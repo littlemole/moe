@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" 
+           elementFormDefault="qualified" 
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           xmlns:mol="urn:mol-codegen" targetNamespace="urn:mol-codegen">
+
+  <!-- cmd identifiers -->  
+  <xs:complexType name="cmds">
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="cmd" minOccurs="0">
+          <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required" />
+            <xs:attribute name="title" type="xs:string" use="optional" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+  </xs:complexType>
+  
+  <!-- opaque resource ids to define -->
+  <xs:complexType name="resource">
+      <xs:attribute name="id" type="xs:string" use="required" />
+      <xs:attribute name="value" type="xs:int" use="required" />
+      <xs:attribute name="type" type="xs:string" use="optional" />
+      <xs:attribute name="src" type="xs:string" use="optional" />
+  </xs:complexType>
+  
+  <!-- dialogs -->
+  <xs:complexType name="dialogs">
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="dialog" type="mol:dialog" />
+      </xs:sequence>
+  </xs:complexType>
+  
+  <!-- control ids -->
+  <xs:complexType name="controls">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element maxOccurs="unbounded" name="window">
+        <xs:complexType>
+          <xs:attribute name="id" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="unbounded" name="control">
+        <xs:complexType>
+          <xs:attribute name="id" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+
+  <!-- type libraries -->
+  <xs:complexType name="typelibs">
+    <xs:sequence>
+      <xs:element name="typelib">
+        <xs:complexType>
+          <xs:attribute name="src" type="xs:string" use="required" />
+          <xs:attribute name="key" type="xs:unsignedByte" use="required" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- icons -->
+  <xs:complexType name="icons">
+    <xs:sequence>
+      <xs:element name="icon">
+        <xs:complexType>
+          <xs:attribute name="id" type="xs:string" use="required" />
+          <xs:attribute name="src" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- bitmaps -->
+  <xs:complexType name="bitmaps">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" name="bitmap">
+        <xs:complexType>
+          <xs:sequence minOccurs="0">
+            <xs:element maxOccurs="unbounded" name="index">
+              <xs:complexType>
+                <xs:attribute name="cmd" type="xs:string" use="required" />
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="id" type="xs:string" use="required" />
+          <xs:attribute name="src" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- accellerators -->
+  <xs:complexType name="accelerators">
+    <xs:sequence>
+      <xs:element name="acceltable">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="accelerator">
+              <xs:complexType>
+                <xs:attribute name="cmd" type="xs:string" use="required" />
+                <xs:attribute name="ch" type="xs:string" use="optional" />
+                <xs:attribute name="flags" type="xs:string" use="required" />
+                <xs:attribute name="key" type="xs:string" use="optional" />
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="id" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- olemenuitems -->
+  <xs:complexType name="olemenuitem">
+    <xs:attribute name="cmd" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <!-- olemenu -->
+  <xs:complexType name="olemenu">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element type="mol:olemenuitem" name="file"/>
+      <xs:element type="mol:olemenuitem" name="window" />
+      <xs:element type="mol:olemenuitem" name="help" />
+    </xs:choice>
+    <xs:attribute name="menu" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <!-- olecmd -->
+  <xs:complexType name="olecmd">
+    <xs:attribute name="cmd" type="xs:string" use="required" />
+    <xs:attribute name="oletarget" type="xs:string" use="required" />
+  </xs:complexType>
+  
+  <!-- olecmds -->
+  <xs:complexType name="olecmds">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element type="mol:olecmd" name="olecmd"/>
+    </xs:choice>
+  </xs:complexType>
+  
+  <!-- setter -->
+  <xs:complexType name="set">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="member" type="xs:string" use="required" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  
+  <!-- adder -->
+  <xs:complexType name="add">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="member" type="xs:string" use="required" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- statusbar -->
+  <xs:complexType name="statusbar">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element name="set" type="mol:set" />
+      <xs:element name="window" type="mol:childwindow" />
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="class" type="xs:string" use="required" />
+    <xs:attribute name="pos" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <!-- childwindow -->
+  <xs:complexType name="childwindow">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="set" type="mol:set" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="add" type="mol:add" />
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="class" type="xs:string" use="required" />
+    <xs:attribute name="pos" type="xs:string" use="required" />
+    <xs:attribute name="visible" type="xs:boolean" use="optional" />
+    <xs:attribute name="layout" type="xs:string" use="optional" />
+    <xs:attribute name="advise" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <!-- toolbutton -->
+  <xs:complexType name="toolbutton">
+    <xs:attribute name="cmd" type="xs:string" use="required" />
+    <xs:attribute name="dropdown" type="xs:boolean" use="optional" />
+  </xs:complexType>
+
+  <!-- active or inactive elements -->
+  <xs:complexType name="activeORinactive">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" name="toolbutton" type="mol:toolbutton" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- toolbar -->
+  <xs:complexType name="toolbar">
+    <xs:sequence>
+      <xs:element minOccurs="0" type="mol:activeORinactive" name="active" />
+      <xs:element minOccurs="0" type="mol:activeORinactive" name="inactive" />
+    </xs:sequence>
+    <xs:attribute name="class" type="xs:string" use="required" />
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="icons" type="xs:unsignedByte" use="required" />
+    <xs:attribute name="bmp" type="xs:string" use="required" />
+    <xs:attribute name="width" type="xs:unsignedByte" use="required" />
+    <xs:attribute name="height" type="xs:unsignedByte" use="required" />
+    <xs:attribute name="visible" type="xs:boolean" use="optional" />
+  </xs:complexType>
+
+  <!-- bar -->
+  <xs:complexType mixed="true" name="bar">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="add" type="mol:add" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="set" type="mol:set" />
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="class" type="xs:string" use="required" />
+    <xs:attribute name="width" type="xs:unsignedByte" use="required" />
+    <xs:attribute name="height" type="xs:unsignedByte" use="required" />
+    <xs:attribute name="visible" type="xs:boolean" use="required" />
+  </xs:complexType>
+
+  <!-- rebar -->
+  <xs:complexType name="rebar">
+    <xs:choice maxOccurs="unbounded">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="toolbar" type="mol:toolbar"/>
+      <xs:element minOccurs="0" maxOccurs="unbounded" type="mol:bar" name="bar" />
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="class" type="xs:string" use="required" />
+    <xs:attribute name="pos" type="xs:string" use="required" />
+    <xs:attribute name="visible" type="xs:boolean" use="required" />
+    <xs:attribute name="layout" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <!-- msg -->
+  <xs:complexType name="msg">
+    <xs:attribute name="handler" type="xs:string" use="optional" />
+    <xs:attribute name="stdhandler" type="xs:string" use="optional" />
+    <xs:attribute name="cmd" type="xs:string" use="optional" />
+    <xs:attribute name="command" type="xs:string" use="optional" />
+    <xs:attribute name="msg" type="xs:string" use="optional" />
+    <xs:attribute name="layout" type="xs:string" use="optional" />
+    <xs:attribute name="ole" type="xs:string" use="optional" />
+    <xs:attribute name="interface" type="xs:string" use="optional" />
+    <xs:attribute name="params" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <!-- msgrange -->
+  <xs:complexType name="msgrange">
+    <xs:attribute name="handler" type="xs:string" use="optional" />
+    <xs:attribute name="stdhandler" type="xs:string" use="optional" />
+    <xs:attribute name="from" type="xs:string" use="optional" />
+    <xs:attribute name="to" type="xs:string" use="optional" />
+    <xs:attribute name="type" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <!-- notify -->
+  <xs:complexType name="notify">
+    <xs:attribute name="handler" type="xs:string" use="optional" />
+    <xs:attribute name="stdhandler" type="xs:string" use="optional" />
+    <xs:attribute name="ctrl" type="xs:string" use="optional" />
+    <xs:attribute name="code" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <!-- class -->
+  <xs:complexType name="class">
+    <xs:choice maxOccurs="unbounded">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="msg" type="mol:msg"/>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="msgrange" type="mol:msgrange"/>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="notify" type="mol:notify"/>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="persist" type="mol:persist"/>
+    </xs:choice>
+    <xs:attribute name="type" type="xs:string" use="required" />
+  </xs:complexType>
+  
+  <!-- msgs -->
+  <xs:complexType name="msgs">
+    <xs:choice maxOccurs="unbounded">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="class" type="mol:class"/>
+    </xs:choice>
+  </xs:complexType>
+
+  <!-- persist -->
+  <xs:complexType name="persist">
+    <xs:attribute name="property" type="xs:string" use="optional" />
+    <xs:attribute name="vtype" type="xs:string" use="optional" />
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="member" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <!-- persistence -->
+  <xs:complexType name="persistence">
+    <xs:choice maxOccurs="unbounded">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="persist" type="mol:persist"/>
+    </xs:choice>
+  </xs:complexType>
+
+
+  <!-- dialog -->
+  <xs:complexType name="dialog">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="msgs" type="mol:msgs" />
+      <xs:element name="controls" type="mol:controls" />
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="optional" />
+    <xs:attribute name="class" type="xs:string" use="optional" />
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="menu" type="xs:string" use="optional" />
+    <xs:attribute name="layout" type="xs:string" use="optional" />
+    <xs:attribute name="pos" type="xs:string" use="optional" />
+    <xs:attribute name="mdi" type="xs:string" use="optional" />
+    <xs:attribute name="persistFile" type="xs:string" use="optional" />
+    <xs:attribute name="persistStorage" type="xs:string" use="optional" />
+    <xs:attribute name="dragDrop" type="xs:string" use="optional" />
+    <xs:attribute name="show" type="xs:string" use="optional" />
+    <xs:attribute name="accel" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <!-- window -->
+  <xs:complexType name="window">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="olemenu" type="mol:olemenu" />
+      <xs:element name="olecmds" type="mol:olecmds" />
+      <xs:element name="window" type="mol:childwindow" />
+      <xs:element name="statusbar" type="mol:statusbar" />
+      <xs:element name="rebar" type="mol:rebar" />
+      <xs:element name="msgs" type="mol:msgs" />
+      <xs:element name="persistence" type="mol:persistence" />
+      <xs:element name="dialog" type="mol:dialog" />
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="class" type="xs:string" use="required" />
+    <xs:attribute name="id" type="xs:string" use="optional" />
+    <xs:attribute name="menu" type="xs:string" use="optional" />
+    <xs:attribute name="layout" type="xs:string" use="optional" />
+    <xs:attribute name="pos" type="xs:string" use="required" />
+    <xs:attribute name="mdi" type="xs:string" use="optional" />
+    <xs:attribute name="persistFile" type="xs:string" use="optional" />
+    <xs:attribute name="persistStorage" type="xs:string" use="optional" />
+    <xs:attribute name="dragDrop" type="xs:string" use="optional" />
+    <xs:attribute name="show" type="xs:string" use="optional" />
+    <xs:attribute name="accel" type="xs:string" use="optional" />
+    <xs:attribute name="accessor" type="xs:string" use="optional" />
+  </xs:complexType>
+
+
+  <!-- child window -->
+  <xs:complexType name="child">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="window" type="mol:childwindow" />
+      <xs:element name="statusbar" type="mol:statusbar" />
+      <xs:element name="rebar" type="mol:rebar" />
+      <xs:element name="msgs" type="mol:msgs" />
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="class" type="xs:string" use="required" />
+    <xs:attribute name="menu" type="xs:string" use="optional" />
+    <xs:attribute name="layout" type="xs:string" use="optional" />
+    <xs:attribute name="pos" type="xs:string" use="optional" />
+    <xs:attribute name="show" type="xs:string" use="optional" />
+  </xs:complexType>
+  
+  <!-- mdi child window -->
+  <xs:complexType name="mdi">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="olemenu" type="mol:olemenu" />
+      <xs:element name="olecmds" type="mol:olecmds" />
+      <xs:element name="window" type="mol:childwindow" />
+      <xs:element name="statusbar" type="mol:statusbar" />
+      <xs:element name="rebar" type="mol:rebar" />
+      <xs:element name="msgs" type="mol:msgs" />
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="class" type="xs:string" use="required" />
+    <xs:attribute name="menu" type="xs:string" use="optional" />
+    <xs:attribute name="layout" type="xs:string" use="optional" />
+    <xs:attribute name="pos" type="xs:string" use="optional" />
+    <xs:attribute name="mdi" type="xs:string" use="optional" />
+    <xs:attribute name="show" type="xs:string" use="optional" />
+  </xs:complexType>
+  
+  <!-- menu -->
+  <xs:complexType name="menu" >
+    <xs:sequence minOccurs="0">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="menu" type="mol:menu"  />
+    </xs:sequence>
+    <xs:attribute name="cmd" type="xs:string" use="optional" />
+    <xs:attribute name="checked" type="xs:boolean" use="optional" />
+    <xs:attribute name="separator" type="xs:boolean" use="optional" />
+    <xs:attribute name="enabled" type="xs:boolean" use="optional" />
+    <xs:attribute name="popup" type="xs:boolean" use="optional" />
+    <xs:attribute name="id" type="xs:string" use="optional" />
+    <xs:attribute name="bmp" type="xs:string" use="optional" />
+  </xs:complexType>
+  
+  <!-- menus -->
+  <xs:complexType name="menus">
+    <xs:sequence maxOccurs="unbounded" minOccurs="0">
+      <xs:element maxOccurs="unbounded" name="menu" type="mol:menu" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- resources :) -->
+  <xs:complexType name="resources">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element name="resource" maxOccurs="unbounded" type="mol:resource" />
+      <xs:element name="dialogs" type="mol:dialogs" />
+      <xs:element name="controls" type="mol:controls" />
+      <xs:element name="typelibs" type="mol:typelibs" />
+      <xs:element name="icons" type="mol:icons" />
+      <xs:element name="bitmaps" type="mol:bitmaps" />
+      <xs:element name="accelerators" type="mol:accelerators"  />
+    </xs:choice>
+  </xs:complexType>
+  
+  <!-- ui :) -->
+  <xs:complexType name="ui">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element name="window" type="mol:window" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="mdi" type="mol:mdi" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="child" type="mol:mdi" minOccurs="0" maxOccurs="unbounded" />
+    </xs:choice>
+  </xs:complexType>
+  
+  <!-- codegen, the root element -->
+  <xs:element name="codegen">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded" minOccurs="0">
+        <xs:element maxOccurs="unbounded" name="include" type="xs:string" />
+        <xs:element name="cmds" type="mol:cmds" />        
+        <xs:element name="menus" type="mol:menus" />
+        <xs:element name="ui" type="mol:ui" />
+        <xs:element name="msgs" type="mol:msgs" />
+        <xs:element name="resources" type="mol:resources" />
+      </xs:choice>
+      <xs:attribute name="class" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

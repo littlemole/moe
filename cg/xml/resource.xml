@@ -1,0 +1,45 @@
+<mol:resources class="ScintillAxGUIBuilder" 
+               xmlns="urn:Scintilla.ScintillAx" 
+               xmlns:mol="urn:Scintilla.ScintillAx" 
+               xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+			   xsi:schemaLocation='urn:Scintilla.ScintillAx resource.xsd'>
+ 
+  <include>app.h</include>
+  
+  <!-- special resources and stuff we need command identifiers for -->
+
+  <resource  id="IDC_STATIC" value="-1" />
+
+
+  <!-- dialogs are still created the classic way. here we define only the necessary IDs -->
+  <dialogs >
+  </dialogs>
+
+  <!-- other controls we just define ids for -->
+
+  <controls >        
+
+  </controls>
+  
+  <!-- typelib to be included in app resources -->
+  <typelibs >
+    <typelib src=".\\Debug\\scintillax.tlb" key="1" />
+  </typelibs>
+  
+  <!-- icon resources to be embedded in app resource-->
+  <icons >
+    <icon id="IDI_SCINTILLA" src=".\\scintillax.ico"/>
+  </icons>
+
+  <!-- 
+      bitmap resources, for toolbar bmps optionally a 
+      mapping of toolbar button to cmd identifier 
+  -->
+
+  
+  <!-- accelerators -->
+
+  
+</mol:resources>
+

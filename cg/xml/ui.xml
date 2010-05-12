@@ -1,0 +1,96 @@
+<mol:resources class="ScintillAxGUIBuilder" 
+               xmlns="urn:Scintilla.ScintillAx" 
+               xmlns:mol="urn:Scintilla.ScintillAx" 
+               xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			         xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+			         xsi:schemaLocation='urn:Scintilla.ScintillAx resource.xsd'>
+  
+  <include >../scieditor.h</include>
+  <include >../ScintillACtrl.h</include>
+  <include >../ScintillAxProp.h</include>
+  <include >ole/persist.h</include>
+  <include>win/layout.h</include>
+  
+   
+  <!-- main GUI description -->
+  <ui >
+
+    <!-- the scintilla ax ctrl -->
+    <window name="ScintillaActiveXControl" class="ScintillAx"
+            layout="BorderLayout" pos="stdRect" id="IDW_SCINTILLA_AX" >
+      
+      <!-- windows messages scintillax is listening to-->
+      <msgs>
+        <msg  handler="OnCreate" msg="WM_CREATE" />
+	      <notify handler="OnUpdateUI" code="SCN_UPDATEUI" />
+	      <notify handler="OnChar" code="SCN_CHARADDED" />
+	      <notify handler="OnDblClick" code="SCN_DOUBLECLICK" />
+      </msgs>
+
+      <!-- persistence for scintillax-->
+	    <persistence>
+		    <persist property="DISPID_SCI_FILENAME" vtype="VT_BSTR" name="filename" />	
+		    <persist property="DISPID_SCI_READONLY" vtype="VT_BOOL" name="readonly" />	
+		    <persist property="DISPID_SCI_SYNTAX" vtype="VT_I4" name="syntax" />	 
+		    <persist property="DISPID_SCI_ENCODING" vtype="VT_I4" name="encoding" />	 
+		    <persist property="DISPID_SCI_TABUSAGE" vtype="VT_BOOL" name="tabusage" />
+		    <persist property="DISPID_SCI_TABINDENTS" vtype="VT_BOOL" name="tabindents" />
+		    <persist property="DISPID_SCI_BACKSPACEUNINDENTS" vtype="VT_BOOL" name="backspaceunindents" />	
+		    <persist property="DISPID_SCI_TABWIDTH" vtype="VT_I4" name="tabwidth" />	    
+		    <persist property="DISPID_SCI_OVERTYPE" vtype="VT_BOOL" name="overtype" />	    
+		    <persist property="DISPID_SCI_USECONTEXT" vtype="VT_BOOL"  name="usecontext"/>	    
+		    <persist property="DISPID_FONT" vtype="VT_FONT" name="font" />	    
+	      <persist member="sizel" name="cs" />	    
+	    </persistence>
+
+      <!-- child window holding native scintilla widget -->
+      <window name="editor" id="IDC_EDITOR_VIEW" class="EditWnd" pos="mol::stdRect"
+              visible="true" layout="BorderLayout::FILL" >
+		    <set member="UsePopUp">true</set>          
+		    <set member="CodePage">CP_UTF8</set>          
+		    <set member="ScrollWidth">120</set>          
+		    <set member="MarginWidth">1,0</set>          
+		    <set member="TabWidth">4</set>
+	    </window>
+    
+
+
+    </window>
+  
+  </ui>
+
+  <dialogs>
+    <!-- scintillax property dialog -->
+    <dialog name="scintillaproperties" id="IDD_DIALOG_PROP" class="ScintillAxProperties">
+
+      <!-- window messages from dialog -->
+      <msgs>
+        <msg  handler="OnInitDialog" msg="WM_INITDIALOG" />
+        <msg  handler="OnDirty" cmd="IDC_RADIO_UNIX"  />
+        <msg  handler="OnDirty" cmd="IDC_RADIO_WIN32"  />
+        <msg  handler="OnDirty" cmd="IDC_COMBO_ENCODING"  />
+        <msg  handler="OnDirty" cmd="IDC_CHECK_USETABS"  />
+        <msg  handler="OnDirty" cmd="IDC_CHECK_TABINDENTS"  />
+        <msg  handler="OnDirty" cmd="IDC_EDIT_TABWIDTH"  />
+        <msg  handler="OnDirty" cmd="IDC_CHECK_BACKSPACEUNINDENTS"  />
+        <msg  handler="OnDirty" cmd="IDC_CHECK_WRITEBOM"  />
+        <msg  handler="OnConvert" cmd="IDC_CONVERT_BUTTON"  />
+      </msgs>
+
+      <!-- dialog child control ids  -->
+      <controls>
+        <control id="IDC_RADIO_UNIX" />
+        <control id="IDC_RADIO_WIN32" />
+        <control id="IDC_COMBO_ENCODING" />
+        <control id="IDC_EDIT_TABWIDTH" />
+        <control id="IDC_CHECK_USETABS" />
+        <control id="IDC_CHECK_BACKSPACEUNINDENTS" />
+        <control id="IDC_CHECK_TABINDENTS" />
+        <control id="IDC_CONVERT_BUTTON" />
+        <control id="IDC_CHECK_WRITEBOM" />
+      </controls>
+    </dialog>
+  </dialogs>
+
+</mol:resources>
+
