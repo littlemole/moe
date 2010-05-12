@@ -294,10 +294,6 @@ Documents* docs()
 {
   return &mol::singleton<Documents>();
 }
-CompilerSink* compilerSink()
-{
-  return &mol::singleton<CompilerSink>();
-}
 TreeWndSink* treeWndSink()
 {
   return &mol::singleton<TreeWndSink>();

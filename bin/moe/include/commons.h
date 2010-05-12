@@ -52,7 +52,7 @@
 
 // .NET JIT support
 
-#include "../net/JIT/JIT_tlh.h"
+//#include "../net/JIT/JIT_tlh.h"
 
 #include "resource.h"
 

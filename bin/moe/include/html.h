@@ -135,7 +135,7 @@ protected:
 	/////////////////////////////////////////////////////////////////////
 	// compiler events
 	/////////////////////////////////////////////////////////////////////
-
+/*
 	class MoeHtmlWnd_compilerSink : public stack_obj<CompilerEvents>
 	{
 		public : 
@@ -143,7 +143,7 @@ protected:
 			HRESULT virtual __stdcall ErrorMsg(BSTR error);
 			HRESULT virtual __stdcall Success();
 	} compilerSink_;
-
+*/
 	/////////////////////////////////////////////////////////////////////
 	// webbrowser events
 	/////////////////////////////////////////////////////////////////////
@@ -159,10 +159,13 @@ protected:
 	
 private:
 	int							style_;
+//	mol::punk<IDispatch>		codeBehind_;
+//	mol::punk<ICompiler>		compiler_;
 	mol::punk<IDispatch>		codeBehind_;
-	mol::punk<ICompiler>		compiler_;
+	mol::punk<IUnknown>		compiler_;
 	Domain*						domain_;
-	punk<IJVM>					jvm_;
+	//punk<IJVM>					jvm_;
+	punk<IUnknown>					jvm_;
 	bstr						filename_;
 	mol::string					location;
 

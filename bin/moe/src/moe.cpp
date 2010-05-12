@@ -69,7 +69,7 @@ MoeWnd::~MoeWnd()
 {
 	if ( NET().aware() && compiler_ )
 	{
-		compilerSink()->UnAdvise(compiler_.interface_);
+//		compilerSink()->UnAdvise(compiler_.interface_);
 	}
 
 	if ( icon )
@@ -1475,8 +1475,8 @@ HRESULT __stdcall  MoeWnd::get_Compiler( IDispatch** disp )
 
 	*disp = 0;
 
-	if ( compiler_ )
-		return compiler_->QueryInterface( IID_ICompiler, (void**) disp );
+//	if ( compiler_ )
+//		return compiler_->QueryInterface( IID_ICompiler, (void**) disp );
 
 	return S_OK;
 }
@@ -1878,7 +1878,7 @@ HRESULT MoeWnd::evalute_csharp(BSTR cs)
 {
 	if ( NET().aware() )
 	{
-		if ( compiler_ )
+	/*	if ( compiler_ )
 		{
 			compilerSink()->UnAdvise(compiler_);
 			compiler_->Unload(VARIANT_TRUE);
@@ -1904,7 +1904,7 @@ HRESULT MoeWnd::evalute_csharp(BSTR cs)
 			compiler_->CompileExec();
 			return S_OK;
 		}
-
+*/
 	}
 	return E_FAIL;
 }

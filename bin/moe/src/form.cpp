@@ -20,10 +20,10 @@ MoeFormWnd::~MoeFormWnd()
 {
 	if ( domain_ && compiler_)
 	{
-		punk<IUnknown> unk(compiler_);
-		compilerSink_.UnAdvise(unk.interface_);
-		compiler_->Unload(VARIANT_TRUE);
-		delete domain_;
+//		punk<IUnknown> unk(compiler_);
+//		compilerSink_.UnAdvise(unk.interface_);
+//		compiler_->Unload(VARIANT_TRUE);
+//		delete domain_;
 	}
 
 	ODBGS("~MoeFormWnd() dropped dead");
@@ -347,6 +347,7 @@ HRESULT __stdcall MoeFormWnd::ExternalMoe::CodeBehind( BSTR fname )
 
 	if ( mol::Path::ext(p) == _T(".class") )
 	{
+		/*
 		mol::string classfile = p.substr(0,p.size()-6);
 		HRESULT hr = This()->jvm_.createObject(CLSID_JRE,CLSCTX_LOCAL_SERVER);
 		if ( hr != S_OK )
@@ -364,7 +365,7 @@ HRESULT __stdcall MoeFormWnd::ExternalMoe::CodeBehind( BSTR fname )
 		hr = This()->jvm_->Extension( mol::bstr(classfile), (IXmoe*)(moe()), (IMoeFrame*)(This()) );
 		if ( hr!= S_OK )
 			return hr;
-
+*/
 		return S_OK;
 	} 
 	
@@ -384,7 +385,7 @@ HRESULT __stdcall MoeFormWnd::ExternalMoe::CodeBehind( BSTR fname )
 	if (  (pos = assembly.find_last_of(_T("."))) != mol::string::npos )
 		assembly = assembly.substr(0,pos);
 
-
+/*
 	This()->domain_ = new Domain();
 	This()->domain_->CreateInstance<ICompiler>( _T("JIT"), _T("mol.JIT"), &(This()->compiler_) );
 
@@ -408,7 +409,7 @@ HRESULT __stdcall MoeFormWnd::ExternalMoe::CodeBehind( BSTR fname )
 	This()->compilerSink_.Advise(unk.interface_);
 
 	This()->compiler_->Run();
-		
+		*/
 	return S_OK;
 }
 
@@ -519,7 +520,7 @@ HRESULT __stdcall MoeFormWnd::MoeFormWnd_htmlSink::DocumentComplete( IDispatch* 
 			}
 			if ( !codebehind.empty() )
 			{
-				statusBar()->status( mol::string(_T("CODEBEHIND: ")) + codebehind );
+/*				statusBar()->status( mol::string(_T("CODEBEHIND: ")) + codebehind );
 
 				mol::string assembly = codebehind;
 				size_t pos = 0;
@@ -552,11 +553,11 @@ HRESULT __stdcall MoeFormWnd::MoeFormWnd_htmlSink::DocumentComplete( IDispatch* 
 				statusBar()->status( mol::string(_T("run CODEBEHIND: ")) + codebehind );
 
 				This()->compiler_->Run();
-
+*/
 				return S_OK;
 			}
 
-
+/*
 			// check JAVA syntax now
 			mol::string classpath  =  mol::Path::pathname(This()->location_);
 			mol::string classbehind = _T(""); 
@@ -611,6 +612,7 @@ HRESULT __stdcall MoeFormWnd::MoeFormWnd_htmlSink::DocumentComplete( IDispatch* 
 
 				return S_OK;
 			}
+			*/
 		}
 	}
 	return S_OK;
@@ -619,7 +621,7 @@ HRESULT __stdcall MoeFormWnd::MoeFormWnd_htmlSink::DocumentComplete( IDispatch* 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
-
+/*
 HRESULT __stdcall MoeFormWnd::MoeFormWnd_compilerSink::ErrorMsg(BSTR error)
 {
 	::MessageBox( *This(),bstr(error).toString().c_str(),_T("error:"),0);
@@ -633,4 +635,4 @@ HRESULT __stdcall MoeFormWnd::MoeFormWnd_compilerSink::Success()
 	return S_OK;
 }
 
-
+*/

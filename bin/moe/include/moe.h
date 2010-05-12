@@ -245,7 +245,8 @@ private:
 	// data members
 	/////////////////////////////////////////////////////////////////////
 
-	punk<ICompiler>					compiler_;
+//	punk<ICompiler>					compiler_;
+	punk<IUnknown>					compiler_;
 	BOOL							bDirty_;
 	long							systype_;
 	long							encoding_;

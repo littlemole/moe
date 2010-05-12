@@ -474,7 +474,7 @@ HRESULT  __stdcall MoeDrop::DragLeave()
 // .NET compiler event sink
 //////////////////////////////////////////////////////////////////////////////
 
-
+/*
 HRESULT __stdcall CompilerSink::ErrorMsg(BSTR error)
 {
 	::MessageBox( *(moe()),bstr(error).toString().c_str(),_T("error:"),0);
@@ -488,7 +488,7 @@ HRESULT __stdcall CompilerSink::Success()
 	statusBar()->status( _T(".NET compilation success"));
 	return S_OK;
 }
-
+*/
 //////////////////////////////////////////////////////////////////////////////
 // tree events sink
 //////////////////////////////////////////////////////////////////////////////

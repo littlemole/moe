@@ -82,8 +82,10 @@ public:
 
 	int							style_;
 	Domain*						domain_;
-	punk<ICompiler>				compiler_;
-	punk<IJVM>					jvm_;
+//	punk<ICompiler>				compiler_;
+	punk<IUnknown>				compiler_;
+//	punk<IJVM>					jvm_;
+	punk<IUnknown>				jvm_;
 
 	mol::punk<IDispatch>		codeBehind_;
 	mol::string					location_;
@@ -136,7 +138,7 @@ public:
 	/////////////////////////////////////////////////////////////////////
 	// .NET compiler events
 	/////////////////////////////////////////////////////////////////////
-
+/*
 	class MoeFormWnd_compilerSink : public stack_obj<CompilerEvents>
 	{
 		public : 
@@ -144,7 +146,7 @@ public:
 			HRESULT virtual __stdcall ErrorMsg(BSTR error);
 			HRESULT virtual __stdcall Success();
 	} compilerSink_;
-
+*/
 };
 
 #endif

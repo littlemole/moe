@@ -19,10 +19,10 @@ MoeHtmlWnd::~MoeHtmlWnd()
 
 	if ( domain_ && compiler_)
 	{
-		punk<IUnknown> unk(compiler_);
-		compilerSink_.UnAdvise(unk.interface_);
-		compiler_->Unload(VARIANT_TRUE);
-		delete domain_;
+//		punk<IUnknown> unk(compiler_);
+//		compilerSink_.UnAdvise(unk.interface_);
+//		compiler_->Unload(VARIANT_TRUE);
+//		delete domain_;
 	}
 }
 
@@ -476,7 +476,7 @@ HRESULT __stdcall MoeHtmlWnd::ExternalMoe:: get_Frame( IMoeFrame** f)
 
 HRESULT __stdcall MoeHtmlWnd::ExternalMoe::CodeBehind( BSTR fname )
 {
-	This()->domain_ = new Domain();
+/*	This()->domain_ = new Domain();
 	This()->domain_->CreateInstance<ICompiler>( _T("JIT"), _T("mol.JIT"), &(This()->compiler_) );
 
 	mol::string p(bstr(fname).toString());
@@ -521,7 +521,7 @@ HRESULT __stdcall MoeHtmlWnd::ExternalMoe::CodeBehind( BSTR fname )
 	statusBar()->status( mol::string( _T("CODEBEHIND run ")) + p );
 
 	This()->compiler_->Run();
-		
+		*/
 	return S_OK;
 }
 
@@ -641,7 +641,7 @@ HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_htmlSink::DocumentComplete( IDispatch* 
 				size_t pos = 0;
 				if (  (pos = assembly.find_last_of(_T("."))) != mol::string::npos )
 					assembly = assembly.substr(0,pos);
-
+/*
 
 				This()->domain_ = new Domain();
 				This()->domain_->CreateInstance<ICompiler>( _T("JIT"), _T("mol.JIT"), &(This()->compiler_) );
@@ -672,10 +672,11 @@ HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_htmlSink::DocumentComplete( IDispatch* 
 				statusBar()->status(100);
 
 				statusBar()->status(_T(""));	
+				*/
 				return S_OK;
 			}
 
-
+/*
 			// check JAVA syntax now
 			mol::string classpath  =  mol::Path::pathname(This()->location);
 			mol::string classbehind = _T(""); 
@@ -745,6 +746,7 @@ HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_htmlSink::DocumentComplete( IDispatch* 
 
 				return S_OK;
 			}
+*/
 		}
 	}
 	
@@ -759,7 +761,7 @@ HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_htmlSink::DocumentComplete( IDispatch* 
 	return S_OK;
 }
 
-
+/*
 HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_compilerSink::ErrorMsg(BSTR error)
 {
 	::MessageBox( *This(),bstr(error).toString().c_str(),_T("error:"),0);
@@ -773,3 +775,4 @@ HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_compilerSink::Success()
 	return S_OK;
 }
 
+*/

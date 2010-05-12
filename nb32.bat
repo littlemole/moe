@@ -42,6 +42,9 @@ IF ERRORLEVEL 1 GOTO hell
 call make.bat "uni_release" 
 IF ERRORLEVEL 1 GOTO hell
 
+echo "SUCCESS"
+goto end
+
 
 echo ----package-------------------------------
 

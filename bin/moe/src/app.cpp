@@ -194,7 +194,7 @@ void MoeApp::init_extensions_if( )
 {
 	// .NET
 
-	NET().start(enableExtensions_);
+	//NET().start(enableExtensions_);
 
 	// GTK
 

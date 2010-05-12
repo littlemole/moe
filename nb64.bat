@@ -20,6 +20,11 @@ call make.bat "uni_release_64"
 IF ERRORLEVEL 1 GOTO hell
 
 
+echo "SUCCESS"
+goto end
+
+
+
 call vdp.bat "Unicode Debug 64|x64" "Unicode Debug 64" "moeSetup64"
 IF ERRORLEVEL 1 GOTO hell
 

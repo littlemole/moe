@@ -217,7 +217,9 @@
     <singleton name="docs" class="Documents" />
     
     <!-- events -->
+    <!-- 
     <singleton name="compilerSink" class="CompilerSink" />
+    -->
     <singleton name="treeWndSink" class="TreeWndSink" />
     <singleton name="moeDropTarget" class="MoeDrop" />
     

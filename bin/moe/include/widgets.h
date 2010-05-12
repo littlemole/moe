@@ -177,7 +177,7 @@ typedef punk<Script>		ScriptingHost;
 /////////////////////////////////////////////////////////////////////////////////////////////
 // compiler event sink
 /////////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 class CompilerEvents	:	
 		public mol::Dispatch< ICompilerDualMsg, &IID_ICompilerDualMsg, &LIBID_JIT,1,0 >,
 		public mol::interfaces< CompilerEvents, 
@@ -197,9 +197,11 @@ public:
 private:
     DWORD           cookie_;
 };
-
+*/
 
 // compiler sink
+
+/*
 class CompilerSink : public stack_obj<CompilerEvents>
 {
 STACKSINGLETON(CompilerSink);
@@ -211,7 +213,7 @@ private:
 	CompilerSink() {};
 	~CompilerSink() {};
 };
-
+*/
 
 
 // tree events sink
