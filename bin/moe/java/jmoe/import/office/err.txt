@@ -1,8 +1,0 @@
-Buildfile: build.xml
-
-compile:
-     [echo] compiling ...
-    [javac] Compiling 1925 source files to C:\Users\mike\Documents\Visual Studio 2008\Projects\molib8\bin\moe\java\jmoe\excel
-
-BUILD SUCCESSFUL
-Total time: 35 seconds
