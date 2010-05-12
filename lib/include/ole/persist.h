@@ -1,0 +1,749 @@
+#ifndef MOL_COM_PERSISTANCE_DEF_GUARD_
+#define MOL_COM_PERSISTANCE_DEF_GUARD_
+
+#pragma once
+#include "util/uni.h"
+#include "ole/punk.h"
+#include "ole/aut.h"
+#include "ole/variant.h"
+#include <ocidl.h>
+#include <vector>
+
+namespace mol {
+namespace ole {
+
+/////////////////////////////////////////////////////////////////////
+// Persistence 
+/////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////
+// Persist Property Support
+/////////////////////////////////////////////////////////////////////
+
+class IProperty
+{
+public:
+
+	virtual const GUID*  prop_guid() = 0;
+
+	virtual HRESULT __stdcall Load( IDispatch* disp, LPSTREAM pStm) = 0;
+	virtual HRESULT __stdcall Save( IDispatch* disp, LPSTREAM pStm) = 0;
+    virtual HRESULT __stdcall GetSizeMax( IDispatch* disp,ULARGE_INTEGER *pCbSize) = 0;
+    virtual HRESULT __stdcall InitNew(IDispatch* disp) = 0;
+	virtual HRESULT __stdcall Load( IDispatch* disp,IPropertyBag *pPropBag) = 0;
+	virtual HRESULT __stdcall Save( IDispatch* disp,IPropertyBag *pPropBag) = 0;
+};
+
+
+template<class T>
+class ClassProperties
+{
+public:
+
+	void add( IProperty* prop )
+	{
+		properties_.push_back(prop);
+	}
+
+	std::vector<IProperty*>& get()
+	{
+		return properties_;
+	}
+
+private:
+	std::vector<IProperty*> properties_;
+};
+
+template<class T>
+ClassProperties<T>& properties()
+{
+	return mol::singleton<ClassProperties<T>>();
+}
+
+/////////////////////////////////////////////////////////////////////
+
+template<class T,class S>
+class TProperty : public IProperty
+{
+public:
+
+	typedef mol::MemberPtr<T,S> Ptr;
+
+	TProperty( Ptr p, const char* k )
+		:ptr(p), key(k)
+	{}
+
+	virtual ~TProperty()
+	{}
+
+	virtual const GUID*  prop_guid() 
+	{
+		return &CLSID_NULL;
+	}
+
+	virtual HRESULT __stdcall Load( IDispatch* disp, LPSTREAM pStm) 
+	{
+		variant v;
+		v.fromStream(pStm);	
+		S* s = dynamic_cast<S*>(disp);
+		T* t = ptr(s);
+		*t = valueOf<T>(v);
+		return S_OK;
+	}
+
+	virtual HRESULT __stdcall Save( IDispatch* disp, LPSTREAM pStm)
+	{
+		S* s = dynamic_cast<S*>(disp);
+		T* t = ptr(s);
+		variant v(*t);
+		v.toStream(pStm);
+		return S_OK;
+	}
+
+    virtual HRESULT __stdcall GetSizeMax( IDispatch* disp, ULARGE_INTEGER *pCbSize)
+	{
+		pCbSize->QuadPart += sizeof(variant);
+		return S_OK;
+	}
+
+    virtual HRESULT __stdcall InitNew(IDispatch* disp)
+	{
+		return S_OK;
+	}
+
+	virtual HRESULT __stdcall Load( void* disp, IPropertyBag *pPropBag) 
+	{
+		variant v((BSTR)0);
+		if ( S_OK == pPropBag->Read( mol::ansi2wstring(key).c_str(), &v, NULL ) )
+		{
+			S* s = dynamic_cast<S*>(disp);
+			T* t = ptr(s);
+			*t = valueOf<T>(v);
+		}
+		return S_OK;
+	}
+
+	virtual HRESULT __stdcall Save( IDispatch* disp, IPropertyBag *pPropBag) 
+	{
+		S* s = dynamic_cast<S*>(disp);
+		T* t = ptr(s);
+		variant v(*t);
+		v.changeType(VT_BSTR);
+		pPropBag->Write( mol::ansi2wstring(key).c_str(), &v );
+		return S_OK;
+	}
+
+	Ptr				ptr;
+	const char*		key;
+};
+/////////////////////////////////////////////////////////////////////
+
+template<class S>
+class TProperty<SIZEL,S> : public IProperty
+{
+public:
+
+	typedef mol::MemberPtr<SIZEL,S> Ptr;
+
+	TProperty( Ptr p, const char* k )
+		:ptr(p), key(k)
+	{}
+
+	virtual ~TProperty()
+	{}
+
+	virtual const GUID*  prop_guid() 
+	{
+		return &CLSID_NULL;
+	}
+
+	virtual HRESULT __stdcall Load( IDispatch* disp, LPSTREAM pStm) 
+	{
+		S* s = dynamic_cast<S*>(disp);
+		SIZEL* t = ptr(s);
+		ULONG len = 0;
+		return pStm->Read( (void*)t, sizeof(SIZEL), &len);
+	}
+
+	virtual HRESULT __stdcall Save( IDispatch* disp, LPSTREAM pStm)
+	{
+		S* s = dynamic_cast<S*>(disp);
+		SIZEL* t = ptr(s);
+		ULONG len = 0;
+		return pStm->Write( (void*)t, sizeof(SIZEL), &len);
+	}
+
+    virtual HRESULT __stdcall GetSizeMax( IDispatch* disp, ULARGE_INTEGER *pCbSize)
+	{
+		pCbSize->QuadPart += sizeof(SIZEL);
+		return S_OK;
+	}
+
+    virtual HRESULT __stdcall InitNew(IDispatch* disp)
+	{
+		S* s = dynamic_cast<S*>(disp);
+		SIZEL* t = ptr(s);
+		t->cx = (LONG)0;
+		t->cy = (LONG)0;
+		return S_OK;
+	}
+
+	virtual HRESULT __stdcall Load( IDispatch* disp, IPropertyBag *pPropBag) 
+	{
+		variant v((BSTR)0);
+		if ( S_OK == pPropBag->Read( mol::ansi2wstring(key).c_str(), &v, NULL ) )
+		{
+			mol::string s = v.toString();
+			std::vector<std::string> xy = mol::split(mol::tostring(s),"|");
+			if ( xy.size() > 1 )
+			{
+				S* s = dynamic_cast<S*>(disp);
+				SIZEL* t = ptr(s);
+				std::istringstream x(mol::tostring(xy[0]));
+				x >> t->cx;
+				std::istringstream y(mol::tostring(xy[1]));
+				y >> t->cy;
+			}
+		}
+		return S_OK;
+	}
+
+	virtual HRESULT __stdcall Save( IDispatch* disp, IPropertyBag *pPropBag) 
+	{
+		S* s = dynamic_cast<S*>(disp);
+		SIZEL* t = ptr(s);
+		
+		std::ostringstream oss;
+		oss << t->cx << "|" << t->cy;
+		variant v(oss.str());
+		pPropBag->Write( mol::ansi2wstring(key).c_str(), &v );
+		return S_OK;
+	}
+
+	Ptr				ptr;
+	const char*		key;
+};
+
+/////////////////////////////////////////////////////////////////////
+// COM visible properties
+/////////////////////////////////////////////////////////////////////
+
+class GetPutProperty : public IProperty
+{
+public:
+
+	GetPutProperty( const char* k, DISPID i,  VARTYPE v, const GUID* p );
+
+	virtual ~GetPutProperty();
+
+	virtual const GUID*  prop_guid() 
+	{
+		return guid;
+	}
+
+	virtual HRESULT __stdcall Load( IDispatch* d,LPSTREAM pStm);
+	virtual HRESULT __stdcall Save( IDispatch* d,LPSTREAM pStm);
+    virtual HRESULT __stdcall GetSizeMax( IDispatch* d,ULARGE_INTEGER *pCbSize);
+    virtual HRESULT __stdcall InitNew(IDispatch* d);
+	virtual HRESULT __stdcall Load( IDispatch* d,IPropertyBag *pPropBag);
+	virtual HRESULT __stdcall Save( IDispatch* d,IPropertyBag *pPropBag);
+
+	VARTYPE         vt;
+	DISPID			diid;
+	const char*		key;
+	const GUID*		guid;
+};
+
+template<class T,class S>
+TProperty<T,S>* make_property( T S::* mp , const char* key )
+{
+	return new TProperty<T,S>( mp, key );
+}
+
+GetPutProperty* make_property( const char* key, DISPID d, VARTYPE v, const GUID* g );
+
+/////////////////////////////////////////////////////////////////////
+// helper macro to declare an inner class which sole purpose
+// is to add an entry to the property map on construction of the
+// outer class
+/////////////////////////////////////////////////////////////////////
+
+#define persist_member( k, mfp )										\
+class MOL_PROP_IMPL_##C##_##k##_										\
+{																		\
+public:																	\
+	MOL_PROP_IMPL_##C##_##k##_()										\
+	{																	\
+		static int i = init();											\
+	}																	\
+																		\
+	static int init()													\
+	{																	\
+		mol::ole::properties<com_creatable_type>()						\
+		.add(mol::ole::make_property( &com_creatable_type::##mfp, #k ));\
+		return 0;														\
+	}																	\
+} k##_member_;
+
+/////////////////////////////////////////////////////////////////////
+// and same for COM properties w get/set impl
+/////////////////////////////////////////////////////////////////////
+
+#define persist_property( d, vt, p )									\
+class MOL_PROP_IMPL_##C##_##d##_										\
+{																		\
+public:																	\
+	MOL_PROP_IMPL_##C##_##d##_()										\
+	{																	\
+		static int i = init();											\
+	}																	\
+																		\
+	static int init()													\
+	{																	\
+		mol::ole::properties<com_creatable_type>()						\
+			.add(mol::ole::make_property(								\
+					#d,													\
+					d,													\
+					vt,													\
+					p													\
+				));														\
+		return 0;														\
+	}																	\
+} d##_member_;
+
+///////////////////////////////////////////////////////////
+
+} // end namespace ole
+
+class enum_statstg : public punk<IEnumSTATSTG>
+{
+public:
+	enum_statstg()
+	{
+		::ZeroMemory(&stats,sizeof(stats));
+	}
+
+	~enum_statstg()
+	{
+		if ( stats.pwcsName )
+			::CoTaskMemFree(stats.pwcsName);
+	}
+
+	bool next()
+	{				
+		if ( stats.pwcsName )
+			::CoTaskMemFree(stats.pwcsName);
+
+		if ( S_OK == interface_->Next(1,&stats,0) )
+		{
+			return true;
+		}
+		return false;
+	}
+
+	STATSTG stats;
+};
+
+///////////////////////////////////////////////////////////
+
+class Storage : public punk<IStorage>
+{
+public:
+
+    Storage() {}									
+    Storage( IUnknown* iUnknown)					
+        : punk<IStorage>(iUnknown) {}		
+    Storage( punk<IStorage>& iUnknown )		
+        : punk<IStorage>(iUnknown) {}		
+    virtual ~Storage() {}							
+    Storage& operator=( Storage& c )				
+    {											
+        if ( c == *this )                       
+            return *this;                       
+        release();								
+        interface_ = c.interface_ ;		    
+		interface_->AddRef();
+        return *this;							
+	}
+
+	bool create( const mol::string& path, DWORD flags = STGM_READWRITE | STGM_SHARE_EXCLUSIVE|STGM_CREATE )
+	{
+		release();
+		if ( S_OK == ::StgCreateDocfile(mol::towstring(path).c_str(),flags ,0,&interface_) )
+			return true;
+		return false;
+	}
+
+	bool open( const mol::string& path, DWORD flags = STGM_READ | STGM_SHARE_EXCLUSIVE )
+	{
+		release();
+		HRESULT hr = ::StgOpenStorage( mol::towstring(path).c_str(), NULL,flags,0,0,&interface_);
+		if ( S_OK == hr )
+			return true;
+		return false;
+	}
+
+	bool read( IUnknown* unk )
+	{
+		punk<IPersistStorage> ps(unk);
+		if ( ps )
+			if ( S_OK == ps->Load(interface_) )
+				return true;
+		return false;
+	}
+
+	bool write( IUnknown* unk )
+	{
+		punk<IPersistStorage> ps(unk);
+		if ( ps )
+			if ( S_OK == ps->Save(interface_,FALSE) )
+				return true;
+		return false;
+	}
+
+	REFCLSID clsid()
+	{
+		if ( interface_ )
+		{		
+			if ( S_OK == ::ReadClassStg(interface_,&clsid_) )
+				return clsid_;
+		}
+		return CLSID_NULL;
+	}
+
+	bool clsid( REFCLSID clsid)
+	{
+		if ( S_OK == ::WriteClassStg(interface_,clsid) )
+			return true;
+		return false;
+	}
+
+	HRESULT enumerator(IEnumSTATSTG** enumStat)
+	{
+		return interface_->EnumElements(0,0,0,enumStat);
+	}
+
+private:
+
+	CLSID clsid_;
+	enum_statstg enum_;
+};
+
+/////////////////////////////////////////////////////////////////////
+// Property Bags
+/////////////////////////////////////////////////////////////////////
+
+template<class T>
+class PersistPropertybag : public IPersistPropertyBag
+{
+public:
+
+	PersistPropertybag()
+	{}
+
+	virtual ~PersistPropertybag()
+	{}
+
+    virtual HRESULT __stdcall GetClassID( CLSID * pClassID)
+	{
+		*pClassID = T::getCoClassID();
+		return S_OK;
+	}
+	virtual HRESULT __stdcall InitNew() 
+	{
+		T* t = (T*)this;
+
+		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
+
+		for ( unsigned int i = 0; i < props.size(); i++ )
+		{
+			props[i]->InitNew(t);
+		}
+		t->setDirty(FALSE);
+		return S_OK;
+	}
+
+	virtual HRESULT __stdcall Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog) 
+	{
+		T* t = (T*)this;
+		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
+		for ( unsigned int i = 0; i < props.size(); i++ )
+		{
+			props[i]->Load(t,pPropBag);
+		}
+		t->setDirty(FALSE);
+		return S_OK;
+	}
+
+	virtual HRESULT __stdcall Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties) 
+	{
+		T* t = (T*)this;
+		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
+		for ( unsigned int i = 0; i < props.size(); i++ )
+		{
+			props[i]->Save(t,pPropBag);
+		}
+		t->setDirty(FALSE);
+		return S_OK;
+	}
+};
+
+/////////////////////////////////////////////////////////////////////
+// Persist Stream
+/////////////////////////////////////////////////////////////////////
+
+template<class T>
+class PersistStream : public IPersistStreamInit
+{
+public:
+
+	PersistStream()	{}
+	virtual ~PersistStream() {}
+
+    virtual HRESULT __stdcall IsDirty( void)
+	{
+		T* t = (T*)this;
+		return t->isDirty() == TRUE ? S_OK : S_FALSE;
+	}
+    
+    virtual HRESULT __stdcall Load( LPSTREAM pStm) 
+	{
+		T* t = (T*)this;
+		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
+		for ( unsigned int i = 0; i < props.size(); i++ )
+		{
+			props[i]->Load(t,pStm);		
+		}
+		t->setDirty(FALSE);
+		return S_OK;
+	}
+    
+    virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty)
+	{
+		T* t = (T*)this;
+		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
+		for ( unsigned int i = 0; i < props.size(); i++ )
+		{
+			props[i]->Save(t,pStm);		
+		}
+		t->setDirty(FALSE);
+		return S_OK;
+	}
+    
+    virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER *pCbSize)
+	{
+		pCbSize->QuadPart = 0;
+		T* t = (T*)this;
+		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
+		for ( unsigned int i = 0; i < props.size(); i++ )
+		{
+			props[i]->GetSizeMax(t,pCbSize);
+		}
+		return S_OK;
+	}
+    
+    virtual HRESULT __stdcall InitNew() 
+	{
+		T* t = (T*)this;
+		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
+		for ( unsigned int i = 0; i < props.size(); i++ )
+		{
+			props[i]->InitNew(t);
+		}
+		t->setDirty(FALSE);
+		return S_OK;
+	}
+
+    virtual HRESULT __stdcall GetClassID( CLSID * pClassID)
+	{
+		*pClassID = T::getCoClassID();
+		return S_OK;
+	}
+};
+
+/////////////////////////////////////////////////////////////////////
+// Persist Storage
+/////////////////////////////////////////////////////////////////////
+
+template<class T>
+class PersistStorage : public IPersistStorage
+{
+public:
+
+	PersistStorage()
+	{}
+
+	virtual ~PersistStorage()
+	{}
+
+    virtual HRESULT __stdcall IsDirty( void)
+	{
+		T* t = (T*)this;
+		return t->isDirty() == TRUE ? S_OK : S_FALSE;
+	}
+    
+    virtual HRESULT __stdcall Load( IStorage *pStg) 
+	{
+		static LPCOLESTR con = OLESTR("Contents");
+		T* t = (T*)this;
+
+		punk<IPersistStreamInit> ipsi;
+		if ( S_OK == ((IPersistStorage*)(t))->QueryInterface(IID_IPersistStreamInit,(void**)&ipsi) )
+		{
+			punk<IStream> stream;
+			HRESULT hr = pStg->OpenStream( con, NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
+			if ( ipsi && (hr == S_OK) )
+			{
+				CLSID clsid;
+				::ReadClassStm(stream,&clsid);
+				t->setDirty(FALSE);
+				return ipsi->Load(stream);
+			}
+		}
+		return S_OK;
+	}
+    
+    virtual HRESULT __stdcall Save( IStorage *pStgSave, BOOL fSameAsLoad)
+	{
+		static LPCOLESTR con = OLESTR("Contents");
+		T* t = (T*)this;
+
+		punk<IPersistStreamInit> ipsi;
+		if ( S_OK == ((IPersistStorage*)(t))->QueryInterface(IID_IPersistStreamInit,(void**)&ipsi) )
+		{
+			punk<IStream> stream;
+			HRESULT hr = pStgSave->CreateStream( con, STGM_WRITE|STGM_SHARE_EXCLUSIVE|STGM_CREATE,0,0,&stream);
+			if ( ipsi && (hr == S_OK) )
+			{
+				::WriteClassStm(stream,T::getCoClassID());
+				t->setDirty(FALSE);
+				return ipsi->Save(stream,TRUE);
+			}
+		}
+		return S_OK;
+	}
+    
+    virtual HRESULT __stdcall SaveCompleted( IStorage *pStgNew)
+	{
+		return S_OK;
+	}
+        
+    virtual HRESULT __stdcall HandsOffStorage( void)
+	{
+		return S_OK;
+	}
+        
+    virtual HRESULT __stdcall InitNew(IStorage *pStg) 
+	{
+		T* t = (T*)this;
+		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
+		for ( unsigned int i = 0; i < props.size(); i++ )
+		{
+			props[i]->InitNew((IDispatch*)t);
+		}
+		t->setDirty(FALSE);
+		return S_OK;
+	}
+
+    virtual HRESULT __stdcall GetClassID( CLSID * pClassID)
+	{
+		*pClassID = T::getCoClassID();
+		return S_OK;
+	}
+};
+
+/////////////////////////////////////////////////////////////////////
+
+template<class T>
+class PersistFile : public IPersistFile
+{
+public:
+
+	PersistFile() : filename_(_T(""))
+	{}
+
+	virtual ~PersistFile()
+	{}
+
+    virtual HRESULT __stdcall GetClassID( CLSID * pClassID)
+	{
+		*pClassID = T::getCoClassID();
+		return S_OK;
+	}
+
+    virtual HRESULT __stdcall IsDirty( void)
+	{
+		T* t = (T*)this;
+		return t->isDirty() == TRUE ? S_OK : S_FALSE;
+	}
+
+    virtual HRESULT __stdcall Load ( LPCOLESTR pszFileName, DWORD dwMode )
+	{
+		T* t = (T*)this;
+		if ( pszFileName )
+		{
+			Storage store;
+			mol::string file = mol::toString(pszFileName);
+			if ( store.open(file,dwMode|STGM_SHARE_EXCLUSIVE) )
+			{
+				filename_ = file;
+				if ( ::IsEqualGUID( store.clsid(), t->getCoClassID()) )
+				{
+					punk<IPersistStorage> ps(t);
+					if ( ps )
+					{
+						return ps->Load(store);
+						return S_OK;
+					}
+				}
+			}
+		}
+		return E_FAIL;
+	}
+
+    virtual HRESULT __stdcall Save( LPCOLESTR pszFileName, BOOL fRemember )
+	{
+		T* t = (T*)this;
+		if ( pszFileName )
+		{
+			Storage store;
+			mol::string file = mol::toString(pszFileName);
+			if ( store.create(file) )
+			{
+				store.clsid(t->getCoClassID());
+				punk<IPersistStorage> ps(t);
+				if ( ps )
+				{
+					ps->Save(store,FALSE);
+					if ( fRemember )
+						filename_ = file;
+					return S_OK;
+				}
+			}
+		}
+		return E_FAIL;		
+	}
+
+
+    virtual HRESULT __stdcall SaveCompleted( LPCOLESTR pszFileName)
+	{
+		return S_OK;
+	}
+
+    virtual HRESULT __stdcall GetCurFile( LPOLESTR * ppszFileName)
+	{
+		std::wstring file = mol::towstring(filename_);
+		*ppszFileName = (LPOLESTR)::CoTaskMemAlloc( (file.size()+1)*sizeof(wchar_t));
+		wcsncpy(*ppszFileName,file.c_str(),file.size()+1);
+		return S_OK;
+	}
+
+protected:
+	mol::string				filename_;
+};
+
+
+} // end namespace mol
+
+
+#endif
