@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <!-- the product (moe) to install -->
+  <Product Id="59A16F7E-EC77-437b-978F-DDAAF554BE80"
+           Name="moe" Language="1033" Version="1.0.0.0"
+           Manufacturer="mole"
+           UpgradeCode="8F05D4B2-5D80-4978-9227-5E7511668B6A">
+
+
+    <?if $(var.BuildArch) = "x86" ?>
+    <?define PF = ProgramFilesFolder ?>
+    <?define Win64 = "no" ?>
+    <?elseif $(var.BuildArch) = "x64" ?>
+    <?define PF = ProgramFiles64Folder ?>
+    <?define Win64 = "yes" ?>
+    <?endif?>
+
+    <!-- msi version and packaging-->
+    <Package InstallerVersion="310" Compressed="yes" />
+
+    <!-- msi media: use single embedded cabinet archive-->
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+    <!-- package icon -->
+    <Icon Id="icon.ico" SourceFile=".\moe\moe.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
+
+    <!-- COM register custom actions-->
+    <Property Id='REGSVR32'>regsvr32.exe</Property>
+
+    <CustomAction Id="MOEEXE" Property='MOEEXE' Value='[INSTALLLOCATION]\moe\moe.exe' />
+
+    <!-- register/unregister moe's dlls -->
+    <CustomAction Id="DLLREG_io" Property="REGSVR32" ExeCommand='/s "[INSTALLLOCATION]\moe\io.dll"' Execute="deferred" Impersonate="no" />
+    <CustomAction Id="DLLUNREG_io" Property="REGSVR32" ExeCommand='/s /u "[INSTALLLOCATION]\moe\io.dll"' Execute="deferred" Impersonate="no" Return="ignore" />
+
+    <CustomAction Id="DLLREG_pipedprocess" Property="REGSVR32" ExeCommand='/s "[INSTALLLOCATION]\moe\pipedprocess.dll"' Execute="deferred" Impersonate="no" />
+    <CustomAction Id="DLLUNREG_pipedprocess" Property="REGSVR32" ExeCommand='/s /u "[INSTALLLOCATION]\moe\pipedprocess.dll"' Execute="deferred" Impersonate="no" Return="ignore"/>
+
+    <CustomAction Id="DLLREG_comtypes" Property="REGSVR32" ExeCommand='/s "[INSTALLLOCATION]\moe\comtypes.dll"' Execute="deferred" Impersonate="no" />
+    <CustomAction Id="DLLUNREG_comtypes" Property="REGSVR32" ExeCommand='/s /u "[INSTALLLOCATION]\moe\comtypes.dll"' Execute="deferred" Impersonate="no" Return="ignore" />
+
+    <CustomAction Id="DLLREG_ScintillAX" Property="REGSVR32" ExeCommand='/s "[INSTALLLOCATION]\moe\ScintillAx.dll"' Execute="deferred" Impersonate="no" />
+    <CustomAction Id="DLLUNREG_ScintillAX" Property="REGSVR32" ExeCommand='/s /u "[INSTALLLOCATION]\moe\ScintillAx.dll"' Execute="deferred" Impersonate="no" Return="ignore"/>
+
+    <CustomAction Id="DLLREG_setting" Property="REGSVR32" ExeCommand='/s "[INSTALLLOCATION]\moe\setting.dll"' Execute="deferred" Impersonate="no" />
+    <CustomAction Id="DLLUNREG_setting" Property="REGSVR32" ExeCommand='/s /u "[INSTALLLOCATION]\moe\setting.dll"' Execute="deferred" Impersonate="no" Return="ignore"/>
+
+    <CustomAction Id="DLLREG_shellCtrl" Property="REGSVR32" ExeCommand='/s "[INSTALLLOCATION]\moe\shellCtrl.dll"' Execute="deferred" Impersonate="no" />
+    <CustomAction Id="DLLUNREG_shellCtrl" Property="REGSVR32" ExeCommand='/s /u "[INSTALLLOCATION]\moe\shellCtrl.dll"' Execute="deferred" Impersonate="no" Return="ignore"/>
+
+    <CustomAction Id="DLLREG_shellFolder" Property="REGSVR32" ExeCommand='/s "[INSTALLLOCATION]\moe\shellFolder.dll"' Execute="deferred" Impersonate="no" />
+    <CustomAction Id="DLLUNREG_shellFolder" Property="REGSVR32" ExeCommand='/s /u "[INSTALLLOCATION]\moe\shellFolder.dll"' Execute="deferred" Impersonate="no" Return="ignore"/>
+
+    <!-- register/unregister moe executable -->
+    <CustomAction Id="EXEREG_moe"  Property="MOEEXE" ExeCommand="/REGSERVER" Execute="deferred" Impersonate="no"  />
+    <CustomAction Id="EXEUNREG_moe" Property="MOEEXE" ExeCommand="/UNREGSERVER" Execute="deferred" Impersonate="no" Return="ignore"/>
+
+    <!-- make an extra copy of the installed fx file folder to a user folder for the user to modify -->
+    <CustomAction Id="CopyFx" Script="vbscript">
+      <![CDATA[     
+        Set fso = CreateObject("Scripting.FileSystemObject")
+        src = Session.Property("INSTALLLOCATION") & "\moe\fx"
+        dest = Session.Property("AppDataFolder") & "\moe\fx"
+        fso.CopyFolder src,dest,true 
+    ]]>
+    </CustomAction>
+
+    <!-- installation directory structure -->
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+
+      <!-- Binaries -->
+      <Directory Id="$(var.PF)">
+        <Directory Id="INSTALLLOCATION" Name="mol">
+
+          <Component Id="moe" Guid="{D5F7AB60-9A35-47c0-9629-FF02CB9E7718}"
+            SharedDllRefCount="no" KeyPath="no" NeverOverwrite="no" Permanent="no" Transitive="no"
+            Win64="$(var.Win64)" Location="either">
+            <CreateFolder/>
+          </Component>
+
+        </Directory>
+      </Directory>
+
+      <!-- App Data -->
+      <Directory Id='AppDataFolder'>
+        <Directory Id='MOEAPPDATAFOLDER' Name='moe' >
+
+          <Component Id="moeData" Guid="{D8061C1F-0D43-4adc-A9FF-DBBD3B62F783}"  >
+            <RegistryKey Action="none" Key="Software\mol\moe\appdata" Root="HKCU" >
+              <RegistryValue Type="string" Value="1" KeyPath="yes" />
+            </RegistryKey>
+            <File Id='uiXmo' Name='ui.xmo' DiskId='1' Source='.\moe\ui.xmo'  />
+            <RemoveFolder Id='MOEAPPDATAFOLDER' On='uninstall' />
+          </Component>
+
+        </Directory>
+      </Directory>
+
+      <!-- Start Menu Shortcut goes here -->
+      <Directory Id="ProgramMenuFolder">
+      </Directory>
+      <!-- Unpriviledged User Install goes here -->
+      <Directory Id="LocalAppDataFolder">
+      </Directory>
+    </Directory>
+
+    <!-- the shortcut -->
+    <DirectoryRef Id="ProgramMenuFolder">
+
+      <Component Id="moeShortcut" Guid="{F0F3FC1D-3E17-4b6a-A9A0-867615C82A1C}">
+        <Shortcut Id="moeStartMenuShortcut"
+                  Name="moe"
+                  Description="mole's own editor"
+                  Target="[INSTALLLOCATION]\moe\moe.exe"
+                  WorkingDirectory="INSTALLLOCATION"/>
+        <RegistryValue Root="HKCU" Key="Software\mol\moe\shortcut" Name="installed" Type="string" Value="1" KeyPath="yes"/>
+      </Component>
+
+    </DirectoryRef>
+
+
+    <!-- Features -->
+
+    <Feature AllowAdvertise='no' InstallDefault='local' Absent='disallow'
+             Id='MoeMain' Title='moe' Description='moe application binaries'
+             Level='1' ConfigurableDirectory="INSTALLLOCATION">
+      <ComponentRef Id="moe" />
+      <ComponentGroupRef Id='MoeCompGroup' />
+      <ComponentRef Id='moeData' />
+      <ComponentRef Id="moeShortcut" />
+
+    </Feature>
+
+
+    <!-- fire custom actions -->
+
+    <InstallExecuteSequence>
+
+      <!-- set path to moe.exe -->
+      <Custom Action='MOEEXE' Before='InstallFiles' />
+
+
+      <!-- register COM objects  -->
+      <Custom Action='EXEREG_moe' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLREG_io' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLREG_pipedprocess' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLREG_comtypes' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLREG_ScintillAX' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLREG_shellCtrl' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLREG_shellFolder' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLREG_setting' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
+
+      <!-- unregister COM objects  -->
+      <Custom Action='EXEUNREG_moe' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLUNREG_io' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLUNREG_pipedprocess' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLUNREG_comtypes' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLUNREG_ScintillAX' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLUNREG_shellCtrl' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLUNREG_shellFolder' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLUNREG_setting' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+
+      <!--   <Custom Action="CopyFx" After="InstallFinalize">Not Installed</Custom>-->
+
+    </InstallExecuteSequence>
+
+    <!-- WIX UI overrides-->
+    <WixVariable Id="WixUILicenseRtf" Value=".\res\License.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value=".\res\moeinstall.jpg" />
+    <WixVariable Id="WixUIDialogBmp" Value=".\res\front.jpg" />
+
+    <!-- WIX UI support -->
+    <UIRef Id="WixUI_ErrorProgressText" />
+    <UIRef Id="WixUI_MondoNoLicense"/>
+    
+  </Product>
+</Wix>

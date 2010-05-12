@@ -1,0 +1,1540 @@
+// ******************************************************************************
+// * This is an automatically generated file containing the ribbon resource for *
+// * your application.                                                          *
+// ******************************************************************************
+
+#include ".\ribbonres.h"
+
+STRINGTABLE 
+BEGIN
+    RibbonTabMain_LabelTitle_RESID L"Main" /* LabelTitle RibbonTabMain_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabTools_LabelTitle_RESID L"Tools" /* LabelTitle RibbonTabTools_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabDocument_LabelTitle_RESID L"Document" /* LabelTitle RibbonTabDocument_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabPreferences_LabelTitle_RESID L"Preferences" /* LabelTitle RibbonTabPreferences_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    macRib_LabelTitle_RESID L"MacRib" /* LabelTitle macRib_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileGroup_LabelTitle_RESID L"File" /* LabelTitle RibbonFileGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileGroup2_LabelTitle_RESID L"Persist" /* LabelTitle RibbonFileGroup2_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonViewGroup_LabelTitle_RESID L"View" /* LabelTitle RibbonViewGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonView_LabelTitle_RESID L"View" /* LabelTitle RibbonView_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonView_TooltipTitle_RESID L"Window Views" /* TooltipTitle RibbonView_TooltipTitle_RESID: (null) */
+END
+
+RibbonView_SmallImages_RESID    BITMAP    "ribbon\View.bmp" /* SmallImages RibbonView_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonToolGroup_LabelTitle_RESID L"Tools" /* LabelTitle RibbonToolGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTool2Group_LabelTitle_RESID L"User" /* LabelTitle RibbonTool2Group_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSyntaxGroup_LabelTitle_RESID L"Tools" /* LabelTitle RibbonSyntaxGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDirGroup_LabelTitle_RESID L"Directory" /* LabelTitle RibbonDirGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDir2Group_LabelTitle_RESID L"Edit" /* LabelTitle RibbonDir2Group_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonClipboardGroup_LabelTitle_RESID L"Clipboard" /* LabelTitle RibbonClipboardGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonClipboardGroup_TooltipTitle_RESID L"Clipboard" /* TooltipTitle RibbonClipboardGroup_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonClipboardGroup_TooltipDescription_RESID L"Cut, Copy & Paste" /* TooltipDescription RibbonClipboardGroup_TooltipDescription_RESID: (null) */
+END
+
+RibbonClipboardGroup_SmallImages_RESID    BITMAP    "ribbon\Paste.bmp" /* SmallImages RibbonClipboardGroup_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonUndoGroup_LabelTitle_RESID L"Undo" /* LabelTitle RibbonUndoGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDocGroup_LabelTitle_RESID L"Doc" /* LabelTitle RibbonDocGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonBytesShownGroup_LabelTitle_RESID L"Bytes" /* LabelTitle RibbonBytesShownGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSettingsGroup_LabelTitle_RESID L"Syntax" /* LabelTitle RibbonSettingsGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSettingsGroup2_LabelTitle_RESID L"Settings" /* LabelTitle RibbonSettingsGroup2_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonModeGroup_LabelTitle_RESID L"EOL" /* LabelTitle RibbonModeGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonReloadGroup_LabelTitle_RESID L"Refresh" /* LabelTitle RibbonReloadGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTemplateGroup_LabelTitle_RESID L"Template" /* LabelTitle RibbonTemplateGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDocumentContextMap_LabelTitle_RESID L"Context Menu" /* LabelTitle RibbonDocumentContextMap_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabContextMap_LabelTitle_RESID L"Tab Context Menu" /* LabelTitle RibbonTabContextMap_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonPrefGroup_LabelTitle_RESID L"Settings" /* LabelTitle RibbonPrefGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonBytesShown_LabelTitle_RESID L"Show" /* LabelTitle RibbonBytesShown_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonMRUItems_LabelTitle_RESID L"Recent Files" /* LabelTitle RibbonMRUItems_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonAppMenuGroup_LabelTitle_RESID L"Menu" /* LabelTitle RibbonAppMenuGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonHelp_LabelTitle_RESID L"Help" /* LabelTitle RibbonHelp_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSettingsTools_LabelTitle_RESID L"Tools" /* LabelTitle RibbonSettingsTools_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSettingsTools_TooltipTitle_RESID L"Tools" /* TooltipTitle RibbonSettingsTools_TooltipTitle_RESID: (null) */
+END
+
+RibbonSettingsTools_SmallImages_RESID    BITMAP    "ribbon\ExecScript.bmp" /* SmallImages RibbonSettingsTools_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonOpenTree_LabelTitle_RESID L"Open" /* LabelTitle RibbonOpenTree_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonOpenTree_TooltipTitle_RESID L"Open" /* TooltipTitle RibbonOpenTree_TooltipTitle_RESID: (null) */
+END
+
+RibbonOpenTree_SmallImages_RESID    BITMAP    "ribbon\Directory.bmp" /* SmallImages RibbonOpenTree_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonReloadTree_LabelTitle_RESID L"Reload" /* LabelTitle RibbonReloadTree_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonReloadTree_TooltipTitle_RESID L"Reload Dir" /* TooltipTitle RibbonReloadTree_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonReloadTree_TooltipDescription_RESID L"Reload Current Directory" /* TooltipDescription RibbonReloadTree_TooltipDescription_RESID: (null) */
+END
+
+RibbonReloadTree_LargeImages_RESID    BITMAP    "ribbon\Reload.bmp" /* LargeImages RibbonReloadTree_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonDeleteTree_LabelTitle_RESID L"Delete" /* LabelTitle RibbonDeleteTree_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDeleteTree_TooltipTitle_RESID L"Delete" /* TooltipTitle RibbonDeleteTree_TooltipTitle_RESID: (null) */
+END
+
+RibbonDeleteTree_SmallImages_RESID    BITMAP    "ribbon\CloseAll.bmp" /* SmallImages RibbonDeleteTree_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonRenameTree_LabelTitle_RESID L"Rename" /* LabelTitle RibbonRenameTree_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonRenameTree_TooltipTitle_RESID L"Rename" /* TooltipTitle RibbonRenameTree_TooltipTitle_RESID: (null) */
+END
+
+RibbonRenameTree_SmallImages_RESID    BITMAP    "ribbon\Replace.bmp" /* SmallImages RibbonRenameTree_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonCutTree_LabelTitle_RESID L"Cut" /* LabelTitle RibbonCutTree_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonCutTree_TooltipTitle_RESID L"Cut" /* TooltipTitle RibbonCutTree_TooltipTitle_RESID: (null) */
+END
+
+RibbonCutTree_LargeImages_RESID    BITMAP    "ribbon\Cut.bmp" /* LargeImages RibbonCutTree_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonCopyTree_LabelTitle_RESID L"Copy" /* LabelTitle RibbonCopyTree_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonCopyTree_TooltipTitle_RESID L"Copy" /* TooltipTitle RibbonCopyTree_TooltipTitle_RESID: (null) */
+END
+
+RibbonCopyTree_LargeImages_RESID    BITMAP    "ribbon\Copy.bmp" /* LargeImages RibbonCopyTree_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonPasteTree_LabelTitle_RESID L"Paste" /* LabelTitle RibbonPasteTree_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonPasteTree_TooltipTitle_RESID L"Paste" /* TooltipTitle RibbonPasteTree_TooltipTitle_RESID: (null) */
+END
+
+RibbonPasteTree_LargeImages_RESID    BITMAP    "ribbon\Paste.bmp" /* LargeImages RibbonPasteTree_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonExecuteTree_LabelTitle_RESID L"Execute" /* LabelTitle RibbonExecuteTree_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonExecuteTree_TooltipTitle_RESID L"Execute" /* TooltipTitle RibbonExecuteTree_TooltipTitle_RESID: (null) */
+END
+
+RibbonExecuteTree_SmallImages_RESID    BITMAP    "ribbon\ExecScript.bmp" /* SmallImages RibbonExecuteTree_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonNewDirTree_LabelTitle_RESID L"NewDir" /* LabelTitle RibbonNewDirTree_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonNewDirTree_TooltipTitle_RESID L"New Directory" /* TooltipTitle RibbonNewDirTree_TooltipTitle_RESID: (null) */
+END
+
+RibbonNewDirTree_SmallImages_RESID    BITMAP    "ribbon\NewDir.bmp" /* SmallImages RibbonNewDirTree_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonPropertiesTree_LabelTitle_RESID L"Properties" /* LabelTitle RibbonPropertiesTree_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonPropertiesTree_TooltipTitle_RESID L"Properties" /* TooltipTitle RibbonPropertiesTree_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonPropertiesTree_TooltipDescription_RESID L"Show Properties" /* TooltipDescription RibbonPropertiesTree_TooltipDescription_RESID: (null) */
+END
+
+RibbonPropertiesTree_SmallImages_RESID    BITMAP    "ribbon\Preferences.bmp" /* SmallImages RibbonPropertiesTree_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonOpenList_LabelTitle_RESID L"Open" /* LabelTitle RibbonOpenList_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonOpenList_TooltipTitle_RESID L"Open" /* TooltipTitle RibbonOpenList_TooltipTitle_RESID: (null) */
+END
+
+RibbonOpenList_SmallImages_RESID    BITMAP    "ribbon\Directory.bmp" /* SmallImages RibbonOpenList_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonReloadList_LabelTitle_RESID L"Reload" /* LabelTitle RibbonReloadList_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonReloadList_TooltipTitle_RESID L"Reload Dir" /* TooltipTitle RibbonReloadList_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonReloadList_TooltipDescription_RESID L"Reload Current Directory" /* TooltipDescription RibbonReloadList_TooltipDescription_RESID: (null) */
+END
+
+RibbonReloadList_LargeImages_RESID    BITMAP    "ribbon\Reload.bmp" /* LargeImages RibbonReloadList_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonDeleteList_LabelTitle_RESID L"Delete" /* LabelTitle RibbonDeleteList_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDeleteList_TooltipTitle_RESID L"Delete" /* TooltipTitle RibbonDeleteList_TooltipTitle_RESID: (null) */
+END
+
+RibbonDeleteList_SmallImages_RESID    BITMAP    "ribbon\CloseAll.bmp" /* SmallImages RibbonDeleteList_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonRenameList_LabelTitle_RESID L"Rename" /* LabelTitle RibbonRenameList_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonRenameList_TooltipTitle_RESID L"Rename" /* TooltipTitle RibbonRenameList_TooltipTitle_RESID: (null) */
+END
+
+RibbonRenameList_SmallImages_RESID    BITMAP    "ribbon\Replace.bmp" /* SmallImages RibbonRenameList_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonCutList_LabelTitle_RESID L"Cut" /* LabelTitle RibbonCutList_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonCutList_TooltipTitle_RESID L"Cut" /* TooltipTitle RibbonCutList_TooltipTitle_RESID: (null) */
+END
+
+RibbonCutList_LargeImages_RESID    BITMAP    "ribbon\Cut.bmp" /* LargeImages RibbonCutList_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonCopyList_LabelTitle_RESID L"Copy" /* LabelTitle RibbonCopyList_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonCopyList_TooltipTitle_RESID L"Copy" /* TooltipTitle RibbonCopyList_TooltipTitle_RESID: (null) */
+END
+
+RibbonCopyList_LargeImages_RESID    BITMAP    "ribbon\Copy.bmp" /* LargeImages RibbonCopyList_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonPasteList_LabelTitle_RESID L"Paste" /* LabelTitle RibbonPasteList_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonPasteList_TooltipTitle_RESID L"Paste" /* TooltipTitle RibbonPasteList_TooltipTitle_RESID: (null) */
+END
+
+RibbonPasteList_LargeImages_RESID    BITMAP    "ribbon\Paste.bmp" /* LargeImages RibbonPasteList_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonExecuteList_LabelTitle_RESID L"Execute" /* LabelTitle RibbonExecuteList_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonExecuteList_TooltipTitle_RESID L"Execute" /* TooltipTitle RibbonExecuteList_TooltipTitle_RESID: (null) */
+END
+
+RibbonExecuteList_SmallImages_RESID    BITMAP    "ribbon\ExecScript.bmp" /* SmallImages RibbonExecuteList_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonNewDirList_LabelTitle_RESID L"NewDir" /* LabelTitle RibbonNewDirList_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonNewDirList_TooltipTitle_RESID L"New Directory" /* TooltipTitle RibbonNewDirList_TooltipTitle_RESID: (null) */
+END
+
+RibbonNewDirList_SmallImages_RESID    BITMAP    "ribbon\NewDir.bmp" /* SmallImages RibbonNewDirList_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonPropertiesList_LabelTitle_RESID L"Properties" /* LabelTitle RibbonPropertiesList_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonPropertiesList_TooltipTitle_RESID L"Properties" /* TooltipTitle RibbonPropertiesList_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonPropertiesList_TooltipDescription_RESID L"Show Properties" /* TooltipDescription RibbonPropertiesList_TooltipDescription_RESID: (null) */
+END
+
+RibbonPropertiesList_SmallImages_RESID    BITMAP    "ribbon\Preferences.bmp" /* SmallImages RibbonPropertiesList_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonUpDir_LabelTitle_RESID L"UpDir" /* LabelTitle RibbonUpDir_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonUpDir_TooltipTitle_RESID L"One Level Up" /* TooltipTitle RibbonUpDir_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonUpDir_TooltipDescription_RESID L"Show Parent Directory" /* TooltipDescription RibbonUpDir_TooltipDescription_RESID: (null) */
+END
+
+RibbonUpDir_SmallImages_RESID    BITMAP    "ribbon\UpDir.bmp" /* SmallImages RibbonUpDir_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonEnterDir_LabelTitle_RESID L"EnterDir" /* LabelTitle RibbonEnterDir_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEnterDir_TooltipTitle_RESID L"New File" /* TooltipTitle RibbonEnterDir_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEnterDir_TooltipDescription_RESID L"Create a new File" /* TooltipDescription RibbonEnterDir_TooltipDescription_RESID: (null) */
+END
+
+RibbonEnterDir_SmallImages_RESID    BITMAP    "ribbon\EnterDir.bmp" /* SmallImages RibbonEnterDir_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonEncoding_LabelTitle_RESID L"Encoding" /* LabelTitle RibbonEncoding_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEncoding_TooltipTitle_RESID L"Encoding" /* TooltipTitle RibbonEncoding_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEncoding_TooltipDescription_RESID L"File Charset Encoding" /* TooltipDescription RibbonEncoding_TooltipDescription_RESID: (null) */
+END
+
+RibbonEncoding_SmallImages_RESID    BITMAP    "ribbon\Preferences.bmp" /* SmallImages RibbonEncoding_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonWriteBOM_LabelTitle_RESID L"Write BOM" /* LabelTitle RibbonWriteBOM_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonWriteBOM_TooltipTitle_RESID L"Write BOM" /* TooltipTitle RibbonWriteBOM_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonWriteBOM_TooltipDescription_RESID L"Write a BOM at the beginning of file" /* TooltipDescription RibbonWriteBOM_TooltipDescription_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabs_LabelTitle_RESID L"Tab usage" /* LabelTitle RibbonTabs_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabs_TooltipTitle_RESID L"Tab Usage" /* TooltipTitle RibbonTabs_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabGroup_LabelTitle_RESID L"Tab Usage" /* LabelTitle RibbonTabGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabGroup_TooltipTitle_RESID L"Tab Usage" /* TooltipTitle RibbonTabGroup_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabGroup2_LabelTitle_RESID L"Tab Settings" /* LabelTitle RibbonTabGroup2_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabGroup2_TooltipTitle_RESID L"Tab Settings" /* TooltipTitle RibbonTabGroup2_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabUseTabs_LabelTitle_RESID L"Use Tabs" /* LabelTitle RibbonTabUseTabs_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabUseTabs_TooltipTitle_RESID L"Use Tabulators or plain whitespace" /* TooltipTitle RibbonTabUseTabs_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabIndents_LabelTitle_RESID L"Tab Indents" /* LabelTitle RibbonTabIndents_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabIndents_TooltipTitle_RESID L"Tabulator indents" /* TooltipTitle RibbonTabIndents_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabBackSpaceUnIndents_LabelTitle_RESID L"Back Unindents" /* LabelTitle RibbonTabBackSpaceUnIndents_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabBackSpaceUnIndents_TooltipTitle_RESID L"Backspace Unindents" /* TooltipTitle RibbonTabBackSpaceUnIndents_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabSize_LabelTitle_RESID L"Tab Size" /* LabelTitle RibbonTabSize_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabSize_TooltipTitle_RESID L"Size of tabulators in spaces" /* TooltipTitle RibbonTabSize_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabConvert_LabelTitle_RESID L"Convert Tabs Now" /* LabelTitle RibbonTabConvert_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonTabConvert_TooltipTitle_RESID L"Convert tabulators to whitespace" /* TooltipTitle RibbonTabConvert_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonPrefsUseTabs_LabelTitle_RESID L"Use Tabs" /* LabelTitle RibbonPrefsUseTabs_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonPrefsUseTabs_TooltipTitle_RESID L"Use Tabulators or plain whitespace" /* TooltipTitle RibbonPrefsUseTabs_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonPrefsTabIndents_LabelTitle_RESID L"Tab Indents" /* LabelTitle RibbonPrefsTabIndents_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonPrefsTabIndents_TooltipTitle_RESID L"Tabulator indents" /* TooltipTitle RibbonPrefsTabIndents_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonPrefsBackSpaceUnIndents_LabelTitle_RESID L"Back Unindents" /* LabelTitle RibbonPrefsBackSpaceUnIndents_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonPrefsBackSpaceUnIndents_TooltipTitle_RESID L"Backspace Unindents" /* TooltipTitle RibbonPrefsBackSpaceUnIndents_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonPrefsTabSize_LabelTitle_RESID L"Tab Size" /* LabelTitle RibbonPrefsTabSize_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonPrefsTabSize_TooltipTitle_RESID L"Size of tabulators in spaces" /* TooltipTitle RibbonPrefsTabSize_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditPreferences_LabelTitle_RESID L"Edit Preferences" /* LabelTitle RibbonEditPreferences_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditPreferences_TooltipTitle_RESID L"Edit User Preferences" /* TooltipTitle RibbonEditPreferences_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonImportPreferences_LabelTitle_RESID L"Import Preferences" /* LabelTitle RibbonImportPreferences_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonImportPreferences_TooltipTitle_RESID L"Import User Preferences" /* TooltipTitle RibbonImportPreferences_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonExportPreferences_LabelTitle_RESID L"Export Preferences" /* LabelTitle RibbonExportPreferences_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonExportPreferences_TooltipTitle_RESID L"Export User Preferences" /* TooltipTitle RibbonExportPreferences_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    cmdQAT_LabelTitle_RESID L"QAT" /* LabelTitle cmdQAT_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    cmdCustomizeQAT_LabelTitle_RESID L"Customize QAT" /* LabelTitle cmdCustomizeQAT_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileNew_LabelTitle_RESID L"New" /* LabelTitle RibbonFileNew_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileNew_TooltipTitle_RESID L"New File" /* TooltipTitle RibbonFileNew_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileNew_TooltipDescription_RESID L"Create a new File" /* TooltipDescription RibbonFileNew_TooltipDescription_RESID: (null) */
+END
+
+RibbonFileNew_SmallImages_RESID    BITMAP    "ribbon\New.bmp" /* SmallImages RibbonFileNew_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonFileOpen_LabelTitle_RESID L"Open" /* LabelTitle RibbonFileOpen_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileOpen_TooltipTitle_RESID L"Open File" /* TooltipTitle RibbonFileOpen_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileOpen_TooltipDescription_RESID L"Open a File" /* TooltipDescription RibbonFileOpen_TooltipDescription_RESID: (null) */
+END
+
+RibbonFileOpen_LargeImages_RESID    BITMAP    "ribbon\OpenFile.bmp" /* LargeImages RibbonFileOpen_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonFileOpenDirectory_LabelTitle_RESID L"Open Folder" /* LabelTitle RibbonFileOpenDirectory_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileOpenDirectory_TooltipTitle_RESID L"Open Folder" /* TooltipTitle RibbonFileOpenDirectory_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileOpenDirectory_TooltipDescription_RESID L"Open a Directory Folder" /* TooltipDescription RibbonFileOpenDirectory_TooltipDescription_RESID: (null) */
+END
+
+RibbonFileOpenDirectory_LargeImages_RESID    BITMAP    "ribbon\Folder.bmp" /* LargeImages RibbonFileOpenDirectory_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonFileOpenUrl_LabelTitle_RESID L"Open Url" /* LabelTitle RibbonFileOpenUrl_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileOpenUrl_TooltipTitle_RESID L"Open Url" /* TooltipTitle RibbonFileOpenUrl_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileOpenUrl_TooltipDescription_RESID L"Open an URL Location" /* TooltipDescription RibbonFileOpenUrl_TooltipDescription_RESID: (null) */
+END
+
+RibbonFileOpenUrl_LargeImages_RESID    BITMAP    "ribbon\Hyperlink.bmp" /* LargeImages RibbonFileOpenUrl_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonFileSave_LabelTitle_RESID L"Save" /* LabelTitle RibbonFileSave_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileSave_TooltipTitle_RESID L"Save File" /* TooltipTitle RibbonFileSave_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileSave_TooltipDescription_RESID L"Save a File" /* TooltipDescription RibbonFileSave_TooltipDescription_RESID: (null) */
+END
+
+RibbonFileSave_LargeImages_RESID    BITMAP    "ribbon\Save.bmp" /* LargeImages RibbonFileSave_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonFileSaveAs_LabelTitle_RESID L"Save File As" /* LabelTitle RibbonFileSaveAs_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileSaveAs_TooltipTitle_RESID L"Save File As" /* TooltipTitle RibbonFileSaveAs_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileSaveAs_TooltipDescription_RESID L"Save a Copy as" /* TooltipDescription RibbonFileSaveAs_TooltipDescription_RESID: (null) */
+END
+
+RibbonFileSaveAs_LargeImages_RESID    BITMAP    "ribbon\SaveAs.bmp" /* LargeImages RibbonFileSaveAs_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonFilePrint_LabelTitle_RESID L"Print" /* LabelTitle RibbonFilePrint_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFilePrint_TooltipTitle_RESID L"Print" /* TooltipTitle RibbonFilePrint_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFilePrint_TooltipDescription_RESID L"Print the current Document" /* TooltipDescription RibbonFilePrint_TooltipDescription_RESID: (null) */
+END
+
+RibbonFilePrint_LargeImages_RESID    BITMAP    "ribbon\Print.bmp" /* LargeImages RibbonFilePrint_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonFilePreferences_LabelTitle_RESID L"Preferences" /* LabelTitle RibbonFilePreferences_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFilePreferences_TooltipTitle_RESID L"User Preferences" /* TooltipTitle RibbonFilePreferences_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFilePreferences_TooltipDescription_RESID L"Edit User Preferences" /* TooltipDescription RibbonFilePreferences_TooltipDescription_RESID: (null) */
+END
+
+RibbonFilePreferences_LargeImages_RESID    BITMAP    "ribbon\Preferences.bmp" /* LargeImages RibbonFilePreferences_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonFileExit_LabelTitle_RESID L"Exit" /* LabelTitle RibbonFileExit_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileExit_TooltipTitle_RESID L"Exit" /* TooltipTitle RibbonFileExit_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileExit_TooltipDescription_RESID L"Exit Application" /* TooltipDescription RibbonFileExit_TooltipDescription_RESID: (null) */
+END
+
+RibbonFileExit_LargeImages_RESID    BITMAP    "ribbon\Exit.bmp" /* LargeImages RibbonFileExit_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonViewCloseOthers_LabelTitle_RESID L"Close Others" /* LabelTitle RibbonViewCloseOthers_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonViewCloseOthers_TooltipTitle_RESID L"Close Other Documents" /* TooltipTitle RibbonViewCloseOthers_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonViewCloseOthers_TooltipDescription_RESID L"Closes all open Documents but the active one" /* TooltipDescription RibbonViewCloseOthers_TooltipDescription_RESID: (null) */
+END
+
+RibbonViewCloseOthers_LargeImages_RESID    BITMAP    "ribbon\Close.bmp" /* LargeImages RibbonViewCloseOthers_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonEditReload_LabelTitle_RESID L"Reload" /* LabelTitle RibbonEditReload_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditReload_TooltipTitle_RESID L"Reload" /* TooltipTitle RibbonEditReload_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditReload_TooltipDescription_RESID L"Reload current Document" /* TooltipDescription RibbonEditReload_TooltipDescription_RESID: (null) */
+END
+
+RibbonEditReload_LargeImages_RESID    BITMAP    "ribbon\Reload.bmp" /* LargeImages RibbonEditReload_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonParentDirectory_LabelTitle_RESID L"Directory" /* LabelTitle RibbonParentDirectory_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonParentDirectory_TooltipTitle_RESID L"Open Parent Directory" /* TooltipTitle RibbonParentDirectory_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonParentDirectory_TooltipDescription_RESID L"Show the Directory for the current Document" /* TooltipDescription RibbonParentDirectory_TooltipDescription_RESID: (null) */
+END
+
+RibbonParentDirectory_LargeImages_RESID    BITMAP    "ribbon\Directory.bmp" /* LargeImages RibbonParentDirectory_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonJumpDirectory_LabelTitle_RESID L"Jump" /* LabelTitle RibbonJumpDirectory_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonJumpDirectory_TooltipTitle_RESID L"Jump to Parent Directory" /* TooltipTitle RibbonJumpDirectory_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonJumpDirectory_TooltipDescription_RESID L"Show the current Document's Parent Directory in Tree View" /* TooltipDescription RibbonJumpDirectory_TooltipDescription_RESID: (null) */
+END
+
+RibbonJumpDirectory_LargeImages_RESID    BITMAP    "ribbon\Jump.bmp" /* LargeImages RibbonJumpDirectory_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonToolDebug_LabelTitle_RESID L"Debug Script" /* LabelTitle RibbonToolDebug_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonToolDebug_TooltipTitle_RESID L"Debug Script" /* TooltipTitle RibbonToolDebug_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonToolDebug_TooltipDescription_RESID L"Run the current Document as Script in Debug Mode" /* TooltipDescription RibbonToolDebug_TooltipDescription_RESID: (null) */
+END
+
+RibbonToolDebug_LargeImages_RESID    BITMAP    "ribbon\Debug.bmp" /* LargeImages RibbonToolDebug_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonEditCut_LabelTitle_RESID L"Cut" /* LabelTitle RibbonEditCut_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditCut_TooltipTitle_RESID L"Cut" /* TooltipTitle RibbonEditCut_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditCut_TooltipDescription_RESID L"Cut to Clipboard" /* TooltipDescription RibbonEditCut_TooltipDescription_RESID: (null) */
+END
+
+RibbonEditCut_LargeImages_RESID    BITMAP    "ribbon\Cut.bmp" /* LargeImages RibbonEditCut_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonEditCopy_LabelTitle_RESID L"Copy" /* LabelTitle RibbonEditCopy_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditCopy_TooltipTitle_RESID L"Copy" /* TooltipTitle RibbonEditCopy_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditCopy_TooltipDescription_RESID L"Copy to Clipboard" /* TooltipDescription RibbonEditCopy_TooltipDescription_RESID: (null) */
+END
+
+RibbonEditCopy_LargeImages_RESID    BITMAP    "ribbon\Copy.bmp" /* LargeImages RibbonEditCopy_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonEditPaste_LabelTitle_RESID L"Paste" /* LabelTitle RibbonEditPaste_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditPaste_TooltipTitle_RESID L"Paste" /* TooltipTitle RibbonEditPaste_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditPaste_TooltipDescription_RESID L"Paste to Clipboard" /* TooltipDescription RibbonEditPaste_TooltipDescription_RESID: (null) */
+END
+
+RibbonEditPaste_LargeImages_RESID    BITMAP    "ribbon\Paste.bmp" /* LargeImages RibbonEditPaste_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonEditUndo_LabelTitle_RESID L"Undo" /* LabelTitle RibbonEditUndo_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditUndo_TooltipTitle_RESID L"Undo" /* TooltipTitle RibbonEditUndo_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditUndo_TooltipDescription_RESID L"Undo last Command" /* TooltipDescription RibbonEditUndo_TooltipDescription_RESID: (null) */
+END
+
+RibbonEditUndo_LargeImages_RESID    BITMAP    "ribbon\Undo.bmp" /* LargeImages RibbonEditUndo_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonEditRedo_LabelTitle_RESID L"Redo" /* LabelTitle RibbonEditRedo_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditRedo_TooltipTitle_RESID L"Redo" /* TooltipTitle RibbonEditRedo_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditRedo_TooltipDescription_RESID L"Redo last Command" /* TooltipDescription RibbonEditRedo_TooltipDescription_RESID: (null) */
+END
+
+RibbonEditRedo_LargeImages_RESID    BITMAP    "ribbon\Redo.bmp" /* LargeImages RibbonEditRedo_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonEditSelectAll_LabelTitle_RESID L"Select All" /* LabelTitle RibbonEditSelectAll_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditSelectAll_TooltipTitle_RESID L"Select All" /* TooltipTitle RibbonEditSelectAll_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditSelectAll_TooltipDescription_RESID L"Select All Text in current Document" /* TooltipDescription RibbonEditSelectAll_TooltipDescription_RESID: (null) */
+END
+
+RibbonEditSelectAll_LargeImages_RESID    BITMAP    "ribbon\SelectAll.bmp" /* LargeImages RibbonEditSelectAll_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonEditFind_LabelTitle_RESID L"Find" /* LabelTitle RibbonEditFind_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditFind_TooltipTitle_RESID L"Find" /* TooltipTitle RibbonEditFind_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditFind_TooltipDescription_RESID L"Search in document" /* TooltipDescription RibbonEditFind_TooltipDescription_RESID: (null) */
+END
+
+RibbonEditFind_LargeImages_RESID    BITMAP    "ribbon\Find.bmp" /* LargeImages RibbonEditFind_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonEditReplace_LabelTitle_RESID L"Replace" /* LabelTitle RibbonEditReplace_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditReplace_TooltipTitle_RESID L"Replace" /* TooltipTitle RibbonEditReplace_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditReplace_TooltipDescription_RESID L"Replace in document" /* TooltipDescription RibbonEditReplace_TooltipDescription_RESID: (null) */
+END
+
+RibbonEditReplace_LargeImages_RESID    BITMAP    "ribbon\Replace.bmp" /* LargeImages RibbonEditReplace_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonSettings_LabelTitle_RESID L"Settings" /* LabelTitle RibbonSettings_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSettings_TooltipTitle_RESID L"Document Settings" /* TooltipTitle RibbonSettings_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSettings_TooltipDescription_RESID L"Edit Document Settings" /* TooltipDescription RibbonSettings_TooltipDescription_RESID: (null) */
+END
+
+RibbonSettings_LargeImages_RESID    BITMAP    "ribbon\Settings.bmp" /* LargeImages RibbonSettings_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonSelectMode_LabelTitle_RESID L"EOL" /* LabelTitle RibbonSelectMode_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectMode_TooltipTitle_RESID L"Select Document Mode" /* TooltipTitle RibbonSelectMode_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectMode_TooltipDescription_RESID L"Set Document EOL Mode" /* TooltipDescription RibbonSelectMode_TooltipDescription_RESID: (null) */
+END
+
+RibbonSelectMode_LargeImages_RESID    BITMAP    "ribbon\EOL.bmp" /* LargeImages RibbonSelectMode_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonSelectModeUnix_LabelTitle_RESID L"UNIX" /* LabelTitle RibbonSelectModeUnix_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectModeUnix_TooltipTitle_RESID L"Set UNIX Mode" /* TooltipTitle RibbonSelectModeUnix_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectModeUnix_TooltipDescription_RESID L"Set Document EOL Mode to UNIX (LF)" /* TooltipDescription RibbonSelectModeUnix_TooltipDescription_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectModeWin32_LabelTitle_RESID L"Windows" /* LabelTitle RibbonSelectModeWin32_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectModeWin32_TooltipTitle_RESID L"Set Windows Mode" /* TooltipTitle RibbonSelectModeWin32_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectModeWin32_TooltipDescription_RESID L"Set Document EOL Mode to Windows (LFRF)" /* TooltipDescription RibbonSelectModeWin32_TooltipDescription_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguage_LabelTitle_RESID L"Syntax" /* LabelTitle RibbonSelectLanguage_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguage_TooltipTitle_RESID L"Syntax Highlite Mode" /* TooltipTitle RibbonSelectLanguage_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguage_TooltipDescription_RESID L"Select Syntax Highlite Mode" /* TooltipDescription RibbonSelectLanguage_TooltipDescription_RESID: (null) */
+END
+
+RibbonSelectLanguage_LargeImages_RESID    BITMAP    "ribbon\Language.bmp" /* LargeImages RibbonSelectLanguage_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguage2_LabelTitle_RESID L"Syntax" /* LabelTitle RibbonSelectLanguage2_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguage2_TooltipTitle_RESID L"Syntax Highlite Mode" /* TooltipTitle RibbonSelectLanguage2_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguage2_TooltipDescription_RESID L"Select Syntax Highlite Mode" /* TooltipDescription RibbonSelectLanguage2_TooltipDescription_RESID: (null) */
+END
+
+RibbonSelectLanguage2_LargeImages_RESID    BITMAP    "ribbon\Language.bmp" /* LargeImages RibbonSelectLanguage2_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageText_LabelTitle_RESID L"Text (none)" /* LabelTitle RibbonSelectLanguageText_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageText_TooltipTitle_RESID L"Text (no Highlite)" /* TooltipTitle RibbonSelectLanguageText_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageText_TooltipDescription_RESID L"Select No Syntax Highlite Mode" /* TooltipDescription RibbonSelectLanguageText_TooltipDescription_RESID: (null) */
+END
+
+RibbonSelectLanguageText_LargeImages_RESID    BITMAP    "ribbon\Settings.bmp" /* LargeImages RibbonSelectLanguageText_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageHtml_LabelTitle_RESID L"HTML" /* LabelTitle RibbonSelectLanguageHtml_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageHtml_TooltipTitle_RESID L"HTML" /* TooltipTitle RibbonSelectLanguageHtml_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageHtml_TooltipDescription_RESID L"Select HTML Syntax Highlite Mode" /* TooltipDescription RibbonSelectLanguageHtml_TooltipDescription_RESID: (null) */
+END
+
+RibbonSelectLanguageHtml_LargeImages_RESID    BITMAP    "ribbon\Settings.bmp" /* LargeImages RibbonSelectLanguageHtml_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageCss_LabelTitle_RESID L"CSS" /* LabelTitle RibbonSelectLanguageCss_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageCss_TooltipTitle_RESID L"CSS" /* TooltipTitle RibbonSelectLanguageCss_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageCss_TooltipDescription_RESID L"Select CSS Syntax Highlite Mode" /* TooltipDescription RibbonSelectLanguageCss_TooltipDescription_RESID: (null) */
+END
+
+RibbonSelectLanguageCss_LargeImages_RESID    BITMAP    "ribbon\Settings.bmp" /* LargeImages RibbonSelectLanguageCss_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageVB_LabelTitle_RESID L"VB" /* LabelTitle RibbonSelectLanguageVB_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageVB_TooltipTitle_RESID L"VB" /* TooltipTitle RibbonSelectLanguageVB_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageVB_TooltipDescription_RESID L"Select Visual Basic Syntax Highlite Mode" /* TooltipDescription RibbonSelectLanguageVB_TooltipDescription_RESID: (null) */
+END
+
+RibbonSelectLanguageVB_LargeImages_RESID    BITMAP    "ribbon\Settings.bmp" /* LargeImages RibbonSelectLanguageVB_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageJs_LabelTitle_RESID L"Javascript" /* LabelTitle RibbonSelectLanguageJs_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageJs_TooltipTitle_RESID L"Javascript" /* TooltipTitle RibbonSelectLanguageJs_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageJs_TooltipDescription_RESID L"Select Javascript Syntax Highlite Mode" /* TooltipDescription RibbonSelectLanguageJs_TooltipDescription_RESID: (null) */
+END
+
+RibbonSelectLanguageJs_LargeImages_RESID    BITMAP    "ribbon\Settings.bmp" /* LargeImages RibbonSelectLanguageJs_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageSQL_LabelTitle_RESID L"SQL" /* LabelTitle RibbonSelectLanguageSQL_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageSQL_TooltipTitle_RESID L"SQL" /* TooltipTitle RibbonSelectLanguageSQL_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageSQL_TooltipDescription_RESID L"Select SQL Syntax Highlite Mode" /* TooltipDescription RibbonSelectLanguageSQL_TooltipDescription_RESID: (null) */
+END
+
+RibbonSelectLanguageSQL_LargeImages_RESID    BITMAP    "ribbon\Settings.bmp" /* LargeImages RibbonSelectLanguageSQL_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageShell_LabelTitle_RESID L"Shell" /* LabelTitle RibbonSelectLanguageShell_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageShell_TooltipTitle_RESID L"Shell" /* TooltipTitle RibbonSelectLanguageShell_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageShell_TooltipDescription_RESID L"Select UNIX Shell Syntax Highlite Mode" /* TooltipDescription RibbonSelectLanguageShell_TooltipDescription_RESID: (null) */
+END
+
+RibbonSelectLanguageShell_LargeImages_RESID    BITMAP    "ribbon\Settings.bmp" /* LargeImages RibbonSelectLanguageShell_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguagePerl_LabelTitle_RESID L"Perl" /* LabelTitle RibbonSelectLanguagePerl_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguagePerl_TooltipTitle_RESID L"Perl" /* TooltipTitle RibbonSelectLanguagePerl_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguagePerl_TooltipDescription_RESID L"Select Perl Syntax Highlite Mode" /* TooltipDescription RibbonSelectLanguagePerl_TooltipDescription_RESID: (null) */
+END
+
+RibbonSelectLanguagePerl_LargeImages_RESID    BITMAP    "ribbon\Settings.bmp" /* LargeImages RibbonSelectLanguagePerl_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageCpp_LabelTitle_RESID L"C++" /* LabelTitle RibbonSelectLanguageCpp_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageCpp_TooltipTitle_RESID L"C++" /* TooltipTitle RibbonSelectLanguageCpp_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageCpp_TooltipDescription_RESID L"Select C++ Syntax Highlite Mode" /* TooltipDescription RibbonSelectLanguageCpp_TooltipDescription_RESID: (null) */
+END
+
+RibbonSelectLanguageCpp_LargeImages_RESID    BITMAP    "ribbon\Settings.bmp" /* LargeImages RibbonSelectLanguageCpp_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageJava_LabelTitle_RESID L"Java" /* LabelTitle RibbonSelectLanguageJava_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageJava_TooltipTitle_RESID L"Java" /* TooltipTitle RibbonSelectLanguageJava_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageJava_TooltipDescription_RESID L"Select Java Syntax Highlite Mode" /* TooltipDescription RibbonSelectLanguageJava_TooltipDescription_RESID: (null) */
+END
+
+RibbonSelectLanguageJava_LargeImages_RESID    BITMAP    "ribbon\Settings.bmp" /* LargeImages RibbonSelectLanguageJava_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageCsharp_LabelTitle_RESID L"C#" /* LabelTitle RibbonSelectLanguageCsharp_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageCsharp_TooltipTitle_RESID L"C#" /* TooltipTitle RibbonSelectLanguageCsharp_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonSelectLanguageCsharp_TooltipDescription_RESID L"Select C# Syntax Highlite Mode" /* TooltipDescription RibbonSelectLanguageCsharp_TooltipDescription_RESID: (null) */
+END
+
+RibbonSelectLanguageCsharp_LargeImages_RESID    BITMAP    "ribbon\Settings.bmp" /* LargeImages RibbonSelectLanguageCsharp_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonShowDirView_LabelTitle_RESID L"Show Dirview" /* LabelTitle RibbonShowDirView_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonShowDirView_TooltipTitle_RESID L"Show Directory View" /* TooltipTitle RibbonShowDirView_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonShowDirView_TooltipDescription_RESID L"Show the Directory Tree View Pane" /* TooltipDescription RibbonShowDirView_TooltipDescription_RESID: (null) */
+END
+
+RibbonShowDirView_LargeImages_RESID    BITMAP    "ribbon\DirView.bmp" /* LargeImages RibbonShowDirView_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonViewMinimize_LabelTitle_RESID L"Minimize" /* LabelTitle RibbonViewMinimize_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonViewMinimize_TooltipTitle_RESID L"Minimize window" /* TooltipTitle RibbonViewMinimize_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonViewMinimize_TooltipDescription_RESID L"Minimize the current Document Window" /* TooltipDescription RibbonViewMinimize_TooltipDescription_RESID: (null) */
+END
+
+RibbonViewMinimize_LargeImages_RESID    BITMAP    "ribbon\Minimize.bmp" /* LargeImages RibbonViewMinimize_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonViewMaximize_LabelTitle_RESID L"Maximize" /* LabelTitle RibbonViewMaximize_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonViewMaximize_TooltipTitle_RESID L"Maximize window" /* TooltipTitle RibbonViewMaximize_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonViewMaximize_TooltipDescription_RESID L"Maximize the current Document Window" /* TooltipDescription RibbonViewMaximize_TooltipDescription_RESID: (null) */
+END
+
+RibbonViewMaximize_LargeImages_RESID    BITMAP    "ribbon\Maximize.bmp" /* LargeImages RibbonViewMaximize_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonViewTile_LabelTitle_RESID L"Tile" /* LabelTitle RibbonViewTile_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonViewTile_TooltipTitle_RESID L"Tile windows" /* TooltipTitle RibbonViewTile_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonViewTile_TooltipDescription_RESID L"Tile the current Document Windows" /* TooltipDescription RibbonViewTile_TooltipDescription_RESID: (null) */
+END
+
+RibbonViewTile_LargeImages_RESID    BITMAP    "ribbon\\Tile.bmp" /* LargeImages RibbonViewTile_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonViewCascade_LabelTitle_RESID L"Cascade" /* LabelTitle RibbonViewCascade_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonViewCascade_TooltipTitle_RESID L"Cascade windows" /* TooltipTitle RibbonViewCascade_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonViewCascade_TooltipDescription_RESID L"Cascade the current Document Windows" /* TooltipDescription RibbonViewCascade_TooltipDescription_RESID: (null) */
+END
+
+RibbonViewCascade_LargeImages_RESID    BITMAP    "ribbon\Cascade.bmp" /* LargeImages RibbonViewCascade_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonViewClose_LabelTitle_RESID L"Close" /* LabelTitle RibbonViewClose_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonViewClose_TooltipTitle_RESID L"Close window" /* TooltipTitle RibbonViewClose_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonViewClose_TooltipDescription_RESID L"Close the current Document Window" /* TooltipDescription RibbonViewClose_TooltipDescription_RESID: (null) */
+END
+
+RibbonViewClose_LargeImages_RESID    BITMAP    "ribbon\Close.bmp" /* LargeImages RibbonViewClose_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonViewCloseAll_LabelTitle_RESID L"Close All" /* LabelTitle RibbonViewCloseAll_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonViewCloseAll_TooltipTitle_RESID L"Close all windows" /* TooltipTitle RibbonViewCloseAll_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonViewCloseAll_TooltipDescription_RESID L"Close all Document Windows" /* TooltipDescription RibbonViewCloseAll_TooltipDescription_RESID: (null) */
+END
+
+RibbonViewCloseAll_LargeImages_RESID    BITMAP    "ribbon\CloseAll.bmp" /* LargeImages RibbonViewCloseAll_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonToolColor_LabelTitle_RESID L"Color" /* LabelTitle RibbonToolColor_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonToolColor_TooltipTitle_RESID L"Color Tool" /* TooltipTitle RibbonToolColor_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonToolColor_TooltipDescription_RESID L"Pick or choose custom color" /* TooltipDescription RibbonToolColor_TooltipDescription_RESID: (null) */
+END
+
+RibbonToolColor_LargeImages_RESID    BITMAP    "ribbon\Color.bmp" /* LargeImages RibbonToolColor_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonToolExecScript_LabelTitle_RESID L"Run Script" /* LabelTitle RibbonToolExecScript_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonToolExecScript_TooltipTitle_RESID L"Execute Script" /* TooltipTitle RibbonToolExecScript_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonToolExecScript_TooltipDescription_RESID L"Run current Document as Script" /* TooltipDescription RibbonToolExecScript_TooltipDescription_RESID: (null) */
+END
+
+RibbonToolExecScript_LargeImages_RESID    BITMAP    "ribbon\ExecScript.bmp" /* LargeImages RibbonToolExecScript_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonToolExecForm_LabelTitle_RESID L"Show Form" /* LabelTitle RibbonToolExecForm_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonToolExecForm_TooltipTitle_RESID L"Show HTML Form" /* TooltipTitle RibbonToolExecForm_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonToolExecForm_TooltipDescription_RESID L"Show current Document as HTML Form" /* TooltipDescription RibbonToolExecForm_TooltipDescription_RESID: (null) */
+END
+
+RibbonToolExecForm_LargeImages_RESID    BITMAP    "ribbon\ExecForm.bmp" /* LargeImages RibbonToolExecForm_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonToolUserForm_LabelTitle_RESID L"User Form" /* LabelTitle RibbonToolUserForm_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonToolUserForm_TooltipTitle_RESID L"Show User Form" /* TooltipTitle RibbonToolUserForm_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonToolUserForm_TooltipDescription_RESID L"Show User defined HTML Form" /* TooltipDescription RibbonToolUserForm_TooltipDescription_RESID: (null) */
+END
+
+RibbonToolUserForm_LargeImages_RESID    BITMAP    "ribbon\UserForm.bmp" /* LargeImages RibbonToolUserForm_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonToolUserScript_LabelTitle_RESID L"User Script" /* LabelTitle RibbonToolUserScript_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonToolUserScript_TooltipTitle_RESID L"Run User Script" /* TooltipTitle RibbonToolUserScript_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonToolUserScript_TooltipDescription_RESID L"Run User defined Script Form" /* TooltipDescription RibbonToolUserScript_TooltipDescription_RESID: (null) */
+END
+
+RibbonToolUserScript_LargeImages_RESID    BITMAP    "ribbon\UserScript.bmp" /* LargeImages RibbonToolUserScript_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonToolUserBatch_LabelTitle_RESID L"User Batch" /* LabelTitle RibbonToolUserBatch_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonToolUserBatch_TooltipTitle_RESID L"Run User Batch" /* TooltipTitle RibbonToolUserBatch_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonToolUserBatch_TooltipDescription_RESID L"Run User defined Batch script" /* TooltipDescription RibbonToolUserBatch_TooltipDescription_RESID: (null) */
+END
+
+RibbonToolUserBatch_LargeImages_RESID    BITMAP    "ribbon\UserBatch.bmp" /* LargeImages RibbonToolUserBatch_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonToolUserTemplate_LabelTitle_RESID L"Insert Template" /* LabelTitle RibbonToolUserTemplate_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonToolUserTemplate_TooltipTitle_RESID L"Insert User Template" /* TooltipTitle RibbonToolUserTemplate_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonToolUserTemplate_TooltipDescription_RESID L"Insert User defined Template into current Document" /* TooltipDescription RibbonToolUserTemplate_TooltipDescription_RESID: (null) */
+END
+
+RibbonToolUserTemplate_LargeImages_RESID    BITMAP    "ribbon\UserTemplate.bmp" /* LargeImages RibbonToolUserTemplate_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonTreeViewContextMap_LabelTitle_RESID L"Label:RibbonTreeViewContextMap" /* LabelTitle RibbonTreeViewContextMap_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonListViewContextMap_LabelTitle_RESID L"Label:RibbonListViewContextMap" /* LabelTitle RibbonListViewContextMap_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    InternalCmd2_LabelTitle_RESID L"Label:InternalCmd2" /* LabelTitle InternalCmd2_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    InternalCmd4_LabelTitle_RESID L"Label:InternalCmd4" /* LabelTitle InternalCmd4_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    InternalCmd6_LabelTitle_RESID L"Label:InternalCmd6" /* LabelTitle InternalCmd6_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    InternalCmd8_LabelTitle_RESID L"Label:InternalCmd8" /* LabelTitle InternalCmd8_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    InternalCmd10_LabelTitle_RESID L"Label:InternalCmd10" /* LabelTitle InternalCmd10_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    InternalCmd12_LabelTitle_RESID L"Label:InternalCmd12" /* LabelTitle InternalCmd12_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    InternalCmd14_LabelTitle_RESID L"Label:InternalCmd14" /* LabelTitle InternalCmd14_LabelTitle_RESID: (null) */
+END
+
+APPLICATION_RIBBON    UIFILE    "ribbon.bml"

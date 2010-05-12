@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+builds mshtml wrappers
+-->
+
+<project name="shellctrl" default="shellctrl" basedir=".">
+
+ <target name="clean" description="Cleanup">
+ 	<echo>cleaning up ...</echo>
+ 	<delete dir="." includes="**\*.java"/>
+ 	<delete dir="." includes="**\*.class"/>
+	<delete dir="." includes="mol.shellctrl.jar"/>
+ </target>	
+
+ <target name="import" description="importing shellctrl tlb" depends="clean">
+ 	<echo>importing ...</echo>  	
+ 	<java jar="../../../com4j/build/dist/tlbimp.jar"
+ 		args="-o . -p mol.shellctrl ..\..\..\..\..\..\ax\ShellCtrl\Debug\shellctrl.tlb" fork="true"
+ 		newenvironment="true" maxmemory="2000000"
+ 	/> 	
+ </target>	
+	
+ <target name="compile" description="Compiling ..." depends="import">
+ 	<echo>compiling ...</echo>  	
+	<javac srcdir="." destdir="." classpath=".;..\..\..\com4j\build\dist\com4j.jar" />
+ </target>	
+	
+ <target name="shellctrl" depends="compile">
+  <jar jarfile="mol.shellctrl.jar" includes="**\*.class" basedir="." /> 
+  <echo>done :-)</echo>  	
+
+ </target>
+</project> 
+ 

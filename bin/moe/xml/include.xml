@@ -1,0 +1,23 @@
+<mol:codegen class="MoeWndGUIBuilder" 
+               xmlns="urn:mol-codegen" 
+               xmlns:mol="urn:mol-codegen" 
+               xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+			   xsi:schemaLocation='urn:mol-codegen resource.xsd'>
+  
+  <!--
+  define the necessary includes to be added to generated cpp files 
+  -->
+
+  <include>app.h</include>
+  <include>dir3.h</include>
+  <include>editor.h</include>
+  <include>hex.h</include>
+  <include>html.h</include>
+  <include>img.h</include>
+  <include>ole.h</include>
+  <include>form.h</include>
+  <include>Docs.h</include>
+  <include>MoeBar.h</include>
+</mol:codegen>
+

@@ -1,0 +1,1565 @@
+<Application xmlns="http://schemas.microsoft.com/windows/2009/Ribbon">
+
+  <Application.Commands>
+    
+    <!-- Command Groups -->
+    <Command Name="RibbonTabMain" Id="30000" LabelTitle="Main" />
+    <Command Name="RibbonTabTools"  LabelTitle="Tools" />
+    <Command Name="RibbonTabDocument"  LabelTitle="Document" />
+    <Command Name="RibbonTabPreferences"  LabelTitle="Preferences" />
+    <Command Name="macRib"  LabelTitle="MacRib" />
+    
+    <Command Name="RibbonFileGroup" LabelTitle="File" />
+    <Command Name="RibbonFileGroup2" LabelTitle="Persist" />
+    <Command Name="RibbonViewGroup"  LabelTitle="View" />
+    <Command Name="RibbonView"  LabelTitle="View" >
+      <Command.TooltipTitle>Window Views</Command.TooltipTitle>
+      <Command.SmallImages>
+        <Image Source="ribbon\View.bmp"/>
+      </Command.SmallImages>  
+    </Command>
+    <Command Name="RibbonToolGroup"  LabelTitle="Tools" />
+    <Command Name="RibbonTool2Group"  LabelTitle="User" />
+    <Command Name="RibbonSyntaxGroup"  LabelTitle="Tools" />
+    <Command Name="RibbonDirGroup"  LabelTitle="Directory" />
+    <Command Name="RibbonDir2Group"  LabelTitle="Edit" />
+    <Command Name="RibbonClipboardGroup" LabelTitle="Clipboard" >
+      <Command.TooltipTitle>Clipboard</Command.TooltipTitle>
+      <Command.TooltipDescription>Cut, Copy &amp; Paste</Command.TooltipDescription>
+      <Command.SmallImages>
+        <Image Source="ribbon\Paste.bmp"/>
+      </Command.SmallImages>
+    </Command>
+
+    <Command Name="RibbonUndoGroup" LabelTitle="Undo" />
+    <Command Name="RibbonDocGroup" LabelTitle="Doc" />
+    <Command Name="RibbonBytesShownGroup" LabelTitle="Bytes" />
+    <Command Name="RibbonSettingsGroup" LabelTitle="Syntax" />
+    <Command Name="RibbonSettingsGroup2" LabelTitle="Settings" />
+    <Command Name="RibbonModeGroup" LabelTitle="EOL" />
+    <Command Name="RibbonReloadGroup" LabelTitle="Refresh" />
+    <Command Name="RibbonTemplateGroup" LabelTitle="Template" />
+
+    <Command Name="RibbonDocumentContextMap" LabelTitle="Context Menu" />
+    <Command Name="RibbonTabContextMap" LabelTitle="Tab Context Menu" />
+    <Command Name="RibbonPrefGroup" LabelTitle="Settings" />
+    
+    <Command Name="RibbonBytesShown" LabelTitle="Show" />
+    
+    <!-- App menu support  -->
+    <Command Name="RibbonMRUItems"  LabelTitle="Recent Files" />
+    <Command Name="RibbonAppMenuGroup"  LabelTitle="Menu" />
+
+    <Command Name="RibbonHelp"  LabelTitle="Help" />
+
+    <Command Name="RibbonSettingsTools"  LabelTitle="Tools" >
+      <Command.TooltipTitle>Tools</Command.TooltipTitle>
+      <Command.SmallImages>
+        <Image Source="ribbon\ExecScript.bmp"/>
+      </Command.SmallImages>
+    </Command>
+    
+    <Command Name="RibbonOpenTree"  LabelTitle="Open" >
+      <Command.TooltipTitle>Open</Command.TooltipTitle>
+      <Command.SmallImages>
+        <Image Source="ribbon\Directory.bmp"/>
+      </Command.SmallImages>
+    </Command>
+    <Command Name="RibbonReloadTree" LabelTitle="Reload">
+      <Command.TooltipTitle>Reload Dir</Command.TooltipTitle>
+      <Command.TooltipDescription>Reload Current Directory</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Reload.bmp"/>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="RibbonDeleteTree"  LabelTitle="Delete" >
+      <Command.TooltipTitle>Delete</Command.TooltipTitle>
+      <Command.SmallImages>
+        <Image Source="ribbon\CloseAll.bmp"/>
+      </Command.SmallImages>
+    </Command>
+    <Command Name="RibbonRenameTree"  LabelTitle="Rename" >
+      <Command.TooltipTitle>Rename</Command.TooltipTitle>
+      <Command.SmallImages>
+        <Image Source="ribbon\Replace.bmp"/>
+      </Command.SmallImages>
+    </Command>
+    <Command Name="RibbonCutTree" LabelTitle="Cut">
+      <Command.TooltipTitle>Cut</Command.TooltipTitle>
+      <Command.LargeImages>
+        <Image Source="ribbon\Cut.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonCopyTree" LabelTitle="Copy">
+      <Command.TooltipTitle>Copy</Command.TooltipTitle>
+      <Command.LargeImages>
+        <Image Source="ribbon\Copy.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonPasteTree" LabelTitle="Paste">
+      <Command.TooltipTitle>Paste</Command.TooltipTitle>
+      <Command.LargeImages>
+        <Image Source="ribbon\Paste.bmp"/>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="RibbonExecuteTree"  LabelTitle="Execute" >
+      <Command.TooltipTitle>Execute</Command.TooltipTitle>
+      <Command.SmallImages>
+        <Image Source="ribbon\ExecScript.bmp"/>
+      </Command.SmallImages>
+    </Command>
+    <Command Name="RibbonNewDirTree"  LabelTitle="NewDir" >
+      <Command.TooltipTitle>New Directory</Command.TooltipTitle>
+      <Command.SmallImages>
+        <Image Source="ribbon\NewDir.bmp"/>
+      </Command.SmallImages>
+    </Command>
+    <Command Name="RibbonPropertiesTree"  LabelTitle="Properties" >
+      <Command.TooltipTitle>Properties</Command.TooltipTitle>
+      <Command.TooltipDescription>Show Properties</Command.TooltipDescription>
+      <Command.SmallImages>
+        <Image Source="ribbon\Preferences.bmp"/>
+      </Command.SmallImages>
+    </Command>
+
+
+
+    <Command Name="RibbonOpenList"  LabelTitle="Open" >
+      <Command.TooltipTitle>Open</Command.TooltipTitle>
+      <Command.SmallImages>
+        <Image Source="ribbon\Directory.bmp"/>
+      </Command.SmallImages>
+    </Command>
+    <Command Name="RibbonReloadList" LabelTitle="Reload">
+      <Command.TooltipTitle>Reload Dir</Command.TooltipTitle>
+      <Command.TooltipDescription>Reload Current Directory</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Reload.bmp"/>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="RibbonDeleteList"  LabelTitle="Delete" >
+      <Command.TooltipTitle>Delete</Command.TooltipTitle>
+      <Command.SmallImages>
+        <Image Source="ribbon\CloseAll.bmp"/>
+      </Command.SmallImages>
+    </Command>
+    <Command Name="RibbonRenameList"  LabelTitle="Rename" >
+      <Command.TooltipTitle>Rename</Command.TooltipTitle>
+      <Command.SmallImages>
+        <Image Source="ribbon\Replace.bmp"/>
+      </Command.SmallImages>
+    </Command>
+    <Command Name="RibbonCutList" LabelTitle="Cut">
+      <Command.TooltipTitle>Cut</Command.TooltipTitle>
+      <Command.LargeImages>
+        <Image Source="ribbon\Cut.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonCopyList" LabelTitle="Copy">
+      <Command.TooltipTitle>Copy</Command.TooltipTitle>
+      <Command.LargeImages>
+        <Image Source="ribbon\Copy.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonPasteList" LabelTitle="Paste">
+      <Command.TooltipTitle>Paste</Command.TooltipTitle>
+      <Command.LargeImages>
+        <Image Source="ribbon\Paste.bmp"/>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="RibbonExecuteList"  LabelTitle="Execute" >
+      <Command.TooltipTitle>Execute</Command.TooltipTitle>
+      <Command.SmallImages>
+        <Image Source="ribbon\ExecScript.bmp"/>
+      </Command.SmallImages>
+    </Command>
+    <Command Name="RibbonNewDirList"  LabelTitle="NewDir" >
+      <Command.TooltipTitle>New Directory</Command.TooltipTitle>
+      <Command.SmallImages>
+        <Image Source="ribbon\NewDir.bmp"/>
+      </Command.SmallImages>
+    </Command>
+    <Command Name="RibbonPropertiesList"  LabelTitle="Properties" >
+      <Command.TooltipTitle>Properties</Command.TooltipTitle>
+      <Command.TooltipDescription>Show Properties</Command.TooltipDescription>
+      <Command.SmallImages>
+        <Image Source="ribbon\Preferences.bmp"/>
+      </Command.SmallImages>
+    </Command>
+    <Command Name="RibbonUpDir"  LabelTitle="UpDir" >
+      <Command.TooltipTitle>One Level Up</Command.TooltipTitle>
+      <Command.TooltipDescription>Show Parent Directory</Command.TooltipDescription>
+      <Command.SmallImages>
+        <Image Source="ribbon\UpDir.bmp"/>
+      </Command.SmallImages>
+    </Command>
+    <Command Name="RibbonEnterDir"  LabelTitle="EnterDir" >
+      <Command.TooltipTitle>New File</Command.TooltipTitle>
+      <Command.TooltipDescription>Create a new File</Command.TooltipDescription>
+      <Command.SmallImages>
+        <Image Source="ribbon\EnterDir.bmp"/>
+      </Command.SmallImages>
+    </Command>
+    <Command Name="RibbonEncoding"  LabelTitle="Encoding" >
+      <Command.TooltipTitle>Encoding</Command.TooltipTitle>
+      <Command.TooltipDescription>File Charset Encoding</Command.TooltipDescription>
+      <Command.SmallImages>
+        <Image Source="ribbon\Preferences.bmp"/>
+      </Command.SmallImages>
+    </Command>
+    <Command Name="RibbonWriteBOM"  LabelTitle="Write BOM" >
+      <Command.TooltipTitle>Write BOM</Command.TooltipTitle>
+      <Command.TooltipDescription>Write a BOM at the beginning of file</Command.TooltipDescription>
+    </Command>
+    <Command Name="RibbonTabs"  LabelTitle="Tab usage" >
+      <Command.TooltipTitle>Tab Usage</Command.TooltipTitle>
+    </Command>
+    <Command Name="RibbonTabGroup"  LabelTitle="Tab Usage" >
+      <Command.TooltipTitle>Tab Usage</Command.TooltipTitle>
+    </Command>
+    <Command Name="RibbonTabGroup2"  LabelTitle="Tab Settings" >
+      <Command.TooltipTitle>Tab Settings</Command.TooltipTitle>
+    </Command>
+    <Command Name="RibbonTabUseTabs"  LabelTitle="Use Tabs" >
+      <Command.TooltipTitle>Use Tabulators or plain whitespace</Command.TooltipTitle>
+    </Command>
+    <Command Name="RibbonTabIndents"  LabelTitle="Tab Indents" >
+      <Command.TooltipTitle>Tabulator indents</Command.TooltipTitle>
+    </Command>
+    <Command Name="RibbonTabBackSpaceUnIndents"  LabelTitle="Back Unindents" >
+      <Command.TooltipTitle>Backspace Unindents</Command.TooltipTitle>
+    </Command>
+    <Command Name="RibbonTabSize"  LabelTitle="Tab Size" >
+      <Command.TooltipTitle>Size of tabulators in spaces</Command.TooltipTitle>
+    </Command>
+    <Command Name="RibbonTabConvert"  LabelTitle="Convert Tabs Now" >
+      <Command.TooltipTitle>Convert tabulators to whitespace</Command.TooltipTitle>
+    </Command>
+
+    <Command Name="RibbonPrefsUseTabs"  LabelTitle="Use Tabs" >
+      <Command.TooltipTitle>Use Tabulators or plain whitespace</Command.TooltipTitle>
+    </Command>
+    <Command Name="RibbonPrefsTabIndents"  LabelTitle="Tab Indents" >
+      <Command.TooltipTitle>Tabulator indents</Command.TooltipTitle>
+    </Command>
+    <Command Name="RibbonPrefsBackSpaceUnIndents"  LabelTitle="Back Unindents" >
+      <Command.TooltipTitle>Backspace Unindents</Command.TooltipTitle>
+    </Command>
+    <Command Name="RibbonPrefsTabSize"  LabelTitle="Tab Size" >
+      <Command.TooltipTitle>Size of tabulators in spaces</Command.TooltipTitle>
+    </Command>
+
+    <Command Name="RibbonEditPreferences"  LabelTitle="Edit Preferences" >
+      <Command.TooltipTitle>Edit User Preferences</Command.TooltipTitle>
+    </Command>
+    <Command Name="RibbonImportPreferences"  LabelTitle="Import Preferences" >
+      <Command.TooltipTitle>Import User Preferences</Command.TooltipTitle>
+    </Command>
+    <Command Name="RibbonExportPreferences"  LabelTitle="Export Preferences" >
+      <Command.TooltipTitle>Export User Preferences</Command.TooltipTitle>
+    </Command>
+    <!-- Commands -->
+
+    <Command Name="cmdQAT"  LabelTitle="QAT" />
+    <Command Name="cmdCustomizeQAT"  LabelTitle="Customize QAT"/>
+        
+    <!-- File Commands -->
+    <Command Name="RibbonFileNew"  LabelTitle="New">
+      <Command.TooltipTitle>New File</Command.TooltipTitle>
+      <Command.TooltipDescription>Create a new File</Command.TooltipDescription>
+      <Command.SmallImages>
+        <Image Source="ribbon\New.bmp"/>
+      </Command.SmallImages>
+    </Command>
+
+    <Command Name="RibbonFileOpen" LabelTitle="Open">
+      <Command.TooltipTitle>Open File</Command.TooltipTitle>
+      <Command.TooltipDescription>Open a File</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\OpenFile.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+    <Command Name="RibbonFileOpenDirectory" LabelTitle="Open Folder">
+      <Command.TooltipTitle>Open Folder</Command.TooltipTitle>
+      <Command.TooltipDescription>Open a Directory Folder</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Folder.bmp"/>
+      </Command.LargeImages>
+    </Command>
+    
+    <Command Name="RibbonFileOpenUrl" LabelTitle="Open Url">
+      <Command.TooltipTitle>Open Url</Command.TooltipTitle>
+      <Command.TooltipDescription>Open an URL Location</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Hyperlink.bmp"/>
+      </Command.LargeImages>
+    </Command>    
+
+    <Command Name="RibbonFileSave"  LabelTitle="Save">
+      <Command.TooltipTitle>Save File</Command.TooltipTitle>
+      <Command.TooltipDescription>Save a File</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Save.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonFileSaveAs" LabelTitle="Save File As">
+      <Command.TooltipTitle>Save File As</Command.TooltipTitle>
+      <Command.TooltipDescription>Save a Copy as</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\SaveAs.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonFilePrint" LabelTitle="Print">
+      <Command.TooltipTitle>Print</Command.TooltipTitle>
+      <Command.TooltipDescription>Print the current Document</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Print.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+    <Command Name="RibbonFilePreferences" LabelTitle="Preferences">
+      <Command.TooltipTitle>User Preferences</Command.TooltipTitle>
+      <Command.TooltipDescription>Edit User Preferences</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Preferences.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+    <Command Name="RibbonFileExit" LabelTitle="Exit">
+      <Command.TooltipTitle>Exit</Command.TooltipTitle>
+      <Command.TooltipDescription>Exit Application</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Exit.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonViewCloseOthers" LabelTitle="Close Others">
+      <Command.TooltipTitle>Close Other Documents</Command.TooltipTitle>
+      <Command.TooltipDescription>Closes all open Documents but the active one</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Close.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonEditReload" LabelTitle="Reload">
+      <Command.TooltipTitle>Reload</Command.TooltipTitle>
+      <Command.TooltipDescription>Reload current Document</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Reload.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+    <Command Name="RibbonParentDirectory" LabelTitle="Directory">
+      <Command.TooltipTitle>Open Parent Directory</Command.TooltipTitle>
+      <Command.TooltipDescription>Show the Directory for the current Document</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Directory.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+    <Command Name="RibbonJumpDirectory" LabelTitle="Jump">
+      <Command.TooltipTitle>Jump to Parent Directory</Command.TooltipTitle>
+      <Command.TooltipDescription>Show the current Document's Parent Directory in Tree View</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Jump.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+    <Command Name="RibbonToolDebug" LabelTitle="Debug Script">
+      <Command.TooltipTitle>Debug Script</Command.TooltipTitle>
+      <Command.TooltipDescription>Run the current Document as Script in Debug Mode</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Debug.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <!-- Edit commands -->
+    <Command Name="RibbonEditCut" LabelTitle="Cut">
+      <Command.TooltipTitle>Cut</Command.TooltipTitle>
+      <Command.TooltipDescription>Cut to Clipboard</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Cut.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonEditCopy" LabelTitle="Copy">
+      <Command.TooltipTitle>Copy</Command.TooltipTitle>
+      <Command.TooltipDescription>Copy to Clipboard</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Copy.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonEditPaste" LabelTitle="Paste">
+      <Command.TooltipTitle>Paste</Command.TooltipTitle>
+      <Command.TooltipDescription>Paste to Clipboard</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Paste.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonEditUndo" LabelTitle="Undo">
+      <Command.TooltipTitle>Undo</Command.TooltipTitle>
+      <Command.TooltipDescription>Undo last Command</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Undo.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonEditRedo" LabelTitle="Redo">
+      <Command.TooltipTitle>Redo</Command.TooltipTitle>
+      <Command.TooltipDescription>Redo last Command</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Redo.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonEditSelectAll" LabelTitle="Select All">
+      <Command.TooltipTitle>Select All</Command.TooltipTitle>
+      <Command.TooltipDescription>Select All Text in current Document</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\SelectAll.bmp"/>
+      </Command.LargeImages>
+    </Command>
+    
+    
+    <!-- Find Replace -->
+
+    <Command Name="RibbonEditFind" LabelTitle="Find">
+      <Command.TooltipTitle>Find</Command.TooltipTitle>
+      <Command.TooltipDescription>Search in document</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Find.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+    <Command Name="RibbonEditReplace" LabelTitle="Replace">
+      <Command.TooltipTitle>Replace</Command.TooltipTitle>
+      <Command.TooltipDescription>Replace in document</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Replace.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <!-- Settings / Mode -->
+
+    <Command Name="RibbonSettings" LabelTitle="Settings">
+      <Command.TooltipTitle>Document Settings</Command.TooltipTitle>
+      <Command.TooltipDescription>Edit Document Settings</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Settings.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+    <Command Name="RibbonSelectMode" LabelTitle="EOL">
+      <Command.TooltipTitle>Select Document Mode</Command.TooltipTitle>
+      <Command.TooltipDescription>Set Document EOL Mode</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\EOL.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+    <Command Name="RibbonSelectModeUnix" LabelTitle="UNIX">
+      <Command.TooltipTitle>Set UNIX Mode</Command.TooltipTitle>
+      <Command.TooltipDescription>Set Document EOL Mode to UNIX (LF)</Command.TooltipDescription>
+    </Command>
+
+
+
+    <Command Name="RibbonSelectModeWin32" LabelTitle="Windows">
+      <Command.TooltipTitle>Set Windows Mode</Command.TooltipTitle>
+      <Command.TooltipDescription>Set Document EOL Mode to Windows (LFRF)</Command.TooltipDescription>
+    </Command>
+
+    
+    <!-- Select Syntax Highlite -->
+
+    <Command Name="RibbonSelectLanguage" LabelTitle="Syntax">
+      <Command.TooltipTitle>Syntax Highlite Mode</Command.TooltipTitle>
+      <Command.TooltipDescription>Select Syntax Highlite Mode</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Language.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+    <Command Name="RibbonSelectLanguage2" LabelTitle="Syntax">
+      <Command.TooltipTitle>Syntax Highlite Mode</Command.TooltipTitle>
+      <Command.TooltipDescription>Select Syntax Highlite Mode</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Language.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonSelectLanguageText" LabelTitle="Text (none)">
+      <Command.TooltipTitle>Text (no Highlite)</Command.TooltipTitle>
+      <Command.TooltipDescription>Select No Syntax Highlite Mode</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Settings.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonSelectLanguageHtml" LabelTitle="HTML">
+      <Command.TooltipTitle>HTML</Command.TooltipTitle>
+      <Command.TooltipDescription>Select HTML Syntax Highlite Mode</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Settings.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+    <Command Name="RibbonSelectLanguageCss" LabelTitle="CSS">
+      <Command.TooltipTitle>CSS</Command.TooltipTitle>
+      <Command.TooltipDescription>Select CSS Syntax Highlite Mode</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Settings.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+    <Command Name="RibbonSelectLanguageVB" LabelTitle="VB">
+      <Command.TooltipTitle>VB</Command.TooltipTitle>
+      <Command.TooltipDescription>Select Visual Basic Syntax Highlite Mode</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Settings.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+    <Command Name="RibbonSelectLanguageJs" LabelTitle="Javascript">
+      <Command.TooltipTitle>Javascript</Command.TooltipTitle>
+      <Command.TooltipDescription>Select Javascript Syntax Highlite Mode</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Settings.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+    <Command Name="RibbonSelectLanguageSQL" LabelTitle="SQL">
+      <Command.TooltipTitle>SQL</Command.TooltipTitle>
+      <Command.TooltipDescription>Select SQL Syntax Highlite Mode</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Settings.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+    <Command Name="RibbonSelectLanguageShell" LabelTitle="Shell">
+      <Command.TooltipTitle>Shell</Command.TooltipTitle>
+      <Command.TooltipDescription>Select UNIX Shell Syntax Highlite Mode</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Settings.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+
+    <Command Name="RibbonSelectLanguagePerl" LabelTitle="Perl">
+      <Command.TooltipTitle>Perl</Command.TooltipTitle>
+      <Command.TooltipDescription>Select Perl Syntax Highlite Mode</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Settings.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+
+    <Command Name="RibbonSelectLanguageCpp" LabelTitle="C++">
+      <Command.TooltipTitle>C++</Command.TooltipTitle>
+      <Command.TooltipDescription>Select C++ Syntax Highlite Mode</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Settings.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+    <Command Name="RibbonSelectLanguageJava" LabelTitle="Java">
+      <Command.TooltipTitle>Java</Command.TooltipTitle>
+      <Command.TooltipDescription>Select Java Syntax Highlite Mode</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Settings.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+    <Command Name="RibbonSelectLanguageCsharp" LabelTitle="C#">
+      <Command.TooltipTitle>C#</Command.TooltipTitle>
+      <Command.TooltipDescription>Select C# Syntax Highlite Mode</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Settings.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    
+  <!-- View -->
+    
+    <Command Name="RibbonShowDirView" LabelTitle="Show Dirview">
+      <Command.TooltipTitle>Show Directory View</Command.TooltipTitle>
+      <Command.TooltipDescription>Show the Directory Tree View Pane</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\DirView.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+
+
+    <Command Name="RibbonViewMinimize" LabelTitle="Minimize">
+      <Command.TooltipTitle>Minimize window</Command.TooltipTitle>
+      <Command.TooltipDescription>Minimize the current Document Window</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Minimize.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+
+    <Command Name="RibbonViewMaximize" LabelTitle="Maximize">
+      <Command.TooltipTitle>Maximize window</Command.TooltipTitle>
+      <Command.TooltipDescription>Maximize the current Document Window</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Maximize.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+
+    <Command Name="RibbonViewTile" LabelTitle="Tile">
+      <Command.TooltipTitle>Tile windows</Command.TooltipTitle>
+      <Command.TooltipDescription>Tile the current Document Windows</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\\Tile.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+    <Command Name="RibbonViewCascade" LabelTitle="Cascade">
+      <Command.TooltipTitle>Cascade windows</Command.TooltipTitle>
+      <Command.TooltipDescription>Cascade the current Document Windows</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Cascade.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+    <Command Name="RibbonViewClose" LabelTitle="Close">
+      <Command.TooltipTitle>Close window</Command.TooltipTitle>
+      <Command.TooltipDescription>Close the current Document Window</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Close.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+
+    <Command Name="RibbonViewCloseAll" LabelTitle="Close All">
+      <Command.TooltipTitle>Close all windows</Command.TooltipTitle>
+      <Command.TooltipDescription>Close all Document Windows</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\CloseAll.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    
+    <!-- Tools -->
+
+    <Command Name="RibbonToolColor" LabelTitle="Color">
+      <Command.TooltipTitle>Color Tool</Command.TooltipTitle>
+      <Command.TooltipDescription>Pick or choose custom color</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Color.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+    <Command Name="RibbonToolExecScript" LabelTitle="Run Script">
+      <Command.TooltipTitle>Execute Script</Command.TooltipTitle>
+      <Command.TooltipDescription>Run current Document as Script</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\ExecScript.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+    <Command Name="RibbonToolExecForm" LabelTitle="Show Form">
+      <Command.TooltipTitle>Show HTML Form</Command.TooltipTitle>
+      <Command.TooltipDescription>Show current Document as HTML Form</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\ExecForm.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+
+    <Command Name="RibbonToolUserForm" LabelTitle="User Form">
+      <Command.TooltipTitle>Show User Form</Command.TooltipTitle>
+      <Command.TooltipDescription>Show User defined HTML Form</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\UserForm.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+
+    <Command Name="RibbonToolUserScript" LabelTitle="User Script">
+      <Command.TooltipTitle>Run User Script</Command.TooltipTitle>
+      <Command.TooltipDescription>Run User defined Script Form</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\UserScript.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+    <Command Name="RibbonToolUserBatch" LabelTitle="User Batch">
+      <Command.TooltipTitle>Run User Batch</Command.TooltipTitle>
+      <Command.TooltipDescription>Run User defined Batch script</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\UserBatch.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+    <Command Name="RibbonToolUserTemplate" LabelTitle="Insert Template">
+      <Command.TooltipTitle>Insert User Template</Command.TooltipTitle>
+      <Command.TooltipDescription>Insert User defined Template into current Document</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\UserTemplate.bmp"/>
+      </Command.LargeImages>
+    </Command>    
+    
+  </Application.Commands>
+
+
+
+  <Application.Views>
+
+    <ContextPopup >
+      <ContextPopup.MiniToolbars>
+        <MiniToolbar Name="RibbonMiniToolbar">
+          <MenuGroup>
+            <Button CommandName="RibbonToolColor" />
+            <Button CommandName="RibbonEditUndo" />
+            <Button CommandName="RibbonEditRedo" />
+            <Button CommandName="RibbonViewClose" />
+          </MenuGroup>
+          <MenuGroup>
+            <ComboBox CommandName="RibbonSelectLanguage"></ComboBox>
+          </MenuGroup>
+        </MiniToolbar>
+      </ContextPopup.MiniToolbars>
+      <ContextPopup.ContextMenus>
+        <ContextMenu Name="RibbonDocumentContextMenu">
+          <MenuGroup>
+            <Button CommandName="RibbonEditSelectAll" />
+          </MenuGroup>
+          <MenuGroup>
+            <Button CommandName="RibbonToolUserTemplate" />
+          </MenuGroup>
+          <MenuGroup>
+            <Button CommandName="RibbonEditCut" />
+            <Button CommandName="RibbonEditCopy" />
+            <Button CommandName="RibbonEditPaste" />
+          </MenuGroup>
+          <MenuGroup>
+            <CheckBox CommandName="RibbonSelectModeUnix"/>
+            <CheckBox CommandName="RibbonSelectModeWin32"/>
+          </MenuGroup>
+          <MenuGroup>
+            <Button CommandName="RibbonSettings"/>
+          </MenuGroup>
+        </ContextMenu>
+        <ContextMenu Name="RibbonTabContextMenu">
+          <MenuGroup>
+            <Button CommandName="RibbonViewClose" />
+            <Button CommandName="RibbonViewCloseOthers" />
+          </MenuGroup>
+          <MenuGroup>
+            <Button CommandName="RibbonEditReload" />
+            <Button CommandName="RibbonFileSave" />
+          </MenuGroup>
+          <MenuGroup>
+            <Button CommandName="RibbonParentDirectory" />
+            <Button CommandName="RibbonJumpDirectory" />
+          </MenuGroup>
+        </ContextMenu>
+        <ContextMenu Name="RibbonTreeViewContextMenu">
+         <MenuGroup>
+          <Button CommandName="RibbonOpenTree" />
+          <Button CommandName="RibbonReloadTree" />
+        </MenuGroup>
+        <MenuGroup>
+          <Button CommandName="RibbonRenameTree" />
+          <Button CommandName="RibbonDeleteTree" />
+        </MenuGroup>
+        <MenuGroup>
+          <Button CommandName="RibbonCutTree" />
+          <Button CommandName="RibbonCopyTree" />
+          <Button CommandName="RibbonPasteTree" />
+        </MenuGroup>
+          <MenuGroup>
+            <Button CommandName="RibbonExecuteTree" />
+            <Button CommandName="RibbonPropertiesTree" />
+            <Button CommandName="RibbonNewDirTree" />
+          </MenuGroup>
+        </ContextMenu>
+        <ContextMenu Name="RibbonListViewContextMenu">
+          <MenuGroup>
+            <Button CommandName="RibbonOpenList" />
+            <Button CommandName="RibbonReloadList" />
+          </MenuGroup>
+          <MenuGroup>
+            <Button CommandName="RibbonUpDir" />
+            <Button CommandName="RibbonEnterDir" />
+          </MenuGroup>
+          <MenuGroup>
+            <Button CommandName="RibbonRenameList" />
+            <Button CommandName="RibbonDeleteList" />
+          </MenuGroup>
+          <MenuGroup>
+            <Button CommandName="RibbonCutList" />
+            <Button CommandName="RibbonCopyList" />
+            <Button CommandName="RibbonPasteList" />
+          </MenuGroup>
+          <MenuGroup>
+            <Button CommandName="RibbonExecuteList" />
+            <Button CommandName="RibbonPropertiesList" />
+            <Button CommandName="RibbonNewDirList" />
+          </MenuGroup>
+        </ContextMenu>
+      </ContextPopup.ContextMenus>      
+      <ContextPopup.ContextMaps>
+        <ContextMap CommandName="RibbonDocumentContextMap" ContextMenu="RibbonDocumentContextMenu" MiniToolbar="RibbonMiniToolbar"/>
+        <ContextMap CommandName="RibbonTabContextMap" ContextMenu="RibbonTabContextMenu" />
+        <ContextMap CommandName="RibbonTreeViewContextMap" ContextMenu="RibbonTreeViewContextMenu" />
+        <ContextMap CommandName="RibbonListViewContextMap" ContextMenu="RibbonListViewContextMenu" />
+      </ContextPopup.ContextMaps>
+    </ContextPopup>
+
+    
+
+    <Ribbon Name="macRib" GroupSpacing="Large">
+      <Ribbon.SizeDefinitions>
+
+        <SizeDefinition Name="FileGroupSize">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        
+        
+        <SizeDefinition Name="ClipboardGroupSize">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        <SizeDefinition Name="DocGroupSize">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        <SizeDefinition Name="UndoGroupSize">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        <SizeDefinition Name="CustomTemplate4">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />          
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />          
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        <SizeDefinition Name="SingleControl">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        <SizeDefinition Name="SingleSmallControl">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        <SizeDefinition Name="TwoSmallControls">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        <SizeDefinition Name="ThreeControls">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        <SizeDefinition Name="ThreeSmallControls">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        <SizeDefinition Name="FourControls">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        <SizeDefinition Name="ViewGroupSize">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        <SizeDefinition Name="ModeGroupSize">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        <SizeDefinition Name="SettingsGroupSize">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        
+        <SizeDefinition Name="SettingsGroupSize2">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+
+        <SizeDefinition Name="SettingsGroupSize3">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        
+        <SizeDefinition Name="TabGroupSize">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        
+        <SizeDefinition Name="ToolGroupSize">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        <SizeDefinition Name="ColorGroupSize">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+      </Ribbon.SizeDefinitions>
+
+      <Ribbon.QuickAccessToolbar>
+        <QuickAccessToolbar CommandName="cmdQAT">
+
+        </QuickAccessToolbar>
+      </Ribbon.QuickAccessToolbar>
+
+      <!-- Control declarations for Application Menu items. -->
+      <Ribbon.ApplicationMenu>
+        
+        <ApplicationMenu CommandName="RibbonAppMenuGroup">
+          <!-- Most recently used items collection. -->
+          <ApplicationMenu.RecentItems>
+            <RecentItems CommandName="RibbonMRUItems"/>
+          </ApplicationMenu.RecentItems>
+          <!-- Menu items collection. -->
+          <MenuGroup>
+            <Button CommandName="RibbonFileNew" />
+            <SplitButton >
+              <SplitButton.ButtonItem>
+                <Button CommandName="RibbonFileOpen"/>
+              </SplitButton.ButtonItem>
+              <SplitButton.MenuGroups>
+                <MenuGroup >
+                  <Button CommandName="RibbonFileOpen"/>
+                  <Button CommandName="RibbonFileOpenDirectory"/>
+                  <Button CommandName="RibbonFileOpenUrl"/>
+                </MenuGroup>
+              </SplitButton.MenuGroups>
+            </SplitButton>
+            <Button CommandName="RibbonFileSave" />
+            <Button CommandName="RibbonFileSaveAs" />
+          </MenuGroup>
+          <MenuGroup>
+            <Button CommandName="RibbonFilePrint" />
+            <Button CommandName="RibbonFilePreferences" />
+          </MenuGroup>
+          <MenuGroup>
+            <Button CommandName="RibbonFileExit" />
+          </MenuGroup>
+
+        </ApplicationMenu>
+      </Ribbon.ApplicationMenu>
+      
+      <!-- Application Tab -->
+      <Ribbon.Tabs>
+        <Tab CommandName="RibbonTabMain">
+
+          <!-- scaling -->
+          <Tab.ScalingPolicy>
+            <ScalingPolicy>
+              <ScalingPolicy.IdealSizes>
+                <Scale Group="RibbonUndoGroup" Size="Large"/>
+                <Scale Group="RibbonFileGroup" Size="Large"/>
+                <Scale Group="RibbonDocGroup" Size="Large"/>
+                <Scale Group="RibbonClipboardGroup" Size="Large"/>
+                <Scale Group="RibbonReloadGroup" Size="Large"/>
+                <Scale Group="RibbonDirGroup" Size="Large"/>
+              </ScalingPolicy.IdealSizes>
+              
+              <Scale Group="RibbonClipboardGroup" Size="Medium"/>
+              <Scale Group="RibbonDocGroup" Size="Medium"/>
+              <Scale Group="RibbonDocGroup" Size="Small"/>
+              <Scale Group="RibbonDirGroup" Size="Small"/>
+              <Scale Group="RibbonReloadGroup" Size="Small"/>              
+              <Scale Group="RibbonClipboardGroup" Size="Small"/>
+              <Scale Group="RibbonUndoGroup" Size="Small"/>
+              <Scale Group="RibbonSettingsGroup" Size="Popup"/>
+              <Scale Group="RibbonFileGroup2" Size="Small"/>
+              <Scale Group="RibbonFileGroup" Size="Small"/>
+
+            </ScalingPolicy>
+          </Tab.ScalingPolicy>
+
+          <!-- Command Groups -->
+
+          <!-- File Group -->
+          <Group CommandName="RibbonFileGroup" SizeDefinition="FileGroupSize" >
+            <Button CommandName="RibbonFileNew" />
+            <SplitButton >
+              <SplitButton.ButtonItem>
+                <Button CommandName="RibbonFileOpen"/>
+              </SplitButton.ButtonItem>
+              <SplitButton.MenuGroups>
+                <MenuGroup >
+                  <Button CommandName="RibbonFileOpen"/>
+                  <Button CommandName="RibbonFileOpenDirectory"/>
+                  <Button CommandName="RibbonFileOpenUrl"/>
+                </MenuGroup>
+              </SplitButton.MenuGroups>
+            </SplitButton>
+          </Group>
+          <Group CommandName="RibbonFileGroup2" SizeDefinition="FileGroupSize" ApplicationModes="1,6" >
+              <SplitButton >
+              <SplitButton.ButtonItem>
+                <Button CommandName="RibbonFileSave"/>
+              </SplitButton.ButtonItem>
+              <SplitButton.MenuGroups>
+                <MenuGroup >
+                  <Button CommandName="RibbonFileSave"/>
+                  <Button CommandName="RibbonFileSaveAs"/>
+                </MenuGroup>
+              </SplitButton.MenuGroups>
+            </SplitButton>
+            <Button CommandName="RibbonFilePrint" />
+          </Group>
+          <Group CommandName="RibbonFileGroup2" SizeDefinition="FileGroupSize" ApplicationModes="5" >
+            <Button CommandName="RibbonFileSaveAs"/>
+            <Button CommandName="RibbonFilePrint" />
+          </Group>
+
+          <!-- Undo Group -->
+          <Group CommandName="RibbonUndoGroup" SizeDefinition="SingleControl" ApplicationModes="1,6" >
+
+            <SplitButton >
+              <SplitButton.ButtonItem>
+                <Button CommandName="RibbonEditUndo" />
+              </SplitButton.ButtonItem>
+              <SplitButton.MenuGroups>
+                <MenuGroup >
+                  <Button CommandName="RibbonEditUndo" />
+                  <Button CommandName="RibbonEditRedo" />
+                </MenuGroup>
+              </SplitButton.MenuGroups>
+            </SplitButton>
+            
+          </Group>
+          
+          <!-- Clipboard Group -->
+          <Group CommandName="RibbonClipboardGroup" SizeDefinition="ClipboardGroupSize"  ApplicationModes="1,2,5,6">
+            <Button CommandName="RibbonEditPaste"/>
+            <Button CommandName="RibbonEditCut"/>
+            <Button CommandName="RibbonEditCopy"/>
+          </Group>
+
+          <!-- Reload Group -->
+          <Group CommandName="RibbonReloadGroup" SizeDefinition="SingleControl" ApplicationModes="1,2,5">
+            <Button CommandName="RibbonEditReload"/>
+          </Group>
+
+          <Group CommandName="RibbonBytesShownGroup"  ApplicationModes="4">
+            <ComboBox CommandName="RibbonBytesShown"></ComboBox>
+          </Group>
+
+          <!-- Dir Group -->
+          <Group CommandName="RibbonDirGroup" SizeDefinition="FourControls" ApplicationModes="2">
+            <Button CommandName="RibbonUpDir"/>
+            <Button CommandName="RibbonPropertiesList"/>
+            <Button CommandName="RibbonExecuteList"/>
+            <Button CommandName="RibbonNewDirList"/>
+          </Group>
+          
+          <!-- Document Group -->
+          <Group CommandName="RibbonDocGroup" SizeDefinition="DocGroupSize"  ApplicationModes="1">
+            <Button CommandName="RibbonEditFind"/>
+            <Button CommandName="RibbonEditReplace"/>
+            <Button CommandName="RibbonToolColor"/>
+          </Group>
+
+          <Group CommandName="RibbonDocGroup" SizeDefinition="SingleControl"  ApplicationModes="5">
+            <Button CommandName="RibbonEditFind"/>
+          </Group>
+
+
+          <!-- Settings Group -->
+          <Group CommandName="RibbonSettingsGroup" SizeDefinition="SettingsGroupSize2"  ApplicationModes="1">
+            <ComboBox CommandName="RibbonSelectLanguage"></ComboBox>
+            <DropDownButton CommandName="RibbonSettingsTools">
+              <Button CommandName="RibbonToolUserTemplate"/>
+              <Button CommandName="RibbonToolExecScript"/>
+              <Button CommandName="RibbonToolDebug"/>
+              <Button CommandName="RibbonToolExecForm"/>
+            </DropDownButton>
+            <Button CommandName="RibbonSettings"/>
+          </Group>
+
+
+
+          <!-- View Group -->
+          <Group CommandName="RibbonViewGroup" SizeDefinition="ViewGroupSize">
+            <ToggleButton CommandName="RibbonShowDirView"></ToggleButton>
+            <DropDownButton CommandName="RibbonView">
+              <Button CommandName="RibbonViewMinimize" />
+              <Button CommandName="RibbonViewMaximize" />
+              <Button CommandName="RibbonViewTile" />
+              <Button CommandName="RibbonViewCascade" />
+            </DropDownButton>
+            <SplitButton >
+              <SplitButton.ButtonItem>
+                <Button CommandName="RibbonViewClose" />
+              </SplitButton.ButtonItem>
+              <SplitButton.MenuGroups>
+                <MenuGroup >
+                  <Button CommandName="RibbonViewClose" />
+                  <Button CommandName="RibbonViewCloseAll" />
+                </MenuGroup>
+              </SplitButton.MenuGroups>
+            </SplitButton>
+          </Group>
+          
+          
+        </Tab>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <Tab CommandName="RibbonTabTools" ApplicationModes="1">
+
+          <!-- scaling -->
+          <Tab.ScalingPolicy>
+            <ScalingPolicy>
+              <ScalingPolicy.IdealSizes>
+                <Scale Group="RibbonTemplateGroup" Size="Large"/>
+                <Scale Group="RibbonToolGroup" Size="Large"/>
+                <Scale Group="RibbonTool2Group" Size="Large"/>
+
+              </ScalingPolicy.IdealSizes>
+
+              <Scale Group="RibbonTool2Group" Size="Medium"/>
+              <Scale Group="RibbonToolGroup" Size="Medium"/>
+              <Scale Group="RibbonTemplateGroup" Size="Medium"/>
+              <Scale Group="RibbonTool2Group" Size="Small"/>
+              <Scale Group="RibbonToolGroup" Size="Small"/>
+              <Scale Group="RibbonTemplateGroup" Size="Small"/>
+            </ScalingPolicy>
+          </Tab.ScalingPolicy>
+
+          <!-- Command Groups -->
+
+          <Group CommandName="RibbonTemplateGroup" SizeDefinition="SingleControl"  ApplicationModes="1">
+            <Button CommandName="RibbonToolUserTemplate"/>
+          </Group>
+          
+          <!-- Tool Group -->
+          <Group CommandName="RibbonToolGroup" SizeDefinition="ThreeControls"  ApplicationModes="1">
+            <Button CommandName="RibbonToolExecScript"/>
+            <Button CommandName="RibbonToolDebug"/>
+            <Button CommandName="RibbonToolExecForm"/>
+          </Group>
+          <Group CommandName="RibbonTool2Group" SizeDefinition="ThreeControls"  ApplicationModes="1">
+            <Button CommandName="RibbonToolUserBatch"/>
+            <Button CommandName="RibbonToolUserForm"/>
+            <Button CommandName="RibbonToolUserScript"/>
+          </Group>
+
+
+
+
+
+          <!-- View Group -->
+          <Group CommandName="RibbonViewGroup" SizeDefinition="ViewGroupSize">
+            <ToggleButton CommandName="RibbonShowDirView"></ToggleButton>
+            <DropDownButton CommandName="RibbonView">
+              <Button CommandName="RibbonViewMinimize" />
+              <Button CommandName="RibbonViewMaximize" />
+              <Button CommandName="RibbonViewTile" />
+              <Button CommandName="RibbonViewCascade" />
+            </DropDownButton>
+            <SplitButton >
+              <SplitButton.ButtonItem>
+                <Button CommandName="RibbonViewClose" />
+              </SplitButton.ButtonItem>
+              <SplitButton.MenuGroups>
+                <MenuGroup >
+                  <Button CommandName="RibbonViewClose" />
+                  <Button CommandName="RibbonViewCloseAll" />
+                </MenuGroup>
+              </SplitButton.MenuGroups>
+            </SplitButton>
+          </Group>
+
+
+        </Tab>
+
+
+
+
+
+
+        <Tab CommandName="RibbonTabDocument" ApplicationModes="1">
+          <!-- scaling -->
+          <Tab.ScalingPolicy>
+            <ScalingPolicy>
+              <ScalingPolicy.IdealSizes>
+                <Scale Group="RibbonPrefGroup" Size="Large"/>
+                <Scale Group="RibbonSettingsGroup" Size="Large"/>
+                <Scale Group="RibbonTabGroup2" Size="Large"/>
+                <Scale Group="RibbonModeGroup" Size="Large"/>
+
+              </ScalingPolicy.IdealSizes>
+
+              <Scale Group="RibbonPrefGroup" Size="Small"/>
+              <Scale Group="RibbonTabGroup2" Size="Popup"/>
+              <Scale Group="RibbonTabGroup" Size="Popup"/>
+              <Scale Group="RibbonSettingsGroup" Size="Popup"/>
+              <Scale Group="RibbonModeGroup" Size="Popup"/>
+
+            </ScalingPolicy>
+          </Tab.ScalingPolicy>
+
+          <!-- Command Groups -->
+
+          <Group CommandName="RibbonPrefGroup" SizeDefinition="SingleControl"  ApplicationModes="1">
+            <Button CommandName="RibbonSettings"/>
+          </Group>
+
+
+          <!-- Settings Group -->
+          <Group CommandName="RibbonSettingsGroup" SizeDefinition="SettingsGroupSize3"  ApplicationModes="1">
+            <ComboBox CommandName="RibbonSelectLanguage"></ComboBox>
+            <CheckBox CommandName="RibbonWriteBOM"/>
+            <ComboBox CommandName="RibbonEncoding"></ComboBox>
+          </Group>
+
+          <!-- Tab Group -->
+
+          <Group CommandName="RibbonTabGroup2"   ApplicationModes="1">
+              <CheckBox CommandName="RibbonTabUseTabs"/>
+              <CheckBox CommandName="RibbonTabIndents"/>
+              <CheckBox CommandName="RibbonTabBackSpaceUnIndents"/>
+          </Group>
+          <Group CommandName="RibbonTabGroup"   ApplicationModes="1">
+
+            <Spinner CommandName="RibbonTabSize"/>
+            <Button CommandName="RibbonTabConvert"/>
+          </Group>
+
+
+          <!-- Mode Group -->
+          <Group CommandName="RibbonModeGroup"  ApplicationModes="1">
+
+            <CheckBox CommandName="RibbonSelectModeUnix"/>
+            <CheckBox CommandName="RibbonSelectModeWin32"/>
+
+
+          </Group>
+          <!-- View Group -->
+          <Group CommandName="RibbonViewGroup" SizeDefinition="ViewGroupSize">
+            <ToggleButton CommandName="RibbonShowDirView"></ToggleButton>
+            <DropDownButton CommandName="RibbonView">
+              <Button CommandName="RibbonViewMinimize" />
+              <Button CommandName="RibbonViewMaximize" />
+              <Button CommandName="RibbonViewTile" />
+              <Button CommandName="RibbonViewCascade" />
+            </DropDownButton>
+            <SplitButton >
+              <SplitButton.ButtonItem>
+                <Button CommandName="RibbonViewClose" />
+              </SplitButton.ButtonItem>
+              <SplitButton.MenuGroups>
+                <MenuGroup >
+                  <Button CommandName="RibbonViewClose" />
+                  <Button CommandName="RibbonViewCloseAll" />
+                </MenuGroup>
+              </SplitButton.MenuGroups>
+            </SplitButton>
+          </Group>
+
+
+        </Tab>
+
+      </Ribbon.Tabs>
+
+      <!-- HELP! -->
+      
+      <Ribbon.HelpButton>
+        <HelpButton CommandName="RibbonHelp"/>
+      </Ribbon.HelpButton>
+    </Ribbon>
+  </Application.Views>
+
+</Application>

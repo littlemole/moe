@@ -1,0 +1,149 @@
+[doctype][4.01 loose]
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+[doctype][4.01 strict]
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+[doctype][4.01 transitional]
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+[doctype][4.01 frameset] 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+
+[doctype][X1.0 strict]
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+[doctype][X1.0 transitional]
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+[doctype][X1.0 frameset]
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+
+[form][form]
+<form name="theForm" action="" method="post" >
+<!-- moleCursor -->
+</form>
+
+[form][input]
+<input name="input" type="text" size="" maxlength="" value="">
+
+[form][pwd]
+<input name="pwd" type="passwordd" size="" maxlength="" value="">
+
+[form][submit]
+<input name="submit" type="submit" value="OK">
+
+[form][textarea]
+<textarea name="text" cols="50" rows="10">
+<!-- moleCursor -->
+</textarea>
+
+[form][textarea]
+<select name="select" size="1">
+<!-- moleCursor -->
+</select>
+
+[form][option]
+<option value=""><!-- moleCursor --></option>
+
+[form][radio]
+<input name="radio" type="radio" value="">
+
+[form][checkbox]
+<input name="checkbox" type="checkbox" value="">
+
+[form][upload]
+<input name="upload" type="file" size="" maxlength="" accept="text/*">
+
+[form][hidden]
+<input type="hidden" name="hidden" value="">
+
+[css][link]
+<link rel="stylesheet" type="text/css" href="<!-- moleCursor -->">
+
+[css][stylesheet]
+<style type="text/css">
+<!--
+<!-- moleCursor -->
+-->
+</style>
+
+[css][style][color]
+color:black;
+
+[css][style][font]
+font-family:Verdana,Arial;
+
+[css][style][font size]
+font-size:medium;
+
+[css][style][bold]
+font-weight:bold;
+
+[css][style][italic]
+font-style:italic;
+
+[css][style][underline]
+text-decoration:underline;
+
+[css][style][align]
+text-align:center;
+
+[css][style][vertical align]
+vertical-align:top;
+
+[css][style][margin]
+margin: 0px 0px 0px 0px;
+
+[css][style][padding]
+padding: 0px 0px 0px 0px;
+
+[css][style][border]
+border-color:#000000;
+border-width:1px;
+border-style:solid;
+
+[css][style][background]
+background-color:#FFFFFF;
+
+[css][style][pseudo]
+a:link    { font-weight:bold; color:#000000; text-decoration:none; }
+a:visited { font-weight:bold; color:#000000; text-decoration:none; }
+a:hover   { font-weight:bold; color:#000000; text-decoration:underline; }
+a:active  { font-weight:bold; color:#000000; text-decoration:none; }
+a:focus   { font-weight:bold; color:#000000; text-decoration:none; }
+
+
+[table]
+<table class="" align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
+ <tr>
+  <td><!-- moleCursor --></td>
+ </tr>
+</table>
+
+[html]
+<html>
+ <head>
+  <title></title>
+ </head>
+ 
+ <body>
+<!-- moleCursor -->
+ </body>
+ 
+</html>
+
+[script]
+<script language="javascript">
+<!-- moleCursor -->
+</script>
+
+[SSI]
+<!--#include virtual="<!-- moleCursor -->" --> 
+
+[perl]
+#!/usr/bin/perl
+
+
+
+ 

@@ -1,0 +1,72 @@
+
+
+<job>
+<!-- MoeEditMSI.wsf for wix
+
+       o Word Count Summary has bit 3 set, and
+
+       o 'INSTALLLOCATION' is in LocalAppDataFolder (Installer's name for
+         CSIDL_LOCAL_APPDATA), and
+
+       o ALLUSERS is null (doesn't exist).
+
+     This allows installs of the application per-user w/o a UAC prompt
+     under Vista/win7.
+
+-->
+
+<script language="VBScript">
+Option Explicit
+
+dim arg 
+arg = WScript.Arguments.Item(0)
+
+
+dim Installer
+set Installer = CreateObject("WindowsInstaller.Installer")
+
+' set the WORDCOUNT bit
+
+Const PID_WORDCOUNT = 15
+Dim Database, SummaryInfo, View, Record, OldTarget, EndVar, NewTarget
+
+Set Database = _
+    Installer.OpenDatabase(arg,1) ', msiOpenDatabaseModeTransact)
+
+Set SummaryInfo = Database.SummaryInformation(1)
+With SummaryInfo
+    .Property(PID_WORDCOUNT) = .Property(PID_WORDCOUNT) Or &H8&
+    WScript.Echo "Word Count Summary now " & CStr(.Property(PID_WORDCOUNT))
+    .Persist
+End With
+
+' set the default install directory
+
+Set View = Database.OpenView("SELECT Directory_Parent FROM Directory WHERE Directory = 'INSTALLLOCATION' ")
+
+View.Execute
+Set Record = View.Fetch
+Record.StringData(1) = "LocalAppDataFolder"
+View.Modify 2, Record              ' msiViewModifyUpdate
+Database.Commit
+View.Close
+
+' set the ALLUSERS property
+
+Set View = _
+    Database.OpenView("SELECT Property, Value FROM Property" _
+                    & " WHERE Property = 'ALLUSERS'")
+View.Execute
+Set Record = View.Fetch
+
+If Record Is Nothing Then
+    WScript.Echo "ALLUSERS already omitted"
+Else
+    View.Modify 6, Record ' msiViewModifyDelete
+    WScript.Echo "ALLUSERS deleted"
+End If
+View.Close
+
+Database.Commit
+</script>
+</job>

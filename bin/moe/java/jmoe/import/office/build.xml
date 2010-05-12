@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+builds excel wrappers XL5EN32.OLB !!
+-->
+
+<project name="office" default="office" basedir=".">
+
+ <target name="purge" description="Cleanup Sources ???">
+ 	<echo>cleaning up ...</echo>
+ 	<delete dir="." includes="**\*.java"/>
+ </target>	
+
+ <target name="clean" description="Cleanup">
+ 	<echo>cleaning up compiled files...</echo>
+ 	<delete dir="." includes="**\*.class"/>
+	<delete dir="." includes="mol.excel.jar"/>
+ </target>	
+
+ <target name="import" description="importing excel tlb" depends="">
+ 	<echo>importing ...</echo>  	
+ <!--	This was INITIALLY used. DO NOT USE or you will overwrite all the hard work!
+
+	<java jar="../../com4j/build/dist/tlbimp.jar" fork="true"
+ 		newenvironment="true" maxmemory="2000000" 
+        args='-s -o import -p mol.excel "C:\Program Files\Microsoft Office\Office12\Excel.exe"'/>
+ 	<java jar="../../com4j/build/dist/tlbimp.jar" fork="true"
+ 		newenvironment="true" maxmemory="2000000" 
+        args='-s -o import -p mol.office "C:\Program Files\Common Files\microsoft shared\OFFICE12\MSO.dll"'/>
+
+ 	<java jar="../../com4j/build/dist/tlbimp.jar" fork="true"
+ 		newenvironment="true" maxmemory="2000000" 
+        args='-s -o import -p mol.vba "C:\Program Files\Common Files\microsoft shared\VBA\VBA6\VBE6EXT.OLB"'/>
+
+ 	<java jar="../../com4j/build/dist/tlbimp.jar" fork="true"
+ 		newenvironment="true" maxmemory="2000000" 
+        args='-s -o import -p mol.word "C:Windows\System32\wshom.ocx"'/>
+-->
+ </target>	
+	
+ <target name="compile" description="Compiling ..." depends="">
+ 	<echo>compiling ...</echo>  	
+	<javac srcdir="." destdir="." classpath=".;..\..\com4j\build\dist\com4j.jar" />
+ </target>	
+	
+ <target name="office" depends="compile">
+  <jar jarfile="mol.office.jar" includes="**\*.class" basedir="." /> 
+  <echo>done :-)</echo>  	
+
+ </target>
+</project> 
+ 

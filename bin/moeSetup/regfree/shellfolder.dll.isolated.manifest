@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
+<assemblyIdentity
+    type="win32"
+    name="shellfolder"
+    version="1.0.0.0" />
+
+<file name="shellfolder.dll" hashalg="SHA1">
+<comClass 
+	clsid="{3609D58F-1D8E-437d-BA8A-11A5DBF59BAD}" 
+	tlbid="{AD81C1CC-B3F3-47e8-BB69-31912616A39F}"
+  	progid="ShellFolder.ShellPane" description="">
+</comClass>
+<typelib 
+	tlbid="{AD81C1CC-B3F3-47e8-BB69-31912616A39F}" 
+	version="1.0" 
+	helpdir="" 
+	flags="HASDISKIMAGE">
+</typelib>
+</file>
+<comInterfaceExternalProxyStub name="IShellPane" 
+	iid="{8E03AB4B-E12B-42a2-905D-F106854C7153}" 
+	tlbid="{AD81C1CC-B3F3-47e8-BB69-31912616A39F}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+<comInterfaceExternalProxyStub name="IShellPaneEvents" 
+	iid="{3B3FF6F3-D0DB-4ada-A593-D99E6F79E6D1}" 
+	tlbid="{AD81C1CC-B3F3-47e8-BB69-31912616A39F}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+</assembly>

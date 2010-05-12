@@ -1,0 +1,153 @@
+<mol:codegen class="MoeWndGUIBuilder"
+               xmlns="urn:mol-codegen"
+               xmlns:mol="urn:mol-codegen"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+			   xsi:schemaLocation='urn:mol-codegen resource.xsd'>
+ 
+  <!-- define binary resources -->
+  <mol:resources>
+ 
+    <!-- special resources and stuff we need resource identifiers for -->
+
+    <resource  id="IDR_PREFS" value="9000" type="TXT" src="resources/xpref.xmo" />
+    <resource  id="ID_TABDRAGDROPTIMER" value="9999" />
+    <resource  id="ID_FIRST_USER_CMD" value="10000" />
+    <resource  id="ID_LAST_USER_CMD" value="19999" />
+    <resource  id="ID_FIRST_USER_SCRIPT" value="20000" />
+    <resource  id="ID_LAST_USER_SCRIPT" value="29999" />
+    <resource  id="ID_FIRST_USER_BATCH" value="30000" />
+    <resource  id="ID_LAST_USER_BATCH" value="39999" />
+    <resource  id="ID_FIRST_USER_FORM" value="40000" />
+    <resource  id="ID_LAST_USER_FORM" value="49999" />
+    <resource  id="ID_FIRST_CHILD_WND" value="50000" />
+    <resource  id="IDC_DISPLAYNAME" value="101" />
+    <resource  id="IDC_STATIC" value="-1" />
+
+
+    <!-- dialogs are still created the classic way. here we define only the necessary IDs -->
+    <dialogs >
+      <dialog id="IDD_DIALOG_URL" />
+      <dialog id="IDD_DIALOG_TAB" />
+      <dialog id="IDD_ABOUTBOX" />
+    </dialogs>
+
+    <!-- other controls we just define ids for -->
+
+    <controls >
+
+      <!-- mdi childs. does not look complete??? -->
+      <window id="IDW_EDITOR_VIEW" />
+      <window id="IDW_DIR_VIEW" />
+      <window id="IDW_HEX_VIEW" />
+
+      <!-- dialog child control ids  -->
+      <control id="IDC_EDIT_TABWIDTH" />
+      <control id="IDC_CHECK_USETABS" />
+      <control id="IDC_CHECK_TABINDENTS" />
+      <control id="IDC_CHECK_BACKSPACEUNINDENTS" />
+      <control id="IDC_EDIT_TAB" />
+      <control id="IDC_EDIT_URL" />
+      <control id="IDC_BUTTON_BOOKMARK" />
+    </controls>
+
+    <!-- typelib to be included in app resources -->
+    <typelibs >
+      <typelib src="moe.tlb" key="1" />
+    </typelibs>
+
+    <!-- icon resources to be embedded in app resource-->
+    <icons >
+      <icon id="IDI_MOE" src=".\\resources\\moe.ico" value="101" />
+    </icons>
+
+    <!-- 
+      bitmap resources, for toolbar bmps optionally a 
+      mapping of toolbar button to cmd identifier 
+  -->
+
+    <bitmaps >
+      <bitmap id="IDB_TOOLBAR" src="resources/moe.bmp" >
+        <index cmd="IDM_FILE_NEW" />
+        <index cmd="IDM_FILE_OPEN" />
+        <index cmd="IDM_FILE_OPEN_FOLDER" />
+        <index cmd="IDM_FILE_SAVE" />
+        <index cmd="IDM_FILE_SAVE_AS" />
+        <index cmd="IDM_FILE_PRINT" />
+        <index cmd="IDM_FILE_EXIT" />
+        <index cmd="IDM_EDIT_UNDO" />
+        <index cmd="IDM_EDIT_REDO" />
+        <index cmd="IDM_EDIT_CUT" />
+        <index cmd="IDM_EDIT_COPY" />
+        <index cmd="IDM_EDIT_PASTE" />
+        <index cmd="IDM_EDIT_FIND" />
+        <index cmd="IDM_EDIT_REPLACE" />
+        <index cmd="IDM_EDIT_EXECUTESCRIPT" />
+        <index cmd="IDM_MODE_EXECUTEFORM" />
+        <index cmd="IDM_USER_SCRIPT" />
+        <index cmd="IDM_USER_BATCH" />
+        <index cmd="IDM_USER_FORM" />
+        <index cmd="IDM_USER_SHORTCUT" />
+        <index cmd="IDM_EDIT_COLOR" />
+        <index cmd="IDM_MODE_EOL" />
+        <index cmd="IDM_MODE_LANGUAGE" />
+        <index cmd="IDM_MODE_SETTINGS" />
+        <index cmd="IDM_MODE_PREFERENCES" />
+        <index cmd="IDM_MODE_EDITSETTINGS" />
+        <index cmd="IDM_EDIT_DEBUGSCRIPT" />
+        <index cmd="IDM_TAB_CLOSEALLBUTTHIS" />
+        <index cmd="IDM_VIEW_MAXIMIZE" />
+        <index cmd="IDM_VIEW_MINIMIZE" />
+        <index cmd="IDM_VIEW_CASCADE" />
+        <index cmd="IDM_VIEW_TILE" />
+        <index cmd="IDM_VIEW_NEXT" />
+        <index cmd="IDM_TAB_RELOADTAB" />
+        <index cmd="IDM_TAB_DIRTAB" />
+        <index cmd="IDM_VIEW_WINDOWS" />
+        <index cmd="" />
+        <index cmd="IDM_HELP_ABOUT" />
+        <index cmd="IDM_VIEW_CLOSE" />
+        <index cmd="IDM_VIEW_CLOSEALL" />
+        <index cmd="IDM_FILE_OPEN_HTML" />
+        <index cmd="IDM_VIEW_TOOLBARS" />
+        <index cmd="IDM_TAB_JUMPTAB" />
+      </bitmap>
+      <bitmap id="IDB_MOE_FAV" src="resources/favs.bmp" />
+      <bitmap id="IDB_MOE_GO" src="resources/next.bmp" />
+    </bitmaps>
+
+    <!-- accelerators -->
+
+    <accelerators >
+      <acceltable id="IDA_MOE">
+        <accelerator cmd="IDM_EDIT_FIND" ch="F" flags="VIRTKEY,CONTROL,NOINVERT" />
+        <accelerator cmd="IDM_EDIT_REPLACE" ch="R" flags="VIRTKEY,CONTROL,NOINVERT" />
+        <accelerator cmd="IDM_FILE_NEW" ch="N" flags="VIRTKEY,CONTROL,NOINVERT" />
+        <accelerator cmd="IDM_FILE_OPEN" ch="O" flags="VIRTKEY,CONTROL,NOINVERT" />
+        <accelerator cmd="IDM_FILE_SAVE" ch="S" flags="VIRTKEY,CONTROL,NOINVERT" />
+        <accelerator cmd="IDM_FILE_SAVE_AS" ch="S" flags="VIRTKEY,ALT,NOINVERT" />
+        <accelerator cmd="IDM_HELP_ABOUT" ch="/" flags="ASCII,ALT,NOINVERT" />
+        <accelerator cmd="IDM_HELP_ABOUT" ch="?" flags="ASCII,ALT,NOINVERT" />
+        <accelerator cmd="IDM_VIEW_CLOSE" ch="W" flags="VIRTKEY,CONTROL,NOINVERT" />
+        <accelerator cmd="IDM_VIEW_CLOSEALL" ch="W" flags="VIRTKEY,SHIFT,CONTROL,NOINVERT" />
+        <accelerator cmd="IDM_VIEW_DIRVIEW" ch="D" flags="VIRTKEY,CONTROL,NOINVERT" />
+        <accelerator cmd="IDM_ESCAPE" key="VK_ESCAPE" flags="VIRTKEY,NOINVERT" />
+        <accelerator cmd="IDM_F1" key="VK_F1" flags="VIRTKEY,NOINVERT" />
+        <accelerator cmd="IDM_F2" key="VK_F2" flags="VIRTKEY,NOINVERT" />
+        <accelerator cmd="IDM_F3" key="VK_F3" flags="VIRTKEY,NOINVERT" />
+        <accelerator cmd="IDM_F4" key="VK_F4" flags="VIRTKEY,NOINVERT" />
+        <accelerator cmd="IDM_F5" key="VK_F5" flags="VIRTKEY,NOINVERT" />
+        <accelerator cmd="IDM_F6" key="VK_F6" flags="VIRTKEY,NOINVERT" />
+        <accelerator cmd="IDM_F7" key="VK_F7" flags="VIRTKEY,NOINVERT" />
+        <accelerator cmd="IDM_F8" key="VK_F8" flags="VIRTKEY,NOINVERT" />
+        <accelerator cmd="IDM_F9" key="VK_F9" flags="VIRTKEY,NOINVERT" />
+        <accelerator cmd="IDM_F10" key="VK_F10" flags="VIRTKEY,NOINVERT" />
+        <accelerator cmd="IDM_F11" key="VK_F11" flags="VIRTKEY,NOINVERT" />
+        <accelerator cmd="IDM_F12" key="VK_F12" flags="VIRTKEY,NOINVERT" />
+
+      </acceltable>
+    </accelerators>
+
+  </mol:resources>
+
+</mol:codegen>

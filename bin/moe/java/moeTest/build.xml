@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="moeTest" default="moeTest" basedir=".">
+
+ <target name="clean" description="Cleanup">
+ 	<echo>Cleanup</echo>
+ 	<delete dir="." includes="**\*.class"/>
+ </target>	
+	
+ <target name="compile" description="Compiles all source code." depends="clean">
+	<javac srcdir="." destdir="." classpath="..\jmoe\mshtml\mol.mshtml.jar;..\jmoe\jmoe.jar;..\com4j\build\dist\com4j.jar" />
+ </target>	
+	
+ <target name="moeTest" depends="compile">
+  <echo>done :-)</echo>  	
+ </target>
+</project> 
+ 

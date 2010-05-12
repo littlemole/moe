@@ -1,0 +1,707 @@
+import "ocidl.idl";
+import "..\..\lib\src\ole\HtmlEvents.idl";
+
+[
+  uuid(E5769EB9-ADD9-41e5-8D3D-D925C7FC0C29),
+  version(1.0),
+  helpstring("xmoe type library")
+]
+library Moe
+{
+    // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
+
+  //  importlib("stdole2.tlb");
+	importlib("stdole32.tlb");
+	//importlib("mshtml.tlb");
+
+	//importlib ("..\..\ax\scintillax\Debug\scintillax.tlb");
+	//importlib ("..\..\ax\shellctrl\Debug\shellctrl.tlb");
+
+	interface IWebBrowserEvents;
+
+	interface IXmoe;
+	interface IDoc;
+	interface IDocs;
+	interface IMoeFrame;
+	//interface INetScripts;
+	//interface IScintillAx;
+	//interface IShellTree;
+	//interface IShellList;
+
+	typedef enum XMOE_DOCTYPE {
+		XMOE_DOCTYPE_NULL   = 0,
+		XMOE_DOCTYPE_DOC    = 1,
+		XMOE_DOCTYPE_DIR    = 2,
+		XMOE_DOCTYPE_PIC    = 3,
+		XMOE_DOCTYPE_HEX    = 4,
+		XMOE_DOCTYPE_HTML   = 5,
+		XMOE_DOCTYPE_OLE    = 6
+	} XMOE_DOCTYPE;
+
+	typedef enum XMOE_SEARCHFLAG {
+		 XMOE_SEARCHFLAG_DOWN                         = 0x00000001,
+		 XMOE_SEARCHFLAG_WHOLEWORD                    = 0x00000002,
+		 XMOE_SEARCHFLAG_MATCHCASE                    = 0x00000004,
+		 XMOE_SEARCHFLAG_FINDNEXT                     = 0x00000008,
+		 XMOE_SEARCHFLAG_REPLACE                      = 0x00000010,
+		 XMOE_SEARCHFLAG_REPLACEALL                   = 0x00000020,
+		 XMOE_SEARCHFLAG_DIALOGTERM                   = 0x00000040
+	} XMOE_SEARCHFLAG;
+
+	typedef enum XMOE_FORMFLAG {
+		XMOE_FORMFLAG_NONE		 = 0,
+		XMOE_FORMFLAG_TITLE		 = 1, 
+		XMOE_FORMFLAG_NOSCROLL	 = 2, 
+		XMOE_FORMFLAG_DIALOG	 = 4, 
+		XMOE_FORMFLAG_STANDALONE = 8
+	} XMOE_FORMFLAG;
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IDocs
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(609BCD33-CDEC-416d-9BBD-F551D452614D),
+      helpstring("IDocs Xmoe Interface - MDI Child Document Collection"),
+      object,oleautomation, dual
+    ]
+	interface IDocs : IDispatch
+    {
+		[id(DISPID_NEWENUM), helpstring("New Enum - enable iteration from script")] 
+		HRESULT _NewEnum([out,retval] IEnumVARIANT** newEnum);
+
+		[id(DISPID_VALUE), helpstring("Item - retrieve child document by numeric or string (full document path) index")] 
+		HRESULT Item([in] VARIANT i, [out,retval] IDoc** docItem);
+
+		[id(1), helpstring("Count number of child documents")] 
+		HRESULT Count([out,retval] long* cnt);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(BF8832A5-AE58-4c26-BBC4-CECCF910149C),
+      helpstring("IMoeFrame Xmoe Interface - Html Frame"),
+      object,oleautomation, dual
+    ]
+	interface IMoeFrame : IDispatch
+    {
+		/////////////////////////////////////////////////////////////////////
+		//properties:
+		/////////////////////////////////////////////////////////////////////
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get the HTML Document for this User Frame")
+		]
+		HRESULT Document( [out,retval] IDispatch** d);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get/Set Top position of HTML window")
+		]
+		HRESULT Top( [in] long t);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2), 
+		]
+		HRESULT Top( [out,retval] long* t);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(3), 
+		  helpstring("Get/Set Left position of HTML window")
+		]
+		HRESULT Left( [in] long l);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(3), 
+		]
+		HRESULT Left( [out,retval] long* l);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(4), 
+		  helpstring("Get/Set Height of HTML window")
+		]
+		HRESULT Height( [in] long h);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(4), 
+		]
+		HRESULT Height( [out,retval] long* h);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(5), 
+		  helpstring("Get/Set Width of HTML window")
+		]
+		HRESULT Width( [in] long w);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(5), 
+		]
+		HRESULT Width( [out,retval] long* w);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(6), 
+		  helpstring("Get/Set Title of HTML window")
+		]
+		HRESULT Title( [in] BSTR t);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(6), 
+		]
+		HRESULT Title( [out,retval] BSTR* t);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(7), 
+		  helpstring("Get embeded HTML Scripts IDpispatch interface")
+		]
+		HRESULT Scripts( [out,retval] IDispatch** s);
+
+
+		/////////////////////////////////////////////////////////////////////
+		[		
+		  propput,id(8), helpstring("Set Code Behind Reference - for .NET CodeBehind Clients")
+		]
+		HRESULT CodeBehind( [in] IDispatch* code );
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  id(9), helpstring("Close the HTML User Frame Window")
+		]
+		HRESULT Close();
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  id(10), helpstring("Eval(uate) a User Script in the HTML Frame document context")
+		]
+		HRESULT Eval( [in] BSTR src, [in] BSTR scrptLanguage );
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  id(11), helpstring("Call OLE CMDID ( Save, Close, Print) of embedded webbrowser control ")
+		]
+		HRESULT OleCmd( [in] long cmd );
+
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IDoc
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(25867097-B5C3-4d5e-999F-417FCBAE218C),
+      helpstring("IDoc Xmoe Interface - Common Interface for moe's MDI Child windows"),
+      object,oleautomation, dual
+    ]
+	interface IDoc : IDispatch
+    {
+		/////////////////////////////////////////////////////////////////////
+		//properties:
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get filename of document")
+		]
+		HRESULT Filename( [out,retval] BSTR* fname);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get directory path of document")
+		]
+		HRESULT Path( [out,retval] BSTR* dname);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(3), 
+		  helpstring("Get/Set Top position of document")
+		]
+		HRESULT Top( [in] long t);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(3), 
+		]
+		HRESULT Top( [out,retval] long* t);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(4), 
+		  helpstring("Get/Set Left position of document")
+		]
+		HRESULT Left( [in] long l);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(4), 
+		]
+		HRESULT Left( [out,retval] long* l);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(5), 
+		  helpstring("Get/Set Height of document")
+		]
+		HRESULT Height( [in] long h);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(5), 
+		]
+		HRESULT Height( [out,retval] long* h);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(6), 
+		  helpstring("Get/Set Width of document")
+		]
+		HRESULT Width( [in] long w);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(6), 
+		]
+		HRESULT Width( [out,retval] long* w);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget, nonbrowsable,id(7), 
+		  helpstring("Get Application (Moe) Object Reference")
+		]
+		HRESULT App( [out,retval] IXmoe** m);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(8), 
+		  helpstring("Get Document Type (XMOE_DOCTYPE)")
+		]
+		HRESULT Type( [out,retval] long* typ);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget, nonbrowsable,id(9), 
+		  helpstring("Get Editor document object ")
+		]
+		HRESULT Document( [out,retval] IDispatch** d);
+
+		/////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////
+
+		/////////////////////////////////////////////////////////////////////
+		// methods:
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  id(10), helpstring("Show MDI Document")
+		]
+		HRESULT Show();
+		[ 
+		  id(11), helpstring("Hide MDI Document")
+		]
+		HRESULT Hide();
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  id(12), helpstring("Minimize MDI Document")
+		]
+		HRESULT Minimize();
+		[ 
+		  id(13), helpstring("Maximize MDI Document")
+		]
+		HRESULT Maximize();
+		[ 
+		  id(14), helpstring("Restore MDI Document")
+		]
+		HRESULT Restore();
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  id(15), helpstring("Close MDI Document")
+		]
+		HRESULT Close();
+		[ 
+		  id(16), helpstring("Activate MDI Document")
+		]
+		HRESULT Activate();
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IXMoe
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(710B3B21-654C-4c07-A062-B7287132F97D),
+      helpstring("IXmoe AppObj Interface - the moe application scripting object"),
+      object,oleautomation, dual
+    ]
+	interface IXmoe : IDispatch
+    {
+		/////////////////////////////////////////////////////////////////////
+		//properties:
+		/////////////////////////////////////////////////////////////////////
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,nonbrowsable,id(1), 
+		  helpstring("Get MDI Child Documents Collection")
+		]
+		HRESULT Docs( [out,retval] IDocs** d);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get/Set Top position of main frame window")
+		]
+		HRESULT Top( [in] long t);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2), 
+		]
+		HRESULT Top( [out,retval] long* t);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(3), 
+		  helpstring("Get/Set Left position of main frame window")
+		]
+		HRESULT Left( [in] long l);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(3), 
+		]
+		HRESULT Left( [out,retval] long* l);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(4), 
+		  helpstring("Get/Set Height of main frame window")
+		]
+		HRESULT Height( [in] long h);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(4), 
+		]
+		HRESULT Height( [out,retval] long* h);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(5), 
+		  helpstring("Get/Set Width of main frame window")
+		]
+		HRESULT Width( [in] long w);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(5), 
+		]
+		HRESULT Width( [out,retval] long* w);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget, nonbrowsable,requestedit,id(6), 
+		  helpstring("Get Active MDI Document Reference")
+		]
+		HRESULT ActiveDoc( [out,retval] IDoc** d);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(7), 
+		  helpstring("Show/Hide the TreeView (SideBar) Control")
+		]
+		HRESULT ShowTreeView( [in] VARIANT_BOOL vb);
+		[ 
+		  propget, bindable,displaybind, requestedit,id(7), 
+		]
+		HRESULT ShowTreeView( [out,retval] VARIANT_BOOL* vb);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget, nonbrowsable,id(8), 
+		  helpstring("get a object reference to the TreeView (SideBar) Control")
+		]
+		HRESULT TreeView( [out,retval] IDispatch** tv);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(9), 
+		  helpstring("Get/Set SysType to UNIX/WIN32 (SCINTILLA_SYSTYPE)")
+		]
+		HRESULT SysType( [in] long typ);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(9), 
+		]
+		HRESULT SysType( [out,retval] long* typ);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(10), 
+		  helpstring("Set Encoding ie UTF-8, Ansi, ... (SCINTILLA_ENCODING)")
+		]
+		HRESULT Encoding( [in] long typ);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(10), 
+		]
+		HRESULT Encoding( [out,retval] long* typ);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(11), 
+		  helpstring("Get/Set Usage of Tab Characters, false converts tabs to spaces")
+		]
+		HRESULT TabUsage( [in] VARIANT_BOOL vbTabUsage);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(11), 
+		]
+		HRESULT TabUsage( [out,retval] VARIANT_BOOL* vbTabUsage);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(12), 
+		  helpstring("Get/Set whether Tabulator keystrokes do code-indent")
+		]
+		HRESULT TabIndents( [in] VARIANT_BOOL vbTabIndents);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(12), 
+		]
+		HRESULT TabIndents( [out,retval] VARIANT_BOOL* vbTabIndents);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(13), 
+		  helpstring("Get/Set wether BackSpace keystrokes unindent (code-indention)")
+		]
+		HRESULT BackSpaceUnindents( [in] VARIANT_BOOL vbBackSpaceIndents);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(13), 
+		]
+		HRESULT BackSpaceUnindents( [out,retval] VARIANT_BOOL* vbBackSpaceIndents);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(14), 
+		  helpstring("Get/Set width of Tabulator in spaces")
+		]
+		HRESULT TabWidth( [in] long w);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(14), 
+		]
+		HRESULT TabWidth( [out,retval] long* w);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(15), 
+		  helpstring("Get/Set Syntax index for highlighting (SCINTILLA_SYNTAX)")
+		]
+		HRESULT Syntax( [in] long typ);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(15), 
+		]
+		HRESULT Syntax( [out,retval] long* typ);
+
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(16), 
+		  helpstring("Get Configuration Files Path on local system")
+		]
+		HRESULT ConfigPath( [out,retval] BSTR* fPath);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(17), 
+		  helpstring("Get Path to moe executable on local system")
+		]
+		HRESULT ModulePath( [out,retval] BSTR* fPath);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(18), 
+		  helpstring("Get a reference to the embedded .NET compiler")
+		]
+		HRESULT Compiler( [out,retval] IDispatch** c );
+
+		/////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////
+
+		/////////////////////////////////////////////////////////////////////
+		// methods:
+		/////////////////////////////////////////////////////////////////////
+		[id(19), helpstring("Create new, empty (Text-Editor) MDI Child Document")] 
+		HRESULT New([out,retval] IDoc** d);
+		[id(20), helpstring("Open existing Document in Text-Editor")] 
+		HRESULT Open([in] BSTR fPath,[out,retval] IDoc** d);
+		[id(21), helpstring("Open Document in Text-Editor, forcing UTF-8 mode")] 
+		HRESULT OpenUTF8([in] BSTR fPath,[out,retval] IDoc** d);
+		[id(22), helpstring("Open Directory View as MDI child")] 
+		HRESULT OpenDir([in]BSTR dir, [out,retval] IDoc** d);
+		[id(23), helpstring("Open document file in Hex Viewer")]
+		HRESULT OpenHexEditor( [in] BSTR f, [in] VARIANT_BOOL vbReadOnly, [out,retval] IDoc** hex);
+		[id(24), helpstring("Open HTML Document as MDI Child (embedded IE)")] 
+		HRESULT OpenHtmlFrame( [in] BSTR f, [out,retval] IDoc** htmlWnd);
+		[id(25), helpstring("Open Directory Browser and return directory name")] 
+		HRESULT ChooseDir([out,retval] BSTR* dir);
+
+		/////////////////////////////////////////////////////////////////////
+		[id(26), helpstring("Save All open MDI documents")] 
+		HRESULT SaveAll();
+		[id(27), helpstring("Close All open MDI documents")] 
+		HRESULT CloseAll();
+
+		/////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////
+		[id(28), helpstring("Show application main window")]
+		HRESULT Show();
+		[id(29), helpstring("Hide application main window")]
+		HRESULT Hide();
+		[id(30), helpstring("Activate MDI document with index by number or full-path")]
+		HRESULT Activate([in] VARIANT i);
+		[id(31), helpstring("Exit moe. Shuts down the application, closing all windows.")] 
+		HRESULT Exit();
+
+		/////////////////////////////////////////////////////////////////////
+		[id(32), helpstring("Minimize application main window")	]
+		HRESULT Minimize();
+		[id(33), helpstring("Maximize application main window")]
+		HRESULT Maximize();
+		[id(34), helpstring("Restore application main window")]
+		HRESULT Restore();
+		[id(35), helpstring("Tile application MDI child windows")]
+		HRESULT Tile();
+		[id(36), helpstring("Cascade application MDI child windows")]
+		HRESULT Cascade();
+
+		/////////////////////////////////////////////////////////////////////
+		[id(37), helpstring("Set the Status Bar text")] 
+		HRESULT SetStatus( [in] BSTR StatusText);
+		[id(38), helpstring("Show the embedded moe HTML Help")] 
+		HRESULT Help();
+
+		/////////////////////////////////////////////////////////////////////
+		[id(39), helpstring("Run a Script from disk inside moe context")]
+		HRESULT Run( [in] BSTR f, [in] BSTR engine );
+		[id(40), helpstring("Evaluate a Script given as text inside moe context")]
+		HRESULT Eval([in] BSTR scrpt, [in] BSTR scrptLanguage);
+		[id(41), helpstring("Execute a Shell command")]
+		HRESULT System( [in] BSTR f);
+		[id(42), helpstring("Show a user-defined HTML Form")]
+		HRESULT ShowForm( [in] BSTR src, [in] long l, [in] int t, [in] int w, [in] int h, [in] int formStyle );
+
+		/////////////////////////////////////////////////////////////////////
+		[id(43), helpstring("Show User Preferences for new opened documents dialog")]
+		HRESULT Preferences( );
+		[id(44), helpstring("Show User Custom Settings dialog")]
+		HRESULT Settings( );
+		[id(45), helpstring("Export User Settings to file")]
+		HRESULT ExportSettings( [in] BSTR f );
+		[id(46), helpstring("Import User Settings from file")]
+		HRESULT ImportSettings( [in] BSTR f );
+
+		[id(47), helpstring("MsgBox")] 
+		HRESULT MsgBox( [in] BSTR text, [in] BSTR title, [in] long flags, [out,retval] long* result);
+		[id(48), helpstring("Debug a Script given as text inside moe context")]
+		HRESULT Debug([in] BSTR scrpt, [in] BSTR scrptLanguage);
+
+		[id(49), helpstring("CreateObjectAdmin - creates new COM object via UAC COM Moniker")] 
+		HRESULT CreateObjectAdmin([in] BSTR progid, [out,retval] IDispatch** disp);
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(50), 
+		  helpstring("Get/Set fullscreen")
+		]
+		HRESULT Fullscreen( [in] VARIANT_BOOL vbTabIndents);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(50), 
+		]
+		HRESULT Fullscreen( [out,retval] VARIANT_BOOL* vbTabIndents);
+	}
+	////////////////////////////////////////////////////////////////////////////////////
+	// IExternalMoe
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(5AA6374E-4995-4f49-AF45-6A047654CDD2),
+      helpstring("IExternalMoxy Xmoe Interface - external interface visible for scripts from within embedded IE"),
+      object,oleautomation, dual
+    ]
+	interface IExternalMoe : IDispatch
+    {
+		[		
+		  propget,id(1), 
+		  helpstring("Get moe application object reference")
+		]
+		HRESULT Moe([out,retval] IDispatch** m);
+
+		[		
+		  propget,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get reference to current frame interface")
+		]
+		HRESULT Frame( [out,retval] IMoeFrame** f );
+
+		[
+		  propget,id(3), 
+		  helpstring("Get Code Behind - for .NET CodeBehind Scripts") 
+		]
+		HRESULT Code( [out,retval] IDispatch** code );
+
+		[id(4), helpstring("Close current frame")] 
+		HRESULT Close();
+
+		[id(5), helpstring("CreateObject - creates new COM object")] 
+		HRESULT CreateObject([in] BSTR progid, [out,retval] IDispatch** disp);
+
+		[id(6), helpstring("Put Code Behind - for .NET CodeBehind Scripts")]
+		HRESULT CodeBehind( [in] BSTR fname );
+	}
+	////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Event Disp Interfaces
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// _IXmoeEvents
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+	  uuid(ABE0076F-2A48-448f-9716-7EF6550F3AB0),
+	  helpstring("XMoe Event Interface")
+	]
+	dispinterface _IXmoeEvents
+	{
+		properties:
+		methods:
+
+		[id(1), helpstring("FileName changed")]  
+		void OnFileNameChanged([in] BSTR fname);
+
+		[id(2), helpstring("Show Menue, return bool value to indicate wether to show default menu")]  
+		void OnShowMenu([out] VARIANT_BOOL* vbShowMenue);
+
+		[id(3), helpstring("Caret Position in editor changed")]  
+		void OnPosChange([in] long posLine );
+
+		[id(4), helpstring("Char was entered in editor")]  
+		void OnChar([in] BSTR ch );
+
+	};
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Co Classes ( class factories )
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// Xmoe
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(6282C9F1-F8B8-446b-9F98-1D4B7043BB9C),
+		appobject, helpstring("Xmoe Application Object")
+	]
+	coclass Xmoe
+	{
+		[default]         interface     IXmoe;
+	}
+
+	[
+		uuid(3BD5BD2B-A9BF-4cf0-8835-EA6462A058CF),
+		noncreatable, helpstring("XMoe MDI Document Child Collection")
+	]
+	coclass Docs
+	{
+		[default]         interface     IDocs;
+	}
+
+	[
+		uuid(D3F8CB44-2FBC-4488-A4F0-378056D1FBF9),
+		noncreatable, helpstring("XMoe MDI Document Child")
+	]
+	coclass Doc
+	{
+		[default]         interface     IDoc;
+	}
+
+}

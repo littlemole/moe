@@ -1,0 +1,247 @@
+<mol:codegen class="MoeWndGUIBuilder" 
+               xmlns="urn:mol-codegen" 
+               xmlns:mol="urn:mol-codegen" 
+               xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+			   xsi:schemaLocation='urn:urn:mol-codegen resource.xsd'>
+   
+ 
+  <!-- main GUI description -->
+ 
+  <ui >
+
+    <!-- 
+      define the main frame moe window 
+      the window has a name, a type, a 'windows internal'
+      a std menu and a borderlayout positioned to standard new window rect
+      identified as midi mainframe by the midi attribute specifying the 
+      mdi view menu.
+      persistent state is loaded via generated command.
+      drag drop is initalized to member "Drop" - accelerators are loaded
+      the window is shown. due to attribute accessor set to "true", 
+      simple accessors (global c-functions) are generated for moe and its
+      static child windows
+      
+      accessor generates an global function name $name to accesss the widget moe()
+      
+      // persistStorage='appPath() + _T("\\ui.xmo")'   
+    -->
+    <window name="moe" class="MoeWnd" id="IDW_MOE" menu="IDM_SMALL_MENU"
+            layout="BorderLayout" pos="stdRect" mdi="IDM_VIEW_WINDOWS"        
+            dragDrop='moeDropTarget()' show='SW_SHOW' accel='IDA_MOE' accessor='true'>
+      
+      <!-- act as an ole container -->
+      <!-- we provide these menues for menu merging with ole embedding -->
+      <olemenu menu='IDM_MOE'>        
+        <file cmd='IDM_FILE'/>
+        <window cmd='IDM_VIEW' />
+      </olemenu>
+      <!-- 
+        we provide these target commands for ole embedding - so we tell an embedded
+        object to (possibly!) forward these commands to us - mapping the call to
+        the named cmd IF it occurs
+      -->
+      <olecmds>
+        <olecmd cmd='IDM_FILE_NEW' oletarget='OLECMDID_NEW' />
+        <olecmd cmd='IDM_FILE_OPEN' oletarget='OLECMDID_OPEN' />
+        <olecmd cmd='IDM_FILE_SAVE' oletarget='OLECMDID_SAVE' />
+        <olecmd cmd='IDM_FILE_SAVE_AS' oletarget='OLECMDID_SAVEAS' />
+        <olecmd cmd='IDM_FILE_PRINT' oletarget='OLECMDID_PRINT' />
+      </olecmds>
+
+      <!-- the directory tree view -->
+      <window name="treeWnd" id="IDW_TREE_VIEW" class="MoeTreeWnd" pos="mol::Rect(0,0,160,200)"
+             visible="true" layout="BorderLayout::WEST" advise="moe->treeSink"/>
+
+      <!-- the child window selector tab control -->
+      <window name="tab"  id="IDW_TAB_CTRL" class="MoeTabControl" pos="mol::Rect(0,0,160,26)" visible="false" layout="BorderLayout::SOUTH" >
+      </window>
+
+
+      <!-- application status bar -->
+      <statusbar name="statusBar" id="IDW_STATUS" class="MoeStatusBar" pos="mol::stdRect" >        
+        <set member="Text">_T("")</set>
+        <window name="progress" id="IDW_PROGRESS_BAR" class="mol::ProgressbarCtrl" pos="mol::Rect(3,7,300,12)"
+               visible="true" >
+          <set member="Color">RGB(175,175,175)</set>
+          <set member="BkColor">RGB(222,222,222)</set>
+          <set member="Range">0,100</set>
+          <set member="Pos">10</set>          
+        </window>
+      </statusbar>
+
+      <!-- user toolbar -->
+    
+      <rebar name="reBar" id="IDW_REBAR" class="MoeBar" pos="mol::Rect(0,0,200,300)"
+             visible="true" layout="BorderLayout::WEST" >
+
+        <toolbar class="MoeToolBar" name="fileBar" id="IDC_TOOLBARS_FILEBAR" icons="43" bmp="IDB_TOOLBAR" width="90" height="24" >
+          <active>
+            <toolbutton cmd="IDM_FILE_NEW" />
+            <toolbutton cmd="IDM_FILE_OPEN"  />
+            <toolbutton cmd="IDM_FILE_SAVE"  />
+            <toolbutton cmd="IDM_FILE_SAVE_AS"  />
+          </active>
+          <inactive>
+            <toolbutton cmd="IDM_VIEW_DIRVIEW" />
+            <toolbutton cmd="IDM_FILE_OPEN_FOLDER"  />
+            <toolbutton cmd="IDM_FILE_PRINT" />
+            <toolbutton cmd="IDM_FILE_EXIT"  />
+          </inactive>
+        </toolbar>
+
+        <toolbar class="MoeToolBar"  name="editBar" id="IDC_TOOLBARS_EDITBAR" icons="43" bmp="IDB_TOOLBAR" width="32" height="24" >
+          <active>
+            <toolbutton cmd="IDM_EDIT_UNDO" />
+          </active>
+          <inactive>
+            <toolbutton cmd="IDM_EDIT_REDO" />
+            <toolbutton cmd="IDM_EDIT_CUT" />
+            <toolbutton cmd="IDM_EDIT_COPY" />
+            <toolbutton cmd="IDM_EDIT_PASTE" />
+            <toolbutton cmd="IDM_EDIT_FIND"  />
+            <toolbutton cmd="IDM_EDIT_REPLACE"  />
+          </inactive>
+        </toolbar>
+
+        <toolbar class="MoeToolBar"  name="toolsBar" id="IDC_TOOLBARS_TOOLBAR" icons="43" bmp="IDB_TOOLBAR" width="32" height="24" >
+          <active>
+            <toolbutton cmd="IDM_EDIT_COLOR" />
+            <toolbutton cmd="IDM_EDIT_EXECUTESCRIPT" />
+            <toolbutton cmd="IDM_USER_SHORTCUT" dropdown="true"/>
+          </active>
+          <inactive>
+            <toolbutton cmd="IDM_MODE_EXECUTEFORM" />
+            <toolbutton cmd="IDM_USER_SCRIPT" dropdown="true"/>
+            <toolbutton cmd="IDM_USER_BATCH" dropdown="true"/>
+            <toolbutton cmd="IDM_USER_FORM" dropdown="true"/>
+          </inactive>
+        </toolbar>
+
+        <toolbar class="MoeToolBar"   name="settingsBar" id="IDC_TOOLBARS_SETTINGBAR" icons="43" bmp="IDB_TOOLBAR" width="64" height="24" visible="false">
+          <active>
+            <toolbutton cmd="IDM_MODE_EOL" dropdown="true"/>
+          </active>
+          <inactive>
+            <toolbutton cmd="IDM_MODE_LANGUAGE" dropdown="true"/>
+            <toolbutton cmd="IDM_MODE_SETTINGS" />
+            <toolbutton cmd="IDM_MODE_PREFERENCES" />
+            <toolbutton cmd="IDM_MODE_EDITSETTINGS" />
+          </inactive>
+        </toolbar>
+
+
+        <toolbar class="MoeToolBar"   name="viewBar" id="IDC_TOOLBARS_VIEWBAR" icons="43" bmp="IDB_TOOLBAR" width="64" height="24"  visible="false">
+          <active>
+            <toolbutton cmd="IDM_VIEW_MAXIMIZE" />
+            <toolbutton cmd="IDM_VIEW_MINIMIZE" />
+            <toolbutton cmd="IDM_VIEW_CASCADE" />
+            <toolbutton cmd="IDM_VIEW_TILE" />
+          </active>
+          <inactive>
+            <toolbutton cmd="IDM_VIEW_NEXT" />
+            <toolbutton cmd="IDM_VIEW_CLOSE" />
+          </inactive>
+        </toolbar>
+
+        <toolbar class="MoeToolBar"   name="userBar" id="IDC_TOOLBARS_USERBAR" icons="43" bmp="IDB_TOOLBAR" width="100" height="24" visible="false" >
+          <active>
+            <toolbutton cmd="IDM_HELP_ABOUT" />            
+          </active>
+          <inactive>
+            <toolbutton cmd="IDM_FILE_NEW" />
+            <toolbutton cmd="IDM_FILE_OPEN" />
+            <toolbutton cmd="IDM_FILE_SAVE_AS" />
+            <toolbutton cmd="IDM_VIEW_DIRVIEW" />
+            <toolbutton cmd="IDM_FILE_OPEN_FOLDER" />
+            <toolbutton cmd="IDM_FILE_SAVE" />
+            <toolbutton cmd="IDM_FILE_PRINT" />
+            <toolbutton cmd="IDM_FILE_EXIT" />
+            <toolbutton cmd="IDM_EDIT_UNDO" />
+            <toolbutton cmd="IDM_EDIT_REDO" />
+            <toolbutton cmd="IDM_EDIT_CUT" />
+            <toolbutton cmd="IDM_EDIT_COPY" />
+            <toolbutton cmd="IDM_EDIT_PASTE" />
+            <toolbutton cmd="IDM_EDIT_FIND"  />
+            <toolbutton cmd="IDM_EDIT_REPLACE" />
+
+            <toolbutton cmd="IDM_EDIT_COLOR" />
+            <toolbutton cmd="IDM_EDIT_EXECUTESCRIPT" />
+            <toolbutton cmd="IDM_MODE_EXECUTEFORM" />
+            <toolbutton cmd="IDM_USER_SCRIPT" dropdown="true"/>
+            <toolbutton cmd="IDM_USER_BATCH" dropdown="true"/>
+            <toolbutton cmd="IDM_USER_FORM" dropdown="true"/>
+            <toolbutton cmd="IDM_USER_SHORTCUT" dropdown="true"/>
+
+            <toolbutton cmd="IDM_SETTINGS_MODE" />
+            <toolbutton cmd="IDM_MODE_LANGUAGE" />
+
+            <toolbutton cmd="IDM_MODE_SETTINGS" />
+            <toolbutton cmd="IDM_MODE_PREFERENCES" />
+            <toolbutton cmd="IDM_MODE_EDITSETTINGS" />
+
+            <toolbutton cmd="IDM_VIEW_MAXIMIZE" />
+            <toolbutton cmd="IDM_VIEW_MINIMIZE" />
+            <toolbutton cmd="IDM_VIEW_CASCADE" />
+            <toolbutton cmd="IDM_VIEW_TILE" />
+            <toolbutton cmd="IDM_VIEW_NEXT" />
+            <toolbutton cmd="IDM_VIEW_CLOSE" />
+          </inactive>
+        </toolbar>
+
+        <bar name="syntax" id="IDW_SYNTAX_BOX" class="MoeComboBox" width="44" height="240"
+               visible="true" >
+          
+          <add member="String">_T("txt")</add>
+          <add member="String">_T("html")</add>
+          <add member="String">_T("css")</add>
+          <add member="String">_T("vb")</add>
+          <add member="String">_T("js")</add>
+          <add member="String">_T("sql")</add>
+          <add member="String">_T("shell")</add>
+          <add member="String">_T("perl")</add>
+          <add member="String">_T("c++")</add>
+          <add member="String">_T("java")</add>
+          <add member="String">_T("c#")</add>
+          <set member="CurSel">0</set>
+        </bar>
+
+      </rebar>
+      
+
+    </window>
+
+    <!-- ui helper singletons -->
+    
+    <!-- open document collection -->
+    <singleton name="docs" class="Documents" />
+    
+    <!-- events -->
+    <singleton name="compilerSink" class="CompilerSink" />
+    <singleton name="treeWndSink" class="TreeWndSink" />
+    <singleton name="moeDropTarget" class="MoeDrop" />
+    
+    <!-- dialogs -->
+    <singleton name="searchDlg" class="mol::SearchDlg" />
+    <singleton name="urlDlg" class="UrlDlg" />
+
+    <!-- COM singleton: user settings -->
+    <singleton name="config" class="ISetting" clsid="CLSID_Setting" />
+    
+    <!-- noncreatable COM singleton: scripting support -->
+    <singleton name="scriptlet" class="Script" interface="IActiveScriptSite" />
+
+    <!-- simple app setting singletons -->
+    
+    <!-- path to moe's user application setting directory -->
+    <singleton name="appPath" path='moe' />
+    <!-- path to moe's user application setting persistent file -->
+    <singleton name="prefPath" string='appPath() + _T("\\xpref.xmo")' />
+    <!-- path to moe executable -->
+    <singleton name="binPath" module='moe' />
+    
+  </ui>
+
+
+</mol:codegen>
+

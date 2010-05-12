@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<project name="native" default="release">
+
+  <macrodef name="devenv">
+    <attribute name="config" />
+    <sequential>
+      <exec dir="." executable="devenv"
+        failonerror="yes">
+        <arg line="jnitl.vcproj /rebuild" />
+        <arg value="@{config}"/>
+      </exec>
+    </sequential>
+  </macrodef>
+
+  <target name="compile">
+    <devenv config="Release" />
+    <devenv config="Release RTDLL" />
+    <devenv config="Debug" />
+    <devenv config="Debug RTDLL" />
+  </target>
+  
+  <target name="clean">
+    <delete dir="Debug"/>
+    <delete dir="Release"/>
+    <delete dir="build"/>
+    <delete dir="lib"/>
+  </target>
+  
+  <target name="release" depends="compile">
+    <mkdir dir="build" />
+    <tstamp />
+    <zip file="build/jnitl-${DSTAMP}-win32.zip">
+      <zipfileset dir="." includes="include/*.h, lib/*.lib" />
+    </zip>
+  </target>
+  
+  <target name="source-zip">
+    <mkdir dir="build" />
+    <tstamp />
+    <zip file="build/jnitl-${DSTAMP}-src.zip">
+      <fileset dir="." includes="source/**/*" />
+      <fileset dir="." includes="include/**/*" />
+      <fileset dir="." includes="jnitl.sln, jnitl.vcproj, build.xml" />
+    </zip>
+  </target>
+</project>

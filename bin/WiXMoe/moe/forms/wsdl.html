@@ -1,0 +1,183 @@
+<html>
+ <head>
+  <title>wsdl</title>
+  <link rel="stylesheet" type="text/css" href="search.css">
+  <script language="javascript" src="dialog.js"></script>
+  <script language="javascript" src="drag.js"></script>
+  <script language="javascript" src="js/javascript.js"></script>
+  <script language="javascript" src="js/namespace.js"></script>
+  <script language="javascript" src="js/class.js"></script>
+  <script language="javascript" src="js/dom.js"></script>
+  <script language="javascript" src="js/http.js"></script>
+  <script language="javascript" src="js/xml/xml.js"></script>
+  <script language="javascript" src="js/xml/xslt.js"></script>
+<script language="javascript" src="js/xml/xpath.js"></script>
+ </head>
+
+ <body onLoad="init()">
+
+   <div class="tab-container" id="container" style="width:100%;height:190px">
+
+     <ul  id="tabs" class="tabs" style="float:left;z-index:2;width:410px">
+      <li><a href="#" onClick="return showPane('pane1', this)" id="tab1">WSDL Transforming</a></li>
+	  <li><a href="#" onClick="return showPane('pane2', this)" id="tab2">Settings</a></li>
+     </ul>
+	 <ul class="tabs" style="float:right;z-index:1;">
+ 	  <li ><a href="moe://close/" >x</a></li>
+     </ul>
+
+    <div class="tab-panes" style="margin:0px 20px 0px 20px;">  
+
+     <div id="pane1" style="width:100%;">
+
+	  <form style="margin:0px" name="xsltForm" action="#" onSubmit="return onOk();">
+
+	  <br>
+	  <fieldset>
+       <legend>WSDL tranform</legend>
+
+
+	   <table cellspacing="14" align=center border=0
+			  style="font-size:12px;border-color:#6D99B6">
+        <tr>
+         <td>input wsdl file<br>
+  	      <input name="wsdlFile" type="input" size="36">
+         </td>
+         <td align=right>
+          <button onClick="onWsdl()">load</button>
+		 </td>
+        </tr>
+        <tr>
+         <td>output directory<br>
+  	      <input name="outputDir" type="input" size="36">
+         </td>
+         <td align=right>
+          <button onClick="onOutput()">load</button>
+		 </td>
+        </tr>
+
+        <tr>
+         <td colspan="2">
+	      <button onClick="transform()">tranform</button>
+         </td>
+        </tr>
+       </table>
+
+ 	   <br>
+
+       </fieldset>
+      </form>
+
+      <br>
+	 </div>
+     <div id="pane2" style="width:100%;">
+	  <form style="margin:0px" name="settingsForm" action="#" onSubmit="return false;">
+
+	  <br>
+	  <fieldset>
+       <legend>settings</legend>
+
+	   <br>
+
+	   <table cellspacing="1" align=center border=0
+			  style="font-size:12px;border-color:#6D99B6" width="80%">
+        <tr>
+         <td align="left">
+		  <textarea name="settings" cols="30" rows="8"></textarea>	
+         </td>
+        </tr>
+       </table>
+
+	   <br><br>
+
+       </fieldset>
+      </form>      
+	 </div>       
+    </div>
+ </body>
+
+<script language="javascript">
+
+var path;
+var xslt;
+
+var wsdl;
+var output;
+var settings;
+
+function init()
+{
+	setupPanes("container", "tab1");
+	draggable("tabs");
+
+    path = external.CreateObject("IO.Path");
+	xslt = new mol.xslt.Processor();
+
+	wsdl    = document.forms.xsltForm.wsdlFile;
+	output = document.forms.xsltForm.outputDir;
+	settings = document.forms.settingsForm.settings;
+}
+
+function onWsdl()
+{
+  var file = path.FileOpenDlg();
+
+  if ( file != "" )
+	wsdl.value = file;
+}
+
+function onOutput()
+{
+  var dir = path.ChooseDir();
+
+  if ( dir != "" )
+	output.value = dir;
+}
+
+function transform()
+{
+alert(wsdl.value);
+  var xml = mol.xml.load(wsdl.value);
+alert(xml.xml);
+  var ns = new Array( 
+	"xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/'",
+    "xmlns:xsd='http://www.w3.org/2001/XMLSchema'"
+  );
+
+  var nodes = mol.xpath.getNodes("/wsdl:definitions/wsdl:types/xsd:schema/*",xml,ns);
+
+  //xslt.addParam( key, val );
+  //var result = xslt.transform(xml,xsl);
+
+  var wnd = external.moe.New();
+
+  var names = new Array();
+
+  for ( var i = 0; i < nodes.length; i++ )
+  {
+	var atts = nodes[i].attributes;
+    if ( atts )
+    {
+	   var name = atts.getNamedItem("name");
+       names[names.length] = name.nodeValue;
+    }
+  }
+
+  var xsl = mol.xml.load("C:\\molib8\\test\\win_TEST\\xmoe\\forms\\xsl\\classDef.xsl");
+
+  var debug = "";
+  for ( var i = 0; i < names.length; i++ )
+  {
+    xslt.clearParams();
+	xslt.addParam( "class", names[i] );
+	var result = xslt.transform(xml,xsl);
+    debug += names[i] + "\r\n";
+	debug += result;
+  }
+  
+  wnd.Document.SetText(debug);
+}
+</script>
+
+</html>
+

@@ -1,0 +1,148 @@
+<mol:codegen class="MoeWndGUIBuilder" 
+               xmlns="urn:mol-codegen" 
+               xmlns:mol="urn:mol-codegen" 
+               xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+			   xsi:schemaLocation='urn:mol-codegen resource.xsd'>
+
+ 
+  <!-- 
+    List User UI Commands ( Menue or Ribbon, toolbar events ... )
+    all id="" attributes (from all elements in this as well as the other ml docs )
+    will generate a resource ID in xmlid.h
+    
+    specifying a ribbon ID must match a valid <command name="[id]"> handler in
+    the ribbon.xml and will set up a ribbon dispatch handler which invokes the
+    corresponding menu command.
+  -->
+  <cmds >
+    <cmd id="IDM_FILE" title="File" />
+    <cmd id="IDM_FILE_NEW" title="New File"  ribbon="RibbonFileNew" />
+    <cmd id="IDM_FILE_OPEN" title="File Open" ribbon="RibbonFileOpen"/>
+    <cmd id="IDM_FILE_OPEN_HEX" title="Open Hex" />
+    <cmd id="IDM_FILE_OPEN_HTML" title="Open Url" ribbon="RibbonFileOpenUrl" />
+    <cmd id="IDM_FILE_OPEN_FOLDER" title="Open Folder" ribbon="RibbonFileOpenDirectory" />
+    <cmd id="IDM_FILE_SAVE" title="Save" ribbon="RibbonFileSave"/>
+    <cmd id="IDM_FILE_SAVE_AS" title="Save As" ribbon="RibbonFileSaveAs"/>
+    <cmd id="IDM_FILE_EXIT" title="Exit" ribbon="RibbonFileExit"/>
+    <cmd id="IDM_FILE_PRINT" title="Print" ribbon="RibbonFilePrint"/>
+    <cmd id="IDM_FILE_NEWDIR" title="New Dir" ribbon="RibbonNewDirList"/>
+    <cmd id="IDM_FILE_RENAME" title="Rename" ribbon="RibbonRenameList"/>
+    <cmd id="IDM_FILE_UPDIR" title="Up Dir" ribbon="RibbonUpDir"/>
+
+    <cmd id="IDM_FILE_DIREXEC" title="Up Dir" ribbon="RibbonExecuteList"/>
+    <cmd id="IDM_FILE_DIRPROP" title="Up Dir" ribbon="RibbonPropertiesList"/>
+
+    <cmd id="IDM_RIBBON_RECENTITEMS" title="Recent Items" ribbon="RibbonMRUItems"/>
+    <cmd id="IDM_RIBBON_LANGUAGE" title="Syntax" ribbon="RibbonSelectLanguage"/>
+    <cmd id="IDM_RIBBON_ENCODING" title="Encoding" ribbon="RibbonEncoding"/>
+    <cmd id="IDM_RIBBON_TABUSAGE" title="Tab Usage" ribbon="RibbonTabUseTabs"/>
+    <cmd id="IDM_RIBBON_TABWIDTH" title="Tab Width" ribbon="RibbonTabSize"/>
+    <cmd id="IDM_RIBBON_TABCONVERT" title="Tab Convert" ribbon="RibbonTabConvert"/>
+    <cmd id="IDM_RIBBON_TABINDENTS" title="Tab Indents" ribbon="RibbonTabIndents"/>
+    <cmd id="IDM_RIBBON_BACKSPACE_UNIDENTS" title="Backspace Unindents" ribbon="RibbonTabBackSpaceUnIndents"/>
+    <cmd id="IDM_RIBBON_WRITE_BOM" title="Write BOM" ribbon="RibbonWriteBOM"/>
+    <cmd id="IDM_RIBBON_BYTES_SHOWN" title="Show #Bytes" ribbon="RibbonBytesShown"/>
+    
+
+    <cmd id="IDM_EDIT" title="Edit" />
+    <cmd id="IDM_EDIT_SELECT" title="Select All" ribbon="RibbonEditSelectAll"/>
+    <cmd id="IDM_EDIT_FIND" title="Find" ribbon="RibbonEditFind"/>
+    <cmd id="IDM_EDIT_REPLACE" title="Replace" ribbon="RibbonEditReplace"/>
+    <cmd id="IDM_EDIT_UNDO" title="Undo" ribbon="RibbonEditUndo"/>
+    <cmd id="IDM_EDIT_REDO" title="Redo" ribbon="RibbonEditRedo"/>
+    <cmd id="IDM_EDIT_CUT" title="Cut" ribbon="RibbonEditCut"/>
+    <cmd id="IDM_EDIT_COPY" title="Copy" ribbon="RibbonEditCopy"/>
+    <cmd id="IDM_EDIT_PASTE"  title="Paste" ribbon="RibbonEditPaste"/>
+    <cmd id="IDM_EDIT_COLOR" title="Insert Color" ribbon="RibbonToolColor"/>
+    <cmd id="IDM_EDIT_UPDATE" title="Update" ribbon="RibbonEditReload"/>
+    <cmd id="IDM_EDIT_STOP" title="Stop" />
+    <cmd id="IDM_EDIT_EXECUTESCRIPT" title="Exec Script" ribbon="RibbonToolExecScript"/>
+    <cmd id="IDM_EDIT_DEBUGSCRIPT" title="Debug Script" ribbon="RibbonToolDebug"/>
+    <cmd id="IDM_EDIT_INDENTION" title="Indention" />
+    <cmd id="IDM_EDIT_16BYTES" title="16 Bytes" />
+    <cmd id="IDM_EDIT_20BYTES" title="20 Bytes" />
+    <cmd id="IDM_EDIT_24BYTES" title="24 Bytes" />
+    <cmd id="IDM_EDIT_28BYTES" title="28 Bytes" />
+    <cmd id="IDM_EDIT_32BYTES" title="32 Bytes" />
+
+    <cmd id="IDM_TOOLS" title="Tools" />
+    <cmd id="IDM_MODE" title="Settings"/>
+    <cmd id="IDM_MODE_EOL" title="Mode" ribbon="RibbonModeGroup" />
+    <cmd id="IDM_MODE_SETTINGS" title="Settings" ribbon="RibbonSettings"/>
+    <cmd id="IDM_MODE_LANGUAGE" title="Language" />
+    <cmd id="IDM_MODE_UNIX" title="UNIX" ribbon="RibbonSelectModeUnix"/>
+    <cmd id="IDM_MODE_WIN32" title="WIN32" ribbon="RibbonSelectModeWin32" />
+    <cmd id="IDM_MODE_PREFERENCES" title="Preferences" ribbon="RibbonFilePreferences"/>
+    <cmd id="IDM_MODE_USETABS" title="Use Tabs" />
+    <cmd id="IDM_MODE_DONT_USE_TABS" title="Don't use Tabs" />
+    <cmd id="IDM_MODE_TABWIDTH" title="tabwidth" />
+    <cmd id="IDM_MODE_EDITSETTINGS" title="Settings" />
+    <cmd id="IDM_TOOLS_EXECUTE_NET" title="Exec .NET" />
+    <cmd id="IDM_MODE_EXECUTEFORM" title="Exec Form" ribbon="RibbonToolExecForm"/>
+    <cmd id="IDM_SETTINGS_LANG" title="Language Settings" />
+    <cmd id="IDM_SETTINGS_MODE" title="Mode Settings" />
+    <cmd id="IDM_USER_FORM" title="UserForm" ribbon="RibbonToolUserForm" notify="TBN_DROPDOWN"/>
+    <cmd id="IDM_USER_SHORTCUT" title="Shortcut" ribbon="RibbonToolUserTemplate" notify="TBN_DROPDOWN"/>
+    <cmd id="IDM_USER_SCRIPT" title="UserScript" ribbon="RibbonToolUserScript" notify="TBN_DROPDOWN"/>
+    <cmd id="IDM_USER_BATCH" title="UserBatch" ribbon="RibbonToolUserBatch" notify="TBN_DROPDOWN"/>
+    <cmd id="IDM_LEXER_PLAIN" title="Text" />
+    <cmd id="IDM_LEXER_HTML" title="Html" />
+    <cmd id="IDM_LEXER_CSS" title="CSS" />
+    <cmd id="IDM_LEXER_VB" title="VBS" />
+    <cmd id="IDM_LEXER_JAVASCRIPT" title="JS" />
+    <cmd id="IDM_LEXER_SQL" title="SQL" />
+    <cmd id="IDM_LEXER_SHELL" title="Shell" />
+    <cmd id="IDM_LEXER_PERL" title="Perl" />
+    <cmd id="IDM_LEXER_CPP" title="C/C++" />
+    <cmd id="IDM_LEXER_JAVA" title="Java" />
+    <cmd id="IDM_LEXER_CSHARP" title="C#" />
+
+    <cmd id="IDM_VIEW" title="View" />
+    <cmd id="IDM_VIEW_DIRVIEW" title="View Dirview" ribbon="RibbonShowDirView"/>
+    <cmd id="IDM_VIEW_MAXIMIZE" title="Maximize" ribbon="RibbonViewMaximize"/>
+    <cmd id="IDM_VIEW_MINIMIZE" title="Minimize" ribbon="RibbonViewMinimize"/>
+    <cmd id="IDM_VIEW_TILE" title="Tile" ribbon="RibbonViewTile"/>
+    <cmd id="IDM_VIEW_CASCADE" title="Cascade" ribbon="RibbonViewCascade"/>
+    <cmd id="IDM_VIEW_NEXT" title="Next" />
+    <cmd id="IDM_VIEW_CLOSE" title="Close" ribbon="RibbonViewClose"/>
+    <cmd id="IDM_VIEW_CLOSEALL" title="Close All" ribbon="RibbonViewCloseAll"/>
+    <cmd id="IDM_VIEW_TOOLBARS" title="Toolbars" />
+    <cmd id="IDM_TOOLBARS_FILEBAR" title="Filebar" />
+    <cmd id="IDM_TOOLBARS_EDITBAR" title="Editbar" />
+    <cmd id="IDM_TOOLBARS_TOOLBAR" title="Toolbar" />
+    <cmd id="IDM_TOOLBARS_SETTINGBAR" title="Settingbar" />
+    <cmd id="IDM_TOOLBARS_VIEWBAR" title="Viewbar" />
+    <cmd id="IDM_TOOLBARS_USERBAR" title="Userbar" />
+    <cmd id="IDM_TOOLBARS_DIRVIEW" title="Dirbar" />
+    <cmd id="IDM_TOOLBARS_FREEZE" title="Freeze" />
+    <cmd id="IDM_VIEW_WINDOWS" title="Windows" />
+    <cmd id="IDM_VIEW_WINDOWS_TEXT" title="Select Child" />
+    <cmd id="IDM_HELP" title="?"  />
+    <cmd id="IDM_HELP_ABOUT" title="About" ribbon="RibbonHelp" />
+
+    <cmd id="IDM_ESCAPE" title="Escape" />
+    <cmd id="IDM_F1" />
+    <cmd id="IDM_F2" />
+    <cmd id="IDM_F3" />
+    <cmd id="IDM_F4" />
+    <cmd id="IDM_F5" />
+    <cmd id="IDM_F6" />
+    <cmd id="IDM_F7" />
+    <cmd id="IDM_F8" />
+    <cmd id="IDM_F9" />
+    <cmd id="IDM_F10" />
+    <cmd id="IDM_F11" />
+    <cmd id="IDM_F12" />
+    <cmd id="IDM_TAB" title="TAB" />
+    <cmd id="IDM_TAB_CLOSETAB" title="Close" />
+    <cmd id="IDM_TAB_CLOSEALLBUTTHIS" title="Close Others" ribbon="RibbonViewCloseOthers"/>
+    <cmd id="IDM_TAB_RELOADTAB" title="Reload" />
+    <cmd id="IDM_TAB_SAVETAB" title="Save" />
+    <cmd id="IDM_TAB_DIRTAB" title="Directory" ribbon="RibbonParentDirectory"/>
+    <cmd id="IDM_TAB_JUMPTAB" title="Jump" ribbon="RibbonJumpDirectory"/>
+
+
+  </cmds>
+</mol:codegen>
+

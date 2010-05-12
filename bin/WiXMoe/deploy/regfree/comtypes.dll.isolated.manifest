@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+<assemblyIdentity
+      type="win32"
+      name="comtypes"
+      version="1.0.0.0" />
+
+
+<file name="comtypes.dll" hashalg="SHA1">
+<comClass 
+	clsid="{9BFB3F1F-E302-4637-8495-7F7FDD29B57C}" 
+	tlbid="{3ECB75B2-E572-47A9-8618-FEE26C64CCB5}" 
+  progid="TypeToXml.TypeLibToXml"
+	description="TypeLibToXml - Object for COM Type library to XML conversion">
+</comClass>
+<typelib 
+	tlbid="{3ECB75B2-E572-47A9-8618-FEE26C64CCB5}" version="1.0" helpdir="" flags="HASDISKIMAGE">
+</typelib>
+</file>
+<comInterfaceExternalProxyStub 
+	name="ITypeLibToXml" 
+	iid="{2D9ABF3A-0013-4761-9F9F-9AFA71AF123C}" 
+	tlbid="{3ECB75B2-E572-47A9-8618-FEE26C64CCB5}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+</assembly>

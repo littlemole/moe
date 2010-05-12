@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+builds io wrappers
+-->
+
+<project name="setting" default="setting" basedir=".">
+
+ <target name="clean" description="Cleanup">
+ 	<echo>cleaning up ...</echo>
+ 	<delete dir="." includes="**\*.java"/>
+ 	<delete dir="." includes="**\*.class"/>
+	<delete dir="." includes="mol.setting.jar"/>
+ </target>	
+
+ <target name="import" description="importing mshtml tlb" depends="clean">
+ 	<echo>importing ...</echo>  	
+ 	<java jar="../../com4j/build/dist/tlbimp.jar"
+ 		args="-o . -p mol.setting ../../../../../ax/setting/Debug/setting.tlb" fork="true"
+ 		newenvironment="true" maxmemory="2000000"
+ 	/> 	
+ </target>	
+	
+ <target name="compile" description="Compiling ..." depends="import">
+ 	<echo>compiling ...</echo>  	
+	<javac srcdir="." destdir="." classpath=".;..\..\com4j\build\dist\com4j.jar" />
+ </target>	
+	
+ <target name="setting" depends="compile">
+  <jar jarfile="mol.setting.jar" includes="**\*.class" basedir="." /> 
+  <echo>done :-)</echo>  	
+
+ </target>
+</project> 
+ 

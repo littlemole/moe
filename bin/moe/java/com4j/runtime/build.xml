@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<project name="runtime" default="compile" basedir=".">
+
+  <target name="compile">
+    <mkdir dir="build/classes"/>
+    <javac srcdir="src" destdir="build/classes">
+    </javac>
+  </target>
+
+  <target name="jar" depends="compile">
+    <tstamp/>
+    <jar file="build/com4j.jar">
+      <manifest>
+        <attribute name="Build-Date" value="${DSTAMP}" />
+      </manifest>
+      <!-- <metainf dir="../../www" includes="LICENSE.txt" /> -->
+	  <!-- <metainf dir="META-INF" /> -->
+      <fileset dir="build/classes" includes="**/*.class"/>
+      <fileset dir="src" includes="**/*.properties"/>
+    </jar>
+    <zip file="build/com4j-src.zip">
+      <fileset dir="src" excludes="**/CVS"/>
+    </zip>
+  </target>
+
+
+  <target name="clean">
+    <delete dir="build"/>
+  </target>
+
+
+</project>
+
+
