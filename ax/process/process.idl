@@ -1,0 +1,122 @@
+import "oaidl.idl";
+
+////////////////////////////////////////////////////////////////////////////////////////
+// mol Process COM Lib
+////////////////////////////////////////////////////////////////////////////////////////
+
+[
+  uuid(9E61E3FC-FC64-4164-A9AC-BDEDC3116BA7),
+  version(1.0),
+  helpstring("PipedProcess lib - pipe external processes")
+]
+library PipedProcess
+{
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Interfaces
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+    // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
+	////////////////////////////////////////////////////////////////////////////////////
+	importlib("stdole32.tlb");
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IPipedProcess
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(263ABFD3-6D9F-4c0b-861A-4D22E0AA9529),
+      helpstring("IPipedProcess - pipes a external process"),
+      object,oleautomation, dual
+    ]
+	interface IPipedProcess : IDispatch
+    {
+		[propget,id(1), helpstring("set async mode")] 
+		HRESULT Async([out,retval] VARIANT_BOOL* vb);
+
+		[propput,id(1)] 
+		HRESULT Async([in] VARIANT_BOOL vb);
+
+		[propget,id(2), helpstring("retrieve readystate for asynchronous documentation")] 
+		HRESULT readyState([out,retval] long* state);
+
+		[propget,id(3), helpstring("detect EOF on external process stdout")] 
+		HRESULT Eof([out,retval] VARIANT_BOOL* vb);
+
+		[propget,id(4), helpstring("detect EOF on external process stderr")] 
+		HRESULT ErrEof([out,retval] VARIANT_BOOL* vb);
+
+		[id(5), helpstring("Create a piped Process specified by commandline")] 
+		HRESULT Create([in] BSTR cmdline, [out,retval] VARIANT_BOOL* vbSuccess);
+
+		[id(6), helpstring("Write to external processes stdin")] 
+		HRESULT Write([in] BSTR s, [out,retval] VARIANT_BOOL* vbSuccess);
+
+		[id(7), helpstring("Close output stream to external process stdin")] 
+		HRESULT CloseOut();
+
+		[id(8), helpstring("ReadLine from external process stdout")] 
+		HRESULT ReadLine([out,retval] BSTR* line);
+
+		[id(9), helpstring("ReadLine from external process stderr")] 
+		HRESULT ReadErrLine([out,retval] BSTR* line );
+
+		[id(10), helpstring("kindly clean up after external process completed. safe way to cleanup, or release all references")] 
+		HRESULT Close();
+
+		[id(11), helpstring("Terminate running external process! UNSAFE! use as last ressort!")] 
+		HRESULT Terminate();
+
+		[propput,id(12),helpstring("onComplete javascript event property")] 
+		HRESULT onComplete([in] IDispatch* onCompleteHandler);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IPipedProcessComplete
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(2CA957E0-4A1D-4e57-AA42-94E9B0701B26),
+      helpstring("_IPipedProcessComplete - piped process completed")
+    ]
+	dispinterface _IPipedProcessComplete 
+    {
+		properties:
+		methods:
+
+			[id(1), helpstring("piped process completed")] 
+			void OnComplete();
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IPipedProcessCompleteDual
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(7FBB9268-45D9-43df-BE32-A5FFED60B456),
+      helpstring("IPipedProcessCompleteDual - piped process completed, dual version"),
+      oleautomation, dual
+    ]
+	interface IPipedProcessCompleteDual : IDispatch
+    {
+			[id(1), helpstring("piped process completed")] 
+			HRESULT OnComplete();
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Co Classes ( class factories )
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// PipedProcess
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(3E08871B-09B9-4e04-B9F7-64D2F9F4E854),
+		helpstring("PipedProcess - Object for executing external process and piping results")
+	]
+	coclass PipedProcessControl
+	{
+		[default]         interface     IPipedProcess;
+		[default,source]  interface     _IPipedProcessComplete;
+	}
+}

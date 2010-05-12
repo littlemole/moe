@@ -1,0 +1,42 @@
+<mol:codegen class="ScintillAxGUIBuilder" 
+               xmlns="urn:mol-codegen" 
+               xmlns:mol="urn:mol-codegen" 
+               xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			         xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+			         xsi:schemaLocation='urn:mol-codegen resource.xsd'>
+  
+
+  
+   
+  <msgs >
+
+    <!-- the scintilla ax ctrl -->
+    <class type="ScintillAx" >
+      
+        <msg  handler="OnCreate" msg="WM_CREATE" />
+	      <notify handler="OnUpdateUI" code="SCN_UPDATEUI" />
+	      <notify handler="OnChar" code="SCN_CHARADDED" />
+	      <notify handler="OnDblClick" code="SCN_DOUBLECLICK" />
+        <msg  handler="OnContext" msg="WM_CONTEXTMENU" />
+    
+    </class>
+  
+
+
+  <class type="ScintillAxProperties">
+
+        <msg  handler="OnInitDialog" msg="WM_INITDIALOG" />
+        <msg  handler="OnDirty" cmd="IDC_RADIO_UNIX"  />
+        <msg  handler="OnDirty" cmd="IDC_RADIO_WIN32"  />
+        <msg  handler="OnDirty" cmd="IDC_COMBO_ENCODING"  />
+        <msg  handler="OnDirty" cmd="IDC_CHECK_USETABS"  />
+        <msg  handler="OnDirty" cmd="IDC_CHECK_TABINDENTS"  />
+        <msg  handler="OnDirty" cmd="IDC_EDIT_TABWIDTH"  />
+        <msg  handler="OnDirty" cmd="IDC_CHECK_BACKSPACEUNINDENTS"  />
+        <msg  handler="OnDirty" cmd="IDC_CHECK_WRITEBOM"  />
+        <msg  handler="OnConvert" cmd="IDC_CONVERT_BUTTON"  />
+   </class>
+
+  </msgs>
+</mol:codegen>
+

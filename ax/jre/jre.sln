@@ -1,0 +1,110 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "comtypes", "comtypes.vcproj", "{E95B8030-D279-45C5-8D39-7B975B70371D}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "win", "..\..\win\win.vcproj", "{E80D4D45-1088-4A6A-9F3D-531E99541A92}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ole", "..\..\win\ole\ole.vcproj", "{654BE85D-A9C0-4AC3-BDF5-9EBE39F3D12A}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "io", "..\..\win\io\io.vcproj", "{7545A6B9-2582-4A6B-AD7C-2A9298DE9A9A}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "thread", "..\..\thread\thread.vcproj", "{341C5103-0406-4D3E-AD1B-7A088A209388}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util", "..\..\util\util.vcproj", "{55AE2DD4-2D64-4051-9F9C-D67C840C368B}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "comTypesSetup", "..\..\test\win_TEST\comTypesSetup\comTypesSetup.vdproj", "{825D3AEF-00BD-41A2-8093-34B1A140FF8B}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug DLL|Win32 = Debug DLL|Win32
+		Debug|Win32 = Debug|Win32
+		Release DLL|Win32 = Release DLL|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E95B8030-D279-45C5-8D39-7B975B70371D}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{E95B8030-D279-45C5-8D39-7B975B70371D}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{E95B8030-D279-45C5-8D39-7B975B70371D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E95B8030-D279-45C5-8D39-7B975B70371D}.Debug|Win32.Build.0 = Debug|Win32
+		{E95B8030-D279-45C5-8D39-7B975B70371D}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{E95B8030-D279-45C5-8D39-7B975B70371D}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{E95B8030-D279-45C5-8D39-7B975B70371D}.Release|Win32.ActiveCfg = Release|Win32
+		{E95B8030-D279-45C5-8D39-7B975B70371D}.Release|Win32.Build.0 = Release|Win32
+		{E80D4D45-1088-4A6A-9F3D-531E99541A92}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{E80D4D45-1088-4A6A-9F3D-531E99541A92}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{E80D4D45-1088-4A6A-9F3D-531E99541A92}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E80D4D45-1088-4A6A-9F3D-531E99541A92}.Debug|Win32.Build.0 = Debug|Win32
+		{E80D4D45-1088-4A6A-9F3D-531E99541A92}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{E80D4D45-1088-4A6A-9F3D-531E99541A92}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{E80D4D45-1088-4A6A-9F3D-531E99541A92}.Release|Win32.ActiveCfg = Release|Win32
+		{E80D4D45-1088-4A6A-9F3D-531E99541A92}.Release|Win32.Build.0 = Release|Win32
+		{654BE85D-A9C0-4AC3-BDF5-9EBE39F3D12A}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{654BE85D-A9C0-4AC3-BDF5-9EBE39F3D12A}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{654BE85D-A9C0-4AC3-BDF5-9EBE39F3D12A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{654BE85D-A9C0-4AC3-BDF5-9EBE39F3D12A}.Debug|Win32.Build.0 = Debug|Win32
+		{654BE85D-A9C0-4AC3-BDF5-9EBE39F3D12A}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{654BE85D-A9C0-4AC3-BDF5-9EBE39F3D12A}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{654BE85D-A9C0-4AC3-BDF5-9EBE39F3D12A}.Release|Win32.ActiveCfg = Release|Win32
+		{654BE85D-A9C0-4AC3-BDF5-9EBE39F3D12A}.Release|Win32.Build.0 = Release|Win32
+		{7545A6B9-2582-4A6B-AD7C-2A9298DE9A9A}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{7545A6B9-2582-4A6B-AD7C-2A9298DE9A9A}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{7545A6B9-2582-4A6B-AD7C-2A9298DE9A9A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7545A6B9-2582-4A6B-AD7C-2A9298DE9A9A}.Debug|Win32.Build.0 = Debug|Win32
+		{7545A6B9-2582-4A6B-AD7C-2A9298DE9A9A}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{7545A6B9-2582-4A6B-AD7C-2A9298DE9A9A}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{7545A6B9-2582-4A6B-AD7C-2A9298DE9A9A}.Release|Win32.ActiveCfg = Release|Win32
+		{7545A6B9-2582-4A6B-AD7C-2A9298DE9A9A}.Release|Win32.Build.0 = Release|Win32
+		{341C5103-0406-4D3E-AD1B-7A088A209388}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{341C5103-0406-4D3E-AD1B-7A088A209388}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{341C5103-0406-4D3E-AD1B-7A088A209388}.Debug|Win32.ActiveCfg = Debug|Win32
+		{341C5103-0406-4D3E-AD1B-7A088A209388}.Debug|Win32.Build.0 = Debug|Win32
+		{341C5103-0406-4D3E-AD1B-7A088A209388}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{341C5103-0406-4D3E-AD1B-7A088A209388}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{341C5103-0406-4D3E-AD1B-7A088A209388}.Release|Win32.ActiveCfg = Release|Win32
+		{341C5103-0406-4D3E-AD1B-7A088A209388}.Release|Win32.Build.0 = Release|Win32
+		{55AE2DD4-2D64-4051-9F9C-D67C840C368B}.Debug DLL|Win32.ActiveCfg = Debug DLL|Win32
+		{55AE2DD4-2D64-4051-9F9C-D67C840C368B}.Debug DLL|Win32.Build.0 = Debug DLL|Win32
+		{55AE2DD4-2D64-4051-9F9C-D67C840C368B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{55AE2DD4-2D64-4051-9F9C-D67C840C368B}.Debug|Win32.Build.0 = Debug|Win32
+		{55AE2DD4-2D64-4051-9F9C-D67C840C368B}.Release DLL|Win32.ActiveCfg = Release DLL|Win32
+		{55AE2DD4-2D64-4051-9F9C-D67C840C368B}.Release DLL|Win32.Build.0 = Release DLL|Win32
+		{55AE2DD4-2D64-4051-9F9C-D67C840C368B}.Release|Win32.ActiveCfg = Release|Win32
+		{55AE2DD4-2D64-4051-9F9C-D67C840C368B}.Release|Win32.Build.0 = Release|Win32
+		{825D3AEF-00BD-41A2-8093-34B1A140FF8B}.Debug DLL|Win32.ActiveCfg = Debug
+		{825D3AEF-00BD-41A2-8093-34B1A140FF8B}.Debug|Win32.ActiveCfg = Debug
+		{825D3AEF-00BD-41A2-8093-34B1A140FF8B}.Release DLL|Win32.ActiveCfg = Release
+		{825D3AEF-00BD-41A2-8093-34B1A140FF8B}.Release|Win32.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

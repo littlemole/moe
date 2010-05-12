@@ -1,0 +1,151 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "colorResources.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// German (Germany) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
+#ifdef _WIN32
+LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // German (Germany) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP_HSB          BITMAP                  "cchsb.bmp"
+IDB_BITMAP_RGB          BITMAP                  "ccrgb.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DIALOG_COLORS DIALOGEX 0, 0, 411, 229
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Color Picker"
+FONT 8, "Tahoma", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,354,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,354,24,50,14
+    GROUPBOX        "RGB",IDC_STATIC_RGB_RECT,7,7,138,157
+    GROUPBOX        "HSB",IDC_STATIC_HSB_RECT,150,7,180,157
+    GROUPBOX        "RGB Values",IDC_STATIC,7,174,137,48
+    EDITTEXT        IDC_EDIT_RED,15,201,32,14,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_SPIN_RED,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,40,201,9,14
+    EDITTEXT        IDC_EDIT_GREEN,55,201,33,14,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_SPIN_GREEN,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,80,201,9,14
+    EDITTEXT        IDC_EDIT_BLUE,100,201,33,14,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_SPIN_BLUE,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,125,201,9,14
+    LTEXT           "Red",IDC_STATIC,15,186,14,8
+    LTEXT           "Green",IDC_STATIC,55,186,20,8
+    LTEXT           "Blue",IDC_STATIC,100,186,15,8
+    GROUPBOX        "HSB Values",IDC_STATIC,152,174,177,48
+    EDITTEXT        IDC_EDIT_HUE,160,201,33,14,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_SPIN_HUE,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,185,201,9,14
+    EDITTEXT        IDC_EDIT_SAT,219,201,33,14,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_SPIN_SAT,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,243,201,9,14
+    EDITTEXT        IDC_EDIT_VAL,278,201,31,14,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_SPIN_VAL,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,301,201,9,14
+    LTEXT           "Hue",IDC_STATIC,160,186,14,8
+    LTEXT           "Saturation",IDC_STATIC,219,186,33,8
+    LTEXT           "Brightness",IDC_STATIC,278,186,34,8
+    GROUPBOX        "Pick Color",IDC_STATIC_OLD,340,52,64,50
+    GROUPBOX        "NewColor",IDC_STATIC_NEW,339,114,65,49
+    GROUPBOX        "Hex Value",IDC_STATIC,339,174,65,48
+    EDITTEXT        IDC_EDIT_HEX,351,201,41,14,ES_AUTOHSCROLL
+    LTEXT           "RGB",IDC_STATIC,353,186,15,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_DIALOG_COLORS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 404
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 222
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

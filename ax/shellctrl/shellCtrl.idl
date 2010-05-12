@@ -1,0 +1,561 @@
+//#include "olectl.h"
+import "oaidl.idl";
+import "ocidl.idl";
+
+////////////////////////////////////////////////////////////////////////////////////////
+// ShellCtrl Library
+////////////////////////////////////////////////////////////////////////////////////////
+
+[
+  uuid(74618F47-2F2A-4b0f-BDCA-344BE3208ECE),
+  version(1.0),
+  helpstring("ShellCtrls")
+]
+library ShellCtrls
+{
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Interfaces
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+    // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
+	////////////////////////////////////////////////////////////////////////////////////
+	importlib("stdole32.tlb");
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IShellTree
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(67282F00-10CA-4540-92B1-37DF10A3CD7B),
+      helpstring("ShellTree Interface"),
+      object,oleautomation, dual
+    ]
+	interface IShellTree : IDispatch
+    {
+		// properties
+		[ 
+		  propput,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get/Set Display of files")
+		] 
+		HRESULT DisplayFiles([in] VARIANT_BOOL vb);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1)
+		] 
+		HRESULT DisplayFiles([out,retval] VARIANT_BOOL* vb);
+
+		[ 
+		  propput,id(2), 
+		  helpstring("Get/Set the current selection path")
+		] 
+		HRESULT Selection([in] BSTR fname);
+
+		[ 
+		  propget,id(2)
+		] 
+		HRESULT Selection([out,retval] BSTR* fname);
+
+		[ 
+		  propget,id(3), 
+		  helpstring("returns true when Treeview has the focus")
+		] 
+		HRESULT HasFocus([out,retval] VARIANT_BOOL* vbHasFocus);
+
+		// methods
+		[id(4), helpstring("Updates the Treeview")] 
+		HRESULT Update();
+
+		[id(5), helpstring("Cut current selection")] 
+		HRESULT Cut();
+
+		[id(6), helpstring("Copy current selection")] 
+		HRESULT Copy();
+
+		[id(7), helpstring("Paste current selection")] 
+		HRESULT Paste();
+
+		[id(8), helpstring("Rename current selection")] 
+		HRESULT Rename();
+
+		[id(9), helpstring("Delete current selection")] 
+		HRESULT Delete();
+
+		[id(10), helpstring("Properties for current selection")] 
+		HRESULT Properties();
+
+		[id(11), helpstring("ShellExecute current selection")] 
+		HRESULT Execute();
+
+		[id(12), helpstring("Add a network folder")] 
+		HRESULT AddFolder([in] BSTR dname);
+
+		[id(13), helpstring("Remove a network folder")] 
+		HRESULT RemoveFolder([in] BSTR dname);
+
+		[id(14), helpstring("Create a new directory at current selection")] 
+		HRESULT CreateDir();
+
+    };
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IHexCtrl
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(3F6F041B-6B7A-4465-9542-4652528C3FB7),
+      helpstring("IHexCtrl Interface"),
+      object,oleautomation, dual
+    ]
+	interface IHexCtrl : IDispatch
+    {
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get/Set Readonly mode")
+		] 
+		HRESULT ReadOnly([out,retval] VARIANT_BOOL* vb);
+		[ 
+		  propput,bindable,displaybind, requestedit,restricted,hidden,id(1)
+		] 
+		HRESULT ReadOnly([in] VARIANT_BOOL vb);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get/Set width of columns to display")
+		] 
+		HRESULT DisplayColumns([out,retval] long* cols);
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(2)
+		] 
+		HRESULT DisplayColumns([in] long cols);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(3), 
+		  helpstring("Get/Set Filename")
+		] 
+		HRESULT Filename([out,retval] BSTR* fname);
+		[ 
+		  propput,bindable,displaybind,requestedit,restricted,hidden,id(3)
+		] 
+		HRESULT Filename([in] BSTR fname);
+
+		[ 
+		  propget,id(4), 
+		  helpstring("returns true when Controls has the focus")
+		] 
+		HRESULT HasFocus([out,retval] VARIANT_BOOL* vbHasFocus);
+
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(5), 
+		  helpstring("Get/Set display of Toolbar")
+		] 
+		HRESULT ShowToolbar([out,retval] VARIANT_BOOL* vb);
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(5)
+		] 
+		HRESULT ShowToolbar([in] VARIANT_BOOL vb);
+
+
+
+
+		[ 
+		  propget,id(6), 
+		  helpstring("Get/Set ScrollPos")
+		] 
+		HRESULT ScrollPos([out,retval] long* pos);
+
+		[ 
+		  propput,id(6)
+		] 
+		HRESULT ScrollPos([in] long pos);
+
+
+
+
+		[ 
+		  propget,id(7), 
+		  helpstring("return the maximum scroll position")
+		] 
+		HRESULT ScrollMax([out,retval] long* pos);
+
+
+		[ 
+		  propget,id(8), 
+		  helpstring("Get/Set the current offset into file to display")
+		] 
+		HRESULT Offset([out,retval] long* off);
+
+		[ 
+		  propput,id(8)
+		] 
+		HRESULT Offset([in] long off);
+
+		[ 
+		  propget,id(9), 
+		  helpstring("Get the File's size")
+		] 
+		HRESULT FileSize([out,retval] long* s);
+
+		[ 
+		  propget,id(10), 
+		  helpstring("Get/Set current Search position")
+		] 
+		HRESULT SearchPos([out,retval] long* pos);
+
+		[ 
+		  propput,id(10)
+		] 
+		HRESULT SearchPos([in] long pos);
+
+		// methods
+		[id(11), helpstring("Open a File")] 
+		HRESULT Open( [in] BSTR file, [out,retval] VARIANT_BOOL* vbSuccess );
+
+		[id(12), helpstring("Open a File ReadOnly")] 
+		HRESULT OpenReadOnly( [in] BSTR file, [out,retval] VARIANT_BOOL* vbSuccess );
+
+		[id(13), helpstring("Set DWORD value (in hex chars) at Offset")] 
+		HRESULT SetOffsetDWORD( [in] long offset, [in] BSTR val );
+
+		[id(14), helpstring("Set BYTE value (in hex chars) at Offset")] 
+		HRESULT SetOffsetByte( [in] long offset, [in] BSTR val );
+
+		[id(15), helpstring("Set Char value at Offset")] 
+		HRESULT SetOffsetChar( [in] long offset, [in] long val );
+
+		[id(16), helpstring("Search in file ")] 
+		HRESULT Search( [in] BSTR what, [in] long flags);
+
+		[id(17), helpstring("Get Value at specific offset")] 
+		HRESULT Value( [in] long off, [out,retval] BSTR* value);
+
+    };
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IShellList
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+      uuid(9C93223B-E503-415a-811A-B817D7B1BC43),
+      helpstring("ShellList Interface"),
+      object,oleautomation, dual
+    ]
+	interface IShellList : IDispatch
+    {
+		// properties
+		[ 
+		  propput,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get/Set Display of files")
+		] 
+		HRESULT DisplayFiles([in] VARIANT_BOOL vb);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1)
+		] 
+		HRESULT DisplayFiles([out,retval] VARIANT_BOOL* vb);
+
+		[ 
+		  propput,defaultbind,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get/Set current selection")
+		] 
+		HRESULT Selection([in] VARIANT fname);
+
+		[ 
+		  propget,defaultbind,bindable,displaybind, requestedit,id(2)
+		] 
+		HRESULT Selection([out,retval] VARIANT* fname);
+
+		[ 
+		  propget,id(3), 
+		  helpstring("returns true when Listview has the focus")
+		] 
+		HRESULT HasFocus([out,retval] VARIANT_BOOL* vbHasFocus);
+
+		// methods
+		[id(4), helpstring("Update Listview")] 
+		HRESULT Update();
+
+		[id(5), helpstring("Cut current selection")] 
+		HRESULT Cut();
+
+		[id(6), helpstring("Copy current selection")] 
+		HRESULT Copy();
+
+		[id(7), helpstring("Paste current selection")] 
+		HRESULT Paste();
+
+		[id(8), helpstring("Rename current selection")] 
+		HRESULT Rename();
+
+		[id(9), helpstring("Delete current selection")] 
+		HRESULT Delete();
+
+		[id(10), helpstring("Properties for current selection")] 
+		HRESULT Properties();
+
+		[id(11), helpstring("ShellExecute current selection")] 
+		HRESULT Execute();
+
+		[id(12), helpstring("Create new directory")] 
+		HRESULT CreateDir();
+
+		[id(13), helpstring("Up to parent directory")] 
+		HRESULT UpDir();
+
+    };
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IColorPicker
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+      uuid(60B3F5EC-7FC7-417a-9D90-F21C78B3FC05),
+      helpstring("ColorPicker Dialog"),
+      object,oleautomation, dual
+    ]
+	interface IColorPicker : IDispatch
+    {
+		// properties
+		[ 
+		  propput,id(1), 
+		  helpstring("get/set current Color as OLE_COLOR")
+		] 
+		HRESULT Color([in] OLE_COLOR cl);
+
+		[ 
+		  propget,id(1)
+		] 
+		HRESULT Color([out,retval] OLE_COLOR* cl);
+
+		[ 
+		  propput,id(2), 
+		  helpstring("get/set Color as HexValue (HTML-Format)")
+		] 
+		HRESULT HexColor([in] BSTR cl);
+
+		[ 
+		  propget,id(2)
+		] 
+		HRESULT HexColor([out,retval] BSTR* cl);
+
+		//method
+		[ 
+		  id(3), helpstring("show the ColorPicker dialog")
+		] 
+		HRESULT Show( [in] HWND wnd, [out,retval] VARIANT_BOOL* ok);
+	};
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Event Disp Interfaces
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// _IShellTreeEvents
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+	  uuid(642D2ED7-975F-4699-B7C9-D95AAB97F826),
+	  helpstring("ShellTree Event Source Interface")
+	]
+	dispinterface _IShellTreeEvents
+	{
+		properties:
+		methods:
+
+		[id(1), helpstring("Tree Selection changed")]  
+		void OnTreeSelection([in] BSTR fname);
+
+		[id(2), helpstring("Tree Item DblClick")]  
+		void OnTreeDblClick([in] BSTR fname);
+
+		[id(3), helpstring("Tree Item Open")]  
+		void OnTreeOpen([in] BSTR fname);
+
+	};
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// _IHexWndEvents
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+	  uuid(AAB8E8A1-A963-4345-ACA6-38DC7CF01A78),
+	  helpstring("HexCtrl Event Source Interface")
+	]
+	dispinterface _IHexCtrlEvents
+	{
+		properties:
+		methods:
+
+		[id(1), helpstring("HexWnd filename changed")]  
+		void OnNewFile([in] BSTR fname, [in] VARIANT_BOOL vbReadOnly);
+
+		[id(2), helpstring("Offset changed")]  
+		void OnNewOffset([in] BSTR address, [in] BSTR value );
+
+		[id(3), helpstring("Value changed")]  
+		void OnNewValue([in] BSTR address, [in] BSTR value );
+
+	};
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// _IShellListEvents
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+	  uuid(24165625-BBB8-404a-B2BC-62B9F40FE7DD),
+	  helpstring("ShellList Event Source Interface")
+	]
+	dispinterface _IShellListEvents
+	{
+		properties:
+		methods:
+
+		[id(1), helpstring("List Selection changed")]  
+		void OnListSelection([in] BSTR fname);
+
+		[id(2), helpstring("List Item DblClick")]  
+		void OnListDblClick([in] BSTR fname);
+
+		[id(3), helpstring("List Item Open")]  
+		void OnListOpen([in] BSTR fname);
+
+		[id(4), helpstring("Active Directory changed")]  
+		void OnDirChanged([in] BSTR dir);
+	};
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Event Dual Interfaces
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IShellTreeEvents
+	////////////////////////////////////////////////////////////////////////////////////
+
+    [
+      uuid(D975C13F-537C-4065-A27A-D25A271A7A6E),
+      helpstring("dual events for ShellTree"),
+      object,oleautomation,dual
+    ]
+    interface IShellTreeEvents : IDispatch
+    {
+		[id(1), helpstring("Tree Selection changed")]  
+		HRESULT OnTreeSelection([in] BSTR fname);
+
+		[id(2), helpstring("Tree Item DblClick")]  
+		HRESULT OnTreeDblClick([in] BSTR fname);
+
+		[id(3), helpstring("Tree Item Open")]  
+		HRESULT OnTreeOpen([in] BSTR fname);
+	};
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IShellListEvents
+	////////////////////////////////////////////////////////////////////////////////////
+
+    [
+      uuid(2ED442CD-E289-46c3-AB7B-8DE1CEF89DB4),
+      helpstring("dual events for ShellList"),
+      object,oleautomation, dual
+    ]
+    interface IShellListEvents : IDispatch
+    {
+		[id(1), helpstring("List Selection changed")]  
+		HRESULT OnListSelection([in] BSTR fname);
+
+		[id(2), helpstring("List Item DblClick")]  
+		HRESULT OnListDblClick([in] BSTR fname);
+
+		[id(3), helpstring("List Item Open")]  
+		HRESULT OnListOpen([in] BSTR fname);
+
+
+		[id(4), helpstring("Active Directory changed")]  
+		HRESULT OnDirChanged([in] BSTR dir);
+	};
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IHexCtrl Events
+	////////////////////////////////////////////////////////////////////////////////////
+
+    [
+      uuid(2031340D-A1E9-4fcf-8774-B94A565D6225),
+      helpstring("dual events for HexCtrl"),
+      object,oleautomation, dual
+    ]
+    interface IHexCtrlEvents : IDispatch
+    {
+		[id(1), helpstring("HexWnd filename changed")]  
+		HRESULT OnNewFile([in] BSTR fname, [in] VARIANT_BOOL vbReadOnly);
+
+		[id(2), helpstring("Offset changed")]  
+		HRESULT OnNewOffset([in] BSTR address, [in] BSTR value );
+
+		[id(3), helpstring("Value changed")]  
+		HRESULT OnNewValue([in] BSTR address, [in] BSTR value );
+
+	};
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Co Classes ( class factories )
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// ShellTree
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(22C25563-E185-4753-8299-1998CD73D389),
+		aggregatable
+	]
+	coclass ShellTree
+	{
+		[default]         interface     IShellTree;
+		[default, source] dispinterface _IShellTreeEvents;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// ShellList
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(8E6A9C86-2FA6-4d02-B9BE-72326A7F6C9D),
+		aggregatable
+	]
+
+	coclass ShellList
+	{
+		[default]         interface     IShellList;
+		[default, source] dispinterface _IShellListEvents;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// ColorDialog
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(ADF80C5A-78DE-4317-BF08-4CE3176D3422),
+	]
+	coclass ColorDialog
+	{
+		[default]         interface     IColorPicker;
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// HExCtrl
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(E83EC0F6-6AF3-44f8-901E-AF01F84FE6D0),
+		aggregatable
+	]
+	coclass HexCtrl
+	{
+		[default]         interface     IHexCtrl;
+		[default, source] dispinterface _IHexCtrlEvents; 
+	}
+}

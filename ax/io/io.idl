@@ -1,0 +1,295 @@
+import "oaidl.idl";
+
+////////////////////////////////////////////////////////////////////////////////////////
+// mol IO COM Lib
+////////////////////////////////////////////////////////////////////////////////////////
+
+[
+  uuid(F1D70022-14DA-4344-9A66-AE78DBF21ABF),
+  version(1.0),
+  helpstring("mol IO lib - helper IO library for Scripting clients")
+]
+library IO
+{
+	enum IO_SYSTYPE {
+		IO_SYSTYPE_UNIX  = 0,
+		IO_SYSTYPE_WIN32 = 1
+	};
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Interfaces
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+    // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
+	////////////////////////////////////////////////////////////////////////////////////
+	importlib("stdole32.tlb");
+
+	interface IFile;
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IDir
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(92AF3107-79EB-480f-A118-6A3FF41E5085),
+      helpstring("IDir - interface representing a Directory collection"),
+      object,oleautomation, dual
+    ]
+	interface IDir : IDispatch
+    {
+		[id(DISPID_NEWENUM), helpstring("New Enum - scripting language enumaration support")] 
+		HRESULT _NewEnum([out,retval] IEnumVARIANT** newEnum);
+
+		[id(DISPID_VALUE), helpstring("Item - returns directory entry for index")] 
+		HRESULT Item([in] long i, [out,retval] BSTR* direntry);
+
+		[id(1), helpstring("Count - returns number of files in directory")] 
+		HRESULT Count([out,retval] long* cnt);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IPath
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(FFEB4898-0ECC-465a-851E-F5F7BB4136A8),
+      helpstring("IPath - interface to Path Information functions"),
+      object,oleautomation, dual
+    ]
+	interface IPath : IDispatch
+    {
+		[ id(1), helpstring("returns file Extension") ] 
+		HRESULT Extension([in] BSTR f, [out,retval] BSTR* ret);
+
+		[ id(2), helpstring("returns Filename w/o path") ] 
+		HRESULT Filename([in] BSTR f, [out,retval] BSTR* ret);
+
+		[ id(3), helpstring("returns Path w/o filename") ] 
+		HRESULT Path([in] BSTR f, [out,retval] BSTR* ret);
+
+		[ id(4), helpstring("strips Root directory") ] 
+		HRESULT StripRoot([in] BSTR f, [out,retval] BSTR* ret);
+
+		[ id(5), helpstring("returns Root directory") ] 
+		HRESULT Root([in] BSTR f, [out,retval] BSTR* ret);
+
+		[ id(6), helpstring("Adds BackSlash, if not yet present") ] 
+		HRESULT AddBackSlash([in] BSTR f, [out,retval] BSTR* ret);
+
+		[ id(7), helpstring("Removes BackSlash, if any") ] 
+		HRESULT RemoveBackSlash([in] BSTR f, [out,retval] BSTR* ret);
+
+		[ id(8), helpstring("Adds an Extension") ] 
+		HRESULT AddExtension([in] BSTR f, [in] BSTR e, [out,retval] BSTR* ret);
+
+		[ id(9), helpstring("returns true if p1 is a subpath of p2 ") ] 
+		HRESULT IsSubPath([in] BSTR p1, [in] BSTR p2, [out,retval] VARIANT_BOOL* ret);
+
+		[ id(10), helpstring("returns true if given path exists") ] 
+		HRESULT Exists([in] BSTR f, [out,retval] VARIANT_BOOL* ret);
+
+		[ id(11), helpstring("return true if given path is a directory") ] 
+		HRESULT IsDir([in] BSTR f, [out,retval] VARIANT_BOOL* ret);
+
+		[ id(12), helpstring("returns true if given path is a root directory") ] 
+		HRESULT IsRoot([in] BSTR f, [out,retval] VARIANT_BOOL* ret);
+
+		[ id(13), helpstring("returns true if given path is a UNC path") ] 
+		HRESULT IsUNC([in] BSTR f, [out,retval] VARIANT_BOOL* ret);
+
+		[ id(14), helpstring("returns true if given path is a mapped Net Drive") ] 
+		HRESULT IsNetDrive([in] BSTR f, [out,retval] VARIANT_BOOL* ret);
+
+		[ id(15), helpstring("returns Parent Directory of a directory path, otherwise behaves like pathname") ] 
+		HRESULT ParentDir([in] BSTR f, [out,retval] BSTR* ret);
+
+		[ id(16), helpstring("Open a Directory path for enumeration") ] 
+		HRESULT OpenDir([in] BSTR f, [out,retval] IDir** ret);
+
+		[ id(17), helpstring("Open path as File, returning file object") ] 
+		HRESULT OpenFile([in] BSTR f, [out,retval] IFile** ret);
+
+		[ id(18), helpstring("Choose Directory - displays DirectoryBrowser to choose a Directory, returns path") ] 
+		HRESULT ChooseDir([out,retval] BSTR* ret);
+
+		[ id(19), helpstring("Choose File to open - displays Filebrowser to open a file, returns path to file") ] 
+		HRESULT FileOpenDlg([out,retval] BSTR* ret);
+
+		[ id(20), helpstring("Choose File to save - displays the FileSave dialog, returns filename") ] 
+		HRESULT FileSaveDlg([out,retval] BSTR* ret);
+
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IFile
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(5AF00596-158A-4ddd-BC20-83BC8D5E432F),
+      helpstring("IFile - simple Scripting File Access interface"),
+      object,oleautomation, dual
+    ]
+	interface IFile : IDispatch
+    {
+		// properties
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get Filename")
+		]
+		HRESULT Filename( [out,retval] BSTR* f);
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Set EOL mode")
+		]
+		HRESULT EoL( [in] long t);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get EOL mode")
+		]
+		HRESULT EoL( [out,retval] long* t);
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(3), 
+		  helpstring("Set Encoding")
+		]
+		HRESULT Encoding( [in] long cp);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(3), 
+		  helpstring("Get Encoding")
+		]
+		HRESULT Encoding( [out,retval] long* cp);
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(4), 
+		  helpstring("Set BOM Usage")
+		]
+		HRESULT UseBOM( [in] VARIANT_BOOL vb);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(4), 
+		  helpstring("Get BOM Usage")
+		]
+		HRESULT UseBOM( [out,retval] VARIANT_BOOL* vb);
+
+
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(5), 
+		  helpstring("Get End of File - indicates whether end of file reached")
+		]
+		HRESULT EoF( [out,retval] VARIANT_BOOL* vb);
+
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(6), 
+		  helpstring("Get File Size")
+		]
+		HRESULT Size( [out,retval] long* s);
+
+		// Methods
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  id(7), 
+		  helpstring("Open File")
+		] 
+		HRESULT Open([in] BSTR file, [out,retval] VARIANT_BOOL* vb );
+
+		[ 
+		  id(8), 
+		  helpstring("Open File Read Only")
+		] 
+		HRESULT OpenReadOnly([in] BSTR file, [out,retval] VARIANT_BOOL* vb );
+
+		[ 
+		  id(9), 
+		  helpstring("Open File for Append")
+		] 
+		HRESULT OpenAppend([in] BSTR file, [out,retval] VARIANT_BOOL* vb );
+
+		[ 
+		  id(10), 
+		  helpstring("Close File")
+		] 
+		HRESULT Close();
+
+		[ 
+		  id(11), 
+		  helpstring("Read up to a specific count from file")
+		] 
+		HRESULT Read( [in] long cnt, [out,retval] BSTR* file);
+
+		[ 
+		  id(12), 
+		  helpstring("Read complete File as one Text String")
+		] 
+		HRESULT ReadText( [out,retval] BSTR* file);
+
+		[ 
+		  id(13), 
+		  helpstring("Seek a specific file position before reading/writing")
+		] 
+		HRESULT Seek( [in] long pos);
+
+		[ 
+		  id(14), 
+		  helpstring("Write a string to a file")
+		] 
+		HRESULT Write( [in] BSTR file, [in] long len, [out,retval] long* s );
+
+		[ 
+		  id(15), 
+		  helpstring("WriteText writes a String to a text file in one batch")
+		] 
+		HRESULT WriteText( [in] BSTR txt, [out,retval] long* s  );
+
+		[ 
+		  id(16), 
+		  helpstring("create a new file")
+		] 
+		HRESULT Create( [in] BSTR txt, [out,retval] VARIANT_BOOL* vb  );
+    };
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Co Classes ( class factories )
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// Path
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(44DC1E37-CB3D-4328-B154-E50250F07A8F)
+	]
+	coclass Path
+	{
+		[default]         interface     IPath;
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// File
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(C4E08E9A-0B46-4fd4-BB8D-588ABC27F52E)
+	]
+	coclass File
+	{
+		[default]         interface     IFile;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// Dir
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(302B0FE6-EE9A-4303-92B9-E6B69B573318),noncreatable
+	]
+	coclass Dir
+	{
+		[default]         interface     IDir;
+	}
+}

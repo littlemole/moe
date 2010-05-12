@@ -1,0 +1,100 @@
+import "oaidl.idl";
+
+////////////////////////////////////////////////////////////////////////////////////////
+// mol IO COM Lib
+////////////////////////////////////////////////////////////////////////////////////////
+
+[
+  uuid(3ECB75B2-E572-47a9-8618-FEE26C64CCB5),
+  version(1.0),
+  helpstring("TypeToXml - COM typelib to XML conversion")
+]
+library TypeToXml
+{
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Interfaces
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+    // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
+	////////////////////////////////////////////////////////////////////////////////////
+	importlib("stdole32.tlb");
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// ITypeLibToXml
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(2D9ABF3A-0013-4761-9F9F-9AFA71AF123C),
+      helpstring("ITypeLibToXml - converts COM Typelibraries to XML"),
+      object,oleautomation, dual
+    ]
+	interface ITypeLibToXml : IDispatch
+    {
+		[id(1), helpstring("load a Type library from file")] 
+		HRESULT Load([in] BSTR filename, [out,retval] VARIANT_BOOL* vbSuccess);
+
+		[propget,id(2), helpstring("Get XML representation for loaded typelib")] 
+		HRESULT XML([out,retval] BSTR* xmlDoc);
+
+		[id(3), helpstring("transform a loaded type library via XSLT")] 
+		HRESULT Transform( [in] VARIANT xsltDoc, [out,retval] BSTR* resultDoc);
+
+		[id(4), helpstring("asynchronous transformation - specify type library file, optional filter and XSL Document")] 
+		HRESULT AsyncDocumentation( [in] BSTR filename, [in] BSTR filter, [in] VARIANT xsltDoc );
+
+		[propput,id(5), helpstring("on Complete script handler")] 
+		HRESULT onComplete( [in] IDispatch* onCompleteHandler );
+		[propget,id(5), helpstring("on Complete script handler")] 
+		HRESULT onComplete( [out,retval] IDispatch** onCompleteHandler );
+
+		[propput,id(6), helpstring("on Status script handler")] 
+		HRESULT onStatus( [in] IDispatch* onStatusHandler );
+		[propget,id(6), helpstring("on Status script handler")] 
+		HRESULT onStatus( [out,retval] IDispatch** onStatusHandler );
+
+		[propget,id(7), helpstring("on Complete script handler")] 
+		HRESULT Error( [out,retval] VARIANT_BOOL* vbIsError );
+
+		[propget,id(8), helpstring("Get Result Doc as String")] 
+		HRESULT Result( [out,retval] BSTR* resultDoc );
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IAsyncDocumentationComplete
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(7CC8CCB0-E258-4116-9E0A-D72873C7169B),
+      helpstring("_IAsyncDocumentationComplete - async doc generation completed")
+    ]
+	dispinterface _IAsyncDocumentationComplete
+    {
+		properties:
+		methods:
+
+			[id(1), helpstring("async doc generation completed")] 
+			void OnComplete();
+
+			[id(2), helpstring("async doc generation status message")] 
+			void OnStatus([in] VARIANT msg);
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Co Classes ( class factories )
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// ITypeLibToXml
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(9BFB3F1F-E302-4637-8495-7F7FDD29B57C),
+		helpstring("TypeLibToXml - Object for COM Type library to XML conversion")
+	]
+	coclass TypeLibToXml
+	{
+		[default]         interface     ITypeLibToXml;
+	}
+}

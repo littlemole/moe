@@ -1,0 +1,145 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Deutsch (Deutschland) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
+#ifdef _WIN32
+LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_SHELLCTRL           ICON                    "shellctrl.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDM_TREE_DIR MENU 
+BEGIN
+    POPUP "Context"
+    BEGIN
+        MENUITEM "Open",                        IDM_TREE_OPEN
+        MENUITEM "Update",                      IDM_TREE_UPDATE
+        MENUITEM SEPARATOR
+        MENUITEM "Rename",                      IDM_TREE_RENAME
+        MENUITEM "Delete",                      IDM_TREE_DELETE
+        MENUITEM SEPARATOR
+        MENUITEM "Copy",                        IDM_TREE_COPY
+        MENUITEM "Cut",                         IDM_TREE_CUT
+        MENUITEM "Paste",                       IDM_TREE_PASTE
+        MENUITEM SEPARATOR
+        MENUITEM "Properties",                  IDM_TREE_PROPERTIES
+        MENUITEM "E&xecute",                    IDM_TREE_EXECUTE
+        MENUITEM "New Dir",                     IDM_TREE_NEWDIR
+    END
+END
+
+IDM_LIST_DIR MENU 
+BEGIN
+    POPUP "Context"
+    BEGIN
+        MENUITEM "Open",                        IDM_LIST_OPEN
+        MENUITEM "Update",                      IDM_LIST_UPDATE
+        MENUITEM SEPARATOR
+        MENUITEM "Up Dir",                      IDM_LIST_UPDIR
+        MENUITEM "Enter Dir",                   IDM_LIST_ENTERDIR
+        MENUITEM SEPARATOR
+        MENUITEM "Rename",                      IDM_LIST_RENAME
+        MENUITEM "Delete",                      IDM_LIST_DELETE
+        MENUITEM SEPARATOR
+        MENUITEM "Copy",                        IDM_LIST_COPY
+        MENUITEM "Cut",                         IDM_LIST_CUT
+        MENUITEM "Paste",                       IDM_LIST_PASTE
+        MENUITEM SEPARATOR
+        MENUITEM "Properties",                  IDM_LIST_PROPERTIES
+        MENUITEM "E&xecute",                    IDM_LIST_EXECUTE
+        MENUITEM "New Dir",                     IDM_LIST_NEWDIR
+    END
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Deutsch (Deutschland) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Englisch (USA) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// TYPELIB
+//
+
+1                       TYPELIB                 TLB
+
+#endif    // Englisch (USA) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

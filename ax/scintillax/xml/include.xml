@@ -1,0 +1,18 @@
+<mol:codegen class="ScintillAxGUIBuilder" 
+               xmlns="urn:mol-codegen" 
+               xmlns:mol="urn:mol-codegen" 
+               xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			         xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+			         xsi:schemaLocation='urn:mol-codegen resource.xsd'>
+  
+  <include >../scieditor.h</include>
+  <include >../ScintillACtrl.h</include>
+  <include >../ScintillAxProp.h</include>
+  <include >ole/persist.h</include>
+  <include>win/layout.h</include>
+  
+   
+
+
+</mol:codegen>
+

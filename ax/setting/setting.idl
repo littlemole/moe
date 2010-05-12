@@ -1,0 +1,208 @@
+#include "olectl.h"
+import "oaidl.idl";
+import "ocidl.idl";
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Setting Lib
+////////////////////////////////////////////////////////////////////////////////////////
+
+[
+  uuid(225F997F-E7F5-422c-9D41-DFC95A59B60A),
+  version(1.0),
+  helpstring("Config Settings")
+]
+library Settings
+{
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Interfaces
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+    // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
+	////////////////////////////////////////////////////////////////////////////////////
+	importlib("stdole32.tlb");
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// ISetting
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(2DD18900-95F3-46a8-98B8-03F3843DE635),
+      helpstring("Setting"),
+      object,oleautomation, dual
+    ]
+	interface ISetting : IDispatch
+    {
+		// properties
+		[ 
+		  propput,id(1), 
+		  helpstring("Get/Set Key Name")
+		] 
+		HRESULT Key([in] BSTR k);
+		[ 
+		  propget,id(1)
+		] 
+		HRESULT Key([out,retval] BSTR* k);
+
+		[ 
+		  propput,id(2), 
+		  helpstring("Get/Set Value")
+		] 
+		HRESULT Value([in] BSTR v);
+		[ 
+		  propget,id(2)
+		] 
+		HRESULT Value([out,retval] BSTR* v);
+
+		[ 
+		  propput,restricted,id(3), 
+		  helpstring("Parent Put")
+		] 
+		HRESULT Parent([in] ISetting* s);
+		[ 
+		  propget,id(3), 
+		  helpstring("Get the Parent key for this key")
+		] 
+		HRESULT Parent([out,retval] ISetting** s);
+
+		[ 
+		  propput,restricted,id(4), 
+		  helpstring("controls whether Children modification is allowedllowed")
+		] 
+		HRESULT ChildrenAllowed([in] VARIANT_BOOL vb);
+		[ 
+		  propget,id(4)
+		] 
+		HRESULT ChildrenAllowed([out,retval] VARIANT_BOOL* vb);
+
+		[ 
+		  propput,restricted,id(5), 
+		  helpstring("controls whether key is Readonly")
+		] 
+		HRESULT KeyReadOnly([in] VARIANT_BOOL vb);
+		[ 
+		  propget,id(5)
+		] 
+		HRESULT KeyReadOnly([out,retval] VARIANT_BOOL* vb);
+
+		[ 
+		  propput,restricted,id(6), 
+		  helpstring("controls whether Value of Key is Readonly")
+		] 
+		HRESULT ValueReadOnly([in] VARIANT_BOOL vb);
+		[ 
+		  propget,id(6)
+		] 
+		HRESULT ValueReadOnly([out,retval] VARIANT_BOOL* vb);
+
+		[ 
+		  propget,id(7),
+		  helpstring("key or subkeys have changed")
+		] 
+		HRESULT IsDirty([out,retval] VARIANT_BOOL* vb);
+
+		[ 
+		  propput,id(7),
+		] 
+		HRESULT IsDirty([in] VARIANT_BOOL vb);
+
+		// methods
+
+		[id(DISPID_NEWENUM), helpstring("New Enum - enumeration for scripting languages")] 
+		HRESULT _NewEnum([out,retval] IEnumVARIANT** newEnum);
+
+		[id(DISPID_VALUE), helpstring("Item - get subkey at specific index")] 
+		HRESULT Item([in] VARIANT index, [out,retval] ISetting** i);
+
+		[id(8), helpstring("returns number of subkeys for this key")] 
+		HRESULT Count([out,retval] long* cnt);
+
+		[id(9), helpstring("returns the root key")] 
+		HRESULT Root([out,retval] ISetting** r);
+
+		[id(10), helpstring("returns Full Key Name")] 
+		HRESULT KeyName([out,retval] BSTR* kName);
+
+		[id(11), helpstring("Add a new Setting as subkey")] 
+		HRESULT Add([in] ISetting* s);
+
+		[id(12), helpstring("Add a New subsetting Setting")] 
+		HRESULT New([in] BSTR k, [in] BSTR v, [out,retval] ISetting** s);
+
+		[id(13), helpstring("Remove this setting from parent")] 
+		HRESULT Remove();
+
+		[id(14), helpstring("Remove subsetting at given index")] 
+		HRESULT RemoveItem([in] VARIANT i);
+
+		[id(15), helpstring("Clear Children - remove all subsettings")] 
+		HRESULT Clear();
+
+		[id(16), helpstring("load setting from file")] 
+		HRESULT Load([in] BSTR fname);
+
+		[id(17), helpstring("save settings to file")] 
+		HRESULT Save([in] BSTR fname);
+
+		[id(18), helpstring("Clone settings")] 
+		HRESULT Clone([out,retval] ISetting** sClone);
+
+    };
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// _ISettingChanged
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(05CE8141-F38B-4c50-AC21-931F4D07A6A0),
+      helpstring("_ISettingChanged - setting changed")
+    ]
+	dispinterface _ISettingChanged 
+    {
+		properties:
+		methods:
+
+			[id(1), helpstring("setting changed")] 
+			void OnChange(BSTR fullkey, BSTR key, BSTR val);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// _ISettingChangedDual
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(0DB8CB91-F13F-4374-BDD8-FDEEED4210F6),
+      helpstring("_ISettingChangedDual - setting changed, dual version"),
+      oleautomation, dual
+    ]
+	interface _ISettingChangedDual : IDispatch
+    {
+			[id(1), helpstring("setting changed")] 
+			HRESULT OnChange(BSTR fullkey, BSTR key, BSTR val);
+	}
+////////////////////////////////////////////////////////////////////////////////////////
+// Co Classes ( class factories )
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// Setting
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(AE500EE9-731F-47a8-8D11-634EF422A396),
+		aggregatable
+	]
+	coclass Setting
+	{
+		[default]         interface     ISetting;
+	}
+
+	[
+		uuid(5754B136-D3FB-4232-B94A-92B44BE066E9),
+		helpstring("ISetting Property Page")
+	]
+	coclass SettingProperties
+	{
+		[default] interface IUnknown;
+		[default,source]  interface     _ISettingChanged;
+	};
+}

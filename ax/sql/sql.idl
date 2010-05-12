@@ -1,0 +1,134 @@
+import "oaidl.idl";
+
+////////////////////////////////////////////////////////////////////////////////////////
+// mol Process COM Lib
+////////////////////////////////////////////////////////////////////////////////////////
+
+[
+  uuid(D47CDF3B-33FC-4b51-BC2D-4BEB2C844FD3),
+  version(1.0),
+  helpstring("SQL MySQL COM connector lib")
+]
+library molSQL
+{
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Interfaces
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+    // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
+	////////////////////////////////////////////////////////////////////////////////////
+	importlib("stdole32.tlb");
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IMyRow
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(74C10BEE-EC77-49eb-A135-5AEE2056BC93),
+      helpstring("IMyRow - interface to SQL query result row"),
+      object,oleautomation, dual
+    ]
+	interface IMyRow : IDispatch
+    {
+		[id(DISPID_NEWENUM), helpstring("New Enum - enable iteration from script")] 
+		HRESULT _NewEnum([out,retval] IEnumVARIANT** newEnum);
+
+		[id(DISPID_VALUE), helpstring("Item - retrieve row field value by index")] 
+		HRESULT Field([in] VARIANT i, [out,retval] VARIANT* cell);
+
+		[propget,id(1), helpstring("Count number of fields")] 
+		HRESULT Fields([out,retval] long* cnt);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IMyResult
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(786ECCBD-A692-4d4c-809B-EA0A52D928F8),
+      helpstring("IMyResult - interface to SQL query results"),
+      object,oleautomation, dual
+    ]
+	interface IMyResult : IDispatch
+    {
+		[id(1), helpstring("fetch a row from SQL result")] 
+		HRESULT Fetch([out,retval] IMyRow** row);
+		[propget,id(2), helpstring("get SQL result as xml/xhtml")] 
+		HRESULT XML([out,retval] BSTR* doc);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IMyStatement
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(FF9E817F-3BD4-4db2-8436-0510E73BF817),
+      helpstring("IMyStatement - interface to SQL query results"),
+      object,oleautomation, dual
+    ]
+	interface IMyStatement : IDispatch
+    {
+		[id(1), helpstring("bind a SQL statement param")] 
+		HRESULT Bind( [in] long index, [in] VARIANT val );
+
+		[id(2), helpstring("execute a SQL query (no results)")] 
+		HRESULT Execute( [out,retval] VARIANT_BOOL* vbSuccess );
+
+		[id(3), helpstring("execute a SQL query (with results)")] 
+		HRESULT Query( [out,retval] IMyResult** result );
+
+		[id(4), helpstring("reset SQL statement to bind or query/execute again")] 
+		HRESULT Reset();
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IMySQL
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(9B225E2F-7D8F-4c30-93C0-E2E99CDAB6CC),
+      helpstring("IMySQL - interface to MySQL"),
+      object,oleautomation, dual
+    ]
+	interface IMySQL : IDispatch
+    {
+		[id(1), helpstring("Connect to MySQL server")] 
+		HRESULT Connect([in] BSTR host,[in] BSTR user, [in] BSTR pwd, [in] long port, [out,retval] VARIANT_BOOL* vbSuccess);
+
+		[id(2), helpstring("Select DB on MySQL Server")] 
+		HRESULT SelectDB([in] BSTR db, [out,retval] VARIANT_BOOL* vbSuccess);
+
+		[id(3), helpstring("Execute SQL Query on MySQL Server (no Results)")] 
+		HRESULT Ececute([in] BSTR sql, [out,retval] VARIANT_BOOL* vbSuccess);
+
+		[id(4), helpstring("Execute SQL Query on MySQL Server (with Results)")] 
+		HRESULT Query([in] BSTR sql, [out,retval] IMyResult** result);
+
+		[id(5), helpstring("prepare SQL statement")] 
+		HRESULT Prepare([in] BSTR sql, [out,retval] IMyStatement** statement);
+
+		[id(6), helpstring("safe encode SQL string")] 
+		HRESULT Escape([in] BSTR str, [out,retval] BSTR* result);
+
+		[propget,id(7), helpstring("returns last error message")] 
+		HRESULT Error( [out,retval] BSTR* msg );
+
+	}
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Co Classes ( class factories )
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// molSQL::MySQL
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(CBAE9604-386B-4db1-8920-3E9E59CF7222),
+		helpstring("MySQL - COM Object for MySQL client interaction")
+	]
+	coclass MySQL
+	{
+		[default]         interface     IMySQL;
+	}
+}

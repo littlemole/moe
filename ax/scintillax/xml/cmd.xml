@@ -1,0 +1,23 @@
+<mol:codegen class="ScintillAxGUIBuilder" 
+               xmlns="urn:mol-codegen" 
+               xmlns:mol="urn:mol-codegen" 
+               xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+			   xsi:schemaLocation='urn:mol-codegen resource.xsd'>
+
+  
+  <!-- 
+    Define an abstract mapping of windows cmd ids and a textual representation.
+    all id="" attributes (from all elements in this file, not only cmd elements)
+    will generate a resource ID in xmlid.h
+  -->
+  <cmds >
+
+<!--  
+    <cmd id="IDM_FILE" title="File" />
+    <cmd id="IDM_FILE_NEW" title="New File" />
+-->
+
+  </cmds>
+</mol:codegen>
+
