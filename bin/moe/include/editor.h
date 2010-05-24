@@ -4,7 +4,7 @@
 #include "shared.h"
 #include "resource.h"
 
-using namespace mol;
+//using namespace mol;
 
 //////////////////////////////////////////////////////////////////////////////////
 // Editor Wnd
@@ -14,14 +14,14 @@ using namespace mol;
 
 class Editor 
 	: 
-	public MdiChildFrame<Editor,mol::AxWnd<Editor,MdiChild,&CLSID_ScintillAx>>,
-	public DispatchMidiWindow<Editor,IDoc>,
-	public ProvideClassInfo<Editor>,
-	public interfaces< Editor, implements< IDispatch, IDoc, IProvideClassInfo> >
+	public mol::MdiChildFrame<Editor,mol::AxWnd<Editor,mol::MdiChild,&CLSID_ScintillAx>>,
+	public DispatchMidiWindow<Editor,IMoeDocument,MOE_DOCTYPE_DOC>,
+	public mol::ProvideClassInfo<Editor>,
+	public mol::interfaces< Editor, mol::implements< IDispatch, IMoeDocument, IProvideClassInfo> >
 {
 public:
 
-	punk<IScintillAx> sci;
+	mol::punk<IScintillAx> sci;
 
 	Editor();
 	virtual ~Editor();
@@ -33,6 +33,7 @@ public:
 	/////////////////////////////////////////////////////////////////////
 	// COM
 	/////////////////////////////////////////////////////////////////////
+	/*
 	virtual HRESULT __stdcall get_Filename( BSTR* filename);
 	virtual HRESULT __stdcall get_Path( BSTR* dirpath);
 
@@ -42,7 +43,7 @@ public:
 	/////////////////////////////////////////////////////////////////////
 	virtual HRESULT __stdcall  Close();
 	virtual HRESULT __stdcall  Activate();
-
+*/
 	/////////////////////////////////////////////////////////////////////
 
 	// std windows msgs
@@ -75,6 +76,10 @@ public:
 	void OnBackspaceUnindents();
 	void OnWriteBOM();
 
+	void OnExecScript();
+	void OnDebugScript();
+	void OnExecForm(  );
+
 	// syntax highlite switches
 	void OnLexer(int code, int id, HWND ctrl);
 
@@ -92,6 +97,16 @@ public:
 
 	LRESULT OnToolbarDropDown(NMTOOLBAR* toolbar );
 
+   virtual HRESULT __stdcall get_FilePath( BSTR *fname)
+   {
+		if ( fname  )
+		{
+			*fname = 0;
+			*fname = ::SysAllocString( filename_.c_str() );
+		}
+		return S_OK;
+   }
+
  protected:
 
 	bool initialize(const mol::string& p, bool utf8, bool readOnly);
@@ -104,10 +119,10 @@ public:
 
 
 
-private:
+protected:
 
 	// scintilla events sink
-    class Sintilla_Events : public stack_obj<ScintillAxEvents>
+    class Sintilla_Events : public mol::stack_obj<ScintillAxEvents>
     {
         public : outer_this(Editor,events); 
 

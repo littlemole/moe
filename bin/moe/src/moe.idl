@@ -4,57 +4,882 @@ import "..\..\lib\src\ole\HtmlEvents.idl";
 [
   uuid(E5769EB9-ADD9-41e5-8D3D-D925C7FC0C29),
   version(1.0),
-  helpstring("xmoe type library")
+  helpstring("moe type library")
 ]
 library Moe
 {
-    // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
+   // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
 
-  //  importlib("stdole2.tlb");
 	importlib("stdole32.tlb");
-	//importlib("mshtml.tlb");
-
-	//importlib ("..\..\ax\scintillax\Debug\scintillax.tlb");
-	//importlib ("..\..\ax\shellctrl\Debug\shellctrl.tlb");
 
 	interface IWebBrowserEvents;
 
-	interface IXmoe;
-	interface IDoc;
-	interface IDocs;
-	interface IMoeFrame;
-	//interface INetScripts;
-	//interface IScintillAx;
-	//interface IShellTree;
-	//interface IShellList;
+	interface IMoe;
+	interface IMoeView;
+	interface IMoeScript;
+	interface IMoeConfig;
+	interface IMoeDialogs;
+	interface IMoeDocumentCollection;
 
-	typedef enum XMOE_DOCTYPE {
-		XMOE_DOCTYPE_NULL   = 0,
-		XMOE_DOCTYPE_DOC    = 1,
-		XMOE_DOCTYPE_DIR    = 2,
-		XMOE_DOCTYPE_PIC    = 3,
-		XMOE_DOCTYPE_HEX    = 4,
-		XMOE_DOCTYPE_HTML   = 5,
-		XMOE_DOCTYPE_OLE    = 6
-	} XMOE_DOCTYPE;
+	interface IMoeDocument;
+	interface IMoeDocumentView;
 
-	typedef enum XMOE_SEARCHFLAG {
-		 XMOE_SEARCHFLAG_DOWN                         = 0x00000001,
-		 XMOE_SEARCHFLAG_WHOLEWORD                    = 0x00000002,
-		 XMOE_SEARCHFLAG_MATCHCASE                    = 0x00000004,
-		 XMOE_SEARCHFLAG_FINDNEXT                     = 0x00000008,
-		 XMOE_SEARCHFLAG_REPLACE                      = 0x00000010,
-		 XMOE_SEARCHFLAG_REPLACEALL                   = 0x00000020,
-		 XMOE_SEARCHFLAG_DIALOGTERM                   = 0x00000040
-	} XMOE_SEARCHFLAG;
+	interface IMoeHtmlFrame;
+	interface IMoeUserFrame;
+	interface IMoeDialogView;
 
-	typedef enum XMOE_FORMFLAG {
-		XMOE_FORMFLAG_NONE		 = 0,
-		XMOE_FORMFLAG_TITLE		 = 1, 
-		XMOE_FORMFLAG_NOSCROLL	 = 2, 
-		XMOE_FORMFLAG_DIALOG	 = 4, 
-		XMOE_FORMFLAG_STANDALONE = 8
-	} XMOE_FORMFLAG;
+
+	typedef enum MOE_DOCTYPE {
+		MOE_DOCTYPE_NULL   = 0,
+		MOE_DOCTYPE_DOC    = 1,
+		MOE_DOCTYPE_DIR    = 2,
+		MOE_DOCTYPE_PIC    = 3,
+		MOE_DOCTYPE_HEX    = 4,
+		MOE_DOCTYPE_HTML   = 5,
+		MOE_DOCTYPE_OLE    = 6,
+		MOE_DOCTYPE_FORM   = 7
+	} MOE_DOCTYPE;
+
+	typedef enum MOE_SEARCHFLAG {
+		 MOE_SEARCHFLAG_DOWN                         = 0x00000001,
+		 MOE_SEARCHFLAG_WHOLEWORD                    = 0x00000002,
+		 MOE_SEARCHFLAG_MATCHCASE                    = 0x00000004,
+		 MOE_SEARCHFLAG_FINDNEXT                     = 0x00000008,
+		 MOE_SEARCHFLAG_REPLACE                      = 0x00000010,
+		 MOE_SEARCHFLAG_REPLACEALL                   = 0x00000020,
+		 MOE_SEARCHFLAG_DIALOGTERM                   = 0x00000040
+	} MOE_SEARCHFLAG;
+
+	typedef enum MOE_FORMFLAG {
+		MOE_FORMFLAG_NONE		 = 0,
+		MOE_FORMFLAG_TITLE		 = 1, 
+		MOE_FORMFLAG_NOSCROLL	 = 2, 
+		MOE_FORMFLAG_DIALOG	     = 4, 
+		MOE_FORMFLAG_STANDALONE  = 8
+	} MOE_FORMFLAG;
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IMoeDialogs
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(C82F0BDB-5835-44b4-B708-5C077C2D3CF7),
+      helpstring("IMoeDialogs Interface - Dialog scripting stuff"),
+      object,oleautomation, dual
+    ]
+	interface IMoeDialogs : IDispatch
+    {
+		[id(1), helpstring("MsgBox")] 
+		HRESULT MsgBox( [in] BSTR text, [in] BSTR title, [in] long flags, [out,retval] long* result);
+
+		[id(2), helpstring("Open existing Document in Text-Editor")] 
+		HRESULT Open( [out,retval] IMoeDocument** d);
+
+		[id(4), helpstring("Open Directory View as MDI child")] 
+		HRESULT OpenDir( [out,retval] IMoeDocument** d);
+
+		[id(5), helpstring("Choose File")] 
+		HRESULT ChooseFile( [out,retval] BSTR* f );		
+
+		[id(6), helpstring("Choose Directory")] 
+		HRESULT ChooseDir( [out,retval] BSTR* d );		
+
+
+	}
+	////////////////////////////////////////////////////////////////////////////////////
+	// IMoeDocumentCollection
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(B2FC978E-28F5-49e0-B363-8C78DE7FC50F),
+      helpstring("IMoeDocumentCollection Interface - MDI Child Document Collection"),
+      object,oleautomation, dual
+    ]
+	interface IMoeDocumentCollection : IDispatch
+    {
+		[id(DISPID_NEWENUM), helpstring("New Enum - enable iteration from script")] 
+		HRESULT _NewEnum([out,retval] IEnumVARIANT** newEnum);
+
+		[id(DISPID_VALUE), helpstring("Item - retrieve child document by numeric or string (full document path) index")] 
+		HRESULT Item([in] VARIANT i, [out,retval] IMoeDocument** docItem);
+
+		[id(1),propget, helpstring("Count number of child documents")] 
+		HRESULT Count([out,retval] long* cnt);
+
+		/////////////////////////////////////////////////////////////////////
+
+		[ 
+		  propget, nonbrowsable,requestedit,id(2), 
+		  helpstring("Get Active MDI Document Reference")
+		]
+		HRESULT ActiveDoc( [out,retval] IMoeDocument** d);
+
+		/////////////////////////////////////////////////////////////////////
+
+		[id(3), helpstring("Create new, empty (Text-Editor) MDI Child Document")] 
+		HRESULT New([out,retval] IMoeDocument** d);
+
+		[id(4), helpstring("Open existing Document in Text-Editor")] 
+		HRESULT Open([in] BSTR fPath,[out,retval] IMoeDocument** d);
+
+		[id(5), helpstring("Open Document in Text-Editor, forcing UTF-8 mode")] 
+		HRESULT OpenUTF8([in] BSTR fPath,[out,retval] IMoeDocument** d);
+
+		[id(6), helpstring("Open Directory View as MDI child")] 
+		HRESULT OpenDir([in]BSTR dir, [out,retval] IMoeDocument** d);
+
+		[id(7), helpstring("Open document file in Hex Viewer")]
+		HRESULT OpenHexEditor( [in] BSTR f, [in] VARIANT_BOOL vbReadOnly, [out,retval] IMoeDocument** hex);
+
+		[id(8), helpstring("Open HTML Document as MDI Child (embedded IE)")] 
+		HRESULT OpenHtmlFrame( [in] BSTR f, [out,retval] IMoeDocument** htmlWnd);
+
+		[id(9), helpstring("Edit a User Form")] 
+		HRESULT OpenUserForm( [in] BSTR pathname, [out,retval] IMoeDocument** form );	
+
+		[id(10), helpstring("New User Form")] 
+		HRESULT NewUserForm(  [out,retval] IMoeDocument** form );	
+
+		/////////////////////////////////////////////////////////////////////
+
+		[id(11), helpstring("Activate MDI document with index by number or full-path")]
+		HRESULT Activate([in] VARIANT i);
+
+		[id(12), helpstring("Save All open MDI documents")] 
+		HRESULT SaveAll();
+
+		[id(13), helpstring("Close All open MDI documents")] 
+		HRESULT CloseAll();
+
+		[id(14), helpstring("Remove and close document at index / with given path")] 
+		HRESULT Remove( [in] VARIANT index);
+
+		[id(15), helpstring("Rename object at index/path to new path")] 
+		HRESULT Rename( [in] VARIANT index, [in]  VARIANT newIndex);
+
+		[id(16), helpstring("Move object from index/path to new index")] 
+		HRESULT Move( [in] VARIANT what, [in] VARIANT to);
+
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IMoeDocumentView;
+	////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(9ADC66FD-13AB-4b52-A92B-5155EA1EF83C),
+      helpstring("IMoeDocumentView Interface - View Helper Interface for moe MDI childrens"),
+      object,oleautomation, dual
+    ]
+	interface IMoeDocumentView : IDispatch
+    {
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get/Set Top position of window")
+		]
+		HRESULT Top( [in] long t);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1), 
+		]
+		HRESULT Top( [out,retval] long* t);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get/Set Left position of window")
+		]
+		HRESULT Left( [in] long l);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2), 
+		]
+		HRESULT Left( [out,retval] long* l);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(3), 
+		  helpstring("Get/Set Height of window")
+		]
+		HRESULT Height( [in] long h);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(3), 
+		]
+		HRESULT Height( [out,retval] long* h);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(4), 
+		  helpstring("Get/Set Width of window")
+		]
+		HRESULT Width( [in] long w);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(4), 
+		]
+		HRESULT Width( [out,retval] long* w);
+
+
+		/////////////////////////////////////////////////////////////////////
+
+		[ 
+		  id(5), helpstring("Show Window")
+		]
+		HRESULT Show();
+
+		[ 
+		  id(6), helpstring("Hide Window")
+		]
+		HRESULT Hide();
+
+		[ 
+		  id(7), helpstring("Close the Window")
+		]
+		HRESULT Close();
+
+		[ 
+		  id(8), helpstring("Minimize MDI Document")
+		]
+		HRESULT Minimize();
+
+		[ 
+		  id(9), helpstring("Maximize MDI Document")
+		]
+
+		HRESULT Maximize();
+		[ 
+		  id(10), helpstring("Restore MDI Document")
+		]
+		HRESULT Restore();
+
+		[ 
+		  id(11), helpstring("Activate MDI Document")
+		]
+		HRESULT Activate();
+
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IMoeDialogView;
+	////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(54E27AFE-3872-481c-968F-20BF61B19496),
+      helpstring("IMoeDialogView Interface - View Helper Interface for moe dialog window"),
+      object,oleautomation, dual
+    ]
+	interface IMoeDialogView : IDispatch
+    {
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get/Set Top window position")
+		]
+		HRESULT Top( [in] long t);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1), 
+		]
+		HRESULT Top( [out,retval] long* t);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get/Set Left window position ")
+		]
+		HRESULT Left( [in] long l);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2), 
+		]
+		HRESULT Left( [out,retval] long* l);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(3), 
+		  helpstring("Get/Set Height of window")
+		]
+		HRESULT Height( [in] long h);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(3), 
+		]
+		HRESULT Height( [out,retval] long* h);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(4), 
+		  helpstring("Get/Set Width of window")
+		]
+		HRESULT Width( [in] long w);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(4), 
+		]
+		HRESULT Width( [out,retval] long* w);
+
+
+
+		[id(5), helpstring("Show dialog window")]
+		HRESULT Show();
+
+		[id(6), helpstring("Hide hide dialog window")]
+		HRESULT Hide();
+
+		[id(7), helpstring("close dialog window")]
+		HRESULT Close();
+
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(8), 
+		  helpstring("Get/Set Title of Dialog window")
+		]
+		HRESULT Title( [in] BSTR t);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(8), 
+		]
+		HRESULT Title( [out,retval] BSTR* t);
+
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IMoeView;
+	////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(E6F7C726-4A4A-487f-8DEA-0854229C1BCB),
+      helpstring("IMoeView Interface - View Helper Interface for moe main window"),
+      object,oleautomation, dual
+    ]
+	interface IMoeView : IDispatch
+    {
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get/Set Top window position")
+		]
+		HRESULT Top( [in] long t);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1), 
+		]
+		HRESULT Top( [out,retval] long* t);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get/Set Left window position ")
+		]
+		HRESULT Left( [in] long l);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2), 
+		]
+		HRESULT Left( [out,retval] long* l);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(3), 
+		  helpstring("Get/Set Height of window")
+		]
+		HRESULT Height( [in] long h);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(3), 
+		]
+		HRESULT Height( [out,retval] long* h);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(4), 
+		  helpstring("Get/Set Width of window")
+		]
+		HRESULT Width( [in] long w);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(4), 
+		]
+		HRESULT Width( [out,retval] long* w);
+
+		/////////////////////////////////////////////////////////////////////
+
+		[id(5), helpstring("Show main window")]
+		HRESULT Show();
+
+		[id(6), helpstring("hide main window")]
+		HRESULT Hide();
+
+		[id(7), helpstring("Minimize application main window")	]
+		HRESULT Minimize();
+
+		[id(8), helpstring("Maximize application main window")]
+		HRESULT Maximize();
+
+		[id(9), helpstring("Restore application main window")]
+		HRESULT Restore();
+
+		[id(10), helpstring("Tile application MDI child windows")]
+		HRESULT Tile();
+
+		[id(11), helpstring("Cascade application MDI child windows")]
+		HRESULT Cascade();
+
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(12), 
+		  helpstring("Show/Hide the TreeView (SideBar) Control")
+		]
+		HRESULT ShowTreeView( [in] VARIANT_BOOL vb);
+		[ 
+		  propget, bindable,displaybind, requestedit,id(12), 
+		]
+		HRESULT ShowTreeView( [out,retval] VARIANT_BOOL* vb);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget, nonbrowsable,id(13), 
+		  helpstring("get a object reference to the TreeView (SideBar) Control")
+		]
+		HRESULT TreeView( [out,retval] IDispatch** tv);
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(14), 
+		  helpstring("Get/Set fullscreen")
+		]
+		HRESULT Fullscreen( [in] VARIANT_BOOL vb);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(14), 
+		]
+		HRESULT Fullscreen( [out,retval] VARIANT_BOOL* vb);
+
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(08B6F80E-72E9-4a97-8672-926F8D7BEEC0),
+      helpstring("IMoeHtmlFrame Interface - Html Frame"),
+      object,oleautomation, dual
+    ]
+	interface IMoeHtmlFrame : IDispatch
+    {
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get the HTML Document for this User Frame")
+		]
+		HRESULT Object( [out,retval] IDispatch** d);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get the View Object for this User Frame")
+		]
+		HRESULT View( [out,retval] IMoeDialogView** d);
+
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(3), 
+		  helpstring("Get embeded HTML Scripts IDpispatch interface")
+		]
+		HRESULT Scripts( [out,retval] IDispatch** s);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  id(4), helpstring("Eval(uate) a User Script in the HTML Frame document context")
+		]
+		HRESULT Eval( [in] BSTR src, [in] BSTR scriptLanguage );
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  id(5), helpstring("Call OLE CMDID ( Save, Close, Print) of embedded webbrowser control ")
+		]
+		HRESULT OleCmd( [in] long cmd );
+
+		/////////////////////////////////////////////////////////////////////
+
+		[ 
+		  helpstring("get HTML Frame file location "),
+		  propget,bindable,displaybind, requestedit,id(6), 
+		]
+		HRESULT FilePath( [out,retval] BSTR* filename);
+	}
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(0DFFAACE-906D-4545-853A-BEE593283BDB),
+      helpstring("IMoeUserForm Interface - User Form (FM20.dll)"),
+      object,oleautomation, dual
+    ]
+	interface IMoeUserForm : IDispatch
+    {
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get the MSForms FM20.dll Form Object for this User Frame")
+
+		]
+		HRESULT Object( [out,retval] IDispatch** d);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get the View Object for this User Form")
+		]
+		HRESULT View( [out,retval] IMoeDialogView** d);
+
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		 propget,bindable,displaybind, requestedit,id(3), 
+		 helpstring("Get embeded User Form Script IDpispatch interface")
+		]
+		HRESULT Script( [out,retval] IDispatch** s);
+
+		[		
+		  id(4), helpstring("Show Form")
+		]
+		HRESULT Show();
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  id(5), helpstring("Close the HTML User Frame Window")
+		]
+		HRESULT Close();
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  id(6), helpstring("Hide Form")
+		]
+		HRESULT Hide(  );
+
+		/////////////////////////////////////////////////////////////////////
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(7), 
+		  helpstring("Get/Set user form filename")
+		]
+		HRESULT FilePath( [out,retval] BSTR* filename);
+
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IMoeDocument
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(F1D065C3-DE27-45c7-A684-C0EECF43AF3E),
+      helpstring("IMoeDocument Interface - Common Interface for moe's MDI Child windows"),
+      object,oleautomation, dual
+    ]
+	interface IMoeDocument : IDispatch
+    {
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get the embdded Document Object for this moe MDI Document")
+		]
+		HRESULT Object( [out,retval] IDispatch** d);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get the View Object for this moe MDI Document")
+		]
+		HRESULT View( [out,retval] IMoeDocumentView** d);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(4), 
+		  helpstring("Get document full path")
+		]
+		HRESULT FilePath( [out,retval] BSTR* dname);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(6), 
+		  helpstring("Get Document Type (MOE_DOCTYPE)")
+		]
+		HRESULT Type( [out,retval] long* typ);
+
+
+		[id(7), helpstring("Save Document")]
+		HRESULT Save();
+
+		[id(8), helpstring("Save Document As")]
+		HRESULT SaveAs( [in] BSTR f );
+	}
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IMoeConfig
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(4DE6729C-2F79-471f-82CB-51137A02E490),
+      helpstring("IMoeConfig Interface "),
+      object,oleautomation, dual
+    ]
+	interface IMoeConfig : IDispatch
+    {
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get Configuration Files Path on local system")
+		]
+		HRESULT ConfigPath( [out,retval] BSTR* fPath);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get Path to moe executable on local system")
+		]
+		HRESULT ModulePath( [out,retval] BSTR* fPath);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(3), 
+		  helpstring("Get/Set SysType to UNIX/WIN32 (SCINTILLA_SYSTYPE)")
+		]
+		HRESULT SysType( [in] long typ);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(3), 
+		]
+		HRESULT SysType( [out,retval] long* typ);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(4), 
+		  helpstring("Set Encoding ie UTF-8, Ansi, ... (SCINTILLA_ENCODING)")
+		]
+		HRESULT Encoding( [in] long typ);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(4), 
+		]
+		HRESULT Encoding( [out,retval] long* typ);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(5), 
+		  helpstring("Get/Set Usage of Tab Characters, false converts tabs to spaces")
+		]
+		HRESULT TabUsage( [in] VARIANT_BOOL vbTabUsage);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(5), 
+		]
+		HRESULT TabUsage( [out,retval] VARIANT_BOOL* vbTabUsage);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(6), 
+		  helpstring("Get/Set whether Tabulator keystrokes do code-indent")
+		]
+		HRESULT TabIndents( [in] VARIANT_BOOL vbTabIndents);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(6), 
+		]
+		HRESULT TabIndents( [out,retval] VARIANT_BOOL* vbTabIndents);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(7), 
+		  helpstring("Get/Set wether BackSpace keystrokes unindent (code-indention)")
+		]
+		HRESULT BackSpaceUnindents( [in] VARIANT_BOOL vbBackSpaceIndents);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(7), 
+		]
+		HRESULT BackSpaceUnindents( [out,retval] VARIANT_BOOL* vbBackSpaceIndents);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(8), 
+		  helpstring("Get/Set width of Tabulator in spaces")
+		]
+		HRESULT TabWidth( [in] long w);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(8), 
+		]
+		HRESULT TabWidth( [out,retval] long* w);
+
+
+		/////////////////////////////////////////////////////////////////////
+
+		[id(9), helpstring("Show User Preferences for new opened documents dialog")]
+		HRESULT EditPreferences( );
+
+		[id(10), helpstring("Show User Custom Settings dialog")]
+		HRESULT EditSettings( );
+
+		[id(11), helpstring("Export User Settings to file")]
+		HRESULT ExportSettings( [in] BSTR f );
+
+		[id(12), helpstring("Import User Settings from file")]
+		HRESULT ImportSettings( [in] BSTR f );
+
+		[id(13), helpstring("Initiaize Editor with default values")]
+		HRESULT InitializeEditorFromPreferences( [in] IMoeDocument* d );
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IMoeScript
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(809CE6F6-C2DE-4d8b-A7F2-C2FFD581E49C),
+      helpstring("IMoeScriptInterface - the moe scripting world"),
+      object,oleautomation, dual
+    ]
+	interface IMoeScript : IDispatch
+    {
+		[id(1), helpstring("Run a Script from disk inside moe context")]
+		HRESULT Run( [in] BSTR f, [in] BSTR engine );
+
+		[id(2), helpstring("Evaluate a Script given as text inside moe context")]
+		HRESULT Eval([in] BSTR scrpt, [in] BSTR scrptLanguage);
+
+		[id(3), helpstring("Debug a Script given as text inside moe context")]
+		HRESULT Debug([in] BSTR scrpt, [in] BSTR scrptLanguage);
+
+		[id(4), helpstring("CreateObjectAdmin - creates new COM object via UAC COM Moniker")] 
+		HRESULT CreateObjectAdmin([in] BSTR progid, [out,retval] IDispatch** disp);
+
+		[id(5), helpstring("Show a user-defined HTML Form")]
+		HRESULT ShowHtmlForm( [in] BSTR src, [in] long l, [in] int t, [in] int w, [in] int h, [in] int formStyle );
+
+		[id(6), helpstring("Edit a User Form Module with moe")] 
+		HRESULT ShowUserForm( [in] BSTR pathname, [out,retval] IMoeUserForm** form );
+
+		[id(7), helpstring("Show a User Form in Debug Mode")] 
+		HRESULT DebugUserForm( [in] BSTR pathname, [out,retval] IMoeUserForm** form );
+
+		[id(8), helpstring("Execute a Shell command")]
+		HRESULT System( [in] BSTR f);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IMoe
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(8C2C5817-4747-4da4-B588-75612B7608A2),
+      helpstring("IMoe AppObj Interface - the moe application scripting object"),
+      object,oleautomation, dual
+    ]
+	interface IMoe : IDispatch
+    {
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,nonbrowsable,id(1), 
+		  helpstring("Get MDI Child Documents Collection")
+		]
+		HRESULT Documents( [out,retval] IMoeDocumentCollection** d);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get the View Object for this moe main window")
+		]
+		HRESULT View( [out,retval] IMoeView** d);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget, nonbrowsable,requestedit,id(3), 
+		  helpstring("Get Active MDI Document Reference")
+		]
+		HRESULT ActiveDoc( [out,retval] IMoeDocument** d);
+
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget, nonbrowsable,requestedit,id(4), 
+		  helpstring("Get Runtime Config ")
+		]
+		HRESULT Config( [out,retval] IMoeConfig** d);
+
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget, nonbrowsable,requestedit,id(5), 
+		  helpstring("Get Moe Script Interface")
+		]
+		HRESULT Script( [out,retval] IMoeScript** d);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget, nonbrowsable,requestedit,id(6), 
+		  helpstring("Get Moe Dialogs Interface")
+		]
+		HRESULT Dialogs( [out,retval] IMoeDialogs** d);
+
+		/////////////////////////////////////////////////////////////////////
+ 		[ 
+		  id(7), 
+		  helpstring("Exit Moe Editor and close the App")
+		]
+		HRESULT Exit();
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IExternalMoe
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(FC03A505-B887-4653-8710-B0AB66674F96),
+      helpstring("IExternalMoe  Interface - external interface visible for scripts from within embedded IE"),
+      object,oleautomation, dual
+    ]
+	interface IExternalMoe : IDispatch
+    {
+		[		
+		  propget,id(1), 
+		  helpstring("Get moe application object reference")
+		]
+		HRESULT Moe([out,retval] IMoe** m);
+
+
+		[		
+		  propget,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get reference to current frame interface")
+		]
+		HRESULT Frame( [out,retval] IMoeHtmlFrame** f );
+
+
+		[id(3), helpstring("Close current frame")] 
+		HRESULT Close();
+	}
+	////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Co Classes ( class factories )
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// Moe
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(FABA1705-8E2D-48d2-AE3C-333FEECA3FBC),
+		appobject, helpstring("Moe Application Object")
+	]
+	coclass Application
+	{
+		[default]         interface     IMoe;
+	}
+}
+
+	/*
 
 	////////////////////////////////////////////////////////////////////////////////////
 	// IDocs
@@ -184,6 +1009,116 @@ library Moe
 
 	}
 
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(8A8D10F4-2EB0-4446-B5EC-A31E196805A1),
+      helpstring("IMoeForm Interface - Fm20.dll UserForm"),
+      object,oleautomation, dual
+    ]
+	interface IMoeForm : IDispatch
+    {
+		/////////////////////////////////////////////////////////////////////
+		//properties:
+		/////////////////////////////////////////////////////////////////////
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get the FM20.dll UserForm Document for this User Form")
+		]
+		HRESULT Form( [out,retval] IDispatch** d);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get/Set Top position of Form window")
+		]
+		HRESULT Top( [in] long t);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2), 
+		]
+		HRESULT Top( [out,retval] long* t);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(3), 
+		  helpstring("Get/Set Left position of Form window")
+		]
+		HRESULT Left( [in] long l);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(3), 
+		]
+		HRESULT Left( [out,retval] long* l);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(4), 
+		  helpstring("Get/Set Height of Form window")
+		]
+		HRESULT Height( [in] long h);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(4), 
+		]
+		HRESULT Height( [out,retval] long* h);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(5), 
+		  helpstring("Get/Set Width of Form window")
+		]
+		HRESULT Width( [in] long w);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(5), 
+		]
+		HRESULT Width( [out,retval] long* w);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(6), 
+		  helpstring("Get/Set Title of Form window")
+		]
+		HRESULT Title( [in] BSTR t);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(6), 
+		]
+		HRESULT Title( [out,retval] BSTR* t);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(7), 
+		  helpstring("Get embeded User Form Script IDpispatch interface")
+		]
+		HRESULT Script( [out,retval] IDispatch** s);
+
+		/////////////////////////////////////////////////////////////////////
+		[		
+		  id(8), helpstring("Show Form")
+		]
+		HRESULT Show();
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  id(9), helpstring("Close the HTML User Frame Window")
+		]
+		HRESULT Close();
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  id(10), helpstring("Hide Form")
+		]
+		HRESULT Hide(  );
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(11), 
+		  helpstring("Get/Set Top position of Form window")
+		]
+		HRESULT Filename( [in] BSTR filename);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(11), 
+		]
+		HRESULT Filename( [out,retval] BSTR* filename);
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////
 	// IDoc
@@ -596,6 +1531,15 @@ library Moe
 		  propget,bindable,displaybind, requestedit,id(50), 
 		]
 		HRESULT Fullscreen( [out,retval] VARIANT_BOOL* vbTabIndents);
+
+		[id(51), helpstring("")] 
+		HRESULT EditUserForm( [in] BSTR pathname, [out,retval] IDispatch** form );
+
+		[id(52), helpstring("")] 
+		HRESULT ShowUserForm( [in] BSTR pathname, [out,retval] IDispatch** form );
+
+		[id(53), helpstring("")] 
+		HRESULT DebugUserForm( [in] BSTR pathname, [out,retval] IDispatch** form );
 	}
 	////////////////////////////////////////////////////////////////////////////////////
 	// IExternalMoe
@@ -705,3 +1649,4 @@ library Moe
 	}
 
 }
+*/

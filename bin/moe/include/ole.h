@@ -3,9 +3,9 @@
 
 #include "shared.h"
 
-using namespace mol::win;
-using namespace mol::ole;
-using namespace mol;
+//using namespace mol::win;
+//using namespace mol::ole;
+//using namespace mol;
 
 class MoeWndImpl;
 
@@ -13,11 +13,11 @@ class MoeWndImpl;
 
 class OleChild 
 : 
-	public mol::MdiChildFrame<OleChild, mol::AxClientWnd<OleChild,MdiChild>>,
-	public DispatchMidiWindow<OleChild,IDoc>,
-	public ProvideClassInfo<OleChild>,
-	public interfaces< OleChild, 
-			implements< IDispatch, IDoc, IProvideClassInfo> >
+public mol::MdiChildFrame<OleChild, mol::AxClientWnd<OleChild,mol::MdiChild>>,
+	public DispatchMidiWindow<OleChild,IMoeDocument,MOE_DOCTYPE_OLE>,
+	public mol::ProvideClassInfo<OleChild>,
+	public mol::interfaces< OleChild, 
+			mol::implements< IDispatch, IMoeDocument, IProvideClassInfo> >
 {
 public:
 
@@ -38,7 +38,7 @@ public:
 	/////////////////////////////////////////////////////////////////////
 	// COM
 	/////////////////////////////////////////////////////////////////////
-
+/*
 	virtual HRESULT __stdcall get_Filename( BSTR* filename);
 	virtual HRESULT __stdcall get_Path( BSTR* dirpath);
 
@@ -48,7 +48,7 @@ public:
 	/////////////////////////////////////////////////////////////////////
 	virtual HRESULT __stdcall  Close();
 	virtual HRESULT __stdcall  Activate();
-
+*/
     virtual HRESULT __stdcall IOleClientSite_SaveObject();
 
 protected:

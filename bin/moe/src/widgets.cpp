@@ -3,10 +3,9 @@
 #include "app.h"
 #include "xmlui.h"
 #include "MoeBar.h"
+#include "fm20_tlh.h"
 
 
-using namespace mol::io;
- 
 std::string engineFromPath(const std::string& path)
 {
 	mol::string engine = mol::engineFromExtension(mol::Path::ext(mol::toString(path)));
@@ -45,7 +44,7 @@ void Script::eval(  const mol::string& engine, const mol::string& script )
 	ODBGS("Script::eval()\r\n");
 	this->AddRef();
 	init(engine);
-	addNamedObject((IXmoe*)(moe()),_T("moe"));
+	addNamedObject((IMoe*)(moe()),_T("moe"));
 	runScript(script);
 	//close();
 	this->Release();
@@ -56,7 +55,7 @@ void Script::debug(  const mol::string& engine, const mol::string& script )
 	ODBGS("Script::eval()\r\n");
 	this->AddRef();
 	init(engine);
-	addNamedObject((IXmoe*)(moe()),_T("moe"));
+	addNamedObject((IMoe*)(moe()),_T("moe"));
 	debugScript(script);
 	//close();
 	this->Release();
@@ -65,7 +64,7 @@ void Script::call(  const mol::string& engine, const mol::string& func, const mo
 {
 	this->AddRef();
 	init(engine);
-	addNamedObject((IXmoe*)moe(),_T("moe"));
+	addNamedObject((IMoe*)moe(),_T("moe"));
 	runScript(script);
 	ScriptHost::call(func);
 	close();
@@ -73,6 +72,184 @@ void Script::call(  const mol::string& engine, const mol::string& func, const mo
 }
 
 
+void Script::formscript( const mol::string& engine, const mol::string& s, IDispatch* form )
+{
+	init(engine);
+
+	addNamedObject((IDispatch*)(moe()),_T("moe"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);//|SCRIPTITEM_CODEONLY );
+	addNamedObject(form,_T("form"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);//|SCRIPTITEM_CODEONLY );
+
+	runScript(s,SCRIPTTEXT_ISVISIBLE|SCRIPTTEXT_ISPERSISTENT);//|SCRIPTTEXT_DELAYEXECUTION);	
+	
+	this->setState(SCRIPTSTATE_STARTED);
+}
+
+void Script::formdebug( const mol::string& engine, const mol::string& s, IDispatch* form )
+{
+	init(engine);
+
+	addNamedObject((IDispatch*)(moe()),_T("moe"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);//|SCRIPTITEM_CODEONLY );
+	addNamedObject(form,_T("form"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);//|SCRIPTITEM_CODEONLY );
+
+	debugScript(s,SCRIPTTEXT_ISVISIBLE|SCRIPTTEXT_ISPERSISTENT);//|SCRIPTTEXT_DELAYEXECUTION);	
+	
+	this->setState(SCRIPTSTATE_STARTED);
+}
+
+void Script::formcontrols( IUnknown* f )
+{
+	mol::punk<MSForms::_UserForm> form(f);
+	if (!form)
+		return;
+
+	if ( !form )
+		return;
+
+//	mol::bstr title("form");
+//	addNamedObject((form),title.toString(),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE );
+
+	mol::punk<MSForms::Controls> controls;
+	if ( S_OK != form->get_Controls(&controls) )
+		return;
+
+	if ( !controls )
+		return;
+
+	long n = 0;
+	if ( S_OK != controls->get_Count(&n) )
+		return;
+
+	for ( long i = 0; i < n; i++ )
+	{
+		mol::punk<IDispatch> disp;
+		if ( S_OK != controls->Item(mol::variant(i),&disp) )
+			continue;
+
+		if ( !disp )
+			continue;
+
+		mol::punk<MSForms::IControl> c(disp);
+		if ( !c )
+			continue;
+
+		mol::bstr name;
+		if ( S_OK != c->get_Name(&name) )
+			continue;
+
+		if ( !name )
+			continue;
+
+		addNamedObject((MSForms::IControl*)(c),name.toString(),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE );
+	}
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+ScriptEventHandler::~ScriptEventHandler()
+{
+	ODBGS("ScriptEventHandler dead");
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void ScriptEventHandler::init(Script* s, REFIID iid, const mol::string& on)
+{
+	riid = iid;
+	script = s;
+	objname = on;
+	info.release();
+	if ( (S_OK == mol::typeInfoForInterface(riid,&info)) && info )
+	{
+		
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall ScriptEventHandler::QueryInterfaceImpl(REFIID iid , LPVOID* ppv)  
+{                                                                       
+	ODBGS("::QueryInterface ScriptEventHandler");                                        
+	if (ppv==(void**)0)                                                 
+		return E_INVALIDARG;                                            
+                                                                        
+	if(IsEqualIID(iid, IID_IUnknown))                                   
+	{                                                                   
+		*ppv = (IUnknown*)this;                          
+		((IUnknown*)(*ppv))->AddRef();                                  
+		return S_OK;                                                    
+	}                                                                   
+	if(IsEqualIID(iid, IID_IDispatch))                                   
+	{                                                                   
+		*ppv = (IDispatch*)this;                          
+		((IDispatch*)(*ppv))->AddRef();                                  
+		return S_OK;                                                    
+	}    
+	if(IsEqualIID(iid, riid))                                   
+	{                                                                   
+		*ppv = (IDispatch*)this;                          
+		((IDispatch*)(*ppv))->AddRef();                                  
+		return S_OK;                                                    
+	} 
+	ODBGS("ScriptEventHandler::QueryInterface E_NOINTERFACE");                          
+	*ppv = (IUnknown*)(0);                                              
+	return E_NOINTERFACE;                                               
+}                                                                       
+       
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall ScriptEventHandler::GetTypeInfoCount (unsigned int FAR*  pctinfo ) 
+{ 
+    *pctinfo = 1;
+    return S_OK; 
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall ScriptEventHandler::GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo ) 
+{ 
+	return info->QueryInterface(IID_ITypeInfo,(void**)ppTInfo);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall ScriptEventHandler::GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId ) 
+{ 
+	return info->GetIDsOfNames( rgszNames, cNames, rgDispId );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall ScriptEventHandler::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i) 
+{ 
+	UINT nNames = 0;
+	mol::bstr name;
+	if ( (S_OK == info->GetNames(dispIdMember,&name,1,&nNames)) && (nNames == 1) )
+	{
+		std::stringstream oss;
+		oss << mol::tostring(objname) << "_";
+		oss << mol::tostring(name); 
+
+		mol::punk<IDispatch> disp;
+		if ( (S_OK == script->getScript(_T(""),&disp)) )
+		{
+			DISPID dispid;
+			std::wstring ws = mol::towstring(oss.str());
+			mol::bstr func(ws);
+			HRESULT hr = disp->GetIDsOfNames(IID_NULL, &(func), 1, 0, &dispid);
+			if ( hr == S_OK )
+			{
+				mol::variant varResult;
+				disp->Invoke( dispid, IID_NULL, 
+							  LOCALE_SYSTEM_DEFAULT, 
+							  w, 
+							  pDisp, 
+							  &varResult, NULL, NULL 
+							 );
+			}				
+		}
+	}
+    return S_OK;
+}	
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -429,8 +606,8 @@ mol::string findFile(const mol::string& f)
 HRESULT __stdcall MoeDrop::Drop( IDataObject* pDataObject, DWORD keyState, POINTL pt , DWORD* pEffect)
 {
 	std::vector<mol::string> v;
-    v = vectorFromDataObject(pDataObject);
-	ImageList::drop(*moe());
+    v = mol::vectorFromDataObject(pDataObject);
+	mol::ImageList::drop(*moe());
 	for ( unsigned int i = 0; i < v.size(); i++ )
 	{
 		bool result = ::docs()->open(0,v[i],Docs::PREF_TXT,false,0);
@@ -452,13 +629,13 @@ HRESULT __stdcall MoeDrop::Drop( IDataObject* pDataObject, DWORD keyState, POINT
 
 HRESULT  __stdcall MoeDrop::DragEnter( IDataObject* , DWORD , POINTL , DWORD* pEffect )
 {
-	ImageList::enterDrag(*moe());
+	mol::ImageList::enterDrag(*moe());
     return S_OK;
 }
 
 HRESULT __stdcall MoeDrop::DragOver( DWORD, POINTL, DWORD* pEffect )
 {
-	ImageList::doDrag(*moe());
+	mol::ImageList::doDrag(*moe());
 	*pEffect &= DROPEFFECT_COPY;
     return S_OK;
 }
@@ -466,7 +643,7 @@ HRESULT __stdcall MoeDrop::DragOver( DWORD, POINTL, DWORD* pEffect )
 
 HRESULT  __stdcall MoeDrop::DragLeave()
 {
-	ImageList::leaveDrag(*moe());
+	mol::ImageList::leaveDrag(*moe());
     return S_OK;
 }
 
@@ -503,7 +680,7 @@ HRESULT __stdcall TreeWndSink::OnTreeDblClick(BSTR filename)
 	mol::string p(mol::toString(filename));
 	if ( !mol::Path::exists(p) || mol::Path::isDir(p) )
 		return S_OK;
-	punk<IShellTree> tree(treeWnd()->oleObject);
+	mol::punk<IShellTree> tree(treeWnd()->oleObject);
 	if ( tree )
 	{
 		bool result = ::docs()->open(0,mol::toString(filename),Docs::PREF_TXT,false,0);
@@ -519,7 +696,7 @@ HRESULT __stdcall TreeWndSink::OnTreeDblClick(BSTR filename)
 
 HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename)
 {
-	punk<IShellTree> tree(treeWnd()->oleObject);
+	mol::punk<IShellTree> tree(treeWnd()->oleObject);
 	if ( tree )
 	{
 		mol::string fn = mol::toString((wchar_t*)filename);

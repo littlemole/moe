@@ -120,7 +120,7 @@ void MoeFormWnd::OnNcDestroy()
 		::PostMessage( active, WM_MDIACTIVATE, 0,(LPARAM)(HWND)(active));
 	}
 	
-	((IMoeFrame*)this)->Release();
+	((IMoeHtmlFrame*)this)->Release();
 
 	ODBGS("~MoeFormWnd()OnNcDestroy --");
 }
@@ -159,6 +159,85 @@ HRESULT MoeFormWnd::hideContextMenu()
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
+HRESULT __stdcall  MoeFormWnd::get_Object( IDispatch **d)
+{
+	if (!d)
+		return E_INVALIDARG;
+	*d=0;
+
+	return this->doc(d);
+}
+
+HRESULT __stdcall  MoeFormWnd::get_View(  IMoeDialogView **d)
+{
+	if (!d)
+		return E_INVALIDARG;
+	*d=0;
+
+	return view->QueryInterface( IID_IMoeDialogView, (void**)d);
+}
+
+HRESULT __stdcall  MoeFormWnd::get_Scripts(  IDispatch **s)
+{
+	if (!s)
+		return E_INVALIDARG;
+
+	*s = 0;
+	
+	punk<IDispatch> disp;
+	if ( S_OK == get_Object( &disp ) && disp )
+	{
+		punk<IHTMLDocument2> doc2(disp);
+		if ( doc2 )
+		{
+			punk<IHTMLDocument> doc(doc2);
+			if ( doc )
+			{
+				return doc->get_Script(s);
+			}
+		}
+	}
+	return E_FAIL;
+}
+
+HRESULT __stdcall  MoeFormWnd::Eval(  BSTR src, BSTR scriptLanguage)
+{
+	punk<IDispatch> disp;
+	if ( S_OK == get_Object(&disp) && disp )
+	{
+		punk<IHTMLDocument2> doc(disp);
+
+		if (doc )
+		{
+			punk<IHTMLWindow2> window;
+			if ( S_OK == doc->get_parentWindow(&window) && window )
+			{
+				variant var;
+				return window->execScript( src, scriptLanguage, &var );
+			}
+		}
+	}
+	return E_FAIL;
+}
+
+HRESULT __stdcall  MoeFormWnd::OleCmd(  long cmd)
+{
+	execWb((OLECMDID)cmd);
+	return S_OK;
+}
+
+HRESULT __stdcall  MoeFormWnd::get_FilePath(  BSTR *filename)
+{
+	if (!filename)
+		return E_INVALIDARG;
+	*filename=0;
+
+	*filename = ::SysAllocString( mol::towstring(location_).c_str() );
+	return S_OK;
+}
+
+
+
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
@@ -170,6 +249,7 @@ HRESULT MoeFormWnd::hideContextMenu()
 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
+/*
 HRESULT __stdcall MoeFormWnd::Eval( BSTR src, BSTR scrptLanguage )
 {
 	punk<IDispatch> disp;
@@ -265,6 +345,7 @@ HRESULT __stdcall MoeFormWnd::OleCmd( long cmd)
 	return S_OK;
 }
 
+*/
 
 HRESULT __stdcall MoeFormWnd::IDocHostUIHandler_GetExternal( IDispatch **ppDispatch)
 {
@@ -294,12 +375,12 @@ MoeFormWnd::ExternalMoe::~ExternalMoe()
 	ODBGS("ExternalMoe ~");
 }
 
-HRESULT __stdcall MoeFormWnd::ExternalMoe::get_Moe(IDispatch** disp)
+HRESULT __stdcall MoeFormWnd::ExternalMoe::get_Moe(IMoe** disp)
 {
 	if ( !disp )
 		return E_INVALIDARG;
 
-	HRESULT hr = ((IXmoe*)(moe()))->QueryInterface(IID_IDispatch, (void**)disp );
+	HRESULT hr = ((IMoe*)(moe()))->QueryInterface(IID_IDispatch, (void**)disp );
 	if ( hr != S_OK )
 		*disp = 0;
 
@@ -329,11 +410,11 @@ HRESULT __stdcall MoeFormWnd::ExternalMoe::CreateObject( BSTR progId, IDispatch*
 	return E_FAIL;
 }
 
-HRESULT __stdcall MoeFormWnd::ExternalMoe:: get_Frame( IMoeFrame** f)
+HRESULT __stdcall MoeFormWnd::ExternalMoe:: get_Frame( IMoeHtmlFrame** f)
 {
 	if (!f) 
 		return E_INVALIDARG;
-	return ((IMoeFrame*)This())->QueryInterface( IID_IMoeFrame, (void**) f );
+	return ((IMoeHtmlFrame*)This())->QueryInterface( IID_IMoeHtmlFrame, (void**) f );
 }
 
 
@@ -343,7 +424,7 @@ HRESULT __stdcall MoeFormWnd::ExternalMoe::CodeBehind( BSTR fname )
 	mol::string l(This()->location_);
 	mol::string s = mol::Path::parentDir(l);
 
-	moe()->SetStatus(fname);
+	statusBar()->status( mol::bstr(fname).toString() );
 
 	if ( mol::Path::ext(p) == _T(".class") )
 	{

@@ -4,17 +4,17 @@
 #include "shared.h"
 #include "resource.h"
 
-using namespace mol;
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
 class DirChild 
-: 
-	public MdiChildFrame<DirChild,mol::AxWnd<DirChild,MdiChild,&CLSID_ShellPane>>,
-	public DispatchMidiWindow<DirChild,IDoc>,
-	public ProvideClassInfo<DirChild>,
-	public interfaces< DirChild, 
-			implements< IDispatch, IDoc, IProvideClassInfo> >
+	: 
+	public mol::MdiChildFrame<DirChild,mol::AxWnd<DirChild,mol::MdiChild,&CLSID_ShellPane>>,
+	public DispatchMidiWindow<DirChild,IMoeDocument,MOE_DOCTYPE_DIR>,
+	public mol::ProvideClassInfo<DirChild>,
+	public mol::interfaces< DirChild, 
+			mol::implements< IDispatch, IMoeDocument, IProvideClassInfo> >
 {
 public:
 
@@ -35,19 +35,19 @@ public:
 	/////////////////////////////////////////////////////////////////////
 	// COM
 	/////////////////////////////////////////////////////////////////////
-
+/*
 	virtual HRESULT __stdcall get_Filename( BSTR* filename);
 	virtual HRESULT __stdcall get_Path( BSTR* dirpath);
 	virtual HRESULT __stdcall get_Type( long* type);
 	virtual HRESULT __stdcall Close();
 	virtual HRESULT __stdcall Activate();
-
+*/
 private:
 
 	mol::punk<IShellPane> list;
 
 	// directory events sink
-    class DirChild_Events : public stack_obj<ShellFolderEvents>
+    class DirChild_Events : public mol::stack_obj<ShellFolderEvents>
     {
         public : outer_this(DirChild,events); 
 		virtual HRESULT __stdcall OnListSelection(BSTR filename);
@@ -57,7 +57,7 @@ private:
     } events;
 
 	bool initialize(const mol::string& p);
-	mol::string filename_;
+	//mol::string filename_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

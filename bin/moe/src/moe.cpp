@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "UserForm.h"
 #include "app.h"
 #include "Img.h"
 #include "Dir3.h"
@@ -11,10 +12,13 @@
 #include "Docs.h"
 #include "xmlui.h"
 #include "ole/Rib.h"
+#include "shared.h"
 #include "Ribbonres.h"
 
 using namespace mol::io;
-
+using namespace mol;
+using namespace mol::ole;
+using namespace mol::win;
 
 
 mol::TCHAR  InFilesFilter[]   = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open file in hexviewer *.*\0*.*\0\0");
@@ -56,7 +60,10 @@ MoeWnd::MoeWnd()
 	icon.load(IDI_MOE);
 	wndClass().setIcon(icon);		
 
-
+	moeScript  = new MoeScript::Instance;
+	moeDialogs = new MoeDialogs::Instance;
+	moeView    = new MoeView::Instance;
+	moeConfig  = new MoeConfig::Instance;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -111,7 +118,7 @@ void MoeWnd::OnCreate()
 	getClientRect(clientRect_);
 
 	// register us as active instance
-	HRESULT hr = ::RegisterActiveObject( (IXmoe*)this,CLSID_Xmoe,ACTIVEOBJECT_STRONG,&activeObj_);
+	HRESULT hr = ::RegisterActiveObject( (IMoe*)this,CLSID_Application,ACTIVEOBJECT_STRONG,&activeObj_);
 
 	// hide the progress window
 	progress()->show(SW_HIDE);
@@ -142,8 +149,10 @@ void MoeWnd::OnCreate()
 
 	// load moe config data from storage
 	mol::punk<IPersistStorage> ps;
-	((IXmoe*)this)->QueryInterface( IID_IPersistStorage, (void**)&ps);
+	((IMoe*)this)->QueryInterface( IID_IPersistStorage, (void**)&ps);
 	ps->Load( store );
+
+	
 }
 
 
@@ -174,13 +183,9 @@ void MoeWnd::OnDestroy()
 
 void MoeWnd::OnNcDestroy()
 {
-	punk<IDocs> docs;
-	if ( (S_OK == get_Docs(&docs)) && docs )
-	{
-		::CoDisconnectObject(docs,0);
-	}
-	::CoDisconnectObject(((IXmoe*)this),0);
-	((IXmoe*)this)->Release();
+	::CoDisconnectObject( (IMoeDocumentCollection*)(docs()),0);
+	::CoDisconnectObject(((IMoe*)this),0);
+	((IMoe*)this)->Release();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -280,7 +285,15 @@ LRESULT MoeWnd::OnDispatch(UINT msg, WPARAM wParam, LPARAM lParam)
 
 void MoeWnd::OnFileNew()
 {
-	New(0);
+	mol::punk<IMoeDocument> doc;
+	docs()->New(&doc);
+}
+
+
+void MoeWnd::OnFileNewUFS()
+{
+	mol::punk<IMoeDocument> doc;
+	docs()->NewUserForm(&doc);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -291,56 +304,8 @@ void MoeWnd::OnFileNew()
 
 void MoeWnd::OnFileOpen()
 {
-	FilenameDlg ofn(*this);
-	ofn.setFilter( InFilesFilter );			
-
-	if ( ofn.dlgOpen( OFN_NOVALIDATE | OFN_ALLOWMULTISELECT | OFN_EXPLORER ) )
-	{
-		// open html
-		if ( ofn.index() == 3 )
-		{
-			for ( int i = 0; i < ofn.selections(); i++ )
-			{
-				ODBGS(ofn.fileName(i).c_str());
-				bool result = docs()->open( 0, ofn.fileName(i), Docs::PREF_HTML,ofn.readOnly(), 0);
-				if (!result)
-				{
-					::MessageBox(*this,ofn.fileName(i).c_str(),_T("failed to load"),MB_ICONERROR);
-				}
-				statusBar()->status(ofn.fileName(i));
-			}
-		}
-		// open hex
-		else if ( ofn.index() == 4 )
-		{
-			for ( int i = 0; i < ofn.selections(); i++ )
-			{
-				bool result = docs()->open( 0, ofn.fileName(i), Docs::PREF_HEX, ofn.readOnly(), 0);
-				if (!result)
-				{
-					::MessageBox(*this,ofn.fileName(i).c_str(),_T("failed to load"),MB_ICONERROR);
-				}
-				statusBar()->status(ofn.fileName(i));
-			}
-		}
-		// open text
-		else
-		{
-			for ( int i = 0; i < ofn.selections(); i++ )
-			{
-				bool result = docs()->open( 0, ofn.fileName(i), ofn.index() == 2 ? Docs::PREF_UTF8 : Docs::PREF_TXT, ofn.readOnly(), 0);
-
-				ODBGS1("OPEN FILE RESULT: [[[ ",(int)result);
-				if (!result)
-				{
-					statusBar()->status(ofn.fileName(i) + _T(" failed to load") );
-					//::MessageBox(*this,ofn.fileName(i).c_str(),_T("failed to load"),MB_ICONERROR);
-					return;
-				}
-				statusBar()->status(ofn.fileName(i));
-			}
-		}
-	}	
+	mol::punk<IMoeDocument> doc;
+	moeDialogs->Open(&doc);
 }
 
 void MoeWnd::OnRecentItems()
@@ -349,7 +314,9 @@ void MoeWnd::OnRecentItems()
 	// and open utilizing COM api
 	int selected = mol::Ribbon::handler(RibbonMRUItems)->index();
 	mol::string f = mol::Ribbon::handler(RibbonMRUItems)->recent_items()[selected].first;
-	Open( mol::bstr(f), 0 );
+
+	mol::punk<IMoeDocument> doc;
+	docs()->Open( mol::bstr(f), &doc );
 }
 
 
@@ -363,23 +330,13 @@ void MoeWnd::OnRecentItems()
 
 void MoeWnd::OnFileOpenDir()
 {
-	bstr d;
-	if ( S_OK == ChooseDir(&d) && d)
-	{
-		mol::string s = d.toString();
-		if ( s != _T("") )
-		{
-			if ( mol::Path::exists(s) )
-				OpenDir(d,0);
-		}
-
-	}
+	mol::punk<IMoeDocument> doc;
+	moeDialogs->OpenDir(&doc);
 }
 
 void MoeWnd::OnFileOpenHex()
 {
-	mol::FilenameDlg dlg(*this);
-	
+	mol::FilenameDlg dlg(*this);	
 	if ( dlg.dlgOpen(OFN_READONLY|OFN_EXPLORER) )
 	{
 		bool result = docs()->open( 0, dlg.fileName(), Docs::PREF_HEX, dlg.readOnly(), 0 );
@@ -492,40 +449,15 @@ void MoeWnd::OnReplace()
 
 void MoeWnd::OnEditSettings()
 {
-	Settings();
+	moeConfig->EditSettings();
 }
 
 void MoeWnd::OnEditPrefs()
 {
-	Preferences();
+	moeConfig->EditPreferences();
 }
 
-void MoeWnd::OnExecForm()
-{
-	punk<IScintillAx> sci;
-	if ( S_OK != getActiveEditor(&sci) )
-		return ;
 
-	sci->Save();
-
-	bstr filename;
-	if ( S_OK != sci->get_Filename(&filename) )
-	{
-		return ;
-	}
-		
-	RECT r;
-	getWindowRect(r);
-
-	ShowForm( 
-			filename, 
-			r.left+50,
-			r.top+50,
-			r.right-r.left-100,
-			r.bottom-r.top-100,
-			1
-	);
-}
 
 /*
 LRESULT MoeWnd::OnExecNet(UINT msg, WPARAM wParam, LPARAM lParam)
@@ -559,49 +491,6 @@ LRESULT MoeWnd::OnExecNet(UINT msg, WPARAM wParam, LPARAM lParam)
 }
 */
 
-void MoeWnd::OnExecScript()
-{
-	punk<IScintillAx> sci;
-	if ( S_OK != getActiveEditor(&sci) )
-		return ;
-
-	bstr filename;
-	if ( S_OK != sci->get_Filename(&filename) )
-		return ;
-
-	std::string engine = engineFromPath(filename.tostring());
-	if ( engine == "" )
-		return ;
-
-	bstr script;
-	if ( S_OK != sci->GetText(&script) )
-		return ;
-
-	Eval( script, bstr(engine) );
-}
-
-
-void MoeWnd::OnDebugScript()
-{
-	punk<IScintillAx> sci;
-	if ( S_OK != getActiveEditor(&sci) )
-		return ;
-
-	bstr filename;
-	if ( S_OK != sci->get_Filename(&filename) )
-		return ;
-
-	std::string engine = engineFromPath(filename.tostring());
-	if ( engine == "" )
-		return ;
-
-	bstr script;
-	if ( S_OK != sci->GetText(&script) )
-		return ;
-
-	Debug( script, bstr(engine) );
-}
-
 void MoeWnd::OnFx(int code, int id, HWND ctrl)
 {
 	int fx =id-IDM_F1+1;
@@ -620,7 +509,7 @@ void MoeWnd::OnFx(int code, int id, HWND ctrl)
 	std::string src = fs.readAll();
 	fs.close();
 
-	Eval(bstr(src),bstr(L"javascript"));
+	moeScript->Eval(bstr(src),bstr(L"javascript"));
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -718,7 +607,16 @@ void MoeWnd::OnFreezeToolBar ()
 
 void MoeWnd::OnHelpAbout()
 {
-	Help();
+	statusBar()->status(_T("help"));
+
+	mol::string p( mol::app<MoeApp>().getModulePath() );
+	mol::string help = mol::Path::parentDir(p) + _T("\\doc\\index.html");
+
+	long left, top;
+	moeView->get_Left(&left);
+	moeView->get_Top(&top);
+
+	docs()->OpenHtmlFrame( bstr(help), 0 );
 }
 
 
@@ -735,11 +633,18 @@ void MoeWnd::OnTabCtrl(NMHDR* notify )
         int sel = (int)tab()->selection();
 		mol::string path = (mol::TCHAR*)tab()->getItemLPARAM(sel);
 
-		mol::punk<IDoc> doc;
+		mol::punk<IMoeDocument> doc;
 		if ( S_OK == docs()->Item( mol::variant(path), &doc ) )
 		{
 			if ( doc )
-				doc->Activate();
+			{
+				mol::punk<IMoeDocumentView> view;
+				HRESULT hr = doc->get_View(&view);
+				if ( hr == S_OK )
+				{
+					view->Activate();
+				}
+			}
 		}
         return ;
     }		
@@ -751,7 +656,7 @@ void MoeWnd::OnTabCtrl(NMHDR* notify )
 			return ;
 
 		mol::string path = (mol::TCHAR*)tab()->getItemLPARAM(i);
-		mol::punk<IDoc> doc;
+		mol::punk<IMoeDocument> doc;
 		if ( S_OK != docs()->Item(variant(path),&doc) && doc )
 			return ;
 
@@ -797,22 +702,27 @@ void MoeWnd::OnTabCtrl(NMHDR* notify )
 			case IDM_TAB_DIRTAB:
 			{
 				mol::bstr dirname;
-				if ( doc->get_Path(&dirname) == S_OK )
+				if ( doc->get_FilePath(&dirname) == S_OK )
 				{
-					if ( t != 2 )
-						this->OpenDir(dirname,0);
+					if ( t != 2 ) 
+					{
+						mol::bstr dir( mol::Path::parentDir(dirname.toString()) );
+						docs()->OpenDir(dir,0);
+					}
 				}
 				break;
 			}
 			case IDM_TAB_JUMPTAB:
 			{
-				mol::bstr dirname;
-				if ( doc->get_Path(&dirname) == S_OK )
+				mol::bstr fn;
+				if ( doc->get_FilePath(&fn) == S_OK )
 				{
+					mol::bstr dir( mol::Path::parentDir(fn.toString()) );
+
 					mol::punk<IShellTree> tree(treeWnd()->oleObject);
 					if ( tree )
 					{
-						tree->put_Selection(dirname);
+						tree->put_Selection(dir);
 					}
 				}
 				break;
@@ -878,7 +788,119 @@ HRESULT __stdcall MoeWnd::IOleInPlaceFrame_SetStatusText(LPCOLESTR txt)
 // COM section
 /////////////////////////////////////////////////////////////////////
 
+HRESULT __stdcall MoeWnd::get_Documents( IMoeDocumentCollection **d)
+{
+	if (!d)
+		return E_INVALIDARG;
+	*d = 0;
 
+	return docs()->QueryInterface( IID_IMoeDocumentCollection, (void**) d );
+}
+
+HRESULT __stdcall MoeWnd::get_View( IMoeView **d)
+{
+	if (!d)
+		return E_INVALIDARG;
+	*d = 0;
+
+	return moeView->QueryInterface( IID_IMoeView, (void**) d );
+}
+
+
+HRESULT __stdcall MoeWnd::get_ActiveDoc( IMoeDocument **d)
+{
+	if (!d)
+		return E_INVALIDARG;
+	*d = 0;
+
+	return docs()->get_ActiveDoc( d );
+}
+
+
+HRESULT __stdcall MoeWnd::get_Config( IMoeConfig **d)
+{
+	if (!d)
+		return E_INVALIDARG;
+	*d = 0;
+
+	return moeConfig->QueryInterface( IID_IMoeConfig, (void**) d );
+}
+
+
+HRESULT __stdcall MoeWnd::get_Script( IMoeScript **d)
+{
+	if (!d)
+		return E_INVALIDARG;
+	*d = 0;
+
+	return moeScript->QueryInterface( IID_IMoeScript, (void**) d );
+}
+
+
+HRESULT __stdcall MoeWnd::get_Dialogs( IMoeDialogs **d)
+{
+	if (!d)
+		return E_INVALIDARG;
+	*d = 0;
+
+	return moeDialogs->QueryInterface( IID_IMoeDialogs, (void**) d );
+}
+
+
+HRESULT __stdcall MoeWnd::Exit()
+{
+	// tear down open documents gently
+	long cnt = 0;
+	HRESULT hr = docs()->get_Count(&cnt);
+	if( hr != S_OK )
+		return hr;
+
+	long i = cnt;
+	while ( i > 0 )
+	{
+		mol::punk<IMoeDocument> doc;
+		hr = docs()->Item( mol::variant(0), &doc );
+		if( hr != S_OK )
+			return hr;
+
+		mol::punk<IMoeDocumentView> view;
+		hr = doc->get_View(&view);
+		if( hr != S_OK )
+			return S_FALSE;
+
+		hr = view->Close();
+		if( hr != S_OK )
+			return S_FALSE;
+		i--;
+	}
+
+	// if we have ribbon, maximize it before persistence
+	if ( mol::Ribbon::ribbon()->enabled())
+	{
+		mol::Ribbon::ribbon()->maximize();
+	}
+
+	// save persistent info
+	mol::string p(appPath() + _T("\\") + _T("ui.xmo"));
+	Storage store;
+	if ( store.create(p) )
+	{
+		store.clsid(this->getCoClassID());
+		punk<IPersistStorage> ps(this);
+		if ( ps )
+		{
+			ps->Save(store,FALSE);
+			destroy();
+			return S_OK;
+		}
+	}
+
+	// harakiri
+	destroy();
+	return S_OK;
+}
+
+/*
 /////////////////////////////////////////////////////////////////////
 HRESULT __stdcall MoeWnd::get_Docs( IDocs** d)
 {			
@@ -1276,7 +1298,11 @@ HRESULT __stdcall  MoeWnd::Show()
 		build_ui(this);
 		return S_OK;
 	}
+
 	show(SW_SHOW);
+	OnLayout(0,0,0);
+	redraw();
+  
 	return S_OK;
 }
 
@@ -1618,6 +1644,64 @@ HRESULT __stdcall MoeWnd::CreateObjectAdmin( BSTR progid, IDispatch** disp)
 	return unk->QueryInterface( IID_IDispatch, (void**)disp );
 }
 
+HRESULT __stdcall MoeWnd::EditUserForm( BSTR pathname, IDispatch** form )
+{
+	if ( form )
+		*form = 0;
+
+	mol::punk<IDoc> doc;
+
+	bool r = false;
+
+	if ( pathname )
+		r = docs()->open(0,mol::bstr(pathname).toString(),Docs::PREF_TXT,false,&doc);
+	else
+		r = docs()->newUFSFile(&doc);
+
+	if (!form )
+		return r ? S_OK : E_FAIL;
+
+	if ( r && doc )
+	{
+		HRESULT hr = doc->QueryInterface( IID_IDispatch, (void**)form );
+		return hr;
+	}
+	return r ? S_OK : E_FAIL;
+}
+
+HRESULT __stdcall MoeWnd::ShowUserForm( BSTR pathname, IDispatch** form )
+{
+	if ( form )
+		*form = 0;
+
+	UserForm::Instance* userForm = UserForm::CreateInstance( mol::bstr(pathname).toString(), false );
+	if ( !userForm )
+		return E_FAIL;
+
+	if ( !form )
+		return S_OK;
+
+	HRESULT hr = userForm->QueryInterface( IID_IDispatch, (void**)form );
+	return hr;
+}
+
+
+HRESULT __stdcall MoeWnd::DebugUserForm( BSTR pathname, IDispatch** form )
+{
+	if ( form )
+		*form = 0;
+
+	UserForm::Instance* userForm = UserForm::CreateInstance( mol::bstr(pathname).toString(), false );
+	if ( !userForm )
+		return E_FAIL;
+
+	if ( !form )
+		return S_OK;
+
+	HRESULT hr = userForm->QueryInterface( IID_IDispatch, (void**)form );
+	return hr;
+}
+*/
 //////////////////////////////////////////////////////////////////////////////
 // Persistence
 //////////////////////////////////////////////////////////////////////////////
@@ -1707,6 +1791,7 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 			}
 		}
 	}
+
 	if ( !showRibbon ) 
 		return S_OK;
 
@@ -1850,7 +1935,7 @@ HRESULT MoeWnd::getActiveEditor( IScintillAx** sci )
 
 	*sci = 0;
 
-	punk<IDoc> doc;
+	punk<IMoeDocument> doc;
 	if ( S_OK != get_ActiveDoc(&doc) )
 		return E_FAIL;
 	if ( !doc )
@@ -1859,14 +1944,14 @@ HRESULT MoeWnd::getActiveEditor( IScintillAx** sci )
 	long type;
 	if ( S_OK == doc->get_Type(&type) )
 	{
-		if ( type != XMOE_DOCTYPE_DOC )
+		if ( type != MOE_DOCTYPE_DOC )
 		{
 			return E_FAIL;
 		}
 	}
 
 	punk<IDispatch> disp;	
-	if ( S_OK != doc->get_Document(&disp) )
+	if ( S_OK != doc->get_Object(&disp) )
 		return E_FAIL;
 
 	return disp->QueryInterface(IID_IScintillAx, (void**) sci );

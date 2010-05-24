@@ -1068,6 +1068,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\formEditor.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\hex.cpp"
 				>
 			</File>
@@ -1101,6 +1105,10 @@
 			</File>
 			<File
 				RelativePath=".\src\ole.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\shared.cpp"
 				>
 			</File>
 			<File
@@ -1156,6 +1164,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\src\UserForm.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\widgets.cpp"
 				>
 			</File>
@@ -1206,6 +1218,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\formEditor.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\hex.h"
 				>
 			</File>
@@ -1251,6 +1267,10 @@
 			</File>
 			<File
 				RelativePath=".\include\stdafx.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\UserForm.h"
 				>
 			</File>
 			<File

@@ -25,14 +25,13 @@ OleChild::~OleChild()
 };
 
 
-OleChild::Instance* OleChild::CreateInstance( const mol::string& dir )
+OleChild::Instance* OleChild::CreateInstance( const mol::string& p )
 {
 	Instance* doc = 0;
 
-	if ( dir.size() < 1 )
+	if ( p.size() < 1 )
 		return doc;
 
-	mol::string p(dir);
 	if ( !mol::Path::exists(p) )
         return doc;
 
@@ -40,7 +39,7 @@ OleChild::Instance* OleChild::CreateInstance( const mol::string& dir )
 		return doc;
 	
 	doc = new Instance;
-
+	doc->filename_ = p;
 	statusBar()->status(20);
 
 	doc->AddRef();
@@ -56,18 +55,18 @@ OleChild::Instance* OleChild::CreateInstance( const mol::string& dir )
 	return doc;
 }
 
-OleChild::Instance* OleChild::CreateInstance( const mol::string& dir, CLSID& clsid )
+OleChild::Instance* OleChild::CreateInstance( const mol::string& p, CLSID& clsid )
 {
 	Instance* doc = 0;
 
-	if ( dir.size() < 1 )
+	if ( p.size() < 1 )
 		return doc;
 
-	mol::string p(dir);
 	doc = new Instance;
 
+	doc->filename_ = p;
 	doc->AddRef();
-	doc->create(p,0 ,Rect(0,0,500,500),*moe());
+	doc->create(p,0 ,mol::Rect(0,0,500,500),*moe());
 	doc->show(SW_SHOW);
 	doc->newObjectFromStorage(clsid);
 
@@ -80,17 +79,18 @@ OleChild::Instance* OleChild::CreateInstance( const mol::string& dir, CLSID& cls
 
 void OleChild::OnDestroy()
 {
-
 	mol::variant v(filename_);
 	docs()->Remove(v);
+
+
 }
 
 
 void OleChild::OnNcDestroy()
 {
-	
-	::CoDisconnectObject(((IDoc*)this),0);
-	((IDoc*)this)->Release();
+	IMoeDocument* doc = (IMoeDocument*)this;	
+	::CoDisconnectObject( doc,0);
+	doc->Release();
 }
 
 
@@ -102,9 +102,10 @@ LRESULT OleChild::OnMDIActivate(WPARAM unused, HWND activated)
 	{
 		if ( activated == *this )
 		{
-			statusBar()->status( filename_ );
-			tab()->select( filename_ );
-			Ribbon::ribbon()->mode(0);
+			mol::string filename = getText();
+			statusBar()->status( filename );
+			tab()->select( filename );
+			mol::Ribbon::ribbon()->mode(0);
 			mol::Ribbon::ribbon()->minimize();
 
 			// delay this or OLE embedded WORD will complaint in some cases
@@ -112,6 +113,7 @@ LRESULT OleChild::OnMDIActivate(WPARAM unused, HWND activated)
 			return 0;
 		}
 	}
+	//mol::invoke<OleChild,LRESULT,WPARAM,HWND>( *this, &OleChild::OnMDIActivateLater,unused, activated);	
 	BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
     return 0;
 }
@@ -132,7 +134,7 @@ LRESULT OleChild::OnMDIActivateLater(WPARAM unused, HWND activated)
 /////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////
-
+/*
 HRESULT __stdcall OleChild::get_Filename( BSTR* filename)
 {
 	if ( !filename )
@@ -192,6 +194,7 @@ HRESULT __stdcall  OleChild::Activate()
 	activate();
 	return S_OK;
 }
+*/
 
 bool OleChild::openFile( const mol::string& path )
 {
@@ -205,11 +208,11 @@ bool OleChild::openFile( const mol::string& path )
 	// determine window menu
 	windowMenu_ = mol::UI().SubMenu( IDM_MOE ,IDM_VIEW_WINDOWS);
 
-	create(path,0 /* IDM_MOE_DIR*/ ,Rect(0,0,500,500),*moe());
+	create(path,0 /* IDM_MOE_DIR*/ ,mol::Rect(0,0,500,500),*moe());
 	show(SW_SHOW);
 
 	// prepare bind ctx
-	punk<IBindCtx> ctx;
+	mol::punk<IBindCtx> ctx;
 	::CreateBindCtx(0,&ctx);
 
 	statusBar()->status(30);
@@ -228,8 +231,8 @@ bool OleChild::openFile( const mol::string& path )
 	if ( S_OK == ::StgIsStorageFile(bstrFile) )
 	{
 		// bind corresponding COM server if avail
-		punk<IPersistStorage>	stg;
-		punk<IMoniker>			moniker;
+		mol::punk<IPersistStorage>	stg;
+		mol::punk<IMoniker>			moniker;
 		HRESULT hr = ::CreateFileMoniker(bstrFile, &moniker);
 		if ( hr == S_OK )
 		{
@@ -256,6 +259,8 @@ bool OleChild::openFile( const mol::string& path )
 		}
 		moniker.release();
     }
+
+
 /*
 	if ( mol::Path::ext(path) != _T(".xml" ) )
 	if ( this->loadObjectFromMoniker(path))
@@ -291,12 +296,13 @@ bool OleChild::openFile( const mol::string& path )
 
 HRESULT __stdcall OleChild::IOleClientSite_SaveObject( )
 { 
+	//mol::string filename = getText();
 	statusBar()->status(10);
 
 	// have we loaded from tmp file 
 	if ( !tmpFile_.empty())
-	{
-		punk<IPersistFile> pf(oleObject);
+	{		
+		mol::punk<IPersistFile> pf(oleObject);
 		if(pf)
 		{
 			std::wstring ws(mol::towstring(filename_));
@@ -311,13 +317,13 @@ HRESULT __stdcall OleChild::IOleClientSite_SaveObject( )
 			}
 		}
 		else
-		{
+		{			
 			bool save = false;
-			{
+			{				
 				mol::filestream tmp1(mol::tostring(tmpFile_));
 				mol::filestream tmp2(mol::tostring(filename_));
-				FileInfo& f1 = tmp1.fileInfo();
-				FileInfo& f2 = tmp2.fileInfo();
+				mol::FileInfo& f1 = tmp1.fileInfo();
+				mol::FileInfo& f2 = tmp2.fileInfo();
 				if ( f1.ftLastWriteTime.dwLowDateTime > f2.ftLastWriteTime.dwLowDateTime )
 					save = true;
 			}
@@ -337,7 +343,7 @@ HRESULT __stdcall OleChild::IOleClientSite_SaveObject( )
 	}
 
 	// check for structured storage
-	punk<IPersistStorage> ps(oleObject);
+	mol::punk<IPersistStorage> ps(oleObject);
 	if (!ps)
 	{
 		statusBar()->status( mol::string(_T("Error saving ")) + filename_ );
@@ -348,7 +354,7 @@ HRESULT __stdcall OleChild::IOleClientSite_SaveObject( )
 
 	mol::Storage store;
 	HRESULT hr;
-	if (store.open(this->filename_,STGM_READWRITE|STGM_SHARE_EXCLUSIVE|STGM_TRANSACTED))
+	if (store.open(filename_,STGM_READWRITE|STGM_SHARE_EXCLUSIVE|STGM_TRANSACTED))
 	{
 		statusBar()->status(30);
 

@@ -14,9 +14,9 @@
 class MoeWnd;
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-using namespace mol::win;
-using namespace mol::ole;
-using namespace mol;
+//using namespace mol::win;
+//using namespace mol::ole;
+//using namespace mol;
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 	  
@@ -25,13 +25,13 @@ using namespace mol;
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 class MoeHtmlWnd  : 
-	public MdiChildFrame<MoeHtmlWnd,mol::HtmlWnd<MoeHtmlWnd,mol::MdiChild>>,
-	public DispatchMidiWindow<MoeHtmlWnd,IDoc>,
-	public ProvideClassInfo<MoeHtmlWnd>,
-	public interfaces< MoeHtmlWnd, 
-			implements< 
+	public mol::MdiChildFrame<MoeHtmlWnd,mol::HtmlWnd<MoeHtmlWnd,mol::MdiChild>>,
+	public DispatchMidiWindow<MoeHtmlWnd,IMoeDocument,MOE_DOCTYPE_HTML>,
+	public mol::ProvideClassInfo<MoeHtmlWnd>,
+	public mol::interfaces< MoeHtmlWnd, 
+			mol::implements< 
 				IDispatch, 
-				IDoc, 
+				IMoeDocument, 
 				IProvideClassInfo> >
 {
 public:
@@ -54,17 +54,27 @@ public:
 	/////////////////////////////////////////////////////////////////////
 	// public COM api
 	/////////////////////////////////////////////////////////////////////
-
+/*
 	virtual HRESULT __stdcall get_Filename( BSTR* filename);
 	virtual HRESULT __stdcall get_Path( BSTR* dirpath);
 	virtual HRESULT __stdcall get_Type( long* type);
 	virtual HRESULT __stdcall Close();
 	virtual HRESULT __stdcall Activate();
-
+*/
 	// htmlwnd base class overrides - customize IE impl
 	DWORD UIflags();
 	HRESULT hideContextMenu();
 	virtual HRESULT __stdcall IDocHostUIHandler_GetExternal( IDispatch **ppDispatch);
+
+   virtual HRESULT __stdcall get_FilePath( BSTR *fname)
+   {
+		if ( fname  )
+		{
+			*fname = 0;
+			*fname = ::SysAllocString( location.c_str() );
+		}
+		return S_OK;
+   }
 
 protected:
 
@@ -72,8 +82,8 @@ protected:
 	/////////////////////////////////////////////////////////////////////
 
 	class MoeFrame :
-			public Dispatch<IMoeFrame>,
-			public interfaces< MoeFrame, implements< IDispatch, IMoeFrame> >
+			public mol::Dispatch<IMoeHtmlFrame>,
+			public mol::interfaces< MoeFrame, mol::implements< IDispatch, IMoeHtmlFrame> >
 	{
 	public:
 		outer_this(MoeHtmlWnd,frame_)
@@ -81,8 +91,18 @@ protected:
 		MoeFrame();
 		~MoeFrame();
 
-		/////////////////////////////////////////////////////////////////////
 
+		mol::punk<IMoeDialogView> view;
+
+		virtual HRESULT __stdcall get_Object( IDispatch **d);    
+		virtual HRESULT __stdcall get_View(  IMoeDialogView **d);    
+		virtual HRESULT __stdcall get_Scripts(  IDispatch **s);    
+		virtual HRESULT __stdcall Eval(  BSTR src, BSTR scriptLanguage);    
+		virtual HRESULT __stdcall OleCmd(  long cmd);    
+		virtual HRESULT __stdcall get_FilePath(  BSTR *filename);
+
+		/////////////////////////////////////////////////////////////////////
+/*
 		virtual HRESULT __stdcall get_Top( long* top);
 		virtual HRESULT __stdcall put_Top( long top);
 		virtual HRESULT __stdcall get_Left( long* left);
@@ -100,18 +120,18 @@ protected:
 		virtual HRESULT __stdcall get_Scripts( IDispatch** s);
 		virtual HRESULT __stdcall put_CodeBehind( IDispatch* code);
 		virtual HRESULT __stdcall OleCmd( long cmd );
-
+*/
 	};
-	stack_obj<MoeFrame> frame_;
+	mol::stack_obj<MoeFrame> frame_;
 
 	/////////////////////////////////////////////////////////////////////
 	// external events called from script inside MoeWnd
 	/////////////////////////////////////////////////////////////////////
 
 	class ExternalMoe : 
-		public Dispatch<IExternalMoe>,
-		public interfaces< ExternalMoe, 
-				implements< IDispatch, IExternalMoe> >
+		public mol::Dispatch<IExternalMoe>,
+		public mol::interfaces< ExternalMoe, 
+				mol::implements< IDispatch, IExternalMoe> >
 	{
 		public : 
 			outer_this(MoeHtmlWnd,external_);
@@ -119,17 +139,17 @@ protected:
 			ExternalMoe();
 			~ExternalMoe();
 
-			virtual HRESULT __stdcall get_Moe(IDispatch** disp);
+			virtual HRESULT __stdcall get_Moe(IMoe** disp);
 			virtual HRESULT __stdcall Close();
 			virtual HRESULT __stdcall CreateObject( BSTR progId, IDispatch** disp);
-			virtual HRESULT __stdcall get_Frame( IMoeFrame** f);
+			virtual HRESULT __stdcall get_Frame( IMoeHtmlFrame** f);
 			virtual HRESULT __stdcall CodeBehind( BSTR fname );
 			virtual HRESULT __stdcall get_Code( IDispatch** code );
 
 		private:
 
 	};
-	stack_obj<ExternalMoe>		external_;
+	mol::stack_obj<ExternalMoe>		external_;
 
 
 	/////////////////////////////////////////////////////////////////////
@@ -148,7 +168,7 @@ protected:
 	// webbrowser events
 	/////////////////////////////////////////////////////////////////////
 
-	class MoeHtmlWnd_htmlSink : public stack_obj<mol::ie::ie_event_sink>
+	class MoeHtmlWnd_htmlSink : public mol::stack_obj<mol::ie::ie_event_sink>
 	{
 		public : 
 			outer_this(MoeHtmlWnd,htmlSink); 
@@ -165,8 +185,8 @@ private:
 	mol::punk<IUnknown>		compiler_;
 	Domain*						domain_;
 	//punk<IJVM>					jvm_;
-	punk<IUnknown>					jvm_;
-	bstr						filename_;
+	mol::punk<IUnknown>					jvm_;
+	mol::bstr					filename_;
 	mol::string					location;
 
 	bool load( const mol::string& loc );

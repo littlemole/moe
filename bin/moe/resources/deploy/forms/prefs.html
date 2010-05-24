@@ -106,27 +106,27 @@ function init()
 	tabIndents 			= document.getElementById("tabIndents");
 	backSpaceUnindents 	= document.getElementById("backSpaceUnindents");
 
-	useTabs.checked 			= external.Moe.TabUsage;
-	tabWidth.value  			= external.Moe.TabWidth;
-	tabIndents.checked 			= external.Moe.TabIndents;
-	backSpaceUnindents.checked 	= external.Moe.BackSpaceUnindents;
+	useTabs.checked 			= external.Moe.Config.TabUsage;
+	tabWidth.value  			= external.Moe.Config.TabWidth;
+	tabIndents.checked 			= external.Moe.Config.TabIndents;
+	backSpaceUnindents.checked 	= external.Moe.Config.BackSpaceUnindents;
 
-    path = external.CreateObject("IO.Path");
+//    path = new ActiveXObject("IO.Path");
 }
 
 function onOk()
 {
- 	external.Moe.TabUsage 			= useTabs.checked;
-	external.Moe.TabWidth 			= tabWidth.value;
-	external.Moe.TabIndents 		= tabIndents.checked;
-	external.Moe.BackSpaceUnindents = backSpaceUnindents.checked;
+ 	external.Moe.Config.TabUsage 			= useTabs.checked;
+	external.Moe.Config.TabWidth 			= tabWidth.value;
+	external.Moe.Config.TabIndents 		= tabIndents.checked;
+	external.Moe.Config.BackSpaceUnindents = backSpaceUnindents.checked;
 
 	external.Close();
 }
 
 function editSettings()
 {
-	external.Moe.Settings();
+	external.Moe.Config.EditSettings();
 }
 
 function importSettings()

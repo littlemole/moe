@@ -11,12 +11,13 @@ using namespace mol;
 
 class ImgViewer : 
 	public MdiChildFrame<ImgViewer,MdiChild>,
-	public DispatchMidiWindow<ImgViewer,IDoc>,
+	//public mol::Dispatch<IMoeDocument>,
+	public DispatchMidiWindow<ImgViewer,IMoeDocument,MOE_DOCTYPE_PIC>,
 	public ProvideClassInfo<ImgViewer>,
 	public interfaces< ImgViewer, 
 			implements< 
 				IDispatch, 
-				IDoc, 
+				IMoeDocument, 
 				IProvideClassInfo> >
 {
 public:
@@ -33,13 +34,20 @@ public:
 	void OnPaint();
 
 	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall get_Filename( BSTR* filename);
-	virtual HRESULT __stdcall get_Path( BSTR* dirpath);
-	virtual HRESULT __stdcall get_Type( long* type);
-	virtual HRESULT __stdcall Close();
-	virtual HRESULT __stdcall Activate();
 
-	/////////////////////////////////////////////////////////////////////
+   virtual HRESULT __stdcall get_Object( IDispatch **d)
+   {
+	   if ( !d )
+		   return E_INVALIDARG;
+	   *d = 0;
+	   
+	   mol::punk<IPictureDisp> disp;
+	   HRESULT hr = pic_.copy(&disp);
+	   if ( hr != S_OK )
+		   return hr;
+
+	   return disp->QueryInterface( IID_IDispatch, (void**)d );
+   }
 
 	// dummy
 	punk<IUnknown> oleObject;

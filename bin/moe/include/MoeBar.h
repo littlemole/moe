@@ -10,9 +10,6 @@
 // widgets for moe
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-using namespace mol;
-using namespace mol::ole;
-using namespace mol::win;
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // customizable toolbar
@@ -62,7 +59,7 @@ private:
 	CLIPFORMAT			dragTabFormat_;
 	
 	// Drag&Drop COM Callback
-    class MoeTabControl_Drop : public stack_obj<DropTargetBase>
+	class MoeTabControl_Drop : public mol::stack_obj<mol::ole::DropTargetBase>
     {
         public : 
 			HRESULT virtual __stdcall Drop( IDataObject* pDataObject, DWORD keyState, POINTL pt , DWORD* pEffect);

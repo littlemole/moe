@@ -95,18 +95,18 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 	{
 		if ( utf8 )
 		{
-			if ( S_OK != sci->LoadUTF8(bstr(p)) )
+			if ( S_OK != sci->LoadUTF8(mol::bstr(p)) )
 				return false;
 		}
 		else
 		{
-			if ( S_OK != sci->Load(bstr(p)) )
+			if ( S_OK != sci->Load(mol::bstr(p)) )
 				return false;
 		}
 	}
 	else
 	{
-		sci->put_Filename(bstr(p));
+		sci->put_Filename(mol::bstr(p));
 	}
 
 	statusBar()->status(80);
@@ -114,7 +114,13 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 	// color dialog COM obj
 	//col_.createObject(CLSID_ColorDialog);
 
+
+
 	// get default values from config and init scintilla
+
+	moe()->moeConfig->InitializeEditorFromPreferences( (IMoeDocument*)this );
+
+	/*
 	VARIANT_BOOL vbBackSpaceUnindents;
 	VARIANT_BOOL vbTabUsage;
 	VARIANT_BOOL vbTabIndents;
@@ -129,6 +135,7 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 	sci->put_TabUsage(vbTabUsage);
 	sci->put_TabIndents(vbTabIndents);
 	sci->put_BackSpaceUnindents(vbBackSpaceUnindents);
+	*/
 
 	sci->put_ReadOnly( readOnly ? VARIANT_TRUE : VARIANT_FALSE );
 
@@ -149,7 +156,7 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 
 LRESULT Editor::OnClose()
 {
-	HRESULT hr = Close();
+	this->destroy();
 	return 0;
 }
 
@@ -161,21 +168,18 @@ LRESULT Editor::OnClose()
 
 void Editor::OnDestroy()
 {
-	mol::bstr filename;
-	if ( S_OK == get_Filename(&filename) )
-	{
-		mol::variant v(filename);
-		docs()->Remove(v);
-	}
+	mol::variant v(filename_);
+	docs()->Remove(v);
+	
  	events.UnAdvise(oleObject);
 	sci.release();
 }
 
 void Editor::OnNcDestroy()
 {
-	IDoc*e = (IDoc*)this;
-	::CoDisconnectObject(((IDoc*)this),0);
-	((IDoc*)this)->Release();
+	IMoeDocument*e = (IMoeDocument*)this;
+	::CoDisconnectObject(((IMoeDocument*)this),0);
+	((IMoeDocument*)this)->Release();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -286,13 +290,13 @@ void Editor::OnReload()
 
 	if ( vb == VARIANT_TRUE )
 	{
-		bstr path;
+		mol::bstr path;
 		sci->get_Filename(&path);
 		if ( IDYES != ::MessageBox(*this,_T("File is modified.\r\nClose without Save?"), path.toString().c_str() ,MB_YESNO|MB_ICONEXCLAMATION) )
 			return ;
 	}
 	mol::bstr filename;
-	if ( S_OK != get_Filename(&filename) )
+	if ( S_OK != get_FilePath(&filename) )
 	{
 		return ;
 	}
@@ -310,17 +314,17 @@ void Editor::OnReload()
 
 		sci->LoadUTF8(filename);
 		sci->put_ReadOnly(vb);
-		moe()->SetStatus(filename);
+		statusBar()->status(filename.toString());
 		return ;
 	}
 	sci->Load(filename);
 	sci->put_ReadOnly(vb);
-	moe()->SetStatus(filename);
+	statusBar()->status(filename.toString());
 }
 
 LRESULT Editor::OnToolbarDropDown(NMTOOLBAR* toolbar)
 {
-	Menu m(mol::UI().Menu(IDM_MOE),false);
+	mol::Menu m(mol::UI().Menu(IDM_MOE),false);
 	
 	int index = toolbar->iItem;
 	if ( index == IDM_MODE_EOL )
@@ -328,7 +332,7 @@ LRESULT Editor::OnToolbarDropDown(NMTOOLBAR* toolbar)
 	else
 		createMenuFromConf(m,mol::UI().SubMenu(IDM_MOE,IDM_TOOLS));
 
-	Menu context( mol::UI().SubMenu(IDM_MOE,index) );
+	mol::Menu context( mol::UI().SubMenu(IDM_MOE,index) );
 	showContext(context);
 
 	updateUI();
@@ -353,18 +357,18 @@ void Editor::OnUserCommand(int code, int id, HWND ctrl)//(UINT msg, WPARAM wPara
 	if ( S_OK != sci->GetSelectionStart(&sel) )
 		return ;
 
-	bstr val;
+	mol::bstr val;
 	if ( S_OK != set->get_Value(&val) || val.bstr_ == 0)
 		return ;
 
-	std::string tmp = BSTR2ansi(val);
+	std::string tmp = mol::BSTR2ansi(val);
 	size_t pos = tmp.find("<!-- moleCursor -->");
 	if ( pos != std::string::npos )
 	{
 		tmp = tmp.substr(0,pos)+tmp.substr(pos+19);
 	}
 						
-	if ( S_OK != sci->Insert(bstr(tmp),sel) )
+	if ( S_OK != sci->Insert(mol::bstr(tmp),sel) )
 		return ;
 
 	if ( pos != std::string::npos )
@@ -377,7 +381,7 @@ void Editor::OnUserBatch(int code, int id, HWND ctrl)
 {
 	mol::punk<ISetting> set = batchMap[id];
 
-    bstr val;
+    mol::bstr val;
 	if ( S_OK != set->get_Value(&val) || !val.bstr_ )
 		return;
 
@@ -421,7 +425,7 @@ void Editor::OnUserForm(int code, int id, HWND ctrl)
 {
 	mol::punk<ISetting> set = formMap[id];
 
-    bstr val;
+    mol::bstr val;
 	if ( S_OK != set->get_Value(&val) || !val.bstr_ )
 		return ;
 
@@ -481,7 +485,7 @@ void Editor::OnUserForm(int code, int id, HWND ctrl)
 		}
 	}
 
-	moe()->ShowForm( bstr(file), l, t, w, h, o );
+	moe()->moeScript->ShowHtmlForm( mol::bstr(file), l, t, w, h, o );
 }
 
 
@@ -489,7 +493,7 @@ void Editor::OnUserScript(int code, int id, HWND ctrl)
 {
 	mol::punk<ISetting> set = scriptMap[id];
 
-    bstr val;
+    mol::bstr val;
 	if ( S_OK != set->get_Value(&val) || !val.bstr_ )
 		return ;
 
@@ -517,7 +521,7 @@ void Editor::OnUserScript(int code, int id, HWND ctrl)
 		execute_shell( file );
 		return ;
 	}
-	std::string engine = engineFromPath(tostring(file));
+	std::string engine = engineFromPath(mol::tostring(file));
 
 	mol::filestream fs;
 	fs.open(mol::tostring(file), GENERIC_READ);
@@ -528,7 +532,7 @@ void Editor::OnUserScript(int code, int id, HWND ctrl)
 	fs.close();
 
 	ScriptingHost scriptlet_ = new Script;
-	scriptlet_->call( toString(engine),func,toString(script));
+	scriptlet_->call( mol::toString(engine),func,mol::toString(script));
 
 }
 
@@ -538,7 +542,7 @@ void Editor::OnBeautify()
 	if ( S_OK != sci->get_Syntax(&type) || type != SCINTILLA_SYNTAX_HTML )
 		return ;
 
-	bstr b;
+	mol::bstr b;
 	if ( S_OK != sci->GetText(&b) || b.bstr_ == 0 )
 		return ;
 
@@ -558,7 +562,7 @@ void Editor::OnBeautify()
 		os << "\r\n";
 	}
 
-	sci->SetText(bstr(os.str()));
+	sci->SetText(mol::bstr(os.str()));
 }
 
 void Editor::OnSearch(FINDREPLACE* find)
@@ -569,7 +573,7 @@ void Editor::OnSearch(FINDREPLACE* find)
 		std::string utf8what(mol::ansi2utf8(what));
 
 		VARIANT_BOOL vb;
-		sci->Search(bstr(utf8what),find->Flags,&vb);
+		sci->Search(mol::bstr(utf8what),find->Flags,&vb);
 		if ( VARIANT_FALSE == vb )
 		{
 			statusBar()->status(_T("Search: end of doc"));
@@ -583,7 +587,7 @@ void Editor::OnSearch(FINDREPLACE* find)
 		std::string utf8with(mol::ansi2utf8(with));
 
 		VARIANT_BOOL vb;
-		sci->Replace(bstr(utf8what),bstr(utf8with),find->Flags,&vb);
+		sci->Replace(mol::bstr(utf8what),mol::bstr(utf8with),find->Flags,&vb);
 		if ( VARIANT_FALSE == vb )
 		{
 			statusBar()->status(_T("Replace: end of doc"));
@@ -601,7 +605,7 @@ void Editor::OnSearch(FINDREPLACE* find)
 		VARIANT_BOOL vb = VARIANT_TRUE;
 		while ( vb == VARIANT_TRUE )
 		{
-			sci->Replace(bstr(utf8what),bstr(utf8with),find->Flags,&vb);
+			sci->Replace(mol::bstr(utf8what),mol::bstr(utf8with),find->Flags,&vb);
 				
 			if ( VARIANT_FALSE == vb )
 			{
@@ -637,19 +641,19 @@ void Editor::OnWin32()
 
 void Editor::OnSettings()
 {
-	punk<IUnknown> unk(oleObject);
+	mol::punk<IUnknown> unk(oleObject);
 	if ( !unk )
 		return;
 
 	CAUUID pages;
-	punk<ISpecifyPropertyPages> spp(unk);
+	mol::punk<ISpecifyPropertyPages> spp(unk);
 	if (!spp)
 		return;
 
 	if ( S_OK != spp->GetPages(&pages) )
 		return;
 
-	bstr filename;
+	mol::bstr filename;
 	if ( S_OK == sci->get_Filename(&filename) )
 	{
 		mol::string p(filename.toString());
@@ -687,7 +691,7 @@ void Editor::OnLexer(int code, int id, HWND ctrl)
 	mol::bstr displayname;
 	if ( S_OK == sci->GetSyntaxDisplayName(syntax,&displayname) )
 	{
-		moe()->SetStatus(displayname);
+		statusBar()->status(displayname.toString());
 	}
 
 }
@@ -699,9 +703,9 @@ void Editor::OnLexer(int code, int id, HWND ctrl)
 void Editor::OnSaveAs()
 {
 	long enc;
-	bstr p;
+	mol::bstr p;
 
-	FilenameDlg ofn(*this);
+	mol::FilenameDlg ofn(*this);
 	ofn.setFilter( OutFilesFilter );		
 	if ( S_OK == sci->get_Encoding(&enc) )
 		ofn.index(enc+1);
@@ -710,14 +714,14 @@ void Editor::OnSaveAs()
 
 	if ( ofn.dlgSave( OFN_OVERWRITEPROMPT ) )
 	{
-		bstr b;
-		this->get_Filename(&b);
+		mol::bstr b;
+		this->get_FilePath(&b);
 
 		
 		if ( ofn.fileName() != b.toString() )
 		{
-			punk<IDoc> doc;
-			if ( (S_OK == docs()->Item(variant(ofn.fileName()),&doc)) && doc )
+			mol::punk<IMoeDocument> doc;
+			if ( (S_OK == docs()->Item(mol::variant(ofn.fileName()),&doc)) && doc )
 			{
 				::MessageBox(*this, _T("File already open in other editor window!"), _T("error"),MB_ICONERROR);
 				return ;
@@ -728,11 +732,12 @@ void Editor::OnSaveAs()
 			sci->put_Encoding(ofn.index()-1);
 		if (sci)
 		{
-			if ( S_OK == sci->SaveAs( bstr(ofn.fileName() ) ) )
+			if ( S_OK == sci->SaveAs( mol::bstr(ofn.fileName() ) ) )
 			{
 				mol::ostringstream oss;
 				oss << _T("file saved as ") << ofn.fileName() << _T(" saved");
 				statusBar()->status(oss.str());
+				filename_ = ofn.fileName();
 			}
 		}
 	}
@@ -751,6 +756,65 @@ void Editor::OnSave()
 		oss << _T("saved file ") << filename.toString() ;
 		statusBar()->status(oss.str());
 	}
+}
+
+void Editor::OnExecForm()
+{
+	sci->Save();
+
+	mol::bstr filename;
+	if ( S_OK != sci->get_Filename(&filename) )
+	{
+		return ;
+	}
+		
+	RECT r;
+	moe()->getWindowRect(r);
+
+	moe()->moeScript->ShowHtmlForm(
+			filename, 
+			r.left+50,
+			r.top+50,
+			r.right-r.left-100,
+			r.bottom-r.top-100,
+			1
+	);
+}
+
+
+void Editor::OnExecScript()
+{
+	mol::bstr filename;
+	if ( S_OK != sci->get_Filename(&filename) )
+		return ;
+
+	std::string engine = engineFromPath(filename.tostring());
+	if ( engine == "" )
+		return ;
+
+	mol::bstr script;
+	if ( S_OK != sci->GetText(&script) )
+		return ;
+
+	moe()->moeScript->Eval( script, mol::bstr(engine) );
+}
+
+
+void Editor::OnDebugScript()
+{
+	mol::bstr filename;
+	if ( S_OK != sci->get_Filename(&filename) )
+		return ;
+
+	std::string engine = engineFromPath(filename.tostring());
+	if ( engine == "" )
+		return ;
+
+	mol::bstr script;
+	if ( S_OK != sci->GetText(&script) )
+		return ;
+
+	moe()->moeScript->Debug( script, mol::bstr(engine) );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -786,7 +850,7 @@ void Editor::OnMenu(HMENU popup, LPARAM unused)
 /////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////
-
+/*
 HRESULT __stdcall Editor::get_Filename( BSTR* filename)
 {
 	if ( !filename )
@@ -810,12 +874,12 @@ HRESULT __stdcall Editor::get_Path( BSTR* p)
 	if (!p)
 		return E_POINTER;
 
-	bstr bstr;
-	if ( S_OK == this->get_Filename(&bstr) )
+	mol::bstr b;
+	if ( S_OK == this->get_Filename(&b) )
 	{
-		if ( bstr )
+		if ( b)
 		{
-			mol::string tmp(mol::Path::parentDir(bstr.toString()));
+			mol::string tmp(mol::Path::parentDir(b.toString()));
 			*p = ::SysAllocString(mol::towstring(tmp).c_str());
 			return S_OK;
 		}
@@ -848,7 +912,7 @@ HRESULT __stdcall  Editor::Close()
 
 	if ( sci && ( vb == VARIANT_TRUE ) )
 	{
-		bstr path;
+		mol::bstr path;
 		sci->get_Filename(&path);
 		if ( IDYES != ::MessageBox(*this,_T("File is modified.\r\nClose without Save?"), path.toString().c_str() ,MB_YESNO|MB_ICONEXCLAMATION) )
 			return S_FALSE;
@@ -866,16 +930,16 @@ HRESULT __stdcall  Editor::Activate()
 	//updateUI();
 	return S_OK;
 }
-
+*/
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
 HRESULT __stdcall  Editor::Sintilla_Events::OnFileNameChanged( BSTR filename, BSTR path)
 {
-	MdiFrame* mf = mol::wndFromHWND<MdiFrame>( This()->mdiParent() );
+	mol::MdiFrame* mf = mol::wndFromHWND<mol::MdiFrame>( This()->mdiParent() );
 
 	docs()->Rename( mol::variant(This()->filename_), mol::variant(path) );
-	This()->filename_ = mol::bstr(path).toString();
+	//This()->filename_ = mol::bstr(path).toString();
 
 	//mol::invoke(*This(),&Editor::updateUI );
 	This()->updateUI();
@@ -912,6 +976,7 @@ HRESULT __stdcall  Editor::Sintilla_Events::OnPosChange( long line )
 	long col = pos-linepos;
 	mol::ostringstream oss2;
 	oss2 << col << " ";
+
 	statusBar()->setText( This()->filename_, oss.str(), oss2.str());
 	return S_OK;
 }
@@ -943,9 +1008,9 @@ HRESULT __stdcall Editor::Sintilla_Events::OnEncoding( long e)
 
 void Editor::updateUI()
 {
-	bstr path;
+	mol::bstr path;
 	mol::string title = this->getText();;
-	if ( S_OK == this->get_Filename(&path) && path)
+	if ( S_OK == this->get_FilePath(&path) && path)
 	{
 		title = path.toString();	
 	}
@@ -969,6 +1034,7 @@ void Editor::updateUI()
 	long col = pos-linepos;
 	mol::ostringstream oss2;
 	oss2 << col << " ";
+
 	statusBar()->setText( filename_, oss.str(), oss2.str() );
 
 	long encoding;
@@ -1080,7 +1146,7 @@ void Editor::updateUI()
 	if ( mol::Ribbon::ribbon()->enabled())
 	{
 		mol::Ribbon::ribbon()->maximize();
-		Ribbon::ribbon()->mode(1);
+		mol::Ribbon::ribbon()->mode(1);
 	}
 }
 
@@ -1093,8 +1159,8 @@ void Editor::populateMenuFromConf( HMENU submenu, ISetting* set, std::map<int,IS
 	{
 		for ( long i = 0; i < l; i++ )
 		{
-			punk<ISetting> s;
-			if ( S_OK == set->Item(variant(i),&s) )
+			mol::punk<ISetting> s;
+			if ( S_OK == set->Item(mol::variant(i),&s) )
 			{
 				walkConf(submenu,s,confMap,id);
 			}
@@ -1156,28 +1222,28 @@ void Editor::updateToolMenu( HMENU tools )
 	batchMap.clear();
 	formMap.clear();
 
-	punk<ISetting> shortCuts;
-	punk<ISetting> scripts;
-	punk<ISetting> batches;
-	punk<ISetting> forms;
+	mol::punk<ISetting> shortCuts;
+	mol::punk<ISetting> scripts;
+	mol::punk<ISetting> batches;
+	mol::punk<ISetting> forms;
 
-	if ( S_OK != config()->Item(variant("shortCuts"),&shortCuts) )
+	if ( S_OK != config()->Item(mol::variant("shortCuts"),&shortCuts) )
 		return;
 
-	if ( S_OK != config()->Item(variant("scripts"),&scripts) )
+	if ( S_OK != config()->Item(mol::variant("scripts"),&scripts) )
 		return;
 
-	if ( S_OK != config()->Item(variant("batches"),&batches) )
+	if ( S_OK != config()->Item(mol::variant("batches"),&batches) )
 		return;
 
-	if ( S_OK != config()->Item(variant("forms"),&forms) )
+	if ( S_OK != config()->Item(mol::variant("forms"),&forms) )
 		return;
 
 	int n = ::GetMenuItemCount(tools);
 	for ( int j = 0; j < 4; j++ )
 	{
 		HMENU sub = ::GetSubMenu(tools,n-j-1);
-		Menu subMenu(sub);
+		mol::Menu subMenu(sub);
 		int nsub = ::GetMenuItemCount(sub);
 		for ( int k = nsub-1; k >= 0; k-- )
 		{
@@ -1220,7 +1286,7 @@ void Editor::createMenuFromConf(HMENU menu,HMENU popup)
 
 	updateToolMenu(tools);
 
-	if ( !Ribbon::ribbon()->enabled())
+	if ( !mol::Ribbon::ribbon()->enabled())
 		::DrawMenuBar(*moe()); 
 	::UpdateWindow(*moe()); 
 }
@@ -1282,7 +1348,7 @@ void Editor::walkConf(HMENU parent, ISetting* set, std::map<int,ISetting*>& conf
 		return;
 
     long l;
-	bstr key;
+	mol::bstr key;
 	if ( S_OK != set->get_Key(&key) )
 		return;
 
@@ -1304,8 +1370,8 @@ void Editor::walkConf(HMENU parent, ISetting* set, std::map<int,ISetting*>& conf
 
 	for ( long i = 0; i < l; i++ )
 	{
-		punk<ISetting> s;
-		if ( S_OK != set->Item(variant(i),&s) )
+		mol::punk<ISetting> s;
+		if ( S_OK != set->Item(mol::variant(i),&s) )
 			continue;
 
 		if ( !s )

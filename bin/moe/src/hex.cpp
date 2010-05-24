@@ -62,7 +62,7 @@ bool Hex::initialize(const mol::string& p, bool readOnly)
 	maximize();
 
 	punk<IDispatch> disp;
-	get_Document(&disp);
+	get_Object(&disp);
 	punk<IHexCtrl> hexer(disp);
 	if(!hexer)
 	{
@@ -102,7 +102,7 @@ void Hex::OnClose()
 void Hex::OnDestroy()
 {
 	mol::bstr filename;
-	if ( S_OK == get_Filename(&filename) )
+	if ( S_OK == get_FilePath(&filename) )
 	{
 		mol::variant v(filename);
 		docs()->Remove(v);
@@ -114,8 +114,8 @@ void Hex::OnDestroy()
 
 void Hex::OnNcDestroy()
 {
-	::CoDisconnectObject(((IDoc*)this),0);
-	((IDoc*)this)->Release();
+	::CoDisconnectObject(((IMoeDocument*)this),0);
+	((IMoeDocument*)this)->Release();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -231,7 +231,7 @@ void Hex::updateUI()
 /////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////
-
+/*
 HRESULT __stdcall Hex::get_Filename( BSTR* filename)
 {
 	if ( !filename )
@@ -304,6 +304,6 @@ HRESULT __stdcall  Hex::Activate()
 	updateUI();
 	return S_OK;
 }
-
+*/
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////

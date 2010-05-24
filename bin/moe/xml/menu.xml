@@ -13,6 +13,8 @@
     <menu  id="IDM_MOE"  bmp="IDB_TOOLBAR" >
       <menu  cmd="IDM_FILE">
         <menu cmd="IDM_FILE_NEW" />
+        <menu cmd="IDM_FILE_NEW_UFS" />
+        <menu separator="true"  />
         <menu cmd="IDM_FILE_OPEN" />
         <menu cmd="IDM_FILE_OPEN_HTML" />
         <menu cmd="IDM_FILE_OPEN_FOLDER"/>
@@ -107,6 +109,8 @@
     <menu id="IDM_MOE_DIR" bmp="IDB_TOOLBAR">
       <menu cmd="IDM_FILE" >
         <menu cmd="IDM_FILE_NEW" />
+        <menu cmd="IDM_FILE_NEW_UFS" />
+        <menu separator="true"  />
         <menu cmd="IDM_FILE_OPEN"  />
         <menu cmd="IDM_FILE_OPEN_HTML" />
         <menu cmd="IDM_FILE_OPEN_FOLDER"/>
@@ -155,6 +159,8 @@
     <menu id="IDM_MOE_IMG" bmp="IDB_TOOLBAR">
       <menu cmd="IDM_FILE" >
         <menu cmd="IDM_FILE_NEW" />
+        <menu cmd="IDM_FILE_NEW_UFS" />
+        <menu separator="true"  />
         <menu cmd="IDM_FILE_OPEN"  />
         <menu cmd="IDM_FILE_OPEN_HTML" />
         <menu cmd="IDM_FILE_OPEN_FOLDER"/>
@@ -202,6 +208,8 @@
     <menu id="IDM_SMALL_MENU" bmp="IDB_TOOLBAR">
       <menu cmd="IDM_FILE" >
         <menu cmd="IDM_FILE_NEW" />
+        <menu cmd="IDM_FILE_NEW_UFS" />
+        <menu separator="true"  />
         <menu cmd="IDM_FILE_OPEN"  />
         <menu cmd="IDM_FILE_OPEN_HTML" />
         <menu cmd="IDM_FILE_OPEN_FOLDER"/>
@@ -249,6 +257,8 @@
     <menu id="IDM_MOE_HEX" bmp="IDB_TOOLBAR">
       <menu cmd="IDM_FILE" >
         <menu cmd="IDM_FILE_NEW" />
+        <menu cmd="IDM_FILE_NEW_UFS" />
+        <menu separator="true"  />
         <menu cmd="IDM_FILE_OPEN"  />
         <menu cmd="IDM_FILE_OPEN_HTML" />
         <menu cmd="IDM_FILE_OPEN_FOLDER"/>
@@ -301,6 +311,8 @@
     <menu id="IDM_MOE_HTML" bmp="IDB_TOOLBAR">
       <menu cmd="IDM_FILE" >
         <menu cmd="IDM_FILE_NEW" />
+        <menu cmd="IDM_FILE_NEW_UFS" />
+        <menu separator="true"  />
         <menu cmd="IDM_FILE_OPEN"  />
         <menu cmd="IDM_FILE_OPEN_HTML" />
         <menu cmd="IDM_FILE_OPEN_FOLDER"/>
@@ -353,7 +365,7 @@
       </menu>
     </menu>
 
-    <!-- the the toolbar context menu -->
+    <!-- the toolbar context menu -->
     <menu id="IDM_MENU_TAB" bmp="IDB_TOOLBAR">
       <menu cmd="IDM_TAB" >
         <menu cmd="IDM_VIEW_CLOSE" />
@@ -369,6 +381,22 @@
     </menu>
 
 
+    <!-- the designer popup window menu -->
+    <menu id="IDM_MENU_DESIGNFORM" bmp="IDB_TOOLBAR">
+      <menu cmd="IDM_WIZARD" >
+        <menu cmd="IDM_FILE_MEMBERS" />
+        <menu cmd="IDM_FILE_EVENTS"  />
+      </menu>
+      <menu cmd="IDM_FORMLANG" >
+        <menu cmd="IDM_FORMLANG_JAVASCRIPT" />
+        <menu cmd="IDM_FORMLANG_VBSCRIPT"  />
+        <menu cmd="IDM_FORMLANG_PERLSCRIPT"  />
+      </menu>
+    </menu>
+
+
+
+    
   </menus>
 
 </mol:codegen>

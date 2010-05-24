@@ -7,6 +7,9 @@
 
 using namespace mol::io;
 
+using namespace mol;
+using namespace mol::ole;
+using namespace mol::win;
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -273,7 +276,7 @@ HRESULT __stdcall MoeTabControl::MoeTabControl_Drop::Drop( IDataObject* pDataObj
 
 	// try find dest tab by path index
 	bool result = false;
-	mol::punk<IDoc> doc;
+	mol::punk<IMoeDocument> doc;
 	if ( S_OK == docs()->Item( mol::variant(path), &doc) && doc )
 	{
 		mol::string fn = tab()->getItemTooltipText(index);

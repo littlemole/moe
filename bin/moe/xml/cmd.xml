@@ -142,7 +142,17 @@
     <cmd id="IDM_TAB_DIRTAB" title="Directory" ribbon="RibbonParentDirectory"/>
     <cmd id="IDM_TAB_JUMPTAB" title="Jump" ribbon="RibbonJumpDirectory"/>
 
+    <cmd id="IDM_WIZARD" title="Wizard" />
+    <cmd id="IDM_FILE_MEMBERS" title="Members"/>
+    <cmd id="IDM_FILE_EVENTS" title="Events"/>
 
+    <cmd id="IDM_FORMLANG" title="Language" />
+    <cmd id="IDM_FORMLANG_JAVASCRIPT" title="Javascript"/>
+    <cmd id="IDM_FORMLANG_VBSCRIPT" title="VBScript"/>
+    <cmd id="IDM_FORMLANG_PERLSCRIPT" title="PerlScript"/>
+
+    <cmd id="IDM_FILE_NEW_UFS" title="New UFS" ribbon="RibbonFileNewUFS" />
+    
   </cmds>
 </mol:codegen>
 

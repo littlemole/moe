@@ -59,7 +59,7 @@ protected:
 
 };
 
-
+/*
 template<class C,class I>
 class DispatchWindow
 	: public mol::Dispatch<I>
@@ -171,197 +171,350 @@ public:
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
-
-template<class C,class I>
+*/
+template<class C,class I, long T>
 class DispatchMidiWindow
-	: public DispatchWindow<C,I>
+	: public mol::Dispatch<I>
 {
 public:
+
+	mol::punk<IMoeDocumentView> view;
+
+	typedef mol::com_instance<C> Instance;
+
+	DispatchMidiWindow()
+	{
+		C* This = (C*)this;
+		MoeChildView::CreateInstance( This, &view );
+	}
+
+	virtual ~DispatchMidiWindow()
+	{}
 
 	virtual void dispose() {}
 
 	static REFGUID getCoClassID()
 	{
-		return IID_IDoc;
+		return CLSID_Application;
 	}
 
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall get_Top( long* top)
-	{
-		if ( top )
+   virtual HRESULT __stdcall get_Object( IDispatch **d)
+   {
+	   if ( !d )
+		   return E_INVALIDARG;
+	   *d = 0;
+
+	   C* This = (C*)this;
+	   return This->oleObject->QueryInterface( IID_IDispatch, (void**)d );
+   }
+
+   virtual HRESULT __stdcall get_View(  IMoeDocumentView **d)
+   {
+	   if ( !d )
+		   return E_INVALIDARG;
+	   *d = 0;
+	   return view->QueryInterface( IID_IDispatch, (void**)d );
+   }
+
+   virtual HRESULT __stdcall get_FilePath( BSTR *fname)
+   {
+		if ( fname  )
 		{
-			RECT r;
+			*fname = 0;
 			C* This = (C*)this;
-			This->getWindowRect(r);
-			mol::Point p(r.left,r.top);
-			::ScreenToClient( This->mdiClient(), &p);
-			*top = p.y;
+			mol::string filename = This->getText();
+			*fname = ::SysAllocString( filename.c_str() );
 		}
 		return S_OK;
-	}
+   }
 
-	virtual HRESULT __stdcall put_Top( long top)
-	{
-		RECT r;
-		C* This = (C*)this;
-		This->getWindowRect(r);
-		int w = r.right-r.left;
-		int h = r.bottom-r.top;
+   virtual HRESULT __stdcall get_Type(long *typ)
+   {
+	   if ( !typ )
+		   return E_INVALIDARG;
 
-		mol::Point p(r.left,r.top);
-		::ScreenToClient(This->mdiClient(), &p);
+	   *typ = T;
+	   return S_OK;
+   }
 
-		p.y = top;
-		h  += top-p.y;
+   virtual HRESULT __stdcall Save( )
+   {
+	   return E_NOTIMPL;
+   }
 
-		This->move(p.x,p.y,w,h);
-		return S_OK;
-	}
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall get_Left( long* left)
-	{
-		if ( left )
-		{
-			RECT r;
-			C* This = (C*)this;
-			This->getWindowRect(r);
-			mol::Point p(r.left,r.top);
-			::ScreenToClient(This->mdiClient(), &p);
-			*left = p.x;
-		}
-		return S_OK;
-	}
+   virtual HRESULT __stdcall SaveAs( BSTR f)
+   {
+	   return E_NOTIMPL;
+   }
 
-	virtual HRESULT __stdcall put_Left( long left)
-	{
-		RECT r;
-		C* This = (C*)this;
-		This->getWindowRect(r);
-		int w = r.right-r.left;
-		int h = r.bottom-r.top;
-
-		mol::Point p(r.left,r.top);
-		::ScreenToClient(This->mdiClient(), &p);
-
-		p.x = left;
-		w += left-p.x;
-
-		This->move(p.x,p.y,w,h);
-		return S_OK;
-	}
-
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall get_Width( long* width)
-	{
-		if ( width )
-		{
-			RECT r;
-			C* This = (C*)this;
-			This->getWindowRect(r);
-			*width = r.right -r.left;
-		}
-		return S_OK;
-	}
-
-	virtual HRESULT __stdcall put_Width( long width)
-	{
-		RECT r;
-		C* This = (C*)this;
-		This->getWindowRect(r);
-		int w = width;
-		int h = r.bottom-r.top;
-
-		mol::Point p(r.left,r.top);
-		::ScreenToClient(This->mdiClient(), &p);
-
-		This->move(p.x, p.y, w, h);
-		return S_OK;
-	}
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall get_Height( long* height)
-	{
-		if ( height )
-		{
-			RECT r;
-			C* This = (C*)this;
-			This->getWindowRect(r);
-			*height = r.bottom -r.top;
-		}
-		return S_OK;
-	}
-
-	virtual HRESULT __stdcall put_Height( long height)
-	{
-		RECT r;
-		C* This = (C*)this;
-		This->getWindowRect(r);
-		int w = r.right-r.left;
-		int h = height;
-
-		mol::Point p(r.left,r.top);
-		::ScreenToClient(This->mdiClient(), &p);
-
-		This->move(p.x, p.y, w, h);
-		return S_OK;
-	}
-
-
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall get_App( IXmoe** m)
-	{			
-		return ((IXmoe*)moe())->QueryInterface(IID_IXmoe,(void**)m);
-	}
-
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall get_Document( IDispatch** doc)
-	{
-		if ( doc )
-		{
-			*doc = NULL;
-			C* This = (C*)this;
-			return This->oleObject.queryInterface(IID_IDispatch, (void**) doc);
-		}
-		return E_NOINTERFACE;
-	}
-
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall  Show()
-	{
-		C* This = (C*)this;
-		This->show(SW_SHOW);
-		return S_OK;
-	}
-
-	virtual HRESULT __stdcall  Hide()
-	{
-		C* This = (C*)this;
-		This->show(SW_HIDE);
-		return S_OK;
-	}
-
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall  Minimize()
-	{
-		C* This = (C*)this;
-		This->show(SW_MINIMIZE);
-		return S_OK;
-	}
-
-	virtual HRESULT __stdcall  Maximize()
-	{
-		C* This = (C*)this;
-		This->show(SW_MAXIMIZE);
-		return S_OK;
-	}
-
-	virtual HRESULT __stdcall  Restore()
-	{
-		C* This = (C*)this;
-		This->show(SW_RESTORE);
-		return S_OK;
-	}
 
 };
 
 
+/////////////////////////////////////////////////////////////////////
+
+
+class MoeChildView : 
+	public mol::Dispatch<IMoeDocumentView>,
+	public mol::ProvideClassInfo<MoeChildView>,
+	public mol::interfaces< MoeChildView, 
+			mol::implements< 
+				IDispatch, 
+				IMoeDocumentView, 
+				IProvideClassInfo> >
+{
+private:
+
+	mol::MdiChild* wnd_;
+
+public:
+
+	virtual ~MoeChildView();
+
+	typedef mol::com_obj<MoeChildView> Instance;
+
+	static bool CreateInstance( mol::MdiChild* wnd, IMoeDocumentView** v );
+
+	virtual void dispose();
+
+	static REFGUID getCoClassID();
+
+	/////////////////////////////////////////////////////////////////////
+
+	virtual HRESULT __stdcall get_Top( long* top);
+	virtual HRESULT __stdcall put_Top( long top);
+	virtual HRESULT __stdcall get_Left( long* left);
+	virtual HRESULT __stdcall put_Left( long left);
+	virtual HRESULT __stdcall get_Width( long* width);
+	virtual HRESULT __stdcall put_Width( long width);
+	virtual HRESULT __stdcall get_Height( long* height);
+	virtual HRESULT __stdcall put_Height( long height);
+
+	virtual HRESULT __stdcall Show();
+	virtual HRESULT __stdcall Hide();
+	virtual HRESULT __stdcall Close();
+	virtual HRESULT __stdcall Minimize();
+	virtual HRESULT __stdcall Maximize();
+	virtual HRESULT __stdcall Restore();
+	virtual HRESULT __stdcall Activate();
+
+};
+/////////////////////////////////////////////////////////////////////
+
+
+class MoeDialogView : 
+	public mol::Dispatch<IMoeDialogView>,
+	public mol::ProvideClassInfo<MoeDialogView>,
+	public mol::interfaces< MoeDialogView, 
+			mol::implements< 
+				IDispatch, 
+				IMoeDialogView, 
+				IProvideClassInfo> >
+{
+private:
+
+	mol::win::WndProc* wnd_;
+
+public:
+
+	virtual ~MoeDialogView();
+
+	void init( mol::win::WndProc* wnd );
+
+	typedef mol::stack_obj<MoeDialogView> Instance;
+
+	virtual void dispose();
+
+	static REFGUID getCoClassID();
+
+	/////////////////////////////////////////////////////////////////////
+
+	virtual HRESULT __stdcall get_Top( long* top);
+	virtual HRESULT __stdcall put_Top( long top);
+	virtual HRESULT __stdcall get_Left( long* left);
+	virtual HRESULT __stdcall put_Left( long left);
+	virtual HRESULT __stdcall get_Width( long* width);
+	virtual HRESULT __stdcall put_Width( long width);
+	virtual HRESULT __stdcall get_Height( long* height);
+	virtual HRESULT __stdcall put_Height( long height);
+
+
+	virtual HRESULT __stdcall Show();
+	virtual HRESULT __stdcall Hide();
+	virtual HRESULT __stdcall Close();
+	virtual HRESULT __stdcall get_Title( BSTR* title );
+	virtual HRESULT __stdcall put_Title( BSTR title );
+};
+
+
+class MoeView : 
+	public mol::Dispatch<IMoeView>,
+	public mol::ProvideClassInfo<MoeView>,
+	public mol::interfaces< MoeView, 
+			mol::implements< 
+				IDispatch, 
+				IMoeView, 
+				IProvideClassInfo> >
+{
+
+private:
+
+	WINDOWPLACEMENT					wpPrev_;
+	void fullScreen(HWND hwnd);
+
+public:
+
+	virtual ~MoeView();
+
+	typedef mol::com_obj<MoeView> Instance;
+
+	virtual void dispose();
+
+	static REFGUID getCoClassID();
+
+	/////////////////////////////////////////////////////////////////////
+
+	virtual HRESULT __stdcall get_Top( long* top);
+	virtual HRESULT __stdcall put_Top( long top);
+	virtual HRESULT __stdcall get_Left( long* left);
+	virtual HRESULT __stdcall put_Left( long left);
+	virtual HRESULT __stdcall get_Width( long* width);
+	virtual HRESULT __stdcall put_Width( long width);
+	virtual HRESULT __stdcall get_Height( long* height);
+	virtual HRESULT __stdcall put_Height( long height);
+
+	/////////////////////////////////////////////////////////////////////
+
+	virtual HRESULT __stdcall Show();
+	virtual HRESULT __stdcall Hide();
+	virtual HRESULT __stdcall Minimize();
+	virtual HRESULT __stdcall  Maximize();
+	virtual HRESULT __stdcall Restore();
+	virtual HRESULT __stdcall Tile();
+	virtual HRESULT __stdcall Cascade();
+	virtual HRESULT __stdcall get_ShowTreeView( VARIANT_BOOL* vb );
+	virtual HRESULT __stdcall put_ShowTreeView( VARIANT_BOOL vb );
+	virtual HRESULT __stdcall put_Fullscreen( VARIANT_BOOL vb );
+	virtual HRESULT __stdcall get_Fullscreen( VARIANT_BOOL* vb );
+	virtual HRESULT __stdcall get_TreeView( IDispatch** tv);
+};
+
+
+class MoeDialogs 
+	:
+	public mol::Dispatch<IMoeDialogs>,
+	public mol::ProvideClassInfo<MoeDialogs>,
+	public mol::interfaces< MoeDialogs, 
+			mol::implements< 
+				IDispatch, 
+				IMoeDialogs, 
+				IProvideClassInfo> >
+{
+
+public:
+
+	virtual ~MoeDialogs();
+
+	typedef mol::com_obj<MoeDialogs> Instance;
+
+	virtual void dispose();
+
+	static REFGUID getCoClassID();
+
+	virtual HRESULT __stdcall MsgBox( BSTR text, BSTR title, long flags, long* result);
+	virtual HRESULT __stdcall Open(IMoeDocument** d);
+	virtual HRESULT __stdcall OpenDir( IMoeDocument** d);
+	virtual HRESULT __stdcall ChooseFile( BSTR* f );
+	virtual HRESULT __stdcall ChooseDir( BSTR* d );
+
+};
+
+
+
+class MoeScript 
+	:
+	public mol::Dispatch<IMoeScript>,
+	public mol::ProvideClassInfo<MoeScript>,
+	public mol::interfaces< MoeScript, 
+			mol::implements< 
+				IDispatch, 
+				IMoeScript, 
+				IProvideClassInfo> >
+{
+public:
+
+	virtual ~MoeScript();
+
+	typedef mol::com_obj<MoeScript> Instance;
+
+	virtual void dispose();
+
+	static REFGUID getCoClassID();
+
+	virtual HRESULT __stdcall Run( BSTR f, BSTR engine );
+	virtual HRESULT __stdcall Eval( BSTR scrpt, BSTR scrptLanguage);
+	virtual HRESULT __stdcall Debug( BSTR scrpt, BSTR scrptLanguage);
+	virtual HRESULT __stdcall CreateObjectAdmin( BSTR progid, IDispatch** disp);
+	virtual HRESULT __stdcall ShowHtmlForm( BSTR src, long l, int t, int w, int h, int formStyle );
+	virtual HRESULT __stdcall ShowUserForm( BSTR pathname, IMoeUserForm** form );
+	virtual HRESULT __stdcall DebugUserForm( BSTR pathname, IMoeUserForm** form );
+	virtual HRESULT __stdcall System( BSTR f);
+
+};
+
+class MoeConfig 
+	:
+	public mol::Dispatch<IMoeConfig>,
+	public mol::ProvideClassInfo<MoeConfig>,
+	public mol::interfaces< MoeConfig, 
+			mol::implements< 
+				IDispatch, 
+				IMoeConfig, 
+				IProvideClassInfo> >
+{
+private:
+
+	long							systype_;
+	long							encoding_;
+	long							tabwidth_;
+	VARIANT_BOOL					tabUsage_;
+	VARIANT_BOOL					tabIndents_;
+	VARIANT_BOOL					fullScreen_;
+	VARIANT_BOOL					backSpaceUnIndents_;
+
+public:
+
+	virtual ~MoeConfig();
+
+	typedef mol::com_obj<MoeConfig> Instance;
+
+	virtual void dispose();
+
+	static REFGUID getCoClassID();
+
+	virtual HRESULT __stdcall get_ConfigPath( BSTR* fPath);
+	virtual HRESULT __stdcall get_ModulePath(  BSTR* fPath);
+	virtual HRESULT __stdcall put_SysType( long typ);
+	virtual HRESULT __stdcall get_SysType( long* typ);
+	virtual HRESULT __stdcall put_Encoding( long typ);
+	virtual HRESULT __stdcall get_Encoding( long* typ);
+	virtual HRESULT __stdcall put_TabUsage( VARIANT_BOOL vbTabUsage);
+	virtual HRESULT __stdcall get_TabUsage( VARIANT_BOOL* vbTabUsage);
+	virtual HRESULT __stdcall put_TabIndents( VARIANT_BOOL vbTabIndents);
+	virtual HRESULT __stdcall get_TabIndents( VARIANT_BOOL* vbTabIndents);
+	virtual HRESULT __stdcall put_BackSpaceUnindents( VARIANT_BOOL vbBackSpaceIndents);
+	virtual HRESULT __stdcall get_BackSpaceUnindents(  VARIANT_BOOL* vbBackSpaceIndents);
+	virtual HRESULT __stdcall put_TabWidth( long width);
+	virtual HRESULT __stdcall get_TabWidth(  long* width);
+	virtual HRESULT __stdcall EditPreferences( );
+	virtual HRESULT __stdcall EditSettings( );
+	virtual HRESULT __stdcall ExportSettings( BSTR f );
+	virtual HRESULT __stdcall ImportSettings( BSTR f );
+	virtual HRESULT __stdcall InitializeEditorFromPreferences( IMoeDocument* d );
+
+};
+
+
+
 #endif
+

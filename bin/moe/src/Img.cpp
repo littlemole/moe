@@ -25,6 +25,8 @@ ImgViewer::Instance* ImgViewer::CreateInstance( const mol::string& file )
 	Instance* iv = new Instance;
 	iv->AddRef();
 
+	
+
 	if ( !iv->load(file) )
 	{
 		iv->Release();
@@ -48,14 +50,14 @@ LRESULT ImgViewer::OnDestroy()
 LRESULT ImgViewer::OnNcDestroy()
 {
 	mol::bstr filename;
-	if ( S_OK == get_Filename(&filename) )
+	if ( S_OK == get_FilePath(&filename) )
 	{
 		mol::variant v(filename);
 		docs()->Remove(v);
 	}
 
-	::CoDisconnectObject(((IDoc*)this),0);
-	((IDoc*)this)->Release();
+	::CoDisconnectObject(((IMoeDocument*)this),0);
+	((IMoeDocument*)this)->Release();
 	return 0;
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -139,60 +141,4 @@ void ImgViewer::updateUI()
 	}
 }
 
-
-
-/////////////////////////////////////////////////////////////////////
-// COM section
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall ImgViewer::get_Filename( BSTR* filename)
-{
-	if ( filename )
-	{
-		mol::string fn = this->getText();
-		*filename = ::SysAllocString( mol::towstring(fn).c_str() );
-	}
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall ImgViewer::get_Path( BSTR* p)
-{			
-	if ( p )
-	{
-		*p = 0;
-		mol::string filename = this->getText();
-		mol::string dir = mol::Path::pathname(filename);
-		if ( mol::Path::isDir(dir) )
-			*p = ::SysAllocString( mol::towstring(dir).c_str() );
-	}
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall ImgViewer::get_Type(  long* type)
-{
-	if ( type )
-	{
-		*type = XMOE_DOCTYPE_PIC;
-	}
-	return S_OK;
-}
-
-
-HRESULT __stdcall  ImgViewer::Close()
-{
-	postMessage(WM_CLOSE,0,0);
-	return S_OK;
-}
-
-HRESULT __stdcall  ImgViewer::Activate()
-{
-	activate();
-	return S_OK;
-}
 

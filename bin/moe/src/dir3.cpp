@@ -72,16 +72,16 @@ DirChild::Instance* DirChild::CreateInstance( const mol::string& dir )
 
 bool DirChild::initialize(const mol::string& p)
 {
-	filename_ = p;
+	//filename_ = p;
 
 	// initial Addref
-	((IDoc*)this)->AddRef();
+	((IMoeDocument*)this)->AddRef();
 
 	// determine window menu
 	windowMenu_ = mol::UI().SubMenu(IDM_MOE_DIR,IDM_VIEW_WINDOWS);
 
 	// create window
-	create(p,(HMENU)mol::UI().Menu(IDM_MOE_DIR),Rect(0,0,500,500),*moe());			
+	create(p,(HMENU)mol::UI().Menu(IDM_MOE_DIR),mol::Rect(0,0,500,500),*moe());			
 
 	// advise event sink
 	list = oleObject;
@@ -94,7 +94,7 @@ bool DirChild::initialize(const mol::string& p)
 		return false;
 
 	// set initial dirchild dir to display
-	list->put_Selection(variant(p));
+	list->put_Selection(mol::variant(p));
 
 	show(SW_SHOW);
 	maximize();
@@ -122,14 +122,15 @@ void DirChild::OnClose()
 
 void DirChild::OnDestroy()
 {
-	docs()->Remove(mol::variant(filename_));
+	mol::string filename = getText();
+	docs()->Remove(mol::variant(filename));
 	events.UnAdvise(oleObject);
 }
 
 void DirChild::OnNcDestroy()
 {
-	::CoDisconnectObject(((IDoc*)this),0);
-	((IDoc*)this)->Release();
+	::CoDisconnectObject(((IMoeDocument*)this),0);
+	((IMoeDocument*)this)->Release();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -154,13 +155,13 @@ LRESULT DirChild::OnMDIActivate( HWND activated )
 	}
 
 	mol::bstr filename;
-	get_Filename(&filename);
-	moe()->SetStatus(filename);
+	get_FilePath(&filename);
+	statusBar()->status(filename.toString());
 	tab()->select( filename.toString() );
 
 	if ( mol::Ribbon::ribbon()->enabled())
 	{
-		Ribbon::ribbon()->mode(2);
+		mol::Ribbon::ribbon()->mode(2);
 		mol::Ribbon::ribbon()->maximize();
 	}
 
@@ -179,7 +180,7 @@ LRESULT DirChild::OnMDIActivate( HWND activated )
 /////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////
-
+/*
 HRESULT __stdcall DirChild::get_Filename( BSTR* filename)
 {
 	if ( !filename )
@@ -189,7 +190,7 @@ HRESULT __stdcall DirChild::get_Filename( BSTR* filename)
 	if ( !list )
 		return S_OK;
 
-	variant var;
+	mol::variant var;
 	if ( S_OK == list->get_Selection(&var) )
 	{
 		if ( var.vt != VT_BSTR )
@@ -233,7 +234,7 @@ HRESULT __stdcall  DirChild::Activate()
 	activate();
 	return S_OK;
 }
-
+*/
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -245,7 +246,7 @@ HRESULT __stdcall  DirChild::Activate()
 
 HRESULT __stdcall DirChild::DirChild_Events::OnListDblClick(BSTR filename)
 {
-	punk<IShellList> list(This()->oleObject);
+	mol::punk<IShellList> list(This()->oleObject);
 	if ( list )
 	{
 		mol::string p(mol::toString(filename));
@@ -274,7 +275,7 @@ HRESULT __stdcall DirChild::DirChild_Events::OnListDblClick(BSTR filename)
 
 HRESULT __stdcall DirChild::DirChild_Events::OnListSelection(BSTR filename)
 {
-	moe()->SetStatus(filename);
+	statusBar()->status(mol::bstr(filename).toString());
 	return S_OK;
 }
 
@@ -294,8 +295,10 @@ HRESULT __stdcall DirChild::DirChild_Events::OnListOpen(BSTR filename)
 
 HRESULT __stdcall DirChild::DirChild_Events::OnDirChanged(BSTR dir)
 {
-	docs()->Rename( mol::variant(This()->filename_),mol::variant(dir));
-	This()->filename_ = mol::bstr(dir).toString();
+	mol::string filename = This()->getText();
+
+	docs()->Rename( mol::variant(filename),mol::variant(dir));
+	//This()->filename_ = mol::bstr(dir).toString();
 	This()->setText( mol::bstr(dir).toString() );
 	return S_OK;
 }

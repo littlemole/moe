@@ -81,7 +81,7 @@ int MoeApp::runEmbedded(const mol::string& cmdline)
 int MoeApp::runStandalone(const mol::string& cmdline)
 {
 	//check if moe is running
-	punk<IDispatch> m = getActiveInstance<IDispatch>(CLSID_Xmoe);
+	mol::punk<IDispatch> m = getActiveInstance<IDispatch>(CLSID_Application);
 
 	if ( m )
 	{
@@ -107,8 +107,16 @@ int MoeApp::runStandalone(const mol::string& cmdline)
 	std::string c = mol::tostring(mol::trim(cmdline));
 	mol::RegExp rgxp("(\"([^\"]*)\")|([^ ]+)");
 
-	punk<IDispatch> disp(moe);
+	mol::punk<IDispatch> disp(moe);
 	openDocsFromCommandLine(disp,cmdline);
+
+	mol::punk<IMoeView> view;
+	HRESULT hr = moe->get_View(&view);
+	if ( hr == S_OK )
+	{
+		view->Show();
+	}
+	view.release();
 
 	return local_server<MoeLoop>::runStandalone(cmdline);
 }
@@ -121,7 +129,7 @@ int MoeApp::runStandalone(const mol::string& cmdline)
 
 // lesson learned: in regfree com we cannot marshal our own interfaces
 // because we havent registered them to COM
-// however COM always knows how to marshal IDispatch, which we implement
+// however COM always knows how to marshal IDispatch, which we utilize :-)
 
 void MoeApp::openDocsFromCommandLine( IDispatch* m, mol::string cmdline )
 {
@@ -232,6 +240,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
                      LPTSTR    lpCmdLine,
                      int       nCmdShow)
 {
+	//::DebugBreak();
+
 	ODBGS(">>>>>>>>>>>>>>>> ENTER MAIN <<<<<<<<<<<<<<<<<<<<<<<<");
 	ODBGS("moe startup");
 	ODBGS(lpCmdLine);

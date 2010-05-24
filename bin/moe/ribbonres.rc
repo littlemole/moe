@@ -664,6 +664,22 @@ END
 RibbonFileNew_SmallImages_RESID    BITMAP    "ribbon\New.bmp" /* SmallImages RibbonFileNew_SmallImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
+    RibbonFileNewUFS_LabelTitle_RESID L"New User Form Script" /* LabelTitle RibbonFileNewUFS_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileNewUFS_TooltipTitle_RESID L"New User Form Script" /* TooltipTitle RibbonFileNewUFS_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileNewUFS_TooltipDescription_RESID L"Create a new User Form and Script module" /* TooltipDescription RibbonFileNewUFS_TooltipDescription_RESID: (null) */
+END
+
+RibbonFileNewUFS_SmallImages_RESID    BITMAP    "ribbon\New.bmp" /* SmallImages RibbonFileNewUFS_SmallImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
     RibbonFileOpen_LabelTitle_RESID L"Open" /* LabelTitle RibbonFileOpen_LabelTitle_RESID: (null) */
 END
 
@@ -1535,6 +1551,11 @@ END
 STRINGTABLE 
 BEGIN
     InternalCmd14_LabelTitle_RESID L"Label:InternalCmd14" /* LabelTitle InternalCmd14_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    InternalCmd16_LabelTitle_RESID L"Label:InternalCmd16" /* LabelTitle InternalCmd16_LabelTitle_RESID: (null) */
 END
 
 APPLICATION_RIBBON    UIFILE    "ribbon.bml"

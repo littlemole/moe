@@ -10,6 +10,8 @@
 
 #include "editor.h"
 
+#include "formeditor.h"
+
 #include "hex.h"
 
 #include "html.h"
@@ -152,6 +154,14 @@ extern "C" void load_codegen_metadata()
   UI().addCmd(IDM_TAB_SAVETAB,_T("Save"));  
   UI().addCmd(IDM_TAB_DIRTAB,_T("Directory"));  
   UI().addCmd(IDM_TAB_JUMPTAB,_T("Jump"));  
+  UI().addCmd(IDM_WIZARD,_T("Wizard"));  
+  UI().addCmd(IDM_FILE_MEMBERS,_T("Members"));  
+  UI().addCmd(IDM_FILE_EVENTS,_T("Events"));  
+  UI().addCmd(IDM_FORMLANG,_T("Language"));  
+  UI().addCmd(IDM_FORMLANG_JAVASCRIPT,_T("Javascript"));  
+  UI().addCmd(IDM_FORMLANG_VBSCRIPT,_T("VBScript"));  
+  UI().addCmd(IDM_FORMLANG_PERLSCRIPT,_T("PerlScript"));  
+  UI().addCmd(IDM_FILE_NEW_UFS,_T("New UFS"));  
 
   
   //foreach bitmap - loads and registers bitmap
@@ -201,6 +211,7 @@ extern "C" void load_codegen_metadata()
   UI().addBmpCmd( IDB_TOOLBAR, IDM_FILE_OPEN_HTML );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_VIEW_TOOLBARS );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_TAB_JUMPTAB );
+  UI().addBmpCmd( IDB_TOOLBAR, IDM_FILE_NEW_UFS );
   
   UI().addBmp(IDB_MOE_FAV);
   
@@ -214,6 +225,8 @@ extern "C" void load_codegen_metadata()
 
     UI().addSubMenu(  IDM_MOE,  IDM_MOE,  IDM_FILE );
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, false, true);
+    UI().addMenuSeparator(IDM_MOE,IDM_FILE);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, false, true);
@@ -303,6 +316,8 @@ extern "C" void load_codegen_metadata()
 
     UI().addSubMenu(  IDM_MOE_DIR,  IDM_MOE_DIR,  IDM_FILE );
         UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, false, true);
+    UI().addMenuSeparator(IDM_MOE_DIR,IDM_FILE);
         UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, false, true);
@@ -347,6 +362,8 @@ extern "C" void load_codegen_metadata()
 
     UI().addSubMenu(  IDM_MOE_IMG,  IDM_MOE_IMG,  IDM_FILE );
         UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, false, true);
+    UI().addMenuSeparator(IDM_MOE_IMG,IDM_FILE);
         UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, false, true);
@@ -391,6 +408,8 @@ extern "C" void load_codegen_metadata()
 
     UI().addSubMenu(  IDM_SMALL_MENU,  IDM_SMALL_MENU,  IDM_FILE );
         UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, false, true);
+    UI().addMenuSeparator(IDM_SMALL_MENU,IDM_FILE);
         UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, false, true);
@@ -435,6 +454,8 @@ extern "C" void load_codegen_metadata()
 
     UI().addSubMenu(  IDM_MOE_HEX,  IDM_MOE_HEX,  IDM_FILE );
         UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, false, true);
+    UI().addMenuSeparator(IDM_MOE_HEX,IDM_FILE);
         UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, false, true);
@@ -483,6 +504,8 @@ extern "C" void load_codegen_metadata()
 
     UI().addSubMenu(  IDM_MOE_HTML,  IDM_MOE_HTML,  IDM_FILE );
         UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, false, true);
+    UI().addMenuSeparator(IDM_MOE_HTML,IDM_FILE);
         UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, false, true);
@@ -543,6 +566,18 @@ extern "C" void load_codegen_metadata()
     UI().addMenuSeparator(IDM_MENU_TAB,IDM_TAB);
         UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_TAB_DIRTAB, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_TAB_JUMPTAB, IDB_TOOLBAR, false, true);
+  
+  // a main menu
+  UI().addMenu(IDM_MENU_DESIGNFORM);    
+
+    UI().addSubMenu(  IDM_MENU_DESIGNFORM,  IDM_MENU_DESIGNFORM,  IDM_WIZARD );
+        UI().addMenuItem(IDM_MENU_DESIGNFORM, IDM_WIZARD, IDM_FILE_MEMBERS, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MENU_DESIGNFORM, IDM_WIZARD, IDM_FILE_EVENTS, IDB_TOOLBAR, false, true);
+
+    UI().addSubMenu(  IDM_MENU_DESIGNFORM,  IDM_MENU_DESIGNFORM,  IDM_FORMLANG );
+        UI().addMenuItem(IDM_MENU_DESIGNFORM, IDM_FORMLANG, IDM_FORMLANG_JAVASCRIPT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MENU_DESIGNFORM, IDM_FORMLANG, IDM_FORMLANG_VBSCRIPT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MENU_DESIGNFORM, IDM_FORMLANG, IDM_FORMLANG_PERLSCRIPT, IDB_TOOLBAR, false, true);
 
 mol::msgMap<MoeWnd>().addMsgHandler( WM_CREATE, make_handler(&MoeWnd::OnCreate) );
 
@@ -558,6 +593,8 @@ mol::msgMap<MoeWnd>().addMsgHandler( WM_INITMENUPOPUP, make_handler(&MoeWnd::OnM
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_NEW, make_handler(&MoeWnd::OnFileNew) );
 
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_NEW_UFS, make_handler(&MoeWnd::OnFileNewUFS) );
+
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_OPEN, make_handler(&MoeWnd::OnFileOpen) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_OPEN_HTML, make_handler(&MoeWnd::OnFileOpenHtml) );
@@ -571,12 +608,6 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_EXIT, make_handler(&MoeWnd::OnFile
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_FIND, make_handler(&MoeWnd::OnFind) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_REPLACE, make_handler(&MoeWnd::OnReplace) );
-
-mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_EXECUTESCRIPT, make_handler(&MoeWnd::OnExecScript) );
-
-mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUGSCRIPT, make_handler(&MoeWnd::OnDebugScript) );
-
-mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_EXECUTEFORM, make_handler(&MoeWnd::OnExecForm) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_EDITSETTINGS, make_handler(&MoeWnd::OnEditSettings) );
 
@@ -690,6 +721,12 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_RIBBON_WRITE_BOM, make_handler(&MoeWnd:
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_RIBBON_BYTES_SHOWN, make_handler(&MoeWnd::OnDispatch) );
 
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_EXECUTESCRIPT, make_handler(&MoeWnd::OnDispatch) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUGSCRIPT, make_handler(&MoeWnd::OnDispatch) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_EXECUTEFORM, make_handler(&MoeWnd::OnDispatch) );
+
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_VIEW_MAXIMIZE, make_handler(&MoeWnd::OnMaximize) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_VIEW_MINIMIZE, make_handler(&MoeWnd::OnMinimize) );
@@ -794,6 +831,12 @@ mol::msgMap<Editor>().addCmdHandler( IDM_RIBBON_BACKSPACE_UNIDENTS, make_handler
 
 mol::msgMap<Editor>().addCmdHandler( IDM_RIBBON_WRITE_BOM, make_handler(&Editor::OnWriteBOM) );
 
+mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_EXECUTESCRIPT, make_handler(&Editor::OnExecScript) );
+
+mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_DEBUGSCRIPT, make_handler(&Editor::OnDebugScript) );
+
+mol::msgMap<Editor>().addCmdHandler( IDM_MODE_EXECUTEFORM, make_handler(&Editor::OnExecForm) );
+
 mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_CUT, make_ole_handler<Editor>(&IScintillAx::Cut) );
 
 mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_COPY, make_ole_handler<Editor>(&IScintillAx::Copy) );
@@ -817,6 +860,20 @@ make_command_range_handler( Editor, ID_FIRST_USER_FORM, ID_LAST_USER_FORM, OnUse
 make_command_range_handler( Editor, ID_FIRST_USER_SCRIPT, ID_LAST_USER_SCRIPT, OnUserScript );
 
 mol::msgMap<Editor>().addNotifyCodeHandler( TBN_DROPDOWN, make_handler(&Editor::OnToolbarDropDown) );
+
+mol::msgMap<FormEditor>().addMsgHandler( WM_DESTROY, make_handler(&FormEditor::OnDestroy) );
+
+mol::msgMap<FormEditor>().addCmdHandler( IDM_FILE_SAVE_AS, make_handler(&FormEditor::OnSaveAs) );
+
+mol::msgMap<FormEditor>().addCmdHandler( IDM_FILE_SAVE, make_handler(&FormEditor::OnSave) );
+
+mol::msgMap<FormEditor>().addMsgHandler( WM_MDIACTIVATE, make_handler(&FormEditor::OnMDIActivate) );
+
+mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_EXECUTESCRIPT, make_handler(&FormEditor::OnExecScript) );
+
+mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_DEBUGSCRIPT, make_handler(&FormEditor::OnDebugScript) );
+
+mol::msgMap<FormEditor>().addCmdHandler( IDM_MODE_EXECUTEFORM, make_handler(&FormEditor::OnExecForm) );
 
 mol::msgMap<Hex>().addMsgHandler( WM_MDIACTIVATE, make_handler(&Hex::OnMDIActivate) );
 

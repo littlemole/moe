@@ -14,9 +14,9 @@ using namespace mol;
 class Hex 
 	: 
 	public MdiChildFrame<Hex,AxWnd<Hex,MdiChild,&CLSID_HexCtrl>>,
-	public DispatchMidiWindow<Hex,IDoc>,
+	public DispatchMidiWindow<Hex,IMoeDocument,MOE_DOCTYPE_HEX>,
 	public ProvideClassInfo<Hex>,
-	public interfaces< Hex, implements< IDispatch, IDoc, IProvideClassInfo> >
+	public interfaces< Hex, implements< IDispatch, IMoeDocument, IProvideClassInfo> >
 {
 public:
 
@@ -39,13 +39,13 @@ public:
 	/////////////////////////////////////////////////////////////////////
 	// COM
 	/////////////////////////////////////////////////////////////////////
-
+/*
 	virtual HRESULT __stdcall get_Filename( BSTR* filename);
 	virtual HRESULT __stdcall get_Path( BSTR* dirpath);
 	virtual HRESULT __stdcall get_Type( long* type);
 	virtual HRESULT __stdcall Close();
 	virtual HRESULT __stdcall Activate();
-
+*/
 protected:
 	bool initialize(const mol::string& p, bool readOnly);
 	void updateUI();		

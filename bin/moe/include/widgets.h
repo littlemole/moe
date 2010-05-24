@@ -10,9 +10,6 @@
 // widgets for moe
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-using namespace mol;
-using namespace mol::ole;
-using namespace mol::win;
 
 class MoeWnd;
 
@@ -147,13 +144,17 @@ private:
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 
-class Script : public com_obj<ScriptHost>
+class Script : public mol::com_obj<mol::ScriptHost>
 {
 public:
 
 	void eval ( const mol::string& engine, const mol::string& script );
 	void debug( const mol::string& engine, const mol::string& script );
 	void call ( const mol::string& engine, const mol::string& func, const mol::string& script );
+
+	void formscript( const mol::string& engine, const mol::string& script, IDispatch* form );
+	void formdebug( const mol::string& engine, const mol::string& script, IDispatch* form );
+	void formcontrols( IUnknown* form );
 
 	Script()
 	{
@@ -167,8 +168,28 @@ public:
 	}
 };
 
-typedef punk<Script>		ScriptingHost;
+typedef mol::punk<Script>		ScriptingHost;
 
+class ScriptEventHandler : public IDispatch
+{
+public:
+	~ScriptEventHandler();
+
+	void init(Script* s, REFIID iid, const mol::string& on);
+	virtual void dispose() {}
+
+	HRESULT virtual __stdcall QueryInterfaceImpl(REFIID iid , LPVOID* ppv) ;              
+    HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo );
+    HRESULT virtual __stdcall GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo );
+    HRESULT virtual __stdcall GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId );
+    HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i);
+
+private:
+	IID riid;
+	Script* script;
+	mol::punk< ITypeInfo> info;
+	mol::string objname;
+};
 
 /////////////////////////////////////////////////////////////////////
 // COM event sinks
@@ -217,7 +238,7 @@ private:
 
 
 // tree events sink
-class TreeWndSink : public stack_obj<ShellTreeEvents>
+class TreeWndSink : public mol::stack_obj<ShellTreeEvents>
 {
 STACKSINGLETON(TreeWndSink);
 public :
@@ -235,7 +256,7 @@ private:
 // Drag&Drop COM Callback
 /////////////////////////////////////////////////////////////////////
 
-class MoeDrop : public stack_obj<DropTargetBase>
+class MoeDrop : public mol::stack_obj<mol::ole::DropTargetBase>
 {
 STACKSINGLETON(MoeDrop);
 public : 

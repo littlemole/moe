@@ -10,6 +10,8 @@
 
 #include "editor.h"
 
+#include "formeditor.h"
+
 #include "hex.h"
 
 #include "html.h"
@@ -236,9 +238,9 @@ void MoeWndGUIBuilder::makeUI()
   init_ribbon_ui(wnd_);
 
   // redraw
-  moe->show(SW_SHOW);
-  moe->OnLayout(0,0,0);
-  moe->redraw();
+  // moe->show(SW_SHOW);
+  // moe->OnLayout(0,0,0);
+  // moe->redraw();
   
 
 delete this;

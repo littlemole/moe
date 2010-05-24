@@ -8,9 +8,7 @@
 #include "Docs.h"
 #include "resource.h"
 
-using namespace mol;
-using namespace mol::ole;
-using namespace mol::win;
+
 
 
 class MoeWnd;
@@ -24,16 +22,16 @@ extern mol::TCHAR  InFilesFilter[];
 ////////////////////////////////////////////////////////////////////////
 
 class MoeWnd  :
-	public MainFrame< MoeWnd, mol::OleContainer<MoeWnd,MdiFrame>>,
-	public com_registerobj< MoeWnd, CLSID_Xmoe, CLSCTX_ALL>,
-	public DispatchWindow<MoeWnd,IXmoe>,
-	public ProvideClassInfo<MoeWnd>,
-	public PersistStream<MoeWnd>,
-	public PersistStorage<MoeWnd>,
-	public PersistFile<MoeWnd>,
-	public interfaces< MoeWnd, 
-			implements< IDispatch,
-						IXmoe,
+	public mol::MainFrame< MoeWnd, mol::OleContainer<MoeWnd,mol::MdiFrame>>,
+	public mol::com_registerobj< MoeWnd, CLSID_Application, CLSCTX_ALL>,
+	public mol::Dispatch<IMoe>,
+	public mol::ProvideClassInfo<MoeWnd>,
+	public mol::PersistStream<MoeWnd>,
+	public mol::PersistStorage<MoeWnd>,
+	public mol::PersistFile<MoeWnd>,
+	public mol::interfaces< MoeWnd, 
+			mol::implements< IDispatch,
+						IMoe,
 						/*
 						IOleCommandTarget,
 						IOleInPlaceFrame,
@@ -41,7 +39,7 @@ class MoeWnd  :
 						IOleInPlaceUIWindow,
 						*/
 						IProvideClassInfo,
-						interface_ex<IPersist,IPersistStream>,
+						mol::interface_ex<IPersist,IPersistStream>,
 						IPersistStream,
 						IPersistStreamInit,
 						IPersistStorage,
@@ -56,7 +54,16 @@ public:
 	~MoeWnd(); 
 
 	// create wrapped Instance
+
+	typedef mol::com_instance<MoeWnd> Instance;
 	static Instance* CreateInstance();
+
+
+	mol::punk<IMoeScript> moeScript;
+	mol::punk<IMoeDialogs> moeDialogs;
+	mol::punk<IMoeView> moeView;
+	mol::punk<IMoeConfig> moeConfig;
+
 
 	/////////////////////////////////////////////////////////////////////
 	// std windows msgs - Creation / Activation / Destruction
@@ -75,6 +82,7 @@ public:
 	/////////////////////////////////////////////////////////////////////
 
 	 void OnFileNew();
+	 void OnFileNewUFS();
 	 void OnFileOpen ();
 	 void OnFileOpenHtml ();
      void OnFileOpenDir ();
@@ -83,10 +91,6 @@ public:
 	 void OnFileExit ( );
 	 void OnFind ();
 	 void OnReplace ();
-
-	 void OnExecScript();
-	 void OnDebugScript();
-	 void OnExecForm(  );
 
 	 void OnEditSettings();
 	 void OnEditPrefs();
@@ -136,13 +140,28 @@ public:
 	// to COM/Scripting clients
 	/////////////////////////////////////////////////////////////////////
 
-	/////////////////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////////////////
+
+    virtual HRESULT __stdcall get_Documents( IMoeDocumentCollection **d);
+    
+    virtual HRESULT __stdcall get_View( IMoeView **d);
+    
+    virtual HRESULT __stdcall get_ActiveDoc( IMoeDocument **d);
+    
+    virtual HRESULT __stdcall get_Config( IMoeConfig **d);
+    
+    virtual HRESULT __stdcall get_Script( IMoeScript **d);
+    
+    virtual HRESULT __stdcall get_Dialogs( IMoeDialogs **d);
+    
+    virtual HRESULT __stdcall Exit();
 
 	/////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////
 
-	virtual HRESULT __stdcall get_Docs( IDocs** docs);
+	/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+
+/*	virtual HRESULT __stdcall get_Docs( IDocs** docs);
 	virtual HRESULT __stdcall get_ActiveDoc( IDoc** doc);
 	virtual HRESULT __stdcall put_ShowTreeView(  VARIANT_BOOL vb);
 	virtual HRESULT __stdcall get_ShowTreeView(  VARIANT_BOOL* vb);
@@ -206,6 +225,10 @@ public:
 	virtual HRESULT __stdcall MsgBox( BSTR text, BSTR title, long flags, long* result);
 	virtual HRESULT __stdcall CreateObjectAdmin( BSTR progid, IDispatch** disp);
 
+	virtual HRESULT __stdcall EditUserForm( BSTR pathname, IDispatch** form );
+	virtual HRESULT __stdcall ShowUserForm( BSTR pathname, IDispatch** form );
+	virtual HRESULT __stdcall DebugUserForm( BSTR pathname, IDispatch** form );
+*/
 	/////////////////////////////////////////////////////////////////////
 	// persistence
 	/////////////////////////////////////////////////////////////////////
@@ -246,7 +269,7 @@ private:
 	/////////////////////////////////////////////////////////////////////
 
 //	punk<ICompiler>					compiler_;
-	punk<IUnknown>					compiler_;
+	mol::punk<IUnknown>					compiler_;
 	BOOL							bDirty_;
 	long							systype_;
 	long							encoding_;

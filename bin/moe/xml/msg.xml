@@ -23,6 +23,7 @@
 
         <!-- main menu handlers -->
         <msg  handler="OnFileNew" cmd="IDM_FILE_NEW" />
+        <msg  handler="OnFileNewUFS" cmd="IDM_FILE_NEW_UFS" />      
         <msg  handler="OnFileOpen" cmd="IDM_FILE_OPEN"  />
         <msg  handler="OnFileOpenHtml" cmd="IDM_FILE_OPEN_HTML"  />
         <msg  handler="OnFileOpenDir" cmd="IDM_FILE_OPEN_FOLDER"  />
@@ -30,9 +31,7 @@
         <msg  handler="OnFileExit" cmd="IDM_FILE_EXIT" />
         <msg  handler="OnFind" cmd="IDM_EDIT_FIND" />
         <msg  handler="OnReplace" cmd="IDM_EDIT_REPLACE" />
-        <msg  handler="OnExecScript" cmd="IDM_EDIT_EXECUTESCRIPT" />
-        <msg  handler="OnDebugScript" cmd="IDM_EDIT_DEBUGSCRIPT" />
-        <msg  handler="OnExecForm" cmd="IDM_MODE_EXECUTEFORM" />
+      
         <msg  handler="OnEditSettings" cmd="IDM_MODE_EDITSETTINGS" />
         <msg  handler="OnEditPrefs" cmd="IDM_MODE_PREFERENCES" />
         <msg  handler="OnHelpAbout" cmd="IDM_HELP_ABOUT" />
@@ -107,6 +106,10 @@
         <msg  handler="OnDispatch" cmd="IDM_RIBBON_BACKSPACE_UNIDENTS"  />
         <msg  handler="OnDispatch" cmd="IDM_RIBBON_WRITE_BOM"  />
         <msg  handler="OnDispatch" cmd="IDM_RIBBON_BYTES_SHOWN"  />
+
+        <msg  handler="OnDispatch" cmd="IDM_EDIT_EXECUTESCRIPT" />
+        <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUGSCRIPT" />
+        <msg  handler="OnDispatch" cmd="IDM_MODE_EXECUTEFORM" />      
       
         <msgrange type="cmd" from="ID_FIRST_USER_CMD" to="ID_LAST_USER_CMD" handler="OnDispatch" />
         <msgrange type="cmd" from="ID_FIRST_USER_SCRIPT" to="ID_LAST_USER_SCRIPT" handler="OnDispatch" />
@@ -175,7 +178,11 @@
         <msg  handler="OnBackspaceUnindents" cmd="IDM_RIBBON_BACKSPACE_UNIDENTS"  />
         <msg  handler="OnWriteBOM" cmd="IDM_RIBBON_WRITE_BOM"  />
 
-        <!-- choose lexer -->
+        <msg  handler="OnExecScript" cmd="IDM_EDIT_EXECUTESCRIPT" />
+        <msg  handler="OnDebugScript" cmd="IDM_EDIT_DEBUGSCRIPT" />
+        <msg  handler="OnExecForm" cmd="IDM_MODE_EXECUTEFORM" />
+
+      <!-- choose lexer -->
         <msgrange type="cmd" from="IDM_LEXER_PLAIN" to="IDM_LEXER_CSHARP" handler="OnLexer" />
       
         <!-- choose user defined command -->
@@ -195,6 +202,17 @@
         <msg  ole="Redo" cmd="IDM_EDIT_REDO" interface="IScintillAx" />
         <msg  ole="Print" cmd="IDM_FILE_PRINT" interface="IScintillAx" />  
 
+    </class>
+
+    <class type="FormEditor" >
+      <msg  handler="OnDestroy" msg="WM_DESTROY" />
+      <msg  handler="OnSaveAs" cmd="IDM_FILE_SAVE_AS" />
+      <msg  handler="OnSave" cmd="IDM_FILE_SAVE" />
+      <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
+
+      <msg  handler="OnExecScript" cmd="IDM_EDIT_EXECUTESCRIPT" />
+      <msg  handler="OnDebugScript" cmd="IDM_EDIT_DEBUGSCRIPT" />
+      <msg  handler="OnExecForm" cmd="IDM_MODE_EXECUTEFORM" />
     </class>
     
     <class type="Hex"  >

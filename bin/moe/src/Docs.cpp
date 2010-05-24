@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "FormEditor.h"
 #include "widgets.h"
 #include "app.h"
 #include "xmlui.h"
@@ -14,8 +15,7 @@
 #include "ribbonres.h"
 #include "ole/Rib.h"
 
-using namespace mol::io;
- 
+
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
@@ -59,7 +59,7 @@ HRESULT __stdcall  Docs::_NewEnum(IEnumVARIANT** newEnum)
 	return ev->QueryInterface(IID_IEnumVARIANT,(void**)newEnum);
 }
 
-HRESULT __stdcall  Docs::Count( long* cnt)
+HRESULT __stdcall  Docs::get_Count( long* cnt)
 {
 	if ( cnt )
 	{
@@ -69,19 +69,245 @@ HRESULT __stdcall  Docs::Count( long* cnt)
 }
 
 
-HRESULT __stdcall  Docs::Item( VARIANT index, IDoc** item)
+HRESULT __stdcall  Docs::Item( VARIANT index, IMoeDocument** item)
 {
 	if ( !item )
 		return E_INVALIDARG;
+
+	*item = 0;
 
 	childlist::iterator& it = iterator(index);
 	if ( it == children_.end() )
 		return S_FALSE;
 
-	IDoc* doc = dynamic_cast<IDoc*>((*it).second);
+	IMoeDocument* doc = dynamic_cast<IMoeDocument*>((*it).second);
 
-	HRESULT hr = doc->QueryInterface( IID_IDoc, (void**)item);
+	HRESULT hr = doc->QueryInterface( IID_IMoeDocument, (void**)item);
 	return hr == S_OK ? S_OK : S_FALSE;
+}
+
+HRESULT __stdcall Docs::get_ActiveDoc( IMoeDocument** d )
+{
+	if (!d)
+		return E_INVALIDARG;
+
+	*d = 0;
+
+	HWND wnd = moe()->getActive();
+	mol::MdiChild* mc = mol::wndFromHWND<mol::MdiChild>(wnd);
+	if ( mc )
+	{
+		IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mc);
+		if ( doc )
+		{
+			return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+		}
+	}
+	return E_FAIL;
+}
+
+HRESULT __stdcall Docs::Activate( VARIANT i)
+{
+	mol::punk<IMoeDocument> d;
+	HRESULT hr = Item(i,&d);
+	if ( hr != S_OK )
+		return hr;
+
+	if (!d)
+		return E_FAIL;
+
+	mol::punk<IMoeDocumentView> view;
+	hr = d->get_View(&view);
+	if ( hr != S_OK )
+		return hr;
+
+	if (!view)
+		return E_FAIL;
+
+	return view->Activate();
+}
+
+HRESULT __stdcall Docs::New(IMoeDocument** d)
+{
+	if (!d)
+		return E_INVALIDARG;
+
+	*d = 0;
+
+	mol::punk<IMoeDocument> doc;
+	bool b = newFile(&doc);
+	if (!b || !doc)
+		return E_FAIL;
+
+	return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+}
+
+
+HRESULT __stdcall Docs::NewUserForm(IMoeDocument** d)
+{
+	if (!d)
+		return E_INVALIDARG;
+
+	*d = 0;
+
+	mol::punk<IMoeDocument> doc;
+	bool b = newUFSFile(&doc);
+	if (!b || !doc)
+		return E_FAIL;
+
+	return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+}
+
+HRESULT __stdcall Docs::Open( BSTR fPath, IMoeDocument** d)
+{
+	if (!d)
+		return E_INVALIDARG;
+
+	*d = 0;
+
+	mol::MdiChild* mc = openPath( mol::bstr(fPath).toString(), Docs::PREF_TXT, false);
+
+	if ( !mc )
+		return E_FAIL;
+
+	IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mc);
+	if ( !doc )
+		return E_FAIL;
+
+	return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+}
+
+HRESULT __stdcall Docs::OpenUTF8( BSTR fPath, IMoeDocument** d)
+{
+	if (!d)
+		return E_INVALIDARG;
+
+	*d = 0;
+
+	mol::MdiChild* mc = openPath( mol::bstr(fPath).toString(), Docs::PREF_UTF8, false);
+
+	if ( !mc )
+		return E_FAIL;
+
+	IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mc);
+	if ( !doc )
+		return E_FAIL;
+
+	return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+}
+
+HRESULT __stdcall Docs::OpenDir(BSTR dir,  IMoeDocument** d)
+{
+	if (!d)
+		return E_INVALIDARG;
+
+	*d = 0;
+
+	mol::MdiChild* mc = openPath( mol::bstr(dir).toString(), Docs::PREF_TXT, false);
+
+	if ( !mc )
+		return E_FAIL;
+
+	IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mc);
+	if ( !doc )
+		return E_FAIL;
+
+	return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+}
+
+HRESULT __stdcall Docs::OpenHexEditor(  BSTR f, VARIANT_BOOL vbReadOnly, IMoeDocument** d)
+{
+	if (!d)
+		return E_INVALIDARG;
+
+	*d = 0;
+
+	mol::MdiChild* mc = openPath( mol::bstr(f).toString(), Docs::PREF_HEX, vbReadOnly == VARIANT_TRUE ? true : false );
+
+	if ( !mc )
+		return E_FAIL;
+
+	IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mc);
+	if ( !doc )
+		return E_FAIL;
+
+	return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+}
+
+HRESULT __stdcall Docs::OpenHtmlFrame(  BSTR f,  IMoeDocument** d)
+{
+	if (!d)
+		return E_INVALIDARG;
+
+	*d = 0;
+
+	mol::MdiChild* mc = openPath( mol::bstr(f).toString(), Docs::PREF_HTML, false );
+
+	if ( !mc )
+		return E_FAIL;
+
+	IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mc);
+	if ( !doc )
+		return E_FAIL;
+
+	return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+}
+
+HRESULT __stdcall Docs::OpenUserForm(  BSTR pathname, IMoeDocument** d )
+{
+	if (!d)
+		return E_INVALIDARG;
+
+	*d = 0;
+
+	mol::MdiChild* mc = openPath( mol::bstr(pathname).toString(), Docs::PREF_FORM, false );
+
+	if ( !mc )
+		return E_FAIL;
+
+	IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mc);
+	if ( !doc )
+		return E_FAIL;
+
+	return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+}
+
+HRESULT __stdcall Docs::SaveAll()
+{
+	statusBar()->status(_T("saving all open documents ..."));
+
+	long cnt = 0;
+	HRESULT hr = docs()->get_Count(&cnt);
+	if (hr != S_OK )
+		return hr;
+
+	for ( int i = 0; i < cnt; i++ )
+	{
+		punk<IMoeDocument> doc;
+
+		if ( S_OK == docs()->Item(variant(i),&doc) && doc )
+		{
+			long t;
+			if ( doc->get_Type(&t) == S_OK )
+			{
+				if ( t == MOE_DOCTYPE_DOC || t == MOE_DOCTYPE_FORM )
+				{
+					doc->Save();
+				}
+			}
+		}
+	}
+	return S_OK;
+}
+
+HRESULT __stdcall Docs::CloseAll()
+{
+	for ( childlist::iterator it = children_.begin(); it != children_.end(); it++ )
+	{
+		(*it).second->postMessage(WM_CLOSE,0,0);
+	}
+
+	return S_OK;
 }
 
 HRESULT __stdcall Docs::Remove( VARIANT index )
@@ -206,15 +432,15 @@ Docs::childlist::iterator Docs::iterator(VARIANT& index)
 
 //////////////////////////////////////////////////////////////////////////////
 
-mol::string Docs::getNewFileName()
+mol::string Docs::getNewFileName(const mol::string& ext)
 {
 	int i = 1;
 	while (i<999)
 	{
 		mol::ostringstream oss;
-		oss << _T("NewFile") << i << _T(".txt");
+		oss << _T("NewFile") << i << ext;
 
-		punk<IDoc> doc;
+		punk<IMoeDocument> doc;
 		if ( S_FALSE == Item( variant(bstr(oss.str())), &doc ) )
 		{
 			return oss.str();
@@ -225,12 +451,12 @@ mol::string Docs::getNewFileName()
 }
 
 
-bool Docs::newFile(IDoc** doc)
+bool Docs::newFile(IMoeDocument** doc)
 {
 	if ( moe()->activeObject)
 		moe()->activeObject->OnDocWindowActivate(FALSE);
 
-	mol::string fn = getNewFileName();
+	mol::string fn = getNewFileName(_T(".txt"));
 	Editor::Instance* edit = Editor::CreateInstance( fn, false, false );
 	if (!edit)
 		return false;
@@ -248,15 +474,44 @@ bool Docs::newFile(IDoc** doc)
 
 	progress()->show(SW_HIDE);
 	if (doc)
-		return edit->QueryInterface(IID_IDoc,(void**)doc) == S_OK;
+		return edit->QueryInterface(IID_IMoeDocument,(void**)doc) == S_OK;
 	return true;
 }
+
+bool Docs::newUFSFile(IMoeDocument** doc)
+{
+	if ( moe()->activeObject)
+		moe()->activeObject->OnDocWindowActivate(FALSE);
+
+	mol::string fn = getNewFileName(_T(".ufs"));
+
+	FormEditor::Instance* edit = FormEditor::CreateInstance( fn );
+	if (!edit)
+		return false;
+
+	if ( children_.empty() )
+	{
+		tab()->show(SW_SHOW);
+		moe()->doLayout();
+	}
+
+	children_.push_back( std::make_pair( mol::variant(fn), dynamic_cast<mol::MdiChild*>(edit)) );
+	tab()->insertItem( mol::Path::filename(fn),fn,0);
+	tab()->select(fn);
+
+
+	progress()->show(SW_HIDE);
+	if (doc)
+		return edit->QueryInterface(IID_IMoeDocument,(void**)doc) == S_OK;
+	return true;
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 // load a path, create MDI child
 //////////////////////////////////////////////////////////////////////////////
 
-bool Docs::open( int index, const mol::string& path, InFiles pref, bool readOnly, IDoc** doc )
+bool Docs::open( int index, const mol::string& path, InFiles pref, bool readOnly, IMoeDocument** doc )
 {
 	mol::MdiChild* mdi = openPath( path, pref, readOnly );
 	if (!mdi)
@@ -277,8 +532,8 @@ bool Docs::open( int index, const mol::string& path, InFiles pref, bool readOnly
 
 	if ( doc )
 	{
-		IDoc* d = dynamic_cast<IDoc*>(mdi);
-		d->QueryInterface( IID_IDoc, (void**) doc );
+		IMoeDocument* d = dynamic_cast<IMoeDocument*>(mdi);
+		d->QueryInterface( IID_IMoeDocument, (void**) doc );
 	}
 
 	tab()->insertItem( mol::Path::filename(path),path,index);
@@ -299,7 +554,7 @@ mol::MdiChild* Docs::openPath( const mol::string& path, InFiles pref, bool readO
 	}
 
 	// already open?
-	punk<IDoc> d;
+	punk<IMoeDocument> d;
 	if ( S_OK == Item(variant(bstr(path)),&d) )
 	{
 		if ( IDYES != ::MessageBox( *moe(), _T("close file?"), _T("file already open!"), MB_ICONEXCLAMATION|MB_YESNO ) )
@@ -309,7 +564,10 @@ mol::MdiChild* Docs::openPath( const mol::string& path, InFiles pref, bool readO
  
 		if (d)
 		{
-			d->Close();
+			mol::punk<IMoeDocumentView> view;
+			HRESULT hr = d->get_View(&view);
+			view->Close();
+			view.release();
 			d.release();
 		}
 		else
@@ -345,6 +603,12 @@ mol::MdiChild* Docs::openPath( const mol::string& path, InFiles pref, bool readO
 	if ( mol::icmp( ext,  _T("pdf") ) == 0 )
 	{
 		return openPathHtml(path);
+	}
+
+	// form20 support
+	if ( mol::icmp( ext,  _T("ufs") ) == 0 )
+	{
+		return openPathForm(path);
 	}
 
 	// office support
@@ -455,4 +719,15 @@ mol::MdiChild* Docs::openPathDir( const mol::string& path )
 
 	DirChild::Instance* dc = DirChild::CreateInstance(path);
 	return dynamic_cast<mol::MdiChild*>(dc);
+}
+
+
+mol::MdiChild* Docs::openPathForm( const mol::string& path )
+{
+	// open form
+	if ( moe()->activeObject)
+		moe()->activeObject->OnDocWindowActivate(FALSE);
+
+	FormEditor::Instance* f = FormEditor::CreateInstance(path);
+	return dynamic_cast<mol::MdiChild*>(f);
 }

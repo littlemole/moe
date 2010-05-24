@@ -12,7 +12,7 @@ public:
 
 class MoeApp : 
 	public mol::local_server<MoeLoop>,
-	public exports< MoeApp, MoeWnd >
+	public mol::exports< MoeApp, MoeWnd >
 {
 SINGLETON(MoeApp);
 public:
@@ -27,8 +27,8 @@ private:
 	~MoeApp();
 
 	// windows libraries
-    ole_init       oi_;
-    comm_ctrl_init cci_;
+    mol::ole_init       oi_;
+    mol::comm_ctrl_init cci_;
 
 	void init_extensions_if();
 	bool enableExtensions_;

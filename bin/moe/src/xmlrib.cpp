@@ -123,5 +123,7 @@ void init_ribbon_ui(  mol::win::WndProc* wnd )
   
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonJumpDirectory, IDM_TAB_JUMPTAB );
   
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonFileNewUFS, IDM_FILE_NEW_UFS );
+  
 
 }

@@ -30,6 +30,7 @@
       <dialog id="IDD_DIALOG_URL" />
       <dialog id="IDD_DIALOG_TAB" />
       <dialog id="IDD_ABOUTBOX" />
+      <dialog id="IDD_DIALOG_EVENTS" />
     </dialogs>
 
     <!-- other controls we just define ids for -->
@@ -49,6 +50,9 @@
       <control id="IDC_EDIT_TAB" />
       <control id="IDC_EDIT_URL" />
       <control id="IDC_BUTTON_BOOKMARK" />
+
+      <control id="IDC_TREE_EVENTS" />
+      <control id="IDC_LIST_EVENTS" />
     </controls>
 
     <!-- typelib to be included in app resources -->
@@ -111,6 +115,7 @@
         <index cmd="IDM_FILE_OPEN_HTML" />
         <index cmd="IDM_VIEW_TOOLBARS" />
         <index cmd="IDM_TAB_JUMPTAB" />
+        <index cmd="IDM_FILE_NEW_UFS" />
       </bitmap>
       <bitmap id="IDB_MOE_FAV" src="resources/favs.bmp" />
       <bitmap id="IDB_MOE_GO" src="resources/next.bmp" />

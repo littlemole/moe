@@ -33,7 +33,7 @@ MoeHtmlWnd::Instance* MoeHtmlWnd::CreateInstance( const mol::string& loc)
 	Instance* form = new Instance;
 	form->AddRef();
 
-	if (!form->load( bstr(loc).toString() ))
+	if (!form->load( mol::bstr(loc).toString() ))
 	{
 		form->destroy();
 		form->Release();
@@ -67,14 +67,14 @@ void MoeHtmlWnd::OnMDIActivate( HWND activated )
 		tab()->select( location );
 		statusBar()->status( location );
 		mol::Ribbon::ribbon()->maximize();
-		Ribbon::ribbon()->mode(5);
+		mol::Ribbon::ribbon()->mode(5);
 	}
 }
 
 /////////////////////////////////////////////////////////////////////
 // COM section
 /////////////////////////////////////////////////////////////////////
-
+/*
 HRESULT __stdcall MoeHtmlWnd::get_Filename( BSTR* filename)
 {
 	if ( filename )
@@ -128,6 +128,7 @@ HRESULT __stdcall  MoeHtmlWnd::Activate()
 	activate();
 	return S_OK;
 }
+*/
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -144,6 +145,7 @@ MoeHtmlWnd::MoeFrame::~MoeFrame()
 
 
 /////////////////////////////////////////////////////////////////////
+/*
 HRESULT __stdcall MoeHtmlWnd::MoeFrame::get_Top( long* top)
 {
 	return This()->get_Top(top);
@@ -184,22 +186,23 @@ HRESULT __stdcall MoeHtmlWnd::MoeFrame::put_Height( long height)
 {
 	return This()->put_Height(height);
 }
+*/
 /////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////
 HRESULT __stdcall MoeHtmlWnd::MoeFrame::Eval( BSTR src, BSTR scrptLanguage )
 {
-	punk<IDispatch> disp;
+	mol::punk<IDispatch> disp;
 	
-	if ( S_OK == get_Document(&disp) && disp )
+	if ( S_OK == get_Object(&disp) && disp )
 	{
-		punk<IHTMLDocument2> doc(disp);
+		mol::punk<IHTMLDocument2> doc(disp);
 		if ( doc )
 		{
-			punk<IHTMLWindow2> window;
+			mol::punk<IHTMLWindow2> window;
 			if ( S_OK == doc->get_parentWindow(&window) && window )
 			{
-				variant var;
+				mol::variant var;
 				return window->execScript( src, scrptLanguage, &var );
 			}
 		}
@@ -208,7 +211,7 @@ HRESULT __stdcall MoeHtmlWnd::MoeFrame::Eval( BSTR src, BSTR scrptLanguage )
 }
 
 /////////////////////////////////////////////////////////////////////
-HRESULT __stdcall MoeHtmlWnd::MoeFrame::get_Document( IDispatch** disp)
+HRESULT __stdcall MoeHtmlWnd::MoeFrame::get_Object( IDispatch** disp)
 {
 	if (!disp)
 		return E_INVALIDARG;
@@ -217,14 +220,83 @@ HRESULT __stdcall MoeHtmlWnd::MoeFrame::get_Document( IDispatch** disp)
 	return This()->doc(disp);
 }
 
+HRESULT __stdcall  MoeHtmlWnd::MoeFrame::get_View(  IMoeDialogView **d)
+{
+	if (!d)
+		return E_INVALIDARG;
+	*d=0;
+
+	return view->QueryInterface( IID_IMoeDialogView, (void**)d);
+}
+
+HRESULT __stdcall  MoeHtmlWnd::MoeFrame::get_Scripts(  IDispatch **s)
+{
+	if (!s)
+		return E_INVALIDARG;
+
+	*s = 0;
+	
+	mol::punk<IDispatch> disp;
+	if ( S_OK == get_Object( &disp ) && disp )
+	{
+		mol::punk<IHTMLDocument2> doc2(disp);
+		if ( doc2 )
+		{
+			mol::punk<IHTMLDocument> doc(doc2);
+			if ( doc )
+			{
+				return doc->get_Script(s);
+			}
+		}
+	}
+	return E_FAIL;
+}
+/*
+HRESULT __stdcall  MoeHtmlWnd::MoeFrame::Eval(  BSTR src, BSTR scriptLanguage)
+{
+	mol::punk<IDispatch> disp;
+	if ( S_OK == get_Object(&disp) && disp )
+	{
+		mol::punk<IHTMLDocument2> doc(disp);
+
+		if (doc )
+		{
+			mol::punk<IHTMLWindow2> window;
+			if ( S_OK == doc->get_parentWindow(&window) && window )
+			{
+				variant var;
+				return window->execScript( src, scriptLanguage, &var );
+			}
+		}
+	}
+	return E_FAIL;
+}
+*/
+
+HRESULT __stdcall  MoeHtmlWnd::MoeFrame::OleCmd(  long cmd)
+{
+	This()->execWb((OLECMDID)cmd);
+	return S_OK;
+}
+
+HRESULT __stdcall  MoeHtmlWnd::MoeFrame::get_FilePath(  BSTR *filename)
+{
+	if (!filename)
+		return E_INVALIDARG;
+	*filename=0;
+
+	*filename = ::SysAllocString( mol::towstring(This()->location).c_str() );
+	return S_OK;
+}
+
 
 /////////////////////////////////////////////////////////////////////
-
+/*
 HRESULT __stdcall MoeHtmlWnd::MoeFrame::put_Title( BSTR title)
 {
 	if ( title )
 	{
-		This()->setText( bstr(title).toString() );
+		This()->setText( mol::bstr(title).toString() );
 	}
 	return S_OK;
 }
@@ -252,14 +324,14 @@ HRESULT __stdcall MoeHtmlWnd::MoeFrame::get_Scripts( IDispatch** s)
 		return E_INVALIDARG;
 
 	*s = 0;
-	punk<IDispatch> disp;
+	mol::punk<IDispatch> disp;
 	
 	if ( S_OK == get_Document( &disp ) && disp )
 	{
-		punk<IHTMLDocument2> doc2(disp);
+		mol::punk<IHTMLDocument2> doc2(disp);
 		if ( doc2)
 		{
-			punk<IHTMLDocument> doc(doc2);
+			mol::punk<IHTMLDocument> doc(doc2);
 			if ( doc )
 			{
 				return doc->get_Script(s);
@@ -282,7 +354,7 @@ HRESULT __stdcall MoeHtmlWnd::MoeFrame::OleCmd( long cmd)
 	This()->execWb((OLECMDID)cmd);
 	return S_OK;
 }
-
+*/
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -370,7 +442,7 @@ void MoeHtmlWnd::OnDestroy()
 	ODBGS("MoeHtmlWndImpl::OnDestroy");
 
 	mol::bstr filename;
-	if ( S_OK == get_Filename(&filename) )
+	if ( S_OK == get_FilePath(&filename) )
 	{
 		mol::variant v(filename);
 		docs()->Remove(v);
@@ -388,7 +460,7 @@ void MoeHtmlWnd::OnDestroy()
 void MoeHtmlWnd::OnNcDestroy()
 {
 	ODBGS("MoeHtmlWndImpl::OnNcDestroy");
-	((IDoc*)this)->Release();
+	((IMoeDocument*)this)->Release();
 }
 
 void MoeHtmlWnd::OnSearch(FINDREPLACE* fi)
@@ -432,12 +504,12 @@ MoeHtmlWnd::ExternalMoe::~ExternalMoe()
 	ODBGS("ExternalMoe ~");
 }
 
-HRESULT __stdcall MoeHtmlWnd::ExternalMoe::get_Moe(IDispatch** disp)
+HRESULT __stdcall MoeHtmlWnd::ExternalMoe::get_Moe(IMoe** disp)
 {
 	if ( !disp )
 		return E_INVALIDARG;
 
-	HRESULT hr = ((IXmoe*)(moe()))->QueryInterface(IID_IDispatch, (void**)disp );
+	HRESULT hr = ((IMoe*)(moe()))->QueryInterface(IID_IMoe, (void**)disp );
 	if ( hr != S_OK )
 		*disp = 0;
 
@@ -466,11 +538,11 @@ HRESULT __stdcall MoeHtmlWnd::ExternalMoe::CreateObject( BSTR progId, IDispatch*
 	return E_FAIL;
 }
 
-HRESULT __stdcall MoeHtmlWnd::ExternalMoe:: get_Frame( IMoeFrame** f)
+HRESULT __stdcall MoeHtmlWnd::ExternalMoe:: get_Frame( IMoeHtmlFrame** f)
 {
 	if (!f) 
 		return E_INVALIDARG;
-	return ((IMoeFrame*)This())->QueryInterface( IID_IMoeFrame, (void**) f );
+	return ((IMoeHtmlFrame*)This())->QueryInterface( IID_IMoeHtmlFrame, (void**) f );
 }
 
 
@@ -545,7 +617,7 @@ HRESULT __stdcall MoeHtmlWnd::ExternalMoe::get_Code( IDispatch** code )
 HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_htmlSink::BeforeNavigate2(IDispatch* pDisp, VARIANT* URL, VARIANT* Flags, VARIANT* TargetFrameName, VARIANT* PostData, VARIANT* Headers, VARIANT_BOOL* Cancel)
 {
 	static std::wstring ws(L"moe://close/");
-	if ( ws == bstr(URL->bstrVal).towstring() )
+	if ( ws == mol::bstr(URL->bstrVal).towstring() )
 	{
 		This()->postMessage(WM_CLOSE,0,0);
 		*Cancel = VARIANT_TRUE;
@@ -572,14 +644,14 @@ HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_htmlSink::DocumentComplete( IDispatch* 
 {
 	statusBar()->status(60);
 
-	punk<IWebBrowser2> ie(pDisp);
+	mol::punk<IWebBrowser2> ie(pDisp);
 	if (!ie )
 	{
 		statusBar()->status(_T(""));	
 		return S_OK;
 	}
 
-	punk<IDispatch> docDisp;
+	mol::punk<IDispatch> docDisp;
 
 	if ( S_OK != ie->get_Document(&docDisp) )
 	{
@@ -593,10 +665,10 @@ HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_htmlSink::DocumentComplete( IDispatch* 
 		return S_OK;
 	}
 
-	punk<IHTMLDocument2> doc(docDisp);
+	mol::punk<IHTMLDocument2> doc(docDisp);
 	if ( doc )
 	{
-		bstr title;
+		mol::bstr title;
 		if ( S_OK == doc->get_title(&title) && title )
 		{
 			This()->setText( title.toString() );
@@ -604,7 +676,7 @@ HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_htmlSink::DocumentComplete( IDispatch* 
 
 		statusBar()->status(70);
 
-		punk<IHTMLElement> body;
+		mol::punk<IHTMLElement> body;
 		if ( S_OK == doc->get_body(&body) && body )
 		{
 			// check for C# syntax first

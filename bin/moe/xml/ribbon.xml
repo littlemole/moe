@@ -276,6 +276,14 @@
       </Command.SmallImages>
     </Command>
 
+    <Command Name="RibbonFileNewUFS"  LabelTitle="New User Form Script">
+      <Command.TooltipTitle>New User Form Script</Command.TooltipTitle>
+      <Command.TooltipDescription>Create a new User Form and Script module</Command.TooltipDescription>
+      <Command.SmallImages>
+        <Image Source="ribbon\New.bmp"/>
+      </Command.SmallImages>
+    </Command>
+    
     <Command Name="RibbonFileOpen" LabelTitle="Open">
       <Command.TooltipTitle>Open File</Command.TooltipTitle>
       <Command.TooltipDescription>Open a File</Command.TooltipDescription>
@@ -1197,7 +1205,17 @@
           </ApplicationMenu.RecentItems>
           <!-- Menu items collection. -->
           <MenuGroup>
-            <Button CommandName="RibbonFileNew" />
+            <SplitButton >
+              <SplitButton.ButtonItem>
+                <Button CommandName="RibbonFileNew"/>
+              </SplitButton.ButtonItem>
+              <SplitButton.MenuGroups>
+                <MenuGroup >
+                  <Button CommandName="RibbonFileNew"/>
+                  <Button CommandName="RibbonFileNewUFS"/>
+                </MenuGroup>
+              </SplitButton.MenuGroups>
+            </SplitButton>
             <SplitButton >
               <SplitButton.ButtonItem>
                 <Button CommandName="RibbonFileOpen"/>
