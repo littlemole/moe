@@ -12,14 +12,19 @@ HRESULT typeLibForInterface(REFIID iid, ITypeLib** typeLib )
 	mol::RegKey root(HKEY_CLASSES_ROOT);
 	mol::RegKey interfaces = root.open(_T("Interface"),KEY_READ);
 	mol::string siid = stringFromCLSID(iid);
-	mol::RegKey iface = interfaces.open(siid);
+	mol::RegKey iface = interfaces.open(siid,KEY_READ);
 	if ( iface )
 	{
 		mol::RegKey lib = iface.open(_T("TypeLib"),KEY_READ);
 		if ( lib )
 		{
 			mol::string guid = lib.get();
-			mol::string version = lib.get(_T("Version"));
+			mol::string version = _T("1.0");
+			try {
+				version = lib.get(_T("Version"));
+			}
+			catch(...) {}
+
 			size_t pos = version.find(_T("."));
 			if ( pos == mol::string::npos )
 				return E_FAIL;
@@ -88,11 +93,21 @@ HRESULT findSourceOnCP(IUnknown* unk, IID* piid)
 			if ( S_OK != cp->GetConnectionInterface(&iid) )
 				continue;
 
+
+
 			punk<ITypeInfo> typInf;
 			HRESULT hr = typeInfoForInterface(iid,&typInf);							
 			if ( hr != S_OK )
+			{
+/*				if ( ::IsEqualIID( iid, IID_IDispatch ) ) 
+				{
+					*piid = iid;
+					return S_OK;
+				}
+				*/
 				continue;
-			
+			}
+
 			TYPEATTR* ta = NULL;
 			if ( S_OK == typInf->GetTypeAttr(&ta) && ta )
 			{

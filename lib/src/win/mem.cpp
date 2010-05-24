@@ -20,19 +20,34 @@ global::global( HGLOBAL glob )
 
 /////////////////////////////////////////////////////////////////////
 
-global::global( const mol::string& s, int opt )
+global::global( const std::string& s, int opt )
 {
-	if ( alloc( (int)((s.size()+1)*sizeof(mol::TCHAR),opt)) )
+	size_t l = s.size()+1;
+	if ( alloc( l, opt ) )
 	{
-		mol::TCHAR* tmp = (mol::TCHAR*)lock();
+		char* tmp = (char*)lock();
 		if ( tmp )
 		{
-			memcpy(tmp,s.c_str(),(s.size()+1)*sizeof(mol::TCHAR));
+			memcpy(tmp,(char*)s.c_str(),l);
 			unLock();
 		}
 	}
 }
 
+
+global::global( const std::wstring& s, int opt )
+{
+	size_t l = (s.size()+1)*sizeof(wchar_t);
+	if ( alloc( l, opt ) )
+	{
+		char* tmp = (char*)lock();
+		if ( tmp )
+		{
+			memcpy(tmp,(char*)s.c_str(),l);
+			unLock();
+		}
+	}
+}
 
 global::global( void* v, size_t size, int opt )
 {

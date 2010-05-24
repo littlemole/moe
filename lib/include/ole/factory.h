@@ -144,6 +144,14 @@ public:
 		return E_NOINTERFACE;
 	}
 
+	virtual HRESULT __stdcall  RegisterClassObject( const IID & riid, void ** ppv)
+	{
+		typedef com_obj< ClassFactory<T,P> >  Factory;
+
+		punk<Factory> factory = new Factory;
+		return factory.queryInterface(riid,ppv);
+	}
+
 	virtual HRESULT __stdcall  Register(void)
 	{
 		T::registerObject();

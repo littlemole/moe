@@ -329,7 +329,10 @@ protected:
 		return 0;
 	}
 
-
+	virtual IOleClientSite* getOleClientSite()
+	{
+		return (IOleClientSite*)axClientSite;
+	}
 private:
 
 	// if we don't have an OLE frame, we use
@@ -371,10 +374,7 @@ private:
 
 	// access ax client site OLE interfaces
 
-	virtual IOleClientSite* getOleClientSite()
-	{
-		return (IOleClientSite*)axClientSite;
-	}
+
 
 	virtual IOleDocumentSite* getOleDocumentSite() 
 	{ 

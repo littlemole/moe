@@ -1146,6 +1146,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SimpleHost.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\storage.cpp"
 				>
 			</File>
@@ -1285,6 +1289,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\ole\simpledisp.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\ole\SimpleHost.h"
 				>
 			</File>
 			<File

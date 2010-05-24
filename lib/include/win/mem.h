@@ -18,7 +18,8 @@ public:
     global();
 	global( HGLOBAL glob );
 
-	global( const mol::string& s, int opt = GMEM_MOVEABLE | GMEM_NODISCARD);
+	global( const std::string& s, int opt = GMEM_MOVEABLE | GMEM_NODISCARD);
+	global( const std::wstring& s, int opt = GMEM_MOVEABLE | GMEM_NODISCARD);
 	global( void* v, size_t size, int opt = GMEM_MOVEABLE | GMEM_NODISCARD);
 
 	template<class T>
