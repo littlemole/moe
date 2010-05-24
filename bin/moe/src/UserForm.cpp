@@ -151,6 +151,8 @@ bool UserForm::initialize(const mol::string& p, bool designMode, bool Debug)
 	RECT moer;
 	::GetWindowRect(*moe(),&moer);
 
+	DWORD formStyle = 0;
+
 	if ( formStore )
 	{
 		// create window
@@ -160,16 +162,20 @@ bool UserForm::initialize(const mol::string& p, bool designMode, bool Debug)
 			moer.left = moer.right-400;
 			moer.top += 100;
 			create(p,m,mol::Rect(moer.left,moer.top,500,500),*moe());	
-			::SetWindowLong(*this,GWL_STYLE,WS_SYSMENU|WS_CAPTION|WS_THICKFRAME|WS_CAPTION |WS_POPUPWINDOW|WS_CLIPSIBLINGS|WS_CLIPCHILDREN);//WS_OVERLAPPEDWINDOW );
+			formStyle = WS_SYSMENU|WS_CAPTION|WS_THICKFRAME|WS_CAPTION |WS_POPUPWINDOW|WS_CLIPSIBLINGS|WS_CLIPCHILDREN;
+			::SetWindowLong(*this,GWL_STYLE,formStyle);//WS_OVERLAPPEDWINDOW );
 		}
 		else
 		{
 			moer.left = moer.left+400;
 			moer.top += 200;
 			create( p, (HMENU)IDW_EDITOR_VIEW, mol::Rect(moer.left,moer.top,300,400),*moe() );
-			::SetWindowLong(*this,GWL_STYLE,WS_SYSMENU|WS_CAPTION|WS_BORDER|WS_CAPTION |WS_POPUP|WS_CLIPSIBLINGS|WS_CLIPCHILDREN);//WS_OVERLAPPEDWINDOW );
+			formStyle = WS_SYSMENU|WS_CAPTION|WS_BORDER|WS_CAPTION |WS_POPUP|WS_CLIPSIBLINGS|WS_CLIPCHILDREN;
+			::SetWindowLong(*this,GWL_STYLE,formStyle);//WS_OVERLAPPEDWINDOW );
 			::EnableWindow( *moe(), FALSE);
 		}
+
+		view = MoeDialogView::CreateInstance(this);
 		show(SW_SHOW);
 
 		SIZEL l;
@@ -187,7 +193,7 @@ bool UserForm::initialize(const mol::string& p, bool designMode, bool Debug)
 //		r.left = r.top = 100;
 		r.right=r.left+l.cx;
 		r.bottom=r.top+l.cy;
-		AdjustWindowRect(&r,WS_CAPTION |WS_POPUPWINDOW|WS_CLIPSIBLINGS|WS_CLIPCHILDREN,FALSE);
+		AdjustWindowRect(&r,formStyle,designMode);
 		move(r.left,r.top,r.right-r.left,r.bottom-r.top );
 
 		getClientRect(r);
@@ -270,6 +276,8 @@ bool UserForm::initialize(const mol::string& p, bool designMode, bool Debug)
 
 		create(p,(HMENU)(mol::UI().Menu(IDM_MENU_DESIGNFORM)),mol::Rect(moer.left+moer.right-400,moer.top+100,400,400),*moe());	
 		::SetWindowLong(*this,GWL_STYLE,WS_SYSMENU|WS_CAPTION|WS_THICKFRAME|WS_CAPTION |WS_POPUPWINDOW|WS_CLIPSIBLINGS|WS_CLIPCHILDREN);//WS_OVERLAPPEDWINDOW );
+
+		view = MoeDialogView::CreateInstance(this);
 		this->show(SW_SHOW);
 
 		mol::TCHAR  path[MAX_PATH];

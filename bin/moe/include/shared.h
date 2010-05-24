@@ -319,9 +319,14 @@ public:
 
 	virtual ~MoeDialogView();
 
-	void init( mol::win::WndProc* wnd );
-
 	typedef mol::stack_obj<MoeDialogView> Instance;
+
+	static Instance* CreateInstance(  mol::win::WndProc* wnd )
+	{
+		Instance* i = new Instance;
+		i->wnd_ = wnd;
+		return i;
+	}
 
 	virtual void dispose();
 

@@ -61,8 +61,6 @@ bool FormEditor::initialize(const mol::string& p)
 {
 	filename_ = p;
 
-
-
 	// get client rectangle
 	mol::Rect r;
 	::GetClientRect(mdiParent(),&r);
@@ -313,16 +311,14 @@ LRESULT FormEditor::OnSaveAs()
 
 	mol::FilenameDlg ofn(*this);
 	ofn.setFilter( FormOutFilesFilter );		
-	if ( S_OK == sci->get_Filename(&p) )
-		ofn.fileName(p.toString());
+	ofn.fileName(filename_);
 
-	mol::string filename = getText();
 
 	if ( ofn.dlgSave( OFN_OVERWRITEPROMPT ) )
 	{
-		mol::bstr b(filename);
+		//mol::bstr b(filename_);
 		
-		if ( ofn.fileName() != b.toString() )
+		if ( ofn.fileName() != filename_ )
 		{
 			mol::punk<IMoeDocument> doc;
 			if ( (S_OK == docs()->Item(mol::variant(ofn.fileName()),&doc)) && doc )
@@ -336,7 +332,7 @@ LRESULT FormEditor::OnSaveAs()
 		HRESULT hr = sci->GetText(&s);
 
 		mol::punk<IStorage> dest;
-		if ( S_OK == ::StgCreateDocfile( mol::towstring(ofn.fileName()).c_str(), STGM_READWRITE|STGM_CREATE|STGM_SHARE_EXCLUSIVE,0,&dest) )
+		if ( S_OK == ::StgCreateDocfile( mol::towstring( ofn.fileName()).c_str(), STGM_READWRITE|STGM_CREATE|STGM_SHARE_EXCLUSIVE,0,&dest) )
 		{
 			::WriteClassStg( dest, IID_IMoeUserForm );
 
@@ -355,7 +351,7 @@ LRESULT FormEditor::OnSaveAs()
 
 			hr = dest->Commit(STGC_DEFAULT);
 
-			setText(ofn.fileName());
+			setText(filename_);
 			filename_ = ofn.fileName();
 		}
 	}
@@ -369,10 +365,8 @@ LRESULT FormEditor::OnSave()
 	mol::bstr s;
 	HRESULT hr = sci->GetText(&s);
 
-	mol::string filename = getText();
-
 	mol::punk<IStorage> dest;
-	if ( S_OK == ::StgCreateDocfile( mol::towstring(filename).c_str(), STGM_READWRITE|STGM_CREATE|STGM_SHARE_EXCLUSIVE,0,&dest) )
+	if ( S_OK == ::StgCreateDocfile( mol::towstring(filename_).c_str(), STGM_READWRITE|STGM_CREATE|STGM_SHARE_EXCLUSIVE,0,&dest) )
 	{
 		::WriteClassStg( dest, IID_IMoeUserForm );
 

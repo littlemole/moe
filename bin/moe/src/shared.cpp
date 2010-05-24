@@ -209,11 +209,6 @@ MoeDialogView::~MoeDialogView()
 }
 
 
-void MoeDialogView::init( mol::win::WndProc* wnd )
-{
-	wnd_ = wnd;
-}
-
 
 void MoeDialogView::dispose() 
 {}

@@ -616,7 +616,8 @@ void MoeWnd::OnHelpAbout()
 	moeView->get_Left(&left);
 	moeView->get_Top(&top);
 
-	docs()->OpenHtmlFrame( bstr(help), 0 );
+	mol::punk<IMoeDocument> doc;
+	docs()->OpenHtmlFrame( bstr(help), &doc );
 }
 
 
