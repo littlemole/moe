@@ -102,7 +102,7 @@ public:
 		if ( fname  )
 		{
 			*fname = 0;
-			*fname = ::SysAllocString( filename_.c_str() );
+			*fname = ::SysAllocString( mol::towstring(filename_).c_str() );
 		}
 		return S_OK;
    }

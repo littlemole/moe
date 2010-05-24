@@ -71,7 +71,7 @@ public:
 		if ( fname  )
 		{
 			*fname = 0;
-			*fname = ::SysAllocString( location.c_str() );
+			*fname = ::SysAllocString( mol::towstring(location).c_str() );
 		}
 		return S_OK;
    }

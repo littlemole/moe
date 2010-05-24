@@ -135,9 +135,9 @@ void <xsl:value-of select="$windowClass" />GUIBuilder::makeUI()
   init_ribbon_ui(wnd_);
 
   // redraw
-  <xsl:value-of select="$name" />-&gt;show(SW_SHOW);
-  <xsl:value-of select="$name" />-&gt;OnLayout(0,0,0);
-  <xsl:value-of select="$name" />-&gt;redraw();
+  // <xsl:value-of select="$name" />-&gt;show(SW_SHOW);
+  // <xsl:value-of select="$name" />-&gt;OnLayout(0,0,0);
+  // <xsl:value-of select="$name" />-&gt;redraw();
   
 <xsl:if test="$persistStorage">
 

@@ -223,7 +223,7 @@ public:
 			*fname = 0;
 			C* This = (C*)this;
 			mol::string filename = This->getText();
-			*fname = ::SysAllocString( filename.c_str() );
+			*fname = ::SysAllocString( mol::towstring(filename).c_str() );
 		}
 		return S_OK;
    }
