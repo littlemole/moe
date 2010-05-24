@@ -17,7 +17,7 @@
     <?endif?>
 
     <!-- msi version and packaging-->
-    <Package InstallerVersion="310" Compressed="yes" />
+    <Package InstallerVersion="200" Compressed="yes" />
 
     <!-- msi media: use single embedded cabinet archive-->
     <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />

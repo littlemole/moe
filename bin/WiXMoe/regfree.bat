@@ -21,6 +21,11 @@ IF ERRORLEVEL 1 GOTO hell
 
 sleep 3
 
+RENAME "%WORKDIR%" "moe"
+
+SET WORKDIR=%DEPLOYDIR%\moe
+
+
 
 mt.exe -manifest %DEPLOYDIR%\moe.exe.isolated.manifest -outputresource:"%WORKDIR%\moe.exe;#1" -hashupdate -validate_manifest -verbose
 IF ERRORLEVEL 1 GOTO hell
