@@ -50,9 +50,9 @@ void ScintillAxGUIBuilder::makeUI()
   init_ribbon_ui(wnd_);
 
   // redraw
-  ScintillaActiveXControl->show(SW_SHOW);
-  ScintillaActiveXControl->OnLayout(0,0,0);
-  ScintillaActiveXControl->redraw();
+  // ScintillaActiveXControl->show(SW_SHOW);
+  // ScintillaActiveXControl->OnLayout(0,0,0);
+  // ScintillaActiveXControl->redraw();
   
 
 delete this;
