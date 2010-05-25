@@ -110,7 +110,7 @@ function init()
 	setupPanes("container", "tab1");
 	draggable("tabs");
 
-    path = external.CreateObject("IO.Path");
+    path = new ActiveXObject("IO.Path");
 	xslt = new mol.xslt.Processor();
 
 	wsdl    = document.forms.xsltForm.wsdlFile;
@@ -175,7 +175,7 @@ alert(xml.xml);
 	debug += result;
   }
   
-  wnd.Document.SetText(debug);
+  wnd.Object.SetText(debug);
 }
 </script>
 

@@ -9,8 +9,8 @@ function onSearch()
   if ( !what || what == "" )
     return false;
 
-  var name = external.Moe.ActiveDoc.Name;
-  var sci = external.Moe.ActiveDoc.Document;
+  var name = external.Moe.ActiveDoc.FilePath;
+  var sci = external.Moe.ActiveDoc.Object;
   if ( sci )
   {
     var txt = sci.GetText();
@@ -72,12 +72,12 @@ function onSearchAll()
 
   var out = "";
 
-  for ( i = 0; i < external.Moe.Docs.Count(); i++ )
+  for ( i = 0; i < external.Moe.Documents.Count; i++ )
   {
-    var doc = external.Moe.Docs(i);
+    var doc = external.Moe.Documents(i);
     if ( doc.type == 1 )
 	{
-	  var sci = doc.Document;
+	  var sci = doc.Object;
 	  var txt = sci.GetText();
 	  var pos = 0;
 	  var p   = 0;
@@ -133,8 +133,8 @@ function JumpTo(  start, end )
 	{
 		if ( d.Type == 1 )
 		{
-			d.Activate();
-			var sci = d.Document;
+			d.View.Activate();
+			var sci = d.Object;
 			sci.SetSelection( start, end );
 			sci.ScrollIntoView();
 		}
@@ -143,13 +143,13 @@ function JumpTo(  start, end )
 
 function GoTo( index, start, end )
 {
-	var d = external.Moe.Docs(index);
+	var d = external.Moe.Documents(index);
 	if ( d )
 	{
 		if ( d.Type == 1 )
 		{
-			d.Activate();
-			var sci = d.Document;
+			d.View.Activate();
+			var sci = d.Object;
 			sci.SetSelection( start, end );
 			sci.ScrollIntoView();
 		}

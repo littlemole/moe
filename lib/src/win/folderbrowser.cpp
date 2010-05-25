@@ -148,7 +148,7 @@ public:
 namespace mol {
 namespace io  {
 
-typedef 	HRESULT SHCreateItemInKnownFolderProc( REFKNOWNFOLDERID kfid, DWORD dwKFFlags, PCWSTR pszItem, REFIID riid, void **ppv );
+typedef 	HRESULT __stdcall SHCreateItemInKnownFolderProc( REFKNOWNFOLDERID kfid, DWORD dwKFFlags, PCWSTR pszItem, REFIID riid, void **ppv );
 
 HRESULT SimpleFolderBrowser(HWND hwnd, mol::string& directory)
 {

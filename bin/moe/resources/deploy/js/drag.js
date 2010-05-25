@@ -24,12 +24,12 @@ function MouseMove()
 
 		if ( dx > 0 || dx < -0 )
 		{
-			external.Frame.Left -= dx;
+			external.Frame.View.Left -= dx;
 			dragging_x = window.event.screenX;
 		}
 		if ( dy > 0 || dy < -0 )
 		{
-			external.Frame.Top  -= dy;
+			external.Frame.View.Top  -= dy;
 			dragging_y = window.event.screenY;
 		}
 

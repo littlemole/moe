@@ -30,8 +30,8 @@ var docu;
 
 function init()
 {
-	path = external.CreateObject("IO.Path");
-	type2Xml = external.CreateObject("TypeToXml.TypeLibToXml");
+	path = new ActiveXObject("IO.Path");
+	type2Xml = new ActiveXObject("TypeToXml.TypeLibToXml");
 	type2Xml.onComplete = onComplete;
 
 	xslt = new mol.xslt.Processor();
@@ -42,7 +42,7 @@ function init()
 	var object  = window.location.hash.substring(1);
     var typelib = window.location.search.substring(1).replace(/\//g,"\\");
 
-	object 	= typelib != "" ? object  : "Xmoe";
+	object 	= typelib != "" ? object  : "Moe";
     typelib = typelib != "" ? typelib  : "moe.exe";
 	typelib = typelib.replace(/%20/g," ");
 	getDocu(typelib, object);

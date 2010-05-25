@@ -13,7 +13,7 @@
 class Docs : 
 	public mol::Dispatch<IMoeDocumentCollection>,
 	public mol::interfaces< Docs, 
-				mol::implements< IDispatch, IMoeDocument> >
+				mol::implements< IDispatch, IMoeDocumentCollection> >
 {
 STACKSINGLETON(Docs);
 public:

@@ -719,6 +719,18 @@ HRESULT __stdcall MoeDialogs::ChooseDir( BSTR* d )
 	return S_OK;
 }
 
+HRESULT __stdcall MoeDialogs::Help()
+{
+	moe()->postMessage( WM_COMMAND, IDM_HELP_ABOUT, 0 );
+	return S_OK;
+}
+
+HRESULT __stdcall MoeDialogs::Print()
+{
+	::PostMessage( moe()->getActive(), WM_COMMAND, IDM_FILE_PRINT, 0 );
+	return S_OK;
+}
+
 
 
 MoeScript::~MoeScript()
@@ -864,6 +876,16 @@ HRESULT __stdcall MoeScript::System( BSTR f)
 
 
 
+MoeConfig::MoeConfig()
+{
+	systype_			= SCINTILLA_SYSTYPE_WIN32;
+	encoding_			= SCINTILLA_ENCODING_ANSI;
+	tabwidth_			= 4;
+	tabUsage_			= VARIANT_TRUE;
+	tabIndents_			= VARIANT_TRUE;
+	backSpaceUnIndents_	= VARIANT_FALSE;
+	fullScreen_			= VARIANT_FALSE;
+}
 
 MoeConfig::~MoeConfig()
 {
@@ -1069,7 +1091,7 @@ HRESULT __stdcall MoeConfig::InitializeEditorFromPreferences( IMoeDocument* d )
 	if ( hr != S_OK )
 		return hr;
 
-	if ( type != MOE_DOCTYPE_DOC && type != MOE_DOCTYPE_FORM )
+	if ( ! (type == MOE_DOCTYPE_DOC || type == MOE_DOCTYPE_FORM ) )
 	{
 		return E_FAIL;
 	}

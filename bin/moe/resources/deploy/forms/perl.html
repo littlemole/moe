@@ -83,14 +83,14 @@ function init()
 	diagnosis = document.forms.perlForm.diagnosis;
 
     // prepare scripting objects used
-    path = external.CreateObject("IO.Path");
-    file = external.CreateObject("IO.file");
+    path = new ActiveXObject("IO.Path");
+    file = new ActiveXObject("IO.file");
 
     // take special care of PipeProcess,
     // set into async mode and specify
     // onComplete callback function
 
-	perl = external.CreateObject("PipedProcess.PipedProcessControl");
+	perl = new ActiveXObject("PipedProcess.PipedProcessControl");
     perl.async = true;
     perl.onComplete = onComplete;
 }
@@ -100,7 +100,7 @@ function runPerl()
   // read input document
 
   var active = external.moe.ActiveDoc;
-  var doc = active.Document;
+  var doc = active.Object;
   doc.Save();
   var f = doc.Filename;
 

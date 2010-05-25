@@ -1,9 +1,9 @@
 var shell = new ActiveXObject("WScript.Shell");
 var doc = moe.ActiveDoc;
 
-if ( doc && doc.Document )
+if ( doc && doc.Object )
 {
-  var xml = doc.Document.getText();
+  var xml = doc.Object.getText();
   var doc = new ActiveXObject("Msxml2.DOMDocument.3.0");
   
   doc.async = false;

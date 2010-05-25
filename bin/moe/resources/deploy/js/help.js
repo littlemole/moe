@@ -1,3 +1,3 @@
 
-moe.ShowForm( moe.ModulePath + "\\doc\\index.html",moe.left+25,moe.top+25,700,450,5);
+moe.Script.ShowHtmlForm( "\\doc\\index.html",moe.View.left+25,moe.View.top+25,700,450,5);
 

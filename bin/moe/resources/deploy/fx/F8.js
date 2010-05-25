@@ -1,5 +1,5 @@
-if ( moe.ShowTreeView )
-  moe.ShowTreeView = false;
+if ( moe.View.ShowTreeView )
+  moe.View.ShowTreeView = false;
 else
-  moe.ShowTreeView = true;
+  moe.View.ShowTreeView = true;
 

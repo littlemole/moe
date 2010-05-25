@@ -2,9 +2,9 @@ var shell = new ActiveXObject("WScript.Shell");
 var xmlHttp = new ActiveXObject("MSXML2.XMLHTTP.3.0");
 
 var doc = moe.ActiveDoc;
-if ( doc && doc.Document )
+if ( doc && doc.Object )
 {
-  shell.Popup("file://" + moe.modulePath + "\\forms\\w3c.html#" + encodeURI(doc.Document.Filename));
-  var d = moe.OpenHtmlFrame( "file://" + moe.modulePath + "\\forms\\w3c.html#" + encodeURI(doc.Document.Filename) );
+  shell.Popup("file://" + moe.Config.modulePath + "\\forms\\w3c.html#" + encodeURI(doc.Object.Filename));
+  var d = moe.Documents.OpenHtmlFrame( "file://" + moe.Config.modulePath +"\\forms\\w3c.html#" + encodeURI(doc.Object.Filename) );
 }
 

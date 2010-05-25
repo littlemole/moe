@@ -1,1 +1,1 @@
-moe.Preferences();
+moe.Config.EditPreferences();

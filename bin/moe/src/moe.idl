@@ -84,7 +84,11 @@ library Moe
 		[id(6), helpstring("Choose Directory")] 
 		HRESULT ChooseDir( [out,retval] BSTR* d );		
 
+		[id(7), helpstring("Show Help")] 
+		HRESULT Help(  );		
 
+		[id(8), helpstring("Print")] 
+		HRESULT Print(  );	
 	}
 	////////////////////////////////////////////////////////////////////////////////////
 	// IMoeDocumentCollection

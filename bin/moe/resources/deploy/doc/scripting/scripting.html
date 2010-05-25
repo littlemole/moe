@@ -8,15 +8,15 @@
 function example1()
 {
  // get active object
- var moe = GetObject("","Moe.Xmoe");
+ var moe = GetObject("","Moe.Application");
 
  //call it like this for a new instance of moe
  //var moe = new ActiveXObject("Moe.Xmoe");
 
- moe.Show();
- var doc = moe.New();
- doc.Document.Append("This is text populated via script!");
- doc.Maximize();
+ moe.View.Show();
+ var doc = moe.Documents.New();
+ doc.Object.Append("This is text populated via script!");
+ doc.View.Maximize();
 }
 </script>
 
@@ -24,25 +24,25 @@ function example1()
 sub example2 {
 
 	# get active moe object
-	my $moe   = Win32::OLE->GetActiveObject("Moe.Xmoe");
+	my $moe   = Win32::OLE->GetActiveObject("Moe.Application");
 
 	# call it like this to create a new moe instance
-	#my $moe  = Win32::OLE->new("Moe.Xmoe");
+	#my $moe  = Win32::OLE->new("Moe.Application");
 
 	my $shell = Win32::OLE->new("WScript.Shell");
 
 	$moe->Show();
 	
-	my $doc_input  = $moe->Open( $moe->ModulePath() . "\\doc\\scripting\\scripting.html");
-	my $doc_output = $moe->New();
+	my $doc_input  = $moe->Documents->Open( $moe->{Config}->{ModulePath} . "\\doc\\scripting\\scripting.html");
+	my $doc_output = $moe->Documents->New();
 	
 	my $c = 0;
-	for ( my $i = 0; $i < $doc_input->Document()->LineCount(); $i++ ) {
+	for ( my $i = 0; $i < $doc_input->{Object}->LineCount(); $i++ ) {
 		
-		my $t = $doc_input->Document()->LineText($i);
+		my $t = $doc_input->{Object}->LineText($i);
 		
 		if ( $t =~ /moe/i ) {
-			$doc_output->Document()->Append("line $i: $t\r\n");
+			$doc_output->{Object}->Append("line $i: $t\r\n");
 			$c++;			
 		} 
 	}
@@ -54,9 +54,9 @@ sub example2 {
 
 function example3()
 {
-var doc = external.Moe.New();
-doc.Document.Append("This is text populated via script!");
-doc.maximize();
+var doc = external.Moe.Documents.New();
+doc.Object.Append("This is text populated via script!");
+doc.View.maximize();
 }
 
 </script>
@@ -252,14 +252,14 @@ doc.maximize();
 		 <i>javascript:</i>
 		 <pre style="background-color:#DDDDDD;padding:4px;margin-top:1px">
 // get active object - assumes a running moe instance
-var moe = GetObject("","Moe.Xmoe");
+var moe = GetObject("","Moe.Application");
 
 //call it like this for a new instance of moe
-//var moe = new ActiveXObject("Moe.Xmoe");
+//var moe = new ActiveXObject("Moe.Application");
 
-var doc = moe.New();
-doc.Document.Append("This is text populated via script!");
-doc.maximize();
+var doc = moe.Documents.New();
+doc.Object.Append("This is text populated via script!");
+doc.View.maximize();
          </pre>
 		  <p>run this script <a href="javascript:void(0)" onClick="example1()">now </a>
            or save it as *.js file and doubleclick.
@@ -271,25 +271,25 @@ doc.maximize();
 		  <i>PerlScript:</i>
 		 <pre style="background-color:#DDDDDD;padding:4px;margin-top:1px">
 # get active moe object - assumes a running moe instance
-my $moe   = Win32::OLE->GetActiveObject("Moe.Xmoe");
+my $moe   = Win32::OLE->GetActiveObject("Moe.Application");
 
 # call it like this to create a new moe instance
-#my $moe  = Win32::OLE->new("Moe.Xmoe");
+#my $moe  = Win32::OLE->new("Moe.Application");
 
 my $shell = Win32::OLE->new("WScript.Shell");
 
-$moe->Show();
+$moe->{View}->Show();
 
-my $doc_input  = $moe->Open( $moe->AppPath() . "\\doc\\scripting.html");
+my $doc_input  = $moe->Open( $moe->{AppPath} . "\\doc\\scripting.html");
 my $doc_output = $moe->New();
 
 my $c = 0;
-for ( my $i = 0; $i < $doc_input->Document()->LineCount(); $i++ ) {
+for ( my $i = 0; $i < $doc_input->{Object}->LineCount(); $i++ ) {
 	
-	my $t = $doc_input->Document()->LineText($i);
+	my $t = $doc_input->{Object}->LineText($i);
 	
 	if ( $t =~ /moe/i ) {
-		$doc_output->Document()->Append("line $i: $t\r\n");
+		$doc_output->{Object}->Append("line $i: $t\r\n");
 		$c++;			
 	} 
 }
@@ -331,9 +331,9 @@ $shell->Popup("I counted $c lines with string 'moe'");
 		 <pre style="background-color:#DDDDDD;padding:4px;margin-top:1px">
 //no need to declare external.moe object
 
-var doc = external.moe.New();
-doc.Append("This is text populated via script!");
-doc.maximize();
+var doc = external.moe.Documents.New();
+doc.Object.Append("This is text populated via script!");
+doc.View.maximize();
          </pre>
 
 		<p>Run script <a href="javascript:void(0)" onClick="example3()">now.</a></p>
@@ -343,13 +343,13 @@ doc.maximize();
 
 		<pre style="background-color:#DDDDDD;padding:4px">
 		'  vbscript
-		set moe = CreateObject("Moe.Xmoe");
+		set moe = CreateObject("Moe.Application");
 		
 		// javascript
-		var moe = new ActiveObject("Moe.Xmoe");
+		var moe = new ActiveObject("Moe.Application");
 		
 		#  perl
-		my $moe = Win32::OLE::->new("Moe.Xmoe");
+		my $moe = Win32::OLE::->new("Moe.Application");
 		
 		</pre>
 		<p>
@@ -382,7 +382,7 @@ doc.maximize();
 
     <tr>
      <td align="right">
-	  <small style="font-size:xx-small">(c) mole 2004-2009</small>
+	  <small style="font-size:xx-small">(c) mole 2004-2010</small>
      </td>
     </tr>
    </table>

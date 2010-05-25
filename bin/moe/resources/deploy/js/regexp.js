@@ -8,8 +8,8 @@ function onRegExp()
   if ( !pattern || pattern == "" )
     return false;
 
-  var name = external.Moe.ActiveDoc.Name;
-  var sci = external.Moe.ActiveDoc.Document;
+  var name = external.Moe.ActiveDoc.PathName;
+  var sci = external.Moe.ActiveDoc.Object;
   if ( sci )
   {
     var txt = sci.GetText();
@@ -79,8 +79,8 @@ function JumpTo(  start, end )
 	{
 		if ( d.Type == 1 )
 		{
-			d.Activate();
-			var sci = d.Document;
+			d.View.Activate();
+			var sci = d.Object;
 			sci.SetSelection( start, end );
 			sci.ScrollIntoView();
 		}

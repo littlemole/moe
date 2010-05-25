@@ -138,21 +138,18 @@
 
   Objects
  <select name="objs" onchange="onSelectObj()">
-  <option value="moe.exe#Xmoe">Xmoe
-  <option value="moe.exe#Doc">Doc
-  <option value="moe.exe#Docs">Docs
+  <option value="moe.exe#Application">Moe Application
   <option value="ScintillAx.dll#ScintillAx">Scintilla
   <option value="Setting.dll#Setting">Setting
   <option value="ShellCtrl.dll#HexCtrl">Hex Editor
   <option value="ShellCtrl.dll#ShellTree">Shell Tree
   <option value="ShellCtrl.dll#ShellList">Shell List
   <option value="ShellCtrl.dll#ColorDialog">Color Picker
+  <option value="ShellFolder.dll#ShellPane">ShellPane
   <option value="io.dll#file">file
   <option value="io.dll#Dir">Dir
   <option value="io.dll#Path">Path
   <option value="comtypes.dll#TypeLibToXml">TypeLib to XML
-  <option value="jit.tlb#JIT">JIT Compiler
-  <option value="moe.tlb#CodeBehind">CodeBehind
  </select >
 
   </td>
@@ -160,23 +157,29 @@
 
   Interfaces
  <select name="interfaces" onchange="onSelectInterface()">
-  <option value="moe.exe#IXmoe">IXmoe
-  <option value="moe.exe#IDoc">IDoc
-  <option value="moe.exe#IDocs">IDocs
-  <option value="moe.exe#IMoeFrame">IMoeFrame
+  <option value="moe.exe#IMoe">IMoe
+  <option value="moe.exe#IMoeView">IMoeView
+  <option value="moe.exe#IMoeDocument">IMoeDocument
+  <option value="moe.exe#IMoeDocumentView">IMoeDocumentView
+  <option value="moe.exe#IMoeDocumentCollection">IMoeDocumentCollection
+  <option value="moe.exe#IMoeDialogView">IMoeDialogView
+  <option value="moe.exe#IMoeScript">IMoeScript
+  <option value="moe.exe#IMoeConfig">IMoeConfig
+  <option value="moe.exe#IMoeScript">IMoeScript
+  <option value="moe.exe#IMoeHtmlFrame">IMoeHtmlFrame
+  <option value="moe.exe#IMoeUserForm">IMoeUserForm
   <option value="moe.exe#IExternalMoe">IExternalMoe
-  <option value="moe.exe#IDocs">IDocs
   <option value="ScintillAx.dll#IScintillAx">IScintillAx
   <option value="Setting.dll#ISetting">ISetting
   <option value="ShellCtrl.dll#IHexCtrl">IHexCtrl
   <option value="ShellCtrl.dll#IColorPicker">IShellTree
   <option value="ShellCtrl.dll#IShellList">IShellList
   <option value="ShellCtrl.dll#IColorPicker">IColorPicker
+  <option value="ShellFolder.dll#ShellPane">IShellPane
   <option value="comtypes.dll#ITypeLibToXml">ITypeLibToXml
   <option value="io.dll#IFile">IFile
   <option value="io.dll#IDir">IDir
   <option value="io.dll#IPath">IPath
-  <option value="jit.tlb#ICompiler">ICompiler
  </select >
 
   </td>
@@ -184,12 +187,11 @@
 
   Events
  <select name="events" onchange="onSelectEvent()">
-  <option value="moe.exe#_IXmoeEvents">_IXmoeEvents
   <option value="ScintillAx.dll#_IScintillAxEvents">_IScintillAxEvents
   <option value="ShellCtrl.dll#_IHexCtrlEvents">_IHexCtrlEvents
   <option value="ShellCtrl.dll#_IShellListEvents">_IShellListEvents
   <option value="ShellCtrl.dll#_IShellTreeEvents">_IShellTreeEvents
-  <option value="jit.tlb#ICompilerMsg">ICompilerMsg
+  <option value="ShellFolder.dll#_IShellPaneEvents">IShellPane
  </select >
 
   </td>
@@ -248,8 +250,8 @@ var docu;
 
 function init()
 {
-	path = external.CreateObject("IO.Path");
-	type2Xml = external.CreateObject("TypeToXml.TypeLibToXml");
+	path = new ActiveXObject("IO.Path");
+	type2Xml = new ActiveXObject("TypeToXml.TypeLibToXml");
 	type2Xml.onComplete = onComplete;
 
 	xslt = new mol.xslt.Processor();
@@ -297,7 +299,7 @@ function getDropDownDocu( val )
 
 function getDocu( typelib, param )
 {
-	typelib = external.moe.ModulePath + "\\" + typelib;
+	typelib = external.moe.Config.ModulePath + "\\" + typelib;
 
 	if ( typelib != "" && xsl && type2Xml )
 	{

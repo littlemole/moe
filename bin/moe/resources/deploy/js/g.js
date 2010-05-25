@@ -1,3 +1,3 @@
 
-moe.ShowForm("C:\\molib8\\test\\win_TEST\\xmoe\\forms\\grep.html",moe.left+250,moe.top+250,440,300,2);
+moe.Script.ShowHtmlForm("C:\\molib8\\test\\win_TEST\\xmoe\\forms\\grep.html",moe.View.left+250,moe.View.top+250,440,300,2);
 

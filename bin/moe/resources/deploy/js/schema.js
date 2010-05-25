@@ -3,7 +3,7 @@ var doc = moe.ActiveDoc;
 if ( doc )
 {
 	var xml = new ActiveXObject("MSXML2.DOMDocument.4.0");
-	var name = doc.FileName;
+	var name = doc.FilePath;
 
 	xml.async = false;
 	xml.validateOnParse = true;
@@ -13,7 +13,7 @@ if ( doc )
 
 	if (xml.parseError.errorCode != 0)
 	{
-		moe.MsgBox( "Validation failed on " + name + 
+		moe.Dialogs.MsgBox( "Validation failed on " + name + 
 		"\nReason: " + xml.parseError.reason + 
 		"\nSource: " + xml.parseError.srcText + 
 		"\nLine: " + xml.parseError.line + "\n",
@@ -21,7 +21,7 @@ if ( doc )
 	}
 	else
 	{
-		moe.SetStatus("XML Validation passed :)");
+		//moe.SetStatus("XML Validation passed :)");
 	}
 }
 
@@ -66,7 +66,7 @@ if ( sci )
 	// Return validation results in message to the user.
 	if (xml.parseError.errorCode != 0)
 	{
-		moe.MsgBox( "Validation failed on " + name + 
+		moe.Dialogs.MsgBox( "Validation failed on " + name + 
 		"\nReason: " + xml.parseError.reason + 
 		"\nSource: " + xml.parseError.srcText + 
 		"\nLine: " + xml.parseError.line + "\n",
@@ -74,7 +74,7 @@ if ( sci )
 	}
 	else
 	{
-		moe.SetStatus("XML Validation passed :)");
+		//moe.SetStatus("XML Validation passed :)");
 	}
 
 }

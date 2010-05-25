@@ -581,10 +581,12 @@ mol::string findFile(const mol::string& f)
 	//configPath = mol::Path::addBackSlash(configPath);
 
 
+	//configPath.append(_T("\\"));
 	configPath.append(f);
 	if ( mol::Path::exists(configPath) )
 		return configPath;
 
+	//modulePath.append(_T("\\"));
 	modulePath.append(f);
 	if ( mol::Path::exists(modulePath) )
 		return modulePath;

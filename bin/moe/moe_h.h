@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Mon May 24 20:18:32 2010
+/* at Tue May 25 01:40:04 2010
  */
 /* Compiler settings for .\src\moe.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -2076,6 +2076,10 @@ EXTERN_C const IID IID_IMoeDialogs;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ChooseDir( 
             /* [retval][out] */ BSTR *d) = 0;
         
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Help( void) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Print( void) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -2148,6 +2152,12 @@ EXTERN_C const IID IID_IMoeDialogs;
             IMoeDialogs * This,
             /* [retval][out] */ BSTR *d);
         
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Help )( 
+            IMoeDialogs * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Print )( 
+            IMoeDialogs * This);
+        
         END_INTERFACE
     } IMoeDialogsVtbl;
 
@@ -2198,6 +2208,12 @@ EXTERN_C const IID IID_IMoeDialogs;
 
 #define IMoeDialogs_ChooseDir(This,d)	\
     ( (This)->lpVtbl -> ChooseDir(This,d) ) 
+
+#define IMoeDialogs_Help(This)	\
+    ( (This)->lpVtbl -> Help(This) ) 
+
+#define IMoeDialogs_Print(This)	\
+    ( (This)->lpVtbl -> Print(This) ) 
 
 #endif /* COBJMACROS */
 

@@ -85,8 +85,8 @@ function init()
 	input     = document.forms.tidyForm.inputFile;
 	obj       = document.forms.tidyForm.inputObject;
     // prepare scripting objects used
-    path = external.CreateObject("IO.Path");
-    file = external.CreateObject("IO.file");
+    path = new ActiveXObject("IO.Path");
+    file = new ActiveXObject("IO.file");
 
 }
 
@@ -102,13 +102,13 @@ function onInput()
 
 function showTypelib()
 { 
-  var p = external.moe.ModulePath;
+  var p = external.moe.Config.ModulePath;
   var o = input.value;
   o = o.replace(/%20/g," ");
   var location = "file://" + p + "\\forms\\object.html?" + o;
   if ( obj.value )
 	location += "#" + obj.value;
-  var doc = external.moe.OpenHtmlFrame( location );
+  var doc = external.moe.Documents.OpenHtmlFrame( location );
 }
 
 

@@ -1,1 +1,3 @@
-moe.Help();
+moe.Dialogs.Help();
+
+

@@ -164,7 +164,7 @@
       <Custom Action='DLLUNREG_shellFolder' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLUNREG_setting' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
 
-      <!--   <Custom Action="CopyFx" After="InstallFinalize">Not Installed</Custom>-->
+      <Custom Action="CopyFx" After="InstallFinalize">Not Installed</Custom>
 
     </InstallExecuteSequence>
 

@@ -431,7 +431,8 @@ public:
 	virtual HRESULT __stdcall OpenDir( IMoeDocument** d);
 	virtual HRESULT __stdcall ChooseFile( BSTR* f );
 	virtual HRESULT __stdcall ChooseDir( BSTR* d );
-
+	virtual HRESULT __stdcall Help();
+	virtual HRESULT __stdcall Print();
 };
 
 
@@ -489,6 +490,7 @@ private:
 
 public:
 
+	MoeConfig();
 	virtual ~MoeConfig();
 
 	typedef mol::com_obj<MoeConfig> Instance;

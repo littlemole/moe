@@ -1,1 +1,1 @@
-moe.New();
+moe.Documents.New();

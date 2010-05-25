@@ -1,5 +1,5 @@
 
-var p = moe.ModulePath;
+var p = moe.Config.ModulePath;
 
 var o = p + "\\io.dll";//#Path";
 //o = encodeURI(o);// o.replace(/\\/g,"/");
@@ -7,11 +7,11 @@ var o = p + "\\io.dll";//#Path";
 var s = new ActiveXObject("WScript.Shell");
 //s.popUp(o);
 
-var doc = moe.OpenHtmlFrame( 
+var doc = moe.Documents.OpenHtmlFrame( 
 			  "file://" + p + "\\forms\\object.html?" + o /* +
 			  o ,
 			  //"\\io.dll#Path" * /
-			  moe.left+50,moe.top+50,
+			  moe.View.left+50,moe.View.top+50,
 			  650,550,1
 */
 		);
