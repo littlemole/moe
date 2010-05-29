@@ -23,6 +23,7 @@ private:
 	void copySelectionToClipboard();
 	
 	void freeTree(HTREEITEM it );
+	void freeList();
 
 	mol::TreeCtrl		tree_;
 	mol::ListBox		list_;
@@ -46,6 +47,7 @@ private:
 	void copySelectionToClipboard();
 	
 	void freeTree(HTREEITEM it );
+	void freeList();
 
 	mol::TreeCtrl		tree_;
 	mol::ListBox		list_;
@@ -894,9 +896,23 @@ void EventDlg::freeTree(HTREEITEM it )
 	tree_.deleteNode(it);
 }
 
+void EventDlg::freeList( )
+{
+	for ( int i = 0; i < list_.count(); i++ )
+	{
+		mol::TCHAR* c = (mol::TCHAR*)list_.getData(i);
+		if ( c )
+		{
+			list_.setData(i,0);
+			delete[] c;
+		}
+	}
+}
+
 //////////////////////////////////////////////////////////////////////////////
 void EventDlg::populateControlList(HTREEITEM hit)
 {
+	freeList();
 	list_.resetContent();
 
 	IUnknown* unk = (IUnknown*)tree_.getLPARAM(hit);
@@ -959,7 +975,18 @@ void EventDlg::populateControlList(HTREEITEM hit)
 						oss <<  _T(" = shift;\r\n");
 					}
 					oss << _T("\r\n}\r\n");
-					list_.addString(oss.str());
+
+					
+					list_.addString(mol::toString(bstrs[0]));
+
+					int index = list_.index(mol::toString(bstrs[0]));
+					if ( index != -1 )
+					{
+						mol::string s = oss.str();
+						mol::TCHAR* c = new mol::TCHAR[s.size()+1];
+						memcpy( c, s.c_str(), (s.size()+1)*sizeof(mol::TCHAR) );
+						list_.setData( index, (void*)c );
+					}
 				}
 				if ( engine_ == _T("Javascript") ) {
 
@@ -975,7 +1002,16 @@ void EventDlg::populateControlList(HTREEITEM hit)
 
 					oss << _T(")\r\n{\r\n");
 					oss << _T("}\r\n");
-					list_.addString(oss.str());
+					list_.addString(mol::toString(bstrs[0]));
+
+					int index = list_.index(mol::toString(bstrs[0]));
+					if ( index != -1 )
+					{
+						mol::string s = oss.str();
+						mol::TCHAR* c = new mol::TCHAR[s.size()+1];
+						memcpy( c, s.c_str(), (s.size()+1)*sizeof(mol::TCHAR) );
+						list_.setData( index, (void*)c );
+					}
 				}
 				if ( engine_ == _T("VBScript") ) {
 
@@ -991,7 +1027,16 @@ void EventDlg::populateControlList(HTREEITEM hit)
 
 					oss << _T(")\r\n\r\n");
 					oss << _T("End Sub\r\n");
-					list_.addString(oss.str());
+					list_.addString(mol::toString(bstrs[0]));
+
+					int index = list_.index(mol::toString(bstrs[0]));
+					if ( index != -1 )
+					{
+						mol::string s = oss.str();
+						mol::TCHAR* c = new mol::TCHAR[s.size()+1];
+						memcpy( c, s.c_str(), (s.size()+1)*sizeof(mol::TCHAR) );
+						list_.setData( index, (void*)c );
+					}
 				}
 			}
 		}
@@ -1040,7 +1085,13 @@ void EventDlg::populateControlTree(IUnknown* ctrl, HTREEITEM hit)
 
 void EventDlg::copySelectionToClipboard()
 {
-	mol::string handler = list_.getString(list_.getCurSel());
+	//mol::string handler = list_.getString(list_.getCurSel());
+
+	int pos = list_.getCurSel();
+	mol::TCHAR* handler = (mol::TCHAR*)list_.getData(pos);
+	if (!handler)
+		return;
+
 	if ( ::OpenClipboard( *this )	)
 	{
 		::EmptyClipboard();
@@ -1082,6 +1133,7 @@ LRESULT EventDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			if (LOWORD(wParam) == IDCANCEL )
 			{
+				freeList();
 				freeTree(TVI_ROOT);
 				endDlg(LOWORD(wParam));
 				return FALSE;
@@ -1144,9 +1196,24 @@ void FuncDlg::freeTree(HTREEITEM it )
 	tree_.deleteNode(it);
 }
 
+
+void FuncDlg::freeList( )
+{
+	for ( int i = 0; i < list_.count(); i++ )
+	{
+		mol::TCHAR* c = (mol::TCHAR*)list_.getData(i);
+		if ( c )
+		{
+			list_.setData(i,0);
+			delete[] c;
+		}
+	}
+}
+
 //////////////////////////////////////////////////////////////////////////////
 void FuncDlg::populateControlList(HTREEITEM hit)
 {
+	freeList();
 	list_.resetContent();
 
 	IUnknown* unk = (IUnknown*)tree_.getLPARAM(hit);
@@ -1267,7 +1334,16 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 								{
 									continue;
 								}
-								list_.addString(func);
+								list_.addString(mol::toString(bstrs[0]));
+
+								int index = list_.index(mol::toString(bstrs[0]));
+								if ( index != -1 )
+								{
+									mol::string s = func;
+									mol::TCHAR* c = new mol::TCHAR[s.size()+1];
+									memcpy( c, s.c_str(), (s.size()+1)*sizeof(mol::TCHAR) );
+									list_.setData( index, (void*)c );
+								}
 							}
 							if ( engine_ == _T("Javascript")) {
 
@@ -1309,7 +1385,16 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 								{
 									continue;
 								}
-								list_.addString(oss.str());
+								list_.addString(mol::toString(bstrs[0]));
+
+								int index = list_.index(mol::toString(bstrs[0]));
+								if ( index != -1 )
+								{
+									mol::string s = oss.str();
+									mol::TCHAR* c = new mol::TCHAR[s.size()+1];
+									memcpy( c, s.c_str(), (s.size()+1)*sizeof(mol::TCHAR) );
+									list_.setData( index, (void*)c );
+								}
 							}
 							if ( engine_ == _T("VBScript")) {
 
@@ -1351,7 +1436,16 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 								{
 									continue;
 								}
-								list_.addString(oss.str());
+								list_.addString(mol::toString(bstrs[0]));
+
+								int index = list_.index(mol::toString(bstrs[0]));
+								if ( index != -1 )
+								{
+									mol::string s = oss.str();
+									mol::TCHAR* c = new mol::TCHAR[s.size()+1];
+									memcpy( c, s.c_str(), (s.size()+1)*sizeof(mol::TCHAR) );
+									list_.setData( index, (void*)c );
+								}
 							}
 						}
 					}
@@ -1406,7 +1500,11 @@ void FuncDlg::populateControlTree(IUnknown* ctrl, HTREEITEM hit)
 
 void FuncDlg::copySelectionToClipboard()
 {
-	mol::string handler = list_.getString(list_.getCurSel());
+	int pos = list_.getCurSel();
+	mol::TCHAR* handler = (mol::TCHAR*)list_.getData(pos);
+	if (!handler)
+		return;
+
 	if ( ::OpenClipboard( *this )	)
 	{
 		::EmptyClipboard();
@@ -1448,6 +1546,7 @@ LRESULT FuncDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			if (LOWORD(wParam) == IDCANCEL )
 			{
+				freeList();
 				freeTree(TVI_ROOT);
 				endDlg(LOWORD(wParam));
 				return FALSE;

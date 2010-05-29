@@ -14,9 +14,9 @@
 INSTALLTOP=\usr\local\ssl
 
 # Set your compiler options
-PLATFORM=VC-WIN64A
+PLATFORM=VC-WIN32
 CC=cl
-CFLAG= /MD /W3 /Ox /Gs0 /GF /Gy /nologo -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DOPENSSL_SYSNAME_WIN32 -DOPENSSL_SYSNAME_WINNT -DUNICODE -D_UNICODE -DOPENSSL_USE_APPLINK -I. /Fdout32dll -DOPENSSL_NO_RC5 -DOPENSSL_NO_MDC2 -DOPENSSL_NO_KRB5    
+CFLAG= /MD /W3 /WX /G5 /Ox /O2 /Ob2 /Gs0 /GF /Gy /nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DOPENSSL_USE_APPLINK -I. /Fdout32dll -DOPENSSL_NO_RC5 -DOPENSSL_NO_MDC2 -DOPENSSL_NO_KRB5    
 APP_CFLAG=
 LIB_CFLAG= -D_WINDLL
 SHLIB_CFLAG=
@@ -24,13 +24,13 @@ APP_EX_OBJ=setargv.obj $(OBJ_D)\applink.obj /implib:$(TMP_D)\junk.lib
 SHLIB_EX_OBJ=
 # add extra libraries to this define, for solaris -lsocket -lnsl would
 # be added
-EX_LIBS=wsock32.lib user32.lib gdi32.lib bufferoverflowu.lib   
+EX_LIBS=wsock32.lib user32.lib gdi32.lib   
 
 # The OpenSSL directory
 SRC_D=.
 
 LINK=link
-LFLAGS=/nologo /subsystem:console /opt:ref
+LFLAGS=/nologo /subsystem:console /machine:I386 /opt:ref
 RSC=rc
 
 BN_ASM_OBJ=
@@ -67,7 +67,7 @@ RM=del
 RANLIB=
 MKDIR=-mkdir
 MKLIB=lib
-MLFLAGS= /nologo /subsystem:console /opt:ref /dll
+MLFLAGS= /nologo /subsystem:console /machine:I386 /opt:ref /dll
 ASM=ml /Cp /coff /c /Cx
 
 ######################################################
@@ -202,7 +202,7 @@ SSLOBJ=$(OBJ_D)\s2_meth.obj \
 	$(OBJ_D)\ssl_err2.obj $(OBJ_D)\ssl_cert.obj $(OBJ_D)\ssl_sess.obj \
 	$(OBJ_D)\ssl_ciph.obj $(OBJ_D)\ssl_stat.obj $(OBJ_D)\ssl_rsa.obj \
 	$(OBJ_D)\ssl_asn1.obj $(OBJ_D)\ssl_txt.obj $(OBJ_D)\ssl_algs.obj \
-	$(OBJ_D)\bio_ssl.obj $(OBJ_D)\ssl_err.obj $(OBJ_D)\kssl.obj
+	$(OBJ_D)\bio_ssl.obj $(OBJ_D)\ssl_err.obj $(OBJ_D)\kssl.obj $(OBJ_D)\$(SSL).res
 
 CRYPTOOBJ=$(OBJ_D)\cryptlib.obj \
 	$(OBJ_D)\mem.obj $(OBJ_D)\mem_clr.obj $(OBJ_D)\mem_dbg.obj \
@@ -367,7 +367,7 @@ CRYPTOOBJ=$(OBJ_D)\cryptlib.obj \
 	$(OBJ_D)\str_mem.obj $(OBJ_D)\pqueue.obj $(OBJ_D)\e_4758cca.obj \
 	$(OBJ_D)\e_aep.obj $(OBJ_D)\e_atalla.obj $(OBJ_D)\e_cswift.obj \
 	$(OBJ_D)\e_gmp.obj $(OBJ_D)\e_chil.obj $(OBJ_D)\e_nuron.obj \
-	$(OBJ_D)\e_sureware.obj $(OBJ_D)\e_ubsec.obj
+	$(OBJ_D)\e_sureware.obj $(OBJ_D)\e_ubsec.obj $(OBJ_D)\$(CRYPTO).res
 
 T_EXE=$(TEST_D)\md2test.exe \
 	$(TEST_D)\md4test.exe $(TEST_D)\md5test.exe $(TEST_D)\shatest.exe \
@@ -397,7 +397,6 @@ EXHEADER= $(EXHEADER) $(INCO_D)\applink.c
 
 LIBS_DEP=$(LIBS_DEP) $(OBJ_D)\applink.obj
 CRYPTOOBJ=$(OBJ_D)\uplink.obj $(CRYPTOOBJ)
-CRYPTOOBJ=ms\uptable.obj $(CRYPTOOBJ)
 
 
 $(TMP_D):
@@ -1185,7 +1184,7 @@ $(OBJ_D)\mem_dbg.obj: $(SRC_D)\crypto\mem_dbg.c
 	$(CC) /Fo$(OBJ_D)\mem_dbg.obj  $(SHLIB_CFLAGS) -DOPENSSL_BUILD_SHLIBCRYPTO -c $(SRC_D)\crypto\mem_dbg.c
 
 $(OBJ_D)\cversion.obj: $(SRC_D)\crypto\cversion.c
-	$(CC) /Fo$(OBJ_D)\cversion.obj  $(SHLIB_CFLAGS) -DOPENSSL_BUILD_SHLIBCRYPTO -DMK1MF_BUILD -DMK1MF_PLATFORM_VC_WIN64A -c $(SRC_D)\crypto\cversion.c
+	$(CC) /Fo$(OBJ_D)\cversion.obj  $(SHLIB_CFLAGS) -DOPENSSL_BUILD_SHLIBCRYPTO -DMK1MF_BUILD -DMK1MF_PLATFORM_VC_WIN32 -c $(SRC_D)\crypto\cversion.c
 
 $(OBJ_D)\ex_data.obj: $(SRC_D)\crypto\ex_data.c
 	$(CC) /Fo$(OBJ_D)\ex_data.obj  $(SHLIB_CFLAGS) -DOPENSSL_BUILD_SHLIBCRYPTO -c $(SRC_D)\crypto\ex_data.c
@@ -2639,6 +2638,12 @@ $(OBJ_D)\e_sureware.obj: $(SRC_D)\engines\e_sureware.c
 $(OBJ_D)\e_ubsec.obj: $(SRC_D)\engines\e_ubsec.c
 	$(CC) /Fo$(OBJ_D)\e_ubsec.obj  $(SHLIB_CFLAGS) -DOPENSSL_BUILD_SHLIBCRYPTO -c $(SRC_D)\engines\e_ubsec.c
 
+$(OBJ_D)\$(CRYPTO).res: ms\version32.rc
+	$(RSC) /fo"$(OBJ_D)\$(CRYPTO).res" /d CRYPTO ms\version32.rc
+
+$(OBJ_D)\$(SSL).res: ms\version32.rc
+	$(RSC) /fo"$(OBJ_D)\$(SSL).res" /d SSL ms\version32.rc
+
 $(TEST_D)\md2test.exe: $(OBJ_D)\md2test.obj $(LIBS_DEP)
   $(LINK) $(LFLAGS) /out:$(TEST_D)\md2test.exe @<<
   $(APP_EX_OBJ) $(OBJ_D)\md2test.obj $(L_LIBS) $(EX_LIBS)
@@ -2776,12 +2781,12 @@ $(TEST_D)\ssltest.exe: $(OBJ_D)\ssltest.obj $(LIBS_DEP)
 
 $(O_SSL): $(SSLOBJ)
 	$(LINK) $(MLFLAGS) /out:$(O_SSL) /def:ms/SSLEAY32.def @<<
-  $(SHLIB_EX_OBJ) $(SSLOBJ)  $(L_CRYPTO) wsock32.lib gdi32.lib advapi32.lib user32.lib bufferoverflowu.lib
+  $(SHLIB_EX_OBJ) $(SSLOBJ)  $(L_CRYPTO) wsock32.lib gdi32.lib advapi32.lib user32.lib
 <<
 
 $(O_CRYPTO): $(CRYPTOOBJ)
 	$(LINK) $(MLFLAGS) /out:$(O_CRYPTO) /def:ms/LIBEAY32.def @<<
-  $(SHLIB_EX_OBJ) $(CRYPTOOBJ)  wsock32.lib gdi32.lib advapi32.lib user32.lib bufferoverflowu.lib
+  $(SHLIB_EX_OBJ) $(CRYPTOOBJ)  wsock32.lib gdi32.lib advapi32.lib user32.lib
 <<
 
 $(BIN_D)\$(E_EXE).exe: $(E_OBJ) $(LIBS_DEP)

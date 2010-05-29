@@ -490,7 +490,7 @@ LRESULT MenuItemInfo::OnDrawItem( UINT, WPARAM wParam, LPARAM lParam)
 
     if (lpdis->itemState & ODS_SELECTED) 
     { 
-        crBkgnd = SetBkColor(lpdis->hDC, ::GetSysColor(COLOR_MENU)); 
+        crBkgnd = SetBkColor(lpdis->hDC, ::GetSysColor(COLOR_BTNFACE)); 
     } 
 	else
 	{
@@ -499,7 +499,7 @@ LRESULT MenuItemInfo::OnDrawItem( UINT, WPARAM wParam, LPARAM lParam)
 
 	if ( separator_ )
 	{
-		::FillRect(lpdis->hDC,&lpdis->rcItem,(HBRUSH)::GetSysColorBrush(COLOR_MENU));
+		::FillRect(lpdis->hDC,&lpdis->rcItem,(HBRUSH)::GetSysColorBrush(COLOR_BTNFACE));
 	}
 	else
 	{
@@ -516,7 +516,7 @@ LRESULT MenuItemInfo::OnDrawItem( UINT, WPARAM wParam, LPARAM lParam)
 
 		mol::Rect r(lpdis->rcItem);
 		r.right = r2.left;
-		::FillRect(lpdis->hDC,&r,::GetSysColorBrush(COLOR_MENU));
+		::FillRect(lpdis->hDC,&r,::GetSysColorBrush(COLOR_BTNFACE));
 
 		if ( lpdis->itemState & ODS_SELECTED )
 			::FrameRect(lpdis->hDC,&lpdis->rcItem,(HBRUSH)::GetStockObject(GRAY_BRUSH));

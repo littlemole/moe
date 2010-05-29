@@ -105,8 +105,46 @@ MoeWnd::Instance* MoeWnd::CreateInstance()
 	return moe;
 }
 
+//#include <dwmapi.h>
+
+#define MOL_DWM_BB_ENABLE                 0x00000001  // fEnable has been specified
+#define MOL_DWM_BB_BLURREGION             0x00000002  // hRgnBlur has been specified
+#define MOL_DWM_BB_TRANSITIONONMAXIMIZED  0x00000004  // fTransitionOnMaximized has been specified
+
+typedef struct MOL_DWM_BLURBEHIND
+{
+    DWORD dwFlags;
+    BOOL fEnable;
+    HRGN hRgnBlur;
+    BOOL fTransitionOnMaximized;
+} MOL_DWM_BLURBEHIND, *MOL_PDWM_BLURBEHIND;
 
 
+HRESULT EnableBlurBehind(HWND hwnd)
+{
+	typedef HRESULT __stdcall DwmEnableBlurBehindWindow( HWND hWnd, const MOL_DWM_BLURBEHIND* pBlurBehind );
+
+	DwmEnableBlurBehindWindow* debbw = (DwmEnableBlurBehindWindow*)mol::dllFunc( _T("dwmapi.dll"), _T("DwmEnableBlurBehindWindow") );
+
+	if (!debbw)
+		return E_FAIL;
+
+    // Create and populate the blur-behind structure.
+    MOL_DWM_BLURBEHIND bb = {0};
+
+    // Specify blur-behind and blur region.
+    bb.dwFlags = MOL_DWM_BB_ENABLE;
+    bb.fEnable = true;
+    bb.hRgnBlur = NULL;
+
+    // Enable blur-behind.
+    HRESULT hr = debbw(hwnd, &bb);
+    if (SUCCEEDED(hr))
+    {
+        // ...
+    }
+    return hr;
+}
 /////////////////////////////////////////////////////////////////////
 
 void MoeWnd::OnCreate()
@@ -152,7 +190,7 @@ void MoeWnd::OnCreate()
 	((IMoe*)this)->QueryInterface( IID_IPersistStorage, (void**)&ps);
 	ps->Load( store );
 
-	
+	//hr = EnableBlurBehind(*this);
 }
 
 

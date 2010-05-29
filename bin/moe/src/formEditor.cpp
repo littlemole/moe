@@ -98,13 +98,18 @@ bool FormEditor::initialize(const mol::string& p)
 	mol::punk<IStorage> src;
 	mol::punk<IStorage> store;
 	
-	HRESULT hr = ::StgOpenStorage( 
+	HRESULT hr = E_FAIL;
+
+	if ( !createNew )
+	{
+		hr = ::StgOpenStorage( 
 					mol::towstring(p).c_str(), 
 					NULL,
 					STGM_READ|STGM_SHARE_EXCLUSIVE,
 					0,
 					0,
 					&src);
+	}
 	if ( hr != S_OK )
 	{
 		createNew = true;
@@ -351,8 +356,13 @@ LRESULT FormEditor::OnSaveAs()
 
 			hr = dest->Commit(STGC_DEFAULT);
 
-			setText(filename_);
+			ODBGS("!!!!!!!!!!!!!!");
+			mol::ostringstream oss;
+			oss << "rename " << filename_ << " -> " << ofn.fileName() << std::endl;
+			ODBGS(oss.str());
+			docs()->Rename( mol::variant(filename_), mol::variant(ofn.fileName()) );
 			filename_ = ofn.fileName();
+			setText(filename_);
 		}
 	}
 	return 0;

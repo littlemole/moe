@@ -734,6 +734,7 @@ void Editor::OnSaveAs()
 		{
 			if ( S_OK == sci->SaveAs( mol::bstr(ofn.fileName() ) ) )
 			{
+				docs()->Rename( mol::variant(filename_), mol::variant(ofn.fileName()) );
 				mol::ostringstream oss;
 				oss << _T("file saved as ") << ofn.fileName() << _T(" saved");
 				statusBar()->status(oss.str());
@@ -938,7 +939,7 @@ HRESULT __stdcall  Editor::Sintilla_Events::OnFileNameChanged( BSTR filename, BS
 {
 	mol::MdiFrame* mf = mol::wndFromHWND<mol::MdiFrame>( This()->mdiParent() );
 
-	docs()->Rename( mol::variant(This()->filename_), mol::variant(path) );
+	//docs()->Rename( mol::variant(This()->filename_), mol::variant(path) );
 	//This()->filename_ = mol::bstr(path).toString();
 
 	//mol::invoke(*This(),&Editor::updateUI );

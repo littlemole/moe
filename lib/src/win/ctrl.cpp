@@ -204,6 +204,33 @@ void ListBox::resetContent()
     sendMessage( LB_RESETCONTENT,0,0 ) ; 
 }
 
+int ListBox::index(const mol::string& s )
+{
+	LRESULT r = sendMessage( LB_FINDSTRING,-1, (LPARAM)s.c_str() ) ; 
+	return r;
+}
+
+int ListBox::count()
+{
+	LRESULT r = sendMessage( LB_GETCOUNT,0, 0 ) ; 
+	return r;
+}
+
+
+void ListBox::setData(int index, void* d )
+{
+	sendMessage( LB_SETITEMDATA,(WPARAM)index, (LPARAM)d ) ; 
+}
+
+void* ListBox::getData(int index)
+{
+	LRESULT r = sendMessage( LB_GETITEMDATA,(WPARAM)index, (LPARAM)0 ) ;
+	if ( r == LB_ERR )
+		return 0;
+
+	return (void*)r;
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////

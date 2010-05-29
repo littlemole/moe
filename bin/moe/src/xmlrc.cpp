@@ -225,7 +225,6 @@ extern "C" void load_codegen_metadata()
 
     UI().addSubMenu(  IDM_MOE,  IDM_MOE,  IDM_FILE );
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_FILE);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
@@ -236,6 +235,8 @@ extern "C" void load_codegen_metadata()
     UI().addMenuSeparator(IDM_MOE,IDM_FILE);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_PRINT, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, false, true);
+    UI().addMenuSeparator(IDM_MOE,IDM_FILE);
+        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_FILE);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, false, true);
 
@@ -316,7 +317,6 @@ extern "C" void load_codegen_metadata()
 
     UI().addSubMenu(  IDM_MOE_DIR,  IDM_MOE_DIR,  IDM_FILE );
         UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, false, true);
     UI().addMenuSeparator(IDM_MOE_DIR,IDM_FILE);
         UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
@@ -362,7 +362,6 @@ extern "C" void load_codegen_metadata()
 
     UI().addSubMenu(  IDM_MOE_IMG,  IDM_MOE_IMG,  IDM_FILE );
         UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, false, true);
     UI().addMenuSeparator(IDM_MOE_IMG,IDM_FILE);
         UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
@@ -408,13 +407,14 @@ extern "C" void load_codegen_metadata()
 
     UI().addSubMenu(  IDM_SMALL_MENU,  IDM_SMALL_MENU,  IDM_FILE );
         UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, false, true);
     UI().addMenuSeparator(IDM_SMALL_MENU,IDM_FILE);
         UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, false, true);
     UI().addMenuSeparator(IDM_SMALL_MENU,IDM_FILE);
         UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, false, true);
+    UI().addMenuSeparator(IDM_SMALL_MENU,IDM_FILE);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, false, true);
     UI().addMenuSeparator(IDM_SMALL_MENU,IDM_FILE);
         UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, false, true);
 
@@ -454,7 +454,6 @@ extern "C" void load_codegen_metadata()
 
     UI().addSubMenu(  IDM_MOE_HEX,  IDM_MOE_HEX,  IDM_FILE );
         UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, false, true);
     UI().addMenuSeparator(IDM_MOE_HEX,IDM_FILE);
         UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
@@ -504,7 +503,6 @@ extern "C" void load_codegen_metadata()
 
     UI().addSubMenu(  IDM_MOE_HTML,  IDM_MOE_HTML,  IDM_FILE );
         UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, false, true);
     UI().addMenuSeparator(IDM_MOE_HTML,IDM_FILE);
         UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);

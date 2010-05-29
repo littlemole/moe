@@ -210,6 +210,11 @@ public:
     int getCurSel();
     mol::string getString(int index);
     void resetContent();
+	int index(const mol::string& s );
+	int count();
+
+	void setData(int index,void* d);
+	void* getData(int index);
 
 protected:
     virtual int style();
