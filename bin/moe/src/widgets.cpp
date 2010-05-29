@@ -571,25 +571,39 @@ LRESULT TabDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 mol::string findFile(const mol::string& f)
 {
-	if ( mol::Path::exists(f) )
+	ODBGS(f);
+
+	if ( mol::Path::exists(f) ) 
+	{
+		ODBGS("FOUND");
 		return f;
+	}
 
 	mol::string modulePath = mol::Path::pathname(binPath());
 	mol::string configPath = mol::Path::pathname(prefPath());
 
-	//modulePath = mol::Path::addBackSlash(modulePath);
-	//configPath = mol::Path::addBackSlash(configPath);
+	modulePath = mol::Path::addBackSlash(modulePath);
+	configPath = mol::Path::addBackSlash(configPath);
 
 
 	//configPath.append(_T("\\"));
 	configPath.append(f);
+
+	ODBGS(configPath);
 	if ( mol::Path::exists(configPath) )
+	{
+		ODBGS("FOUND");
 		return configPath;
+	}
 
 	//modulePath.append(_T("\\"));
 	modulePath.append(f);
+	ODBGS(modulePath);
 	if ( mol::Path::exists(modulePath) )
+	{
+		ODBGS("FOUND");
 		return modulePath;
+	}
 
 	return _T("");
 }
