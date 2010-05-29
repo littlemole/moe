@@ -63,7 +63,7 @@ UserForm::UserForm( )
 	//eraseBackground_ = 1;
 	wndClass().setIcon(moe()->icon); 
 	wndClass().hIconSm(moe()->icon); 
-	scriptEngine_ = _T("PerlScript");
+	scriptEngine_ = _T("Javascript");
 	dirty_ = false;
 
 	this->script = new Script;
@@ -198,8 +198,8 @@ bool UserForm::initialize(const mol::string& p, bool designMode, bool Debug)
 
 		getClientRect(r);
 
-		r.left -=1;
-		r.top -=1;
+		r.left -=4;
+		r.top -=4;
 
 		mol::punk<IOleInPlaceObject>	inplace(oleObject);
 		inplace->SetObjectRects(&r, &r);
