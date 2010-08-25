@@ -5,7 +5,7 @@
 #include "moebar.h"
 #include "xmlui.h"
 #include "ole/Rib.h"
-
+#include "TaskBar.h"
 #include "ribbonres.h"
 
 using namespace mol::win;
@@ -13,7 +13,6 @@ using namespace mol::ole;
 using namespace mol::io;
 
 mol::TCHAR OutFilesFilter[]   = _T("ANSI\0*.*\0UTF-8\0*.*\0UTF-16 (LE)\0*.*\0\0");
-
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -51,7 +50,6 @@ Editor::Instance* Editor::CreateInstance(const mol::string& file, bool utf8, boo
 	if ( !e->initialize(file,utf8,readOnly) )
 	{
 		e->destroy();
-		//e->Release();
 		return 0;
 	}
 	return e;
@@ -59,17 +57,11 @@ Editor::Instance* Editor::CreateInstance(const mol::string& file, bool utf8, boo
 
 bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 {
-	// no OLE border on oleframe
-	//if ( oleFrame )
-	//{
-	//	oleFrame->SetBorderSpace(0);
-	//}
-
 	filename_ = p;
 
 	// get client rectangle
 	mol::Rect r;
-	::GetClientRect(mdiParent(),&r);
+	::GetClientRect(mdiClient(),&r);
 
 	// determine window menu
 	HMENU m = mol::UI().Menu(IDM_MOE);
@@ -111,31 +103,10 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 
 	statusBar()->status(80);
 
-	// color dialog COM obj
-	//col_.createObject(CLSID_ColorDialog);
-
-
-
 	// get default values from config and init scintilla
 
 	moe()->moeConfig->InitializeEditorFromPreferences( (IMoeDocument*)this );
 
-	/*
-	VARIANT_BOOL vbBackSpaceUnindents;
-	VARIANT_BOOL vbTabUsage;
-	VARIANT_BOOL vbTabIndents;
-	long tw = 0;
-
-	moe()->get_TabWidth(&tw);
-	moe()->get_BackSpaceUnindents(&vbBackSpaceUnindents);
-	moe()->get_TabUsage(&vbTabUsage);
-	moe()->get_TabIndents(&vbTabIndents);
-
-	sci->put_TabWidth(tw);
-	sci->put_TabUsage(vbTabUsage);
-	sci->put_TabIndents(vbTabIndents);
-	sci->put_BackSpaceUnindents(vbBackSpaceUnindents);
-	*/
 
 	sci->put_ReadOnly( readOnly ? VARIANT_TRUE : VARIANT_FALSE );
 
@@ -145,11 +116,15 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 	}
 	statusBar()->status(100);
 
+	thumb = taskbar()->addTab( this );
+
 	// now maximize the window
 	maximize();
+	OnLayout(0,0,0);
 
 	return true;
 }
+
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -187,14 +162,21 @@ void Editor::OnNcDestroy()
 LRESULT Editor::OnMDIActivate(WPARAM unused, HWND activated)
 {
 	ODBGS("Editor::OnMDIActivate");
+
+	if ( activated != hWnd_ )
+	{
+		thumb.refreshIcon();
+	}
 	BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
 	if ( activated == hWnd_ )
 	{
+
 		tab()->select( filename_ );
 		updateUI();
 		setFocus();
+		thumb.refreshIcon(true);
 	}
-    return 0;
+	return 0;
 }
 
 void Editor::OnConvertTabs()
@@ -828,9 +810,6 @@ void Editor::OnDebugScript()
 
 void Editor::OnMenu(HMENU popup, LPARAM unused)
 {
-	//if ( mol::Ribbon::ribbon()->enabled())
-	//	return;
-
 	HMENU frameMenu = mol::UI().Menu(IDM_MOE);
 
 	if ( popup == mol::UI().SubMenu(IDM_MOE,IDM_MODE_EOL) )
@@ -842,109 +821,23 @@ void Editor::OnMenu(HMENU popup, LPARAM unused)
 
 
 //////////////////////////////////////////////////////////////////////////////
-//
-// COM section
-//
-//////////////////////////////////////////////////////////////////////////////
 
-
-/////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////
-/*
-HRESULT __stdcall Editor::get_Filename( BSTR* filename)
+HRESULT __stdcall Editor::get_FilePath( BSTR *fname)
 {
-	if ( !filename )
+	if ( fname  )
 	{
-		return E_FAIL;
-	}
-	if ( filename )
-	{
-		if ( sci )
-		{
-			HRESULT hr = sci->get_Filename(filename);
-			return hr;
-		}
-	}
-	return S_FALSE;
-}
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall Editor::get_Path( BSTR* p)
-{			
-	if (!p)
-		return E_POINTER;
-
-	mol::bstr b;
-	if ( S_OK == this->get_Filename(&b) )
-	{
-		if ( b)
-		{
-			mol::string tmp(mol::Path::parentDir(b.toString()));
-			*p = ::SysAllocString(mol::towstring(tmp).c_str());
-			return S_OK;
-		}
-	}
-	*p = 0;
-	return S_OK;
-}
-/////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall Editor::get_Type(  long* type)
-{
-	if ( type )
-	{
-		*type = XMOE_DOCTYPE_DOC;
+		*fname = 0;
+		*fname = ::SysAllocString( mol::towstring(filename_).c_str() );
 	}
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  Editor::Close()
-{
-	VARIANT_BOOL vb;
-
-	if ( sci && ( S_OK != sci->Modified(&vb) ) )
-		return S_FALSE;
-
-	if ( sci && ( vb == VARIANT_TRUE ) )
-	{
-		mol::bstr path;
-		sci->get_Filename(&path);
-		if ( IDYES != ::MessageBox(*this,_T("File is modified.\r\nClose without Save?"), path.toString().c_str() ,MB_YESNO|MB_ICONEXCLAMATION) )
-			return S_FALSE;
-	}
-    BaseWindowType::wndProc( *this, WM_CLOSE, 0,0);
-	return S_OK;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  Editor::Activate()
-{
-	activate();
-	//updateUI();
-	return S_OK;
-}
-*/
-//////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
 HRESULT __stdcall  Editor::Sintilla_Events::OnFileNameChanged( BSTR filename, BSTR path)
 {
 	mol::MdiFrame* mf = mol::wndFromHWND<mol::MdiFrame>( This()->mdiParent() );
-
-	//docs()->Rename( mol::variant(This()->filename_), mol::variant(path) );
-	//This()->filename_ = mol::bstr(path).toString();
-
-	//mol::invoke(*This(),&Editor::updateUI );
 	This()->updateUI();
-
 	return S_OK;
 }
 
@@ -962,10 +855,6 @@ HRESULT __stdcall  Editor::Sintilla_Events::OnShowMenu( VARIANT_BOOL* showMenue)
 
 HRESULT __stdcall  Editor::Sintilla_Events::OnPosChange( long line )
 {
-//	mol::ostringstream oss;
-//	oss << _T("line ") << line;
-//	statusBar()->status(oss.str());
-
 	mol::ostringstream oss;
 	oss << (line+1);
 
@@ -1293,58 +1182,9 @@ void Editor::createMenuFromConf(HMENU menu,HMENU popup)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-
-/*
-void Editor::walkConf(HMENU parent, ISetting* set, std::map<int,ISetting*>& confMap, int& id)
-{
-    if ( set )
-    {
-		long l;
-		bstr key;
-		if ( S_OK == set->get_Key(&key) )
-		{
-			if ( S_OK == set->Count(&l) )
-			{
-				if ( l > 0 )
-				{
-					HMENU m = ::CreateMenu();
-					MenuItemInfo* inf = new MenuItemInfo(key.toString().c_str(),false,-1,0);
-					::AppendMenu( parent, MF_POPUP|MF_OWNERDRAW, (UINT_PTR)m, (mol::TCHAR*)inf);//key.toString().c_str() );
-					for ( long i = 0; i < l; i++ )
-					{
-						punk<ISetting> s;
-						if ( S_OK == set->Item(variant(i),&s) )
-						{
-							if ( s )
-							{
-								walkConf(m,s,confMap,id);
-							}
-						}
-					}
-				}
-				else
-				{
-					MenuItemInfo* inf = new MenuItemInfo(key.toString().c_str(),false,-1,0);
-					::AppendMenu( parent, MF_OWNERDRAW, (UINT_PTR)id, (mol::TCHAR*)inf);//key.toString().c_str() );
-					confMap[id] = (ISetting*)set;
-					id++;
-				}
-			}
-		}
-    }
-}
-*/
-
 
 void Editor::walkConf(HMENU parent, ISetting* set, std::map<int,ISetting*>& confMap, int& id)
 {
-	/*
-	static MenuItemInfo*' infScript    = new MenuItemInfo( _T("Script"),false,IDM_USER_SCRIPT,mol::UI().Bitmap(IDB_TOOLBAR));
-	static MenuItemInfo* infBatch     = new MenuItemInfo( _T("Batch"),false,IDM_USER_BATCH,mol::UI().Bitmap(IDB_TOOLBAR));
-	static MenuItemInfo* infForm      = new MenuItemInfo( _T("Form"),false,IDM_USER_FORM,mol::UI().Bitmap(IDB_TOOLBAR));
-	static MenuItemInfo* infShortCuts = new MenuItemInfo( _T("ShortCuts"),false,IDM_USER_SHORTCUT,mol::UI().Bitmap(IDB_TOOLBAR));
-*/
     if ( !set )
 		return;
 

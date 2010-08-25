@@ -81,6 +81,19 @@
             Win64="$(var.Win64)" Location="either">
             <CreateFolder/>
           </Component>
+          
+          <Directory Id="gdiPlusDir" Name="moe">
+           <Component Id="GdiPlus" Guid="{698600A4-66AC-4e7a-9AB0-D37CB10E947F}"  >
+            <RegistryKey Action="none" Key="Software\mol\moe\gdiplus" Root="HKCU" >
+              <RegistryValue Type="string" Value="1" KeyPath="yes" />
+            </RegistryKey>
+            <File Id='gdiplus' Name='gdiplus.dll' DiskId='1' Source='gdiplus.dll'  />
+             <Condition >
+               <![CDATA[ VersionNT <= 500]]>
+             </Condition>
+           </Component>
+          </Directory>
+
 
         </Directory>
       </Directory>
@@ -96,7 +109,7 @@
             <File Id='uiXmo' Name='ui.xmo' DiskId='1' Source='.\moe\ui.xmo'  />
             <RemoveFolder Id='MOEAPPDATAFOLDER' On='uninstall' />
           </Component>
-
+          
         </Directory>
       </Directory>
 
@@ -133,6 +146,13 @@
       <ComponentRef Id='moeData' />
       <ComponentRef Id="moeShortcut" />
 
+    </Feature>
+
+    <Feature AllowAdvertise='no' InstallDefault='local' Absent='allow'
+         Id='GdiPlus' Title='GdiPlusForWin2K' Description='GdiPlus for Windows 2000'
+         Level='0' ConfigurableDirectory="INSTALLLOCATION" TypicalDefault="install">
+      <Condition Level="1"><![CDATA[ VersionNT <= 500]]></Condition>
+      <ComponentRef Id="GdiPlus" />
     </Feature>
 
 

@@ -62,7 +62,6 @@ using namespace mol::io;
 
 UserForm::UserForm( ) 
 {
-	//eraseBackground_ = 1;
 	wndClass().setIcon(moe()->icon); 
 	wndClass().hIconSm(moe()->icon); 
 	scriptEngine_ = _T("Javascript");
@@ -348,18 +347,10 @@ LRESULT UserForm::OnClose()
 void UserForm::OnDestroy()
 {
 	setMenu(0);
-
-	//oleObject->Close(0);
-
 	script->close();
 	script.release();
 	unAdviseControls();
 	disconnectObjects();
-
-	//clientSite->dispose();
-	//oleObject.release();
-	//clientSite.release();
-	//frame.release();
 }
 
 void UserForm::OnNcDestroy()
@@ -388,9 +379,6 @@ void UserForm::OnLangPerlScript()
 
 void UserForm::OnMenu(HMENU popup, LPARAM unused)
 {
-	//if ( mol::Ribbon::ribbon()->enabled())
-	//	return;
-
 	HMENU frameMenu = mol::UI().Menu(IDM_MENU_DESIGNFORM);
 
 	if ( popup == mol::UI().SubMenu(IDM_MENU_DESIGNFORM,IDM_FORMLANG) )
@@ -423,8 +411,6 @@ void UserForm::OnMenu(HMENU popup, LPARAM unused)
 		{
 			m.unCheckItem(IDM_FORMLANG_PERLSCRIPT );
 		}
-
-		//::DrawMenuBar(*this);
 	}
 }
 
@@ -471,106 +457,6 @@ HRESULT __stdcall  UserForm::get_FilePath(  BSTR *filename)
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// COM section
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////
-/*
-HRESULT __stdcall UserForm::get_Form( IDispatch** d)
-{
-	if (!d)
-		return E_INVALIDARG;
-	*d = 0;
-
-	mol::punk<MSForms::_UserForm> form(oleObject);
-	if ( form )
-		return form->QueryInterface( IID_IDispatch, (void**)d);
-
-	return E_FAIL;
-}
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall UserForm::get_Filename( BSTR* filename)
-{
-	if ( !filename )
-		return E_INVALIDARG;
-
-	*filename = ::SysAllocString( mol::towstring(filename_).c_str() );
-	return S_OK;
-}
-
-
-HRESULT __stdcall UserForm::put_Filename( BSTR filename)
-{
-	if ( !filename )
-		return S_OK;
-
-	this->filename_ = mol::toString(filename);
-
-	return S_OK;
-}
-
-HRESULT __stdcall UserForm::get_Title( BSTR* filename)
-{
-	if (!filename )
-		return E_INVALIDARG;
-
-	*filename = ::SysAllocString( mol::towstring(title_).c_str() );
-	return S_OK;
-}
-
-HRESULT __stdcall UserForm::put_Title( BSTR filename)
-{
-	if (!filename )
-		title_ = _T("");
-	else
-		title_ = mol::bstr(filename).toString();
-
-	this->setText( filename );
-	return S_OK;
-}
-
-HRESULT __stdcall UserForm::get_Script( IDispatch** s)
-{
-	mol::punk<IDispatch> disp;
-	if ( (S_OK == script->getScript(_T(""),&disp)) )
-	{
-		return disp->QueryInterface(IID_IDispatch, (void**)s);
-	}
-
-	return S_OK;
-}
-
-HRESULT __stdcall UserForm::Show()
-{
-	show(SW_SHOW);
-	mol::punk<MSForms::_UserForm> form(oleObject);
-	if ( form )
-	{
-		form->put_ShowToolbox(MSForms::fmModeOn);
-	}
-	else 
-	{
-		
-	}
-	return S_OK;
-}
-HRESULT __stdcall UserForm::Hide()
-{
-	show(SW_HIDE);
-	mol::punk<MSForms::_UserForm> form(oleObject);
-	if ( form )
-	{
-		form->put_ShowToolbox(MSForms::fmModeOff);
-	}
-	return S_OK;
-}
-*/
 
 HRESULT __stdcall UserForm::Load( IStorage *pStg) 
 {
@@ -659,103 +545,6 @@ HRESULT __stdcall UserForm::Hide()
 }
 
 
-/*
-void UserForm::initObject( REFCLSID clsid, IStorage* store )
-{
-	if ( this->oleObject )
-	{
-		oleObject->Close(OLECLOSE_NOSAVE);
-		oleObject.release();
-	}
-
-	HRESULT hr = oleObject.createObject( clsid );
-
-	mol::punk<IOleClientSite> cs(clientSite);
-	hr = oleObject->SetClientSite( cs );
-
-	mol::punk<IPersistStorage> ps(oleObject);
-	if ( ps )
-	{
-		HRESULT hr;
-		hr = ps->InitNew(store);
-	}
-
-	hr = oleObject->SetHostNames(L"My Host Name", 0);
-
-	hr = OleSetContainedObject( oleObject,TRUE);
-
-	RECT r;
-	getClientRect(r);
-
-	hr = oleObject->DoVerb(OLEIVERB_SHOW, NULL, cs, -1, *this, &r);
-}
-
-bool UserForm::loadObjectFromStorage( REFCLSID clsid, IStorage* store )
-{
-	if ( this->oleObject )
-	{
-		oleObject->Close(OLECLOSE_NOSAVE);
-		oleObject.release();
-	}
-
-	HRESULT hr = oleObject.createObject( clsid );
-
-	mol::punk<IOleClientSite> cs(clientSite);
-	hr = oleObject->SetClientSite( cs );
-
-	// load object from structured storage
-	try
-	{	
-		mol::punk<IPersistStorage> ps(oleObject);
-		if ( ps )
-		{
-			HRESULT hr;
-			mol::punk<IStorage> s;
-			hr = copyStorageTemp(store,&s);
-			if ( hr == S_OK && s )
-			{
-				hr = ps->Load(s);
-			}
-		}
-	}
-	catch (mol::X x)
-	{
-		oleObject->Close(OLECLOSE_NOSAVE);
-		throw x;
-	}
-
-
-	hr = oleObject->SetHostNames(L"My Host Name", 0);
-
-	hr = OleSetContainedObject( oleObject,TRUE);
-
-	RECT r;
-	getClientRect(r);
-	hr = oleObject->DoVerb(OLEIVERB_SHOW, NULL, cs, -1, *this, &r);
-	return false;
-}
-
-HRESULT UserForm::copyStorageTemp(IStorage* src, IStorage** copy)
-{
-	if ( !src || !copy )
-		return E_POINTER;
-
-	*copy = 0;
-	mol::TCHAR  path[MAX_PATH];
-	mol::TCHAR file[MAX_PATH];
-	::GetTempPath(255,path);
-	::GetTempFileName( path, _T("JsHost_"), 0, file );
-
-
-	mol::punk<IStorage> store;
-	if ( S_OK == ::StgCreateDocfile( mol::towstring(file).c_str(), STGM_DELETEONRELEASE|STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE|STGM_TRANSACTED,0,&store) )
-	{
-		HRESULT hr = src->CopyTo(0,0,0,store);
-		return store->QueryInterface( IID_IStorage, (void**)copy);
-	}
-	return E_FAIL;
-}
-*/
 void UserForm::adviseControls(  )
 {
 	mol::punk<MSForms::_UserForm> form(oleObject);
@@ -924,12 +713,6 @@ void EventDlg::populateControlList(HTREEITEM hit)
 	if ( ctrl )
 	{		
 		ctrl->get_Name(&name);
-/*		mol::punk<IDispatch> obj;
-		if ( S_OK == ctrl->get_Object(&obj) )
-		{
-			unk = obj;
-		}
-*/
 	}
 
 	IID iid;
@@ -1085,8 +868,6 @@ void EventDlg::populateControlTree(IUnknown* ctrl, HTREEITEM hit)
 
 void EventDlg::copySelectionToClipboard()
 {
-	//mol::string handler = list_.getString(list_.getCurSel());
-
 	int pos = list_.getCurSel();
 	mol::TCHAR* handler = (mol::TCHAR*)list_.getData(pos);
 	if (!handler)
@@ -1107,7 +888,6 @@ void EventDlg::copySelectionToClipboard()
 		glob2.detach();
 
 		::CloseClipboard();
-		
 		::PostMessage(moe()->getActive(),WM_COMMAND,IDM_EDIT_PASTE,0);
 	}
 }

@@ -3,6 +3,20 @@
 #include "win/Layout.h"
 #include "util/X.h"
 
+//#define min std::min
+//#define max std::max
+
+//#include <Gdiplusflat.h>
+
+//#include <GdiplusGpStubs.h>
+
+//#include <gdiplus.h>
+//#include <gdiplusgraphics.h>
+
+//typedef BOOL __stdcall PrintWindowPtr( HWND hwnd, HDC hdcBlt, UINT nFlags );
+//PrintWindowPtr* PrintWindow = (PrintWindowPtr*)mol::dllFunc( _T("User32.dll"), _T("PrintWindow") );
+
+
 namespace mol {
 namespace win {
 /////////////////////////////////////////////////////////////////
@@ -11,10 +25,18 @@ namespace win {
 Wnd::Wnd()
 	: isMidi_(false)
 {
+//	bmp_ = 0;
 }
 
 Wnd::~Wnd()
-{}
+{
+/*	if ( bmp_ )
+	{
+		::DeleteObject( (HGDIOBJ)bmp_);
+		bmp_ = 0;
+	}
+	*/
+}
 
 BOOL Wnd::update()
 {
@@ -203,8 +225,297 @@ HBITMAP Wnd::snapshot( RECT* r )
         DeleteDC(hdcTemp);
         ReleaseDC(*this, hdcWin);
 
+/*		if ( bmp_ )
+		{
+			::DeleteObject( (HGDIOBJ) bmp_ );
+			bmp_ = 0;
+		}
+
+		bmp_ = hbm;
+*/
 		return hbm;
 }
+/*
+HBITMAP Wnd::BMP()
+{
+	return bmp_;
+}
+/*
+HBITMAP Wnd::createDIB2(int nWidth, int nHeight)
+{
+	Gdiplus::Graphics g(*this);
+
+//	GpGraphics* g = 0;
+
+//	GdipCreateFromHWND( *this, &g );
+
+//	if (!g)
+//		return 0;
+
+	Gdiplus::Bitmap bmp(nWidth,nHeight,&g);
+
+//	GdipCreateBitmapFromGraphics(nWidth,nHeight,g,&bmp);
+
+	HBITMAP hbm = 0;
+	Gdiplus::Color color(0,0,0,0);
+	bmp.GetHBITMAP( color, &hbm );
+//	GdipCreateHBITMAPFromBitmap( bmp, &hbm, 0 );
+
+//	GdipDisposeImage( bmp );
+//	GdipDeleteGraphics(g);
+	return hbm;
+}
+*/
+/*
+HBITMAP Wnd::createDIB(int nWidth, int nHeight)
+{
+	RECT cr;
+	::GetClientRect( *this, &cr );
+
+	RECT wr;
+	::GetWindowRect(  *this, &wr );
+
+	POINT pt = {0,0};
+
+	::ClientToScreen( *this, &pt );
+
+	int offx = pt.x - wr.left;
+	int offy = pt.y - wr.top;
+
+	if (nWidth == -1)
+		nWidth = wr.right-wr.left;
+	if (nHeight == -1)
+		nHeight = wr.bottom-wr.top;
+
+	int w = wr.right-wr.left;
+	int h = wr.bottom-wr.top;
+
+
+	Gdiplus::Bitmap bitmap(w, h, PixelFormat32bppPARGB );// PixelFormat32bppARGB );//0x26200a );
+
+    Gdiplus::Graphics *pGraphics= new Gdiplus::Graphics( &bitmap );
+
+    pGraphics->Clear( 0xffffffff );// 0xffffffff );  // clear to solid white
+
+	HDC mem = pGraphics->GetHDC();
+
+
+	BOOL bret = PrintWindow( *this, mem, 0 );
+
+	pGraphics->Flush();
+	pGraphics->ReleaseHDC(mem);
+	delete pGraphics;
+
+
+	HDC dest = CreateCompatibleDC(0);
+
+	Gdiplus::Bitmap*  bitmap2 = 0;
+
+	bitmap2 = new Gdiplus::Bitmap( nWidth, nHeight, PixelFormat32bppARGB);//PixelFormat32bppPARGB );// PixelFormat32bppARGB );//0x26200a );
+
+
+    Gdiplus::Graphics* pGraphics2 = new Gdiplus::Graphics( bitmap2 );
+	
+
+	Gdiplus::RectF rSrc(0,0,w,h);
+	Gdiplus::RectF rDest(0,0,nWidth,nHeight);
+	Gdiplus::ImageAttributes ia;
+	
+	pGraphics2->DrawImage( &bitmap, rDest,offx,offy,nWidth,nHeight, Gdiplus::UnitPixel, &ia, NULL, NULL );
+
+	delete pGraphics2;
+
+
+	HBITMAP hBitmap = 0;
+	bitmap2->GetHBITMAP(Gdiplus::Color::Transparent, &hBitmap);
+
+	DeleteDC(mem);
+	DeleteDC(dest);
+
+	if ( bmp_ ) 
+	{
+		::DeleteObject( (HGDIOBJ)bmp_ );
+	}
+	bmp_ = hBitmap;
+	return hBitmap;
+}
+*/
+
+/*
+HBITMAP Wnd::createDIB(int nWidth, int nHeight)
+{
+	if ( !hWnd_ )
+		return 0;
+
+    HBITMAP hbm = NULL;
+	HDC hdcMem = ::CreateCompatibleDC(NULL);
+    if (hdcMem == NULL)
+		return 0;
+
+	mol::Rect r;
+	getClientRect(r);
+
+	if (nWidth == -1)
+		nWidth = r.right-r.left;
+	if (nHeight == -1)
+		nHeight = r.bottom-r.top;
+
+    BITMAPINFO bmi;
+    ZeroMemory(&bmi.bmiHeader, sizeof(BITMAPINFOHEADER));
+    bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bmi.bmiHeader.biWidth = nWidth;
+    bmi.bmiHeader.biHeight = -nHeight;  // Use a top-down DIB
+    bmi.bmiHeader.biPlanes = 1;
+    bmi.bmiHeader.biBitCount = 32;
+
+    PBYTE pbDS = NULL;
+	hbm = ::CreateDIBSection(hdcMem, &bmi, DIB_RGB_COLORS, (VOID**)&pbDS, NULL, NULL);
+    if (hbm == NULL)
+		return 0;
+
+	HDC srcDc = ::GetDC( hWnd_ );
+
+	HGDIOBJ old = 0;
+	old = ::SelectObject( hdcMem, (HGDIOBJ)hbm );
+	::StretchBlt( hdcMem, 0,0,nWidth,nHeight, srcDc, 0, 0, r.right, r.bottom, SRCCOPY|CAPTUREBLT );
+	::SelectObject( hdcMem, old );
+
+	::DeleteDC( hdcMem );
+	::ReleaseDC( hWnd_, srcDc );
+
+	if ( bmp_ ) 
+	{
+		::DeleteObject( (HGDIOBJ)bmp_ );
+	}
+	bmp_ = hbm;
+	return hbm;
+}*/
+/*
+HBITMAP Wnd::CaptureWindow( int nWidth , int nHeight )
+{
+	if ( !hWnd_ )
+		return 0;
+
+    HBITMAP hbm = NULL;
+	HDC hdcMem = ::CreateCompatibleDC(NULL);
+    if (hdcMem == NULL)
+		return 0;
+
+
+    BITMAPINFO bmi;
+    ZeroMemory(&bmi.bmiHeader, sizeof(BITMAPINFOHEADER));
+    bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bmi.bmiHeader.biWidth = nWidth;
+    bmi.bmiHeader.biHeight = -nHeight;  // Use a top-down DIB
+    bmi.bmiHeader.biPlanes = 1;
+    bmi.bmiHeader.biBitCount = 32;
+
+    PBYTE pbDS = NULL;
+	hbm = ::CreateDIBSection(hdcMem, &bmi, DIB_RGB_COLORS, (VOID**)&pbDS, NULL, NULL);
+    if (hbm == NULL)
+		return 0;
+
+	HDC srcDc = ::GetDC( hWnd_ );
+	mol::Rect r;
+	getClientRect(r);
+
+	HGDIOBJ old = 0;
+	old = ::SelectObject( hdcMem, (HGDIOBJ)hbm );
+
+	RECT rd = { 0,0, nWidth, nHeight };
+	::FillRect( hdcMem, &rd, (HBRUSH)::GetStockObject( BLACK_BRUSH ) );
+	::BitBlt( hdcMem, 0,0,nWidth,nHeight, srcDc, 0, 0, SRCCOPY|CAPTUREBLT );
+	::SelectObject( hdcMem, old );
+
+	::DeleteDC( hdcMem );
+	::ReleaseDC( hWnd_, srcDc );
+
+	if ( bmp_ ) 
+	{
+		::DeleteObject( (HGDIOBJ)bmp_ );
+	}
+	bmp_ = hbm;
+	return hbm;
+
+}
+*/
+/*
+HBITMAP Wnd::CaptureWindow( int nWidth , int nHeight )
+{
+	RECT r;
+	//::GetWindowRect( hWnd_, &r );
+
+	::GetClientRect( hWnd_, &r );
+	POINT p = { 0,0 };
+	::ClientToScreen( hWnd_, &p);
+
+	r.left = p.x;
+	r.top = p.y;
+	r.right += p.x;
+	r.bottom +=p.y;
+
+	//SIZE clientSize = GetClientSize(hWnd);
+
+	if (nWidth == -1)
+		nWidth = r.right-r.left;
+	if (nHeight == -1)
+		nHeight = r.bottom-r.top;
+
+	HDC windowDC = ::GetWindowDC(NULL);
+	
+	Gdiplus::Bitmap bitmap(nWidth, nHeight, PixelFormat32bppARGB );//0x26200a );
+	Gdiplus::Graphics graphics(&bitmap);
+	HDC bitmapDC = graphics.GetHDC();
+
+	//HDC srcDc = ::CreateCompatibleDC(bitmapDC);
+
+	//HBITMAP b = this->createDIB( r.right,r.bottom );
+
+	//HGDIOBJ old = 0;
+
+	//old = ::SelectObject( srcDc, (HGDIOBJ)b );
+
+	HBITMAP hBitmap = NULL;
+	*/
+/*
+	int w = r.right/3;
+	int h = r.bottom/3;
+
+	if ( w < nWidth || h < nHeight)
+	{
+		w += nWidth;
+		h += nHeight;
+	}
+*/
+/*
+	int w = r.right-r.left;
+	int h = r.bottom-r.top;
+
+	BOOL ret = ::StretchBlt(bitmapDC, 0, 0, bitmap.GetWidth(), bitmap.GetHeight(),
+		windowDC,  r.left,r.top, w, h,
+		SRCCOPY | CAPTUREBLT);
+
+	graphics.Flush();
+	graphics.ReleaseHDC(bitmapDC);
+
+//	old = ::SelectObject( srcDc, old );
+
+	//::DeleteDC(srcDc);
+	::ReleaseDC(hWnd_, windowDC);
+
+	if (ret)
+	{
+		bitmap.GetHBITMAP( Gdiplus::Color::Transparent, &hBitmap);
+	}
+
+	if ( bmp_ ) 
+	{
+		::DeleteObject( (HGDIOBJ)bmp_ );
+	}
+	bmp_ = hBitmap;
+	return hBitmap;
+}
+*/
 
 /////////////////////////////////////////////////////////////////
 //the one and only framework-windowproc
@@ -337,6 +648,7 @@ LRESULT WndProc::OnSize( UINT message, WPARAM wParam, LPARAM lParam)
 
 	::InvalidateRect(*this,0,TRUE);
 	::UpdateWindow(*this);
+
 	return 0;
 }
 
@@ -350,6 +662,7 @@ LRESULT WndProc::OnLayout( UINT message, WPARAM wParam, LPARAM lParam)
 
 	::InvalidateRect(*this,0,TRUE);
 	::UpdateWindow(*this);
+
 	return 0;
 }
 

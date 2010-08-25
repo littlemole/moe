@@ -3,20 +3,17 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "Dot.h"
 #include "shared.h"
 #include "widgets.h"
 #include "ax/jre/jre_h.h"
 
-
+class TaskbarWnd;
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 class MoeWnd;
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-//using namespace mol::win;
-//using namespace mol::ole;
-//using namespace mol;
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 	  
@@ -51,16 +48,7 @@ public:
 
 	void OnMDIActivate( HWND activated );
 
-	/////////////////////////////////////////////////////////////////////
-	// public COM api
-	/////////////////////////////////////////////////////////////////////
-/*
-	virtual HRESULT __stdcall get_Filename( BSTR* filename);
-	virtual HRESULT __stdcall get_Path( BSTR* dirpath);
-	virtual HRESULT __stdcall get_Type( long* type);
-	virtual HRESULT __stdcall Close();
-	virtual HRESULT __stdcall Activate();
-*/
+
 	// htmlwnd base class overrides - customize IE impl
 	DWORD UIflags();
 	HRESULT hideContextMenu();
@@ -101,26 +89,6 @@ protected:
 		virtual HRESULT __stdcall OleCmd(  long cmd);    
 		virtual HRESULT __stdcall get_FilePath(  BSTR *filename);
 
-		/////////////////////////////////////////////////////////////////////
-/*
-		virtual HRESULT __stdcall get_Top( long* top);
-		virtual HRESULT __stdcall put_Top( long top);
-		virtual HRESULT __stdcall get_Left( long* left);
-		virtual HRESULT __stdcall put_Left( long left);
-		virtual HRESULT __stdcall get_Width( long* width);
-		virtual HRESULT __stdcall put_Width( long width);
-		virtual HRESULT __stdcall get_Height( long* width);
-		virtual HRESULT __stdcall put_Height( long width);
-
-		virtual HRESULT __stdcall Eval( BSTR src, BSTR scrptLanguage );
-		virtual HRESULT __stdcall get_Document( IDispatch** doc);
-		virtual HRESULT __stdcall get_Title( BSTR* title);
-		virtual HRESULT __stdcall put_Title( BSTR  title);
-		virtual HRESULT __stdcall Close();
-		virtual HRESULT __stdcall get_Scripts( IDispatch** s);
-		virtual HRESULT __stdcall put_CodeBehind( IDispatch* code);
-		virtual HRESULT __stdcall OleCmd( long cmd );
-*/
 	};
 	mol::stack_obj<MoeFrame> frame_;
 
@@ -153,18 +121,6 @@ protected:
 
 
 	/////////////////////////////////////////////////////////////////////
-	// compiler events
-	/////////////////////////////////////////////////////////////////////
-/*
-	class MoeHtmlWnd_compilerSink : public stack_obj<CompilerEvents>
-	{
-		public : 
-			outer_this(MoeHtmlWnd,compilerSink_); 
-			HRESULT virtual __stdcall ErrorMsg(BSTR error);
-			HRESULT virtual __stdcall Success();
-	} compilerSink_;
-*/
-	/////////////////////////////////////////////////////////////////////
 	// webbrowser events
 	/////////////////////////////////////////////////////////////////////
 
@@ -179,13 +135,6 @@ protected:
 	
 private:
 	int							style_;
-//	mol::punk<IDispatch>		codeBehind_;
-//	mol::punk<ICompiler>		compiler_;
-	mol::punk<IDispatch>		codeBehind_;
-	mol::punk<IUnknown>		compiler_;
-	Domain*						domain_;
-	//punk<IJVM>					jvm_;
-	mol::punk<IUnknown>					jvm_;
 	mol::bstr					filename_;
 	mol::string					location;
 

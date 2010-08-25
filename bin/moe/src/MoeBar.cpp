@@ -368,31 +368,5 @@ LRESULT MoeBar::wndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 	}
-	/*
-	switch(msg)
-	{
-		case WM_NOTIFY :
-		{
-			mol::Crack message(msg,wParam,lParam);
-			if ( message.nmhdr()->code == TBN_DROPDOWN )
-			{	
-				Menu m(mol::UI().Menu(IDM_MOE),false);
-					
-				int index = message.nmtoolbar()->iItem;
-		//		if ( index == IDM_MODE_EOL )
-		//			createMenuFromConf(m,mol::UI().SubMenu(IDM_MOE,IDM_MODE_EOL));
-		//		else
-		//			createMenuFromConf(m,mol::UI().SubMenu(IDM_MOE,IDM_TOOLS));
-
-				Menu context( mol::UI().SubMenu(IDM_MOE,index) );
-				moe()->showContext(context);
-
-		//		updateUI();
-				return TBDDRET_DEFAULT;
-				return 0;
-			}
-		}
-	}
-	*/
 	return mol::ReBar::wndProc(wnd,msg,wParam,lParam);
 }

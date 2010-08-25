@@ -118,6 +118,9 @@ mol::SearchDlg* searchDlg();
 class UrlDlg;    
 UrlDlg* urlDlg();
 
+class Taskbar;    
+Taskbar* taskbar();
+
 struct ISetting;
 ISetting* config();
 

@@ -312,6 +312,10 @@ UrlDlg* urlDlg()
 {
   return &mol::singleton<UrlDlg>();
 }
+Taskbar* taskbar()
+{
+  return &mol::singleton<Taskbar>();
+}
 ISetting* config()
 {
   return mol::comSingleton<ISetting,&CLSID_Setting>();

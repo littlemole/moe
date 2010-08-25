@@ -11,7 +11,6 @@ using namespace mol;
 
 class ImgViewer : 
 	public MdiChildFrame<ImgViewer,MdiChild>,
-	//public mol::Dispatch<IMoeDocument>,
 	public DispatchMidiWindow<ImgViewer,IMoeDocument,MOE_DOCTYPE_PIC>,
 	public ProvideClassInfo<ImgViewer>,
 	public interfaces< ImgViewer, 

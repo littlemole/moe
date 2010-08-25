@@ -29,19 +29,6 @@ public:
 	void OnDestroy();
 	void OnNcDestroy();
 
-
-public:
-
-	/////////////////////////////////////////////////////////////////////
-	// COM
-	/////////////////////////////////////////////////////////////////////
-/*
-	virtual HRESULT __stdcall get_Filename( BSTR* filename);
-	virtual HRESULT __stdcall get_Path( BSTR* dirpath);
-	virtual HRESULT __stdcall get_Type( long* type);
-	virtual HRESULT __stdcall Close();
-	virtual HRESULT __stdcall Activate();
-*/
 private:
 
 	mol::punk<IShellPane> list;
@@ -57,7 +44,6 @@ private:
     } events;
 
 	bool initialize(const mol::string& p);
-	//mol::string filename_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

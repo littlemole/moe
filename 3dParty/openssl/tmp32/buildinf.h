@@ -9,12 +9,12 @@
   /* auto-generated/updated by util/mk1mf.pl for crypto/cversion.c */
   #define CFLAGS "cl  /MD /W3 /WX /G5 /Ox /O2 /Ob2 /Gs0 /GF /Gy /nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DOPENSSL_USE_APPLINK -I. /Fdout32dll -DOPENSSL_NO_RC5 -DOPENSSL_NO_MDC2 -DOPENSSL_NO_KRB5    "
   #define PLATFORM "VC-WIN32"
-  #define DATE "Sat May 29 20:20:26 2010"
+  #define DATE "Mon Aug 23 19:54:13 2010"
 #endif
 #ifdef MK1MF_PLATFORM_VC_CE
   /* auto-generated/updated by util/mk1mf.pl for crypto/cversion.c */
   #define CFLAGS "cl  /MD /W3 /WX /G5 /Ox /O2 /Ob2 /Gs0 /GF /Gy /nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DOPENSSL_USE_APPLINK -I. /Fdout32dll -DOPENSSL_NO_RC5 -DOPENSSL_NO_MDC2 -DOPENSSL_NO_KRB5    "
   #define PLATFORM "VC-CE"
-  #define DATE "Sat May 29 20:20:26 2010"
+  #define DATE "Mon Aug 23 19:54:14 2010"
 #endif
 

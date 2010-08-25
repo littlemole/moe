@@ -37,6 +37,8 @@ Hex::Instance* Hex::CreateInstance(const mol::string& file, bool readOnly)
 	Instance* e = new Instance;
 	e->AddRef();
 
+	statusBar()->status(30);
+
 	if (!e->initialize(p,readOnly))
 	{
 		e->destroy();
@@ -57,9 +59,13 @@ bool Hex::initialize(const mol::string& p, bool readOnly)
 	HMENU m = mol::UI().Menu(IDM_MOE);
 	windowMenu_ = mol::UI().SubMenu( IDM_MOE_HEX ,IDM_VIEW_WINDOWS);
 
+	statusBar()->status(40);
+
 	sink.Advise(oleObject);
 	show(SW_SHOW);
 	maximize();
+
+	statusBar()->status(50);
 
 	punk<IDispatch> disp;
 	get_Object(&disp);
@@ -69,6 +75,7 @@ bool Hex::initialize(const mol::string& p, bool readOnly)
 		return false;
 	}
 
+	statusBar()->status(80);
 	if ( mol::Path::exists(p) )
 	{
 		VARIANT_BOOL vb;
@@ -87,6 +94,7 @@ bool Hex::initialize(const mol::string& p, bool readOnly)
 			}
 		}
 	}
+	thumb = taskbar()->addTab( this );
 	return true;
 }
 
@@ -128,6 +136,11 @@ void Hex::OnMDIActivate(HWND activated)
 		statusBar()->status( getText() );
 		updateUI();
 		setFocus();
+		thumb.refreshIcon(true);
+	}
+	else 
+	{
+		thumb.refreshIcon();
 	}
 }
 
@@ -219,91 +232,3 @@ void Hex::updateUI()
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// COM section
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////
-/*
-HRESULT __stdcall Hex::get_Filename( BSTR* filename)
-{
-	if ( !filename )
-	{
-		return E_INVALIDARG;
-	}
-	if ( filename )
-	{
-		punk<IHexCtrl> hexer(oleObject);
-		if ( hexer )
-		{
-			HRESULT hr = hexer->get_Filename(filename);
-			return hr;
-		}
-	}
-	return S_FALSE;
-}
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall Hex::get_Path( BSTR* p)
-{			
-	if (!p)
-		return E_POINTER;
-
-	bstr bstr;
-	if ( S_OK == this->get_Filename(&bstr) )
-	{
-		if ( bstr )
-		{
-			mol::string tmp(mol::Path::parentDir(bstr.toString()));
-			*p = ::SysAllocString(mol::towstring(tmp).c_str());
-			return S_OK;
-		}
-	}
-	*p = 0;
-	return S_OK;
-}
-
-
-/////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall Hex::get_Type(  long* type)
-{
-	if ( type )
-	{
-		*type = XMOE_DOCTYPE_HEX;
-	}
-	return S_OK;
-}
-
-
-HRESULT __stdcall  Hex::Close()
-{
-	postMessage(WM_CLOSE,0,0);
-	return S_OK;
-}
-
-
-/////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  Hex::Activate()
-{
-	//!!!!!!!!!!!!
-	activate();
-	updateUI();
-	return S_OK;
-}
-*/
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////

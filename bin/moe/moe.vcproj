@@ -68,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\lib\src\win\Debug\win.lib ..\..\lib\src\ole\Debug\ole.lib ..\..\lib\src\util\Debug\util.lib ..\..\lib\src\xml\Debug\xml.lib ..\..\lib\src\thread\Debug\thread.lib ..\..\3dParty\scintilla\bin\static\debug\Scintilla.lib ..\..\3dParty\scintilla\bin\static\Debug\SciLexer.lib Imm32.lib shlwapi.lib wininet.lib comctl32.lib Msimg32.lib Mpr.lib Urlmon.lib ..\..\3dParty\pcre\Debug\pcre.lib ..\..\3dParty\expat\Source\lib\Debug\libexpatMT.lib"
+				AdditionalDependencies="..\..\lib\src\win\Debug\win.lib ..\..\lib\src\ole\Debug\ole.lib ..\..\lib\src\util\Debug\util.lib ..\..\lib\src\xml\Debug\xml.lib ..\..\lib\src\thread\Debug\thread.lib ..\..\3dParty\scintilla\bin\static\debug\Scintilla.lib ..\..\3dParty\scintilla\bin\static\Debug\SciLexer.lib Imm32.lib shlwapi.lib wininet.lib comctl32.lib Msimg32.lib Mpr.lib gdiplus.lib Urlmon.lib ..\..\3dParty\pcre\Debug\pcre.lib ..\..\3dParty\expat\Source\lib\Debug\libexpatMT.lib"
 				OutputFile="$(OutDir)/moe.exe"
 				LinkIncremental="2"
 				GenerateManifest="true"
@@ -237,7 +237,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\..\lib\src\win\Release\win.lib ..\..\lib\src\ole\Release\ole.lib ..\..\lib\src\util\Release\util.lib ..\..\lib\src\xml\Release\xml.lib ..\..\lib\src\thread\Release\thread.lib Imm32.lib shlwapi.lib wininet.lib comctl32.lib Mpr.lib urlmon.lib ..\..\3dParty\pcre\Release\pcre.lib Msimg32.lib ..\..\3dParty\expat\Source\lib\Release\libexpatMT.lib"
+				AdditionalDependencies="..\..\lib\src\win\Release\win.lib ..\..\lib\src\ole\Release\ole.lib ..\..\lib\src\util\Release\util.lib ..\..\lib\src\xml\Release\xml.lib ..\..\lib\src\thread\Release\thread.lib Imm32.lib shlwapi.lib wininet.lib comctl32.lib Mpr.lib gdiplus.lib urlmon.lib ..\..\3dParty\pcre\Release\pcre.lib Msimg32.lib ..\..\3dParty\expat\Source\lib\Release\libexpatMT.lib"
 				OutputFile="$(OutDir)/moe.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="false"
@@ -404,7 +404,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="&quot;..\..\lib\src\win\Unicode Debug\win.lib&quot; &quot;..\..\lib\src\ole\Unicode Debug\ole.lib&quot; &quot;..\..\lib\src\util\Unicode Debug\util.lib&quot; &quot;..\..\lib\src\xml\Unicode Debug\xml.lib&quot; &quot;..\..\lib\src\thread\Unicode Debug\thread.lib&quot; ..\..\3dParty\scintilla\bin\static\debug\Scintilla.lib ..\..\3dParty\scintilla\bin\static\Debug\SciLexer.lib Imm32.lib shlwapi.lib wininet.lib comctl32.lib Msimg32.lib Mpr.lib Urlmon.lib ..\..\3dParty\pcre\Debug\pcre.lib &quot;..\..\3dParty\expat\Source\lib\Unicode Debug\libexpatMT.lib&quot;"
+				AdditionalDependencies="&quot;..\..\lib\src\win\Unicode Debug\win.lib&quot; &quot;..\..\lib\src\ole\Unicode Debug\ole.lib&quot; &quot;..\..\lib\src\util\Unicode Debug\util.lib&quot; &quot;..\..\lib\src\xml\Unicode Debug\xml.lib&quot; &quot;..\..\lib\src\thread\Unicode Debug\thread.lib&quot; ..\..\3dParty\scintilla\bin\static\debug\Scintilla.lib ..\..\3dParty\scintilla\bin\static\Debug\SciLexer.lib Imm32.lib shlwapi.lib wininet.lib comctl32.lib Msimg32.lib Mpr.lib Urlmon.lib gdiplus.lib ..\..\3dParty\pcre\Debug\pcre.lib &quot;..\..\3dParty\expat\Source\lib\Unicode Debug\libexpatMT.lib&quot;"
 				OutputFile="$(OutDir)/moe.exe"
 				LinkIncremental="2"
 				GenerateManifest="true"
@@ -575,7 +575,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/SUBSYSTEM:WINDOWS,4.00"
-				AdditionalDependencies="..\..\lib\src\win\uni_Release\win.lib ..\..\lib\src\ole\uni_Release\ole.lib ..\..\lib\src\util\uni_Release\util.lib ..\..\lib\src\xml\uni_Release\xml.lib ..\..\lib\src\thread\uni_Release\thread.lib Imm32.lib shlwapi.lib wininet.lib comctl32.lib Mpr.lib urlmon.lib ..\..\3dParty\pcre\uni_Release\pcre.lib Msimg32.lib ..\..\3dParty\expat\Source\lib\uni_release\libexpatMT.lib"
+				AdditionalDependencies="..\..\lib\src\win\uni_Release\win.lib ..\..\lib\src\ole\uni_Release\ole.lib ..\..\lib\src\util\uni_Release\util.lib ..\..\lib\src\xml\uni_Release\xml.lib ..\..\lib\src\thread\uni_Release\thread.lib Imm32.lib shlwapi.lib wininet.lib comctl32.lib Mpr.lib gdiplus.lib urlmon.lib ..\..\3dParty\pcre\uni_Release\pcre.lib Msimg32.lib ..\..\3dParty\expat\Source\lib\uni_release\libexpatMT.lib"
 				OutputFile="$(OutDir)/moe.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="false"
@@ -830,7 +830,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="&quot;..\..\lib\src\win\x64\Unicode Debug 64\win.lib&quot; &quot;..\..\lib\src\ole\x64\Unicode Debug 64\ole.lib&quot; &quot;..\..\lib\src\util\x64\Unicode Debug 64\util.lib&quot; &quot;..\..\lib\src\xml\x64\Unicode Debug 64\xml.lib&quot; &quot;..\..\lib\src\thread\x64\Unicode Debug 64\thread.lib&quot; ..\..\3dParty\scintilla\bin\static64\debug\Scintilla.lib ..\..\3dParty\scintilla\bin\static64\Debug\SciLexer.lib Imm32.lib shlwapi.lib wininet.lib comctl32.lib Msimg32.lib Mpr.lib Urlmon.lib &quot;..\..\3dParty\pcre\x64\Unicode Debug 64\pcre.lib&quot; &quot;..\..\3dParty\expat\Source\lib\x64\Unicode Debug 64\libexpatMT.lib&quot;"
+				AdditionalDependencies="&quot;..\..\lib\src\win\x64\Unicode Debug 64\win.lib&quot; &quot;..\..\lib\src\ole\x64\Unicode Debug 64\ole.lib&quot; &quot;..\..\lib\src\util\x64\Unicode Debug 64\util.lib&quot; &quot;..\..\lib\src\xml\x64\Unicode Debug 64\xml.lib&quot; &quot;..\..\lib\src\thread\x64\Unicode Debug 64\thread.lib&quot; ..\..\3dParty\scintilla\bin\static64\debug\Scintilla.lib ..\..\3dParty\scintilla\bin\static64\Debug\SciLexer.lib Imm32.lib shlwapi.lib wininet.lib comctl32.lib Msimg32.lib Mpr.lib Urlmon.lib gdiplus.lib &quot;..\..\3dParty\pcre\x64\Unicode Debug 64\pcre.lib&quot; &quot;..\..\3dParty\expat\Source\lib\x64\Unicode Debug 64\libexpatMT.lib&quot;"
 				OutputFile="$(OutDir)/moe.exe"
 				LinkIncremental="2"
 				GenerateManifest="false"
@@ -999,7 +999,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/SUBSYSTEM:WINDOWS,4.00"
-				AdditionalDependencies="..\..\lib\src\win\x64\uni_Release_64\win.lib ..\..\lib\src\ole\x64\uni_Release_64\ole.lib ..\..\lib\src\util\x64\uni_Release_64\util.lib ..\..\lib\src\xml\x64\uni_Release_64\xml.lib ..\..\lib\src\thread\x64\uni_Release_64\thread.lib Imm32.lib shlwapi.lib wininet.lib comctl32.lib Mpr.lib urlmon.lib ..\..\3dParty\pcre\x64\uni_Release_64\pcre.lib Msimg32.lib ..\..\3dParty\expat\Source\lib\x64\uni_release_64\libexpatMT.lib"
+				AdditionalDependencies="..\..\lib\src\win\x64\uni_Release_64\win.lib ..\..\lib\src\ole\x64\uni_Release_64\ole.lib ..\..\lib\src\util\x64\uni_Release_64\util.lib ..\..\lib\src\xml\x64\uni_Release_64\xml.lib ..\..\lib\src\thread\x64\uni_Release_64\thread.lib Imm32.lib shlwapi.lib wininet.lib comctl32.lib Mpr.lib urlmon.lib gdiplus.lib ..\..\3dParty\pcre\x64\uni_Release_64\pcre.lib Msimg32.lib ..\..\3dParty\expat\Source\lib\x64\uni_release_64\libexpatMT.lib"
 				OutputFile="$(OutDir)/moe.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="false"
@@ -1053,10 +1053,6 @@
 			</File>
 			<File
 				RelativePath=".\src\Docs.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\dot.cpp"
 				>
 			</File>
 			<File
@@ -1164,6 +1160,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\src\Taskbar.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\UserForm.cpp"
 				>
 			</File>
@@ -1206,10 +1206,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\include\dot.h"
-				>
-			</File>
-			<File
 				RelativePath=".\include\editor.h"
 				>
 			</File>
@@ -1246,10 +1242,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\include\mscorlib_tlh.h"
-				>
-			</File>
-			<File
 				RelativePath=".\include\ole.h"
 				>
 			</File>
@@ -1267,6 +1259,10 @@
 			</File>
 			<File
 				RelativePath=".\include\stdafx.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\TaskBar.h"
 				>
 			</File>
 			<File
@@ -1291,10 +1287,6 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-			<File
-				RelativePath=".\Debug\moe.tlb"
-				>
-			</File>
 			<File
 				RelativePath=".\resources\mol.rc"
 				>

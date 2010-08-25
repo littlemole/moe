@@ -4,13 +4,12 @@
 #include "shared.h"
 #include "resource.h"
 
-//using namespace mol;
 
 //////////////////////////////////////////////////////////////////////////////////
 // Editor Wnd
 //////////////////////////////////////////////////////////////////////////////////
 
-
+class TaskbarWnd;
 
 class Editor 
 	: 
@@ -26,25 +25,8 @@ public:
 	Editor();
 	virtual ~Editor();
 
-	//typedef debug_com_instance<Editor> Instance;
-
 	static Instance* CreateInstance(const mol::string& p, bool utf8, bool readOnly);
 
-	/////////////////////////////////////////////////////////////////////
-	// COM
-	/////////////////////////////////////////////////////////////////////
-	/*
-	virtual HRESULT __stdcall get_Filename( BSTR* filename);
-	virtual HRESULT __stdcall get_Path( BSTR* dirpath);
-
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall get_Type( long* type);
-
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall  Close();
-	virtual HRESULT __stdcall  Activate();
-*/
-	/////////////////////////////////////////////////////////////////////
 
 	// std windows msgs
 
@@ -97,17 +79,9 @@ public:
 
 	LRESULT OnToolbarDropDown(NMTOOLBAR* toolbar );
 
-   virtual HRESULT __stdcall get_FilePath( BSTR *fname)
-   {
-		if ( fname  )
-		{
-			*fname = 0;
-			*fname = ::SysAllocString( mol::towstring(filename_).c_str() );
-		}
-		return S_OK;
-   }
+   virtual HRESULT __stdcall get_FilePath( BSTR *fname);
 
- protected:
+protected:
 
 	bool initialize(const mol::string& p, bool utf8, bool readOnly);
 	void updateUI();		
@@ -139,8 +113,6 @@ protected:
 	std::map<int,ISetting*>		scriptMap;
 	std::map<int,ISetting*>		batchMap;
 	std::map<int,ISetting*>		formMap;
-
-	//punk<IColorPicker>			col_;
 
 	mol::string filename_;
 

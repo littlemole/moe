@@ -11,7 +11,7 @@
 using namespace mol::io;
 
 OleChild::OleChild( ) 
-{
+{	
 	eraseBackground_ = 1;
     wndClass().setIcon(moe()->icon); 
 	wndClass().hIconSm(moe()->icon); 
@@ -51,7 +51,11 @@ OleChild::Instance* OleChild::CreateInstance( const mol::string& p )
 	}
 
 	doc->maximize();
+	statusBar()->status(100);
 	doc->OnLayout(0,0,0);	
+
+	doc->thumb = taskbar()->addTab( doc );
+
 	return doc;
 }
 
@@ -66,12 +70,23 @@ OleChild::Instance* OleChild::CreateInstance( const mol::string& p, CLSID& clsid
 
 	doc->filename_ = p;
 	doc->AddRef();
+
+	statusBar()->status(30);
 	doc->create(p,0 ,mol::Rect(0,0,500,500),*moe());
+
 	doc->show(SW_SHOW);
+	statusBar()->status(50);
+
 	doc->newObjectFromStorage(clsid);
+	statusBar()->status(80);
 
 	doc->maximize();
+	statusBar()->status(100);
+
 	doc->OnLayout(0,0,0);	
+
+	doc->thumb = taskbar()->addTab( doc );
+
     return doc;
 }
 
@@ -81,8 +96,6 @@ void OleChild::OnDestroy()
 {
 	mol::variant v(filename_);
 	docs()->Remove(v);
-
-
 }
 
 
@@ -97,6 +110,14 @@ void OleChild::OnNcDestroy()
 LRESULT OleChild::OnMDIActivate(WPARAM unused, HWND activated)
 {
 	ODBGS("OleChild::OnMDIActivate");
+	if ( activated != hWnd_ )
+	{
+		thumb.refreshIcon();
+	}
+	else 
+	{
+		thumb.refreshIcon(true);
+	}
 
 	if ( mol::Ribbon::ribbon()->enabled() )
 	{
@@ -108,12 +129,13 @@ LRESULT OleChild::OnMDIActivate(WPARAM unused, HWND activated)
 			mol::Ribbon::ribbon()->mode(0);
 			mol::Ribbon::ribbon()->minimize();
 
+
 			// delay this or OLE embedded WORD will complaint in some cases
 			mol::invoke<OleChild,LRESULT,WPARAM,HWND>( *this, &OleChild::OnMDIActivateLater,unused, activated);	
 			return 0;
 		}
 	}
-	//mol::invoke<OleChild,LRESULT,WPARAM,HWND>( *this, &OleChild::OnMDIActivateLater,unused, activated);	
+
 	BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
     return 0;
 }
@@ -130,71 +152,6 @@ LRESULT OleChild::OnMDIActivateLater(WPARAM unused, HWND activated)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-
-/////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////
-/*
-HRESULT __stdcall OleChild::get_Filename( BSTR* filename)
-{
-	if ( !filename )
-		return E_INVALIDARG;
-
-	*filename = 0;
-	
-	mol::string title = this->getText();
-	//title = mol::Path::filename(title);
-	*filename = ::SysAllocString( mol::towstring(title).c_str() );
-	
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall OleChild::get_Path( BSTR* path)
-{
-	if ( !path )
-		return E_INVALIDARG;
-
-	*path = 0;
-	
-	mol::string title = this->getText();
-
-	mol::string tmp(mol::Path::parentDir(title));
-
-	*path = ::SysAllocString( mol::towstring(tmp).c_str() );
-
-	return S_OK;
-}
-
-
-/////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall OleChild::get_Type(  long* type)
-{
-	if ( type )
-	{
-		*type = XMOE_DOCTYPE_OLE;
-	}
-	return S_OK;
-}
-
-
-HRESULT __stdcall  OleChild::Close()
-{
-
-	postMessage(WM_CLOSE,0,0);
-	return S_OK;
-}
-
-HRESULT __stdcall  OleChild::Activate()
-{
-	activate();
-	return S_OK;
-}
-*/
 
 bool OleChild::openFile( const mol::string& path )
 {
@@ -259,34 +216,6 @@ bool OleChild::openFile( const mol::string& path )
 		}
 		moniker.release();
     }
-
-
-/*
-	if ( mol::Path::ext(path) != _T(".xml" ) )
-	if ( this->loadObjectFromMoniker(path))
-	{
-		return true;
-	}
-*/
-
-	//else check if we can bind to IPersistFile
-/*
-	punk<IPersistFile> pf;
-	hr = moniker->BindToObject(ctx, NULL, IID_IPersistFile, (void**)&pf);
-	if ( hr == S_OK )
-	{
-		// retrieve class id
-		hr = pf->GetClassID(&clsid);
-		if ( hr == S_OK )
-		{
-			moniker.release();
-			pf.release();
-
-
-			return loadObjectFromPersistFile(clsid,path);
-		}
-	}
-*/
 
 	// something unknown - instantiate webbrowser control
 	// and let it display whatever possible

@@ -10,6 +10,9 @@
 #include "moe_i.c"
 #include "xmlui.h"
 
+#define min std::min
+#define max std::max
+#include <gdiplus.h>
 
 
 //! Moe specific MDO loop override
@@ -77,6 +80,15 @@ int MoeApp::runEmbedded(const mol::string& cmdline)
 	return local_server<MoeLoop>::runEmbedded(cmdline);
 }
 
+// in standalone mode, we first check for a running instance and hand over
+// control if any, shutting down afterwards. if we are the only instance
+// we finally create the main window instance and check the commandline 
+// for files to be opened (explorer integration)
+// 
+
+// lesson learned: in regfree com we cannot marshal our own interfaces
+// because we havent registered them to COM
+// however COM always knows how to marshal IDispatch, which we utilize :-)
 
 int MoeApp::runStandalone(const mol::string& cmdline)
 {
@@ -89,7 +101,7 @@ int MoeApp::runStandalone(const mol::string& cmdline)
 		// pass any commandline parameters thru
 
 		openDocsFromCommandLine( m, cmdline );
-		mol::disp_invoke(m, 28 );
+		//mol::disp_invoke(m, 28 );
 		return 0;
 		
 	}
@@ -121,19 +133,22 @@ int MoeApp::runStandalone(const mol::string& cmdline)
 	return local_server<MoeLoop>::runStandalone(cmdline);
 }
 
-// in standalone mode, we first check for a running instance and hand over
-// control if any, shutting down afterwards. if we are the only instance
-// we finally create the main window instance and check the commandline 
-// for files to be opened (explorer integration)
-// 
 
-// lesson learned: in regfree com we cannot marshal our own interfaces
-// because we havent registered them to COM
-// however COM always knows how to marshal IDispatch, which we utilize :-)
 
-void MoeApp::openDocsFromCommandLine( IDispatch* m, mol::string cmdline )
+void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 {
 	std::string cl = mol::tostring(cmdline);
+
+	mol::variant v;
+	HRESULT hr = mol::get( moe, 1, &v);
+	if ( hr != S_OK )
+		return;
+
+	mol::punk<IDispatch> m(v.pdispVal);
+	if (!m )
+		return;
+
+	::CoAllowSetForegroundWindow(moe,0);
 
 	mol::RegExp rgxp("(\"([^\"]*)\")|([^ ]+)");
 	while ( rgxp.nextMatch( cl ) )
@@ -149,27 +164,27 @@ void MoeApp::openDocsFromCommandLine( IDispatch* m, mol::string cmdline )
 			s = s.substr(4);
 			if ( mol::Path::isDir(mol::toString(s)) )
 			{
-				mol::disp_invoke(m, 22, mol::variant(s) );
+				mol::disp_invoke(m, 6, mol::variant(s) );
 			}
 			else
 			{
-				mol::disp_invoke(m, 20, mol::variant(s) );
+				mol::disp_invoke(m, 4, mol::variant(s) );
 			}
 		}
 		else if ( s.substr(0,9) == "moe-utf8:" ) 
 		{
 			s = s.substr(9);
-			mol::disp_invoke(m, 21, mol::variant(s) );					
+			mol::disp_invoke(m, 4, mol::variant(s) );					
 		}
 		else if ( s.substr(0,8) == "moe-bin:" ) 
 		{
 			s = s.substr(8);
-			mol::disp_invoke(m, 23, mol::variant(s), mol::variant(true) );					
+			mol::disp_invoke(m, 7, mol::variant(s), mol::variant(true) );					
 		}
 		else if ( s.substr(0,9) == "moe-html:" ) 
 		{
 			s = s.substr(9);
-			mol::disp_invoke(m, 24, mol::variant(s) );					
+			mol::disp_invoke(m, 8, mol::variant(s) );					
 		}
 		else if ( s.substr(0,8) == "moe-dir:" ) 
 		{
@@ -178,20 +193,26 @@ void MoeApp::openDocsFromCommandLine( IDispatch* m, mol::string cmdline )
 			{
 				s = mol::tostring(mol::Path::parentDir(mol::toString(s)));
 			}
-			mol::disp_invoke(m, 22, mol::variant(s) );					
+			mol::disp_invoke(m, 6, mol::variant(s) );					
 		}
 		else
 		{
 			if ( mol::Path::isDir(mol::toString(s)) )
 			{
-				mol::disp_invoke(m, 22, mol::variant(s) );
+				mol::disp_invoke(m, 6, mol::variant(s) );
 			}
 			else
 			{
-				mol::disp_invoke(m, 20, mol::variant(s) );
+				mol::disp_invoke(m, 4, mol::variant(s) );
 			}
 		}
 	}
+
+	mol::variant view;
+	hr = mol::get( moe, 2, &view);
+	if ( hr != S_OK )
+		return;
+	mol::disp_invoke( view.pdispVal, 5 );
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -234,6 +255,24 @@ void MoeApp::init_extensions_if( )
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 
+class GdiPlusUser
+{
+public:
+	GdiPlusUser()
+	{
+		Gdiplus::GdiplusStartup(&gdiplusToken_, &gdiplusStartupInput_, NULL);	
+	}
+
+	~GdiPlusUser()
+	{
+		Gdiplus::GdiplusShutdown(gdiplusToken_);
+	}
+
+private:
+	Gdiplus::GdiplusStartupInput gdiplusStartupInput_;
+	ULONG_PTR           gdiplusToken_;
+};
+
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
@@ -242,9 +281,12 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 {
 	//::DebugBreak();
 
+
 	ODBGS(">>>>>>>>>>>>>>>> ENTER MAIN <<<<<<<<<<<<<<<<<<<<<<<<");
 	ODBGS("moe startup");
 	ODBGS(lpCmdLine);
+
+	GdiPlusUser gdip_;
 
 	int result = 0;
 	try {

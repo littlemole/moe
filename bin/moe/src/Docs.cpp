@@ -165,12 +165,9 @@ HRESULT __stdcall Docs::Open( BSTR fPath, IMoeDocument** d)
 
 	*d = 0;
 
-	mol::MdiChild* mc = openPath( mol::bstr(fPath).toString(), Docs::PREF_TXT, false);
+	mol::punk<IMoeDocument> doc;
+	open(0, mol::bstr(fPath).toString(), Docs::PREF_TXT, false,&doc);
 
-	if ( !mc )
-		return E_FAIL;
-
-	IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mc);
 	if ( !doc )
 		return E_FAIL;
 
@@ -184,12 +181,9 @@ HRESULT __stdcall Docs::OpenUTF8( BSTR fPath, IMoeDocument** d)
 
 	*d = 0;
 
-	mol::MdiChild* mc = openPath( mol::bstr(fPath).toString(), Docs::PREF_UTF8, false);
+	mol::punk<IMoeDocument> doc;
+	open(0, mol::bstr(fPath).toString(), Docs::PREF_UTF8, false,&doc);
 
-	if ( !mc )
-		return E_FAIL;
-
-	IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mc);
 	if ( !doc )
 		return E_FAIL;
 
@@ -203,12 +197,9 @@ HRESULT __stdcall Docs::OpenDir(BSTR dir,  IMoeDocument** d)
 
 	*d = 0;
 
-	mol::MdiChild* mc = openPath( mol::bstr(dir).toString(), Docs::PREF_TXT, false);
+	mol::punk<IMoeDocument> doc;
+	open(0, mol::bstr(dir).toString(), Docs::PREF_TXT, false,&doc);
 
-	if ( !mc )
-		return E_FAIL;
-
-	IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mc);
 	if ( !doc )
 		return E_FAIL;
 
@@ -222,12 +213,9 @@ HRESULT __stdcall Docs::OpenHexEditor(  BSTR f, VARIANT_BOOL vbReadOnly, IMoeDoc
 
 	*d = 0;
 
-	mol::MdiChild* mc = openPath( mol::bstr(f).toString(), Docs::PREF_HEX, vbReadOnly == VARIANT_TRUE ? true : false );
+	mol::punk<IMoeDocument> doc;
+	open(0, mol::bstr(f).toString(), Docs::PREF_HEX, vbReadOnly == VARIANT_TRUE ? true : false,&doc);
 
-	if ( !mc )
-		return E_FAIL;
-
-	IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mc);
 	if ( !doc )
 		return E_FAIL;
 
@@ -241,12 +229,9 @@ HRESULT __stdcall Docs::OpenHtmlFrame(  BSTR f,  IMoeDocument** d)
 
 	*d = 0;
 
-	mol::MdiChild* mc = openPath( mol::bstr(f).toString(), Docs::PREF_HTML, false );
+	mol::punk<IMoeDocument> doc;
+	open(0, mol::bstr(f).toString(), Docs::PREF_HTML, false,&doc);
 
-	if ( !mc )
-		return E_FAIL;
-
-	IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mc);
 	if ( !doc )
 		return E_FAIL;
 
@@ -260,12 +245,9 @@ HRESULT __stdcall Docs::OpenUserForm(  BSTR pathname, IMoeDocument** d )
 
 	*d = 0;
 
-	mol::MdiChild* mc = openPath( mol::bstr(pathname).toString(), Docs::PREF_FORM, false );
+	mol::punk<IMoeDocument> doc;
+	open(0, mol::bstr(pathname).toString(), Docs::PREF_FORM, false,&doc);
 
-	if ( !mc )
-		return E_FAIL;
-
-	IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mc);
 	if ( !doc )
 		return E_FAIL;
 
@@ -471,7 +453,6 @@ bool Docs::newFile(IMoeDocument** doc)
 	tab()->insertItem( mol::Path::filename(fn),fn,0);
 	tab()->select(fn);
 
-
 	progress()->show(SW_HIDE);
 	if (doc)
 		return edit->QueryInterface(IID_IMoeDocument,(void**)doc) == S_OK;
@@ -547,6 +528,7 @@ bool Docs::open( int index, const mol::string& path, InFiles pref, bool readOnly
 
 mol::MdiChild* Docs::openPath( const mol::string& path, InFiles pref, bool readOnly)
 {
+
 	statusBar()->status(10);
 	if ( path.size() < 1 )
 	{
@@ -651,6 +633,11 @@ mol::MdiChild* Docs::openPathText( const mol::string& path, bool readOnly )
 		moe()->activeObject->OnDocWindowActivate(FALSE);
 
 	Editor::Instance* edit = Editor::CreateInstance( path, false, readOnly );
+	if ( edit )
+			statusBar()->status(path);
+	else
+			statusBar()->status( _T("failed to load") );
+
 	return dynamic_cast<mol::MdiChild*>(edit);
 }
 	
@@ -662,6 +649,10 @@ mol::MdiChild* Docs::openPathUTF8( const mol::string& path, bool readOnly )
 		moe()->activeObject->OnDocWindowActivate(FALSE);
 
 	Editor::Instance* edit = Editor::CreateInstance( path, true, readOnly );
+	if ( edit )
+			statusBar()->status(path);
+	else
+			statusBar()->status( _T("failed to load") );
 	return dynamic_cast<mol::MdiChild*>(edit);
 }
 
@@ -673,6 +664,10 @@ mol::MdiChild* Docs::openPathHex( const mol::string& path, bool readOnly )
 
 	// open in hexedit
 	Hex::Instance* hexer = Hex::CreateInstance( path, readOnly );
+	if ( hexer )
+			statusBar()->status(path);
+	else
+			statusBar()->status( _T("failed to load") );
 	return dynamic_cast<mol::MdiChild*>(hexer);
 }
 
@@ -683,6 +678,10 @@ mol::MdiChild* Docs::openPathHtml( const mol::string& path)
 		moe()->activeObject->OnDocWindowActivate(FALSE);
 
 	MoeHtmlWnd::Instance* html = MoeHtmlWnd::CreateInstance(path);
+	if ( html )
+			statusBar()->status(path);
+	else
+			statusBar()->status( _T("failed to load") );
 	return dynamic_cast<mol::MdiChild*>(html);
 }
 
@@ -694,6 +693,10 @@ mol::MdiChild* Docs::openPathOle( const mol::string& path )
 		moe()->activeObject->OnDocWindowActivate(FALSE);
 
 	OleChild::Instance* oc = OleChild::CreateInstance(path);
+	if ( oc )
+			statusBar()->status(path);
+	else
+			statusBar()->status( _T("failed to load") );
 	return dynamic_cast<mol::MdiChild*>(oc);
 }
 
@@ -706,6 +709,10 @@ mol::MdiChild* Docs::openPathImg( const mol::string& path )
 		moe()->activeObject->OnDocWindowActivate(FALSE);
 
 	ImgViewer::Instance* iv = ImgViewer::CreateInstance(path);
+	if ( iv )
+			statusBar()->status(path);
+	else
+			statusBar()->status( _T("failed to load") );
     return dynamic_cast<mol::MdiChild*>(iv);
 }
 
@@ -718,6 +725,10 @@ mol::MdiChild* Docs::openPathDir( const mol::string& path )
 		moe()->activeObject->OnDocWindowActivate(FALSE);
 
 	DirChild::Instance* dc = DirChild::CreateInstance(path);
+	if ( dc )
+			statusBar()->status(path);
+	else
+			statusBar()->status( _T("failed to load") );
 	return dynamic_cast<mol::MdiChild*>(dc);
 }
 
@@ -729,5 +740,9 @@ mol::MdiChild* Docs::openPathForm( const mol::string& path )
 		moe()->activeObject->OnDocWindowActivate(FALSE);
 
 	FormEditor::Instance* f = FormEditor::CreateInstance(path);
+	if ( f )
+			statusBar()->status(path);
+	else
+			statusBar()->status( _T("failed to load") );
 	return dynamic_cast<mol::MdiChild*>(f);
 }

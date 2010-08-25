@@ -68,7 +68,11 @@ public:
     virtual int setFont( HFONT font );
 	virtual mol::string  getText();
 
-	virtual HBITMAP Wnd::snapshot(RECT* r = 0);
+	virtual HBITMAP snapshot(RECT* r = 0);
+	//virtual HBITMAP createDIB(int nWidth =-1, int nHeight=-1);
+	//virtual HBITMAP Wnd::createDIB2(int nWidth, int nHeight);
+	//virtual HBITMAP CaptureWindow(int nWidth =-1, int nHeight =-1);
+	//virtual HBITMAP BMP();
 
     //info
     virtual BOOL client2Screen( POINT& p );
@@ -106,6 +110,7 @@ public:
 protected:
     HWND	hWnd_;
 	bool	isMidi_;
+	//HBITMAP bmp_;
 };
 
 

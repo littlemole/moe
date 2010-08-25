@@ -8,15 +8,7 @@
 
 std::string engineFromPath(const std::string& path)
 {
-	mol::string engine = mol::engineFromExtension(mol::Path::ext(mol::toString(path)));
-	if ( engine == _T("") )
-	{
-		if ( mol::Path::ext(mol::toString(path)) == _T(".cs") )
-			engine = _T("cs");
-		else
-			engine = _T("");
-	}
-	return mol::tostring(engine);
+	return mol::tostring(mol::engineFromExtension(mol::Path::ext(mol::toString(path))));
 }
 
 

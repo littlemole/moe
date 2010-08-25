@@ -36,16 +36,6 @@ public:
     void OnHexRange(int code, int id, HWND ctrl);
 	void OnBytesShown();
 
-	/////////////////////////////////////////////////////////////////////
-	// COM
-	/////////////////////////////////////////////////////////////////////
-/*
-	virtual HRESULT __stdcall get_Filename( BSTR* filename);
-	virtual HRESULT __stdcall get_Path( BSTR* dirpath);
-	virtual HRESULT __stdcall get_Type( long* type);
-	virtual HRESULT __stdcall Close();
-	virtual HRESULT __stdcall Activate();
-*/
 protected:
 	bool initialize(const mol::string& p, bool readOnly);
 	void updateUI();		

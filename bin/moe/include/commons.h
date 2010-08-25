@@ -50,10 +50,7 @@
 // moe idl
 #include "moe_h.h"
 
-// .NET JIT support
-
-//#include "../net/JIT/JIT_tlh.h"
-
+// resource identifiers defines
 #include "resource.h"
 
 #endif

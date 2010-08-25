@@ -227,6 +227,9 @@
     <singleton name="searchDlg" class="mol::SearchDlg" />
     <singleton name="urlDlg" class="UrlDlg" />
 
+    <!-- ThumbnailTaskBar Support-->
+    <singleton name="taskbar" class="Taskbar" />
+    
     <!-- COM singleton: user settings -->
     <singleton name="config" class="ISetting" clsid="CLSID_Setting" />
     

@@ -9,7 +9,6 @@
 
 MoeFormWnd::MoeFormWnd(  )
 {
-	domain_   = 0;
     eraseBackground_ = 1;
 	wndClass().setIcon(moe()->icon); 
 	wndClass().hIconSm(moe()->icon); 
@@ -18,14 +17,6 @@ MoeFormWnd::MoeFormWnd(  )
 
 MoeFormWnd::~MoeFormWnd()
 {
-	if ( domain_ && compiler_)
-	{
-//		punk<IUnknown> unk(compiler_);
-//		compilerSink_.UnAdvise(unk.interface_);
-//		compiler_->Unload(VARIANT_TRUE);
-//		delete domain_;
-	}
-
 	ODBGS("~MoeFormWnd() dropped dead");
 }
 
@@ -104,9 +95,6 @@ void MoeFormWnd::OnClose()
 void MoeFormWnd::OnNcDestroy()
 {
 	ODBGS("MoeFormWnd::OnNcDestroy");
-	if ( codeBehind_ )
-		codeBehind_.release();
-
 	::CoDisconnectObject(((IExternalMoe*)&external_),0);
 
 	// trigger the missing WM_MDIACTIVATE as we broke MDI handling
@@ -241,112 +229,6 @@ HRESULT __stdcall  MoeFormWnd::get_FilePath(  BSTR *filename)
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-// COM section
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/*
-HRESULT __stdcall MoeFormWnd::Eval( BSTR src, BSTR scrptLanguage )
-{
-	punk<IDispatch> disp;
-	if ( S_OK == get_Document(&disp) && disp )
-	{
-		punk<IHTMLDocument2> doc(disp);
-
-		if (doc )
-		{
-			punk<IHTMLWindow2> window;
-			if ( S_OK == doc->get_parentWindow(&window) && window )
-			{
-				variant var;
-				return window->execScript( src, scrptLanguage, &var );
-			}
-		}
-	}
-	return E_FAIL;
-}
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall MoeFormWnd::get_Document( IDispatch** disp)
-{
-	if (!disp)
-		return E_INVALIDARG;
-	*disp = 0;
-	return this->doc(disp);
-}
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall MoeFormWnd::put_Title( BSTR title)
-{
-	if ( title )
-	{
-		setText( bstr(title).toString() );
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall MoeFormWnd::get_Title( BSTR* title)
-{
-	if ( !title )
-		return E_INVALIDARG;
-
-	*title = ::SysAllocString( mol::towstring( getText() ).c_str() );
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall MoeFormWnd::Close()
-{
-	postMessage(WM_CLOSE,0,0);
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall MoeFormWnd::get_Scripts( IDispatch** s)
-{
-	if (!s)
-		return E_INVALIDARG;
-
-	*s = 0;
-	
-	punk<IDispatch> disp;
-	if ( S_OK == get_Document( &disp ) && disp )
-	{
-		punk<IHTMLDocument2> doc2(disp);
-		if ( doc2 )
-		{
-			punk<IHTMLDocument> doc(doc2);
-			if ( doc )
-			{
-				return doc->get_Script(s);
-			}
-		}
-	}
-	return E_FAIL;
-}
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall MoeFormWnd::put_CodeBehind( IDispatch* code)
-{
-	codeBehind_ = code;
-	return S_OK;
-}
-
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall MoeFormWnd::OleCmd( long cmd)
-{
-	execWb((OLECMDID)cmd);
-	return S_OK;
-}
-
-*/
-
 HRESULT __stdcall MoeFormWnd::IDocHostUIHandler_GetExternal( IDispatch **ppDispatch)
 {
 	ODBGS("MoeFormWnd::IDocHostUIHandler_GetExternal");
@@ -420,77 +302,6 @@ HRESULT __stdcall MoeFormWnd::ExternalMoe:: get_Frame( IMoeHtmlFrame** f)
 
 HRESULT __stdcall MoeFormWnd::ExternalMoe::CodeBehind( BSTR fname )
 {
-	mol::string p(bstr(fname).toString());
-	mol::string l(This()->location_);
-	mol::string s = mol::Path::parentDir(l);
-
-	statusBar()->status( mol::bstr(fname).toString() );
-
-	if ( mol::Path::ext(p) == _T(".class") )
-	{
-		/*
-		mol::string classfile = p.substr(0,p.size()-6);
-		HRESULT hr = This()->jvm_.createObject(CLSID_JRE,CLSCTX_LOCAL_SERVER);
-		if ( hr != S_OK )
-			return hr;
-
-		mol::string module = mol::Path::pathname(mol::app<MoeApp>().getModulePath());
-		mol::string libpath = module + _T("\\com4j.jar;");
-		libpath += module + _T("\\jmoe.jar;");
-		libpath += s ;
-
-		hr = This()->jvm_->put_Classpath( mol::bstr(libpath) );
-		if ( hr != S_OK )
-			return hr;
-
-		hr = This()->jvm_->Extension( mol::bstr(classfile), (IXmoe*)(moe()), (IMoeFrame*)(This()) );
-		if ( hr!= S_OK )
-			return hr;
-*/
-		return S_OK;
-	} 
-	
-	if ( !mol::Path::exists(p) )
-	{
-
-		s += _T("\\");
-		s += p;
-		p = s;
-		if ( !mol::Path::exists(p) )
-			return S_OK;
-	}
-
-
-	mol::string assembly = p;
-	size_t pos = 0;
-	if (  (pos = assembly.find_last_of(_T("."))) != mol::string::npos )
-		assembly = assembly.substr(0,pos);
-
-/*
-	This()->domain_ = new Domain();
-	This()->domain_->CreateInstance<ICompiler>( _T("JIT"), _T("mol.JIT"), &(This()->compiler_) );
-
-	assembly += _T(".exe");
-
-	This()->compiler_->Start();
-	This()->compiler_->put_AssemblyName(bstr(assembly));
-	This()->compiler_->AddDirectory(bstr(mol::Path::pathname(p)));
-	This()->compiler_->AddSourceFile(bstr(mol::Path::filename(p)));
-
-	This()->compiler_->AddDirectory(bstr(mol::Path::pathname(mol::app<MoeApp>().getModulePath())));
-	This()->compiler_->AddReference(bstr(L"System.Web.dll"));
-	This()->compiler_->AddReference(bstr(L"moe.dll"));
-	This()->compiler_->AddReference(bstr(L"Interop.Moe.dll"));
-	This()->compiler_->AddReference(bstr(L"Interop.Scintilla.dll"));
-	This()->compiler_->AddReference(bstr(L"Interop.ShellCtrls.dll"));
-	This()->compiler_->AddObject(bstr("moe"),variant((IDispatch*)(IXmoe*)(moe())));
-	This()->compiler_->AddObject(bstr("frame"),variant((IDispatch*)(IMoeFrame*)(This())));
-
-	punk<IUnknown> unk(This()->compiler_);
-	This()->compilerSink_.Advise(unk.interface_);
-
-	This()->compiler_->Run();
-		*/
 	return S_OK;
 }
 
@@ -500,15 +311,7 @@ HRESULT __stdcall MoeFormWnd::ExternalMoe::get_Code( IDispatch** code )
 		return E_INVALIDARG;
 
 	*code = 0;
-	if ( ! (This()->codeBehind_) )
-		return E_FAIL;
-
-	mol::disp_invoke(This()->codeBehind_,2);
-
-	This()->codeBehind_->AddRef();
-	*code = This()->codeBehind_;
-	
-	return S_OK;
+	return E_FAIL;
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -539,8 +342,6 @@ ODBGS("MoeFormWnd::MoeFormWnd_htmlSink::WindowClosing");
 
 	if ( (isChildWindow == VARIANT_FALSE) )
 	{
-		This()->codeBehind_.release();
-		This()->codeBehind_ = 0;
 	}
 	return S_OK;
 }
@@ -569,151 +370,6 @@ HRESULT __stdcall MoeFormWnd::MoeFormWnd_htmlSink::DocumentComplete( IDispatch* 
 		{
 			This()->setText( title.toString() );
 		}
-
-		punk<IHTMLElement> body;
-		if ( S_OK == doc->get_body(&body) && body )
-		{
-			// check for C# syntax first
-			mol::string codebase   =  mol::Path::pathname(This()->location_);
-			mol::string codebehind = _T(""); 
-
-			mol::variant vCodebase;
-			if ( S_OK == body->getAttribute( mol::bstr("CODEBASE"),0,&vCodebase) )
-			{
-				if ( vCodebase.vt == VT_BSTR && vCodebase.bstrVal != 0 )
-				{
-					mol::string p = vCodebase.toString();
-					if (!mol::Path::exists(p))
-					{
-						p = codebase + _T("\\") + p;
-					}
-					if ( mol::Path::exists(p) )
-						codebase = p;
-				}
-			}
-			mol::variant vCodebehind;
-			if ( S_OK == body->getAttribute(mol::bstr("CODEBEHIND"),0,&vCodebehind) )
-			{
-				if ( vCodebehind.vt == VT_BSTR && vCodebehind.bstrVal != 0 )
-				{
-					codebehind = vCodebehind.toString();
-				}
-			}
-			if ( !codebehind.empty() )
-			{
-/*				statusBar()->status( mol::string(_T("CODEBEHIND: ")) + codebehind );
-
-				mol::string assembly = codebehind;
-				size_t pos = 0;
-				if (  (pos = assembly.find_last_of(_T("."))) != mol::string::npos )
-					assembly = assembly.substr(0,pos);
-
-
-				This()->domain_ = new Domain();
-				This()->domain_->CreateInstance<ICompiler>( _T("JIT"), _T("mol.JIT"), &(This()->compiler_) );
-
-				assembly += _T(".exe");
-
-				This()->compiler_->Start();
-				This()->compiler_->put_AssemblyName(bstr(assembly));
-				This()->compiler_->AddDirectory(bstr(codebase));
-				This()->compiler_->AddSourceFile(bstr(codebehind));
-
-				This()->compiler_->AddDirectory(bstr(mol::Path::pathname(mol::app<MoeApp>().getModulePath())));
-				This()->compiler_->AddReference(bstr(L"System.Web.dll"));
-				This()->compiler_->AddReference(bstr(L"moe.dll"));
-				This()->compiler_->AddReference(bstr(L"Interop.Moe.dll"));
-				This()->compiler_->AddReference(bstr(L"Interop.Scintilla.dll"));
-				This()->compiler_->AddReference(bstr(L"Interop.ShellCtrls.dll"));
-				This()->compiler_->AddObject(bstr("moe"),variant((IDispatch*)(IXmoe*)(moe())));
-				This()->compiler_->AddObject(bstr("frame"),variant((IDispatch*)(IMoeFrame*)(This())));
-
-				punk<IUnknown> unk(This()->compiler_);
-				This()->compilerSink_.Advise(unk.interface_);
-
-				statusBar()->status( mol::string(_T("run CODEBEHIND: ")) + codebehind );
-
-				This()->compiler_->Run();
-*/
-				return S_OK;
-			}
-
-/*
-			// check JAVA syntax now
-			mol::string classpath  =  mol::Path::pathname(This()->location_);
-			mol::string classbehind = _T(""); 
-
-			mol::variant vClasspath;
-			if ( S_OK == body->getAttribute( mol::bstr("CLASSPATH"),0,&vClasspath) )
-			{
-				if ( vClasspath.vt == VT_BSTR && vClasspath.bstrVal != 0 )
-				{
-					mol::string p = vClasspath.toString();
-					if (!mol::Path::exists(p))
-					{
-						p = classpath + _T("\\") + p;
-					}
-					if ( mol::Path::exists(p) )
-						classpath = p;
-						
-				}
-			}
-			mol::variant vClassbehind;
-			if ( S_OK == body->getAttribute(mol::bstr("CLASSBEHIND"),0,&vClassbehind) )
-			{
-				if ( vClassbehind.vt == VT_BSTR && vClassbehind.bstrVal != 0 )
-				{
-					classbehind = vClassbehind.toString();
-				}
-			}
-			if ( !classbehind.empty() )
-			{
-				statusBar()->status( mol::string(_T("CLASSBEHIND: ")) + codebehind );
-				if ( This()->jvm_ )
-					This()->jvm_.release();
-
-				HRESULT hr = This()->jvm_.createObject(CLSID_JRE,CLSCTX_LOCAL_SERVER);
-				if ( hr != S_OK )
-					return hr;
-
-				mol::string module = mol::Path::pathname(mol::app<MoeApp>().getModulePath());
-				mol::string libpath = module + _T("\\com4j.jar;");
-				libpath += module + _T("\\jmoe.jar;");
-				libpath += classpath ;
-
-				hr = This()->jvm_->put_Classpath( mol::bstr(libpath) );
-				if ( hr != S_OK )
-					return hr;
-
-				statusBar()->status( mol::string(_T("run CLASSBEHIND: ")) + codebehind );
-
-				hr = This()->jvm_->Extension( mol::bstr(classbehind), (IXmoe*)(moe()), (IMoeFrame*)(This()) );
-				if ( hr!= S_OK )
-					return hr;
-
-				return S_OK;
-			}
-			*/
-		}
 	}
 	return S_OK;
 }
-
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/*
-HRESULT __stdcall MoeFormWnd::MoeFormWnd_compilerSink::ErrorMsg(BSTR error)
-{
-	::MessageBox( *This(),bstr(error).toString().c_str(),_T("error:"),0);
-	return S_OK;
-}
-
-
-HRESULT __stdcall MoeFormWnd::MoeFormWnd_compilerSink::Success()
-{
-	statusBar()->status(_T("JIT success"));
-	return S_OK;
-}
-
-*/

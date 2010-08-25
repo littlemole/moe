@@ -23,6 +23,8 @@ using namespace mol::win;
 
 mol::TCHAR  InFilesFilter[]   = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open file in hexviewer *.*\0*.*\0\0");
 
+
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // MoeWnd Constructor - prepare Frame window object
@@ -46,9 +48,6 @@ MoeWnd::MoeWnd()
 	tabIndents_			= VARIANT_TRUE;
 	backSpaceUnIndents_	= VARIANT_FALSE;
 	fullScreen_			= VARIANT_FALSE;
-
-	//wpPrev_= { sizeof(wpPrev_) };
-	//wpPrev_ = { sizeof(wpPrev_) };
 
 	// don't erase window background, avoid flicker
     eraseBackground_ = 0;
@@ -74,11 +73,6 @@ MoeWnd::MoeWnd()
 
 MoeWnd::~MoeWnd()
 {
-	if ( NET().aware() && compiler_ )
-	{
-//		compilerSink()->UnAdvise(compiler_.interface_);
-	}
-
 	if ( icon )
 		::DestroyIcon(icon);
 
@@ -105,6 +99,8 @@ MoeWnd::Instance* MoeWnd::CreateInstance()
 	return moe;
 }
 
+/*
+
 //#include <dwmapi.h>
 
 #define MOL_DWM_BB_ENABLE                 0x00000001  // fEnable has been specified
@@ -118,7 +114,6 @@ typedef struct MOL_DWM_BLURBEHIND
     HRGN hRgnBlur;
     BOOL fTransitionOnMaximized;
 } MOL_DWM_BLURBEHIND, *MOL_PDWM_BLURBEHIND;
-
 
 HRESULT EnableBlurBehind(HWND hwnd)
 {
@@ -145,6 +140,7 @@ HRESULT EnableBlurBehind(HWND hwnd)
     }
     return hr;
 }
+*/
 /////////////////////////////////////////////////////////////////////
 
 void MoeWnd::OnCreate()
@@ -190,7 +186,6 @@ void MoeWnd::OnCreate()
 	((IMoe*)this)->QueryInterface( IID_IPersistStorage, (void**)&ps);
 	ps->Load( store );
 
-	//hr = EnableBlurBehind(*this);
 }
 
 
@@ -233,24 +228,6 @@ void MoeWnd::OnNcDestroy()
 
 void MoeWnd::OnMDIActivate(HWND activated)
 {
-	/*
-    int i = index(activated);
-	mol::MdiChild* mdi = mol::wndFromHWND<mol::MdiChild>(childAt(i));
-	if ( mdi )
-	{
-		IDoc* doc = dynamic_cast<IDoc*>(mdi);
-		if ( doc )
-		{
-			mol::bstr fn;
-			if ( S_OK == doc->get_Filename(&fn) && fn.bstr_ )
-			{
-				tab()->select( fn.toString() );
-				IOleInPlaceFrame_SetStatusText(fn);
-				
-			}
-		}
-	}
-	*/
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -266,8 +243,7 @@ LRESULT MoeWnd::OnMenu(UINT msg, WPARAM wParam, LPARAM lParam)
 
 	Menu m( (HMENU)wParam );
 
-	if ( !NET().aware() )
-		m.disableItem(IDM_TOOLS_EXECUTE_NET);
+	m.disableItem(IDM_TOOLS_EXECUTE_NET);
 
 	if ( !treeWnd()->isVisible() )
 		m.unCheckItem(IDM_VIEW_DIRVIEW );
@@ -469,10 +445,15 @@ LRESULT MoeWnd::OnEditPaste(UINT msg, WPARAM wParam, LPARAM lParam)
 }
 
 
+//////////////////////////////////////////////////////////////////////////////
+
 void MoeWnd::OnFind()
 {
     searchDlg()->findText(*this);
 }
+
+
+//////////////////////////////////////////////////////////////////////////////
 
 void MoeWnd::OnReplace()
 {
@@ -481,7 +462,7 @@ void MoeWnd::OnReplace()
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// Cancel
+// Settings
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -496,38 +477,7 @@ void MoeWnd::OnEditPrefs()
 }
 
 
-
-/*
-LRESULT MoeWnd::OnExecNet(UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	punk<IDoc> doc;
-	if ( S_OK != ->get_ActiveDoc(&doc) )
-		return 0;
-	if ( !doc )
-		return 0;
-
-	long type;
-	if ( S_OK == doc->get_Type(&type) )
-	{
-		if ( type == XMOE_DOCTYPE_DOC )
-		{
-			punk<IScintillAx> sci;
-			if ( S_OK == doc->get_Document(&sci) )
-			{
-				bstr script;
-				if ( S_OK == sci->GetText(&script) )
-				{
-					if ( script )
-					{
-//						->dotScript(script);
-					}
-				}
-			}
-		}
-	}	
-	return 0;
-}
-*/
+//////////////////////////////////////////////////////////////////////////////
 
 void MoeWnd::OnFx(int code, int id, HWND ctrl)
 {
@@ -582,6 +532,12 @@ void MoeWnd::OnShowDirView ()
 	OnLayout(0,0,0);
 }
 
+//////////////////////////////////////////////////////////////////////////////
+//
+// show/hide Tool bars
+//
+//////////////////////////////////////////////////////////////////////////////
+
 void MoeWnd::OnShowToolBar (int code, int id, HWND ctrl)
 {
 	Menu m(*this);
@@ -623,6 +579,12 @@ void MoeWnd::OnShowToolBar (int code, int id, HWND ctrl)
 	}
 	OnLayout(0,0,0);
 }
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// freeze toolbars
+//
+//////////////////////////////////////////////////////////////////////////////
 
 void MoeWnd::OnFreezeToolBar ()
 {
@@ -772,6 +734,11 @@ void MoeWnd::OnTabCtrl(NMHDR* notify )
 	return ;
 }
 
+//////////////////////////////////////////////////////////////////////////////
+//
+// OnToolbarRightClick
+//
+//////////////////////////////////////////////////////////////////////////////
 
 void MoeWnd::OnToolbarRightClick(NMHDR* notify )
 {
@@ -789,6 +756,12 @@ void MoeWnd::OnToolbarRightClick(NMHDR* notify )
 			::SendMessage( mol::UI().hWnd((unsigned int)notify->idFrom), TB_CUSTOMIZE, 0,0 );
 	}
 }
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// OnSyntax
+//
+//////////////////////////////////////////////////////////////////////////////
 
 void MoeWnd::OnSyntax(int code, int id, HWND ctrl)
 {
@@ -939,808 +912,7 @@ HRESULT __stdcall MoeWnd::Exit()
 	return S_OK;
 }
 
-/*
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall MoeWnd::get_Docs( IDocs** d)
-{			
-	if ( d )
-	{
-		return docs()->QueryInterface(IID_IDocs,(void**)d);
-	}
-	return S_OK;
-}
-/////////////////////////////////////////////////////////////////////
 
-HRESULT __stdcall MoeWnd::get_ActiveDoc( IDoc** doc)
-{			
-	if ( doc )
-	{
-		*doc  = NULL;
-		HWND wnd = getActive();
-		mol::MdiChild* mdi = mol::wndFromHWND<mol::MdiChild>(wnd);
-		if ( mdi )
-		{
-			IDoc* d = dynamic_cast<IDoc*>(mdi);
-			if ( d )
-			{
-				return d->QueryInterface( IID_IDoc, (void**) doc );
-			}
-		}
-	}
-	return S_FALSE;
-}
-/////////////////////////////////////////////////////////////////////
-
-
-HRESULT __stdcall MoeWnd::put_ShowTreeView(  VARIANT_BOOL vb)
-{
-	if ( vb == VARIANT_TRUE )
-	{
-		treeWnd()->show(SW_SHOW);
-		::InvalidateRect(mdiClient(),0,TRUE);
-		statusBar()->status(_T("Tree view visible"));
-	}
-	if ( vb == VARIANT_FALSE )
-	{
-		treeWnd()->show(SW_HIDE);
-		statusBar()->status(_T("Tree view hidden"));
-	}
-
-	OnLayout(0,0,0);
-	return S_OK;
-}
-
-HRESULT __stdcall MoeWnd::get_ShowTreeView(  VARIANT_BOOL* vb)
-{
-	if ( vb )
-	{
-		if ( treeWnd()->isVisible() )
-			*vb = VARIANT_TRUE;
-		else
-			*vb = VARIANT_FALSE;
-	}
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  MoeWnd::get_TreeView( IDispatch** tree)
-{
-	if ( tree  )
-	{
-		return treeWnd()->oleObject.queryInterface(IID_IDispatch,(void**)tree);
-	}
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall  MoeWnd::put_SysType( long type)
-{
-	systype_ = type;
-
-	if ( type == 0 )
-		statusBar()->status(_T("new sysmode: UNIX"));	
-	else
-		statusBar()->status(_T("new sysmode: Windows"));
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::get_SysType( long* type)
-{
-	if ( type )
-		*type = systype_;
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall  MoeWnd::put_Encoding( long enc)
-{
-	encoding_ = enc;
-	switch ( enc )
-	{
-		case SCINTILLA_ENCODING_ANSI :
-		{
-			statusBar()->status(_T("new encoding: ANSI"));	
-			break;
-		}
-		case SCINTILLA_ENCODING_UTF8 :
-		{
-			statusBar()->status(_T("new encoding: UTF8"));	
-			break;
-		}
-		case SCINTILLA_ENCODING_UTF16 :
-		{
-			statusBar()->status(_T("new encoding: UTF16"));	
-			break;
-		}
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::get_Encoding( long* enc)
-{
-	if ( enc )
-		*enc = encoding_;
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  MoeWnd::put_TabUsage( VARIANT_BOOL vbTabUsage)
-{
-	tabUsage_ = vbTabUsage;
-	if ( vbTabUsage == VARIANT_TRUE )
-		statusBar()->status(_T("use tabs"));	
-	else
-		statusBar()->status(_T("convert tabs to spaces"));
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::get_TabUsage( VARIANT_BOOL* vbTabUsage)
-{
-	if ( vbTabUsage )
-		*vbTabUsage = tabUsage_;
-	return S_OK;
-}
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  MoeWnd::put_TabIndents( VARIANT_BOOL vbTabIndents)
-{
-	tabIndents_ = vbTabIndents;
-	if ( vbTabIndents == VARIANT_TRUE )
-		statusBar()->status(_T("tab indents"));	
-	else
-		statusBar()->status(_T("tab doesn't indent"));
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::get_TabIndents( VARIANT_BOOL* vbTabIndents)
-{
-	if ( vbTabIndents )
-		*vbTabIndents = tabIndents_;
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  MoeWnd::put_BackSpaceUnindents( VARIANT_BOOL vbBackSpaceIndents)
-{
-	backSpaceUnIndents_ = vbBackSpaceIndents;
-	if ( vbBackSpaceIndents == VARIANT_TRUE )
-		statusBar()->status(_T("backspace unindents"));	
-	else
-		statusBar()->status(_T("backspace doesn't unindent"));
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::get_BackSpaceUnindents(  VARIANT_BOOL* vbBackSpaceIndents)
-{
-	if ( vbBackSpaceIndents )
-		*vbBackSpaceIndents = backSpaceUnIndents_;
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  MoeWnd::put_TabWidth( long width)
-{
-	tabwidth_ = width;
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::get_TabWidth(  long* width)
-{
-	if ( width )
-	{
-		*width = tabwidth_;
-	}
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall  MoeWnd::put_Syntax( long type)
-{
-	syntax_ = type;
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::get_Syntax( long* type)
-{
-	if ( type )
-	{
-		*type = syntax_;
-	}
-	return S_OK;
-}
-
-
-HRESULT __stdcall  MoeWnd::get_ConfigPath( BSTR* p)
-{
-	if ( !p ) 
-		return E_POINTER;
-	mol::string tmp( mol::Path::parentDir(mol::App().getAppPath()));
-	*p = ::SysAllocString(mol::towstring(tmp).c_str());
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::get_ModulePath( BSTR* p)
-{
-	if ( !p ) 
-		return E_POINTER;
-	mol::string tmp( mol::Path::parentDir(mol::App().getModulePath()));
-	*p = ::SysAllocString(mol::towstring(tmp).c_str());
-	return S_OK;
-}
-
-
-
-
-void MoeWnd::fullScreen(HWND hwnd)
-{
-  DWORD dwStyle = GetWindowLong(hwnd, GWL_STYLE);
-  if (dwStyle & WS_OVERLAPPEDWINDOW) {
-    MONITORINFO mi = { sizeof(mi) };
-    if (GetWindowPlacement(hwnd, &wpPrev_) &&
-        GetMonitorInfo(MonitorFromWindow(hwnd,
-                       MONITOR_DEFAULTTOPRIMARY), &mi)) {
-      SetWindowLong(hwnd, GWL_STYLE,
-                    dwStyle & ~WS_OVERLAPPEDWINDOW);
-      SetWindowPos(hwnd, HWND_TOP,
-                   mi.rcMonitor.left, mi.rcMonitor.top,
-                   mi.rcMonitor.right - mi.rcMonitor.left,
-                   mi.rcMonitor.bottom - mi.rcMonitor.top,
-                   SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
-    }
-  } else {
-    SetWindowLong(hwnd, GWL_STYLE,
-                  dwStyle | WS_OVERLAPPEDWINDOW);
-    SetWindowPlacement(hwnd, &wpPrev_);
-    SetWindowPos(hwnd, NULL, 0, 0, 0, 0,
-                 SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |
-                 SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
-  }
-
-}
-
-
-HRESULT __stdcall MoeWnd::put_Fullscreen( VARIANT_BOOL vbFullScreen)
-{
-	fullScreen_ = vbFullScreen;
-	fullScreen(*this);
-	return S_OK;
-}
-
-HRESULT __stdcall MoeWnd::get_Fullscreen( VARIANT_BOOL* vbFullScreen)
-{
-	if ( !vbFullScreen )
-		return E_INVALIDARG;
-
-	fullScreen(*this);
-	*vbFullScreen = fullScreen_;
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////
-// methods:
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  MoeWnd::New(IDoc** doc)
-{
-	return docs()->newFile(doc) ? S_OK : S_FALSE;
-}
-
-HRESULT __stdcall  MoeWnd::Open( BSTR p, IDoc** doc)
-{
-	bool result = docs()->open(0, bstr(p).toString(), Docs::PREF_TXT, false, doc );
-	if (!result)
-	{
-		::MessageBox(*this,bstr(p).toString().c_str(),_T("failed to load"),MB_ICONERROR);
-	}
-	statusBar()->status(bstr(p).toString());
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::OpenUTF8( BSTR p, IDoc** doc)
-{
-	bool result = docs()->open(0, bstr(p).toString(), Docs::PREF_UTF8, false, doc );
-	if (!result)
-	{
-		::MessageBox(*this,bstr(p).toString().c_str(),_T("failed to load"),MB_ICONERROR);
-	}
-	statusBar()->status(bstr(p).toString());
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::ChooseDir( BSTR* d)
-{
-	if ( !d )
-		return E_INVALIDARG;
-
-	mol::string p = browseForFolder(*this);
-
-	*d = ::SysAllocString( mol::towstring(p).c_str() );
-	if ( p != _T("") )
-	{
-		statusBar()->status(p);
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::OpenDir( BSTR d, IDoc** doc)
-{
-	mol::string s = bstr(d).toString();
-	Shit shit = desktop().parseDisplayName(s);
-	if ( shit )
-	{
-		bool result = docs()->open(0, bstr(d).toString(), Docs::PREF_TXT, false, doc );
-		if (!result)
-		{
-			::MessageBox(*this,s.c_str(),_T("failed to load"),MB_ICONERROR);
-		}
-		statusBar()->status(s);
-	}
-	return S_OK;
-}
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  MoeWnd::SaveAll()
-{
-	statusBar()->status(_T("saving all open documents ..."));
-
-	for ( int i = 0; i < count(); i++ )
-	{
-		punk<IDoc> doc;
-
-		if ( S_OK == docs()->Item(variant(i),&doc) && doc )
-		{
-			long t;
-			if ( doc->get_Type(&t) == S_OK )
-			{
-				if ( t == XMOE_DOCTYPE_DOC )
-				{
-					punk<IDispatch> disp;
-					
-					if ( S_OK == doc->get_Document(&disp) )
-					{
-						punk<IScintillAx> sci(disp);
-						if ( sci )
-						{
-							sci->Save();
-						}
-					}
-				}
-			}
-		}
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::CloseAll()
-{
-	statusBar()->status(_T("closing all open documents"));
-	OnCloseAll(0,0,0);
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall  MoeWnd::Show()
-{
-	if (!::IsWindow(*this) )
-	{
-		// create window
-		((IXmoe*)this)->AddRef();
-		build_ui(this);
-		return S_OK;
-	}
-
-	show(SW_SHOW);
-	OnLayout(0,0,0);
-	redraw();
-  
-	return S_OK;
-}
-
-
-HRESULT __stdcall  MoeWnd::Hide()
-{
-	show(SW_HIDE);
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  MoeWnd::Minimize()
-{
-	show(SW_MINIMIZE);
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::Maximize()
-{
-	show(SW_MAXIMIZE);
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::Restore()
-{
-	show(SW_RESTORE);
-	return S_OK;
-}
-
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall  MoeWnd::Tile()
-{
-	OnTileHorizontal(0,0,0);
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::Cascade()
-{
-	OnCascade(0,0,0);
-	return S_OK;
-}
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  MoeWnd::SetStatus(BSTR stat)
-{
-	statusBar()->status(mol::toString(stat));
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  MoeWnd::Help()
-{
-	statusBar()->status(_T("help"));
-
-	mol::string p( mol::app<MoeApp>().getModulePath() );
-	mol::string help = mol::Path::parentDir(p) + _T("\\doc\\index.html");
-
-	long left, top;
-	get_Left(&left);
-	get_Top(&top);
-
-	this->OpenHtmlFrame( bstr(help), 0 );
-
-	return S_OK;
-}
-
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  MoeWnd::Exit()
-{
-	// tear down open documents gently
-	long cnt = 0;
-	HRESULT hr = docs()->Count(&cnt);
-	if( hr != S_OK )
-		return hr;
-
-	long i = cnt;
-	while ( i > 0 )
-	{
-		mol::punk<IDoc> doc;
-		hr = docs()->Item( mol::variant(0), &doc );
-		if( hr != S_OK )
-			return hr;
-		
-		hr = doc->Close();
-		if( hr != S_OK )
-			return S_FALSE;
-		i--;
-	}
-
-	// if we have ribbon, maximize it before persistence
-	if ( mol::Ribbon::ribbon()->enabled())
-	{
-		mol::Ribbon::ribbon()->maximize();
-	}
-
-	// save persistent info
-	mol::string p(appPath() + _T("\\") + _T("ui.xmo"));
-	Storage store;
-	if ( store.create(p) )
-	{
-		store.clsid(this->getCoClassID());
-		punk<IPersistStorage> ps(this);
-		if ( ps )
-		{
-			ps->Save(store,FALSE);
-			destroy();
-			return S_OK;
-		}
-	}
-
-	// harakiri
-	destroy();
-	return S_OK;
-}
-
-//TODO: move to Docs
-HRESULT __stdcall  MoeWnd::Activate(VARIANT index)
-{
-	punk<IDoc> doc;
-	if ( S_OK == docs()->Item(index,&doc))
-	{
-		if ( doc )
-		{
-			bstr f;
-			if ( S_OK == doc->get_Filename(&f) && f )
-			{
-				statusBar()->status(f.toString());
-			}
-			return doc->Activate();
-		}
-	}
-	return S_OK;
-}
-/////////////////////////////////////////////////////////////////////
-
-//TODO: moveto scriptlet
-
-HRESULT __stdcall  MoeWnd::Eval(BSTR script, BSTR engine)
-{
-	if ( !script || !engine )
-		return E_INVALIDARG;
-
-	statusBar()->status( mol::string( _T("evaluating ")) + mol::bstr(engine).toString() );
-
-	mol::string e = bstr(engine).toString();
-	if ( e == _T("cs") )
-	{
-		return evalute_csharp(script);
-	}
-
-	scriptlet()->eval( mol::toString(engine),mol::toString(script) );
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::Debug(BSTR script, BSTR engine)
-{
-	if ( !script || !engine )
-		return E_INVALIDARG;
-
-	statusBar()->status( mol::string( _T("evaluating ")) + mol::bstr(engine).toString() );
-
-	mol::string e = bstr(engine).toString();
-	if ( e == _T("cs") )
-	{
-		return evalute_csharp(script);
-	}
-
-	scriptlet()->debug( mol::toString(engine),mol::toString(script) );
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  MoeWnd::ShowForm( BSTR html, long left, int top, int width, int height, int style )
-{
-	statusBar()->status(bstr(html).toString());
-
-	typedef com_obj<MoeFormWnd> form;
-	form* f = MoeFormWnd::CreateInstance( 
-							bstr(html).toString(),
-							left,top,width,height, 
-							style 
-						);
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::get_Compiler( IDispatch** disp )
-{
-	if ( !disp )
-		return E_INVALIDARG;
-
-	*disp = 0;
-
-//	if ( compiler_ )
-//		return compiler_->QueryInterface( IID_ICompiler, (void**) disp );
-
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::Preferences()
-{
-	statusBar()->status(_T("edit preferences for new documents"));
-	mol::string p( mol::app<MoeApp>().getModulePath() );
-	mol::string prefs = mol::Path::parentDir(p) + _T("\\forms\\prefs.html");
-
-	long left, top;
-	get_Left(&left);
-	get_Top(&top);
-
-	this->ShowForm( bstr(prefs) ,left+225,top+225,450,190,6);
-	
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::Settings()
-{
-	statusBar()->status(_T("edit user settings"));
-
-	LPUNKNOWN punks[] = { config() };
-	CLSID pages[]     = { CLSID_SettingProperties };
-	::OleCreatePropertyFrame(*this,100,100,L"Moe",1,punks,1,pages,0,0,0);
-
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::ExportSettings(BSTR f)
-{
-	if ( f )
-	{
-		config()->Save(f);
-		statusBar()->status(_T("exported custom user settings"));
-	}	
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::ImportSettings(BSTR f)
-{
-	if ( f )
-	{
-		config()->Load(f);
-		statusBar()->status(_T("imported custom user settings"));
-	}	
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::Run( BSTR f, BSTR engine )
-{
-	statusBar()->status(bstr(f).toString());
-	mol::string s = findFile(bstr(f).toString());
-	if ( s == _T("") )
-		return E_FAIL;
-
-	mol::filestream fi;
-	if ( fi.open( mol::tostring(s), GENERIC_READ ) )
-	{
-		std::string txt = fi.readAll();
-		fi.close();
-		return Eval(bstr(txt),engine);
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::System( BSTR f)
-{
-	statusBar()->status(bstr(f).toString());
-	mol::string s = findFile(bstr(f).toString());
-	if ( s == _T("") )
-		return E_FAIL;
-
-	exec_cmdline( s );
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::OpenHexEditor( BSTR f, VARIANT_BOOL vbReadOnly, IDoc** hex)
-{
-	if (hex)
-		*hex = 0;
-
-	bool result = docs()->open(0, bstr(f).toString(), Docs::PREF_HEX, vbReadOnly == VARIANT_TRUE ? true : false, hex );
-
-	statusBar()->status(bstr(f).toString());
-	if (!result)
-	{
-		::MessageBox(*this,bstr(f).toString().c_str(),_T("failed to load"),MB_ICONERROR);
-		return S_FALSE;
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeWnd::OpenHtmlFrame( BSTR f, IDoc** htmlWnd)
-{
-	if ( htmlWnd )
-		*htmlWnd = 0;
-
-	bool result = docs()->open(0, bstr(f).toString(), Docs::PREF_HTML, true, htmlWnd );
-
-	statusBar()->status(bstr(f).toString());
-	if (!result)
-	{
-		::MessageBox(*this,bstr(f).toString().c_str(),_T("failed to load"),MB_ICONERROR);
-		return S_FALSE;
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall MoeWnd::MsgBox( BSTR text,  BSTR title, long flags,  long* result)
-{
-	((IXmoe*)this)->AddRef();
-	mol::string txt = text  ? mol::toString(text)  : _T("");
-	mol::string ttl = title ? mol::toString(title) : _T("");
-
-	long res = ::MessageBox(*this,txt.c_str(),ttl.c_str(),flags);
-	if ( result )
-		*result = res;
-	((IXmoe*)this)->Release();
-	return S_OK;
-}
-
-HRESULT __stdcall MoeWnd::CreateObjectAdmin( BSTR progid, IDispatch** disp)
-{
-	if (!disp )
-		return E_INVALIDARG;
-
-	*disp = 0;
-
-	if ( !progid )
-		return E_INVALIDARG;
-
-	mol::punk<IUnknown> unk;
-	HRESULT hr = mol::CreateObjectAdmin( *this, progid, &unk );
-	if ( hr != S_OK )
-		return hr;
-
-	return unk->QueryInterface( IID_IDispatch, (void**)disp );
-}
-
-HRESULT __stdcall MoeWnd::EditUserForm( BSTR pathname, IDispatch** form )
-{
-	if ( form )
-		*form = 0;
-
-	mol::punk<IDoc> doc;
-
-	bool r = false;
-
-	if ( pathname )
-		r = docs()->open(0,mol::bstr(pathname).toString(),Docs::PREF_TXT,false,&doc);
-	else
-		r = docs()->newUFSFile(&doc);
-
-	if (!form )
-		return r ? S_OK : E_FAIL;
-
-	if ( r && doc )
-	{
-		HRESULT hr = doc->QueryInterface( IID_IDispatch, (void**)form );
-		return hr;
-	}
-	return r ? S_OK : E_FAIL;
-}
-
-HRESULT __stdcall MoeWnd::ShowUserForm( BSTR pathname, IDispatch** form )
-{
-	if ( form )
-		*form = 0;
-
-	UserForm::Instance* userForm = UserForm::CreateInstance( mol::bstr(pathname).toString(), false );
-	if ( !userForm )
-		return E_FAIL;
-
-	if ( !form )
-		return S_OK;
-
-	HRESULT hr = userForm->QueryInterface( IID_IDispatch, (void**)form );
-	return hr;
-}
-
-
-HRESULT __stdcall MoeWnd::DebugUserForm( BSTR pathname, IDispatch** form )
-{
-	if ( form )
-		*form = 0;
-
-	UserForm::Instance* userForm = UserForm::CreateInstance( mol::bstr(pathname).toString(), false );
-	if ( !userForm )
-		return E_FAIL;
-
-	if ( !form )
-		return S_OK;
-
-	HRESULT hr = userForm->QueryInterface( IID_IDispatch, (void**)form );
-	return hr;
-}
-*/
 //////////////////////////////////////////////////////////////////////////////
 // Persistence
 //////////////////////////////////////////////////////////////////////////////
@@ -1966,72 +1138,6 @@ HRESULT __stdcall MoeWnd::InitNew()
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-
-HRESULT MoeWnd::getActiveEditor( IScintillAx** sci )
-{
-	if ( !sci )
-		return E_INVALIDARG;
-
-	*sci = 0;
-
-	punk<IMoeDocument> doc;
-	if ( S_OK != get_ActiveDoc(&doc) )
-		return E_FAIL;
-	if ( !doc )
-		return E_FAIL;
-
-	long type;
-	if ( S_OK == doc->get_Type(&type) )
-	{
-		if ( type != MOE_DOCTYPE_DOC )
-		{
-			return E_FAIL;
-		}
-	}
-
-	punk<IDispatch> disp;	
-	if ( S_OK != doc->get_Object(&disp) )
-		return E_FAIL;
-
-	return disp->QueryInterface(IID_IScintillAx, (void**) sci );
-}
-
-
-
-HRESULT MoeWnd::evalute_csharp(BSTR cs)
-{
-	if ( NET().aware() )
-	{
-	/*	if ( compiler_ )
-		{
-			compilerSink()->UnAdvise(compiler_);
-			compiler_->Unload(VARIANT_TRUE);
-			compiler_.release();
-		}
-		NET().CreateInstance<ICompiler>( _T("JIT"), _T("mol.JIT"), &compiler_ );
-		if ( compiler_ )
-		{
-			punk<IUnknown> unk(compiler_);
-			if (unk)
-				compilerSink()->Advise(compiler_);
-			compiler_->Start();
-
-			compiler_->AddDirectory(bstr(mol::Path::pathname(binPath())));
-			compiler_->AddReference(bstr(L"System.Web.dll"));
-			compiler_->AddReference(bstr(L"moe.dll"));
-			compiler_->AddReference(bstr(L"Interop.Moe.dll"));
-			compiler_->AddReference(bstr(L"Interop.Scintilla.dll"));
-			compiler_->AddReference(bstr(L"Interop.ShellCtrls.dll"));
-
-			compiler_->AddSourceText(cs);
-			compiler_->AddObject(bstr("moe"), variant((IDispatch*)(IXmoe*)(this)) );
-			compiler_->CompileExec();
-			return S_OK;
-		}
-*/
-	}
-	return E_FAIL;
-}
 
 
 

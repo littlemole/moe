@@ -11,6 +11,7 @@
           <xs:complexType>
             <xs:attribute name="id" type="xs:string" use="required" />
             <xs:attribute name="title" type="xs:string" use="optional" />
+            <xs:attribute name="ribbon" type="xs:string" use="optional" />
           </xs:complexType>
         </xs:element>
       </xs:sequence>
@@ -66,6 +67,7 @@
         <xs:complexType>
           <xs:attribute name="id" type="xs:string" use="required" />
           <xs:attribute name="src" type="xs:string" use="required" />
+          <xs:attribute name="value" type="xs:string" use="optional" />
         </xs:complexType>
       </xs:element>
     </xs:sequence>

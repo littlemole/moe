@@ -196,6 +196,7 @@ HRESULT __stdcall MoeChildView::Restore()
 
 HRESULT __stdcall MoeChildView::Activate()
 {
+	moe()->restore();
 	wnd_->activate();
 	return S_OK;
 }
@@ -450,6 +451,7 @@ HRESULT __stdcall MoeView::put_Height( long height)
 HRESULT __stdcall MoeView::Show()
 {
 	moe()->show(SW_SHOW);
+	::SetForegroundWindow(*moe());
 	return S_OK;
 }
 

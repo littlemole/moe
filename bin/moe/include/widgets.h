@@ -191,51 +191,6 @@ private:
 	mol::string objname;
 };
 
-/////////////////////////////////////////////////////////////////////
-// COM event sinks
-/////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-// compiler event sink
-/////////////////////////////////////////////////////////////////////////////////////////////
-/*
-class CompilerEvents	:	
-		public mol::Dispatch< ICompilerDualMsg, &IID_ICompilerDualMsg, &LIBID_JIT,1,0 >,
-		public mol::interfaces< CompilerEvents, 
-			mol::implements< IDispatch, ICompilerMsg> >
-{
-public:
-
-    HRESULT Advise(IUnknown* object )
-    {
-		return mol::advise<ICompilerMsg>(object,this,cookie_);
-    }
-    HRESULT UnAdvise(IUnknown* object )
-    {
-        return mol::unadvise<ICompilerMsg>(object,cookie_);
-    }
-
-private:
-    DWORD           cookie_;
-};
-*/
-
-// compiler sink
-
-/*
-class CompilerSink : public stack_obj<CompilerEvents>
-{
-STACKSINGLETON(CompilerSink);
-public : 
-	HRESULT virtual __stdcall ErrorMsg(BSTR error);
-	HRESULT virtual __stdcall Success();
-
-private:
-	CompilerSink() {};
-	~CompilerSink() {};
-};
-*/
-
 
 // tree events sink
 class TreeWndSink : public mol::stack_obj<ShellTreeEvents>

@@ -3,7 +3,6 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "Dot.h"
 #include "shared.h"
 #include "widgets.h"
 #include "ax/jre/jre_h.h"
@@ -23,7 +22,6 @@ class MoeWnd;
 
 class MoeFormWnd  : 
 	public mol::ChildFrame<MoeFormWnd,mol::HtmlWnd<MoeFormWnd,Window>>,
-	//public DispatchWindow<MoeFormWnd,IMoeFrame>,
 	public mol::Dispatch<IMoeHtmlFrame>,
 	public interfaces< MoeFormWnd, implements< IDispatch, IMoeHtmlFrame> >
 {
@@ -51,30 +49,6 @@ public:
     virtual HRESULT __stdcall OleCmd(  long cmd);    
     virtual HRESULT __stdcall get_FilePath(  BSTR *filename);
 
-
-/*
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall Eval( BSTR src, BSTR scrptLanguage );
-
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall get_Document( IDispatch** doc);
-
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall get_Title( BSTR* title);
-	virtual HRESULT __stdcall put_Title( BSTR  title);
-
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall Close();
-
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall get_Scripts( IDispatch** s);
-
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall put_CodeBehind( IDispatch* code);
-
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall OleCmd( long cmd );
-*/
 	/////////////////////////////////////////////////////////////////////
 	virtual HRESULT __stdcall IDocHostUIHandler_GetExternal( IDispatch **ppDispatch);
 
@@ -94,15 +68,7 @@ public:
 	/////////////////////////////////////////////////////////////////////
 
 	int							style_;
-	Domain*						domain_;
-//	punk<ICompiler>				compiler_;
-	punk<IUnknown>				compiler_;
-//	punk<IJVM>					jvm_;
-	punk<IUnknown>				jvm_;
-
-	mol::punk<IDispatch>		codeBehind_;
 	mol::string					location_;
-
 
 	/////////////////////////////////////////////////////////////////////
 	// external events called from script inside MoeWnd
@@ -148,18 +114,6 @@ public:
 	
 	} htmlSink_;
 
-	/////////////////////////////////////////////////////////////////////
-	// .NET compiler events
-	/////////////////////////////////////////////////////////////////////
-/*
-	class MoeFormWnd_compilerSink : public stack_obj<CompilerEvents>
-	{
-		public : 
-			outer_this(MoeFormWnd,compilerSink_); 
-			HRESULT virtual __stdcall ErrorMsg(BSTR error);
-			HRESULT virtual __stdcall Success();
-	} compilerSink_;
-*/
 };
 
 #endif

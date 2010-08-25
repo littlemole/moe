@@ -708,7 +708,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="&quot;..\..\lib\src\win\Unicode Debug\win.lib&quot; &quot;..\..\lib\src\ole\Unicode Debug\ole.lib&quot; &quot;..\..\lib\src\util\Unicode Debug\util.lib&quot; ..\..\3dParty\pcre\Debug\pcre.lib &quot;..\..\lib\src\thread\Unicode Debug\thread.lib&quot; ..\..\3dParty\scintilla\bin\static\Debug\SciLexer.lib ..\..\\3dParty\scintilla\bin\static\debug\Scintilla.lib shlwapi.lib Mpr.lib comctl32.lib urlmon.lib wininet.lib Imm32.lib Msimg32.lib &quot;..\..\lib\src\xml\Unicode Debug\xml.lib&quot; &quot;..\..\3dParty\expat\Source\lib\Unicode Debug\libexpatMT.lib&quot;"
+				AdditionalDependencies="&quot;..\..\lib\src\win\Unicode Debug\win.lib&quot; &quot;..\..\lib\src\ole\Unicode Debug\ole.lib&quot; &quot;..\..\lib\src\util\Unicode Debug\util.lib&quot; ..\..\3dParty\pcre\Debug\pcre.lib &quot;..\..\lib\src\thread\Unicode Debug\thread.lib&quot; ..\..\3dParty\scintilla\bin\static\Debug\SciLexer.lib ..\..\\3dParty\scintilla\bin\static\debug\Scintilla.lib shlwapi.lib Mpr.lib comctl32.lib urlmon.lib wininet.lib Imm32.lib Msimg32.lib gdiplus.lib &quot;..\..\lib\src\xml\Unicode Debug\xml.lib&quot; &quot;..\..\3dParty\expat\Source\lib\Unicode Debug\libexpatMT.lib&quot;"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="2"
 				ModuleDefinitionFile="ScintillAX.def"

@@ -2,7 +2,7 @@ rem ---------------------------------------
 rem BUILDING MSI INSTALLER THE WIX WAY
 rem ---------------------------------------
 
-set WIXBIN=C:\Program Files\Windows Installer XML v3\bin
+set WIXBIN=%WIX%\bin
 
 set CANDLE=%WIXBIN%\candle.exe
 set LIGHT=%WIXBIN%\light.exe

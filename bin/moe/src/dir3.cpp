@@ -24,21 +24,7 @@ DirChild::~DirChild()
 {
 	ODBGS("~DirChild dies");
 };
-/*
-LRESULT DirChild::OnSize(UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	mol::Rect clientRect_ = mol::Rect(0,0,0,0);
 
-	// get new width and height
-	clientRect_.right  = LOWORD(lParam) ;
-	clientRect_.bottom = HIWORD(lParam) ;
-
-	list->
-	oleObject->
-	oleObject->move(clientRect_);
-	return 0;
-}
-*/
 //////////////////////////////////////////////////////////////////////////////
 // initialization
 //////////////////////////////////////////////////////////////////////////////
@@ -72,8 +58,6 @@ DirChild::Instance* DirChild::CreateInstance( const mol::string& dir )
 
 bool DirChild::initialize(const mol::string& p)
 {
-	//filename_ = p;
-
 	// initial Addref
 	((IMoeDocument*)this)->AddRef();
 
@@ -85,7 +69,6 @@ bool DirChild::initialize(const mol::string& p)
 
 	// advise event sink
 	list = oleObject;
-	//punk<IShellList> list(oleObject);
 	if (!list)
 		return false;
 
@@ -99,12 +82,10 @@ bool DirChild::initialize(const mol::string& p)
 	show(SW_SHOW);
 	maximize();
 
-	this->redrawOleFrameLater();
+	thumb = taskbar()->addTab( this );
 
-	//this->OnLayout(0,0,0);
-	//this->redraw();
-	//mol::invoke<MoeWnd,LRESULT,UINT,WPARAM,LPARAM>( *moe(), &MoeWnd::OnLayout,(UINT)0,(WPARAM)0,(LPARAM)0 );
-	//mol::invoke<MoeWnd,void>( *moe(), &MoeWnd::redraw);
+	redrawOleFrameLater();
+
 	return true;
 }
 
@@ -144,10 +125,11 @@ LRESULT DirChild::OnMDIActivate( HWND activated )
 {
 	BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)0, (LPARAM)activated );
 
-	//this->redrawOleFrame();
-
 	if ( *this != activated )
+	{
+		thumb.refreshIcon();
 		return 0;
+	}
 
 	if ( activeObject.interface_ != 0 )
 	{
@@ -165,79 +147,11 @@ LRESULT DirChild::OnMDIActivate( HWND activated )
 		mol::Ribbon::ribbon()->maximize();
 	}
 
+	thumb.refreshIcon(true);
     return 0;
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// COM section
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////
-/*
-HRESULT __stdcall DirChild::get_Filename( BSTR* filename)
-{
-	if ( !filename )
-		return E_INVALIDARG;
-
-	*filename = 0;
-	if ( !list )
-		return S_OK;
-
-	mol::variant var;
-	if ( S_OK == list->get_Selection(&var) )
-	{
-		if ( var.vt != VT_BSTR )
-			var.changeType(VT_BSTR);
-		if ( var.bstrVal != 0 )
-			*filename = ::SysAllocString(var.bstrVal);
-	}
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall DirChild::get_Path( BSTR* path)
-{	
-	return get_Filename(path);
-}
-
-/////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall DirChild::get_Type(  long* type)
-{
-	if ( type )
-	{
-		*type = XMOE_DOCTYPE_DIR;
-	}
-	return S_OK;
-}
-
-
-HRESULT __stdcall  DirChild::Close()
-{
-	destroy();
-	return S_OK;
-}
-
-HRESULT __stdcall  DirChild::Activate()
-{
-	activate();
-	return S_OK;
-}
-*/
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -298,7 +212,6 @@ HRESULT __stdcall DirChild::DirChild_Events::OnDirChanged(BSTR dir)
 	mol::string filename = This()->getText();
 
 	docs()->Rename( mol::variant(filename),mol::variant(dir));
-	//This()->filename_ = mol::bstr(dir).toString();
 	This()->setText( mol::bstr(dir).toString() );
 	return S_OK;
 }

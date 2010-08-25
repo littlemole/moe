@@ -10,7 +10,6 @@
 
 ImgViewer::ImgViewer()
 {
-	//eraseBackground_ = 0;
 	wndClass().setIcon(moe()->icon); 
 	wndClass().hIconSm(moe()->icon); 
 }
@@ -26,12 +25,14 @@ ImgViewer::Instance* ImgViewer::CreateInstance( const mol::string& file )
 	iv->AddRef();
 
 	
+	statusBar()->status(30);
 
 	if ( !iv->load(file) )
 	{
 		iv->Release();
 		return 0;
 	}
+	statusBar()->status(100);
 	return iv;
 }
 
@@ -85,6 +86,15 @@ void ImgViewer::OnMDIActivate( HWND activated )
 {
 	tab()->select( getText() );
 	updateUI();
+
+	if ( activated == hWnd_ )
+	{
+		thumb.refreshIcon();
+	}
+	else
+	{
+		thumb.refreshIcon(true);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -116,7 +126,11 @@ bool ImgViewer::load(const mol::string& p)
 	mol::Point pt(0,0);
 	client2Screen(pt);
 
+	statusBar()->status(80);
 	move(0,0,s.cx+pt.x-rw.left,s.cy+pt.y-rw.top,TRUE);
+	
+	thumb = taskbar()->addTab( this );
+
 	return true;
 }
 
@@ -124,8 +138,6 @@ bool ImgViewer::load(const mol::string& p)
 
 void ImgViewer::updateUI()
 {
-//	statusBar()->simple(false);
-
 	SIZE s = pic_.getSize();
 	mol::ostringstream oss;
 	oss <<  s.cx << _T(" ");

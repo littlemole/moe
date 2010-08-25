@@ -9,6 +9,10 @@
 
 #include "resource.h"
 
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
 
 class UserForm 
 	: 
@@ -16,11 +20,9 @@ class UserForm
 				UserForm,
 				mol::ole::SimpleAxHost<UserForm,mol::Window>,
 				WS_CAPTION |WS_POPUPWINDOW|WS_CLIPSIBLINGS|WS_CLIPCHILDREN,0>,
-	//public DispatchWindow<UserForm,IMoeForm>,
 	public mol::Dispatch<IMoeUserForm>,
 	public mol::ProvideClassInfo<UserForm>,
 	public mol::PersistStorage<UserForm>,
-	//public mol::PersistFile<UserForm>,
 	public mol::interfaces< UserForm, 
 			mol::implements< IDispatch, IMoeUserForm, IProvideClassInfo> >
 {
@@ -45,7 +47,6 @@ public:
     virtual HRESULT __stdcall get_FilePath(  BSTR *filename);
 
 	// msgs
-
 	msg_handler(WM_CLOSE,OnClose)
 	LRESULT OnClose();
 
@@ -77,19 +78,10 @@ public:
 	bool isDirty() { return dirty_; }
 	void setDirty(bool b) { dirty_ = b; }
 
-public:
-
 	/////////////////////////////////////////////////////////////////////
 	// COM
 	/////////////////////////////////////////////////////////////////////
-/*
-	virtual HRESULT __stdcall get_Form( IDispatch** d);
-	virtual HRESULT __stdcall get_Filename( BSTR* filename);
-	virtual HRESULT __stdcall put_Filename( BSTR filename);
-	virtual HRESULT __stdcall get_Title( BSTR* filename);
-	virtual HRESULT __stdcall put_Title( BSTR filename);
-	virtual HRESULT __stdcall get_Script( IDispatch** script);
-*/
+
 	virtual HRESULT __stdcall Close();
 	virtual HRESULT __stdcall Show();
 	virtual HRESULT __stdcall Hide();
@@ -110,7 +102,6 @@ private:
 	std::map<DWORD,IUnknown*>   sinks;
 	std::map<DWORD,IUnknown*>   ctrls;
 	std::map<DWORD,IID>			iids;
-
 
 	bool initialize(const mol::string& p, bool designMode, bool Debug);
 

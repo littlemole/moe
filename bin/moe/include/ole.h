@@ -3,11 +3,8 @@
 
 #include "shared.h"
 
-//using namespace mol::win;
-//using namespace mol::ole;
-//using namespace mol;
-
 class MoeWndImpl;
+class TaskbarWnd;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -35,30 +32,14 @@ public:
 	LRESULT OnMDIActivate(WPARAM unused,HWND activated);
 	LRESULT OnMDIActivateLater(WPARAM unused,HWND activated);
 
-	/////////////////////////////////////////////////////////////////////
-	// COM
-	/////////////////////////////////////////////////////////////////////
-/*
-	virtual HRESULT __stdcall get_Filename( BSTR* filename);
-	virtual HRESULT __stdcall get_Path( BSTR* dirpath);
-
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall get_Type( long* type);
-
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall  Close();
-	virtual HRESULT __stdcall  Activate();
-*/
     virtual HRESULT __stdcall IOleClientSite_SaveObject();
 
 protected:
 
 	virtual void OnLoadProgress(int n);
-
-	mol::string			filename_;
-
 	bool openFile( const mol::string& path );
 
+	mol::string			filename_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

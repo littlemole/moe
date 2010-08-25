@@ -40,8 +40,6 @@ FormEditor::Instance* FormEditor::CreateInstance(const mol::string& file)
 	if ( mol::Path::exists(p) && mol::Path::isDir(p) )
 		return 0;
 
-	statusBar()->status(50);
-
 	Instance* e = new Instance;
 	e->AddRef();
 
@@ -49,11 +47,9 @@ FormEditor::Instance* FormEditor::CreateInstance(const mol::string& file)
 	if ( !e->initialize(file) )
 	{
 		e->destroy();
-		statusBar()->status(_T("failed to load"));
 		return 0;
 	}
 	statusBar()->status(100);
-	statusBar()->status(file);
 	return e;
 }
 
@@ -159,22 +155,6 @@ bool FormEditor::initialize(const mol::string& p)
 
 	moe()->moeConfig->InitializeEditorFromPreferences( (IMoeDocument*)this );
 
-	/*
-	VARIANT_BOOL vbBackSpaceUnindents;
-	VARIANT_BOOL vbTabUsage;
-	VARIANT_BOOL vbTabIndents;
-	long tw = 0;
-
-	moe()->get_TabWidth(&tw);
-	moe()->get_BackSpaceUnindents(&vbBackSpaceUnindents);
-	moe()->get_TabUsage(&vbTabUsage);
-	moe()->get_TabIndents(&vbTabIndents);
-
-	sci->put_TabWidth(tw);
-	sci->put_TabUsage(vbTabUsage);
-	sci->put_TabIndents(vbTabIndents);
-	sci->put_BackSpaceUnindents(vbBackSpaceUnindents);
-	*/
 
 	sci->put_ReadOnly( VARIANT_FALSE );
 
@@ -182,7 +162,8 @@ bool FormEditor::initialize(const mol::string& p)
 	{
 		sci->put_UseContext(VARIANT_FALSE);
 	}
-	statusBar()->status(100);
+
+	thumb = taskbar()->addTab( this );
 
 	// now maximize the window
 	maximize();
@@ -218,16 +199,26 @@ LRESULT FormEditor::OnDestroy()
 
 LRESULT FormEditor::OnMDIActivate(WPARAM unused, HWND activated)
 {
+	//BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
+
 	ODBGS("Editor::OnMDIActivate");
-	BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
 	if ( activated == hWnd_ )
 	{
+		//thumb.refreshIcon();
+
+		//tab()->select( filename_ );
+		//updateUI();
+		//setFocus();
+
 		userForm->Show();
+		//mol::invoke(*this,&FormEditor::OnExecForm);
 	}
 	else
 	{
 		userForm->Hide();
+		//thumb.refreshIcon(true);
 	}
+	mol::invoke(*((Editor*)this),&Editor::OnMDIActivate,unused,activated);
     return 0;
 }
 
@@ -297,7 +288,6 @@ void FormEditor::OnReload()
 
 		sci->LoadUTF8(filename);
 		sci->put_ReadOnly(vb);
-		//moe()->SetStatus(filename);
 		statusBar()->status( filename.toString() );
 		return ;
 	}
@@ -321,8 +311,6 @@ LRESULT FormEditor::OnSaveAs()
 
 	if ( ofn.dlgSave( OFN_OVERWRITEPROMPT ) )
 	{
-		//mol::bstr b(filename_);
-		
 		if ( ofn.fileName() != filename_ )
 		{
 			mol::punk<IMoeDocument> doc;
@@ -353,13 +341,8 @@ LRESULT FormEditor::OnSaveAs()
 			}
 
 			hr = userForm->Save(dest,FALSE);
-
 			hr = dest->Commit(STGC_DEFAULT);
 
-			ODBGS("!!!!!!!!!!!!!!");
-			mol::ostringstream oss;
-			oss << "rename " << filename_ << " -> " << ofn.fileName() << std::endl;
-			ODBGS(oss.str());
 			docs()->Rename( mol::variant(filename_), mol::variant(ofn.fileName()) );
 			filename_ = ofn.fileName();
 			setText(filename_);

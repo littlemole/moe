@@ -4,10 +4,10 @@
 #include "xmlui.h"
 #include "ole/Rib.h"
 #include "MoeBar.h"
+#include "TaskBar.h"
 
 MoeHtmlWnd::MoeHtmlWnd( )
 {
-	domain_   = 0;
     eraseBackground_ = 1;
 	wndClass().setIcon(moe()->icon); 
 	wndClass().hIconSm(moe()->icon); 
@@ -16,14 +16,6 @@ MoeHtmlWnd::MoeHtmlWnd( )
 MoeHtmlWnd::~MoeHtmlWnd()
 {
 	ODBGS("~MoeHtmlWnd dead");
-
-	if ( domain_ && compiler_)
-	{
-//		punk<IUnknown> unk(compiler_);
-//		compilerSink_.UnAdvise(unk.interface_);
-//		compiler_->Unload(VARIANT_TRUE);
-//		delete domain_;
-	}
 }
 
 MoeHtmlWnd::Instance* MoeHtmlWnd::CreateInstance( const mol::string& loc)
@@ -55,6 +47,7 @@ MoeHtmlWnd::Instance* MoeHtmlWnd::CreateInstance( const mol::string& loc)
 		tmp = _T("file://") + tmp;
 	}
 
+	statusBar()->status(100);
 	form->frame_.Release();
 	::SetFocus(*form);	
     return form;
@@ -69,66 +62,16 @@ void MoeHtmlWnd::OnMDIActivate( HWND activated )
 		mol::Ribbon::ribbon()->maximize();
 		mol::Ribbon::ribbon()->mode(5);
 	}
-}
-
-/////////////////////////////////////////////////////////////////////
-// COM section
-/////////////////////////////////////////////////////////////////////
-/*
-HRESULT __stdcall MoeHtmlWnd::get_Filename( BSTR* filename)
-{
-	if ( filename )
+	if ( activated == hWnd_ )
 	{
-		if ( !location.empty() )
-			*filename = ansi2BSTR(mol::tostring(location));
+			thumb.refreshIcon(true);
 	}
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall MoeHtmlWnd::get_Path( BSTR* p)
-{			
-	if ( p )
+	else 
 	{
-		*p = 0;
-		if ( !location.empty() )
-		{
-			mol::string dir = mol::Path::pathname(location);
-			*p = ansi2BSTR(mol::tostring(dir));
-		}
+		thumb.refreshIcon();
 	}
-	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall MoeHtmlWnd::get_Type(  long* type)
-{
-	if ( type )
-	{
-		*type = XMOE_DOCTYPE_HTML;
-	}
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  MoeHtmlWnd::Close()
-{
-	destroy();
-	return S_OK;
-}
-
-
-HRESULT __stdcall  MoeHtmlWnd::Activate()
-{
-	activate();
-	return S_OK;
-}
-*/
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -145,51 +88,9 @@ MoeHtmlWnd::MoeFrame::~MoeFrame()
 
 
 /////////////////////////////////////////////////////////////////////
-/*
-HRESULT __stdcall MoeHtmlWnd::MoeFrame::get_Top( long* top)
-{
-	return This()->get_Top(top);
-}
-
-HRESULT __stdcall MoeHtmlWnd::MoeFrame::put_Top( long top)
-{
-	return This()->put_Top(top);
-}
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall MoeHtmlWnd::MoeFrame::get_Left( long* left)
-{
-	return This()->get_Left(left);
-}
-
-HRESULT __stdcall MoeHtmlWnd::MoeFrame::put_Left( long left)
-{
-	return This()->put_Left(left);
-}
 
 /////////////////////////////////////////////////////////////////////
-HRESULT __stdcall MoeHtmlWnd::MoeFrame::get_Width( long* width)
-{
-	return This()->get_Width(width);
-}
 
-HRESULT __stdcall MoeHtmlWnd::MoeFrame::put_Width( long width)
-{
-	return This()->put_Width(width);
-}
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall MoeHtmlWnd::MoeFrame::get_Height( long* height)
-{
-	return This()->get_Height(height);
-}
-
-HRESULT __stdcall MoeHtmlWnd::MoeFrame::put_Height( long height)
-{
-	return This()->put_Height(height);
-}
-*/
-/////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////
 HRESULT __stdcall MoeHtmlWnd::MoeFrame::Eval( BSTR src, BSTR scrptLanguage )
 {
 	mol::punk<IDispatch> disp;
@@ -251,27 +152,6 @@ HRESULT __stdcall  MoeHtmlWnd::MoeFrame::get_Scripts(  IDispatch **s)
 	}
 	return E_FAIL;
 }
-/*
-HRESULT __stdcall  MoeHtmlWnd::MoeFrame::Eval(  BSTR src, BSTR scriptLanguage)
-{
-	mol::punk<IDispatch> disp;
-	if ( S_OK == get_Object(&disp) && disp )
-	{
-		mol::punk<IHTMLDocument2> doc(disp);
-
-		if (doc )
-		{
-			mol::punk<IHTMLWindow2> window;
-			if ( S_OK == doc->get_parentWindow(&window) && window )
-			{
-				variant var;
-				return window->execScript( src, scriptLanguage, &var );
-			}
-		}
-	}
-	return E_FAIL;
-}
-*/
 
 HRESULT __stdcall  MoeHtmlWnd::MoeFrame::OleCmd(  long cmd)
 {
@@ -289,76 +169,6 @@ HRESULT __stdcall  MoeHtmlWnd::MoeFrame::get_FilePath(  BSTR *filename)
 	return S_OK;
 }
 
-
-/////////////////////////////////////////////////////////////////////
-/*
-HRESULT __stdcall MoeHtmlWnd::MoeFrame::put_Title( BSTR title)
-{
-	if ( title )
-	{
-		This()->setText( mol::bstr(title).toString() );
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall MoeHtmlWnd::MoeFrame::get_Title( BSTR* title)
-{
-	if ( !title )
-		return E_INVALIDARG;
-
-	*title = ::SysAllocString( mol::towstring( This()->getText() ).c_str() );
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall MoeHtmlWnd::MoeFrame::Close()
-{
-	This()->postMessage(WM_CLOSE,0,0);
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall MoeHtmlWnd::MoeFrame::get_Scripts( IDispatch** s)
-{
-	if (!s)
-		return E_INVALIDARG;
-
-	*s = 0;
-	mol::punk<IDispatch> disp;
-	
-	if ( S_OK == get_Document( &disp ) && disp )
-	{
-		mol::punk<IHTMLDocument2> doc2(disp);
-		if ( doc2)
-		{
-			mol::punk<IHTMLDocument> doc(doc2);
-			if ( doc )
-			{
-				return doc->get_Script(s);
-			}
-		}
-	}
-	return E_FAIL;
-}
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall MoeHtmlWnd::MoeFrame::put_CodeBehind( IDispatch* code)
-{
-	This()->codeBehind_ = code;
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-HRESULT __stdcall MoeHtmlWnd::MoeFrame::OleCmd( long cmd)
-{
-	This()->execWb((OLECMDID)cmd);
-	return S_OK;
-}
-*/
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -428,6 +238,8 @@ bool MoeHtmlWnd::load( const mol::string& loc )
 
 	statusBar()->status(50);
 
+	thumb = taskbar()->addTab( this );
+
 	return true;
 }
 
@@ -448,10 +260,6 @@ void MoeHtmlWnd::OnDestroy()
 		docs()->Remove(v);
 	}
 
-	if ( codeBehind_ )
-		codeBehind_.release();
-
-	::CoDisconnectObject(((IDispatch*)codeBehind_),0);
 	::CoDisconnectObject(((IExternalMoe*)&external_),0);
 
 	unAdvise(htmlSink);
@@ -548,52 +356,6 @@ HRESULT __stdcall MoeHtmlWnd::ExternalMoe:: get_Frame( IMoeHtmlFrame** f)
 
 HRESULT __stdcall MoeHtmlWnd::ExternalMoe::CodeBehind( BSTR fname )
 {
-/*	This()->domain_ = new Domain();
-	This()->domain_->CreateInstance<ICompiler>( _T("JIT"), _T("mol.JIT"), &(This()->compiler_) );
-
-	mol::string p(bstr(fname).toString());
-	if ( !mol::Path::exists(p) )
-	{
-		mol::string l = This()->location;
-		mol::string s = mol::Path::parentDir(l);
-		s += _T("\\");
-		s += p;
-		p = s;
-		if ( !mol::Path::exists(p) )
-			return S_OK;
-	}
-
-	statusBar()->status( mol::string( _T("codebehind ") + p) );
-
-	mol::string an = p;
-	size_t pos = 0;
-	if (  (pos = an.find_last_of(_T("."))) != mol::string::npos )
-		an = an.substr(0,pos);
-	an += _T(".exe");
-
-	This()->compiler_->Start();
-	This()->compiler_->put_AssemblyName(bstr(an));
-	This()->compiler_->AddSourceFile(bstr(mol::Path::filename(p)));
-
-	This()->compiler_->AddDirectory(bstr(mol::Path::pathname(mol::app<MoeApp>().getModulePath())));
-	This()->compiler_->AddReference(bstr(L"System.Web.dll"));
-	This()->compiler_->AddReference(bstr(L"moe.dll"));
-	This()->compiler_->AddReference(bstr(L"Interop.Moe.dll"));
-	This()->compiler_->AddReference(bstr(L"Interop.Scintilla.dll"));
-	This()->compiler_->AddReference(bstr(L"Interop.ShellCtrls.dll"));
-	This()->compiler_->AddObject(bstr("moe"),variant((IDispatch*)(IXmoe*)(moe())));
-
-	mol::punk<IDispatch> disp((IDispatch*)(IMoeFrame*)(&(This()->frame_)));
-	mol::variant v(disp);
-	This()->compiler_->AddObject(bstr("frame"),v);
-	
-	punk<IUnknown> unk(This()->compiler_);
-	This()->compilerSink_.Advise(unk.interface_);
-
-	statusBar()->status( mol::string( _T("CODEBEHIND run ")) + p );
-
-	This()->compiler_->Run();
-		*/
 	return S_OK;
 }
 
@@ -603,10 +365,7 @@ HRESULT __stdcall MoeHtmlWnd::ExternalMoe::get_Code( IDispatch** code )
 		return E_INVALIDARG;
 
 	*code = 0;
-	if ( ! (This()->codeBehind_) )
-		return E_FAIL;
-
-	return This()->codeBehind_->QueryInterface( IID_IDispatch, (void**)code );
+	return E_FAIL;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -632,10 +391,8 @@ HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_htmlSink::WindowClosing( VARIANT_BOOL i
 	if ( vbCancel )
 		*vbCancel = VARIANT_FALSE;
 
-	if ( (isChildWindow == VARIANT_FALSE) && This()->codeBehind_ )
+	if ( isChildWindow == VARIANT_FALSE )
 	{
-		This()->codeBehind_->Release();
-		This()->codeBehind_ = 0;
 	}
 	return S_OK;
 }
@@ -675,155 +432,9 @@ HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_htmlSink::DocumentComplete( IDispatch* 
 		}
 
 		statusBar()->status(70);
-
-		mol::punk<IHTMLElement> body;
-		if ( S_OK == doc->get_body(&body) && body )
-		{
-			// check for C# syntax first
-			mol::string codebase   =  mol::Path::pathname(This()->location);
-			mol::string codebehind = _T(""); 
-
-			mol::variant vCodebase;
-			if ( S_OK == body->getAttribute( mol::bstr("CODEBASE"),0,&vCodebase) )
-			{
-				if ( vCodebase.vt == VT_BSTR && vCodebase.bstrVal != 0 )
-				{
-					mol::string p = vCodebase.toString();
-					if (!mol::Path::exists(p))
-					{
-						p = codebase + _T("\\") + p;
-					}
-					if ( mol::Path::exists(p) )
-						codebase = p;
-				}
-			}
-			mol::variant vCodebehind;
-			if ( S_OK == body->getAttribute(mol::bstr("CODEBEHIND"),0,&vCodebehind) )
-			{
-				if ( vCodebehind.vt == VT_BSTR && vCodebehind.bstrVal != 0 )
-				{
-					codebehind = vCodebehind.toString();
-				}
-			}
-			statusBar()->status(80);
-
-			if ( !codebehind.empty() )
-			{
-				mol::string assembly = codebehind;
-				size_t pos = 0;
-				if (  (pos = assembly.find_last_of(_T("."))) != mol::string::npos )
-					assembly = assembly.substr(0,pos);
-/*
-
-				This()->domain_ = new Domain();
-				This()->domain_->CreateInstance<ICompiler>( _T("JIT"), _T("mol.JIT"), &(This()->compiler_) );
-
-				assembly += _T(".exe");
-
-				This()->compiler_->Start();
-				This()->compiler_->put_AssemblyName(bstr(assembly));
-				This()->compiler_->AddDirectory(bstr(codebase));
-				This()->compiler_->AddSourceFile(bstr(codebehind));
-
-				This()->compiler_->AddDirectory(bstr(mol::Path::pathname(mol::app<MoeApp>().getModulePath())));
-				This()->compiler_->AddReference(bstr(L"System.Web.dll"));
-				This()->compiler_->AddReference(bstr(L"moe.dll"));
-				This()->compiler_->AddReference(bstr(L"Interop.Moe.dll"));
-				This()->compiler_->AddReference(bstr(L"Interop.Scintilla.dll"));
-				This()->compiler_->AddReference(bstr(L"Interop.ShellCtrls.dll"));
-				This()->compiler_->AddObject(bstr("moe"),variant((IDispatch*)(IXmoe*)(moe())));
-				This()->compiler_->AddObject(bstr("frame"),variant((IDispatch*)(IMoeFrame*)&(This()->frame_)));
-
-				punk<IUnknown> unk(This()->compiler_);
-				This()->compilerSink_.Advise(unk.interface_);
-
-				statusBar()->status(90);
-
-				This()->compiler_->Run();
-
-				statusBar()->status(100);
-
-				statusBar()->status(_T(""));	
-				*/
-				return S_OK;
-			}
-
-/*
-			// check JAVA syntax now
-			mol::string classpath  =  mol::Path::pathname(This()->location);
-			mol::string classbehind = _T(""); 
-
-			mol::variant vClasspath;
-			if ( S_OK == body->getAttribute( mol::bstr("CLASSPATH"),0,&vClasspath) )
-			{
-				if ( vClasspath.vt == VT_BSTR && vClasspath.bstrVal != 0 )
-				{
-					mol::string p = vClasspath.toString();
-					if (!mol::Path::exists(p))
-					{
-						p = classpath + _T("\\") + p;
-					}
-					if ( mol::Path::exists(p) )
-						classpath = p;
-						
-				}
-			}
-			statusBar()->status(80);
-
-			mol::variant vClassbehind;
-			if ( S_OK == body->getAttribute(mol::bstr("CLASSBEHIND"),0,&vClassbehind) )
-			{
-				if ( vClassbehind.vt == VT_BSTR && vClassbehind.bstrVal != 0 )
-				{
-					classbehind = vClassbehind.toString();
-				}
-			}
-			statusBar()->status(90);	
-
-			if ( !classbehind.empty() )
-			{
-				if ( This()->jvm_ )
-					This()->jvm_.release();
-
-				HRESULT hr = This()->jvm_.createObject(CLSID_JRE,CLSCTX_LOCAL_SERVER);
-				if ( hr != S_OK )
-				{
-					statusBar()->status(_T(""));	
-					return hr;
-				}
-
-				mol::string module = mol::Path::pathname(mol::app<MoeApp>().getModulePath());
-				mol::string libpath = module + _T("\\com4j.jar;");
-				libpath += module + _T("\\jmoe.jar;");
-				libpath += classpath ;
-
-				hr = This()->jvm_->put_Classpath( mol::bstr(libpath) );
-				if ( hr != S_OK )
-				{
-					statusBar()->status(_T(""));	
-					return hr;
-				}
-
-				statusBar()->status(80);
-
-				hr = This()->jvm_->Extension( mol::bstr(classbehind), (IXmoe*)(moe()), (IMoeFrame*)&(This()->frame_) );
-
-				statusBar()->status(100);
-
-				statusBar()->status(_T(""));	
-				if ( hr!= S_OK )
-				{
-					return hr;
-				}
-
-				return S_OK;
-			}
-*/
-		}
 	}
-	
-	statusBar()->status(100);
 
+	statusBar()->status(100);
 	mol::punk<IOleCommandTarget> oct(This()->oleObject);
 	if ( oct)
 	{
@@ -832,19 +443,3 @@ HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_htmlSink::DocumentComplete( IDispatch* 
 	statusBar()->status(_T(""));	
 	return S_OK;
 }
-
-/*
-HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_compilerSink::ErrorMsg(BSTR error)
-{
-	::MessageBox( *This(),bstr(error).toString().c_str(),_T("error:"),0);
-	return S_OK;
-}
-
-
-HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_compilerSink::Success()
-{
-	statusBar()->status( _T("jit successfull"));
-	return S_OK;
-}
-
-*/

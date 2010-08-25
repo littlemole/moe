@@ -3,7 +3,7 @@
                xmlns:mol="urn:mol-codegen" 
                xmlns:xs="http://www.w3.org/2001/XMLSchema" 
 			   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-			   xsi:schemaLocation='urn:mol-codegen resource.xsd'>
+			   xsi:schemaLocation='urn:mol-codegen ../../../cg/xml/resource.xsd'>
 
  
   <!-- 
@@ -17,7 +17,7 @@
   -->
   <cmds >
     <cmd id="IDM_FILE" title="File" />
-    <cmd id="IDM_FILE_NEW" title="New File"  ribbon="RibbonFileNew" />
+    <cmd id="IDM_FILE_NEW" title="New File"   ribbon="RibbonFileNew" />
     <cmd id="IDM_FILE_OPEN" title="File Open" ribbon="RibbonFileOpen"/>
     <cmd id="IDM_FILE_OPEN_HEX" title="Open Hex" />
     <cmd id="IDM_FILE_OPEN_HTML" title="Open Url" ribbon="RibbonFileOpenUrl" />
@@ -66,7 +66,7 @@
     <cmd id="IDM_EDIT_28BYTES" title="28 Bytes" />
     <cmd id="IDM_EDIT_32BYTES" title="32 Bytes" />
 
-    <cmd id="IDM_TOOLS" title="Tools" />
+    <cmd id="IDM_TOOLS" title="Tools"  />
     <cmd id="IDM_MODE" title="Settings"/>
     <cmd id="IDM_MODE_EOL" title="Mode" ribbon="RibbonModeGroup" />
     <cmd id="IDM_MODE_SETTINGS" title="Settings" ribbon="RibbonSettings"/>

@@ -3,6 +3,7 @@
 
 #include "commons.h"
 #include "Docs.h"
+#include "TaskBar.h"
 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
@@ -59,124 +60,22 @@ protected:
 
 };
 
-/*
-template<class C,class I>
-class DispatchWindow
-	: public mol::Dispatch<I>
+
+class TaskBarMdiWindow
 {
 public:
-	typedef mol::com_instance<C> Instance;
+	virtual ~TaskBarMdiWindow() {};
 
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall get_Top( long* top)
-	{
-		if ( top )
-		{
-			RECT r;
-			C* This = (C*)this;
-			This->getWindowRect(r);
-			*top = r.top;
-		}
-		return S_OK;
-	}
-
-	virtual HRESULT __stdcall put_Top( long top)
-	{
-		RECT r;
-		C* This = (C*)this;
-		This->getWindowRect(r);
-		r.bottom = r.bottom + ( top - r.top );
-		r.top = top;
-
-		This->move(r.left,r.top,r.right-r.left,r.bottom-r.top);
-		return S_OK;
-	}
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall get_Left( long* left)
-	{
-		if ( left )
-		{
-			RECT r;
-			C* This = (C*)this;
-			This->getWindowRect(r);
-			*left = r.left;
-		}
-		return S_OK;
-	}
-
-	virtual HRESULT __stdcall put_Left( long left)
-	{
-		RECT r;
-		C* This = (C*)this;
-		This->getWindowRect(r);
-		r.right = r.right + ( left - r.left );
-		r.left = left;
-		This->move(r.left,r.top,r.right-r.left,r.bottom-r.top);
-		return S_OK;
-	}
-
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall get_Width( long* width)
-	{
-		if ( width )
-		{
-			RECT r;
-			C* This = (C*)this;
-			This->getWindowRect(r);
-			*width = r.right -r.left;
-		}
-		return S_OK;
-	}
-
-	virtual HRESULT __stdcall put_Width( long width)
-	{
-		RECT r;
-		C* This = (C*)this;
-		This->getWindowRect(r);
-		r.right = r.left + width;
-		This->move(r.left,r.top,r.right-r.left,r.bottom-r.top);
-		return S_OK;
-	}
-	/////////////////////////////////////////////////////////////////////
-	virtual HRESULT __stdcall get_Height( long* height)
-	{
-		if ( height )
-		{
-			RECT r;
-			C* This = (C*)this;
-			This->getWindowRect(r);
-			*height = r.bottom -r.top;
-		}
-		return S_OK;
-	}
-
-	virtual HRESULT __stdcall put_Height( long height)
-	{
-		RECT r;
-		C* This = (C*)this;
-		This->getWindowRect(r);
-		r.bottom = r.top + height;
-		This->move(r.left,r.top,r.right-r.left,r.bottom-r.top);
-		return S_OK;
-	}
+	TaskThumbnail thumb;
 };
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-// shared dispatch implementation for moe mdi child windows
-// derives from DispatchWindow<C,I>
-// adds necessary COM plumbing for non-creatable Dispatch
-// implementations (dispose,getCoClassID) and the Dispatch
-// implementation for basic MDI functionality
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-
-*/
 template<class C,class I, long T>
 class DispatchMidiWindow
-	: public mol::Dispatch<I>
+	: public mol::Dispatch<I>, public TaskBarMdiWindow
 {
 public:
+
+	
 
 	mol::punk<IMoeDocumentView> view;
 
@@ -189,7 +88,9 @@ public:
 	}
 
 	virtual ~DispatchMidiWindow()
-	{}
+	{
+
+	}
 
 	virtual void dispose() {}
 
@@ -246,7 +147,6 @@ public:
    {
 	   return E_NOTIMPL;
    }
-
 
 };
 

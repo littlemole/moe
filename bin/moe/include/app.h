@@ -10,6 +10,9 @@ public:
 	int operator() ( mol::win::AppBase& app );
 };
 
+
+
+
 class MoeApp : 
 	public mol::local_server<MoeLoop>,
 	public mol::exports< MoeApp, MoeWnd >
