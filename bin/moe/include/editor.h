@@ -14,7 +14,7 @@ class TaskbarWnd;
 class Editor 
 	: 
 	public mol::MdiChildFrame<Editor,mol::AxWnd<Editor,mol::MdiChild,&CLSID_ScintillAx>>,
-	public DispatchMidiWindow<Editor,IMoeDocument,MOE_DOCTYPE_DOC>,
+	public DispatchMdiWindow<Editor,IMoeDocument,MOE_DOCTYPE_DOC>,
 	public mol::ProvideClassInfo<Editor>,
 	public mol::interfaces< Editor, mol::implements< IDispatch, IMoeDocument, IProvideClassInfo> >
 {
@@ -57,6 +57,7 @@ public:
 	void OnTabIndents();
 	void OnBackspaceUnindents();
 	void OnWriteBOM();
+	void OnShowLineNumbers();
 
 	void OnExecScript();
 	void OnDebugScript();
@@ -96,7 +97,8 @@ protected:
 protected:
 
 	// scintilla events sink
-    class Sintilla_Events : public mol::stack_obj<ScintillAxEvents>
+    class Sintilla_Events : 
+		public mol::stack_obj<ScintillAxEvents>
     {
         public : outer_this(Editor,events); 
 

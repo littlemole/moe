@@ -109,8 +109,9 @@
 
         <msg  handler="OnDispatch" cmd="IDM_EDIT_EXECUTESCRIPT" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUGSCRIPT" />
-        <msg  handler="OnDispatch" cmd="IDM_MODE_EXECUTEFORM" />      
-      
+        <msg  handler="OnDispatch" cmd="IDM_MODE_EXECUTEFORM" />
+        <msg  handler="OnDispatch" cmd="IDM_MODE_SHOW_LINE_NUMBERS" />
+
         <msgrange type="cmd" from="ID_FIRST_USER_CMD" to="ID_LAST_USER_CMD" handler="OnDispatch" />
         <msgrange type="cmd" from="ID_FIRST_USER_SCRIPT" to="ID_LAST_USER_SCRIPT" handler="OnDispatch" />
         <msgrange type="cmd" from="ID_FIRST_USER_BATCH" to="ID_LAST_USER_BATCH" handler="OnDispatch" />
@@ -176,6 +177,7 @@
         <msg  handler="OnTabWidth" cmd="IDM_RIBBON_TABWIDTH"  />
         <msg  handler="OnTabIndents" cmd="IDM_RIBBON_TABINDENTS"  />
         <msg  handler="OnBackspaceUnindents" cmd="IDM_RIBBON_BACKSPACE_UNIDENTS"  />
+        <msg  handler="OnShowLineNumbers" cmd="IDM_MODE_SHOW_LINE_NUMBERS" />      
         <msg  handler="OnWriteBOM" cmd="IDM_RIBBON_WRITE_BOM"  />
 
         <msg  handler="OnExecScript" cmd="IDM_EDIT_EXECUTESCRIPT" />

@@ -779,7 +779,7 @@ HRESULT __stdcall MoeScript::Eval( BSTR scrpt, BSTR scrptLanguage)
 //		return evalute_csharp(scrpt);
 	}
 
-	scriptlet()->eval( mol::toString(scrptLanguage),mol::toString(scrpt) );
+	scriptlet()->eval( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
 	return S_OK;
 }
 
@@ -796,7 +796,7 @@ HRESULT __stdcall MoeScript::Debug( BSTR scrpt, BSTR scrptLanguage)
 //		return evalute_csharp(scrpt);
 	}
 
-	scriptlet()->debug( mol::toString(scrptLanguage),mol::toString(scrpt) );
+	scriptlet()->debug( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
 	return S_OK;
 }
 
@@ -1036,6 +1036,21 @@ HRESULT __stdcall MoeConfig::get_TabWidth(  long* width)
 	return S_OK;
 }
 
+HRESULT __stdcall MoeConfig::put_ShowLineNumbers( VARIANT_BOOL vb)
+{
+	showLineNumbers_ = vb;
+	return S_OK;
+}
+
+HRESULT __stdcall MoeConfig::get_ShowLineNumbers(  VARIANT_BOOL* vb)
+{
+	if ( vb )
+	{
+		*vb = showLineNumbers_;
+	}
+	return S_OK;
+}
+
 HRESULT __stdcall MoeConfig::EditPreferences( )
 {
 	statusBar()->status(_T("edit preferences for new documents"));
@@ -1046,7 +1061,7 @@ HRESULT __stdcall MoeConfig::EditPreferences( )
 	moe()->moeView->get_Left(&left);
 	moe()->moeView->get_Top(&top);
 
-	moe()->moeScript->ShowHtmlForm( bstr(prefs) ,left+225,top+225,450,190,6);
+	moe()->moeScript->ShowHtmlForm( bstr(prefs) ,left+225,top+225,450,217,6);
 	
 	return S_OK;
 }	
@@ -1133,7 +1148,97 @@ HRESULT __stdcall MoeConfig::InitializeEditorFromPreferences( IMoeDocument* d )
 	if ( hr != S_OK )
 		return hr;
 
+	hr = sci->put_ShowLineNumbers(showLineNumbers_);
+	if ( hr != S_OK )
+		return hr;
+
+	return S_OK;
+}
+
+void MoeConfig::setDirty(bool b)
+{
+
+}
+
+bool MoeConfig::isDirty()
+{
+	return false;
+}
+
+/*
+HRESULT __stdcall MoeConfig::Load( LPSTREAM pStm) 
+{
+	data_.copyFrom(pStm);
+
+	urlDlg()->Load(pStm);
+	reBar()->Load(pStm);
+
+	ULONG len = 0;
+	pStm->Read( &toolBarFrozen_, sizeof(BYTE),  &len );
+	reBar()->freeze(toolBarFrozen_!= 0);
+
 	return S_OK;
 }
 
 
+
+HRESULT __stdcall MoeConfig::Save( LPSTREAM pStm,BOOL fClearDirty)
+{
+	if ( mol::Ribbon::ribbon()->enabled() )
+	{
+		// if we have ribbon, write url dlg config to data_
+		data_.reset();
+		urlDlg()->Save(data_,fClearDirty);
+		data_.reset();
+		// and keep all the old school toolbar state as is
+		HRESULT hr = data_.copyTo( pStm );		
+		return S_OK;
+	}
+
+	// no ribbon - save urldlg and toolbar state
+	urlDlg()->Save(pStm,fClearDirty);
+	reBar()->Save(pStm, fClearDirty);
+
+	ULONG written = 0;
+	pStm->Write( &toolBarFrozen_, sizeof(BYTE),		 &written );
+
+	return S_OK;
+}
+
+*/
+
+HRESULT __stdcall MoeConfig::Load( LPSTREAM pStm)
+{
+	/*
+	persist_property( DISPID_MOECONF_SYSTYPE, VT_I4, &CLSID_NULL)
+	persist_property(DISPID_MOECONF_ENCODING,VT_I4,&CLSID_NULL)
+	persist_property(DISPID_MOECONF_TABUSAGE,VT_BOOL,&CLSID_NULL)
+	persist_property(DISPID_MOECONF_TABINDENTS,VT_BOOL,&CLSID_NULL)
+	persist_property(DISPID_MOECONF_BACKSPACEUNINDENTS,VT_BOOL,&CLSID_NULL)
+	persist_property(DISPID_MOECONF_TABWIDTH,VT_I4,&CLSID_NULL)
+	persist_property(DISPID_MOECONF_LINENUMBERS,VT_BOOL,&CLSID_NULL)
+*/
+	pStm >> mol::property( mol::DispId(this,DISPID_MOECONF_SYSTYPE, VT_I4) )
+		 >> mol::property( mol::DispId(this,DISPID_MOECONF_ENCODING, VT_I4) )
+		 >> mol::property( mol::DispId(this,DISPID_MOECONF_TABUSAGE,VT_BOOL) )
+		 >> mol::property( mol::DispId(this,DISPID_MOECONF_TABINDENTS,VT_BOOL) )
+		 >> mol::property( mol::DispId(this,DISPID_MOECONF_BACKSPACEUNINDENTS,VT_BOOL) )
+		 >> mol::property( mol::DispId(this,DISPID_MOECONF_TABWIDTH, VT_I4) )
+		 >> mol::property( mol::DispId(this,DISPID_MOECONF_LINENUMBERS,VT_BOOL) );
+
+	return S_OK;
+}
+
+HRESULT __stdcall MoeConfig::Save( LPSTREAM pStm,BOOL fClearDirty)
+{
+	pStm << mol::property( mol::DispId(this,DISPID_MOECONF_SYSTYPE, VT_I4) )
+		 << mol::property( mol::DispId(this,DISPID_MOECONF_ENCODING, VT_I4) )
+		 << mol::property( mol::DispId(this,DISPID_MOECONF_TABUSAGE,VT_BOOL) )
+		 << mol::property( mol::DispId(this,DISPID_MOECONF_TABINDENTS,VT_BOOL) )
+		 << mol::property( mol::DispId(this,DISPID_MOECONF_BACKSPACEUNINDENTS,VT_BOOL) )
+		 << mol::property( mol::DispId(this,DISPID_MOECONF_TABWIDTH, VT_I4) )
+		 << mol::property( mol::DispId(this,DISPID_MOECONF_LINENUMBERS,VT_BOOL) );
+
+
+	return S_OK;
+}

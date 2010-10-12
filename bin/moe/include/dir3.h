@@ -11,7 +11,7 @@
 class DirChild 
 	: 
 	public mol::MdiChildFrame<DirChild,mol::AxWnd<DirChild,mol::MdiChild,&CLSID_ShellPane>>,
-	public DispatchMidiWindow<DirChild,IMoeDocument,MOE_DOCTYPE_DIR>,
+	public DispatchMdiWindow<DirChild,IMoeDocument,MOE_DOCTYPE_DIR>,
 	public mol::ProvideClassInfo<DirChild>,
 	public mol::interfaces< DirChild, 
 			mol::implements< IDispatch, IMoeDocument, IProvideClassInfo> >
@@ -34,7 +34,8 @@ private:
 	mol::punk<IShellPane> list;
 
 	// directory events sink
-    class DirChild_Events : public mol::stack_obj<ShellFolderEvents>
+    class DirChild_Events : 
+		public mol::stack_obj<ShellFolderEvents>
     {
         public : outer_this(DirChild,events); 
 		virtual HRESULT __stdcall OnListSelection(BSTR filename);

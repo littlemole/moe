@@ -933,6 +933,20 @@ HRESULT __stdcall MoeWnd::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
 				return hr;
 		}
 	}
+	stream.release();
+
+	// save moe default settings
+	//punk<IStream> stream;
+	if ( S_OK == pStgSave->CreateStream( L"DEFAULTS", STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,0,&stream) )
+	{
+		mol::punk<IPersistStream> ps;
+
+		if ( S_OK == moeConfig->QueryInterface(IID_IPersistStream,(void**)&ps ))
+		if ( ps )
+		{
+			ps->Save(stream,TRUE);
+		}
+	}
 
 	// save Ribbon UI state (if applicable)
 	mol::Ribbon::ribbon()->save(pStgSave);
@@ -943,18 +957,37 @@ HRESULT __stdcall MoeWnd::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
 HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 {
 	static LPCOLESTR con = OLESTR("UI");
+	static LPCOLESTR def = OLESTR("DEFAULTS");
 
-	punk<IPersistStreamInit> ipsi(this);
-	if ( !ipsi )
-		return S_OK;
+	// open defaults stream
+	punk<IStream> stream;
+	HRESULT hr = pStgLoad->OpenStream( def, NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
+	if ( stream && hr == S_OK )
+	{
+		mol::punk<IMoeConfig> moeConf;
+		if ( S_OK == this->get_Config(&moeConf) )
+		{
+			mol::punk<IPersistStream> ps(moeConf);
+			if ( ps )
+			{
+				ps->Load(stream);
+			}
+		}		
+	}
+
+	stream.release();
 
 	// open UI stream
-	punk<IStream> stream;
-	HRESULT hr = pStgLoad->OpenStream( con, NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
+	//punk<IStream> stream;
+	hr = pStgLoad->OpenStream( con, NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
 	if ( !stream || (hr != S_OK) )
 		return S_OK;
 
 	// load UI config
+	punk<IPersistStreamInit> ipsi(this);
+	if ( !ipsi )
+		return S_OK;
+
 	setDirty(FALSE);
 	hr = ipsi->Load(stream);
 	if ( hr != S_OK )

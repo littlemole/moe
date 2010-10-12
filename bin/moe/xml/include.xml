@@ -20,5 +20,6 @@
   <include>form.h</include>
   <include>Docs.h</include>
   <include>MoeBar.h</include>
+  <include>win/msghandler.h</include>
 </mol:codegen>
 

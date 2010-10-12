@@ -43,21 +43,10 @@ private:
 	IMoeDocument* doc;
 	HBITMAP hbm_cached_;
 	
-	class TimerCB
-	{
-		public:
-
-			TimerCB( TaskbarWnd * w);
-			void operator()();
-
-		private:
-
-			TaskbarWnd* wnd_;
-	};
-
-	TimerCB timerCB_;
-	mol::Timer<TimerCB> timer_;
-
+	
+	void timer_callback();
+	
+	mol::Timer timer_;
 };
 
 

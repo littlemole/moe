@@ -29,7 +29,7 @@ int MoeLoop::operator() ( mol::win::AppBase& app )
 			)
 			continue;
 
-		if ( !::TranslateMDISysAccel( getMDIClient(app), &msg) )
+		if ( !::TranslateMDISysAccel( mol::win::mdiClient(), &msg) )
 			doMsg( msg, app );
   }
   return (int)msg.wParam ;

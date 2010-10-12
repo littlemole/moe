@@ -503,7 +503,7 @@ void Editor::OnUserScript(int code, int id, HWND ctrl)
 		execute_shell( file );
 		return ;
 	}
-	std::string engine = engineFromPath(mol::tostring(file));
+	mol::string engine = engineFromPath(mol::tostring(file));
 
 	mol::filestream fs;
 	fs.open(mol::tostring(file), GENERIC_READ);
@@ -764,6 +764,22 @@ void Editor::OnExecForm()
 	);
 }
 
+void Editor::OnShowLineNumbers()
+{
+	VARIANT_BOOL vb;
+	if ( S_OK != sci->get_ShowLineNumbers(&vb) )
+		return;
+
+	vb = vb == VARIANT_FALSE ? VARIANT_TRUE : VARIANT_FALSE;
+	sci->put_ShowLineNumbers(vb);
+
+	mol::Menu mode(mol::UI().SubMenu(IDM_MOE,IDM_MODE));
+
+	if ( vb == VARIANT_TRUE )
+		mode.checkItem( IDM_MODE_SHOW_LINE_NUMBERS );
+	else
+		mode.unCheckItem( IDM_MODE_SHOW_LINE_NUMBERS );
+}
 
 void Editor::OnExecScript()
 {
@@ -771,15 +787,17 @@ void Editor::OnExecScript()
 	if ( S_OK != sci->get_Filename(&filename) )
 		return ;
 
-	std::string engine = engineFromPath(filename.tostring());
-	if ( engine == "" )
+	mol::string engine = engineFromPath(filename.tostring());
+	if ( engine == _T("") )
 		return ;
 
 	mol::bstr script;
 	if ( S_OK != sci->GetText(&script) )
 		return ;
 
-	moe()->moeScript->Eval( script, mol::bstr(engine) );
+	scriptlet()->eval(engine,script.toString(),sci);
+
+	//moe()->moeScript->Eval( script, mol::bstr(engine) );
 }
 
 
@@ -789,15 +807,16 @@ void Editor::OnDebugScript()
 	if ( S_OK != sci->get_Filename(&filename) )
 		return ;
 
-	std::string engine = engineFromPath(filename.tostring());
-	if ( engine == "" )
+	mol::string engine = engineFromPath(filename.tostring());
+	if ( engine == _T("") )
 		return ;
 
 	mol::bstr script;
 	if ( S_OK != sci->GetText(&script) )
 		return ;
 
-	moe()->moeScript->Debug( script, mol::bstr(engine) );
+	//moe()->moeScript->Debug( script, mol::bstr(engine) );
+	scriptlet()->debug(engine,script.toString(),sci);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1032,6 +1051,26 @@ void Editor::updateUI()
 			mol::Ribbon::handler(RibbonWriteBOM)->check(vb == VARIANT_TRUE ? true : false );
 		}
 	}
+
+
+	if ( S_OK != sci->get_ShowLineNumbers(&vb) )
+		return;
+
+	if ( mol::Ribbon::ribbon()->enabled() )
+	{
+		bool  b = vb == VARIANT_TRUE ? true : false;
+		mol::Ribbon::handler(RibbonShowLineNumbers)->check(b);
+	}
+	else
+	{
+		mol::Menu mode(mol::UI().SubMenu(IDM_MOE,IDM_MODE));
+
+		if ( vb == VARIANT_TRUE )
+			mode.checkItem( IDM_MODE_SHOW_LINE_NUMBERS );
+		else
+			mode.unCheckItem( IDM_MODE_SHOW_LINE_NUMBERS );
+	}
+
 
 	if ( mol::Ribbon::ribbon()->enabled())
 	{

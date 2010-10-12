@@ -261,7 +261,7 @@ HRESULT __stdcall MoeTabControl::MoeTabControl_Drop::Drop( IDataObject* pDataObj
 
 	// determine drop target tab
 	int index = tab()->hitTest();
-	int cur = tab()->selection();
+	int cur = (int)tab()->selection();
 	/*
 	if ( index == cur )
 	{

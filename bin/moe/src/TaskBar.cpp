@@ -47,20 +47,17 @@ enum MOL_DWMWINDOWATTRIBUTE
 };
 
 
-TaskbarWnd::TimerCB::TimerCB( TaskbarWnd* w )
+
+void TaskbarWnd::timer_callback()
 {
-	wnd_ = w;
+	this->cacheIconicRepresentation();
+	ODBGS("refreshIcon");
+	this->timer_.kill();
 }
 
-void TaskbarWnd::TimerCB::operator()()
-{
-	wnd_->cacheIconicRepresentation();
-	ODBGS("refreshIcon");
-	wnd_->timer_.kill();
-}
 
 TaskbarWnd::TaskbarWnd( Taskbar* tb, IMoeDocument* d, ITaskbarList4* tbl, bool disabled )
-:timerCB_(this)
+//:timerCB_(this)
 {
 	tb_ = tb;
 	doc = d;
@@ -80,6 +77,8 @@ TaskbarWnd::~TaskbarWnd()
         DeleteObject(hbm_cached_);
     }
 }
+
+
 
 void TaskbarWnd::enableTabs(bool b)
 {
@@ -237,7 +236,7 @@ HBITMAP TaskbarWnd::GetIconicRepresentation(int nWidth, int nHeight, int scale )
 	// scale
 	Gdiplus::Bitmap  dest( nWidth, nHeight, PixelFormat32bppARGB);
 	{
-		Gdiplus::RectF rDest(0,0,nWidth,nHeight);
+		Gdiplus::RectF rDest(0,0,(Gdiplus::REAL)nWidth, (Gdiplus::REAL)nHeight );
 		Gdiplus::Graphics gScale( &dest );
 
 		if ( scale != 1 )
@@ -246,7 +245,7 @@ HBITMAP TaskbarWnd::GetIconicRepresentation(int nWidth, int nHeight, int scale )
 			nHeight = min(nHeight*scale, (int)src->GetHeight());
 		}
 
-		gScale.DrawImage( src, rDest,0,0,nWidth,nHeight, Gdiplus::UnitPixel, NULL, NULL, NULL );
+		gScale.DrawImage( src, rDest,0,0,(Gdiplus::REAL)nWidth,(Gdiplus::REAL)nHeight, Gdiplus::UnitPixel, NULL, NULL, NULL );
 
 	}
 	delete src;
@@ -311,7 +310,7 @@ void TaskbarWnd::cacheIconicRepresentation()
 
 void TaskbarWnd::refreshIconDelayed()
 {
-	timer_.set(1,&timerCB_ );
+	timer_.set(1, boost::bind(&TaskbarWnd::timer_callback,this) );
 }
 
 void TaskbarWnd::sendLivePreviewBitmap( )

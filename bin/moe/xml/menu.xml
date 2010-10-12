@@ -56,6 +56,7 @@
           <menu cmd="IDM_MODE_UNIX" />
           <menu cmd="IDM_MODE_WIN32" checked="true"/>
         </menu>
+        <menu cmd="IDM_MODE_SHOW_LINE_NUMBERS" checked="false"/>
         <menu cmd="IDM_MODE_LANGUAGE">
           <menu cmd="IDM_LEXER_PLAIN" />
           <menu separator="true"  />

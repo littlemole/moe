@@ -45,9 +45,16 @@
          </td>
          <td>
 	      <input name="backSpaceUnindents" type="checkbox" >backspace unindents
-	      <input align="right" type="submit" value="OK" >
          </td> 
         </tr>
+       <tr>
+         <td>
+          <input name="showLineNumbers" type="checkbox" >show line numbers
+         </td>
+         <td>
+	      <input align="right" type="submit" value="OK" >
+         </td> 
+        </tr>        
        </table>
 
  	   <br>
@@ -104,13 +111,15 @@ function init()
 	useTabs  			= document.getElementById("useTabs");
 	tabWidth 			= document.getElementById("tabWidth");
 	tabIndents 			= document.getElementById("tabIndents");
-	backSpaceUnindents 	= document.getElementById("backSpaceUnindents");
+	backSpaceUnindents  = document.getElementById("backSpaceUnindents");
+	showLineNumbers     = document.getElementById("showLineNumbers");	
 
 	useTabs.checked 			= external.Moe.Config.TabUsage;
 	tabWidth.value  			= external.Moe.Config.TabWidth;
 	tabIndents.checked 			= external.Moe.Config.TabIndents;
 	backSpaceUnindents.checked 	= external.Moe.Config.BackSpaceUnindents;
-
+	showLineNumbers.checked     = external.Moe.Config.ShowLineNumbers;
+	
     path = new ActiveXObject("IO.Path");
 }
 
@@ -120,6 +129,7 @@ function onOk()
 	external.Moe.Config.TabWidth 			= tabWidth.value;
 	external.Moe.Config.TabIndents 		= tabIndents.checked;
 	external.Moe.Config.BackSpaceUnindents = backSpaceUnindents.checked;
+	external.Moe.Config.ShowLineNumbers = showLineNumbers.checked;
 
 	external.Close();
 }

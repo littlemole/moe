@@ -1078,6 +1078,21 @@ END
 
 STRINGTABLE 
 BEGIN
+    RibbonShowLineNumbers_LabelTitle_RESID L"Line Numbers" /* LabelTitle RibbonShowLineNumbers_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonShowLineNumbers_TooltipTitle_RESID L"Show Line Numbers" /* TooltipTitle RibbonShowLineNumbers_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonShowLineNumbers_TooltipDescription_RESID L"Shows or Hides the Display of Line Numbers" /* TooltipDescription RibbonShowLineNumbers_TooltipDescription_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
     RibbonSelectLanguage_LabelTitle_RESID L"Syntax" /* LabelTitle RibbonSelectLanguage_LabelTitle_RESID: (null) */
 END
 

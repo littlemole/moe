@@ -78,6 +78,7 @@ public:
 		public Dispatch<IExternalMoe>,
 		public interfaces< ExternalMoe, 
 				implements< IDispatch, IExternalMoe> >
+
 	{
 		public : 
 			outer_this(MoeFormWnd,external_);
@@ -104,7 +105,8 @@ public:
 	// webbrowser events
 	/////////////////////////////////////////////////////////////////////
 
-	class MoeFormWnd_htmlSink : public stack_obj<mol::ie::ie_event_sink>
+	class MoeFormWnd_htmlSink : 
+		public stack_obj<mol::ie::ie_event_sink>
 	{
 		public : 
 			outer_this(MoeFormWnd,htmlSink_); 

@@ -6,6 +6,8 @@
 #include "ole/obj.h"
 #include "ole/SimpleHost.h"
 #include "fm20_tlh.h"
+#include "win/msghandler.h"
+#include "win/msg_macro.h"
 
 #include "resource.h"
 

@@ -1,6 +1,7 @@
 #ifndef MOL_MOE_DEF_GUARD_
 #define MOL_MOE_DEF_GUARD_
 
+#include "win/msgloop.h"
 #include "moe.h"
 
 
@@ -17,7 +18,7 @@ class MoeApp :
 	public mol::local_server<MoeLoop>,
 	public mol::exports< MoeApp, MoeWnd >
 {
-SINGLETON(MoeApp);
+friend mol::Singleton<MoeApp>; 
 public:
 
     virtual int run(const mol::string& cmdline);

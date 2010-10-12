@@ -13,13 +13,17 @@ if "%TARGET%"=="/clean" goto clean
 
 SET WORKDIR=%DEPLOYDIR%\tmpdir
 
+del /S /Q "%DEPLOYDIR%\moe"
 del /S /Q "%WORKDIR%"
+
+rmdir "%DEPLOYDIR%\moe"
+rmdir "%WORKDIR%"
 mkdir "%WORKDIR%"
 
 xcopy /Y /S /E /I /EXCLUDE:%TARGETDIR%\exclude.txt "%TARGETDIR%\moe" "%WORKDIR%"
 IF ERRORLEVEL 1 GOTO hell
 
-sleep 3
+rem sleep 3
 
 RENAME "%WORKDIR%" "moe"
 

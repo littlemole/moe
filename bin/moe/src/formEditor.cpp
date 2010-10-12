@@ -333,7 +333,7 @@ LRESULT FormEditor::OnSaveAs()
 			hr = dest->CreateStream( L"CONTENT",STGM_READWRITE|STGM_CREATE|STGM_SHARE_EXCLUSIVE, 0,0, &stream );
 			if ( S_OK == hr )
 			{
-				DWORD size = s.towstring().size();
+				DWORD size = (DWORD)s.towstring().size();
 				ULONG nwritten = 0;
 				hr = stream->Write( &size, sizeof(DWORD), &nwritten);
 				hr = stream->Write( s, size*sizeof(wchar_t), &nwritten);
@@ -367,7 +367,7 @@ LRESULT FormEditor::OnSave()
 		hr = dest->CreateStream( L"CONTENT",STGM_READWRITE|STGM_CREATE|STGM_SHARE_EXCLUSIVE, 0,0, &stream );
 		if ( S_OK == hr )
 		{
-			DWORD size = s.towstring().size();
+			DWORD size = (DWORD)s.towstring().size();
 			ULONG nwritten = 0;
 			hr = stream->Write( &size, sizeof(DWORD), &nwritten);
 			hr = stream->Write( s, size*sizeof(wchar_t), &nwritten);

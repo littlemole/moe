@@ -497,6 +497,10 @@
       <Command.TooltipDescription>Set Document EOL Mode to Windows (LFRF)</Command.TooltipDescription>
     </Command>
 
+    <Command Name="RibbonShowLineNumbers" LabelTitle="Line Numbers">
+      <Command.TooltipTitle>Show Line Numbers</Command.TooltipTitle>
+      <Command.TooltipDescription>Shows or Hides the Display of Line Numbers</Command.TooltipDescription>
+    </Command>
     
     <!-- Select Syntax Highlite -->
 
@@ -807,6 +811,7 @@
           <MenuGroup>
             <CheckBox CommandName="RibbonSelectModeUnix"/>
             <CheckBox CommandName="RibbonSelectModeWin32"/>
+            <ToggleButton CommandName="RibbonShowLineNumbers"></ToggleButton>
           </MenuGroup>
           <MenuGroup>
             <Button CommandName="RibbonSettings"/>
@@ -1542,7 +1547,7 @@
 
             <CheckBox CommandName="RibbonSelectModeUnix"/>
             <CheckBox CommandName="RibbonSelectModeWin32"/>
-
+            <ToggleButton CommandName="RibbonShowLineNumbers"></ToggleButton>
 
           </Group>
           <!-- View Group -->

@@ -15,7 +15,8 @@ class Docs :
 	public mol::interfaces< Docs, 
 				mol::implements< IDispatch, IMoeDocumentCollection> >
 {
-STACKSINGLETON(Docs);
+friend mol::Singleton<Docs>; 
+friend mol::stack_obj<Docs>;
 public:
 
 	typedef mol::stack_obj<Docs> Instance;

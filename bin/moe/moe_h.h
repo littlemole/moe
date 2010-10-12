@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Mon Aug 23 22:22:55 2010
+/* at Tue Oct 12 22:13:10 2010
  */
 /* Compiler settings for .\src\moe.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 7.00.0555 
@@ -1803,6 +1803,12 @@ EXTERN_C const IID IID_IMoeConfig;
         virtual /* [id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_TabWidth( 
             /* [retval][out] */ long *w) = 0;
         
+        virtual /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT STDMETHODCALLTYPE put_ShowLineNumbers( 
+            /* [in] */ VARIANT_BOOL vb) = 0;
+        
+        virtual /* [id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_ShowLineNumbers( 
+            /* [retval][out] */ VARIANT_BOOL *vb) = 0;
+        
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EditPreferences( void) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EditSettings( void) = 0;
@@ -1921,6 +1927,14 @@ EXTERN_C const IID IID_IMoeConfig;
             IMoeConfig * This,
             /* [retval][out] */ long *w);
         
+        /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ShowLineNumbers )( 
+            IMoeConfig * This,
+            /* [in] */ VARIANT_BOOL vb);
+        
+        /* [id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShowLineNumbers )( 
+            IMoeConfig * This,
+            /* [retval][out] */ VARIANT_BOOL *vb);
+        
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *EditPreferences )( 
             IMoeConfig * This);
         
@@ -2016,6 +2030,12 @@ EXTERN_C const IID IID_IMoeConfig;
 
 #define IMoeConfig_get_TabWidth(This,w)	\
     ( (This)->lpVtbl -> get_TabWidth(This,w) ) 
+
+#define IMoeConfig_put_ShowLineNumbers(This,vb)	\
+    ( (This)->lpVtbl -> put_ShowLineNumbers(This,vb) ) 
+
+#define IMoeConfig_get_ShowLineNumbers(This,vb)	\
+    ( (This)->lpVtbl -> get_ShowLineNumbers(This,vb) ) 
 
 #define IMoeConfig_EditPreferences(This)	\
     ( (This)->lpVtbl -> EditPreferences(This) ) 

@@ -14,7 +14,7 @@
 class MoeWnd;
 
 mol::string findFile(const mol::string& f);
-std::string engineFromPath(const std::string& path);
+mol::string engineFromPath(const std::string& path);
 
 class MoeStatusBar : public mol::StatusBarEx 
 {
@@ -121,7 +121,8 @@ public:
 
 class UrlDlg  : public mol::win::Dialog
 {
-STACKSINGLETON(UrlDlg);
+friend mol::Singleton<UrlDlg>; 
+friend mol::stack_obj<UrlDlg>;
 public:
 	virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -148,8 +149,8 @@ class Script : public mol::com_obj<mol::ScriptHost>
 {
 public:
 
-	void eval ( const mol::string& engine, const mol::string& script );
-	void debug( const mol::string& engine, const mol::string& script );
+	void eval ( const mol::string& engine, const mol::string& script, IScintillAx* sci );
+	void debug( const mol::string& engine, const mol::string& script, IScintillAx* sci );
 	void call ( const mol::string& engine, const mol::string& func, const mol::string& script );
 
 	void formscript( const mol::string& engine, const mol::string& script, IDispatch* form );
@@ -166,6 +167,12 @@ public:
 		close();
 		ODBGS("Script death");
 	}
+
+	 virtual HRESULT  __stdcall OnScriptError( IActiveScriptError *pscripterror);
+	 virtual HRESULT  __stdcall GetWindow(HWND *phwnd );
+
+private:
+	 IScintillAx* sci_;
 };
 
 typedef mol::punk<Script>		ScriptingHost;
@@ -195,7 +202,8 @@ private:
 // tree events sink
 class TreeWndSink : public mol::stack_obj<ShellTreeEvents>
 {
-STACKSINGLETON(TreeWndSink);
+friend mol::Singleton<TreeWndSink>; 
+friend mol::stack_obj<TreeWndSink>;
 public :
 	HRESULT virtual __stdcall OnTreeSelection(BSTR filename);
 	HRESULT virtual __stdcall OnTreeDblClick(BSTR filename);
@@ -213,7 +221,8 @@ private:
 
 class MoeDrop : public mol::stack_obj<mol::ole::DropTargetBase>
 {
-STACKSINGLETON(MoeDrop);
+friend mol::Singleton<MoeDrop>; 
+friend mol::stack_obj<MoeDrop>;
 public : 
 	HRESULT virtual __stdcall Drop( IDataObject* pDataObject, DWORD keyState, POINTL pt , DWORD* pEffect);
 	HRESULT virtual __stdcall DragEnter( IDataObject*, DWORD, POINTL, DWORD* );

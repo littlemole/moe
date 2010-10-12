@@ -719,21 +719,30 @@ library Moe
 		HRESULT TabWidth( [out,retval] long* w);
 
 
+		[ 
+		  propput,bindable,displaybind, requestedit,id(9), 
+		  helpstring("Show Line Numbers")
+		]
+		HRESULT ShowLineNumbers( [in] VARIANT_BOOL vb);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(9), 
+		]
+		HRESULT ShowLineNumbers( [out,retval] VARIANT_BOOL* vb);
 		/////////////////////////////////////////////////////////////////////
 
-		[id(9), helpstring("Show User Preferences for new opened documents dialog")]
+		[id(10), helpstring("Show User Preferences for new opened documents dialog")]
 		HRESULT EditPreferences( );
 
-		[id(10), helpstring("Show User Custom Settings dialog")]
+		[id(11), helpstring("Show User Custom Settings dialog")]
 		HRESULT EditSettings( );
 
-		[id(11), helpstring("Export User Settings to file")]
+		[id(12), helpstring("Export User Settings to file")]
 		HRESULT ExportSettings( [in] BSTR f );
 
-		[id(12), helpstring("Import User Settings from file")]
+		[id(13), helpstring("Import User Settings from file")]
 		HRESULT ImportSettings( [in] BSTR f );
 
-		[id(13), helpstring("Initiaize Editor with default values")]
+		[id(14), helpstring("Initiaize Editor with default values")]
 		HRESULT InitializeEditorFromPreferences( [in] IMoeDocument* d );
 	}
 

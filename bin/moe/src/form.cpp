@@ -34,6 +34,7 @@ MoeFormWnd::Instance* MoeFormWnd::CreateInstance( const mol::string& loc, int le
 		return 0;
 
 	Instance* form = new Instance;
+	form->view = MoeDialogView::CreateInstance(form);
 	form->AddRef();
 
 	form->location_ = f;

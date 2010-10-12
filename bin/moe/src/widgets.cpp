@@ -6,9 +6,9 @@
 #include "fm20_tlh.h"
 
 
-std::string engineFromPath(const std::string& path)
+mol::string engineFromPath(const std::string& path)
 {
-	return mol::tostring(mol::engineFromExtension(mol::Path::ext(mol::toString(path))));
+	return mol::toString(mol::engineFromExtension(mol::Path::ext(mol::toString(path))));
 }
 
 
@@ -31,8 +31,12 @@ void MoeStatusBar::status( const mol::string& txt )
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-void Script::eval(  const mol::string& engine, const mol::string& script )
+void Script::eval(  const mol::string& engine, const mol::string& script, IScintillAx* sci )
 {
+	sci_ = sci;
+	if ( sci )
+		sci->ClearAnnotations();
+
 	ODBGS("Script::eval()\r\n");
 	this->AddRef();
 	init(engine);
@@ -42,8 +46,12 @@ void Script::eval(  const mol::string& engine, const mol::string& script )
 	this->Release();
 }
 
-void Script::debug(  const mol::string& engine, const mol::string& script )
+void Script::debug(  const mol::string& engine, const mol::string& script, IScintillAx* sci )
 {
+	sci_ = sci;
+	if ( sci )
+		sci->ClearAnnotations();
+
 	ODBGS("Script::eval()\r\n");
 	this->AddRef();
 	init(engine);
@@ -134,6 +142,36 @@ void Script::formcontrols( IUnknown* f )
 		addNamedObject((MSForms::IControl*)(c),name.toString(),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE );
 	}
 }
+
+
+HRESULT  __stdcall Script::OnScriptError( IActiveScriptError *pscripterror)
+{
+	if ( !sci_ )
+		return mol::ScriptHost::OnScriptError(pscripterror);
+
+	EXCEPINFO ex;
+	pscripterror->GetExceptionInfo(&ex);
+
+	DWORD context;
+	ULONG line;
+	LONG pos;
+	pscripterror->GetSourcePosition(&context,&line,&pos);
+
+	mol::ostringstream oss;
+	oss << "line: " << (line+1) << std::endl << mol::bstr(ex.bstrDescription).toString();
+
+	sci_->SetAnnotation( line, mol::bstr(oss.str()) );
+
+	return S_OK;
+}
+
+HRESULT  __stdcall Script::GetWindow(HWND *phwnd )
+{
+	HWND w = *moe();
+	*phwnd = w;
+	return S_OK;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -486,7 +486,7 @@ HRESULT __stdcall UserForm::Save( IStorage* store, BOOL fSameAsLoad)
 		ULONG nwritten = 0;
 
 		std::wstring ws = mol::towstring(scriptEngine_);
-		size = ws.size();
+		size = (DWORD)ws.size();
 
 		if ( S_OK == stream->Write( &size, sizeof(DWORD), &nwritten ) )
 		{

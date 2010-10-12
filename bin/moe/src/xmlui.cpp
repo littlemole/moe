@@ -26,6 +26,8 @@
 
 #include "MoeBar.h"
 
+#include "win/msghandler.h"
+
 
 using namespace mol;
 
@@ -221,8 +223,8 @@ void MoeWndGUIBuilder::makeUI()
     ::RegisterDragDrop(*moe,moeDropTarget());
     
 
-    // keybord shortcuts (accellerators)
-    mol::win::AppBase::app<AppBase>().loadAccellerator(IDA_MOE,*moe);
+  // keybord shortcuts (accellerators)
+  mol::win::accelerators().load(IDA_MOE,*moe);
 
     // hook up ole container menus for OLE embedding
     moe->setWindowMenu(mol::UI().SubMenu(IDM_MOE,IDM_VIEW_WINDOWS));

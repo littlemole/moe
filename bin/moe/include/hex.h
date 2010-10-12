@@ -14,7 +14,7 @@ using namespace mol;
 class Hex 
 	: 
 	public MdiChildFrame<Hex,AxWnd<Hex,MdiChild,&CLSID_HexCtrl>>,
-	public DispatchMidiWindow<Hex,IMoeDocument,MOE_DOCTYPE_HEX>,
+	public DispatchMdiWindow<Hex,IMoeDocument,MOE_DOCTYPE_HEX>,
 	public ProvideClassInfo<Hex>,
 	public interfaces< Hex, implements< IDispatch, IMoeDocument, IProvideClassInfo> >
 {
@@ -42,7 +42,8 @@ protected:
 
 
 	// hexwnd events sink
-    class Hex_sink : public stack_obj<HexCtrlEvents>
+    class Hex_sink : 
+		public stack_obj<HexCtrlEvents>
     {
         public : outer_this(Hex,sink); 
 

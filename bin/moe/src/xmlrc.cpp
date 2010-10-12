@@ -26,6 +26,8 @@
 
 #include "MoeBar.h"
 
+#include "win/msghandler.h"
+
 
 using namespace mol;
 
@@ -93,6 +95,7 @@ extern "C" void load_codegen_metadata()
   UI().addCmd(IDM_MODE_DONT_USE_TABS,_T("Don't use Tabs"));  
   UI().addCmd(IDM_MODE_TABWIDTH,_T("tabwidth"));  
   UI().addCmd(IDM_MODE_EDITSETTINGS,_T("Settings"));  
+  UI().addCmd(IDM_MODE_SHOW_LINE_NUMBERS,_T("Show Line Numbers"));  
   UI().addCmd(IDM_TOOLS_EXECUTE_NET,_T("Exec .NET"));  
   UI().addCmd(IDM_MODE_EXECUTEFORM,_T("Exec Form"));  
   UI().addCmd(IDM_SETTINGS_LANG,_T("Language Settings"));  
@@ -267,6 +270,7 @@ extern "C" void load_codegen_metadata()
     UI().addSubMenu(  IDM_MOE, IDM_MODE, IDM_MODE_EOL, IDB_TOOLBAR);
         UI().addMenuItem(IDM_MOE, IDM_MODE_EOL, IDM_MODE_UNIX, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE, IDM_MODE_EOL, IDM_MODE_WIN32, IDB_TOOLBAR, true, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE, IDM_MODE_SHOW_LINE_NUMBERS, IDB_TOOLBAR, false, true);
     UI().addSubMenu(  IDM_MOE, IDM_MODE, IDM_MODE_LANGUAGE, IDB_TOOLBAR);
         UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_PLAIN, IDB_TOOLBAR, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_MODE_LANGUAGE);
@@ -725,6 +729,8 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUGSCRIPT, make_handler(&MoeWnd:
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_EXECUTEFORM, make_handler(&MoeWnd::OnDispatch) );
 
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_SHOW_LINE_NUMBERS, make_handler(&MoeWnd::OnDispatch) );
+
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_VIEW_MAXIMIZE, make_handler(&MoeWnd::OnMaximize) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_VIEW_MINIMIZE, make_handler(&MoeWnd::OnMinimize) );
@@ -826,6 +832,8 @@ mol::msgMap<Editor>().addCmdHandler( IDM_RIBBON_TABWIDTH, make_handler(&Editor::
 mol::msgMap<Editor>().addCmdHandler( IDM_RIBBON_TABINDENTS, make_handler(&Editor::OnTabIndents) );
 
 mol::msgMap<Editor>().addCmdHandler( IDM_RIBBON_BACKSPACE_UNIDENTS, make_handler(&Editor::OnBackspaceUnindents) );
+
+mol::msgMap<Editor>().addCmdHandler( IDM_MODE_SHOW_LINE_NUMBERS, make_handler(&Editor::OnShowLineNumbers) );
 
 mol::msgMap<Editor>().addCmdHandler( IDM_RIBBON_WRITE_BOM, make_handler(&Editor::OnWriteBOM) );
 

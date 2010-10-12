@@ -23,7 +23,7 @@ class MoeWnd;
 
 class MoeHtmlWnd  : 
 	public mol::MdiChildFrame<MoeHtmlWnd,mol::HtmlWnd<MoeHtmlWnd,mol::MdiChild>>,
-	public DispatchMidiWindow<MoeHtmlWnd,IMoeDocument,MOE_DOCTYPE_HTML>,
+	public DispatchMdiWindow<MoeHtmlWnd,IMoeDocument,MOE_DOCTYPE_HTML>,
 	public mol::ProvideClassInfo<MoeHtmlWnd>,
 	public mol::interfaces< MoeHtmlWnd, 
 			mol::implements< 
@@ -124,10 +124,11 @@ protected:
 	// webbrowser events
 	/////////////////////////////////////////////////////////////////////
 
-	class MoeHtmlWnd_htmlSink : public mol::stack_obj<mol::ie::ie_event_sink>
+	class MoeHtmlWnd_htmlSink : 
+		public mol::stack_obj<mol::ie::ie_event_sink>
 	{
 		public : 
-			outer_this(MoeHtmlWnd,htmlSink); 
+			outer_this(MoeHtmlWnd,htmlSink);
 			HRESULT virtual __stdcall BeforeNavigate2(IDispatch* pDisp, VARIANT* URL, VARIANT* Flags, VARIANT* TargetFrameName, VARIANT* PostData, VARIANT* Headers, VARIANT_BOOL* Cancel);
 			HRESULT virtual __stdcall DocumentComplete( IDispatch* pDisp,  VARIANT* URL);
 			HRESULT virtual __stdcall WindowClosing( VARIANT_BOOL isChildWindow, VARIANT_BOOL* vbCancel );

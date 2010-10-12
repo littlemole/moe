@@ -78,6 +78,7 @@
     <cmd id="IDM_MODE_DONT_USE_TABS" title="Don't use Tabs" />
     <cmd id="IDM_MODE_TABWIDTH" title="tabwidth" />
     <cmd id="IDM_MODE_EDITSETTINGS" title="Settings" />
+    <cmd id="IDM_MODE_SHOW_LINE_NUMBERS" title="Show Line Numbers" ribbon="RibbonShowLineNumbers"/>
     <cmd id="IDM_TOOLS_EXECUTE_NET" title="Exec .NET" />
     <cmd id="IDM_MODE_EXECUTEFORM" title="Exec Form" ribbon="RibbonToolExecForm"/>
     <cmd id="IDM_SETTINGS_LANG" title="Language Settings" />
