@@ -124,8 +124,24 @@ function make_ribbon( file )
     resrc = resrc.replace(/ribbonres\.h\.tmp/gi,"ribbonres\.h");
     saveFile( resrc, "ribbonres.rc" );
     fso.DeleteFile("ribbonres.rc.tmp");
-    
+
 }
+
+// filter IDs already defined by windows.h
+
+function filter_id( id )
+{
+    var ids = [ "IDOK", "IDCANCEL", "IDABORT", "IDRETRY", "IDIGNORE", "IDYES", "IDNO", "IDCLOSE", "IDHELP", "IDTRYAGAIN", "IDCONTINUE" ]; 
+    
+    for ( var i = 0; i < ids.length; i++ ) 
+    {
+      if ( ids[i] == id ) 
+      {      
+         return true;
+      }
+    }
+    return false;
+}    
 
 ////////////////////////////////////////////////////////////////////////
 // main
@@ -180,16 +196,14 @@ WScript.StdOut.WriteLine("   xml/menu.xml -> xsl/uimenu.xsl");
 xml.load("xml/menu.xml");
 result += transform( "../../cg/xsl/uimenu.xsl" );
 
-
-WScript.StdOut.WriteLine("   xml/persist.xml -> xsl/persist.xsl");
-xml.load("xml/persist.xml");
-result += transform( "../../cg/xsl/persist.xsl" );
-
-
 WScript.StdOut.WriteLine("   xml/msg.xml -> xsl/msg.xsl");
 xml.load("xml/msg.xml");
 result += transform( "../../cg/xsl/msg.xsl" );
 
+
+WScript.StdOut.WriteLine("   xml/persist.xml -> xsl/persist.xsl");
+xml.load("xml/persist.xml");
+result += transform("../../cg/xsl/persist.xsl");
 
 saveFile( result, "src/xmlrc.cpp" );
 
@@ -318,7 +332,12 @@ for ( f = 0; f < xml_files.length; f++ )
 
 	for ( r = 0; r < result.length; r++ )
 	{
-		var value = result[r].nodeValue;
+	    var value = result[r].nodeValue;
+
+	    if (filter_id(value)) 
+	    {
+	        continue;
+	    }
 
 		if( typeof ids[value] !='undefined')
 		{

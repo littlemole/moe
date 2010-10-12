@@ -6,29 +6,16 @@
 #include "app.h"
 #include <list>
 #include <map>
+#include <set>
 #include <vector>
 #include "thread/sync.h"
 
 namespace mol  {
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////
-//! App Object Philosophy:
-//
-//! assure you instanciate ONE mol::App derived object in main()
-//! or have one mole singleton in your DLL routines
-//
-////////////////////////////////////////////////////////////////////////////////////////////
-
-
-////////////////////////////////////////////////////////////////////////////////////////////
 //! global helper to get the windows HINSTANCE handle
-//
-//! assure you instanciate a mol::App derived object in main()
-////////////////////////////////////////////////////////////////////////////////////////////
-
 HINSTANCE hinstance();
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 //! global helper to get THAT application
@@ -43,6 +30,9 @@ T& app()
 	return T::app<T>();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
+//! helper to run THAT application
+////////////////////////////////////////////////////////////////////////////////////////////
 
 
 template<class T>
@@ -68,25 +58,14 @@ namespace ole {
 //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-
-////////////////////////////////////////////////////////////////////////////////////////////
 namespace win  {
 
 class AppBase
 {
-
 friend HINSTANCE mol::hinstance();
-friend class mol::win::LoopBase;
-friend class mol::win::DlgBase;
-friend class mol::ole::dll;
+friend class mol::Singleton<AppBase>;
 
 public:
-		// store hInst
-        AppBase();
-        virtual ~AppBase();
-
-		// load Keaboard Accelerators for GUI Application
-        HACCEL loadAccellerator(int n, HWND hWnd);
 
 		// run the application
 		virtual int run(const mol::string& cmdline)		{ return 0; };
@@ -94,19 +73,8 @@ public:
 		// message loop callback (idle time)
         virtual void idle(MSG& msg) {}
 
-		// global reference to the one and only app
-       // static AppBase& app();
-
 		virtual mol::TCHAR* getAppId()					{ return 0; };
 		virtual int getElevationStringIdentifier()		{ return 0; };
-
-        void OnMDIClient(HWND hWnd);
-        void OnCreateDlg(HWND hWnd);
-        void OnEndDlg   (HWND hWnd);
-		void OnCreateTab(HWND hTool, HWND hTab);
-        void OnEndTab   (HWND hTool);
-
-		bool TabToolNotify( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
 
 		virtual void lock();
 		virtual void unlock();
@@ -123,12 +91,6 @@ public:
 
 		virtual HRESULT __stdcall RegisterClassObjects(int ctx, int cls) { return S_OK; } 
 
-
-		//! returns the static ref to THE app object
-		//!
-		//! requires one mol::App derived Object instanciated in main()
-		//! or singleton usage thru mol::Dll
-
 		template<class T>
 		static T& app()
 		{
@@ -142,9 +104,13 @@ public:
 				}
 			}
 			return (T&)(*app_);
+
 		}
 	
 protected:
+
+        AppBase();
+        virtual ~AppBase();
 
 		virtual void Lock();
 		virtual void UnLock();
@@ -153,12 +119,7 @@ protected:
 
         HINSTANCE hinstance();
 
-        HACCEL				hAccel_;
-        HWND				hWndAccel_;
-        HWND				hWndMDIClient_;
         HINSTANCE			hInstance_;
-        std::list<HWND>		dlgList_;		
-		std::map<HWND,HWND>	tabMap_;
 		LONG                lockCount_;
 		mol::Mutex			mutex_;
 
@@ -179,6 +140,10 @@ mol::win::AppBase& App()
 { 
 	return mol::win::AppBase::app<mol::win::AppBase>(); 
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////
+//! MAIN TEMPLATE
+////////////////////////////////////////////////////////////////////////////////////////////
 
 template<class L = mol::win::MsgLoop> 
 class Application : public mol::win::AppBase
@@ -214,7 +179,6 @@ class LoopBase
 {
 public:
         void doMsg(MSG& msg, AppBase& app);
-        HWND getMDIClient(AppBase& app);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////

@@ -3,7 +3,7 @@
 
 
 #include "conf.h"
-#include "thread/call.h"
+#include "thread/fun.h"
 #include "thread/sync.h"
 
 #include <map>
@@ -28,7 +28,7 @@ public:
     Thread ( );
 	~Thread();
 
-	int start(mol::threading::CallBase*  obj);
+	int start( mol::fun::call* obj);
 
 	static unsigned int self();
 	static bool stop(int id);
@@ -40,16 +40,17 @@ public:
 
 	static int threads() { LOCK(cs_map_); return (int)map().size(); }
 
+	static inline int call( mol::fun::call* fc) 
+	{
+		return (new mol::Thread)->start(fc);
+	}
+
 protected:
 
     void  detach();
     void  kill();
 
-	typedef mol::Call< mol::threading::HeapDeletePolicy,
-					   mol::threading::CallBase,
-					   mol::threading::CallBase> 
-		ThreadCallType;
-
+	typedef mol::fun::call ThreadCallType;
 
 	typedef THREAD_RET_VAL 
 		(MOL_THREAD_CALL_TYPE *threadFunctionPointer)(void* t);
@@ -61,7 +62,7 @@ protected:
 	mol::Event                   start_;
 	mol::Event                   stop_;
 	mol::Event                   done_;
-	mol::threading::CallBase*	 call_;
+	mol::fun::call*				 call_;
 
 	typedef std::map<int,mol::Thread*>   MapType;
 
@@ -71,7 +72,9 @@ protected:
 	static mol::CriticalSection cs_map_;
 };
 
-///////////////////////////////////////////////////////////////////////////////
+
+										
+
 
 } // end namespace mol
 

@@ -200,7 +200,7 @@ struct VariantTraits<VT_R8>
 ///////////////////////////////////////////////////////////////////////
 template<class T>
 struct VarTraits {
-	static VARTYPE vt() { return VT_EMPTY };
+	static VARTYPE vt() { return VT_EMPTY; };
 };
 
 template<>
@@ -564,8 +564,7 @@ T& valueOf( mol::variant& v)
 {
 	if ( v.vt == mol::ole::VarTraits<T>::vt() )
 	{
-		return (T&)(*pintVal);
-		return t;
+		return (T&)(*v.pintVal);
 	}
 	mol::variant tmp(v);
 	tmp.changeType(mol::ole::VarTraits<T>::vt());

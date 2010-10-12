@@ -5,7 +5,7 @@
 #include "win/WndClass.h"
 #include "win/MsgMap.h"
 #include "win/Res.h"
-#include "thread/call.h"
+#include "thread/fun.h"
 #include "thread/thread.h"
 
 namespace mol {
@@ -25,12 +25,15 @@ class Wnd
 public:
 
     //construction/destruction
-    Wnd();
+
+	Wnd();
     Wnd(HWND hwnd) { hWnd_ = hwnd; };
-    virtual ~Wnd();
-    void attach( HWND hwnd) { hWnd_ = hwnd; }
+
+	virtual ~Wnd();
 	virtual BOOL close();
     virtual BOOL destroy();
+
+    inline void attach( HWND hwnd) { hWnd_ = hwnd; }
 
     // styles
     virtual int style()   { return 0; }
@@ -38,20 +41,24 @@ public:
 
     //  showing & updating
     virtual BOOL update();
-    virtual LRESULT setRedraw(bool redraw);
-    virtual int show( int nCmdShow );
-    virtual BOOL invalidateRect( const RECT* r, BOOL erase );
-    virtual BOOL invalidate( BOOL erase = TRUE )
+
+    LRESULT setRedraw(bool redraw);
+    int show( int nCmdShow );
+
+    BOOL invalidateRect( const RECT* r, BOOL erase );
+    inline BOOL invalidate( BOOL erase = TRUE )
 	{
 		return invalidateRect(0,erase);
 	}
+
     virtual void redraw()
 	{
 		::RedrawWindow(*this,0,0,RDW_FRAME|RDW_INVALIDATE);	
 		invalidateRect(0,TRUE);
 		::UpdateWindow(*this);
 	}
-    virtual BOOL validateRect( const RECT* r );
+
+    BOOL validateRect( const RECT* r );
 
     virtual HWND setFocus();    
     virtual int  setForeGround();
@@ -80,18 +87,18 @@ public:
 	virtual BOOL screen2Client( POINT& p );
 	virtual BOOL screen2Client( RECT& r  );
 
-    virtual int  getDlgCtrlID()             { return ::GetDlgCtrlID(hWnd_); }
-	virtual HWND getDlgItem(int id)         { return ::GetDlgItem (hWnd_,id); }
-	virtual BOOL getClientRect( RECT& r )   { return ::GetClientRect( hWnd_, &r);}
-	virtual BOOL getWindowRect( RECT& r )   { return ::GetWindowRect( hWnd_, &r);}
-    virtual BOOL isVisible()                { return ::IsWindowVisible( hWnd_ ); }
-    virtual BOOL isIconic()                 { return ::IsIconic(hWnd_); };
-	virtual bool pointInWnd(POINT& pt)		{ return hWnd_ == ::WindowFromPoint(pt); }
-	virtual bool pointInWnd()				{ POINT pt; ::GetCursorPos(&pt); return hWnd_ == ::WindowFromPoint(pt); }
+    int  getDlgCtrlID()             { return ::GetDlgCtrlID(hWnd_); }
+	HWND getDlgItem(int id)         { return ::GetDlgItem (hWnd_,id); }
+	BOOL getClientRect( RECT& r )   { return ::GetClientRect( hWnd_, &r);}
+	BOOL getWindowRect( RECT& r )   { return ::GetWindowRect( hWnd_, &r);}
+    BOOL isVisible()                { return ::IsWindowVisible( hWnd_ ); }
+    BOOL isIconic()                 { return ::IsIconic(hWnd_); };
+	bool pointInWnd(POINT& pt)		{ return hWnd_ == ::WindowFromPoint(pt); }
+	bool pointInWnd()				{ POINT pt; ::GetCursorPos(&pt); return hWnd_ == ::WindowFromPoint(pt); }
 
     //parent handling
-    virtual HWND getParent()				{ return ::GetParent(hWnd_);}
-    virtual HWND setParent(HWND hwnd)		{ return ::SetParent(hWnd_,hwnd);}
+    HWND getParent()				{ return ::GetParent(hWnd_);}
+    HWND setParent(HWND hwnd)		{ return ::SetParent(hWnd_,hwnd);}
 
 	virtual void setMenu( HMENU newMenu, HMENU windowMenu = 0 )
 	{
@@ -99,8 +106,8 @@ public:
 	}
 
     //messaging
-    virtual LRESULT sendMessage(UINT msg, WPARAM wParam, LPARAM lParam );
-    virtual BOOL    postMessage(UINT msg, WPARAM wParam, LPARAM lParam );
+    LRESULT sendMessage(UINT msg, WPARAM wParam, LPARAM lParam );
+    BOOL    postMessage(UINT msg, WPARAM wParam, LPARAM lParam );
 
     // convert into HWND
     operator HWND() { return hWnd_; };
@@ -406,48 +413,75 @@ typedef MsgPubsub<WM_COMMAND,mol::win::FireSendMsgPubSubPolicy>		sendcmd_pubsub;
 template<class T,class R>
 void invoke( T& t, R (T::*f)()  )
 {
+	/*
 	typedef mol::Call<mol::threading::StackDeletePolicy,T,void,R> CallType;
 	CallType* call = new CallType( &t, f );
+	t.postMessage(WM_COMMAND,0,(LPARAM)call);
+	*/
+
+	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t) );
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
 }
 
 template<class T, class R, class P1>
 void invoke( T& t, R (T::*f)(P1), P1 p1 )
 {
+/*
 	typedef mol::Call<mol::threading::StackDeletePolicy,T,void,R,P1,void,void,void,void,void> CallType;
 	CallType* call = new CallType( &t, f, p1 );
+	t.postMessage(WM_COMMAND,0,(LPARAM)call);
+*/
+	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t,p1) );
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
 }
 
 template<class T, class R, class P1, class P2>
 void invoke( T& t, R (T::*f)(P1,P2), P1 p1, P2 p2  )
 {
+	/*
 	typedef mol::Call<mol::threading::StackDeletePolicy,T,void,R,P1,P2,void,void,void,void> CallType;
 	CallType* call = new CallType( &t, f , p1, p2);
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
+	*/
+
+	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t,p1,p2) );
+	t.postMessage(WM_COMMAND,0,(LPARAM)call);
+
 }
 
 template<class T, class R, class P1, class P2, class P3>
 void invoke( T& t, R (T::*f)(P1,P2,P3), P1 p1, P2 p2, P3 p3 )
 {
+	/*
 	typedef mol::Call<mol::threading::StackDeletePolicy,T,void,R,P1,P2,P3,void,void,void> CallType;
 	CallType* call = new CallType( &t, f , p1, p2, p3);
+	t.postMessage(WM_COMMAND,0,(LPARAM)call);
+	*/
+	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t,p1,p2,p3) );
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
 }
 
 template<class T, class R, class P1, class P2, class P3, class P4>
 void invoke( T& t, R (T::*f)(P1,P2,P3,P4), P1 p1, P2 p2, P3 p3, P4 p4  )
 {
+	/*
 	typedef mol::Call<mol::threading::StackDeletePolicy,T,void,R,P1,P2,P3,P4,void,void> CallType;
 	CallType* call = new CallType( &t, f , p1, p2, p3, p4);
+	t.postMessage(WM_COMMAND,0,(LPARAM)call);
+	*/
+	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t,p1,p2,p3,p4) );
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
 }
 
 template<class T>
-void invoke_handler( T& t, mol::threading::Func<T,UINT,WPARAM,LPARAM,LRESULT> f, UINT msg, WPARAM wParam, LPARAM lParam)
+void invoke_handler( T& t, LRESULT (T::*func)(UINT,WPARAM,LPARAM),UINT msg, WPARAM wParam, LPARAM lParam ) //mol::threading::Func<T,UINT,WPARAM,LPARAM,LRESULT> f, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	/*
 	typedef mol::Call<mol::threading::StackDeletePolicy,T,void,LRESULT,UINT,WPARAM,LPARAM,void,void,void> CallType;
 	CallType* call = new CallType( &t, f , msg, wParam, lParam );
+	*/
+
+	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(func,&t,msg,wParam,lParam) );
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
 }
 

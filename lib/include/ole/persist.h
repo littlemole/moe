@@ -8,18 +8,424 @@
 #include "ole/variant.h"
 #include <ocidl.h>
 #include <vector>
+#include "boost/call_traits.hpp"
 
 namespace mol {
+
+
+
+class DispId
+{
+public:
+	DispId( IDispatch* d, int i, VARTYPE t )
+		: disp(d), id(i), vt(t)
+	{}
+
+	IDispatch* disp;
+	int id;
+	VARTYPE vt;
+};
+
+namespace persist {
+
+template<class T>
+class Property
+{
+public:
+
+	Property( T* t)
+		: t_(t)
+	{}
+
+	Property( const mol::string& name, T* t)
+		: name_(name), t_(t)
+	{}
+
+	void write( IPropertyBag* bag )
+	{
+		mol::variant v( *t_ );
+		bag->Write( mol::towstring(name_).c_str(), &v );
+	}
+
+	void load( IPropertyBag* bag )
+	{
+		mol::variant v;
+		bag->Read( mol::towstring(name_).c_str(),&v, 0 );
+
+		*t_ = mol::valueOf<T>(v);
+	}
+
+	void write( IStream* stream )
+	{
+		ULONG written = 0;
+		HRESULT hr = stream->Write( t_, sizeof(T), &written );
+	}
+
+	void read( IStream* stream )
+	{
+		ULONG read = 0;
+		HRESULT hr = stream->Read( t_, sizeof(T), &read );
+	}
+
+private:
+	mol::string name_;
+	T* t_;
+};
+
+template<>
+class Property<SIZEL>
+{
+public:
+
+	Property( SIZEL* t)
+		: t_(t)
+	{}
+
+	Property( const mol::string& name, SIZEL* t)
+		: name_(name), t_(t)
+	{}
+
+	void write( IPropertyBag* bag )
+	{
+		std::ostringstream oss;
+		oss << t_->cx << "|" << t_->cy;
+
+		mol::variant v( oss.str() );
+		bag->Write( mol::towstring(name_).c_str(), &v );
+	}
+
+	void load( IPropertyBag* bag )
+	{
+		mol::variant v;
+		bag->Read( mol::towstring(name_).c_str(),&v, 0 );
+
+		std::string s = mol::valueOf<std::string>(v);
+		std::vector<std::string> xy = mol::split(s,"|");
+
+		if ( xy.size() > 1 )
+		{
+			std::istringstream x(xy[0]);
+			x >> t_->cx;
+			std::istringstream y(xy[1]);
+			y >> t_->cy;
+		}
+	}
+
+
+	void write( IStream* stream )
+	{
+		ULONG written = 0;
+		HRESULT hr = stream->Write( t_, sizeof(SIZEL), &written );
+	}
+
+	void read( IStream* stream )
+	{
+		ULONG read = 0;
+		HRESULT hr = stream->Read( t_, sizeof(SIZEL), &read );
+	}
+
+private:
+	mol::string name_;
+	SIZEL* t_;
+};
+
+template<>
+class Property<mol::bstr>
+{
+public:
+
+	Property( mol::bstr& b)
+		: bstr_(b)
+	{}
+
+	Property( const mol::string& name, mol::bstr& b)
+		: name_(name), bstr_(b)
+	{}
+
+	void write( IPropertyBag* bag )
+	{
+		mol::variant v( bstr_ );
+		bag->Write( mol::towstring(name_).c_str(), &v );
+	}
+
+	void load( IPropertyBag* bag )
+	{
+		mol::variant v;
+		bag->Read( mol::towstring(name_).c_str(),&v, 0 );
+		bstr_ = v.bstrVal;
+	}
+
+
+	void write( IStream* stream )
+	{
+		ULONG written = 0;
+		int len = ::SysStringByteLen(bstr_);
+		HRESULT hr = stream->Write( &len, sizeof(int), &written );
+		if ( len > 0 )
+		{
+			hr = stream->Write( bstr_.bstr_, len, &written );
+		}
+	}
+
+	void read( IStream* stream )
+	{
+		ULONG read = 0;
+		int len = 0;
+		HRESULT hr = stream->Read( &len, sizeof(len), &read );
+		if ( len > 0 )
+		{
+			char* buf = new char[len+2];
+			hr = stream->Read( buf, len, &read );
+			buf[len]   = 0;
+			buf[len+1] = 0;
+			bstr_ = ::SysAllocString( (OLECHAR*)buf );
+			delete[] buf;
+		}
+	}
+
+private:
+	mol::bstr& bstr_;
+	mol::string name_;
+};
+
+
+template<>
+class Property<std::string>
+{
+public:
+
+	Property( std::string& s)
+		: str_(s)
+	{}
+
+	Property( const mol::string& name, std::string& s)
+		: name_(name), str_(s)
+	{}
+
+	void write( IPropertyBag* bag )
+	{
+		mol::variant v( str_ );
+		bag->Write( mol::towstring(name_).c_str(), &v );
+	}
+
+	void load( IPropertyBag* bag )
+	{
+		mol::variant v;
+		bag->Read( mol::towstring(name_).c_str(),&v, 0 );
+		str_ = v.tostring();
+	}
+
+
+	void write( IStream* stream )
+	{
+		ULONG written = 0;
+		size_t len = str_.size();
+		HRESULT hr = stream->Write( &len, sizeof(int), &written );
+		if ( len > 0 )
+		{
+			hr = stream->Write( str_.c_str(), (ULONG)len, &written );
+		}
+	}
+
+	void read( IStream* stream )
+	{
+		ULONG read = 0;
+		int len = 0;
+		HRESULT hr = stream->Read( &len, sizeof(len), &read );
+		if ( len > 0 )
+		{
+			char* buf = new char[len+1];
+			hr = stream->Read( buf, len, &read );
+			buf[len]   = 0;
+			str_ = std::string( buf, len );
+			delete[] buf;
+		}
+	}
+
+private:
+	std::string& str_;
+	mol::string name_;
+};
+
+
+
+template<>
+class Property<std::wstring>
+{
+public:
+
+	Property( std::wstring& s)
+		: str_(s)
+	{}
+
+	Property( const mol::string& name, std::wstring& s)
+		: name_(name), str_(s)
+	{}
+
+	void write( IPropertyBag* bag )
+	{
+		mol::variant v( str_ );
+		bag->Write( mol::towstring(name_).c_str(), &v );
+	}
+
+	void load( IPropertyBag* bag )
+	{
+		mol::variant v;
+		bag->Read( mol::towstring(name_).c_str(),&v, 0 );
+		str_ = v.towstring();
+	}
+
+	void write( IStream* stream )
+	{
+		ULONG written = 0;
+		size_t len = str_.size();
+		HRESULT hr = stream->Write( &len, sizeof(int), &written );
+		if ( len > 0 )
+		{
+			hr = stream->Write( str_.c_str(), (ULONG)(len * sizeof(wchar_t)), &written );
+		}
+	}
+
+	void read( IStream* stream )
+	{
+		ULONG read = 0;
+		int len = 0;
+		HRESULT hr = stream->Read( &len, sizeof(len), &read );
+		if ( len > 0 )
+		{
+			wchar_t* buf = new wchar_t[len+1];
+			hr = stream->Read( (void*)buf, len* sizeof(wchar_t), &read );
+			buf[len]   = 0;
+			str_ = std::wstring( buf, len );
+			delete[] buf;
+		}
+	}
+private:
+	std::wstring& str_;
+	mol::string name_;
+};
+
+
+template<>
+class Property<mol::DispId>
+{
+public:
+	Property( const mol::string& name, mol::DispId id)
+		: name_(name), id_(id)
+	{}
+
+	Property( mol::DispId id)
+		: id_(id)
+	{}
+
+	void write( IPropertyBag* bag )
+	{
+		mol::variant v;
+		HRESULT hr = mol::get( id_.disp, id_.id, &v );
+		if ( hr == S_OK )
+		{
+			bag->Write( mol::towstring(name_).c_str(), &v );
+		}
+	}
+
+	void load( IPropertyBag* bag )
+	{
+		mol::variant v;
+		bag->Read( mol::towstring(name_).c_str(),&v, 0 );
+
+		HRESULT hr = mol::put( id_.disp, id_.id, &v);
+	}
+
+	void write( IStream* stream )
+	{
+		mol::variant v;
+		HRESULT hr = mol::get( id_.disp, id_.id, &v );
+		v.toStream(stream);
+	}
+
+	void read( IStream* stream )
+	{
+		variant v((BSTR)0);
+		v.vt = id_.vt;
+		v.fromStream(stream);
+
+		HRESULT hr = mol::put( id_.disp, id_.id, &v);
+	}
+
+private:
+	mol::string name_;
+	mol::DispId id_;
+};
+
+	
+} // end namespace persist
+} // end namespace mol
+
+template<class T>
+IPropertyBag* operator<<( IPropertyBag* bag, mol::persist::Property<T>& prop ) 
+{
+	prop.write(bag);
+	return bag;
+}
+
+template<class T>
+IPropertyBag* operator>>( IPropertyBag* bag, mol::persist::Property<T>& prop ) 
+{
+	prop.load(bag);
+	return bag;
+}
+
+
+template<class T>
+IStream* operator<<( IStream* stream, mol::persist::Property<T>& prop ) 
+{
+	prop.write(stream);
+	return stream;
+}
+
+template<class T>
+IStream* operator>>( IStream* stream, mol::persist::Property<T>& prop ) 
+{
+	prop.read(stream);
+	return stream;
+}
+
+namespace mol {
+
+template<class T>
+mol::persist::Property<T> property( const mol::string& name, T* t)
+{
+	return mol::persist::Property<T>(name,t);
+}
+
+template<class T>
+mol::persist::Property<T> property( T* t)
+{
+	return mol::persist::Property<T>(t);
+}
+
+
+inline mol::persist::Property<mol::DispId> property( const mol::string& name, mol::DispId t)
+{
+	return mol::persist::Property<mol::DispId>(name,t);
+}
+
+inline mol::persist::Property<mol::DispId> property( mol::DispId t)
+{
+	return mol::persist::Property<mol::DispId>(t);
+}
+
 namespace ole {
 
 /////////////////////////////////////////////////////////////////////
 // Persistence 
 /////////////////////////////////////////////////////////////////////
 
+
 /////////////////////////////////////////////////////////////////////
 // Persist Property Support
 /////////////////////////////////////////////////////////////////////
-
+/*
 class IProperty
 {
 public:
@@ -310,7 +716,7 @@ public:																	\
 		return 0;														\
 	}																	\
 } d##_member_;
-
+*/
 ///////////////////////////////////////////////////////////
 
 } // end namespace ole
@@ -452,25 +858,29 @@ public:
 	virtual HRESULT __stdcall InitNew() 
 	{
 		T* t = (T*)this;
-
+/*
 		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
 
 		for ( unsigned int i = 0; i < props.size(); i++ )
 		{
 			props[i]->InitNew(t);
 		}
+*/
 		t->setDirty(FALSE);
 		return S_OK;
 	}
-
+/*
 	virtual HRESULT __stdcall Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog) 
 	{
 		T* t = (T*)this;
+
+		/*
 		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
 		for ( unsigned int i = 0; i < props.size(); i++ )
 		{
 			props[i]->Load(t,pPropBag);
 		}
+		* /
 		t->setDirty(FALSE);
 		return S_OK;
 	}
@@ -478,14 +888,17 @@ public:
 	virtual HRESULT __stdcall Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties) 
 	{
 		T* t = (T*)this;
+		/*
 		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
 		for ( unsigned int i = 0; i < props.size(); i++ )
 		{
 			props[i]->Save(t,pPropBag);
 		}
+		* /
 		t->setDirty(FALSE);
 		return S_OK;
 	}
+	*/
 };
 
 /////////////////////////////////////////////////////////////////////
@@ -505,15 +918,17 @@ public:
 		T* t = (T*)this;
 		return t->isDirty() == TRUE ? S_OK : S_FALSE;
 	}
-    
+    /*
     virtual HRESULT __stdcall Load( LPSTREAM pStm) 
 	{
 		T* t = (T*)this;
+		/*
 		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
 		for ( unsigned int i = 0; i < props.size(); i++ )
 		{
 			props[i]->Load(t,pStm);		
 		}
+		* /
 		t->setDirty(FALSE);
 		return S_OK;
 	}
@@ -521,35 +936,42 @@ public:
     virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty)
 	{
 		T* t = (T*)this;
+		/*
 		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
 		for ( unsigned int i = 0; i < props.size(); i++ )
 		{
 			props[i]->Save(t,pStm);		
 		}
+		* /
 		t->setDirty(FALSE);
 		return S_OK;
 	}
+	*/
     
     virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER *pCbSize)
 	{
 		pCbSize->QuadPart = 0;
 		T* t = (T*)this;
+		/*
 		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
 		for ( unsigned int i = 0; i < props.size(); i++ )
 		{
 			props[i]->GetSizeMax(t,pCbSize);
 		}
+		*/
 		return S_OK;
 	}
     
     virtual HRESULT __stdcall InitNew() 
 	{
 		T* t = (T*)this;
+		/*
 		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
 		for ( unsigned int i = 0; i < props.size(); i++ )
 		{
 			props[i]->InitNew(t);
 		}
+		*/
 		t->setDirty(FALSE);
 		return S_OK;
 	}
@@ -636,11 +1058,13 @@ public:
     virtual HRESULT __stdcall InitNew(IStorage *pStg) 
 	{
 		T* t = (T*)this;
+		/*
 		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
 		for ( unsigned int i = 0; i < props.size(); i++ )
 		{
 			props[i]->InitNew((IDispatch*)t);
 		}
+		*/
 		t->setDirty(FALSE);
 		return S_OK;
 	}

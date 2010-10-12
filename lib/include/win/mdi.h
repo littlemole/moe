@@ -7,6 +7,44 @@
 
 namespace mol {
 
+namespace win {
+
+
+class MdiClient
+{
+friend class mol::Singleton<MdiClient>;
+public:
+
+	void set( HWND hWnd)
+	{
+		hWnd_ = hWnd;
+	}
+
+	HWND get()
+	{
+		return hWnd_;
+	}
+
+	operator HWND()
+	{
+		return get();
+	}
+
+private:
+
+	MdiClient() {}
+	~MdiClient() {}
+
+	HWND hWnd_;
+};
+
+inline MdiClient& mdiClient()
+{
+	return mol::Singleton<MdiClient>::instance();
+}
+
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //base MDI frame windows
 ////////////////////////////////////////////////////////////////////////////////////////////////

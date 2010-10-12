@@ -34,7 +34,7 @@ cd %TARGETDIR%
 IF NOT EXIST xml\cmd.xml goto compile
 IF NOT %5!==! goto compile
 
-cscript %OLDDIR%\cg\js\make.js %MODE%
+cscript "%OLDDIR%\cg\js\make.js" "%MODE%"
 
 IF ERRORLEVEL 0 GOTO compile
 

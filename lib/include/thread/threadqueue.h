@@ -2,7 +2,7 @@
 #define MOL_THREADQUEUE_DEF_GUARD_H_DEFINE_
 
 #pragma warning( disable: 4355)
-#include "thread/systhread.h"
+//#include "thread/systhread.h"
 #include "thread/thread.h"
 #include "thread/sync.h"
 #include <list>
@@ -28,14 +28,14 @@ public:
 } // end namespace threading
 
 template<class T, bool Synchronize = true, class P=mol::threading::ThreadStartPolicy, class PS=mol::threading::ThreadShutdownPolicy >
-class ThreadQueue : public mol::threading::CallBase
+class ThreadQueue 
 {
 friend class mol::Thread;
 public:
     ThreadQueue()
 		:go_(false),cancel_(false)
 	{
-		thread_ = mol::thread( *this, &ThreadQueue::operator() );
+		thread_ = threaded_fun_call( &mol::ThreadQueue<T,Synchronize,P,PS>::worker, this);
 	}
 
     ~ThreadQueue()
@@ -69,7 +69,7 @@ public:
 		return cancel_.test() != 0;
 	}
 
-	void operator()()
+	void worker()
 	{
 		P p;
 		p();

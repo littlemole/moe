@@ -5,6 +5,7 @@
 #include <cmath>
 #include <map>
 #include <string>
+#include <thread/fun.h>
 
 namespace mol  {
 
@@ -16,11 +17,14 @@ template<class T>
 class point
 {
 public:
+
     T x;
     T y;
+
     point()					{ x = y = 0; };
     point( T X, T Y  )		{ x = X; y = Y; };
     point( const point& p )	{ x = p.x; y = p.y; }
+
     inline T distance( T X, T Y )
     {
         T dx = (X-x);
@@ -28,7 +32,9 @@ public:
         long s = ( dx >= 0 ? 1 : -1) * ( dy >= 0 ? 1 : -1 );
         return (T)(sqrt( dx*dx + dy*dy )*s);
     }
+
     inline T distance( const point<T>& p ) { return distance( p.x, p.y); };
+
     inline T fast_distance( T X, T Y )
     {
         T ax = fabs(X-x);
@@ -36,8 +42,11 @@ public:
         long min = ( ax < ay ) ? ax : ay;
         return ( ax+ay-(T)(min>>1)-(T)(min>>2)+(T)(min>>4));
     }
+
     inline T fast_distance( const point<T>& p ) { return fast_distance( p.x, p.y); };
+
     inline point<T> normal() { T l = distance(0,0); return point<T>( ((l!=0) ? (T)(x/l) : 0), ((l!=0)?(T)(y/l):0) ); };
+
     inline point<T> fast_normal() { T l = fast_distance(0,0); return point<T>( ((l>0) ? (T)(x/l) : 0), ((l>0)?(T)(y/l):0) ); };
 
     inline point<T> operator+( const point<T>& p ) { return point<T>( this->x+p.x, this->y+p.y ); };
@@ -189,7 +198,6 @@ public:
 
 extern const Rect stdRect;
 
-template<class T>
 class Timer
 {
 public:
@@ -201,12 +209,22 @@ public:
     {
         kill();
     }
-    void set(int delay, T* p )
+
+	void set(int delay, mol::fun::call* c )
     {
         kill();
         id_ = ::SetTimer( 0,0, delay, TimerProc );
-        map()[id_] = p;
+        map()[id_] = c;
     }
+
+	template<class T>
+	void set(int delay, T t )
+    {
+        kill();
+        id_ = ::SetTimer( 0,0, delay, TimerProc );
+		map()[id_] = mol::fun::thread_prepare_call( t );
+    }
+
 
     void kill()
     {
@@ -219,19 +237,25 @@ public:
     }
 
 protected:
-    int id_;
+
+    UINT_PTR id_;
+
     static void CALLBACK TimerProc(  HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime )
     {
         if ( map().count(idEvent) )
         {
-            T* p  = map()[idEvent];
+			mol::fun::call* p  = map()[idEvent];
             if ( p )
+			{
                 (*p)();
+
+			}
         }
     }
-    static std::map<int, T*>& map()
+
+    static std::map<UINT_PTR,mol::fun::call*>& map()
     {
-        static std::map<int, T*> theMap;
+        static std::map<UINT_PTR, mol::fun::call*> theMap;
         return theMap;
     }
 };

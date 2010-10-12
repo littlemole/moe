@@ -655,13 +655,14 @@ public:
 			return;
 
 		T* t = (T*)this;
-		std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
+		/*std::vector<mol::ole::IProperty*>& props = mol::ole::properties<T>().get();
 		//T::PROPERTIES& prop = t->T::properties();
 		for ( unsigned int i = 0; i < props.size(); i++ )
 		{
 			if ( props[i]->prop_guid() != 0 )
 				clsids_proppages_.insert( props[i]->prop_guid() );
 		}
+		*/
 	}
 
 	// actual wndProc uses mol::MsgMap

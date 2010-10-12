@@ -147,6 +147,37 @@ mol::string stringFromFreedBSTR( BSTR bstr );
 ///////////////////////////////////////////////////////////////////////////////
 // COM Singletons - will be released just before ~OleUninitialize()
 ///////////////////////////////////////////////////////////////////////////////
+template<class T>
+class ComShim : public T
+{
+public:
+
+	virtual long AddRef()
+	{
+		debug_refcount_++;
+	}
+	virtual long Release()
+	{
+		debug_refcount_--;
+	}
+
+	virtual long comshim_internal_AddRef()
+	{
+		return T::AddRef();
+	}
+
+	virtual long comshim_internal_Release()
+	{
+		if ( debug_refcount_ != 0 )
+			cry();
+
+		return T::Release();
+	}
+
+private:
+	int debug_refcount_;
+};
+
 
 template<class T, const CLSID* clsid, const CLSID* iid = &mol::uuidof<T>()>
 class COMSingleton

@@ -1,5 +1,7 @@
 rem @echo off
 
+PROMPT $G
+
 set MODE=%1
 if NOT %1!==! set MODE=%MODE:"=%
 
@@ -58,8 +60,11 @@ goto hell
 
 
 echo     ! BUILD FAILED :-(
+
+PROMPT
 exit /B 1
 
 :end
 
+PROMPT
 exit /B 0

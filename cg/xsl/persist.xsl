@@ -19,18 +19,79 @@
 <xsl:template name="registerPersistence">
 
 <xsl:variable name="wndClass" select="./@type"/>
+
+HRESULT __stdcall <xsl:value-of select="$wndClass" />::Load( LPSTREAM pStm)
+{
+    pStm
 <xsl:for-each select="./mol:persist">
-<xsl:variable name="name" select="./@name"/>
 <xsl:variable name="vtype" select="./@vtype"/>
 <xsl:variable name="property" select="./@property"/>
 <xsl:variable name="member" select="./@member"/>
 <xsl:if test="$property">
-  mol::ole::properties&lt;<xsl:value-of select="$wndClass" />&gt;().add(mol::ole::make_property("<xsl:value-of select="$name" />", <xsl:value-of select="$property" />, <xsl:value-of select="$vtype" />, &amp;CLSID_NULL));
+  &lt;&lt; mol::property( mol::DispId(this,<xsl:value-of select="$property" />,<xsl:value-of select="$vtype" />) )
 </xsl:if>
 <xsl:if test="$member">
-  mol::ole::properties&lt;<xsl:value-of select="$wndClass" />&gt;().add(mol::ole::make_property( &amp;<xsl:value-of select="$wndClass" />::<xsl:value-of select="$member" />,"<xsl:value-of select="$name" />"));
+  &lt;&lt; mol::property( &amp;<xsl:value-of select="$member" /> )
 </xsl:if>
-</xsl:for-each>
+</xsl:for-each>;
+  return S_OK;
+  }
+
+
+HRESULT __stdcall <xsl:value-of select="$wndClass" />::Save( LPSTREAM pStm,BOOL fClearDirty )
+{
+    pStm
+<xsl:for-each select="./mol:persist">
+<xsl:variable name="vtype" select="./@vtype"/>
+<xsl:variable name="property" select="./@property"/>
+<xsl:variable name="member" select="./@member"/>
+<xsl:if test="$property">
+  &gt;&gt; mol::property( mol::DispId(this,<xsl:value-of select="$property" />,<xsl:value-of select="$vtype" />) )
+</xsl:if>
+<xsl:if test="$member">
+  &gt;&gt; mol::property( &amp;<xsl:value-of select="$member" /> )
+</xsl:if>
+</xsl:for-each>;
+  return S_OK;
+  }
+
+
+
+HRESULT __stdcall <xsl:value-of select="$wndClass" />::Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog)
+{
+    pPropBag
+<xsl:for-each select="./mol:persist">
+<xsl:variable name="vtype" select="./@vtype"/>
+<xsl:variable name="property" select="./@property"/>
+<xsl:variable name="member" select="./@member"/>
+<xsl:if test="$property">
+  &lt;&lt; mol::property( _T("<xsl:value-of select="$property" />"), mol::DispId(this,<xsl:value-of select="$property" />,<xsl:value-of select="$vtype" />) )
+</xsl:if>
+<xsl:if test="$member">
+  &lt;&lt; mol::property( _T("<xsl:value-of select="$member" />"), &amp;<xsl:value-of select="$member" /> )
+</xsl:if>
+</xsl:for-each>;
+return S_OK;
+}
+
+
+HRESULT __stdcall <xsl:value-of select="$wndClass" />::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties)
+{
+    pPropBag
+<xsl:for-each select="./mol:persist">
+<xsl:variable name="vtype" select="./@vtype"/>
+<xsl:variable name="property" select="./@property"/>
+<xsl:variable name="member" select="./@member"/>
+<xsl:if test="$property">
+  &gt;&gt; mol::property( _T("<xsl:value-of select="$property" />"), mol::DispId(this,<xsl:value-of select="$property" />,<xsl:value-of select="$vtype" />) )
+</xsl:if>
+<xsl:if test="$member">
+  &gt;&gt; mol::property( _T("<xsl:value-of select="$member" />"), &amp;<xsl:value-of select="$member" /> )
+</xsl:if>
+</xsl:for-each>;
+return S_OK;
+}
+
 </xsl:template>  
 
 </xsl:stylesheet>

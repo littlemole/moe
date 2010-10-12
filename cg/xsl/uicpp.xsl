@@ -87,8 +87,8 @@ void <xsl:value-of select="$windowClass" />GUIBuilder::makeUI()
     
 </xsl:if>
 <xsl:if test="$accel">
-    // keybord shortcuts (accellerators)
-    mol::win::AppBase::app&lt;AppBase&gt;().loadAccellerator(<xsl:value-of select="$accel" />,*<xsl:value-of select="$name" />);
+  // keybord shortcuts (accellerators)
+  mol::win::accelerators().load(<xsl:value-of select="$accel" />,*<xsl:value-of select="$name" />);
 </xsl:if>
 <xsl:if test="$show">
 

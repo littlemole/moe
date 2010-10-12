@@ -7,6 +7,7 @@
 namespace mol {
 namespace win {
 
+/*
 class DIB 
 {
 public:
@@ -109,6 +110,40 @@ protected :
 	RGBQUAD CacheQuad[256];
 	char CachePtr[256];
 	HBITMAP bitmap;
+};
+*/
+
+
+class DIB 
+{
+public:
+
+	DIB();
+	~DIB();
+
+	bool create(int w,int h,int bits=24);
+	void setPalette(unsigned char *palette);
+	void bitBlt(HDC hDest,int nXDest,int nYDest,int nWidth,int nHeight,int xSrc,int ySrc);
+
+	int width()  { return width_; }
+	int height() { return height_; }
+
+	unsigned char *get_line_ptr(int line);
+
+private:
+
+	int getPaletteSize(BITMAPINFOHEADER& bmInfo);
+	int getPaletteSize();
+	void destroy();
+
+	unsigned char *pbits_;
+	PBITMAPINFO    pinfo_;
+	RGBQUAD       *pRGB_;
+	void		  *pvoid_; 
+	BYTE		 **plineptr_;
+
+	int height_,bytes_,width_,nBits_;
+	int nFlags_;
 };
 
 } // end namespace mol::win

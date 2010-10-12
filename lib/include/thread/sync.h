@@ -157,11 +157,12 @@ T& singleton()
 {
 	return Singleton<T>::instance();
 }
-
+/*
 #define SINGLETON(T) friend mol::Singleton<T>; 
 #define STACKSINGLETON(T) friend mol::Singleton<T>; friend mol::stack_obj<T>;
 #define COMSINGLETON(T) friend mol::ComSingleton<T>;
 #define NONCREATABLECOMSINGLETON(T) friend mol::NonCreatableCOMSingleton<T>; friend mol::com_obj<T>;
+*/
 
 } // end namespace mol
 

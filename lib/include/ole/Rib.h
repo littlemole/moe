@@ -169,7 +169,8 @@ class HandlerRegistry :
 			mol::implements<IUnknown> 
 		   >
 {
-NONCREATABLECOMSINGLETON(HandlerRegistry);
+friend mol::NonCreatableCOMSingleton<HandlerRegistry>; 
+friend mol::com_obj<HandlerRegistry>;
 friend class Ribbon;
 public:
 
@@ -266,7 +267,8 @@ class Ribbon :
 			mol::implements<IUIApplication> 
 		   >
 {
-NONCREATABLECOMSINGLETON(Ribbon);
+friend mol::NonCreatableCOMSingleton<Ribbon>; 
+friend mol::com_obj<Ribbon>;
 friend class HandlerRegistry;
 friend class RibbonWnd;
 public:

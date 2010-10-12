@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////////////
 // Function Signatures
 /////////////////////////////////////////////////////////////////////////////////////
-
+/*
 namespace mol {
 
 class THISCALL {};
@@ -495,7 +495,7 @@ template<class T, class R,
 		 class P5 = void, 
 		 class P6 = void>
 */
-
+/*
 
 template<class T, class R, class P1, class P2, class P3, class P4, class P5, class P6>
 const Signature<T,R,P1,P2,P3,P4,P5,P6>& signature( R ( T::*Function)(P1,P2,P3,P4,P5,P6) )
@@ -552,5 +552,7 @@ const Signature<T,R,void,void,void,void,void,void>& signature( R ( T::*Function)
 
 
 } // end namespace mol
+
+*/
 
 #endif

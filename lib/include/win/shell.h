@@ -121,7 +121,9 @@ public:
 
 	int getFolderIcon();
     int getOpenFolderIcon();
+
 protected:
+
 	void release(LPITEMIDLIST pidl);
 
 
@@ -152,16 +154,45 @@ public:
     ShellFileOp();
     ~ShellFileOp();
 
-    int  copy(HWND hwnd, const mol::string& from, const mol::string& to, FILEOP_FLAGS flags = FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
-	int  copy(HWND hwnd, const std::vector<mol::string>& from, const mol::string& to, FILEOP_FLAGS flags = FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
+    int  copy(
+			HWND hwnd, 
+			const mol::string& from, 
+			const mol::string& to, 
+			FILEOP_FLAGS flags = FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
 
-    int  remove(HWND hwnd, const mol::string& from, FILEOP_FLAGS flags =FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
-	int  remove(HWND hwnd, const std::vector<mol::string>& from, FILEOP_FLAGS flags =FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
+	int  copy(
+			HWND hwnd, 
+			const std::vector<mol::string>& from, 
+			const mol::string& to, 
+			FILEOP_FLAGS flags = FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
 
-    int  move(HWND hwnd, const mol::string& from, const mol::string& to, FILEOP_FLAGS flags =FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
-	int  move(HWND hwnd, const std::vector<mol::string>& from, const mol::string& to, FILEOP_FLAGS flags =FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
+    int  remove(
+			HWND hwnd, 
+			const mol::string& from, 
+			FILEOP_FLAGS flags =FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
 
-    int  rename(HWND hwnd, const mol::string& from, const mol::string& to, FILEOP_FLAGS flags =FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
+	int  remove(
+			HWND hwnd, 
+			const std::vector<mol::string>& from, 
+			FILEOP_FLAGS flags =FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
+
+    int  move(
+			HWND hwnd, 
+			const mol::string& from, 
+			const mol::string& to, 
+			FILEOP_FLAGS flags =FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
+
+	int  move(
+			HWND hwnd, 
+			const std::vector<mol::string>& from, 
+			const mol::string& to, 
+			FILEOP_FLAGS flags =FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
+
+    int  rename(
+			HWND hwnd, 
+			const mol::string& from, 
+			const mol::string& to, 
+			FILEOP_FLAGS flags =FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
 
 	bool createDir( const mol::string& dirname );
 
@@ -178,9 +209,19 @@ private:
 // Try to launch new process thru windows shell (explorer.exe)
 ////////////////////////////////////////////////////////////////////////////////////
 
-BOOL execute_shell( const mol::string& path, const mol::string& verb = _T("open"), int nShow = SW_SHOWNORMAL, ULONG fMask = 0 );//SEE_MASK_INVOKEIDLIST);
+BOOL execute_shell( 
+				   const mol::string& path, 
+				   const mol::string& verb = _T("open"), 
+				   int nShow = SW_SHOWNORMAL, ULONG fMask = 0 //SEE_MASK_INVOKEIDLIST);
+				   );	
 
-BOOL execute_shell_args( const mol::string& path, const mol::string& args, const mol::string& verb = _T("open"), int nShow = SW_SHOWNORMAL, ULONG fMask = SEE_MASK_FLAG_DDEWAIT | SEE_MASK_FLAG_NO_UI );//SEE_MASK_INVOKEIDLIST);
+
+BOOL execute_shell_args( 
+					const mol::string& path, 
+					const mol::string& args, 
+					const mol::string& verb = _T("open"), 
+					int nShow = SW_SHOWNORMAL, ULONG fMask = SEE_MASK_FLAG_DDEWAIT | SEE_MASK_FLAG_NO_UI );//SEE_MASK_INVOKEIDLIST);
+
 
 BOOL execute_shell_admin( const mol::string& path, const mol::string& args );
 
