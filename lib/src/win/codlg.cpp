@@ -1,5 +1,7 @@
 #include "win/CoDlg.h"
 #include "win/path.h"
+#include "win/app.h"
+#include "win/msgloop.h"
 
 namespace mol  {
 
@@ -21,7 +23,8 @@ SearchDlg::SearchDlg()
 LRESULT SearchDlg::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     if ( message == WM_DESTROY )
-		mol::win::AppBase::app<mol::win::AppBase>().OnEndDlg(hWnd_);
+		//mol::win::AppBase::app<mol::win::AppBase>().OnEndDlg(hWnd_);
+		mol::win::dialogs().unregisterDialog(hwnd);
 
     return ::CallWindowProc( oldProc, hwnd, message, wParam, lParam );
 }
@@ -44,7 +47,8 @@ HWND SearchDlg::findText(HWND parent, DWORD flags,const mol::TCHAR* what )
     }
     hWnd_ = ::FindText(&frp_);
     subClass(hWnd_);
-	mol::App().OnCreateDlg(hWnd_);
+	//mol::App().OnCreateDlg(hWnd_);
+	mol::win::dialogs().registerDialog(hWnd_);
     return hWnd_;
 }
 
@@ -64,7 +68,8 @@ HWND SearchDlg::replaceText( HWND parent, DWORD flags, const mol::TCHAR* what , 
     }
 	hWnd_ = ::ReplaceText(&frp_);
     subClass(hWnd_);
-	mol::App().OnCreateDlg(hWnd_);
+	//mol::App().OnCreateDlg(hWnd_);
+	mol::win::dialogs().registerDialog(hWnd_);
     return hWnd_;
 }
 

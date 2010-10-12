@@ -1,6 +1,7 @@
 #include "win/mdi.h"
 #include "win/coctrl.h"
 #include "win/layout.h"
+#include "win/msgloop.h"
 #include "ole/Rib.h"
 
 namespace mol {
@@ -568,8 +569,9 @@ LRESULT MdiFrame::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				}
 				case TTN_GETDISPINFO : 
 				{
-					mol::win::AppBase& a = app<mol::win::AppBase>();
-					if ( !a.TabToolNotify(msg.nmhdr()->hwndFrom,message,wParam,lParam) )
+					//mol::win::AppBase& a = app<mol::win::AppBase>();
+					//if ( !a.TabToolNotify(msg.nmhdr()->hwndFrom,message,wParam,lParam) )
+					if ( !mol::win::tabToolTips().tabToolNotify(msg.nmhdr()->hwndFrom,message,wParam,lParam) )
 						::SendMessage(msg.nmhdr()->hwndFrom,message,wParam,lParam);
 					return 0;
 				}
@@ -719,7 +721,8 @@ void MdiFrame::createMDIClient( LPCREATESTRUCT lpcs )
 								(HMENU)1,
 								mol::hinstance(),
 								(PSTR)&cs);
-	mol::win::AppBase::app<mol::win::AppBase>().OnMDIClient(client_);
+//	mol::win::AppBase::app<mol::win::AppBase>().OnMDIClient(client_);
+	mol::win::mdiClient().set(client_);
 
 }
 

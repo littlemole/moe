@@ -207,13 +207,13 @@ void ListBox::resetContent()
 int ListBox::index(const mol::string& s )
 {
 	LRESULT r = sendMessage( LB_FINDSTRING,-1, (LPARAM)s.c_str() ) ; 
-	return r;
+	return (int)r;
 }
 
 int ListBox::count()
 {
 	LRESULT r = sendMessage( LB_GETCOUNT,0, 0 ) ; 
-	return r;
+	return (int)r;
 }
 
 

@@ -412,7 +412,7 @@ void variant::toStream( IStream* stream )
 void variant::fromStream( IStream* stream )
 {
 	VARTYPE t = vt;
-	::VariantClear(this);
+	//::VariantClear(this); ouch ?
 	vt = t;
 
 	ULONG len;

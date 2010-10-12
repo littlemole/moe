@@ -5,6 +5,7 @@
 namespace mol {
 namespace ole {
 
+	/*
 GetPutProperty::GetPutProperty( const char* k, DISPID i, VARTYPE v, const GUID* g )
 	: diid(i), key(k), vt(v)
 {
@@ -68,6 +69,7 @@ GetPutProperty* make_property( const char* key, DISPID d, VARTYPE v, const GUID*
 {
 	return new GetPutProperty( key, d, v, g );
 }
+*/
 
 } // end namespace mol::win::ole
 } // end namespace mol

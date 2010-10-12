@@ -1,7 +1,10 @@
 #include "win/Wnd.h"
+#include "win/msgloop.h"
 #include "win/Res.h"
 #include "win/Layout.h"
 #include "util/X.h"
+#include "boost/scoped_ptr.hpp"
+#include "boost/shared_ptr.hpp"
 
 //#define min std::min
 //#define max std::max
@@ -624,8 +627,9 @@ LRESULT WndProc::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			if ( lpnmhdr && (lpnmhdr->code == TTN_GETDISPINFO) )
 			{
-				mol::win::AppBase& a = mol::app<mol::win::AppBase>();
-				if ( !a.TabToolNotify(lpnmhdr->hwndFrom,message,wParam,lParam) )
+//				mol::win::AppBase& a = mol::app<mol::win::AppBase>();
+//				if ( !a.TabToolNotify(lpnmhdr->hwndFrom,message,wParam,lParam) )
+				if ( !mol::win::tabToolTips().tabToolNotify(lpnmhdr->hwndFrom,message,wParam,lParam) )
 					::SendMessage(lpnmhdr->hwndFrom,message,wParam,lParam);
 				return 0;
 			}
@@ -669,9 +673,14 @@ LRESULT WndProc::OnLayout( UINT message, WPARAM wParam, LPARAM lParam)
 
 LRESULT WndProc::OnInvoke( UINT message, WPARAM wParam, LPARAM lParam)
 {
+	/*
 	mol::threading::CallBase* async = (mol::threading::CallBase*)lParam;
 	async->operator()();
 	delete async;
+	*/
+
+	boost::shared_ptr<mol::fun::call> call((mol::fun::call*)lParam);
+	(*call)();
 
 	return 0;
 }

@@ -562,15 +562,15 @@ HANDLE UACPipe::create(const mol::string& pipename )
 {
     pipe_ = CreateNamedPipe( 
       pipename.c_str(),             // pipe name 
-      PIPE_ACCESS_DUPLEX,       // read/write access 
-      PIPE_TYPE_BYTE |       // message type pipe 
-      PIPE_READMODE_BYTE |   // message-read mode 
-      PIPE_WAIT,                // blocking mode 
-      PIPE_UNLIMITED_INSTANCES, // max. instances  
-      BUFSIZE,                  // output buffer size 
-      BUFSIZE,                  // input buffer size 
-      0,                        // client time-out 
-      NULL);                    // default security attribute 
+      PIPE_ACCESS_DUPLEX,			// read/write access 
+      PIPE_TYPE_BYTE |				// message type pipe 
+      PIPE_READMODE_BYTE |			// message-read mode 
+      PIPE_WAIT,					// blocking mode 
+      PIPE_UNLIMITED_INSTANCES,		// max. instances  
+      BUFSIZE,						// output buffer size 
+      BUFSIZE,						// input buffer size 
+      0,							// client time-out 
+      NULL);						// default security attribute 
 
 	return pipe_;
 }
@@ -684,7 +684,7 @@ bool UACPipe::write( const std::string& data )
 		BOOL b = ::WriteFile( 
 					pipe_,                 // pipe handle 
 					data.c_str()+cnt,       // message 
-					data.size()-cnt,	   // message length 
+					(DWORD)(data.size()-cnt),	   // message length 
 					&cbWritten,            // bytes written 
 					NULL);                 // not overlapped 
 		if (!b) 

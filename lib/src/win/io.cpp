@@ -48,7 +48,7 @@ void DirMon::watch( const mol::string& path )
 	cancel();
 	path_ = Path::addBackSlash(path);
     monitorMap_.insert(std::make_pair(path_,this));
-	mol::thread( *this, &DirMon::run );
+	mol::thread( boost::bind( &DirMon::run, this) );
 }
 
 void DirMon::run()

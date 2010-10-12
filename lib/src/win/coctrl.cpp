@@ -1,5 +1,6 @@
 #include "win/CoCtrl.h"
 #include "win/Res.h"
+#include "win/msgloop.h"
 #include "crtdbg.h"
 
 namespace mol  {
@@ -152,11 +153,11 @@ LRESULT StatusBarEx::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		widths[parts_.size()-1] = -1;
 		mol::DC dc(hWnd_);
 
-		for ( int i = parts_.size()-1; i >=0; i-- )
+		for ( size_t i = parts_.size()-1; i >=0; i-- )
 		{
-			int len = parts_[i].size();
+			size_t len = parts_[i].size();
 			SIZE s;
-			::GetTextExtentPoint32( dc, parts_[i].c_str(), parts_[i].size(), &s);
+			::GetTextExtentPoint32( dc, parts_[i].c_str(), (int)parts_[i].size(), &s);
 			widths[i] = w;
 			w = w - ( s.cx + 10 ); 
 		}
@@ -176,12 +177,12 @@ void StatusBarEx::resizeStatusbar()
 	int w = tmp.right-tmp.left-20;
 	mol::DC dc(hWnd_);
 
-	for ( int i = parts_.size()-1; i >=0; i-- )
+	for ( size_t i = parts_.size()-1; i >=0; i-- )
 	{
-		int len = parts_[i].size();
+		size_t len = parts_[i].size();
 		
 		SIZE s;
-		::GetTextExtentPoint32( dc, parts_[i].c_str(), parts_[i].size(), &s);
+		::GetTextExtentPoint32( dc, parts_[i].c_str(), (int)parts_[i].size(), &s);
 		widths[i] = w;
 		w = w - ( s.cx + 10 ); 
 	}
@@ -988,8 +989,9 @@ void ReBar::loadReBarState( int cmd, int pos, LPSTREAM pStm )
 
 TabCtrl::~TabCtrl()
 {
-	mol::win::AppBase& a = mol::app<mol::win::AppBase>();
-	a.OnEndTab(this->hToolTip());
+	mol::win::tabToolTips().unregisterTab( this->hToolTip() );
+//	mol::win::AppBase& a = mol::app<mol::win::AppBase>();
+//	a.OnEndTab(this->hToolTip());
 
 	for ( int i = 0; i < count(); i++ )
 	{
@@ -1009,8 +1011,9 @@ HWND TabCtrl::createWindow( const mol::string& wndName, HMENU hMenu, const Rect&
 
     subClass();
 	setFont( (HFONT)::GetStockObject(ANSI_VAR_FONT));
-	mol::win::AppBase& a = mol::app<mol::win::AppBase>();
-	a.OnCreateTab(this->hToolTip(),*this);
+//	mol::win::AppBase& a = mol::app<mol::win::AppBase>();
+//	a.OnCreateTab(this->hToolTip(),*this);
+	mol::win::tabToolTips().registerTab( this->hToolTip(), *this );
     this->OnCtrlCreated();
 
     return hWnd_;

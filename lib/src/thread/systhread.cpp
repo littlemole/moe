@@ -6,13 +6,6 @@ namespace mol {
 
 mol::CriticalSection Thread::cs_map_;
 
-
-mol::threading::Func<void> fun(  void (*callFunc)() )
-{
-	return mol::threading::Func<void>(  callFunc );
-}
-
-
 Thread::MapType& Thread::map()
 {
 	static MapType type;
@@ -21,7 +14,10 @@ Thread::MapType& Thread::map()
 
 //´initialize the Thread - set StartFunc-Pointer
 Thread::Thread()
-: tfp_(&Thread::threadFunction),hThread_(0),start_(false),done_(false)
+	: tfp_( &Thread::threadFunction ),
+	  hThread_(0),
+	  start_(false),
+	  done_(false)
 {
 }
 
@@ -140,10 +136,12 @@ void Thread::terminate(int id)
 
 // start a thread - the thread will call the function
 // encapsulated in mol::Call c
-int Thread::start( mol::threading::CallBase* c )
+//int Thread::start( mol::threading::CallBase* c )
+
+int Thread::start( mol::fun::call* c )
 {
 	start_.reset();
-	call_ = new ThreadCallType(c,&mol::threading::CallBase::operator());
+	call_ = c;
 	
 #ifdef WIN32
 
@@ -213,6 +211,7 @@ THREAD_RET_VAL MOL_THREAD_CALL_TYPE Thread::threadFunction(void* t)
 
 	thread->done_.signal();
 	delete thread;
+	delete call;
 
     return (THREAD_RET_VAL) 0;
 }

@@ -1180,6 +1180,14 @@
 			<File
 				RelativePath=".\wndclass.cpp"
 				>
+				<FileConfiguration
+					Name="Unicode Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						GeneratePreprocessedFile="0"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -1232,11 +1240,27 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\win\GenericMsgMapHandler_repeat.inc"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\win\io.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\include\win\layout.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\win\make_generic_handler_repeat.inc"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\win\make_handler_repeat.inc"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\win\make_ole_handler_repeat.inc"
 				>
 			</File>
 			<File
@@ -1248,11 +1272,31 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\win\msg_macro.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\win\msghandler.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\win\msgloop.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\win\msgmap.h"
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\win\MsgMapHandler_repeat.inc"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\win\net.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\win\OleMsgMapHandler_repeat.inc"
 				>
 			</File>
 			<File
@@ -1294,10 +1338,6 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
-		<File
-			RelativePath=".\ClassDiagram1.cd"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

@@ -1068,6 +1068,14 @@
 				RelativePath=".\signal.cpp"
 				>
 				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						GeneratePreprocessedFile="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
@@ -1275,15 +1283,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\include\thread\call.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\thread\func.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\thread\invoke.h"
+				RelativePath="..\..\include\thread\fun.h"
 				>
 			</File>
 			<File
@@ -1313,14 +1313,6 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
-		<File
-			RelativePath=".\ClassDiagram1.cd"
-			>
-		</File>
-		<File
-			RelativePath=".\ReadMe.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

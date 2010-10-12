@@ -288,7 +288,7 @@ HRESULT __stdcall HandlerBase::UpdateProperty( UINT nCmdID, REFPROPERTYKEY key, 
     else if ( key == UI_PKEY_RecentItems )
 	{
 
-		int iFileCount = recent_items_.size();
+		size_t iFileCount = recent_items_.size();
 		LONG iCurrentFile = 0;
 		HRESULT hr = E_FAIL;
 

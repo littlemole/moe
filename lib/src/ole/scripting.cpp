@@ -570,7 +570,8 @@ HRESULT  __stdcall ScriptHost::OnScriptErrorDebug(
 {
    if (pfEnterDebugger)
    {
-      *pfEnterDebugger = TRUE;
+	   if ( debug_ )
+	      *pfEnterDebugger = TRUE;
    }
    if (pfCallOnScriptErrorWhenContinuing)
    {
