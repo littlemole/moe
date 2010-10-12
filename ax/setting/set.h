@@ -3,6 +3,8 @@
 
 #include "win/CoCtrl.h"
 #include "win/MsgMap.h"
+#include "win/MsgHandler.h"
+#include "win/msg_macro.h"
 #include "ole/punk.h"
 #include "ole/factory.h"
 #include "ole/bstr.h"
@@ -61,26 +63,21 @@ public:
 
 	// COM properties
 
-	persist_property(DISPID_SETTING_KEY,VT_BSTR,&CLSID_NULL)
 		HRESULT virtual __stdcall get_Key	( BSTR* key );
 		HRESULT virtual __stdcall put_Key	( BSTR key  );
 
-	persist_property(DISPID_SETTING_VALUE,VT_BSTR,&CLSID_NULL)
 		HRESULT virtual __stdcall get_Value	( BSTR* value );
 		HRESULT virtual __stdcall put_Value	( BSTR value );
 
 		HRESULT virtual __stdcall get_Parent ( ISetting** parent );
 		HRESULT virtual __stdcall put_Parent ( ISetting* parent );
 
-	persist_property(DISPID_SETTING_CHILDREN_ALLOWED,VT_BOOL,&CLSID_NULL)
 		HRESULT virtual __stdcall get_ChildrenAllowed	( VARIANT_BOOL* vb );
 		HRESULT virtual __stdcall put_ChildrenAllowed	( VARIANT_BOOL vb );
 
-	persist_property(DISPID_SETTING_KEY_READONLY,VT_BOOL,&CLSID_NULL)
 		HRESULT virtual __stdcall get_KeyReadOnly		( VARIANT_BOOL* vb );
 		HRESULT virtual __stdcall put_KeyReadOnly		( VARIANT_BOOL vb );
 
-	persist_property(DISPID_SETTING_VALUE_READONLY,VT_BOOL,&CLSID_NULL)
 		HRESULT virtual __stdcall get_ValueReadOnly		( VARIANT_BOOL* vb );
 		HRESULT virtual __stdcall put_ValueReadOnly		( VARIANT_BOOL vb );
 
@@ -107,6 +104,10 @@ public:
 
 		HRESULT virtual __stdcall Save(	 IStorage * pStgSave, BOOL fSameAsLoad );
 		HRESULT virtual __stdcall Load(	 IStorage * pStgLoad);
+
+		HRESULT virtual __stdcall Load( LPSTREAM pStm);
+		HRESULT virtual __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
+
 
 	//helpers
 	BOOL isDirty()			{ return bDirty_; }

@@ -1090,7 +1090,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="&quot;..\..\lib\src\win\x64\Unicode Debug 64\win.lib&quot; &quot;..\..\lib\src\ole\x64\Unicode Debug 64\ole.lib&quot; &quot;..\..\lib\src\util\x64\Unicode Debug 64\util.lib&quot; &quot;..\..\3dParty\pcre\x64\Unicode Debug 64\pcre.lib&quot; &quot;..\..\lib\src\thread\x64\Unicode Debug 64\thread.lib&quot; &quot;..\..\lib\src\tcp\x64\Unicode Debug 64\net.lib&quot; shlwapi.lib Mpr.lib comctl32.lib urlmon.lib wininet.lib Msimg32.lib &quot;..\..\lib\src\xml\x64\Unicode Debug 64\xml.lib&quot; &quot;..\..\3dParty\expat\Source\lib\x64\Unicode Debug 64\libexpatMT.lib&quot;"
+				AdditionalDependencies="&quot;..\..\lib\src\win\x64\Unicode Debug 64\win.lib&quot; &quot;..\..\lib\src\ole\x64\Unicode Debug 64\ole.lib&quot; &quot;..\..\lib\src\util\x64\Unicode Debug 64\util.lib&quot; &quot;..\..\3dParty\pcre\x64\Unicode Debug 64\pcre.lib&quot; &quot;..\..\lib\src\thread\x64\Unicode Debug 64\thread.lib&quot; shlwapi.lib Mpr.lib comctl32.lib urlmon.lib wininet.lib Msimg32.lib &quot;..\..\lib\src\xml\x64\Unicode Debug 64\xml.lib&quot; &quot;..\..\3dParty\expat\Source\lib\x64\Unicode Debug 64\libexpatMT.lib&quot;"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="2"
 				ModuleDefinitionFile="io.def"
@@ -1473,10 +1473,6 @@
 				</FileConfiguration>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\ClassDiagram1.cd"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

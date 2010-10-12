@@ -712,6 +712,32 @@ public:
 		sendMessage( SCI_ZOOMOUT, (WPARAM)0 , (LPARAM)(0) );
 	}
 
+	void setAnnotation( int i, const mol::string& str )
+	{
+		std::string tmp = mol::tostring(str);
+		sendMessage( SCI_ANNOTATIONSETTEXT, (WPARAM)i , (LPARAM)(tmp.c_str()) );
+	}
+
+	void setAnnotationStyle( int i, int style )
+	{
+		sendMessage( SCI_ANNOTATIONSETSTYLE, (WPARAM)i , (LPARAM)(style) );
+	}
+
+	void clearAnnotation( int i )
+	{
+		sendMessage( SCI_ANNOTATIONSETTEXT, (WPARAM)i , (LPARAM)(0) );
+	}
+
+	void clearAnnotations()
+	{
+		sendMessage( SCI_ANNOTATIONCLEARALL, (WPARAM)0 , (LPARAM)(0) );
+	}
+
+	void showAnnotations(int style)
+	{
+		sendMessage( SCI_ANNOTATIONSETVISIBLE, (WPARAM)style , (LPARAM)(0) );
+	}
+
 	void setStyle(int style, COLORREF fore, COLORREF back=0, int size=0, const char* font=0) 
 	{
 		styleSetFore(style, fore);

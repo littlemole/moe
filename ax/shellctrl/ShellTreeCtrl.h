@@ -2,7 +2,6 @@
 #define _MOL_SHELL_TREE_DEF_H_
 
 #include "win/IO.h"
-//#include "win/io/Shell.h"
 #include "win/file.h"
 #include "win/CoCtrl.h"
 #include "ole/DragDrop.h"
@@ -10,6 +9,8 @@
 #include "ole/punk.h"
 #include "shellCtrl_h.h"
 #include "win/Layout.h"
+#include "win/msghandler.h"
+#include "win/msg_macro.h"
 #include "resource.h"
 
 using namespace mol;
@@ -102,7 +103,6 @@ public:
 //////////////////////////////////////////////////////////////////
 
 #define SHELL_TREE_CTRL_ON_IDATA_NOTIFY 101
-//#define SHELL_TREE_CTRL_ON_IO_NOTIFY    201
 
 class ShellTree: 
 	public ax_ctrl<ShellTree,CLSID_ShellTree,false,mol::Window,WS_CHILD|WS_CLIPSIBLINGS|WS_CLIPCHILDREN,0>,
@@ -125,7 +125,6 @@ class ShellTree:
 				IViewObject2,
 				interface_ex<IOleWindow,IOleInPlaceObjectWindowless>,
 				interface_ex<IOleInPlaceObject,IOleInPlaceObjectWindowless>,
-				//INTERFACE_ENTRY(IOleInPlaceObjectWindowless)
 				IOleControl,
 				IConnectionPointContainer,
 				IProvideClassInfo,
@@ -179,31 +178,35 @@ public:
 		LRESULT virtual OnTreeContext( UINT, WPARAM, LPARAM );
 
 	// COM properties
-	persist_property(ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL,&CLSID_NULL)
-		HRESULT virtual __stdcall get_DisplayFiles	( VARIANT_BOOL* vb );
-		HRESULT virtual __stdcall put_DisplayFiles	( VARIANT_BOOL vb  );
 
-	persist_property(ShellTreeCtrl_Dispatch_Selection,VT_BSTR,&CLSID_NULL)
-		HRESULT virtual __stdcall get_Selection		( BSTR* dirname );
-		HRESULT virtual __stdcall put_Selection		( BSTR  dirname );
+	HRESULT virtual __stdcall get_DisplayFiles	( VARIANT_BOOL* vb );
+	HRESULT virtual __stdcall put_DisplayFiles	( VARIANT_BOOL vb  );
 
-		HRESULT virtual __stdcall get_HasFocus		( VARIANT_BOOL* vbHasFocus);
+	HRESULT virtual __stdcall get_Selection		( BSTR* dirname );
+	HRESULT virtual __stdcall put_Selection		( BSTR  dirname );
+
+	HRESULT virtual __stdcall get_HasFocus		( VARIANT_BOOL* vbHasFocus);
 
 
 	// COM methods
 
-		HRESULT virtual __stdcall Update			();
-		HRESULT virtual __stdcall Cut				();
-		HRESULT virtual __stdcall Copy				();
-		HRESULT virtual __stdcall Paste				();
-		HRESULT virtual __stdcall Rename			();
-		HRESULT virtual __stdcall Delete			();
-		HRESULT virtual __stdcall Properties		();
-		HRESULT virtual __stdcall Execute			();
-		HRESULT virtual __stdcall AddFolder			(BSTR folder);
-		HRESULT virtual __stdcall RemoveFolder		(BSTR folder);
-		HRESULT virtual __stdcall CreateDir     	();
+	HRESULT virtual __stdcall Update			();
+	HRESULT virtual __stdcall Cut				();
+	HRESULT virtual __stdcall Copy				();
+	HRESULT virtual __stdcall Paste				();
+	HRESULT virtual __stdcall Rename			();
+	HRESULT virtual __stdcall Delete			();
+	HRESULT virtual __stdcall Properties		();
+	HRESULT virtual __stdcall Execute			();
+	HRESULT virtual __stdcall AddFolder			(BSTR folder);
+	HRESULT virtual __stdcall RemoveFolder		(BSTR folder);
+	HRESULT virtual __stdcall CreateDir     	();
 
+	HRESULT virtual __stdcall Load( LPSTREAM pStm);
+	HRESULT virtual __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
+
+	HRESULT virtual __stdcall Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog);
+	HRESULT virtual __stdcall Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties);
 
 	virtual void initAmbientProperties( IDispatch* disp)
 	{
@@ -229,22 +232,20 @@ public:
 
 protected:
 
-	persist_member(cs_,sizel);
-	//persist_member(ShellTree,cy_,sizel_.cy);
-
     virtual int treeStyle()   { return WS_CHILD|WS_VISIBLE|TVS_HASLINES|TVS_EDITLABELS|TVS_HASBUTTONS; }
     virtual int treeExStyle() { return WS_EX_ACCEPTFILES; }
 
-	class ShellTreeCtrl : public mol::TreeCtrl 
+	class ShellTreeCtrl : 
+		public mol::TreeCtrl
 	{
 	    public:
 
-		virtual ~ShellTreeCtrl() { ODBGS("~ShellTreeCtrl"); }
+			virtual ~ShellTreeCtrl() { ODBGS("~ShellTreeCtrl"); }
 
-		outer_this(ShellTree,tree_);
-		
-		virtual int style()   { return This()->treeStyle(); }
-		virtual int exstyle() { return This()->treeExStyle(); }
+			outer_this(ShellTree,tree_);
+			
+			virtual int style()   { return This()->treeStyle(); }
+			virtual int exstyle() { return This()->treeExStyle(); }
 
 	} tree_;
 

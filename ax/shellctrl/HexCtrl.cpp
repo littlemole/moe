@@ -1540,7 +1540,6 @@ HRESULT __stdcall HexCtrl::Open( BSTR file, VARIANT_BOOL* vbSuccess)
 	*vbSuccess = b ? VARIANT_TRUE : VARIANT_FALSE;
 	
 	clientRect_ = mol::Rect(0,0,0,0);
-	//invalidateRect(0,TRUE);
 	return S_OK;
 }
 
@@ -1554,7 +1553,6 @@ HRESULT __stdcall HexCtrl::OpenReadOnly( BSTR file, VARIANT_BOOL* vbSuccess )
 	*vbSuccess = b ? VARIANT_TRUE : VARIANT_FALSE;
 
 	clientRect_ = mol::Rect(0,0,0,0);
-	//invalidateRect(0,TRUE);
 	return S_OK;
 }
 
@@ -1663,5 +1661,51 @@ HRESULT HexCtrl::OnDraw( HDC hdcDraw, LPCRECTL lprcBounds, LPCRECTL lprcMFBounds
 	}
 
 	hex_.move( r, TRUE );			
+	return S_OK;
+}
+
+HRESULT __stdcall HexCtrl::Load( LPSTREAM pStm)
+{
+	pStm >> mol::property( mol::DispId(this,DISPID_HexCtrl_READONLY,VT_BOOL) )
+		 >> mol::property( mol::DispId(this,DISPID_HexCtrl_DISPLAYCOLUMNS,VT_I4) )
+		 >> mol::property( mol::DispId(this,DISPID_HexCtrl_FILENAME,VT_BSTR) )
+		 >> mol::property( mol::DispId(this,DISPID_HexCtrl_SHOWTOOLBAR,VT_BOOL) )
+		 >> mol::property( &sizel );
+
+	return S_OK;
+}
+
+HRESULT __stdcall HexCtrl::Save( LPSTREAM pStm,BOOL fClearDirty)
+{
+	pStm << mol::property( mol::DispId(this,DISPID_HexCtrl_READONLY,VT_BOOL) )
+		 << mol::property( mol::DispId(this,DISPID_HexCtrl_DISPLAYCOLUMNS,VT_I4) )
+		 << mol::property( mol::DispId(this,DISPID_HexCtrl_FILENAME,VT_BSTR) )
+		 << mol::property( mol::DispId(this,DISPID_HexCtrl_SHOWTOOLBAR,VT_BOOL) )
+		 << mol::property( &sizel );
+
+	return S_OK;
+}
+
+HRESULT __stdcall HexCtrl::Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog)
+{
+
+	pPropBag >> mol::property( _T("readonly"), mol::DispId(this,DISPID_HexCtrl_READONLY,VT_BOOL) )
+			 >> mol::property( _T("displaycolumns"), mol::DispId(this,DISPID_HexCtrl_DISPLAYCOLUMNS,VT_I4) )
+			 >> mol::property( _T("filename"), mol::DispId(this,DISPID_HexCtrl_FILENAME,VT_BSTR) )
+			 >> mol::property( _T("showtoolbar"), mol::DispId(this,DISPID_HexCtrl_SHOWTOOLBAR,VT_BOOL) )
+			 >> mol::property( _T("cs"), &sizel );
+
+	return S_OK;
+}
+
+HRESULT __stdcall HexCtrl::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties)
+{
+	pPropBag << mol::property( _T("readonly"), mol::DispId(this,DISPID_HexCtrl_READONLY,VT_BOOL) )
+			 << mol::property( _T("displaycolumns"), mol::DispId(this,DISPID_HexCtrl_DISPLAYCOLUMNS,VT_I4) )
+			 << mol::property( _T("filename"), mol::DispId(this,DISPID_HexCtrl_FILENAME,VT_BSTR) )
+			 << mol::property( _T("showtoolbar"), mol::DispId(this,DISPID_HexCtrl_SHOWTOOLBAR,VT_BOOL) )
+			 << mol::property( _T("cs"), &sizel );
+
+
 	return S_OK;
 }

@@ -6,6 +6,8 @@
 #include "win/file.h"
 #include "win/CoCtrl.h"
 #include "win/MsgMap.h"
+#include "win/MsgHandler.h"
+#include "win/msg_macro.h"
 #include "ole/DragDrop.h"
 #include "ole/Ctrl.h"
 #include "ole/ShellFolderWnd.h"
@@ -55,11 +57,9 @@ public:
 
 	// COM properties
 
-	persist_property(ShellFolderCtrl_Dispatch_DisplayFiles,VT_BOOL,&CLSID_NULL)
 		HRESULT virtual __stdcall get_DisplayFiles	( VARIANT_BOOL* vb );
 		HRESULT virtual __stdcall put_DisplayFiles	( VARIANT_BOOL vb  );
 
-	persist_property(ShellFolderCtrl_Dispatch_Selection,VT_BSTR,&CLSID_NULL)
 		HRESULT virtual __stdcall get_Selection		( VARIANT* dirname );
 		HRESULT virtual __stdcall put_Selection		( VARIANT dirname );
 
@@ -78,6 +78,12 @@ public:
 		HRESULT virtual __stdcall CreateDir     	();
 		HRESULT virtual __stdcall UpDir		     	();
 
+		HRESULT virtual __stdcall Load( LPSTREAM pStm);
+		HRESULT virtual __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
+
+		HRESULT virtual __stdcall Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog);
+		HRESULT virtual __stdcall Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties);
+
 protected:
 
 	void setPath(const mol::string& p);
@@ -91,13 +97,12 @@ protected:
 	msg_handler( WM_DESTROY, OnDestroy )
 		LRESULT virtual OnDestroy( UINT, WPARAM, LPARAM );
 
-	persist_member(cs_,sizel);
-
 	RECT					clientRect_;
 
     bool					displayFiles_;
 
-	class Folder : public mol::ole::ShellFolderWnd
+	class Folder : 
+		public mol::ole::ShellFolderWnd
 	{
 		public:
 			outer_this(ShellFolderCtrl,wnd_);

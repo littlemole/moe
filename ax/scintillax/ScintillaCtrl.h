@@ -138,6 +138,8 @@ public:
 		HRESULT virtual __stdcall get_Font( IFontDisp** font);
 		HRESULT virtual __stdcall put_WriteBOM( VARIANT_BOOL vb);
 		HRESULT virtual __stdcall get_WriteBOM( VARIANT_BOOL* vb);
+		HRESULT virtual __stdcall put_ShowLineNumbers(VARIANT_BOOL useLineNums);
+		HRESULT virtual __stdcall get_ShowLineNumbers(VARIANT_BOOL* useLineNums);
 
 	//methods:
 
@@ -229,17 +231,21 @@ public:
 		HRESULT virtual __stdcall Print();
 		HRESULT virtual __stdcall GetTextRange(long start, long end, BSTR* range);
 		HRESULT virtual __stdcall GetPages( CAUUID *pPages);
+
+
+		HRESULT virtual __stdcall SetAnnotation( long line,  BSTR txt);
+		HRESULT virtual __stdcall ClearAnnotation( long line);
+		HRESULT virtual __stdcall ClearAnnotations();
+		HRESULT virtual __stdcall SetAnnotationStyle( long line, long style);
     
-		// new intitialization 
+		// persistence
 	    HRESULT virtual __stdcall InitNew();
 
-		// ctrl drawing
-		HRESULT OnDraw( HDC hdcDraw, LPCRECTL lprcBounds, LPCRECTL lprcMFBounds)
-		{
-			ODBGS("ScintillAx::OnDraw");
-			edit()->redraw();
-			return S_OK;
-		}
+		HRESULT virtual __stdcall Load( LPSTREAM pStm);
+		HRESULT virtual __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
+
+		HRESULT virtual __stdcall Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog);
+		HRESULT virtual __stdcall Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties);
 
 		// window messages
 
@@ -248,7 +254,9 @@ public:
 		LRESULT virtual OnDblClick(  UINT, WPARAM, LPARAM );
         LRESULT virtual OnChar( UINT, WPARAM, LPARAM );
 		LRESULT virtual OnContext( UINT, WPARAM, LPARAM );
-		//LRESULT virtual OnSize( UINT, WPARAM, LPARAM );
+
+		// ctrl drawing
+		HRESULT OnDraw( HDC hdcDraw, LPCRECTL lprcBounds, LPCRECTL lprcMFBounds);
 
 protected:
 

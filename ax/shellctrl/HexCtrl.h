@@ -10,6 +10,8 @@
 #include "shellCtrl_h.h"
 #include "win/Layout.h"
 #include "resource.h"
+#include "win/msghandler.h"
+#include "win/msg_macro.h"
 
 using namespace mol;
 using namespace mol::io;
@@ -224,58 +226,50 @@ public:
     HexCtrl();
 	virtual ~HexCtrl();
 
-	persist_member(cs_,sizel);
-	//persist_member(HexCtrl,cy_,sizel_.cy);
-
 	// COM properties
 
-	persist_property(DISPID_HexCtrl_READONLY,VT_BOOL,&CLSID_NULL)
-		HRESULT virtual __stdcall get_ReadOnly	( VARIANT_BOOL* vb );
-		HRESULT virtual __stdcall put_ReadOnly	( VARIANT_BOOL vb  );
+	HRESULT virtual __stdcall get_ReadOnly	( VARIANT_BOOL* vb );
+	HRESULT virtual __stdcall put_ReadOnly	( VARIANT_BOOL vb  );
 
-	persist_property(DISPID_HexCtrl_DISPLAYCOLUMNS,VT_I4,&CLSID_NULL)
-		HRESULT virtual __stdcall get_DisplayColumns( long* c );
-		HRESULT virtual __stdcall put_DisplayColumns( long  c );
+	HRESULT virtual __stdcall get_DisplayColumns( long* c );
+	HRESULT virtual __stdcall put_DisplayColumns( long  c );
 
-	persist_property(DISPID_HexCtrl_FILENAME,VT_BSTR,&CLSID_NULL)
-		HRESULT virtual __stdcall get_Filename		( BSTR* fn );
-		HRESULT virtual __stdcall put_Filename		( BSTR  fn );
-	
-		HRESULT virtual __stdcall get_HasFocus	( VARIANT_BOOL* vb );
+	HRESULT virtual __stdcall get_Filename		( BSTR* fn );
+	HRESULT virtual __stdcall put_Filename		( BSTR  fn );
 
-	persist_property(DISPID_HexCtrl_SHOWTOOLBAR,VT_BOOL,&CLSID_NULL)
-		HRESULT virtual __stdcall get_ShowToolbar	( VARIANT_BOOL* vb );
-		HRESULT virtual __stdcall put_ShowToolbar	( VARIANT_BOOL vb  );
+	HRESULT virtual __stdcall get_HasFocus	( VARIANT_BOOL* vb );
 
-		HRESULT virtual __stdcall get_ScrollPos	( long* p );
-		HRESULT virtual __stdcall put_ScrollPos	( long  p );
+	HRESULT virtual __stdcall get_ShowToolbar	( VARIANT_BOOL* vb );
+	HRESULT virtual __stdcall put_ShowToolbar	( VARIANT_BOOL vb  );
 
-		HRESULT virtual __stdcall get_ScrollMax	( long* p );
+	HRESULT virtual __stdcall get_ScrollPos	( long* p );
+	HRESULT virtual __stdcall put_ScrollPos	( long  p );
 
-		HRESULT virtual __stdcall get_Offset( long* o );
-		HRESULT virtual __stdcall put_Offset( long  o );
+	HRESULT virtual __stdcall get_ScrollMax	( long* p );
 
-		HRESULT virtual __stdcall get_FileSize( long* s );
+	HRESULT virtual __stdcall get_Offset( long* o );
+	HRESULT virtual __stdcall put_Offset( long  o );
 
-		HRESULT virtual __stdcall get_SearchPos( long* o );
-		HRESULT virtual __stdcall put_SearchPos( long  o );
+	HRESULT virtual __stdcall get_FileSize( long* s );
 
-	// COM methods
+	HRESULT virtual __stdcall get_SearchPos( long* o );
+	HRESULT virtual __stdcall put_SearchPos( long  o );
 
-		HRESULT virtual __stdcall Open( BSTR file, VARIANT_BOOL* vbSuccess);
+// COM methods
 
-		HRESULT virtual __stdcall OpenReadOnly( BSTR file, VARIANT_BOOL* vbSuccess );
+	HRESULT virtual __stdcall Open( BSTR file, VARIANT_BOOL* vbSuccess);
+	HRESULT virtual __stdcall OpenReadOnly( BSTR file, VARIANT_BOOL* vbSuccess );
+	HRESULT virtual __stdcall SetOffsetDWORD( long offset, BSTR val );
+	HRESULT virtual __stdcall SetOffsetByte( long offset, BSTR val );
+	HRESULT virtual __stdcall SetOffsetChar( long offset, long val );
+	HRESULT virtual __stdcall Search( BSTR what, long flags);
+	HRESULT virtual __stdcall Value( long off, BSTR* value);
 
-		HRESULT virtual __stdcall SetOffsetDWORD( long offset, BSTR val );
+	HRESULT virtual __stdcall Load( LPSTREAM pStm);
+	HRESULT virtual __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
 
-		HRESULT virtual __stdcall SetOffsetByte( long offset, BSTR val );
-
-		HRESULT virtual __stdcall SetOffsetChar( long offset, long val );
-
-		HRESULT virtual __stdcall Search( BSTR what, long flags);
-
-		HRESULT virtual __stdcall Value( long off, BSTR* value);
-
+	HRESULT virtual __stdcall Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog);
+	HRESULT virtual __stdcall Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties);
 
 	virtual HRESULT OnDraw( HDC hdcDraw, LPCRECTL lprcBounds, LPCRECTL lprcMFBounds);
 
@@ -286,7 +280,6 @@ protected:
 
 	msg_handler( WM_CREATE, OnCreate )
 		LRESULT virtual OnCreate( UINT, WPARAM, LPARAM );
-
 
 	RECT					clientRect_;
 

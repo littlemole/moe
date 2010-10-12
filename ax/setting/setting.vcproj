@@ -1665,10 +1665,6 @@
 				</FileConfiguration>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\debug\setting.tlb"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

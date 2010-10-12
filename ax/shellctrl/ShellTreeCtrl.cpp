@@ -1236,6 +1236,45 @@ HRESULT ShellTree::CreateDir()
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
+
+HRESULT __stdcall ShellTree::Load( LPSTREAM pStm)
+{
+	pStm >> mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BSTR) )
+		 >> mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_Selection,VT_BSTR) )
+		 >> mol::property( &sizel );
+
+	return S_OK;
+}
+
+HRESULT __stdcall ShellTree::Save( LPSTREAM pStm,BOOL fClearDirty)
+{
+	pStm << mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BSTR) )
+		 << mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_Selection,VT_BSTR) )
+		 << mol::property( &sizel );
+
+	return S_OK;
+}
+
+HRESULT __stdcall ShellTree::Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog)
+{
+	pPropBag >> mol::property( _T("displayfiles"), mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BSTR) )
+			 >> mol::property( _T("selection"), mol::DispId(this,ShellTreeCtrl_Dispatch_Selection,VT_BSTR) )
+			 >> mol::property( _T("cs"), &sizel );
+
+	return S_OK;
+}
+
+HRESULT __stdcall ShellTree::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties)
+{
+	pPropBag << mol::property( _T("displayfiles"), mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BSTR) )
+			 << mol::property( _T("selection"), mol::DispId(this,ShellTreeCtrl_Dispatch_Selection,VT_BSTR) )
+			 << mol::property( _T("cs"), &sizel );
+
+	return S_OK;
+}
+
+
+
 ///////////////////////////////////////////////////////////////////////
 // Drag Drop Implementation
 ///////////////////////////////////////////////////////////////////////

@@ -53,6 +53,7 @@ protected:
 	VARIANT_BOOL vbTabIndents_;
 	VARIANT_BOOL vbBackSpaceUnindents_;
 	VARIANT_BOOL vbWriteBOM_;
+	VARIANT_BOOL vbShowLineNumbers_;
 	mol::ComboBox combo_;
 };
 

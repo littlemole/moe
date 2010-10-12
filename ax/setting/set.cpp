@@ -509,7 +509,7 @@ HRESULT __stdcall Setting::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
 	{
 		if ( S_OK == ::WriteClassStm(stream,CLSID_Setting) )
 		{
-			if ( S_OK == this->PersistStream<Setting>::Save(stream,TRUE) )
+			if ( S_OK == this->Save(stream,TRUE) )
 			{
 				int i = 0;
 				for ( std::list<ISetting*>::iterator it = entries_.begin(); it != entries_.end(); it++ )
@@ -550,7 +550,7 @@ HRESULT __stdcall Setting::Load(IStorage * pStgLoad)
 		{
 			if ( ::IsEqualGUID( clsid, CLSID_Setting ) )
 			{
-				if ( S_OK == this->PersistStream<Setting>::Load(stream) )
+				if ( S_OK == this->Load(stream) )
 				{
 					int i = 0;
 					std::wostringstream woss;
@@ -614,6 +614,26 @@ HRESULT __stdcall Setting::GetPages( CAUUID *pPages )
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall Setting::Load( LPSTREAM pStm)
+{
+	pStm >> mol::property( mol::DispId(this,DISPID_SETTING_KEY,VT_BSTR) )
+		 >> mol::property( mol::DispId(this,DISPID_SETTING_VALUE,VT_BSTR) )
+		 >> mol::property( mol::DispId(this,DISPID_SETTING_CHILDREN_ALLOWED,VT_BOOL) )
+		 >> mol::property( mol::DispId(this,DISPID_SETTING_KEY_READONLY,VT_BOOL) )
+		 >> mol::property( mol::DispId(this,DISPID_SETTING_VALUE_READONLY,VT_BOOL) );
+	return S_OK;
+}
+
+HRESULT __stdcall Setting::Save( LPSTREAM pStm,BOOL fClearDirty)
+{
+	pStm << mol::property( mol::DispId(this,DISPID_SETTING_KEY,VT_BSTR) )
+		 << mol::property( mol::DispId(this,DISPID_SETTING_VALUE,VT_BSTR) )
+		 << mol::property( mol::DispId(this,DISPID_SETTING_CHILDREN_ALLOWED,VT_BOOL) )
+		 << mol::property( mol::DispId(this,DISPID_SETTING_KEY_READONLY,VT_BOOL) )
+		 << mol::property( mol::DispId(this,DISPID_SETTING_VALUE_READONLY,VT_BOOL) );
+	return S_OK;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // Key helpers

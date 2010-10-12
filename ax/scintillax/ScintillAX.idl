@@ -404,6 +404,43 @@ library Scintilla
 		]
 		HRESULT WriteBOM( [out,retval] VARIANT_BOOL* vb);
 
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(70), 
+		  helpstring("Get/Set Show LineNumbers")
+		]
+		HRESULT ShowLineNumbers([in] VARIANT_BOOL useLineNums);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(70)
+		]
+		HRESULT ShowLineNumbers([out,retval] VARIANT_BOOL* useLineNums);
+
+
+		[ 
+		  id(71), 
+		  helpstring("SetAnnotation Text")
+		]
+		HRESULT SetAnnotation([in] long line, [in] BSTR txt);
+
+		[ 
+		  id(72), 
+		  helpstring("ClearAnnotation Text")
+		]
+		HRESULT ClearAnnotation([in] long line);
+
+		[ 
+		  id(73), 
+		  helpstring("ClearAnnotations")
+		]
+		HRESULT ClearAnnotations();
+
+		[ 
+		  id(74), 
+		  helpstring("SetAnnotation Style")
+		]
+		HRESULT SetAnnotationStyle([in] long line, [in] long style);
+
     };
 
 

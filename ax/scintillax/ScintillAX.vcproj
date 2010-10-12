@@ -1527,6 +1527,18 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\xml\cmd.xml"
+				>
+			</File>
+			<File
+				RelativePath=".\xml\include.xml"
+				>
+			</File>
+			<File
+				RelativePath=".\xml\menu.xml"
+				>
+			</File>
+			<File
 				RelativePath=".\resources\mol.rc"
 				>
 			</File>
@@ -1536,6 +1548,10 @@
 			</File>
 			<File
 				RelativePath=".\xml\msg.xml"
+				>
+			</File>
+			<File
+				RelativePath=".\xml\persist.xml"
 				>
 			</File>
 			<File
@@ -1551,10 +1567,6 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\ClassDiagram1.cd"
-			>
-		</File>
 		<File
 			RelativePath="..\..\cg\js\make.js"
 			>
@@ -1690,10 +1702,6 @@
 					Outputs="xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h"
 				/>
 			</FileConfiguration>
-		</File>
-		<File
-			RelativePath=".\Debug\ScintillAX.tlb"
-			>
 		</File>
 	</Files>
 	<Globals>

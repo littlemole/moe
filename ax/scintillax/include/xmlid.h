@@ -13,8 +13,9 @@
 #define IDC_CHECK_TABINDENTS                     507
 #define IDC_CONVERT_BUTTON                       508
 #define IDC_CHECK_WRITEBOM                       509
-#define IDI_SCINTILLA                            510
-#define IDC_EDITOR_VIEW                          511
+#define IDC_CHECK_LINE_NUMBERS                   510
+#define IDI_SCINTILLA                            511
+#define IDC_EDITOR_VIEW                          512
 
 
 #endif

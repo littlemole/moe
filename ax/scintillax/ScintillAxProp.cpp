@@ -64,6 +64,8 @@ LRESULT ScintillAxProperties::OnInitDialog(UINT msg, WPARAM wParam, LPARAM lPara
 				return FALSE;
 			if ( S_OK != sci->get_WriteBOM(&vbWriteBOM_) )
 				return FALSE;
+			if ( S_OK != sci->get_ShowLineNumbers(&vbShowLineNumbers_) )
+				return FALSE;
 
 			if ( S_OK != sci->get_TabUsage(&vbUseTabs_) )
 				return FALSE;
@@ -103,6 +105,14 @@ LRESULT ScintillAxProperties::OnInitDialog(UINT msg, WPARAM wParam, LPARAM lPara
 				{
 					this->sendDlgItemMsg( IDC_CHECK_WRITEBOM, BM_SETCHECK, BST_UNCHECKED,0);
 				}
+			}
+			if ( vbShowLineNumbers_ == VARIANT_TRUE )
+			{
+				this->sendDlgItemMsg( IDC_CHECK_LINE_NUMBERS, BM_SETCHECK, BST_CHECKED,0);
+			}
+			else
+			{
+				this->sendDlgItemMsg( IDC_CHECK_LINE_NUMBERS, BM_SETCHECK, BST_UNCHECKED,0);
 			}
 		}
 	}
@@ -147,6 +157,11 @@ HRESULT ScintillAxProperties::Apply( void)
 	else
 		vbWriteBOM_ = VARIANT_FALSE;
 
+	if ( BST_CHECKED == this->sendDlgItemMsg( IDC_CHECK_LINE_NUMBERS,BM_GETCHECK,0,0) )
+		vbShowLineNumbers_ = VARIANT_TRUE;
+	else
+		vbShowLineNumbers_ = VARIANT_FALSE;
+
 	for ( unsigned int i = 0; i < objects_.size(); i++ )
 	{	
 		mol::punk<IScintillAx> sci(objects_[i]);
@@ -166,6 +181,8 @@ HRESULT ScintillAxProperties::Apply( void)
 			if ( S_OK != sci->put_BackSpaceUnindents(vbBackSpaceUnindents_) )
 				continue;
 			if ( S_OK != sci->put_WriteBOM(vbWriteBOM_) )
+				continue;
+			if ( S_OK != sci->put_ShowLineNumbers(vbShowLineNumbers_) )
 				continue;
 		}
 	}

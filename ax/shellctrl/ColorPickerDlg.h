@@ -8,9 +8,10 @@
 #include "ole/Bstr.h"
 #include "ole/punk.h"
 #include "ole/aut.h"
-#include "win/Dib.h"
 #include "win/Dlg.h"
 #include "win/DIB.h"
+#include "win/msghandler.h"
+#include "win/msg_macro.h"
 #include "ColorResources.h"  
 
 #include "shellCtrl_h.h"
@@ -42,6 +43,8 @@ struct LineDesc
 };
 COLORREF hex2rgb( const char* hex );
 const char* rgb2hex( COLORREF col );
+
+
 
 class ColorPickerDlg : 
 	public mol::Dlg< ColorPickerDlg >

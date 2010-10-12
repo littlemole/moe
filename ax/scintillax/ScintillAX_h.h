@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Mon Aug 23 22:22:34 2010
+/* at Tue Oct 12 22:12:41 2010
  */
 /* Compiler settings for .\ScintillAX.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 7.00.0555 
@@ -399,6 +399,25 @@ EXTERN_C const IID IID_IScintillAx;
         virtual /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_WriteBOM( 
             /* [retval][out] */ VARIANT_BOOL *vb) = 0;
         
+        virtual /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT STDMETHODCALLTYPE put_ShowLineNumbers( 
+            /* [in] */ VARIANT_BOOL useLineNums) = 0;
+        
+        virtual /* [id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_ShowLineNumbers( 
+            /* [retval][out] */ VARIANT_BOOL *useLineNums) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetAnnotation( 
+            /* [in] */ long line,
+            /* [in] */ BSTR txt) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ClearAnnotation( 
+            /* [in] */ long line) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ClearAnnotations( void) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetAnnotationStyle( 
+            /* [in] */ long line,
+            /* [in] */ long style) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -789,6 +808,31 @@ EXTERN_C const IID IID_IScintillAx;
             IScintillAx * This,
             /* [retval][out] */ VARIANT_BOOL *vb);
         
+        /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ShowLineNumbers )( 
+            IScintillAx * This,
+            /* [in] */ VARIANT_BOOL useLineNums);
+        
+        /* [id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShowLineNumbers )( 
+            IScintillAx * This,
+            /* [retval][out] */ VARIANT_BOOL *useLineNums);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetAnnotation )( 
+            IScintillAx * This,
+            /* [in] */ long line,
+            /* [in] */ BSTR txt);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ClearAnnotation )( 
+            IScintillAx * This,
+            /* [in] */ long line);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ClearAnnotations )( 
+            IScintillAx * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetAnnotationStyle )( 
+            IScintillAx * This,
+            /* [in] */ long line,
+            /* [in] */ long style);
+        
         END_INTERFACE
     } IScintillAxVtbl;
 
@@ -1076,6 +1120,24 @@ EXTERN_C const IID IID_IScintillAx;
 
 #define IScintillAx_get_WriteBOM(This,vb)	\
     ( (This)->lpVtbl -> get_WriteBOM(This,vb) ) 
+
+#define IScintillAx_put_ShowLineNumbers(This,useLineNums)	\
+    ( (This)->lpVtbl -> put_ShowLineNumbers(This,useLineNums) ) 
+
+#define IScintillAx_get_ShowLineNumbers(This,useLineNums)	\
+    ( (This)->lpVtbl -> get_ShowLineNumbers(This,useLineNums) ) 
+
+#define IScintillAx_SetAnnotation(This,line,txt)	\
+    ( (This)->lpVtbl -> SetAnnotation(This,line,txt) ) 
+
+#define IScintillAx_ClearAnnotation(This,line)	\
+    ( (This)->lpVtbl -> ClearAnnotation(This,line) ) 
+
+#define IScintillAx_ClearAnnotations(This)	\
+    ( (This)->lpVtbl -> ClearAnnotations(This) ) 
+
+#define IScintillAx_SetAnnotationStyle(This,line,style)	\
+    ( (This)->lpVtbl -> SetAnnotationStyle(This,line,style) ) 
 
 #endif /* COBJMACROS */
 

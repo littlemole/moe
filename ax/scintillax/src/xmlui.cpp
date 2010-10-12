@@ -14,6 +14,8 @@
 
 #include "win/layout.h"
 
+#include "win/msghandler.h"
+
 
 using namespace mol;
 

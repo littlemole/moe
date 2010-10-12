@@ -31,6 +31,8 @@
 HDC getPrinterDC();
 HDC choosePrinterDC(HWND owner, int& copies, bool& collate);
 
+#define SCI_ANNO_ERRORSTYLE 128
+
 class ScEdMode 
 {
 public:
@@ -100,8 +102,11 @@ public:
 	SCINTILLA_SYNTAX mode( const mol::string& path, const mol::string& ext );
 
 	void print();
-
 	void setFont(int size, const mol::string& font);
+
+	bool showLineNumbers();
+	void showLineNumbers(bool b );
+
 
 	mol::string SyntaxDisplayName();
 	mol::string SyntaxDisplayName(int syntax);

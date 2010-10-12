@@ -1601,10 +1601,6 @@
 				</FileConfiguration>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\Debug\shellCtrl.tlb"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

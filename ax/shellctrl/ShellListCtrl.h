@@ -10,6 +10,8 @@
 #include "ole/Ctrl.h"
 #include "shellCtrl_h.h"
 #include "resource.h"
+#include "win/msghandler.h"
+#include "win/msg_macro.h"
 
 using namespace mol;
 using namespace mol::io;
@@ -85,7 +87,6 @@ class ShellListCtrl:
 						IViewObject2,
 						interface_ex<IOleWindow,IOleInPlaceObjectWindowless>,
 						interface_ex<IOleInPlaceObject,IOleInPlaceObjectWindowless>,
-						//INTERFACE_ENTRY(IOleInPlaceObjectWindowless)
 						IOleControl,
 						IConnectionPointContainer,
 						IProvideClassInfo> >
@@ -101,28 +102,32 @@ public:
 
 	// COM properties
 
-	persist_property(ShellListCtrl_Dispatch_DisplayFiles,VT_BOOL,&CLSID_NULL)
-		HRESULT virtual __stdcall get_DisplayFiles	( VARIANT_BOOL* vb );
-		HRESULT virtual __stdcall put_DisplayFiles	( VARIANT_BOOL vb  );
+	HRESULT virtual __stdcall get_DisplayFiles	( VARIANT_BOOL* vb );
+	HRESULT virtual __stdcall put_DisplayFiles	( VARIANT_BOOL vb  );
 
-	persist_property(ShellListCtrl_Dispatch_Selection,VT_BSTR,&CLSID_NULL)
-		HRESULT virtual __stdcall get_Selection		( VARIANT* dirname );
-		HRESULT virtual __stdcall put_Selection		( VARIANT dirname );
+	HRESULT virtual __stdcall get_Selection		( VARIANT* dirname );
+	HRESULT virtual __stdcall put_Selection		( VARIANT dirname );
 
-		HRESULT virtual __stdcall get_HasFocus		( VARIANT_BOOL* vbHasFocus);
+	HRESULT virtual __stdcall get_HasFocus		( VARIANT_BOOL* vbHasFocus);
 
 	// COM methods
 
-		HRESULT virtual __stdcall Update			();
-		HRESULT virtual __stdcall Cut				();
-		HRESULT virtual __stdcall Copy				();
-		HRESULT virtual __stdcall Paste				();
-		HRESULT virtual __stdcall Rename			();
-		HRESULT virtual __stdcall Delete			();
-		HRESULT virtual __stdcall Properties		();
-		HRESULT virtual __stdcall Execute			();
-		HRESULT virtual __stdcall CreateDir     	();
-		HRESULT virtual __stdcall UpDir		     	();
+	HRESULT virtual __stdcall Update			();
+	HRESULT virtual __stdcall Cut				();
+	HRESULT virtual __stdcall Copy				();
+	HRESULT virtual __stdcall Paste				();
+	HRESULT virtual __stdcall Rename			();
+	HRESULT virtual __stdcall Delete			();
+	HRESULT virtual __stdcall Properties		();
+	HRESULT virtual __stdcall Execute			();
+	HRESULT virtual __stdcall CreateDir     	();
+	HRESULT virtual __stdcall UpDir		     	();
+
+	HRESULT virtual __stdcall Load( LPSTREAM pStm);
+	HRESULT virtual __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
+
+	HRESULT virtual __stdcall Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog);
+	HRESULT virtual __stdcall Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties);
   
 	virtual void initAmbientProperties( IDispatch* disp)
 	{
@@ -186,7 +191,7 @@ protected:
         LRESULT virtual OnDirMon( UINT, WPARAM, LPARAM );
 
 
-	persist_member(cs_,sizel);
+	//persist_member(cs_,sizel);
 
     void setPath(const mol::string& path);
     mol::string getPath();
@@ -203,9 +208,6 @@ protected:
 	mol::string getItemPath(int i);
     int getItemByPath(const mol::string& path);
 
-	//virtual void createInplaceMenu() ;
-	//virtual void removeInplaceMenu() ;
-
     virtual int listStyle()   { return WS_VISIBLE|WS_CHILD|WS_CLIPSIBLINGS|WS_CLIPCHILDREN|LVS_REPORT|LVS_SHAREIMAGELISTS|LVS_EDITLABELS; }
     virtual int listExStyle() { return 0; }
 
@@ -216,7 +218,8 @@ protected:
     virtual int compare(LPARAM lParam1, LPARAM lParam2);
     static int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 
-	class ShellList : public mol::ListCtrl 
+	class ShellList : 
+		public mol::ListCtrl
 	{
 	    public:
 		outer_this(ShellListCtrl,list_);

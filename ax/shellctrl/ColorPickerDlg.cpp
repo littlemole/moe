@@ -40,6 +40,11 @@ POINT  PtFromAngle(double angle,double sat,POINT center);
 COLORREF hex2rgb( const char* hex );
 const char* rgb2hex( COLORREF col );
 
+
+/////////////////////////////////////////////////////////////////////////////
+
+
+
 /////////////////////////////////////////////////////////////////////////////
 // ColorPickerDlg dialog
 
@@ -672,10 +677,10 @@ void ColorPickerDlg::trackPoint(POINT pt)
 void ColorPickerDlg::createBrightDIB()
 {
 	mol::win::DIB& d = brightDIB;
-	d.Create( brightRect.right-brightRect.left,brightRect.bottom-brightRect.top ,8);
-	for(int i=0; i < d.Height(); i++)
+	d.create( brightRect.right-brightRect.left,brightRect.bottom-brightRect.top ,8);
+	for(int i=0; i < d.height(); i++)
 	{
-		memset(d.GetLinePtr(i),i,d.Width());
+		memset(d.get_line_ptr(i),i,d.width());
 	}
 }
 
@@ -694,7 +699,7 @@ void ColorPickerDlg::setDIBPalette()
 		p[1] = rgb.g;
 		p[2] = rgb.b;
 	}
-	brightDIB.SetPalette(palette);
+	brightDIB.setPalette(palette);
 }
 
 void ColorPickerDlg::calcRects()
@@ -716,7 +721,7 @@ void ColorPickerDlg::drawHSB(HDC dc)
 		HBITMAP oldBitmap  = (HBITMAP)::SelectObject(memDC,hsbBitmap);
 		::BitBlt(dc,hsbRect.left,hsbRect.top,hsbWidth,hsbHeight,memDC,0,0,SRCCOPY);
 
-		brightDIB.BitBlt(dc,brightRect.left,brightRect.top,brightRect.right-brightRect.left,(brightRect.bottom-brightRect.top),0,0);
+		brightDIB.bitBlt(dc,brightRect.left,brightRect.top,brightRect.right-brightRect.left,(brightRect.bottom-brightRect.top),0,0);
 		drawMarkers(dc);
 		::SelectObject(memDC,oldBitmap);
 	}

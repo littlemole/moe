@@ -10,7 +10,7 @@
   <include >../ScintillAxProp.h</include>
   <include >ole/persist.h</include>
   <include>win/layout.h</include>
-  
+  <include>win/msghandler.h</include>  
    
 
 

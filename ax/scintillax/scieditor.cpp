@@ -744,7 +744,8 @@ void ScEdMode::init ( const mol::string& p, const mol::string& ext )
 }
 
 ScintillaEditor::ScintillaEditor()
-{}
+{
+}
 
 ScintillaEditor::~ScintillaEditor()
 {}
@@ -778,6 +779,9 @@ SCINTILLA_SYNTAX ScintillaEditor::mode( const mol::string& path, const mol::stri
 void ScintillaEditor::init()
 {
 	mod_.init(this);
+
+	this->setStyle(SCI_ANNO_ERRORSTYLE,ScEdMode::red,ScEdMode::offGrey);
+	showAnnotations(2);
 }
 
 
@@ -913,6 +917,32 @@ mol::string ScintillaEditor::SyntaxDisplayName()
 {
 	return SyntaxDisplayName(mod_.modes);
 }
+
+bool ScintillaEditor::showLineNumbers()
+{
+	int w = sendMessage( SCI_GETMARGINWIDTHN, (WPARAM)0 , (LPARAM)0 );
+	return w != 0;
+}
+
+void ScintillaEditor::showLineNumbers(bool b)
+{
+	if ( b == false )
+	{
+		sendMessage( SCI_SETMARGINWIDTHN, (WPARAM)(0), (LPARAM)(0) );
+		sendMessage( SCI_SETMARGINWIDTHN, (WPARAM)(1), (LPARAM)(0) );
+		return;
+	}
+
+	int lines = getLineCount();
+	std::ostringstream oss;
+	oss << "_" << lines;
+
+	int w = sendMessage( SCI_TEXTWIDTH, (WPARAM)STYLE_LINENUMBER, (LPARAM)(oss.str().c_str()) );
+	sendMessage( SCI_SETMARGINWIDTHN, (WPARAM)(0), (LPARAM)(w) );
+	sendMessage( SCI_SETMARGINWIDTHN, (WPARAM)(1), (LPARAM)(4) );
+}
+
+
 
 mol::string ScintillaEditor::SyntaxDisplayName(int syntax)
 {

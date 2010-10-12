@@ -8,20 +8,22 @@
   
    
    <persistence>
+      
       <class type="ScintillAx">
-		    <persist property="DISPID_SCI_FILENAME" vtype="VT_BSTR" name="filename" />	
-		    <persist property="DISPID_SCI_READONLY" vtype="VT_BOOL" name="readonly" />	
-		    <persist property="DISPID_SCI_SYNTAX" vtype="VT_I4" name="syntax" />	 
-		    <persist property="DISPID_SCI_ENCODING" vtype="VT_I4" name="encoding" />	 
-		    <persist property="DISPID_SCI_TABUSAGE" vtype="VT_BOOL" name="tabusage" />
-		    <persist property="DISPID_SCI_TABINDENTS" vtype="VT_BOOL" name="tabindents" />
-		    <persist property="DISPID_SCI_BACKSPACEUNINDENTS" vtype="VT_BOOL" name="backspaceunindents" />	
-		    <persist property="DISPID_SCI_TABWIDTH" vtype="VT_I4" name="tabwidth" />	    
-		    <persist property="DISPID_SCI_OVERTYPE" vtype="VT_BOOL" name="overtype" />	    
-		    <persist property="DISPID_SCI_USECONTEXT" vtype="VT_BOOL"  name="usecontext"/>	    
-		    <persist property="DISPID_FONT" vtype="VT_FONT" name="font" />	    
+		    <persist property="DISPID_SCI_FILENAME" vtype="VT_BSTR"  />	
+		    <persist property="DISPID_SCI_READONLY" vtype="VT_BOOL"  />	
+		    <persist property="DISPID_SCI_SYNTAX" vtype="VT_I4"  />	 
+		    <persist property="DISPID_SCI_ENCODING" vtype="VT_I4"  />	 
+		    <persist property="DISPID_SCI_TABUSAGE" vtype="VT_BOOL"  />
+		    <persist property="DISPID_SCI_TABINDENTS" vtype="VT_BOOL"  />
+		    <persist property="DISPID_SCI_BACKSPACEUNINDENTS" vtype="VT_BOOL" />	
+		    <persist property="DISPID_SCI_TABWIDTH" vtype="VT_I4"/>	    
+		    <persist property="DISPID_SCI_OVERTYPE" vtype="VT_BOOL" />	    
+		    <persist property="DISPID_SCI_USECONTEXT" vtype="VT_BOOL"  />	    
+		    <persist property="DISPID_FONT" vtype="VT_FONT" />	    
 	      <persist member="sizel" name="cs" />
       </class>
+     
     </persistence>
 
 

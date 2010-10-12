@@ -30,6 +30,7 @@
           <control id="IDC_CHECK_TABINDENTS" />
           <control id="IDC_CONVERT_BUTTON" />
           <control id="IDC_CHECK_WRITEBOM" />
+          <control id="IDC_CHECK_LINE_NUMBERS" />
         </controls>
       </dialog>
     </dialogs>

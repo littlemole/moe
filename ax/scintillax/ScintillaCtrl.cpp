@@ -322,6 +322,8 @@ LRESULT ScintillAx::OnUpdateUI(UINT msg, WPARAM wParam, LPARAM lParam)
 			else
 				edit()->braceHighlight(-1,-1);
 		}
+		if ( edit()->showLineNumbers() )
+			edit()->showLineNumbers(true);	
 	}
     return 0;
 }
@@ -348,14 +350,15 @@ LRESULT ScintillAx::OnChar(UINT msg, WPARAM wParam, LPARAM lParam)
 		char tmp[] = { c, '\0' };
 
 		this->fire(DISPID_SCI_ONCHAR,mol::bstr(tmp));
-
 	}
+	this->ClearAnnotations();
     return 0;
 }
 
 LRESULT ScintillAx::OnDblClick(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	this->uiActivate();
+	this->ClearAnnotations();
 	return 0;
 }
 
@@ -869,6 +872,25 @@ HRESULT __stdcall ScintillAx::get_Font( IFontDisp** font)
 
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall ScintillAx::put_ShowLineNumbers(VARIANT_BOOL useLineNums)
+{
+	bool b = useLineNums == VARIANT_TRUE ? true : false;
+	edit()->showLineNumbers(b);
+	return S_OK;
+}
+
+HRESULT __stdcall ScintillAx::get_ShowLineNumbers(VARIANT_BOOL* useLineNums)
+{
+	if ( !useLineNums )
+		return E_INVALIDARG;
+
+	bool b = edit()->showLineNumbers();
+	*useLineNums = b == true ? VARIANT_TRUE :VARIANT_FALSE;
+	return S_OK;
+}
+
+
 
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
@@ -1577,6 +1599,37 @@ HRESULT __stdcall ScintillAx::GetPages( CAUUID *pPages)
 
 	return S_OK;
 }
+
+
+HRESULT __stdcall ScintillAx::SetAnnotation( long line,  BSTR txt)
+{
+	if ( !txt )
+		return this->ClearAnnotation(line);
+
+	edit()->setAnnotation( line, mol::bstr(txt).toString() );
+	edit()->setAnnotationStyle( line, SCI_ANNO_ERRORSTYLE );
+	return S_OK;
+}
+
+HRESULT __stdcall ScintillAx::ClearAnnotation( long line)
+{
+	edit()->clearAnnotation(line);
+	return S_OK;
+}
+
+HRESULT __stdcall ScintillAx::ClearAnnotations()
+{
+	edit()->clearAnnotations();
+	return S_OK;
+}
+
+HRESULT __stdcall ScintillAx::SetAnnotationStyle( long line, long style)
+{
+	edit()->setAnnotationStyle( line, style );
+	return S_OK;
+}
+
+
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
@@ -1678,6 +1731,103 @@ HRESULT __stdcall ScintillAx::get_WriteBOM( VARIANT_BOOL* vb)
 
 	return S_OK;
 }
+
+HRESULT ScintillAx::OnDraw( HDC hdcDraw, LPCRECTL lprcBounds, LPCRECTL lprcMFBounds)
+{
+	ODBGS("ScintillAx::OnDraw");
+	edit()->redraw();
+	return S_OK;
+}
+
+/*
+HRESULT __stdcall ScintillAx::Load( LPSTREAM pStm)
+{
+	pStm >> mol::property( mol::DispId(this,DISPID_SCI_FILENAME,VT_BSTR) )
+		 >> mol::property( mol::DispId(this,DISPID_SCI_READONLY,VT_BOOL) )
+		 >> mol::property( mol::DispId(this,DISPID_SCI_SYNTAX,VT_I4) )
+		 >> mol::property( mol::DispId(this,DISPID_SCI_ENCODING,VT_I4) )
+		 >> mol::property( mol::DispId(this,DISPID_SCI_TABUSAGE,VT_BOOL) )
+		 >> mol::property( mol::DispId(this,DISPID_SCI_TABINDENTS,VT_BOOL) )
+		 >> mol::property( mol::DispId(this,DISPID_SCI_BACKSPACEUNINDENTS,VT_BOOL) )
+		 >> mol::property( mol::DispId(this,DISPID_SCI_TABWIDTH,VT_I4) )
+		 >> mol::property( mol::DispId(this,DISPID_SCI_OVERTYPE,VT_BOOL) )
+		 >> mol::property( mol::DispId(this,DISPID_SCI_USECONTEXT,VT_BOOL) )
+		 >> mol::property( mol::DispId(this,DISPID_FONT,VT_FONT) )
+		 >> mol::property( &sizel );
+
+	return S_OK;
+}
+
+HRESULT __stdcall ScintillAx::Save( LPSTREAM pStm,BOOL fClearDirty)
+{
+	pStm << mol::property( mol::DispId(this,DISPID_SCI_FILENAME,VT_BSTR) )
+		 << mol::property( mol::DispId(this,DISPID_SCI_READONLY,VT_BOOL) )
+		 << mol::property( mol::DispId(this,DISPID_SCI_SYNTAX,VT_I4) )
+		 << mol::property( mol::DispId(this,DISPID_SCI_ENCODING,VT_I4) )
+		 << mol::property( mol::DispId(this,DISPID_SCI_TABUSAGE,VT_BOOL) )
+		 << mol::property( mol::DispId(this,DISPID_SCI_TABINDENTS,VT_BOOL) )
+		 << mol::property( mol::DispId(this,DISPID_SCI_BACKSPACEUNINDENTS,VT_BOOL) )
+		 << mol::property( mol::DispId(this,DISPID_SCI_TABWIDTH,VT_I4) )
+		 << mol::property( mol::DispId(this,DISPID_SCI_OVERTYPE,VT_BOOL) )
+		 << mol::property( mol::DispId(this,DISPID_SCI_USECONTEXT,VT_BOOL) )
+		 << mol::property( mol::DispId(this,DISPID_FONT,VT_FONT) )
+		 << mol::property( &sizel );
+
+	return S_OK;
+}
+
+HRESULT __stdcall ScintillAx::Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog)
+{
+//  mol::ole::properties<ScintillAx>().add(mol::ole::make_property("filename", DISPID_SCI_FILENAME, VT_BSTR, &CLSID_NULL));
+//  mol::ole::properties<ScintillAx>().add(mol::ole::make_property("readonly", DISPID_SCI_READONLY, VT_BOOL, &CLSID_NULL));
+//  mol::ole::properties<ScintillAx>().add(mol::ole::make_property("syntax", DISPID_SCI_SYNTAX, VT_I4, &CLSID_NULL));
+//  mol::ole::properties<ScintillAx>().add(mol::ole::make_property("encoding", DISPID_SCI_ENCODING, VT_I4, &CLSID_NULL));
+//  mol::ole::properties<ScintillAx>().add(mol::ole::make_property("tabusage", DISPID_SCI_TABUSAGE, VT_BOOL, &CLSID_NULL));
+//  mol::ole::properties<ScintillAx>().add(mol::ole::make_property("tabindents", DISPID_SCI_TABINDENTS, VT_BOOL, &CLSID_NULL));
+//  mol::ole::properties<ScintillAx>().add(mol::ole::make_property("backspaceunindents", DISPID_SCI_BACKSPACEUNINDENTS, VT_BOOL, &CLSID_NULL));
+//  mol::ole::properties<ScintillAx>().add(mol::ole::make_property("tabwidth", DISPID_SCI_TABWIDTH, VT_I4, &CLSID_NULL));
+//  mol::ole::properties<ScintillAx>().add(mol::ole::make_property("overtype", DISPID_SCI_OVERTYPE, VT_BOOL, &CLSID_NULL));
+//  mol::ole::properties<ScintillAx>().add(mol::ole::make_property("usecontext", DISPID_SCI_USECONTEXT, VT_BOOL, &CLSID_NULL));
+//  mol::ole::properties<ScintillAx>().add(mol::ole::make_property("font", DISPID_FONT, VT_FONT, &CLSID_NULL));
+//  mol::ole::properties<ScintillAx>().add(mol::ole::make_property( &ScintillAx::sizel,"cs"));
+
+
+	pPropBag >> mol::property( _T("DISPID_SCI_FILENAME"), mol::DispId(this,DISPID_SCI_FILENAME, VT_BSTR) )
+			 >> mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_READONLY, VT_BOOL) )
+			 >> mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_SYNTAX, VT_I4) )
+			 >> mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_ENCODING, VT_I4) )
+			 >> mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_TABUSAGE, VT_BOOL) )
+			 >> mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_TABINDENTS, VT_BOOL) )
+			 >> mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_BACKSPACEUNINDENTS, VT_BOOL) )
+			 >> mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_TABWIDTH, VT_I4) )
+			 >> mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_OVERTYPE, VT_BOOL) )
+			 >> mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_USECONTEXT, VT_BOOL) )
+			 >> mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_FONT, VT_FONT) )
+			 >> mol::property( _T("cs_"), &sizel );
+
+	return S_OK;
+}
+
+HRESULT __stdcall ScintillAx::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties)
+{
+
+	pPropBag << mol::property( _T("DISPID_SCI_FILENAME"), mol::DispId(this,DISPID_SCI_FILENAME, VT_BSTR) )
+			 << mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_READONLY, VT_BOOL) )
+			 << mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_SYNTAX, VT_I4) )
+			 << mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_ENCODING, VT_I4) )
+			 << mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_TABUSAGE, VT_BOOL) )
+			 << mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_TABINDENTS, VT_BOOL) )
+			 << mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_BACKSPACEUNINDENTS, VT_BOOL) )
+			 << mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_TABWIDTH, VT_I4) )
+			 << mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_OVERTYPE, VT_BOOL) )
+			 << mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_USECONTEXT, VT_BOOL) )
+			 << mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_FONT, VT_FONT) )
+			 << mol::property( _T("cs_"), &sizel );
+
+	return S_OK;
+}
+
+*/
 
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
@@ -2106,6 +2256,8 @@ bool ScintillAx::loadAdminCOM(const mol::string& p, const mol::string& ext,  boo
 
 bool ScintillAx::load(const mol::string& p, const mol::string& ext,  bool utf8)
 {
+	edit()->clearAnnotations();
+
 	//filename_ = p;
 
 	std::stringstream is;
