@@ -153,7 +153,7 @@ LRESULT StatusBarEx::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		widths[parts_.size()-1] = -1;
 		mol::DC dc(hWnd_);
 
-		for ( size_t i = parts_.size()-1; i >=0; i-- )
+		for ( int i = (int)(parts_.size()-1); i >=0; i-- )
 		{
 			size_t len = parts_[i].size();
 			SIZE s;
@@ -169,6 +169,9 @@ LRESULT StatusBarEx::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 
 void StatusBarEx::resizeStatusbar()
 {
+	if ( parts_.empty() )
+		return;
+
 	int * widths = new int[ parts_.size() ];
 	widths[parts_.size()-1] = -1;
 
@@ -177,7 +180,8 @@ void StatusBarEx::resizeStatusbar()
 	int w = tmp.right-tmp.left-20;
 	mol::DC dc(hWnd_);
 
-	for ( size_t i = parts_.size()-1; i >=0; i-- )
+
+	for ( int i = (int)(parts_.size()-1); i >=0; i-- )
 	{
 		size_t len = parts_[i].size();
 		
