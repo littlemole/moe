@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CD102FF0-CCBB-4E5C-BBF5-113E5FA5EA71}</ProjectGuid>
+    <RootNamespace>skeleton</RootNamespace>
+	<TargetName>shellfolder</TargetName>
+  </PropertyGroup>
+
+  <Import Project="..\..\master.props" />
+  <Import Project="..\build.props" />
+
+  <ItemGroup>
+    <Midl Include="shellfolder.idl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="shellfolder.cpp" />
+    <ClCompile Include="ShellFolderCtrl.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+
+</Project>

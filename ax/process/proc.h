@@ -18,7 +18,7 @@
 #include <set>
 #include <vector>
 
-#include "process_h.h"
+#include "pipedprocess_h.h"
 #include "win/process.h"
 
 using namespace mol;

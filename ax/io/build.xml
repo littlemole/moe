@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E95B8030-D279-45C5-8D39-7B975B70371D}</ProjectGuid>
+    <RootNamespace>skeleton</RootNamespace>
+	<TargetName>io</TargetName>
+  </PropertyGroup>
+
+  <Import Project="..\..\master.props" />
+  <Import Project="..\build.props" />
+
+  <ItemGroup>
+    <Midl Include="io.idl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="dir.cpp" />
+    <ClCompile Include="file.cpp" />
+    <ClCompile Include="io.cpp" />
+    <ClCompile Include="path.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+
+</Project>

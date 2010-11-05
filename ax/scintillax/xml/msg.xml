@@ -17,6 +17,7 @@
 	      <notify handler="OnUpdateUI" code="SCN_UPDATEUI" />
 	      <notify handler="OnChar" code="SCN_CHARADDED" />
 	      <notify handler="OnDblClick" code="SCN_DOUBLECLICK" />
+        <notify handler="OnMarginClick" code="SCN_MARGINCLICK" />
         <msg  handler="OnContext" msg="WM_CONTEXTMENU" />
     
     </class>

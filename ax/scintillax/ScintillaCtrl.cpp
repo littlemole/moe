@@ -207,6 +207,7 @@ void ScintillAx::Init()
 	vbTabIndents_		  = VARIANT_TRUE;
 	vbBackSpaceUnindents_ = VARIANT_TRUE;
 	tabWidth_ = 4;
+	vbMarkers_			  = VARIANT_FALSE;
 
 	vbContext_ = VARIANT_TRUE;
 	vbOverType_   = VARIANT_FALSE;
@@ -352,6 +353,7 @@ LRESULT ScintillAx::OnChar(UINT msg, WPARAM wParam, LPARAM lParam)
 		this->fire(DISPID_SCI_ONCHAR,mol::bstr(tmp));
 	}
 	this->ClearAnnotations();
+	edit()->highliteLine(-1);
     return 0;
 }
 
@@ -359,6 +361,17 @@ LRESULT ScintillAx::OnDblClick(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	this->uiActivate();
 	this->ClearAnnotations();
+	edit()->highliteLine(-1);
+	return 0;
+}
+
+LRESULT ScintillAx::OnMarginClick(UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	SCNotification* sciNotify = (SCNotification*)lParam;
+	int pos = sciNotify->position;
+	int line = edit()->lineFromPos(pos);
+	edit()->highliteLine(-1);
+	this->fire(DISPID_SCI_ONMARKER,line);
 	return 0;
 }
 
@@ -1736,6 +1749,87 @@ HRESULT ScintillAx::OnDraw( HDC hdcDraw, LPCRECTL lprcBounds, LPCRECTL lprcMFBou
 {
 	ODBGS("ScintillAx::OnDraw");
 	edit()->redraw();
+	return S_OK;
+}
+
+HRESULT __stdcall ScintillAx::put_UseMarkers( VARIANT_BOOL vbMarkers)
+{
+	if ( vbMarkers_ == vbMarkers )
+		return S_OK;
+
+	if ( vbMarkers == VARIANT_TRUE )
+	{
+		edit()->useMarkers(true);
+		return S_OK;
+	}
+	edit()->useMarkers(false);
+	return S_OK;
+}
+
+HRESULT __stdcall ScintillAx::get_UseMarkers( VARIANT_BOOL* vbMarkers)
+{
+	if ( !vbMarkers )
+		return E_INVALIDARG;
+
+	*vbMarkers = vbMarkers_;
+	return S_OK;
+}
+
+HRESULT __stdcall ScintillAx::ToggleMarker( long line)
+{
+	edit()->toggleMarker(line);
+	return S_OK;
+}
+
+HRESULT __stdcall ScintillAx::SetMarker(long line)
+{
+	edit()->setMarker(line);
+	return S_OK;
+}
+
+HRESULT __stdcall ScintillAx::RemoveMarker( long line)
+{
+	edit()->removeMarker(line);
+	return S_OK;
+}
+
+HRESULT __stdcall ScintillAx::RemoveAllMarkers()
+{
+	edit()->clearAllMarkers();
+	return S_OK;
+}
+
+HRESULT __stdcall ScintillAx::HasMarker( long line)
+{
+	edit()->hasMarker(line);
+	return S_OK;
+}
+
+HRESULT __stdcall ScintillAx::GetMarkers( SAFEARRAY** markers )
+{
+	if ( !markers )
+		return E_INVALIDARG;
+
+	std::set<int> lines = edit()->getMarkers();
+
+	mol::ArrayBound ab(lines.size());
+	mol::SafeArray<VT_I4> sf(ab);
+	{
+		mol::SFAccess<long> sfa(sf);
+	
+		int i = 0;
+		for ( std::set<int>::iterator it = lines.begin(); it != lines.end(); it++ )
+		{
+			sfa[i] = (*it);
+			i++;
+		}
+	}
+	return ::SafeArrayCopy(sf,markers);
+}
+
+HRESULT __stdcall ScintillAx::HighliteLine( long line )
+{
+	edit()->highliteLine(line);
 	return S_OK;
 }
 

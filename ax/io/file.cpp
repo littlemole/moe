@@ -182,14 +182,14 @@ HRESULT __stdcall FileObj::Read( long cnt, BSTR* file)
 	if (!stream_)
 		return S_OK;
 
-	size_t sg = stream_.tellg();
+	size_t sg = (size_t)stream_.tellg();
 
 	char* buf = new char[cnt+1];
 	stream_.read(buf,cnt);
 	buf[stream_.gcount()] = 0;
 
 	mol::FileEncoding fe;
-	fe.investigate( std::string(buf,stream_.gcount()) );
+	fe.investigate( std::string(buf,(unsigned int)(stream_.gcount())) );
 	//std::string s(bud,stream_.gcount());
 
 	if ( this->codePage_ == CP_UTF8 )
@@ -198,7 +198,7 @@ HRESULT __stdcall FileObj::Read( long cnt, BSTR* file)
 
 		if ( sg == 0 && fe.hasBOM() )
 		{
-			ws = mol::utf82wstring( std::string( buf+3, stream_.gcount()-3) );
+			ws = mol::utf82wstring( std::string( buf+3, (unsigned int)(stream_.gcount()-3)) );
 			this->useBOM_ = VARIANT_TRUE;
 			this->eol_ = (IO_SYSTYPE)fe.eolMode();
 		}
@@ -213,16 +213,16 @@ HRESULT __stdcall FileObj::Read( long cnt, BSTR* file)
 	else
 	if ( this->codePage_ == CP_WINUNICODE )
 	{
-		std::wstring ws = std::wstring( (wchar_t*)buf, stream_.gcount()/sizeof(wchar_t) );
+		std::wstring ws = std::wstring( (wchar_t*)buf, (unsigned int)(stream_.gcount()/sizeof(wchar_t)) );
 
 		if ( sg == 0 && mol::FileEncoding::hasUTF16_BOM(buf) )
 		{
-			ws = std::wstring( (wchar_t*)(buf+2), (stream_.gcount()/sizeof(wchar_t))-1 );
+			ws = std::wstring( (wchar_t*)(buf+2), (unsigned int)((stream_.gcount()/sizeof(wchar_t))-1) );
 			this->useBOM_ = VARIANT_TRUE;
 			this->eol_ = (IO_SYSTYPE)fe.eolMode();
 		}
 		else
-			ws = std::wstring( (wchar_t*)buf, stream_.gcount()/sizeof(wchar_t) );
+			ws = std::wstring( (wchar_t*)buf, (unsigned int)(stream_.gcount()/sizeof(wchar_t)) );
 
 		if ( this->eol_ == IO_SYSTYPE_UNIX )
 			ws = mol::unix2dos(ws);
@@ -312,7 +312,7 @@ HRESULT __stdcall FileObj::Write( BSTR file, long len, long* s )
 	if (!stream_)
 		return S_OK;
 
-	size_t sp = stream_.tellp();
+	size_t sp = (size_t)stream_.tellp();
 
 	std::wstring ws = bstr(file).towstring();
 	if ( !ws.empty() )
@@ -369,7 +369,7 @@ HRESULT __stdcall FileObj::WriteText( BSTR txt, long* s )
 
 	ODBGS("WriteText 4");
 
-	size_t sp = stream_.tellp();
+	size_t sp = (size_t)stream_.tellp();
 
 	std::wstring ws = bstr(txt).towstring();
 

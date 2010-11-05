@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+ <Target Name="Build">
+        <MSBuild Projects="comtypes/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+        <MSBuild Projects="io/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+        <MSBuild Projects="process/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+        <MSBuild Projects="setting/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+        <MSBuild Projects="shellctrl/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+        <MSBuild Projects="shellfolder/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+        <MSBuild Projects="scintillax/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+ </Target>
+
+
+ <Target Name="Clean">
+        <MSBuild Projects="comtypes/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+        <MSBuild Projects="io/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+        <MSBuild Projects="process/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+        <MSBuild Projects="setting/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+        <MSBuild Projects="shellctrl/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+        <MSBuild Projects="shellfolder/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+        <MSBuild Projects="scintillax/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+ </Target>
+
+</Project>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{915CE04E-97B4-4995-8223-64E51F78B622}</ProjectGuid>
+    <RootNamespace>skeleton</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+	<TargetName>comtypes</TargetName>
+  </PropertyGroup>
+
+  <Import Project="..\..\master.props" />
+  <Import Project="..\build.props" />
+
+  <ItemGroup>
+    <Midl Include="comtypes.idl" >
+	 <TypeLibraryName>comtypes.tlb</TypeLibraryName>
+    </Midl>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="comtypes.cpp" />
+    <ClCompile Include="Meta.cpp" />
+    <ClCompile Include="types.cpp" />
+    <ClCompile Include="stdafx.cpp">
+		<PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+
+</Project>

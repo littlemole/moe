@@ -128,10 +128,6 @@ END
 // Generated from the TEXTINCLUDE 3 resource.
 //
 
-STRINGTABLE
-BEGIN
-   IDC_DISPLAYNAME   "moe IO interface"
-END
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED

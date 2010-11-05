@@ -4,9 +4,9 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Tue Oct 12 22:12:41 2010
+/* at Tue Nov 02 22:41:59 2010
  */
-/* Compiler settings for .\ScintillAX.idl:
+/* Compiler settings for ScintillAX.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 7.00.0555 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
@@ -32,8 +32,8 @@
 #endif // __RPCNDR_H_VERSION__
 
 
-#ifndef __ScintillAX_h_h__
-#define __ScintillAX_h_h__
+#ifndef __ScintillAx_h_h__
+#define __ScintillAx_h_h__
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 #pragma once
@@ -390,7 +390,7 @@ EXTERN_C const IID IID_IScintillAx;
             /* [in] */ long type,
             /* [retval][out] */ BSTR *syntax) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InsertColorDialog( 
+        virtual /* [local][helpstring][id] */ HRESULT STDMETHODCALLTYPE InsertColorDialog( 
             HWND wnd) = 0;
         
         virtual /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT STDMETHODCALLTYPE put_WriteBOM( 
@@ -417,6 +417,32 @@ EXTERN_C const IID IID_IScintillAx;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetAnnotationStyle( 
             /* [in] */ long line,
             /* [in] */ long style) = 0;
+        
+        virtual /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT STDMETHODCALLTYPE put_UseMarkers( 
+            /* [in] */ VARIANT_BOOL vbMarkers) = 0;
+        
+        virtual /* [id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_UseMarkers( 
+            /* [retval][out] */ VARIANT_BOOL *vbMarkers) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ToggleMarker( 
+            /* [in] */ long line) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetMarker( 
+            /* [in] */ long line) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveMarker( 
+            /* [in] */ long line) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveAllMarkers( void) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HasMarker( 
+            /* [in] */ long line) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMarkers( 
+            /* [out] */ SAFEARRAY * *markers) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HighliteLine( 
+            /* [in] */ long line) = 0;
         
     };
     
@@ -796,7 +822,7 @@ EXTERN_C const IID IID_IScintillAx;
             /* [in] */ long type,
             /* [retval][out] */ BSTR *syntax);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InsertColorDialog )( 
+        /* [local][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InsertColorDialog )( 
             IScintillAx * This,
             HWND wnd);
         
@@ -832,6 +858,41 @@ EXTERN_C const IID IID_IScintillAx;
             IScintillAx * This,
             /* [in] */ long line,
             /* [in] */ long style);
+        
+        /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UseMarkers )( 
+            IScintillAx * This,
+            /* [in] */ VARIANT_BOOL vbMarkers);
+        
+        /* [id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UseMarkers )( 
+            IScintillAx * This,
+            /* [retval][out] */ VARIANT_BOOL *vbMarkers);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ToggleMarker )( 
+            IScintillAx * This,
+            /* [in] */ long line);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetMarker )( 
+            IScintillAx * This,
+            /* [in] */ long line);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveMarker )( 
+            IScintillAx * This,
+            /* [in] */ long line);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveAllMarkers )( 
+            IScintillAx * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HasMarker )( 
+            IScintillAx * This,
+            /* [in] */ long line);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetMarkers )( 
+            IScintillAx * This,
+            /* [out] */ SAFEARRAY * *markers);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HighliteLine )( 
+            IScintillAx * This,
+            /* [in] */ long line);
         
         END_INTERFACE
     } IScintillAxVtbl;
@@ -1139,6 +1200,33 @@ EXTERN_C const IID IID_IScintillAx;
 #define IScintillAx_SetAnnotationStyle(This,line,style)	\
     ( (This)->lpVtbl -> SetAnnotationStyle(This,line,style) ) 
 
+#define IScintillAx_put_UseMarkers(This,vbMarkers)	\
+    ( (This)->lpVtbl -> put_UseMarkers(This,vbMarkers) ) 
+
+#define IScintillAx_get_UseMarkers(This,vbMarkers)	\
+    ( (This)->lpVtbl -> get_UseMarkers(This,vbMarkers) ) 
+
+#define IScintillAx_ToggleMarker(This,line)	\
+    ( (This)->lpVtbl -> ToggleMarker(This,line) ) 
+
+#define IScintillAx_SetMarker(This,line)	\
+    ( (This)->lpVtbl -> SetMarker(This,line) ) 
+
+#define IScintillAx_RemoveMarker(This,line)	\
+    ( (This)->lpVtbl -> RemoveMarker(This,line) ) 
+
+#define IScintillAx_RemoveAllMarkers(This)	\
+    ( (This)->lpVtbl -> RemoveAllMarkers(This) ) 
+
+#define IScintillAx_HasMarker(This,line)	\
+    ( (This)->lpVtbl -> HasMarker(This,line) ) 
+
+#define IScintillAx_GetMarkers(This,markers)	\
+    ( (This)->lpVtbl -> GetMarkers(This,markers) ) 
+
+#define IScintillAx_HighliteLine(This,line)	\
+    ( (This)->lpVtbl -> HighliteLine(This,line) ) 
+
 #endif /* COBJMACROS */
 
 
@@ -1285,6 +1373,9 @@ EXTERN_C const IID IID_IScintillAxEvents;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnChar( 
             /* [in] */ BSTR ch) = 0;
         
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnMarker( 
+            /* [in] */ long iLine) = 0;
+        
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnSyntax( 
             /* [in] */ long s) = 0;
         
@@ -1360,6 +1451,10 @@ EXTERN_C const IID IID_IScintillAxEvents;
             IScintillAxEvents * This,
             /* [in] */ BSTR ch);
         
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnMarker )( 
+            IScintillAxEvents * This,
+            /* [in] */ long iLine);
+        
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnSyntax )( 
             IScintillAxEvents * This,
             /* [in] */ long s);
@@ -1419,6 +1514,9 @@ EXTERN_C const IID IID_IScintillAxEvents;
 
 #define IScintillAxEvents_OnChar(This,ch)	\
     ( (This)->lpVtbl -> OnChar(This,ch) ) 
+
+#define IScintillAxEvents_OnMarker(This,iLine)	\
+    ( (This)->lpVtbl -> OnMarker(This,iLine) ) 
 
 #define IScintillAxEvents_OnSyntax(This,s)	\
     ( (This)->lpVtbl -> OnSyntax(This,s) ) 

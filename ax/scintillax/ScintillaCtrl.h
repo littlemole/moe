@@ -72,6 +72,7 @@ class EditWnd
 #define DISPID_SCI_ONSHOWMENU				2
 #define DISPID_SCI_ONPOSCHANGED				3
 #define DISPID_SCI_ONCHAR					4
+#define DISPID_SCI_ONMARKER					5
 
 ///////////////////////////////////////////////////////////////////////////////
 // the scintilla active X control
@@ -247,11 +248,23 @@ public:
 		HRESULT virtual __stdcall Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog);
 		HRESULT virtual __stdcall Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties);
 
+
+		HRESULT virtual __stdcall put_UseMarkers( VARIANT_BOOL vbMarkers);
+		HRESULT virtual __stdcall get_UseMarkers( VARIANT_BOOL* vbMarkers);
+		HRESULT virtual __stdcall ToggleMarker( long line);
+		HRESULT virtual __stdcall SetMarker(long line);
+		HRESULT virtual __stdcall RemoveMarker( long line);
+		HRESULT virtual __stdcall RemoveAllMarkers();
+		HRESULT virtual __stdcall HasMarker( long line);
+		HRESULT virtual __stdcall GetMarkers( SAFEARRAY** markers );
+		HRESULT virtual __stdcall HighliteLine( long line );
+
 		// window messages
 
 		LRESULT virtual OnCreate(  UINT, WPARAM, LPARAM );
 		LRESULT virtual OnUpdateUI (  UINT, WPARAM, LPARAM );
 		LRESULT virtual OnDblClick(  UINT, WPARAM, LPARAM );
+		LRESULT virtual OnMarginClick(  UINT, WPARAM, LPARAM );
         LRESULT virtual OnChar( UINT, WPARAM, LPARAM );
 		LRESULT virtual OnContext( UINT, WPARAM, LPARAM );
 
@@ -268,6 +281,7 @@ protected:
 	VARIANT_BOOL			vbTabUsage_;
 	VARIANT_BOOL			vbTabIndents_;
 	VARIANT_BOOL			vbBackSpaceUnindents_;
+	VARIANT_BOOL			vbMarkers_;
 	long					tabWidth_;
 
 	VARIANT_BOOL			vbOverType_;

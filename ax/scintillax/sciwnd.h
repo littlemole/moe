@@ -60,6 +60,7 @@ public:
 	{
 		nextSearchPos_=0;
 		searchOptions_=FR_DOWN;
+		highlight_= 0;
 	}
 
 	~Scintilla()
@@ -738,6 +739,103 @@ public:
 		sendMessage( SCI_ANNOTATIONSETVISIBLE, (WPARAM)style , (LPARAM)(0) );
 	}
 
+	void clearAllMarkers()
+	{
+		sendMessage( SCI_MARKERDELETEALL, (WPARAM)-1 , (LPARAM)(0) );
+	}
+
+	void setMarker(int line, int num = 2)
+	{
+		LRESULT markerhandle = sendMessage( SCI_MARKERADD, (WPARAM)line , (LPARAM)(num) );
+		markers_.insert(markerhandle);
+	}
+
+	void removeMarker(int line, int num = 2)
+	{
+		for( std::set<LRESULT>::iterator it = markers_.begin(); it != markers_.end(); it++)
+		{
+			LRESULT markerhandler = (*it);
+			int l = sendMessage( SCI_MARKERLINEFROMHANDLE, (WPARAM)markerhandler , (LPARAM)(0) );
+			if ( l == line )
+			{				
+				markers_.erase(markerhandler);
+				sendMessage( SCI_MARKERDELETEHANDLE, (WPARAM)markerhandler , (LPARAM)(0) );
+				return;
+			}
+		}
+	}
+
+	std::set<int> getMarkers()
+	{
+		std::set<int> lines;
+		for( std::set<LRESULT>::iterator it = markers_.begin(); it != markers_.end(); it++)
+		{
+			LRESULT markerhandler = (*it);
+			int line = sendMessage( SCI_MARKERLINEFROMHANDLE, (WPARAM)markerhandler , (LPARAM)(0) );
+			int pos = posFromLine(line);
+			lines.insert(pos);
+		}
+		return lines;
+	}
+
+	bool hasMarker(int line, int mask = 0x04)
+	{
+		int val = sendMessage( SCI_MARKERGET, (WPARAM)(line), (LPARAM)(0) );
+		if ( mask & val )
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool toggleMarker(int line )
+	{
+		bool b = hasMarker(line);
+		if (!b)
+		{
+			setMarker(line);
+			return b;
+		}
+		removeMarker(line);
+		return !b;
+	}
+
+	void useMarkers(bool b)
+	{
+		if ( b )
+		{
+			sendMessage( SCI_SETMARGINWIDTHN, (WPARAM)(2), (LPARAM)(16) );
+			sendMessage( SCI_SETMARGINSENSITIVEN, (WPARAM)(2), (LPARAM)(true) );
+			sendMessage( SCI_MARKERDEFINE, (WPARAM)(2), (LPARAM)(SC_MARK_CIRCLE) );
+			sendMessage( SCI_MARKERSETFORE, (WPARAM)(2), (LPARAM)(RGB(0,0,0)) );
+			sendMessage( SCI_SETMARGINMASKN, (WPARAM)(1), (LPARAM)(0) );
+			sendMessage( SCI_SETMARGINMASKN, (WPARAM)(2), (LPARAM)(-1) );
+			//sendMessage( SCI_MARKERSETBACK, (WPARAM)(2), (LPARAM)(SC_MARK_CIRCLE) );
+			return;
+		}
+		sendMessage( SCI_SETMARGINWIDTHN, (WPARAM)(2), (LPARAM)(0) );
+		sendMessage( SCI_SETMARGINSENSITIVEN, (WPARAM)(2), (LPARAM)(false) );
+	}
+
+	void highliteLine( int line )
+	{
+		if ( highlight_ != 0 )
+		{
+			sendMessage( SCI_MARKERDELETEHANDLE, (WPARAM)highlight_ , (LPARAM)(0) );
+			highlight_ = 0;
+		}
+
+		if ( line == -1 )
+		{
+			return;
+		}
+
+		sendMessage( SCI_MARKERDEFINE, (WPARAM)(1), (LPARAM)(SC_MARK_BACKGROUND) );
+		sendMessage( SCI_MARKERSETBACK, (WPARAM)(1), (LPARAM)(RGB(255,245,199)) );
+		highlight_ = sendMessage( SCI_MARKERADD, (WPARAM)line , (LPARAM)(1) );
+	}
+
+
 	void setStyle(int style, COLORREF fore, COLORREF back=0, int size=0, const char* font=0) 
 	{
 		styleSetFore(style, fore);
@@ -775,10 +873,12 @@ public:
 		return true;
 	}
 
+
 private:
 	int						nextSearchPos_;
     int						searchOptions_;
-
+	LRESULT					highlight_;
+	std::set<LRESULT>		markers_;
 };
 
 

@@ -388,7 +388,7 @@ library Scintilla
 
 		/////////////////////////////////////////////////////////////////////
 
-		[id(68), helpstring("Show the Insert Color Dialog")]
+		[id(68), helpstring("Show the Insert Color Dialog"),local]
 		HRESULT InsertColorDialog( HWND wnd );
 
 		/////////////////////////////////////////////////////////////////////
@@ -441,6 +441,65 @@ library Scintilla
 		]
 		HRESULT SetAnnotationStyle([in] long line, [in] long style);
 
+
+
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(75), 
+		  helpstring("Get/Set Use markers")
+		]
+		HRESULT UseMarkers([in] VARIANT_BOOL vbMarkers);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(75)
+		]
+		HRESULT UseMarkers([out,retval] VARIANT_BOOL* vbMarkers);
+
+		[ 
+		  id(76), 
+		  helpstring("Toggle a Marker at the left widnow border")
+		]
+		HRESULT ToggleMarker([in] long line);
+
+		[ 
+		  id(77), 
+		  helpstring("Set a Marker")
+		]
+		HRESULT SetMarker([in] long line);
+
+
+		[ 
+		  id(78), 
+		  helpstring("Remove a Marker")
+		]
+		HRESULT RemoveMarker([in] long line);
+
+
+		[ 
+		  id(79), 
+		  helpstring("Remove all Markers")
+		]
+		HRESULT RemoveAllMarkers();
+
+
+		[ 
+		  id(80), 
+		  helpstring("Test for Marker at line")
+		]
+		HRESULT HasMarker([in] long line);
+
+		[ 
+		  id(81), 
+		  helpstring("Get all Markers")
+		]
+		HRESULT GetMarkers([out] SAFEARRAY(long)* markers );
+
+		[ 
+		  id(82), 
+		  helpstring("Highlite Line")
+		]
+		HRESULT HighliteLine( [in] long line );
+
     };
 
 
@@ -474,6 +533,18 @@ library Scintilla
 		[id(4), helpstring("Char entered")]  
 		void OnChar([in] BSTR ch );
 
+		[id(5), helpstring("Marker click")]  
+		void OnMarker([in] long iLine );
+
+		[id(6), helpstring("Syntax changed")]  
+		void OnSyntax([in] long s );
+
+		[id(7), helpstring("System change")]  
+		void OnSystem([in] long s );
+
+		[id(8), helpstring("Encoding changed")]  
+		void OnEncoding([in] long e );
+
 	};
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -503,13 +574,16 @@ library Scintilla
 		[id(4), helpstring("Char entered")]  
 		HRESULT OnChar([in] BSTR ch );
 
-		[id(5), helpstring("Syntax changed")]  
+		[id(5), helpstring("Marker click")]  
+		HRESULT OnMarker([in] long iLine );
+
+		[id(6), helpstring("Syntax changed")]  
 		HRESULT OnSyntax([in] long s );
 
-		[id(6), helpstring("System change")]  
+		[id(7), helpstring("System change")]  
 		HRESULT OnSystem([in] long s );
 
-		[id(7), helpstring("Encoding changed")]  
+		[id(8), helpstring("Encoding changed")]  
 		HRESULT OnEncoding([in] long e );
 	};
 

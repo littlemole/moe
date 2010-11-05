@@ -33,7 +33,9 @@ public:
 
 	HRESULT virtual __stdcall OnSystem( long s)						{ return S_OK; }
 
-	HRESULT virtual __stdcall OnEncoding( long e)						{ return S_OK; }
+	HRESULT virtual __stdcall OnEncoding( long e)					{ return S_OK; }
+
+	HRESULT virtual __stdcall OnMarker( long iLine )				{ return S_OK; }
 
     HRESULT Advise(IUnknown* object )
     {

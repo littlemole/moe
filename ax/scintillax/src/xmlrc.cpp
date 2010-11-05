@@ -44,6 +44,8 @@ mol::msgMap<ScintillAx>().addNotifyCodeHandler( SCN_CHARADDED, make_handler(&Sci
 
 mol::msgMap<ScintillAx>().addNotifyCodeHandler( SCN_DOUBLECLICK, make_handler(&ScintillAx::OnDblClick) );
 
+mol::msgMap<ScintillAx>().addNotifyCodeHandler( SCN_MARGINCLICK, make_handler(&ScintillAx::OnMarginClick) );
+
 mol::msgMap<ScintillAxProperties>().addMsgHandler( WM_INITDIALOG, make_handler(&ScintillAxProperties::OnInitDialog) );
 
 mol::msgMap<ScintillAxProperties>().addCmdHandler( IDC_RADIO_UNIX, make_handler(&ScintillAxProperties::OnDirty) );

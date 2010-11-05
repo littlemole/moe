@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+<PropertyGroup Label="Globals">
+    <ProjectGuid>{612DCF55-08F8-4A1C-8803-DA4D9F08F457}</ProjectGuid>
+    <RootNamespace>skeleton</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+	<TargetName>shellctrl</TargetName>
+  </PropertyGroup>
+
+  <Import Project="..\..\master.props" />
+  <Import Project="..\build.props" />
+
+  <ItemGroup>
+    <Midl Include="shellCtrl.idl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="ColorPickerDlg.cpp" />
+    <ClCompile Include="HexCtrl.cpp" />
+    <ClCompile Include="shellCtrl.cpp" />
+    <ClCompile Include="ShellListCtrl.cpp" />
+    <ClCompile Include="ShellTreeCtrl.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ResourceCompile Include="colorPicker.rc" />
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+
+</Project>

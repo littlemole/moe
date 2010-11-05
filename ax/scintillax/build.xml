@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DB3273F3-A023-4A46-BD7C-9219611756D0}</ProjectGuid>
+    <RootNamespace>skeleton</RootNamespace>
+	<TargetName>ScintillAx</TargetName>
+  </PropertyGroup>
+
+  <Import Project="..\..\master.props" />
+  <Import Project="..\build.props" />
+
+  <PropertyGroup>
+	<rcsource>resources\mol</rcsource>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+	  <AdditionalIncludeDirectories>..\..\;.\src;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+	</ClCompile>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">..\..\3dParty\scintilla\bin\static\debug\SciLexer.lib;..\..\\3dParty\scintilla\bin\static\debug\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">..\..\3dParty\scintilla\bin\static\SciLexer.lib;..\..\\3dParty\scintilla\bin\static\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_debug_64|x64'">..\..\3dParty\scintilla\bin\static64\debug\SciLexer.lib;..\..\\3dParty\scintilla\bin\static64\debug\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">..\..\3dParty\scintilla\bin\static64\uni_release_64\SciLexer.lib;..\..\\3dParty\scintilla\bin\static64\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <PreprocessorDefinitions>STATIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>  
+    </Link>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <ClCompile Include="scieditor.cpp" />
+    <ClCompile Include="ScintillaCtrl.cpp" />
+    <ClCompile Include="ScintillAX.cpp" />
+    <ClCompile Include="ScintillAxProp.cpp" />
+    <ClCompile Include="src\xmlrc.cpp" />
+    <ClCompile Include="src\xmlui.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Midl Include="ScintillAX.idl" >
+		<TypeLibraryName>ScintillAX.tlb</TypeLibraryName>
+	</Midl>
+  </ItemGroup>
+
+  <ItemGroup>
+    <CustomBuild Include="..\..\cg\js\make.js">
+      <Message>codegen phase</Message>
+      <Command>cscript.exe ../../cg/js/make.js "$(Configuration)"</Command>
+      <AdditionalInputs>xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs>xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+
+</Project>

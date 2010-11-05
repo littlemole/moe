@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Label="Globals">
+    <ProjectName>pipedprocess</ProjectName>
+    <ProjectGuid>{D5AC5825-9107-469F-BD0F-C45717A6345B}</ProjectGuid>
+    <RootNamespace>skeleton</RootNamespace>
+	<TargetName>pipedprocess</TargetName>
+  </PropertyGroup>
+
+  <Import Project="..\..\master.props" />
+  <Import Project="..\build.props" />
+
+  <PropertyGroup>
+	<rcsource>process</rcsource>
+	<defsource>process</defsource>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Midl Include="process.idl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="proc.cpp" />
+    <ClCompile Include="process.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+
+</Project>
