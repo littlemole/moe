@@ -79,7 +79,17 @@ void init_ribbon_ui(  mol::win::WndProc* wnd )
   
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonToolExecScript, IDM_EDIT_EXECUTESCRIPT );
   
-    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonToolDebug, IDM_EDIT_DEBUGSCRIPT );
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonDebugGo, IDM_EDIT_DEBUG_GO );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonDebugStepIn, IDM_EDIT_DEBUG_STEPIN );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonDebugStepOver, IDM_EDIT_DEBUG_STEPOVER );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonDebugStepOut, IDM_EDIT_DEBUG_STEPOUT );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonDebugPause, IDM_EDIT_DEBUG_STOP );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonDebugQuit, IDM_EDIT_DEBUG_QUIT );
   
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonModeGroup, IDM_MODE_EOL );
   

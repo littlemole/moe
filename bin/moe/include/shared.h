@@ -24,11 +24,11 @@ public:
     debug_com_instance()
     {
         molrefcount_ = 0;
-		mol::win::AppBase::lock();        
+		mol::App().lock();        
     }
     virtual ~debug_com_instance() 
 	{
-		mol::win::AppBase::unlock();        
+		mol::App().unlock();        
 	}
 
 	HRESULT virtual __stdcall QueryInterface(REFIID iid , LPVOID* ppv)

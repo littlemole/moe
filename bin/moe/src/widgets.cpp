@@ -39,8 +39,15 @@ void Script::eval(  const mol::string& engine, const mol::string& script, IScint
 
 	ODBGS("Script::eval()\r\n");
 	this->AddRef();
-	init(engine);
+	HRESULT hr = init(engine);
+	if ( hr != S_OK )
+	{
+		ODBGS("failed to init engine");
+		return;
+	}
+	ODBGS("engine initialized");
 	addNamedObject((IMoe*)(moe()),_T("moe"));
+	ODBGS("moe object added");
 	runScript(script);
 	//close();
 	this->Release();
@@ -407,6 +414,7 @@ HRESULT __stdcall UrlBox::GetSizeMax( ULARGE_INTEGER *pCbSize)
 	return S_OK;
 }
 
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -447,6 +455,367 @@ LRESULT InfoDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     }
 	return mol::win::Dialog::wndProc(hDlg, message, wParam, lParam);
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+DebugDlg::DebugDlg(  )
+{
+//	icon_.load(IDI_MOE,64,64);
+}
+
+DebugDlg::~DebugDlg(  )
+{
+//	icon_.load(IDI_MOE,64,64);
+	exp_.release();
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall  DebugDlg::ExpCallback::onComplete()
+{
+	HRESULT phr;
+	mol::bstr txt;
+	HRESULT hr = This()->exp_->GetResultAsString(&phr,&txt);
+	if ( hr == S_OK && txt )
+	{
+		This()->setDlgItemText( IDC_EDIT_DEBUG_RESULT, txt.toString() );
+	}
+	This()->exp_.release();
+	return S_OK;
+}
+
+LRESULT DebugDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+
+	static HANDLE imgGo    = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_GO),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
+	static HANDLE imgPause = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_PAUSE),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
+	static HANDLE imgQuit  = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_QUIT),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
+
+	static HANDLE imgStepIn    = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_STEPIN),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
+	static HANDLE imgStepOver  = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_STEPOVER),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
+	static HANDLE imgStepOut   = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_STEPOUT),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
+
+
+			
+
+	switch (message)
+    {
+		case WM_INITDIALOG:
+		{
+			sendDlgItemMsg( IDC_BUTTON_DEBUG_GO, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgGo) );
+			sendDlgItemMsg( IDC_BUTTON_DEBUG_PAUSE, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgPause) );
+			sendDlgItemMsg( IDC_BUTTON_DEBUG_QUIT, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgQuit) );
+
+			sendDlgItemMsg( IDC_BUTTON_DEBUG_STEPIN, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgStepIn) );
+			sendDlgItemMsg( IDC_BUTTON_DEBUG_STEPOVER, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgStepOver) );
+			sendDlgItemMsg( IDC_BUTTON_DEBUG_STEPOUT, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgStepOut) );
+
+			return FALSE; // note: false! look into PSDK!
+		}
+        case WM_COMMAND:
+		{
+			if (LOWORD(wParam) == IDOK )
+			{
+				exp_.release();
+
+				mol::string code;
+				getDlgItemText(IDC_EDIT_DEBUG_EXP,code);
+
+				if ( code.empty() )
+					return FALSE;
+
+				if ( !remote )
+					return FALSE;
+
+				mol::punk<IRemoteDebugApplicationThread> r(remote);
+				if ( !r )
+					return FALSE;
+
+				mol::punk<IEnumDebugStackFrames> frames;
+				HRESULT hr = r->EnumStackFrames(&frames);
+				if ( hr != S_OK)
+					return FALSE;
+				if (!frames)
+					return FALSE;
+
+				ULONG fetched = 0;							
+				DebugStackFrameDescriptor dsfd;
+				hr = frames->Next(1,&dsfd,&fetched);
+				if ( hr != S_OK)
+					return FALSE;
+				if (! fetched )
+					return FALSE;
+
+				if ( !dsfd.pdsf )
+					return FALSE;
+
+				mol::punk<IDebugStackFrame> frame(dsfd.pdsf);
+				dsfd.pdsf->Release();
+
+				mol::punk<IDebugExpressionContext> ctx(frame);
+				if (!ctx)
+					return FALSE;
+
+				hr = ctx->ParseLanguageText( mol::towstring(code).c_str(), 10, 0, DEBUG_TEXT_ISEXPRESSION|DEBUG_TEXT_RETURNVALUE,&exp_);
+				if ( hr != S_OK)
+					return FALSE;
+				if ( !exp_ )
+					return FALSE;
+
+				hr = exp_->Start(&expCallback);
+
+                //endDlg(LOWORD(wParam));
+				return FALSE;
+			}
+			if (LOWORD(wParam) == IDCANCEL )
+			{
+				exp_.release();
+                //endDlg(LOWORD(wParam));
+				show(SW_HIDE);
+				return FALSE;
+			}
+			if (LOWORD(wParam) == IDC_BUTTON_DEBUG_GO )
+			{
+				::PostMessage( moe()->getActive(),WM_COMMAND,IDM_EDIT_DEBUG_GO,0);
+				show(SW_HIDE);
+				return FALSE;
+			}
+			if (LOWORD(wParam) == IDC_BUTTON_DEBUG_PAUSE )
+			{
+				::PostMessage( moe()->getActive(),WM_COMMAND,IDM_EDIT_DEBUG_STOP,0);
+				return FALSE;
+			}
+			if (LOWORD(wParam) == IDC_BUTTON_DEBUG_QUIT )
+			{
+				::PostMessage( moe()->getActive(),WM_COMMAND,IDM_EDIT_DEBUG_QUIT,0);
+				show(SW_HIDE);
+				return FALSE;
+			}
+
+			if (LOWORD(wParam) == IDC_BUTTON_DEBUG_STEPIN )
+			{
+				::PostMessage( moe()->getActive(),WM_COMMAND,IDM_EDIT_DEBUG_STEPIN,0);
+				return FALSE;
+			}
+			if (LOWORD(wParam) == IDC_BUTTON_DEBUG_STEPOVER )
+			{
+				::PostMessage( moe()->getActive(),WM_COMMAND,IDM_EDIT_DEBUG_STEPOVER,0);
+				return FALSE;
+			}
+			if (LOWORD(wParam) == IDC_BUTTON_DEBUG_STEPOUT )
+			{
+				::PostMessage( moe()->getActive(),WM_COMMAND,IDM_EDIT_DEBUG_STEPOUT,0);
+				return FALSE;
+			}
+		}
+    }
+	return mol::win::Dialog::wndProc(hDlg, message, wParam, lParam);
+}
+
+void DebugDlg::update_variables(IEnumDebugStackFrames* frames)
+{
+
+	HWND tree = getDlgItem(IDC_DEBUG_VARIABLES);
+
+	TreeView_DeleteAllItems(tree);
+
+	while (1)
+	{
+
+		TV_INSERTSTRUCTW			insertStruct;
+
+		ZeroMemory(&insertStruct, sizeof(TV_INSERTSTRUCT));
+		insertStruct.hInsertAfter = TVI_LAST;
+		insertStruct.item.mask = TVIF_TEXT;
+
+		ODBGS("EnumStackFrames:");
+		DebugStackFrameDescriptor d;
+		ULONG fetched = 0;
+		HRESULT hr = frames->Reset();
+		if ( hr != S_OK  )
+			break;
+
+
+
+		hr = frames->Next(1, &d, &fetched );
+		if ( hr != S_OK || fetched == 0 )
+			break;
+
+		
+		if ( d.punkFinal != NULL )
+		{
+			mol::punk<IEnumDebugStackFrames> f(d.punkFinal);
+			if ( f )
+			{
+				update_variables(f);
+			}
+
+			mol::punk<IDebugProperty> p(d.punkFinal);
+			if ( p )
+			{
+				addPropertyToList(tree,&insertStruct,p);
+			}
+
+			d.punkFinal->Release();
+			d.pdsf->Release();
+			break;
+		}
+		
+
+		mol::punk<IDebugProperty> prop;
+		hr = d.pdsf->GetDebugProperty(&prop);
+		if ( hr == S_OK && prop )
+		{
+				
+			addPropertyToList(tree,&insertStruct,prop);
+
+		}
+		//ODBGS(oss.str());
+
+		d.pdsf->Release();
+		break;
+	}
+
+}
+
+HRESULT DebugDlg::addPropertyToList(HWND tree, TV_INSERTSTRUCTW *insertStruct, IDebugProperty *prop)
+{
+	HRESULT		hr;
+
+	mol::punk<IEnumDebugPropertyInfo> dpis;
+	hr = prop->EnumMembers( PROP_INFO_NAME|PROP_INFO_VALUE|PROP_INFO_DEBUGPROP,10, IID_IDebugPropertyEnumType_LocalsPlusArgs, &dpis);
+	if ( hr != S_OK )
+		return S_OK;
+
+	DebugPropertyInfo		propInfo;
+	ULONG					numFetched;
+
+	//dpis->Reset();
+
+	if ( hr == S_OK )
+	{
+			ULONG fetched = 0;
+			ULONG cnt = 0;
+			hr = dpis->GetCount(&cnt);
+			if ( hr != S_OK || cnt == 0 )
+				return S_OK;
+
+			for ( int i = 0; i < cnt; i++ )
+			{
+				//
+				HTREEITEM parent = insertStruct->hParent;
+
+				DebugPropertyInfo pi;
+				::ZeroMemory(&pi,sizeof(DebugPropertyInfo));
+
+
+
+				hr = dpis->Next( 1, &pi, &fetched );
+				if ( hr != S_OK || fetched == 0 )
+				{
+					insertStruct->hParent = parent;
+					continue;
+				}
+
+				if ( pi.m_pDebugProp == prop )
+				{
+					insertStruct->hParent = parent;
+					continue;
+				}
+
+				{
+					std::wstringstream oss;
+					if ( pi.m_bstrName )
+					{
+						oss << mol::bstr(pi.m_bstrName).toString() << " - ";
+						::SysFreeString(pi.m_bstrName);
+					}
+					if ( pi.m_bstrType )
+					{
+						oss << mol::bstr(pi.m_bstrType).toString() << " : ";
+						::SysFreeString(pi.m_bstrType);
+					}
+					if ( pi.m_bstrValue )
+					{
+						oss << mol::bstr(pi.m_bstrValue).toString() << std::endl;
+						::SysFreeString(pi.m_bstrValue);	
+					}
+					std::wstring s = oss.str();
+					insertStruct->item.pszText = (LPWSTR)(s.c_str()); 
+
+					insertStruct->hParent = (HTREEITEM)SendMessageW(tree, TVM_INSERTITEM, 0, (LPARAM)insertStruct);
+					if ( insertStruct->hParent )
+					{
+						if ( pi.m_pDebugProp && pi.m_pDebugProp != prop )
+						{
+							addPropertyToList( tree, insertStruct, pi.m_pDebugProp);
+							pi.m_pDebugProp->Release();
+						}
+					}
+				}
+
+				insertStruct->hParent = parent;
+			}
+	}
+/*
+	for (;;)
+	{
+			register HTREEITEM			parent;
+
+			// Get the next variable's DebugPropertyInfo
+			enumInfo->lpVtbl->Next(enumInfo, 1, &propInfo, &numFetched);
+			if (!numFetched) break;
+
+			parent = insertStruct->hParent;
+
+			// Get the variable name
+			if (!(insertStruct->item.pszText = propInfo.m_bstrFullName))
+				insertStruct->item.pszText = propInfo.m_bstrName;
+
+			// Insert the item
+			if (!(insertStruct->hParent = (HTREEITEM)SendMessageW(VariablesDockInfo->focusWindow, TVM_INSERTITEM, 0, (LPARAM)insertStruct)))
+				freeDebugPropertyInfo(&propInfo);
+			else
+			{
+				SysFreeString(propInfo.m_bstrName);
+				SysFreeString(propInfo.m_bstrType);
+				SysFreeString(propInfo.m_bstrValue);
+				SysFreeString(propInfo.m_bstrFullName);
+
+				// See if this property (variable) has sub-properties to list. If so,
+				// recursively list them. Typically, if the variable was an object/struct,\
+				// its sub-properties would be the members of that object
+				if (propInfo.m_pDebugProp && (hr = addPropertyToList(insertStruct, propInfo.m_pDebugProp))) break;
+			}
+
+			insertStruct->hParent = parent;
+		}
+
+		enumInfo->lpVtbl->Release(enumInfo);
+	}
+
+	debugProperty->lpVtbl->Release(debugProperty);
+
+	return(S_OK);	
+	*/
+
+	return S_OK;
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////

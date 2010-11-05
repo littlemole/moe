@@ -31,6 +31,7 @@
       <dialog id="IDD_DIALOG_TAB" />
       <dialog id="IDD_ABOUTBOX" />
       <dialog id="IDD_DIALOG_EVENTS" />
+      <dialog id="IDD_DIALOG_DEBUG" />
     </dialogs>
 
     <!-- other controls we just define ids for -->
@@ -53,6 +54,19 @@
 
       <control id="IDC_TREE_EVENTS" />
       <control id="IDC_LIST_EVENTS" />
+
+      <control id="IDC_EDIT_DEBUG_EXP" />
+      <control id="IDC_EDIT_DEBUG_RESULT" />
+      <control id="IDC_DEBUG_VARIABLES" />
+      
+      <control id="IDC_BUTTON_DEBUG_GO" />
+      <control id="IDC_BUTTON_DEBUG_PAUSE" />
+      <control id="IDC_BUTTON_DEBUG_QUIT" />
+
+      <control id="IDC_BUTTON_DEBUG_STEPIN" />
+      <control id="IDC_BUTTON_DEBUG_STEPOVER" />
+      <control id="IDC_BUTTON_DEBUG_STEPOUT" />
+
     </controls>
 
     <!-- typelib to be included in app resources -->
@@ -62,7 +76,7 @@
 
     <!-- icon resources to be embedded in app resource-->
     <icons >
-      <icon id="IDI_MOE" src=".\\resources\\moe.ico" value="101" />
+      <icon id="IDI_MOE" src=".\\resources\\moe.ico" value="101" />            
     </icons>
 
     <!-- 
@@ -98,7 +112,7 @@
         <index cmd="IDM_MODE_SETTINGS" />
         <index cmd="IDM_MODE_PREFERENCES" />
         <index cmd="IDM_MODE_EDITSETTINGS" />
-        <index cmd="IDM_EDIT_DEBUGSCRIPT" />
+        <index cmd="" />
         <index cmd="IDM_TAB_CLOSEALLBUTTHIS" />
         <index cmd="IDM_VIEW_MAXIMIZE" />
         <index cmd="IDM_VIEW_MINIMIZE" />
@@ -116,9 +130,24 @@
         <index cmd="IDM_VIEW_TOOLBARS" />
         <index cmd="IDM_TAB_JUMPTAB" />
         <index cmd="IDM_FILE_NEW_UFS" />
+        <index cmd="IDM_EDIT_DEBUG_GO" />
+        <index cmd="IDM_EDIT_DEBUG_QUIT" />
+        <index cmd="IDM_EDIT_DEBUG_STEPIN" />
+        <index cmd="IDM_EDIT_DEBUG_STEPOUT" />
+        <index cmd="IDM_EDIT_DEBUG_STEPOVER" />
+        <index cmd="IDM_EDIT_DEBUG_STOP" />
       </bitmap>
       <bitmap id="IDB_MOE_FAV" src="resources/favs.bmp" />
       <bitmap id="IDB_MOE_GO" src="resources/next.bmp" />
+
+      <bitmap id="IDB_DEBUG_GO" src="resources/nresume.bmp" />
+      <bitmap id="IDB_DEBUG_PAUSE" src="resources/nsuspend.bmp" />
+      <bitmap id="IDB_DEBUG_QUIT" src="resources/ntermin.bmp" />
+
+      <bitmap id="IDB_DEBUG_STEPIN" src="resources/nstepinf.bmp" />
+      <bitmap id="IDB_DEBUG_STEPOVER" src="resources/nstepovn.bmp" />
+      <bitmap id="IDB_DEBUG_STEPOUT" src="resources/nstepout.bmp" />
+
     </bitmaps>
 
     <!-- accelerators -->

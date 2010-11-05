@@ -108,7 +108,14 @@
         <msg  handler="OnDispatch" cmd="IDM_RIBBON_BYTES_SHOWN"  />
 
         <msg  handler="OnDispatch" cmd="IDM_EDIT_EXECUTESCRIPT" />
-        <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUGSCRIPT" />
+        <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG" />
+        <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_GO" />
+        <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_STEPIN" />
+        <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_STEPOVER" />
+        <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_STEPOUT" />
+        <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_STOP" />
+        <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_QUIT" />
+
         <msg  handler="OnDispatch" cmd="IDM_MODE_EXECUTEFORM" />
         <msg  handler="OnDispatch" cmd="IDM_MODE_SHOW_LINE_NUMBERS" />
 
@@ -181,7 +188,13 @@
         <msg  handler="OnWriteBOM" cmd="IDM_RIBBON_WRITE_BOM"  />
 
         <msg  handler="OnExecScript" cmd="IDM_EDIT_EXECUTESCRIPT" />
-        <msg  handler="OnDebugScript" cmd="IDM_EDIT_DEBUGSCRIPT" />
+        <msg  handler="OnDebugScriptGo" cmd="IDM_EDIT_DEBUG_GO" />
+        <msg  handler="OnDebugScriptStepIn" cmd="IDM_EDIT_DEBUG_STEPIN" />
+        <msg  handler="OnDebugScriptStepOver" cmd="IDM_EDIT_DEBUG_STEPOVER" />
+        <msg  handler="OnDebugScriptStepOut" cmd="IDM_EDIT_DEBUG_STEPOUT" />
+        <msg  handler="OnDebugScriptStop" cmd="IDM_EDIT_DEBUG_STOP" />
+        <msg  handler="OnDebugScriptQuit" cmd="IDM_EDIT_DEBUG_QUIT" />
+
         <msg  handler="OnExecForm" cmd="IDM_MODE_EXECUTEFORM" />
 
       <!-- choose lexer -->
@@ -213,8 +226,15 @@
       <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
 
       <msg  handler="OnExecScript" cmd="IDM_EDIT_EXECUTESCRIPT" />
-      <msg  handler="OnDebugScript" cmd="IDM_EDIT_DEBUGSCRIPT" />
       <msg  handler="OnExecForm" cmd="IDM_MODE_EXECUTEFORM" />
+
+      <msg  handler="OnExecScript" cmd="IDM_EDIT_EXECUTESCRIPT" />
+      <msg  handler="OnDebugScriptGo" cmd="IDM_EDIT_DEBUG_GO" />
+      <msg  handler="OnDebugScriptStepIn" cmd="IDM_EDIT_DEBUG_STEPIN" />
+      <msg  handler="OnDebugScriptStepOver" cmd="IDM_EDIT_DEBUG_STEPOVER" />
+      <msg  handler="OnDebugScriptStepOut" cmd="IDM_EDIT_DEBUG_STEPOUT" />
+      <msg  handler="OnDebugScriptStop" cmd="IDM_EDIT_DEBUG_STOP" />
+      <msg  handler="OnDebugScriptQuit" cmd="IDM_EDIT_DEBUG_QUIT" />
     </class>
     
     <class type="Hex"  >

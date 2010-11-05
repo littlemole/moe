@@ -4,6 +4,7 @@
 #include "win/res.h"
 #include "win/wnd.h"
 #include "shared.h"
+#include <activdbg.h>
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,6 +98,38 @@ public:
 	virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 private:
 	mol::Icon icon_;
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+// poor debugger dlg
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+class DebugDlg  : public mol::win::Dialog
+{
+public:
+	DebugDlg();
+	~DebugDlg();
+
+	mol::punk<IRemoteDebugApplicationThread> remote;
+
+	virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+	class ExpCallback :
+		public IDebugExpressionCallBack,
+		public mol::interfaces< ExpCallback, mol::implements<IDebugExpressionCallBack> >
+	{
+		public: outer_this(DebugDlg,expCallback); 
+			
+				HRESULT virtual __stdcall onComplete();
+	};
+
+	void update_variables(IEnumDebugStackFrames* frames);
+
+private:
+	HRESULT addPropertyToList(HWND tree, TV_INSERTSTRUCTW *insertStruct, IDebugProperty *debugProperty);
+
+	mol::stack_obj<ExpCallback> expCallback;
+	mol::punk<IDebugExpression> exp_;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////

@@ -7,6 +7,8 @@
 #include "ole/Rib.h"
 #include "TaskBar.h"
 #include "ribbonres.h"
+#include "ThreadScript.h"
+#include "ActivDbg.h"
 
 using namespace mol::win;
 using namespace mol::ole;
@@ -22,6 +24,7 @@ mol::TCHAR OutFilesFilter[]   = _T("ANSI\0*.*\0UTF-8\0*.*\0UTF-16 (LE)\0*.*\0\0"
 
 Editor::Editor() 
 {
+	ts_ = 0;
     eraseBackground_ = 1;
 	wndClass().setIcon(moe()->icon); 
 	wndClass().hIconSm(moe()->icon); 
@@ -107,6 +110,8 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 
 	moe()->moeConfig->InitializeEditorFromPreferences( (IMoeDocument*)this );
 
+	sci->put_UseMarkers(VARIANT_TRUE);
+
 
 	sci->put_ReadOnly( readOnly ? VARIANT_TRUE : VARIANT_FALSE );
 
@@ -131,6 +136,9 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 
 LRESULT Editor::OnClose()
 {
+	if ( ts_ )
+		return 1;
+
 	this->destroy();
 	return 0;
 }
@@ -311,8 +319,10 @@ LRESULT Editor::OnToolbarDropDown(NMTOOLBAR* toolbar)
 	int index = toolbar->iItem;
 	if ( index == IDM_MODE_EOL )
 		createMenuFromConf(m,mol::UI().SubMenu(IDM_MOE,IDM_MODE_EOL));
-	else
+	else // if ( index == IDM_TOOLS ) 
 		createMenuFromConf(m,mol::UI().SubMenu(IDM_MOE,IDM_TOOLS));
+//	else
+	//	createMenuFromConf(m,mol::UI().SubMenu(IDM_MOE,IDM_EDIT_DEBUG));
 
 	mol::Menu context( mol::UI().SubMenu(IDM_MOE,index) );
 	showContext(context);
@@ -781,6 +791,426 @@ void Editor::OnShowLineNumbers()
 		mode.unCheckItem( IDM_MODE_SHOW_LINE_NUMBERS );
 }
 
+void Editor::OnDebugScriptGo()
+{
+	debugDlg()->show(SW_HIDE);
+
+	sci->HighliteLine(-1);
+	sci->ClearAnnotations();
+
+	if ( remote_ )
+	{		
+		mol::Ribbon::ribbon()->mode(8);
+	
+		mol::punk<IRemoteDebugApplication> app;
+
+		HRESULT hr = remote_->GetApplication(&app);
+		if ( hr == S_OK && app ) 
+		{
+			hr = app->ResumeFromBreakPoint( remote_, BREAKRESUMEACTION_CONTINUE, ERRORRESUMEACTION_AbortCallAndReturnErrorToCaller );
+		}
+
+		remote_.release();
+		return;
+	}
+
+	if ( ts_ )
+	{
+		::MessageBox( *moe(), _T("Script running already!"), _T("warning!"), MB_ICONERROR );
+		return;
+	}
+
+	mol::bstr filename;
+	if ( S_OK != sci->get_Filename(&filename) )
+		return ;
+
+	mol::bstr script;
+	if ( S_OK != sci->GetText(&script) )
+		return ;
+
+	mol::string engine = engineFromPath(filename.tostring());
+	if ( engine == _T("") )
+		return ;
+
+	mol::SafeArray<VT_I4> sf;
+
+
+	std::set<int> s;
+	if ( S_OK == sci->GetMarkers(&sf) )
+	{
+		mol::SFAccess<long> sfa(sf);
+
+		for ( int i = 0; i < sfa.size(); i++ )
+		{
+			s.insert(sfa[i]);
+		}
+	}
+
+	ts_ = ThreadScript::execute( this, (IMoe*)moe(), _T("moe"), script.toString(), filename.toString(), SCRIPTTEXT_ISVISIBLE,s );
+
+	mol::Ribbon::ribbon()->mode(8);
+
+	/*
+	mol::bstr filename;
+	if ( S_OK != sci->get_Filename(&filename) )
+		return ;
+
+	mol::string engine = engineFromPath(filename.tostring());
+	if ( engine == _T("") )
+		return ;
+
+	mol::bstr script;
+	if ( S_OK != sci->GetText(&script) )
+		return ;
+
+	scriptlet()->eval(engine,script.toString(),sci);
+	*/
+	//moe()->moeScript->Eval( script, mol::bstr(engine) );
+}
+
+
+void Editor::OnDebugScriptStepIn()
+{
+	sci->ClearAnnotations();
+	sci->HighliteLine(-1);
+
+	if ( !remote_)
+		return;
+
+	mol::punk<IRemoteDebugApplication> app;
+
+	HRESULT hr = remote_->GetApplication(&app);
+	if ( hr == S_OK && app ) 
+	{
+		hr = app->ResumeFromBreakPoint( remote_, BREAKRESUMEACTION_STEP_INTO, ERRORRESUMEACTION_AbortCallAndReturnErrorToCaller );
+	}
+
+	remote_.release();
+
+	mol::Ribbon::ribbon()->mode(9);
+}
+
+void Editor::OnDebugScriptStepOver()
+{
+	sci->ClearAnnotations();
+	sci->HighliteLine(-1);
+
+	if ( !remote_)
+		return;
+
+	mol::punk<IRemoteDebugApplication> app;
+
+	HRESULT hr = remote_->GetApplication(&app);
+	if ( hr == S_OK && app ) 
+	{
+		hr = app->ResumeFromBreakPoint( remote_, BREAKRESUMEACTION_STEP_OVER, ERRORRESUMEACTION_AbortCallAndReturnErrorToCaller );
+	}
+
+	remote_.release();
+
+	mol::Ribbon::ribbon()->mode(9);
+}
+
+void Editor::OnDebugScriptStepOut()
+{
+	sci->ClearAnnotations();
+	sci->HighliteLine(-1);
+
+	if ( !remote_)
+		return;
+
+	mol::punk<IRemoteDebugApplication> app;
+
+	HRESULT hr = remote_->GetApplication(&app);
+	if ( hr == S_OK && app ) 
+	{
+		hr = app->ResumeFromBreakPoint( remote_, BREAKRESUMEACTION_STEP_OUT, ERRORRESUMEACTION_AbortCallAndReturnErrorToCaller );
+	}
+
+	remote_.release();
+
+	mol::Ribbon::ribbon()->mode(9);
+}
+
+void Editor::OnDebugScriptStop()
+{
+	sci->ClearAnnotations();
+	sci->HighliteLine(-1);
+
+	if ( !ts_ )
+		return;
+
+	ts_->cause_break();
+
+	mol::Ribbon::ribbon()->mode(9);
+}
+
+void Editor::OnDebugScriptQuit()
+{
+	debugDlg()->show(SW_HIDE);
+
+	sci->HighliteLine(-1);
+
+	mol::Ribbon::ribbon()->mode(1);
+
+	if ( !remote_)
+		return;
+
+
+	mol::punk<IRemoteDebugApplication> app;
+
+	HRESULT hr = remote_->GetApplication(&app);
+	if ( hr == S_OK && app ) 
+	{
+		hr = app->ResumeFromBreakPoint( remote_, BREAKRESUMEACTION_ABORT, ERRORRESUMEACTION_AbortCallAndReturnErrorToCaller );
+	}
+
+	remote_.release();
+}
+
+
+void enumProps( mol::ostringstream& oss, IDebugProperty* prop, int level = 0 )
+{
+	mol::ostringstream o;
+	for  ( int i =0 ; i < level ; i++ )
+	{
+		o << "  ";
+	}
+	mol::string trim = o.str();
+
+	DebugPropertyInfo dpi;
+	::ZeroMemory(&dpi,sizeof(DebugPropertyInfo));
+
+	HRESULT hr = prop->GetPropertyInfo( PROP_INFO_NAME|PROP_INFO_TYPE|PROP_INFO_VALUE|PROP_INFO_DEBUGPROP|PROP_INFO_AUTOEXPAND,10,&dpi);
+
+	oss << trim << mol::bstr(dpi.m_bstrName).toString() << " - "
+		<< trim << mol::bstr(dpi.m_bstrType).toString() << " : "
+		<< trim << mol::bstr(dpi.m_bstrValue).toString() << std::endl;
+
+	::SysFreeString(dpi.m_bstrName);
+	::SysFreeString(dpi.m_bstrType);
+	::SysFreeString(dpi.m_bstrValue);
+
+	if ( dpi.m_pDebugProp && dpi.m_pDebugProp != prop)
+	{
+		enumProps( oss, dpi.m_pDebugProp, level+1 );
+		dpi.m_pDebugProp->Release();
+	}
+
+	
+	mol::punk<IEnumDebugPropertyInfo> dpis;
+	hr = prop->EnumMembers( PROP_INFO_NAME|PROP_INFO_VALUE|PROP_INFO_DEBUGPROP,10, IID_IDebugPropertyEnumType_LocalsPlusArgs, &dpis);
+	if ( hr == S_OK )
+	{
+		//hr = dpis->Reset();
+		if ( hr == S_OK )
+		{
+			ULONG fetched = 0;
+			while(1)
+			{
+				//
+
+				DebugPropertyInfo pi;
+				::ZeroMemory(&pi,sizeof(DebugPropertyInfo));
+
+				hr = dpis->Next( 1, &pi, &fetched );
+				if ( hr != S_OK || fetched == 0 )
+					break;
+
+				{
+					if ( pi.m_bstrName )
+					{
+						oss << trim << mol::bstr(pi.m_bstrName).toString() << " - ";
+						::SysFreeString(pi.m_bstrName);
+					}
+					if ( pi.m_bstrType )
+					{
+						oss << trim << mol::bstr(pi.m_bstrType).toString() << " : ";
+						::SysFreeString(pi.m_bstrType);
+					}
+					if ( pi.m_bstrValue )
+					{
+						oss << trim << mol::bstr(pi.m_bstrValue).toString() << std::endl;
+						::SysFreeString(pi.m_bstrValue);	
+					}
+				}
+
+				if ( pi.m_pDebugProp && pi.m_pDebugProp != prop  && level < 1)
+				{
+					enumProps(oss,pi.m_pDebugProp,level+1);
+					pi.m_pDebugProp->Release();
+				}
+			}
+		}
+	}
+	
+}
+
+void Editor::OnScriptThreadDone()
+{
+	debugDlg()->remote.release();
+	debugDlg()->show(SW_HIDE);
+	ts_ = 0;
+	sci->HighliteLine(-1);
+	mol::Ribbon::ribbon()->mode(1);
+}
+
+void Editor::OnScriptThread( int line, IRemoteDebugApplicationThread* remote, IActiveScriptErrorDebug* pError )
+{
+	ODBGS1("OnScriptThread:",line);
+
+	remote_.release();
+	remote_ = remote;
+
+	debugDlg()->remote = remote;
+	debugDlg()->show(SW_SHOW);
+
+	sci->ClearAnnotations();
+	mol::Ribbon::ribbon()->mode(9);
+
+	sci->GotoLine(line);
+
+	std::wostringstream oss;
+	oss << _T("line: ") << (line+1) << _T(" ");
+
+	long start = 0;
+	long end = 0;
+
+	//sci->PosFromLine(line,&start);
+	//sci->LineEndPos(line,&end);
+	//sci->SetSelection(start,end);
+	sci->HighliteLine(line);
+
+	if ( pError )
+	{
+		EXCEPINFO ex;
+		pError->GetExceptionInfo(&ex);
+
+		DWORD context;
+		ULONG line;
+		LONG pos;
+		pError->GetSourcePosition(&context,&line,&pos);
+		
+		mol::punk<IDebugStackFrame> f;
+		pError->GetStackFrame(&f);
+
+		mol::bstr e;
+		f->GetDescriptionString(TRUE,&e);
+		mol::punk<IDebugProperty> p;
+		f->GetDebugProperty(&p);
+
+		oss << e.toString() << std::endl;
+		//enumProps(oss,p,0);
+
+		oss << mol::bstr(ex.bstrDescription).toString();
+
+		// setAnnotation(line,str)
+
+	}
+	//oss << std::endl << frame;
+	//::MessageBox( *this, oss.str().c_str(), _T("OnScriptThread called"), 0 );
+	oss << std::endl;
+
+	//mol::punk<IEnumDebugStackFrames> frames;
+	//HRESULT hr = remote->EnumStackFrames(&frames);
+	//if ( hr == S_OK && frames )
+	//{
+		//debugDlg()->update_variables(frames);
+
+		/*hr = frames->Reset();
+		if ( hr == S_OK  )
+		{
+			while (1)
+			{
+
+				ODBGS("EnumStackFrames:");
+				DebugStackFrameDescriptor d;
+				ULONG fetched = 0;
+				hr = frames->Next(1, &d, &fetched );
+				if ( hr != S_OK || fetched == 0 )
+					break;
+
+
+
+				mol::bstr txt;
+				hr = d.pdsf->GetDescriptionString(TRUE,&txt);
+				if ( hr == S_OK )
+				{
+					oss << txt.toString() << std::endl;
+				}
+
+				mol::punk<IDebugProperty> prop;
+				hr = d.pdsf->GetDebugProperty(&prop);
+				if ( hr == S_OK && prop )
+				{
+				
+					enumProps(oss,prop);
+
+				}
+				//ODBGS(oss.str());
+
+				d.pdsf->Release();
+				break;
+			}
+		}
+		*/
+	//}
+
+	
+	/*
+	mol::punk<IEnumDebugStackFrames> frames;
+	HRESULT hr = remote->EnumStackFrames(&frames);
+	if ( hr == S_OK && frames )
+	{
+		DebugStackFrameDescriptor d;
+		ULONG fetched = 0;
+		while (1)
+		{
+				
+			hr = frames->Next(1, &d, &fetched );
+			if ( hr != S_OK || fetched == 0 )
+				break;
+
+			mol::bstr txt;
+			hr = d.pdsf->GetDescriptionString(TRUE,&txt);
+			if ( hr == S_OK )
+			{
+				//::MessageBox( *this, txt.toString().c_str(), _T("frame desc"), 0 );
+				oss << txt.toString() << std::endl;
+			}
+
+			mol::punk<IDebugProperty> prop;
+			hr = d.pdsf->GetDebugProperty(&prop);
+			if ( hr == S_OK && prop )
+			{
+				//mol::ostringstream oss;
+				enumProps(oss,prop);
+
+				//::MessageBox( *this, oss.str().c_str(), _T("props"), 0 );
+			}
+
+			d.pdsf->Release();
+		}
+	}
+	*/
+	sci->SetAnnotation( line, mol::bstr(oss.str()) );
+	/*
+	mol::punk<IRemoteDebugApplication> app;
+
+	hr = remote->GetApplication(&app);
+	if ( hr == S_OK && app ) 
+	{
+		hr = app->ResumeFromBreakPoint( remote, BREAKRESUMEACTION_CONTINUE, ERRORRESUMEACTION_AbortCallAndReturnErrorToCaller );
+	}
+	*/
+	if ( remote )
+		remote->Release();
+	if ( pError)
+		pError->Release();
+	ODBGS1("OnScriptThread:",line);
+}
+
+
 void Editor::OnExecScript()
 {
 	mol::bstr filename;
@@ -795,28 +1225,8 @@ void Editor::OnExecScript()
 	if ( S_OK != sci->GetText(&script) )
 		return ;
 
-	scriptlet()->eval(engine,script.toString(),sci);
-
-	//moe()->moeScript->Eval( script, mol::bstr(engine) );
-}
-
-
-void Editor::OnDebugScript()
-{
-	mol::bstr filename;
-	if ( S_OK != sci->get_Filename(&filename) )
-		return ;
-
-	mol::string engine = engineFromPath(filename.tostring());
-	if ( engine == _T("") )
-		return ;
-
-	mol::bstr script;
-	if ( S_OK != sci->GetText(&script) )
-		return ;
-
 	//moe()->moeScript->Debug( script, mol::bstr(engine) );
-	scriptlet()->debug(engine,script.toString(),sci);
+	scriptlet()->eval(engine,script.toString(),sci);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -835,6 +1245,9 @@ void Editor::OnMenu(HMENU popup, LPARAM unused)
 		createMenuFromConf(frameMenu,popup);
 	else
 	if ( popup == mol::UI().SubMenu(IDM_MOE,IDM_TOOLS) )
+		createMenuFromConf(frameMenu,popup);
+	else
+	if ( popup == mol::UI().SubMenu(IDM_MOE,IDM_EDIT_DEBUG) )
 		createMenuFromConf(frameMenu,popup);
 }
 
@@ -911,9 +1324,36 @@ HRESULT __stdcall Editor::Sintilla_Events::OnEncoding( long e)
 { 
 	This()->updateUI();
 	return S_OK; 
+}
+
+
+HRESULT __stdcall Editor::Sintilla_Events::OnMarker( long line)						
+{ 
+	This()->sci->ToggleMarker(line);
+
+	if ( This()->ts_ )
+	{
+
+		mol::SafeArray<VT_I4> sf;
+
+		std::set<int> s;
+		if ( S_OK == This()->sci->GetMarkers(&sf) )
+		{
+			mol::SFAccess<long> sfa(sf);
+
+			for ( int i = 0; i < sfa.size(); i++ )
+			{
+				s.insert(sfa[i]);
+			}
+		}
+		This()->ts_->update_breakpoints(s);
+	}
+	return S_OK; 
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
-}/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 
 void Editor::updateUI()
 {
@@ -1195,19 +1635,52 @@ void Editor::updateToolMenu( HMENU tools )
 
 }
 
+void Editor::updateDebugMenu( HMENU debug )
+{
+	mol::Menu menu(debug);
+	//menu.disableItem(IDM_EDIT_DEBUG_GO);
+	menu.disableItem(IDM_EDIT_DEBUG_STEPIN);
+	menu.disableItem(IDM_EDIT_DEBUG_STEPOVER);
+	menu.disableItem(IDM_EDIT_DEBUG_STEPOUT);
+	menu.disableItem(IDM_EDIT_DEBUG_STOP);
+	menu.disableItem(IDM_EDIT_DEBUG_QUIT);
+	
+	if ( remote_ )
+	{
+		menu.enableItem(IDM_EDIT_DEBUG_STEPIN);
+		menu.enableItem(IDM_EDIT_DEBUG_STEPOVER);
+		menu.enableItem(IDM_EDIT_DEBUG_STEPOUT);
+		menu.enableItem(IDM_EDIT_DEBUG_QUIT);
+		return;
+	}
+
+	if ( ts_ )
+	{
+		menu.enableItem(IDM_EDIT_DEBUG_STOP);
+		menu.enableItem(IDM_EDIT_DEBUG_QUIT);
+		return;
+	}
+}
+
 
 void Editor::createMenuFromConf(HMENU menu,HMENU popup)
 {
 
 	HMENU frameMenu = mol::UI().Menu(IDM_MOE);
 
-	HMENU tools = mol::UI().SubMenu(IDM_MOE,IDM_TOOLS);
-	mol::Menu mode(mol::UI().SubMenu(IDM_MOE,IDM_MODE_EOL));
+	HMENU tools =   mol::UI().SubMenu(IDM_MOE,IDM_TOOLS);
+	mol::Menu mode (mol::UI().SubMenu(IDM_MOE,IDM_MODE_EOL));
+	mol::Menu debug(mol::UI().SubMenu(IDM_MOE,IDM_EDIT_DEBUG));
 
 	if ( popup == mode )
 	{
 		updateModeMenu(mode);
 		return;
+	}
+
+	if ( popup == debug )
+	{
+		updateDebugMenu(debug);
 	}
 
 	if ( popup != tools )

@@ -226,6 +226,7 @@
     <!-- dialogs -->
     <singleton name="searchDlg" class="mol::SearchDlg" />
     <singleton name="urlDlg" class="UrlDlg" />
+    <singleton name="debugDlg" class="DebugDlg" />
 
     <!-- ThumbnailTaskBar Support-->
     <singleton name="taskbar" class="Taskbar" />

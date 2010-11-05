@@ -10,6 +10,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 class TaskbarWnd;
+class ThreadScript;
 
 class Editor 
 	: 
@@ -60,8 +61,15 @@ public:
 	void OnShowLineNumbers();
 
 	void OnExecScript();
-	void OnDebugScript();
 	void OnExecForm(  );
+
+	void OnDebugScriptGo();
+	void OnDebugScriptStepIn();
+	void OnDebugScriptStepOver();
+	void OnDebugScriptStepOut();
+	void OnDebugScriptStop();
+	void OnDebugScriptQuit();
+
 
 	// syntax highlite switches
 	void OnLexer(int code, int id, HWND ctrl);
@@ -80,6 +88,9 @@ public:
 
 	LRESULT OnToolbarDropDown(NMTOOLBAR* toolbar );
 
+	void OnScriptThread( int line, IRemoteDebugApplicationThread* remote,IActiveScriptErrorDebug* pError);
+	void OnScriptThreadDone();
+
    virtual HRESULT __stdcall get_FilePath( BSTR *fname);
 
 protected:
@@ -90,6 +101,7 @@ protected:
 	void walkConf(HMENU parent, ISetting* set, std::map<int,ISetting*>& confMap, int& id);
 	void updateModeMenu( mol::Menu& mode );
 	void updateToolMenu( HMENU tools );
+	void updateDebugMenu( HMENU debug );
 	void populateMenuFromConf( HMENU submenu, ISetting* set, std::map<int,ISetting*>& confMap, int& id);
 
 
@@ -109,6 +121,7 @@ protected:
 		virtual HRESULT __stdcall OnSyntax( long s);
 		virtual HRESULT __stdcall OnSystem( long s);
 		virtual HRESULT __stdcall OnEncoding( long e);
+		virtual HRESULT __stdcall OnMarker( long line);
     } events;
 
 	std::map<int,ISetting*>		shortCutMap;
@@ -118,6 +131,8 @@ protected:
 
 	mol::string filename_;
 
+	mol::punk<IRemoteDebugApplicationThread> remote_;
+	ThreadScript* ts_;
 };
 
 //////////////////////////////////////////////////////////////////////////////////

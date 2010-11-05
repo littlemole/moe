@@ -314,6 +314,10 @@ UrlDlg* urlDlg()
 {
   return &mol::singleton<UrlDlg>();
 }
+DebugDlg* debugDlg()
+{
+  return &mol::singleton<DebugDlg>();
+}
 Taskbar* taskbar()
 {
   return &mol::singleton<Taskbar>();

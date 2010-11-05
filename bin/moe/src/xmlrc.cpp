@@ -76,7 +76,13 @@ extern "C" void load_codegen_metadata()
   UI().addCmd(IDM_EDIT_UPDATE,_T("Update"));  
   UI().addCmd(IDM_EDIT_STOP,_T("Stop"));  
   UI().addCmd(IDM_EDIT_EXECUTESCRIPT,_T("Exec Script"));  
-  UI().addCmd(IDM_EDIT_DEBUGSCRIPT,_T("Debug Script"));  
+  UI().addCmd(IDM_EDIT_DEBUG,_T("Debug"));  
+  UI().addCmd(IDM_EDIT_DEBUG_GO,_T("Go"));  
+  UI().addCmd(IDM_EDIT_DEBUG_STEPIN,_T("Step in"));  
+  UI().addCmd(IDM_EDIT_DEBUG_STEPOVER,_T("Step over"));  
+  UI().addCmd(IDM_EDIT_DEBUG_STEPOUT,_T("Step out"));  
+  UI().addCmd(IDM_EDIT_DEBUG_STOP,_T("Stop"));  
+  UI().addCmd(IDM_EDIT_DEBUG_QUIT,_T("Quit"));  
   UI().addCmd(IDM_EDIT_INDENTION,_T("Indention"));  
   UI().addCmd(IDM_EDIT_16BYTES,_T("16 Bytes"));  
   UI().addCmd(IDM_EDIT_20BYTES,_T("20 Bytes"));  
@@ -197,7 +203,7 @@ extern "C" void load_codegen_metadata()
   UI().addBmpCmd( IDB_TOOLBAR, IDM_MODE_SETTINGS );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_MODE_PREFERENCES );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_MODE_EDITSETTINGS );
-  UI().addBmpCmd( IDB_TOOLBAR, IDM_EDIT_DEBUGSCRIPT );
+  UI().addBmpCmd( IDB_TOOLBAR, -1 );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_TAB_CLOSEALLBUTTHIS );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_VIEW_MAXIMIZE );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_VIEW_MINIMIZE );
@@ -215,10 +221,28 @@ extern "C" void load_codegen_metadata()
   UI().addBmpCmd( IDB_TOOLBAR, IDM_VIEW_TOOLBARS );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_TAB_JUMPTAB );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_FILE_NEW_UFS );
+  UI().addBmpCmd( IDB_TOOLBAR, IDM_EDIT_DEBUG_GO );
+  UI().addBmpCmd( IDB_TOOLBAR, IDM_EDIT_DEBUG_QUIT );
+  UI().addBmpCmd( IDB_TOOLBAR, IDM_EDIT_DEBUG_STEPIN );
+  UI().addBmpCmd( IDB_TOOLBAR, IDM_EDIT_DEBUG_STEPOUT );
+  UI().addBmpCmd( IDB_TOOLBAR, IDM_EDIT_DEBUG_STEPOVER );
+  UI().addBmpCmd( IDB_TOOLBAR, IDM_EDIT_DEBUG_STOP );
   
   UI().addBmp(IDB_MOE_FAV);
   
   UI().addBmp(IDB_MOE_GO);
+  
+  UI().addBmp(IDB_DEBUG_GO);
+  
+  UI().addBmp(IDB_DEBUG_PAUSE);
+  
+  UI().addBmp(IDB_DEBUG_QUIT);
+  
+  UI().addBmp(IDB_DEBUG_STEPIN);
+  
+  UI().addBmp(IDB_DEBUG_STEPOVER);
+  
+  UI().addBmp(IDB_DEBUG_STEPOUT);
 
 
   // menus
@@ -258,7 +282,13 @@ extern "C" void load_codegen_metadata()
         UI().addMenuItem(IDM_MOE, IDM_TOOLS, IDM_EDIT_COLOR, IDB_TOOLBAR, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_TOOLS);
         UI().addMenuItem(IDM_MOE, IDM_TOOLS, IDM_EDIT_EXECUTESCRIPT, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_TOOLS, IDM_EDIT_DEBUGSCRIPT, IDB_TOOLBAR, false, true);
+    UI().addSubMenu(  IDM_MOE, IDM_TOOLS, IDM_EDIT_DEBUG, IDB_TOOLBAR);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_GO, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_STEPIN, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_STEPOVER, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_STEPOUT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_STOP, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_QUIT, IDB_TOOLBAR, false, true);
         UI().addMenuItem(IDM_MOE, IDM_TOOLS, IDM_MODE_EXECUTEFORM, IDB_TOOLBAR, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_TOOLS);
     UI().addSubMenu(  IDM_MOE, IDM_TOOLS, IDM_USER_SCRIPT, IDB_TOOLBAR);
@@ -725,7 +755,19 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_RIBBON_BYTES_SHOWN, make_handler(&MoeWn
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_EXECUTESCRIPT, make_handler(&MoeWnd::OnDispatch) );
 
-mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUGSCRIPT, make_handler(&MoeWnd::OnDispatch) );
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUG, make_handler(&MoeWnd::OnDispatch) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUG_GO, make_handler(&MoeWnd::OnDispatch) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUG_STEPIN, make_handler(&MoeWnd::OnDispatch) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUG_STEPOVER, make_handler(&MoeWnd::OnDispatch) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUG_STEPOUT, make_handler(&MoeWnd::OnDispatch) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUG_STOP, make_handler(&MoeWnd::OnDispatch) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUG_QUIT, make_handler(&MoeWnd::OnDispatch) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_EXECUTEFORM, make_handler(&MoeWnd::OnDispatch) );
 
@@ -839,7 +881,17 @@ mol::msgMap<Editor>().addCmdHandler( IDM_RIBBON_WRITE_BOM, make_handler(&Editor:
 
 mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_EXECUTESCRIPT, make_handler(&Editor::OnExecScript) );
 
-mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_DEBUGSCRIPT, make_handler(&Editor::OnDebugScript) );
+mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_DEBUG_GO, make_handler(&Editor::OnDebugScriptGo) );
+
+mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_DEBUG_STEPIN, make_handler(&Editor::OnDebugScriptStepIn) );
+
+mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_DEBUG_STEPOVER, make_handler(&Editor::OnDebugScriptStepOver) );
+
+mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_DEBUG_STEPOUT, make_handler(&Editor::OnDebugScriptStepOut) );
+
+mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_DEBUG_STOP, make_handler(&Editor::OnDebugScriptStop) );
+
+mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_DEBUG_QUIT, make_handler(&Editor::OnDebugScriptQuit) );
 
 mol::msgMap<Editor>().addCmdHandler( IDM_MODE_EXECUTEFORM, make_handler(&Editor::OnExecForm) );
 
@@ -877,9 +929,21 @@ mol::msgMap<FormEditor>().addMsgHandler( WM_MDIACTIVATE, make_handler(&FormEdito
 
 mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_EXECUTESCRIPT, make_handler(&FormEditor::OnExecScript) );
 
-mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_DEBUGSCRIPT, make_handler(&FormEditor::OnDebugScript) );
-
 mol::msgMap<FormEditor>().addCmdHandler( IDM_MODE_EXECUTEFORM, make_handler(&FormEditor::OnExecForm) );
+
+mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_EXECUTESCRIPT, make_handler(&FormEditor::OnExecScript) );
+
+mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_DEBUG_GO, make_handler(&FormEditor::OnDebugScriptGo) );
+
+mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_DEBUG_STEPIN, make_handler(&FormEditor::OnDebugScriptStepIn) );
+
+mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_DEBUG_STEPOVER, make_handler(&FormEditor::OnDebugScriptStepOver) );
+
+mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_DEBUG_STEPOUT, make_handler(&FormEditor::OnDebugScriptStepOut) );
+
+mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_DEBUG_STOP, make_handler(&FormEditor::OnDebugScriptStop) );
+
+mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_DEBUG_QUIT, make_handler(&FormEditor::OnDebugScriptQuit) );
 
 mol::msgMap<Hex>().addMsgHandler( WM_MDIACTIVATE, make_handler(&Hex::OnMDIActivate) );
 

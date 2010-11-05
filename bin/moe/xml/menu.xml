@@ -43,7 +43,14 @@
         <menu cmd="IDM_EDIT_COLOR" />
         <menu separator="true"  />
         <menu cmd="IDM_EDIT_EXECUTESCRIPT" />
-        <menu cmd="IDM_EDIT_DEBUGSCRIPT" />
+        <menu cmd="IDM_EDIT_DEBUG">
+          <menu cmd="IDM_EDIT_DEBUG_GO" />
+          <menu cmd="IDM_EDIT_DEBUG_STEPIN" />
+          <menu cmd="IDM_EDIT_DEBUG_STEPOVER" />
+          <menu cmd="IDM_EDIT_DEBUG_STEPOUT" />
+          <menu cmd="IDM_EDIT_DEBUG_STOP" />
+          <menu cmd="IDM_EDIT_DEBUG_QUIT" />
+        </menu>
         <menu cmd="IDM_MODE_EXECUTEFORM" />
         <menu separator="true"  />
         <menu cmd="IDM_USER_SCRIPT" popup="true"/>

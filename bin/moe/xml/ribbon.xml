@@ -43,7 +43,10 @@
     <Command Name="RibbonDocumentContextMap" LabelTitle="Context Menu" />
     <Command Name="RibbonTabContextMap" LabelTitle="Tab Context Menu" />
     <Command Name="RibbonPrefGroup" LabelTitle="Settings" />
-    
+
+    <Command Name="RibbonDebugGroup" LabelTitle="Debug" />
+    <Command Name="RibbonDebugStepGroup" LabelTitle="Step" />
+
     <Command Name="RibbonBytesShown" LabelTitle="Show" />
     
     <!-- App menu support  -->
@@ -773,8 +776,60 @@
       <Command.LargeImages>
         <Image Source="ribbon\UserTemplate.bmp"/>
       </Command.LargeImages>
-    </Command>    
-    
+    </Command>
+
+
+
+    <Command Name="RibbonDebugGo" LabelTitle="Debug Script">
+      <Command.TooltipTitle>Start / Resume Debug</Command.TooltipTitle>
+      <Command.TooltipDescription>Start or resume debugging current Document as script</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon/go.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonDebugPause" LabelTitle="Pause Script">
+      <Command.TooltipTitle>Pause Script</Command.TooltipTitle>
+      <Command.TooltipDescription>Break Debugging the current running Script</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon/pause.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonDebugQuit" LabelTitle="Quit Script">
+      <Command.TooltipTitle>Quit Script</Command.TooltipTitle>
+      <Command.TooltipDescription>Quit debugging current Document as script</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon/quit.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+
+
+    <Command Name="RibbonDebugStepIn" LabelTitle="Step In">
+      <Command.TooltipTitle>Single Step</Command.TooltipTitle>
+      <Command.TooltipDescription>Step into next Expression</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon/stepin.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonDebugStepOver" LabelTitle="Step Over">
+      <Command.TooltipTitle>Step Over</Command.TooltipTitle>
+      <Command.TooltipDescription>Step over to next Expression</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon/stepover.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonDebugStepOut" LabelTitle="Step Out">
+      <Command.TooltipTitle>Leave Function Frame</Command.TooltipTitle>
+      <Command.TooltipDescription>Step out of the current Function</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon/stepout.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
   </Application.Commands>
 
 
@@ -1373,7 +1428,7 @@
             <DropDownButton CommandName="RibbonSettingsTools">
               <Button CommandName="RibbonToolUserTemplate"/>
               <Button CommandName="RibbonToolExecScript"/>
-              <Button CommandName="RibbonToolDebug"/>
+              <Button CommandName="RibbonDebugGo"/>
               <Button CommandName="RibbonToolExecForm"/>
             </DropDownButton>
             <Button CommandName="RibbonSettings"/>
@@ -1420,7 +1475,7 @@
 
 
 
-        <Tab CommandName="RibbonTabTools" ApplicationModes="1">
+        <Tab CommandName="RibbonTabTools" ApplicationModes="1,8,9">
 
           <!-- scaling -->
           <Tab.ScalingPolicy>
@@ -1429,7 +1484,8 @@
                 <Scale Group="RibbonTemplateGroup" Size="Large"/>
                 <Scale Group="RibbonToolGroup" Size="Large"/>
                 <Scale Group="RibbonTool2Group" Size="Large"/>
-
+                <Scale Group="RibbonDebugGroup" Size="Large"/>
+                <Scale Group="RibbonDebugStepGroup" Size="Large"/>
               </ScalingPolicy.IdealSizes>
 
               <Scale Group="RibbonTool2Group" Size="Medium"/>
@@ -1450,9 +1506,23 @@
           <!-- Tool Group -->
           <Group CommandName="RibbonToolGroup" SizeDefinition="ThreeControls"  ApplicationModes="1">
             <Button CommandName="RibbonToolExecScript"/>
-            <Button CommandName="RibbonToolDebug"/>
+            <Button CommandName="RibbonDebugGo"/>
             <Button CommandName="RibbonToolExecForm"/>
           </Group>
+
+          <Group CommandName="RibbonDebugGroup" SizeDefinition="ThreeControls"  ApplicationModes="8,9">
+            <Button CommandName="RibbonDebugGo"/>
+            <Button CommandName="RibbonDebugPause"/>
+            <Button CommandName="RibbonDebugQuit"/>
+          </Group>
+
+
+          <Group CommandName="RibbonDebugStepGroup" SizeDefinition="ThreeControls"  ApplicationModes="9">
+            <Button CommandName="RibbonDebugStepIn"/>
+            <Button CommandName="RibbonDebugStepOver"/>
+            <Button CommandName="RibbonDebugStepOut"/>
+          </Group>
+          
           <Group CommandName="RibbonTool2Group" SizeDefinition="ThreeControls"  ApplicationModes="1">
             <Button CommandName="RibbonToolUserBatch"/>
             <Button CommandName="RibbonToolUserForm"/>

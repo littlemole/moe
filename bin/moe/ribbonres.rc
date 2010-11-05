@@ -154,6 +154,16 @@ END
 
 STRINGTABLE 
 BEGIN
+    RibbonDebugGroup_LabelTitle_RESID L"Debug" /* LabelTitle RibbonDebugGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDebugStepGroup_LabelTitle_RESID L"Step" /* LabelTitle RibbonDebugStepGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
     RibbonBytesShown_LabelTitle_RESID L"Show" /* LabelTitle RibbonBytesShown_LabelTitle_RESID: (null) */
 END
 
@@ -1523,6 +1533,102 @@ BEGIN
 END
 
 RibbonToolUserTemplate_LargeImages_RESID    BITMAP    "ribbon\UserTemplate.bmp" /* LargeImages RibbonToolUserTemplate_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonDebugGo_LabelTitle_RESID L"Debug Script" /* LabelTitle RibbonDebugGo_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDebugGo_TooltipTitle_RESID L"Start / Resume Debug" /* TooltipTitle RibbonDebugGo_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDebugGo_TooltipDescription_RESID L"Start or resume debugging current Document as script" /* TooltipDescription RibbonDebugGo_TooltipDescription_RESID: (null) */
+END
+
+RibbonDebugGo_LargeImages_RESID    BITMAP    "ribbon\\go.bmp" /* LargeImages RibbonDebugGo_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonDebugPause_LabelTitle_RESID L"Pause Script" /* LabelTitle RibbonDebugPause_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDebugPause_TooltipTitle_RESID L"Pause Script" /* TooltipTitle RibbonDebugPause_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDebugPause_TooltipDescription_RESID L"Break Debugging the current running Script" /* TooltipDescription RibbonDebugPause_TooltipDescription_RESID: (null) */
+END
+
+RibbonDebugPause_LargeImages_RESID    BITMAP    "ribbon\\pause.bmp" /* LargeImages RibbonDebugPause_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonDebugQuit_LabelTitle_RESID L"Quit Script" /* LabelTitle RibbonDebugQuit_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDebugQuit_TooltipTitle_RESID L"Quit Script" /* TooltipTitle RibbonDebugQuit_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDebugQuit_TooltipDescription_RESID L"Quit debugging current Document as script" /* TooltipDescription RibbonDebugQuit_TooltipDescription_RESID: (null) */
+END
+
+RibbonDebugQuit_LargeImages_RESID    BITMAP    "ribbon\\quit.bmp" /* LargeImages RibbonDebugQuit_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonDebugStepIn_LabelTitle_RESID L"Step In" /* LabelTitle RibbonDebugStepIn_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDebugStepIn_TooltipTitle_RESID L"Single Step" /* TooltipTitle RibbonDebugStepIn_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDebugStepIn_TooltipDescription_RESID L"Step into next Expression" /* TooltipDescription RibbonDebugStepIn_TooltipDescription_RESID: (null) */
+END
+
+RibbonDebugStepIn_LargeImages_RESID    BITMAP    "ribbon\\stepin.bmp" /* LargeImages RibbonDebugStepIn_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonDebugStepOver_LabelTitle_RESID L"Step Over" /* LabelTitle RibbonDebugStepOver_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDebugStepOver_TooltipTitle_RESID L"Step Over" /* TooltipTitle RibbonDebugStepOver_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDebugStepOver_TooltipDescription_RESID L"Step over to next Expression" /* TooltipDescription RibbonDebugStepOver_TooltipDescription_RESID: (null) */
+END
+
+RibbonDebugStepOver_LargeImages_RESID    BITMAP    "ribbon\\stepover.bmp" /* LargeImages RibbonDebugStepOver_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonDebugStepOut_LabelTitle_RESID L"Step Out" /* LabelTitle RibbonDebugStepOut_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDebugStepOut_TooltipTitle_RESID L"Leave Function Frame" /* TooltipTitle RibbonDebugStepOut_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonDebugStepOut_TooltipDescription_RESID L"Step out of the current Function" /* TooltipDescription RibbonDebugStepOut_TooltipDescription_RESID: (null) */
+END
+
+RibbonDebugStepOut_LargeImages_RESID    BITMAP    "ribbon\\stepout.bmp" /* LargeImages RibbonDebugStepOut_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonTreeViewContextMap_LabelTitle_RESID L"Label:RibbonTreeViewContextMap" /* LabelTitle RibbonTreeViewContextMap_LabelTitle_RESID: (null) */

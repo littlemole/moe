@@ -163,6 +163,10 @@ void MoeWnd::OnCreate()
 	// update the menu
 	::DrawMenuBar(*this);
 
+	debugDlg()->doModeless( IDD_DIALOG_DEBUG, *this );
+	debugDlg()->show(SW_HIDE);
+
+
 	// ------------------  //
 
     // load persist UI state

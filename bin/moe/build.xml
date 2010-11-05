@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{73DC413C-CE91-4651-A992-3592338BE98C}</ProjectGuid>
+    <RootNamespace>xmoe</RootNamespace>
+	<TargetName>moe</TargetName>
+    <rcsource>resources\mol</rcsource>
+  </PropertyGroup>
+
+  <Import Project="..\..\master.props" />
+  <Import Project="..\build.props" />
+
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;.\include;..\..\3dParty\pcre;..\..\lib\include\ole;..\..\lib\include;..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Link>
+<!--      <AdditionalDependencies>..\..\lib\src\win\Unicode Debug\win.lib;..\..\lib\src\ole\Unicode Debug\ole.lib;..\..\lib\src\util\Unicode Debug\util.lib;..\..\lib\src\xml\Unicode Debug\xml.lib;..\..\lib\src\thread\Unicode Debug\thread.lib;..\..\3dParty\scintilla\bin\static\debug\Scintilla.lib;..\..\3dParty\scintilla\bin\static\Debug\SciLexer.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Msimg32.lib;Mpr.lib;Urlmon.lib;gdiplus.lib;..\..\3dParty\pcre\Debug\pcre.lib;..\..\3dParty\expat\Source\lib\Unicode Debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+-->
+      <OutputFile>$(OutDir)moe.exe</OutputFile>
+      <AdditionalManifestDependencies>%(AdditionalManifestDependencies)</AdditionalManifestDependencies>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <Manifest>
+      <AdditionalManifestFiles>resources/moe.exe.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
+    </Manifest>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <Midl Include="src\moe.idl">
+      <TypeLibraryName >$(IntDir)$(TargetName).tlb</TypeLibraryName>
+      <HeaderFileName>../$(TargetName)_h.h</HeaderFileName>
+    </Midl>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="src\app.cpp" />
+    <ClCompile Include="src\dir3.cpp" />
+    <ClCompile Include="src\Docs.cpp" />
+    <ClCompile Include="src\editor.cpp" />
+    <ClCompile Include="src\form.cpp" />
+    <ClCompile Include="src\formEditor.cpp" />
+    <ClCompile Include="src\hex.cpp" />
+    <ClCompile Include="src\html.cpp" />
+    <ClCompile Include="src\Img.cpp" />
+    <ClCompile Include="src\moe.cpp" />
+    <ClCompile Include="src\MoeBar.cpp" />
+    <ClCompile Include="src\ole.cpp" />
+    <ClCompile Include="src\shared.cpp" />
+    <ClCompile Include="src\Taskbar.cpp" />
+    <ClCompile Include="src\UserForm.cpp" />
+    <ClCompile Include="src\widgets.cpp" />
+    <ClCompile Include="src\ThreadScript.cpp" />
+    <ClCompile Include="src\xmlrc.cpp" />
+    <ClCompile Include="src\xmlrib.cpp" />
+    <ClCompile Include="src\xmlui.cpp" />
+    <ClCompile Include="src\stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <CustomBuild Include="..\..\cg\js\make.js">
+      <Message>code generation phase</Message>
+      <Command>cscript.exe //NoLogo ../../cg/js/make.js "Unicode Debug"</Command>
+      <AdditionalInputs>xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;xml/ribbon.xml;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs>xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;ribbonres.rc;ribbonres.h;ribbon.bml;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+
+</Project>
