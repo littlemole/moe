@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+ <PropertyGroup Label="Configuration">
+  <Configuration Condition=" '$(Configuration)' == '' ">uni_debug</Configuration>
+  <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
+ </PropertyGroup>
+
+ <Target Name="Build">
+
+		<Message Text="Project Configuration = $(Configuration)" />
+		<Message Text="Project Platform = $(Platform)" />
+
+        <MSBuild Projects=".\lib\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild Projects=".\ax\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild Projects=".\bin\prw\prw\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild Projects=".\bin\moe\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+
+		<Exec Command='build.bat "$(Configuration)" moeSetup $(Platform) ' WorkingDirectory=".\bin\WixMoe"/>
+		<Exec Command='.\bin\WixMoe\regfree.bat "bin\WixMoe" "$(Configuration)" ' WorkingDirectory="."/>
+
+ </Target>
+
+ <Target Name="Clean">
+        <MSBuild Projects=".\lib\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+		<MSBuild Projects=".\ax\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+		<MSBuild Projects=".\bin\prw\prw\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+		<MSBuild Projects=".\bin\moe\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+
+		<Exec Command='build.bat "$(Configuration)" moeSetup "$(Platform)" /clean' WorkingDirectory=".\bin\WixMoe\"/>
+		<Exec Command='.\bin\WixMoe\regfree.bat bin\WixMoe "$(Configuration)" /clean'  WorkingDirectory="."/>
+
+ </Target>
+
+ <Target Name="3dParty">
+		<MSBuild Projects=".\3dParty\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+        <MSBuild Projects=".\3dParty\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Full" />
+ </Target>
+
+ <Target Name="Universe">
+        <CallTarget Targets="3dParty"/>
+  	    <CallTarget Targets="Build"/>
+ </Target>
+
+</Project>
