@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E80D4D45-1088-4A6A-9F3D-531E99541A92}</ProjectGuid>
+    <RootNamespace>win</RootNamespace>
+	<TargetName>win</TargetName>
+  </PropertyGroup>
+
+  <Import Project="..\..\..\master.props" />
+  <Import Project="..\build.props" />
+
+  <ItemGroup>
+    <ClCompile Include="app.cpp" />
+    <ClCompile Include="coctrl.cpp" />
+    <ClCompile Include="codlg.cpp" />
+    <ClCompile Include="core.cpp" />
+    <ClCompile Include="ctrl.cpp" />
+    <ClCompile Include="dde.cpp" />
+    <ClCompile Include="dib.cpp" />
+    <ClCompile Include="dlg.cpp" />
+    <ClCompile Include="enc.cpp" />
+    <ClCompile Include="file.cpp" />
+    <ClCompile Include="folder.cpp" />
+    <ClCompile Include="folderbrowser.cpp" />
+    <ClCompile Include="io.cpp" />
+    <ClCompile Include="layout.cpp" />
+    <ClCompile Include="mdi.cpp" />
+    <ClCompile Include="mem.cpp" />
+    <ClCompile Include="net.cpp" />
+    <ClCompile Include="path.cpp" />
+    <ClCompile Include="process.cpp" />
+    <ClCompile Include="res.cpp" />
+    <ClCompile Include="RTFedit.cpp" />
+    <ClCompile Include="shell.cpp" />
+    <ClCompile Include="wnd.cpp" />
+    <ClCompile Include="wndclass.cpp" />
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

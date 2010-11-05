@@ -6,7 +6,7 @@
 #include "xml/xml.h"
 
 namespace mol  {
-
+	 
 
 /////////////////////////////////////////////////////////////////////
 
@@ -282,6 +282,9 @@ DWORD Menu::unCheckItem( int i , int flags)
 
 DWORD Menu::enableItem  ( int i , int flags)
 {
+	int f = flags|MF_ENABLED;
+	f = f & ~MF_DISABLED;
+	f = f & ~MF_GRAYED;
     return (DWORD)(::EnableMenuItem( hMenu_, i, flags|MF_ENABLED));
 };
 

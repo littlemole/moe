@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{40818446-7EA5-491B-8B9E-78F04E1B2A83}</ProjectGuid>
+    <RootNamespace>xml</RootNamespace>
+	<TargetName>xml</TargetName>
+  </PropertyGroup>
+
+  <Import Project="..\..\..\master.props" />
+  <Import Project="..\build.props" />
+
+  <ItemGroup>
+    <ClCompile Include="document.cpp" />
+    <ClCompile Include="dom.cpp" />
+    <ClCompile Include="html.cpp" />
+    <ClCompile Include="patex.cpp" />
+    <ClCompile Include="xml.cpp" />
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

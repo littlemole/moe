@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{341C5103-0406-4D3E-AD1B-7A088A209388}</ProjectGuid>
+    <RootNamespace>thread</RootNamespace>
+	<TargetName>thread</TargetName>
+  </PropertyGroup>
+
+  <Import Project="..\..\..\master.props" />
+  <Import Project="..\build.props" />
+
+  <ItemGroup>
+    <ClCompile Include="signal.cpp" />
+    <ClCompile Include="sync.cpp" />
+    <ClCompile Include="systhread.cpp" />
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+
+</Project>

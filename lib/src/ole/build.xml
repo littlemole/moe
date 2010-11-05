@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{654BE85D-A9C0-4AC3-BDF5-9EBE39F3D12A}</ProjectGuid>
+    <RootNamespace>ole</RootNamespace>
+	<TargetName>ole</TargetName>
+  </PropertyGroup>
+
+  <Import Project="..\..\..\master.props" />
+  <Import Project="..\build.props" />
+
+  <ItemGroup>
+    <Midl Include="HtmlEvents.idl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="aut.cpp" />
+    <ClCompile Include="bookmark.cpp" />
+    <ClCompile Include="com.cpp" />
+    <ClCompile Include="container.cpp" />
+    <ClCompile Include="cp.cpp" />
+    <ClCompile Include="ctrl.cpp" />
+    <ClCompile Include="dataobj.cpp" />
+    <ClCompile Include="dll.cpp" />
+    <ClCompile Include="dragdrop.cpp" />
+    <ClCompile Include="enum.cpp" />
+    <ClCompile Include="factory.cpp" />
+    <ClCompile Include="host.cpp" />
+    <ClCompile Include="ie.cpp" />
+    <ClCompile Include="img.cpp" />
+    <ClCompile Include="obj.cpp" />
+    <ClCompile Include="ole.cpp" />
+    <ClCompile Include="persist.cpp" />
+    <ClCompile Include="propertypage.cpp" />
+    <ClCompile Include="punk.cpp" />
+    <ClCompile Include="Rib.cpp" />
+    <ClCompile Include="scripting.cpp" />
+    <ClCompile Include="ShellFolderWnd.cpp" />
+    <ClCompile Include="SimpleHost.cpp" />
+    <ClCompile Include="storage.cpp" />
+    <ClCompile Include="stream.cpp" />
+    <ClCompile Include="typeinfo.cpp" />
+    <ClCompile Include="typelib.cpp" />
+    <ClCompile Include="urlmoniker.cpp" />
+    <ClCompile Include="variant.cpp" />
+  </ItemGroup>
+
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+
+</Project>

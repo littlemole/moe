@@ -808,7 +808,13 @@ LRESULT MenuItemInfo::OnDrawItem( UINT, WPARAM wParam, LPARAM lParam)
     int nTextX = /*wCheckX +*/ lpdis->rcItem.left; 
 	int nTextY = lpdis->rcItem.top; 
 
-	COLORREF crBkgnd;
+	COLORREF crBkgnd,crTxt;
+	crBkgnd,crTxt = 0;
+
+	if ( lpdis->itemState & ODS_GRAYED )
+	{
+		crTxt = ::SetTextColor( lpdis->hDC,::GetSysColor(COLOR_GRAYTEXT));
+	}
 
     if (lpdis->itemState & ODS_SELECTED) 
     { 
@@ -861,6 +867,8 @@ LRESULT MenuItemInfo::OnDrawItem( UINT, WPARAM wParam, LPARAM lParam)
 		}
 	}
     SetBkColor(lpdis->hDC, crBkgnd); 
+	if ( crTxt)
+		SetTextColor(lpdis->hDC, crTxt); 
 	return 0;
 }
 

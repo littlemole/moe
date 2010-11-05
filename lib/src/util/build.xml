@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{55AE2DD4-2D64-4051-9F9C-D67C840C368B}</ProjectGuid>
+    <RootNamespace>util</RootNamespace>
+	<TargetName>util</TargetName>  
+  </PropertyGroup>
+
+  <Import Project="..\..\..\master.props" />
+  <Import Project="..\build.props" />
+
+  <ItemDefinitionGroup>
+    <Lib>
+      <OutputFile>$(OutDir)util.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <ClCompile Include="istr.cpp" />
+    <ClCompile Include="regex.cpp" />
+    <ClCompile Include="Str.cpp" />
+    <ClCompile Include="uni.cpp" />
+    <ClCompile Include="util.cpp" />
+    <ClCompile Include="X.cpp" />
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

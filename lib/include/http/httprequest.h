@@ -133,7 +133,7 @@ operator>> ( std::basic_istream<charT,Traits>& is, mol::HttpBody& body)
 		int len = body.contentLength();
 		char* buf = new char[len+1];
 		is.read(buf,len);
-		body.body( std::string(buf,is.gcount()) );
+		body.body( std::string(buf, (unsigned int)(is.gcount())) );
 		delete[] buf;
 		return is;
 	}

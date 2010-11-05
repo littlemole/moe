@@ -7,7 +7,7 @@
 #include "ole/aut.h"
 #include "ole/punk.h"
 #include <ActivScp.h>
-#include "ole/ActivDbg.h"
+#include <activDbg.h>
 
 namespace mol {
 namespace ole {

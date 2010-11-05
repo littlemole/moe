@@ -149,7 +149,8 @@ protected:
 	{
 		if ( n < base_type::epptr() - base_type::pptr() )
 		{
-			memcpy(base_type::pptr(),s,n*sizeof(typename base_type::char_type));
+			size_t len = (size_t)(n*sizeof(typename base_type::char_type));
+			memcpy(base_type::pptr(),s,len);
 			base_type::pbump((int)n);
 			return n;
 		}
@@ -229,7 +230,7 @@ private:
 
 		memcpy( buffer_ + (pbSize_-numPutbacks) * sizeof(typename base_type::char_type),
 			    base_type::gptr() - numPutbacks * sizeof(typename base_type::char_type),
-				numPutbacks * sizeof(typename base_type::char_type) );
+				(size_t)(numPutbacks * sizeof(typename base_type::char_type)) );
 
 		int retval = buffered_read( buffer_ + pbSize_ * sizeof(typename base_type::char_type), bufSize_ - pbSize_ );
 
