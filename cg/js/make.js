@@ -104,8 +104,8 @@ function make_ribbon( file )
       WScript.StdOut.WriteLine("no ribbon xml found - skipping");
       return;
     }
-    
-    var oExec = shell.Exec("uicc.exe  " + file + " ribbon.bml /header:ribbonres.h.tmp /res:ribbonres.rc.tmp");
+
+  var oExec = shell.Exec("C:\\Program Files\\Microsoft SDKs\\Windows\\v7.1\\Bin\\uicc.exe  " + file + " ribbon.bml /header:ribbonres.h.tmp /res:ribbonres.rc.tmp");
     
 
     while (oExec.Status == 0)
@@ -324,7 +324,7 @@ var counter = 500;
 
 for ( f = 0; f < xml_files.length; f++ )
 {
-	//WScript.StdOut.WriteLine(xml_files[f] + "\r\n");
+	WScript.StdOut.WriteLine(xml_files[f] + "\r\n");
 	xml.load(xml_files[f]);
 	xml.setProperty("SelectionLanguage", "XPath");
 
@@ -347,10 +347,15 @@ for ( f = 0; f < xml_files.length; f++ )
 		if( fixed!=null && typeof fixed !='undefined')
 		{
 			ids[value] = fixed.nodeValue;		
+            //WScript.StdOut.WriteLine("id:" + fixed.nodeValue );
 		}
 		else
+        {
 			ids[value] = counter++;		
+           // WScript.StdOut.WriteLine("id:" + fixed.nodeValue );
+        }
 	}
+    
 } 
 
 var output = "#ifndef MOL_MOE_XML_GENERATED_RESOURCE_ID_DEFINES_DEF_GUARD_DEFINE\r\n";
