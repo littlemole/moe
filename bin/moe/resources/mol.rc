@@ -2,7 +2,7 @@
 #include "include/resource.h"
 
 //#########################################
-//#uni_release
+//#Unicode Debug
 //#########################################
 
 
@@ -16,6 +16,12 @@ IDI_MOE                                ICON    ".\\resources\\moe.ico"
 IDB_TOOLBAR                            BITMAP    "resources/moe.bmp"
 IDB_MOE_FAV                            BITMAP    "resources/favs.bmp"
 IDB_MOE_GO                             BITMAP    "resources/next.bmp"
+IDB_DEBUG_GO                           BITMAP    "resources/nresume.bmp"
+IDB_DEBUG_PAUSE                        BITMAP    "resources/nsuspend.bmp"
+IDB_DEBUG_QUIT                         BITMAP    "resources/ntermin.bmp"
+IDB_DEBUG_STEPIN                       BITMAP    "resources/nstepinf.bmp"
+IDB_DEBUG_STEPOVER                     BITMAP    "resources/nstepovn.bmp"
+IDB_DEBUG_STEPOUT                      BITMAP    "resources/nstepout.bmp"
 
 
 // ACCELERATORS
@@ -51,7 +57,7 @@ END
 
 // TYPELIBS
 
-1                                      TYPELIB    ".\\uni_release\\moe.tlb"
+1                                      TYPELIB    ".\\Unicode Debug\\moe.tlb"
 
 
 // MENUS
@@ -108,6 +114,31 @@ BEGIN
     PUSHBUTTON      "Close",IDCANCEL,7,165,64,14
     CONTROL         "",IDC_TREE_EVENTS,"SysTreeView32",WS_BORDER | WS_HSCROLL | WS_TABSTOP,7,7,104,150,WS_EX_CLIENTEDGE
     LISTBOX         IDC_LIST_EVENTS,117,7,147,150,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+END
+
+
+
+
+IDD_DIALOG_DEBUG DIALOGEX 0, 0, 316, 183
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_TOOLWINDOW
+CAPTION "Immediate Window"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Evaluate",IDOK,248,134,50,14
+    PUSHBUTTON      "Close",IDCANCEL,247,151,50,14
+    GROUPBOX        "Variables",IDC_STATIC,7,7,302,76
+    EDITTEXT        IDC_EDIT_DEBUG_EXP,15,97,213,23,ES_AUTOHSCROLL
+    GROUPBOX        "Expression",IDC_STATIC,7,84,227,42
+    EDITTEXT        IDC_EDIT_DEBUG_RESULT,16,140,212,26,ES_AUTOHSCROLL
+    PUSHBUTTON      "go",IDC_BUTTON_DEBUG_GO,243,94,18,14,BS_ICON
+    PUSHBUTTON      "go",IDC_BUTTON_DEBUG_PAUSE,262,94,18,14,BS_ICON
+    PUSHBUTTON      "go",IDC_BUTTON_DEBUG_QUIT,281,94,18,14,BS_ICON
+    PUSHBUTTON      "go",IDC_BUTTON_DEBUG_STEPIN,243,111,18,14,BS_ICON
+    PUSHBUTTON      "go",IDC_BUTTON_DEBUG_STEPOVER,262,111,18,14,BS_ICON
+    PUSHBUTTON      "go",IDC_BUTTON_DEBUG_STEPOUT,281,111,18,14,BS_ICON
+    GROUPBOX        "Result",IDC_STATIC,7,130,227,42
+    CONTROL         "",IDC_DEBUG_VARIABLES,"SysTreeView32",TVS_HASBUTTONS | TVS_HASLINES| TVS_LINESATROOT |TVS_DISABLEDRAGDROP | TVS_NOTOOLTIPS | TVS_SINGLEEXPAND | WS_HSCROLL | WS_TABSTOP,15,18,286,57
 END
 
 /////////////////////////////////////////////////////////////////////////////
