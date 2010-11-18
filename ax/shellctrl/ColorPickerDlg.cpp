@@ -117,6 +117,33 @@ LRESULT ColorPickerDlg::OnInitDialog( UINT msg, WPARAM wParam, LPARAM lParam )
 	if ( bInitOver == TRUE )
 		return TRUE;
 
+	HWND hwndOwner;
+    if ((hwndOwner = GetParent(*this)) == NULL) 
+    {
+        hwndOwner = GetDesktopWindow(); 
+    }
+
+	RECT rcOwner;
+	RECT rcDlg;
+	RECT rc;
+    ::GetWindowRect(hwndOwner, &rcOwner); 
+    ::GetWindowRect(*this, &rcDlg); 
+    ::CopyRect(&rc, &rcOwner); 
+
+	
+    OffsetRect(&rcDlg, -rcDlg.left, -rcDlg.top); 
+    OffsetRect(&rc, -rc.left, -rc.top); 
+    OffsetRect(&rc, -rcDlg.right, -rcDlg.bottom); 
+
+    ::SetWindowPos(*this, 
+                 HWND_TOP, 
+                 rcOwner.left + (rc.right / 2), 
+                 rcOwner.top + (rc.bottom / 2), 
+                 0, 0,          // Ignores size arguments. 
+                 SWP_NOSIZE); 
+
+
+
 	::GetWindowRect(getDlgItem(IDC_STATIC_RGB_RECT),&rgbRect);
 	::GetWindowRect(getDlgItem(IDC_STATIC_HSB_RECT),&hsbRect);
 

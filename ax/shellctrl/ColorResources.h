@@ -19,3 +19,5 @@
 #define IDC_SPIN_VAL                    1015
 #define IDC_EDIT_HEX                    1016
 #define IDC_BUTTON_PICK                 1017
+#define IDC_STATIC				-1
+
