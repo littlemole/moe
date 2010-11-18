@@ -53,12 +53,13 @@ public:
 		LPNMTOOLBAR     nmtoolbar()			{ return (NMTOOLBAR*)	   lParam_; }
         MSGFILTER*      msgfilter()         { return (MSGFILTER*)      lParam_;	}
         FINDREPLACE*    findreplace()       { return (FINDREPLACE*)    lParam_;	}
-        TV_KEYDOWN*  /*NMTVKEYDOWN* */    keydown()	        { return (TV_KEYDOWN*) /* (NMTVKEYDOWN*) */   lParam_;	}
+        TV_KEYDOWN*     keydown()	        { return (TV_KEYDOWN*)     lParam_;	}
         NMLISTVIEW*     listview()          { return (NMLISTVIEW*)     lParam_;	}
 		NMLVDISPINFO*   listviewDispInfo()  { return (NMLVDISPINFO*)   lParam_;	}
 		NMITEMACTIVATE* listActivate()      { return (NMITEMACTIVATE*) lParam_;	}
         NMTTDISPINFO*   toolTipDispInfo()   { return (NMTTDISPINFO*)   lParam_; }
 		NMOBJECTNOTIFY* notifyObject()		{ return (NMOBJECTNOTIFY*) lParam_; }
+		PSHNOTIFY*		propSheetNotify()   { return (PSHNOTIFY*)	   lParam_; }
 		POINT wPoint()
 		{
 			return mol::Point( LOWORD(wParam_),HIWORD(wParam_));

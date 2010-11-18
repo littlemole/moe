@@ -29,10 +29,14 @@ public:
         LRESULT setDlgItemInt   ( int id, int val );
         LRESULT setDlgItemFont  ( int id, HFONT hfont );
         LRESULT setDlgButtonIcon( int id, HICON hicon );
+		LRESULT setDlgButtonImg ( int id, HBITMAP bitmap );
         LRESULT setDlgStaticIcon( int id, HICON hicon );
+		
 
         UINT getDlgItemText( int id, mol::string& s );
 		UINT getDlgItemInt ( int id, int& value, BOOL bSigned = TRUE);
+		bool getDlgItemChecked( int id );
+		void setDlgItemChecked( int id );
         HWND getDlgItem    ( int id );
 
         //default ctrl handling: pass back to windows

@@ -407,57 +407,38 @@ typedef MsgPubsub<WM_COMMAND>										postcmd_pubsub;
 typedef MsgPubsub<WM_COMMAND,mol::win::FireSendMsgPubSubPolicy>		sendcmd_pubsub;
 
 /////////////////////////////////////////////////////////////////
-// tread safe invokes
+// gui tread safe invokes
 /////////////////////////////////////////////////////////////////
 
 template<class T,class R>
 void invoke( T& t, R (T::*f)()  )
 {
-	/*
-	typedef mol::Call<mol::threading::StackDeletePolicy,T,void,R> CallType;
-	CallType* call = new CallType( &t, f );
-	t.postMessage(WM_COMMAND,0,(LPARAM)call);
-	*/
-
 	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t) );
+	//::PostThreadMessage( mol::guithread(), 42, 42, (LPARAM)call );
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
 }
 
 template<class T, class R, class P1>
 void invoke( T& t, R (T::*f)(P1), P1 p1 )
 {
-/*
-	typedef mol::Call<mol::threading::StackDeletePolicy,T,void,R,P1,void,void,void,void,void> CallType;
-	CallType* call = new CallType( &t, f, p1 );
-	t.postMessage(WM_COMMAND,0,(LPARAM)call);
-*/
 	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t,p1) );
+	//::PostThreadMessage( mol::guithread(), 42, 42, (LPARAM)call );
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
 }
 
 template<class T, class R, class P1, class P2>
 void invoke( T& t, R (T::*f)(P1,P2), P1 p1, P2 p2  )
 {
-	/*
-	typedef mol::Call<mol::threading::StackDeletePolicy,T,void,R,P1,P2,void,void,void,void> CallType;
-	CallType* call = new CallType( &t, f , p1, p2);
-	t.postMessage(WM_COMMAND,0,(LPARAM)call);
-	*/
-
 	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t,p1,p2) );
+	//::PostThreadMessage( mol::guithread(), 42, 42, (LPARAM)call );
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
-
 }
 
 template<class T, class R, class P1, class P2, class P3>
 void invoke( T& t, R (T::*f)(P1,P2,P3), P1 p1, P2 p2, P3 p3 )
 {
-	/*
-	typedef mol::Call<mol::threading::StackDeletePolicy,T,void,R,P1,P2,P3,void,void,void> CallType;
-	CallType* call = new CallType( &t, f , p1, p2, p3);
-	t.postMessage(WM_COMMAND,0,(LPARAM)call);
-	*/
 	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t,p1,p2,p3) );
+	//::PostThreadMessage( mol::guithread(), 42, 42, (LPARAM)call );
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
 }
 
@@ -465,26 +446,26 @@ template<class T, class R, class P1, class P2, class P3, class P4>
 void invoke( T& t, R (T::*f)(P1,P2,P3,P4), P1 p1, P2 p2, P3 p3, P4 p4  )
 {
 	/*
-	typedef mol::Call<mol::threading::StackDeletePolicy,T,void,R,P1,P2,P3,P4,void,void> CallType;
-	CallType* call = new CallType( &t, f , p1, p2, p3, p4);
-	t.postMessage(WM_COMMAND,0,(LPARAM)call);
+	if ( mol::guithread() == mol::Thread::self )
+	{
+		(t->*f)(p1,p2,p3,p4);
+		return;
+	}
 	*/
 	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t,p1,p2,p3,p4) );
+	//::PostThreadMessage( mol::guithread(), 42, 42, (LPARAM)call );
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
+
 }
 
+/*
 template<class T>
 void invoke_handler( T& t, LRESULT (T::*func)(UINT,WPARAM,LPARAM),UINT msg, WPARAM wParam, LPARAM lParam ) //mol::threading::Func<T,UINT,WPARAM,LPARAM,LRESULT> f, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	/*
-	typedef mol::Call<mol::threading::StackDeletePolicy,T,void,LRESULT,UINT,WPARAM,LPARAM,void,void,void> CallType;
-	CallType* call = new CallType( &t, f , msg, wParam, lParam );
-	*/
-
 	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(func,&t,msg,wParam,lParam) );
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
 }
-
+*/
 /////////////////////////////////////////////////////////////////
 
 } // endnamespace mol

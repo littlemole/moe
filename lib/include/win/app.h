@@ -3,7 +3,6 @@
 
 #include "util/uni.h"
 #include "util/x.h"
-#include "app.h"
 #include <list>
 #include <map>
 #include <set>
@@ -15,7 +14,7 @@ namespace mol  {
 
 //! global helper to get the windows HINSTANCE handle
 HINSTANCE hinstance();
-
+unsigned int guithread();
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 //! global helper to get THAT application
@@ -62,6 +61,7 @@ namespace win  {
 
 class AppBase
 {
+friend unsigned int mol::guithread();
 friend HINSTANCE mol::hinstance();
 friend class mol::Singleton<AppBase>;
 
@@ -124,7 +124,11 @@ protected:
 		mol::Mutex			mutex_;
 
         static  AppBase*	app_;
+		static unsigned int guithread_;
 };
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 //! Windows Message Loop Template Class
@@ -140,6 +144,8 @@ mol::win::AppBase& App()
 { 
 	return mol::win::AppBase::app<mol::win::AppBase>(); 
 };
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 //! MAIN TEMPLATE
