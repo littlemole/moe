@@ -48,6 +48,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ssl", "..\..\lib\src\ssl\ss
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "http", "..\..\lib\src\http\http.vcxproj", "{B467E93F-8637-48E4-9313-76B92E6EEE1F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "eve", "C:\Users\mike\Documents\Visual Studio 2010\Projects\eve\eve.vcxproj", "{C8B37281-220E-42A7-8A64-57995444D25B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		uni_debug|Any CPU = uni_debug|Any CPU
@@ -435,7 +437,7 @@ Global
 		{CD102FF0-CCBB-4E5C-BBF5-113E5FA5EA71}.uni_release|x86.ActiveCfg = uni_release|x64
 		{A918A1E1-D132-4004-AF12-1A54F4E751CD}.uni_debug|Any CPU.ActiveCfg = Release|x86
 		{A918A1E1-D132-4004-AF12-1A54F4E751CD}.uni_debug|Mixed Platforms.ActiveCfg = Release|x86
-		{A918A1E1-D132-4004-AF12-1A54F4E751CD}.uni_debug|Win32.ActiveCfg = Release|x86
+		{A918A1E1-D132-4004-AF12-1A54F4E751CD}.uni_debug|Win32.ActiveCfg = uni_debug|x86
 		{A918A1E1-D132-4004-AF12-1A54F4E751CD}.uni_debug|x64.ActiveCfg = Release|x86
 		{A918A1E1-D132-4004-AF12-1A54F4E751CD}.uni_debug|x86.ActiveCfg = Release|x86
 		{A918A1E1-D132-4004-AF12-1A54F4E751CD}.uni_release_64|Any CPU.ActiveCfg = Release|x86
@@ -448,7 +450,7 @@ Global
 		{A918A1E1-D132-4004-AF12-1A54F4E751CD}.uni_release|Any CPU.ActiveCfg = Release|x86
 		{A918A1E1-D132-4004-AF12-1A54F4E751CD}.uni_release|Mixed Platforms.ActiveCfg = Release|x86
 		{A918A1E1-D132-4004-AF12-1A54F4E751CD}.uni_release|Mixed Platforms.Build.0 = Release|x86
-		{A918A1E1-D132-4004-AF12-1A54F4E751CD}.uni_release|Win32.ActiveCfg = Release|x86
+		{A918A1E1-D132-4004-AF12-1A54F4E751CD}.uni_release|Win32.ActiveCfg = uni_release|x86
 		{A918A1E1-D132-4004-AF12-1A54F4E751CD}.uni_release|x64.ActiveCfg = Release|x86
 		{A918A1E1-D132-4004-AF12-1A54F4E751CD}.uni_release|x86.ActiveCfg = Release|x86
 		{A918A1E1-D132-4004-AF12-1A54F4E751CD}.uni_release|x86.Build.0 = Release|x86
@@ -548,6 +550,27 @@ Global
 		{B467E93F-8637-48E4-9313-76B92E6EEE1F}.uni_release|x64.ActiveCfg = uni_release_64|x64
 		{B467E93F-8637-48E4-9313-76B92E6EEE1F}.uni_release|x64.Build.0 = uni_release_64|x64
 		{B467E93F-8637-48E4-9313-76B92E6EEE1F}.uni_release|x86.ActiveCfg = uni_release_64|x64
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_debug|Any CPU.ActiveCfg = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_debug|Mixed Platforms.ActiveCfg = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_debug|Mixed Platforms.Build.0 = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_debug|Win32.ActiveCfg = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_debug|Win32.Build.0 = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_debug|x64.ActiveCfg = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_debug|x86.ActiveCfg = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_release_64|Any CPU.ActiveCfg = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_release_64|Mixed Platforms.ActiveCfg = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_release_64|Mixed Platforms.Build.0 = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_release_64|Win32.ActiveCfg = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_release_64|Win32.Build.0 = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_release_64|x64.ActiveCfg = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_release_64|x86.ActiveCfg = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_release|Any CPU.ActiveCfg = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_release|Mixed Platforms.ActiveCfg = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_release|Mixed Platforms.Build.0 = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_release|Win32.ActiveCfg = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_release|Win32.Build.0 = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_release|x64.ActiveCfg = uni_debug|Win32
+		{C8B37281-220E-42A7-8A64-57995444D25B}.uni_release|x86.ActiveCfg = uni_debug|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

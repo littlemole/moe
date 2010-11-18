@@ -70,6 +70,10 @@ public:
 	void OnDebugScriptStop();
 	void OnDebugScriptQuit();
 
+	void OnCut();
+	void OnCopy();
+	void OnPaste();
+
 
 	// syntax highlite switches
 	void OnLexer(int code, int id, HWND ctrl);
@@ -88,7 +92,7 @@ public:
 
 	LRESULT OnToolbarDropDown(NMTOOLBAR* toolbar );
 
-	void OnScriptThread( int line, IRemoteDebugApplicationThread* remote,IActiveScriptErrorDebug* pError);
+	void OnScriptThread( int line, IRemoteDebugApplicationThread* remote,IActiveScriptError* pError);
 	void OnScriptThreadDone();
 
    virtual HRESULT __stdcall get_FilePath( BSTR *fname);

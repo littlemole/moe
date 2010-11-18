@@ -97,7 +97,7 @@ public:
 
 	static REFGUID getCoClassID()
 	{
-		return CLSID_Application;
+		return IID_IMoeDocument;
 	}
 
    virtual HRESULT __stdcall get_Object( IDispatch **d)
@@ -418,31 +418,24 @@ public:
 	virtual HRESULT __stdcall get_ConfigPath( BSTR* fPath);
 	virtual HRESULT __stdcall get_ModulePath(  BSTR* fPath);
 
-	//persist_property( DISPID_MOECONF_SYSTYPE, VT_I4, &CLSID_NULL)
 	virtual HRESULT __stdcall put_SysType( long typ);
 	virtual HRESULT __stdcall get_SysType( long* typ);
 
-	//persist_property(DISPID_MOECONF_ENCODING,VT_I4,&CLSID_NULL)
 	virtual HRESULT __stdcall put_Encoding( long typ);
 	virtual HRESULT __stdcall get_Encoding( long* typ);
 
-	//persist_property(DISPID_MOECONF_TABUSAGE,VT_BOOL,&CLSID_NULL)
 	virtual HRESULT __stdcall put_TabUsage( VARIANT_BOOL vbTabUsage);
 	virtual HRESULT __stdcall get_TabUsage( VARIANT_BOOL* vbTabUsage);
 
-	//persist_property(DISPID_MOECONF_TABINDENTS,VT_BOOL,&CLSID_NULL)
 	virtual HRESULT __stdcall put_TabIndents( VARIANT_BOOL vbTabIndents);
 	virtual HRESULT __stdcall get_TabIndents( VARIANT_BOOL* vbTabIndents);
 
-	//persist_property(DISPID_MOECONF_BACKSPACEUNINDENTS,VT_BOOL,&CLSID_NULL)
 	virtual HRESULT __stdcall put_BackSpaceUnindents( VARIANT_BOOL vbBackSpaceIndents);
 	virtual HRESULT __stdcall get_BackSpaceUnindents(  VARIANT_BOOL* vbBackSpaceIndents);
 
-	//persist_property(DISPID_MOECONF_TABWIDTH,VT_I4,&CLSID_NULL)
 	virtual HRESULT __stdcall put_TabWidth( long width);
 	virtual HRESULT __stdcall get_TabWidth(  long* width);
 
-	//persist_property(DISPID_MOECONF_LINENUMBERS,VT_BOOL,&CLSID_NULL)
 	virtual HRESULT __stdcall put_ShowLineNumbers( VARIANT_BOOL vb);
 	virtual HRESULT __stdcall get_ShowLineNumbers(  VARIANT_BOOL* vb);
 

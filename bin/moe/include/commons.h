@@ -45,7 +45,7 @@
 #include "ax/shellfolder/ShellFolderEvents.h"
 #include "ax/shellctrl/ShellTreeEvents.h"
 #include "ax/shellctrl/HexCtrlEvents.h"
-#include "ax/ScintillAx/ScintillaxEvents.h"
+#include "ax/ScintillAx/include/ScintillaxEvents.h"
 
 // moe idl
 #include "moe_h.h"

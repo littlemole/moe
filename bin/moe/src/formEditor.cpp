@@ -82,14 +82,17 @@ bool FormEditor::initialize(const mol::string& p)
 
 	bool createNew = false;
 
-	sci->put_Filename(mol::bstr(p));
+	mol::punk<IScintillAxProperties> props;
+	sci->get_Properties(&props);
+
+	props->put_Filename(mol::bstr(p));
 
 	// if file exists, load
 	if ( !mol::Path::exists(p) )
 		createNew = true;
 
 	// load ?
-	sci->put_Filename(mol::bstr(p));
+	props->put_Filename(mol::bstr(p));
 
 	mol::punk<IStorage> src;
 	mol::punk<IStorage> store;
@@ -131,7 +134,10 @@ bool FormEditor::initialize(const mol::string& p)
 				std::wstring ws = std::wstring( buf, size );
 				delete[] buf;
 
-				hr = sci->SetText( mol::bstr(ws) );
+				mol::punk<IScintillAxText> txt;
+				sci->get_Text(&txt);
+
+				hr = txt->SetText( mol::bstr(ws) );
 				hr = sci->SavePoint();
 			}
 		}
@@ -143,7 +149,7 @@ bool FormEditor::initialize(const mol::string& p)
 	}
 	if ( createNew == true )
 	{
-		sci->put_Filename(mol::bstr(p));
+		props->put_Filename(mol::bstr(p));
 		userForm = UserForm::CreateInstance(p,true);
 
 	}
@@ -156,11 +162,11 @@ bool FormEditor::initialize(const mol::string& p)
 	moe()->moeConfig->InitializeEditorFromPreferences( (IMoeDocument*)this );
 
 
-	sci->put_ReadOnly( VARIANT_FALSE );
+	props->put_ReadOnly( VARIANT_FALSE );
 
 	if ( mol::Ribbon::ribbon()->enabled() )
 	{
-		sci->put_UseContext(VARIANT_FALSE);
+		props->put_UseContext(VARIANT_FALSE);
 	}
 
 	thumb = taskbar()->addTab( this );
@@ -256,16 +262,22 @@ void FormEditor::OnReload()
 {
 	return;
 
+	mol::punk<IScintillAxProperties> props;
+	sci->get_Properties(&props);
+
+	mol::punk<IScintillAxText> txt;
+	sci->get_Text(&txt);
+
 	//TODO FIXME
 
 	VARIANT_BOOL vb;
-	if ( S_OK != sci->Modified(&vb) )
+	if ( S_OK != txt->get_Modified(&vb) )
 		return ;
 
 	if ( vb == VARIANT_TRUE )
 	{
 		mol::bstr path;
-		sci->get_Filename(&path);
+		props->get_Filename(&path);
 		if ( IDYES != ::MessageBox(*this,_T("File is modified.\r\nClose without Save?"), path.toString().c_str() ,MB_YESNO|MB_ICONEXCLAMATION) )
 			return ;
 	}
@@ -274,12 +286,12 @@ void FormEditor::OnReload()
 	{
 		return ;
 	}
-	if ( S_OK != sci->get_ReadOnly(&vb) )
+	if ( S_OK != props->get_ReadOnly(&vb) )
 	{
 		return ;
 	}
 	long t;
-	if ( S_OK != sci->get_Encoding(&t) )
+	if ( S_OK != props->get_Encoding(&t) )
 	{
 		return ;
 	}
@@ -287,12 +299,12 @@ void FormEditor::OnReload()
 	{
 
 		sci->LoadUTF8(filename);
-		sci->put_ReadOnly(vb);
+		props->put_ReadOnly(vb);
 		statusBar()->status( filename.toString() );
 		return ;
 	}
 	sci->Load(filename);
-	sci->put_ReadOnly(vb);
+	props->put_ReadOnly(vb);
 	statusBar()->status( filename.toString() );
 }
 
@@ -308,6 +320,12 @@ LRESULT FormEditor::OnSaveAs()
 	ofn.setFilter( FormOutFilesFilter );		
 	ofn.fileName(filename_);
 
+	mol::punk<IScintillAxProperties> props;
+	sci->get_Properties(&props);
+
+	mol::punk<IScintillAxText> txt;
+	sci->get_Text(&txt);
+
 
 	if ( ofn.dlgSave( OFN_OVERWRITEPROMPT ) )
 	{
@@ -322,7 +340,7 @@ LRESULT FormEditor::OnSaveAs()
 		}
 
 		mol::bstr s;
-		HRESULT hr = sci->GetText(&s);
+		HRESULT hr = txt->GetText(&s);
 
 		mol::punk<IStorage> dest;
 		if ( S_OK == ::StgCreateDocfile( mol::towstring( ofn.fileName()).c_str(), STGM_READWRITE|STGM_CREATE|STGM_SHARE_EXCLUSIVE,0,&dest) )
@@ -355,8 +373,15 @@ LRESULT FormEditor::OnSaveAs()
 
 LRESULT FormEditor::OnSave()
 {
+	mol::punk<IScintillAxProperties> props;
+	sci->get_Properties(&props);
+
+	mol::punk<IScintillAxText> txt;
+	sci->get_Text(&txt);
+
+
 	mol::bstr s;
-	HRESULT hr = sci->GetText(&s);
+	HRESULT hr = txt->GetText(&s);
 
 	mol::punk<IStorage> dest;
 	if ( S_OK == ::StgCreateDocfile( mol::towstring(filename_).c_str(), STGM_READWRITE|STGM_CREATE|STGM_SHARE_EXCLUSIVE,0,&dest) )

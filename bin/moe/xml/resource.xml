@@ -32,6 +32,8 @@
       <dialog id="IDD_ABOUTBOX" />
       <dialog id="IDD_DIALOG_EVENTS" />
       <dialog id="IDD_DIALOG_DEBUG" />
+      <dialog id="IDD_DIALOG_EXPORT"/>
+      <dialog id="IDD_DIALOG_SETWRAPPER"/>
     </dialogs>
 
     <!-- other controls we just define ids for -->
@@ -51,6 +53,8 @@
       <control id="IDC_EDIT_TAB" />
       <control id="IDC_EDIT_URL" />
       <control id="IDC_BUTTON_BOOKMARK" />
+      <control id="IDC_CHECK_SHOWLINENUM" />
+      <control id="IDC_CHECK_WRITEBOM" />
 
       <control id="IDC_TREE_EVENTS" />
       <control id="IDC_LIST_EVENTS" />
@@ -67,6 +71,10 @@
       <control id="IDC_BUTTON_DEBUG_STEPOVER" />
       <control id="IDC_BUTTON_DEBUG_STEPOUT" />
 
+      <control id="IDC_BUTTON_EXPORT" />
+      <control id="IDC_BUTTON_IMPORT" />
+
+      <control id="IDC_STATIC_SETWRAPPER"/>
     </controls>
 
     <!-- typelib to be included in app resources -->

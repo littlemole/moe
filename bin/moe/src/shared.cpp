@@ -1053,15 +1053,22 @@ HRESULT __stdcall MoeConfig::get_ShowLineNumbers(  VARIANT_BOOL* vb)
 
 HRESULT __stdcall MoeConfig::EditPreferences( )
 {
-	statusBar()->status(_T("edit preferences for new documents"));
-	mol::string p( mol::app<MoeApp>().getModulePath() );
-	mol::string prefs = mol::Path::parentDir(p) + _T("\\forms\\prefs.html");
+	PropSheet ps( *moe(), _T("Moe") );
 
-	long left, top;
-	moe()->moeView->get_Left(&left);
-	moe()->moeView->get_Top(&top);
+	ps.addPage<TabPage>		(	_T("new doc prefs"), IDD_DIALOG_TAB );
+	ps.addPage<ExportPage>	(	_T("export/import"), IDD_DIALOG_EXPORT );
+	ps.addPage<PrefPage>	(	_T("user settings"), CLSID_SettingProperties, IDD_DIALOG_SETWRAPPER );
 
-	moe()->moeScript->ShowHtmlForm( bstr(prefs) ,left+225,top+225,450,217,6);
+	INT_PTR r = ps.create( );
+
+	//mol::string p( mol::app<MoeApp>().getModulePath() );
+	//mol::string prefs = mol::Path::parentDir(p) + _T("\\forms\\prefs.html");
+
+	//long left, top;
+	//moe()->moeView->get_Left(&left);
+	//moe()->moeView->get_Top(&top);
+
+	//moe()->moeScript->ShowHtmlForm( bstr(prefs) ,left+225,top+225,450,217,6);
 	
 	return S_OK;
 }	
@@ -1124,31 +1131,34 @@ HRESULT __stdcall MoeConfig::InitializeEditorFromPreferences( IMoeDocument* d )
 	if (!sci )
 		return E_FAIL;
 
-	hr = sci->put_SysType(systype_);
+	mol::punk<IScintillAxProperties> props;
+	sci->get_Properties(&props);
+
+	hr = props->put_SysType(systype_);
 	if ( hr != S_OK )
 		return hr;
 
-	hr = sci->put_Encoding(encoding_);
+	hr = props->put_Encoding(encoding_);
 	if ( hr != S_OK )
 		return hr;
 
-	hr = sci->put_TabWidth(tabwidth_);
+	hr = props->put_TabWidth(tabwidth_);
 	if ( hr != S_OK )
 		return hr;
 
-	hr = sci->put_TabUsage(tabUsage_);
+	hr = props->put_TabUsage(tabUsage_);
 	if ( hr != S_OK )
 		return hr;
 
-	hr = sci->put_TabIndents(tabIndents_);
+	hr = props->put_TabIndents(tabIndents_);
 	if ( hr != S_OK )
 		return hr;
 
-	hr = sci->put_BackSpaceUnindents(backSpaceUnIndents_);
+	hr = props->put_BackSpaceUnindents(backSpaceUnIndents_);
 	if ( hr != S_OK )
 		return hr;
 
-	hr = sci->put_ShowLineNumbers(showLineNumbers_);
+	hr = props->put_ShowLineNumbers(showLineNumbers_);
 	if ( hr != S_OK )
 		return hr;
 
@@ -1165,59 +1175,9 @@ bool MoeConfig::isDirty()
 	return false;
 }
 
-/*
-HRESULT __stdcall MoeConfig::Load( LPSTREAM pStm) 
-{
-	data_.copyFrom(pStm);
-
-	urlDlg()->Load(pStm);
-	reBar()->Load(pStm);
-
-	ULONG len = 0;
-	pStm->Read( &toolBarFrozen_, sizeof(BYTE),  &len );
-	reBar()->freeze(toolBarFrozen_!= 0);
-
-	return S_OK;
-}
-
-
-
-HRESULT __stdcall MoeConfig::Save( LPSTREAM pStm,BOOL fClearDirty)
-{
-	if ( mol::Ribbon::ribbon()->enabled() )
-	{
-		// if we have ribbon, write url dlg config to data_
-		data_.reset();
-		urlDlg()->Save(data_,fClearDirty);
-		data_.reset();
-		// and keep all the old school toolbar state as is
-		HRESULT hr = data_.copyTo( pStm );		
-		return S_OK;
-	}
-
-	// no ribbon - save urldlg and toolbar state
-	urlDlg()->Save(pStm,fClearDirty);
-	reBar()->Save(pStm, fClearDirty);
-
-	ULONG written = 0;
-	pStm->Write( &toolBarFrozen_, sizeof(BYTE),		 &written );
-
-	return S_OK;
-}
-
-*/
 
 HRESULT __stdcall MoeConfig::Load( LPSTREAM pStm)
 {
-	/*
-	persist_property( DISPID_MOECONF_SYSTYPE, VT_I4, &CLSID_NULL)
-	persist_property(DISPID_MOECONF_ENCODING,VT_I4,&CLSID_NULL)
-	persist_property(DISPID_MOECONF_TABUSAGE,VT_BOOL,&CLSID_NULL)
-	persist_property(DISPID_MOECONF_TABINDENTS,VT_BOOL,&CLSID_NULL)
-	persist_property(DISPID_MOECONF_BACKSPACEUNINDENTS,VT_BOOL,&CLSID_NULL)
-	persist_property(DISPID_MOECONF_TABWIDTH,VT_I4,&CLSID_NULL)
-	persist_property(DISPID_MOECONF_LINENUMBERS,VT_BOOL,&CLSID_NULL)
-*/
 	pStm >> mol::property( mol::DispId(this,DISPID_MOECONF_SYSTYPE, VT_I4) )
 		 >> mol::property( mol::DispId(this,DISPID_MOECONF_ENCODING, VT_I4) )
 		 >> mol::property( mol::DispId(this,DISPID_MOECONF_TABUSAGE,VT_BOOL) )

@@ -3,6 +3,7 @@
 
 #include <map>
 #include "util/uni.h"
+#include "thread/events.h"
 #include "ole/aut.h"
 #include "ole/punk.h"
 #include <ActivScp.h>
@@ -32,30 +33,26 @@ class ThreadScript :
 							IDebugDocumentTextAuthor,
 							IDebugDocumentProvider,
 							IDebugDocumentContext
-
 							> >
 {
 public:
 	
-	ThreadScript();
-	virtual ~ThreadScript();
+	Event<int,IRemoteDebugApplicationThread*,IActiveScriptError*> OnScriptThread;
+	Event<> OnScriptThreadDone;
+
+//	event<void(int,IRemoteDebugApplicationThread*,IActiveScriptError*)> OnScriptThread;
+	//event<void()> OnScriptThreadDone;
 
 	//typedef mol::com_instance<ThreadScript> ScriptInstance;
 	typedef debug_com_instance<ThreadScript> ScriptInstance;
 
 	virtual void dispose()  {};
 
-	static ThreadScript* execute( Editor* editor, IUnknown* obj, const mol::string& name, const mol::string& script,  const mol::string& filename, int flag, std::set<int> brs );
-	
-	void execute_thread();
-	void execute_callback();
+	static ThreadScript* CreateInstance( const mol::string& script,  const mol::string& filename );
 
+	void execute( int flag = SCRIPTTEXT_ISVISIBLE );	
 	void cause_break();
 	void update_breakpoints(std::set<int> br);
-
-	// init and cleanup
-	void init(const mol::string& engine);
-	void close();
 
 
 	// add a named object
@@ -112,7 +109,19 @@ public:
 	virtual HRESULT  __stdcall  ThreadScript::GetDocument(IDebugDocument **pObj);
 	virtual HRESULT  __stdcall  ThreadScript::EnumCodeContexts(IEnumDebugCodeContexts **pObj);
 
+
+
 protected:
+
+	ThreadScript();
+	virtual ~ThreadScript();
+
+	// init and cleanup
+	void init(const mol::string& engine);
+	void execute_thread();
+	void execute_callback();
+	void close();
+
 	std::set<int>						breakpoints_;
 	std::map<mol::string,DWORD>			objectMap_;
 
@@ -121,7 +130,6 @@ protected:
 	mol::punk<IActiveScript>			activeScript_;
 	mol::punk<IActiveScriptParse>		asp_;
 
-	DWORD								sciCookie_;
 	DWORD								dwAppCookie_;
 	DWORD								offset_;
 	DWORD								scriptFlags_;
@@ -131,9 +139,6 @@ protected:
 	mol::string							engine_;
 	mol::variant						varResult_;
     EXCEPINFO							ei_; 
-
-	Editor*								editor_;
-	bool								debug_;
 
 	HRESULT getScriptEngine(const mol::string& engine, IActiveScript **ppas);
 };

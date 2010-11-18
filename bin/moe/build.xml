@@ -4,8 +4,9 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{73DC413C-CE91-4651-A992-3592338BE98C}</ProjectGuid>
     <RootNamespace>xmoe</RootNamespace>
-	<TargetName>moe</TargetName>
+    <TargetName>moe</TargetName>
     <rcsource>resources\mol</rcsource>
+    <CustomBuildAfterTargets>Midl</CustomBuildAfterTargets>
   </PropertyGroup>
 
   <Import Project="..\..\master.props" />
@@ -14,7 +15,7 @@
 
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>.;.\include;..\..\3dParty\pcre;..\..\lib\include\ole;..\..\lib\include;..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;.\include;..\..\;..\..\ax\scintillax;..\..\3dParty\pcre;..\..\lib\include\ole;..\..\lib\include;..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ResourceCompile>
@@ -34,7 +35,7 @@
 
   <ItemGroup>
     <Midl Include="src\moe.idl">
-      <TypeLibraryName >$(IntDir)$(TargetName).tlb</TypeLibraryName>
+      <TypeLibraryName >$(TargetName).tlb</TypeLibraryName>
       <HeaderFileName>../$(TargetName)_h.h</HeaderFileName>
     </Midl>
   </ItemGroup>
@@ -68,9 +69,18 @@
   <ItemGroup>
     <CustomBuild Include="..\..\cg\js\make.js">
       <Message>code generation phase</Message>
-      <Command>cscript.exe //NoLogo ../../cg/js/make.js "Unicode Debug"</Command>
+      <Command>cscript.exe //NoLogo ../../cg/js/make.js $(Configuration)</Command>
       <AdditionalInputs>xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;xml/ribbon.xml;%(AdditionalInputs)</AdditionalInputs>
       <Outputs>xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;ribbonres.rc;ribbonres.h;ribbon.bml;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+
+  <ItemGroup>
+    <CustomBuild Include="..\..\cg\disph.exe">
+      <Message>dispid generation phase</Message>
+      <Command>..\..\cg\disph.exe $(Configuration)\$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
+      <AdditionalInputs>$(Configuration)\$(TargetName).tlb;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs>$(TargetName)_dispid.h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
 

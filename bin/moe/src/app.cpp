@@ -9,13 +9,14 @@
 #include "ax/setting/setting_i.c"
 #include "moe_i.c"
 #include "xmlui.h"
+#include "moe_dispid.h"
 
 #define min std::min
 #define max std::max
 #include <gdiplus.h>
 
 
-//! Moe specific MDO loop override
+//! Moe specific MDI message loop override
 int MoeLoop::operator() ( mol::win::AppBase& app )
 {
   MSG msg;
@@ -23,13 +24,13 @@ int MoeLoop::operator() ( mol::win::AppBase& app )
   {
 		// check ioleactive obj accel here
 		if ( 
-			 moe() && 
-			 moe()->activeObject &&
-			 moe()->activeObject->TranslateAccelerator(&msg) == S_OK 
+				moe() && 
+				moe()->activeObject &&
+				moe()->activeObject->TranslateAccelerator(&msg) == S_OK 
 			)
 			continue;
 
-		if ( !::TranslateMDISysAccel( mol::win::mdiClient(), &msg) )
+		if (!::TranslateMDISysAccel( mol::win::mdiClient(), &msg) )
 			doMsg( msg, app );
   }
   return (int)msg.wParam ;
@@ -140,7 +141,7 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 	std::string cl = mol::tostring(cmdline);
 
 	mol::variant v;
-	HRESULT hr = mol::get( moe, 1, &v);
+	HRESULT hr = mol::get( moe, DISPID_IMOE_DOCUMENTS, &v);
 	if ( hr != S_OK )
 		return;
 
@@ -164,27 +165,27 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 			s = s.substr(4);
 			if ( mol::Path::isDir(mol::toString(s)) )
 			{
-				mol::disp_invoke(m, 6, mol::variant(s) );
+				mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR , mol::variant(s) );
 			}
 			else
 			{
-				mol::disp_invoke(m, 4, mol::variant(s) );
+				mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPEN, mol::variant(s) );
 			}
 		}
 		else if ( s.substr(0,9) == "moe-utf8:" ) 
 		{
 			s = s.substr(9);
-			mol::disp_invoke(m, 4, mol::variant(s) );					
+			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENUTF8, mol::variant(s) );					
 		}
 		else if ( s.substr(0,8) == "moe-bin:" ) 
 		{
 			s = s.substr(8);
-			mol::disp_invoke(m, 7, mol::variant(s), mol::variant(true) );					
+			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENHEXEDITOR, mol::variant(s), mol::variant(true) );					
 		}
 		else if ( s.substr(0,9) == "moe-html:" ) 
 		{
 			s = s.substr(9);
-			mol::disp_invoke(m, 8, mol::variant(s) );					
+			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENHTMLFRAME, mol::variant(s) );					
 		}
 		else if ( s.substr(0,8) == "moe-dir:" ) 
 		{
@@ -193,26 +194,27 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 			{
 				s = mol::tostring(mol::Path::parentDir(mol::toString(s)));
 			}
-			mol::disp_invoke(m, 6, mol::variant(s) );					
+			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR, mol::variant(s) );					
 		}
 		else
 		{
 			if ( mol::Path::isDir(mol::toString(s)) )
 			{
-				mol::disp_invoke(m, 6, mol::variant(s) );
+				mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR, mol::variant(s) );
 			}
 			else
 			{
-				mol::disp_invoke(m, 4, mol::variant(s) );
+				mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPEN, mol::variant(s) );
 			}
 		}
 	}
 
 	mol::variant view;
-	hr = mol::get( moe, 2, &view);
+	hr = mol::get( moe, DISPID_IMOE_VIEW, &view);
 	if ( hr != S_OK )
 		return;
-	mol::disp_invoke( view.pdispVal, 5 );
+
+	mol::disp_invoke( view.pdispVal, DISPID_IMOEVIEW_SHOW );
 }
 
 /////////////////////////////////////////////////////////////////////////

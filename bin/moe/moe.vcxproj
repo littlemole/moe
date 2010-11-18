@@ -123,6 +123,7 @@
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">L:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">Midl</CustomBuildAfterTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
     <ClCompile>
@@ -162,7 +163,7 @@
       <Optimization>Disabled</Optimization>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>.\;.\include;..\..\3dParty\expat\Source\lib;..\..\;..\..\3dParty\pcre;..\..\lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;.\include;..\..\;..\..\ax\scintillax;..\..\3dParty\expat\Source\lib;..\..\3dParty\pcre;..\..\lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
@@ -355,6 +356,7 @@
     <ClInclude Include="include\Img.h" />
     <ClInclude Include="include\moe.h" />
     <ClInclude Include="include\ThreadScript.h" />
+    <ClInclude Include="moe_dispid.h" />
     <ClInclude Include="moe_h.h" />
     <ClInclude Include="include\MoeBar.h" />
     <ClInclude Include="include\ole.h" />
@@ -372,6 +374,11 @@
     <ResourceCompile Include="resources\mol.rc" />
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="..\..\cg\disph.exe">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">$(TargetName)_dispid.h</Outputs>
+    </CustomBuild>
     <None Include="resources\mol.rc.inc" />
     <None Include="resources\deploy\xpref.xmo" />
     <None Include="resources\favs.bmp" />
@@ -420,7 +427,9 @@
     <None Include="xml\include.xml" />
     <None Include="xml\menu.xml" />
     <None Include="xml\msg.xml" />
-    <None Include="xml\resource.xml" />
+    <None Include="xml\resource.xml">
+      <SubType>Designer</SubType>
+    </None>
     <CustomBuildStep Include="xml\ribbon.xml">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">true</ExcludedFromBuild>

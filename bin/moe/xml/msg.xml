@@ -197,6 +197,10 @@
 
         <msg  handler="OnExecForm" cmd="IDM_MODE_EXECUTEFORM" />
 
+        <msg  handler="OnCut" cmd="IDM_EDIT_CUT" />
+        <msg  handler="OnCopy" cmd="IDM_EDIT_COPY" />
+        <msg  handler="OnPaste" cmd="IDM_EDIT_PASTE" />
+
       <!-- choose lexer -->
         <msgrange type="cmd" from="IDM_LEXER_PLAIN" to="IDM_LEXER_CSHARP" handler="OnLexer" />
       
@@ -210,9 +214,6 @@
         <notify handler="OnToolbarDropDown" code="TBN_DROPDOWN" /> 
 
         <!-- pass messages to embedded ole object -->
-        <msg  ole="Cut" cmd="IDM_EDIT_CUT" interface="IScintillAx"/>
-        <msg  ole="Copy" cmd="IDM_EDIT_COPY" interface="IScintillAx" />
-        <msg  ole="Paste" cmd="IDM_EDIT_PASTE" interface="IScintillAx" />
         <msg  ole="Undo" cmd="IDM_EDIT_UNDO" interface="IScintillAx" />
         <msg  ole="Redo" cmd="IDM_EDIT_REDO" interface="IScintillAx" />
         <msg  ole="Print" cmd="IDM_FILE_PRINT" interface="IScintillAx" />  

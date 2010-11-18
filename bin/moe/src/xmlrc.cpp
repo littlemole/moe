@@ -895,11 +895,11 @@ mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_DEBUG_QUIT, make_handler(&Editor::
 
 mol::msgMap<Editor>().addCmdHandler( IDM_MODE_EXECUTEFORM, make_handler(&Editor::OnExecForm) );
 
-mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_CUT, make_ole_handler<Editor>(&IScintillAx::Cut) );
+mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_CUT, make_handler(&Editor::OnCut) );
 
-mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_COPY, make_ole_handler<Editor>(&IScintillAx::Copy) );
+mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_COPY, make_handler(&Editor::OnCopy) );
 
-mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_PASTE, make_ole_handler<Editor>(&IScintillAx::Paste) );
+mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_PASTE, make_handler(&Editor::OnPaste) );
 
 mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_UNDO, make_ole_handler<Editor>(&IScintillAx::Undo) );
 

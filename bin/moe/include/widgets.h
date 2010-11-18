@@ -3,9 +3,10 @@
 
 #include "win/res.h"
 #include "win/wnd.h"
+#include "win/msgloop.h"
 #include "shared.h"
 #include <activdbg.h>
-
+#include <Prsht.h>
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // widgets for moe
@@ -83,7 +84,30 @@ private:
 
  };
 
- 
+/////////////////////////////////////////////////////////////////////////////////////////////
+// URL Dialog
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+class UrlDlg  : public mol::win::Dialog
+{
+friend mol::Singleton<UrlDlg>; 
+friend mol::stack_obj<UrlDlg>;
+public:
+	virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+	mol::string url;
+
+    virtual HRESULT __stdcall Load( LPSTREAM pStm);
+    virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
+	virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER *pCbSize);
+
+private:
+	UrlBox urlBox_;
+
+	UrlDlg();
+	~UrlDlg() {};
+};
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -135,7 +159,7 @@ private:
 /////////////////////////////////////////////////////////////////////////////////////////////
 // poorer tab dlg
 /////////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 class TabDlg  : public mol::win::Dialog
 {
 public:
@@ -147,30 +171,7 @@ public:
 	bool tabindents;
 	bool backspaceunindents;
 };
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-// URL Dialog
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-class UrlDlg  : public mol::win::Dialog
-{
-friend mol::Singleton<UrlDlg>; 
-friend mol::stack_obj<UrlDlg>;
-public:
-	virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-	mol::string url;
-
-    virtual HRESULT __stdcall Load( LPSTREAM pStm);
-    virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
-	virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER *pCbSize);
-
-private:
-	UrlBox urlBox_;
-
-	UrlDlg();
-	~UrlDlg() {};
-};
+*/
 
 
 
@@ -266,5 +267,151 @@ private:
 	~MoeDrop() {}
 };
 
+/////////////////////////////////////////////////////////////////////
+// Property Sheets
+/////////////////////////////////////////////////////////////////////
+
+class PropSheet;
+
+class PropPage : public mol::win::Dialog
+{
+friend class PropSheet;
+public:
+
+	typedef PropPage BaseWindowType;
+	~PropPage();
+
+	virtual void init();
+	virtual void reset();
+	virtual void command(int c);
+	virtual int apply();
+	virtual int translateAccel( LPMSG msg);
+
+	PropSheet* ps() { return ps_; }
+
+	LRESULT wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+	static BOOL CALLBACK dialogProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+	operator HPROPSHEETPAGE () { return page_; };
+
+protected:
+
+	void create(PropSheet* ps, const mol::string& tab, int id, int flags = PSP_DEFAULT|PSP_USETITLE);
+	PropPage();
+
+	mol::string tab_;
+	int id_;
+
+	PROPSHEETPAGE psp_;
+	HPROPSHEETPAGE page_;
+
+	PropSheet* ps_;
+
+private:
+	virtual LRESULT doModal( int lpTemplate, HWND hWndParent ) { return 0; };
+    virtual HWND doModeless( int lpTemplate, HWND hWndParent ) { return 0; };
+};
+
+class OlePropPage : 
+	public PropPage
+{
+friend class PropSheet;
+public:
+
+	OlePropPage();
+
+	virtual void init();
+	virtual void reset();
+	virtual int apply();
+	virtual int translateAccel( LPMSG msg);
+
+private:
+
+	void create(PropSheet* ps, const mol::string& tab, REFCLSID clsid , int id,int flags = PSP_DEFAULT|PSP_USETITLE);
+
+	void create(PropSheet* ps, const mol::string& tab, int id, int flags = PSP_DEFAULT|PSP_USETITLE) {};
+
+	class PropertyPageSite :
+		public IPropertyPageSite,
+		public mol::interfaces< PropertyPageSite, mol::implements<IPropertyPageSite> >
+	{
+		public: outer_this(OlePropPage,propertyPageSite_); 
+
+			void dispose() {};
+			
+			virtual HRESULT STDMETHODCALLTYPE OnStatusChange( DWORD dwFlags);
+			virtual HRESULT STDMETHODCALLTYPE GetLocaleID( LCID *pLocaleID);
+			virtual HRESULT STDMETHODCALLTYPE GetPageContainer( IUnknown **ppUnk);
+			virtual HRESULT STDMETHODCALLTYPE TranslateAccelerator( MSG* pMsg);
+	};
+
+
+	mol::stack_obj<PropertyPageSite> propertyPageSite_;
+	
+	mol::punk<IPropertyPage> prop_;
+
+};
+
+class PropSheet
+{
+public:
+
+	typedef PropSheet BaseWindowType;
+
+	PropSheet(HWND owner, const mol::string& title, int flags = PSH_NOCONTEXTHELP|PSH_PROPTITLE|PSH_USEPSTARTPAGE|PSH_NOAPPLYNOW|PSH_USECALLBACK );
+
+	template<class T>
+	void addPage(  const mol::string& tab, int id )
+	{
+		PropPage* page = new T;
+		page->create(this,tab,id);
+		addPage(page);
+	}
+
+	template<class T>
+	void addPage(  const mol::string& tab, REFCLSID clsid ,  int id)
+	{
+		OlePropPage* page = new T;
+		page->create(this,tab,clsid,id);
+		addPage(page);
+	}
+
+	INT_PTR create();
+
+	static int CALLBACK PropSheetProc( HWND hwndDlg, UINT uMsg, LPARAM lParam );
+
+	void center(HWND hwnd);
+protected:
+
+	HPROPSHEETPAGE addPage(PropPage* page);
+
+	bool centered_;
+	int startPage_;
+	int	nPages_;
+	std::vector<HPROPSHEETPAGE> pages_;
+	PROPSHEETHEADER ph_;
+};
+
+
+class TabPage  : public PropPage
+{
+public:
+	TabPage();
+
+	virtual void init();
+	virtual int apply();
+};
+
+class ExportPage  : public PropPage
+{
+public:
+
+	virtual void command(int c);
+};
+
+class PrefPage  : public OlePropPage
+{
+public:
+};
 
 #endif

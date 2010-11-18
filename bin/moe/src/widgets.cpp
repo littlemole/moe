@@ -3,6 +3,8 @@
 #include "app.h"
 #include "xmlui.h"
 #include "MoeBar.h"
+//#include "Moe.h"
+#include "Shared.h"
 #include "fm20_tlh.h"
 
 
@@ -34,8 +36,13 @@ void MoeStatusBar::status( const mol::string& txt )
 void Script::eval(  const mol::string& engine, const mol::string& script, IScintillAx* sci )
 {
 	sci_ = sci;
+
 	if ( sci )
-		sci->ClearAnnotations();
+	{
+		mol::punk<IScintillAxAnnotation> anno;
+		sci->get_Annotation(&anno);
+		anno->ClearAll();
+	}
 
 	ODBGS("Script::eval()\r\n");
 	this->AddRef();
@@ -57,7 +64,11 @@ void Script::debug(  const mol::string& engine, const mol::string& script, IScin
 {
 	sci_ = sci;
 	if ( sci )
-		sci->ClearAnnotations();
+	{
+		mol::punk<IScintillAxAnnotation> anno;
+		sci->get_Annotation(&anno);
+		anno->ClearAll();
+	}
 
 	ODBGS("Script::eval()\r\n");
 	this->AddRef();
@@ -167,7 +178,9 @@ HRESULT  __stdcall Script::OnScriptError( IActiveScriptError *pscripterror)
 	mol::ostringstream oss;
 	oss << "line: " << (line+1) << std::endl << mol::bstr(ex.bstrDescription).toString();
 
-	sci_->SetAnnotation( line, mol::bstr(oss.str()) );
+	mol::punk<IScintillAxAnnotation> anno;
+	sci_->get_Annotation(&anno);
+	anno->SetText( line, mol::bstr(oss.str()) );
 
 	return S_OK;
 }
@@ -473,13 +486,10 @@ LRESULT InfoDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 DebugDlg::DebugDlg(  )
-{
-//	icon_.load(IDI_MOE,64,64);
-}
+{}
 
 DebugDlg::~DebugDlg(  )
 {
-//	icon_.load(IDI_MOE,64,64);
 	exp_.release();
 }
 
@@ -500,29 +510,32 @@ HRESULT __stdcall  DebugDlg::ExpCallback::onComplete()
 
 LRESULT DebugDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-
+	/*
 	static HANDLE imgGo    = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_GO),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
 	static HANDLE imgPause = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_PAUSE),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
 	static HANDLE imgQuit  = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_QUIT),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
 
-	static HANDLE imgStepIn    = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_STEPIN),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
-	static HANDLE imgStepOver  = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_STEPOVER),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
-	static HANDLE imgStepOut   = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_STEPOUT),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
+	static HANDLE imgStepIn    = mol::UI().Bitmap(IDB_DEBUG_STEPIN);
+	static HANDLE imgStepOver  = mol::UI().Bitmap(IDB_DEBUG_STEPOVER);
+	static HANDLE imgStepOut   = mol::UI().Bitmap(IDB_DEBUG_STEPOUT);
+	// ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_STEPIN),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
+	//static HANDLE imgStepOver  = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_STEPOVER),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
+	//static HANDLE imgStepOut   = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_STEPOUT),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
 
 
-			
+		*/	
 
 	switch (message)
     {
 		case WM_INITDIALOG:
 		{
-			sendDlgItemMsg( IDC_BUTTON_DEBUG_GO, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgGo) );
-			sendDlgItemMsg( IDC_BUTTON_DEBUG_PAUSE, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgPause) );
-			sendDlgItemMsg( IDC_BUTTON_DEBUG_QUIT, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgQuit) );
+			setDlgButtonImg( IDC_BUTTON_DEBUG_GO, mol::UI().Bitmap(IDB_DEBUG_GO) );
+			setDlgButtonImg( IDC_BUTTON_DEBUG_PAUSE, mol::UI().Bitmap(IDB_DEBUG_PAUSE) );
+			setDlgButtonImg( IDC_BUTTON_DEBUG_QUIT, mol::UI().Bitmap(IDB_DEBUG_QUIT) );
 
-			sendDlgItemMsg( IDC_BUTTON_DEBUG_STEPIN, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgStepIn) );
-			sendDlgItemMsg( IDC_BUTTON_DEBUG_STEPOVER, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgStepOver) );
-			sendDlgItemMsg( IDC_BUTTON_DEBUG_STEPOUT, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgStepOut) );
+			setDlgButtonImg( IDC_BUTTON_DEBUG_STEPIN, mol::UI().Bitmap(IDB_DEBUG_STEPIN) );
+			setDlgButtonImg( IDC_BUTTON_DEBUG_STEPOVER, mol::UI().Bitmap(IDB_DEBUG_STEPOVER) );
+			setDlgButtonImg( IDC_BUTTON_DEBUG_STEPOUT, mol::UI().Bitmap(IDB_DEBUG_STEPOUT) );
 
 			return FALSE; // note: false! look into PSDK!
 		}
@@ -578,13 +591,11 @@ LRESULT DebugDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 				hr = exp_->Start(&expCallback);
 
-                //endDlg(LOWORD(wParam));
 				return FALSE;
 			}
 			if (LOWORD(wParam) == IDCANCEL )
 			{
 				exp_.release();
-                //endDlg(LOWORD(wParam));
 				show(SW_HIDE);
 				return FALSE;
 			}
@@ -628,68 +639,55 @@ LRESULT DebugDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 void DebugDlg::update_variables(IEnumDebugStackFrames* frames)
 {
-
 	HWND tree = getDlgItem(IDC_DEBUG_VARIABLES);
-
 	TreeView_DeleteAllItems(tree);
 
-	while (1)
+	TV_INSERTSTRUCTW			insertStruct;
+	ZeroMemory(&insertStruct, sizeof(TV_INSERTSTRUCT));
+	insertStruct.hInsertAfter = TVI_LAST;
+	insertStruct.item.mask = TVIF_TEXT;
+
+	ODBGS("EnumStackFrames:");
+	DebugStackFrameDescriptor d;
+	ULONG fetched = 0;
+	HRESULT hr = frames->Reset();
+	if ( hr != S_OK  )
+		return;
+
+	hr = frames->Next(1, &d, &fetched );
+	if ( hr != S_OK || fetched == 0 )
+		return;
+		
+	if ( d.punkFinal != NULL )
 	{
-
-		TV_INSERTSTRUCTW			insertStruct;
-
-		ZeroMemory(&insertStruct, sizeof(TV_INSERTSTRUCT));
-		insertStruct.hInsertAfter = TVI_LAST;
-		insertStruct.item.mask = TVIF_TEXT;
-
-		ODBGS("EnumStackFrames:");
-		DebugStackFrameDescriptor d;
-		ULONG fetched = 0;
-		HRESULT hr = frames->Reset();
-		if ( hr != S_OK  )
-			break;
-
-
-
-		hr = frames->Next(1, &d, &fetched );
-		if ( hr != S_OK || fetched == 0 )
-			break;
-
-		
-		if ( d.punkFinal != NULL )
+		mol::punk<IEnumDebugStackFrames> f(d.punkFinal);
+		if ( f )
 		{
-			mol::punk<IEnumDebugStackFrames> f(d.punkFinal);
-			if ( f )
-			{
-				update_variables(f);
-			}
-
-			mol::punk<IDebugProperty> p(d.punkFinal);
-			if ( p )
-			{
-				addPropertyToList(tree,&insertStruct,p);
-			}
-
-			d.punkFinal->Release();
-			d.pdsf->Release();
-			break;
+			update_variables(f);
 		}
-		
 
-		mol::punk<IDebugProperty> prop;
-		hr = d.pdsf->GetDebugProperty(&prop);
-		if ( hr == S_OK && prop )
+		mol::punk<IDebugProperty> p(d.punkFinal);
+		if ( p )
 		{
-				
-			addPropertyToList(tree,&insertStruct,prop);
-
+			addPropertyToList(tree,&insertStruct,p);
 		}
-		//ODBGS(oss.str());
 
+		d.punkFinal->Release();
 		d.pdsf->Release();
-		break;
+		return;
+	}
+		
+
+	mol::punk<IDebugProperty> prop;
+	hr = d.pdsf->GetDebugProperty(&prop);
+	if ( hr == S_OK && prop )
+	{
+				
+		addPropertyToList(tree,&insertStruct,prop);
+
 	}
 
+	d.pdsf->Release();
 }
 
 HRESULT DebugDlg::addPropertyToList(HWND tree, TV_INSERTSTRUCTW *insertStruct, IDebugProperty *prop)
@@ -701,117 +699,64 @@ HRESULT DebugDlg::addPropertyToList(HWND tree, TV_INSERTSTRUCTW *insertStruct, I
 	if ( hr != S_OK )
 		return S_OK;
 
-	DebugPropertyInfo		propInfo;
-	ULONG					numFetched;
+	ULONG fetched = 0;
+	ULONG cnt = 0;
+	hr = dpis->GetCount(&cnt);
+	if ( hr != S_OK || cnt == 0 )
+		return S_OK;
 
-	//dpis->Reset();
-
-	if ( hr == S_OK )
+	for ( unsigned int i = 0; i < cnt; i++ )
 	{
-			ULONG fetched = 0;
-			ULONG cnt = 0;
-			hr = dpis->GetCount(&cnt);
-			if ( hr != S_OK || cnt == 0 )
-				return S_OK;
+		HTREEITEM parent = insertStruct->hParent;
 
-			for ( int i = 0; i < cnt; i++ )
-			{
-				//
-				HTREEITEM parent = insertStruct->hParent;
+		DebugPropertyInfo pi;
+		::ZeroMemory(&pi,sizeof(DebugPropertyInfo));
 
-				DebugPropertyInfo pi;
-				::ZeroMemory(&pi,sizeof(DebugPropertyInfo));
-
-
-
-				hr = dpis->Next( 1, &pi, &fetched );
-				if ( hr != S_OK || fetched == 0 )
-				{
-					insertStruct->hParent = parent;
-					continue;
-				}
-
-				if ( pi.m_pDebugProp == prop )
-				{
-					insertStruct->hParent = parent;
-					continue;
-				}
-
-				{
-					std::wstringstream oss;
-					if ( pi.m_bstrName )
-					{
-						oss << mol::bstr(pi.m_bstrName).toString() << " - ";
-						::SysFreeString(pi.m_bstrName);
-					}
-					if ( pi.m_bstrType )
-					{
-						oss << mol::bstr(pi.m_bstrType).toString() << " : ";
-						::SysFreeString(pi.m_bstrType);
-					}
-					if ( pi.m_bstrValue )
-					{
-						oss << mol::bstr(pi.m_bstrValue).toString() << std::endl;
-						::SysFreeString(pi.m_bstrValue);	
-					}
-					std::wstring s = oss.str();
-					insertStruct->item.pszText = (LPWSTR)(s.c_str()); 
-
-					insertStruct->hParent = (HTREEITEM)SendMessageW(tree, TVM_INSERTITEM, 0, (LPARAM)insertStruct);
-					if ( insertStruct->hParent )
-					{
-						if ( pi.m_pDebugProp && pi.m_pDebugProp != prop )
-						{
-							addPropertyToList( tree, insertStruct, pi.m_pDebugProp);
-							pi.m_pDebugProp->Release();
-						}
-					}
-				}
-
-				insertStruct->hParent = parent;
-			}
-	}
-/*
-	for (;;)
-	{
-			register HTREEITEM			parent;
-
-			// Get the next variable's DebugPropertyInfo
-			enumInfo->lpVtbl->Next(enumInfo, 1, &propInfo, &numFetched);
-			if (!numFetched) break;
-
-			parent = insertStruct->hParent;
-
-			// Get the variable name
-			if (!(insertStruct->item.pszText = propInfo.m_bstrFullName))
-				insertStruct->item.pszText = propInfo.m_bstrName;
-
-			// Insert the item
-			if (!(insertStruct->hParent = (HTREEITEM)SendMessageW(VariablesDockInfo->focusWindow, TVM_INSERTITEM, 0, (LPARAM)insertStruct)))
-				freeDebugPropertyInfo(&propInfo);
-			else
-			{
-				SysFreeString(propInfo.m_bstrName);
-				SysFreeString(propInfo.m_bstrType);
-				SysFreeString(propInfo.m_bstrValue);
-				SysFreeString(propInfo.m_bstrFullName);
-
-				// See if this property (variable) has sub-properties to list. If so,
-				// recursively list them. Typically, if the variable was an object/struct,\
-				// its sub-properties would be the members of that object
-				if (propInfo.m_pDebugProp && (hr = addPropertyToList(insertStruct, propInfo.m_pDebugProp))) break;
-			}
-
+		hr = dpis->Next( 1, &pi, &fetched );
+		if ( hr != S_OK || fetched == 0 )
+		{
 			insertStruct->hParent = parent;
+			continue;
 		}
 
-		enumInfo->lpVtbl->Release(enumInfo);
+		if ( pi.m_pDebugProp == prop )
+		{
+			insertStruct->hParent = parent;
+			continue;
+		}
+
+		std::wstringstream oss;
+		if ( pi.m_bstrName )
+		{
+			oss << mol::bstr(pi.m_bstrName).toString() << " - ";
+			::SysFreeString(pi.m_bstrName);
+		}
+		if ( pi.m_bstrType )
+		{
+			oss << mol::bstr(pi.m_bstrType).toString() << " : ";
+			::SysFreeString(pi.m_bstrType);
+		}
+		if ( pi.m_bstrValue )
+		{
+			oss << mol::bstr(pi.m_bstrValue).toString() << std::endl;
+			::SysFreeString(pi.m_bstrValue);	
+		}
+
+		std::wstring s = oss.str();
+		insertStruct->item.pszText = (LPWSTR)(s.c_str()); 
+
+		insertStruct->hParent = (HTREEITEM)SendMessageW(tree, TVM_INSERTITEM, 0, (LPARAM)insertStruct);
+		if ( insertStruct->hParent )
+		{
+			if ( pi.m_pDebugProp && pi.m_pDebugProp != prop )
+			{
+				addPropertyToList( tree, insertStruct, pi.m_pDebugProp);
+				pi.m_pDebugProp->Release();
+			}
+		}
+
+		insertStruct->hParent = parent;
 	}
-
-	debugProperty->lpVtbl->Release(debugProperty);
-
-	return(S_OK);	
-	*/
 
 	return S_OK;
 }
@@ -835,14 +780,17 @@ UrlDlg::UrlDlg(  )
 LRESULT UrlDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	static mol::Menu menu( mol::bookmarks().getMenu() ); 
-	static HANDLE imgFavs = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_MOE_FAV),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
-	static HANDLE imgGo   = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_MOE_GO),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
+	//static HANDLE imgFavs = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_MOE_FAV),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
+	//static HANDLE imgGo   = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_MOE_GO),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
 	switch (message)
     {
 		case WM_INITDIALOG:
 		{
-			sendDlgItemMsg( IDC_BUTTON_BOOKMARK, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgFavs) );
-			sendDlgItemMsg( IDOK, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgGo) );			
+			setDlgButtonImg( IDC_BUTTON_BOOKMARK, mol::UI().Bitmap(IDB_MOE_FAV) );
+			setDlgButtonImg( IDOK, mol::UI().Bitmap(IDB_MOE_GO) );
+
+//			sendDlgItemMsg( IDC_BUTTON_BOOKMARK, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgFavs) );
+	//		sendDlgItemMsg( IDOK, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgGo) );			
 			urlBox_.subClass( getDlgItem(IDC_EDIT_URL) );
 			urlBox_.updateGUI();
 			
@@ -912,7 +860,7 @@ HRESULT __stdcall UrlDlg::GetSizeMax( ULARGE_INTEGER *pCbSize)
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-
+/*
 TabDlg::TabDlg(  )
 {
 }
@@ -968,6 +916,8 @@ LRESULT TabDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	return mol::win::Dialog::wndProc(hDlg, message, wParam, lParam);
 }
 
+*/
+
 mol::string findFile(const mol::string& f)
 {
 	ODBGS(f);
@@ -984,8 +934,6 @@ mol::string findFile(const mol::string& f)
 	modulePath = mol::Path::addBackSlash(modulePath);
 	configPath = mol::Path::addBackSlash(configPath);
 
-
-	//configPath.append(_T("\\"));
 	configPath.append(f);
 
 	ODBGS(configPath);
@@ -995,7 +943,6 @@ mol::string findFile(const mol::string& f)
 		return configPath;
 	}
 
-	//modulePath.append(_T("\\"));
 	modulePath.append(f);
 	ODBGS(modulePath);
 	if ( mol::Path::exists(modulePath) )
@@ -1062,25 +1009,6 @@ HRESULT  __stdcall MoeDrop::DragLeave()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// .NET compiler event sink
-//////////////////////////////////////////////////////////////////////////////
-
-/*
-HRESULT __stdcall CompilerSink::ErrorMsg(BSTR error)
-{
-	::MessageBox( *(moe()),bstr(error).toString().c_str(),_T("error:"),0);
-	statusBar()->status(_T(".NET compiler error"));
-	return S_OK;
-}
-
-
-HRESULT __stdcall CompilerSink::Success()
-{
-	statusBar()->status( _T(".NET compilation success"));
-	return S_OK;
-}
-*/
 //////////////////////////////////////////////////////////////////////////////
 // tree events sink
 //////////////////////////////////////////////////////////////////////////////
@@ -1151,4 +1079,345 @@ HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename)
 		}
 	}
 	return S_OK;
+}
+
+
+
+//HWND PropSheet::hWnd_;
+
+
+
+PropPage::PropPage()
+{
+	deleteOnNCDestroy_ = true;
+}
+
+void PropPage::create(PropSheet* ps, const mol::string& tab, int id, int flags)
+{
+	tab_ = tab;
+	id_ =id;
+	ps_ = ps;
+
+	::ZeroMemory(&psp_,sizeof(PROPSHEETPAGE) );
+	psp_.dwSize = sizeof(PROPSHEETPAGE);
+	psp_.dwFlags = flags;
+	psp_.hInstance = mol::hinstance();
+	psp_.pszTemplate = MAKEINTRESOURCE(id);
+	psp_.pszTitle = tab.c_str();
+	psp_.lParam = (LPARAM)this;
+	psp_.pfnDlgProc = &PropPage::dialogProcedure;
+
+	page_ = ::CreatePropertySheetPage(&psp_);
+}
+
+PropPage::~PropPage()
+{
+	ODBGS("~PropPage");
+}
+
+void PropPage::init()
+{}
+
+void PropPage::command(int c)
+{}
+
+int PropPage::apply()
+{
+	return PSNRET_NOERROR;
+}
+
+void PropPage::reset()
+{
+}
+
+int  PropPage::translateAccel( LPMSG msg)
+{
+	return PSNRET_NOERROR ;
+}
+
+LRESULT PropPage::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	if ( message == WM_INITDIALOG )
+	{
+		init();
+		PropSheet_Changed( ::GetParent(hDlg), hDlg);
+		return FALSE; // note: false! look into PSDK!
+	}
+	if ( message == WM_COMMAND )
+	{
+		command( LOWORD(wParam) );
+	}
+	if ( message == WM_NCDESTROY )
+	{
+		mol::win::dialogs().unregisterDialog(hDlg);
+		if ( this->deleteOnNCDestroy_ )
+			delete this;
+	}
+
+	return mol::win::Dialog::wndProc(hDlg, message, wParam, lParam);
+}
+
+BOOL CALLBACK PropPage::dialogProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+		if ( message == WM_NOTIFY )
+		{
+			mol::Crack msg(message,wParam,lParam);
+			if ( msg.nmhdr()->code == PSN_APPLY )
+			{
+				PropPage* pThis = mol::wndFromHWND<PropPage>(hwnd);
+				int r = pThis->apply();
+				::SetWindowLong(hwnd,DWL_MSGRESULT,r);
+				return TRUE;
+			}
+			if ( msg.nmhdr()->code == PSN_RESET  )
+			{
+				PropPage* pThis = mol::wndFromHWND<PropPage>(hwnd);
+				pThis->reset();
+			}
+			if ( msg.nmhdr()->code == PSN_TRANSLATEACCELERATOR )
+			{
+				PropPage* pThis = mol::wndFromHWND<PropPage>(hwnd);
+				PSHNOTIFY * psn = (PSHNOTIFY *)lParam;
+				LPMSG m = (LPMSG)(msg.propSheetNotify()->lParam);
+				int r = pThis->translateAccel(m);
+				::SetWindowLong(hwnd,DWL_MSGRESULT,r);
+				return TRUE;
+			}
+		}
+		if (message == WM_INITDIALOG)
+		{
+			PROPSHEETPAGE* psp = (PROPSHEETPAGE*)lParam;
+			PropPage* pThis = (PropPage*)(psp->lParam);
+			pThis->subClass(hwnd);
+			mol::win::dialogs().registerDialog(hwnd);
+			pThis->ps_->center(::GetParent(hwnd));
+			return (BOOL)(pThis->wndProc( hwnd, message,wParam,lParam));
+		}
+		return FALSE;
+}
+
+OlePropPage::OlePropPage()
+{
+	deleteOnNCDestroy_ = true;
+}
+
+
+void OlePropPage::create(PropSheet* ps, const mol::string& tab, REFCLSID clsid, int id,int flags )
+{
+	PropPage::create(ps,tab,id,flags);
+
+	prop_.createObject(clsid);
+	
+}
+void OlePropPage::init()
+{
+	prop_->SetPageSite(&propertyPageSite_);
+	RECT r;
+	::GetClientRect( *this,&r );
+
+	IUnknown* unk(config());
+	prop_->SetObjects( 1, &unk );
+
+	prop_->Activate( *this, &r, TRUE );
+	prop_->Show(SW_SHOW);
+
+}
+
+int OlePropPage::apply()
+{
+	prop_->Apply();
+	return PSNRET_NOERROR;
+}
+
+void OlePropPage::reset()
+{
+	prop_->Deactivate();
+	prop_->SetObjects(0,0);
+	prop_.release();
+	ODBGS(_T("OlePropPage::reset()"));
+}
+
+
+int  OlePropPage::translateAccel( LPMSG msg)
+{
+	if ( prop_ )
+	{
+		HRESULT hr = prop_->TranslateAcceleratorW(msg);
+		if ( hr == S_OK )
+			return PSNRET_MESSAGEHANDLED;
+	}
+	return PSNRET_NOERROR ;
+}
+
+HRESULT STDMETHODCALLTYPE OlePropPage::PropertyPageSite::OnStatusChange( DWORD dwFlags)
+{
+	if ( dwFlags == PROPPAGESTATUS_DIRTY )
+	{
+		HWND hwnd = (HWND)*(This());
+		PropSheet_Changed( ::GetParent(hwnd), hwnd );
+	}
+
+	if ( dwFlags == PROPPAGESTATUS_VALIDATE )
+	{
+		This()->apply();
+	}
+	return S_OK;
+}
+        
+HRESULT STDMETHODCALLTYPE OlePropPage::PropertyPageSite::GetLocaleID( LCID *pLocaleID)
+{
+	return LOCALE_USER_DEFAULT;
+}
+        
+HRESULT STDMETHODCALLTYPE OlePropPage::PropertyPageSite::GetPageContainer( IUnknown **ppUnk)
+{
+	return E_NOTIMPL;
+}
+        
+HRESULT STDMETHODCALLTYPE OlePropPage::PropertyPageSite::TranslateAccelerator( MSG* pMsg)
+{
+	return E_NOTIMPL;
+}
+
+PropSheet::PropSheet(HWND owner, const mol::string& title, int flags )
+{
+	::ZeroMemory(&ph_,sizeof(&ph_) );
+	ph_.dwSize = sizeof(PROPSHEETHEADER);
+	ph_.dwFlags = flags;
+	ph_.hwndParent = owner;
+	ph_.hInstance = mol::hinstance();
+	ph_.pszCaption = title.c_str();
+	ph_.pfnCallback = &PropSheet::PropSheetProc;
+	startPage_ = 0;
+	centered_ = false;
+}
+
+HPROPSHEETPAGE PropSheet::addPage(PropPage* page)
+{
+	pages_.push_back( *page );
+	return *page;
+}
+
+
+INT_PTR PropSheet::create()
+{		
+	ph_.nPages = pages_.size();
+	ph_.nStartPage = startPage_;
+	ph_.phpage = &(pages_.front());
+
+	return ::PropertySheet(&ph_);
+}
+
+void PropSheet::center(HWND hwnd)
+{
+	if ( centered_ )
+		return;
+
+	centered_ = true;
+
+    RECT r;
+    ::GetWindowRect(hwnd,&r);
+
+    RECT s;
+    ::GetWindowRect( ::GetDesktopWindow(),&s);
+
+    int x = s.right/2  - (r.right-r.left)/2;
+    int y = s.bottom/2 - (r.bottom-r.top)/2;
+    int w = (r.right-r.left);
+    int h = (r.bottom-r.top);
+	
+	POINT p = {x,y};
+	::ScreenToClient( hwnd, &p );
+
+	::MoveWindow( hwnd, p.x, p.y, w, h, 0 );
+}
+
+int CALLBACK PropSheet::PropSheetProc( HWND hwndDlg, UINT uMsg, LPARAM lParam )
+{
+	if ( uMsg == PSCB_INITIALIZED )
+	{
+	}
+	return 0;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+TabPage::TabPage(  )
+{
+
+}
+
+
+void TabPage::init()
+{
+	LONG w = 4;
+	moe()->moeConfig->get_TabWidth(&w);	
+	setDlgItemInt(IDC_EDIT_TABWIDTH,w);
+
+	VARIANT_BOOL vb = VARIANT_FALSE;
+
+	moe()->moeConfig->get_TabUsage(&vb);	
+	if ( vb == VARIANT_TRUE )
+		setDlgItemChecked(IDC_CHECK_USETABS);
+
+	moe()->moeConfig->get_TabIndents(&vb);	
+	if ( vb == VARIANT_TRUE )
+		setDlgItemChecked(IDC_CHECK_TABINDENTS);
+
+	moe()->moeConfig->get_BackSpaceUnindents(&vb);	
+	if ( vb == VARIANT_TRUE )
+		setDlgItemChecked(IDC_CHECK_BACKSPACEUNINDENTS);
+
+	moe()->moeConfig->get_ShowLineNumbers(&vb);	
+	if ( vb == VARIANT_TRUE )
+		setDlgItemChecked(IDC_CHECK_SHOWLINENUM);
+}
+
+
+int TabPage::apply()
+{
+	int w = 0;
+	getDlgItemInt(IDC_EDIT_TABWIDTH,w);
+	moe()->moeConfig->put_TabWidth(w);	
+
+	VARIANT_BOOL vb = VARIANT_TRUE;
+
+	vb = getDlgItemChecked(IDC_CHECK_USETABS) ? VARIANT_TRUE : FALSE;
+	moe()->moeConfig->put_TabUsage(vb);		
+
+	vb = getDlgItemChecked(IDC_CHECK_TABINDENTS) ? VARIANT_TRUE : FALSE;
+	moe()->moeConfig->put_TabIndents(vb);
+
+	vb = getDlgItemChecked(IDC_CHECK_BACKSPACEUNINDENTS) ? VARIANT_TRUE : FALSE;
+	moe()->moeConfig->put_BackSpaceUnindents(vb);
+
+	vb = getDlgItemChecked(IDC_CHECK_SHOWLINENUM) ? VARIANT_TRUE : FALSE;
+	moe()->moeConfig->put_ShowLineNumbers(vb);
+
+	return PSNRET_NOERROR;
+}
+
+
+
+void ExportPage::command(int c)
+{
+	if ( c == IDC_BUTTON_EXPORT )
+	{
+		mol::FilenameDlg dlg( *moe() );
+		if ( dlg.dlgSave() )
+		{
+			moe()->moeConfig->ExportSettings( mol::bstr( dlg.fileName() ) );
+		}
+	}
+
+	if ( c == IDC_BUTTON_IMPORT )
+	{
+		mol::FilenameDlg dlg( *moe() );
+		if ( dlg.dlgOpen() )
+		{
+			moe()->moeConfig->ImportSettings( mol::bstr( dlg.fileName() ) );
+		}
+	}
 }
