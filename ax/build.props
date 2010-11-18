@@ -4,12 +4,13 @@
   <PropertyGroup Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-	<boost Condition=" '$(boost)' == '' ">L:\boost\boost_1_44_0\</boost>
+    <boost Condition=" '$(boost)' == '' ">L:\boost\boost_1_44_0\</boost>
     <Keyword>Win32Proj</Keyword>
-	<Configuration Condition=" '$(Configuration)' == '' ">uni_debug</Configuration>
-	<Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
-	<rcsource>$(TargetName)</rcsource>
-	<defsource>$(TargetName)</defsource>
+    <Configuration Condition=" '$(Configuration)' == '' ">uni_debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
+    <rcsource>$(TargetName)</rcsource>
+    <defsource>$(TargetName)</defsource>
+    <CustomBuildAfterTargets>Midl</CustomBuildAfterTargets>
   </PropertyGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -63,7 +64,7 @@
 
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
     <Midl>
-	 <TypeLibraryName>uni_release\$(TargetName).tlb</TypeLibraryName>
+	<OutputDirectory>uni_release</OutputDirectory>
     </Midl>
     <ClCompile>
       <Optimization>Full</Optimization>
@@ -121,5 +122,12 @@
     </ResourceCompile>
   </ItemGroup>
 
-
+  <ItemGroup>
+    <CustomBuild Include="..\..\cg\disph.exe">
+      <Message>dispid generation phase</Message>
+      <Command>..\..\cg\disph.exe $(Configuration)\$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
+      <AdditionalInputs>$(Configuration)\$(TargetName).tlb;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs>$(TargetName)_dispid.h;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
 </Project>
