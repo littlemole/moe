@@ -5,6 +5,8 @@
 #include "util/Str.h"
 #include <Shlobj.h>
 #include <fstream>
+#include "boost/scoped_ptr.hpp"
+#include "boost/shared_ptr.hpp"
 
 namespace mol  {
 
@@ -17,15 +19,22 @@ HINSTANCE hinstance()
 	return mol::App().hinstance();
 }
 
+unsigned int guithread()
+{ 
+	return mol::win::AppBase::guithread_; 
+}
+
 namespace win  {
 
 AppBase*				AppBase::app_			= 0;
-
+unsigned int			AppBase::guithread_     = 0;
 
 void AppBase::lock()
 {
 	return this->Lock();
 }
+
+
 
 void AppBase::unlock()
 {
@@ -60,13 +69,13 @@ bool AppBase::Locked()
 
 
 
-//! construcor 
+//! constructor 
 AppBase::AppBase()
 {
-	hInstance_ = ::GetModuleHandle(0);
-//	hWndMDIClient_ = 0;
-	lockCount_ = 0;
-    app_	   = this;
+	hInstance_  = ::GetModuleHandle(0);
+	lockCount_  = 0;
+    app_	    = this;
+	guithread_  = mol::Thread::self();
 }
 
 AppBase::~AppBase() 
@@ -141,6 +150,18 @@ mol::string AppBase::getAppPath()
 //! basic windows msg handling
 void LoopBase::doMsg(MSG& msg, AppBase& app)
 {
+	/*
+	if ( msg.hwnd == NULL )
+	{
+		if ( msg.message == 42 && msg.wParam == 42 )
+		{
+			boost::shared_ptr<mol::fun::call> call( (mol::fun::call*) (msg.lParam) );
+			(*call)();
+			return;
+		}
+	}
+	*/
+
 	if ( dialogs().isDialogMessage(msg) )
 	  return;
 	if ( accelerators().translate(msg) )

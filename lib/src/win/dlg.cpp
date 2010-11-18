@@ -132,6 +132,11 @@ LRESULT DlgBase::setDlgButtonIcon( int id, HICON hicon )
         return sendDlgItemMsg(id, BM_SETIMAGE, (WPARAM)IMAGE_ICON,  (LPARAM)(hicon) );
 }
 
+LRESULT DlgBase::setDlgButtonImg( int id, HBITMAP bmp )
+{
+        return sendDlgItemMsg(id, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(bmp) );
+}
+
 LRESULT DlgBase::setDlgStaticIcon( int id, HICON hicon )
 {
         return sendDlgItemMsg(id, STM_SETIMAGE, (WPARAM)IMAGE_ICON,  (LPARAM)(hicon) );
@@ -164,6 +169,18 @@ LRESULT DlgBase::setDlgItemInt( int id, int value )
 {
 	return ::SetDlgItemInt(hWnd_, id, value, FALSE);
 }
+
+bool  DlgBase::getDlgItemChecked( int id )
+{
+	return ( BST_CHECKED == sendDlgItemMsg(id, BM_GETCHECK, 0 ,0) );
+}
+
+
+void  DlgBase::setDlgItemChecked( int id )
+{
+	sendDlgItemMsg(id,BM_SETCHECK,BST_CHECKED,0);
+}
+
 
 void DlgBase::center()
 {
