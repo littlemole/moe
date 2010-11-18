@@ -4,7 +4,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DB3273F3-A023-4A46-BD7C-9219611756D0}</ProjectGuid>
     <RootNamespace>skeleton</RootNamespace>
-	<TargetName>ScintillAx</TargetName>
+    <TargetName>ScintillAx</TargetName>
   </PropertyGroup>
 
   <Import Project="..\..\master.props" />
@@ -16,7 +16,7 @@
 
   <ItemDefinitionGroup>
     <ClCompile>
-	  <AdditionalIncludeDirectories>..\..\;.\src;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+	  <AdditionalIncludeDirectories>..\..\ax;..\..\3dParty;.;..;.\src;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 	</ClCompile>
     <Link>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">..\..\3dParty\scintilla\bin\static\debug\SciLexer.lib;..\..\\3dParty\scintilla\bin\static\debug\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -28,12 +28,21 @@
   </ItemDefinitionGroup>
 
   <ItemGroup>
-    <ClCompile Include="scieditor.cpp" />
-    <ClCompile Include="ScintillaCtrl.cpp" />
-    <ClCompile Include="ScintillAX.cpp" />
-    <ClCompile Include="ScintillAxProp.cpp" />
+    <ClCompile Include="src\scieditor.cpp" />
+    <ClCompile Include="src\ScintillaCtrl.cpp" />
+    <ClCompile Include="src\ScintillAX.cpp" />
+    <ClCompile Include="src\ScintillAxProp.cpp" />
     <ClCompile Include="src\xmlrc.cpp" />
     <ClCompile Include="src\xmlui.cpp" />
+
+    <ClCompile Include="src\Properties.cpp" />
+    <ClCompile Include="src\Position.cpp" />
+    <ClCompile Include="src\Selection.cpp" />
+    <ClCompile Include="src\Line.cpp" />
+    <ClCompile Include="src\Text.cpp" />
+    <ClCompile Include="src\Annotation.cpp" />
+    <ClCompile Include="src\Markers.cpp" />
+
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -53,6 +62,9 @@
       <Outputs>xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
+
+
+
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 

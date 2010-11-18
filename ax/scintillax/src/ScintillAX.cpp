@@ -5,7 +5,7 @@
 #include "ScintillaCtrl.h"
 #include "ScintillAxProp.h"
 #include "ScintillAx_i.c"
-#include "ax/ShellCtrl/ShellCtrl_i.c"
+#include "ShellCtrl/ShellCtrl_i.c"
 #include "ole/Dll.h"
 #include "win/res.h"
 #include <sstream>

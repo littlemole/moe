@@ -38,7 +38,10 @@ LRESULT ScintillAxProperties::OnConvert(UINT msg, WPARAM wParam, LPARAM lParam)
 		mol::punk<IScintillAx> sci(objects_[i]);
 		if ( sci )
 		{
-			sci->ConvertTabs();
+			mol::punk<IScintillAxProperties> props;
+			sci->get_Properties(&props);
+			if ( props )
+				props->ConvertTabs();
 		}
 	}
 	return 0;
@@ -56,24 +59,29 @@ LRESULT ScintillAxProperties::OnInitDialog(UINT msg, WPARAM wParam, LPARAM lPara
 		mol::punk<IScintillAx> sci(objects_[0]);
 		if ( sci )
 		{
-			if ( S_OK != sci->get_SysType(&systype_) )
-				return FALSE;
-			if ( S_OK != sci->get_Encoding(&encoding_) )
-				return FALSE;
-			if ( S_OK != sci->get_TabWidth(&tabwidth_) )
-				return FALSE;
-			if ( S_OK != sci->get_WriteBOM(&vbWriteBOM_) )
-				return FALSE;
-			if ( S_OK != sci->get_ShowLineNumbers(&vbShowLineNumbers_) )
-				return FALSE;
+			mol::punk<IScintillAxProperties> props;
+			sci->get_Properties(&props);
 
-			if ( S_OK != sci->get_TabUsage(&vbUseTabs_) )
-				return FALSE;
-			if ( S_OK != sci->get_TabIndents(&vbTabIndents_) )
-				return FALSE;
-			if ( S_OK != sci->get_BackSpaceUnindents(&vbBackSpaceUnindents_) )
-				return FALSE;
+			if ( props )
+			{
+				if ( S_OK != props->get_SysType(&systype_) )
+					return FALSE;
+				if ( S_OK != props->get_Encoding(&encoding_) )
+					return FALSE;
+				if ( S_OK != props->get_TabWidth(&tabwidth_) )
+					return FALSE;
+				if ( S_OK != props->get_WriteBOM(&vbWriteBOM_) )
+					return FALSE;
+				if ( S_OK != props->get_ShowLineNumbers(&vbShowLineNumbers_) )
+					return FALSE;
 
+				if ( S_OK != props->get_TabUsage(&vbUseTabs_) )
+					return FALSE;
+				if ( S_OK != props->get_TabIndents(&vbTabIndents_) )
+					return FALSE;
+				if ( S_OK != props->get_BackSpaceUnindents(&vbBackSpaceUnindents_) )
+				return FALSE;
+			}
 			if ( systype_ == SCINTILLA_SYSTYPE_UNIX )
 				this->sendDlgItemMsg(IDC_RADIO_UNIX,BM_SETCHECK ,BST_CHECKED,0);
 			if ( systype_ == SCINTILLA_SYSTYPE_WIN32 )
@@ -167,23 +175,27 @@ HRESULT ScintillAxProperties::Apply( void)
 		mol::punk<IScintillAx> sci(objects_[i]);
 		if ( sci )
 		{
-			if ( S_OK != sci->put_SysType(systype_) )
-				continue;
-			if ( S_OK != sci->put_Encoding(encoding_) )
-				continue;
-			if ( S_OK != sci->put_TabWidth(tabwidth_) )
-				continue;
+			mol::punk<IScintillAxProperties> props;
+			if ( S_OK == sci->get_Properties(&props) )
+			{
+				if ( S_OK != props->put_SysType(systype_) )
+					continue;
+				if ( S_OK != props->put_Encoding(encoding_) )
+					continue;
+				if ( S_OK != props->put_TabWidth(tabwidth_) )
+					continue;
 
-			if ( S_OK != sci->put_TabUsage(vbUseTabs_) )
-				continue;
-			if ( S_OK != sci->put_TabIndents(vbTabIndents_) )
-				continue;
-			if ( S_OK != sci->put_BackSpaceUnindents(vbBackSpaceUnindents_) )
-				continue;
-			if ( S_OK != sci->put_WriteBOM(vbWriteBOM_) )
-				continue;
-			if ( S_OK != sci->put_ShowLineNumbers(vbShowLineNumbers_) )
-				continue;
+				if ( S_OK != props->put_TabUsage(vbUseTabs_) )
+					continue;
+				if ( S_OK != props->put_TabIndents(vbTabIndents_) )
+					continue;
+				if ( S_OK != props->put_BackSpaceUnindents(vbBackSpaceUnindents_) )
+					continue;
+				if ( S_OK != props->put_WriteBOM(vbWriteBOM_) )
+					continue;
+				if ( S_OK != props->put_ShowLineNumbers(vbShowLineNumbers_) )
+					continue;
+			}
 		}
 	}
 	bDirty_ = FALSE;

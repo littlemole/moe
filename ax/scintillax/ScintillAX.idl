@@ -7,6 +7,16 @@ import "ocidl.idl";
 ////////////////////////////////////////////////////////////////////////////////////////
 
 [
+	uuid(87084618-4FF1-4AF1-9098-7D679C6C0B86),
+    helpstring("IScintillAxDispose Interface"),
+    object
+]
+interface IScintillAxDispose : IUnknown
+{
+	HRESULT Dispose();
+};
+
+[
   uuid(B353B863-12C3-45ab-82FE-2F8F9BAA91D6),
   version(1.0),
   helpstring("ScintillAx")
@@ -39,6 +49,14 @@ library Scintilla
 		SCINTILLA_SYNTAX_CSHARP = 10
 	};
 
+	interface IScintillAxProperties;
+	interface IScintillAxText;
+	interface IScintillAxPosition;
+	interface IScintillAxSelection;
+	interface IScintillAxLine;
+	interface IScintillAxAnnotation;
+	interface IScintillAxMarkers;
+
 ////////////////////////////////////////////////////////////////////////////////////////
 // Interfaces
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -48,6 +66,7 @@ library Scintilla
 	////////////////////////////////////////////////////////////////////////////////////
 	importlib("stdole32.tlb");
 
+/*
 	////////////////////////////////////////////////////////////////////////////////////
 	// IScintillAx
 	////////////////////////////////////////////////////////////////////////////////////
@@ -502,6 +521,659 @@ library Scintilla
 
     };
 
+*/
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IScintillAxProperties
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(65BC59C3-3E46-4F80-8B4A-13AADF1A58EB),
+      helpstring("IScintillAxProperties Interface - Properties of a Text Editor AX Component"),
+      object,oleautomation, dual
+    ]
+	interface IScintillAxProperties : IDispatch
+    {
+		//properties:
+
+		[ 
+		  propputref,bindable, requestedit,id(DISPID_FONT), 
+		  helpstring("Get/Set Font")
+		]
+		HRESULT Font( [in] IFontDisp* fnt);
+		[ 
+		  propput,bindable, requestedit,id(DISPID_FONT)
+		]
+		HRESULT Font( [in] IFontDisp* fnt);
+
+		[ 
+		  propget,bindable, requestedit,id(DISPID_FONT)
+		]
+		HRESULT Font( [out,retval] IFontDisp** fnt);
+
+		[ 
+		  propput,bindable,displaybind,defaultbind,requestedit,id(1), 
+		  helpstring("Get/Set Filename")
+		]
+		HRESULT Filename( [in] BSTR fname);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1)
+		]
+		HRESULT Filename( [out,retval] BSTR* fname);
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Set/Get ReadOnly Mode")
+		]
+		HRESULT ReadOnly( [in] VARIANT_BOOL vbReadOnly);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2)
+		]
+		HRESULT ReadOnly( [out,retval] VARIANT_BOOL* vbReadOnly);
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(3), 
+		  helpstring("Get/Set Coloring Syntax")
+		]
+		HRESULT Syntax( [in] long typ);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(3)
+		]
+		HRESULT Syntax( [out,retval] long* typ);
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(4), 
+		  helpstring("get/Set SysTypec (UNIX/Win32)")
+		]
+		HRESULT SysType( [in] long typ);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(4)
+		]
+		HRESULT SysType( [out,retval] long* typ);
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(5), 
+		  helpstring("Set/Get Encoding (UTF-8,Ansi,...)")
+		]
+		HRESULT Encoding( [in] long typ);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(5)
+		]
+		HRESULT Encoding( [out,retval] long* typ);
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(6), 
+		  helpstring("Set/Get Usage of Tabulator chars, setting to false converts tabs to spaces")
+		]
+		HRESULT TabUsage( [in] VARIANT_BOOL vbTabUsage);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(6)
+		]
+		HRESULT TabUsage( [out,retval] VARIANT_BOOL* vbTabUsage);
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(7), 
+		  helpstring("Set/Get whether Tabulator indents")
+		]
+		HRESULT TabIndents( [in] VARIANT_BOOL vbTabIndents);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(7)
+		]
+		HRESULT TabIndents( [out,retval] VARIANT_BOOL* vbTabIndents);
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(8), 
+		  helpstring("Get/Set whether BackSpace unindents")
+		]
+		HRESULT BackSpaceUnindents( [in] VARIANT_BOOL vbBackSpaceIndents);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(8)
+		]
+		HRESULT BackSpaceUnindents( [out,retval] VARIANT_BOOL* vbBackSpaceIndents);
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(9), 
+		  helpstring("get/Set Tabulator width")
+		]
+		HRESULT TabWidth( [in] long width);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(9)
+		]
+		HRESULT TabWidth( [out,retval] long* w);
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(10), 
+		  helpstring("GetSet Overtype mode")
+		]
+		HRESULT Overtype( [in] VARIANT_BOOL over_type);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(10)
+		]
+		HRESULT Overtype( [out,retval] VARIANT_BOOL* over_type);
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(11), 
+		  helpstring("Get/Set Use Context Menue")
+		]
+		HRESULT UseContext([in] VARIANT_BOOL useMenu);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(11)
+		]
+		HRESULT UseContext([out,retval] VARIANT_BOOL* useMenu);
+
+		
+		[ 
+		  propput,bindable,displaybind, requestedit,id(12), 
+		  helpstring("Set WriteBOM")
+		]
+		HRESULT WriteBOM( [in] VARIANT_BOOL vb);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(12), 
+		  helpstring("Get WriteBOM")
+		]
+		HRESULT WriteBOM( [out,retval] VARIANT_BOOL* vb);
+
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(13), 
+		  helpstring("Get/Set Show LineNumbers")
+		]
+		HRESULT ShowLineNumbers([in] VARIANT_BOOL useLineNums);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(13)
+		]
+		HRESULT ShowLineNumbers([out,retval] VARIANT_BOOL* useLineNums);
+
+
+		// methods :
+
+
+		[ id(14), helpstring("Syntax")] 
+		HRESULT SyntaxDisplayName([out,retval] BSTR* syntax);
+
+		[ id(15), helpstring("SyntaxDisplayName")] 
+		HRESULT GetSyntaxDisplayName([in] long type, [out,retval] BSTR* syntax);
+
+
+
+		[ id(16), helpstring("Set Indent")] 
+		HRESULT SetIndent([in] long i);
+
+		[ id(17), helpstring("Convert Tabs")] 
+		HRESULT ConvertTabs();
+
+		/////////////////////////////////////////////////////////////////////
+
+
+
+	};
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IScintillAxText
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(A479AEBD-ED80-4451-8C83-8E422EBC20A1),
+      helpstring("IScintillAxText Interface - Text Content of a Text Editor AX Component"),
+      object,oleautomation, dual
+    ]
+	interface IScintillAxText : IDispatch
+    {
+		//properties:
+
+		[ 
+		  propput,bindable,displaybind,defaultbind,requestedit,id(DISPID_VALUE), 
+		  helpstring("Get/Set Text Value")
+		]
+		HRESULT Value( [in] BSTR txt);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(DISPID_VALUE)
+		]
+		HRESULT Value( [out,retval] BSTR* txt);
+
+
+		[ propget,bindable,displaybind,id(1), helpstring("Get Modified flag")	]
+		HRESULT Modified( [out,retval] VARIANT_BOOL* vbModified );
+
+		[ propget,bindable,displaybind,id(2), helpstring("returns whole document's Text Length")]
+		HRESULT Length( [out,retval] long* len );
+
+		// methods :
+
+		[ id(3), helpstring("Set whole document Text")	]
+		HRESULT SetText( [in] BSTR txt);
+
+		[ id(4), helpstring("Get whole document Text")	]
+		HRESULT GetText( [out,retval] BSTR* txt);
+
+
+
+		[ id(5), helpstring("Get Text Range")] 
+		HRESULT GetTextRange([in] long pStart, [in] long pEnd, [out,retval] BSTR* rng);
+
+		[ id(6), helpstring("Append Text to document")] 
+		HRESULT Append( [in] BSTR txt);
+
+		[ id(7), helpstring("Insert Text to document at specific position")] 
+		HRESULT Insert( [in] Bstr txt, [in] long p );
+
+
+		// Search and Replace
+		[ id(8), helpstring("Search in page")] 
+		HRESULT Search( [in] BSTR sWhat, [in] long lFlags, [out,retval] VARIANT_BOOL* vbFound);
+
+		[ id(9), helpstring("Replace in page")] 
+		HRESULT Replace( [in] BSTR sWhat, [in] BSTR w, [in] long lFlags, [out,retval] VARIANT_BOOL* vbReplaced);
+
+	};
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IScintillAxPosition
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(AE7C2E4D-1AD1-48E8-A376-6C6DA26707E8),
+      helpstring("IScintillAxPosition Interface - Positions in a Text Editor AX Component"),
+      object,oleautomation, dual
+    ]
+	interface IScintillAxPosition : IDispatch
+    {
+		//properties:
+
+		[ 
+		  propput,bindable,displaybind,defaultbind,requestedit,id(DISPID_VALUE), 
+		  helpstring("Get/Set Caret position")
+		]
+		HRESULT Caret( [in] long p);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(DISPID_VALUE)
+		]
+		HRESULT Caret( [out,retval] long* p);
+
+		[ 
+		  propput,bindable,displaybind,defaultbind,requestedit,id(1), 
+		  helpstring("Get/Set Search Position")
+		]
+		HRESULT SearchPos( [in] long p);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1)
+		]
+		HRESULT SearchPos( [out,retval] long* p);
+
+		
+		[ 
+		  propput,bindable,displaybind,defaultbind,requestedit,id(2), 
+		  helpstring("Get/Set Anchor")
+		]
+		HRESULT Anchor( [in] long p);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2)
+		]
+		HRESULT Anchor( [out,retval] long* p);
+
+
+		// methods :
+
+		[ id(3), helpstring("Character At")] 
+		HRESULT CharAt( [in]long p, [out,retval] BSTR* ch);
+
+		[ id(4), helpstring("Scroll by cols / lines")] 
+		HRESULT Scroll([in] long cCols, [in] long cLines);
+
+		[ id(5), helpstring("Scroll into View")] 
+		HRESULT ScrollIntoView();
+
+	};
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IScintillAxSelection
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(76D700E6-D9F1-4D92-AEEF-658773834226),
+      helpstring("IScintillAxSelection Interface - Selections in a Text Editor AX Component"),
+      object,oleautomation, dual
+    ]
+	interface IScintillAxSelection : IDispatch
+    {
+		//properties:
+		[ 
+		  propput,bindable,displaybind,defaultbind,requestedit,id(1), 
+		  helpstring("Get/Set Selection Start Position")
+		]
+		HRESULT Start( [in] long p);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1)
+		]
+		HRESULT Start( [out,retval] long* p);
+
+		[ 
+		  propput,bindable,displaybind,defaultbind,requestedit,id(2), 
+		  helpstring("Get/Set Selection End Position")
+		]
+		HRESULT End( [in] long p);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2)
+		]
+		HRESULT End( [out,retval] long* p);
+
+		[ 
+		  propput,bindable,displaybind,defaultbind,requestedit,id(3), 
+		  helpstring("Get/Set Selection Text")
+		]
+		HRESULT Text( [in] BSTR txt);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(3)
+		]
+		HRESULT Text( [out,retval] BSTR* txt);
+
+
+		// methods :
+
+		[ id(4), helpstring("Get current selection")] 
+		HRESULT GetSelection ( [out] long* pFirst, [out] long* pLast );
+
+		[ id(5), helpstring("Set current selection")] 
+		HRESULT SetSelection ( [in] long pFirst, [in] long pLast );
+
+
+		// Clipboard
+		[ id(6), helpstring("Cut current selection")] 
+		HRESULT Cut();
+
+		[ id(7), helpstring("Copy current selection")] 
+		HRESULT Copy();
+
+		[ id(8), helpstring("Paste current selection")] 
+		HRESULT Paste();
+
+
+	};
+
+	interface IScintillAxLine;
+	
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IScintillAxLine
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(B22C83F1-785D-4007-BE8D-DA5CE333D9D4),
+      helpstring("IScintillAxLine Interface - Lines in a Text Editor AX Component"),
+      object,oleautomation, dual
+    ]
+	interface IScintillAxLine : IDispatch
+    {
+		//properties:
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(DISPID_VALUE),
+		  helpstring("Get/Set current line")
+		]
+		HRESULT Current( [out,retval] long* p);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1)
+		]
+		HRESULT Count( [out,retval] long* p);
+
+		// methods :
+		[ id(2), helpstring("Line from position")] 
+		HRESULT LineFromPos( [in] long p, [out,retval] long* l );
+
+		[ id(3), helpstring("pos for line")] 
+		HRESULT PosFromLine( [in] long l, [out,retval] long* p );
+
+		[ id(4), helpstring("endpos for line")] 
+		HRESULT LineEndPos( [in] long l, [out,retval] long* p );
+
+		[ id(5), helpstring("First Visible Line")	]
+		HRESULT FirstVisibleLine( [out,retval] long* l);
+
+		[ id(6), helpstring("Visible Lines Count")	]
+		HRESULT LinesOnScreen( [out,retval] long* cnt);
+
+		[ id(7), helpstring("Line Length")] 
+		HRESULT LineLength( [in] long l, [out,retval] long* len);
+
+		[ id(8), helpstring("Get Line Text")] 
+		HRESULT LineText( [in] long l, [out,retval] BSTR* txt );
+
+		[ id(9), helpstring("Set Line Text")] 
+		HRESULT SetLineText( [in] long l, [in] BSTR txt );
+
+		[ id(10), helpstring("Line")] 
+		HRESULT Goto( [in] long l );
+
+		[ 
+		  id(11), 
+		  helpstring("Highlite Line")
+		]
+		HRESULT Highlite( [in] long line );
+	};
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IScintillAxAnnotation
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(D0799D5B-E2EC-4877-99A3-03ADD1895B17),
+      helpstring("IScintillAxAnnotation Interface - Inplace Annotation in a Text Editor AX Component"),
+      object,oleautomation, dual
+    ]
+	interface IScintillAxAnnotation : IDispatch
+    {
+		[ 
+		  id(1), 
+		  helpstring("SetAnnotation Text")
+		]
+		HRESULT SetText([in] long line, [in] BSTR txt);
+
+		[ 
+		  id(2), 
+		  helpstring("ClearAnnotation Text")
+		]
+		HRESULT Clear([in] long line);
+
+		[ 
+		  id(3), 
+		  helpstring("ClearAnnotations")
+		]
+		HRESULT ClearAll();
+
+		[ 
+		  id(4), 
+		  helpstring("SetAnnotation Style")
+		]
+		HRESULT SetStyle([in] long line, [in] long style);
+
+	};
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IScintillAxMarkers
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(6F7991E0-0762-452C-A6D4-649847D136DC),
+      helpstring("IScintillAxMarkers Interface - Markers in a Text Editor AX Component"),
+      object,oleautomation, dual
+    ]
+	interface IScintillAxMarkers : IDispatch
+    {
+		//properties:
+				[ 
+		  propput,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get/Set Use markers")
+		]
+		HRESULT UseMarkers([in] VARIANT_BOOL vbMarkers);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1)
+		]
+		HRESULT UseMarkers([out,retval] VARIANT_BOOL* vbMarkers);
+
+
+		//methods:
+		[ 
+		  id(2), 
+		  helpstring("Toggle a Marker at the left widnow border")
+		]
+		HRESULT ToggleMarker([in] long line);
+
+		[ 
+		  id(3), 
+		  helpstring("Set a Marker")
+		]
+		HRESULT SetMarker([in] long line);
+
+
+		[ 
+		  id(4), 
+		  helpstring("Remove a Marker")
+		]
+		HRESULT Remove([in] long line);
+
+
+		[ 
+		  id(5), 
+		  helpstring("Remove all Markers")
+		]
+		HRESULT RemoveAll();
+
+
+		[ 
+		  id(6), 
+		  helpstring("Test for Marker at line")
+		]
+		HRESULT HasMarker([in] long line);
+
+		[ 
+		  id(7), 
+		  helpstring("Get all Markers")
+		]
+		HRESULT GetMarkers([out] SAFEARRAY(long)* markers );
+
+	};
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IScintillAx
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(1120EC6A-130F-440e-9B1D-F02D505FB5BC),
+      helpstring("ScintillAX Interface - Text Editor AX Component"),
+      object,oleautomation, dual
+    ]
+	interface IScintillAx : IDispatch
+    {
+		//properties:	
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get the Properties for this Document")
+		]
+		HRESULT Properties( [out,retval] IScintillAxProperties** d);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get the Text for this Document")
+		]
+		HRESULT Text( [out,retval] IScintillAxText** d);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(3), 
+		  helpstring("Access Positions in this Document")
+		]
+		HRESULT Position( [out,retval] IScintillAxPosition** d);
+
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(4), 
+		  helpstring("Access the Current Selection in this Document")
+		]
+		HRESULT Selection( [out,retval] IScintillAxSelection** d);
+
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(5), 
+		  helpstring("Access Lines of this Document")
+		]
+		HRESULT Line( [out,retval] IScintillAxLine** d);
+
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(6), 
+		  helpstring("Access Annotations in this Document")
+		]
+		HRESULT Annotation( [out,retval] IScintillAxAnnotation** d);
+
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(7), 
+		  helpstring("Access Markers in this Document")
+		]
+		HRESULT Markers( [out,retval] IScintillAxMarkers** d);
+
+		//methods:
+
+		// Load / Save
+		[id(8), helpstring("Load File form disk")] 
+		HRESULT Load( [in] BSTR fname );
+
+		[id(9), helpstring("Load File from disk - Force UTF8")] 
+		HRESULT LoadUTF8( [in] BSTR fname);
+
+		[id(10), helpstring("Save File to disk")] 
+		HRESULT Save();
+
+		[id(11), helpstring("Save As - save File to disk to path")] 
+		HRESULT SaveAs( [in] BSTR fname );
+
+
+		// Undo / Redo
+		[ id(12), helpstring("Undo")] 
+		HRESULT Undo();
+
+		[ id(13), helpstring("Redo")] 
+		HRESULT Redo();
+
+		[ id(14), helpstring("Set SavePoint")] 
+		HRESULT SavePoint();
+
+		// Options
+
+		[ id(15), helpstring("Set Focus")] 
+		HRESULT SetFocus();
+
+		[ id(16), helpstring("Zoom in")] 
+		HRESULT ZoomIn();
+
+		[ id(17), helpstring("Zoom out")] 
+		HRESULT ZoomOut();
+
+		// Print
+		[ id(18), helpstring("Print")] 
+		HRESULT Print();
+
+
+		[ id(19), helpstring("Show Properties")] 
+		HRESULT ShowProperties();
+
+		[id(20), helpstring("Show the Insert Color Dialog"),local]
+		HRESULT InsertColorDialog( );
+
+
+    };
 
 
 ////////////////////////////////////////////////////////////////////////////////////////

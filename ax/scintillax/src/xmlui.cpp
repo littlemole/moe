@@ -4,17 +4,21 @@
 #include "win/res.h"
 #include "xmlui.h"
 
-#include "../scieditor.h"
+#include "scieditor.h"
 
-#include "../ScintillACtrl.h"
+#include "ScintillACtrl.h"
 
-#include "../ScintillAxProp.h"
+#include "ScintillAxProp.h"
+
+#include "Properties.h"
 
 #include "ole/persist.h"
 
 #include "win/layout.h"
 
 #include "win/msghandler.h"
+
+#include "ScintillAx_dispid.h"
 
 
 using namespace mol;

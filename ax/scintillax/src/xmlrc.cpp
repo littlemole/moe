@@ -4,17 +4,21 @@
 #include "win/res.h"
 #include "xmlui.h"
 
-#include "../scieditor.h"
+#include "scieditor.h"
 
-#include "../ScintillACtrl.h"
+#include "ScintillACtrl.h"
 
-#include "../ScintillAxProp.h"
+#include "ScintillAxProp.h"
+
+#include "Properties.h"
 
 #include "ole/persist.h"
 
 #include "win/layout.h"
 
 #include "win/msghandler.h"
+
+#include "ScintillAx_dispid.h"
 
 
 using namespace mol;
@@ -71,130 +75,122 @@ mol::msgMap<ScintillAxProperties>().addCmdHandler( IDC_CONVERT_BUTTON, make_hand
 
 
 
-HRESULT __stdcall ScintillAx::Load( LPSTREAM pStm)
+HRESULT __stdcall SciAxProperties::Load( LPSTREAM pStm)
 {
     pStm
 
-  << mol::property( mol::DispId(this,DISPID_SCI_FILENAME,VT_BSTR) )
+  << mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_FILENAME,VT_BSTR) )
 
-  << mol::property( mol::DispId(this,DISPID_SCI_READONLY,VT_BOOL) )
+  << mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_READONLY,VT_BOOL) )
 
-  << mol::property( mol::DispId(this,DISPID_SCI_SYNTAX,VT_I4) )
+  << mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_SYNTAX,VT_I4) )
 
-  << mol::property( mol::DispId(this,DISPID_SCI_ENCODING,VT_I4) )
+  << mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_ENCODING,VT_I4) )
 
-  << mol::property( mol::DispId(this,DISPID_SCI_TABUSAGE,VT_BOOL) )
+  << mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_TABUSAGE,VT_BOOL) )
 
-  << mol::property( mol::DispId(this,DISPID_SCI_TABINDENTS,VT_BOOL) )
+  << mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_TABINDENTS,VT_BOOL) )
 
-  << mol::property( mol::DispId(this,DISPID_SCI_BACKSPACEUNINDENTS,VT_BOOL) )
+  << mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_BACKSPACEUNINDENTS,VT_BOOL) )
 
-  << mol::property( mol::DispId(this,DISPID_SCI_TABWIDTH,VT_I4) )
+  << mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_TABWIDTH,VT_I4) )
 
-  << mol::property( mol::DispId(this,DISPID_SCI_OVERTYPE,VT_BOOL) )
+  << mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_OVERTYPE,VT_BOOL) )
 
-  << mol::property( mol::DispId(this,DISPID_SCI_USECONTEXT,VT_BOOL) )
+  << mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_USECONTEXT,VT_BOOL) )
 
-  << mol::property( mol::DispId(this,DISPID_FONT,VT_FONT) )
-
-  << mol::property( &sizel )
+  << mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_FONT,VT_FONT) )
 ;
   return S_OK;
   }
 
 
-HRESULT __stdcall ScintillAx::Save( LPSTREAM pStm,BOOL fClearDirty )
+HRESULT __stdcall SciAxProperties::Save( LPSTREAM pStm,BOOL fClearDirty )
 {
     pStm
 
-  >> mol::property( mol::DispId(this,DISPID_SCI_FILENAME,VT_BSTR) )
+  >> mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_FILENAME,VT_BSTR) )
 
-  >> mol::property( mol::DispId(this,DISPID_SCI_READONLY,VT_BOOL) )
+  >> mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_READONLY,VT_BOOL) )
 
-  >> mol::property( mol::DispId(this,DISPID_SCI_SYNTAX,VT_I4) )
+  >> mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_SYNTAX,VT_I4) )
 
-  >> mol::property( mol::DispId(this,DISPID_SCI_ENCODING,VT_I4) )
+  >> mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_ENCODING,VT_I4) )
 
-  >> mol::property( mol::DispId(this,DISPID_SCI_TABUSAGE,VT_BOOL) )
+  >> mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_TABUSAGE,VT_BOOL) )
 
-  >> mol::property( mol::DispId(this,DISPID_SCI_TABINDENTS,VT_BOOL) )
+  >> mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_TABINDENTS,VT_BOOL) )
 
-  >> mol::property( mol::DispId(this,DISPID_SCI_BACKSPACEUNINDENTS,VT_BOOL) )
+  >> mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_BACKSPACEUNINDENTS,VT_BOOL) )
 
-  >> mol::property( mol::DispId(this,DISPID_SCI_TABWIDTH,VT_I4) )
+  >> mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_TABWIDTH,VT_I4) )
 
-  >> mol::property( mol::DispId(this,DISPID_SCI_OVERTYPE,VT_BOOL) )
+  >> mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_OVERTYPE,VT_BOOL) )
 
-  >> mol::property( mol::DispId(this,DISPID_SCI_USECONTEXT,VT_BOOL) )
+  >> mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_USECONTEXT,VT_BOOL) )
 
-  >> mol::property( mol::DispId(this,DISPID_FONT,VT_FONT) )
-
-  >> mol::property( &sizel )
+  >> mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_FONT,VT_FONT) )
 ;
   return S_OK;
   }
 
 
 
-HRESULT __stdcall ScintillAx::Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog)
+HRESULT __stdcall SciAxProperties::Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog)
 {
     pPropBag
 
-  << mol::property( _T("DISPID_SCI_FILENAME"), mol::DispId(this,DISPID_SCI_FILENAME,VT_BSTR) )
+  << mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_FILENAME"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_FILENAME,VT_BSTR) )
 
-  << mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_READONLY,VT_BOOL) )
+  << mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_READONLY"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_READONLY,VT_BOOL) )
 
-  << mol::property( _T("DISPID_SCI_SYNTAX"), mol::DispId(this,DISPID_SCI_SYNTAX,VT_I4) )
+  << mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_SYNTAX"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_SYNTAX,VT_I4) )
 
-  << mol::property( _T("DISPID_SCI_ENCODING"), mol::DispId(this,DISPID_SCI_ENCODING,VT_I4) )
+  << mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_ENCODING"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_ENCODING,VT_I4) )
 
-  << mol::property( _T("DISPID_SCI_TABUSAGE"), mol::DispId(this,DISPID_SCI_TABUSAGE,VT_BOOL) )
+  << mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_TABUSAGE"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_TABUSAGE,VT_BOOL) )
 
-  << mol::property( _T("DISPID_SCI_TABINDENTS"), mol::DispId(this,DISPID_SCI_TABINDENTS,VT_BOOL) )
+  << mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_TABINDENTS"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_TABINDENTS,VT_BOOL) )
 
-  << mol::property( _T("DISPID_SCI_BACKSPACEUNINDENTS"), mol::DispId(this,DISPID_SCI_BACKSPACEUNINDENTS,VT_BOOL) )
+  << mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_BACKSPACEUNINDENTS"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_BACKSPACEUNINDENTS,VT_BOOL) )
 
-  << mol::property( _T("DISPID_SCI_TABWIDTH"), mol::DispId(this,DISPID_SCI_TABWIDTH,VT_I4) )
+  << mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_TABWIDTH"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_TABWIDTH,VT_I4) )
 
-  << mol::property( _T("DISPID_SCI_OVERTYPE"), mol::DispId(this,DISPID_SCI_OVERTYPE,VT_BOOL) )
+  << mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_OVERTYPE"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_OVERTYPE,VT_BOOL) )
 
-  << mol::property( _T("DISPID_SCI_USECONTEXT"), mol::DispId(this,DISPID_SCI_USECONTEXT,VT_BOOL) )
+  << mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_USECONTEXT"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_USECONTEXT,VT_BOOL) )
 
-  << mol::property( _T("DISPID_FONT"), mol::DispId(this,DISPID_FONT,VT_FONT) )
-
-  << mol::property( _T("sizel"), &sizel )
+  << mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_FONT"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_FONT,VT_FONT) )
 ;
 return S_OK;
 }
 
 
-HRESULT __stdcall ScintillAx::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties)
+HRESULT __stdcall SciAxProperties::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties)
 {
     pPropBag
 
-  >> mol::property( _T("DISPID_SCI_FILENAME"), mol::DispId(this,DISPID_SCI_FILENAME,VT_BSTR) )
+  >> mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_FILENAME"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_FILENAME,VT_BSTR) )
 
-  >> mol::property( _T("DISPID_SCI_READONLY"), mol::DispId(this,DISPID_SCI_READONLY,VT_BOOL) )
+  >> mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_READONLY"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_READONLY,VT_BOOL) )
 
-  >> mol::property( _T("DISPID_SCI_SYNTAX"), mol::DispId(this,DISPID_SCI_SYNTAX,VT_I4) )
+  >> mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_SYNTAX"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_SYNTAX,VT_I4) )
 
-  >> mol::property( _T("DISPID_SCI_ENCODING"), mol::DispId(this,DISPID_SCI_ENCODING,VT_I4) )
+  >> mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_ENCODING"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_ENCODING,VT_I4) )
 
-  >> mol::property( _T("DISPID_SCI_TABUSAGE"), mol::DispId(this,DISPID_SCI_TABUSAGE,VT_BOOL) )
+  >> mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_TABUSAGE"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_TABUSAGE,VT_BOOL) )
 
-  >> mol::property( _T("DISPID_SCI_TABINDENTS"), mol::DispId(this,DISPID_SCI_TABINDENTS,VT_BOOL) )
+  >> mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_TABINDENTS"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_TABINDENTS,VT_BOOL) )
 
-  >> mol::property( _T("DISPID_SCI_BACKSPACEUNINDENTS"), mol::DispId(this,DISPID_SCI_BACKSPACEUNINDENTS,VT_BOOL) )
+  >> mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_BACKSPACEUNINDENTS"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_BACKSPACEUNINDENTS,VT_BOOL) )
 
-  >> mol::property( _T("DISPID_SCI_TABWIDTH"), mol::DispId(this,DISPID_SCI_TABWIDTH,VT_I4) )
+  >> mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_TABWIDTH"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_TABWIDTH,VT_I4) )
 
-  >> mol::property( _T("DISPID_SCI_OVERTYPE"), mol::DispId(this,DISPID_SCI_OVERTYPE,VT_BOOL) )
+  >> mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_OVERTYPE"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_OVERTYPE,VT_BOOL) )
 
-  >> mol::property( _T("DISPID_SCI_USECONTEXT"), mol::DispId(this,DISPID_SCI_USECONTEXT,VT_BOOL) )
+  >> mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_USECONTEXT"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_USECONTEXT,VT_BOOL) )
 
-  >> mol::property( _T("DISPID_FONT"), mol::DispId(this,DISPID_FONT,VT_FONT) )
-
-  >> mol::property( _T("sizel"), &sizel )
+  >> mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_FONT"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_FONT,VT_FONT) )
 ;
 return S_OK;
 }

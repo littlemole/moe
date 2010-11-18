@@ -123,6 +123,7 @@
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">L:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">Midl</CustomBuildAfterTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
     <ClCompile>
@@ -154,7 +155,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>..\..\lib\include;..\..;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\ax;.;..\..\3dParty;..\..\lib\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;DEBUG;_WINDOWS;MOL_DLL;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;STATIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -291,22 +292,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="scieditor.cpp" />
-    <ClCompile Include="ScintillaCtrl.cpp" />
-    <ClCompile Include="ScintillAX.cpp" />
-    <ClCompile Include="ScintillAxProp.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_release_64|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="src\xmlrc.cpp" />
-    <ClCompile Include="src\xmlui.cpp" />
-  </ItemGroup>
-  <ItemGroup>
+    <CustomBuild Include="..\..\cg\disph.exe">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">$(TargetName)_dispid_h</Outputs>
+    </CustomBuild>
     <None Include="ScintillAX.def" />
     <None Include="xml\cmd.xml" />
     <None Include="xml\include.xml" />
@@ -333,7 +323,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">codegen phase</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">cscript.exe ../../cg/js/make.js "uni_release"
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">cscript.exe ../../cg/js/make.js "uni_release"
+      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">cscript.exe ../../cg/js/make.js "uni_debug"
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
@@ -355,18 +345,6 @@
     <Midl Include="ScintillAX.idl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\resource.h" />
-    <ClInclude Include="scieditor.h" />
-    <ClInclude Include="ScintillaCtrl.h" />
-    <ClInclude Include="ScintillAX_h.h" />
-    <ClInclude Include="ScintillAxEvents.h" />
-    <ClInclude Include="ScintillAxProp.h" />
-    <ClInclude Include="sciwnd.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="include\xmlid.h" />
-    <ClInclude Include="include\xmlui.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="resources\mol.rc" />
   </ItemGroup>
   <ItemGroup>
@@ -378,6 +356,44 @@
       <Project>{612dcf55-08f8-4a1c-8803-da4d9f08f457}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Annotation.h" />
+    <ClInclude Include="include\Line.h" />
+    <ClInclude Include="include\Markers.h" />
+    <ClInclude Include="include\Position.h" />
+    <ClInclude Include="include\Properties.h" />
+    <ClInclude Include="include\resource.h" />
+    <ClInclude Include="include\scieditor.h" />
+    <ClInclude Include="include\ScintillaCtrl.h" />
+    <ClInclude Include="include\ScintillAxEvents.h" />
+    <ClInclude Include="include\ScintillAxProp.h" />
+    <ClInclude Include="include\sciwnd.h" />
+    <ClInclude Include="include\Selection.h" />
+    <ClInclude Include="include\Text.h" />
+    <ClInclude Include="include\xmlid.h" />
+    <ClInclude Include="include\xmlui.h" />
+    <ClInclude Include="ScintillAx_dispid.h" />
+    <ClInclude Include="ScintillAx_h.h" />
+    <ClInclude Include="stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Annotation.cpp" />
+    <ClCompile Include="src\Line.cpp" />
+    <ClCompile Include="src\Markers.cpp" />
+    <ClCompile Include="src\Position.cpp" />
+    <ClCompile Include="src\Properties.cpp" />
+    <ClCompile Include="src\scieditor.cpp" />
+    <ClCompile Include="src\ScintillaCtrl.cpp" />
+    <ClCompile Include="src\ScintillAX.cpp" />
+    <ClCompile Include="src\ScintillAxProp.cpp" />
+    <ClCompile Include="src\Selection.cpp" />
+    <ClCompile Include="src\Text.cpp" />
+    <ClCompile Include="src\xmlrc.cpp" />
+    <ClCompile Include="src\xmlui.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -9,19 +9,19 @@
    
    <persistence>
       
-      <class type="ScintillAx">
-		    <persist property="DISPID_SCI_FILENAME" vtype="VT_BSTR"  />	
-		    <persist property="DISPID_SCI_READONLY" vtype="VT_BOOL"  />	
-		    <persist property="DISPID_SCI_SYNTAX" vtype="VT_I4"  />	 
-		    <persist property="DISPID_SCI_ENCODING" vtype="VT_I4"  />	 
-		    <persist property="DISPID_SCI_TABUSAGE" vtype="VT_BOOL"  />
-		    <persist property="DISPID_SCI_TABINDENTS" vtype="VT_BOOL"  />
-		    <persist property="DISPID_SCI_BACKSPACEUNINDENTS" vtype="VT_BOOL" />	
-		    <persist property="DISPID_SCI_TABWIDTH" vtype="VT_I4"/>	    
-		    <persist property="DISPID_SCI_OVERTYPE" vtype="VT_BOOL" />	    
-		    <persist property="DISPID_SCI_USECONTEXT" vtype="VT_BOOL"  />	    
-		    <persist property="DISPID_FONT" vtype="VT_FONT" />	    
-	      <persist member="sizel" name="cs" />
+      <class type="SciAxProperties">
+		    <persist property="DISPID_ISCINTILLAXPROPERTIES_FILENAME" vtype="VT_BSTR"  />	
+		    <persist property="DISPID_ISCINTILLAXPROPERTIES_READONLY" vtype="VT_BOOL"  />	
+		    <persist property="DISPID_ISCINTILLAXPROPERTIES_SYNTAX" vtype="VT_I4"  />	 
+		    <persist property="DISPID_ISCINTILLAXPROPERTIES_ENCODING" vtype="VT_I4"  />	 
+		    <persist property="DISPID_ISCINTILLAXPROPERTIES_TABUSAGE" vtype="VT_BOOL"  />
+		    <persist property="DISPID_ISCINTILLAXPROPERTIES_TABINDENTS" vtype="VT_BOOL"  />
+		    <persist property="DISPID_ISCINTILLAXPROPERTIES_BACKSPACEUNINDENTS" vtype="VT_BOOL" />	
+		    <persist property="DISPID_ISCINTILLAXPROPERTIES_TABWIDTH" vtype="VT_I4"/>	    
+		    <persist property="DISPID_ISCINTILLAXPROPERTIES_OVERTYPE" vtype="VT_BOOL" />	    
+		    <persist property="DISPID_ISCINTILLAXPROPERTIES_USECONTEXT" vtype="VT_BOOL"  />	    
+		    <persist property="DISPID_ISCINTILLAXPROPERTIES_FONT" vtype="VT_FONT" />	    
+	     
       </class>
      
     </persistence>
