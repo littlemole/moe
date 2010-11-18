@@ -191,6 +191,7 @@ public:
 
     virtual HRESULT __stdcall Apply( void);
 
+
 protected:
 	void initWalker(HTREEITEM parent, ISetting* set);
 	bool editValue(HTREEITEM hit);
