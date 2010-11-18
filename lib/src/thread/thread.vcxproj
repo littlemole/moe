@@ -250,6 +250,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\thread\events.h" />
     <ClInclude Include="..\..\include\thread\fun.h" />
     <ClInclude Include="..\..\include\thread\signal.h" />
     <ClInclude Include="..\..\include\thread\sync.h" />
