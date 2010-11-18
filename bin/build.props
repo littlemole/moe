@@ -56,7 +56,7 @@
 
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
     <Midl>
-	 <TypeLibraryName>uni_release\$(TargetName).tlb</TypeLibraryName>
+	 <OutputDirectory>uni_release</OutputDirectory>
     </Midl>
     <ClCompile>
       <Optimization>Full</Optimization>
