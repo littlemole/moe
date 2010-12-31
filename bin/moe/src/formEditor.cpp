@@ -5,7 +5,7 @@
 #include "moebar.h"
 #include "xmlui.h"
 #include "ole/Rib.h"
-
+#include "win/TaskBar.h"
 #include "ribbonres.h"
 
 using namespace mol::win;
@@ -167,7 +167,7 @@ bool FormEditor::initialize(const mol::string& p)
 		props->put_UseContext(VARIANT_FALSE);
 	}
 
-	thumb = taskbar()->addTab( *this,p );
+	thumb = mol::taskbar()->addTab( *this,p );
 
 	// now maximize the window
 	maximize();

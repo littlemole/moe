@@ -4,6 +4,7 @@
 #include "xmlui.h"
 #include "ole/Rib.h"
 #include "MoeBar.h"
+#include "win/TaskBar.h"
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -131,7 +132,7 @@ bool ImgViewer::load(const mol::string& p)
 	statusBar()->status(80);
 	move(0,0,s.cx+pt.x-rw.left,s.cy+pt.y-rw.top,TRUE);
 	
-	thumb = taskbar()->addTab( *this,p );
+	thumb = mol::taskbar()->addTab( *this,p );
 
 	return true;
 }

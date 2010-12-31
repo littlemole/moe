@@ -4,6 +4,7 @@
 #include "xmlui.h"
 #include "ole/Rib.h"
 #include "MoeBar.h"
+#include "win/TaskBar.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -54,7 +55,7 @@ OleChild::Instance* OleChild::CreateInstance( const mol::string& p )
 	statusBar()->status(100);
 	doc->OnLayout(0,0,0);	
 
-	doc->thumb = taskbar()->addTab( *doc,p );
+	doc->thumb = mol::taskbar()->addTab( *doc,p );
 
 	return doc;
 }
@@ -85,7 +86,7 @@ OleChild::Instance* OleChild::CreateInstance( const mol::string& p, CLSID& clsid
 
 	doc->OnLayout(0,0,0);	
 
-	doc->thumb = taskbar()->addTab( *doc,p );
+	doc->thumb = mol::taskbar()->addTab( *doc,p );
 
     return doc;
 }

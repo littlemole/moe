@@ -228,9 +228,6 @@
     <singleton name="urlDlg" class="UrlDlg" />
     <singleton name="debugDlg" class="DebugDlg" />
 
-    <!-- ThumbnailTaskBar Support-->
-    <singleton name="taskbar" class="Taskbar" />
-    
     <!-- COM singleton: user settings -->
     <singleton name="config" class="ISetting" clsid="CLSID_Setting" />
     

@@ -14,6 +14,7 @@
 #include "ole/Rib.h"
 #include "shared.h"
 #include "Ribbonres.h"
+#include "win/taskbar.h"
 
 using namespace mol::io;
 using namespace mol;
@@ -168,7 +169,7 @@ void MoeWnd::OnCreate()
 	debugDlg()->doModeless( IDD_DIALOG_DEBUG, *this );
 	debugDlg()->show(SW_HIDE);
 
-	taskbar()->init(*this);
+	mol::taskbar()->init(*this);
 
 	// ------------------  //
 

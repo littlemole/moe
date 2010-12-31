@@ -3,7 +3,7 @@
 
 #include "commons.h"
 #include "Docs.h"
-#include "TaskBar.h"
+#include "win/TaskBar.h"
 #include "ole/cp.h"
 
 /////////////////////////////////////////////////////////////////////
@@ -149,7 +149,7 @@ public:
 	   return E_NOTIMPL;
    }
 
-   TaskThumbnail thumb;
+   mol::TaskThumbnail thumb;
 };
 
 
