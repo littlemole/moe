@@ -5,6 +5,7 @@
 #include "MoeBar.h"
 #include "Ribbonres.h"
 #include "ole/Rib.h"
+#include "win/TaskBar.h"
 
 using namespace mol::io;
 
@@ -94,7 +95,7 @@ bool Hex::initialize(const mol::string& p, bool readOnly)
 			}
 		}
 	}
-	thumb = taskbar()->addTab( *this,p );
+	thumb = mol::taskbar()->addTab( *this,p );
 	return true;
 }
 

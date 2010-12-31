@@ -4,7 +4,7 @@
 #include "xmlui.h"
 #include "ole/Rib.h"
 #include "MoeBar.h"
-#include "TaskBar.h"
+#include "win/TaskBar.h"
 
 MoeHtmlWnd::MoeHtmlWnd( )
 {
@@ -238,7 +238,7 @@ bool MoeHtmlWnd::load( const mol::string& loc )
 
 	statusBar()->status(50);
 
-	thumb = taskbar()->addTab( *this,loc );
+	thumb = mol::taskbar()->addTab( *this,loc );
 
 	return true;
 }

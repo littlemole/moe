@@ -5,6 +5,7 @@
 #include "MoeBar.h"
 #include "xmlui.h"
 #include "ole/Rib.h"
+#include "win/TaskBar.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -82,7 +83,7 @@ bool DirChild::initialize(const mol::string& p)
 	show(SW_SHOW);
 	maximize();
 
-	thumb = taskbar()->addTab( *this,p );
+	thumb = mol::taskbar()->addTab( *this,p );
 
 	redrawOleFrameLater();
 

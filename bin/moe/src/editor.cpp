@@ -5,7 +5,7 @@
 #include "moebar.h"
 #include "xmlui.h"
 #include "ole/Rib.h"
-#include "TaskBar.h"
+#include "win/TaskBar.h"
 #include "ribbonres.h"
 #include "ThreadScript.h"
 #include "ActivDbg.h"

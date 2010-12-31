@@ -6,7 +6,7 @@
 #include "widgets.h"
 #include "Docs.h"
 #include "resource.h"
-#include "taskbar.h"
+
 
 
 
