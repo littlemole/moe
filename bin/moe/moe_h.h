@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sat Nov 13 12:58:22 2010
+/* at Sun Dec 26 23:58:16 2010
  */
 /* Compiler settings for src\moe.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 7.00.0555 
@@ -2315,10 +2315,6 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Remove( 
             /* [in] */ VARIANT index) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Rename( 
-            /* [in] */ VARIANT index,
-            /* [in] */ VARIANT newIndex) = 0;
-        
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Move( 
             /* [in] */ VARIANT what,
             /* [in] */ VARIANT to) = 0;
@@ -2442,11 +2438,6 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
             IMoeDocumentCollection * This,
             /* [in] */ VARIANT index);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Rename )( 
-            IMoeDocumentCollection * This,
-            /* [in] */ VARIANT index,
-            /* [in] */ VARIANT newIndex);
-        
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Move )( 
             IMoeDocumentCollection * This,
             /* [in] */ VARIANT what,
@@ -2535,9 +2526,6 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
 
 #define IMoeDocumentCollection_Remove(This,index)	\
     ( (This)->lpVtbl -> Remove(This,index) ) 
-
-#define IMoeDocumentCollection_Rename(This,index,newIndex)	\
-    ( (This)->lpVtbl -> Rename(This,index,newIndex) ) 
 
 #define IMoeDocumentCollection_Move(This,what,to)	\
     ( (This)->lpVtbl -> Move(This,what,to) ) 

@@ -172,8 +172,10 @@ HRESULT __stdcall MoeChildView::Hide()
 
 HRESULT __stdcall MoeChildView::Close()
 {
-	wnd_->postMessage(WM_CLOSE,0,0);
-	return S_OK;
+	//wnd_->postMessage(WM_CLOSE,0,0);
+	LRESULT r = wnd_->sendMessage(WM_CLOSE,0,0);
+
+	return r == 0 ? S_OK : S_FALSE;
 }
 
 HRESULT __stdcall MoeChildView::Minimize()
@@ -623,7 +625,7 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 	mol::FilenameDlg ofn(*moe());
 	ofn.setFilter( InFilesFilter );			
 
-	if ( ofn.dlgOpen( OFN_NOVALIDATE | OFN_ALLOWMULTISELECT | OFN_EXPLORER ) )
+	if ( ofn.dlgOpen( OFN_NOVALIDATE | OFN_ALLOWMULTISELECT | OFN_EXPLORER  | OFN_NOTESTFILECREATE ) )
 	{
 		// open html
 		if ( ofn.index() == 3 )
@@ -631,12 +633,7 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
 				ODBGS(ofn.fileName(i).c_str());
-				bool result = docs()->open( 0, ofn.fileName(i), Docs::PREF_HTML,ofn.readOnly(), 0);
-				if (!result)
-				{
-					::MessageBox(*moe(),ofn.fileName(i).c_str(),_T("failed to load"),MB_ICONERROR);
-				}
-				statusBar()->status(ofn.fileName(i));
+				bool result = docs()->open( -1, ofn.fileName(i), Docs::PREF_HTML,ofn.readOnly(), 0);
 			}
 		}
 		// open hex
@@ -644,12 +641,7 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 		{
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
-				bool result = docs()->open( 0, ofn.fileName(i), Docs::PREF_HEX, ofn.readOnly(), 0);
-				if (!result)
-				{
-					::MessageBox(*moe(),ofn.fileName(i).c_str(),_T("failed to load"),MB_ICONERROR);
-				}
-				statusBar()->status(ofn.fileName(i));
+				bool result = docs()->open( -1, ofn.fileName(i), Docs::PREF_HEX, ofn.readOnly(), 0);
 			}
 		}
 		// open text
@@ -657,16 +649,7 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 		{
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
-				bool result = docs()->open( 0, ofn.fileName(i), ofn.index() == 2 ? Docs::PREF_UTF8 : Docs::PREF_TXT, ofn.readOnly(), 0);
-
-				ODBGS1("OPEN FILE RESULT: [[[ ",(int)result);
-				if (!result)
-				{
-					statusBar()->status(ofn.fileName(i) + _T(" failed to load") );
-					//::MessageBox(*this,ofn.fileName(i).c_str(),_T("failed to load"),MB_ICONERROR);
-					return E_FAIL;
-				}
-				statusBar()->status(ofn.fileName(i));
+				bool result = docs()->open(-1, ofn.fileName(i), ofn.index() == 2 ? Docs::PREF_UTF8 : Docs::PREF_TXT, ofn.readOnly(), 0);
 			}
 		}
 	}	
@@ -682,7 +665,7 @@ HRESULT __stdcall MoeDialogs::OpenDir( IMoeDocument** d)
 		if ( s != _T("") )
 		{
 			if ( mol::Path::exists(s) )
-				docs()->open( 0, s, Docs::PREF_TXT, false, d);
+				docs()->open( -1, s, Docs::PREF_TXT, false, d);
 		}
 
 	}
@@ -698,7 +681,7 @@ HRESULT __stdcall MoeDialogs::ChooseFile( BSTR* f )
 	*f = 0;
 
 	mol::FilenameDlg ofn(*moe());
-	if ( ofn.dlgOpen( OFN_NOVALIDATE | OFN_EXPLORER ) )
+	if ( ofn.dlgOpen( OFN_NOVALIDATE | OFN_EXPLORER | OFN_NOTESTFILECREATE ) )
 	{
 		mol::string fn = ofn.fileName();
 		*f = ::SysAllocString( mol::towstring(fn).c_str() );

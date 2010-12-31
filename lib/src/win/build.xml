@@ -33,8 +33,11 @@
     <ClCompile Include="res.cpp" />
     <ClCompile Include="RTFedit.cpp" />
     <ClCompile Include="shell.cpp" />
+    <ClCompile Include="propwnd.cpp" />
     <ClCompile Include="wnd.cpp" />
     <ClCompile Include="wndclass.cpp" />
+    <ClCompile Include="gdiplus.cpp" />
+    <ClCompile Include="pp.cpp" />
   </ItemGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

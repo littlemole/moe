@@ -133,10 +133,11 @@ protected:
 	std::map<int,ISetting*>		batchMap;
 	std::map<int,ISetting*>		formMap;
 
-	mol::string filename_;
+	//mol::string filename_;
 
 	mol::punk<IRemoteDebugApplicationThread> remote_;
 	ThreadScript* ts_;
+	mol::string	lasterror_;
 };
 
 //////////////////////////////////////////////////////////////////////////////////

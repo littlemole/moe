@@ -4,7 +4,7 @@ if ( doc )
   var d = doc.Object;
   if ( d )
   {
-    var txt = d.GetText();
+    var txt = d.Text;
     moe.Script.Eval(txt,"javascript");
   }
 }

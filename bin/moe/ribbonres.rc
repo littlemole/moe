@@ -149,6 +149,11 @@ END
 
 STRINGTABLE 
 BEGIN
+    RibbonTreeViewContextMap_LabelTitle_RESID L"Tree Context Menu" /* LabelTitle RibbonTreeViewContextMap_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
     RibbonPrefGroup_LabelTitle_RESID L"Settings" /* LabelTitle RibbonPrefGroup_LabelTitle_RESID: (null) */
 END
 
@@ -1629,11 +1634,6 @@ BEGIN
 END
 
 RibbonDebugStepOut_LargeImages_RESID    BITMAP    "ribbon\\stepout.bmp" /* LargeImages RibbonDebugStepOut_LargeImages_RESID: (null) */
-STRINGTABLE 
-BEGIN
-    RibbonTreeViewContextMap_LabelTitle_RESID L"Label:RibbonTreeViewContextMap" /* LabelTitle RibbonTreeViewContextMap_LabelTitle_RESID: (null) */
-END
-
 STRINGTABLE 
 BEGIN
     RibbonListViewContextMap_LabelTitle_RESID L"Label:RibbonListViewContextMap" /* LabelTitle RibbonListViewContextMap_LabelTitle_RESID: (null) */

@@ -72,6 +72,7 @@ public:
 	void OnNcDestroy();
 
 	LRESULT OnClose();
+	LRESULT OnCloseAllButThis();
 	LRESULT OnMenu(UINT, WPARAM, LPARAM );
 
 	/////////////////////////////////////////////////////////////////////
@@ -84,6 +85,7 @@ public:
 	 void OnFileOpenHtml ();
      void OnFileOpenDir ();
      void OnFileOpenHex ();
+	 void OnTreeOpen();
 
 	 void OnFileExit ( );
 	 void OnFind ();
@@ -118,6 +120,7 @@ public:
 	/////////////////////////////////////////////////////////////////////
 
 	LRESULT OnDispatch(UINT, WPARAM, LPARAM );
+	LRESULT OnDispatchTree(UINT, WPARAM, LPARAM );
 
 	/////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////

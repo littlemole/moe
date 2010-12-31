@@ -41,6 +41,8 @@
         <msg  handler="OnEditPaste" cmd="IDM_EDIT_PASTE" />
         <msg  handler="OnFreezeToolBar" cmd="IDM_TOOLBARS_FREEZE" />
         <msg  handler="OnSyntax" cmd="IDW_SYNTAX_BOX" />
+
+        <msg  handler="OnTreeOpen" cmd="IDM_TREE_OPEN" />
       
         <!-- ribbon -->
         <msg  handler="OnRecentItems" cmd="IDM_RIBBON_RECENTITEMS"  />
@@ -115,11 +117,21 @@
         <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_STEPOUT" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_STOP" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_QUIT" />
-
+     
         <msg  handler="OnDispatch" cmd="IDM_MODE_EXECUTEFORM" />
         <msg  handler="OnDispatch" cmd="IDM_MODE_SHOW_LINE_NUMBERS" />
 
-        <msgrange type="cmd" from="ID_FIRST_USER_CMD" to="ID_LAST_USER_CMD" handler="OnDispatch" />
+        <msg  handler="OnDispatchTree" cmd="IDM_TREE_OPEN" />
+        <msg  handler="OnDispatchTree" cmd="IDM_TREE_RENAME" />
+        <msg  handler="OnDispatchTree" cmd="IDM_TREE_DELETE" />
+        <msg  handler="OnDispatchTree" cmd="IDM_TREE_CUT" />
+        <msg  handler="OnDispatchTree" cmd="IDM_TREE_COPY" />
+        <msg  handler="OnDispatchTree" cmd="IDM_TREE_PASTE" />
+        <msg  handler="OnDispatchTree" cmd="IDM_TREE_PROPERTIES" />
+        <msg  handler="OnDispatchTree" cmd="IDM_TREE_EXECUTE" />
+        <msg  handler="OnDispatchTree" cmd="IDM_TREE_NEWDIR" />
+
+      <msgrange type="cmd" from="ID_FIRST_USER_CMD" to="ID_LAST_USER_CMD" handler="OnDispatch" />
         <msgrange type="cmd" from="ID_FIRST_USER_SCRIPT" to="ID_LAST_USER_SCRIPT" handler="OnDispatch" />
         <msgrange type="cmd" from="ID_FIRST_USER_BATCH" to="ID_LAST_USER_BATCH" handler="OnDispatch" />
         <msgrange type="cmd" from="ID_FIRST_USER_FORM" to="ID_LAST_USER_FORM" handler="OnDispatch" />
@@ -313,6 +325,26 @@
         <!-- std windows msgs -->
         <msg  handler="OnClose" msg="WM_CLOSE" />
         <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
+    </class>
+
+    <class type="MoeTreeWnd" >
+
+      
+      <msg  handler="OnTreeOpen" cmd="IDM_FILE_OPEN" />
+      <msg  handler="OnTreeOpen" cmd="IDM_TREE_OPEN" />
+      <msg  handler="OnTreeUpdate" cmd="IDM_TREE_UPDATE" />
+      <msg  handler="OnTreeRename" cmd="IDM_TREE_RENAME" />
+      <msg  handler="OnTreeDelete" cmd="IDM_TREE_DELETE" />
+      <msg  handler="OnTreeExecute" cmd="IDM_TREE_EXECUTE" />
+      <msg  handler="OnTreeProperties" cmd="IDM_TREE_PROPERTIES" />
+      <msg  handler="OnTreeNewDir" cmd="IDM_TREE_NEWDIR" />
+      <msg  handler="OnEditCut" cmd="IDM_TREE_CUT" />
+      <msg  handler="OnEditCopy" cmd="IDM_TREE_COPY" />
+      <msg  handler="OnEditPaste" cmd="IDM_TREE_PASTE" />
+      <msg  handler="OnEditCut" cmd="IDM_EDIT_CUT" />
+      <msg  handler="OnEditCopy" cmd="IDM_EDIT_COPY" />
+      <msg  handler="OnEditPaste" cmd="IDM_EDIT_PASTE" />
+      
     </class>
     
   </msgs>

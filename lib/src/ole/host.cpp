@@ -1107,6 +1107,7 @@ LRESULT AxClientWndBase::wndProcAxImpl( HWND hWnd, UINT message, WPARAM wParam, 
 			return 0;
 		}
 
+		//case WM_NCDESTROY:
 		case WM_DESTROY:
 		{
 			mol::Rect r(0,0,0,0);
@@ -1119,16 +1120,9 @@ LRESULT AxClientWndBase::wndProcAxImpl( HWND hWnd, UINT message, WPARAM wParam, 
 			{	
 				ODBGS("WM_CLOSE");
 
-
 				// shutdown oleobj
 				HRESULT hr = oleObject->Unadvise(cookie_);
-
-				//assure frame has no more active obj
-
-				// anounce de-activation to active obj
-				//if ( activeObject)
-					//activeObject->OnDocWindowActivate(FALSE);
-					
+				
 				this->inplaceDeActivate(TRUE);
 
 			}
@@ -1148,7 +1142,7 @@ LRESULT AxClientWndBase::wndProcAxImpl( HWND hWnd, UINT message, WPARAM wParam, 
 
 				// release interfaces
 
-				oleObject.release();	
+				//oleObject.release();	
 				theStorage.release();
 				this->releaseAxClientSite();
 				oleFrame.release();
@@ -1176,10 +1170,13 @@ LRESULT AxClientWndBase::wndProcAxImpl( HWND hWnd, UINT message, WPARAM wParam, 
 			}
 			return 0;
 		}
+		
 		case WM_NCDESTROY:
 		{
+			oleObject.release();	
 			return 0;
 		}
+		
 		default:
 		{
 			return this->callAxDefWndProc( hWnd, message,wParam,lParam);

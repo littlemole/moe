@@ -48,6 +48,7 @@ public:
         WORD   event()  { return hi();				}
 
         LPNMHDR         nmhdr()		        { return (LPNMHDR)         lParam_;	}
+		LPNMHEADER      nmheader()	        { return (LPNMHEADER)      lParam_;	}
 		LPNMTVDISPINFO  treeViewDispInfo()  { return (LPNMTVDISPINFO)  lParam_; }
         LPNMTREEVIEW    nmtreeview()        { return (NMTREEVIEW*)     lParam_;	}
 		LPNMTOOLBAR     nmtoolbar()			{ return (NMTOOLBAR*)	   lParam_; }

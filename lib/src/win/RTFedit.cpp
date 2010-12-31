@@ -8,8 +8,8 @@ const mol::TCHAR richedit_class[] = RICHEDIT_CLASS;
 DWORD CALLBACK RichEditStreamCallBack::inStreamCallback( DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb )
 {
     RichEditStreamCallBack* pThis	= (RichEditStreamCallBack*)(dwCookie);
-    const mol::string& str			= pThis->ioBuf_;
-	LONG toWrite					= (LONG)(str.size())*sizeof(mol::TCHAR) -  pThis->written_;
+    const std::string& str			= pThis->ioBuf_;
+	LONG toWrite					= (LONG)(str.size())*sizeof(char) -  pThis->written_;
 
     if ( toWrite > cb )
             toWrite = cb;
@@ -19,7 +19,7 @@ DWORD CALLBACK RichEditStreamCallBack::inStreamCallback( DWORD_PTR dwCookie, LPB
     if ( toWrite == 0 )
             return 0;
 
-	const mol::TCHAR* p = str.c_str();
+	const char* p = str.c_str();
     p += pThis->written_;
 
     memcpy(pbBuff,p,toWrite);
@@ -32,7 +32,7 @@ DWORD CALLBACK RichEditStreamCallBack::inStreamCallback( DWORD_PTR dwCookie, LPB
 DWORD CALLBACK RichEditStreamCallBack::outStreamCallback( DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb )
 {
     RichEditStreamCallBack* pThis	= (RichEditStreamCallBack*)(dwCookie);
-    const mol::string& str			= pThis->ioBuf_;
+    const std::string& str			= pThis->ioBuf_;
 
     pThis->written_ += cb;
 
@@ -44,7 +44,7 @@ DWORD CALLBACK RichEditStreamCallBack::outStreamCallback( DWORD_PTR dwCookie, LP
 
     buf[cb]=0;
 
-	pThis->ioBuf_ += (const mol::TCHAR*)(buf);
+	pThis->ioBuf_ += (const char*)(buf);
 
     delete buf;
 
@@ -53,7 +53,7 @@ DWORD CALLBACK RichEditStreamCallBack::outStreamCallback( DWORD_PTR dwCookie, LP
 
 } // end namespace mol::win
 
-LRESULT RichEditCtrl::streamIn( const mol::string c, int type )
+LRESULT RichEditCtrl::streamIn( const std::string c, int type )
 {
     cb_.ioBuf_					= c ;
     cb_.written_				= 0;
@@ -62,18 +62,21 @@ LRESULT RichEditCtrl::streamIn( const mol::string c, int type )
     cb_.editstream_.pfnCallback	= &(mol::win::RichEditStreamCallBack::inStreamCallback);
 
     LRESULT ret=0;
-    if ( c != _T("") )
+    if ( c != "" )
             ret = sendMessage(EM_STREAMIN,type,(LPARAM)(&(cb_.editstream_)) );
 
     if ( cb_.editstream_.dwError != 0 )
+	{
+		cry();
             throw X( _T("stream E") );
+	}
 
     return ret;
 }
 
-LRESULT RichEditCtrl::streamOut(mol::string& out, int type )
+LRESULT RichEditCtrl::streamOut(std::string& out, int type )
 {
-    cb_.ioBuf_					= _T("") ;
+    cb_.ioBuf_					= "" ;
     cb_.written_				= 0;
     cb_.editstream_.dwError		= 0;
     cb_.editstream_.dwCookie	= (DWORD_PTR)(mol::win::RichEditStreamCallBack*) &cb_;
@@ -95,7 +98,7 @@ LRESULT RichEditCtrl::notify(int id )
 }
 
 
-bool RichEditCtrl::search( const mol::string& s, int options )
+bool RichEditCtrl::search( const std::string& s, int options )
 {
     searchText_ = s;
     return search( options );

@@ -12,6 +12,12 @@ namespace mol  {
 void* dllFunc( const mol::string& dll, const mol::string& f );
 void* dllFunc( HMODULE module, const mol::string& f );
 
+template<class T>
+void zero( T& t )
+{
+	::ZeroMemory( &t, sizeof(T) );
+}
+
 
 template<class T>
 class point

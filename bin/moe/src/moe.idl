@@ -157,10 +157,10 @@ library Moe
 		[id(14), helpstring("Remove and close document at index / with given path")] 
 		HRESULT Remove( [in] VARIANT index);
 
-		[id(15), helpstring("Rename object at index/path to new path")] 
-		HRESULT Rename( [in] VARIANT index, [in]  VARIANT newIndex);
-
-		[id(16), helpstring("Move object from index/path to new index")] 
+		//[id(15), helpstring("Rename object at index/path to new path")] 
+		//HRESULT Rename( [in] VARIANT index, [in]  VARIANT newIndex);
+		 
+		[id(15), helpstring("Move object from index/path to new index")] 
 		HRESULT Move( [in] VARIANT what, [in] VARIANT to);
 
 	}

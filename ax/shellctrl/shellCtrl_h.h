@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sat Nov 13 12:56:54 2010
+/* at Sat Dec 25 13:44:10 2010
  */
 /* Compiler settings for shellCtrl.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 7.00.0555 
@@ -222,6 +222,12 @@ EXTERN_C const IID IID_IShellTree;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateDir( void) = 0;
         
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_UseContext( 
+            /* [in] */ VARIANT_BOOL vb) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UseContext( 
+            /* [retval][out] */ VARIANT_BOOL *vb) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -326,6 +332,14 @@ EXTERN_C const IID IID_IShellTree;
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateDir )( 
             IShellTree * This);
         
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UseContext )( 
+            IShellTree * This,
+            /* [in] */ VARIANT_BOOL vb);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UseContext )( 
+            IShellTree * This,
+            /* [retval][out] */ VARIANT_BOOL *vb);
+        
         END_INTERFACE
     } IShellTreeVtbl;
 
@@ -409,6 +423,12 @@ EXTERN_C const IID IID_IShellTree;
 
 #define IShellTree_CreateDir(This)	\
     ( (This)->lpVtbl -> CreateDir(This) ) 
+
+#define IShellTree_put_UseContext(This,vb)	\
+    ( (This)->lpVtbl -> put_UseContext(This,vb) ) 
+
+#define IShellTree_get_UseContext(This,vb)	\
+    ( (This)->lpVtbl -> get_UseContext(This,vb) ) 
 
 #endif /* COBJMACROS */
 
@@ -1535,6 +1555,9 @@ EXTERN_C const IID IID_IShellTreeEvents;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnTreeOpen( 
             /* [in] */ BSTR fname) = 0;
         
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnContextMenu( 
+            /* [in] */ BSTR fname) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -1596,6 +1619,10 @@ EXTERN_C const IID IID_IShellTreeEvents;
             IShellTreeEvents * This,
             /* [in] */ BSTR fname);
         
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnContextMenu )( 
+            IShellTreeEvents * This,
+            /* [in] */ BSTR fname);
+        
         END_INTERFACE
     } IShellTreeEventsVtbl;
 
@@ -1640,6 +1667,9 @@ EXTERN_C const IID IID_IShellTreeEvents;
 
 #define IShellTreeEvents_OnTreeOpen(This,fname)	\
     ( (This)->lpVtbl -> OnTreeOpen(This,fname) ) 
+
+#define IShellTreeEvents_OnContextMenu(This,fname)	\
+    ( (This)->lpVtbl -> OnContextMenu(This,fname) ) 
 
 #endif /* COBJMACROS */
 

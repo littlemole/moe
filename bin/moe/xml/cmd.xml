@@ -159,6 +159,18 @@
     <cmd id="IDM_FORMLANG_PERLSCRIPT" title="PerlScript"/>
 
     <cmd id="IDM_FILE_NEW_UFS" title="New UFS" ribbon="RibbonFileNewUFS" />
+    <cmd id="IDM_TREE" title="Tree Window Context Menu" />
+
+    <cmd id="IDM_TREE_OPEN" title="Open in moe" ribbon="RibbonOpenTree" />
+    <cmd id="IDM_TREE_UPDATE" title="Update" ribbon="RibbonReloadTree" />
+    <cmd id="IDM_TREE_RENAME" title="Rename" ribbon="RibbonRenameTree" />
+    <cmd id="IDM_TREE_DELETE" title="Delete" ribbon="RibbonDeleteTree" />
+    <cmd id="IDM_TREE_CUT" title="Delete" ribbon="RibbonCutTree" />
+    <cmd id="IDM_TREE_COPY" title="Delete" ribbon="RibbonCopyTree" />
+    <cmd id="IDM_TREE_PASTE" title="Execute" ribbon="RibbonPasteTree" />
+    <cmd id="IDM_TREE_PROPERTIES"  title="Properties" ribbon="RibbonPropertiesTree" />
+    <cmd id="IDM_TREE_EXECUTE"  title="Properties" ribbon="RibbonExecuteTree" />
+    <cmd id="IDM_TREE_NEWDIR" title="New Directory" ribbon="RibbonNewDirTree" />
     
   </cmds>
 </mol:codegen>

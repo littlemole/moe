@@ -166,7 +166,7 @@ HRESULT __stdcall Docs::Open( BSTR fPath, IMoeDocument** d)
 	*d = 0;
 
 	mol::punk<IMoeDocument> doc;
-	open(0, mol::bstr(fPath).toString(), Docs::PREF_TXT, false,&doc);
+	open(-1, mol::bstr(fPath).toString(), Docs::PREF_TXT, false,&doc);
 
 	if ( !doc )
 		return E_FAIL;
@@ -182,7 +182,7 @@ HRESULT __stdcall Docs::OpenUTF8( BSTR fPath, IMoeDocument** d)
 	*d = 0;
 
 	mol::punk<IMoeDocument> doc;
-	open(0, mol::bstr(fPath).toString(), Docs::PREF_UTF8, false,&doc);
+	open(-1, mol::bstr(fPath).toString(), Docs::PREF_UTF8, false,&doc);
 
 	if ( !doc )
 		return E_FAIL;
@@ -198,7 +198,7 @@ HRESULT __stdcall Docs::OpenDir(BSTR dir,  IMoeDocument** d)
 	*d = 0;
 
 	mol::punk<IMoeDocument> doc;
-	open(0, mol::bstr(dir).toString(), Docs::PREF_TXT, false,&doc);
+	open(-1, mol::bstr(dir).toString(), Docs::PREF_TXT, false,&doc);
 
 	if ( !doc )
 		return E_FAIL;
@@ -214,7 +214,7 @@ HRESULT __stdcall Docs::OpenHexEditor(  BSTR f, VARIANT_BOOL vbReadOnly, IMoeDoc
 	*d = 0;
 
 	mol::punk<IMoeDocument> doc;
-	open(0, mol::bstr(f).toString(), Docs::PREF_HEX, vbReadOnly == VARIANT_TRUE ? true : false,&doc);
+	open(-1, mol::bstr(f).toString(), Docs::PREF_HEX, vbReadOnly == VARIANT_TRUE ? true : false,&doc);
 
 	if ( !doc )
 		return E_FAIL;
@@ -230,7 +230,7 @@ HRESULT __stdcall Docs::OpenHtmlFrame(  BSTR f,  IMoeDocument** d)
 	*d = 0;
 
 	mol::punk<IMoeDocument> doc;
-	open(0, mol::bstr(f).toString(), Docs::PREF_HTML, false,&doc);
+	open(-1, mol::bstr(f).toString(), Docs::PREF_HTML, false,&doc);
 
 	if ( !doc )
 		return E_FAIL;
@@ -246,7 +246,7 @@ HRESULT __stdcall Docs::OpenUserForm(  BSTR pathname, IMoeDocument** d )
 	*d = 0;
 
 	mol::punk<IMoeDocument> doc;
-	open(0, mol::bstr(pathname).toString(), Docs::PREF_FORM, false,&doc);
+	open(-1, mol::bstr(pathname).toString(), Docs::PREF_FORM, false,&doc);
 
 	if ( !doc )
 		return E_FAIL;
@@ -317,14 +317,21 @@ HRESULT __stdcall Docs::Remove( VARIANT index )
 
 HRESULT __stdcall Docs::Rename(VARIANT index, VARIANT newIndex )
 {
+	if ( newIndex.vt != VT_BSTR )
+		return S_FALSE;
+
 	childlist::iterator it = iterator(index);
 	if ( it == children_.end() )
 		return S_FALSE;
 
 	(*it).first = newIndex;
+	mol::string newTitle =  mol::valueOf(mol::variant(newIndex));
 
 	// update tab window
-	tab()->rename( mol::valueOf(mol::variant(index)), mol::valueOf(mol::variant(newIndex)), mol::Path::filename(mol::valueOf(mol::variant(newIndex))) );
+	tab()->rename( mol::valueOf(mol::variant(index)), newTitle, mol::Path::filename(newTitle) );
+
+	// update taskbar
+	taskbar()->renameTab( ((HWND)(*it).second), newTitle );
 	return S_OK;
 }
 
@@ -352,6 +359,9 @@ HRESULT __stdcall Docs::Move( VARIANT what, VARIANT to )
 	if ( jt == children_.end() )
 		return S_FALSE;
 
+	mol::MdiChild* mc( (*jt).second );
+	taskbar()->moveTab( (HWND)(*val), (HWND)(*mc) );
+
 	tab()->remove( key.toString() );
 	children_.insert(jt,std::make_pair( what, val) );
 
@@ -360,6 +370,8 @@ HRESULT __stdcall Docs::Move( VARIANT what, VARIANT to )
 	tab()->insertItem( mol::Path::filename( key.toString() ), key.toString(), index );
 	tab()->select(key.toString());
 	val->activate();
+
+
 	return S_OK;
 }
 
@@ -416,20 +428,28 @@ Docs::childlist::iterator Docs::iterator(VARIANT& index)
 
 mol::string Docs::getNewFileName(const mol::string& ext)
 {
+	mol::TCHAR buf[MAX_PATH];
+	::SHGetSpecialFolderPath( *moe(), buf, CSIDL_MYDOCUMENTS, TRUE );
+
+	mol::string p(buf);
+	p = mol::Path::addBackSlash(p);
+
 	int i = 1;
 	while (i<999)
 	{
 		mol::ostringstream oss;
-		oss << _T("NewFile") << i << ext;
+		oss << p << _T("NewFile") << i << ext;
+
+		mol::string f = oss.str();
 
 		punk<IMoeDocument> doc;
-		if ( S_FALSE == Item( variant(bstr(oss.str())), &doc ) )
+		if ( S_FALSE == Item( variant(bstr(f)), &doc ) )
 		{
-			return oss.str();
+			return f;
 		}
 		i++;
 	}
-	return _T("NewFile.txt");
+	return p + _T("NewFile.txt");
 }
 
 
@@ -438,8 +458,9 @@ bool Docs::newFile(IMoeDocument** doc)
 	if ( moe()->activeObject)
 		moe()->activeObject->OnDocWindowActivate(FALSE);
 
-	mol::string fn = getNewFileName(_T(".txt"));
-	Editor::Instance* edit = Editor::CreateInstance( fn, false, false );
+	mol::string p = getNewFileName(_T(".txt"));
+
+	Editor::Instance* edit = Editor::CreateInstance( p, false, false );
 	if (!edit)
 		return false;
 
@@ -449,9 +470,9 @@ bool Docs::newFile(IMoeDocument** doc)
 		moe()->doLayout();
 	}
 
-	children_.push_back( std::make_pair( mol::variant(fn), dynamic_cast<mol::MdiChild*>(edit)) );
-	tab()->insertItem( mol::Path::filename(fn),fn,0);
-	tab()->select(fn);
+	children_.push_back( std::make_pair( mol::variant(p), dynamic_cast<mol::MdiChild*>(edit)) );
+	tab()->insertItem( mol::Path::filename(p),p);//,0);
+	tab()->select(p);
 
 	progress()->show(SW_HIDE);
 	if (doc)
@@ -464,9 +485,9 @@ bool Docs::newUFSFile(IMoeDocument** doc)
 	if ( moe()->activeObject)
 		moe()->activeObject->OnDocWindowActivate(FALSE);
 
-	mol::string fn = getNewFileName(_T(".ufs"));
+	mol::string p = getNewFileName(_T(".ufs"));
 
-	FormEditor::Instance* edit = FormEditor::CreateInstance( fn );
+	FormEditor::Instance* edit = FormEditor::CreateInstance( p );
 	if (!edit)
 		return false;
 
@@ -476,9 +497,9 @@ bool Docs::newUFSFile(IMoeDocument** doc)
 		moe()->doLayout();
 	}
 
-	children_.push_back( std::make_pair( mol::variant(fn), dynamic_cast<mol::MdiChild*>(edit)) );
-	tab()->insertItem( mol::Path::filename(fn),fn,0);
-	tab()->select(fn);
+	children_.push_back( std::make_pair( mol::variant(p), dynamic_cast<mol::MdiChild*>(edit)) );
+	tab()->insertItem( mol::Path::filename(p),p);//,0);
+	tab()->select(p);
 
 
 	progress()->show(SW_HIDE);
@@ -494,46 +515,15 @@ bool Docs::newUFSFile(IMoeDocument** doc)
 
 bool Docs::open( int index, const mol::string& path, InFiles pref, bool readOnly, IMoeDocument** doc )
 {
-	mol::MdiChild* mdi = openPath( path, pref, readOnly );
-	if (!mdi)
-		return false;
-
-	if ( children_.empty() )
-	{
-		tab()->show(SW_SHOW);
-		moe()->doLayout();
-	}
-
-
-	childlist::iterator it = iterator( mol::variant(index) );
-	if ( it == children_.end() )
-		children_.push_back( std::make_pair(mol::variant(path), mdi) );
-	else
-		children_.insert( it, std::make_pair(mol::variant(path), mdi) );
-
-	if ( doc )
-	{
-		IMoeDocument* d = dynamic_cast<IMoeDocument*>(mdi);
-		d->QueryInterface( IID_IMoeDocument, (void**) doc );
-	}
-
-	tab()->insertItem( mol::Path::filename(path),path,index);
-
-	tab()->select(path);
-
-	mol::Ribbon::ribbon()->addRecentDoc(RibbonMRUItems,path);
-
-	return true;
-}
-
-mol::MdiChild* Docs::openPath( const mol::string& path, InFiles pref, bool readOnly)
-{
-
-	statusBar()->status(10);
+	// valid path ?
 	if ( path.size() < 1 )
 	{
+		mol::ostringstream oss;
+		oss << "cancelled loading empty path " << path;
+		statusBar()->status(oss.str());
 		return false;
 	}
+
 
 	// already open?
 	punk<IMoeDocument> d;
@@ -541,6 +531,9 @@ mol::MdiChild* Docs::openPath( const mol::string& path, InFiles pref, bool readO
 	{
 		if ( IDYES != ::MessageBox( *moe(), _T("close file?"), _T("file already open!"), MB_ICONEXCLAMATION|MB_YESNO ) )
 		{
+			mol::ostringstream oss;
+			oss << "cancelled reloading " << path;
+			statusBar()->status(oss.str());
 			return false;
 		}
  
@@ -552,18 +545,70 @@ mol::MdiChild* Docs::openPath( const mol::string& path, InFiles pref, bool readO
 			view.release();
 			d.release();
 		}
-		else
-			return false;
 	}
+
+	// inactive any active object
+	if ( moe()->activeObject)
+		moe()->activeObject->OnDocWindowActivate(FALSE);
+
+	// try to load and create mdi child 
+	mol::MdiChild* mdi = openPath( path, pref, readOnly );
+	if (!mdi)
+	{
+		// failed to load
+		if ( moe()->activeObject)
+			moe()->activeObject->OnDocWindowActivate(TRUE);
+
+		mol::ostringstream oss;
+		oss << _T(" failed to load ") << path;
+		statusBar()->status( oss.str() );
+		return false;
+	}
+
+	// if first document, show tab
+	if ( children_.empty() )
+	{
+		tab()->show(SW_SHOW);
+		moe()->doLayout();
+	}
+
+	// insert document into collection
+	childlist::iterator it = iterator( mol::variant(index) );
+	if ( it == children_.end() )
+		children_.push_back( std::make_pair(mol::variant(path), mdi) );
+	else
+		children_.insert( it, std::make_pair(mol::variant(path), mdi) );
+
+	// update child selector tab window
+	tab()->insertItem( mol::Path::filename(path),path,index);
+	tab()->select(path);
+
+	// add document to ribbon recent docs
+	mol::Ribbon::ribbon()->addRecentDoc(RibbonMRUItems,path);
+
+	// deliver return value if desired
+	if ( doc )
+	{
+		IMoeDocument* d = dynamic_cast<IMoeDocument*>(mdi);
+		d->QueryInterface( IID_IMoeDocument, (void**) doc );
+	}
+
+	statusBar()->status(path);
+	return true;
+}
+
+mol::MdiChild* Docs::openPath( const mol::string& path, InFiles pref, bool readOnly)
+{
+	statusBar()->status(10);
 
 	// if path is directory, create dir view
 	if ( mol::Path::isDir(path) )
 	{
-		return openPathDir(path);
+		return load<DirChild>(path);
 	}			
 
 	if ( pref == PREF_HTML )
-		return openPathHtml(path);
+		return load<MoeHtmlWnd>(path);
 
 	
 	if ( !mol::Path::exists(path) )
@@ -572,7 +617,7 @@ mol::MdiChild* Docs::openPath( const mol::string& path, InFiles pref, bool readO
 	}
 
 	if ( pref == PREF_HEX )
-		return openPathHex(path,readOnly);
+		return load<Hex>(path,readOnly);
 
 
 	// if path is file, check filextension
@@ -584,13 +629,13 @@ mol::MdiChild* Docs::openPath( const mol::string& path, InFiles pref, bool readO
 	// pdf support
 	if ( mol::icmp( ext,  _T("pdf") ) == 0 )
 	{
-		return openPathHtml(path);
+		return load<MoeHtmlWnd>(path);
 	}
 
 	// form20 support
 	if ( mol::icmp( ext,  _T("ufs") ) == 0 )
 	{
-		return openPathForm(path);
+		return load<FormEditor>(path);
 	}
 
 	// office support
@@ -605,7 +650,7 @@ mol::MdiChild* Docs::openPath( const mol::string& path, InFiles pref, bool readO
 		 )
 	   )
 	{
-		return openPathOle(path);
+		return load<OleChild>(path);
 	}
 
     // is image?
@@ -616,133 +661,11 @@ mol::MdiChild* Docs::openPath( const mol::string& path, InFiles pref, bool readO
 		 mol::icmp( ext,  _T("bmp"))== 0   
 		)
     {
-		return openPathImg(path);
+		return load<ImgViewer>(path);
     }
 
 	// ... so try open in text editor
-	if ( pref == PREF_UTF8 )
-		return openPathUTF8(path,readOnly);
-	else
-		return openPathText(path,readOnly);
+	return load<Editor>(path, pref == PREF_UTF8, readOnly );
 }
 	
-mol::MdiChild* Docs::openPathText( const mol::string& path, bool readOnly )
-{
-	// ... so try open in text editor
-	if ( moe()->activeObject)
-		moe()->activeObject->OnDocWindowActivate(FALSE);
 
-	Editor::Instance* edit = Editor::CreateInstance( path, false, readOnly );
-	if ( edit )
-			statusBar()->status(path);
-	else
-			statusBar()->status( _T("failed to load") );
-
-	return dynamic_cast<mol::MdiChild*>(edit);
-}
-	
-	
-mol::MdiChild* Docs::openPathUTF8( const mol::string& path, bool readOnly )
-{
-	// ... so try open in text editor
-	if ( moe()->activeObject)
-		moe()->activeObject->OnDocWindowActivate(FALSE);
-
-	Editor::Instance* edit = Editor::CreateInstance( path, true, readOnly );
-	if ( edit )
-			statusBar()->status(path);
-	else
-			statusBar()->status( _T("failed to load") );
-	return dynamic_cast<mol::MdiChild*>(edit);
-}
-
-mol::MdiChild* Docs::openPathHex( const mol::string& path, bool readOnly )
-{
-	// open html
-	if ( moe()->activeObject)
-		moe()->activeObject->OnDocWindowActivate(FALSE);
-
-	// open in hexedit
-	Hex::Instance* hexer = Hex::CreateInstance( path, readOnly );
-	if ( hexer )
-			statusBar()->status(path);
-	else
-			statusBar()->status( _T("failed to load") );
-	return dynamic_cast<mol::MdiChild*>(hexer);
-}
-
-mol::MdiChild* Docs::openPathHtml( const mol::string& path)
-{
-	// open html
-	if ( moe()->activeObject)
-		moe()->activeObject->OnDocWindowActivate(FALSE);
-
-	MoeHtmlWnd::Instance* html = MoeHtmlWnd::CreateInstance(path);
-	if ( html )
-			statusBar()->status(path);
-	else
-			statusBar()->status( _T("failed to load") );
-	return dynamic_cast<mol::MdiChild*>(html);
-}
-
-
-mol::MdiChild* Docs::openPathOle( const mol::string& path )
-{
-	// open html
-	if ( moe()->activeObject)
-		moe()->activeObject->OnDocWindowActivate(FALSE);
-
-	OleChild::Instance* oc = OleChild::CreateInstance(path);
-	if ( oc )
-			statusBar()->status(path);
-	else
-			statusBar()->status( _T("failed to load") );
-	return dynamic_cast<mol::MdiChild*>(oc);
-}
-
-
-
-mol::MdiChild* Docs::openPathImg( const mol::string& path )
-{
-	// open html
-	if ( moe()->activeObject)
-		moe()->activeObject->OnDocWindowActivate(FALSE);
-
-	ImgViewer::Instance* iv = ImgViewer::CreateInstance(path);
-	if ( iv )
-			statusBar()->status(path);
-	else
-			statusBar()->status( _T("failed to load") );
-    return dynamic_cast<mol::MdiChild*>(iv);
-}
-
-
-
-mol::MdiChild* Docs::openPathDir( const mol::string& path )
-{
-	// open html
-	if ( moe()->activeObject)
-		moe()->activeObject->OnDocWindowActivate(FALSE);
-
-	DirChild::Instance* dc = DirChild::CreateInstance(path);
-	if ( dc )
-			statusBar()->status(path);
-	else
-			statusBar()->status( _T("failed to load") );
-	return dynamic_cast<mol::MdiChild*>(dc);
-}
-
-
-mol::MdiChild* Docs::openPathForm( const mol::string& path )
-{
-	// open form
-	if ( moe()->activeObject)
-		moe()->activeObject->OnDocWindowActivate(FALSE);
-
-	FormEditor::Instance* f = FormEditor::CreateInstance(path);
-	if ( f )
-			statusBar()->status(path);
-	else
-			statusBar()->status( _T("failed to load") );
-	return dynamic_cast<mol::MdiChild*>(f);
-}

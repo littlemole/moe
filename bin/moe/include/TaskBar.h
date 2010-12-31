@@ -4,7 +4,7 @@
 
 #include "win/res.h"
 #include "win/wnd.h"
-#include "shared.h"
+//#include "shared.h"
 
 class Taskbar;
 
@@ -19,9 +19,8 @@ public:
 
 private:
 
-	TaskbarWnd(Taskbar* tb, IMoeDocument*, ITaskbarList4*, bool disabled = false );
-	static TaskbarWnd* Create( Taskbar * pMainDlg, IMoeDocument* d, ITaskbarList4*,bool disabled = false);
-
+	TaskbarWnd(Taskbar* tb, HWND doc, ITaskbarList4*, bool disabled = false );
+	static TaskbarWnd* Create( Taskbar * pMainDlg, HWND d,const mol::string& title, ITaskbarList4*,bool disabled = false);
 
 	virtual ~TaskbarWnd();
 	virtual BOOL destroy();
@@ -40,12 +39,10 @@ private:
 	Taskbar* tb_;
 
 	bool disabled_;
-	IMoeDocument* doc;
+	HWND doc;
 	HBITMAP hbm_cached_;
-	
-	
-	void timer_callback();
-	
+		
+	void timer_callback();	
 	mol::Timer timer_;
 };
 
@@ -59,12 +56,19 @@ public:
 	Taskbar();
 	virtual ~Taskbar();
 
-	TaskbarWnd* addTab( IMoeDocument* d, bool disabled = false );
+	void init(HWND parent);
 
+	TaskbarWnd* addTab( HWND d, const mol::string& title, bool disabled = false );
+
+	void renameTab( HWND d, const mol::string& title );
+	void moveTab( HWND d, HWND before );
+
+	HWND parent() {return parent_; }
 private:
 
 	void RemoveTab(HWND hwnd);
 
+	HWND parent_;
 	std::map<HWND,TaskbarWnd*> tabs_;
 	mol::punk<ITaskbarList4> tbl_;
 };

@@ -72,6 +72,8 @@ public:
     int  contentLength();
 	void contentLength( int len );
     std::string contentType();
+	std::string contentEncoding();
+	std::string transferEncoding();
 	void contentType(const std::string& c);
     std::string connection();
     bool wantShutDown();
@@ -115,25 +117,6 @@ protected:
 
 /////////////////////////////////////////////////////////////////////////
 
-template<class charT, class Traits>
-std::string 
-get_line_paranoid( std::basic_istream<charT,Traits>& is, const char delim = '\n' )
-{
-	std::ostringstream oss;
-
-	typename std::basic_istream<charT,Traits>::char_type c = 0;
-
-	while ( is )
-	{
-		c = is.get();
-		if ( std::basic_istream<charT,Traits>::traits_type::eq_int_type( c, std::basic_istream<charT,Traits>::traits_type::eof() ) )
-			break;
-		oss << c;
-		if ( c == delim )
-			break;
-	}
-	return oss.str();
-}
 
 } // end namespace mol
 
@@ -145,7 +128,7 @@ template<class charT, class Traits>
 std::basic_ostream<charT,Traits>&
 operator<< ( std::basic_ostream<charT,Traits>& os, mol::HttpHeaders& http)
 {
-	os << http.Headers() << "\r\n";// std::endl;
+	os << http.Headers() << "\r\n";
 	return os;
 }
 
@@ -160,23 +143,29 @@ operator>> ( std::basic_istream<charT,Traits>& is, mol::HttpHeaders& http)
 	http = mol::HttpHeaders();
 
 	// get Http Request command or Http responde command
-	std::string line = mol::get_line_paranoid(is);
-	//std::getline(is,line);
+	std::string code = "100";
+	while ( code == "100" )
+	{
+		std::string line = mol::get_line_paranoid(is);
+//		std::getline(is,line);
 
-	if ( line == "" )
-		throw mol::HttpEx("HTTP ex: failed to get http command line");
+		if ( line == "" )
+			throw mol::HttpEx("HTTP ex: empty line reading HttpHeaders from stream looking for HTPP Command (socket closed?)");
 
-	line = mol::trim(line);
-	if ( ( line.size() > 3 ) && ( line.substr(0,4) != "HTTP" ) )
-		http.setAction(line);
-	else
-		http.setResponse(line);
+		line = mol::trim(line);
+		if ( ( line.size() > 3 ) && ( line.substr(0,4) != "HTTP" ) )
+			http.setAction(line);
+		else
+			http.setResponse(line);
+
+		code = http.getCode();
+	}
 
 	// get headers
 	while ( is )
 	{
-		line = mol::get_line_paranoid(is);
-		//std::getline(is,line);
+		std::string line;
+		std::getline(is,line);
 		line = mol::trim (line);
 		if ( line == "" )
 			break;

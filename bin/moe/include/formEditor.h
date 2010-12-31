@@ -30,7 +30,7 @@ public:
 	// std windows msgs
 
 	LRESULT OnMDIActivate(WPARAM unused,HWND activated);
-	LRESULT OnDestroy();
+	void OnDestroy();
 
 	LRESULT OnSaveAs();
 	LRESULT OnSave();

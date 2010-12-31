@@ -116,7 +116,8 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">L:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
     <ClCompile>
@@ -248,13 +249,16 @@
     <ClCompile Include="file.cpp" />
     <ClCompile Include="folder.cpp" />
     <ClCompile Include="folderbrowser.cpp" />
+    <ClCompile Include="gdiplus.cpp" />
     <ClCompile Include="io.cpp" />
     <ClCompile Include="layout.cpp" />
     <ClCompile Include="mdi.cpp" />
     <ClCompile Include="mem.cpp" />
     <ClCompile Include="net.cpp" />
     <ClCompile Include="path.cpp" />
+    <ClCompile Include="pp.cpp" />
     <ClCompile Include="process.cpp" />
+    <ClCompile Include="propwnd.cpp" />
     <ClCompile Include="res.cpp" />
     <ClCompile Include="RTFedit.cpp" />
     <ClCompile Include="shell.cpp" />
@@ -273,6 +277,7 @@
     <ClInclude Include="..\..\include\win\enc.h" />
     <ClInclude Include="..\..\include\win\file.h" />
     <ClInclude Include="..\..\include\win\folder.h" />
+    <ClInclude Include="..\..\include\win\gdiplus.h" />
     <ClInclude Include="..\..\include\win\io.h" />
     <ClInclude Include="..\..\include\win\layout.h" />
     <ClInclude Include="..\..\include\win\mdi.h" />
@@ -283,7 +288,9 @@
     <ClInclude Include="..\..\include\win\msgmap.h" />
     <ClInclude Include="..\..\include\win\net.h" />
     <ClInclude Include="..\..\include\win\path.h" />
+    <ClInclude Include="..\..\include\win\pp.h" />
     <ClInclude Include="..\..\include\win\process.h" />
+    <ClInclude Include="..\..\include\win\propwnd.h" />
     <ClInclude Include="..\..\include\win\regkey.h" />
     <ClInclude Include="..\..\include\win\res.h" />
     <ClInclude Include="..\..\include\win\RTFedit.h" />

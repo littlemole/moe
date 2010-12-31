@@ -54,7 +54,7 @@ OleChild::Instance* OleChild::CreateInstance( const mol::string& p )
 	statusBar()->status(100);
 	doc->OnLayout(0,0,0);	
 
-	doc->thumb = taskbar()->addTab( doc );
+	doc->thumb = taskbar()->addTab( *doc,p );
 
 	return doc;
 }
@@ -85,7 +85,7 @@ OleChild::Instance* OleChild::CreateInstance( const mol::string& p, CLSID& clsid
 
 	doc->OnLayout(0,0,0);	
 
-	doc->thumb = taskbar()->addTab( doc );
+	doc->thumb = taskbar()->addTab( *doc,p );
 
     return doc;
 }
@@ -94,14 +94,20 @@ OleChild::Instance* OleChild::CreateInstance( const mol::string& p, CLSID& clsid
 
 void OleChild::OnDestroy()
 {
-	mol::variant v(filename_);
-	docs()->Remove(v);
+
+
+
+
 }
 
 
 void OleChild::OnNcDestroy()
 {
-	IMoeDocument* doc = (IMoeDocument*)this;	
+		
+		mol::variant v(filename_);
+	docs()->Remove(v);	
+
+		IMoeDocument* doc = (IMoeDocument*)this;	
 	::CoDisconnectObject( doc,0);
 	doc->Release();
 }
@@ -119,19 +125,22 @@ LRESULT OleChild::OnMDIActivate(WPARAM unused, HWND activated)
 		thumb.refreshIcon(true);
 	}
 
+	mol::string filename = getText();
+	statusBar()->status( filename );
+	tab()->select( filename );
+
 	if ( mol::Ribbon::ribbon()->enabled() )
 	{
 		if ( activated == *this )
 		{
-			mol::string filename = getText();
-			statusBar()->status( filename );
-			tab()->select( filename );
 			mol::Ribbon::ribbon()->mode(0);
 			mol::Ribbon::ribbon()->minimize();
 
-
 			// delay this or OLE embedded WORD will complaint in some cases
+
 			mol::invoke<OleChild,LRESULT,WPARAM,HWND>( *this, &OleChild::OnMDIActivateLater,unused, activated);	
+			//BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
+			//this->redrawOleFrameLater();
 			return 0;
 		}
 	}
@@ -142,6 +151,8 @@ LRESULT OleChild::OnMDIActivate(WPARAM unused, HWND activated)
 
 LRESULT OleChild::OnMDIActivateLater(WPARAM unused, HWND activated)
 {
+
+
 	BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
     return 0;
 }
@@ -165,7 +176,7 @@ bool OleChild::openFile( const mol::string& path )
 	// determine window menu
 	windowMenu_ = mol::UI().SubMenu( IDM_MOE ,IDM_VIEW_WINDOWS);
 
-	create(path,0 /* IDM_MOE_DIR*/ ,mol::Rect(0,0,500,500),*moe());
+	create(path, 0 ,mol::Rect(0,0,500,500),*moe());
 	show(SW_SHOW);
 
 	// prepare bind ctx

@@ -122,7 +122,8 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">L:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">Midl</CustomBuildAfterTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
     <ClCompile>
@@ -160,11 +161,12 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\..\lib\src\win\uni_debug\win.lib;..\..\lib\src\ole\uni_debug\ole.lib;..\..\lib\src\util\uni_debug\util.lib;..\..\lib\src\thread\uni_debug\thread.lib;..\..\3dParty\pcre\uni_debug\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Msimg32.lib;..\..\lib\src\xml\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\uni_debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>shellCtrl.def</ModuleDefinitionFile>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -305,6 +307,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="..\..\cg\disph.exe">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">$(TargetName)_dispid.h</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">$(IntDir)$(TargetName).tlb</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">generate dispids from typelib</Message>
+    </CustomBuild>
     <None Include="shellCtrl.def" />
     <None Include="CCHSB.bmp" />
     <None Include="ccrgb.bmp" />
@@ -319,6 +328,7 @@
     <ClInclude Include="HexCtrl.h" />
     <ClInclude Include="HexCtrlEvents.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="shellctrl_dispid.h" />
     <ClInclude Include="ShellListCtrl.h" />
     <ClInclude Include="ShellListEvents.h" />
     <ClInclude Include="ShellTreeCtrl.h" />
@@ -331,7 +341,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_release_64|Win32'">TLB=.\\uni_release_64\\shellfolder.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">TLB=.\\x64\\uni_release_64\\shellCtrl.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">TLB=.\\uni_release\\shellCtrl.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">TLB=.\\uni_release\\shellCtrl.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">TLB=.\\uni_debug\\shellCtrl.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

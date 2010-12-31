@@ -13,7 +13,7 @@ function onSearch()
   var sci = external.Moe.ActiveDoc.Object;
   if ( sci )
   {
-    var txt = sci.GetText();
+    var txt = sci.Text;
 	var pos = 0;
 	var p   = 0;
 	var s   = what;
@@ -28,12 +28,12 @@ function onSearch()
 
 	var s = new RegExp ( s, flags  );
 
-	var out = "<small><b>filename: " + sci.Filename + "</b></small>";
+	var out = "<small><b>filename: " + sci.Properties.Filename + "</b></small>";
 	
 	while ( -1 != ( p = txt.substring(pos).search(s) ) )
 	{
-	  var line   = sci.LineFromPos(pos+p);
-	  var linend = sci.LineEndPos(line);
+	  var line   = sci.Line.LineFromPos(pos+p);
+	  var linend = sci.Line.LineEndPos(line);
 	  var start  = pos+p;
 	  var end    = pos+p+what.length;
       var m = txt.substring(start,end);
@@ -45,7 +45,7 @@ function onSearch()
 	  out += " line: " + line;
 	  out += "</b></a><small class='moe'>";
 	  
-	  var l = htmlEncode(sci.LineText(line));
+	  var l = htmlEncode(sci.Line.LineText(line));
 	  var r = new RegExp( what, flags + "g" );
 	  l = l.replace( s, "<i class='match'>" + what + "</i>" );
 	  out += l;
@@ -78,7 +78,7 @@ function onSearchAll()
     if ( doc.type == 1 )
 	{
 	  var sci = doc.Object;
-	  var txt = sci.GetText();
+	  var txt = sci.Text;
 	  var pos = 0;
 	  var p   = 0;
 	  var s   = what;
@@ -93,12 +93,12 @@ function onSearchAll()
 
 	  var s = new RegExp ( s, flags  );
 
-	  out += "<small><b>filename: " + sci.Filename + "</b></small>";
+	  out += "<small><b>filename: " + sci.Properties.Filename + "</b></small>";
 	
 	  while ( -1 != ( p = txt.substring(pos).search(s) ) )
 	  {
-		var line   = sci.LineFromPos(pos+p);
-		var linend = sci.LineEndPos(line);
+		var line   = sci.Line.LineFromPos(pos+p);
+		var linend = sci.Line.LineEndPos(line);
 		var start  = pos+p;
 		var end    = pos+p+what.length;
 		var m = txt.substring(start,end);
@@ -109,7 +109,7 @@ function onSearchAll()
 		out += " line: " + line;
 		out += "</b></a><small class='moe'>";
 		
-		var l = htmlEncode(sci.LineText(line));
+		var l = htmlEncode(sci.Line.LineText(line));
 		var r = new RegExp( what, flags + "g" );
 		l = l.replace( s, "<i class='match'>" + what + "</i>" );
 		out += l;
@@ -135,8 +135,8 @@ function JumpTo(  start, end )
 		{
 			d.View.Activate();
 			var sci = d.Object;
-			sci.SetSelection( start, end );
-			sci.ScrollIntoView();
+			sci.Selection.SetSelection( start, end );
+			sci.Position.ScrollIntoView();
 		}
 	}
 }
@@ -150,8 +150,8 @@ function GoTo( index, start, end )
 		{
 			d.View.Activate();
 			var sci = d.Object;
-			sci.SetSelection( start, end );
-			sci.ScrollIntoView();
+			sci.Selection.SetSelection( start, end );
+			sci.Position.ScrollIntoView();
 		}
 	}
 }

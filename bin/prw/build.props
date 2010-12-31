@@ -4,10 +4,7 @@
   <PropertyGroup Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-	<boost Condition=" '$(boost)' == '' ">L:\boost\boost_1_44_0\</boost>
     <Keyword>Win32Proj</Keyword>
-	<Configuration Condition=" '$(Configuration)' == '' ">uni_debug</Configuration>
-	<Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
 	<rcsource>$(TargetName)</rcsource>
 	<defsource>$(TargetName)</defsource>
   </PropertyGroup>

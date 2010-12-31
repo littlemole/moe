@@ -9,6 +9,7 @@
 #include "ribbonres.h"
 #include "ThreadScript.h"
 #include "ActivDbg.h"
+#include "boost/function.hpp"
 
 using namespace mol::win;
 using namespace mol::ole;
@@ -94,7 +95,7 @@ Editor::Instance* Editor::CreateInstance(const mol::string& file, bool utf8, boo
 
 bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 {
-	filename_ = p;
+	//filename_ = p;
 
 	// get client rectangle
 	mol::Rect r;
@@ -163,7 +164,7 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 	statusBar()->status(100);
 
 	// add a windows7 taskbar thumbnail
-	thumb = taskbar()->addTab( this );
+	thumb = taskbar()->addTab(* this,p );
 
 	// now maximize the window
 	maximize();
@@ -181,6 +182,22 @@ LRESULT Editor::OnClose()
 	if ( ts_ )
 		return 1;
 
+	VARIANT_BOOL vb;
+	SciMember<IScintillAxText>(sci)->get_Modified(&vb);
+
+	if ( vb == VARIANT_TRUE )
+	{
+		mol::bstr p;
+		SciMember<IScintillAxProperties>(sci)->get_Filename(&p);
+		mol::ostringstream oss;
+		oss << p.toString() << _T(" is modified! \r\n close without save?");
+		LRESULT r = ::MessageBox( *this, oss.str().c_str(), _T("document modified!"), MB_ICONEXCLAMATION|MB_OKCANCEL );
+		if ( r != IDOK )
+		{
+			return 1;
+		}
+	}
+
 	this->destroy();
 	return 0;
 }
@@ -193,18 +210,31 @@ LRESULT Editor::OnClose()
 
 void Editor::OnDestroy()
 {
-	mol::variant v(filename_);
-	docs()->Remove(v);
+
+	ODBGS("Editor::OnDestroy()");
 	
- 	events.UnAdvise(oleObject);
-	sci.release();
+
 }
 
 void Editor::OnNcDestroy()
 {
+
+		SciMember<IScintillAxProperties> props(sci);
+	mol::bstr path;
+	props->get_Filename(&path);
+
+	mol::variant v(path);
+	docs()->Remove(v);
+	
+ 	events.UnAdvise(oleObject);
+	sci.release();
+	ODBGS("Editor::OnNcDestroy()");
+
+	
 	IMoeDocument*e = (IMoeDocument*)this;
 	::CoDisconnectObject(((IMoeDocument*)this),0);
 	((IMoeDocument*)this)->Release();
+	
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -222,8 +252,11 @@ LRESULT Editor::OnMDIActivate(WPARAM unused, HWND activated)
 
 	if ( activated == hWnd_ )
 	{
+		SciMember<IScintillAxProperties> props(sci);
+		mol::bstr path;
+		props->get_Filename(&path);
 
-		tab()->select( filename_ );
+		tab()->select( path.toString() );
 		updateUI();
 		setFocus();
 		thumb.refreshIcon(true);
@@ -825,13 +858,9 @@ void Editor::OnSaveAs()
 	if ( S_OK == props->get_Filename(&p) )
 		ofn.fileName(p.toString());
 
-	if ( ofn.dlgSave( OFN_OVERWRITEPROMPT ) )
-	{
-		mol::bstr b;
-		this->get_FilePath(&b);
-
-		
-		if ( ofn.fileName() != b.toString() )
+	if ( ofn.dlgSave( OFN_OVERWRITEPROMPT| OFN_NOTESTFILECREATE| OFN_NOVALIDATE) )
+	{	
+		if ( ofn.fileName() != p.toString() )
 		{
 			mol::punk<IMoeDocument> doc;
 			if ( (S_OK == docs()->Item(mol::variant(ofn.fileName()),&doc)) && doc )
@@ -845,14 +874,20 @@ void Editor::OnSaveAs()
 			props->put_Encoding(ofn.index()-1);
 		if (sci)
 		{
+			mol::ostringstream oss;
+
 			if ( S_OK == sci->SaveAs( mol::bstr(ofn.fileName() ) ) )
 			{
-				docs()->Rename( mol::variant(filename_), mol::variant(ofn.fileName()) );
-				mol::ostringstream oss;
+				docs()->Rename( mol::variant(p), mol::variant(ofn.fileName()) );
+				props->put_Filename(mol::bstr(ofn.fileName()));
+
 				oss << _T("file saved as ") << ofn.fileName() << _T(" saved");
-				statusBar()->status(oss.str());
-				filename_ = ofn.fileName();
 			}
+			else
+			{
+				oss << _T("failed to saved file ") << ofn.fileName() ;
+			}
+			statusBar()->status(oss.str());
 		}
 	}
 }
@@ -864,15 +899,22 @@ void Editor::OnSave()
 	if ( !sci )
 		return;
 
+	mol::bstr filename;
+	SciMember<IScintillAxProperties>(sci)->get_Filename(&filename);
+
+	mol::ostringstream oss;
+
 	HRESULT hr = sci->Save();
 	if ( hr == S_OK )
 	{
-		mol::bstr filename;
-		SciMember<IScintillAxProperties>(sci)->get_Filename(&filename);
-		mol::ostringstream oss;
 		oss << _T("saved file ") << filename.toString() ;
-		statusBar()->status(oss.str());
 	}
+	else
+	{
+		oss << _T("failed to saved file ") << filename.toString() ;
+	}
+
+	statusBar()->status(oss.str());
 }
 
 void Editor::OnExecForm()
@@ -984,7 +1026,7 @@ void Editor::OnDebugScriptGo()
 		}
 	}
 
-	ts_ = ThreadScript::CreateInstance( script.toString(), filename.toString() );
+	ts_ = ThreadScript::CreateInstance( *moe(), script.toString(), filename.toString() );
 	ts_->addNamedObject((IMoe*)moe(), _T("moe"));
 	ts_->update_breakpoints(s);
 	ts_->OnScriptThread = event_handler(&Editor::OnScriptThread,this);
@@ -1109,12 +1151,11 @@ void Editor::OnDebugScriptQuit()
 	remote_.release();
 }
 
-
 void Editor::OnScriptThreadDone()
 {
 	if ( mol::guithread() != mol::Thread::self() )
 	{
-		mol::invoke( *this, &Editor::OnScriptThreadDone);
+		mol::invoke( *this, &Editor::OnScriptThreadDone);		
 		return;
 	}
 
@@ -1132,6 +1173,62 @@ void Editor::OnScriptThread( int line, IRemoteDebugApplicationThread* remote, IA
 {
 	if ( mol::guithread() != mol::Thread::self() )
 	{
+		lasterror_ = _T("");
+
+		// get stack frame
+		DebugStackFrameDescriptor	desc;
+		::ZeroMemory(&desc,sizeof(DebugStackFrameDescriptor));
+
+		mol::punk<IEnumDebugStackFrames> frames;
+		HRESULT hr = remote->EnumStackFrames( &frames );
+		if ( S_OK == hr && frames )
+		{
+			// update variable window
+			debugDlg()->update_variables(frames);
+		}
+
+		mol::ostringstream oss;
+		if ( pError )
+		{
+			oss << _T("line: ") << (line+1) << _T(" ");
+
+			EXCEPINFO ex;
+			pError->GetExceptionInfo(&ex);
+
+			DWORD context;
+			ULONG line;
+			LONG pos;
+			pError->GetSourcePosition(&context,&line,&pos);
+		
+			mol::punk<IActiveScriptErrorDebug> de(pError);
+			if ( de )
+			{
+				mol::punk<IDebugStackFrame> f;
+				de->GetStackFrame(&f);
+
+				if ( f )
+				{
+					mol::bstr e;
+					f->GetDescriptionString(TRUE,&e);
+
+					if ( e )
+						oss << e.toString() << std::endl;
+				}
+			}
+
+			if ( ex.bstrDescription )
+			{
+				oss << mol::bstr(ex.bstrDescription).toString();
+			}
+			oss << std::endl;
+			lasterror_ = oss.str();
+		}
+
+		if ( remote )
+			remote->Release();
+		if ( pError)
+			pError->Release();
+
 		mol::invoke( *this, &Editor::OnScriptThread, line, remote, pError );
 		return;
 	}
@@ -1151,11 +1248,16 @@ void Editor::OnScriptThread( int line, IRemoteDebugApplicationThread* remote, IA
 	SciMember<IScintillAxAnnotation> anno(sci);
 
 	anno->ClearAll();
+	if ( !lasterror_.empty())
+	{
+		anno->SetText( line, mol::bstr(lasterror_) );
+	}
+
 	lines->Goto(line);
 	lines->Highlite(line);
 
 	mol::Ribbon::ribbon()->mode(9);
-
+	/*
 	std::wostringstream oss;
 
 	if ( pError )
@@ -1198,7 +1300,7 @@ void Editor::OnScriptThread( int line, IRemoteDebugApplicationThread* remote, IA
 		remote->Release();
 	if ( pError)
 		pError->Release();
-
+		*/
 	ODBGS1("Leaving OnScriptThread:",line);
 }
 
@@ -1256,7 +1358,10 @@ HRESULT __stdcall Editor::get_FilePath( BSTR *fname)
 	if ( fname  )
 	{
 		*fname = 0;
-		*fname = ::SysAllocString( mol::towstring(filename_).c_str() );
+		SciMember<IScintillAxProperties> props(sci);
+		mol::bstr path;
+		props->get_Filename(&path);
+		*fname = ::SysAllocString(path.bstr_);
 	}
 	return S_OK;
 }
@@ -1302,7 +1407,11 @@ HRESULT __stdcall  Editor::Sintilla_Events::OnPosChange( long line )
 	mol::ostringstream oss2;
 	oss2 << col << " ";
 
-	statusBar()->setText( This()->filename_, oss.str(), oss2.str());
+	SciMember<IScintillAxProperties> props(This()->sci);
+	mol::bstr path;
+	props->get_Filename(&path);
+
+	statusBar()->setText( path.toString(), oss.str(), oss2.str());
 	return S_OK;
 }
 
@@ -1364,22 +1473,21 @@ HRESULT __stdcall Editor::Sintilla_Events::OnMarker( long line)
 
 void Editor::updateUI()
 {
-	mol::bstr path;
-	mol::string title = this->getText();
-	if ( S_OK == this->get_FilePath(&path) && path)
-	{
-		title = path.toString();	
-	}
-
 	if ( !sci )
 	{
-		setText(title);
 		return;
 	}
 
 	SciMember<IScintillAxPosition> p(sci);
 	SciMember<IScintillAxLine> lines(sci);
 	SciMember<IScintillAxProperties> props(sci);
+
+	mol::bstr path;
+	HRESULT hr = props->get_Filename(&path);
+	if ( hr != S_OK )
+		return;
+
+	mol::string title = path.toString();
 
 	long line=0;
 	lines->get_Current(&line);
@@ -1395,7 +1503,7 @@ void Editor::updateUI()
 	mol::ostringstream oss2;
 	oss2 << col << " ";
 
-	statusBar()->setText( filename_, oss.str(), oss2.str() );
+	statusBar()->setText( path.toString(), oss.str(), oss2.str() );
 
 	long encoding;
 	if ( S_OK == props->get_Encoding(&encoding) )
@@ -1553,7 +1661,7 @@ void Editor::updateModeMenu( mol::Menu& mode )
 {
 	mode.enableItem(IDM_MODE_UNIX);
 
-	if ( sci )
+	if ( !sci )
 		return;
 
 	SciMember<IScintillAxProperties> props(sci);

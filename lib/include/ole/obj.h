@@ -49,6 +49,50 @@ protected:
 
 };
 
+template<class COM>
+class debug_com_instance : public COM
+{
+public:
+    debug_com_instance()
+    {
+        molrefcount_ = 0;
+		mol::App().lock();        
+    }
+    virtual ~debug_com_instance() 
+	{
+		mol::App().unlock();        
+	}
+
+	HRESULT virtual __stdcall QueryInterface(REFIID iid , LPVOID* ppv)
+	{
+		HRESULT hr = COM::QueryInterfaceImpl(iid,ppv);
+		return hr;
+	}
+
+    ULONG   virtual __stdcall AddRef()
+    {
+		::InterlockedIncrement((volatile long*)&molrefcount_);
+		ODBGS1("AddRef",molrefcount_);
+		return molrefcount_;
+    }
+
+    ULONG   virtual __stdcall Release()
+    {		
+        if ( ::InterlockedDecrement((volatile long*)&molrefcount_) ==0 )
+        {
+			this->dispose();
+			ODBGS1("Release",molrefcount_);
+            delete this;
+            return 0;
+        }
+		ODBGS1("Release",molrefcount_);
+        return molrefcount_;
+    }
+protected:
+    volatile DWORD molrefcount_;
+
+};
+
 //////////////////////////////////////////////////////////////////////
 // AddRef/Release Impl for creatable IUnknown 
 // an com_instance will force a lock-count on the server, as opposed

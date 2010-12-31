@@ -122,7 +122,7 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">L:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">Midl</CustomBuildAfterTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
@@ -378,17 +378,21 @@
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">$(TargetName)_dispid.h</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">$(IntDir)$(TargetName).tlb</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">generate dispids from typelib</Message>
     </CustomBuild>
+    <None Include="..\..\cg\xsl\uimenu.xsl" />
     <None Include="resources\mol.rc.inc" />
-    <None Include="resources\deploy\xpref.xmo" />
     <None Include="resources\favs.bmp" />
     <None Include="resources\moe.bmp" />
     <None Include="resources\moe.ico" />
     <None Include="resources\next.bmp" />
+    <None Include="xml\ribbon.xml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="xsl\uicmd.xsl" />
     <None Include="xsl\uicpp.xsl" />
     <None Include="xsl\uih.xsl" />
-    <None Include="xsl\uimenu.xsl" />
     <None Include="xsl\uirc.xsl" />
     <None Include="xsl\uires.xsl" />
     <CustomBuild Include="..\..\cg\js\make.js">
@@ -423,10 +427,14 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
     </CustomBuild>
-    <None Include="xml\cmd.xml" />
+    <None Include="xml\cmd.xml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="xml\include.xml" />
     <None Include="xml\menu.xml" />
-    <None Include="xml\msg.xml" />
+    <None Include="xml\msg.xml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="xml\resource.xml">
       <SubType>Designer</SubType>
     </None>

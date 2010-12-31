@@ -2,7 +2,7 @@ set CONF=%1
 if %1!==! SET CONF=uni_debug
 
 set PLAT=%2
-if NOT %2!==! set PLAT=/x86
+if %2!==! set PLAT=/x86
 
 if "%CONF%"=="uni_debug" goto debug
 

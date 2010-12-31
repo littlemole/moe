@@ -8,7 +8,7 @@
 #include "ole/punk.h"
 #include <ActivScp.h>
 #include <ActivDbg.h>
-#include "shared.h"
+//#include "shared.h"
 
 class Editor;
 
@@ -43,12 +43,12 @@ public:
 //	event<void(int,IRemoteDebugApplicationThread*,IActiveScriptError*)> OnScriptThread;
 	//event<void()> OnScriptThreadDone;
 
-	//typedef mol::com_instance<ThreadScript> ScriptInstance;
-	typedef debug_com_instance<ThreadScript> ScriptInstance;
+	typedef mol::com_instance<ThreadScript> ScriptInstance;
+	//typedef mol::debug_com_instance<ThreadScript> ScriptInstance;
 
 	virtual void dispose()  {};
 
-	static ThreadScript* CreateInstance( const mol::string& script,  const mol::string& filename );
+	static ThreadScript* CreateInstance( HWND owner, const mol::string& script,  const mol::string& filename );
 
 	void execute( int flag = SCRIPTTEXT_ISVISIBLE );	
 	void cause_break();
@@ -139,6 +139,8 @@ protected:
 	mol::string							engine_;
 	mol::variant						varResult_;
     EXCEPINFO							ei_; 
+
+	HWND								owner_;
 
 	HRESULT getScriptEngine(const mol::string& engine, IActiveScript **ppas);
 };

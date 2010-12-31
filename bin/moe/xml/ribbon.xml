@@ -42,6 +42,7 @@
 
     <Command Name="RibbonDocumentContextMap" LabelTitle="Context Menu" />
     <Command Name="RibbonTabContextMap" LabelTitle="Tab Context Menu" />
+    <Command Name="RibbonTreeViewContextMap" LabelTitle="Tree Context Menu" />
     <Command Name="RibbonPrefGroup" LabelTitle="Settings" />
 
     <Command Name="RibbonDebugGroup" LabelTitle="Debug" />

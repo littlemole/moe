@@ -3,9 +3,10 @@
 
 #pragma once
 #include "util/uni.h"
-#include "win/dlg.h"
+#include "win/pp.h"
 #include "ole/com.h"
 #include "ole/punk.h"
+#include "ole/obj.h"
 #include <ocidl.h>
 
 namespace mol {
@@ -52,6 +53,50 @@ protected:
 
 	std::vector<IUnknown*> objects_;
 };
+
+class OlePropPage : 
+	public mol::win::PropPage
+{
+friend class mol::PropSheet;
+public:
+
+	OlePropPage();
+
+	virtual void init();
+	virtual void setObjects();
+	virtual void reset();
+	virtual int apply();
+	virtual int translateAccel( LPMSG msg);
+
+private:
+
+	void create( mol::PropSheet* ps, const mol::string& tab, REFCLSID clsid , int id,int flags = PSP_DEFAULT|PSP_USETITLE);
+
+	void create( mol::PropSheet* ps, const mol::string& tab, int id, int flags = PSP_DEFAULT|PSP_USETITLE) {};
+
+	class PropertyPageSite :
+		public IPropertyPageSite,
+		public mol::interfaces< PropertyPageSite, mol::implements<IPropertyPageSite> >
+	{
+		public: outer_this( OlePropPage, propertyPageSite_); 
+
+			void dispose() {};
+			
+			virtual HRESULT STDMETHODCALLTYPE OnStatusChange( DWORD dwFlags);
+			virtual HRESULT STDMETHODCALLTYPE GetLocaleID( LCID *pLocaleID);
+			virtual HRESULT STDMETHODCALLTYPE GetPageContainer( IUnknown **ppUnk);
+			virtual HRESULT STDMETHODCALLTYPE TranslateAccelerator( MSG* pMsg);
+	};
+
+
+	mol::stack_obj<PropertyPageSite> propertyPageSite_;
+	
+protected:
+
+	mol::punk<IPropertyPage> prop_;
+
+};
+
 
 } // end namespace mol::win::ole
 

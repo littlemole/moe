@@ -327,6 +327,16 @@ void HttpHeaders::contentType(const std::string& c)
 	add( mol::HttpHeader("content-type",c));
 }
 
+std::string HttpHeaders::contentEncoding()
+{
+	return mol::str::string2lower(getHeader("Content-Encoding"));
+}
+
+std::string HttpHeaders::transferEncoding()
+{
+	return mol::str::string2lower(getHeader("Transfer-Encoding"));
+}
+
 std::string HttpHeaders::contentType()
 {
 	return mol::str::string2lower(getHeader("Content-Type"));

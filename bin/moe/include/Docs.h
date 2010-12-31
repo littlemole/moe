@@ -75,16 +75,28 @@ private:
 
 	mol::MdiChild* openPath( const mol::string& dir, InFiles pref, bool readOnly);
 
-
 	// file opening helpers
-	mol::MdiChild* openPathText( const mol::string& file, bool readOnly );
-	mol::MdiChild* openPathUTF8( const mol::string& file, bool readOnly );
-	mol::MdiChild* openPathHex ( const mol::string& file, bool readOnly );
-	mol::MdiChild* openPathHtml( const mol::string& file );
-	mol::MdiChild* openPathOle ( const mol::string& file );
-	mol::MdiChild* openPathImg ( const mol::string& file );
-	mol::MdiChild* openPathDir ( const mol::string& file );
-	mol::MdiChild* openPathForm( const mol::string& file );
+
+	template<class T>
+	mol::MdiChild* load( const mol::string& path, bool utf8, bool readOnly )
+	{
+		typename T::Instance* t = T::CreateInstance( path, utf8, readOnly );
+		return dynamic_cast<mol::MdiChild*>(t);
+	}
+
+	template<class T>
+	mol::MdiChild* load( const mol::string& path, bool readOnly )
+	{
+		typename T::Instance* t = T::CreateInstance( path, readOnly );
+		return dynamic_cast<mol::MdiChild*>(t);
+	}
+
+	template<class T>
+	mol::MdiChild* load( const mol::string& path)
+	{
+		typename T::Instance* t = T::CreateInstance( path );
+		return dynamic_cast<mol::MdiChild*>(t);
+	}
 
 	typedef std::list<std::pair<mol::variant,mol::MdiChild*> > childlist;
 	childlist	children_;

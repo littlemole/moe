@@ -238,7 +238,7 @@ bool MoeHtmlWnd::load( const mol::string& loc )
 
 	statusBar()->status(50);
 
-	thumb = taskbar()->addTab( this );
+	thumb = taskbar()->addTab( *this,loc );
 
 	return true;
 }
@@ -252,7 +252,6 @@ void MoeHtmlWnd::OnClose()
 void MoeHtmlWnd::OnDestroy()
 {
 	ODBGS("MoeHtmlWndImpl::OnDestroy");
-
 	mol::bstr filename;
 	if ( S_OK == get_FilePath(&filename) )
 	{
@@ -263,11 +262,13 @@ void MoeHtmlWnd::OnDestroy()
 	::CoDisconnectObject(((IExternalMoe*)&external_),0);
 
 	unAdvise(htmlSink);
+
 }
 
 void MoeHtmlWnd::OnNcDestroy()
 {
 	ODBGS("MoeHtmlWndImpl::OnNcDestroy");
+
 	((IMoeDocument*)this)->Release();
 }
 

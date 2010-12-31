@@ -96,6 +96,17 @@ library ShellCtrls
 		[id(14), helpstring("Create a new directory at current selection")] 
 		HRESULT CreateDir();
 
+
+		[ 
+		  propput,id(15), 
+		  helpstring("Get/Set embedded context menu usage")
+		] 
+		HRESULT UseContext([in] VARIANT_BOOL vb);
+
+		[ 
+		  propget,id(15)
+		] 
+		HRESULT UseContext([out,retval] VARIANT_BOOL* vb);
     };
 
 
@@ -374,6 +385,8 @@ library ShellCtrls
 		[id(3), helpstring("Tree Item Open")]  
 		void OnTreeOpen([in] BSTR fname);
 
+		[id(4), helpstring("On Context Menu")]  
+		void OnContextMenu([in] BSTR fname);
 	};
 
 	////////////////////////////////////////////////////////////////////////////////////
@@ -449,6 +462,10 @@ library ShellCtrls
 
 		[id(3), helpstring("Tree Item Open")]  
 		HRESULT OnTreeOpen([in] BSTR fname);
+
+		[id(4), helpstring("On Context Menu")]  
+		HRESULT OnContextMenu([in] BSTR fname);
+
 	};
 
 

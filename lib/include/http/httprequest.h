@@ -1,7 +1,7 @@
 #ifndef HTTP_REQUEST_DEF_GUARD_DEF
 #define HTTP_REQUEST_DEF_GUARD_DEF
 
-#include "http/httpheader.h"
+#include "http/reader.h"
 
 namespace mol {
 
@@ -14,25 +14,39 @@ class HttpBody
 public:
 
 	HttpBody();	
+	HttpBody(AbstractBodyReader* r);
 	HttpBody(const std::string& b);
-	HttpBody(HttpHeaders& headers);
+	//HttpBody(HttpHeaders& headers);
 
 	~HttpBody();
 
-	const bool contentLengthIsKnown();
-	const int contentLength();
-	void  contentLength(const int s);
 	const std::string& body();
-
 	void body( const std::string& b );
+
+	const std::string& raw_body();
 
 	void addParam  ( const std::string& key, const std::string& val );
 	std::string getParam(const std::string& key);
 	std::vector<std::string> getParams(const std::string& key);
 
+	HttpBody& operator=(const HttpBody& rhs )
+	{
+		if ( &rhs == this )
+			return *this;
+
+		if ( reader_ )
+			delete reader_;
+		reader_ = rhs.reader_;
+		((HttpBody&)rhs).reader_ = 0;
+		body_ = rhs.body_;
+		queryParams_ = rhs.queryParams_;
+		return *this;
+	}
+
 protected:
-	int contentLength_;
-	bool contentLengthIsKnown_;
+
+
+	AbstractBodyReader* reader_;
 	std::string body_;
 
     typedef std::pair<std::string,std::string> KeyVal;
@@ -67,6 +81,8 @@ public:
 
 	HttpHeaders headers;
 	HttpBody body;
+
+	AbstractBodyReader* reader();
 };
 
 
@@ -96,7 +112,7 @@ operator<< ( std::basic_ostream<charT,Traits>& os, mol::HttpRequest& request)
 	os << request.headers;
 
 	// write body if any
-	if ( request.body.contentLengthIsKnown() )
+	if ( request.headers.contentLengthIsKnown() )
 	{
 		os << request.body;
 	}
@@ -122,11 +138,19 @@ operator<< ( std::basic_ostream<charT,Traits>& os, mol::HttpBody& body)
 /////////////////////////////////////////////////////////////////////////
 // read http body from stream
 /////////////////////////////////////////////////////////////////////////
-
+/*
 template<class charT, class Traits>
 std::basic_istream<charT,Traits>&
 operator>> ( std::basic_istream<charT,Traits>& is, mol::HttpBody& body)
 {
+	// if chunked ?
+	if ( body.chunked_ )
+	{
+		// read chunked !
+	}
+
+	//TODO: remove redundancy
+
 	// if content length is known, read exact content-len bytes
 	if ( body.contentLengthIsKnown() )
 	{
@@ -152,7 +176,7 @@ operator>> ( std::basic_istream<charT,Traits>& is, mol::HttpBody& body)
 	return is;
 }
 
-
+*/
 /////////////////////////////////////////////////////////////////////////
 // get Http Request from stream
 /////////////////////////////////////////////////////////////////////////
@@ -174,8 +198,16 @@ operator>> ( std::basic_istream<charT,Traits>& is, mol::HttpRequest& request)
 	// get body if content length known only
 	if ( request.headers.contentLengthIsKnown() )
 	{
-		request.body.contentLength(request.headers.contentLength());
-		is >> request.body;
+		//request.body.contentLength(request.headers.contentLength());
+		mol::ContentLengthBodyReader reader(request.headers.contentLength());
+		size_t s = reader.read(is);
+
+		if ( s )
+		{
+			request.body.body(reader.toString());
+		}
+
+		//is >> request.body;
 	}
 	return is;
 }
@@ -193,23 +225,23 @@ operator>> ( std::basic_istream<charT,Traits>& is, mol::HttpResponse& response)
 
 	// get body if any
 
-	// if content length is known, read content length bytes
-	if ( response.headers.contentLengthIsKnown() )
-	{
-		response.body.contentLength(response.headers.contentLength());
-	}
 
-	// get body
-	if ( response.body.contentLengthIsKnown() )
-	{
-		is >> response.body;
-		return is;
-	}
+	mol::AbstractBodyReader* reader = response.reader();
+
+	size_t s = reader->read(is);
 	
 	if ( response.headers.getCode() == "304"  )
+	{
+		delete reader;
 		return is;
-	
-	is >> response.body;
+	}
+
+	if ( s )
+	{
+		response.body = mol::HttpBody(reader);
+	}
+
+	//delete reader;
 	return is;
 }
 

@@ -50,8 +50,9 @@ public:
 			<< _T("read")
 			<< _T(" ") 
 			<< pipename
-			<< _T(" ") 
-			<< file;
+			<< _T(" \"") 
+			<< file
+			<< _T("\"");
 
 		BOOL r = mol::io::execute_shell_args( executor_, oss_args.str(), _T("runas"), SW_HIDE );
 
@@ -92,8 +93,9 @@ public:
 			<< _T("write")
 			<< _T(" ") 
 			<< pipename
-			<< _T(" ") 
-			<< file;
+			<< _T(" \"") 
+			<< file
+			<< _T("\"");
 
 		BOOL r = mol::io::execute_shell_args( executor_, oss_args.str(), _T("runas"), SW_HIDE );
 

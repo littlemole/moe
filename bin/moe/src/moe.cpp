@@ -158,6 +158,8 @@ void MoeWnd::OnCreate()
 	progress()->show(SW_HIDE);
 
 	// hook up tree window COM events
+	mol::punk<IShellTree> tree(treeWnd()->oleObject);
+	tree->put_UseContext(VARIANT_FALSE);
 	treeWndSink()->Advise(treeWnd()->oleObject);
 
 	// update the menu
@@ -166,6 +168,7 @@ void MoeWnd::OnCreate()
 	debugDlg()->doModeless( IDD_DIALOG_DEBUG, *this );
 	debugDlg()->show(SW_HIDE);
 
+	taskbar()->init(*this);
 
 	// ------------------  //
 
@@ -202,6 +205,21 @@ void MoeWnd::OnCreate()
 LRESULT MoeWnd::OnClose()
 {
 	Exit();
+	return 0;
+}
+
+
+LRESULT MoeWnd::OnCloseAllButThis()
+{
+	HWND m = getActive();
+	if (!::IsWindow(m) )
+		return 0;
+
+	for ( int i = 0; i < count(); i++ )
+	{
+		if ( childAt(i) != m )
+			::PostMessage( childAt(i), WM_CLOSE, 0, 0 );
+	}
 	return 0;
 }
 
@@ -287,14 +305,18 @@ LRESULT MoeWnd::OnDispatch(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if ( treeWnd()->hasFocus() )
 	{
-		treeWnd()->postMessage(msg,wParam,lParam);
+		treeWnd()->sendMessage(msg,wParam,lParam);
 		return 0;
 	}
     ::SendMessage(getActive(),msg,wParam,lParam);
     return 0;
 }
 
-
+LRESULT MoeWnd::OnDispatchTree(UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	treeWnd()->sendMessage(msg,wParam,lParam);
+	return 0;
+}
 //////////////////////////////////////////////////////////////////////////////
 //
 // Create new child window
@@ -357,7 +379,7 @@ void MoeWnd::OnFileOpenHex()
 	mol::FilenameDlg dlg(*this);	
 	if ( dlg.dlgOpen(OFN_READONLY|OFN_EXPLORER) )
 	{
-		bool result = docs()->open( 0, dlg.fileName(), Docs::PREF_HEX, dlg.readOnly(), 0 );
+		bool result = docs()->open( -1, dlg.fileName(), Docs::PREF_HEX, dlg.readOnly(), 0 );
 		if (!result)
 		{
 			::MessageBox(*this,dlg.fileName().c_str(),_T("failed to load"),MB_ICONERROR);
@@ -373,7 +395,7 @@ void MoeWnd::OnFileOpenHtml()
 	{
 		if ( !urlDlg()->url.empty() )
 		{
-			bool result = docs()->open( 0, urlDlg()->url, Docs::PREF_HTML, true, 0 );
+			bool result = docs()->open( -1, urlDlg()->url, Docs::PREF_HTML, true, 0 );
 			if (!result)
 			{
 				::MessageBox(*this,urlDlg()->url.c_str(),_T("failed to load"),MB_ICONERROR);
@@ -381,6 +403,53 @@ void MoeWnd::OnFileOpenHtml()
 			statusBar()->status(urlDlg()->url);
 		}
 	}
+}
+
+void MoeWnd::OnTreeOpen()
+{
+	mol::punk<IShellTree> tree(treeWnd()->oleObject);
+	if ( tree )
+	{
+		mol::bstr path;
+		tree->get_Selection(&path);
+		mol::string fn = path.toString();
+		if ( mol::Path::isDir( fn) )
+		{
+			statusBar()->status(fn);
+			bool result = ::docs()->open(0,fn,Docs::PREF_TXT,false,0);
+
+			if (!result)
+			{
+				statusBar()->status( mol::string(_T("failed to load ")) + fn);
+				return;
+			}
+			return;
+		}
+		mol::FilenameDlg dlg(*moe());
+		dlg.setFilter( InFilesFilter );	
+		dlg.fileName(fn);
+		if ( !dlg.dlgOpen(OFN_ALLOWMULTISELECT | OFN_EXPLORER) )
+			return;
+
+		int s = dlg.selections();
+		int p = dlg.index();
+		for ( int i = 0; i < s; i++ )
+		{
+			mol::string f = dlg.fileName(i);
+			statusBar()->status(f);
+
+
+			bool result = ::docs()->open(0,f,(Docs::InFiles)(p-1 >=0 ? p-1 :0),false,0);
+
+			if (!result)
+			{
+				statusBar()->status( mol::string(_T("failed to load ")) + f);
+				return;
+			}
+		}
+	}
+	return;
+
 }
 
 //////////////////////////////////////////////////////////////////////////////

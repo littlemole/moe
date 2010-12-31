@@ -21,11 +21,21 @@
 <xsl:variable name="children" select="count(./mol:menu)"/>
 <xsl:if test="$children &gt; 0" >
     UI().addSubMenu(  <xsl:value-of select="$menuId" />,  <xsl:value-of select="$menuId" />,  <xsl:value-of select="$cmd" /> );
-<xsl:for-each select="./mol:menu"><xsl:call-template name="menuMaker"><xsl:with-param name="root"><xsl:value-of select="$menuId" />
+<xsl:for-each select="./mol:menu"><xsl:variable name="idx" select="./@bmp"/><xsl:if test="not($idx)">
+<xsl:call-template name="menuMaker"><xsl:with-param name="root"><xsl:value-of select="$menuId" />
 </xsl:with-param><xsl:with-param name="parent"><xsl:value-of select="$cmd" />
 </xsl:with-param><xsl:with-param name="bmp"><xsl:value-of select="$menuBmp" />
+</xsl:with-param><xsl:with-param name="idx"><xsl:value-of select="./@cmd" />
 </xsl:with-param>
 </xsl:call-template>
+</xsl:if><xsl:if test="$idx">
+<xsl:call-template name="menuMaker"><xsl:with-param name="root"><xsl:value-of select="$menuId" />
+</xsl:with-param><xsl:with-param name="parent"><xsl:value-of select="$cmd" />
+</xsl:with-param><xsl:with-param name="bmp"><xsl:value-of select="$menuBmp" />
+</xsl:with-param><xsl:with-param name="idx"><xsl:value-of select="$idx" />
+</xsl:with-param>
+</xsl:call-template>
+</xsl:if>
 </xsl:for-each>
 </xsl:if>
 <xsl:if test="$children = 0" >    UI().addSubMenu(  <xsl:value-of select="$menuId" />,  <xsl:value-of select="$menuId" />,  <xsl:value-of select="$cmd" /> );
@@ -40,6 +50,7 @@
 <xsl:param name="root"  ></xsl:param>
 <xsl:param name="parent"  ></xsl:param>
 <xsl:param name="bmp"  ></xsl:param>
+<xsl:param name="idx"  ></xsl:param>
 <xsl:variable name="cmd" select="./@cmd"/>
 <xsl:variable name="popup" select="./@popup"/>
 <xsl:variable name="separator" select="./@separator"/>
@@ -51,12 +62,13 @@
 <xsl:with-param name="root"><xsl:value-of select="$root" /></xsl:with-param>
 <xsl:with-param name="parent"><xsl:value-of select="$cmd" /></xsl:with-param>
 <xsl:with-param name="bmp"><xsl:value-of select="$bmp" /></xsl:with-param>
+<xsl:with-param name="idx"><xsl:value-of select="$idx" /></xsl:with-param>
 </xsl:call-template>
 </xsl:for-each>
-</xsl:if><xsl:if test="$children = 0 and (not($popup) or $popup != string('true'))" ><xsl:if test="$checked = string('true') " ><xsl:if test="$enabled = string('false')" >        UI().addMenuItem(<xsl:value-of select="$root" />, <xsl:value-of select="$parent" />, <xsl:value-of select="$cmd" />, <xsl:value-of select="$bmp" />, true, false);
-</xsl:if><xsl:if test="not($enabled) or $enabled != string('false')" >        UI().addMenuItem(<xsl:value-of select="$root" />, <xsl:value-of select="$parent" />, <xsl:value-of select="$cmd" />, <xsl:value-of select="$bmp" />, true, true);
-</xsl:if></xsl:if><xsl:if test="not($checked) or $checked != string('true') " ><xsl:if test="$enabled = string('false')" >        UI().addMenuItem(<xsl:value-of select="$root" />, <xsl:value-of select="$parent" />, <xsl:value-of select="$cmd" />, <xsl:value-of select="$bmp" />, false, false);
-</xsl:if><xsl:if test="not($enabled) or $enabled != string('false')" >        UI().addMenuItem(<xsl:value-of select="$root" />, <xsl:value-of select="$parent" />, <xsl:value-of select="$cmd" />, <xsl:value-of select="$bmp" />, false, true);
+</xsl:if><xsl:if test="$children = 0 and (not($popup) or $popup != string('true'))" ><xsl:if test="$checked = string('true') " ><xsl:if test="$enabled = string('false')" >        UI().addMenuItem(<xsl:value-of select="$root" />, <xsl:value-of select="$parent" />, <xsl:value-of select="$cmd" />, <xsl:value-of select="$bmp" />, <xsl:value-of select="$idx" />, true, false);
+</xsl:if><xsl:if test="not($enabled) or $enabled != string('false')" >        UI().addMenuItem(<xsl:value-of select="$root" />, <xsl:value-of select="$parent" />, <xsl:value-of select="$cmd" />, <xsl:value-of select="$bmp" />, <xsl:value-of select="$idx" />, true, true);
+</xsl:if></xsl:if><xsl:if test="not($checked) or $checked != string('true') " ><xsl:if test="$enabled = string('false')" >        UI().addMenuItem(<xsl:value-of select="$root" />, <xsl:value-of select="$parent" />, <xsl:value-of select="$cmd" />, <xsl:value-of select="$bmp" />, <xsl:value-of select="$idx" />, false, false);
+</xsl:if><xsl:if test="not($enabled) or $enabled != string('false')" >        UI().addMenuItem(<xsl:value-of select="$root" />, <xsl:value-of select="$parent" />, <xsl:value-of select="$cmd" />, <xsl:value-of select="$bmp" />, <xsl:value-of select="$idx" />, false, true);
 </xsl:if>
 </xsl:if>
 </xsl:if>
@@ -65,5 +77,5 @@
 </xsl:if>
 </xsl:template>
 
-
+  
 </xsl:stylesheet>

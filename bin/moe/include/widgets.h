@@ -3,7 +3,10 @@
 
 #include "win/res.h"
 #include "win/wnd.h"
+#include "ole/propertypage.h"
 #include "win/msgloop.h"
+#include "win/msghandler.h"
+#include "win/msg_macro.h"
 #include "shared.h"
 #include <activdbg.h>
 #include <Prsht.h>
@@ -30,6 +33,7 @@ public:
 // the resizable directory tree widget
 /////////////////////////////////////////////////////////////////////////////////////////////
 
+
 typedef mol::CtrlResizer< 
 						mol::Window , 
                         100,0,
@@ -48,10 +52,41 @@ class MoeTreeWnd :
 					    WS_EX_STATICEDGE >
 {
 public:
-	~MoeTreeWnd() 
-	{
-		ODBGS("~MoeTreeWnd");
-	}
+
+	~MoeTreeWnd();
+
+	//msg_handler(WM_CREATE,OnCreate)
+	//LRESULT OnCreate();
+
+	void OnTreeOpen();
+	void OnTreeUpdate();
+
+	void OnTreeRename();
+	void OnTreeDelete();
+
+	void OnTreeExecute();
+	void OnTreeProperties();
+	void OnTreeNewDir();
+
+	void OnEditCut();
+	void OnEditCopy();
+	void OnEditPaste();
+
+};
+
+// tree events sink
+class TreeWndSink : public mol::stack_obj<ShellTreeEvents>
+{
+friend mol::Singleton<TreeWndSink>; 
+friend mol::stack_obj<TreeWndSink>;
+public :
+	HRESULT virtual __stdcall OnTreeSelection(BSTR filename);
+	HRESULT virtual __stdcall OnTreeDblClick(BSTR filename);
+	HRESULT virtual __stdcall OnTreeOpen(BSTR filename); 
+	HRESULT virtual __stdcall OnContextMenu(BSTR filename); 
+private:
+	TreeWndSink() {}
+	~TreeWndSink() {}
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,6 +218,9 @@ class Script : public mol::com_obj<mol::ScriptHost>
 {
 public:
 
+	Script();
+	~Script();
+
 	void eval ( const mol::string& engine, const mol::string& script, IScintillAx* sci );
 	void debug( const mol::string& engine, const mol::string& script, IScintillAx* sci );
 	void call ( const mol::string& engine, const mol::string& func, const mol::string& script );
@@ -191,16 +229,7 @@ public:
 	void formdebug( const mol::string& engine, const mol::string& script, IDispatch* form );
 	void formcontrols( IUnknown* form );
 
-	Script()
-	{
-		ODBGS("Script start");
-	}
 
-	~Script()
-	{
-		close();
-		ODBGS("Script death");
-	}
 
 	 virtual HRESULT  __stdcall OnScriptError( IActiveScriptError *pscripterror);
 	 virtual HRESULT  __stdcall GetWindow(HWND *phwnd );
@@ -233,19 +262,7 @@ private:
 };
 
 
-// tree events sink
-class TreeWndSink : public mol::stack_obj<ShellTreeEvents>
-{
-friend mol::Singleton<TreeWndSink>; 
-friend mol::stack_obj<TreeWndSink>;
-public :
-	HRESULT virtual __stdcall OnTreeSelection(BSTR filename);
-	HRESULT virtual __stdcall OnTreeDblClick(BSTR filename);
-	HRESULT virtual __stdcall OnTreeOpen(BSTR filename); 
-private:
-	TreeWndSink() {}
-	~TreeWndSink() {}
-};
+
 
 
 
@@ -270,7 +287,7 @@ private:
 /////////////////////////////////////////////////////////////////////
 // Property Sheets
 /////////////////////////////////////////////////////////////////////
-
+/*
 class PropSheet;
 
 class PropPage : public mol::win::Dialog
@@ -392,8 +409,9 @@ protected:
 	PROPSHEETHEADER ph_;
 };
 
+*/
 
-class TabPage  : public PropPage
+class TabPage  : public mol::win::PropPage
 {
 public:
 	TabPage();
@@ -402,16 +420,18 @@ public:
 	virtual int apply();
 };
 
-class ExportPage  : public PropPage
+class ExportPage  : public mol::win::PropPage
 {
 public:
 
 	virtual void command(int c);
 };
 
-class PrefPage  : public OlePropPage
+class PrefPage  : public mol::ole::OlePropPage
 {
 public:
+
+	virtual void setObjects();
 };
 
 #endif

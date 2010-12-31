@@ -163,7 +163,7 @@ function onComplete()
 
   // create new moe doc and place stdin output there
   var wnd = external.moe.New();
-  wnd.Object.SetText(output);
+  wnd.Object.Text = output;
 
   // switch to tab2 of form and put stderr output there
   diagnosis.value = output_err;

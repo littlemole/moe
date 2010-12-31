@@ -29,7 +29,7 @@ public:
     static DWORD CALLBACK inStreamCallback( DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb );
     static DWORD CALLBACK outStreamCallback( DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb );
 
-    mol::string		ioBuf_;
+    std::string		ioBuf_;
     EDITSTREAM		editstream_;
     long			written_;
 };
@@ -49,19 +49,19 @@ public:
     // styles
     virtual int style()   { return WS_CHILD|WS_VISIBLE; }
 
-    LRESULT streamIn(  const mol::string c, int type = SF_TEXT);
-    LRESULT streamOut( mol::string&, int type = SF_TEXT);
+    LRESULT streamIn(  const std::string c, int type = SF_TEXT);
+    LRESULT streamOut( std::string&, int type = SF_TEXT);
     LRESULT notify(int id );
 
-    bool search ( const mol::string& s , int options = FR_DOWN);
+    bool search ( const std::string& s , int options = FR_DOWN);
     bool search(int options );
 
-    const mol::string& getSearchText() { return searchText_; };
+    const std::string& getSearchText() { return searchText_; };
 
 private:
 	mol::win::RichEditStreamCallBack	cb_;
 
-    mol::string				searchText_;
+    std::string				searchText_;
     int						nextSearchPos_;
     int						lastSearchDir_;
 };

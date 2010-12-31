@@ -11,6 +11,8 @@
 		<Message Text="Project Configuration = $(Configuration)" />
 		<Message Text="Project Platform = $(Platform)" />
 
+        <MSBuild Projects=".\3dParty\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+
         <MSBuild Projects=".\lib\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		<MSBuild Projects=".\ax\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		<MSBuild Projects=".\bin\prw\prw\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>

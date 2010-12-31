@@ -82,7 +82,7 @@ bool DirChild::initialize(const mol::string& p)
 	show(SW_SHOW);
 	maximize();
 
-	thumb = taskbar()->addTab( this );
+	thumb = taskbar()->addTab( *this,p );
 
 	redrawOleFrameLater();
 
@@ -100,12 +100,13 @@ void DirChild::OnClose()
 {
 }
 
-
 void DirChild::OnDestroy()
 {
+	
 	mol::string filename = getText();
 	docs()->Remove(mol::variant(filename));
 	events.UnAdvise(oleObject);
+	
 }
 
 void DirChild::OnNcDestroy()
@@ -170,7 +171,7 @@ HRESULT __stdcall DirChild::DirChild_Events::OnListDblClick(BSTR filename)
 			{
 				return S_OK;
 			}
-			bool result = docs()->open(0,p,Docs::PREF_TXT,false,0);
+			bool result = docs()->open(-1,p,Docs::PREF_TXT,false,0);
 			if (!result)
 			{
 				mol::ostringstream oss;
@@ -196,7 +197,7 @@ HRESULT __stdcall DirChild::DirChild_Events::OnListSelection(BSTR filename)
 HRESULT __stdcall DirChild::DirChild_Events::OnListOpen(BSTR filename)
 {
 	mol::string p(mol::toString(filename));
-	bool result = docs()->open(0,p,Docs::PREF_TXT,false,0);
+	bool result = docs()->open(-1,p,Docs::PREF_TXT,false,0);
 	if (!result)
 	{
 		mol::ostringstream oss;

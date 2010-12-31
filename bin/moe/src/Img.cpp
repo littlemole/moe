@@ -45,22 +45,24 @@ void ImgViewer::OnCreate()
 
 LRESULT ImgViewer::OnDestroy()
 {
-	return 0;
-}
-
-LRESULT ImgViewer::OnNcDestroy()
-{
 	mol::bstr filename;
 	if ( S_OK == get_FilePath(&filename) )
 	{
 		mol::variant v(filename);
 		docs()->Remove(v);
 	}
+	return 0;
+}
+
+LRESULT ImgViewer::OnNcDestroy()
+{
+
 
 	::CoDisconnectObject(((IMoeDocument*)this),0);
 	((IMoeDocument*)this)->Release();
 	return 0;
 }
+
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -129,7 +131,7 @@ bool ImgViewer::load(const mol::string& p)
 	statusBar()->status(80);
 	move(0,0,s.cx+pt.x-rw.left,s.cy+pt.y-rw.top,TRUE);
 	
-	thumb = taskbar()->addTab( this );
+	thumb = taskbar()->addTab( *this,p );
 
 	return true;
 }

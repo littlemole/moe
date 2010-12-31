@@ -1,5 +1,5 @@
 #include "StdAfx.h"
-#include "moe.h"
+//#include "moe.h"
 #include "Taskbar.h"
 #include "xmlui.h"
 
@@ -56,8 +56,7 @@ void TaskbarWnd::timer_callback()
 }
 
 
-TaskbarWnd::TaskbarWnd( Taskbar* tb, IMoeDocument* d, ITaskbarList4* tbl, bool disabled )
-//:timerCB_(this)
+TaskbarWnd::TaskbarWnd( Taskbar* tb, HWND d, ITaskbarList4* tbl, bool disabled )
 {
 	tb_ = tb;
 	doc = d;
@@ -116,16 +115,13 @@ void TaskbarWnd::enableTabs(bool b)
 	}
 }
 
-TaskbarWnd *TaskbarWnd::Create( Taskbar * pMainDlg, IMoeDocument* d, ITaskbarList4* tbl, bool disabled)
+TaskbarWnd *TaskbarWnd::Create( Taskbar * pMainDlg, HWND d, const mol::string& title, ITaskbarList4* tbl, bool disabled)
 {
     TaskbarWnd *pWnd = new TaskbarWnd( pMainDlg, d, tbl, disabled);
 
     if (pWnd)
     {
-		mol::bstr fp;
-		d->get_FilePath( &fp );
-
-		HWND hwnd = pWnd->create( fp.toString().c_str(), 0, mol::Rect(-32000,-32000,10,10), 0 );//*moe() );
+		HWND hwnd = pWnd->create( title.c_str(), 0, mol::Rect(-32000,-32000,10,10), 0 );//*moe() );
 
         if (hwnd == NULL)
         {
@@ -141,7 +137,7 @@ BOOL TaskbarWnd::destroy()
 {
     if (hWnd_ != NULL)
     {
-		tb_->RemoveTab(hWnd_);
+		tb_->RemoveTab(doc);
 		tbl_.release();
 		::DestroyWindow(hWnd_);		
     }
@@ -157,7 +153,7 @@ LRESULT TaskbarWnd::wndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         case WM_CREATE:
         {
 			enableTabs(false);
-			tbl_->RegisterTab(*this,*moe());
+			tbl_->RegisterTab(*this,tb_->parent());
             break;
         }
 
@@ -166,13 +162,11 @@ LRESULT TaskbarWnd::wndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 			if (LOWORD(wParam) == WA_ACTIVE)
             {
 				tbl_->ActivateTab(*this);
-				tbl_->SetTabActive( *this, *moe(), 0 );
-				::SetForegroundWindow(*moe());
+				tbl_->SetTabActive( *this, tb_->parent(), 0 );
+				::SetForegroundWindow(tb_->parent());
 
-				mol::punk<IMoeDocumentView> view;
-				doc->get_View(&view);
-				if ( view )
-					view->Activate();
+				::ShowWindow(tb_->parent(),SW_RESTORE);
+				::PostMessage( mol::win::mdiClient(), WM_MDIACTIVATE, (WPARAM)(HWND)(doc), 0);
             }
             break;
 		}
@@ -181,7 +175,7 @@ LRESULT TaskbarWnd::wndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 		{
             if (wParam != SC_CLOSE)
             {
-                lResult = SendMessage( (HWND)*moe(), WM_SYSCOMMAND, wParam, lParam);
+                lResult = SendMessage( tb_->parent(), WM_SYSCOMMAND, wParam, lParam);
             }
             else
             {
@@ -191,11 +185,14 @@ LRESULT TaskbarWnd::wndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 		}
         case WM_CLOSE:
 		{
-			mol::punk<IMoeDocumentView> view;
-			doc->get_View(&view);
-			if ( view )
-				view->Close();
 
+			LRESULT lr = ::SendMessage(doc,WM_CLOSE,0,0);
+			if ( lr == 0 )
+			{
+				tb_->RemoveTab(doc);
+				tbl_.release();
+				::DestroyWindow(hWnd_);	
+			}
 			break;
 		}
 
@@ -203,14 +200,12 @@ LRESULT TaskbarWnd::wndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 		{
 			HBITMAP bmp = GetIconicRepresentation( HIWORD(lParam), LOWORD(lParam), 2 );
 			DwmSetIconicThumbnail( *this, bmp, 0);
-
 			break;
 		}
 
         case MOL_WM_DWMSENDICONICLIVEPREVIEWBITMAP:
 		{
 			sendLivePreviewBitmap();
-
 			break;
 		}
         default:
@@ -226,10 +221,6 @@ LRESULT TaskbarWnd::wndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 HBITMAP TaskbarWnd::GetIconicRepresentation(int nWidth, int nHeight, int scale )
 {
     HRESULT hr = E_FAIL;
-
-	mol::MdiChild* mc = dynamic_cast<mol::MdiChild*>(doc);
-	if (!mc)
-		return 0;
 
 	Gdiplus::Bitmap* src = Gdiplus::Bitmap::FromHBITMAP( hbm_cached_,0);
 
@@ -258,21 +249,17 @@ HBITMAP TaskbarWnd::GetIconicRepresentation(int nWidth, int nHeight, int scale )
 
 void TaskbarWnd::cacheIconicRepresentation()
 {
-	mol::MdiChild* mc = dynamic_cast<mol::MdiChild*>(doc);
-	if (!mc)
-		return;
-
-	if ( hbm_cached_ && !::IsZoomed(*mc) ) {
+	if ( hbm_cached_ && !::IsZoomed(doc) ) {
 		return;
 	}
 
 	RECT r;
-	::GetWindowRect(  moe()->mdiClient(), &r );
+	::GetWindowRect( mol::win::mdiClient(), &r );
 
 	RECT cr;
-	::GetClientRect(  *mc, &cr );
+	::GetClientRect(  doc, &cr );
 	POINT p = {cr.right,cr.bottom};
-	::ClientToScreen( *mc, &p );
+	::ClientToScreen( doc, &p );
 
 	if ( p.y > r.bottom ) 
 	{
@@ -283,7 +270,7 @@ void TaskbarWnd::cacheIconicRepresentation()
 		p.x = r.right;
 	}
 
-	::ScreenToClient( *mc, &p );
+	::ScreenToClient( doc, &p );
 
 	// snap
 	Gdiplus::Bitmap src(p.x, p.y, PixelFormat32bppPARGB );
@@ -292,7 +279,7 @@ void TaskbarWnd::cacheIconicRepresentation()
 		gsnap.Clear( 0x00ffffff );
 
 		HDC mem = gsnap.GetHDC();
-		BOOL bret = PrintWindow2( *mc, mem, 1 );
+		BOOL bret = PrintWindow2( doc, mem, 1 );
 		gsnap.Flush();
 		gsnap.ReleaseHDC(mem);
 	}
@@ -316,10 +303,10 @@ void TaskbarWnd::refreshIconDelayed()
 void TaskbarWnd::sendLivePreviewBitmap( )
 {
 	RECT r;
-	::GetWindowRect( moe()->mdiClient(), &r );
+	::GetWindowRect( mol::win::mdiClient(), &r );
 
 	RECT wr;
-	::GetWindowRect( (HWND)*moe(), &wr );
+	::GetWindowRect( tb_->parent(), &wr );
 
 	POINT ptOffset = { r.left-wr.left, r.top-wr.top };
 
@@ -344,16 +331,21 @@ Taskbar::~Taskbar()
 {
 }
 
-TaskbarWnd* Taskbar::addTab(IMoeDocument* d, bool disabled )
+void Taskbar::init(HWND parent)
+{
+	parent_ = parent;
+}
+
+TaskbarWnd* Taskbar::addTab( HWND d, const mol::string& title, bool disabled )
 {
 	if ( tbl_ )
     {
-		TaskbarWnd* pTabWnd = TaskbarWnd::Create( this, d, tbl_, disabled);
+		TaskbarWnd* pTabWnd = TaskbarWnd::Create( this, d, title, tbl_, disabled);
         if (pTabWnd != NULL)
         {
             tbl_->SetTabOrder( *pTabWnd, NULL);
 
-			tabs_.insert( std::make_pair( (HWND)(*pTabWnd), pTabWnd ) );
+			tabs_.insert( std::make_pair( (HWND)(d), pTabWnd ) );
 
 			return pTabWnd;
         }
@@ -362,6 +354,30 @@ TaskbarWnd* Taskbar::addTab(IMoeDocument* d, bool disabled )
 	return 0;
 }
 
+void Taskbar::renameTab( HWND d, const mol::string& title )
+{
+	if ( tabs_.count(d) == 0 )
+		return;
+
+	TaskbarWnd* tw  = tabs_[d];
+
+	::SetWindowText( *tw, title.c_str() );
+}
+
+
+void Taskbar::moveTab( HWND d, HWND before )
+{
+	if ( tabs_.count(d) == 0 )
+		return;
+
+	if ( tabs_.count(before) == 0 )
+		return;
+
+	TaskbarWnd* t_what  = tabs_[d];
+	TaskbarWnd* t_where = tabs_[before];
+
+	tbl_->SetTabOrder(*t_what,*t_where);
+}
 
 void Taskbar::RemoveTab(HWND hwnd)
 {

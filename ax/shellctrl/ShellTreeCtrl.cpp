@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "ShellTreeCtrl.h"
+#include "ShellCtrl_Dispid.h"
 #include "ole/Img.h"
 #include "ole/Bstr.h"
 #include "ole/enum.h"
@@ -172,6 +173,7 @@ ShellTree::ShellTree()
 	foreCol_  = RGB(0,0,0);
 	mol::ole::PixeltoHIMETRIC(&sizel);
 	eraseBackground_ = 1;
+	useContext_ = true;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -295,16 +297,25 @@ LRESULT ShellTree::OnTreeContext(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	mol::Crack message(msg,wParam,lParam);
 
-	// prepare context menue
-	mol::Menu m(treeMenu_.getSubMenu(0));
-	m.enableItem(IDM_TREE_REMOVE);
-
 	// get selection, if we have a hittest update selection beforehand
 	HTREEITEM hit = getHitTest();
 	mol::string p = getPath();
 	// check if to display a context menu
 	if ( !hit )
 		return 0;
+
+	if ( !useContext_ )
+	{
+		mol::variant v(p);
+		fire(DISPID_ISHELLTREEEVENTS_ONCONTEXTMENU,v);
+		return 0;
+	}
+
+	// prepare context menue
+	mol::Menu m(treeMenu_.getSubMenu(0));
+	m.enableItem(IDM_TREE_REMOVE);
+
+
 
 	m.enableItem(IDM_TREE_RENAME);
 	m.enableItem(IDM_TREE_DELETE);
@@ -961,6 +972,33 @@ HRESULT __stdcall ShellTree::put_DisplayFiles	( VARIANT_BOOL vb  )
 		displayFiles_ = false;
 
 	this->OnChanged(1);
+	return S_OK;
+}
+///////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall ShellTree::get_UseContext	( VARIANT_BOOL* vb )
+{
+	if ( vb )
+	{
+		if ( useContext_ )
+			*vb = VARIANT_TRUE;
+		else
+			*vb = VARIANT_FALSE;
+	}
+	return S_OK;
+}
+
+HRESULT __stdcall ShellTree::put_UseContext	( VARIANT_BOOL vb  )
+{
+	if ( S_OK != OnRequestEdit( 15 ) )
+		return S_FALSE;
+
+	if ( vb == VARIANT_TRUE )
+		useContext_ = true;
+	else
+		useContext_ = false;
+
+	this->OnChanged(51);
 	return S_OK;
 }
 

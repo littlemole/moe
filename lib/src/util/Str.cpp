@@ -252,16 +252,16 @@ std::wstring xmlentities_decode( const std::wstring& str )
     return out.str();
 }
 
-mol::string str2rtf( const mol::string& in )
+std::string str2rtf( const std::string& in )
 {
-    mol::ostringstream out;
+    std::ostringstream out;
     size_t p = 0;
     size_t len = in.size();
     while( ( p < len ) )
     {
-        if ( (in[p] == _T('\\')) || (in[p] == _T('{')) || (in[p] == _T('}')) )
+        if ( (in[p] == '\\') || (in[p] == '{') || (in[p] == '}') )
         {
-                out << _T("\\");
+                out << "\\";
         }
         out << in[p];
         p++;
@@ -270,9 +270,26 @@ mol::string str2rtf( const mol::string& in )
 }
 
 
-mol::string nl2rtf( const mol::string& in )
+std::wstring str2rtf( const std::wstring& in )
 {
-    mol::ostringstream out;
+    std::wostringstream out;
+    size_t p = 0;
+    size_t len = in.size();
+    while( ( p < len ) )
+    {
+        if ( (in[p] == L'\\') || (in[p] == L'{') || (in[p] == L'}') )
+        {
+                out << L"\\";
+        }
+        out << in[p];
+        p++;
+    }
+    return out.str();
+}
+
+std::wstring nl2rtf( const std::wstring& in )
+{
+    std::wostringstream out;
 
     //if ( in[0] == _T('\n') )
       //      out << _T("\\par");
@@ -282,9 +299,31 @@ mol::string nl2rtf( const mol::string& in )
     size_t len = in.size();
     while( ( p < len ) )
     {
-        if ( in[p] == _T('\n') )
+        if ( in[p] == L'\n' )
         {
-                out << _T("\\par");
+                out << L"\\par";
+        }
+        out << in[p];
+        p++;
+    }
+    return out.str();
+}
+
+std::string nl2rtf( const std::string& in )
+{
+    std::ostringstream out;
+
+    //if ( in[0] == _T('\n') )
+      //      out << _T("\\par");
+    //out << in[0];
+
+    size_t p = 0;
+    size_t len = in.size();
+    while( ( p < len ) )
+    {
+        if ( in[p] == '\n' )
+        {
+                out << "\\par";
         }
         out << in[p];
         p++;

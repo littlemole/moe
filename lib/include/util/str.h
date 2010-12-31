@@ -24,8 +24,11 @@ std::string  xmlentities_encode(const std::string& str );
 std::wstring xmlentities_encode(const std::wstring& str );
 std::string  xmlentities_decode(const std::string& str );
 std::wstring xmlentities_decode(const std::wstring& str );
-mol::string str2rtf(const mol::string& str );
-mol::string nl2rtf( const mol::string& in );
+std::string str2rtf(const std::string& str );
+std::string nl2rtf( const std::string& in );
+std::wstring str2rtf(const std::wstring& str );
+std::wstring nl2rtf( const std::wstring& in );
+
 mol::string tab2space(const mol::string& str );
 mol::string skip2spaces(const mol::string& str );
 mol::string skipNewLines(const mol::string& str);

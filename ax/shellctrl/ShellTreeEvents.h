@@ -36,6 +36,11 @@ public:
 	{
 		return S_OK;
 	}
+	
+	HRESULT virtual __stdcall OnContextMenu(BSTR filename)
+	{
+		return S_OK;
+	}
 
     HRESULT Advise(IUnknown* object )
     {

@@ -15,7 +15,7 @@ function example1()
 
  moe.View.Show();
  var doc = moe.Documents.New();
- doc.Object.Append("This is text populated via script!");
+ doc.Object.Text.Append("This is text populated via script!");
  doc.View.Maximize();
 }
 </script>
@@ -37,12 +37,12 @@ sub example2 {
 	my $doc_output = $moe->Documents->New();
 	
 	my $c = 0;
-	for ( my $i = 0; $i < $doc_input->{Object}->LineCount(); $i++ ) {
+	for ( my $i = 0; $i < $doc_input->{Object}->{Line}->LineCount(); $i++ ) {
 		
-		my $t = $doc_input->{Object}->LineText($i);
+		my $t = $doc_input->{Object}->{Line}->LineText($i);
 		
 		if ( $t =~ /moe/i ) {
-			$doc_output->{Object}->Append("line $i: $t\r\n");
+			$doc_output->{Object}->{Text}->Append("line $i: $t\r\n");
 			$c++;			
 		} 
 	}
@@ -55,7 +55,7 @@ sub example2 {
 function example3()
 {
 var doc = external.Moe.Documents.New();
-doc.Object.Append("This is text populated via script!");
+doc.Object.Text.Append("This is text populated via script!");
 doc.View.maximize();
 }
 
@@ -258,7 +258,7 @@ var moe = GetObject("","Moe.Application");
 //var moe = new ActiveXObject("Moe.Application");
 
 var doc = moe.Documents.New();
-doc.Object.Append("This is text populated via script!");
+doc.Object.Text.Append("This is text populated via script!");
 doc.View.maximize();
          </pre>
 		  <p>run this script <a href="javascript:void(0)" onClick="example1()">now </a>
@@ -284,12 +284,12 @@ my $doc_input  = $moe->Open( $moe->{AppPath} . "\\doc\\scripting.html");
 my $doc_output = $moe->New();
 
 my $c = 0;
-for ( my $i = 0; $i < $doc_input->{Object}->LineCount(); $i++ ) {
+for ( my $i = 0; $i < $doc_input->{Object}->{Line}->LineCount(); $i++ ) {
 	
-	my $t = $doc_input->{Object}->LineText($i);
+	my $t = $doc_input->{Object}->{Line}->LineText($i);
 	
 	if ( $t =~ /moe/i ) {
-		$doc_output->{Object}->Append("line $i: $t\r\n");
+		$doc_output->{Object}->{Text}->Append("line $i: $t\r\n");
 		$c++;			
 	} 
 }
@@ -332,7 +332,7 @@ $shell->Popup("I counted $c lines with string 'moe'");
 //no need to declare external.moe object
 
 var doc = external.moe.Documents.New();
-doc.Object.Append("This is text populated via script!");
+doc.Object.Text.Append("This is text populated via script!");
 doc.View.maximize();
          </pre>
 

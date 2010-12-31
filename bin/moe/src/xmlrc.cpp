@@ -171,6 +171,17 @@ extern "C" void load_codegen_metadata()
   UI().addCmd(IDM_FORMLANG_VBSCRIPT,_T("VBScript"));  
   UI().addCmd(IDM_FORMLANG_PERLSCRIPT,_T("PerlScript"));  
   UI().addCmd(IDM_FILE_NEW_UFS,_T("New UFS"));  
+  UI().addCmd(IDM_TREE,_T("Tree Window Context Menu"));  
+  UI().addCmd(IDM_TREE_OPEN,_T("Open in moe"));  
+  UI().addCmd(IDM_TREE_UPDATE,_T("Update"));  
+  UI().addCmd(IDM_TREE_RENAME,_T("Rename"));  
+  UI().addCmd(IDM_TREE_DELETE,_T("Delete"));  
+  UI().addCmd(IDM_TREE_CUT,_T("Delete"));  
+  UI().addCmd(IDM_TREE_COPY,_T("Delete"));  
+  UI().addCmd(IDM_TREE_PASTE,_T("Execute"));  
+  UI().addCmd(IDM_TREE_PROPERTIES,_T("Properties"));  
+  UI().addCmd(IDM_TREE_EXECUTE,_T("Properties"));  
+  UI().addCmd(IDM_TREE_NEWDIR,_T("New Directory"));  
 
   
   //foreach bitmap - loads and registers bitmap
@@ -251,45 +262,45 @@ extern "C" void load_codegen_metadata()
   UI().addMenu(IDM_MOE);    
 
     UI().addSubMenu(  IDM_MOE,  IDM_MOE,  IDM_FILE );
-        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, IDM_FILE_NEW, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_FILE);
-        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, IDM_FILE_OPEN, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, IDM_FILE_OPEN_HTML, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, IDM_FILE_OPEN_FOLDER, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_FILE);
-        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_SAVE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_SAVE_AS, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_SAVE, IDB_TOOLBAR, IDM_FILE_SAVE, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_SAVE_AS, IDB_TOOLBAR, IDM_FILE_SAVE_AS, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_FILE);
-        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_PRINT, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_PRINT, IDB_TOOLBAR, IDM_FILE_PRINT, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_FILE);
-        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, IDM_FILE_NEW_UFS, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_FILE);
-        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, IDM_FILE_EXIT, false, true);
 
     UI().addSubMenu(  IDM_MOE,  IDM_MOE,  IDM_EDIT );
-        UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_FIND, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_REPLACE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_FIND, IDB_TOOLBAR, IDM_EDIT_FIND, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_REPLACE, IDB_TOOLBAR, IDM_EDIT_REPLACE, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_EDIT);
-        UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_UNDO, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_REDO, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_UNDO, IDB_TOOLBAR, IDM_EDIT_UNDO, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_REDO, IDB_TOOLBAR, IDM_EDIT_REDO, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_EDIT);
-        UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_CUT, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_COPY, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_PASTE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_CUT, IDB_TOOLBAR, IDM_EDIT_CUT, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_COPY, IDB_TOOLBAR, IDM_EDIT_COPY, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_PASTE, IDB_TOOLBAR, IDM_EDIT_PASTE, false, true);
 
     UI().addSubMenu(  IDM_MOE,  IDM_MOE,  IDM_TOOLS );
-        UI().addMenuItem(IDM_MOE, IDM_TOOLS, IDM_EDIT_COLOR, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_TOOLS, IDM_EDIT_COLOR, IDB_TOOLBAR, IDM_EDIT_COLOR, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_TOOLS);
-        UI().addMenuItem(IDM_MOE, IDM_TOOLS, IDM_EDIT_EXECUTESCRIPT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_TOOLS, IDM_EDIT_EXECUTESCRIPT, IDB_TOOLBAR, IDM_EDIT_EXECUTESCRIPT, false, true);
     UI().addSubMenu(  IDM_MOE, IDM_TOOLS, IDM_EDIT_DEBUG, IDB_TOOLBAR);
-        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_GO, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_STEPIN, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_STEPOVER, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_STEPOUT, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_STOP, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_QUIT, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_TOOLS, IDM_MODE_EXECUTEFORM, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_GO, IDB_TOOLBAR, IDM_EDIT_DEBUG, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_STEPIN, IDB_TOOLBAR, IDM_EDIT_DEBUG, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_STEPOVER, IDB_TOOLBAR, IDM_EDIT_DEBUG, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_STEPOUT, IDB_TOOLBAR, IDM_EDIT_DEBUG, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_STOP, IDB_TOOLBAR, IDM_EDIT_DEBUG, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_QUIT, IDB_TOOLBAR, IDM_EDIT_DEBUG, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_TOOLS, IDM_MODE_EXECUTEFORM, IDB_TOOLBAR, IDM_MODE_EXECUTEFORM, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_TOOLS);
     UI().addSubMenu(  IDM_MOE, IDM_TOOLS, IDM_USER_SCRIPT, IDB_TOOLBAR);
     UI().addSubMenu(  IDM_MOE, IDM_TOOLS, IDM_USER_BATCH, IDB_TOOLBAR);
@@ -298,318 +309,336 @@ extern "C" void load_codegen_metadata()
 
     UI().addSubMenu(  IDM_MOE,  IDM_MOE,  IDM_MODE );
     UI().addSubMenu(  IDM_MOE, IDM_MODE, IDM_MODE_EOL, IDB_TOOLBAR);
-        UI().addMenuItem(IDM_MOE, IDM_MODE_EOL, IDM_MODE_UNIX, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_MODE_EOL, IDM_MODE_WIN32, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE, IDM_MODE, IDM_MODE_SHOW_LINE_NUMBERS, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE_EOL, IDM_MODE_UNIX, IDB_TOOLBAR, IDM_MODE_EOL, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE_EOL, IDM_MODE_WIN32, IDB_TOOLBAR, IDM_MODE_EOL, true, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE, IDM_MODE_SHOW_LINE_NUMBERS, IDB_TOOLBAR, IDM_MODE_SHOW_LINE_NUMBERS, false, true);
     UI().addSubMenu(  IDM_MOE, IDM_MODE, IDM_MODE_LANGUAGE, IDB_TOOLBAR);
-        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_PLAIN, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_PLAIN, IDB_TOOLBAR, IDM_MODE_LANGUAGE, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_MODE_LANGUAGE);
-        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_HTML, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_CSS, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_HTML, IDB_TOOLBAR, IDM_MODE_LANGUAGE, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_CSS, IDB_TOOLBAR, IDM_MODE_LANGUAGE, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_MODE_LANGUAGE);
-        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_VB, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_JAVASCRIPT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_VB, IDB_TOOLBAR, IDM_MODE_LANGUAGE, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_JAVASCRIPT, IDB_TOOLBAR, IDM_MODE_LANGUAGE, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_MODE_LANGUAGE);
-        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_SQL, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_SQL, IDB_TOOLBAR, IDM_MODE_LANGUAGE, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_MODE_LANGUAGE);
-        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_SHELL, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_PERL, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_SHELL, IDB_TOOLBAR, IDM_MODE_LANGUAGE, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_PERL, IDB_TOOLBAR, IDM_MODE_LANGUAGE, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_MODE_LANGUAGE);
-        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_CPP, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_JAVA, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_CSHARP, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_MODE, IDM_MODE_SETTINGS, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_CPP, IDB_TOOLBAR, IDM_MODE_LANGUAGE, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_JAVA, IDB_TOOLBAR, IDM_MODE_LANGUAGE, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_CSHARP, IDB_TOOLBAR, IDM_MODE_LANGUAGE, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE, IDM_MODE_SETTINGS, IDB_TOOLBAR, IDM_MODE_SETTINGS, false, true);
 
     UI().addSubMenu(  IDM_MOE,  IDM_MOE,  IDM_VIEW );
-        UI().addMenuItem(IDM_MOE, IDM_VIEW, IDM_VIEW_MAXIMIZE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_VIEW, IDM_VIEW_MINIMIZE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_VIEW, IDM_VIEW_TILE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_VIEW, IDM_VIEW_CASCADE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_VIEW, IDM_VIEW_MAXIMIZE, IDB_TOOLBAR, IDM_VIEW_MAXIMIZE, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_VIEW, IDM_VIEW_MINIMIZE, IDB_TOOLBAR, IDM_VIEW_MINIMIZE, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_VIEW, IDM_VIEW_TILE, IDB_TOOLBAR, IDM_VIEW_TILE, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_VIEW, IDM_VIEW_CASCADE, IDB_TOOLBAR, IDM_VIEW_CASCADE, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_VIEW);
-        UI().addMenuItem(IDM_MOE, IDM_VIEW, IDM_VIEW_CLOSE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_VIEW, IDM_VIEW_CLOSEALL, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_VIEW, IDM_VIEW_CLOSE, IDB_TOOLBAR, IDM_VIEW_CLOSE, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_VIEW, IDM_VIEW_CLOSEALL, IDB_TOOLBAR, IDM_VIEW_CLOSEALL, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_VIEW);
     UI().addSubMenu(  IDM_MOE, IDM_VIEW, IDM_VIEW_TOOLBARS, IDB_TOOLBAR);
-        UI().addMenuItem(IDM_MOE, IDM_VIEW_TOOLBARS, IDM_VIEW_DIRVIEW, IDB_TOOLBAR, true, true);
+        UI().addMenuItem(IDM_MOE, IDM_VIEW_TOOLBARS, IDM_VIEW_DIRVIEW, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
     UI().addMenuSeparator(IDM_MOE,IDM_VIEW_TOOLBARS);
-        UI().addMenuItem(IDM_MOE, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FILEBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_EDITBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_TOOLBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_SETTINGBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_VIEWBAR, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_USERBAR, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FILEBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_EDITBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_TOOLBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_SETTINGBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_VIEWBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_USERBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_VIEW_TOOLBARS);
-        UI().addMenuItem(IDM_MOE, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FREEZE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FREEZE, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
     UI().addSubMenu(  IDM_MOE, IDM_VIEW, IDM_VIEW_WINDOWS, IDB_TOOLBAR);
-        UI().addMenuItem(IDM_MOE, IDM_VIEW_WINDOWS, IDM_VIEW_WINDOWS_TEXT, IDB_TOOLBAR, false, false);
+        UI().addMenuItem(IDM_MOE, IDM_VIEW_WINDOWS, IDM_VIEW_WINDOWS_TEXT, IDB_TOOLBAR, IDM_VIEW_WINDOWS, false, false);
 
     UI().addSubMenu(  IDM_MOE,  IDM_MOE,  IDM_HELP );
-        UI().addMenuItem(IDM_MOE, IDM_HELP, IDM_HELP_ABOUT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_HELP, IDM_HELP_ABOUT, IDB_TOOLBAR, IDM_HELP_ABOUT, false, true);
   
   // a main menu
   UI().addMenu(IDM_MOE_DIR);    
 
     UI().addSubMenu(  IDM_MOE_DIR,  IDM_MOE_DIR,  IDM_FILE );
-        UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, IDM_FILE_NEW, false, true);
     UI().addMenuSeparator(IDM_MOE_DIR,IDM_FILE);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, IDM_FILE_OPEN, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, IDM_FILE_OPEN_HTML, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, IDM_FILE_OPEN_FOLDER, false, true);
     UI().addMenuSeparator(IDM_MOE_DIR,IDM_FILE);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
     UI().addMenuSeparator(IDM_MOE_DIR,IDM_FILE);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, IDM_FILE_EXIT, false, true);
 
     UI().addSubMenu(  IDM_MOE_DIR,  IDM_MOE_DIR,  IDM_EDIT );
-        UI().addMenuItem(IDM_MOE_DIR, IDM_EDIT, IDM_EDIT_CUT, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_EDIT, IDM_EDIT_COPY, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_EDIT, IDM_EDIT_PASTE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_EDIT, IDM_EDIT_CUT, IDB_TOOLBAR, IDM_EDIT_CUT, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_EDIT, IDM_EDIT_COPY, IDB_TOOLBAR, IDM_EDIT_COPY, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_EDIT, IDM_EDIT_PASTE, IDB_TOOLBAR, IDM_EDIT_PASTE, false, true);
 
     UI().addSubMenu(  IDM_MOE_DIR,  IDM_MOE_DIR,  IDM_VIEW );
-        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW, IDM_VIEW_MAXIMIZE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW, IDM_VIEW_MINIMIZE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW, IDM_VIEW_TILE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW, IDM_VIEW_CASCADE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW, IDM_VIEW_CLOSE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW, IDM_VIEW_MAXIMIZE, IDB_TOOLBAR, IDM_VIEW_MAXIMIZE, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW, IDM_VIEW_MINIMIZE, IDB_TOOLBAR, IDM_VIEW_MINIMIZE, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW, IDM_VIEW_TILE, IDB_TOOLBAR, IDM_VIEW_TILE, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW, IDM_VIEW_CASCADE, IDB_TOOLBAR, IDM_VIEW_CASCADE, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW, IDM_VIEW_CLOSE, IDB_TOOLBAR, IDM_VIEW_CLOSE, false, true);
     UI().addMenuSeparator(IDM_MOE_DIR,IDM_VIEW);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW, IDM_VIEW_CLOSEALL, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW, IDM_VIEW_CLOSEALL, IDB_TOOLBAR, IDM_VIEW_CLOSEALL, false, true);
     UI().addMenuSeparator(IDM_MOE_DIR,IDM_VIEW);
     UI().addSubMenu(  IDM_MOE_DIR, IDM_VIEW, IDM_VIEW_TOOLBARS, IDB_TOOLBAR);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_TOOLBARS, IDM_VIEW_DIRVIEW, IDB_TOOLBAR, true, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_TOOLBARS, IDM_VIEW_DIRVIEW, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
     UI().addMenuSeparator(IDM_MOE_DIR,IDM_VIEW_TOOLBARS);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FILEBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_EDITBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_TOOLBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_SETTINGBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_VIEWBAR, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_USERBAR, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FILEBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_EDITBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_TOOLBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_SETTINGBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_VIEWBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_USERBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
     UI().addMenuSeparator(IDM_MOE_DIR,IDM_VIEW_TOOLBARS);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FREEZE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FREEZE, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
     UI().addSubMenu(  IDM_MOE_DIR, IDM_VIEW, IDM_VIEW_WINDOWS, IDB_TOOLBAR);
-        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_WINDOWS, IDM_VIEW_WINDOWS_TEXT, IDB_TOOLBAR, false, false);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_VIEW_WINDOWS, IDM_VIEW_WINDOWS_TEXT, IDB_TOOLBAR, IDM_VIEW_WINDOWS, false, false);
 
     UI().addSubMenu(  IDM_MOE_DIR,  IDM_MOE_DIR,  IDM_HELP );
-        UI().addMenuItem(IDM_MOE_DIR, IDM_HELP, IDM_HELP_ABOUT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_HELP, IDM_HELP_ABOUT, IDB_TOOLBAR, IDM_HELP_ABOUT, false, true);
   
   // a main menu
   UI().addMenu(IDM_MOE_IMG);    
 
     UI().addSubMenu(  IDM_MOE_IMG,  IDM_MOE_IMG,  IDM_FILE );
-        UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, IDM_FILE_NEW, false, true);
     UI().addMenuSeparator(IDM_MOE_IMG,IDM_FILE);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, IDM_FILE_OPEN, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, IDM_FILE_OPEN_HTML, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, IDM_FILE_OPEN_FOLDER, false, true);
     UI().addMenuSeparator(IDM_MOE_IMG,IDM_FILE);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
     UI().addMenuSeparator(IDM_MOE_IMG,IDM_FILE);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, IDM_FILE_EXIT, false, true);
 
     UI().addSubMenu(  IDM_MOE_IMG,  IDM_MOE_IMG,  IDM_EDIT );
-        UI().addMenuItem(IDM_MOE_IMG, IDM_EDIT, IDM_EDIT_CUT, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_EDIT, IDM_EDIT_COPY, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_EDIT, IDM_EDIT_PASTE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_EDIT, IDM_EDIT_CUT, IDB_TOOLBAR, IDM_EDIT_CUT, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_EDIT, IDM_EDIT_COPY, IDB_TOOLBAR, IDM_EDIT_COPY, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_EDIT, IDM_EDIT_PASTE, IDB_TOOLBAR, IDM_EDIT_PASTE, false, true);
 
     UI().addSubMenu(  IDM_MOE_IMG,  IDM_MOE_IMG,  IDM_VIEW );
-        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW, IDM_VIEW_MAXIMIZE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW, IDM_VIEW_MINIMIZE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW, IDM_VIEW_TILE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW, IDM_VIEW_CASCADE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW, IDM_VIEW_MAXIMIZE, IDB_TOOLBAR, IDM_VIEW_MAXIMIZE, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW, IDM_VIEW_MINIMIZE, IDB_TOOLBAR, IDM_VIEW_MINIMIZE, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW, IDM_VIEW_TILE, IDB_TOOLBAR, IDM_VIEW_TILE, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW, IDM_VIEW_CASCADE, IDB_TOOLBAR, IDM_VIEW_CASCADE, false, true);
     UI().addMenuSeparator(IDM_MOE_IMG,IDM_VIEW);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW, IDM_VIEW_CLOSE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW, IDM_VIEW_CLOSEALL, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW, IDM_VIEW_CLOSE, IDB_TOOLBAR, IDM_VIEW_CLOSE, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW, IDM_VIEW_CLOSEALL, IDB_TOOLBAR, IDM_VIEW_CLOSEALL, false, true);
     UI().addMenuSeparator(IDM_MOE_IMG,IDM_VIEW);
     UI().addSubMenu(  IDM_MOE_IMG, IDM_VIEW, IDM_VIEW_TOOLBARS, IDB_TOOLBAR);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_TOOLBARS, IDM_VIEW_DIRVIEW, IDB_TOOLBAR, true, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_TOOLBARS, IDM_VIEW_DIRVIEW, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
     UI().addMenuSeparator(IDM_MOE_IMG,IDM_VIEW_TOOLBARS);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FILEBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_EDITBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_TOOLBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_SETTINGBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_VIEWBAR, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_USERBAR, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FILEBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_EDITBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_TOOLBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_SETTINGBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_VIEWBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_USERBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
     UI().addMenuSeparator(IDM_MOE_IMG,IDM_VIEW_TOOLBARS);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FREEZE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FREEZE, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
     UI().addSubMenu(  IDM_MOE_IMG, IDM_VIEW, IDM_VIEW_WINDOWS, IDB_TOOLBAR);
-        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_WINDOWS, IDM_VIEW_WINDOWS_TEXT, IDB_TOOLBAR, false, false);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_VIEW_WINDOWS, IDM_VIEW_WINDOWS_TEXT, IDB_TOOLBAR, IDM_VIEW_WINDOWS, false, false);
 
     UI().addSubMenu(  IDM_MOE_IMG,  IDM_MOE_IMG,  IDM_HELP );
-        UI().addMenuItem(IDM_MOE_IMG, IDM_HELP, IDM_HELP_ABOUT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_HELP, IDM_HELP_ABOUT, IDB_TOOLBAR, IDM_HELP_ABOUT, false, true);
   
   // a main menu
   UI().addMenu(IDM_SMALL_MENU);    
 
     UI().addSubMenu(  IDM_SMALL_MENU,  IDM_SMALL_MENU,  IDM_FILE );
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, IDM_FILE_NEW, false, true);
     UI().addMenuSeparator(IDM_SMALL_MENU,IDM_FILE);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, IDM_FILE_OPEN, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, IDM_FILE_OPEN_HTML, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, IDM_FILE_OPEN_FOLDER, false, true);
     UI().addMenuSeparator(IDM_SMALL_MENU,IDM_FILE);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
     UI().addMenuSeparator(IDM_SMALL_MENU,IDM_FILE);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, IDM_FILE_NEW_UFS, false, true);
     UI().addMenuSeparator(IDM_SMALL_MENU,IDM_FILE);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, IDM_FILE_EXIT, false, true);
 
     UI().addSubMenu(  IDM_SMALL_MENU,  IDM_SMALL_MENU,  IDM_EDIT );
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_EDIT, IDM_EDIT_CUT, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_EDIT, IDM_EDIT_COPY, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_EDIT, IDM_EDIT_PASTE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_EDIT, IDM_EDIT_CUT, IDB_TOOLBAR, IDM_EDIT_CUT, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_EDIT, IDM_EDIT_COPY, IDB_TOOLBAR, IDM_EDIT_COPY, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_EDIT, IDM_EDIT_PASTE, IDB_TOOLBAR, IDM_EDIT_PASTE, false, true);
 
     UI().addSubMenu(  IDM_SMALL_MENU,  IDM_SMALL_MENU,  IDM_VIEW );
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW, IDM_VIEW_MAXIMIZE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW, IDM_VIEW_MINIMIZE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW, IDM_VIEW_TILE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW, IDM_VIEW_CASCADE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW, IDM_VIEW_MAXIMIZE, IDB_TOOLBAR, IDM_VIEW_MAXIMIZE, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW, IDM_VIEW_MINIMIZE, IDB_TOOLBAR, IDM_VIEW_MINIMIZE, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW, IDM_VIEW_TILE, IDB_TOOLBAR, IDM_VIEW_TILE, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW, IDM_VIEW_CASCADE, IDB_TOOLBAR, IDM_VIEW_CASCADE, false, true);
     UI().addMenuSeparator(IDM_SMALL_MENU,IDM_VIEW);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW, IDM_VIEW_CLOSE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW, IDM_VIEW_CLOSEALL, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW, IDM_VIEW_CLOSE, IDB_TOOLBAR, IDM_VIEW_CLOSE, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW, IDM_VIEW_CLOSEALL, IDB_TOOLBAR, IDM_VIEW_CLOSEALL, false, true);
     UI().addMenuSeparator(IDM_SMALL_MENU,IDM_VIEW);
     UI().addSubMenu(  IDM_SMALL_MENU, IDM_VIEW, IDM_VIEW_TOOLBARS, IDB_TOOLBAR);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_TOOLBARS, IDM_VIEW_DIRVIEW, IDB_TOOLBAR, true, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_TOOLBARS, IDM_VIEW_DIRVIEW, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
     UI().addMenuSeparator(IDM_SMALL_MENU,IDM_VIEW_TOOLBARS);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FILEBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_EDITBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_TOOLBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_SETTINGBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_VIEWBAR, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_USERBAR, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FILEBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_EDITBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_TOOLBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_SETTINGBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_VIEWBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_USERBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
     UI().addMenuSeparator(IDM_SMALL_MENU,IDM_VIEW_TOOLBARS);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FREEZE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FREEZE, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
     UI().addSubMenu(  IDM_SMALL_MENU, IDM_VIEW, IDM_VIEW_WINDOWS, IDB_TOOLBAR);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_WINDOWS, IDM_VIEW_WINDOWS_TEXT, IDB_TOOLBAR, false, false);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_VIEW_WINDOWS, IDM_VIEW_WINDOWS_TEXT, IDB_TOOLBAR, IDM_VIEW_WINDOWS, false, false);
 
     UI().addSubMenu(  IDM_SMALL_MENU,  IDM_SMALL_MENU,  IDM_HELP );
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_HELP, IDM_HELP_ABOUT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_HELP, IDM_HELP_ABOUT, IDB_TOOLBAR, IDM_HELP_ABOUT, false, true);
   
   // a main menu
   UI().addMenu(IDM_MOE_HEX);    
 
     UI().addSubMenu(  IDM_MOE_HEX,  IDM_MOE_HEX,  IDM_FILE );
-        UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, IDM_FILE_NEW, false, true);
     UI().addMenuSeparator(IDM_MOE_HEX,IDM_FILE);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, IDM_FILE_OPEN, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, IDM_FILE_OPEN_HTML, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, IDM_FILE_OPEN_FOLDER, false, true);
     UI().addMenuSeparator(IDM_MOE_HEX,IDM_FILE);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
     UI().addMenuSeparator(IDM_MOE_HEX,IDM_FILE);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, IDM_FILE_EXIT, false, true);
 
     UI().addSubMenu(  IDM_MOE_HEX,  IDM_MOE_HEX,  IDM_EDIT );
-        UI().addMenuItem(IDM_MOE_HEX, IDM_EDIT, IDM_EDIT_FIND, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_EDIT, IDM_EDIT_FIND, IDB_TOOLBAR, IDM_EDIT_FIND, false, true);
     UI().addMenuSeparator(IDM_MOE_HEX,IDM_EDIT);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_EDIT, IDM_EDIT_16BYTES, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_EDIT, IDM_EDIT_20BYTES, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_EDIT, IDM_EDIT_24BYTES, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_EDIT, IDM_EDIT_28BYTES, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_EDIT, IDM_EDIT_32BYTES, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_EDIT, IDM_EDIT_16BYTES, IDB_TOOLBAR, IDM_EDIT_16BYTES, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_EDIT, IDM_EDIT_20BYTES, IDB_TOOLBAR, IDM_EDIT_20BYTES, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_EDIT, IDM_EDIT_24BYTES, IDB_TOOLBAR, IDM_EDIT_24BYTES, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_EDIT, IDM_EDIT_28BYTES, IDB_TOOLBAR, IDM_EDIT_28BYTES, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_EDIT, IDM_EDIT_32BYTES, IDB_TOOLBAR, IDM_EDIT_32BYTES, false, true);
 
     UI().addSubMenu(  IDM_MOE_HEX,  IDM_MOE_HEX,  IDM_VIEW );
-        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW, IDM_VIEW_MAXIMIZE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW, IDM_VIEW_MINIMIZE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW, IDM_VIEW_TILE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW, IDM_VIEW_CASCADE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW, IDM_VIEW_MAXIMIZE, IDB_TOOLBAR, IDM_VIEW_MAXIMIZE, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW, IDM_VIEW_MINIMIZE, IDB_TOOLBAR, IDM_VIEW_MINIMIZE, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW, IDM_VIEW_TILE, IDB_TOOLBAR, IDM_VIEW_TILE, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW, IDM_VIEW_CASCADE, IDB_TOOLBAR, IDM_VIEW_CASCADE, false, true);
     UI().addMenuSeparator(IDM_MOE_HEX,IDM_VIEW);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW, IDM_VIEW_CLOSE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW, IDM_VIEW_CLOSEALL, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW, IDM_VIEW_CLOSE, IDB_TOOLBAR, IDM_VIEW_CLOSE, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW, IDM_VIEW_CLOSEALL, IDB_TOOLBAR, IDM_VIEW_CLOSEALL, false, true);
     UI().addMenuSeparator(IDM_MOE_HEX,IDM_VIEW);
     UI().addSubMenu(  IDM_MOE_HEX, IDM_VIEW, IDM_VIEW_TOOLBARS, IDB_TOOLBAR);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_TOOLBARS, IDM_VIEW_DIRVIEW, IDB_TOOLBAR, true, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_TOOLBARS, IDM_VIEW_DIRVIEW, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
     UI().addMenuSeparator(IDM_MOE_HEX,IDM_VIEW_TOOLBARS);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FILEBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_EDITBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_TOOLBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_SETTINGBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_VIEWBAR, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_USERBAR, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FILEBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_EDITBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_TOOLBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_SETTINGBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_VIEWBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_USERBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
     UI().addMenuSeparator(IDM_MOE_HEX,IDM_VIEW_TOOLBARS);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FREEZE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FREEZE, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
     UI().addSubMenu(  IDM_MOE_HEX, IDM_VIEW, IDM_VIEW_WINDOWS, IDB_TOOLBAR);
-        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_WINDOWS, IDM_VIEW_WINDOWS_TEXT, IDB_TOOLBAR, false, false);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_VIEW_WINDOWS, IDM_VIEW_WINDOWS_TEXT, IDB_TOOLBAR, IDM_VIEW_WINDOWS, false, false);
 
     UI().addSubMenu(  IDM_MOE_HEX,  IDM_MOE_HEX,  IDM_HELP );
-        UI().addMenuItem(IDM_MOE_HEX, IDM_HELP, IDM_HELP_ABOUT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_HELP, IDM_HELP_ABOUT, IDB_TOOLBAR, IDM_HELP_ABOUT, false, true);
   
   // a main menu
   UI().addMenu(IDM_MOE_HTML);    
 
     UI().addSubMenu(  IDM_MOE_HTML,  IDM_MOE_HTML,  IDM_FILE );
-        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, IDM_FILE_NEW, false, true);
     UI().addMenuSeparator(IDM_MOE_HTML,IDM_FILE);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, IDM_FILE_OPEN, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, IDM_FILE_OPEN_HTML, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, IDM_FILE_OPEN_FOLDER, false, true);
     UI().addMenuSeparator(IDM_MOE_HTML,IDM_FILE);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_SAVE_AS, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_SAVE_AS, IDB_TOOLBAR, IDM_FILE_SAVE_AS, false, true);
     UI().addMenuSeparator(IDM_MOE_HTML,IDM_FILE);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_PRINT, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_PRINT, IDB_TOOLBAR, IDM_FILE_PRINT, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
     UI().addMenuSeparator(IDM_MOE_HTML,IDM_FILE);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, IDM_FILE_EXIT, false, true);
 
     UI().addSubMenu(  IDM_MOE_HTML,  IDM_MOE_HTML,  IDM_EDIT );
-        UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_FIND, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_FIND, IDB_TOOLBAR, IDM_EDIT_FIND, false, true);
     UI().addMenuSeparator(IDM_MOE_HTML,IDM_EDIT);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_UNDO, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_REDO, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_UNDO, IDB_TOOLBAR, IDM_EDIT_UNDO, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_REDO, IDB_TOOLBAR, IDM_EDIT_REDO, false, true);
     UI().addMenuSeparator(IDM_MOE_HTML,IDM_EDIT);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_UPDATE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_STOP, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_UPDATE, IDB_TOOLBAR, IDM_EDIT_UPDATE, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_STOP, IDB_TOOLBAR, IDM_EDIT_STOP, false, true);
     UI().addMenuSeparator(IDM_MOE_HTML,IDM_EDIT);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_COPY, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_COPY, IDB_TOOLBAR, IDM_EDIT_COPY, false, true);
 
     UI().addSubMenu(  IDM_MOE_HTML,  IDM_MOE_HTML,  IDM_VIEW );
-        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW, IDM_VIEW_MAXIMIZE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW, IDM_VIEW_MINIMIZE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW, IDM_VIEW_TILE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW, IDM_VIEW_CASCADE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW, IDM_VIEW_MAXIMIZE, IDB_TOOLBAR, IDM_VIEW_MAXIMIZE, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW, IDM_VIEW_MINIMIZE, IDB_TOOLBAR, IDM_VIEW_MINIMIZE, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW, IDM_VIEW_TILE, IDB_TOOLBAR, IDM_VIEW_TILE, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW, IDM_VIEW_CASCADE, IDB_TOOLBAR, IDM_VIEW_CASCADE, false, true);
     UI().addMenuSeparator(IDM_MOE_HTML,IDM_VIEW);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW, IDM_VIEW_CLOSE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW, IDM_VIEW_CLOSEALL, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW, IDM_VIEW_CLOSE, IDB_TOOLBAR, IDM_VIEW_CLOSE, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW, IDM_VIEW_CLOSEALL, IDB_TOOLBAR, IDM_VIEW_CLOSEALL, false, true);
     UI().addMenuSeparator(IDM_MOE_HTML,IDM_VIEW);
     UI().addSubMenu(  IDM_MOE_HTML, IDM_VIEW, IDM_VIEW_TOOLBARS, IDB_TOOLBAR);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_TOOLBARS, IDM_VIEW_DIRVIEW, IDB_TOOLBAR, true, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_TOOLBARS, IDM_VIEW_DIRVIEW, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
     UI().addMenuSeparator(IDM_MOE_HTML,IDM_VIEW_TOOLBARS);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FILEBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_EDITBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_TOOLBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_SETTINGBAR, IDB_TOOLBAR, true, true);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_VIEWBAR, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_USERBAR, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FILEBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_EDITBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_TOOLBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_SETTINGBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_VIEWBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_USERBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
     UI().addMenuSeparator(IDM_MOE_HTML,IDM_VIEW_TOOLBARS);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FREEZE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FREEZE, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
     UI().addSubMenu(  IDM_MOE_HTML, IDM_VIEW, IDM_VIEW_WINDOWS, IDB_TOOLBAR);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_WINDOWS, IDM_VIEW_WINDOWS_TEXT, IDB_TOOLBAR, false, false);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW_WINDOWS, IDM_VIEW_WINDOWS_TEXT, IDB_TOOLBAR, IDM_VIEW_WINDOWS, false, false);
 
     UI().addSubMenu(  IDM_MOE_HTML,  IDM_MOE_HTML,  IDM_HELP );
-        UI().addMenuItem(IDM_MOE_HTML, IDM_HELP, IDM_HELP_ABOUT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_HELP, IDM_HELP_ABOUT, IDB_TOOLBAR, IDM_HELP_ABOUT, false, true);
   
   // a main menu
   UI().addMenu(IDM_MENU_TAB);    
 
     UI().addSubMenu(  IDM_MENU_TAB,  IDM_MENU_TAB,  IDM_TAB );
-        UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_VIEW_CLOSE, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_TAB_CLOSEALLBUTTHIS, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_VIEW_CLOSE, IDB_TOOLBAR, IDM_VIEW_CLOSE, false, true);
+        UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_TAB_CLOSEALLBUTTHIS, IDB_TOOLBAR, IDM_TAB_CLOSEALLBUTTHIS, false, true);
     UI().addMenuSeparator(IDM_MENU_TAB,IDM_TAB);
-        UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_TAB_RELOADTAB, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_FILE_SAVE, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_TAB_RELOADTAB, IDB_TOOLBAR, IDM_TAB_RELOADTAB, false, true);
+        UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_FILE_SAVE, IDB_TOOLBAR, IDM_FILE_SAVE, false, true);
     UI().addMenuSeparator(IDM_MENU_TAB,IDM_TAB);
-        UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_TAB_DIRTAB, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_TAB_JUMPTAB, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_TAB_DIRTAB, IDB_TOOLBAR, IDM_TAB_DIRTAB, false, true);
+        UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_TAB_JUMPTAB, IDB_TOOLBAR, IDM_TAB_JUMPTAB, false, true);
   
   // a main menu
   UI().addMenu(IDM_MENU_DESIGNFORM);    
 
     UI().addSubMenu(  IDM_MENU_DESIGNFORM,  IDM_MENU_DESIGNFORM,  IDM_WIZARD );
-        UI().addMenuItem(IDM_MENU_DESIGNFORM, IDM_WIZARD, IDM_FILE_MEMBERS, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MENU_DESIGNFORM, IDM_WIZARD, IDM_FILE_EVENTS, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MENU_DESIGNFORM, IDM_WIZARD, IDM_FILE_MEMBERS, IDB_TOOLBAR, IDM_FILE_MEMBERS, false, true);
+        UI().addMenuItem(IDM_MENU_DESIGNFORM, IDM_WIZARD, IDM_FILE_EVENTS, IDB_TOOLBAR, IDM_FILE_EVENTS, false, true);
 
     UI().addSubMenu(  IDM_MENU_DESIGNFORM,  IDM_MENU_DESIGNFORM,  IDM_FORMLANG );
-        UI().addMenuItem(IDM_MENU_DESIGNFORM, IDM_FORMLANG, IDM_FORMLANG_JAVASCRIPT, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MENU_DESIGNFORM, IDM_FORMLANG, IDM_FORMLANG_VBSCRIPT, IDB_TOOLBAR, false, true);
-        UI().addMenuItem(IDM_MENU_DESIGNFORM, IDM_FORMLANG, IDM_FORMLANG_PERLSCRIPT, IDB_TOOLBAR, false, true);
+        UI().addMenuItem(IDM_MENU_DESIGNFORM, IDM_FORMLANG, IDM_FORMLANG_JAVASCRIPT, IDB_TOOLBAR, IDM_FORMLANG_JAVASCRIPT, false, true);
+        UI().addMenuItem(IDM_MENU_DESIGNFORM, IDM_FORMLANG, IDM_FORMLANG_VBSCRIPT, IDB_TOOLBAR, IDM_FORMLANG_VBSCRIPT, false, true);
+        UI().addMenuItem(IDM_MENU_DESIGNFORM, IDM_FORMLANG, IDM_FORMLANG_PERLSCRIPT, IDB_TOOLBAR, IDM_FORMLANG_PERLSCRIPT, false, true);
+  
+  // a main menu
+  UI().addMenu(IDM_CONTEXT_TREE);    
+
+    UI().addSubMenu(  IDM_CONTEXT_TREE,  IDM_CONTEXT_TREE,  IDM_TREE );
+        UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_TREE_OPEN, IDB_TOOLBAR, IDM_FILE_OPEN, false, true);
+        UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_TREE_UPDATE, IDB_TOOLBAR, IDM_FILE_OPEN_FOLDER, false, true);
+    UI().addMenuSeparator(IDM_CONTEXT_TREE,IDM_TREE);
+        UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_TREE_RENAME, IDB_TOOLBAR, IDM_MODE_EDITSETTINGS, false, true);
+        UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_TREE_DELETE, IDB_TOOLBAR, IDM_VIEW_CLOSE, false, true);
+    UI().addMenuSeparator(IDM_CONTEXT_TREE,IDM_TREE);
+        UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_EDIT_CUT, IDB_TOOLBAR, IDM_EDIT_CUT, false, true);
+        UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_EDIT_COPY, IDB_TOOLBAR, IDM_EDIT_COPY, false, true);
+        UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_EDIT_PASTE, IDB_TOOLBAR, IDM_EDIT_PASTE, false, true);
+    UI().addMenuSeparator(IDM_CONTEXT_TREE,IDM_TREE);
+        UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_TREE_PROPERTIES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
+        UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_TREE_EXECUTE, IDB_TOOLBAR, IDM_USER_SCRIPT, false, true);
+        UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_TREE_NEWDIR, IDB_TOOLBAR, IDM_FILE_NEW, false, true);
 
 mol::msgMap<MoeWnd>().addMsgHandler( WM_CREATE, make_handler(&MoeWnd::OnCreate) );
 
@@ -656,6 +685,8 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_PASTE, make_handler(&MoeWnd::OnEdi
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_TOOLBARS_FREEZE, make_handler(&MoeWnd::OnFreezeToolBar) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDW_SYNTAX_BOX, make_handler(&MoeWnd::OnSyntax) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_TREE_OPEN, make_handler(&MoeWnd::OnTreeOpen) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_RIBBON_RECENTITEMS, make_handler(&MoeWnd::OnRecentItems) );
 
@@ -772,6 +803,24 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUG_QUIT, make_handler(&MoeWnd::
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_EXECUTEFORM, make_handler(&MoeWnd::OnDispatch) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_SHOW_LINE_NUMBERS, make_handler(&MoeWnd::OnDispatch) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_TREE_OPEN, make_handler(&MoeWnd::OnDispatchTree) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_TREE_RENAME, make_handler(&MoeWnd::OnDispatchTree) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_TREE_DELETE, make_handler(&MoeWnd::OnDispatchTree) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_TREE_CUT, make_handler(&MoeWnd::OnDispatchTree) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_TREE_COPY, make_handler(&MoeWnd::OnDispatchTree) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_TREE_PASTE, make_handler(&MoeWnd::OnDispatchTree) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_TREE_PROPERTIES, make_handler(&MoeWnd::OnDispatchTree) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_TREE_EXECUTE, make_handler(&MoeWnd::OnDispatchTree) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_TREE_NEWDIR, make_handler(&MoeWnd::OnDispatchTree) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_VIEW_MAXIMIZE, make_handler(&MoeWnd::OnMaximize) );
 
@@ -1028,6 +1077,34 @@ mol::msgMap<OleChild>().addCmdHandler( IDM_EDIT_REDO, make_generic_handler(&OleC
 mol::msgMap<MoeFormWnd>().addMsgHandler( WM_CLOSE, make_handler(&MoeFormWnd::OnClose) );
 
 mol::msgMap<MoeFormWnd>().addMsgHandler( WM_NCDESTROY, make_handler(&MoeFormWnd::OnNcDestroy) );
+
+mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_FILE_OPEN, make_handler(&MoeTreeWnd::OnTreeOpen) );
+
+mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_TREE_OPEN, make_handler(&MoeTreeWnd::OnTreeOpen) );
+
+mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_TREE_UPDATE, make_handler(&MoeTreeWnd::OnTreeUpdate) );
+
+mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_TREE_RENAME, make_handler(&MoeTreeWnd::OnTreeRename) );
+
+mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_TREE_DELETE, make_handler(&MoeTreeWnd::OnTreeDelete) );
+
+mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_TREE_EXECUTE, make_handler(&MoeTreeWnd::OnTreeExecute) );
+
+mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_TREE_PROPERTIES, make_handler(&MoeTreeWnd::OnTreeProperties) );
+
+mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_TREE_NEWDIR, make_handler(&MoeTreeWnd::OnTreeNewDir) );
+
+mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_TREE_CUT, make_handler(&MoeTreeWnd::OnEditCut) );
+
+mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_TREE_COPY, make_handler(&MoeTreeWnd::OnEditCopy) );
+
+mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_TREE_PASTE, make_handler(&MoeTreeWnd::OnEditPaste) );
+
+mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_EDIT_CUT, make_handler(&MoeTreeWnd::OnEditCut) );
+
+mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_EDIT_COPY, make_handler(&MoeTreeWnd::OnEditCopy) );
+
+mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_EDIT_PASTE, make_handler(&MoeTreeWnd::OnEditPaste) );
 
 
 }

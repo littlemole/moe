@@ -187,6 +187,8 @@ public:
 
 	HRESULT virtual __stdcall get_HasFocus		( VARIANT_BOOL* vbHasFocus);
 
+	HRESULT virtual __stdcall get_UseContext	( VARIANT_BOOL* vb );
+	HRESULT virtual __stdcall put_UseContext	( VARIANT_BOOL vb  );
 
 	// COM methods
 
@@ -303,6 +305,7 @@ protected:
 
 	mol::ThreadQueue<ShellTreeAction>			queue_;
     bool										displayFiles_;
+	bool										useContext_;
 	RECT										clientRect_;
 	OLE_COLOR									bgCol_;
 	OLE_COLOR									foreCol_;

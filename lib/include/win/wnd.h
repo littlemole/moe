@@ -414,7 +414,7 @@ template<class T,class R>
 void invoke( T& t, R (T::*f)()  )
 {
 	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t) );
-	//::PostThreadMessage( mol::guithread(), 42, 42, (LPARAM)call );
+	//::PostThreadMessage( mol::guithread(), WM_COMMAND,0, (LPARAM)call );
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
 }
 
@@ -422,7 +422,7 @@ template<class T, class R, class P1>
 void invoke( T& t, R (T::*f)(P1), P1 p1 )
 {
 	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t,p1) );
-	//::PostThreadMessage( mol::guithread(), 42, 42, (LPARAM)call );
+	//::PostThreadMessage( mol::guithread(), WM_COMMAND,0, (LPARAM)call );
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
 }
 
@@ -430,7 +430,7 @@ template<class T, class R, class P1, class P2>
 void invoke( T& t, R (T::*f)(P1,P2), P1 p1, P2 p2  )
 {
 	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t,p1,p2) );
-	//::PostThreadMessage( mol::guithread(), 42, 42, (LPARAM)call );
+	//::PostThreadMessage( mol::guithread(), WM_COMMAND,0, (LPARAM)call );
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
 }
 
@@ -438,24 +438,16 @@ template<class T, class R, class P1, class P2, class P3>
 void invoke( T& t, R (T::*f)(P1,P2,P3), P1 p1, P2 p2, P3 p3 )
 {
 	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t,p1,p2,p3) );
-	//::PostThreadMessage( mol::guithread(), 42, 42, (LPARAM)call );
+	//::PostThreadMessage( mol::guithread(), WM_COMMAND,0, (LPARAM)call );
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
 }
 
 template<class T, class R, class P1, class P2, class P3, class P4>
 void invoke( T& t, R (T::*f)(P1,P2,P3,P4), P1 p1, P2 p2, P3 p3, P4 p4  )
 {
-	/*
-	if ( mol::guithread() == mol::Thread::self )
-	{
-		(t->*f)(p1,p2,p3,p4);
-		return;
-	}
-	*/
 	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t,p1,p2,p3,p4) );
-	//::PostThreadMessage( mol::guithread(), 42, 42, (LPARAM)call );
+	//::PostThreadMessage( mol::guithread(), WM_COMMAND,0, (LPARAM)call );
 	t.postMessage(WM_COMMAND,0,(LPARAM)call);
-
 }
 
 /*

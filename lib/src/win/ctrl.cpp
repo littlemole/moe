@@ -69,7 +69,17 @@ HWND Ctrl::createWindow( const mol::string& windowName, HMENU hMenu, const Rect&
                               r.left, r.top, r.right, r.bottom,
                               parent, (HMENU)hMenu, hinstance(),(PVOID)dynamic_cast<void*>(this) );
     subClass();
-    setFont( (HFONT)::GetStockObject(ANSI_VAR_FONT));
+
+	NONCLIENTMETRICS nm;
+	nm.cbSize = sizeof (NONCLIENTMETRICS);
+
+	SystemParametersInfo (SPI_GETNONCLIENTMETRICS,0,&nm,0);
+	LOGFONT fl = nm.lfMenuFont;
+
+	static HFONT font_ = ::CreateFontIndirect(&fl);
+
+    //setFont( (HFONT)::GetStockObject(ANSI_VAR_FONT));
+	setFont( font_);
 
     this->OnCtrlCreated();
     return hWnd_;

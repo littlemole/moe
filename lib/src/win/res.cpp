@@ -486,13 +486,13 @@ void UserInterface::addSubMenu(int root, int menu, int cmd, int bmp)
 	submenus_[root].insert(std::make_pair(cmd,popup));
 }
 
-void UserInterface::addMenuItem( int root, int menu, int cmd, int bmp, bool checked, bool enabled )
+void UserInterface::addMenuItem( int root, int menu, int cmd, int bmp, int index, bool checked, bool enabled )
 {
 	int iicon = -1;
 	HBITMAP b = 0;
 	if ( bmps_.count(bmp) > 0 )
 	{
-		int c = BitmapCmdIndex(bmp,cmd);
+		int c = BitmapCmdIndex(bmp,index);
 		if ( c != -1 )
 		{
 			iicon = c;

@@ -5,49 +5,49 @@ namespace mol {
 
 	
 HttpBody::HttpBody() 
-	:contentLengthIsKnown_(false)
+	:reader_(0)
+{}
+
+HttpBody::HttpBody(AbstractBodyReader* r)
+	:reader_(r)//,body_(r->toString())
 {}
 
 HttpBody::HttpBody(const std::string& b) 
-	: contentLength_( (int) b.size()),
-	  contentLengthIsKnown_(true),
-	  body_(b)
+	:reader_(0), body_(b)
 {}
 
-HttpBody::HttpBody(HttpHeaders& headers) 
-	:contentLengthIsKnown_(false)
+HttpBody::~HttpBody() 
 {
-	if ( headers.contentLengthIsKnown() )
+	delete reader_;
+}
+
+/*
+HttpBody::HttpBody(HttpHeaders& headers) 
+{
+
+}
+*/
+
+const std::string& HttpBody::raw_body()		
+{
+	if ( !reader_ )
 	{
-		contentLengthIsKnown_ = true;
-		contentLength_ = headers.contentLength();
+		return body();
 	}
-}
-
-HttpBody::~HttpBody() {}
-
-const bool HttpBody::contentLengthIsKnown()           
-{ 
-	if ( queryParams_.size() > 0 )
-		return true;
-	return contentLengthIsKnown_; 
-}
-
-const int HttpBody::contentLength()					
-{ 
-	if ( queryParams_.size() > 0 )
-		return (int)body().size();
-	return contentLength_; 
-}
-
-void  HttpBody::contentLength(const int s)			
-{ 
-	contentLength_ = s;  
-	contentLengthIsKnown_ = true; 
+	return reader_->raw();
 }
 
 const std::string& HttpBody::body()					
 { 
+	if ( !body_.empty() )
+		return body_;
+
+	if ( reader_ )
+	{
+		body_ = reader_->toString();
+		return body_;
+	}
+
 	if ( queryParams_.size() > 0 )
 	{
 		std::ostringstream oss;
@@ -68,13 +68,14 @@ const std::string& HttpBody::body()
 void HttpBody::body( const std::string& b )			
 { 
 	body_ = b; 
-	contentLength_ = (int)b.size(); 
-	contentLengthIsKnown_ = true; 
+	delete reader_;
+	reader_ = 0;
 }
 
 
 void HttpBody::addParam  ( const std::string& key, const std::string& val  )
 {
+	body_ = "";
 	queryParams_.push_back( std::make_pair( key,val ) );
 }
 
@@ -129,6 +130,58 @@ HttpResponse::HttpResponse(const std::string& b, const std::string& content_type
 HttpResponse::~HttpResponse() 
 {}
 
+AbstractBodyReader* HttpResponse::reader()
+{
+	std::string enc = headers.contentEncoding();
+	size_t gzip = enc.find("gzip");
+
+	size_t deflate = enc.find("deflate");
+
+	std::string te = headers.transferEncoding();
+	size_t chunked = te.find("chunked");
+
+
+	if ( chunked != std::string::npos )
+	{
+		if ( gzip != std::string::npos )
+		{
+			return new ChunkedBodyReader( new GzipBodyReader );
+		}
+		if ( deflate != std::string::npos )
+		{
+			return new ChunkedBodyReader( new DeflateBodyReader );
+		}
+		return new ChunkedBodyReader();
+	}
+
+	if ( gzip != std::string::npos )
+	{
+		if ( headers.contentLengthIsKnown() )
+		{
+			size_t s = headers.contentLength();
+			return new ContentLengthBodyReader( new GzipBodyReader,s );
+		}
+		return new EofBodyReader( new GzipBodyReader );
+	}
+
+
+	if ( deflate != std::string::npos )
+	{
+		if ( headers.contentLengthIsKnown() )
+		{
+			size_t s = headers.contentLength();
+			return new ContentLengthBodyReader( new DeflateBodyReader , s );
+		}
+		return new EofBodyReader( new DeflateBodyReader );
+	}
+
+	if ( headers.contentLengthIsKnown() )
+	{
+		size_t s = headers.contentLength();
+		return new ContentLengthBodyReader(s);
+	}
+	return new EofBodyReader();
+}
 
 } // end namespace mol
 

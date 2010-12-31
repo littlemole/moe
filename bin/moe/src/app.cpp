@@ -10,6 +10,7 @@
 #include "moe_i.c"
 #include "xmlui.h"
 #include "moe_dispid.h"
+#include "win/gdiplus.h"
 
 #define min std::min
 #define max std::max
@@ -256,7 +257,7 @@ void MoeApp::init_extensions_if( )
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
-
+/*
 class GdiPlusUser
 {
 public:
@@ -274,7 +275,7 @@ private:
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput_;
 	ULONG_PTR           gdiplusToken_;
 };
-
+*/
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
@@ -288,7 +289,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	ODBGS("moe startup");
 	ODBGS(lpCmdLine);
 
-	GdiPlusUser gdip_;
+	mol::GdiPlusUser gdip_;
 
 	int result = 0;
 	try {

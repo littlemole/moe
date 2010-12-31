@@ -55,8 +55,6 @@ FormEditor::Instance* FormEditor::CreateInstance(const mol::string& file)
 
 bool FormEditor::initialize(const mol::string& p)
 {
-	filename_ = p;
-
 	// get client rectangle
 	mol::Rect r;
 	::GetClientRect(mdiParent(),&r);
@@ -169,7 +167,7 @@ bool FormEditor::initialize(const mol::string& p)
 		props->put_UseContext(VARIANT_FALSE);
 	}
 
-	thumb = taskbar()->addTab( this );
+	thumb = taskbar()->addTab( *this,p );
 
 	// now maximize the window
 	maximize();
@@ -186,7 +184,7 @@ bool FormEditor::initialize(const mol::string& p)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-LRESULT FormEditor::OnDestroy()
+void FormEditor::OnDestroy()
 {
 	if ( userForm )
 	{
@@ -194,10 +192,20 @@ LRESULT FormEditor::OnDestroy()
 		userForm.release();
 	}
 
-	docs()->Remove(mol::variant(filename_));
+	mol::punk<IScintillAxProperties> props;
+	HRESULT hr = sci->get_Properties(&props);
+	if ( hr != S_OK )
+		return ;
+
+	mol::bstr path;
+	hr = props->get_Filename(&path);
+	if ( hr != S_OK )
+		return ;
+
+	docs()->Remove(mol::variant(path));
  	events.UnAdvise(oleObject);
 	sci.release();
-	return 0;
+	return ;
 }
 
 
@@ -205,26 +213,19 @@ LRESULT FormEditor::OnDestroy()
 
 LRESULT FormEditor::OnMDIActivate(WPARAM unused, HWND activated)
 {
-	//BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
-
 	ODBGS("Editor::OnMDIActivate");
 	if ( activated == hWnd_ )
 	{
-		//thumb.refreshIcon();
-
-		//tab()->select( filename_ );
-		//updateUI();
-		//setFocus();
-
 		userForm->Show();
-		//mol::invoke(*this,&FormEditor::OnExecForm);
+		mol::invoke(*((Editor*)this),&Editor::OnMDIActivate,unused,activated);
+
 	}
 	else
 	{
 		userForm->Hide();
-		//thumb.refreshIcon(true);
+		BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
 	}
-	mol::invoke(*((Editor*)this),&Editor::OnMDIActivate,unused,activated);
+//	mol::invoke(*((Editor*)this),&Editor::OnMDIActivate,unused,activated);
     return 0;
 }
 
@@ -240,8 +241,18 @@ LRESULT FormEditor::OnExecScript()
 {
 	OnSave();
 
+	mol::punk<IScintillAxProperties> props;
+	HRESULT hr = sci->get_Properties(&props);
+	if ( hr != S_OK )
+		return 0;
+
+	mol::bstr path;
+	hr = props->get_Filename(&path);
+	if ( hr != S_OK )
+		return 0;
+
 	mol::punk<IMoeUserForm> form;
-	moe()->moeScript->ShowUserForm( mol::bstr(filename_), &form );
+	moe()->moeScript->ShowUserForm(path, &form );
 	return 0;
 }
 
@@ -250,8 +261,18 @@ LRESULT FormEditor::OnDebugScript()
 {
 	OnSave();
 
+	mol::punk<IScintillAxProperties> props;
+	HRESULT hr = sci->get_Properties(&props);
+	if ( hr != S_OK )
+		return 0;
+
+	mol::bstr path;
+	hr = props->get_Filename(&path);
+	if ( hr != S_OK )
+		return 0;
+
 	mol::punk<IMoeUserForm> form;
-	moe()->moeScript->DebugUserForm( mol::bstr(filename_), &form );
+	moe()->moeScript->DebugUserForm( path, &form );
 	return 0;
 }
 
@@ -316,12 +337,22 @@ LRESULT FormEditor::OnSaveAs()
 {
 	mol::bstr p;
 
-	mol::FilenameDlg ofn(*this);
-	ofn.setFilter( FormOutFilesFilter );		
-	ofn.fileName(filename_);
+	if (!sci )
+		return 0;
 
 	mol::punk<IScintillAxProperties> props;
-	sci->get_Properties(&props);
+	HRESULT hr = sci->get_Properties(&props);
+	if ( hr != S_OK )
+		return 0;
+
+	mol::bstr path;
+	hr = props->get_Filename(&path);
+	if ( hr != S_OK )
+		return 0;
+
+	mol::FilenameDlg ofn(*this);
+	ofn.setFilter( FormOutFilesFilter );		
+	ofn.fileName(path.toString());
 
 	mol::punk<IScintillAxText> txt;
 	sci->get_Text(&txt);
@@ -329,7 +360,7 @@ LRESULT FormEditor::OnSaveAs()
 
 	if ( ofn.dlgSave( OFN_OVERWRITEPROMPT ) )
 	{
-		if ( ofn.fileName() != filename_ )
+		if ( ofn.fileName() != path.toString() )
 		{
 			mol::punk<IMoeDocument> doc;
 			if ( (S_OK == docs()->Item(mol::variant(ofn.fileName()),&doc)) && doc )
@@ -361,9 +392,10 @@ LRESULT FormEditor::OnSaveAs()
 			hr = userForm->Save(dest,FALSE);
 			hr = dest->Commit(STGC_DEFAULT);
 
-			docs()->Rename( mol::variant(filename_), mol::variant(ofn.fileName()) );
-			filename_ = ofn.fileName();
-			setText(filename_);
+			docs()->Rename( mol::variant(path), mol::variant(ofn.fileName()) );
+
+			props->put_Filename( mol::bstr(ofn.fileName()) );
+			//setText(ofn.fileName());
 		}
 	}
 	return 0;
@@ -376,15 +408,20 @@ LRESULT FormEditor::OnSave()
 	mol::punk<IScintillAxProperties> props;
 	sci->get_Properties(&props);
 
+	mol::bstr path;
+	HRESULT hr = props->get_Filename(&path);
+	if ( hr != S_OK )
+		return 0;
+
 	mol::punk<IScintillAxText> txt;
 	sci->get_Text(&txt);
 
 
 	mol::bstr s;
-	HRESULT hr = txt->GetText(&s);
+	hr = txt->GetText(&s);
 
 	mol::punk<IStorage> dest;
-	if ( S_OK == ::StgCreateDocfile( mol::towstring(filename_).c_str(), STGM_READWRITE|STGM_CREATE|STGM_SHARE_EXCLUSIVE,0,&dest) )
+	if ( S_OK == ::StgCreateDocfile( path.toString().c_str(), STGM_READWRITE|STGM_CREATE|STGM_SHARE_EXCLUSIVE,0,&dest) )
 	{
 		::WriteClassStg( dest, IID_IMoeUserForm );
 
@@ -403,6 +440,7 @@ LRESULT FormEditor::OnSave()
 		hr = dest->Commit(STGC_DEFAULT);
 
 		hr = userForm->Save(dest,FALSE);
+		hr = sci->SavePoint();
 	}
 	return 0;
 }

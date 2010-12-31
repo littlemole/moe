@@ -358,7 +358,7 @@ private:
 	void addMenuSeparator(int root, int menu);
 	void addSubMenu(int root, int menu, int cmd);
 	void addSubMenu(int root, int menu, int cmd, int bmp);
-	void addMenuItem( int root, int menu, int cmd, int bmp, bool checked = false, bool enabled = true);
+	void addMenuItem( int root, int menu, int cmd, int bmp, int idx, bool checked = false, bool enabled = true);
 
 
 	std::map<int,mol::string> cmdStrings_;

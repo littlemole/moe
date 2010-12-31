@@ -22,7 +22,7 @@ function init()
   var doc = external.moe.Documents.Item(file);
   if ( doc && doc.Object )
   {
-     var markup = doc.Object.getText();
+     var markup = doc.Object.Text;
      var form = document.getElementById("theForm");
      form.fragment.value = markup;
      document.forms["theForm"].submit();

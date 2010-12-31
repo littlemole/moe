@@ -19,7 +19,7 @@ void HttpGet::setUri( const mol::Uri& u )
 {
 	uri = u;
 	headers.setCmd("GET");
-	headers.setProto("HTTP/1.0");
+	headers.setProto("HTTP/1.1");
 	headers.setPath(uri.getFullPath());
 }
 
@@ -55,7 +55,7 @@ void HttpPost::setUri( const mol::Uri& u )
 {
 	uri = u;
 	headers.setCmd("POST");
-	headers.setProto("HTTP/1.0");
+	headers.setProto("HTTP/1.1");
 	headers.setPath(uri.getFullPath());
 }
 
@@ -217,7 +217,7 @@ void Http::doTCP()
 	}
 
 	if ( request.headers.getCmd() == "POST" )
-		request.headers.contentLength(request.body.contentLength());
+		request.headers.contentLength(request.body.body().size());
 
 	*tcp_ << request;
 

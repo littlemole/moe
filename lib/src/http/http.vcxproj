@@ -205,12 +205,14 @@
     <ClCompile Include="http.cpp" />
     <ClCompile Include="httpheader.cpp" />
     <ClCompile Include="httprequest.cpp" />
+    <ClCompile Include="reader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\http\cgi.h" />
     <ClInclude Include="..\..\include\http\http.h" />
     <ClInclude Include="..\..\include\http\httpheader.h" />
     <ClInclude Include="..\..\include\http\httprequest.h" />
+    <ClInclude Include="..\..\include\http\reader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />

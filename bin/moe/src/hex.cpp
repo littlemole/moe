@@ -94,7 +94,7 @@ bool Hex::initialize(const mol::string& p, bool readOnly)
 			}
 		}
 	}
-	thumb = taskbar()->addTab( this );
+	thumb = taskbar()->addTab( *this,p );
 	return true;
 }
 

@@ -137,5 +137,25 @@ void init_ribbon_ui(  mol::win::WndProc* wnd )
   
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonFileNewUFS, IDM_FILE_NEW_UFS );
   
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonOpenTree, IDM_TREE_OPEN );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonReloadTree, IDM_TREE_UPDATE );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonRenameTree, IDM_TREE_RENAME );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonDeleteTree, IDM_TREE_DELETE );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonCutTree, IDM_TREE_CUT );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonCopyTree, IDM_TREE_COPY );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonPasteTree, IDM_TREE_PASTE );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonPropertiesTree, IDM_TREE_PROPERTIES );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonExecuteTree, IDM_TREE_EXECUTE );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonNewDirTree, IDM_TREE_NEWDIR );
+  
 
 }

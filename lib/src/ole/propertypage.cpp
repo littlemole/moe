@@ -107,6 +107,95 @@ void PropertyPageBase::setDirty()
 		pageSite_->OnStatusChange(PROPPAGESTATUS_DIRTY);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+OlePropPage::OlePropPage()
+{
+	deleteOnNCDestroy_ = true;
+}
+
+
+void OlePropPage::create( mol::PropSheet* ps, const mol::string& tab, REFCLSID clsid, int id,int flags )
+{
+	mol::win::PropPage::create(ps,tab,id,flags);
+
+	prop_.createObject(clsid);
+	
+}
+void OlePropPage::init()
+{
+	prop_->SetPageSite(&propertyPageSite_);
+	RECT r;
+	::GetClientRect( *this,&r );
+
+	this->setObjects();
+
+	prop_->Activate( *this, &r, TRUE );
+	prop_->Show(SW_SHOW);
+
+}
+
+void OlePropPage::setObjects()
+{
+}
+
+int OlePropPage::apply()
+{
+	prop_->Apply();
+	return PSNRET_NOERROR;
+}
+
+void OlePropPage::reset()
+{
+	prop_->Deactivate();
+	prop_->SetObjects(0,0);
+	prop_.release();
+	ODBGS(_T("OlePropPage::reset()"));
+}
+
+
+int  OlePropPage::translateAccel( LPMSG msg)
+{
+	if ( prop_ )
+	{
+		HRESULT hr = prop_->TranslateAcceleratorW(msg);
+		if ( hr == S_OK )
+			return PSNRET_MESSAGEHANDLED;
+	}
+	return PSNRET_NOERROR ;
+}
+
+HRESULT STDMETHODCALLTYPE OlePropPage::PropertyPageSite::OnStatusChange( DWORD dwFlags)
+{
+	if ( dwFlags == PROPPAGESTATUS_DIRTY )
+	{
+		HWND hwnd = (HWND)*(This());
+		PropSheet_Changed( ::GetParent(hwnd), hwnd );
+	}
+
+	if ( dwFlags == PROPPAGESTATUS_VALIDATE )
+	{
+		This()->apply();
+	}
+	return S_OK;
+}
+        
+HRESULT STDMETHODCALLTYPE OlePropPage::PropertyPageSite::GetLocaleID( LCID *pLocaleID)
+{
+	return LOCALE_USER_DEFAULT;
+}
+        
+HRESULT STDMETHODCALLTYPE OlePropPage::PropertyPageSite::GetPageContainer( IUnknown **ppUnk)
+{
+	return E_NOTIMPL;
+}
+        
+HRESULT STDMETHODCALLTYPE OlePropPage::PropertyPageSite::TranslateAccelerator( MSG* pMsg)
+{
+	return E_NOTIMPL;
+}
+
 
 } // end namespace mol::win::ole
 } // end namespace mol

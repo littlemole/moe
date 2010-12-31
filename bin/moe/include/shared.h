@@ -16,7 +16,7 @@
 // creation.
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
-
+/*
 template<class COM>
 class debug_com_instance : public COM
 {
@@ -60,8 +60,8 @@ protected:
     volatile DWORD molrefcount_;
 
 };
-
-
+*/
+/*
 class TaskBarMdiWindow
 {
 public:
@@ -69,10 +69,10 @@ public:
 
 	TaskThumbnail thumb;
 };
-
+*/
 template<class C,class I, long T>
 class DispatchMdiWindow
-	: public mol::Dispatch<I>, public TaskBarMdiWindow
+	: public mol::Dispatch<I>//, public TaskBarMdiWindow
 {
 public:
 
@@ -149,6 +149,7 @@ public:
 	   return E_NOTIMPL;
    }
 
+   TaskThumbnail thumb;
 };
 
 

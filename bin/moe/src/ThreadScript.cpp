@@ -4,8 +4,15 @@
 #include "ole/bstr.h"
 #include "ole/cp.h"
 #include <sstream>
-#include "moe.h"
+//#include "moe.h"
+//#include "widgets.h"
 #include "xmlui.h"
+
+
+mol::string engineFromPath(const std::string& path)
+{
+	return mol::toString(mol::engineFromExtension(mol::Path::ext(mol::toString(path))));
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,7 +152,7 @@ HRESULT ThreadScript::removeNamedObject( const mol::string& obj )
 	return S_OK;
 }
 
-
+/*
 mol::string engineFromExtension(const mol::string& ext)
 {
 	try {
@@ -169,14 +176,15 @@ mol::string engineFromExtension(const mol::string& ext)
 	catch (...) {}
 	return _T("");
 }
-
-ThreadScript* ThreadScript::CreateInstance( const mol::string& script, const mol::string& filename)
+*/
+ThreadScript* ThreadScript::CreateInstance( HWND owner, const mol::string& script, const mol::string& filename)
 {
 	ODBGS("ThreadScript::execute()\r\n");
 
 	ScriptInstance* ts = new ScriptInstance;
 	ts->AddRef();
 
+	ts->owner_ = owner;
 	ts->script_ = script;
 	ts->filename_ = filename;
 	ts->engine_ = engineFromPath( mol::tostring(filename));
@@ -407,7 +415,7 @@ HRESULT  __stdcall ThreadScript::OnLeaveScript( void)
 
 HRESULT  __stdcall ThreadScript::GetWindow(HWND *phwnd )
 {
-	HWND w = *moe();
+	HWND w = owner_;
 	*phwnd = w;	
 	return S_OK;
 }
@@ -453,7 +461,7 @@ HRESULT  __stdcall  ThreadScript::onHandleBreakPoint(IRemoteDebugApplicationThre
 		return S_OK;
 
 	// update variable window
-	debugDlg()->update_variables(frames);
+	//debugDlg()->update_variables(frames);
 
 	// reset frame enumerator
 	hr = frames->Reset();

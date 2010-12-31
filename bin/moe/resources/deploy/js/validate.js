@@ -3,7 +3,7 @@ var doc = moe.ActiveDoc;
 
 if ( doc && doc.Object )
 {
-  var xml = doc.Object.getText();
+  var xml = doc.Object.Text;
   var doc = new ActiveXObject("Msxml2.DOMDocument.3.0");
   
   doc.async = false;

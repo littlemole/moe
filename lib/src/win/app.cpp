@@ -153,7 +153,7 @@ void LoopBase::doMsg(MSG& msg, AppBase& app)
 	/*
 	if ( msg.hwnd == NULL )
 	{
-		if ( msg.message == 42 && msg.wParam == 42 )
+		if ( (msg.message == WM_COMMAND) && (msg.wParam == 0) )
 		{
 			boost::shared_ptr<mol::fun::call> call( (mol::fun::call*) (msg.lParam) );
 			(*call)();

@@ -3,18 +3,22 @@
 #include "app.h"
 #include "xmlui.h"
 #include "MoeBar.h"
+#include "ole/Rib.h"
+#include "ribbonres.h"
 //#include "Moe.h"
 #include "Shared.h"
 #include "fm20_tlh.h"
 
-
+/*
 mol::string engineFromPath(const std::string& path)
 {
 	return mol::toString(mol::engineFromExtension(mol::Path::ext(mol::toString(path))));
 }
-
+*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -32,6 +36,17 @@ void MoeStatusBar::status( const mol::string& txt )
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
+
+Script::Script()
+{
+	ODBGS("Script start");
+}
+
+Script::~Script()
+{
+	close();
+	ODBGS("Script death");
+}
 
 void Script::eval(  const mol::string& engine, const mol::string& script, IScintillAx* sci )
 {
@@ -1013,6 +1028,80 @@ HRESULT  __stdcall MoeDrop::DragLeave()
 // tree events sink
 //////////////////////////////////////////////////////////////////////////////
 
+MoeTreeWnd::~MoeTreeWnd() 
+{
+	ODBGS("~MoeTreeWnd");
+}
+/*
+void MoeTreeWnd::OnCreate()
+{
+	// hook up tree window COM events
+}
+*/
+
+void MoeTreeWnd::OnTreeOpen()
+{
+	mol::bstr p;
+	mol::punk<IShellTree> tree(oleObject);
+	tree->get_Selection(&p);
+	treeWndSink()->OnTreeOpen(p);
+}
+
+void MoeTreeWnd::OnTreeUpdate()
+{
+	mol::punk<IShellTree> tree(oleObject);
+	tree->Update();
+}			
+
+void MoeTreeWnd::OnTreeRename()
+{
+	mol::punk<IShellTree> tree(oleObject);
+	tree->Rename();
+}
+
+void MoeTreeWnd::OnTreeDelete()
+{
+	mol::punk<IShellTree> tree(oleObject);
+	tree->Delete();
+}
+
+void MoeTreeWnd::OnTreeExecute()
+{
+	mol::punk<IShellTree> tree(oleObject);
+	tree->Execute();
+}
+
+void MoeTreeWnd::OnTreeProperties()
+{
+	mol::punk<IShellTree> tree(oleObject);
+	tree->Properties();
+}
+
+void MoeTreeWnd::OnTreeNewDir()
+{
+	mol::punk<IShellTree> tree(oleObject);
+	tree->CreateDir();
+}
+
+void MoeTreeWnd::OnEditCut()
+{
+	mol::punk<IShellTree> tree(oleObject);
+	tree->Cut();
+}
+
+void MoeTreeWnd::OnEditCopy()
+{
+	mol::punk<IShellTree> tree(oleObject);
+	tree->Copy();
+}
+
+void MoeTreeWnd::OnEditPaste()
+{
+	mol::punk<IShellTree> tree(oleObject);
+	tree->Paste();
+}
+
+
 HRESULT __stdcall TreeWndSink::OnTreeSelection(BSTR filename)
 {
 	return moe()->IOleInPlaceFrame_SetStatusText(filename);
@@ -1081,13 +1170,91 @@ HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename)
 	return S_OK;
 }
 
+HRESULT __stdcall TreeWndSink::OnContextMenu(BSTR fname)
+{
+	mol::punk<IShellTree> tree(treeWnd()->oleObject);
+	if ( !tree )
+		return S_OK;
+
+	POINT pt;
+	::GetCursorPos(&pt);
+
+	if ( mol::Ribbon::ribbon()->enabled() )
+	{
+		mol::Ribbon::ribbon()->showContextualUI( RibbonTreeViewContextMap, pt.x, pt.y);
+		return 0;
+	}
+
+	mol::Menu sub = mol::UI().SubMenu(IDM_CONTEXT_TREE,IDM_TREE);
+
+	moe()->showContext(sub);
+
+	return 0;
+
+	int id = sub.returnTrackPopup(*moe(),pt.x-10,pt.y-10);
+	switch ( id )
+	{
+		case IDM_TREE_OPEN:
+		{
+			OnTreeOpen(fname);
+			break;
+		}
+		case IDM_TREE_UPDATE:
+		{
+			tree->Update();
+			break;
+		}
+		case IDM_TREE_RENAME:
+		{
+			tree->Rename();
+			break;
+		}
+		case IDM_TREE_DELETE:
+		{
+			tree->Delete();
+			break;
+		}
+		case IDM_EDIT_CUT:
+		{
+			tree->Cut();
+			break;
+		}
+		case IDM_EDIT_COPY:
+		{
+			tree->Copy();
+			break;
+		}
+		case IDM_EDIT_PASTE:
+		{
+			tree->Paste();
+			break;
+		}
+		case IDM_TREE_PROPERTIES:
+		{
+			tree->Properties();
+			break;
+		}
+		case IDM_TREE_EXECUTE:
+		{
+			tree->Execute();
+			break;
+		}
+		case IDM_TREE_NEWDIR:
+		{
+			tree->CreateDir();
+			break;
+		}
+	}
+	return S_OK;
+}
+
 
 
 //HWND PropSheet::hWnd_;
 
 
 
-PropPage::PropPage()
+/*PropPage::PropPage()
 {
 	deleteOnNCDestroy_ = true;
 }
@@ -1098,7 +1265,8 @@ void PropPage::create(PropSheet* ps, const mol::string& tab, int id, int flags)
 	id_ =id;
 	ps_ = ps;
 
-	::ZeroMemory(&psp_,sizeof(PROPSHEETPAGE) );
+	//::ZeroMemory(&psp_,sizeof(PROPSHEETPAGE) );
+	mol::zero(psp_);
 	psp_.dwSize = sizeof(PROPSHEETPAGE);
 	psp_.dwFlags = flags;
 	psp_.hInstance = mol::hinstance();
@@ -1340,7 +1508,7 @@ int CALLBACK PropSheet::PropSheetProc( HWND hwndDlg, UINT uMsg, LPARAM lParam )
 	return 0;
 }
 
-
+*/
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -1420,4 +1588,10 @@ void ExportPage::command(int c)
 			moe()->moeConfig->ImportSettings( mol::bstr( dlg.fileName() ) );
 		}
 	}
+}
+
+void PrefPage::setObjects()
+{
+	IUnknown* unk(config());
+	prop_->SetObjects( 1, &unk );
 }
