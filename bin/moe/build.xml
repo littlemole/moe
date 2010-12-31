@@ -54,7 +54,6 @@
     <ClCompile Include="src\MoeBar.cpp" />
     <ClCompile Include="src\ole.cpp" />
     <ClCompile Include="src\shared.cpp" />
-    <ClCompile Include="src\Taskbar.cpp" />
     <ClCompile Include="src\UserForm.cpp" />
     <ClCompile Include="src\widgets.cpp" />
     <ClCompile Include="src\ThreadScript.cpp" />

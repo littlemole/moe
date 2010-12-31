@@ -7,6 +7,9 @@
         <MSBuild Projects=".\src\util\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		<MSBuild Projects=".\src\xml\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		<MSBuild Projects=".\src\thread\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild Projects=".\src\tcp\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild Projects=".\src\ssl\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild Projects=".\src\http\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		<MSBuild Projects=".\src\win\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		<MSBuild Projects=".\src\ole\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
  </Target>
@@ -15,6 +18,9 @@
         <MSBuild Projects=".\src\util\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 		<MSBuild Projects=".\src\xml\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 		<MSBuild Projects=".\src\thread\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"  Targets="Clean" />
+		<MSBuild Projects=".\src\tcp\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+		<MSBuild Projects=".\src\ssl\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+		<MSBuild Projects=".\src\http\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 		<MSBuild Projects=".\src\win\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"  Targets="Clean" />
 		<MSBuild Projects=".\src\ole\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
  </Target>

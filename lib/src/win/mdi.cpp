@@ -8,6 +8,7 @@ namespace mol {
 
 HWND MdiChild::createWindow( const mol::string& windowName, HMENU hMenu, const Rect& r, HWND p )
 {
+	//isMidi_ = true;
     registerClass(hMenu);
     parent_ = p;
     HWND client_ = addChild(parent_);
@@ -104,8 +105,7 @@ LRESULT CALLBACK MdiChild::windowProcedure (HWND hwnd, UINT message, WPARAM wPar
 
 MdiChild::~MdiChild()
 {
-	windowMenu_ = 0;
-	isMidi_ = true;
+	windowMenu_ = 0;	
 	this->cleanup();
 }
 

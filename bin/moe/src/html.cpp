@@ -55,21 +55,11 @@ MoeHtmlWnd::Instance* MoeHtmlWnd::CreateInstance( const mol::string& loc)
 
 void MoeHtmlWnd::OnMDIActivate( HWND activated )
 {
-	if ( mol::Ribbon::ribbon()->enabled())
-	{
-		tab()->select( location );
-		statusBar()->status( location );
-		mol::Ribbon::ribbon()->maximize();
-		mol::Ribbon::ribbon()->mode(5);
-	}
-	if ( activated == hWnd_ )
-	{
-			thumb.refreshIcon(true);
-	}
-	else 
-	{
-		thumb.refreshIcon();
-	}
+	tab()->select( location );
+	statusBar()->status( location );
+
+	mol::Ribbon::ribbon()->maximize();
+	mol::Ribbon::ribbon()->mode(5);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -252,6 +242,14 @@ void MoeHtmlWnd::OnClose()
 void MoeHtmlWnd::OnDestroy()
 {
 	ODBGS("MoeHtmlWndImpl::OnDestroy");
+
+
+}
+
+void MoeHtmlWnd::OnNcDestroy()
+{
+	ODBGS("MoeHtmlWndImpl::OnNcDestroy");
+
 	mol::bstr filename;
 	if ( S_OK == get_FilePath(&filename) )
 	{
@@ -262,12 +260,6 @@ void MoeHtmlWnd::OnDestroy()
 	::CoDisconnectObject(((IExternalMoe*)&external_),0);
 
 	unAdvise(htmlSink);
-
-}
-
-void MoeHtmlWnd::OnNcDestroy()
-{
-	ODBGS("MoeHtmlWndImpl::OnNcDestroy");
 
 	((IMoeDocument*)this)->Release();
 }

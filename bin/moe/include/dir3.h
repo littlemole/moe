@@ -23,10 +23,7 @@ public:
 
 	static Instance* CreateInstance( const mol::string& p );
 
-	LRESULT OnMDIActivate(HWND activated);
-
-    void OnClose();
-	void OnDestroy();
+	void OnMDIActivate(HWND activated);
 	void OnNcDestroy();
 
 private:

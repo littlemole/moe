@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{290D7FBC-5138-41E3-AA30-F73CE5B06B7E}</ProjectGuid>
+    <RootNamespace>http</RootNamespace>
+	<TargetName>http</TargetName>  
+  </PropertyGroup>
+
+  <Import Project="..\..\..\master.props" />
+  <Import Project="..\build.props" />
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\3dParty\openssl\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup>
+    <Lib>
+      <OutputFile>$(OutDir)http.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+<!--    <ClCompile Include="headers.cpp" /> -->
+    <ClCompile Include="cgi.cpp" />
+    <ClCompile Include="http.cpp" />
+    <ClCompile Include="httpheader.cpp" />
+	<ClCompile Include="httprequest.cpp" />
+	<ClCompile Include="reader.cpp" />
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

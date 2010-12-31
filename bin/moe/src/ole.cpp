@@ -102,6 +102,12 @@ void OleChild::OnDestroy()
 }
 
 
+void OleChild::OnPaint()
+{
+	mol::PaintDC dc(*this);
+	thumb.refreshIcon();
+}
+
 void OleChild::OnNcDestroy()
 {
 		
@@ -114,42 +120,24 @@ void OleChild::OnNcDestroy()
 }
 
 
-LRESULT OleChild::OnMDIActivate(WPARAM unused, HWND activated)
+void OleChild::OnMDIActivate(WPARAM unused, HWND activated)
 {
 	ODBGS("OleChild::OnMDIActivate");
-	if ( activated != hWnd_ )
-	{
-		thumb.refreshIcon();
-	}
-	else 
-	{
-		thumb.refreshIcon(true);
-	}
 
 	mol::string filename = getText();
 	statusBar()->status( filename );
 	tab()->select( filename );
 
-	if ( mol::Ribbon::ribbon()->enabled() )
+	if ( activated == *this )
 	{
-		if ( activated == *this )
-		{
-			mol::Ribbon::ribbon()->mode(0);
-			mol::Ribbon::ribbon()->minimize();
-
-			// delay this or OLE embedded WORD will complaint in some cases
-
-			mol::invoke<OleChild,LRESULT,WPARAM,HWND>( *this, &OleChild::OnMDIActivateLater,unused, activated);	
-			//BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
-			//this->redrawOleFrameLater();
-			return 0;
-		}
+		mol::Ribbon::ribbon()->mode(0);
+		mol::Ribbon::ribbon()->minimize();
 	}
 
-	BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
-    return 0;
+	//BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
+    //return 0;
 }
-
+/*
 LRESULT OleChild::OnMDIActivateLater(WPARAM unused, HWND activated)
 {
 
@@ -157,7 +145,7 @@ LRESULT OleChild::OnMDIActivateLater(WPARAM unused, HWND activated)
 	BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
     return 0;
 }
-
+*/
 //////////////////////////////////////////////////////////////////////////////
 //
 // COM section
@@ -186,15 +174,11 @@ bool OleChild::openFile( const mol::string& path )
 
 	statusBar()->status(30);
 
-	//TEST
-	
 	if ( mol::Path::ext(path) != _T(".xml" ) )
 	if ( this->loadObjectFromMoniker(path))
 	{
 		return true;
 	}
-
-	//TEST
 
 	// check for structured storage
 	if ( S_OK == ::StgIsStorageFile(bstrFile) )

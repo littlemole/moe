@@ -4,6 +4,7 @@
 #include "conf.h"
 #include "win/wnd.h"
 #include "win/res.h"
+#include "win/Taskbar.h"
 
 namespace mol {
 
@@ -82,6 +83,8 @@ public:
     virtual LRESULT wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	int mdiMenuIndex();
+
+	mol::TaskThumbnail thumb;
 
 protected:
 

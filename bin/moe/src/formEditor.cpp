@@ -184,7 +184,7 @@ bool FormEditor::initialize(const mol::string& p)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-void FormEditor::OnDestroy()
+void FormEditor::OnNcDestroy()
 {
 	if ( userForm )
 	{
@@ -211,22 +211,19 @@ void FormEditor::OnDestroy()
 
 //////////////////////////////////////////////////////////////////////////////
 
-LRESULT FormEditor::OnMDIActivate(WPARAM unused, HWND activated)
+void FormEditor::OnMDIActivate(WPARAM unused, HWND activated)
 {
 	ODBGS("Editor::OnMDIActivate");
 	if ( activated == hWnd_ )
 	{
 		userForm->Show();
-		mol::invoke(*((Editor*)this),&Editor::OnMDIActivate,unused,activated);
-
 	}
 	else
 	{
 		userForm->Hide();
-		BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
 	}
-//	mol::invoke(*((Editor*)this),&Editor::OnMDIActivate,unused,activated);
-    return 0;
+//	BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
+  //  return 0;
 }
 
 
@@ -395,7 +392,6 @@ LRESULT FormEditor::OnSaveAs()
 			docs()->Rename( mol::variant(path), mol::variant(ofn.fileName()) );
 
 			props->put_Filename( mol::bstr(ofn.fileName()) );
-			//setText(ofn.fileName());
 		}
 	}
 	return 0;

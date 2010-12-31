@@ -23,21 +23,22 @@
     <ClCompile Include="file.cpp" />
     <ClCompile Include="folder.cpp" />
     <ClCompile Include="folderbrowser.cpp" />
+    <ClCompile Include="gdiplus.cpp" />
     <ClCompile Include="io.cpp" />
     <ClCompile Include="layout.cpp" />
     <ClCompile Include="mdi.cpp" />
     <ClCompile Include="mem.cpp" />
     <ClCompile Include="net.cpp" />
     <ClCompile Include="path.cpp" />
+    <ClCompile Include="pp.cpp" />
     <ClCompile Include="process.cpp" />
     <ClCompile Include="res.cpp" />
     <ClCompile Include="RTFedit.cpp" />
     <ClCompile Include="shell.cpp" />
+    <ClCompile Include="taskbar.cpp" />
     <ClCompile Include="propwnd.cpp" />
     <ClCompile Include="wnd.cpp" />
     <ClCompile Include="wndclass.cpp" />
-    <ClCompile Include="gdiplus.cpp" />
-    <ClCompile Include="pp.cpp" />
   </ItemGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

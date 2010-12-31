@@ -29,8 +29,8 @@ public:
 
 	// std windows msgs
 
-	LRESULT OnMDIActivate(WPARAM unused,HWND activated);
-	void OnDestroy();
+	void OnMDIActivate(WPARAM unused,HWND activated);
+	void OnNcDestroy();
 
 	LRESULT OnSaveAs();
 	LRESULT OnSave();

@@ -318,10 +318,6 @@ DebugDlg* debugDlg()
 {
   return &mol::singleton<DebugDlg>();
 }
-Taskbar* taskbar()
-{
-  return &mol::singleton<Taskbar>();
-}
 ISetting* config()
 {
   return mol::comSingleton<ISetting,&CLSID_Setting>();

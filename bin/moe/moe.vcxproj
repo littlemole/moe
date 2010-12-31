@@ -332,7 +332,6 @@
     <ClCompile Include="src\ole.cpp" />
     <ClCompile Include="src\shared.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
-    <ClCompile Include="src\Taskbar.cpp" />
     <ClCompile Include="src\ThreadScript.cpp" />
     <ClCompile Include="src\UserForm.cpp" />
     <ClCompile Include="src\widgets.cpp" />
@@ -364,7 +363,6 @@
     <ClInclude Include="ribbonres.h" />
     <ClInclude Include="include\shared.h" />
     <ClInclude Include="include\stdafx.h" />
-    <ClInclude Include="include\TaskBar.h" />
     <ClInclude Include="include\UserForm.h" />
     <ClInclude Include="include\widgets.h" />
     <ClInclude Include="include\xmlid.h" />

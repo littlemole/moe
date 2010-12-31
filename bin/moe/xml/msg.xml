@@ -152,9 +152,7 @@
 
       <!-- std windows msgs -->
       <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
-      <msg  handler="OnClose" msg="WM_CLOSE" />
       <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
-      <msg  handler="OnDestroy" msg="WM_DESTROY" />
 
       <!-- pass messages to embedded ole object -->
       <msg  ole="Update" cmd="IDM_EDIT_UPDATE" interface="IShellPane"/>
@@ -175,7 +173,8 @@
         <msg  handler="OnDestroy" msg="WM_DESTROY" />
         <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
         <msg  handler="OnClose" msg="WM_CLOSE" />
-
+        
+      
         <!-- menu commans -->
         <msg  handler="OnSearch" msg="WM_SEARCH_MSG" />
         <msg  handler="OnBeautify" cmd="IDM_EDIT_INDENTION" />
@@ -233,7 +232,7 @@
     </class>
 
     <class type="FormEditor" >
-      <msg  handler="OnDestroy" msg="WM_DESTROY" />
+      <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
       <msg  handler="OnSaveAs" cmd="IDM_FILE_SAVE_AS" />
       <msg  handler="OnSave" cmd="IDM_FILE_SAVE" />
       <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />

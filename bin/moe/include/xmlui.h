@@ -121,9 +121,6 @@ UrlDlg* urlDlg();
 class DebugDlg;    
 DebugDlg* debugDlg();
 
-class Taskbar;    
-Taskbar* taskbar();
-
 struct ISetting;
 ISetting* config();
 
