@@ -83,9 +83,8 @@ bool DirChild::initialize(const mol::string& p)
 	show(SW_SHOW);
 	maximize();
 
+	// display winows 7 task bar thumbnail
 	thumb = mol::taskbar()->addTab( *this,p );
-
-	redrawOleFrameLater();
 
 	return true;
 }
@@ -97,21 +96,13 @@ bool DirChild::initialize(const mol::string& p)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-void DirChild::OnClose()
-{
-}
-
-void DirChild::OnDestroy()
-{
 	
+void DirChild::OnNcDestroy()
+{
 	mol::string filename = getText();
 	docs()->Remove(mol::variant(filename));
 	events.UnAdvise(oleObject);
-	
-}
 
-void DirChild::OnNcDestroy()
-{
 	::CoDisconnectObject(((IMoeDocument*)this),0);
 	((IMoeDocument*)this)->Release();
 }
@@ -123,34 +114,15 @@ void DirChild::OnNcDestroy()
 //////////////////////////////////////////////////////////////////////////////
 
 
-LRESULT DirChild::OnMDIActivate( HWND activated )
+void DirChild::OnMDIActivate( HWND activated )
 {
-	BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)0, (LPARAM)activated );
-
-	if ( *this != activated )
-	{
-		thumb.refreshIcon();
-		return 0;
-	}
-
-	if ( activeObject.interface_ != 0 )
-	{
-		activeObject->OnDocWindowActivate(FALSE);												
-	}
-
 	mol::bstr filename;
 	get_FilePath(&filename);
 	statusBar()->status(filename.toString());
 	tab()->select( filename.toString() );
 
-	if ( mol::Ribbon::ribbon()->enabled())
-	{
-		mol::Ribbon::ribbon()->mode(2);
-		mol::Ribbon::ribbon()->maximize();
-	}
-
-	thumb.refreshIcon(true);
-    return 0;
+	mol::Ribbon::ribbon()->mode(2);
+	mol::Ribbon::ribbon()->maximize();
 }
 
 

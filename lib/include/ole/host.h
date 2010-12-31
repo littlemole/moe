@@ -5,6 +5,7 @@
 #include "ole/container.h"
 #include "win/layout.h"
 #include "win/shell.h"
+#include "win/Taskbar.h"
 
 //////////////////////////////////////////////////////////////////////
 
@@ -63,6 +64,7 @@ public:
 
 	// styles
     virtual int style();
+	virtual LRESULT OnMDIActivateLater(WPARAM unused,HWND activated);
 
 protected:
 
@@ -171,9 +173,11 @@ protected:
 
 	// talk to embdedding host
 	virtual ole::AxFrameBase* createDummyAxFrame() = 0;
+	virtual mol::TaskThumbnail* taskthumb() = 0;
 	virtual void redrawOleFrame() = 0;
 	virtual void redrawOleFrameLater() = 0;
 	virtual bool getMidiState() = 0;
+	virtual void activateLater( WPARAM wParam, LPARAM lParam) = 0;
 
 	// acquire required OLE interfaces from derived template
 	virtual IOleClientSite* getOleClientSite() = 0;
@@ -195,6 +199,7 @@ protected:
 
 	// window procedure impl
     virtual LRESULT wndProcAxImpl( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
 
 	// sizing
 	void SetObjectSize(RECT& r);
@@ -361,6 +366,17 @@ private:
 		return (HWND)*this;
 	}
 
+	virtual mol::TaskThumbnail* taskthumb()
+	{
+		mol::MdiChild* mc = mol::wndFromHWND<mol::MdiChild>(*this);
+		if ( mc )
+		{
+			mol::TaskThumbnail* t = &mc->thumb;
+			return t;
+		}
+		return 0;
+	}
+
 	// handle ax client site c'tor/d'tor
 	virtual void initAxClientSite()
 	{
@@ -371,6 +387,8 @@ private:
 	{
 		axClientSite.release();				
 	}
+
+
 
 	// access ax client site OLE interfaces
 
@@ -399,6 +417,11 @@ private:
 		return this->isMidi_; 
 	}
 
+	// delay the ax mdi activation handling until base mdi processing is done
+	virtual void activateLater( WPARAM wParam, LPARAM lParam)
+	{
+		mol::invoke<mol::AxClientWnd<C,W> >( *(mol::AxClientWnd<C,W>*)this, &mol::AxClientWnd<C,W>::OnMDIActivateLater, wParam, (HWND)lParam );
+	}
 
 	// layout helper, resizes the embedded ax obj
 	mol::Rect  doLayout()

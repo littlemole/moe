@@ -31,12 +31,11 @@ public:
 
 	// std windows msgs
 
-	LRESULT OnMDIActivate(WPARAM unused,HWND activated);
+	void OnMDIActivate(WPARAM unused,HWND activated);
 	void OnMenu( HMENU menu, LPARAM unused );
 	void OnDestroy();
 	void OnNcDestroy();
 	LRESULT OnClose();
-
 	// menu
 
 	void OnSearch( FINDREPLACE* find );

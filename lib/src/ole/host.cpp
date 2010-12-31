@@ -1050,46 +1050,10 @@ LRESULT AxClientWndBase::wndProcAxImpl( HWND hWnd, UINT message, WPARAM wParam, 
 		}
 		case WM_MDIACTIVATE:
 		{
-			HWND wnd = this->getHostingWindow();
 
-			int tmp = (HWND)(lParam) == wnd;
-			ODBGS1("WM_MDIACTIVATE ",tmp);
-			if ( (HWND)(lParam)== wnd )
-			{				
-				if ( oleObject )
-				{
-					if ( !this->isInplaceActive_)
-						this->inplaceActivate(TRUE);
-					else
-						if ( !this->isUIActive)
-							this->inplaceActivate(TRUE);
-				}
-
-				if ( activeObject.interface_ != 0 )
-				{
-					this->oleFrame->SetBorderSpace(0);
-					oleFrame->SetActiveObject(activeObject,0);
-					activeObject->OnDocWindowActivate(TRUE);												
-				}
-			}
-			else // deactivate
-			{
-				if ( isShuttingDown_ == true )
-				{
-					//return 0;
-				}
-				else
-				if ( oleObject && activeObject.interface_ )
-				{
-					activeObject->OnDocWindowActivate(FALSE);		
-				}		
-				
-			}	
-
+			// delay this or OLE embedded WORD will complaint in some cases
+			activateLater(wParam,lParam);
 			this->callAxDefWndProc( hWnd, message,wParam,lParam);
-
-			// redraw oleframe
-			this->redrawOleFrame();
 
 			ODBGS("<----WM_MDIACTIVATE END");
 			return 0;
@@ -1107,7 +1071,6 @@ LRESULT AxClientWndBase::wndProcAxImpl( HWND hWnd, UINT message, WPARAM wParam, 
 			return 0;
 		}
 
-		//case WM_NCDESTROY:
 		case WM_DESTROY:
 		{
 			mol::Rect r(0,0,0,0);
@@ -1142,7 +1105,6 @@ LRESULT AxClientWndBase::wndProcAxImpl( HWND hWnd, UINT message, WPARAM wParam, 
 
 				// release interfaces
 
-				//oleObject.release();	
 				theStorage.release();
 				this->releaseAxClientSite();
 				oleFrame.release();
@@ -1185,5 +1147,55 @@ LRESULT AxClientWndBase::wndProcAxImpl( HWND hWnd, UINT message, WPARAM wParam, 
 	return 0;
 }
 
+LRESULT AxClientWndBase::OnMDIActivateLater(WPARAM unused, HWND activated)
+{
+	HWND wnd = this->getHostingWindow();
+
+	if ( (HWND)(activated)== wnd )
+	{				
+
+		if ( oleObject )
+		{
+			if ( !this->isInplaceActive_)
+				this->inplaceActivate(TRUE);
+			else
+				if ( !this->isUIActive)
+					this->inplaceActivate(TRUE);
+		}
+
+		if ( activeObject.interface_ != 0 )
+		{
+			this->oleFrame->SetBorderSpace(0);
+			oleFrame->SetActiveObject(activeObject,0);
+			activeObject->OnDocWindowActivate(TRUE);												
+		}
+
+		mol::TaskThumbnail* t = this->taskthumb();
+		if ( t ) 
+			t->refreshIcon(true);
+
+	}
+	else // deactivate
+	{
+		mol::TaskThumbnail* t = this->taskthumb();
+		if ( t ) 
+			t->refreshIcon();
+
+		if ( isShuttingDown_ == true )
+		{
+			//return 0;
+		}
+		else
+		if ( oleObject && activeObject.interface_ )
+		{
+			activeObject->OnDocWindowActivate(FALSE);		
+		}		
+	}	
+
+	// redraw oleframe
+	this->redrawOleFrame();
+
+	return 0;
+}
 
 }} // end ns

@@ -141,9 +141,10 @@ BOOL TaskbarWnd::destroy()
 {
     if (hWnd_ != NULL)
     {
-		tb_->RemoveTab(doc);
+		tb_->RemoveTab(*this);
 		tbl_.release();
 		::DestroyWindow(hWnd_);		
+		hWnd_ = NULL;
     }
 	return TRUE;
 }
@@ -193,9 +194,8 @@ LRESULT TaskbarWnd::wndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 			LRESULT lr = ::SendMessage(doc,WM_CLOSE,0,0);
 			if ( lr == 0 )
 			{
-				tb_->RemoveTab(doc);
-				tbl_.release();
-				::DestroyWindow(hWnd_);	
+				//tb_->RemoveTab(doc);
+				//destroy();
 			}
 			break;
 		}

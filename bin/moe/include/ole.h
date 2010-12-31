@@ -29,8 +29,10 @@ public:
 
 	void OnDestroy();
 	void OnNcDestroy();
-	LRESULT OnMDIActivate(WPARAM unused,HWND activated);
-	LRESULT OnMDIActivateLater(WPARAM unused,HWND activated);
+	void OnPaint();
+
+	void OnMDIActivate(WPARAM unused,HWND activated);
+	//LRESULT OnMDIActivateLater(WPARAM unused,HWND activated);
 
     virtual HRESULT __stdcall IOleClientSite_SaveObject();
 

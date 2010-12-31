@@ -110,6 +110,12 @@ void Hex::OnClose()
 
 void Hex::OnDestroy()
 {
+
+
+}
+
+void Hex::OnNcDestroy()
+{
 	mol::bstr filename;
 	if ( S_OK == get_FilePath(&filename) )
 	{
@@ -119,10 +125,6 @@ void Hex::OnDestroy()
 
 	sink.UnAdvise(oleObject);
 
-}
-
-void Hex::OnNcDestroy()
-{
 	::CoDisconnectObject(((IMoeDocument*)this),0);
 	((IMoeDocument*)this)->Release();
 }
@@ -137,11 +139,6 @@ void Hex::OnMDIActivate(HWND activated)
 		statusBar()->status( getText() );
 		updateUI();
 		setFocus();
-		thumb.refreshIcon(true);
-	}
-	else 
-	{
-		thumb.refreshIcon();
 	}
 }
 

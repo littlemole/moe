@@ -71,6 +71,7 @@ Editor::~Editor()
 	ODBGS("~Editor dead");
 };
 
+
 //////////////////////////////////////////////////////////////////////////////
 Editor::Instance* Editor::CreateInstance(const mol::string& file, bool utf8, bool readOnly)
 {
@@ -95,8 +96,6 @@ Editor::Instance* Editor::CreateInstance(const mol::string& file, bool utf8, boo
 
 bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 {
-	//filename_ = p;
-
 	// get client rectangle
 	mol::Rect r;
 	::GetClientRect(mdiClient(),&r);
@@ -164,7 +163,7 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 	statusBar()->status(100);
 
 	// add a windows7 taskbar thumbnail
-	thumb = taskbar()->addTab(* this,p );
+	thumb = mol::taskbar()->addTab(* this,p );
 
 	// now maximize the window
 	maximize();
@@ -219,7 +218,7 @@ void Editor::OnDestroy()
 void Editor::OnNcDestroy()
 {
 
-		SciMember<IScintillAxProperties> props(sci);
+	SciMember<IScintillAxProperties> props(sci);
 	mol::bstr path;
 	props->get_Filename(&path);
 
@@ -239,16 +238,9 @@ void Editor::OnNcDestroy()
 
 //////////////////////////////////////////////////////////////////////////////
 
-LRESULT Editor::OnMDIActivate(WPARAM unused, HWND activated)
+void Editor::OnMDIActivate(WPARAM unused, HWND activated)
 {
 	ODBGS("Editor::OnMDIActivate");
-
-	if ( activated != hWnd_ )
-	{
-		thumb.refreshIcon();
-	}
-
-	BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
 
 	if ( activated == hWnd_ )
 	{
@@ -259,9 +251,7 @@ LRESULT Editor::OnMDIActivate(WPARAM unused, HWND activated)
 		tab()->select( path.toString() );
 		updateUI();
 		setFocus();
-		thumb.refreshIcon(true);
 	}
-	return 0;
 }
 
 void Editor::OnCut()
