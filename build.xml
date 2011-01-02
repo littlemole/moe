@@ -19,7 +19,7 @@
 		<MSBuild Projects=".\bin\moe\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 
 		<Exec Command='build.bat "$(Configuration)" moeSetup $(Platform) ' WorkingDirectory=".\bin\WixMoe"/>
-		<Exec Command='.\bin\WixMoe\regfree.bat "bin\WixMoe" "$(Configuration)" ' WorkingDirectory="."/>
+		<Exec Command='.\bin\WixMoe\regfree.bat "bin\WixMoe" "$(Configuration)" "$(Platform)" ' WorkingDirectory="."/>
 
  </Target>
 
@@ -30,7 +30,7 @@
 		<MSBuild Projects=".\bin\moe\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 
 		<Exec Command='build.bat "$(Configuration)" moeSetup "$(Platform)" /clean' WorkingDirectory=".\bin\WixMoe\"/>
-		<Exec Command='.\bin\WixMoe\regfree.bat bin\WixMoe "$(Configuration)" /clean'  WorkingDirectory="."/>
+		<Exec Command='.\bin\WixMoe\regfree.bat bin\WixMoe "$(Configuration)" "$(Platform)" /clean'  WorkingDirectory="."/>
 
  </Target>
 

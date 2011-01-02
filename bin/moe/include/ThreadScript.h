@@ -60,7 +60,14 @@ public:
 	virtual HRESULT removeNamedObject( const mol::string& obj );
 
 	// IActiveScriptSiteDebug Implementation
-	virtual HRESULT  __stdcall GetDocumentContextFromPosition(DWORD dwSourceContext, ULONG uCharacterOffset,ULONG uNumChars,IDebugDocumentContext **ppsc);
+	virtual HRESULT  STDMETHODCALLTYPE GetDocumentContextFromPosition(
+#ifdef _WIN64
+								  DWORDLONG dwSourceContext,	
+#else
+								 DWORD dwSourceContext,	
+#endif
+		ULONG uCharacterOffset,ULONG uNumChars,IDebugDocumentContext **ppsc);
+
 	virtual HRESULT  __stdcall GetApplication(IDebugApplication **ppda);
 	virtual HRESULT  __stdcall GetRootApplicationNode(IDebugApplicationNode **ppdanRoot);
 	virtual HRESULT  __stdcall OnScriptErrorDebug(IActiveScriptErrorDebug *pErrorDebug,BOOL*pfEnterDebugger, BOOL *pfCallOnScriptErrorWhenContinuing);

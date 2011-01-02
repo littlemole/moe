@@ -212,12 +212,7 @@ void Editor::OnDestroy()
 
 	ODBGS("Editor::OnDestroy()");
 	
-
-}
-
-void Editor::OnNcDestroy()
-{
-
+	
 	SciMember<IScintillAxProperties> props(sci);
 	mol::bstr path;
 	props->get_Filename(&path);
@@ -227,6 +222,11 @@ void Editor::OnNcDestroy()
 	
  	events.UnAdvise(oleObject);
 	sci.release();
+}
+
+void Editor::OnNcDestroy()
+{
+
 	ODBGS("Editor::OnNcDestroy()");
 
 	

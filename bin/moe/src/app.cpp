@@ -3,6 +3,7 @@
 
 #include "app.h"
 #include "util/regex.h"
+#include "thread/sync.h"
 #include "ax/scintillax/scintillax_i.c"
 #include "ax/shellctrl/shellctrl_i.c"
 #include "ax/shellfolder/shellfolder_i.c"

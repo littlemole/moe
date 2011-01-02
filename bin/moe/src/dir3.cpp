@@ -96,12 +96,16 @@ bool DirChild::initialize(const mol::string& p)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-	
-void DirChild::OnNcDestroy()
+void DirChild::OnDestroy()
 {
 	mol::string filename = getText();
 	docs()->Remove(mol::variant(filename));
 	events.UnAdvise(oleObject);
+
+}
+
+void DirChild::OnNcDestroy()
+{
 
 	::CoDisconnectObject(((IMoeDocument*)this),0);
 	((IMoeDocument*)this)->Release();

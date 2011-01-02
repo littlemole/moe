@@ -226,6 +226,7 @@ LRESULT MoeWnd::OnCloseAllButThis()
 
 void MoeWnd::OnDestroy()
 {
+	
 	Ribbon::ribbon()->tearDown();
 
 	treeWndSink()->UnAdvise(treeWnd()->oleObject);
@@ -235,10 +236,21 @@ void MoeWnd::OnDestroy()
 
 	if ( activeObj_ )
 		::RevokeActiveObject(activeObj_,0);
+	
 }
 
 void MoeWnd::OnNcDestroy()
-{
+{/*
+	Ribbon::ribbon()->tearDown();
+
+	treeWndSink()->UnAdvise(treeWnd()->oleObject);
+	::CoDisconnectObject(treeWnd()->oleObject,0);
+	scriptlet()->close();
+	::RevokeDragDrop(*this);
+
+	if ( activeObj_ )
+		::RevokeActiveObject(activeObj_,0);
+	*/
 	::CoDisconnectObject( (IMoeDocumentCollection*)(docs()),0);
 	::CoDisconnectObject(((IMoe*)this),0);
 	((IMoe*)this)->Release();

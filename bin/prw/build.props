@@ -68,35 +68,35 @@
     </Link>
   </ItemDefinitionGroup>
 
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug_64|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
     <Midl>
-	  <OutputDirectory>x64\uni_debug_64</OutputDirectory>
+	  <OutputDirectory>x64\uni_debug</OutputDirectory>
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN64;_WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\..\lib\src\win\x64\uni_debug_64\win.lib;..\..\..\lib\src\ole\x64\uni_debug_64\ole.lib;..\..\..\lib\src\util\x64\uni_debug_64\util.lib;..\..\..\3dParty\pcre\x64\uni_debug_64\pcre.lib;..\..\..\lib\src\thread\x64\uni_debug_64\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\..\lib\src\xml\x64\uni_debug_64\xml.lib;..\..\..\3dParty\expat\Source\lib\x64\uni_debug_64\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\..\lib\src\win\x64\uni_debug\win.lib;..\..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\..\lib\src\util\x64\uni_debug\util.lib;..\..\..\3dParty\pcre\x64\uni_debug_64\pcre.lib;..\..\..\lib\src\thread\x64\uni_debug\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\..\3dParty\expat\Source\lib\x64\uni_debug_64\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
 
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">
     <Midl>
- 	  <OutputDirectory>x64\uni_release_64</OutputDirectory>
+ 	  <OutputDirectory>x64\uni_release</OutputDirectory>
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
       <Optimization>Full</Optimization>
-      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN64;_WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
-     <AdditionalDependencies>..\..\..\lib\src\win\x64\uni_release_64\win.lib;..\..\..\lib\src\ole\x64\uni_release_64\ole.lib;..\..\..\lib\src\util\x64\uni_release_64\util.lib;..\..\..\3dParty\pcre\x64\uni_release_64\pcre.lib;..\..\..\lib\src\thread\x64\uni_release_64\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\..\lib\src\xml\x64\uni_release_64\xml.lib;..\..\..\3dParty\expat\Source\lib\x64\uni_release_64\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     <AdditionalDependencies>..\..\..\lib\src\win\x64\uni_release\win.lib;..\..\..\lib\src\ole\x64\uni_release\ole.lib;..\..\..\lib\src\util\x64\uni_release\util.lib;..\..\..\3dParty\pcre\x64\uni_release_64\pcre.lib;..\..\..\lib\src\thread\x64\uni_release\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\..\lib\src\xml\x64\uni_release\xml.lib;..\..\..\3dParty\expat\Source\lib\x64\uni_release_64\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
      <GenerateDebugInformation>true</GenerateDebugInformation>
      <TargetMachine>MachineX64</TargetMachine>
     </Link>

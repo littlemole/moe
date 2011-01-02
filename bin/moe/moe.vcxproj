@@ -46,6 +46,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -61,6 +62,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -124,6 +126,10 @@
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">Midl</CustomBuildAfterTargets>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">Midl</CustomBuildAfterTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
     <ClCompile>
@@ -196,22 +202,23 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <Optimization>MinSpace</Optimization>
+      <Optimization>Disabled</Optimization>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>.\;.\include;..\..\3dParty\expat\Source\lib;..\..\;..\..\3dParty\pcre;..\..\lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN64;_WIN64;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <AdditionalOptions>/SUBSYSTEM:WINDOWS,4.00 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>..\..\lib\src\win\uni_Release\win.lib;..\..\lib\src\ole\uni_Release\ole.lib;..\..\lib\src\util\uni_Release\util.lib;..\..\lib\src\xml\uni_Release\xml.lib;..\..\lib\src\thread\uni_Release\thread.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Mpr.lib;urlmon.lib;..\..\3dParty\pcre\uni_Release\pcre.lib;Msimg32.lib;..\..\3dParty\expat\Source\lib\Release_static\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\x64\uni_Release\win.lib;..\..\lib\src\ole\x64\uni_Release\ole.lib;..\..\lib\src\util\x64\uni_Release\util.lib;..\..\lib\src\xml\x64\uni_Release\xml.lib;..\..\lib\src\thread\x64\uni_Release\thread.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Mpr.lib;gdiplus.lib;urlmon.lib;Msimg32.lib;..\..\3dParty\pcre\x64\uni_Release\pcre.lib;..\..\3dParty\expat\Source\lib\x64\uni_Release_64\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)moe.exe</OutputFile>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>NotSet</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -221,28 +228,32 @@
       <TargetMachine>MachineX64</TargetMachine>
       <Profile>true</Profile>
     </Link>
+    <Manifest>
+      <AdditionalManifestFiles>resources/moe64.exe.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <Optimization>MinSpace</Optimization>
+      <Optimization>Disabled</Optimization>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>.\;.\include;..\..\3dParty\expat\Source\lib;..\..\;..\..\3dParty\pcre;..\..\lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PreprocessorDefinitions>WIN64;_WIN64;DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <AdditionalOptions>/SUBSYSTEM:WINDOWS,4.00 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>..\..\lib\src\win\uni_Release\win.lib;..\..\lib\src\ole\uni_Release\ole.lib;..\..\lib\src\util\uni_Release\util.lib;..\..\lib\src\xml\uni_Release\xml.lib;..\..\lib\src\thread\uni_Release\thread.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Mpr.lib;urlmon.lib;..\..\3dParty\pcre\uni_Release\pcre.lib;Msimg32.lib;..\..\3dParty\expat\Source\lib\Release_static\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Mpr.lib;urlmon.lib;..\..\3dParty\pcre\x64\uni_debug_64\pcre.lib;Msimg32.lib;..\..\3dParty\expat\Source\lib\x64\uni_debug_64\libexpatMT.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)moe.exe</OutputFile>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>NotSet</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -250,8 +261,11 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX64</TargetMachine>
-      <Profile>true</Profile>
+      <Profile>false</Profile>
     </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>TLB=x64\uni_debug\moe.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release_64|Win32'">
     <ClCompile>
@@ -293,7 +307,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>.\;.\include;..\..\3dParty\expat\Source\lib;..\..\;..\..\3dParty\pcre;..\..\lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN64;_WIN64;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -302,7 +316,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/SUBSYSTEM:WINDOWS,4.00 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>..\..\lib\src\win\x64\uni_Release_64\win.lib;..\..\lib\src\ole\x64\uni_Release_64\ole.lib;..\..\lib\src\util\x64\uni_Release_64\util.lib;..\..\lib\src\xml\x64\uni_Release_64\xml.lib;..\..\lib\src\thread\x64\uni_Release_64\thread.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Mpr.lib;urlmon.lib;gdiplus.lib;..\..\3dParty\pcre\x64\uni_Release_64\pcre.lib;Msimg32.lib;..\..\3dParty\expat\Source\lib\x64\uni_release_64\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\x64\uni_Release\win.lib;..\..\lib\src\ole\x64\uni_Release\ole.lib;..\..\lib\src\util\x64\uni_Release\util.lib;..\..\lib\src\xml\x64\uni_Release\xml.lib;..\..\lib\src\thread\x64\uni_Release\thread.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Mpr.lib;urlmon.lib;gdiplus.lib;..\..\3dParty\pcre\x64\uni_Release_64\pcre.lib;Msimg32.lib;..\..\3dParty\expat\Source\lib\x64\uni_release_64\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)moe.exe</OutputFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -331,7 +345,9 @@
     <ClCompile Include="src\MoeBar.cpp" />
     <ClCompile Include="src\ole.cpp" />
     <ClCompile Include="src\shared.cpp" />
-    <ClCompile Include="src\stdafx.cpp" />
+    <ClCompile Include="src\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\ThreadScript.cpp" />
     <ClCompile Include="src\UserForm.cpp" />
     <ClCompile Include="src\widgets.cpp" />
@@ -378,6 +394,10 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">$(TargetName)_dispid.h</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">$(IntDir)$(TargetName).tlb</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">generate dispids from typelib</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">generate dispids from typelib</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">$(TargetName)_dispid.h</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">$(IntDir)$(TargetName).tlb</AdditionalInputs>
     </CustomBuild>
     <None Include="..\..\cg\xsl\uimenu.xsl" />
     <None Include="resources\mol.rc.inc" />
@@ -416,9 +436,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">xmlrc.cpp;xmlrib.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;ribbonres.h;ribbonres.rc;ribbon.bml;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">code generation phase</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">code generation phase</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">cscript.exe ../../cg/js/make.js
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">cscript.exe ../../cg/js/make.js
+      <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">cscript.exe ../../cg/js/make.js "x64\uni_release"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">cscript.exe "../../cg/js/make.js" "x64/uni_debug"
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>

@@ -334,7 +334,11 @@ HRESULT ScriptHost::runScript(const mol::string& script, int flag)
 					if ( hr == S_OK )
 					{
 
+#ifdef _WIN64
+						DWORDLONG dw;
+#else
 						DWORD dw;
+#endif
 						hr = debugDocHelper_->DefineScriptBlock( 0, 
 																 (ULONG)script.size(),
 																 activeScript_.activeScript, 
@@ -376,7 +380,12 @@ HRESULT ScriptHost::debugScript(const mol::string& script, int flag)
 #endif
 					if ( hr == S_OK )
 					{
+
+#ifdef _WIN64
+						DWORDLONG dw;
+#else
 						DWORD dw;
+#endif
 						hr = debugDocHelper_->DefineScriptBlock(0, (ULONG)script.size(),activeScript_.activeScript, FALSE, &dw);
 					}
 				}
@@ -557,12 +566,22 @@ mol::string engineFromExtension(const mol::string& ext)
 
 
 // IActiveScriptSiteDebug Implementation
+HRESULT  __stdcall  ScriptHost::GetDocumentContextFromPosition(
+#ifdef _WIN64
+								  DWORDLONG dwSourceContext,	
+#else
+								  DWORD dwSourceContext,	
+#endif
+								  ULONG uCharacterOffset,	
+								  ULONG uNumChars,			
+								  IDebugDocumentContext **ppsc)
 
-HRESULT  __stdcall ScriptHost::GetDocumentContextFromPosition(
+/**HRESULT  __stdcall ScriptHost::GetDocumentContextFromPosition(
 								  DWORD dwSourceContext,	
 								  ULONG uCharacterOffset,	
 								  ULONG uNumChars,			
 								  IDebugDocumentContext **ppsc)
+								  */
 {
    ULONG ulStartPos = 0;
    HRESULT hr;

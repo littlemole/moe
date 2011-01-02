@@ -31,6 +31,7 @@ public:
 
 	void OnMDIActivate(WPARAM unused,HWND activated);
 	void OnNcDestroy();
+	void OnDestroy();
 
 	LRESULT OnSaveAs();
 	LRESULT OnSave();

@@ -67,7 +67,7 @@ TaskbarWnd::TaskbarWnd( Taskbar* tb, HWND d, ITaskbarList4* tbl, bool disabled )
 	tbl_ = tbl;
 	hbm_cached_ = 0;
 	disabled_ = disabled;
-	deleteOnNCDestroy_ = true;
+	deleteOnNCDestroy_ = false;
 }
 
 TaskbarWnd::~TaskbarWnd()
@@ -143,7 +143,7 @@ BOOL TaskbarWnd::destroy()
     {
 		tb_->RemoveTab(*this);
 		tbl_.release();
-		::DestroyWindow(hWnd_);		
+		//::DestroyWindow(hWnd_);		
 		hWnd_ = NULL;
     }
 	return TRUE;
@@ -194,6 +194,7 @@ LRESULT TaskbarWnd::wndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 			LRESULT lr = ::SendMessage(doc,WM_CLOSE,0,0);
 			if ( lr == 0 )
 			{
+				::DestroyWindow(hWnd_);	
 				//tb_->RemoveTab(doc);
 				//destroy();
 			}
