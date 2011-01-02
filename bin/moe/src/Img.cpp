@@ -46,18 +46,18 @@ void ImgViewer::OnCreate()
 
 LRESULT ImgViewer::OnDestroy()
 {
-
-	return 0;
-}
-
-LRESULT ImgViewer::OnNcDestroy()
-{
 	mol::bstr filename;
 	if ( S_OK == get_FilePath(&filename) )
 	{
 		mol::variant v(filename);
 		docs()->Remove(v);
 	}
+	return 0;
+}
+
+LRESULT ImgViewer::OnNcDestroy()
+{
+
 
 	::CoDisconnectObject(((IMoeDocument*)this),0);
 	((IMoeDocument*)this)->Release();

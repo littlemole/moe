@@ -184,7 +184,7 @@ bool FormEditor::initialize(const mol::string& p)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-void FormEditor::OnNcDestroy()
+void FormEditor::OnDestroy()
 {
 	if ( userForm )
 	{
@@ -208,7 +208,16 @@ void FormEditor::OnNcDestroy()
 	return ;
 }
 
-
+void FormEditor::OnNcDestroy()
+{/*
+	if ( userForm )
+	{
+		userForm->Close();
+		userForm.release();
+	}
+	*/
+	return ;
+}
 //////////////////////////////////////////////////////////////////////////////
 
 void FormEditor::OnMDIActivate(WPARAM unused, HWND activated)

@@ -186,7 +186,15 @@ public:
 	// IActiveScriptSiteDebug Implementation
 	// Used by the language engine to delegate IDebugCodeContext::GetSourceContext. 
 
-	HRESULT virtual __stdcall GetDocumentContextFromPosition(DWORD dwSourceContext, ULONG uCharacterOffset,ULONG uNumChars,IDebugDocumentContext **ppsc);
+	//HRESULT virtual __stdcall GetDocumentContextFromPosition(DWORD dwSourceContext, ULONG uCharacterOffset,ULONG uNumChars,IDebugDocumentContext **ppsc);
+	virtual HRESULT  __stdcall GetDocumentContextFromPosition(
+#ifdef _WIN64
+								  DWORDLONG dwSourceContext,	
+#else
+								 DWORD dwSourceContext,	
+#endif
+		ULONG uCharacterOffset,ULONG uNumChars,IDebugDocumentContext **ppsc);
+
 	HRESULT virtual __stdcall GetApplication(IDebugApplication **ppda);
 	HRESULT virtual __stdcall GetRootApplicationNode(IDebugApplicationNode **ppdanRoot);
 	HRESULT virtual __stdcall OnScriptErrorDebug(IActiveScriptErrorDebug *pErrorDebug,BOOL*pfEnterDebugger, BOOL *pfCallOnScriptErrorWhenContinuing);

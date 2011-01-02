@@ -96,7 +96,8 @@ OleChild::Instance* OleChild::CreateInstance( const mol::string& p, CLSID& clsid
 void OleChild::OnDestroy()
 {
 
-
+	mol::variant v(filename_);
+	docs()->Remove(v);	
 
 
 }
@@ -111,8 +112,7 @@ void OleChild::OnPaint()
 void OleChild::OnNcDestroy()
 {
 		
-		mol::variant v(filename_);
-	docs()->Remove(v);	
+
 
 		IMoeDocument* doc = (IMoeDocument*)this;	
 	::CoDisconnectObject( doc,0);

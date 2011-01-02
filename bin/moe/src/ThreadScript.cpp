@@ -774,9 +774,12 @@ HRESULT  __stdcall  ThreadScript::EnumCodeContexts(IEnumDebugCodeContexts **pObj
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 // IActiveScriptSiteDebug Implementation
-
-HRESULT  __stdcall ThreadScript::GetDocumentContextFromPosition(
+HRESULT  STDMETHODCALLTYPE  ThreadScript::GetDocumentContextFromPosition(
+#ifdef _WIN64
+								  DWORDLONG dwSourceContext,	
+#else
 								  DWORD dwSourceContext,	
+#endif
 								  ULONG uCharacterOffset,	
 								  ULONG uNumChars,			
 								  IDebugDocumentContext **ppsc)

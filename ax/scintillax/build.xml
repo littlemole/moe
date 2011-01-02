@@ -21,8 +21,8 @@
     <Link>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">..\..\3dParty\scintilla\bin\static\debug\SciLexer.lib;..\..\\3dParty\scintilla\bin\static\debug\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
 	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">..\..\3dParty\scintilla\bin\static\SciLexer.lib;..\..\\3dParty\scintilla\bin\static\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
-	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_debug_64|x64'">..\..\3dParty\scintilla\bin\static64\debug\SciLexer.lib;..\..\\3dParty\scintilla\bin\static64\debug\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
-	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">..\..\3dParty\scintilla\bin\static64\uni_release_64\SciLexer.lib;..\..\\3dParty\scintilla\bin\static64\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\3dParty\scintilla\bin\static64\debug\SciLexer.lib;..\..\\3dParty\scintilla\bin\static64\debug\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">..\..\3dParty\scintilla\bin\static64\SciLexer.lib;..\..\\3dParty\scintilla\bin\static64\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <PreprocessorDefinitions>STATIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>  
     </Link>
   </ItemDefinitionGroup>
@@ -54,7 +54,7 @@
 	</Midl>
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(Platform)'=='x86'">
     <CustomBuild Include="..\..\cg\js\make.js">
       <Message>codegen phase</Message>
       <Command>cscript.exe ../../cg/js/make.js "$(Configuration)"</Command>
@@ -63,7 +63,14 @@
     </CustomBuild>
   </ItemGroup>
 
-
+  <ItemGroup Condition="'$(Platform)'=='x64'">
+    <CustomBuild Include="..\..\cg\js\make.js">
+      <Message>codegen phase</Message>
+      <Command>cscript.exe ../../cg/js/make.js "x64/$(Configuration)"</Command>
+      <AdditionalInputs>xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs>xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
 
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

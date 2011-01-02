@@ -25,6 +25,7 @@ public:
 
 	void OnMDIActivate(HWND activated);
 	void OnNcDestroy();
+	void OnDestroy();
 
 private:
 

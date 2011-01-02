@@ -6,7 +6,7 @@
 #include "ole/Variant.h"
 #include "ole/aut.h"
 #include "ole/cp.h"
-#include "ScintillAx_h.h"
+#include "../ScintillAx_h.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // dual event impl for scintilla (c++ clients)

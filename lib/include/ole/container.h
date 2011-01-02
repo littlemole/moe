@@ -309,14 +309,15 @@ public:
 
     virtual LRESULT wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
+		// let OleContainerWndProc try to handle that message
 		// catch WM_NCDESTROY as we are always dead then:
 		if ( message == WM_NCDESTROY ) 
 		{
 			// just let the base window do any necessary cleanup
 			return W::wndProc(hWnd, message, wParam, lParam);
 		}
-		// let OleContainerWndProc try to handle that message
-		return this->OleContainerWndProc( hWnd, message, wParam, lParam );
+		LRESULT l = this->OleContainerWndProc( hWnd, message, wParam, lParam );
+		return l;
 	}
 
 	//////////////////////////////////////////////////////////

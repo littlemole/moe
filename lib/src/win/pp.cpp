@@ -69,13 +69,22 @@ LRESULT PropPage::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		mol::win::dialogs().unregisterDialog(hDlg);
 		if ( this->deleteOnNCDestroy_ )
-			delete this;
+		{
+			LRESULT l = mol::win::Dialog::wndProc(hDlg, message, wParam, lParam);
+			//delete this;
+			return l;
+		}
 	}
 
 	return mol::win::Dialog::wndProc(hDlg, message, wParam, lParam);
 }
 
-BOOL CALLBACK PropPage::dialogProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+#ifdef _WIN64
+#define DWL_MSGRESULT 0
+LRESULT CALLBACK  PropPage::dialogProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+#else
+BOOL CALLBACK  PropPage::dialogProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+#endif
 {
 		if ( message == WM_NOTIFY )
 		{

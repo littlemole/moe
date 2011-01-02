@@ -33,7 +33,12 @@ public:
 	mol::PropSheet* ps() { return ps_; }
 
 	LRESULT wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+
+#ifdef _WIN64
+	static LRESULT CALLBACK dialogProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+#else
 	static BOOL CALLBACK dialogProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+#endif
 
 	operator HPROPSHEETPAGE () { return page_; };
 

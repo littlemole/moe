@@ -302,8 +302,19 @@ protected:
 
 	punk<ShellTreeCtrl_Drop> Drop;
 
+	class ThreadStartPolicy 
+	{
+	public:
+		void operator()(){ ::CoInitialize(0); };
+	};
 
-	mol::ThreadQueue<ShellTreeAction>			queue_;
+	class ThreadShutdownPolicy 
+	{
+	public:
+		void operator()(){ ::CoUninitialize(); };
+	};
+
+	mol::ThreadQueue<ShellTreeAction,true,ThreadStartPolicy,ThreadShutdownPolicy>			queue_;
     bool										displayFiles_;
 	bool										useContext_;
 	RECT										clientRect_;

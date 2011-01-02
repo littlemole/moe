@@ -4,7 +4,10 @@ set TARGETDIR=%TARGETDIR:"=%
 set MODE=%2
 set MODE=%MODE:"=%\moe
 
-set TARGET=%3
+set PLAT=%3
+set PLAT=%PLAT:"=%
+
+set TARGET=%4
 
 set DEPLOYDIR=%TARGETDIR%\deploy\regfree
 
@@ -55,7 +58,11 @@ IF ERRORLEVEL 1 GOTO hell
 mt.exe -manifest %DEPLOYDIR%\shellfolder.dll.isolated.manifest -outputresource:"%WORKDIR%\shellfolder.dll;#2" 
 IF ERRORLEVEL 1 GOTO hell
 
-cscript "%TARGETDIR%\zip.vbs" "%DEPLOYDIR%\%MODE%\moe.zip" "%WORKDIR%"
+
+echo "%TARGETDIR%\zip.vbs" "%DEPLOYDIR%\%PLAT%\%MODE%\moe.zip" "%WORKDIR%"
+
+cscript "%TARGETDIR%\zip.vbs" "%DEPLOYDIR%\%PLAT%\%MODE%\moe.zip" "%WORKDIR%"
+
 IF ERRORLEVEL 1 GOTO hell
 
 rmdir /S /Q  "%WORKDIR%"
@@ -67,7 +74,7 @@ goto end
 
 :clean
 
-del "%DEPLOYDIR%\%MODE%\moe.zip"
+del "%DEPLOYDIR%\%PLAT%\%MODE%\moe.zip"
 
 goto end
 

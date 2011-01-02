@@ -860,6 +860,8 @@ mol::msgMap<DirChild>().addMsgHandler( WM_MDIACTIVATE, make_handler(&DirChild::O
 
 mol::msgMap<DirChild>().addMsgHandler( WM_NCDESTROY, make_handler(&DirChild::OnNcDestroy) );
 
+mol::msgMap<DirChild>().addMsgHandler( WM_DESTROY, make_handler(&DirChild::OnDestroy) );
+
 mol::msgMap<DirChild>().addCmdHandler( IDM_EDIT_UPDATE, make_ole_handler<DirChild>(&IShellPane::Update) );
 
 mol::msgMap<DirChild>().addCmdHandler( IDM_EDIT_CUT, make_ole_handler<DirChild>(&IShellPane::Cut) );
@@ -963,6 +965,8 @@ make_command_range_handler( Editor, ID_FIRST_USER_FORM, ID_LAST_USER_FORM, OnUse
 make_command_range_handler( Editor, ID_FIRST_USER_SCRIPT, ID_LAST_USER_SCRIPT, OnUserScript );
 
 mol::msgMap<Editor>().addNotifyCodeHandler( TBN_DROPDOWN, make_handler(&Editor::OnToolbarDropDown) );
+
+mol::msgMap<FormEditor>().addMsgHandler( WM_DESTROY, make_handler(&FormEditor::OnDestroy) );
 
 mol::msgMap<FormEditor>().addMsgHandler( WM_NCDESTROY, make_handler(&FormEditor::OnNcDestroy) );
 

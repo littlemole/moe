@@ -243,13 +243,6 @@ void MoeHtmlWnd::OnDestroy()
 {
 	ODBGS("MoeHtmlWndImpl::OnDestroy");
 
-
-}
-
-void MoeHtmlWnd::OnNcDestroy()
-{
-	ODBGS("MoeHtmlWndImpl::OnNcDestroy");
-
 	mol::bstr filename;
 	if ( S_OK == get_FilePath(&filename) )
 	{
@@ -260,6 +253,13 @@ void MoeHtmlWnd::OnNcDestroy()
 	::CoDisconnectObject(((IExternalMoe*)&external_),0);
 
 	unAdvise(htmlSink);
+}
+
+void MoeHtmlWnd::OnNcDestroy()
+{
+	ODBGS("MoeHtmlWndImpl::OnNcDestroy");
+
+
 
 	((IMoeDocument*)this)->Release();
 }

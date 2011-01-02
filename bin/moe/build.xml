@@ -28,15 +28,19 @@
       <AdditionalManifestDependencies>%(AdditionalManifestDependencies)</AdditionalManifestDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
-    <Manifest>
+    <Manifest Condition="'$(Platform)'=='Win32'">
       <AdditionalManifestFiles>resources/moe.exe.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
     </Manifest>
+    <Manifest Condition="'$(Platform)'=='x64'">
+      <AdditionalManifestFiles>resources/moe64.exe.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
+    </Manifest>
+
   </ItemDefinitionGroup>
 
   <ItemGroup>
     <Midl Include="src\moe.idl">
       <TypeLibraryName >$(TargetName).tlb</TypeLibraryName>
-      <HeaderFileName>../$(TargetName)_h.h</HeaderFileName>
+      <HeaderFileName>../../$(TargetName)_h.h</HeaderFileName>
     </Midl>
   </ItemGroup>
 
@@ -65,7 +69,7 @@
     </ClCompile>
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(Platform)'=='Win32'">
     <CustomBuild Include="..\..\cg\js\make.js">
       <Message>code generation phase</Message>
       <Command>cscript.exe //NoLogo ../../cg/js/make.js $(Configuration)</Command>
@@ -74,11 +78,29 @@
     </CustomBuild>
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(Platform)'=='x64'">
+    <CustomBuild Include="..\..\cg\js\make.js">
+      <Message>code generation phase</Message>
+      <Command>cscript.exe //NoLogo ../../cg/js/make.js x64/$(Configuration)</Command>
+      <AdditionalInputs>xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;xml/ribbon.xml;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs>xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;ribbonres.rc;ribbonres.h;ribbon.bml;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Platform)'=='Win32'">
     <CustomBuild Include="..\..\cg\disph.exe">
       <Message>dispid generation phase</Message>
       <Command>..\..\cg\disph.exe $(Configuration)\$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
       <AdditionalInputs>$(Configuration)\$(TargetName).tlb;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs>$(TargetName)_dispid.h;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Platform)'=='x64'">
+    <CustomBuild Include="..\..\cg\disph.exe">
+      <Message>dispid generation phase $(Configuration)\$(TargetName)</Message>
+      <Command>..\..\cg\disph.exe x64\$(Configuration)\$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
+      <AdditionalInputs>x64\$(Configuration)\$(TargetName).tlb;%(AdditionalInputs)</AdditionalInputs>
       <Outputs>$(TargetName)_dispid.h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>

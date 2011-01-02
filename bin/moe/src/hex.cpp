@@ -110,12 +110,6 @@ void Hex::OnClose()
 
 void Hex::OnDestroy()
 {
-
-
-}
-
-void Hex::OnNcDestroy()
-{
 	mol::bstr filename;
 	if ( S_OK == get_FilePath(&filename) )
 	{
@@ -124,6 +118,12 @@ void Hex::OnNcDestroy()
 	}
 
 	sink.UnAdvise(oleObject);
+
+}
+
+void Hex::OnNcDestroy()
+{
+
 
 	::CoDisconnectObject(((IMoeDocument*)this),0);
 	((IMoeDocument*)this)->Release();

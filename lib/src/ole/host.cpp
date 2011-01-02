@@ -1108,6 +1108,8 @@ LRESULT AxClientWndBase::wndProcAxImpl( HWND hWnd, UINT message, WPARAM wParam, 
 				theStorage.release();
 				this->releaseAxClientSite();
 				oleFrame.release();
+
+				oleObject.release();	
 				return 0;
 			}
 
@@ -1135,7 +1137,7 @@ LRESULT AxClientWndBase::wndProcAxImpl( HWND hWnd, UINT message, WPARAM wParam, 
 		
 		case WM_NCDESTROY:
 		{
-			oleObject.release();	
+			//oleObject.release();	
 			return 0;
 		}
 		

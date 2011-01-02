@@ -50,9 +50,10 @@ rem ---non priviledged user-----------------------------
 
 
 SET SRC="bin\%MODE%\%MSI:"=%"
-SET DEST="deploy\%MODE%\%MSILIGHT:"=%"
+SET DEST="deploy\%PLATFORM%\%MODE%\%MSILIGHT:"=%"
 
 mkdir "deploy\%MODE%"
+mkdir "deploy\%PLATFORM%\%MODE%"
 copy /Y %SRC% %DEST%
 
 cscript "moeEditMSI.wsf" %DEST%
@@ -64,7 +65,7 @@ IF ERRORLEVEL 1 GOTO hell
 rem ---admin install------------------------------------
 
 
-SET DEST="deploy\%MODE%\%MSI%"
+SET DEST="deploy\%PLATFORM%\%MODE%\%MSI%"
 
 copy /Y %SRC% %DEST%
 
