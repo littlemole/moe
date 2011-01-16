@@ -50,6 +50,8 @@ public:
 		return body_;
 	}
 
+protected:
+
 	
 	size_t chain( std::stringstream& in)
 	{
@@ -62,10 +64,18 @@ public:
 		return 0;
 	}
 
-protected:
-
 	std::string body_;
 	AbstractBodyReader* chain_;
+
+private:
+	AbstractBodyReader( const AbstractBodyReader& rhs)
+	{}
+
+	AbstractBodyReader& operator=( const AbstractBodyReader& rhs)
+	{
+		return *this;
+	}
+
 };
 
 

@@ -130,8 +130,8 @@ public:
 
 	void destroyChild(HWND wnd);
 
-	virtual BOOL destroy( );
-	virtual BOOL mdiDestroy( );
+	//virtual BOOL destroy( );
+	//virtual BOOL mdiDestroy( );
 
 	virtual void setMenu( HMENU newMenu, HMENU windowMenu = 0  );
 

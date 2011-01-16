@@ -47,17 +47,40 @@ bool TCPStreamBuf::connect( const std::string& server, int port )
 	if ( !addr_.set(server,port) )
 		return false;
 
-	// open tcp socket
-    if ( (sock_fd_ = ::socket( AF_INET,SOCK_STREAM, IPPROTO_TCP)) == INVALID_SOCKET )
-        return false;
+	bool repeat = false;
 
-	// connect socket to address
-    if ( ::connect( sock_fd_, (const sockaddr*)addr_, sizeof(sockaddr_in)) != 0 )
+	int retry = 3;
+	while(retry)
 	{
-		close();
-        return false;
+		retry--;
+
+		// open tcp socket
+		if ( (sock_fd_ = ::socket( AF_INET,SOCK_STREAM, IPPROTO_TCP)) == INVALID_SOCKET )
+			return false;
+
+		SOCKET buf = sock_fd_;
+		if ( sock_fd_ == 0 )
+		{
+			int we = WSAGetLastError();
+			return false;
+		}
+
+		// connect socket to address
+		if ( ::connect( sock_fd_, (const sockaddr*)addr_, sizeof(sockaddr_in)) == 0 )
+		{
+			return true;
+		}
+
+		int we = WSAGetLastError();
+		if ( we == WSAETIMEDOUT )
+		{
+				continue;		
+		}
+		break;
 	}
-	return true;
+
+	close();
+	return false;
 }
 
 

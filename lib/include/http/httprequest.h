@@ -2,6 +2,7 @@
 #define HTTP_REQUEST_DEF_GUARD_DEF
 
 #include "http/reader.h"
+#include "boost/shared_ptr.hpp"
 
 namespace mol {
 
@@ -16,7 +17,7 @@ public:
 	HttpBody();	
 	HttpBody(AbstractBodyReader* r);
 	HttpBody(const std::string& b);
-	//HttpBody(HttpHeaders& headers);
+	HttpBody(const HttpBody& rhs);
 
 	~HttpBody();
 
@@ -29,24 +30,11 @@ public:
 	std::string getParam(const std::string& key);
 	std::vector<std::string> getParams(const std::string& key);
 
-	HttpBody& operator=(const HttpBody& rhs )
-	{
-		if ( &rhs == this )
-			return *this;
-
-		if ( reader_ )
-			delete reader_;
-		reader_ = rhs.reader_;
-		((HttpBody&)rhs).reader_ = 0;
-		body_ = rhs.body_;
-		queryParams_ = rhs.queryParams_;
-		return *this;
-	}
+	HttpBody& operator=(const HttpBody& rhs );
 
 protected:
 
-
-	AbstractBodyReader* reader_;
+	boost::shared_ptr<AbstractBodyReader> reader_;
 	std::string body_;
 
     typedef std::pair<std::string,std::string> KeyVal;
@@ -75,12 +63,15 @@ class HttpResponse
 public:
 
 	HttpResponse();
+	HttpResponse(const HttpResponse& rhs);
 	HttpResponse(const std::string& b);
 	HttpResponse(const std::string& b, const std::string& content_type);
 	~HttpResponse();
 
 	HttpHeaders headers;
 	HttpBody body;
+
+	HttpResponse& operator=(const HttpResponse& rhs );
 
 	AbstractBodyReader* reader();
 };
@@ -198,16 +189,12 @@ operator>> ( std::basic_istream<charT,Traits>& is, mol::HttpRequest& request)
 	// get body if content length known only
 	if ( request.headers.contentLengthIsKnown() )
 	{
-		//request.body.contentLength(request.headers.contentLength());
 		mol::ContentLengthBodyReader reader(request.headers.contentLength());
 		size_t s = reader.read(is);
-
 		if ( s )
 		{
 			request.body.body(reader.toString());
 		}
-
-		//is >> request.body;
 	}
 	return is;
 }
@@ -225,23 +212,19 @@ operator>> ( std::basic_istream<charT,Traits>& is, mol::HttpResponse& response)
 
 	// get body if any
 
-
-	mol::AbstractBodyReader* reader = response.reader();
-
-	size_t s = reader->read(is);
-	
 	if ( response.headers.getCode() == "304"  )
 	{
-		delete reader;
 		return is;
 	}
 
+	mol::AbstractBodyReader* reader = response.reader();
+
+	size_t s = reader->read(is);	
 	if ( s )
 	{
 		response.body = mol::HttpBody(reader);
 	}
 
-	//delete reader;
 	return is;
 }
 
@@ -255,8 +238,10 @@ operator<< ( std::basic_ostream<charT,Traits>& os, mol::HttpResponse& response)
 {
 	// write headers
 	os << response.headers;
+
 	// write body
 	os << response.body;
+
 	// flush the stream
 	os.flush();
 	return os;

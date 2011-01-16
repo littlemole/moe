@@ -6,7 +6,6 @@
 #include "openssl/err.h"
 #include "openssl/x509.h"
 #include "openssl/x509v3.h"
-//#include "openssl/ossl_typ.h"
 #include "openssl/pem.h"
 #include "util/x.h"
 #include "tcp/sockets.h"
@@ -46,13 +45,10 @@ public:
 	static void dyn_destroy_function(CRYPTO_dynlock_value* mutex,const char* file, int line);
 	static void locking_function(int mode, int n, const char* file, int line );
 	static unsigned long id_function();
-	static mol::Mutex* mutexe();//[CRYPTO_NUM_LOCKS];
+	static mol::Mutex* mutexe();
 
 private:
-	//static SSLContext ctx_;
 	static std::string pass_;
-	//static mol::Mutex mutex_[CRYPTO_NUM_LOCKS];
-
 	static int init();
 	static int init_();
 };
@@ -113,37 +109,6 @@ private:
 	X509*       cert_;
 };
 
-/*
-class SSLSocket : public mol::TCPsocket 
-{
-public:
-	SSLSocket();
-	SSLSocket(SSLContext& ctx);
-	SSLSocket(mol::TCPsocket& s);
-	SSLSocket(SSLContext& ctx, mol::TCPsocket& s);
-	SSLSocket(SSLContext& ctx, SOCKET s, SSL* ssl);
-	~SSLSocket();
-
-	bool SSL_connect( const std::string& host, int port = 443 );
-	int SSL_verifyCert();
-	int SSL_pending() { return ::SSL_pending(ssl_); }
-
-	SSLSocket*  SSL_accept( SOCKET s );
-
-	virtual int read( std::string& str );
-	virtual int read( std::string& str, int n );
-	virtual int readLine( std::string& line );
-	virtual int write( const std::string& c );
-
-	void sslShutdown();
-
-private:
-	BIO* bio_;
-	BIO* sbio_;
-	SSL* ssl_;
-	SSLContext* ctx_;
-};
-*/
 
 } // end namespace mol
 #endif
