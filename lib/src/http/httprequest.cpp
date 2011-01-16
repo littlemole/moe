@@ -4,29 +4,36 @@
 namespace mol {
 
 	
-HttpBody::HttpBody() 
-	:reader_(0)
+HttpBody::HttpBody() 	
 {}
 
 HttpBody::HttpBody(AbstractBodyReader* r)
-	:reader_(r)//,body_(r->toString())
+	:reader_(r)
 {}
 
 HttpBody::HttpBody(const std::string& b) 
-	:reader_(0), body_(b)
+	:body_(b)
 {}
 
+
+HttpBody::HttpBody(const HttpBody& rhs) 
+	:reader_(rhs.reader_), body_(rhs.body_)
+{
+}
+
 HttpBody::~HttpBody() 
-{
-	delete reader_;
-}
+{}
 
-/*
-HttpBody::HttpBody(HttpHeaders& headers) 
+HttpBody& HttpBody::operator=(const HttpBody& rhs )
 {
+	if ( &rhs == this )
+		return *this;
 
+	reader_ = rhs.reader_;
+	body_ = rhs.body_;
+	queryParams_ = rhs.queryParams_;
+	return *this;
 }
-*/
 
 const std::string& HttpBody::raw_body()		
 {
@@ -68,14 +75,13 @@ const std::string& HttpBody::body()
 void HttpBody::body( const std::string& b )			
 { 
 	body_ = b; 
-	delete reader_;
-	reader_ = 0;
+	reader_.reset();
 }
 
 
 void HttpBody::addParam  ( const std::string& key, const std::string& val  )
 {
-	body_ = "";
+	body("");
 	queryParams_.push_back( std::make_pair( key,val ) );
 }
 
@@ -111,6 +117,10 @@ HttpResponse::HttpResponse()
 	headers.setResponse("HTTP 200 OK");
 }
 
+HttpResponse::HttpResponse(const HttpResponse& rhs) 
+	: headers(rhs.headers),body(rhs.body)
+{}
+
 HttpResponse::HttpResponse(const std::string& b) 
 {
 	headers.setResponse("HTTP 200 OK");
@@ -129,6 +139,17 @@ HttpResponse::HttpResponse(const std::string& b, const std::string& content_type
 
 HttpResponse::~HttpResponse() 
 {}
+
+HttpResponse& HttpResponse::operator=(const HttpResponse& rhs)
+{
+	if ( &rhs == this )
+		return *this;
+
+	headers = rhs.headers;
+	body = rhs.body;
+	return *this;
+}
+
 
 AbstractBodyReader* HttpResponse::reader()
 {

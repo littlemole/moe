@@ -774,7 +774,7 @@ void MdiFrame::setMenu( HMENU newMenu, HMENU windowMenu   )
 		::DrawMenuBar( *this );
 	}
 }
-
+/*
 BOOL MdiFrame::destroy( )
 {
 	for (int i = this->count()-1; i >= 0; i-- )
@@ -792,7 +792,7 @@ BOOL MdiFrame::mdiDestroy( )
 	return mol::win::Wnd::destroy();
 	return TRUE;
 }
-
+*/
 void MdiFrame::redraw()
 {
 	::RedrawWindow(mdiClient(),0,0,RDW_FRAME|RDW_INVALIDATE);			

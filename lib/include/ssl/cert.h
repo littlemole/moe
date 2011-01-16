@@ -103,6 +103,8 @@ public:
 	X509* cert()		{ return cert_; }
 	X509V3_CTX& ctx()	{ return ctx_;  }
 
+	static void setSerial(long s) { serial = s; };
+
 private:
 	bool output( const std::string& filename, const std::string& mode );
 	bool addExt(const std::string& key, const std::string& val);

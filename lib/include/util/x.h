@@ -79,15 +79,16 @@ public :
 
 	X(const wchar_t* const& what)
 		//: std::exception(what)
-		:what_(0)
+		:what_("")
 	{}
 
     virtual const char* what() const throw()
 	{
-		return what_;
+		return what_.c_str();
 	}
 private:
-	const char* what_;
+	std::string what_;
+//	const char* what_;
 };
 
 
