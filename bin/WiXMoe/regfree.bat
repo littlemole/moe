@@ -59,6 +59,8 @@ mt.exe -manifest %DEPLOYDIR%\shellfolder.dll.isolated.manifest -outputresource:"
 IF ERRORLEVEL 1 GOTO hell
 
 
+mkdir "%DEPLOYDIR%\%PLAT%\%MODE%
+
 echo "%TARGETDIR%\zip.vbs" "%DEPLOYDIR%\%PLAT%\%MODE%\moe.zip" "%WORKDIR%"
 
 cscript "%TARGETDIR%\zip.vbs" "%DEPLOYDIR%\%PLAT%\%MODE%\moe.zip" "%WORKDIR%"

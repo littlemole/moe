@@ -8,7 +8,7 @@ For I = 0 to objArgs.Count - 1
 Next
 
 zip = "moe.zip"
-src = "Unicode Debug"
+src = "Uni_Debug"
 
 if objArgs.Count > 0 then
   zip = objArgs(0)
