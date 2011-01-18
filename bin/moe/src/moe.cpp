@@ -955,10 +955,11 @@ HRESULT __stdcall MoeWnd::Exit()
 		return hr;
 
 	long i = cnt;
-	while ( i > 0 )
+	//while ( i > 0 )
+	for( i = 0; i < cnt; i++ )
 	{
 		mol::punk<IMoeDocument> doc;
-		hr = docs()->Item( mol::variant(0), &doc );
+		hr = docs()->Item( mol::variant(i), &doc );
 		if( hr != S_OK )
 			return hr;
 
@@ -970,7 +971,7 @@ HRESULT __stdcall MoeWnd::Exit()
 		hr = view->Close();
 		if( hr != S_OK )
 			return S_FALSE;
-		i--;
+		//i--;
 	}
 
 	// if we have ribbon, maximize it before persistence
