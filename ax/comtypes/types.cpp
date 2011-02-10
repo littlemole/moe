@@ -249,6 +249,7 @@ void TypeLib2XML::tl_funcdesc(mol::TypeInfo& ti, MetaClass& meta, int fi )
 	delete[] names;
 
 	metafunc.dispid = fd->memid;
+	metafunc.vtindex = fd->oVft;
 	bstr doc;
 	ti.type_info->GetDocumentation(fd->memid,0,&doc,0,0);
 	metafunc.desc = doc.toString();

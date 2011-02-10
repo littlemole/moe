@@ -93,6 +93,7 @@ mol::string MetaFunc::out()
 		oss << _T("' ");
 
 		oss << _T("dispid='") << dispid << _T("' ");
+		oss << _T("vtindex='") << vtindex << _T("' ");
 		oss << _T("ctype='") << type << _T("' ");
 		oss << _T("param='");
 		if ( !params.empty() )
@@ -131,6 +132,7 @@ mol::string MetaFunc::out()
 
 		oss << _T("' ");
 		oss << _T("dispid='") << dispid << _T("' ");
+		oss << _T("vtindex='") << vtindex << _T("' ");
 		oss << _T("ctype='") << type << _T("' ");
 		if ( funkind != _T("") )
 			oss << _T(" funkind='") << funkind << _T("' ");

@@ -72,7 +72,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // TYPELIB
 //
 
-1                       TYPELIB                 ".\\Debug\\jre.tlb"
+1                       TYPELIB                 ".\\uni_debug\\jre.tlb"
 
 /////////////////////////////////////////////////////////////////////////////
 //

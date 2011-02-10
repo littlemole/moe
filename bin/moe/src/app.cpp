@@ -140,6 +140,7 @@ int MoeApp::runStandalone(const mol::string& cmdline)
 
 void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 {
+	
 	std::string cl = mol::tostring(cmdline);
 
 	mol::variant v;
