@@ -22,6 +22,26 @@ library JRE
 	importlib("stdole32.tlb");
 	//importlib("moe.tlb");
 
+	interface IJavaObject;
+
+	[ 
+	  uuid(EA028093-8B55-4D3B-8B0F-824301504455),
+      helpstring("IJavaClass - Java class"),
+      object,oleautomation, dual
+    ]
+	interface IJavaClass : IDispatch
+    {
+	}
+
+
+	[
+	  uuid(1900068C-D7A1-4654-9019-4F28DE1DE846),
+      helpstring("IJavaObject - Java Object"),
+      object,oleautomation, dual
+    ]
+	interface IJavaObject : IDispatch
+    {
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////
 	// IJVM
@@ -44,14 +64,8 @@ library JRE
 		[propget,id(2) ] 
 		HRESULT Libpath( [out,retval] BSTR* lp );
 
-		[id(3), helpstring("execute a Java class")] 
-		HRESULT Execute([in] BSTR classfile);
-
-		[id(4), helpstring("show a AWT/Swing form")] 
-		HRESULT Show([in] BSTR classfile);
-
-		[id(5), helpstring("init moe extension")] 
-		HRESULT Extension([in] BSTR classfile, [in] IDispatch* moe, [in] IDispatch* frame);
+		[id(DISPID_VALUE), helpstring("load java class")] 
+		HRESULT LoadClass([in] BSTR clazzName, [out,retval] IJavaClass** clazz);
 
 	}
 
@@ -67,7 +81,7 @@ library JRE
 		uuid(B3ED4D8C-7FDD-4177-BF47-3680A8E225BC),
 		helpstring("JRE - COM Object for Java VM interaction")
 	]
-	coclass JRE
+	coclass Java
 	{
 		[default]         interface     IJVM;
 	}

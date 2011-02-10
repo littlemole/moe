@@ -49,6 +49,7 @@ public:
 	bool isPropGet;
 
 	long dispid;
+	long vtindex;
 
 	std::list<MetaParam> params;
 
