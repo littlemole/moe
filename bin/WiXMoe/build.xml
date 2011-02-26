@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+ <!-- Configuration -->
+
+ <PropertyGroup Label="Configuration">
+
+  <!-- paths -->
+  <Configuration Condition=" '$(Configuration)' == '' ">uni_debug</Configuration>
+  <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
+
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' ">uni_debug</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' ">uni_release</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' ">x64\uni_debug</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' ">x64\uni_release</confPath>
+
+  <arch Condition=" '$(Platform)' == 'x64' ">x64</arch>
+  <arch Condition=" '$(Platform)' == 'Win32' ">x86</arch>
+
+  <!-- wix ui helper dll-->
+  <uiext>$(WIX)\bin\WixUIExtension.dll</uiext>
+
+  <!-- generated wix objects to link into .msi file -->
+  <genObj>obj\$(confPath)\gen.wixobj</genObj>
+  <moeObj>obj\$(confPath)\moe.wixobj</moeObj>
+  <monObj>obj\$(confPath)\mon.wixobj</monObj>
+
+  <!-- wix output file -->
+  <msiTarget>.\bin\$(confPath)\moeSetup.msi</msiTarget>
+
+  <!-- admin and non-privilegded user install packets -->
+  <deployTarget>.\deploy\$(confPath)\moeSetup.msi</deployTarget>
+  <deployTargetLight>.\deploy\$(confPath)\moeSetupLight.msi</deployTargetLight>
+
+  <!-- regfree -->
+  <regfree>deploy\regfree</regfree>
+  <regfreeTargetPath>deploy\regfree\$(confPath)</regfreeTargetPath>
+ </PropertyGroup>
+
+<!-- java source files -->
+ <ItemGroup>
+  <moeResourceFiles Include="..\moe\resources\deploy\**\*.*" Exclude="..\moe\resources\deploy\**\.svn\*.*" />
+  <SvnFolders Include=".\moe\**\*.svn" />
+  <moeFiles Include=".\moe\**\*.*" />
+ </ItemGroup>
+
+ <!-- Build -->
+
+
+ <Target Name="Build">
+
+		<Message Text="building Wix Installer JRE" />
+		<Message Text="Project Configuration = $(Configuration)" />
+		<Message Text="Project Platform = $(Platform)" />
+
+		<!-- prepare directory structure -->
+		<RemoveDir Directories=".\moe\*.*" />
+		<RemoveDir Directories=".\$(regfree)\moe;" />
+
+		<MakeDir Directories=".\moe"/>
+		<MakeDir Directories=".\moe\lib"/>
+		<MakeDir Directories=".\moe\lib\classes"/>
+		<MakeDir Directories=".\moe\lib\src"/>
+
+		<MakeDir Directories=".\deploy\$(confPath)"/>
+		<MakeDir Directories=".\$(regfree)\moe;" />
+		<MakeDir Directories=".\$(regfreeTargetPath)" />
+
+		<!-- copy files -->
+        <Copy
+            SourceFiles="@(moeResourceFiles)"
+            DestinationFiles="@(moeResourceFiles->'.\moe\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+        <Copy
+            SourceFiles="..\moe\resources\moe.ico"
+            DestinationFiles=".\moe\moe.ico"
+        />
+
+        <Copy
+            SourceFiles="..\moe\$(confPath)\moe.exe"
+            DestinationFolder=".\moe"
+        />
+        <Copy
+            SourceFiles="..\prw\prw\$(confPath)\prw.exe"
+            DestinationFolder=".\moe"
+        />
+
+        <Copy
+            SourceFiles="..\..\ax\io\$(confPath)\io.dll"
+            DestinationFolder=".\moe"
+        />
+        <Copy
+            SourceFiles="..\..\ax\process\$(confPath)\pipedprocess.dll"
+            DestinationFolder=".\moe"
+        />
+        <Copy
+            SourceFiles="..\..\ax\comtypes\$(confPath)\comtypes.dll"
+            DestinationFolder=".\moe"
+        />
+        <Copy
+            SourceFiles="..\..\ax\scintillax\$(confPath)\scintillax.dll"
+            DestinationFolder=".\moe"
+        />
+        <Copy
+            SourceFiles="..\..\ax\setting\$(confPath)\setting.dll"
+            DestinationFolder=".\moe"
+        />
+
+        <Copy
+            SourceFiles="..\..\ax\shellctrl\$(confPath)\shellctrl.dll"
+            DestinationFolder=".\moe"
+        />
+
+        <Copy
+            SourceFiles="..\..\ax\shellfolder\$(confPath)\shellfolder.dll"
+            DestinationFolder=".\moe"
+        />
+
+		<RemoveDir Directories="@(SvnFolders)" />
+
+		<!-- heat -->
+		<Exec Command='"$(WIX)\bin\heat.exe" dir . -gg -cg "MoeCompGroup" -dr INSTALLLOCATION -var var.SourceDir  -o ..\gen.wxs' WorkingDirectory="./moe"/>
+
+        <!-- candle -->
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(genObj)" gen.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(moeObj)" moe.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(monObj)" MondoNoLicense.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+        <!-- light -->
+		<Exec Command='"$(WIX)\bin\light.exe" -ext "$(uiext)" -out "$(msiTarget)" -cultures:en-us -loc en-us.wxl "$(genObj)" "$(moeObj)" "$(monObj)"' WorkingDirectory="."/>
+
+
+		<!-- nonadmin install -->
+        <Copy
+            SourceFiles="$(msiTarget)"
+            DestinationFiles="$(deployTargetLight)"
+        />
+
+		<Exec Command='cscript "..\..\cg\bin\patchMSI.wsf" $(deployTargetLight)' WorkingDirectory="."/>
+
+		<!-- admin install -->
+
+        <Copy
+            SourceFiles="$(msiTarget)"
+            DestinationFiles="$(deployTarget)"
+        />
+
+		<!-- regfree -->
+
+        <Copy
+            SourceFiles="@(moeFiles)"
+            DestinationFiles="@(moeFiles->'.\$(regfree)\moe\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+
+		<Exec Command='mt.exe -manifest .\$(regfree)\moe.exe.isolated.manifest -outputresource:".\$(regfree)\moe\moe.exe;#1" -hashupdate -validate_manifest -verbose' WorkingDirectory="."/>
+		<Exec Command='mt.exe -manifest .\$(regfree)\io.dll.isolated.manifest -outputresource:".\$(regfree)\moe\io.dll;#2" -verbose' WorkingDirectory="."/>
+		<Exec Command='mt.exe -manifest .\$(regfree)\comtypes.dll.isolated.manifest -outputresource:".\$(regfree)\moe\comtypes.dll;#2" -verbose' WorkingDirectory="."/>
+		<Exec Command='mt.exe -manifest .\$(regfree)\setting.dll.isolated.manifest -outputresource:".\$(regfree)\moe\setting.dll;#2" -verbose' WorkingDirectory="."/>
+		<Exec Command='mt.exe -manifest .\$(regfree)\pipedprocess.dll.isolated.manifest -outputresource:".\$(regfree)\moe\pipedprocess.dll;#2" -verbose' WorkingDirectory="."/>
+		<Exec Command='mt.exe -manifest .\$(regfree)\shellctrl.dll.isolated.manifest -outputresource:".\$(regfree)\moe\shellctrl.dll;#2" -verbose' WorkingDirectory="."/>
+		<Exec Command='mt.exe -manifest .\$(regfree)\scintillax.dll.isolated.manifest -outputresource:".\$(regfree)\moe\scintillax.dll;#2" -verbose' WorkingDirectory="."/>
+		<Exec Command='mt.exe -manifest .\$(regfree)\shellfolder.dll.isolated.manifest -outputresource:".\$(regfree)\moe\shellfolder.dll;#2" -verbose' WorkingDirectory="."/>
+
+		<Exec Command='cscript "..\..\cg\bin\zip.vbs" "$(regfreeTargetPath)\moe.zip" "$(regfree)\moe"' WorkingDirectory="."/>
+
+ </Target>
+
+
+<!-- Clean -->
+
+ <Target Name="Clean">
+    <RemoveDir Directories=".\deploy\$(confPath)\**\*.*;" />
+    <RemoveDir Directories=".\bin\**\*.*;" />
+    <RemoveDir Directories=".\moe\**\*.*" />
+	<RemoveDir Directories=".\$(regfree)\moe\**\*.*;" />
+	<RemoveDir Directories=".\$(regfreeTargetPath)" />
+ </Target>
+
+ <Target Name="3dParty">
+		<MSBuild Projects=".\3dParty\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+        <MSBuild Projects=".\3dParty\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Full" />
+ </Target>
+
+ <Target Name="Universe">
+        <CallTarget Targets="3dParty"/>
+  	    <CallTarget Targets="Build"/>
+ </Target>
+
+</Project>
