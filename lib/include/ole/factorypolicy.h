@@ -19,17 +19,17 @@ namespace ole {
 // aggregation policies
 //////////////////////////////////////////////////////////////////////
 
+template<class T,class P  = mol::com_instance<T> >
 class AggregationPolicyNonAggregable
 {
 public:
 
-	template<class T>
 	static HRESULT __stdcall CreateInstance( IUnknown* pIUOuter, REFIID riid, void** ppVoid )
 	{
 			if ( pIUOuter != 0 )
 				return CLASS_E_NOAGGREGATION;
 
-			com_instance<T>* t = new com_instance<T>;
+			P* t = new P;
 
 			t->AddRef();
 			HRESULT hr = t->QueryInterface(riid,ppVoid);
@@ -40,17 +40,17 @@ public:
 
 //////////////////////////////////////////////////////////////////////
 
+template<class T, class P  = mol::com_instance_agg<T> >
 class AggregationPolicyAggregable
 {
 public:
 
-	template<class T>
 	static HRESULT __stdcall CreateInstance( IUnknown* pIUOuter, REFIID riid, void** ppVoid )
 	{
 		if ( pIUOuter == 0 )
-			return AggregationPolicyNonAggregable::CreateInstance<T>( pIUOuter, riid, ppVoid );
+			return AggregationPolicyNonAggregable<T,mol::com_instance<T> >::CreateInstance( pIUOuter, riid, ppVoid );
 
-		com_instance_agg<T>* at = new com_instance_agg<T>(pIUOuter);
+		P* at = new P(pIUOuter);
 
 		at->AddRef();
 		HRESULT hr = at->QueryInterface(riid,ppVoid);
@@ -64,14 +64,14 @@ public:
 // creation policies (multi or singleton)
 //////////////////////////////////////////////////////////////////////
 
-template<class T, class P=AggregationPolicyNonAggregable>
+template<class T, class P=AggregationPolicyNonAggregable<T,mol::com_instance<T> > >
 class ComCreatePolicy
 {
 public:
 
 	HRESULT virtual __stdcall CreateInstance( IUnknown* pIUOuter, REFIID riid, void** ppVoid )
 	{
-		return P::CreateInstance<T>( pIUOuter, riid, ppVoid );
+		return P::CreateInstance( pIUOuter, riid, ppVoid );
 	}
 };
 

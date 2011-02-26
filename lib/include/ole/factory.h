@@ -21,7 +21,7 @@ namespace ole {
 // class factory
 //////////////////////////////////////////////////////////////////////
 
-template<class T, class P = ComCreatePolicy<T,AggregationPolicyNonAggregable> >
+template<class T, class P = ComCreatePolicy<T,AggregationPolicyNonAggregable<T> > >
 class ClassFactory : 
 	public IClassFactory,
 	public interfaces< ClassFactory<T,P>, implements<IClassFactory> >
@@ -99,7 +99,7 @@ public:
 template< class T, 
 		  class P = ComCreatePolicy<
 						T,
-						AggregationPolicyNonAggregable>, 
+						AggregationPolicyNonAggregable<T> >, 
 		  const REGCLS cls = REGCLS_SINGLEUSE >
 
 class CreatableObjectHolder 
@@ -327,7 +327,7 @@ public:
 			 ( _tcsicmp(cmdline.c_str(), _T("-Automation")) == 0 ) )
 		{
 			// create & register Class Object
-			RegisterClassObjects(CLSCTX_LOCAL_SERVER );
+			//RegisterClassObjects(CLSCTX_LOCAL_SERVER );
 			return runEmbedded(cmdline);	
 		}
 
@@ -412,7 +412,7 @@ protected:
 	}
 };
 
-template<class T,class O>
+template<class T,class O,class P = mol::ole::ComCreatePolicy<O> >
 class exports
 {
 public:
@@ -420,7 +420,7 @@ public:
  {
 	 ((T*)this)->objects_.push_back(
 		 new mol::ole::CreatableObjectHolder< O,
-								        mol::ole::ComCreatePolicy<O>,
+								        P,
 										O::RegCls
 			                          >				
 									  );
@@ -435,7 +435,7 @@ public:
  {
 	 ((T*)this)->objects_.push_back(
 			new mol::ole::CreatableObjectHolder< O,
-										mol::ole::ComCreatePolicy< O, mol::ole::AggregationPolicyAggregable >,
+										mol::ole::ComCreatePolicy< O, mol::ole::AggregationPolicyAggregable<O> >,
 										O::RegCls
 			                          >				
 									  );
