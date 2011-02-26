@@ -1,0 +1,66 @@
+<typelib name='PipedProcess' 
+desc='PipedProcess lib - pipe external processes' 
+typeinfocount='4' 
+guid='{9E61E3FC-FC64-4164-A9AC-BDEDC3116BA7}' 
+major='1' 
+minor='0' 
+file='..\..\..\..\ax\process\x64\uni_debug\pipedprocess.tlb'>
+
+<interface name='IPipedProcess' type='Dual' iid='{263ABFD3-6D9F-4C0B-861A-4D22E0AA9529}' base='IDispatch' members='12' desc='' >
+ <property name='Async' type='VARIANT_BOOL*' dispid='1' vtindex='56' ctype='HRESULT' param='vb' desc='set async mode'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='readyState' type='long*' dispid='2' vtindex='72' ctype='HRESULT' param='state' desc='retrieve readystate for asynchronous documentation'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='Eof' type='VARIANT_BOOL*' dispid='3' vtindex='80' ctype='HRESULT' param='vb' desc='detect EOF on external process stdout'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='ErrEof' type='VARIANT_BOOL*' dispid='4' vtindex='88' ctype='HRESULT' param='vb' desc='detect EOF on external process stderr'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <method name='Create' type='VARIANT_BOOL*' dispid='5' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Create a piped Process specified by commandline' >
+  <param type='BSTR' dir='IN' name='cmdline' />
+ </method>
+ <method name='Write' type='VARIANT_BOOL*' dispid='6' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Write to external processes stdin' >
+  <param type='BSTR' dir='IN' name='s' />
+ </method>
+ <method name='CloseOut' type='void' dispid='7' vtindex='112' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Close output stream to external process stdin' >
+ </method>
+ <method name='ReadLine' type='BSTR*' dispid='8' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='ReadLine from external process stdout' >
+ </method>
+ <method name='ReadErrLine' type='BSTR*' dispid='9' vtindex='128' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='ReadLine from external process stderr' >
+ </method>
+ <method name='Close' type='void' dispid='10' vtindex='136' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='kindly clean up after external process completed. safe way to cleanup, or release all references' >
+ </method>
+ <method name='Terminate' type='void' dispid='11' vtindex='144' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Terminate running external process! UNSAFE! use as last ressort!' >
+ </method>
+ <property name='onComplete' type='IDispatch*' dispid='12' vtindex='152' ctype='HRESULT' param='param0' desc='onComplete javascript event property'  funkind='virtual'  calltype='__stdcall' >
+ <put />
+</property>
+</interface>
+
+
+<interface name='_IPipedProcessComplete' iid='{2CA957E0-4A1D-4E57-AA42-94E9B0701B26}' base='IDispatch' members='1' desc='' >
+ <method name='onComplete' type='void' dispid='1' vtindex='0' ctype='void'  calltype='__stdcall' desc='piped process completed' >
+ </method>
+</interface>
+
+
+<interface name='IPipedProcessCompleteDual' type='Dual' iid='{7FBB9268-45D9-43DF-BE32-A5FFED60B456}' base='IDispatch' members='1' desc='' >
+ <method name='onComplete' type='void' dispid='1' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='piped process completed' >
+ </method>
+</interface>
+
+
+
+<object name='PipedProcessControl' guid='{3E08871B-09B9-4E04-B9F7-64D2F9F4E854}' major='1' minor='0' progId='PipedProcess.PipedProcessControl' desc='PipedProcess lib - pipe external processes' >
+<implements type='IPipedProcess' guid='{3E08871B-09B9-4E04-B9F7-64D2F9F4E854}' default='true'  />
+<implements type='_IPipedProcessComplete' guid='{3E08871B-09B9-4E04-B9F7-64D2F9F4E854}' default='true' source='true'  />
+</object>
+
+
+
+
+</typelib>

@@ -1,0 +1,533 @@
+<typelib name='Moe' 
+desc='moe type library' 
+typeinfocount='17' 
+guid='{E5769EB9-ADD9-41E5-8D3D-D925C7FC0C29}' 
+major='1' 
+minor='0' 
+file='..\..\..\..\bin\moe\x64\uni_debug\moe.tlb'>
+
+<interface name='IWebBrowserEvents' type='Dual' iid='{F010AA89-5CF5-4BCE-BABE-5ADAE3D300EB}' base='IDispatch' members='32' desc='' >
+ <method name='StatusTextChange' type='void' dispid='102' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Statusbar text changed.' >
+  <param type='BSTR' dir='IN' name='Text' />
+ </method>
+ <method name='ProgressChange' type='void' dispid='108' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when download progress is updated.' >
+  <param type='long' dir='IN' name='Progress' />
+  <param type='long' dir='IN' name='ProgressMax' />
+ </method>
+ <method name='CommandStateChange' type='void' dispid='105' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='The enabled state of a command changed.' >
+  <param type='long' dir='IN' name='Command' />
+  <param type='VARIANT_BOOL' dir='IN' name='Enable' />
+ </method>
+ <method name='DownloadBegin' type='void' dispid='106' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Download of a page started.' >
+ </method>
+ <method name='DownloadComplete' type='void' dispid='104' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Download of page complete.' >
+ </method>
+ <method name='TitleChange' type='void' dispid='113' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Document title changed.' >
+  <param type='BSTR' dir='IN' name='Text' />
+ </method>
+ <method name='PropertyChange' type='void' dispid='112' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when the PutProperty method has been called.' >
+  <param type='BSTR' dir='IN' name='szProperty' />
+ </method>
+ <method name='BeforeNavigate2' type='void' dispid='250' vtindex='112' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired before navigate occurs in the given WebBrowser (window or frameset element). The processing of this navigation may be modified.' >
+  <param type='IDispatch*' dir='IN' name='pDisp' />
+  <param type='VARIANT*' dir='IN' name='URL' />
+  <param type='VARIANT*' dir='IN' name='Flags' />
+  <param type='VARIANT*' dir='IN' name='TargetFrameName' />
+  <param type='VARIANT*' dir='IN' name='PostData' />
+  <param type='VARIANT*' dir='IN' name='Headers' />
+  <param type='VARIANT_BOOL*' dir='IN,OUT' name='Cancel' />
+ </method>
+ <method name='NewWindow2' type='void' dispid='251' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='A new, hidden, non-navigated WebBrowser window is needed.' >
+  <param type='IDispatch**' dir='IN,OUT' name='ppDisp' />
+  <param type='VARIANT_BOOL*' dir='IN,OUT' name='Cancel' />
+ </method>
+ <method name='NavigateComplete2' type='void' dispid='252' vtindex='128' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when the document being navigated to becomes visible and enters the navigation stack.' >
+  <param type='IDispatch*' dir='IN' name='pDisp' />
+  <param type='VARIANT*' dir='IN' name='URL' />
+ </method>
+ <method name='DocumentComplete' type='void' dispid='259' vtindex='136' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when the document being navigated to reaches ReadyState_Complete.' >
+  <param type='IDispatch*' dir='IN' name='pDisp' />
+  <param type='VARIANT*' dir='IN' name='URL' />
+ </method>
+ <method name='OnQuit' type='void' dispid='253' vtindex='144' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when application is quiting.' >
+ </method>
+ <method name='OnVisible' type='void' dispid='254' vtindex='152' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when the window should be shown/hidden' >
+  <param type='VARIANT_BOOL' dir='IN' name='Visible' />
+ </method>
+ <method name='OnToolBar' type='void' dispid='255' vtindex='160' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when the toolbar  should be shown/hidden' >
+  <param type='VARIANT_BOOL' dir='IN' name='ToolBar' />
+ </method>
+ <method name='OnMenuBar' type='void' dispid='256' vtindex='168' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when the menubar should be shown/hidden' >
+  <param type='VARIANT_BOOL' dir='IN' name='MenuBar' />
+ </method>
+ <method name='OnStatusBar' type='void' dispid='257' vtindex='176' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when the statusbar should be shown/hidden' >
+  <param type='VARIANT_BOOL' dir='IN' name='StatusBar' />
+ </method>
+ <method name='OnFullScreen' type='void' dispid='258' vtindex='184' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when fullscreen mode should be on/off' >
+  <param type='VARIANT_BOOL' dir='IN' name='FullScreen' />
+ </method>
+ <method name='OnTheaterMode' type='void' dispid='260' vtindex='192' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when theater mode should be on/off' >
+  <param type='VARIANT_BOOL' dir='IN' name='TheaterMode' />
+ </method>
+ <method name='WindowSetResizable' type='void' dispid='262' vtindex='200' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when the host window should allow/disallow resizing' >
+  <param type='VARIANT_BOOL' dir='IN' name='Resizable' />
+ </method>
+ <method name='WindowSetLeft' type='void' dispid='264' vtindex='208' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when the host window should change its Left coordinate' >
+  <param type='long' dir='IN' name='Left' />
+ </method>
+ <method name='WindowSetTop' type='void' dispid='265' vtindex='216' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when the host window should change its Top coordinate' >
+  <param type='long' dir='IN' name='Top' />
+ </method>
+ <method name='WindowSetWidth' type='void' dispid='266' vtindex='224' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when the host window should change its width' >
+  <param type='long' dir='IN' name='Width' />
+ </method>
+ <method name='WindowSetHeight' type='void' dispid='267' vtindex='232' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when the host window should change its height' >
+  <param type='long' dir='IN' name='Height' />
+ </method>
+ <method name='WindowClosing' type='void' dispid='263' vtindex='240' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when the WebBrowser is about to be closed by script' >
+  <param type='VARIANT_BOOL' dir='IN' name='IsChildWindow' />
+  <param type='VARIANT_BOOL*' dir='IN,OUT' name='Cancel' />
+ </method>
+ <method name='ClientToHostWindow' type='void' dispid='268' vtindex='248' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired to request client sizes be converted to host window sizes' >
+  <param type='long*' dir='IN,OUT' name='CX' />
+  <param type='long*' dir='IN,OUT' name='CY' />
+ </method>
+ <method name='SetSecureLockIcon' type='void' dispid='269' vtindex='256' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired to indicate the security level of the current web page contents' >
+  <param type='long' dir='IN' name='SecureLockIcon' />
+ </method>
+ <method name='FileDownload' type='void' dispid='270' vtindex='264' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired to indicate the File Download dialog is opening' >
+  <param type='VARIANT_BOOL*' dir='IN,OUT' name='Cancel' />
+ </method>
+ <method name='NavigateError' type='void' dispid='271' vtindex='272' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when a binding error occurs (window or frameset element).' >
+  <param type='IDispatch*' dir='IN' name='pDisp' />
+  <param type='VARIANT*' dir='IN' name='URL' />
+  <param type='VARIANT*' dir='IN' name='Frame' />
+  <param type='VARIANT*' dir='IN' name='StatusCode' />
+  <param type='VARIANT_BOOL*' dir='IN,OUT' name='Cancel' />
+ </method>
+ <method name='PrintTemplateInstantiation' type='void' dispid='225' vtindex='280' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when a print template is instantiated.' >
+  <param type='IDispatch*' dir='IN' name='pDisp' />
+ </method>
+ <method name='PrintTemplateTeardown' type='void' dispid='226' vtindex='288' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when a print template destroyed.' >
+  <param type='IDispatch*' dir='IN' name='pDisp' />
+ </method>
+ <method name='UpdatePageStatus' type='void' dispid='227' vtindex='296' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when a page is spooled. When it is fired can be changed by a custom template.' >
+  <param type='IDispatch*' dir='IN' name='pDisp' />
+  <param type='VARIANT*' dir='IN' name='nPage' />
+  <param type='VARIANT*' dir='IN' name='fDone' />
+ </method>
+ <method name='PrivacyImpactedStateChange' type='void' dispid='272' vtindex='304' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Fired when the global privacy impacted state changes' >
+  <param type='VARIANT_BOOL' dir='IN' name='bImpacted' />
+ </method>
+</interface>
+
+
+<interface name='IMoe' type='Dual' iid='{8C2C5817-4747-4DA4-B588-75612B7608A2}' base='IDispatch' members='7' desc='' >
+ <property name='Documents' type='IMoeDocumentCollection**' dispid='1' vtindex='56' ctype='HRESULT' param='d' desc='Get MDI Child Documents Collection'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='View' type='IMoeView**' dispid='2' vtindex='64' ctype='HRESULT' param='d' desc='Get the View Object for this moe main window'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='ActiveDoc' type='IMoeDocument**' dispid='3' vtindex='72' ctype='HRESULT' param='d' desc='Get Active MDI Document Reference'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='Config' type='IMoeConfig**' dispid='4' vtindex='80' ctype='HRESULT' param='d' desc='Get Runtime Config '  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='Script' type='IMoeScript**' dispid='5' vtindex='88' ctype='HRESULT' param='d' desc='Get Moe Script Interface'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='Dialogs' type='IMoeDialogs**' dispid='6' vtindex='96' ctype='HRESULT' param='d' desc='Get Moe Dialogs Interface'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <method name='Exit' type='void' dispid='7' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Exit Moe Editor and close the App' >
+ </method>
+</interface>
+
+
+<interface name='IMoeDocumentCollection' type='Dual' iid='{B2FC978E-28F5-49E0-B363-8C78DE7FC50F}' base='IDispatch' members='17' desc='' >
+ <method name='_NewEnum' type='IEnumVARIANT**' dispid='-4' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='New Enum - enable iteration from script' >
+ </method>
+ <method name='Item' type='IMoeDocument**' dispid='0' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Item - retrieve child document by numeric or string (full document path) index' >
+  <param type='VARIANT' dir='IN' name='i' />
+ </method>
+ <property name='Count' type='long*' dispid='1' vtindex='72' ctype='HRESULT' param='cnt' desc='Count number of child documents'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='ActiveDoc' type='IMoeDocument**' dispid='2' vtindex='80' ctype='HRESULT' param='d' desc='Get Active MDI Document Reference'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <method name='New' type='IMoeDocument**' dispid='3' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Create new, empty (Text-Editor) MDI Child Document' >
+ </method>
+ <method name='Open' type='IMoeDocument**' dispid='4' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open existing Document in Text-Editor' >
+  <param type='BSTR' dir='IN' name='fPath' />
+ </method>
+ <method name='OpenUTF8' type='IMoeDocument**' dispid='5' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open Document in Text-Editor, forcing UTF-8 mode' >
+  <param type='BSTR' dir='IN' name='fPath' />
+ </method>
+ <method name='OpenDir' type='IMoeDocument**' dispid='6' vtindex='112' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open Directory View as MDI child' >
+  <param type='BSTR' dir='IN' name='dir' />
+ </method>
+ <method name='OpenHexEditor' type='IMoeDocument**' dispid='7' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open document file in Hex Viewer' >
+  <param type='BSTR' dir='IN' name='f' />
+  <param type='VARIANT_BOOL' dir='IN' name='vbReadOnly' />
+ </method>
+ <method name='OpenHtmlFrame' type='IMoeDocument**' dispid='8' vtindex='128' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open HTML Document as MDI Child (embedded IE)' >
+  <param type='BSTR' dir='IN' name='f' />
+ </method>
+ <method name='OpenUserForm' type='IMoeDocument**' dispid='9' vtindex='136' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Edit a User Form' >
+  <param type='BSTR' dir='IN' name='pathname' />
+ </method>
+ <method name='NewUserForm' type='IMoeDocument**' dispid='10' vtindex='144' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='New User Form' >
+ </method>
+ <method name='Activate' type='void' dispid='11' vtindex='152' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Activate MDI document with index by number or full-path' >
+  <param type='VARIANT' dir='IN' name='i' />
+ </method>
+ <method name='SaveAll' type='void' dispid='12' vtindex='160' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Save All open MDI documents' >
+ </method>
+ <method name='CloseAll' type='void' dispid='13' vtindex='168' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Close All open MDI documents' >
+ </method>
+ <method name='Remove' type='void' dispid='14' vtindex='176' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Remove and close document at index / with given path' >
+  <param type='VARIANT' dir='IN' name='index' />
+ </method>
+ <method name='Move' type='void' dispid='15' vtindex='184' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Move object from index/path to new index' >
+  <param type='VARIANT' dir='IN' name='what' />
+  <param type='VARIANT' dir='IN' name='to' />
+ </method>
+</interface>
+
+
+<interface name='IMoeDocument' type='Dual' iid='{F1D065C3-DE27-45C7-A684-C0EECF43AF3E}' base='IDispatch' members='6' desc='' >
+ <property name='Object' type='IDispatch**' dispid='0' vtindex='56' ctype='HRESULT' param='d' desc='Get the embdded Document Object for this moe MDI Document'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='View' type='IMoeDocumentView**' dispid='1' vtindex='64' ctype='HRESULT' param='d' desc='Get the View Object for this moe MDI Document'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='FilePath' type='BSTR*' dispid='2' vtindex='72' ctype='HRESULT' param='dname' desc='Get document full path'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='Type' type='long*' dispid='3' vtindex='80' ctype='HRESULT' param='typ' desc='Get Document Type (MOE_DOCTYPE)'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <method name='Save' type='void' dispid='4' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Save Document' >
+ </method>
+ <method name='SaveAs' type='void' dispid='5' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Save Document As' >
+  <param type='BSTR' dir='IN' name='f' />
+ </method>
+</interface>
+
+
+<interface name='IMoeDocumentView' type='Dual' iid='{9ADC66FD-13AB-4B52-A92B-5155EA1EF83C}' base='IDispatch' members='11' desc='' >
+ <property name='Top' type='long' dispid='1' vtindex='56' ctype='HRESULT' param='t' desc='Get/Set Top position of window'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Left' type='long' dispid='2' vtindex='72' ctype='HRESULT' param='l' desc='Get/Set Left position of window'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Height' type='long' dispid='3' vtindex='88' ctype='HRESULT' param='h' desc='Get/Set Height of window'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Width' type='long' dispid='4' vtindex='104' ctype='HRESULT' param='w' desc='Get/Set Width of window'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <method name='Show' type='void' dispid='5' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Show Window' >
+ </method>
+ <method name='Hide' type='void' dispid='6' vtindex='128' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Hide Window' >
+ </method>
+ <method name='Close' type='void' dispid='7' vtindex='136' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Close the Window' >
+ </method>
+ <method name='Minimize' type='void' dispid='8' vtindex='144' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Minimize MDI Document' >
+ </method>
+ <method name='Maximize' type='void' dispid='9' vtindex='152' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Maximize MDI Document' >
+ </method>
+ <method name='Restore' type='void' dispid='10' vtindex='160' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Restore MDI Document' >
+ </method>
+ <method name='Activate' type='void' dispid='11' vtindex='168' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Activate MDI Document' >
+ </method>
+</interface>
+
+
+<interface name='IMoeView' type='Dual' iid='{E6F7C726-4A4A-487F-8DEA-0854229C1BCB}' base='IDispatch' members='14' desc='' >
+ <property name='Top' type='long' dispid='1' vtindex='56' ctype='HRESULT' param='t' desc='Get/Set Top window position'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Left' type='long' dispid='2' vtindex='72' ctype='HRESULT' param='l' desc='Get/Set Left window position '  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Height' type='long' dispid='3' vtindex='88' ctype='HRESULT' param='h' desc='Get/Set Height of window'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Width' type='long' dispid='4' vtindex='104' ctype='HRESULT' param='w' desc='Get/Set Width of window'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <method name='Show' type='void' dispid='5' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Show main window' >
+ </method>
+ <method name='Hide' type='void' dispid='6' vtindex='128' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='hide main window' >
+ </method>
+ <method name='Minimize' type='void' dispid='7' vtindex='136' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Minimize application main window' >
+ </method>
+ <method name='Maximize' type='void' dispid='8' vtindex='144' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Maximize application main window' >
+ </method>
+ <method name='Restore' type='void' dispid='9' vtindex='152' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Restore application main window' >
+ </method>
+ <method name='Tile' type='void' dispid='10' vtindex='160' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Tile application MDI child windows' >
+ </method>
+ <method name='Cascade' type='void' dispid='11' vtindex='168' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Cascade application MDI child windows' >
+ </method>
+ <property name='ShowTreeView' type='VARIANT_BOOL' dispid='12' vtindex='176' ctype='HRESULT' param='vb' desc='Show/Hide the TreeView (SideBar) Control'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='TreeView' type='IDispatch**' dispid='13' vtindex='192' ctype='HRESULT' param='tv' desc='get a object reference to the TreeView (SideBar) Control'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='FullScreen' type='VARIANT_BOOL' dispid='14' vtindex='200' ctype='HRESULT' param='vb' desc='Get/Set fullscreen'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+</interface>
+
+
+<interface name='IMoeConfig' type='Dual' iid='{4DE6729C-2F79-471F-82CB-51137A02E490}' base='IDispatch' members='14' desc='' >
+ <property name='ConfigPath' type='BSTR*' dispid='1' vtindex='56' ctype='HRESULT' param='fPath' desc='Get Configuration Files Path on local system'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='ModulePath' type='BSTR*' dispid='2' vtindex='64' ctype='HRESULT' param='fPath' desc='Get Path to moe executable on local system'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='SysType' type='long' dispid='3' vtindex='72' ctype='HRESULT' param='typ' desc='Get/Set SysType to UNIX/WIN32 (SCINTILLA_SYSTYPE)'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Encoding' type='long' dispid='4' vtindex='88' ctype='HRESULT' param='typ' desc='Set Encoding ie UTF-8, Ansi, ... (SCINTILLA_ENCODING)'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='TabUsage' type='VARIANT_BOOL' dispid='5' vtindex='104' ctype='HRESULT' param='vbTabUsage' desc='Get/Set Usage of Tab Characters, false converts tabs to spaces'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='TabIndents' type='VARIANT_BOOL' dispid='6' vtindex='120' ctype='HRESULT' param='vbTabIndents' desc='Get/Set whether Tabulator keystrokes do code-indent'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='BackSpaceUnindents' type='VARIANT_BOOL' dispid='7' vtindex='136' ctype='HRESULT' param='vbBackSpaceIndents' desc='Get/Set wether BackSpace keystrokes unindent (code-indention)'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='TabWidth' type='long' dispid='8' vtindex='152' ctype='HRESULT' param='w' desc='Get/Set width of Tabulator in spaces'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='ShowLineNumbers' type='VARIANT_BOOL' dispid='9' vtindex='168' ctype='HRESULT' param='vb' desc='Show Line Numbers'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <method name='EditPreferences' type='void' dispid='10' vtindex='184' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Show User Preferences for new opened documents dialog' >
+ </method>
+ <method name='EditSettings' type='void' dispid='11' vtindex='192' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Show User Custom Settings dialog' >
+ </method>
+ <method name='ExportSettings' type='void' dispid='12' vtindex='200' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Export User Settings to file' >
+  <param type='BSTR' dir='IN' name='f' />
+ </method>
+ <method name='ImportSettings' type='void' dispid='13' vtindex='208' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Import User Settings from file' >
+  <param type='BSTR' dir='IN' name='f' />
+ </method>
+ <method name='InitializeEditorFromPreferences' type='void' dispid='14' vtindex='216' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Initiaize Editor with default values' >
+  <param type='IMoeDocument*' dir='IN' name='d' />
+ </method>
+</interface>
+
+
+<interface name='IMoeScript' type='Dual' iid='{809CE6F6-C2DE-4D8B-A7F2-C2FFD581E49C}' base='IDispatch' members='8' desc='' >
+ <method name='Run' type='void' dispid='1' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Run a Script from disk inside moe context' >
+  <param type='BSTR' dir='IN' name='f' />
+  <param type='BSTR' dir='IN' name='engine' />
+ </method>
+ <method name='Eval' type='void' dispid='2' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Evaluate a Script given as text inside moe context' >
+  <param type='BSTR' dir='IN' name='scrpt' />
+  <param type='BSTR' dir='IN' name='scrptLanguage' />
+ </method>
+ <method name='Debug' type='void' dispid='3' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Debug a Script given as text inside moe context' >
+  <param type='BSTR' dir='IN' name='scrpt' />
+  <param type='BSTR' dir='IN' name='scrptLanguage' />
+ </method>
+ <method name='CreateObjectAdmin' type='IDispatch**' dispid='4' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='CreateObjectAdmin - creates new COM object via UAC COM Moniker' >
+  <param type='BSTR' dir='IN' name='progid' />
+ </method>
+ <method name='ShowHtmlForm' type='void' dispid='5' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Show a user-defined HTML Form' >
+  <param type='BSTR' dir='IN' name='src' />
+  <param type='long' dir='IN' name='l' />
+  <param type='int' dir='IN' name='t' />
+  <param type='int' dir='IN' name='w' />
+  <param type='int' dir='IN' name='h' />
+  <param type='int' dir='IN' name='formStyle' />
+ </method>
+ <method name='ShowUserForm' type='IMoeUserForm**' dispid='6' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Edit a User Form Module with moe' >
+  <param type='BSTR' dir='IN' name='pathname' />
+ </method>
+ <method name='DebugUserForm' type='IMoeUserForm**' dispid='7' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Show a User Form in Debug Mode' >
+  <param type='BSTR' dir='IN' name='pathname' />
+ </method>
+ <method name='System' type='void' dispid='8' vtindex='112' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Execute a Shell command' >
+  <param type='BSTR' dir='IN' name='f' />
+ </method>
+</interface>
+
+
+<interface name='IMoeUserForm' type='Dual' iid='{0DFFAACE-906D-4545-853A-BEE593283BDB}' base='IDispatch' members='7' desc='' >
+ <property name='Object' type='IDispatch**' dispid='0' vtindex='56' ctype='HRESULT' param='d' desc='Get the MSForms FM20.dll Form Object for this User Frame'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='View' type='IMoeDialogView**' dispid='1' vtindex='64' ctype='HRESULT' param='d' desc='Get the View Object for this User Form'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='Script' type='IDispatch**' dispid='2' vtindex='72' ctype='HRESULT' param='s' desc='Get embeded User Form Script IDpispatch interface'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <method name='Show' type='void' dispid='3' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Show Form' >
+ </method>
+ <method name='Close' type='void' dispid='4' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Close the HTML User Frame Window' >
+ </method>
+ <method name='Hide' type='void' dispid='5' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Hide Form' >
+ </method>
+ <property name='FilePath' type='BSTR*' dispid='6' vtindex='104' ctype='HRESULT' param='filename' desc='Get/Set user form filename'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+</interface>
+
+
+<interface name='IMoeDialogView' type='Dual' iid='{54E27AFE-3872-481C-968F-20BF61B19496}' base='IDispatch' members='8' desc='' >
+ <property name='Top' type='long' dispid='1' vtindex='56' ctype='HRESULT' param='t' desc='Get/Set Top window position'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Left' type='long' dispid='2' vtindex='72' ctype='HRESULT' param='l' desc='Get/Set Left window position '  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Height' type='long' dispid='3' vtindex='88' ctype='HRESULT' param='h' desc='Get/Set Height of window'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Width' type='long' dispid='4' vtindex='104' ctype='HRESULT' param='w' desc='Get/Set Width of window'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <method name='Show' type='void' dispid='5' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Show dialog window' >
+ </method>
+ <method name='Hide' type='void' dispid='6' vtindex='128' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Hide hide dialog window' >
+ </method>
+ <method name='Close' type='void' dispid='7' vtindex='136' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='close dialog window' >
+ </method>
+ <property name='Title' type='BSTR' dispid='8' vtindex='144' ctype='HRESULT' param='t' desc='Get/Set Title of Dialog window'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+</interface>
+
+
+<interface name='IMoeDialogs' type='Dual' iid='{C82F0BDB-5835-44B4-B708-5C077C2D3CF7}' base='IDispatch' members='7' desc='' >
+ <method name='MsgBox' type='long*' dispid='1' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='MsgBox' >
+  <param type='BSTR' dir='IN' name='Text' />
+  <param type='BSTR' dir='IN' name='Title' />
+  <param type='long' dir='IN' name='Flags' />
+ </method>
+ <method name='Open' type='IMoeDocument**' dispid='2' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open existing Document in Text-Editor' >
+ </method>
+ <method name='OpenDir' type='IMoeDocument**' dispid='4' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open Directory View as MDI child' >
+ </method>
+ <method name='ChooseFile' type='BSTR*' dispid='5' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Choose File' >
+ </method>
+ <method name='ChooseDir' type='BSTR*' dispid='6' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Choose Directory' >
+ </method>
+ <method name='Help' type='void' dispid='7' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Show Help' >
+ </method>
+ <method name='Print' type='void' dispid='8' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Print' >
+ </method>
+</interface>
+
+
+<interface name='IMoeHtmlFrame' type='Dual' iid='{08B6F80E-72E9-4A97-8672-926F8D7BEEC0}' base='IDispatch' members='6' desc='' >
+ <property name='Object' type='IDispatch**' dispid='0' vtindex='56' ctype='HRESULT' param='d' desc='Get the HTML Document for this User Frame'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='View' type='IMoeDialogView**' dispid='1' vtindex='64' ctype='HRESULT' param='d' desc='Get the View Object for this User Frame'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='Scripts' type='IDispatch**' dispid='2' vtindex='72' ctype='HRESULT' param='s' desc='Get embeded HTML Scripts IDpispatch interface'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <method name='Eval' type='void' dispid='3' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Eval(uate) a User Script in the HTML Frame document context' >
+  <param type='BSTR' dir='IN' name='src' />
+  <param type='BSTR' dir='IN' name='scriptLanguage' />
+ </method>
+ <method name='OleCmd' type='void' dispid='4' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Call OLE CMDID ( Save, Close, Print) of embedded webbrowser control ' >
+  <param type='long' dir='IN' name='cmd' />
+ </method>
+ <property name='FilePath' type='BSTR*' dispid='5' vtindex='96' ctype='HRESULT' param='filename' desc='get HTML Frame file location '  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+</interface>
+
+
+<interface name='IExternalMoe' type='Dual' iid='{FC03A505-B887-4653-8710-B0AB66674F96}' base='IDispatch' members='3' desc='' >
+ <property name='Moe' type='IMoe**' dispid='0' vtindex='56' ctype='HRESULT' param='m' desc='Get moe application object reference'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='Frame' type='IMoeHtmlFrame**' dispid='1' vtindex='64' ctype='HRESULT' param='f' desc='Get reference to current frame interface'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <method name='Close' type='void' dispid='2' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Close current frame' >
+ </method>
+</interface>
+
+
+
+<object name='Application' guid='{FABA1705-8E2D-48D2-AE3C-333FEECA3FBC}' major='1' minor='0' progId='Moe.Application' desc='moe type library' >
+<implements type='IMoe' guid='{FABA1705-8E2D-48D2-AE3C-333FEECA3FBC}' default='true'  />
+</object>
+
+<enum type='MOE_DOCTYPE' desc='' >
+<element name='MOE_DOCTYPE_NULL' value='0' />
+<element name='MOE_DOCTYPE_DOC' value='1' />
+<element name='MOE_DOCTYPE_DIR' value='2' />
+<element name='MOE_DOCTYPE_PIC' value='3' />
+<element name='MOE_DOCTYPE_HEX' value='4' />
+<element name='MOE_DOCTYPE_HTML' value='5' />
+<element name='MOE_DOCTYPE_OLE' value='6' />
+<element name='MOE_DOCTYPE_FORM' value='7' />
+</enum>
+
+<enum type='MOE_SEARCHFLAG' desc='' >
+<element name='MOE_SEARCHFLAG_DOWN' value='1' />
+<element name='MOE_SEARCHFLAG_WHOLEWORD' value='2' />
+<element name='MOE_SEARCHFLAG_MATCHCASE' value='4' />
+<element name='MOE_SEARCHFLAG_FINDNEXT' value='8' />
+<element name='MOE_SEARCHFLAG_REPLACE' value='16' />
+<element name='MOE_SEARCHFLAG_REPLACEALL' value='32' />
+<element name='MOE_SEARCHFLAG_DIALOGTERM' value='64' />
+</enum>
+
+<enum type='MOE_FORMFLAG' desc='' >
+<element name='MOE_FORMFLAG_NONE' value='0' />
+<element name='MOE_FORMFLAG_TITLE' value='1' />
+<element name='MOE_FORMFLAG_NOSCROLL' value='2' />
+<element name='MOE_FORMFLAG_DIALOG' value='4' />
+<element name='MOE_FORMFLAG_STANDALONE' value='8' />
+</enum>
+
+
+
+
+</typelib>

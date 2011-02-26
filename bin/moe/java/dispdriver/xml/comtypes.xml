@@ -1,0 +1,58 @@
+<typelib name='TypeToXml' 
+desc='TypeToXml - COM typelib to XML conversion' 
+typeinfocount='3' 
+guid='{3ECB75B2-E572-47A9-8618-FEE26C64CCB5}' 
+major='1' 
+minor='0' 
+file='..\..\..\..\ax\comtypes\x64\uni_debug\comtypes.tlb'>
+
+<interface name='ITypeLibToXml' type='Dual' iid='{2D9ABF3A-0013-4761-9F9F-9AFA71AF123C}' base='IDispatch' members='8' desc='' >
+ <method name='Load' type='VARIANT_BOOL*' dispid='1' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='load a Type library from file' >
+  <param type='BSTR' dir='IN' name='filename' />
+ </method>
+ <property name='XML' type='BSTR*' dispid='2' vtindex='64' ctype='HRESULT' param='xmlDoc' desc='Get XML representation for loaded typelib'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <method name='Transform' type='BSTR*' dispid='3' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='transform a loaded type library via XSLT' >
+  <param type='VARIANT' dir='IN' name='xsltDoc' />
+ </method>
+ <method name='AsyncDocumentation' type='void' dispid='4' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='asynchronous transformation - specify type library file, optional filter and XSL Document' >
+  <param type='BSTR' dir='IN' name='filename' />
+  <param type='BSTR' dir='IN' name='filter' />
+  <param type='VARIANT' dir='IN' name='xsltDoc' />
+ </method>
+ <property name='onComplete' type='IDispatch*' dispid='5' vtindex='88' ctype='HRESULT' param='onCompleteHandler' desc='on Complete script handler'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='onStatus' type='IDispatch*' dispid='6' vtindex='104' ctype='HRESULT' param='onStatusHandler' desc='on Status script handler'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Error' type='VARIANT_BOOL*' dispid='7' vtindex='120' ctype='HRESULT' param='vbIsError' desc='on Complete script handler'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='Result' type='BSTR*' dispid='8' vtindex='128' ctype='HRESULT' param='resultDoc' desc='Get Result Doc as String'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+</interface>
+
+
+<interface name='_IAsyncDocumentationComplete' iid='{7CC8CCB0-E258-4116-9E0A-D72873C7169B}' base='IDispatch' members='2' desc='' >
+ <method name='onComplete' type='void' dispid='1' vtindex='0' ctype='void'  calltype='__stdcall' desc='async doc generation completed' >
+ </method>
+ <method name='onStatus' type='void' dispid='2' vtindex='0' ctype='void'  calltype='__stdcall' desc='async doc generation status message' >
+  <param type='VARIANT' dir='IN' name='msg' />
+ </method>
+</interface>
+
+
+
+<object name='TypeLibToXml' guid='{9BFB3F1F-E302-4637-8495-7F7FDD29B57C}' major='1' minor='0' progId='TypeToXml.TypeLibToXml' desc='TypeToXml - COM typelib to XML conversion' >
+<implements type='ITypeLibToXml' guid='{9BFB3F1F-E302-4637-8495-7F7FDD29B57C}' default='true'  />
+</object>
+
+
+
+
+</typelib>
