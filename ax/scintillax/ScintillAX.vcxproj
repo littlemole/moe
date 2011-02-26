@@ -311,6 +311,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">$(TargetName)_dispid_h</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">$(TargetName)_dispid_h</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">$(TargetName)_dispid_h</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
     </CustomBuild>
     <None Include="ScintillAX.def" />
     <None Include="xml\cmd.xml" />

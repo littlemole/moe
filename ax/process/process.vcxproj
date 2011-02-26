@@ -231,6 +231,7 @@
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
       <HeaderFileName>pipedprocess_h.h</HeaderFileName>
+      <InterfaceIdentifierFileName>pipedprocess_i.c</InterfaceIdentifierFileName>
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6A95F801-2A30-4574-BD62-B72798142550}</ProjectGuid>
+    <RootNamespace>jre</RootNamespace>
+	<TargetName>jre</TargetName>
+    <TargetExt>exe</TargetExt>
+  </PropertyGroup>
+
+
+  <Import Project="..\..\master.props" />
+  <Import Project="build.props" />
+
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\java\jdk\include;C:\java\jdk\include\win32;..\..\lib\include\java;$(boost);..\..\..\3dParty\expat\Source\lib;..\..\lib\include;..\..\..\3dParty\pcre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>..\..\lib\src\java\x64\uni_debug\jre.lib;..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\3dParty\pcre\x64\uni_debug_64\pcre.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\x64\uni_debug_64\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName).exe</OutputFile>
+      <ModuleDefinitionFile></ModuleDefinitionFile>
+      <SubSystem>Windows</SubSystem>      
+      <LinkTimeCodeGeneration></LinkTimeCodeGeneration>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention></DataExecutionPrevention>
+    </Link>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <Midl Include="jre.idl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="jre.cpp" />
+    <ClCompile Include="jreserver.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+
+</Project>

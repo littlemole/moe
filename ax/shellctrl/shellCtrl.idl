@@ -356,7 +356,7 @@ library ShellCtrls
 		[ 
 		  id(3), helpstring("show the ColorPicker dialog")
 		] 
-		HRESULT Show( [in] HWND wnd, [out,retval] VARIANT_BOOL* ok);
+		HRESULT Show([out,retval] VARIANT_BOOL* ok);
 	};
 
 ////////////////////////////////////////////////////////////////////////////////////////

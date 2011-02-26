@@ -5,7 +5,7 @@
 //#include "ole/dll.h"
 
 #include "jre_i.c"
-
+//#include "../../lib/src/java/java_i.c"
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -25,10 +25,12 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	ODBGS(lpCmdLine);
 
 	//::DebugBreak();
+	//::MessageBoxA(0,"startup","JRE",0);
 
     try
     {
-
+		::CoInitializeEx(0,COINIT_MULTITHREADED);
+		//::CoInitialize(0);
 		mol::run<JREApp>(lpCmdLine);	
 
     }

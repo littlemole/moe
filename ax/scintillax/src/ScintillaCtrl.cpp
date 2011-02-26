@@ -696,7 +696,7 @@ HRESULT __stdcall ScintillAx::InsertColorDialog(  )
 		return S_OK;
 
 	VARIANT_BOOL vb = VARIANT_FALSE;
-	if ( S_OK != col_->Show( ::GetDesktopWindow(),&vb) )
+	if ( S_OK != col_->Show( &vb) )
 		return S_OK;
 
 	if ( vb != VARIANT_TRUE )
