@@ -270,6 +270,7 @@
     <ClCompile Include="RTFedit.cpp" />
     <ClCompile Include="shell.cpp" />
     <ClCompile Include="taskbar.cpp" />
+    <ClCompile Include="tls.cpp" />
     <ClCompile Include="wnd.cpp" />
     <ClCompile Include="wndclass.cpp" />
   </ItemGroup>
@@ -304,6 +305,7 @@
     <ClInclude Include="..\..\include\win\RTFedit.h" />
     <ClInclude Include="..\..\include\win\shell.h" />
     <ClInclude Include="..\..\include\win\Taskbar.h" />
+    <ClInclude Include="..\..\include\win\tls.h" />
     <ClInclude Include="..\..\include\win\wnd.h" />
     <ClInclude Include="..\..\include\win\wndclass.h" />
   </ItemGroup>
