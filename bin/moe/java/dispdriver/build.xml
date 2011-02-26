@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="dispdriver" default="dispdriver" basedir=".">
+
+ <property name="buildtext" value="creating dispdriver .jar"/> 
+
+ <target name="clean" description="Cleanup">
+ 	<delete dir=".\bin" includes="**\*.class"/>
+    <delete dir="." includes="dispdriver.jar"/>
+ </target>	
+	
+ <target name="compile" description="Compiles all source code." depends="clean">
+	<javac srcdir=".\src" destdir=".\bin" classpath="" />
+ </target>	
+	
+ <target name="dispdriver" depends="compile">
+
+  <echo>${buildtext}</echo> 
+  <jar jarfile="dispdriver.jar" includes="**\*.class" basedir=".\bin" manifest="META-INF/MANIFEST.MF"/>
+
+ </target>
+	
+</project> 
