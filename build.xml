@@ -17,26 +17,48 @@
 		<MSBuild Projects=".\ax\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		<MSBuild Projects=".\bin\prw\prw\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		<MSBuild Projects=".\bin\moe\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild Projects=".\bin\WixMoe\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"  />
 
+<!--
 		<Exec Command='build.bat "$(Configuration)" moeSetup $(Platform) ' WorkingDirectory=".\bin\WixMoe"/>
 		<Exec Command='.\bin\WixMoe\regfree.bat "bin\WixMoe" "$(Configuration)" "$(Platform)" ' WorkingDirectory="."/>
+-->
 
  </Target>
 
  <Target Name="Clean">
+		<MSBuild Projects=".\3dParty\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
         <MSBuild Projects=".\lib\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 		<MSBuild Projects=".\ax\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 		<MSBuild Projects=".\bin\prw\prw\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 		<MSBuild Projects=".\bin\moe\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
-
+		<MSBuild Projects=".\bin\WixMoe\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+<!--
 		<Exec Command='build.bat "$(Configuration)" moeSetup "$(Platform)" /clean' WorkingDirectory=".\bin\WixMoe\"/>
 		<Exec Command='.\bin\WixMoe\regfree.bat bin\WixMoe "$(Configuration)" "$(Platform)" /clean'  WorkingDirectory="."/>
+-->
 
  </Target>
 
  <Target Name="3dParty">
 		<MSBuild Projects=".\3dParty\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
         <MSBuild Projects=".\3dParty\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Full" />
+ </Target>
+
+ <Target Name="jre">
+		<MSBuild Projects=".\lib\src\java\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+		<MSBuild Projects=".\ax\jre\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+		<MSBuild Projects=".\ax\jre\dispdriver\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+		<Exec Command='ant' WorkingDirectory=".\bin\moe\java\dispdriver"  />
+		<MSBuild Projects=".\bin\WixJre\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+ </Target>
+
+ <Target Name="cleanjre">
+		<MSBuild Projects=".\lib\src\java\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean"/>
+		<MSBuild Projects=".\ax\jre\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+		<MSBuild Projects=".\ax\jre\dispdriver\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean"/>
+		<Exec Command='ant clean' WorkingDirectory=".\bin\moe\java\dispdriver"/>
+		<MSBuild Projects=".\bin\WixJre\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean"/>
  </Target>
 
  <Target Name="Universe">
