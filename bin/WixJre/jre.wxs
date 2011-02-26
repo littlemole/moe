@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <!-- the product (jre) to install -->
+  <Product Id="194E6D46-2C00-4CCD-B3D4-F9539B11F6D4"
+           Name="jre" Language="1033" Version="1.0.0.0"
+           Manufacturer="mole"
+           UpgradeCode="3ED26CD6-DF18-491D-8ED6-0379B892F802">
+
+
+    <?if $(var.BuildArch) = "x86" ?>
+    <?define PF = ProgramFilesFolder ?>
+    <?define Win64 = "no" ?>
+    <?elseif $(var.BuildArch) = "x64" ?>
+    <?define PF = ProgramFiles64Folder ?>
+    <?define Win64 = "yes" ?>
+    <?endif?>
+
+    <!-- msi version and packaging-->
+    <Package InstallerVersion="200" Compressed="yes" />
+
+    <!-- msi media: use single embedded cabinet archive-->
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+    <!-- package icon -->
+    <Icon Id="icon.ico" SourceFile=".\moe\jre.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
+
+    <!-- COM register custom actions-->
+    <Property Id='REGSVR32'>regsvr32.exe</Property>
+
+    <CustomAction Id="JREEXE" Property='JREEXE' Value='[INSTALLLOCATION]\moe\jre.exe' />
+
+    <!-- register/unregister moe executable -->
+    <CustomAction Id="EXEREG_jre"  Property="JREEXE" ExeCommand="/REGSERVER" Execute="deferred" Impersonate="no"  />
+    <CustomAction Id="EXEUNREG_jre" Property="JREEXE" ExeCommand="/UNREGSERVER" Execute="deferred" Impersonate="no" Return="ignore"/>
+
+    <!-- installation directory structure -->
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+
+      <!-- Binaries -->
+      <Directory Id="$(var.PF)">
+        <Directory Id="INSTALLLOCATION" Name="mol">
+
+          <Component Id="moe" Guid="{5BF2A0B8-2284-43CE-B321-E16F650BDD0A}"
+            SharedDllRefCount="no" KeyPath="no" NeverOverwrite="yes" Permanent="no" Transitive="no"
+            Win64="$(var.Win64)" Location="either">
+            <CreateFolder/> 
+          </Component>
+          
+        </Directory>
+      </Directory>
+
+    </Directory>
+
+    <!-- Features -->
+
+    <Feature AllowAdvertise='no' InstallDefault='local' Absent='disallow'
+             Id='JreMain' Title='jre' Description='moe java jre application binaries'
+             Level='1' ConfigurableDirectory="INSTALLLOCATION">
+      <ComponentRef Id="moe" />
+      <ComponentGroupRef Id='JreCompGroup' />
+
+    </Feature>
+
+
+
+    <!-- fire custom actions -->
+
+    <InstallExecuteSequence>
+
+      <!-- set path to moe.exe -->
+      <Custom Action='JREEXE' Before='InstallFiles' />
+
+
+      <!-- register COM objects  -->
+      <Custom Action='EXEREG_jre' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
+
+      <!-- unregister COM objects  -->
+      <Custom Action='EXEUNREG_jre' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+
+    </InstallExecuteSequence>
+
+    <!-- WIX UI overrides-->
+    <WixVariable Id="WixUILicenseRtf" Value=".\res\License.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value=".\res\moeinstall.jpg" />
+    <WixVariable Id="WixUIDialogBmp" Value=".\res\front.jpg" />
+
+    <!-- WIX UI support -->
+    <UIRef Id="WixUI_ErrorProgressText" />
+    <UIRef Id="WixUI_MondoNoLicense"/>
+    
+  </Product>
+</Wix>

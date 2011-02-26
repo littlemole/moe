@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+ <!-- Configuration -->
+
+ <PropertyGroup Label="Configuration">
+
+  <!-- paths -->
+  <Configuration Condition=" '$(Configuration)' == '' ">uni_debug</Configuration>
+  <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
+
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' ">uni_debug</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' ">uni_release</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' ">x64\uni_debug</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' ">x64\uni_release</confPath>
+
+  <arch Condition=" '$(Platform)' == 'x64' ">x64</arch>
+  <arch Condition=" '$(Platform)' == 'Win32' ">x86</arch>
+
+  <!-- wix ui helper dll-->
+  <uiext>$(WIX)\bin\WixUIExtension.dll</uiext>
+
+  <!-- generated wix objects to link into .msi file -->
+  <genObj>obj\$(confPath)\gen.wixobj</genObj>
+  <jreObj>obj\$(confPath)\jre.wixobj</jreObj>
+  <monObj>obj\$(confPath)\mon.wixobj</monObj>
+
+  <!-- wix output file -->
+  <msiTarget>.\bin\$(confPath)\jreSetup.msi</msiTarget>
+
+  <!-- admin and non-privilegded user install packets -->
+  <deployTarget>.\deploy\$(confPath)\jreSetup.msi</deployTarget>
+  <deployTargetLight>.\deploy\$(confPath)\jreSetupLight.msi</deployTargetLight>
+
+  <!-- regfree -->
+  <regfree>deploy\regfree</regfree>
+  <regfreeTargetPath>deploy\regfree\$(confPath)</regfreeTargetPath>
+ </PropertyGroup>
+
+<!-- java source files -->
+ <ItemGroup>
+  <JavaSrcFiles Include="..\moe\java\dispdriver\src\**\*.*" />
+  <SvnFolders Include=".\moe\**\*.svn" />
+  <moeFiles Include=".\moe\**\*.*" />
+ </ItemGroup>
+
+ <!-- Build -->
+
+
+ <Target Name="Build">
+
+		<Message Text="building Wix Installer JRE" />
+		<Message Text="Project Configuration = $(Configuration)" />
+		<Message Text="Project Platform = $(Platform)" />
+
+		<!-- prepare directory structure -->
+		<RemoveDir Directories=".\moe\*.*" />
+		<RemoveDir Directories=".\$(regfree)\moe;" />
+
+		<MakeDir Directories=".\moe"/>
+		<MakeDir Directories=".\moe\lib"/>
+		<MakeDir Directories=".\moe\lib\classes"/>
+		<MakeDir Directories=".\moe\lib\src"/>
+		<MakeDir Directories=".\deploy\$(confPath)"/>
+		<MakeDir Directories=".\$(regfree)\moe;" />
+		<MakeDir Directories=".\$(regfreeTargetPath)" />
+
+		<!-- copy files -->
+        <Copy
+            SourceFiles="@(JavaSrcFiles)"
+            DestinationFiles="@(JavaSrcFiles->'.\moe\lib\src\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+        <Copy
+            SourceFiles="..\moe\resources\moe.ico"
+            DestinationFiles="..\moe\resources\moe.ico"
+        />
+        <Copy
+            SourceFiles="..\moe\java\dispdriver\dispdriver.jar"
+            DestinationFolder=".\moe\lib"
+        />
+        <Copy
+            SourceFiles="..\..\ax\jre\$(confPath)\jre.exe"
+            DestinationFolder=".\moe"
+        />
+        <Copy
+            SourceFiles="..\..\ax\jre\dispdriver\$(confPath)\dispdriver.dll"
+            DestinationFolder=".\moe\lib"
+        />
+
+		<RemoveDir Directories="@(SvnFolders)" />
+
+		<!-- heat -->
+		<Exec Command='"$(WIX)\bin\heat.exe" dir . -gg -cg "JreCompGroup" -dr INSTALLLOCATION -var var.SourceDir  -o ..\gen.wxs' WorkingDirectory="./moe"/>
+
+        <!-- candle -->
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(genObj)" gen.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(jreObj)" jre.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(monObj)" MondoNoLicense.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+        <!-- light -->
+		<Exec Command='"$(WIX)\bin\light.exe" -ext "$(uiext)" -out "$(msiTarget)" -cultures:en-us -loc en-us.wxl "$(genObj)" "$(jreObj)" "$(monObj)"' WorkingDirectory="."/>
+
+
+		<!-- nonadmin install -->
+        <Copy
+            SourceFiles="$(msiTarget)"
+            DestinationFiles="$(deployTargetLight)"
+        />
+
+		<Exec Command='cscript "..\..\cg\bin\patchMSI.wsf" $(deployTargetLight)' WorkingDirectory="."/>
+
+		<!-- admin install -->
+
+        <Copy
+            SourceFiles="$(msiTarget)"
+            DestinationFiles="$(deployTarget)"
+        />
+
+		<!-- regfree -->
+
+        <Copy
+            SourceFiles="@(moeFiles)"
+            DestinationFiles="@(moeFiles->'.\$(regfree)\moe\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+
+		<Exec Command='mt.exe -manifest .\$(regfree)\jre.exe.isolated.manifest -outputresource:".\$(regfree)\moe\jre.exe;#1" -hashupdate -validate_manifest -verbose' WorkingDirectory="."/>
+
+		<Exec Command='cscript "..\..\cg\bin\zip.vbs" "$(regfreeTargetPath)\moe.zip" "$(regfree)\moe"' WorkingDirectory="."/>
+
+ </Target>
+
+
+<!-- Clean -->
+
+ <Target Name="Clean">
+    <RemoveDir Directories=".\deploy\$(confPath)\**\*.*;" />
+    <RemoveDir Directories=".\bin\**\*.*;" />
+    <RemoveDir Directories=".\moe\**\*.*" />
+	<RemoveDir Directories=".\$(regfree)\moe\**\*.*;" />
+	<RemoveDir Directories=".\$(regfreeTargetPath)" />
+ </Target>
+
+ <Target Name="3dParty">
+		<MSBuild Projects=".\3dParty\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+        <MSBuild Projects=".\3dParty\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Full" />
+ </Target>
+
+ <Target Name="Universe">
+        <CallTarget Targets="3dParty"/>
+  	    <CallTarget Targets="Build"/>
+ </Target>
+
+</Project>
