@@ -529,14 +529,15 @@ bool Docs::open( int index, const mol::string& path, InFiles pref, bool readOnly
 	punk<IMoeDocument> d;
 	if ( S_OK == Item(variant(bstr(path)),&d) )
 	{
-		if ( IDYES != ::MessageBox( *moe(), _T("close file?"), _T("file already open!"), MB_ICONEXCLAMATION|MB_YESNO ) )
+		//TODO:fix me
+		/*if ( IDYES !=*/ ::MessageBox( *moe(), _T("close file?"), _T("file already open!"), MB_ICONEXCLAMATION); //|MB_YESNO ) )
 		{
 			mol::ostringstream oss;
 			oss << "cancelled reloading " << path;
 			statusBar()->status(oss.str());
 			return false;
 		}
- 
+ /*
 		if (d)
 		{
 			mol::punk<IMoeDocumentView> view;
@@ -545,6 +546,8 @@ bool Docs::open( int index, const mol::string& path, InFiles pref, bool readOnly
 			view.release();
 			d.release();
 		}
+		*/
+		return false;
 	}
 
 	// inactive any active object

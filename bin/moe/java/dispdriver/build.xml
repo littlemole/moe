@@ -1,21 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- dispdriver .jar ant build file -->
 <project name="dispdriver" default="dispdriver" basedir=".">
 
- <property name="buildtext" value="creating dispdriver .jar"/> 
+ <!-- properties -->
+ <property environment="env"/>
 
- <target name="clean" description="Cleanup">
+ <!-- set confPath property depending on Configuration and Platform -->
+ <target name="set" description="set" depends="">
+  <condition property="confPath" value="${env.Configuration}">
+   <equals arg1="${env.Platform}" arg2="Win32" />
+  </condition>
+  <condition property="confPath" value="x64/${env.Configuration}">
+   <equals arg1="${env.Platform}" arg2="x64" />
+  </condition>
+ </target>	
+
+ <!-- clean -->
+ <target name="clean" description="Cleanup" depends="set">
  	<delete dir=".\bin" includes="**\*.class"/>
     <delete dir="." includes="dispdriver.jar"/>
  </target>	
+
+ <!-- generate java code from typelib -->
+ <target name="generate" description="generate sources" depends="clean">
+
+   <echo>${env.Configuration}</echo> 
+   <echo>${env.Platform}</echo> 
+   <echo>${env.Plat}</echo> 
+   <echo>${confPath}</echo> 
+
+  <exec executable="cscript.exe">
+    <arg value="jcg.js"/>
+    <arg value="..\..\..\..\bin\moe\${confPath}\moe.tlb"/>
+    <arg value="org.oha7.mol.moe"/>
+  </exec>
+
+  <exec executable="cscript.exe">
+    <arg value="jcg.js"/>
+    <arg value="..\..\..\..\ax\io\${confPath}\io.tlb"/>
+    <arg value="org.oha7.mol.io"/>
+  </exec>
+
+  <exec executable="cscript.exe">
+    <arg value="jcg.js"/>
+    <arg value="..\..\..\..\ax\comtypes\${confPath}\comtypes.tlb"/>
+    <arg value="org.oha7.mol.comtypes"/>
+  </exec>
+
+  <exec executable="cscript.exe">
+    <arg value="jcg.js"/>
+    <arg value="..\..\..\..\ax\process\${confPath}\pipedprocess.tlb"/>
+    <arg value="org.oha7.mol.pipedprocess"/>
+  </exec>
+
+  <exec executable="cscript.exe">
+    <arg value="jcg.js"/>
+    <arg value="..\..\..\..\ax\scintillax\${confPath}scintillax.tlb"/>
+    <arg value="org.oha7.mol.scintillax"/>
+  </exec>
+
+  <exec executable="cscript.exe">
+    <arg value="jcg.js"/>
+    <arg value="..\..\..\..\ax\setting\${confPath}\setting.tlb"/>
+    <arg value="org.oha7.mol.setting"/>
+  </exec>
+
+  <exec executable="cscript.exe">
+    <arg value="jcg.js"/>
+    <arg value="..\..\..\..\ax\shellctrl\${confPath}\shellctrl.tlb"/>
+    <arg value="org.oha7.mol.shellctrl"/>
+  </exec>
+
+  <exec executable="cscript.exe">
+    <arg value="jcg.js"/>
+    <arg value="..\..\..\..\ax\shellfolder\${confPath}\shellfolder.tlb"/>
+    <arg value="org.oha7.mol.shellfolder"/>
+  </exec>
+
+ </target>	
 	
- <target name="compile" description="Compiles all source code." depends="clean">
+ <!-- compile java classes -->
+ <target name="compile" description="Compiles all source code." depends="generate">
 	<javac srcdir=".\src" destdir=".\bin" classpath="" />
  </target>	
 	
+ <!-- assemble dispdriver.jar -->
  <target name="dispdriver" depends="compile">
 
-  <echo>${buildtext}</echo> 
+  <echo>creating dispdriver .jar</echo> 
   <jar jarfile="dispdriver.jar" includes="**\*.class" basedir=".\bin" manifest="META-INF/MANIFEST.MF"/>
 
  </target>

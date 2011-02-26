@@ -4,7 +4,7 @@ typeinfocount='17'
 guid='{E5769EB9-ADD9-41E5-8D3D-D925C7FC0C29}' 
 major='1' 
 minor='0' 
-file='..\..\..\..\bin\moe\x64\uni_debug\moe.tlb'>
+file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
 
 <interface name='IWebBrowserEvents' type='Dual' iid='{F010AA89-5CF5-4BCE-BABE-5ADAE3D300EB}' base='IDispatch' members='32' desc='' >
  <method name='StatusTextChange' type='void' dispid='102' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Statusbar text changed.' >
