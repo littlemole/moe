@@ -18,7 +18,7 @@
 
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\java\jdk\include;C:\java\jdk\include\win32;..\..\lib\include\java;$(boost);..\..\..\..\3dParty\expat\Source\lib;..\..\..\lib\include;..\..\..\..\3dParty\pcre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(java);..\..\..\lib\include\java;$(boost);..\..\..\..\..\3dParty\expat\Source\lib;..\..\..\lib\include;..\..\..\..\3dParty\pcre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;MOL_DLL;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;PCRE_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>false</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
@@ -43,7 +43,7 @@
 	  <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\..\lib\src\java\uni_debug\jre.lib;..\..\..\lib\src\win\uni_debug\win.lib;..\..\..\lib\src\ole\uni_debug\ole.lib;..\..\..\lib\src\util\uni_debug\util.lib;..\..\..\3dParty\pcre\Debug\pcre.lib;..\..\..\lib\src\thread\uni_debug\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\lib\src\xml\uni_debug\xml.lib;..\..\..\3dParty\expat\Source\lib\uni_debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\..\lib\src\java\uni_debug\jre.lib;..\..\..\lib\src\win\uni_debug\win.lib;..\..\..\lib\src\ole\uni_debug\ole.lib;..\..\..\lib\src\util\uni_debug\util.lib;..\..\..\3dParty\pcre\Debug\pcre.lib;..\..\..\lib\src\thread\uni_debug\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\..\lib\src\xml\uni_debug\xml.lib;..\..\..\3dParty\expat\Source\lib\uni_debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
       <MinimumRequiredVersion>5.0</MinimumRequiredVersion>

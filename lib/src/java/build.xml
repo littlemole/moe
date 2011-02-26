@@ -17,7 +17,7 @@
 	 <InterfaceIdentifierFileName>./java_i.c</InterfaceIdentifierFileName>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\\java\jdk\include;C:\\java\jdk\include\win32;$(boost);..\..\..\3dParty\expat\Source\lib;..\..\include;..\..\..\3dParty\pcre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(java);$(boost);..\..\..\3dParty\expat\Source\lib;..\..\include;..\..\..\3dParty\pcre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;PCRE_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>false</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
