@@ -18,5 +18,16 @@ call "C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\SetEnv.Cmd" %CONFIG% %PLA
 
 set Configuration=%CONF%
 
+if "%PLAT%"=="/x86" goto x86
+set Platform=x64
+goto end
+
+:x86
+set Platform=Win32
+
+:end
+
 echo Configuration: %Configuration%
+echo Platform: %Platform%
+echo %PLAT%
 exit /B
