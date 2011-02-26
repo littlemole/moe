@@ -1,8 +1,10 @@
-import "oaidl.idl";
+//import "oaidl.idl";
+import "../../lib/src/java/java.idl";
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // mol JRE COM Lib
 ////////////////////////////////////////////////////////////////////////////////////////
+
 
 [
   uuid(0E681FCF-0286-4e02-B95E-9A41BE384FE7),
@@ -22,6 +24,7 @@ library JRE
 	importlib("stdole32.tlb");
 	//importlib("moe.tlb");
 
+	/*
 	interface IJavaObject;
 
 	[ 
@@ -31,6 +34,11 @@ library JRE
     ]
 	interface IJavaClass : IDispatch
     {
+		[id(1), helpstring("initialize java class")] 
+		HRESULT Initialize([in]long* ptr);
+
+		[id(2), helpstring("ret raw java class ptr")] 
+		HRESULT RawPtr([out,retval]long** ptr);
 	}
 
 
@@ -41,8 +49,13 @@ library JRE
     ]
 	interface IJavaObject : IDispatch
     {
-	}
+		[id(1), helpstring("initialize java obj")] 
+		HRESULT Initialize([in]long* ptr);
 
+		[id(2), helpstring("get raw java obj ptr")] 
+		HRESULT RawPtr([out,retval]long** ptr);
+	}
+	*/
 	////////////////////////////////////////////////////////////////////////////////////
 	// IJVM
 	////////////////////////////////////////////////////////////////////////////////////
@@ -67,6 +80,12 @@ library JRE
 		[id(DISPID_VALUE), helpstring("load java class")] 
 		HRESULT LoadClass([in] BSTR clazzName, [out,retval] IJavaClass** clazz);
 
+		[id(3), helpstring("quit jvm")] 
+		HRESULT Exit();
+
+		[id(4), helpstring("cast a java object")] 
+		HRESULT Cast([in] IJavaObject* jObject, [in] BSTR clazz, [out,retval] IJavaObject** );
+
 	}
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -85,4 +104,25 @@ library JRE
 	{
 		[default]         interface     IJVM;
 	}
+
+	
+	[
+		uuid(4CCBBB37-A5F2-47A3-B67B-53AE711DEFCA),
+		helpstring("JavaClass - COM Object for Java VM interaction")
+	]
+	coclass JavaClass
+	{
+		[default]         interface     IJavaClass;
+	}
+
+
+	[
+		uuid(C22704EA-3233-42BC-AA5D-56543D01AA82),
+		helpstring("JavaObject - COM Object for Java VM interaction")
+	]
+	coclass JavaObject
+	{
+		[default]         interface     IJavaObject;
+	}
+	
 }

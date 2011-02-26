@@ -218,11 +218,11 @@ public:
 		}
 
 		//method
-		HRESULT virtual __stdcall Show(HWND wnd, VARIANT_BOOL* ok)
+		HRESULT virtual __stdcall Show( VARIANT_BOOL* ok)
 		{
 			if ( ok )
 				*ok = VARIANT_FALSE;
-			if ( IDOK == dlg_.doModal(wnd,col_) )
+			if ( IDOK == dlg_.doModal( ::GetDesktopWindow(),col_) )
 			{
 				if ( ok )
 				{

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{97892032-605C-479D-AC28-E99BCAA88E41}</ProjectGuid>
+    <RootNamespace>dispdriver</RootNamespace>
+	<TargetName>dispdriver</TargetName>
+  </PropertyGroup>
+
+  <Import Project="..\..\..\master.props" />
+  <Import Project="build.props" />
+
+
+  <ItemGroup>
+    <ClCompile Include="dispdriver.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="i.c" >
+     <PrecompiledHeader></PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+
+</Project>

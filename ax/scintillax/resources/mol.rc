@@ -2,7 +2,7 @@
 #include "include/resource.h"
 
 //#########################################
-//#x64/uni_release
+//#x64/uni_debug
 //#########################################
 
 
@@ -17,7 +17,7 @@ IDI_SCINTILLA                          ICON    ".\\scintillax.ico"
 
 // TYPELIBS
 
-1                                      TYPELIB    ".\\x64/uni_release\\scintillax.tlb"
+1                                      TYPELIB    ".\\x64/uni_debug\\scintillax.tlb"
 
 
 // MENUS
