@@ -2,13 +2,16 @@
 //
 
 #include "stdafx.h"
+#include "ole/aut.h"
+#include "java/jre.h"
 #include "java/javaclass.h"
 #include "java/jmarshaler.h"
-#include "java/jre.h"
-
 #include "java/dispdriver.h"
+
 ///////////////////////////////////////////////////////////
 
+namespace mol {
+namespace java {
 
 void JavaClass::dispose()
 {
@@ -67,13 +70,13 @@ HRESULT __stdcall JavaClass::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 	jclass objectClazz = classes["java/lang/Object"];
 	DispDriver dispDriver = classes["org/oha7/dispdriver/impl/DispDriver"];
 
-	jobjectArray args = JavaMarshaller::dispArgs2JavaArray( classes, pDisp );
+	jobjectArray args = JavaMarshaler::dispArgs2JavaArray( classes, pDisp );
 
 	// create java obj via constructor
 	if ( dispIdMember == 0 ) 
 	{
 		jobject obj = dispDriver.Create( theJavaClass_, args );
-		if (JRE::exceptionOccured(env))
+		if (mol::java::exceptionOccured(env))
 			return S_FALSE;
 
 		if ( obj == 0 )
@@ -84,7 +87,7 @@ HRESULT __stdcall JavaClass::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 
 		if ( pReturn )
 		{
-			mol::variant v = JavaMarshaller::javaObject2Variant(classes,obj);
+			mol::variant v = JavaMarshaler::javaObject2Variant(classes,obj);
 			if ( v.vt == VT_DISPATCH ) 
 			{
 				::CoAllowSetForegroundWindow( (IUnknown*)v.pdispVal, 0);
@@ -100,12 +103,12 @@ HRESULT __stdcall JavaClass::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 	if (  w == DISPATCH_PROPERTYGET ) 
 	{
 		jobject ret = dispDriver.propertyGet( theJavaClass_, name, args );
-		if (JRE::exceptionOccured(env))
+		if (mol::java::exceptionOccured(env))
 			return S_FALSE;
 
 		if ( pReturn )
 		{
-			mol::variant v = JavaMarshaller::javaObject2Variant(classes, ret );
+			mol::variant v = JavaMarshaler::javaObject2Variant(classes, ret );
 			::VariantCopy( pReturn, &v );
 		}
 
@@ -115,7 +118,7 @@ HRESULT __stdcall JavaClass::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 	if (  w == DISPATCH_PROPERTYPUT ) 
 	{
 		dispDriver.propertyPut( theJavaClass_, name, args );
-		if (JRE::exceptionOccured(env))
+		if (mol::java::exceptionOccured(env))
 			return S_FALSE;
 
 		if ( pReturn )
@@ -129,14 +132,17 @@ HRESULT __stdcall JavaClass::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 	}
 
 	jobject ret = dispDriver.invoke( theJavaClass_,  name, args );
-	if (JRE::exceptionOccured(env))
+	if (mol::java::exceptionOccured(env))
 		return S_FALSE;
 
 	if ( pReturn )
 	{
-		mol::variant v = JavaMarshaller::javaObject2Variant(classes, ret );
+		mol::variant v = JavaMarshaler::javaObject2Variant(classes, ret );
 		::VariantCopy( pReturn, &v );
 	}
 
     return S_OK;
 }
+
+} // end namespace java
+} // end namespace mol

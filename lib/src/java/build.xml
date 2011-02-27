@@ -36,6 +36,8 @@
     <ClCompile Include="javaobject.cpp" />
     <ClCompile Include="jglue.cpp" />
     <ClCompile Include="jmarshaler.cpp" />
+    <ClCompile Include="java2variant.cpp" />
+    <ClCompile Include="variant2java.cpp" />
     <ClCompile Include="jre.cpp" />
     <ClCompile Include="java_i.c" />
   </ItemGroup>

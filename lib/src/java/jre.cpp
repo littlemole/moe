@@ -1,29 +1,12 @@
 #include "stdafx.h"
-#include "java/jglue.h"
 #include "java/jre.h"
-#include "ole/ole.h"
-#include "ole/com.h"
-#include "ole/obj.h"
-#include "ole/Bstr.h"
-#include "ole/typeinfo.h"
-#include "ole/aut.h"
-
-
+#include "win/regkey.h"
 #include "win/app.h"
 #include "win/path.h"
 
+namespace mol {
 
 HMODULE JRE::jruntime_ = 0;
-
-JRE& jre()
-{
-	return mol::singleton<JRE>();
-}
-
-JNIEnv* java()
-{
-	return *jre();
-}
 
 JRE::JRE()
 	: jvm_(0),       
@@ -203,34 +186,7 @@ mol::string JRE::getJREpathOnce()
 }
 
 
-bool JRE::exceptionOccured( JNIEnv* jre, REFCLSID clsid )
-{
-	jboolean isExceptionOccured = jre->ExceptionCheck();
-	if ( isExceptionOccured == 0 )
-		return false;
-
-	jthrowable exc = jre->ExceptionOccurred();
-	if (exc) {
-
-			jre->ExceptionDescribe();
-
-			// have to clear the exception before JNI will work again.
-			jre->ExceptionClear();
-
-			jclass eclass = jre->GetObjectClass(exc);
-
-			jmethodID mid = jre->GetMethodID(eclass, "toString", "()Ljava/lang/String;");
-
-			jstring jErrorMsg = (jstring) jre->CallObjectMethod(exc, mid);
-
-			OleStr str( jre,jErrorMsg );
-			ODBGS( str.str() );
-		 
-			mol::com_throw( str.c_str(), clsid, _T("Java error"));
-
-			jre->ExceptionClear();
-	}
-	return true;
-}
 
 
+
+} // end namespace mol

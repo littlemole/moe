@@ -170,6 +170,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="java2variant.cpp" />
     <ClCompile Include="javaclass.cpp" />
     <ClCompile Include="javaobject.cpp" />
     <ClCompile Include="java_i.c">
@@ -178,14 +179,17 @@
     <ClCompile Include="jre.cpp" />
     <ClCompile Include="jglue.cpp" />
     <ClCompile Include="jmarshaler.cpp" />
+    <ClCompile Include="variant2java.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\java\dispdriver.h" />
+    <ClInclude Include="..\..\include\java\java2variant.h" />
     <ClInclude Include="..\..\include\java\javaclass.h" />
     <ClInclude Include="..\..\include\java\javaobject.h" />
     <ClInclude Include="..\..\include\java\jre.h" />
     <ClInclude Include="..\..\include\java\jglue.h" />
     <ClInclude Include="..\..\include\java\jmarshaler.h" />
+    <ClInclude Include="..\..\include\java\variant2java.h" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="java.idl">
