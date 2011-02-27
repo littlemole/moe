@@ -2,10 +2,15 @@
 //
 
 #include "stdafx.h"
-#include "java/javaobject.h"
+#include "ole/aut.h"
 #include "java/jre.h"
+#include "java/javaobject.h"
 #include "java/jmarshaler.h"
 #include "java/dispdriver.h"
+
+namespace mol {
+namespace java {
+
 
 void JavaObject::dispose()
 {
@@ -59,17 +64,17 @@ HRESULT  __stdcall JavaObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lci
 	jclass objectClazz = classes["java/lang/Object"];
 	DispDriver dispDriver = classes["org/oha7/dispdriver/impl/DispDriver"];
 
-	jobjectArray args = JavaMarshaller::dispArgs2JavaArray( classes, pDisp );
+	jobjectArray args = JavaMarshaler::dispArgs2JavaArray( classes, pDisp );
 
 	if (  w == DISPATCH_PROPERTYGET ) 
 	{
 		jobject ret = dispDriver.propertyGet( theJavaObject_, name, args );
-		if (JRE::exceptionOccured(env))
+		if (mol::java::exceptionOccured(env))
 			return S_FALSE;
 
 		if ( pReturn )
 		{
-			mol::variant v = JavaMarshaller::javaObject2Variant(classes, ret );
+			mol::variant v = JavaMarshaler::javaObject2Variant(classes, ret );
 			::VariantCopy( pReturn, &v );
 		}
 
@@ -79,7 +84,7 @@ HRESULT  __stdcall JavaObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lci
 	if (  w == DISPATCH_PROPERTYPUT ) 
 	{
 		dispDriver.propertyPut( theJavaObject_, name, args );
-		if (JRE::exceptionOccured(env))
+		if (mol::java::exceptionOccured(env))
 			return S_FALSE;
 
 		if ( pReturn )
@@ -95,8 +100,8 @@ HRESULT  __stdcall JavaObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lci
 	jobject ret = dispDriver.invoke( theJavaObject_, name , args );
 	if ( pReturn )
 	{
-		mol::variant v = JavaMarshaller::javaObject2Variant( classes,ret );
-		if (JRE::exceptionOccured(env))
+		mol::variant v = JavaMarshaler::javaObject2Variant( classes,ret );
+		if (mol::java::exceptionOccured(env))
 			return S_FALSE;
 
 		::VariantCopy( pReturn, &v );
@@ -104,4 +109,7 @@ HRESULT  __stdcall JavaObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lci
 
     return S_OK;
 }
+
+} // end namespace java
+} // end namespace mol
 
