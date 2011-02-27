@@ -44,7 +44,7 @@ JNIEXPORT jlong JNICALL Java_org_oha7_dispdriver_impl_Native_QueryInterface
 	CoInitializeIf();
 	IDispatch* disp = (IDispatch*)ptr;
 
-	OleStr str( env,iid );
+	mol::java::OleStr str( env,iid );
 
 	IID id;
 	HRESULT hr = ::IIDFromString( str.c_str(), &id);
@@ -99,7 +99,7 @@ JNIEXPORT jlong JNICALL Java_org_oha7_dispdriver_impl_Native_CreateObject
   (JNIEnv * env, jclass clazz, jstring str)
 {
 	CoInitializeIf();
-	OleStr s( env,str );
+	mol::java::OleStr s( env,str );
 
 	CLSID clsid;
 	HRESULT hr = ::CLSIDFromProgID( s.c_str(), &clsid );
@@ -143,8 +143,8 @@ JNIEXPORT jobject JNICALL Java_org_oha7_dispdriver_impl_Native_Invoke
 		n = env->GetArrayLength(args);
 	}
 
-	JavaClassStore classes(env);
-	DISPPARAMS* dispParams = JavaMarshaller::javaArray2DispArgs( classes, args, flags );
+	mol::java::JavaClassStore classes(env);
+	DISPPARAMS* dispParams = mol::java::JavaMarshaler::javaArray2DispArgs( classes, args, flags );
 
 	mol::variant varResult;
 	HRESULT hr = disp->Invoke( dispid, IID_NULL,0, (WORD)flags, dispParams, &varResult, 0, 0 );
@@ -163,7 +163,7 @@ JNIEXPORT jobject JNICALL Java_org_oha7_dispdriver_impl_Native_Invoke
 		return 0;
 	}
 
-	jobject r = JavaMarshaller::variant2JavaObject( classes, varResult );
+	jobject r = mol::java::JavaMarshaler::variant2JavaObject( classes, varResult );
 	return r;
 }
 
@@ -220,7 +220,7 @@ JNIEXPORT jstring JNICALL Java_org_oha7_dispdriver_impl_Native_RetrieveBstr
 JNIEXPORT jlong JNICALL Java_org_oha7_dispdriver_impl_Native_GetObject (JNIEnv * env, jclass clazz, jstring str)
 {
 	CoInitializeIf();
-	OleStr s( env,str );
+	mol::java::OleStr s( env,str );
 
 	CLSID clsid;
 	HRESULT hr = ::CLSIDFromProgID( s.c_str(), &clsid );
