@@ -88,21 +88,21 @@ class JREApp :
 
 	public mol::exports< 
 					JREApp, 
-					JavaClass, 
+					mol::java::JavaClass, 
 					mol::ole::ComCreatePolicy<
 									JREApp,
 									mol::ole::AggregationPolicyNonAggregable<
-													JavaClass,
-													mol::com_obj<JavaClass> 
+													mol::java::JavaClass,
+													mol::com_obj<mol::java::JavaClass> 
 												> > >,
 	public mol::exports< 
 					JREApp, 
-					JavaObject, 
+					mol::java::JavaObject, 
 					mol::ole::ComCreatePolicy<
 									JREApp,
 									mol::ole::AggregationPolicyNonAggregable<
-													JavaObject,
-													mol::com_obj<JavaObject> 
+													mol::java::JavaObject,
+													mol::com_obj<mol::java::JavaObject> 
 												>  > >
 	
 {

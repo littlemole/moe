@@ -27,7 +27,7 @@ HRESULT __stdcall JREServer::Exit()
 
 HRESULT __stdcall JREServer::put_Classpath( BSTR cp) 
 {
-	jre().classpath( mol::bstr(cp).toString() );
+	mol::java::jre().classpath( mol::bstr(cp).toString() );
 	return S_OK;
 }
 
@@ -36,14 +36,14 @@ HRESULT __stdcall JREServer::get_Classpath( BSTR *cp)
 	if ( !cp )
 		return E_INVALIDARG;
 
-	mol::string p =jre().classpath();
+	mol::string p = mol::java::jre().classpath();
 	*cp = ::SysAllocString( mol::towstring(p).c_str() );
 	return S_OK;
 }
 
 HRESULT __stdcall JREServer::put_Libpath( BSTR lp)
 {
-	jre().libpath( mol::bstr(lp).toString() );
+	mol::java::jre().libpath( mol::bstr(lp).toString() );
 	return S_OK;
 }
 
@@ -52,7 +52,7 @@ HRESULT __stdcall JREServer::get_Libpath( BSTR *lp)
 	if ( !lp )
 		return E_INVALIDARG;
 
-	mol::string p = jre().libpath();
+	mol::string p = mol::java::jre().libpath();
 
 	*lp = ::SysAllocString( mol::towstring(p).c_str() );
 
@@ -73,7 +73,7 @@ HRESULT __stdcall JREServer::LoadClass( BSTR clazzName, IJavaClass** clazz)
 		return S_FALSE;
 	}
 
-	JRE& env = jre();
+	mol::JRE& env = mol::java::jre();
 	
 	std::string s = mol::bstr(clazzName).tostring();
 	size_t pos = s.find('.');
@@ -85,7 +85,7 @@ HRESULT __stdcall JREServer::LoadClass( BSTR clazzName, IJavaClass** clazz)
 
 	jclass c = env->FindClass(s.c_str());
 
-	if (JRE::exceptionOccured(*env))
+	if (mol::java::exceptionOccured(*env))
 		return E_FAIL;
 
 	mol::punk<IJavaClass> instance;
@@ -127,23 +127,23 @@ HRESULT  __stdcall JREServer::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid
 { 
 	if ( dispIdMember == 6 )
 	{
-		JRE& env = jre();
-		JavaClassStore classes(*env);
+		mol::JRE& env = mol::java::jre();
+		mol::java::JavaClassStore classes(*env);
 
 		jclass objectClazz = classes["java/lang/Object"];
-		DispDriver dispDriver = classes["org/oha7/dispdriver/impl/DispDriver"];
+		mol::java::DispDriver dispDriver = classes["org/oha7/dispdriver/impl/DispDriver"];
 
-		jobjectArray args = JavaMarshaller::dispArgs2JavaArray( classes, pDisp, -1 );
+		jobjectArray args = mol::java::JavaMarshaler::dispArgs2JavaArray( classes, pDisp, -1 );
 
 		mol::bstr name(pDisp->rgvarg[pDisp->cArgs-1].bstrVal);
 	
 		jobject obj = dispDriver.Create(name.tostring(), args);
-		if (JRE::exceptionOccured(*env))
+		if (mol::java::exceptionOccured(*env))
 			return S_FALSE;
 
 		if ( pReturn )
 		{
-			mol::variant v = JavaMarshaller::javaObject2Variant(classes,obj);
+			mol::variant v = mol::java::JavaMarshaler::javaObject2Variant(classes,obj);
 			if ( v.vt == VT_DISPATCH ) 
 			{
 				::CoAllowSetForegroundWindow( (IUnknown*)v.pdispVal, 0);
@@ -158,8 +158,8 @@ HRESULT  __stdcall JREServer::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid
 
 HRESULT __stdcall JREServer::Cast( IJavaObject* javaObject, BSTR clazzName, IJavaObject** retObject )
 {
-	JRE& env = jre();
-	JavaClassStore classes(*env);
+	mol::JRE& env = mol::java::jre();
+	mol::java::JavaClassStore classes(*env);
 
 	jclass objectClazz = classes["java/lang/Object"];
 	
@@ -171,9 +171,9 @@ HRESULT __stdcall JREServer::Cast( IJavaObject* javaObject, BSTR clazzName, IJav
 		pos = s.find('.');
 	}
 
-	jclass c = jre()->FindClass(s.c_str());
+	jclass c = env->FindClass(s.c_str());
 
-	if (JRE::exceptionOccured(*env))
+	if (mol::java::exceptionOccured(*env))
 		return E_FAIL;
 
 	mol::punk<IJavaObject> instance;
