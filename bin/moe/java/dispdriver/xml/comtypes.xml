@@ -4,7 +4,7 @@ typeinfocount='3'
 guid='{3ECB75B2-E572-47A9-8618-FEE26C64CCB5}' 
 major='1' 
 minor='0' 
-file='..\..\..\..\ax\comtypes\x64/uni_debug\comtypes.tlb'>
+file='..\..\..\..\ax\comtypes\uni_debug\comtypes.tlb'>
 
 <interface name='ITypeLibToXml' type='Dual' iid='{2D9ABF3A-0013-4761-9F9F-9AFA71AF123C}' base='IDispatch' members='8' desc='' >
  <method name='Load' type='VARIANT_BOOL*' dispid='1' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='load a Type library from file' >
@@ -56,4 +56,4 @@ file='..\..\..\..\ax\comtypes\x64/uni_debug\comtypes.tlb'>
 
 
 </typelib>
->
+elib>

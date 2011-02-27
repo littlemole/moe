@@ -14,9 +14,9 @@
 INSTALLTOP=\usr\local\ssl
 
 # Set your compiler options
-PLATFORM=VC-WIN64A
+PLATFORM=VC-WIN32
 CC=cl
-CFLAG= /MD /W3 /Ox /Gs0 /GF /Gy /nologo -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DOPENSSL_SYSNAME_WIN32 -DOPENSSL_SYSNAME_WINNT -DUNICODE -D_UNICODE /Fdout32 -DOPENSSL_NO_RC5 -DOPENSSL_NO_MDC2 -DOPENSSL_NO_KRB5    
+CFLAG= /MD /W3 /WX /G5 /Ox /O2 /Ob2 /Gs0 /GF /Gy /nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 /Fdout32 -DOPENSSL_NO_RC5 -DOPENSSL_NO_MDC2 -DOPENSSL_NO_KRB5    
 APP_CFLAG=
 LIB_CFLAG=
 SHLIB_CFLAG=
@@ -24,13 +24,13 @@ APP_EX_OBJ=setargv.obj
 SHLIB_EX_OBJ=
 # add extra libraries to this define, for solaris -lsocket -lnsl would
 # be added
-EX_LIBS=wsock32.lib user32.lib gdi32.lib bufferoverflowu.lib   
+EX_LIBS=wsock32.lib user32.lib gdi32.lib   
 
 # The OpenSSL directory
 SRC_D=.
 
 LINK=link
-LFLAGS=/nologo /subsystem:console /opt:ref
+LFLAGS=/nologo /subsystem:console /machine:I386 /opt:ref
 RSC=rc
 
 BN_ASM_OBJ=
@@ -1171,7 +1171,7 @@ $(OBJ_D)\mem_dbg.obj: $(SRC_D)\crypto\mem_dbg.c
 	$(CC) /Fo$(OBJ_D)\mem_dbg.obj  $(LIB_CFLAGS) -c $(SRC_D)\crypto\mem_dbg.c
 
 $(OBJ_D)\cversion.obj: $(SRC_D)\crypto\cversion.c
-	$(CC) /Fo$(OBJ_D)\cversion.obj  $(LIB_CFLAGS) -DMK1MF_BUILD -DMK1MF_PLATFORM_VC_WIN64A -c $(SRC_D)\crypto\cversion.c
+	$(CC) /Fo$(OBJ_D)\cversion.obj  $(LIB_CFLAGS) -DMK1MF_BUILD -DMK1MF_PLATFORM_VC_WIN32 -c $(SRC_D)\crypto\cversion.c
 
 $(OBJ_D)\ex_data.obj: $(SRC_D)\crypto\ex_data.c
 	$(CC) /Fo$(OBJ_D)\ex_data.obj  $(LIB_CFLAGS) -c $(SRC_D)\crypto\ex_data.c
@@ -2624,6 +2624,12 @@ $(OBJ_D)\e_sureware.obj: $(SRC_D)\engines\e_sureware.c
 
 $(OBJ_D)\e_ubsec.obj: $(SRC_D)\engines\e_ubsec.c
 	$(CC) /Fo$(OBJ_D)\e_ubsec.obj  $(LIB_CFLAGS) -c $(SRC_D)\engines\e_ubsec.c
+
+$(OBJ_D)\$(CRYPTO).res: ms\version32.rc
+	$(RSC) /fo"$(OBJ_D)\$(CRYPTO).res" /d CRYPTO ms\version32.rc
+
+$(OBJ_D)\$(SSL).res: ms\version32.rc
+	$(RSC) /fo"$(OBJ_D)\$(SSL).res" /d SSL ms\version32.rc
 
 $(TEST_D)\md2test.exe: $(OBJ_D)\md2test.obj $(LIBS_DEP)
   $(LINK) $(LFLAGS) /out:$(TEST_D)\md2test.exe @<<

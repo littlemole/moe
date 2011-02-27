@@ -17,8 +17,10 @@
 
   <ItemDefinitionGroup>
     <Midl>
-	 <TypeLibraryName>$(ProjectName).tlb</TypeLibraryName>
-
+     <OutputDirectory>$(OutDir)</OutputDirectory>
+	 <TypeLibraryName>$(TargetName).tlb</TypeLibraryName>
+	 <HeaderFileName>$(ProjectDir)/$(TargetName)_h.h</HeaderFileName>
+	 <InterfaceIdentifierFileName>$(ProjectDir)/$(TargetName)_i.c</InterfaceIdentifierFileName>
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>$(boost);..\..\..\..\3dParty\expat\Source\lib;..\..\lib\include;..\..\..\3dParty\pcre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -35,11 +37,6 @@
   </ItemDefinitionGroup>
 
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">
-    <Midl>
-	 <OutputDirectory>uni_debug</OutputDirectory>
-	 <HeaderFileName>../$(TargetName)_h.h</HeaderFileName>
-	 <InterfaceIdentifierFileName>../$(TargetName)_i.c</InterfaceIdentifierFileName>
-    </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -54,11 +51,6 @@
   </ItemDefinitionGroup>
 
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
-    <Midl>
-	 <OutputDirectory>uni_release</OutputDirectory>
-	 <HeaderFileName>../$(TargetName)_h.h</HeaderFileName>
-	 <InterfaceIdentifierFileName>../$(TargetName)_i.c</InterfaceIdentifierFileName>
-    </Midl>
     <ClCompile>
       <Optimization>Full</Optimization>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -74,10 +66,7 @@
 
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
     <Midl>
-	  <OutputDirectory>x64\uni_debug</OutputDirectory>
       <TargetEnvironment>X64</TargetEnvironment>
-	 <HeaderFileName>../../$(TargetName)_h.h</HeaderFileName>
-	 <InterfaceIdentifierFileName>../../$(TargetName)_i.c</InterfaceIdentifierFileName>
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -95,8 +84,6 @@
     <Midl>
  	  <OutputDirectory>x64\uni_release</OutputDirectory>
       <TargetEnvironment>X64</TargetEnvironment>
-	 <HeaderFileName>../../$(TargetName)_h.h</HeaderFileName>
-	 <InterfaceIdentifierFileName>../../$(TargetName)_i.c</InterfaceIdentifierFileName>
     </Midl>
     <ClCompile>
       <Optimization>Full</Optimization>
