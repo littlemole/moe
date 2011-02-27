@@ -119,7 +119,7 @@
 		<RemoveDir Directories="@(SvnFolders)" />
 
 		<!-- heat -->
-		<Exec Command='"$(WIX)\bin\heat.exe" dir . -sw5150  -gg -cg "MoeCompGroup" -dr INSTALLLOCATION -var var.SourceDir  -o ..\gen.wxs' WorkingDirectory="./moe"/>
+		<Exec Command='"$(WIX)\bin\heat.exe" dir . -sw5150 -sw5151 -gg -cg "MoeCompGroup" -dr INSTALLLOCATION -var var.SourceDir  -o ..\gen.wxs' WorkingDirectory="./moe"/>
 
         <!-- candle -->
 		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(genObj)" gen.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>

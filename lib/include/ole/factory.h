@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "factorypolicy.h"
+#include "ole/factorypolicy.h"
 #include "win/app.h"
 #include "ole/TypeLib.h"
 

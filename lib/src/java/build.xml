@@ -12,9 +12,10 @@
 
   <ItemDefinitionGroup>
     <Midl>
+	 <OutputDirectory>$(OutDir)</OutputDirectory>
 	 <TypeLibraryName>$(TargetName).tlb</TypeLibraryName>
-	 <HeaderFileName>../../include/java/java.h</HeaderFileName>
-	 <InterfaceIdentifierFileName>./java_i.c</InterfaceIdentifierFileName>
+	 <HeaderFileName>$(ProjectDir)/../../include/java/java.h</HeaderFileName>
+	 <InterfaceIdentifierFileName>$(ProjectDir)/java_i.c</InterfaceIdentifierFileName>
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>$(java);$(boost);..\..\..\3dParty\expat\Source\lib;..\..\include;..\..\..\3dParty\pcre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

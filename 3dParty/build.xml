@@ -17,6 +17,7 @@
 		<Exec Command="nmake -f win32\Makefile.msc64" WorkingDirectory=".\zlib" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' "  />
 		<Exec Command="nmake -f win32\Makefile.mscd64" WorkingDirectory=".\zlib" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' "  />
 
+		<Delete Files="@(objFiles)" />
 		<Exec Command="nmake -f deps.mak" WorkingDirectory=".\scintilla\win32" />
 		<Exec Command="nmake -f scintilla-static.mak" WorkingDirectory=".\scintilla\win32" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' "  />
 		<Exec Command="nmake -f scintilla-static.mak DEBUG=1" WorkingDirectory=".\scintilla\win32" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' "  />
@@ -62,12 +63,6 @@
 		<Exec Command="nmake -f ms\ntd64.mak clean" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' "  />
 
 
- </Target>
-
- <Target Name="Full">
-  <Exec Command="./build.openssl.bat"/>
-  <Exec Command="./scintilla.bat"/>
-  <CallTarget Targets="Build"/>
  </Target>
 
 </Project>
