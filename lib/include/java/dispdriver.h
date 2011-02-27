@@ -1,10 +1,11 @@
 #ifndef MOL_JGLUE_DISPDRIVER_DEF_GUARD_DEFINE_
 #define MOL_JGLUE_DISPDRIVER_DEF_GUARD_DEFINE_
 
-#include "util/uni.h"
-#include <string>
-#include <jni.h>
 #include "java/jglue.h"
+
+namespace mol {
+namespace java {
+
 
 class DispDriver
 {
@@ -100,5 +101,7 @@ private:
 	jclass clazz_;
 };
 
+} // end namespace java
+} // end namespace mol
 
 #endif
