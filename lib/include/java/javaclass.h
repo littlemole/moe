@@ -1,32 +1,14 @@
 #ifndef _MOL_JAVACLASS_DEF_DEFINE_GUARD_
 #define _MOL_JAVACLASS_DEF_DEFINE_GUARD_
 
-#include "ole/ole.h"
-#include "ole/com.h"
-#include "ole/obj.h"
-#include "ole/Bstr.h"
-#include "ole/typeinfo.h"
 #include "ole/Factory.h"
-#include "ole/Factorypolicy.h"
-#include "ole/aut.h"
-#include "ole/cp.h"
-#include "win/path.h"
-#include "win/file.h"
-#include "util/istr.h"
-#include "thread/thread.h"
-#include "thread/threadqueue.h"
-
-#include <list>
-#include <map>
-#include <set>
-#include <vector>
-#include <cstring>
-
 #include "java/java.h"
 #include "java/jglue.h"
-#include "ole/com.h"
 
 EXTERN_C const  CLSID CLSID_JavaClass;
+
+namespace mol {
+namespace java {
 
 ////////////////////////////////////////////////////////////////////////
 class JavaClass : 
@@ -56,6 +38,9 @@ public:
 private:
 	jclass theJavaClass_;
 };
+
+} // end namespace java
+} // end namespace mol
 
 
 #endif

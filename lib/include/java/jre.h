@@ -1,15 +1,9 @@
 #ifndef MOL_JGLUE_JRE_DEF_GUARD_DEFINE_
 #define MOL_JGLUE_JRE_DEF_GUARD_DEFINE_
 
-#include "win/regkey.h"
+#include "java/jglue.h"
 
-#include <iostream>
-#include <string>
-#include <jni.h>
-#include "ole/variant.h"
-#include "thread/sync.h"
-
-EXTERN_C const  CLSID CLSID_JavaObject;
+namespace mol {
 
 class JRE
 {
@@ -25,19 +19,12 @@ public:
 	mol::string libpath();
 
 	JNIEnv* createJVM(bool debug);
+	bool isLoaded();
+	void detach();
 
 	JNIEnv* operator->();
 	JNIEnv* operator*() { return this->operator->(); }
-
-	bool isLoaded();
-
-	static mol::string getJREpath();
-
-	void detach();
-
-	JavaVM* jvm() { return jvm_; };
-
-	static bool JRE::exceptionOccured( JNIEnv *env, REFCLSID clsid = CLSID_JavaObject);
+	JavaVM* jvm() { return jvm_; };	
 
 private:
 	JRE();
@@ -54,9 +41,12 @@ private:
 
 	HMODULE loadJVM();
 
+	static mol::string getJREpath();
 	static mol::string getJREpathOnce();
 };
 
+
+} // end namespace mol
 
 
 

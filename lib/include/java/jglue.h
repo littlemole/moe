@@ -1,13 +1,21 @@
 #ifndef MOL_JGLUE_DEF_GUARD_DEFINE_
 #define MOL_JGLUE_DEF_GUARD_DEFINE_
 
-#include "win/regkey.h"
-
-#include <iostream>
-#include <string>
-#include <jni.h>
-#include "ole/variant.h"
+#include <map>
+#include "util/uni.h"
 #include "thread/sync.h"
+
+#include <jni.h>
+
+EXTERN_C const  CLSID CLSID_JavaObject;
+
+namespace mol {
+
+class JRE;
+
+namespace java {
+
+bool exceptionOccured( JNIEnv *env, REFCLSID clsid = CLSID_JavaObject);
 
 class JavaClassStore 
 {
@@ -62,10 +70,13 @@ class JavaClassNames : public JavaNames
 friend class mol::Singleton<JavaClassNames>;
 };
 
-class JRE;
 
 JRE& jre();
 JNIEnv* java();
+
+} // end namespace java
+} // end namespace mol
+
 
 #endif
 
