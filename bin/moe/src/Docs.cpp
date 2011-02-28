@@ -442,10 +442,13 @@ mol::string Docs::getNewFileName(const mol::string& ext)
 
 		mol::string f = oss.str();
 
-		punk<IMoeDocument> doc;
-		if ( S_FALSE == Item( variant(bstr(f)), &doc ) )
+		if ( !mol::Path::exists(f) )
 		{
-			return f;
+			punk<IMoeDocument> doc;
+			if ( S_FALSE == Item( variant(bstr(f)), &doc ) )
+			{
+				return f;
+			}
 		}
 		i++;
 	}
