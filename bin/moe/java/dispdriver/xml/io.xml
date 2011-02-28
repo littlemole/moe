@@ -4,7 +4,7 @@ typeinfocount='7'
 guid='{F1D70022-14DA-4344-9A66-AE78DBF21ABF}' 
 major='1' 
 minor='0' 
-file='..\..\..\..\ax\io\uni_debug\io.tlb'>
+file='..\..\..\..\ax\io\x64/uni_release\io.tlb'>
 
 <interface name='IFile' type='Dual' iid='{5AF00596-158A-4DDD-BC20-83BC8D5E432F}' base='IDispatch' members='16' desc='' >
  <property name='Filename' type='BSTR*' dispid='1' vtindex='56' ctype='HRESULT' param='f' desc='Get Filename'  funkind='virtual'  calltype='__stdcall' >
@@ -154,4 +154,3 @@ file='..\..\..\..\ax\io\uni_debug\io.tlb'>
 
 
 </typelib>
-elib>

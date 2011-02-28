@@ -4,8 +4,6 @@
 #include "ole/bstr.h"
 #include "ole/cp.h"
 #include <sstream>
-//#include "moe.h"
-//#include "widgets.h"
 #include "xmlui.h"
 
 
@@ -152,31 +150,7 @@ HRESULT ThreadScript::removeNamedObject( const mol::string& obj )
 	return S_OK;
 }
 
-/*
-mol::string engineFromExtension(const mol::string& ext)
-{
-	try {
-		
-		mol::string x = ext;
-		mol::RegKey root(HKEY_CLASSES_ROOT, KEY_READ);
 
-		if ( ext[0] != _T('.') )
-		{
-			mol::string tmp(_T("."));
-			tmp += ext;
-			x = tmp;
-		}
-		
-		mol::RegKey extKey = root.open(x, KEY_READ);
-		mol::string extFile = extKey.get();
-		mol::RegKey fileKey = root.open(extFile, KEY_READ);
-		mol::RegKey engineKey = fileKey.open( _T("ScriptEngine"), KEY_READ );
-		return engineKey.get();
-	}
-	catch (...) {}
-	return _T("");
-}
-*/
 ThreadScript* ThreadScript::CreateInstance( HWND owner, const mol::string& script, const mol::string& filename)
 {
 	ODBGS("ThreadScript::execute()\r\n");
@@ -189,7 +163,6 @@ ThreadScript* ThreadScript::CreateInstance( HWND owner, const mol::string& scrip
 	ts->filename_ = filename;
 	ts->engine_ = engineFromPath( mol::tostring(filename));
 	
-	//mol::thread( boost::bind( &ThreadScript::execute_thread, ts ), boost::bind(&ThreadScript::execute_callback,ts) );
 	return ts;
 }
 
@@ -460,9 +433,6 @@ HRESULT  __stdcall  ThreadScript::onHandleBreakPoint(IRemoteDebugApplicationThre
 	if ( S_OK != hr || !frames )
 		return S_OK;
 
-	// update variable window
-	//debugDlg()->update_variables(frames);
-
 	// reset frame enumerator
 	hr = frames->Reset();
 	if ( S_OK != hr )
@@ -589,7 +559,7 @@ HRESULT  __stdcall  ThreadScript::GetSize(ULONG *  numLines, ULONG* numChars)
 	DWORD	lines;
 	WCHAR	*ptr;
 
-	chars = script_.size();
+	chars = (DWORD)script_.size();
 	*numChars = chars;
 
 	ptr = (WCHAR*)script_.c_str();
@@ -704,7 +674,7 @@ HRESULT  __stdcall  ThreadScript::GetText(ULONG position, WCHAR * text, SOURCE_T
 
 	// Make sure caller isn't asking for more chars than are remaining
 	offset = max;
-	if ((offset + position) > script_.size() ) offset = script_.size() - position;
+	if ((offset + position) > (DWORD)script_.size() ) offset = (DWORD)script_.size() - position;
 	*numChars = offset;
 
 	if (text) 
@@ -725,7 +695,7 @@ HRESULT  __stdcall  ThreadScript::GetText(ULONG position, WCHAR * text, SOURCE_T
 
 HRESULT  __stdcall  ThreadScript::GetPositionOfContext( IDebugDocumentContext * ctx, ULONG *position, ULONG * numChars)
 {
-	*numChars = script_.size();
+	*numChars = (DWORD)script_.size();
 	*position = 0;
 	return S_OK;
 }
@@ -767,7 +737,7 @@ HRESULT  __stdcall  ThreadScript::EnumCodeContexts(IEnumDebugCodeContexts **pObj
 		return E_FAIL;
 	}
 
-	hr = debug->EnumCodeContextsOfPosition( (DWORD)0,0,script_.size(),pObj);
+	hr = debug->EnumCodeContextsOfPosition( (DWORD)0,0,(ULONG)script_.size(),pObj);
 	return hr;
 }
 

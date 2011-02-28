@@ -53,7 +53,7 @@ public:
 
 		std::string data = pipe.read();
 
-		ODBGS1( "data read:", data.size() );
+		ODBGS1( "data read:", (int)data.size() );
 		if ( data.size() == 0 )
 			return false;
 

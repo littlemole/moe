@@ -7,466 +7,466 @@
     </Fragment>
     <Fragment>
         <ComponentGroup Id="JreCompGroup">
-            <Component Id="cmp2E726CCD9BE795D556302767F961ADA5" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{1AE9586A-5C93-4448-9DD2-70E9B266249F}">
+            <Component Id="cmp2E726CCD9BE795D556302767F961ADA5" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{3EDB37E7-8EF0-4170-9794-0C922754DA78}">
                 <File Id="fil13A62F1F8736DA93B0EE9AC80DEB9663" KeyPath="yes" Source="$(var.SourceDir)\jre.ico" />
             </Component>
-            <Component Id="cmp1F2178ADBCF34841B4955AEA1BB41E7A" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{3E55EE54-F573-4E7A-B97A-8A260FDC4D30}">
+            <Component Id="cmp1F2178ADBCF34841B4955AEA1BB41E7A" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{2778BEC3-F18A-4250-B0D6-A797DDCBC6B2}">
                 <File Id="fil8C55FB070FC1557FBDE5B621267793EE" KeyPath="yes" Source="$(var.SourceDir)\jre.exe" />
             </Component>
-            <Component Id="cmp75C55EBEBD3AF818AA639765BDA0A2EB" Directory="dir8162FB4B486DCA0B870210E2ED94CB46" Guid="{FC380574-10D2-4443-B773-8C7BAA47F3DE}">
+            <Component Id="cmp75C55EBEBD3AF818AA639765BDA0A2EB" Directory="dir8162FB4B486DCA0B870210E2ED94CB46" Guid="{DB926110-B8C0-4F63-8CD7-DD2140052A99}">
                 <File Id="fil314B635FCE418DAEDAD0445337EDCF2E" KeyPath="yes" Source="$(var.SourceDir)\lib\dispdriver.jar" />
             </Component>
-            <Component Id="cmp01ED767A9053D8EB8078EA1E5CBFC595" Directory="dir8162FB4B486DCA0B870210E2ED94CB46" Guid="{74262936-80F2-40D5-AC9E-E5DA01AE554E}">
+            <Component Id="cmp01ED767A9053D8EB8078EA1E5CBFC595" Directory="dir8162FB4B486DCA0B870210E2ED94CB46" Guid="{A2C6E03E-DA4B-4E77-90A6-AF72EB3CC9F8}">
                 <File Id="fil416BF1778DE73F99495F058B496EDBF5" KeyPath="yes" Source="$(var.SourceDir)\lib\dispdriver.dll" />
             </Component>
-            <Component Id="cmpD4F01939412E1015EBF1FF524BC96796" Directory="dir23210BFC740D3AF58B0C97856901826D" Guid="{B60F23D9-A4D6-4461-AB84-E36E905AC238}">
+            <Component Id="cmpD4F01939412E1015EBF1FF524BC96796" Directory="dir23210BFC740D3AF58B0C97856901826D" Guid="{52F09CE4-1A2B-4655-9B9D-62D0EAE64B60}">
                 <File Id="filA42D2569A9504A623AEEF2BEC980DADD" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\Factory.java" />
             </Component>
-            <Component Id="cmpD84C48CB01F2DA902135E6D131548B3F" Directory="dirB67D050F815398A7EFF388B66A2B95BE" Guid="{0AED1198-43FC-4CB7-8F5D-714AEDC59F27}">
+            <Component Id="cmpD84C48CB01F2DA902135E6D131548B3F" Directory="dirB67D050F815398A7EFF388B66A2B95BE" Guid="{835C031C-94C2-4A93-8A4D-C61C654B16FF}">
                 <File Id="fil2E37B93F1C8B8218DF23060C95529829" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\annotations\Dispid.java" />
             </Component>
-            <Component Id="cmp02A1FD0459D52BAC2ECADFF60CC538BC" Directory="dirB67D050F815398A7EFF388B66A2B95BE" Guid="{9E7D3F98-BC6F-4206-ACCC-A1B8EA149366}">
+            <Component Id="cmp02A1FD0459D52BAC2ECADFF60CC538BC" Directory="dirB67D050F815398A7EFF388B66A2B95BE" Guid="{36187555-C357-40C3-9974-401D7315152A}">
                 <File Id="fil36F808B47356F62B694D0AF1B6EFD061" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\annotations\IID.java" />
             </Component>
-            <Component Id="cmp9CCAD4990B47D688B9BBEBB883AC157D" Directory="dirB67D050F815398A7EFF388B66A2B95BE" Guid="{C65C69F5-EAC6-470A-A49D-199687594CF7}">
+            <Component Id="cmp9CCAD4990B47D688B9BBEBB883AC157D" Directory="dirB67D050F815398A7EFF388B66A2B95BE" Guid="{5FA97EDF-A934-4EAD-B6CC-D11F650BA8F2}">
                 <File Id="fil450FBA052B6CC2858B931C5AE866AF68" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\annotations\ProgId.java" />
             </Component>
-            <Component Id="cmpA5A320CE0583BABA247A0D7A257BC4E4" Directory="dir67161147C4F88B5EDEC09BE2D2873865" Guid="{7DB598AA-058E-452F-B832-C9B46198F07F}">
+            <Component Id="cmpA5A320CE0583BABA247A0D7A257BC4E4" Directory="dir67161147C4F88B5EDEC09BE2D2873865" Guid="{3C41363C-ACE6-488A-AD4F-4742E015EDCF}">
                 <File Id="fil389AA38845A6CCBCDCE3DF4836B64428" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\annotations\.svn\entries" />
             </Component>
-            <Component Id="cmpFCD1F91C6025BDB522019EBCF655A214" Directory="dir589ACF08FDF51D09E9D41F3B4B1A2DA3" Guid="{35DBD859-872D-431B-8A3A-30D80B98B8F3}">
+            <Component Id="cmpFCD1F91C6025BDB522019EBCF655A214" Directory="dir589ACF08FDF51D09E9D41F3B4B1A2DA3" Guid="{9180921B-95B7-4C5D-A446-B6E0A4C27B7E}">
                 <File Id="fil8F961E0A9AE07A0A537646EF4ABF3972" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\annotations\.svn\text-base\Dispid.java.svn-base" />
             </Component>
-            <Component Id="cmp9AEC97A84A1577D76E1EAD073C511B00" Directory="dir589ACF08FDF51D09E9D41F3B4B1A2DA3" Guid="{8E9FAAC0-441F-41F8-A486-057D4907EEF8}">
+            <Component Id="cmp9AEC97A84A1577D76E1EAD073C511B00" Directory="dir589ACF08FDF51D09E9D41F3B4B1A2DA3" Guid="{7EF8354C-4196-49BE-AB37-9F3A51449D2A}">
                 <File Id="fil1636B7B6E2A115A32B8454E0F97DFE68" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\annotations\.svn\text-base\IID.java.svn-base" />
             </Component>
-            <Component Id="cmpEDD3889EDD7DB23DD27D1D54162E86EF" Directory="dir589ACF08FDF51D09E9D41F3B4B1A2DA3" Guid="{F9847CF7-FD7C-43A3-A883-6AEF6C95CF05}">
+            <Component Id="cmpEDD3889EDD7DB23DD27D1D54162E86EF" Directory="dir589ACF08FDF51D09E9D41F3B4B1A2DA3" Guid="{B3B9174D-DE42-4CAC-AAF1-B9BF180799D0}">
                 <File Id="fil6EC984722B2E306B0E04B1DF797DB715" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\annotations\.svn\text-base\ProgId.java.svn-base" />
             </Component>
-            <Component Id="cmp975D2BBA6F65B42FD03847B6ABEF3D7D" Directory="dirBB8A041B9BDFCC53FC32376959982CB5" Guid="{9C559407-4985-45EA-BD05-7E51F65A932E}">
+            <Component Id="cmp975D2BBA6F65B42FD03847B6ABEF3D7D" Directory="dirBB8A041B9BDFCC53FC32376959982CB5" Guid="{70B3BE19-D277-45BE-B412-370656A54F49}">
                 <File Id="filDC3F6C593EB8CC4ADA8FD7CF107225A0" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\impl\ComProxy.java" />
             </Component>
-            <Component Id="cmp9D8AC161FCAF6E145902C1066F3ABA5D" Directory="dirBB8A041B9BDFCC53FC32376959982CB5" Guid="{8C7A69A7-8F09-4963-B4F6-2B3F5098D278}">
+            <Component Id="cmp9D8AC161FCAF6E145902C1066F3ABA5D" Directory="dirBB8A041B9BDFCC53FC32376959982CB5" Guid="{FF2931E5-5940-49AD-8DD0-B568832482B1}">
                 <File Id="filDE5C94FCC2E6D01F3B7A19EEA351266B" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\impl\DispDriver.java" />
             </Component>
-            <Component Id="cmp25D18B9C8D532C00842ADBBFF5C9442D" Directory="dirBB8A041B9BDFCC53FC32376959982CB5" Guid="{635A257A-A9F0-470E-A925-C6D7483C6CA5}">
+            <Component Id="cmp25D18B9C8D532C00842ADBBFF5C9442D" Directory="dirBB8A041B9BDFCC53FC32376959982CB5" Guid="{A95E0465-0726-403B-B58E-0BC9D7122F10}">
                 <File Id="fil0D8517E21FA1C2E7FC1C777A85D292F8" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\impl\Native.java" />
             </Component>
-            <Component Id="cmp8480D3661BE2BF8E58AB103BB3C9414D" Directory="dirBB8A041B9BDFCC53FC32376959982CB5" Guid="{9BCE8A58-21C4-4868-BACA-4A403ECA22A6}">
+            <Component Id="cmp8480D3661BE2BF8E58AB103BB3C9414D" Directory="dirBB8A041B9BDFCC53FC32376959982CB5" Guid="{939BF91E-8C2B-4AD1-BBF1-0C5B6623B447}">
                 <File Id="fil686D6D7246B9622A8BC327CA0E493DBE" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\impl\RawComPtr.java" />
             </Component>
-            <Component Id="cmpE54EE7B2F3CF1FF343177E30F8AB4FD9" Directory="dirBB8A041B9BDFCC53FC32376959982CB5" Guid="{019E773D-362F-45A4-8923-05DE0F723101}">
+            <Component Id="cmpE54EE7B2F3CF1FF343177E30F8AB4FD9" Directory="dirBB8A041B9BDFCC53FC32376959982CB5" Guid="{B40C68EC-7E16-4053-8EEE-3231F7510DD9}">
                 <File Id="filB4B20C94DDE0CB16BA2FEBF5019921DD" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\impl\WrapperTypes.java" />
             </Component>
-            <Component Id="cmpF88EA8F5EE89D117AD70B11A6E0B08FD" Directory="dir4AB0630A2421B1FF98841C0FFC39775D" Guid="{94621483-85C0-4958-90BA-B6A7ADD2680D}">
+            <Component Id="cmpF88EA8F5EE89D117AD70B11A6E0B08FD" Directory="dir4AB0630A2421B1FF98841C0FFC39775D" Guid="{4BA8B733-517E-4992-9E5D-51AB14868F18}">
                 <File Id="fil09DE3D7CD2BFA82C6B44B4054E8AD0F0" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\impl\.svn\entries" />
             </Component>
-            <Component Id="cmp83FCBDE36ED671D4FA94F6CED2159683" Directory="dir069F915E3719EA7814C87ADED024CC59" Guid="{3603EEE9-B0CC-467B-BF2E-9EF68241102E}">
+            <Component Id="cmp83FCBDE36ED671D4FA94F6CED2159683" Directory="dir069F915E3719EA7814C87ADED024CC59" Guid="{153CA3C3-E905-474E-B7FF-749C0BC15BCC}">
                 <File Id="filEEAA3891AFD4F2853EDE5F9A7643C673" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\impl\.svn\text-base\ComProxy.java.svn-base" />
             </Component>
-            <Component Id="cmp4B45B27E2722E63B7CF3716163740C49" Directory="dir069F915E3719EA7814C87ADED024CC59" Guid="{1A9F45EF-F4ED-4906-B0C9-9CDC5D535FCF}">
+            <Component Id="cmp4B45B27E2722E63B7CF3716163740C49" Directory="dir069F915E3719EA7814C87ADED024CC59" Guid="{7ACE5FCB-9259-457C-A2F6-BC0E58CFF1AF}">
                 <File Id="filA6EF3C4C8D27BBDD412D04422A98F6C0" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\impl\.svn\text-base\DispDriver.java.svn-base" />
             </Component>
-            <Component Id="cmpD2CD7867066EAD01BB970B313874737E" Directory="dir069F915E3719EA7814C87ADED024CC59" Guid="{CBF7F2C9-B4CB-46C4-AF80-333E4F8C94FB}">
+            <Component Id="cmpD2CD7867066EAD01BB970B313874737E" Directory="dir069F915E3719EA7814C87ADED024CC59" Guid="{EFC974A3-0B5E-4E50-A9BB-8ACCEA19D56B}">
                 <File Id="filCD3FF01D5E9B3C472B13A3B90CBB41B3" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\impl\.svn\text-base\Native.java.svn-base" />
             </Component>
-            <Component Id="cmpE47365D05408EF440AB3EC1E931DB88A" Directory="dir069F915E3719EA7814C87ADED024CC59" Guid="{FBA189BB-5293-4823-A7AF-8C50165A632B}">
+            <Component Id="cmpE47365D05408EF440AB3EC1E931DB88A" Directory="dir069F915E3719EA7814C87ADED024CC59" Guid="{BF590D94-9583-4612-B4BF-463A472A2BDF}">
                 <File Id="filFF41BDF8708A0656BE3298D38FAE5F3A" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\impl\.svn\text-base\RawComPtr.java.svn-base" />
             </Component>
-            <Component Id="cmpD37ACA4B22F7AB9AF32608CA7C209F3F" Directory="dir069F915E3719EA7814C87ADED024CC59" Guid="{31209B38-55A0-4D4F-8289-4FEFBC4CCF5E}">
+            <Component Id="cmpD37ACA4B22F7AB9AF32608CA7C209F3F" Directory="dir069F915E3719EA7814C87ADED024CC59" Guid="{2A2E0B2B-BDB7-46BC-8740-2DCAFD4854B7}">
                 <File Id="filECC60206B8D6C00B1D7B79759ECFF050" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\impl\.svn\text-base\WrapperTypes.java.svn-base" />
             </Component>
-            <Component Id="cmp4D21F95DFF6DB5B6DDD459F00D98DAD7" Directory="dir7AC8EC9868752E2BB754A14AC09C9197" Guid="{5A483A11-50B5-4D18-AC45-4CE8EBD472C0}">
+            <Component Id="cmp4D21F95DFF6DB5B6DDD459F00D98DAD7" Directory="dir7AC8EC9868752E2BB754A14AC09C9197" Guid="{F91A9490-941B-4A52-BCAE-2D3322FA8F69}">
                 <File Id="filEF065214937258525F4DE00817210F04" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\interfaces\IDispatch.java" />
             </Component>
-            <Component Id="cmpCB4D0BFCF9F5411C5BC6903473580F85" Directory="dir7AC8EC9868752E2BB754A14AC09C9197" Guid="{28127EDC-1686-4E66-BC35-12785B7352D4}">
+            <Component Id="cmpCB4D0BFCF9F5411C5BC6903473580F85" Directory="dir7AC8EC9868752E2BB754A14AC09C9197" Guid="{3A0E7A4F-865A-4F7C-AEC1-39254811C219}">
                 <File Id="fil6A695D45C54AA400F73020A864701C96" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\interfaces\IEnumVARIANT.java" />
             </Component>
-            <Component Id="cmpCF683F28833E7587063C4CE54FAA1D54" Directory="dir7AC8EC9868752E2BB754A14AC09C9197" Guid="{5CFBF983-5257-4699-8203-3EDFB4A38D5E}">
+            <Component Id="cmpCF683F28833E7587063C4CE54FAA1D54" Directory="dir7AC8EC9868752E2BB754A14AC09C9197" Guid="{1840AA43-DEC6-4406-BF85-4BB3487BADEA}">
                 <File Id="fil39D40D4AE4A7A6F85A8C4E42A5FCF190" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\interfaces\IUnknown.java" />
             </Component>
-            <Component Id="cmp0DAA18BC667840EEA805EBD3870A8302" Directory="dir7AC8EC9868752E2BB754A14AC09C9197" Guid="{54B1818D-F70F-4201-B341-4F001E930CA5}">
+            <Component Id="cmp0DAA18BC667840EEA805EBD3870A8302" Directory="dir7AC8EC9868752E2BB754A14AC09C9197" Guid="{9C32CB78-3C78-4603-857D-F4ECE7A9803C}">
                 <File Id="filB3523E8AAE7978A439F73275BCD0C7FE" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\interfaces\RawPtr.java" />
             </Component>
-            <Component Id="cmp4494D5D0142653732CBAAF163F353CB8" Directory="dir7AC8EC9868752E2BB754A14AC09C9197" Guid="{2AA8A04F-9358-4781-BBB2-2F2F0E85DB74}">
+            <Component Id="cmp4494D5D0142653732CBAAF163F353CB8" Directory="dir7AC8EC9868752E2BB754A14AC09C9197" Guid="{E86BAB8C-D678-48FD-BF9B-115BD7D63C44}">
                 <File Id="fil27C2E8E491BA0F4DD84638A4D825FD03" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\interfaces\IFontDisp.java" />
             </Component>
-            <Component Id="cmp607D8B8DD0960D3E15118CCFA49DE8AC" Directory="dirB4906D6597EA88867D55C46622219F65" Guid="{711D4551-5BE8-4E9C-B934-A707B45C1751}">
+            <Component Id="cmp607D8B8DD0960D3E15118CCFA49DE8AC" Directory="dirB4906D6597EA88867D55C46622219F65" Guid="{6745CD26-2852-4817-9092-0B517AC2E30E}">
                 <File Id="filE710E628D9CB33ED0AAAD2CC49674D14" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\interfaces\.svn\entries" />
             </Component>
-            <Component Id="cmpB11FFD14C0EFE0F52733AB01B124D35F" Directory="dirD4D7AA24BF07B5300A9E2C0A5C99C293" Guid="{09A10C59-9D47-4E97-A16A-A7EF0776E6E1}">
+            <Component Id="cmpB11FFD14C0EFE0F52733AB01B124D35F" Directory="dirD4D7AA24BF07B5300A9E2C0A5C99C293" Guid="{370121A0-264E-486D-A794-5AC42D5F9344}">
                 <File Id="filCDBF2934ACC7578021A2EC459F04C9A0" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\interfaces\.svn\text-base\IDispatch.java.svn-base" />
             </Component>
-            <Component Id="cmpCAB1139C3E2F47D4A730194E88930308" Directory="dirD4D7AA24BF07B5300A9E2C0A5C99C293" Guid="{3C538FC6-C597-40CB-BDCF-1B7BD961B131}">
+            <Component Id="cmpCAB1139C3E2F47D4A730194E88930308" Directory="dirD4D7AA24BF07B5300A9E2C0A5C99C293" Guid="{AAB4546C-8856-4FB6-93F3-A551F92791FE}">
                 <File Id="fil8D098B88D9EB9CF3588058E86C2B3C72" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\interfaces\.svn\text-base\IEnumVARIANT.java.svn-base" />
             </Component>
-            <Component Id="cmp2C8380B6B2643C144F101D8F04D18E35" Directory="dirD4D7AA24BF07B5300A9E2C0A5C99C293" Guid="{BBBE12B8-B3FF-4968-BFFE-9182D12BE2EF}">
+            <Component Id="cmp2C8380B6B2643C144F101D8F04D18E35" Directory="dirD4D7AA24BF07B5300A9E2C0A5C99C293" Guid="{DF7E47E9-B1E5-40FA-AD89-8F8747E350C5}">
                 <File Id="fil51E9D47FE966D71A951E8D79FD97FB74" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\interfaces\.svn\text-base\IFontDisp.java.svn-base" />
             </Component>
-            <Component Id="cmp275B306A93BC9556E9BB4C4CFB730F63" Directory="dirD4D7AA24BF07B5300A9E2C0A5C99C293" Guid="{59F9D4C1-CDAF-421B-BE0A-3DF81BF9DEC3}">
+            <Component Id="cmp275B306A93BC9556E9BB4C4CFB730F63" Directory="dirD4D7AA24BF07B5300A9E2C0A5C99C293" Guid="{193E1AD6-A813-4513-97CC-F3A851C0DF0D}">
                 <File Id="fil5FAEE6E31D52C0987D7339199286B1EE" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\interfaces\.svn\text-base\IUnknown.java.svn-base" />
             </Component>
-            <Component Id="cmpD9EDBD416CF969F8CAF22D41027595D6" Directory="dirD4D7AA24BF07B5300A9E2C0A5C99C293" Guid="{2C53E80B-477B-426D-8D9D-77A320AE5C5E}">
+            <Component Id="cmpD9EDBD416CF969F8CAF22D41027595D6" Directory="dirD4D7AA24BF07B5300A9E2C0A5C99C293" Guid="{C75166D1-8224-4DCD-BE83-0A9FC0007741}">
                 <File Id="fil57A1B7E446AA6299FA5DC3CCA9F6857A" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\interfaces\.svn\text-base\RawPtr.java.svn-base" />
             </Component>
-            <Component Id="cmp7E93EDB4E7773AF42FEA2351F74381AE" Directory="dirED3627C699995C75DA581E4E81A1A417" Guid="{20E16499-6AB4-43CE-9A91-4D4963EA9245}">
+            <Component Id="cmp7E93EDB4E7773AF42FEA2351F74381AE" Directory="dirED3627C699995C75DA581E4E81A1A417" Guid="{214570E5-D310-42B9-83B5-BCA369CB94E6}">
                 <File Id="fil939C0ADBF560590C896B33D26200FC98" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\swing\Util.java" />
             </Component>
-            <Component Id="cmpE134456DC2DC60EFB1B4615D478820DE" Directory="dir99A271DF618F2C81CE56FF890E8ADE37" Guid="{5AA502AC-6B72-4D2E-89B7-F3D9B1490A5F}">
+            <Component Id="cmpE134456DC2DC60EFB1B4615D478820DE" Directory="dir99A271DF618F2C81CE56FF890E8ADE37" Guid="{237D752E-8B63-428B-AF45-7AA0728256A8}">
                 <File Id="fil06A8E804193A1648EB42742641CC26EF" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\swing\.svn\entries" />
             </Component>
-            <Component Id="cmp318E984094CB9EBD3B70D688AB10360D" Directory="dir9DD983FE481AE26813621347A65530B5" Guid="{FAE8F46C-D7D9-4616-B885-E516C63620C4}">
+            <Component Id="cmp318E984094CB9EBD3B70D688AB10360D" Directory="dir9DD983FE481AE26813621347A65530B5" Guid="{16D96BB5-44D4-476D-A266-3AA0159F0CDF}">
                 <File Id="fil16322F8E2B41539561358BC3198AA09A" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\swing\.svn\text-base\Util.java.svn-base" />
             </Component>
-            <Component Id="cmp03756151BA5B8017E4FDF7B92C7FA0AA" Directory="dirB650F778584106060D13BA0BCFEE8829" Guid="{F3712A25-54FC-469D-8D18-FF4895AB9D0E}">
+            <Component Id="cmp03756151BA5B8017E4FDF7B92C7FA0AA" Directory="dirB650F778584106060D13BA0BCFEE8829" Guid="{84DAC831-BA74-4818-92B6-A842ACCA589E}">
                 <File Id="filF30924CB8A50A275C96929AF8AD72789" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\.svn\entries" />
             </Component>
-            <Component Id="cmpB9E25713447587716E4FC140D94B00D9" Directory="dir6507C2A0CB375FD315FBE52A4D95F75A" Guid="{8DC1FCEA-D88B-4812-82E3-749AB50F56B3}">
+            <Component Id="cmpB9E25713447587716E4FC140D94B00D9" Directory="dir6507C2A0CB375FD315FBE52A4D95F75A" Guid="{06B90C82-7E83-469F-8DEA-60330AB6FF04}">
                 <File Id="fil1CC38B8FFDC768C3C9CBD8146C490ED1" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\dispdriver\.svn\text-base\Factory.java.svn-base" />
             </Component>
-            <Component Id="cmp031EA8DF3FBB1E0A852099CEEDE0188F" Directory="dir7C68073B97C7304793F2DF28637820B0" Guid="{737BFF02-605A-4A2A-B4CB-80E25A193E38}">
+            <Component Id="cmp031EA8DF3FBB1E0A852099CEEDE0188F" Directory="dir7C68073B97C7304793F2DF28637820B0" Guid="{815080F9-7B23-44D5-B34C-7D1B374DF6CF}">
                 <File Id="filF199B68D1CB6B01680186567F832B371" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\test\Client.java" />
             </Component>
-            <Component Id="cmpDAC33F0E158F0F1E30562A0028D8F355" Directory="dir7C68073B97C7304793F2DF28637820B0" Guid="{9122C56B-FD6E-44A9-9BB0-B03C3AA49726}">
+            <Component Id="cmpDAC33F0E158F0F1E30562A0028D8F355" Directory="dir7C68073B97C7304793F2DF28637820B0" Guid="{3114CA65-8D06-4BD9-B8BA-341A3F8BAF81}">
                 <File Id="fil9D9A54F36DDFC9C1EEF328058CB1146F" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\test\ISimpleAx.java" />
             </Component>
-            <Component Id="cmp173A33BD22FECFDF9105C5F90A2BD82A" Directory="dir7C68073B97C7304793F2DF28637820B0" Guid="{D8B0EECA-19BF-400E-BC0F-1A503AD5BC22}">
+            <Component Id="cmp173A33BD22FECFDF9105C5F90A2BD82A" Directory="dir7C68073B97C7304793F2DF28637820B0" Guid="{F0AE4081-A26E-4CB8-9B39-7601F88C8AAF}">
                 <File Id="fil93B4B76F450648744638A63AB2234076" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\test\ISimpleTuple.java" />
             </Component>
-            <Component Id="cmp2B16CA0B7DA784A5A5BDC32DF2C759D7" Directory="dir7C68073B97C7304793F2DF28637820B0" Guid="{22D02ABF-0773-45D0-AACE-BBEC73EC1D31}">
+            <Component Id="cmp2B16CA0B7DA784A5A5BDC32DF2C759D7" Directory="dir7C68073B97C7304793F2DF28637820B0" Guid="{86856708-A1F7-4420-8627-F68F677A17BF}">
                 <File Id="filEB8FA6BDA04F33753005C473355EB93F" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\test\Main.java" />
             </Component>
-            <Component Id="cmp6A3758FF93C0731C1DD0443BDCC855B3" Directory="dir575F88AC50742200231F43BCE2A6E556" Guid="{599BAF18-29E3-4B0A-A07C-03807CDED2BC}">
+            <Component Id="cmp6A3758FF93C0731C1DD0443BDCC855B3" Directory="dir575F88AC50742200231F43BCE2A6E556" Guid="{3A5DD3A4-2CF0-4004-93FA-988B64085E8A}">
                 <File Id="fil14A7C2430830BA3ADF9DA1E1D014866D" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\test\.svn\entries" />
             </Component>
-            <Component Id="cmp37A22DFC762354A4789FAA3EA3667CDE" Directory="dir80E5A96CCCD37FB847B1C06BE58DA0F6" Guid="{18DD04E8-3D68-4AA5-9885-CA6DE9FB5E17}">
+            <Component Id="cmp37A22DFC762354A4789FAA3EA3667CDE" Directory="dir80E5A96CCCD37FB847B1C06BE58DA0F6" Guid="{9AD222A0-C7CE-455F-AD39-F8FBD1D5AE2C}">
                 <File Id="fil5F294CDA66E37D8AC4632144B4F0AB0D" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\test\.svn\text-base\Client.java.svn-base" />
             </Component>
-            <Component Id="cmp16A884F49C70E65BC93E0175296416B8" Directory="dir80E5A96CCCD37FB847B1C06BE58DA0F6" Guid="{9FBDE731-4879-4E4D-AF16-AD29CCD3F49D}">
+            <Component Id="cmp16A884F49C70E65BC93E0175296416B8" Directory="dir80E5A96CCCD37FB847B1C06BE58DA0F6" Guid="{3767084E-BA9E-40C0-87C9-B714FAC99AAA}">
                 <File Id="fil854DD965C04D2E2A5465A3768349E177" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\test\.svn\text-base\ISimpleAx.java.svn-base" />
             </Component>
-            <Component Id="cmpAEB34E3568D5407E09740AD9E4BFC548" Directory="dir80E5A96CCCD37FB847B1C06BE58DA0F6" Guid="{07F2816D-0DA5-468B-99DE-856F5215E07C}">
+            <Component Id="cmpAEB34E3568D5407E09740AD9E4BFC548" Directory="dir80E5A96CCCD37FB847B1C06BE58DA0F6" Guid="{B86BFB37-AFEE-47DA-BEDD-E7B9CB7AF8C0}">
                 <File Id="fil3D37E95C7B5BCA2EE6A5D6A087638D52" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\test\.svn\text-base\ISimpleTuple.java.svn-base" />
             </Component>
-            <Component Id="cmp8F9E5D0B0CD5EFDBC349092DC68A2D59" Directory="dir80E5A96CCCD37FB847B1C06BE58DA0F6" Guid="{5B7EBDC4-F8BE-430F-82AF-8A2910C52DC8}">
+            <Component Id="cmp8F9E5D0B0CD5EFDBC349092DC68A2D59" Directory="dir80E5A96CCCD37FB847B1C06BE58DA0F6" Guid="{69D0EFE1-3979-454D-8BC5-99ABF821F98A}">
                 <File Id="fil1DF92543BA444D0E03F41A2BC5A239CE" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\test\.svn\text-base\Main.java.svn-base" />
             </Component>
-            <Component Id="cmpCBCBE51B4825CBCFD2A25B917245294D" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{2B1E465F-8109-460C-9081-76C927CE96C7}">
+            <Component Id="cmpCBCBE51B4825CBCFD2A25B917245294D" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{4A6B94D1-6C1D-4085-8E6F-739575FB7DA1}">
                 <File Id="fil7C749F3C5D22697BE770DA8BC5DF85B3" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\IWebBrowserEvents.java" />
             </Component>
-            <Component Id="cmp677908CEE2BFAB5F9E739B8ABAB904B4" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{7948DC7C-B393-4207-890D-0BCD73E0A836}">
+            <Component Id="cmp677908CEE2BFAB5F9E739B8ABAB904B4" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{37986AE1-0D24-411F-85A0-8CC18A978CC6}">
                 <File Id="fil54D79B9578F5B5B40FCC52CF81447602" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\IMoe.java" />
             </Component>
-            <Component Id="cmp1A141A0BA8C99E79E86F2809B7148E2B" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{463A9E79-8BDE-47F9-AD25-ACAECF0A6CF9}">
+            <Component Id="cmp1A141A0BA8C99E79E86F2809B7148E2B" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{BADC3EFB-5E39-4A9A-A33E-0F8678BF151F}">
                 <File Id="filE7D23C55ADEB925CFFDFAC5A12BDAF6D" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\IMoeDocumentCollection.java" />
             </Component>
-            <Component Id="cmpD01F43A275B55560A4B8447B835FF25C" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{276B1D1E-8F02-4EE1-9C0B-C8AD9F4DFED5}">
+            <Component Id="cmpD01F43A275B55560A4B8447B835FF25C" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{047DAA0D-7D2B-43FC-8799-497A607C3E4C}">
                 <File Id="filCB64C8CF006C1F2F4B6D558683B251A1" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\IMoeDocument.java" />
             </Component>
-            <Component Id="cmp6427B82D772808628870E3FD3ACA78DA" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{6C8A5399-FA74-4702-8092-C3C87E4961F8}">
+            <Component Id="cmp6427B82D772808628870E3FD3ACA78DA" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{57BF68B1-C8AB-4FE8-8A14-54C8809AC803}">
                 <File Id="fil2CCCA06EA3EFD29CEDAB6064EA0E80E3" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\IMoeDocumentView.java" />
             </Component>
-            <Component Id="cmpE03D0609BA4D3B3E9A75DFBEB81EDFC1" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{010362D6-BD3D-4212-955A-2F57D92F1F2C}">
+            <Component Id="cmpE03D0609BA4D3B3E9A75DFBEB81EDFC1" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{8D723EAB-D3DC-4BE4-90CC-0EA463776F6D}">
                 <File Id="filCE0BD8711C6757C6C4121B75387C7736" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\IMoeView.java" />
             </Component>
-            <Component Id="cmpB8D08EB33EC4D304402772E75AED86B4" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{77333D0E-1678-44CB-A51A-69B11F7D3D91}">
+            <Component Id="cmpB8D08EB33EC4D304402772E75AED86B4" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{9B51DB5D-31AB-4084-AFCB-FA45E70FBBA6}">
                 <File Id="fil4F566EC1FF8D8BBE6ADF35AC93F0CA5C" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\IMoeConfig.java" />
             </Component>
-            <Component Id="cmpFD4B83BA036352AF195B9F1156366F6A" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{25DA1404-981E-4712-B6BB-2D944216B319}">
+            <Component Id="cmpFD4B83BA036352AF195B9F1156366F6A" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{F2779978-82AC-4DA3-B8C8-8200CD4451BD}">
                 <File Id="fil49EAEE547F4EB488A30315F2D2B3559F" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\IMoeScript.java" />
             </Component>
-            <Component Id="cmpCDF565FEEFC9CED1C0B43F1549F7EFB7" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{87665B37-4EFD-4876-A03B-9870D1ECC2AD}">
+            <Component Id="cmpCDF565FEEFC9CED1C0B43F1549F7EFB7" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{40D43AEB-7E12-45C4-9B41-3258B3CDDD8B}">
                 <File Id="fil9009026CBE89687BFC161B6FA386C80A" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\IMoeUserForm.java" />
             </Component>
-            <Component Id="cmpCC99BE809CF3B0B60C22E9A73C15558F" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{FB59E2CA-3AFB-4551-899E-CCAED288FA77}">
+            <Component Id="cmpCC99BE809CF3B0B60C22E9A73C15558F" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{CDF314A3-7225-4F1C-8275-A0C559ADF452}">
                 <File Id="filB960ED6132FBE606FABCF15ACED8369A" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\IMoeDialogView.java" />
             </Component>
-            <Component Id="cmp75BF30629EDDA987082CA4012604C793" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{75D0D3F4-550D-4643-ABE5-1D79D62170A7}">
+            <Component Id="cmp75BF30629EDDA987082CA4012604C793" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{64CAB877-6702-4143-B699-53CE9B9DF10E}">
                 <File Id="filB4A23500CC7E9DDAAC18E08B48D9E2D4" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\IMoeDialogs.java" />
             </Component>
-            <Component Id="cmp226E9404634CB5057B3B17DD1E78D933" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{919DA9A3-CACA-438A-AC1F-C8695B38F6DA}">
+            <Component Id="cmp226E9404634CB5057B3B17DD1E78D933" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{7C01CC79-CDC2-4CE3-A7CD-061702111CED}">
                 <File Id="fil537C34028CA3F1E8BCEADA332427D0F9" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\IMoeHtmlFrame.java" />
             </Component>
-            <Component Id="cmp0ED8C41A73E2DB4C333C94EB3471E17B" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{A06C49B5-A151-453F-9125-3476D8EDCAE5}">
+            <Component Id="cmp0ED8C41A73E2DB4C333C94EB3471E17B" Directory="dir0ED76B022E6E7B53642C635C44C3F9A8" Guid="{5EE0EC9F-69FD-449B-BF35-F5B13FDCE433}">
                 <File Id="fil7412AA49FD4548F4F9977EEE8FE2D986" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\IExternalMoe.java" />
             </Component>
-            <Component Id="cmp5D2EC32F68A0660605EAF2B287A38F9A" Directory="dirFD5AA3B6D81906AAAD3334F1A84CFB06" Guid="{504E79AA-00E8-49E1-BF72-7D67D3D9E270}">
+            <Component Id="cmp5D2EC32F68A0660605EAF2B287A38F9A" Directory="dirFD5AA3B6D81906AAAD3334F1A84CFB06" Guid="{160A0873-C983-41B0-AFF2-1C7CB4CF4A71}">
                 <File Id="filD1C4CA3435DC0110D45CB0758C33C0BD" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\.svn\entries" />
             </Component>
-            <Component Id="cmp31ABFED240D0C32DB7328397A764749D" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{27CD24F5-D32D-411F-9C14-85F64919ECC9}">
+            <Component Id="cmp31ABFED240D0C32DB7328397A764749D" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{CC28C788-5A92-472F-92C9-71A394518341}">
                 <File Id="filF00634F3240E3916A9E00D7FA922837A" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\.svn\text-base\IExternalMoe.java.svn-base" />
             </Component>
-            <Component Id="cmp3CB6518C26E0E42A741214796D9FD301" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{F40FD51A-A34E-4C96-BB71-83197F840C37}">
+            <Component Id="cmp3CB6518C26E0E42A741214796D9FD301" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{43655CDE-F4CA-489F-B10B-8C33267D75D6}">
                 <File Id="fil25413A5FF0C59DA77EB802A4BF30EBDA" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\.svn\text-base\IMoe.java.svn-base" />
             </Component>
-            <Component Id="cmpBFA0B5DB18EEE168E7A49DBA19B81B88" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{4155B6F0-50AA-4B3E-BBE0-FD1918CA4033}">
+            <Component Id="cmpBFA0B5DB18EEE168E7A49DBA19B81B88" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{78A4E64E-D8B9-4046-AE7E-C1AF05119377}">
                 <File Id="filF7015AD72CF7171576B664A04498FB28" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\.svn\text-base\IMoeConfig.java.svn-base" />
             </Component>
-            <Component Id="cmpEBDB12B00E62D7507EF73B99A03BCBA8" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{A8BC27F5-188C-4E46-BE0C-ABFB6A9B6ED0}">
+            <Component Id="cmpEBDB12B00E62D7507EF73B99A03BCBA8" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{8F7849EE-8009-4023-8BCD-C308E3EB7647}">
                 <File Id="fil6D3C11F7444B215E43F896532DB3D601" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\.svn\text-base\IMoeDialogs.java.svn-base" />
             </Component>
-            <Component Id="cmp03D3DAC26B7E4E1FFB92766D3238E3A0" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{3ED856F4-35DC-4766-BE98-70FC3C7CED34}">
+            <Component Id="cmp03D3DAC26B7E4E1FFB92766D3238E3A0" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{F4ED7BF6-599A-4990-AF7E-381E44F04204}">
                 <File Id="fil038B7EE63FC44FBC78F7B788FB2064DA" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\.svn\text-base\IMoeDialogView.java.svn-base" />
             </Component>
-            <Component Id="cmp46D62E327479C4198287B1AB63B540F6" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{64F8866B-C873-4810-9DB0-72E8C749B4D8}">
+            <Component Id="cmp46D62E327479C4198287B1AB63B540F6" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{080600A7-C76D-4B70-ADA1-3AF7BEB8E0F7}">
                 <File Id="fil38475211C6FA44099161430FD683B64B" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\.svn\text-base\IMoeDocument.java.svn-base" />
             </Component>
-            <Component Id="cmpD81EEB41AB994D81DF0E09F3D6FDCDA0" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{2A9163EA-E038-4F84-822E-DCDFE903328F}">
+            <Component Id="cmpD81EEB41AB994D81DF0E09F3D6FDCDA0" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{63BCF589-5D14-42EF-ADB4-9186DC18BB8E}">
                 <File Id="fil7B53923AD332B86651AA954C0A69754F" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\.svn\text-base\IMoeDocumentCollection.java.svn-base" />
             </Component>
-            <Component Id="cmpBC532742C801CC57A8DE42FBCAE8A949" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{9DCF2462-BF14-453F-AD5C-2527BCBF032E}">
+            <Component Id="cmpBC532742C801CC57A8DE42FBCAE8A949" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{0F16B970-D878-4634-87F4-1CDF0BDBB2DB}">
                 <File Id="filE038619544AD866587D754C3100925C6" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\.svn\text-base\IMoeDocumentView.java.svn-base" />
             </Component>
-            <Component Id="cmp83A5558E909C241845023C7D4D39FB40" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{6B03F4C2-6A65-47BB-95FF-2A77AFE6AAE7}">
+            <Component Id="cmp83A5558E909C241845023C7D4D39FB40" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{C5B9BF91-E7B1-4F83-AC98-3476AF712A4B}">
                 <File Id="fil82AA73AC0C77F4883AABEFD63FF8E916" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\.svn\text-base\IMoeHtmlFrame.java.svn-base" />
             </Component>
-            <Component Id="cmpCF8B362EBDCA4628BEAE5AD2E9B5D0D5" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{A11E9F1F-ABEC-4D48-A865-2E72F4772BED}">
+            <Component Id="cmpCF8B362EBDCA4628BEAE5AD2E9B5D0D5" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{7EFE146D-97C7-4A80-8427-37BF9E168678}">
                 <File Id="fil8EA800C0E2B99330F15080FA46DB50AE" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\.svn\text-base\IMoeScript.java.svn-base" />
             </Component>
-            <Component Id="cmp10938DC3DC5BCE34FE3174F39A488AE7" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{DB4D97FC-8AA9-4625-A7F5-57BF833983D9}">
+            <Component Id="cmp10938DC3DC5BCE34FE3174F39A488AE7" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{27BCB154-E07C-438C-95A7-8E0F7F5A55AA}">
                 <File Id="fil39D2636BDFE5AAF700E1FB309959A5C0" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\.svn\text-base\IMoeUserForm.java.svn-base" />
             </Component>
-            <Component Id="cmp4A7E0F6B12CDCDBB3CA90216ED43B6DB" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{85FD397E-2BEF-46B8-B7AC-25F50E007A2B}">
+            <Component Id="cmp4A7E0F6B12CDCDBB3CA90216ED43B6DB" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{784CB3FB-9EE6-49CD-B131-1B95869CD203}">
                 <File Id="filA4ECE474045A988BA57E08278E04F96D" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\.svn\text-base\IMoeView.java.svn-base" />
             </Component>
-            <Component Id="cmpCBB4F5B9300A3AC33A53316BE30BB514" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{622D10BD-EC67-4CD2-878E-CE3A47B34F39}">
+            <Component Id="cmpCBB4F5B9300A3AC33A53316BE30BB514" Directory="dir56C374FE1F0E3741EA040FC4B91B3AFF" Guid="{9F519A48-883D-4EC1-BE19-DABD5EB9FDF5}">
                 <File Id="fil8FB4F2C6274A59DFBA9E554AA7D3C25C" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\moe\.svn\text-base\IWebBrowserEvents.java.svn-base" />
             </Component>
-            <Component Id="cmpC4EDBE66A16CB2FAFCFAEAAF3EB2BF95" Directory="dirBBDAD4C4597EB673B8C8F1807FE33EBB" Guid="{C94CF5E2-468E-4CDA-942B-10A9333E7426}">
+            <Component Id="cmpC4EDBE66A16CB2FAFCFAEAAF3EB2BF95" Directory="dirBBDAD4C4597EB673B8C8F1807FE33EBB" Guid="{E0FB918B-3151-4D85-ABDD-95A6D492F388}">
                 <File Id="filE1DA8C6BB057AE1FEF16E9CBA783EADB" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\io\IFile.java" />
             </Component>
-            <Component Id="cmpCF6C257BA111ADC1E90246A8EBB7EEE7" Directory="dirBBDAD4C4597EB673B8C8F1807FE33EBB" Guid="{67291D33-9442-44F2-B3A6-84325643EC13}">
+            <Component Id="cmpCF6C257BA111ADC1E90246A8EBB7EEE7" Directory="dirBBDAD4C4597EB673B8C8F1807FE33EBB" Guid="{122E269C-C3D3-46CF-BF16-4B080EEE5FA1}">
                 <File Id="fil2C61C18877E66D369DA06E6D4B8CF5E2" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\io\IDir.java" />
             </Component>
-            <Component Id="cmp183A2975D8CADB555E11DDE8CF60EDC3" Directory="dirBBDAD4C4597EB673B8C8F1807FE33EBB" Guid="{17CA632C-C668-40DB-B804-CFB0CFB60798}">
+            <Component Id="cmp183A2975D8CADB555E11DDE8CF60EDC3" Directory="dirBBDAD4C4597EB673B8C8F1807FE33EBB" Guid="{A5032E9A-D8F0-4AD0-9654-26448A9469CA}">
                 <File Id="filF069DF44E1385BB1390C9FE5A9FDCCB6" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\io\IPath.java" />
             </Component>
-            <Component Id="cmp276C742EC88E633BCFAE6B46E76FCC26" Directory="dir554706F23639EEA224CD0570A7C18CF7" Guid="{B65CF16F-FBE1-4123-9B3F-43C3A490AA01}">
+            <Component Id="cmp276C742EC88E633BCFAE6B46E76FCC26" Directory="dir554706F23639EEA224CD0570A7C18CF7" Guid="{C4602F5B-61A6-42F4-A425-3D0E7D14038C}">
                 <File Id="fil24ADF1973CC4F2B6817E7E8D60E3D138" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\io\.svn\entries" />
             </Component>
-            <Component Id="cmp33E421202C6ABA1569F1F56747386F5C" Directory="dir55A1CF51C341389275A4EADF3D12B92F" Guid="{92CAFD97-444E-45EF-9590-8F214F027B73}">
+            <Component Id="cmp33E421202C6ABA1569F1F56747386F5C" Directory="dir55A1CF51C341389275A4EADF3D12B92F" Guid="{49DF92F2-C397-4E6F-9799-32AA3C99353D}">
                 <File Id="fil48D57F846AFB8462F27022F9A2508A36" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\io\.svn\text-base\IDir.java.svn-base" />
             </Component>
-            <Component Id="cmpCBA6EA85506DD60FFF8962E73EA2EDFC" Directory="dir55A1CF51C341389275A4EADF3D12B92F" Guid="{9A2F80B5-F37B-4C16-990C-F898B1C7A77A}">
+            <Component Id="cmpCBA6EA85506DD60FFF8962E73EA2EDFC" Directory="dir55A1CF51C341389275A4EADF3D12B92F" Guid="{027DCEDE-1E62-453E-A75A-61330D002795}">
                 <File Id="fil1AE59618B0D6B8DF199AE448414AC876" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\io\.svn\text-base\IFile.java.svn-base" />
             </Component>
-            <Component Id="cmp19D10D96761214CCD91B990359D28F25" Directory="dir55A1CF51C341389275A4EADF3D12B92F" Guid="{F56951C3-85EF-4E2F-AF3B-4CEFAC24D1F0}">
+            <Component Id="cmp19D10D96761214CCD91B990359D28F25" Directory="dir55A1CF51C341389275A4EADF3D12B92F" Guid="{19BEE2BA-43AA-48DC-A96B-34D059B26CD6}">
                 <File Id="fil654268771FE3BEA84D081AD5827A041D" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\io\.svn\text-base\IPath.java.svn-base" />
             </Component>
-            <Component Id="cmp7297E5289A7EE5C314556562D44D9F92" Directory="dir1CE2FA6C9F0078DFF45AABD44165D9AB" Guid="{9BE2E282-224E-4133-A4D0-7C78E585D9F6}">
+            <Component Id="cmp7297E5289A7EE5C314556562D44D9F92" Directory="dir1CE2FA6C9F0078DFF45AABD44165D9AB" Guid="{4047A7A5-0332-4298-9340-C001252FAA2F}">
                 <File Id="fil59CE6D1EEB29D77C9482A756B77310A4" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\comtypes\ITypeLibToXml.java" />
             </Component>
-            <Component Id="cmp1F50A6CD0595E81F7AD5F31C9089F5C9" Directory="dir1CE2FA6C9F0078DFF45AABD44165D9AB" Guid="{EB0F8369-286E-4EDC-BE98-076A404EB526}">
+            <Component Id="cmp1F50A6CD0595E81F7AD5F31C9089F5C9" Directory="dir1CE2FA6C9F0078DFF45AABD44165D9AB" Guid="{2D614FEB-0D5A-4095-9F7D-7B370532A393}">
                 <File Id="fil4BA6DF2C236D55634A67FE2328EEC8DA" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\comtypes\_IAsyncDocumentationComplete.java" />
             </Component>
-            <Component Id="cmpD2F1AF756FFD2B97C20230F4CE6DB36F" Directory="dir16F554CF51E041127060C609236835F0" Guid="{79529354-D452-4ECA-A597-E3D8EAD2C0D1}">
+            <Component Id="cmpD2F1AF756FFD2B97C20230F4CE6DB36F" Directory="dir16F554CF51E041127060C609236835F0" Guid="{0FC1B864-1C5F-4B10-B81F-8AE4089F3097}">
                 <File Id="filCC4D2686DD962D5FB5C2F9023F24277E" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\comtypes\.svn\entries" />
             </Component>
-            <Component Id="cmp1A9AD191D2C86047F5519C667B6F6907" Directory="dir3B1DE0F603E44F703670CF62704EC947" Guid="{C7809FDF-61C6-4D32-9390-9FB4346D3D27}">
+            <Component Id="cmp1A9AD191D2C86047F5519C667B6F6907" Directory="dir3B1DE0F603E44F703670CF62704EC947" Guid="{8EB3B4FE-A89C-4D81-88F3-713142F511DC}">
                 <File Id="fil925DE644E792A10593744F2D91471C4F" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\comtypes\.svn\text-base\ITypeLibToXml.java.svn-base" />
             </Component>
-            <Component Id="cmp1757442850EF3332F4EAA475BF02D3CB" Directory="dir3B1DE0F603E44F703670CF62704EC947" Guid="{3185AF8B-7A65-474F-8A43-DC61500655EC}">
+            <Component Id="cmp1757442850EF3332F4EAA475BF02D3CB" Directory="dir3B1DE0F603E44F703670CF62704EC947" Guid="{3D8E023F-7490-429A-B586-AF1C82D6A244}">
                 <File Id="filA2D79DBD2B5139C8D103390273FFDC91" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\comtypes\.svn\text-base\_IAsyncDocumentationComplete.java.svn-base" />
             </Component>
-            <Component Id="cmp3F54CC1480BBE8561A009CFFD2F300A5" Directory="dirB6F2BEBE582A736EE0B5BCB9E1AC4B3D" Guid="{BCD875D5-51D9-411D-851D-D042C1BD2A1F}">
+            <Component Id="cmp3F54CC1480BBE8561A009CFFD2F300A5" Directory="dirB6F2BEBE582A736EE0B5BCB9E1AC4B3D" Guid="{AAEEAB9E-114F-4F78-8E4B-6EA510F17CF1}">
                 <File Id="fil463762259F13E5E5644C2A9535183092" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\pipedprocess\IPipedProcess.java" />
             </Component>
-            <Component Id="cmp20EC3A2F930D45670E42758654A8E4F3" Directory="dirB6F2BEBE582A736EE0B5BCB9E1AC4B3D" Guid="{89AE82FB-55F2-40E2-BEA7-6D82C1258136}">
+            <Component Id="cmp20EC3A2F930D45670E42758654A8E4F3" Directory="dirB6F2BEBE582A736EE0B5BCB9E1AC4B3D" Guid="{5FBD27A7-092D-4BBB-BAAE-2F83CD69D087}">
                 <File Id="fil7D063FB66962AD2164BF9ADA648F71CD" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\pipedprocess\_IPipedProcessComplete.java" />
             </Component>
-            <Component Id="cmpBB04D8AFF9FA6CE755F4725373C71D63" Directory="dirB6F2BEBE582A736EE0B5BCB9E1AC4B3D" Guid="{FEABE080-589D-4AAF-BF83-C82DDCB0A918}">
+            <Component Id="cmpBB04D8AFF9FA6CE755F4725373C71D63" Directory="dirB6F2BEBE582A736EE0B5BCB9E1AC4B3D" Guid="{43292311-EBA4-49BF-95C1-65231DC7B031}">
                 <File Id="filA7629F54C62AA23DA5A092F235EA73B3" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\pipedprocess\IPipedProcessCompleteDual.java" />
             </Component>
-            <Component Id="cmp806BE18E3D0A82AC4A2D149113BF0BD7" Directory="dirDE098F4FC63CE9622A62C7C7820126D6" Guid="{019E8668-A85F-41E6-BE01-BC8FD3CE5664}">
+            <Component Id="cmp806BE18E3D0A82AC4A2D149113BF0BD7" Directory="dirDE098F4FC63CE9622A62C7C7820126D6" Guid="{F5D05297-9FDC-4720-A9BA-341559C6C780}">
                 <File Id="fil55068CB0F8FA983E9D0ACED86E02C0FF" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\pipedprocess\.svn\entries" />
             </Component>
-            <Component Id="cmpD23829473DBB365676AC1A9AC6D33E7A" Directory="dirF5A2CFE486710C9C90BE9F9CA04A8D9A" Guid="{B1448466-F399-422D-92EC-112D02B0A2DB}">
+            <Component Id="cmpD23829473DBB365676AC1A9AC6D33E7A" Directory="dirF5A2CFE486710C9C90BE9F9CA04A8D9A" Guid="{3C3052A8-5D10-47A4-A5F7-20ED77FC6D41}">
                 <File Id="filF529EDA968A6996613C577BA0E7EE681" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\pipedprocess\.svn\text-base\IPipedProcess.java.svn-base" />
             </Component>
-            <Component Id="cmpCD5EB79B3B7E99DC728EE37F49988BBD" Directory="dirF5A2CFE486710C9C90BE9F9CA04A8D9A" Guid="{87FD3C28-FD91-48F7-A171-63D9E2FBBC84}">
+            <Component Id="cmpCD5EB79B3B7E99DC728EE37F49988BBD" Directory="dirF5A2CFE486710C9C90BE9F9CA04A8D9A" Guid="{14A19BDD-B638-4888-BB4B-FEC13EC41374}">
                 <File Id="fil6B24A32339265E688025354F522B0163" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\pipedprocess\.svn\text-base\IPipedProcessCompleteDual.java.svn-base" />
             </Component>
-            <Component Id="cmpBE4033D894C3A677B80A128C8F0BB6AA" Directory="dirF5A2CFE486710C9C90BE9F9CA04A8D9A" Guid="{960F04E4-AC05-416E-8DCD-214632EA6772}">
+            <Component Id="cmpBE4033D894C3A677B80A128C8F0BB6AA" Directory="dirF5A2CFE486710C9C90BE9F9CA04A8D9A" Guid="{6120F76C-C2E2-4D22-A60C-3F7A2365541E}">
                 <File Id="fil5840B12EED902C14590C37235ED83153" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\pipedprocess\.svn\text-base\_IPipedProcessComplete.java.svn-base" />
             </Component>
-            <Component Id="cmp0937BCA3FF5566D9B7FC39B584137D60" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{2739DDE9-ED26-46D1-B81D-01DF278ABBEE}">
+            <Component Id="cmp0937BCA3FF5566D9B7FC39B584137D60" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{D0BD3063-8BC5-4C87-A5BD-7C52D839739E}">
                 <File Id="fil462439129AB23D6F0655077D55BDC193" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\IScintillAxProperties.java" />
             </Component>
-            <Component Id="cmp62F083C0E5F927919105B9E4C6C7D1A6" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{0CE36F0E-FAB0-4B76-9017-F93349950D28}">
+            <Component Id="cmp62F083C0E5F927919105B9E4C6C7D1A6" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{87CAD4B3-576E-4466-AC1D-D0D70827B7AE}">
                 <File Id="filB5D03C25DE322AD82E8F677C32A4840D" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\IScintillAxText.java" />
             </Component>
-            <Component Id="cmp82BCED051F6653B2F136117A6BB8ADEA" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{F9632EA5-2402-412E-8651-E5CDDDC5184B}">
+            <Component Id="cmp82BCED051F6653B2F136117A6BB8ADEA" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{05CD6B62-2D2A-492E-A461-A361D969C2FE}">
                 <File Id="filFAB5C4353F2E7A9CE102C089DC79CB19" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\IScintillAxPosition.java" />
             </Component>
-            <Component Id="cmp6620BD39FDA48473D23F46B4CB2EA43F" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{F910ED6D-89AA-46FB-8A19-3C8162CF5995}">
+            <Component Id="cmp6620BD39FDA48473D23F46B4CB2EA43F" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{2D3BF6BF-DBDB-4841-9A7D-7F60CF8A82CD}">
                 <File Id="fil29D203B0B9E4E11780406413F82F08A6" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\IScintillAxSelection.java" />
             </Component>
-            <Component Id="cmp3A11F3E20D1C38EA204364B4D350919A" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{9750E02B-33B6-47E9-B3E4-5586EE9E34A8}">
+            <Component Id="cmp3A11F3E20D1C38EA204364B4D350919A" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{CBC77FF5-FA01-4E85-9A35-EE9098B066AB}">
                 <File Id="filE547AE5B769AFAB12782642C502B0C67" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\IScintillAxLine.java" />
             </Component>
-            <Component Id="cmpDDD577784E4A0F300106F3F94CFB2979" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{D96EEFF7-A353-4ADF-8779-B8653D993B7B}">
+            <Component Id="cmpDDD577784E4A0F300106F3F94CFB2979" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{CBB9A571-C613-44EA-A274-9477E33B529B}">
                 <File Id="filA28FF52AFF7A668985BB1AF9E540E42E" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\IScintillAxAnnotation.java" />
             </Component>
-            <Component Id="cmpFFCC06B2FFE831338025989B2C7AF5F8" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{607F11C3-B2FA-48D4-BBFF-68BAA1CDDA89}">
+            <Component Id="cmpFFCC06B2FFE831338025989B2C7AF5F8" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{8A080B70-38F4-4782-BB1F-DF4643D8EF2C}">
                 <File Id="fil39FBEAADF42C221F266DFC8DE54E9AED" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\IScintillAxMarkers.java" />
             </Component>
-            <Component Id="cmp64040B5E712E75BEA648032A2419215B" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{CE6634B7-84EB-4982-8014-9ED91A217777}">
+            <Component Id="cmp64040B5E712E75BEA648032A2419215B" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{AB11830A-856F-4455-9EE8-BE46A6ABE716}">
                 <File Id="fil6663445DE5C324C2BD1DE1530E50D00A" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\IScintillAx.java" />
             </Component>
-            <Component Id="cmp88CD065EEF4ACFFF83277FEEE939A5E8" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{67C2F0C2-5294-4707-A78D-71C82E60A9C1}">
+            <Component Id="cmp88CD065EEF4ACFFF83277FEEE939A5E8" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{44F8CDD9-6FA7-4DCC-AEFA-6F8EB78F146E}">
                 <File Id="filCBF09FABEDDAB4DCE6BFE45561B84B51" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\_IScintillAxEvents.java" />
             </Component>
-            <Component Id="cmp8B80B320D31FB955144CD9BA75799BE1" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{DC0CDD13-87D7-4295-9557-020E52DF4317}">
+            <Component Id="cmp8B80B320D31FB955144CD9BA75799BE1" Directory="dirACD59B77C39F7BBD4CCF94728742FB1E" Guid="{9B63E0D4-5A86-4A23-BB1E-DA87640B5907}">
                 <File Id="fil492C1DFEC42841848F81FA79D80C93C6" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\IScintillAxEvents.java" />
             </Component>
-            <Component Id="cmp66BD90D26E5D8F876C9186DC535C783E" Directory="dir7F195F8E546E6B9E936864BB2CA024D0" Guid="{B5750C28-3893-4E00-B5A1-C915ACE652E9}">
+            <Component Id="cmp66BD90D26E5D8F876C9186DC535C783E" Directory="dir7F195F8E546E6B9E936864BB2CA024D0" Guid="{30CB379D-6FA1-4921-A200-EDF914C35F72}">
                 <File Id="fil2B0534BEC9B7FF8680479154AA922E49" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\.svn\entries" />
             </Component>
-            <Component Id="cmp8EE6F97D077D6C2FCBFC3D5027204BB8" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{72FE6A41-BF6F-440A-9017-D54AB8587B6E}">
+            <Component Id="cmp8EE6F97D077D6C2FCBFC3D5027204BB8" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{AA8DA1F3-BB11-4387-B5C7-548F4E243A5E}">
                 <File Id="fil7BF5DB88DB3577FBDAF406562EB1C1E8" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\.svn\text-base\IScintillAx.java.svn-base" />
             </Component>
-            <Component Id="cmpB294536E68C5B8EDDADD06857139E79C" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{B9E76142-5D48-48E4-AA9C-9AFDD599A572}">
+            <Component Id="cmpB294536E68C5B8EDDADD06857139E79C" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{E211058B-C45E-4066-A951-10EB00497720}">
                 <File Id="fil6049B9502377D71D44E372565FFBCF0B" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\.svn\text-base\IScintillAxAnnotation.java.svn-base" />
             </Component>
-            <Component Id="cmpB401522DA21F1CAB6E4B32C789C1F169" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{95830656-1520-40D9-8FB7-C1B5E6B7390A}">
+            <Component Id="cmpB401522DA21F1CAB6E4B32C789C1F169" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{DD2D8764-6AC0-4D22-A857-C7E8E85F315F}">
                 <File Id="filB471C44655A618CAC49CCD574B4ED3A7" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\.svn\text-base\IScintillAxEvents.java.svn-base" />
             </Component>
-            <Component Id="cmpAA5A1049A6C7B2634E97772BBCA776D4" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{DAF80E99-82F1-48A0-99DD-F994DA3A8EC8}">
+            <Component Id="cmpAA5A1049A6C7B2634E97772BBCA776D4" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{BB98ACAE-416A-4440-86EA-F59B9BBA23B8}">
                 <File Id="fil09D17205D38805AA29CCEEA045654D1C" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\.svn\text-base\IScintillAxLine.java.svn-base" />
             </Component>
-            <Component Id="cmp35D514BC25029E7CA028FB3619092200" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{3E0211FA-95F2-4E6C-933D-4B24124843C7}">
+            <Component Id="cmp35D514BC25029E7CA028FB3619092200" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{2D5120AB-E1AA-4ACA-B019-BE78CB04B5D6}">
                 <File Id="filFF70D8EDD8B3A9D529D9D9E5FEE75B2C" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\.svn\text-base\IScintillAxMarkers.java.svn-base" />
             </Component>
-            <Component Id="cmpFDC1C01FE803CDB400309B63374A6F04" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{BCC961D8-6BAE-4A8D-9DC2-9FC3C5CF1EAB}">
+            <Component Id="cmpFDC1C01FE803CDB400309B63374A6F04" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{EDA5D233-38E1-47FC-BFA3-08B8D76779A3}">
                 <File Id="filA308128AABCA16DEFEBA8A4F9BC6CB1F" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\.svn\text-base\IScintillAxPosition.java.svn-base" />
             </Component>
-            <Component Id="cmp5592176278C8E9D811BCDB6AB98615A4" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{6F28125D-0AEB-4236-A8FD-19EEA695A5CF}">
+            <Component Id="cmp5592176278C8E9D811BCDB6AB98615A4" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{29269617-5A4A-4B66-9B22-B45F52E4E00B}">
                 <File Id="fil0EF3E0F6CF7DFDAA623DA6A464D15AA9" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\.svn\text-base\IScintillAxProperties.java.svn-base" />
             </Component>
-            <Component Id="cmpC838637B79B5A113AF209304106F45B1" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{C151E39A-9202-4A58-A5A3-98D0176FA5C7}">
+            <Component Id="cmpC838637B79B5A113AF209304106F45B1" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{0CB723D7-0FF9-4FA5-A038-DB5E6D2F2F52}">
                 <File Id="filF89DBBFEFD440804CBD6378A8C8394B3" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\.svn\text-base\IScintillAxSelection.java.svn-base" />
             </Component>
-            <Component Id="cmpF0ACD1ACE466EDB6074D03C04F0CAA9F" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{DF07A71A-712F-4E55-BCE2-C66794917AE6}">
+            <Component Id="cmpF0ACD1ACE466EDB6074D03C04F0CAA9F" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{49E82E25-9B53-490F-A29F-B0DF7B9389B6}">
                 <File Id="filFB893A9AC2DFA5E89F8701BDDD21BB8E" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\.svn\text-base\IScintillAxText.java.svn-base" />
             </Component>
-            <Component Id="cmp54A0FE401FB10711F391FEC98A30C1DB" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{FFCABD0C-51B0-414B-ACC0-8132E01E605A}">
+            <Component Id="cmp54A0FE401FB10711F391FEC98A30C1DB" Directory="dir6432343C9F5DC105637A4C38E8B21B85" Guid="{E447CF3C-69FD-4181-BF88-9FEDDB241EBF}">
                 <File Id="fil937D65FEB8EAB72FF739D161698D4051" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\scintillax\.svn\text-base\_IScintillAxEvents.java.svn-base" />
             </Component>
-            <Component Id="cmp6DFFC62146462F5C6EE10161D3E71265" Directory="dirEE389CD88E6DA030475BA1E50CB464D7" Guid="{C09D24DA-E6A0-4236-AC14-4E19742110C4}">
+            <Component Id="cmp6DFFC62146462F5C6EE10161D3E71265" Directory="dirEE389CD88E6DA030475BA1E50CB464D7" Guid="{A23896AC-F5B5-418F-892E-2ACB2F2AAAB3}">
                 <File Id="fil891A3D21D357AFCB209E7FC07D204C13" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\setting\ISetting.java" />
             </Component>
-            <Component Id="cmp049053CD38061D5FD1515B576216CD5C" Directory="dirEE389CD88E6DA030475BA1E50CB464D7" Guid="{7467FFD4-1601-47E1-A3BC-83609F669A3E}">
+            <Component Id="cmp049053CD38061D5FD1515B576216CD5C" Directory="dirEE389CD88E6DA030475BA1E50CB464D7" Guid="{74B95021-4AC2-480F-9350-D324AE5D3214}">
                 <File Id="fil3A4CBE9E986FCF004AA4CA41E347E90E" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\setting\_ISettingChanged.java" />
             </Component>
-            <Component Id="cmpAA8E50817E8DE2AA710BA1E174B7E2A0" Directory="dirEE389CD88E6DA030475BA1E50CB464D7" Guid="{D13479E2-FDE6-4F6D-B94C-4C2F93534BF9}">
+            <Component Id="cmpAA8E50817E8DE2AA710BA1E174B7E2A0" Directory="dirEE389CD88E6DA030475BA1E50CB464D7" Guid="{CB1ABE0E-1615-45DF-A802-176F080373F9}">
                 <File Id="fil853F166620CC0DB0A7C7D9C0C37BBEC9" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\setting\_ISettingChangedDual.java" />
             </Component>
-            <Component Id="cmp7027988FFA82E85B3FD3AEF08BA1B599" Directory="dir5F0F8BEFA7C9F7BF207FDEE73BF2AC59" Guid="{3A65661B-1FC5-4D60-BAF7-E540BDC42975}">
+            <Component Id="cmp7027988FFA82E85B3FD3AEF08BA1B599" Directory="dir5F0F8BEFA7C9F7BF207FDEE73BF2AC59" Guid="{7147B65F-28B1-484D-A566-9357A2B11C36}">
                 <File Id="fil94CD4DF6361827465151CF89616CD631" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\setting\.svn\entries" />
             </Component>
-            <Component Id="cmpCD021B70E77CC9140EABCB0639760DDE" Directory="dirBE86B653D72D248A964C4AAE076BC001" Guid="{5CAB9ABB-2FA1-4224-8F48-88BF9793A671}">
+            <Component Id="cmpCD021B70E77CC9140EABCB0639760DDE" Directory="dirBE86B653D72D248A964C4AAE076BC001" Guid="{8D2D0281-F6D2-44E9-A65C-477A2739B71B}">
                 <File Id="fil4028E5A803FDDB128CC3B1D4A421DF6D" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\setting\.svn\text-base\ISetting.java.svn-base" />
             </Component>
-            <Component Id="cmp826E328638B24468520BD4060F072D83" Directory="dirBE86B653D72D248A964C4AAE076BC001" Guid="{E677B458-13CC-4715-B5A7-7EA5FAD640E5}">
+            <Component Id="cmp826E328638B24468520BD4060F072D83" Directory="dirBE86B653D72D248A964C4AAE076BC001" Guid="{4BAE9DE9-A894-49B4-827B-4B13B0E33BC4}">
                 <File Id="fil2A7EBED48CBE66221A4B848F07B40A28" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\setting\.svn\text-base\_ISettingChanged.java.svn-base" />
             </Component>
-            <Component Id="cmpCA53BEC90BF2090741A42B334A48B8AE" Directory="dirBE86B653D72D248A964C4AAE076BC001" Guid="{B3285162-3A72-49FA-A4AD-38B2EC44497A}">
+            <Component Id="cmpCA53BEC90BF2090741A42B334A48B8AE" Directory="dirBE86B653D72D248A964C4AAE076BC001" Guid="{C8AA8A11-A360-477E-82B0-09EAE3D730BF}">
                 <File Id="filF30033ED05F9E53D22A0D5CA45CA0607" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\setting\.svn\text-base\_ISettingChangedDual.java.svn-base" />
             </Component>
-            <Component Id="cmp9447DE627874E197938A19D7378F9FAD" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{0165F97C-DA8F-4A38-BED6-33F7E28F21B1}">
+            <Component Id="cmp9447DE627874E197938A19D7378F9FAD" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{53E5940A-4281-4FBE-8C3D-9A3DFDF70943}">
                 <File Id="fil64E8C47A0D6D3CCA4FEDB506128CDADF" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\IShellTree.java" />
             </Component>
-            <Component Id="cmpCE769CDFE730A03830B0369DAFF23602" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{A5E204FD-F7E7-4B34-8128-0D8A301A8811}">
+            <Component Id="cmpCE769CDFE730A03830B0369DAFF23602" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{0E68C2C3-A4E9-491E-B238-E9B45F2A93C1}">
                 <File Id="filD6BB3105DF1846E8634137E896D0B3FC" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\IHexCtrl.java" />
             </Component>
-            <Component Id="cmpE6CD065D0D8B06468AE9196BE99EFEBB" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{593B1DDB-10B1-4AA9-8D69-2F2E3A0413EA}">
+            <Component Id="cmpE6CD065D0D8B06468AE9196BE99EFEBB" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{DB2C88F0-AC96-452D-8E19-60E5B15F9809}">
                 <File Id="filEDCAA51A0158C7BC581B4CC2C7BC4ED8" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\IShellList.java" />
             </Component>
-            <Component Id="cmp2748D881BFE9A290BF1527CEE75B4258" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{0B866822-7DD1-4F4A-B921-4CB65F1CED31}">
+            <Component Id="cmp2748D881BFE9A290BF1527CEE75B4258" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{28AE0C8B-C53E-43A7-9BE2-A638123F438B}">
                 <File Id="fil6EE7FDEF3CE0F42ADE44965BE2DDFEFA" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\IColorPicker.java" />
             </Component>
-            <Component Id="cmpAD6ECC9126F942F2C3F207FBAFF7E64C" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{849F28D7-99A5-4FC2-8954-ABB6116706A7}">
+            <Component Id="cmpAD6ECC9126F942F2C3F207FBAFF7E64C" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{C3C1690A-BA2B-4C73-AC5C-51849D180F56}">
                 <File Id="filAECEC28E7B9CED9E32FF47538E7E569B" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\_IShellTreeEvents.java" />
             </Component>
-            <Component Id="cmpDA5B2C12DEAC52475D422213CDEFEC39" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{312DE042-DE07-4313-BD1F-1BFDEC04597F}">
+            <Component Id="cmpDA5B2C12DEAC52475D422213CDEFEC39" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{173FDAA9-C504-4DFE-93EC-C622CE99C764}">
                 <File Id="fil3F867A8A82750DF33CE70D88D947299B" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\_IHexCtrlEvents.java" />
             </Component>
-            <Component Id="cmp6AEF22C64CB493C1AD0F685B1217BBEF" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{1546BD8D-2F08-4C77-8BC9-80A2AFBD0CC0}">
+            <Component Id="cmp6AEF22C64CB493C1AD0F685B1217BBEF" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{77A3D980-685B-4F44-AD3D-E41645FE325B}">
                 <File Id="fil6FA5738C7390D64F3CB354381841A82B" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\_IShellListEvents.java" />
             </Component>
-            <Component Id="cmp777DACAD1C0648D36E189630279653C5" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{33C9116F-54CE-4316-B7DF-A980728D1F19}">
+            <Component Id="cmp777DACAD1C0648D36E189630279653C5" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{8130BF29-B76D-487A-B49F-EC0ED4162354}">
                 <File Id="filC37ADC02023E07F6E153551E5E2236A4" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\IShellTreeEvents.java" />
             </Component>
-            <Component Id="cmp93CAA61052F0A49E53981213D0F0726B" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{7438DAE0-B9AD-4296-81AC-4E74C593F7EA}">
+            <Component Id="cmp93CAA61052F0A49E53981213D0F0726B" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{1D58384B-AD67-47E7-8573-6155BB28F12C}">
                 <File Id="filF68A7C60AA0EC0C49F8BB5806EBF5C45" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\IShellListEvents.java" />
             </Component>
-            <Component Id="cmp0137B3CA8F8A22DA927D637AB91B01BC" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{8A29D652-E07F-4A9E-807D-C1B554A0A24A}">
+            <Component Id="cmp0137B3CA8F8A22DA927D637AB91B01BC" Directory="dir476E3DA5EB150CE1298FA9BCC422908E" Guid="{CA40FED8-8FB8-47E8-9F4B-E039E1917A41}">
                 <File Id="fil591A432935CBE2B0C0D684568E3E6E97" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\IHexCtrlEvents.java" />
             </Component>
-            <Component Id="cmpC9F4DD3B4197533AE56FD10D58D31F16" Directory="dirDF2F9737E8A41134DC32870711DC7BAD" Guid="{FAA7538F-96E4-41FC-9193-FF9204FA71D9}">
+            <Component Id="cmpC9F4DD3B4197533AE56FD10D58D31F16" Directory="dirDF2F9737E8A41134DC32870711DC7BAD" Guid="{1B39CF4E-E906-460F-A0DB-9E595FFBF7ED}">
                 <File Id="fil244CF5782EBD86536E164ABA3F9DDFEB" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\.svn\entries" />
             </Component>
-            <Component Id="cmpFDFE244D684736FB0AD0FF670E63F354" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{57972750-56A4-4CD4-A8AB-5C18FC649628}">
+            <Component Id="cmpFDFE244D684736FB0AD0FF670E63F354" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{62046022-084F-421E-90A7-CF5CF0077612}">
                 <File Id="fil8DC1E63DC4D3FD8C2B79B6A9551FCC1B" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\.svn\text-base\IColorPicker.java.svn-base" />
             </Component>
-            <Component Id="cmp5EEDB98A67BA54DD4A936822A38B8078" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{B40EABF7-FF0D-45A4-AAA4-2EF2C6147FCB}">
+            <Component Id="cmp5EEDB98A67BA54DD4A936822A38B8078" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{15636CCF-52F3-4313-A60D-6EBA7B0CB809}">
                 <File Id="fil0BCCF52A4E08733F664616C0820D0524" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\.svn\text-base\IHexCtrl.java.svn-base" />
             </Component>
-            <Component Id="cmp01E7D21304F8EFB41C03512BA87661DB" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{D444C68F-C42E-4981-BD6B-23B7D792A3BA}">
+            <Component Id="cmp01E7D21304F8EFB41C03512BA87661DB" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{98D0B9BB-7523-41ED-9C40-E02319D7E3D2}">
                 <File Id="filEB038E3836FE2A12423A783554B75EAD" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\.svn\text-base\IHexCtrlEvents.java.svn-base" />
             </Component>
-            <Component Id="cmp1A95660452EA2D757C01F9E054F68757" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{0B812BC4-344B-4A8F-B3E2-514008D6C054}">
+            <Component Id="cmp1A95660452EA2D757C01F9E054F68757" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{085B05CC-F469-4338-B7AF-454D6E480DFE}">
                 <File Id="filAC2671BB2A3A81B8CA9C750FDF7D60EB" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\.svn\text-base\IShellList.java.svn-base" />
             </Component>
-            <Component Id="cmpA082F60DA0F3F69FD89EDA0E1B5B8406" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{483B592B-C664-4908-95CE-B186B3E68D43}">
+            <Component Id="cmpA082F60DA0F3F69FD89EDA0E1B5B8406" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{9C2EA354-4098-45E7-A975-1D5672643BDE}">
                 <File Id="fil40717872CE317276801517A1F72C9C48" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\.svn\text-base\IShellListEvents.java.svn-base" />
             </Component>
-            <Component Id="cmp676E04580953A430948AF3299312AB1B" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{2BD21700-1B8A-4B43-9E37-700D590ED933}">
+            <Component Id="cmp676E04580953A430948AF3299312AB1B" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{79B5D5DD-3F5E-473F-8F7A-C12F68CDFA19}">
                 <File Id="filE7ACDB006B8E1F856C8A7461B15D9B70" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\.svn\text-base\IShellTree.java.svn-base" />
             </Component>
-            <Component Id="cmp6854591743156115F56FFFD5C6CE6254" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{584297D7-6B45-400F-9093-FD891138D24E}">
+            <Component Id="cmp6854591743156115F56FFFD5C6CE6254" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{3AFAF51C-B6F0-417B-814C-EB0E62284727}">
                 <File Id="filDB84E62D0767B9122E4F66EFE580A106" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\.svn\text-base\IShellTreeEvents.java.svn-base" />
             </Component>
-            <Component Id="cmp51B9E18E7759BA0115DF1E6725470603" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{3BA2D115-FFEC-4DD6-97F9-AC246CF1A0C2}">
+            <Component Id="cmp51B9E18E7759BA0115DF1E6725470603" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{9C78EFAC-116B-4B3E-A067-0AB2CC164841}">
                 <File Id="fil52E59C2A11E834BBDC42441536EB82EF" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\.svn\text-base\_IHexCtrlEvents.java.svn-base" />
             </Component>
-            <Component Id="cmp01E461999867B5DE8D89454ED938CFBA" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{0D7AA98F-8120-4351-9A54-DA9BB953CD53}">
+            <Component Id="cmp01E461999867B5DE8D89454ED938CFBA" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{E560F0CC-E34F-4A46-BA17-02B346CFE1C9}">
                 <File Id="filC466A568244E02739F8206AC4F4EB83D" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\.svn\text-base\_IShellListEvents.java.svn-base" />
             </Component>
-            <Component Id="cmpCC649C996D60DA8321B660EFA4346E15" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{7364E7F3-802B-4573-AA99-63D64CFDCD33}">
+            <Component Id="cmpCC649C996D60DA8321B660EFA4346E15" Directory="dirE5609914E7830D8794080CEFD3013DDC" Guid="{46DFDE6C-B0A0-4DB0-A16D-9C05B07F8706}">
                 <File Id="filF542AB27A9B7F3175A3B57301455DE05" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellctrl\.svn\text-base\_IShellTreeEvents.java.svn-base" />
             </Component>
-            <Component Id="cmp9350EA97369D0B98898EC6EBDD8F6278" Directory="dirDC21A76259F7473D4D1A8CF0BD735CA1" Guid="{1DB0F7A0-5853-4301-AB87-C357E8D9D9FD}">
+            <Component Id="cmp9350EA97369D0B98898EC6EBDD8F6278" Directory="dirDC21A76259F7473D4D1A8CF0BD735CA1" Guid="{E6C73CA9-1E66-4FD1-B3D8-0BF8A314C37B}">
                 <File Id="fil65CCE6BF09B6E06CCC573A3BB37A9F75" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellfolder\IShellPane.java" />
             </Component>
-            <Component Id="cmpAFEC97C940A64D6901AE14B3C1698520" Directory="dirDC21A76259F7473D4D1A8CF0BD735CA1" Guid="{85F25B2C-5FA4-4BBE-8B8A-82DF4F2D4A82}">
+            <Component Id="cmpAFEC97C940A64D6901AE14B3C1698520" Directory="dirDC21A76259F7473D4D1A8CF0BD735CA1" Guid="{8CD6293B-FA77-489D-9C51-7E6B93F445D4}">
                 <File Id="fil968459D28B0A8124CF021D559A4129BA" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellfolder\_IShellPaneEvents.java" />
             </Component>
-            <Component Id="cmp579116E7D801B6F2BFDD2156D69EADB1" Directory="dirDC21A76259F7473D4D1A8CF0BD735CA1" Guid="{D075BAA3-E424-46B9-B430-807A46031C31}">
+            <Component Id="cmp579116E7D801B6F2BFDD2156D69EADB1" Directory="dirDC21A76259F7473D4D1A8CF0BD735CA1" Guid="{13E46358-ABD2-4CB1-A351-349A811B6B63}">
                 <File Id="fil8CB888C5555B1D72E380D586B77BBE90" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellfolder\IShellPaneEvents.java" />
             </Component>
-            <Component Id="cmpA898B4363B5426AF7F3107D646A8F846" Directory="dirE74ECBB343F3857B56E0133F74107D5A" Guid="{8891059F-C590-44CE-9B10-949358DEF8BA}">
+            <Component Id="cmpA898B4363B5426AF7F3107D646A8F846" Directory="dirE74ECBB343F3857B56E0133F74107D5A" Guid="{4571D57F-5778-4B93-9C89-1307D7415394}">
                 <File Id="filDB71C4B891763E4645B4F5E451CEC361" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellfolder\.svn\entries" />
             </Component>
-            <Component Id="cmp59782BB3A7750E38339F16DAF9F01DF2" Directory="dir057FFFC569D97925BF5CFC29480F5776" Guid="{D8F9C5F4-CEDB-4B03-9183-D27132B635DA}">
+            <Component Id="cmp59782BB3A7750E38339F16DAF9F01DF2" Directory="dir057FFFC569D97925BF5CFC29480F5776" Guid="{93447F81-FAA6-4130-8B47-6430F5140CFF}">
                 <File Id="fil7E9EDBB8084F503EF21E94390DED8CDE" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellfolder\.svn\text-base\IShellPane.java.svn-base" />
             </Component>
-            <Component Id="cmp76AC82C0DE2396CE8BA3504D58AFAFF4" Directory="dir057FFFC569D97925BF5CFC29480F5776" Guid="{3BFA2548-8F46-4FEF-9C0C-E8DE42BD3463}">
+            <Component Id="cmp76AC82C0DE2396CE8BA3504D58AFAFF4" Directory="dir057FFFC569D97925BF5CFC29480F5776" Guid="{E901D27B-D7E9-4E43-94E7-A3C99BC7A58C}">
                 <File Id="fil3AA2D8537CBC93DA4613789043453C81" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellfolder\.svn\text-base\IShellPaneEvents.java.svn-base" />
             </Component>
-            <Component Id="cmpF0A2DAA1AD1B239EE80EEF5C95200308" Directory="dir057FFFC569D97925BF5CFC29480F5776" Guid="{B5E94453-5A5F-4842-99CB-2C24F35E1432}">
+            <Component Id="cmpF0A2DAA1AD1B239EE80EEF5C95200308" Directory="dir057FFFC569D97925BF5CFC29480F5776" Guid="{58259567-FC06-441F-ABD7-E68990FFB63C}">
                 <File Id="filFA9C239F48BBF390B8DB55172DFBECEC" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\shellfolder\.svn\text-base\_IShellPaneEvents.java.svn-base" />
             </Component>
-            <Component Id="cmp7082BB8EC6FEABBC9B1606B77B0B9ADC" Directory="dirA28ABFCC3AF92B01F4823831F696C48A" Guid="{76884377-D9FD-464F-8DD2-5805B83EA393}">
+            <Component Id="cmp7082BB8EC6FEABBC9B1606B77B0B9ADC" Directory="dirA28ABFCC3AF92B01F4823831F696C48A" Guid="{BD0F8057-D47D-48B4-AAF9-0584198DB5C5}">
                 <File Id="fil9F34B5EB5B80FF9A0394EAC05A88B438" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\mol\.svn\entries" />
             </Component>
-            <Component Id="cmp83C1F064D7FB78856A555D0E7834600B" Directory="dirE29375B05D79771DB4B018F8B0A78A6F" Guid="{BEB6BD93-C3E2-4E34-8AFD-3AA6167F5CF1}">
+            <Component Id="cmp83C1F064D7FB78856A555D0E7834600B" Directory="dirE29375B05D79771DB4B018F8B0A78A6F" Guid="{443EA027-EF1E-470F-9D84-594B13BDF524}">
                 <File Id="fil46F15516CB295145DAFF47B69DD0CD57" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\oha7\.svn\entries" />
             </Component>
-            <Component Id="cmp68E04DECF136738F1519A91B49008826" Directory="dir8AB1266392315464D6C520525FB97487" Guid="{A0595BC2-048C-49E8-90D3-DDFA0862BF93}">
+            <Component Id="cmp68E04DECF136738F1519A91B49008826" Directory="dir8AB1266392315464D6C520525FB97487" Guid="{F2541C10-E1AE-4F3B-9D82-F31358285EDA}">
                 <File Id="fil05BA0EA4F2F7023EBF554C6EDE70DAB1" KeyPath="yes" Source="$(var.SourceDir)\lib\src\org\.svn\entries" />
             </Component>
-            <Component Id="cmpD9490C7297FEFB4848D1AF50C1693E3A" Directory="dir308896E95A260D45F1E86BBD1ECFBFB8" Guid="{F3A59DEF-247B-496C-9CFF-2922B5A27679}">
+            <Component Id="cmpD9490C7297FEFB4848D1AF50C1693E3A" Directory="dir308896E95A260D45F1E86BBD1ECFBFB8" Guid="{5B69406A-7CE8-4AE2-A57D-968F82C91584}">
                 <File Id="filCFDB45206B24E4EA058E11DE385CE4CF" KeyPath="yes" Source="$(var.SourceDir)\lib\src\.svn\entries" />
             </Component>
         </ComponentGroup>
