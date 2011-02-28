@@ -128,7 +128,7 @@
 		<Exec Command='mt.exe -manifest .\$(regfree)\jre.exe.isolated.manifest -outputresource:".\$(regfree)\moe\jre.exe;#1" -hashupdate -validate_manifest -verbose' WorkingDirectory="." Condition=" '$(Platform)' == 'Win32'" />
 		<Exec Command='mt.exe -manifest .\$(regfree)\jre.exe.isolated64.manifest -outputresource:".\$(regfree)\moe\jre.exe;#1" -hashupdate -validate_manifest -verbose' WorkingDirectory="." Condition=" '$(Platform)' == 'x64'" />
 
-		<Exec Command='cscript "..\..\cg\bin\zip.vbs" "$(regfreeTargetPath)\moe.zip" "$(regfree)\moe"' WorkingDirectory="."/>
+		<Exec Command='cscript "..\..\cg\bin\zip.vbs" "$(regfreeTargetPath)\jre.zip" "$(regfree)\moe"' WorkingDirectory="."/>
 
  </Target>
 
@@ -136,11 +136,13 @@
 <!-- Clean -->
 
  <Target Name="Clean">
-    <RemoveDir Directories=".\deploy\$(confPath)\**\*.*;" />
+
     <RemoveDir Directories=".\bin\**\*.*;" />
     <RemoveDir Directories=".\moe\**\*.*" />
 	<RemoveDir Directories=".\$(regfree)\moe\**\*.*;" />
-	<RemoveDir Directories=".\$(regfreeTargetPath)" />
+
+	<Delete Files="$(regfreeTargetPath)\jre.zip" />
+	<Delete Files=".\deploy\$(confPath)\jreSetup.msi;.\deploy\$(confPath)\jreSetupLight.msi" />
  </Target>
 
  <Target Name="3dParty">
