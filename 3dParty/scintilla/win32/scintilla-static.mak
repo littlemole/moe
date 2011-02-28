@@ -14,11 +14,12 @@
 
 .SUFFIXES: .cxx
 
-DIR_O=.
 !IF "$(DEBUG)"=="1"
 DIR_BIN=..\bin\static\debug
+DIR_O=.\obj\debug
 !ELSE
 DIR_BIN=..\bin\static
+DIR_O=.\obj\release
 !ENDIF
 
 COMPONENT=$(DIR_BIN)\Scintilla.lib
