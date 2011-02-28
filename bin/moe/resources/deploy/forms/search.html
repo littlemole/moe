@@ -78,7 +78,7 @@ function onSearch()
   var sci = external.Moe.ActiveDoc.Object;
   if ( sci )
   {
-    var txt = sci.Text;
+    var txt = "" + sci.Text;
 	var pos = 0;
 	var p   = 0;
 	var s   = what;
@@ -94,9 +94,10 @@ function onSearch()
 	var s = new RegExp ( s, flags  );
 
 	var out = "<small><b>filename: " + sci.Properties.Filename + "</b></small>";
-	
+
 	while ( -1 != ( p = txt.substring(pos).search(s) ) )
 	{
+
 	  var line   = sci.Line.LineFromPos(pos+p);
 	  var linend = sci.Line.LineEndPos(line);
 	  var start  = pos+p;

@@ -101,8 +101,8 @@ function runPerl()
 
   var active = external.moe.ActiveDoc;
   var doc = active.Object;
-  doc.Save();
-  var f = doc.Filename;
+
+  var f = active.FilePath;
 
   // create perl process
   if ( ! perl.Create("perl.exe -cw \"" + f ) + "\"" )
