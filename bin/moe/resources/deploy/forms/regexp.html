@@ -70,7 +70,7 @@
 
 <script language="javascript">
 function onRegExp()
-{
+{	
   var pattern       = document.getElementById("regExp").value;
   var showGroups    = document.getElementById("showGroups").checked;
   var caseSensitive = document.getElementById("caseSensitive").checked;
@@ -82,8 +82,8 @@ function onRegExp()
   var name = external.Moe.ActiveDoc.FilePath;
   var sci = external.Moe.ActiveDoc.Object;
   if ( sci )
-  {
-    var txt = sci.Text;
+  {	
+    var txt = "" + sci.Text;
 	var pos = 0;
 	var p   = 0;
 
@@ -93,13 +93,13 @@ function onRegExp()
 		flags += "i";
 
 	var r;
-	
+
 	r = eval( "new RegExp('" + pattern + "', '" + flags + "' );" );
 
 	if ( !r )
         return false;
 	var out = "<small><b>filename: " + sci.Properties.Filename + "</b></small>";
-	
+
 	while ( -1 != ( p = txt.substring(pos).search(r) ) )
 	{
 	  var line   = sci.Line.LineFromPos(pos+p);

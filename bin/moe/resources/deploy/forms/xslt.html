@@ -166,8 +166,8 @@ function transform()
 
   var result = xslt.transform(xml,xsl);
 //alert(result);
-  var wnd = external.moe.New();
-  wnd.Object.Text = result;
+  var wnd = external.moe.Documents.New();
+  wnd.Object.Text.Value = "HALO" + result;
 }
 </script>
 
