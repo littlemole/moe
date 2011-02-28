@@ -149,7 +149,7 @@ HPROPSHEETPAGE PropSheet::addPage(mol::win::PropPage* page)
 
 INT_PTR PropSheet::create()
 {		
-	ph_.nPages = pages_.size();
+	ph_.nPages = (UINT)pages_.size();
 	ph_.nStartPage = startPage_;
 	ph_.phpage = &(pages_.front());
 

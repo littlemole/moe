@@ -530,23 +530,27 @@ bool Docs::open( int index, const mol::string& path, InFiles pref, bool readOnly
 	if ( S_OK == Item(variant(bstr(path)),&d) )
 	{
 		//TODO:fix me
-		/*if ( IDYES !=*/ ::MessageBox( *moe(), _T("close file?"), _T("file already open!"), MB_ICONEXCLAMATION); //|MB_YESNO ) )
+		/*if ( IDYES !=*/// ::MessageBox( *moe(), _T("close file?"), _T("file already open!"), MB_ICONEXCLAMATION); //|MB_YESNO ) )
 		{
 			mol::ostringstream oss;
-			oss << "cancelled reloading " << path;
+			oss << "file already open!" << path;
 			statusBar()->status(oss.str());
-			return false;
+			if (d)
+			{
+				mol::punk<IMoeDocumentView> view;
+				HRESULT hr = d->get_View(&view);
+				view->Activate();
+				view.release();
+
+				if (doc)
+				{
+					d->QueryInterface( IID_IMoeDocument, (void**) doc );
+				}
+			}
+
+			return true;
 		}
- /*
-		if (d)
-		{
-			mol::punk<IMoeDocumentView> view;
-			HRESULT hr = d->get_View(&view);
-			view->Close();
-			view.release();
-			d.release();
-		}
-		*/
+
 		return false;
 	}
 
@@ -599,6 +603,8 @@ bool Docs::open( int index, const mol::string& path, InFiles pref, bool readOnly
 	statusBar()->status(path);
 	return true;
 }
+
+
 
 mol::MdiChild* Docs::openPath( const mol::string& path, InFiles pref, bool readOnly)
 {

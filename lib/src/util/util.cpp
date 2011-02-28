@@ -23,6 +23,26 @@ std::vector<std::string> split( const std::string& what, const std::string& deli
 	return ret;
 }
 
+std::vector<std::wstring> split( const std::wstring& what, const std::wstring& delim )
+{
+	std::vector<std::wstring> ret;
+	
+	size_t p   = 0;
+	size_t pos = 0;
+
+	while ( (pos = what.find( delim, p )) != std::wstring::npos )
+	{
+		ret.push_back( what.substr( p, pos-p ) );
+		p = pos + delim.length();
+	}
+	if ( p < what.size()-1 )
+	{
+		ret.push_back( what.substr( p ) );
+	}
+
+	return ret;
+}
+
 }
 
 

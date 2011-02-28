@@ -137,6 +137,89 @@ int MoeApp::runStandalone(const mol::string& cmdline)
 }
 
 
+std::string resolvePath(const std::string& p)
+{
+	if ( mol::Path::exists(mol::toString(p)) )
+	{
+		return p;
+	}
+
+	std::ostringstream oss;
+	for ( size_t i = 0; i < p.size(); i++ ) 
+	{
+		if ( p[i] == '/' )
+			oss << '\\';
+		else
+			oss << p[i];
+	}
+
+	std::vector<std::string> v = mol::split( oss.str(), "\\" );
+
+	std::vector<std::string> v2;
+	if ( !v.empty() )
+		v2.push_back(v[0]);
+
+	for ( size_t i = 1; i < v.size(); i++ )
+	{
+		if ( i < v.size()-1 && v[i+1] == ".." )
+		{
+			continue;
+		}
+		if ( v[i] == ".." )
+		{
+			continue;
+		}
+
+		if ( v[i] == "." ) 
+		{
+			continue;
+		}
+		if ( v[i] == "" ) 
+		{
+			continue;
+		}
+
+		v2.push_back(v[i]);
+	}
+
+	std::ostringstream oss2;
+	if ( !v2.empty() )
+	{
+		oss2 << v2[0];
+	}
+	for ( size_t i = 1; i < v2.size(); i++ )
+	{
+		oss2 << "\\" << v2[i];
+	}
+
+	std::string s = oss2.str();
+
+	const std::string cygdrive("\\cygdrive\\");
+
+	size_t pos = s.find(cygdrive);
+	if ( pos == 0 )
+	{
+		return s.substr(cygdrive.size(),1) + ":\\" + s.substr(cygdrive.size()+2);
+	}
+
+	if ( mol::Path::exists(mol::toString(s)) )
+	{
+		return s;
+	}
+
+	char buf[MAX_PATH];
+	::GetCurrentDirectoryA(MAX_PATH,buf);
+
+	std::ostringstream oss3;
+	oss3 << buf << "\\" << s;
+
+	std::string path = oss3.str();
+	if ( mol::Path::exists(mol::toString(path)) )
+	{
+		return path;
+	}
+	return "";
+}
 
 void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 {
@@ -162,6 +245,10 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 		{
 			s = rgxp.subString( cl, 3 );
 		}
+
+		s = resolvePath(s);
+		if ( s.empty() )
+			continue;
 
 		if ( s.substr(0,4) == "moe:" ) 
 		{
@@ -226,9 +313,6 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 
 void MoeApp::init_extensions_if( )
 {
-	// .NET
-
-	//NET().start(enableExtensions_);
 
 	// GTK
 
@@ -259,25 +343,7 @@ void MoeApp::init_extensions_if( )
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
-/*
-class GdiPlusUser
-{
-public:
-	GdiPlusUser()
-	{
-		Gdiplus::GdiplusStartup(&gdiplusToken_, &gdiplusStartupInput_, NULL);	
-	}
 
-	~GdiPlusUser()
-	{
-		Gdiplus::GdiplusShutdown(gdiplusToken_);
-	}
-
-private:
-	Gdiplus::GdiplusStartupInput gdiplusStartupInput_;
-	ULONG_PTR           gdiplusToken_;
-};
-*/
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,

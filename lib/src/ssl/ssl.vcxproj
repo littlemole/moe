@@ -185,6 +185,7 @@
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)ssl.lib</OutputFile>
+      <TargetMachine>MachineX64</TargetMachine>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release_64|Win32'">

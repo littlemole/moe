@@ -162,7 +162,7 @@ unsigned int base_offset()
 // split using stl vectors
 //////////////////////////////////////////////////////////////////////
 std::vector<std::string> split( const std::string& what, const std::string& delim );
-
+std::vector<std::wstring> split( const std::wstring& what, const std::wstring& delim );
 
 //////////////////////////////////////////////////////////////////////
 // helpers to delete stl containers holding pointers
