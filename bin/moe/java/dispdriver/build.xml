@@ -56,7 +56,7 @@
 
   <exec executable="cscript.exe">
     <arg value="jcg.js"/>
-    <arg value="..\..\..\..\ax\scintillax\${confPath}scintillax.tlb"/>
+    <arg value="..\..\..\..\ax\scintillax\${confPath}\scintillax.tlb"/>
     <arg value="org.oha7.mol.scintillax"/>
   </exec>
 
