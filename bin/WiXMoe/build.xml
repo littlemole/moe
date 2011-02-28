@@ -177,7 +177,10 @@
     <RemoveDir Directories=".\bin\**\*.*;" />
     <RemoveDir Directories=".\moe\**\*.*" />
 	<RemoveDir Directories=".\$(regfree)\moe\**\*.*;" />
-	<RemoveDir Directories=".\$(regfreeTargetPath)" />
+	
+	<Delete Files="$(regfreeTargetPath)\moe.zip" />
+	<Delete Files=".\deploy\$(confPath)\moeSetup.msi;.\deploy\$(confPath)\moeSetupLight.msi" />
+
  </Target>
 
  <Target Name="3dParty">
