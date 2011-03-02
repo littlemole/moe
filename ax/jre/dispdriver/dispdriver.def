@@ -1,0 +1,14 @@
+LIBRARY "dispdriver"
+
+EXPORTS	
+	Java_org_oha7_dispdriver_impl_Native_QueryInterface PRIVATE
+	Java_org_oha7_dispdriver_impl_Native_Addref PRIVATE
+	Java_org_oha7_dispdriver_impl_Native_Release PRIVATE
+	Java_org_oha7_dispdriver_impl_Native_CoIninitalize PRIVATE
+	Java_org_oha7_dispdriver_impl_Native_CoUnIninitalize PRIVATE
+	Java_org_oha7_dispdriver_impl_Native_CreateObject PRIVATE
+	Java_org_oha7_dispdriver_impl_Native_RetrieveBstr PRIVATE
+	Java_org_oha7_dispdriver_impl_Native_Invoke PRIVATE
+	Java_org_oha7_dispdriver_impl_Native_GetObject PRIVATE
+
+

@@ -495,6 +495,9 @@ LRESULT ShellTree::OnTreeBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 	mol::string p(getItemPath(hti));
 	if ( !mol::Path::isDir(p) && !mol::Path::exists(p) )
 		return 0;
+
+	if ( mol::Path::isRoot(p) )
+		return 0;
     
 	HIMAGELIST himl = TreeView_CreateDragImage( tree_, hti ); 
 
@@ -800,6 +803,8 @@ BOOL ShellTree::expandFolder( HTREEITEM item, bool force, int flags )
 				}
 			}
 		}
+		
+		tree_.setRedraw(false);
 
         // deletions
         HTREEITEM it = tree_.getChildItem(item);
@@ -820,7 +825,7 @@ BOOL ShellTree::expandFolder( HTREEITEM item, bool force, int flags )
 		std::sort( files.begin(), files.end() );
 		std::sort( dirs.begin(), dirs.end()   );
 
-        tree_.setRedraw(false);
+
 		for ( std::vector<mol::string>::iterator iter = dirs.begin(); iter != dirs.end(); iter++ )
 		{
             //already there?
@@ -1205,6 +1210,9 @@ HRESULT ShellTree::Delete()
 	if ( hit )
 	{
 		mol::string p = getItemPath(hit);
+		if ( mol::Path::isRoot(p) ) {
+			return S_FALSE;
+		}
 		ShellFileOp sfo;
 		sfo.remove(*this,p,FOF_ALLOWUNDO);
 		HTREEITEM parent = tree_.getParentItem(hit);
