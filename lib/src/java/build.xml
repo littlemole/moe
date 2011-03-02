@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+
+<Project InitialTargets="setup" DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+<Target Name="setup">
+	    <Message Text="Configuration = $(Configuration)" />
+		<Message Text="Platform = $(Platform)" />
+		<Message Text="Java Path = $(java)" />
+		<Message Text="boost Path = $(boost)" />
+</Target>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{615F2791-3F7A-4F26-821D-20BBFA28766E}</ProjectGuid>
     <RootNamespace>java</RootNamespace>
@@ -9,6 +17,8 @@
 
   <Import Project="..\..\..\master.props" />
   <Import Project="..\build.props" />
+
+
 
   <ItemDefinitionGroup>
     <Midl>

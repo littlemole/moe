@@ -870,6 +870,9 @@ void MenuItemInfo::DrawCheckMark(HDC dc,int x,int y,COLORREF color)
 	HPEN pen = ::CreatePen(PS_SOLID,0,color);
 	HGDIOBJ oldpen = ::SelectObject(dc, (HGDIOBJ) pen);
 
+	x += 6;
+	y += 6;
+
 	::MoveToEx( dc,x,y+2, 0);
 	::LineTo( dc,x,y+2);
 

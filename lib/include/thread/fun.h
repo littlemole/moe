@@ -23,7 +23,7 @@ class call
 	public:
 
 		call() {}
-		virtual ~call() { std::cout << "~call" << std::endl; }
+		virtual ~call() {  }
 
 		virtual void operator()()		= 0;
 
