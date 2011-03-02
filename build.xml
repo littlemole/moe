@@ -6,7 +6,7 @@
   <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
  </PropertyGroup>
 
- <Target Name="Build">
+ <Target Name="Build" DependsOnTargets="3dParty">
 
 		<Message Text="Project Configuration = $(Configuration)" />
 		<Message Text="Project Platform = $(Platform)" />
@@ -40,6 +40,7 @@
  </Target>
 
  <Target Name="jre">
+
 		<MSBuild Projects=".\lib\src\java\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
 		<MSBuild Projects=".\ax\jre\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
 		<MSBuild Projects=".\ax\jre\dispdriver\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
