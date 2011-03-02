@@ -12,6 +12,11 @@
         <MSBuild Projects="expat\Source\lib\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
         <MSBuild Projects="pcre/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		
+		<Exec Command="nmake -f win32\Makefile.msc clean" WorkingDirectory=".\zlib" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' " />
+		<Exec Command="nmake -f win32\Makefile.mscd clean" WorkingDirectory=".\zlib" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' "  />
+		<Exec Command="nmake -f win32\Makefile.msc64 clean" WorkingDirectory=".\zlib" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' "  />
+		<Exec Command="nmake -f win32\Makefile.mscd64 clean" WorkingDirectory=".\zlib" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' " />
+
 		<Exec Command="nmake -f win32\Makefile.msc" WorkingDirectory=".\zlib" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' "  />
 		<Exec Command="nmake -f win32\Makefile.mscd" WorkingDirectory=".\zlib" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' "  />
 		<Exec Command="nmake -f win32\Makefile.msc64" WorkingDirectory=".\zlib" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' "  />
