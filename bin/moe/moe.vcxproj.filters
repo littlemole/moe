@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\app.cpp" />
+    <ClCompile Include="src\Docs.cpp" />
+    <ClCompile Include="src\moe.cpp" />
+    <ClCompile Include="src\shared.cpp" />
+    <ClCompile Include="src\stdafx.cpp" />
+    <ClCompile Include="src\dir3.cpp">
+      <Filter>mdi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\editor.cpp">
+      <Filter>mdi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\formEditor.cpp">
+      <Filter>mdi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\form.cpp">
+      <Filter>widget</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hex.cpp">
+      <Filter>mdi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\html.cpp">
+      <Filter>mdi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Img.cpp">
+      <Filter>mdi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ole.cpp">
+      <Filter>mdi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MoeBar.cpp">
+      <Filter>widget</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UserForm.cpp">
+      <Filter>widget</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xmlrc.cpp">
+      <Filter>gen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xmlrib.cpp">
+      <Filter>gen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\xmlui.cpp">
+      <Filter>gen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\widgets.cpp">
+      <Filter>widget</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ThreadScript.cpp">
+      <Filter>widget</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\app.h" />
+    <ClInclude Include="include\commons.h" />
+    <ClInclude Include="include\Docs.h" />
+    <ClInclude Include="include\moe.h" />
+    <ClInclude Include="include\shared.h" />
+    <ClInclude Include="include\stdafx.h" />
+    <ClInclude Include="include\dir3.h">
+      <Filter>mdi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\editor.h">
+      <Filter>mdi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\formEditor.h">
+      <Filter>mdi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\form.h">
+      <Filter>widget</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hex.h">
+      <Filter>mdi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\html.h">
+      <Filter>mdi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Img.h">
+      <Filter>mdi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ole.h">
+      <Filter>mdi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MoeBar.h">
+      <Filter>widget</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UserForm.h">
+      <Filter>widget</Filter>
+    </ClInclude>
+    <ClInclude Include="include\xmlid.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="include\xmlui.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="include\widgets.h">
+      <Filter>widget</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ThreadScript.h">
+      <Filter>widget</Filter>
+    </ClInclude>
+    <ClInclude Include="ribbonres.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="moe_dispid.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="moe_h.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="include\resource.h">
+      <Filter>resources</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="src\moe.idl" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\cg\js\make.js">
+      <Filter>gen</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\cg\disph.exe">
+      <Filter>gen</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\moe.ico">
+      <Filter>resources</Filter>
+    </None>
+    <None Include="resources\mol.rc.inc">
+      <Filter>resources</Filter>
+    </None>
+    <None Include="xsl\uicmd.xsl">
+      <Filter>resources\xsl</Filter>
+    </None>
+    <None Include="xsl\uires.xsl">
+      <Filter>resources\xsl</Filter>
+    </None>
+    <None Include="xsl\uicpp.xsl">
+      <Filter>resources\xsl</Filter>
+    </None>
+    <None Include="xsl\uih.xsl">
+      <Filter>resources\xsl</Filter>
+    </None>
+    <None Include="xsl\uirc.xsl">
+      <Filter>resources\xsl</Filter>
+    </None>
+    <None Include="resources\moe.bmp">
+      <Filter>resources\img</Filter>
+    </None>
+    <None Include="resources\favs.bmp">
+      <Filter>resources\img</Filter>
+    </None>
+    <None Include="resources\next.bmp">
+      <Filter>resources\img</Filter>
+    </None>
+    <None Include="xml\cmd.xml">
+      <Filter>resources\xml</Filter>
+    </None>
+    <None Include="xml\include.xml">
+      <Filter>resources\xml</Filter>
+    </None>
+    <None Include="xml\menu.xml">
+      <Filter>resources\xml</Filter>
+    </None>
+    <None Include="xml\msg.xml">
+      <Filter>resources\xml</Filter>
+    </None>
+    <None Include="xml\resource.xml">
+      <Filter>resources\xml</Filter>
+    </None>
+    <None Include="xml\ui.xml">
+      <Filter>resources\xml</Filter>
+    </None>
+    <None Include="..\..\cg\xsl\uimenu.xsl">
+      <Filter>resources\xsl</Filter>
+    </None>
+    <None Include="xml\ribbon.xml">
+      <Filter>resources\xml</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="mdi">
+      <UniqueIdentifier>{02fea64e-37fd-49b8-b29e-12bca0cadf18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="widget">
+      <UniqueIdentifier>{039f8a6b-77dc-4227-acb2-301d312d95ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gen">
+      <UniqueIdentifier>{05e42fb4-dca6-4da7-822b-0bbbea280b75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{652567f0-6db7-4b4b-941f-298b2ec369ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\xml">
+      <UniqueIdentifier>{53b9d845-adcf-407a-9da3-0228b3bc1858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\img">
+      <UniqueIdentifier>{ca6320d2-653a-4395-b999-4aa04027a785}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\xsl">
+      <UniqueIdentifier>{8ccbe4dc-43c1-4ef8-b1bd-4be31b365a22}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\mol.rc">
+      <Filter>gen</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
