@@ -18,6 +18,12 @@ mol::string engineFromPath(const std::string& path)
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
+CLIControl::CLIControl()
+{}
+
+CLIControl::~CLIControl()
+{}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -39,6 +45,7 @@ void MoeStatusBar::status( const mol::string& txt )
 
 Script::Script()
 {
+	sci_ = 0;
 	ODBGS("Script start");
 }
 

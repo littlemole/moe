@@ -80,6 +80,24 @@ class MoeComboBox : public mol::Control< mol::ComboBox,
 {};
 
  
+class CLIControl : public mol::Control<mol::ReditBox<IDM_CLI_RETURN>,WS_CHILD|WS_VISIBLE|WS_CLIPCHILDREN|WS_BORDER,WS_EX_CLIENTEDGE>
+{
+public:
+	CLIControl();
+	~CLIControl();
+
+private:
+
+};
+
+
+class  MoeTaskbarControl : public mol::ChildFrame<MoeTaskbarControl,mol::Window>
+{
+public:
+	
+};
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -107,6 +125,28 @@ public:
 
     virtual HRESULT __stdcall Load( LPSTREAM pStm);
     virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
+
+	LRESULT wndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+};
+
+class MoeCLIBar : public mol::Control< 
+						mol::ReBar,
+						/*WS_BORDER|*/WS_CHILD|WS_VISIBLE|
+						WS_CLIPCHILDREN|WS_CLIPSIBLINGS|CCS_NODIVIDER|
+						RBS_BANDBORDERS|/*RBS_VARHEIGHT|CCS_NOPARENTALIGN|*/
+						RBS_REGISTERDROP,
+						WS_EX_TOOLWINDOW/*|WS_EX_CLIENTEDGE*/ >
+{
+friend class MoeWnd;
+public:
+	MoeCLIBar()
+	{}
+
+	~MoeCLIBar();
+
+//    virtual HRESULT __stdcall Load( LPSTREAM pStm);
+  //  virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
 
 	LRESULT wndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

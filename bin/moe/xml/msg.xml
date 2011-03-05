@@ -43,6 +43,8 @@
         <msg  handler="OnSyntax" cmd="IDW_SYNTAX_BOX" />
 
         <msg  handler="OnTreeOpen" cmd="IDM_TREE_OPEN" />
+
+        <msg  handler="OnDispatch" cmd="IDM_CLI_RETURN" />
       
         <!-- ribbon -->
         <msg  handler="OnRecentItems" cmd="IDM_RIBBON_RECENTITEMS"  />
@@ -209,6 +211,8 @@
 
         <msg  handler="OnExecForm" cmd="IDM_MODE_EXECUTEFORM" />
 
+        <msg  handler="OnCliReturn" cmd="IDM_CLI_RETURN" />
+      
         <msg  handler="OnCut" cmd="IDM_EDIT_CUT" />
         <msg  handler="OnCopy" cmd="IDM_EDIT_COPY" />
         <msg  handler="OnPaste" cmd="IDM_EDIT_PASTE" />

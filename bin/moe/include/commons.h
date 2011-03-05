@@ -50,8 +50,8 @@
 // moe idl
 #include "moe_h.h"
 
-// resource identifiers defines
-#include "resource.h"
+// resource identifiers defines //BAD BAD BAD
+//#include "resource.h"
 
 #endif
 

@@ -251,7 +251,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/SUBSYSTEM:WINDOWS,4.00 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Mpr.lib;urlmon.lib;..\..\3dParty\pcre\x64\uni_debug_64\pcre.lib;Msimg32.lib;..\..\3dParty\expat\Source\lib\x64\uni_debug_64\libexpatMT.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Mpr.lib;urlmon.lib;..\..\3dParty\pcre\x64\uni_debug\pcre.lib;Msimg32.lib;..\..\3dParty\expat\Source\lib\x64\uni_debug\libexpatMT.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)moe.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -466,7 +466,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">true</ExcludedFromBuild>
     </CustomBuildStep>
-    <None Include="xml\ui.xml" />
+    <None Include="xml\ui.xml">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

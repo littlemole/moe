@@ -171,6 +171,8 @@
     <cmd id="IDM_TREE_PROPERTIES"  title="Properties" ribbon="RibbonPropertiesTree" />
     <cmd id="IDM_TREE_EXECUTE"  title="Properties" ribbon="RibbonExecuteTree" />
     <cmd id="IDM_TREE_NEWDIR" title="New Directory" ribbon="RibbonNewDirTree" />
+
+    <cmd id="IDM_CLI_RETURN"/>
     
   </cmds>
 </mol:codegen>
