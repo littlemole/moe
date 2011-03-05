@@ -4,7 +4,7 @@ typeinfocount='15'
 guid='{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}' 
 major='1' 
 minor='0' 
-file='..\..\..\..\ax\scintillax\x64/uni_debug\scintillax.tlb'>
+file='..\..\..\..\ax\scintillax\x64/uni_release\scintillax.tlb'>
 
 <interface name='IScintillAxProperties' type='Dual' iid='{65BC59C3-3E46-4F80-8B4A-13AADF1A58EB}' base='IDispatch' members='18' desc='' >
  <property name='Font' type='IFontDisp*' dispid='-512' vtindex='56' ctype='HRESULT' param='fnt' desc='Get/Set Font'  funkind='virtual'  calltype='__stdcall' >
@@ -402,4 +402,3 @@ file='..\..\..\..\ax\scintillax\x64/uni_debug\scintillax.tlb'>
 
 
 </typelib>
->

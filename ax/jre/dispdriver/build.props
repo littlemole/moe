@@ -84,7 +84,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
-     <AdditionalDependencies>..\..\..\lib\src\java\x64\uni_release\jre.lib;..\..\..\lib\src\win\x64\uni_release\win.lib;..\..\..\lib\src\ole\x64\uni_release\ole.lib;..\..\..\lib\src\util\x64\uni_release\util.lib;..\..\..\3dParty\pcre\x64\uni_release_64\pcre.lib;..\..\..\lib\src\thread\x64\uni_release\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\..\lib\src\xml\x64\uni_release\xml.lib;..\..\..\3dParty\expat\Source\lib\x64\uni_release_64\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     <AdditionalDependencies>..\..\..\lib\src\java\x64\uni_release\jre.lib;..\..\..\lib\src\win\x64\uni_release\win.lib;..\..\..\lib\src\ole\x64\uni_release\ole.lib;..\..\..\lib\src\util\x64\uni_release\util.lib;..\..\..\3dParty\pcre\x64\uni_release\pcre.lib;..\..\..\lib\src\thread\x64\uni_release\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\..\lib\src\xml\x64\uni_release\xml.lib;..\..\..\3dParty\expat\Source\lib\x64\uni_release\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
      <GenerateDebugInformation>false</GenerateDebugInformation>
      <TargetMachine>MachineX64</TargetMachine>
     </Link>
