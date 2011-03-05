@@ -182,6 +182,7 @@ extern "C" void load_codegen_metadata()
   UI().addCmd(IDM_TREE_PROPERTIES,_T("Properties"));  
   UI().addCmd(IDM_TREE_EXECUTE,_T("Properties"));  
   UI().addCmd(IDM_TREE_NEWDIR,_T("New Directory"));  
+  UI().addCmd(IDM_CLI_RETURN,_T(""));  
 
   
   //foreach bitmap - loads and registers bitmap
@@ -688,6 +689,8 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDW_SYNTAX_BOX, make_handler(&MoeWnd::OnSyn
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_TREE_OPEN, make_handler(&MoeWnd::OnTreeOpen) );
 
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_CLI_RETURN, make_handler(&MoeWnd::OnDispatch) );
+
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_RIBBON_RECENTITEMS, make_handler(&MoeWnd::OnRecentItems) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_PRINT, make_handler(&MoeWnd::OnDispatch) );
@@ -941,6 +944,8 @@ mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_DEBUG_STOP, make_handler(&Editor::
 mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_DEBUG_QUIT, make_handler(&Editor::OnDebugScriptQuit) );
 
 mol::msgMap<Editor>().addCmdHandler( IDM_MODE_EXECUTEFORM, make_handler(&Editor::OnExecForm) );
+
+mol::msgMap<Editor>().addCmdHandler( IDM_CLI_RETURN, make_handler(&Editor::OnCliReturn) );
 
 mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_CUT, make_handler(&Editor::OnCut) );
 

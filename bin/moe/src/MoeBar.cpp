@@ -370,3 +370,33 @@ LRESULT MoeBar::wndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	return mol::ReBar::wndProc(wnd,msg,wParam,lParam);
 }
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+MoeCLIBar::~MoeCLIBar()
+{
+	ODBGS("~MoeCLIBar");
+}
+
+
+LRESULT MoeCLIBar::wndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	switch(msg)
+	{
+		case WM_CREATE :
+		{
+			RECT r;
+			::GetClientRect(*this,&r);
+			postMessage(WM_SIZE,0,MAKELPARAM(r.right,r.bottom));
+			redraw();
+			break;
+		}
+	}
+	return mol::ReBar::wndProc(wnd,msg,wParam,lParam);
+}
+
+
+

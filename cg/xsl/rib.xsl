@@ -12,6 +12,7 @@
 #include "win/wnd.h"
 #include "ole/rib.h"
 #include "ribbonres.h"
+#include "resource.h"
 
 <xsl:for-each select=".//mol:cmds">
 

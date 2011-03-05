@@ -4,6 +4,7 @@
 #include "win/wnd.h"
 #include "ole/rib.h"
 #include "ribbonres.h"
+#include "resource.h"
 
 
 

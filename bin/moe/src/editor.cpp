@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "editor.h"
 #include "moe.h"
+#include "widgets.h"
 #include "Docs.h"
 #include "moebar.h"
 #include "xmlui.h"
@@ -253,6 +254,14 @@ void Editor::OnMDIActivate(WPARAM unused, HWND activated)
 		setFocus();
 	}
 }
+
+void Editor::OnCliReturn()
+{
+	//mol::string txt = cli()->getText();
+
+
+}
+
 
 void Editor::OnCut()
 {

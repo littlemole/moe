@@ -192,6 +192,7 @@ void FormEditor::OnDestroy()
 		userForm.release();
 	}
 
+	/*
 	mol::punk<IScintillAxProperties> props;
 	HRESULT hr = sci->get_Properties(&props);
 	if ( hr != S_OK )
@@ -205,6 +206,7 @@ void FormEditor::OnDestroy()
 	docs()->Remove(mol::variant(path));
  	events.UnAdvise(oleObject);
 	sci.release();
+	*/
 	return ;
 }
 

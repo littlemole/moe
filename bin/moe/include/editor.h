@@ -3,7 +3,7 @@
 
 #include "shared.h"
 #include "resource.h"
-
+#include "MoeBar.h"
 
 //////////////////////////////////////////////////////////////////////////////////
 // Editor Wnd
@@ -11,6 +11,8 @@
 
 class TaskbarWnd;
 class ThreadScript;
+class MoeCLIBar;
+class CLIControl;
 
 class Editor 
 	: 
@@ -73,6 +75,7 @@ public:
 	void OnCopy();
 	void OnPaste();
 
+	void OnCliReturn();
 
 	// syntax highlite switches
 	void OnLexer(int code, int id, HWND ctrl);
@@ -137,6 +140,7 @@ protected:
 	mol::punk<IRemoteDebugApplicationThread> remote_;
 	ThreadScript* ts_;
 	mol::string	lasterror_;
+
 };
 
 //////////////////////////////////////////////////////////////////////////////////
