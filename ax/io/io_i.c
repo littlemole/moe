@@ -6,7 +6,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sat Mar 05 23:17:43 2011
+/* at Thu Mar 10 22:11:05 2011
  */
 /* Compiler settings for io.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 7.00.0555 

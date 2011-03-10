@@ -2,7 +2,7 @@
 #include "include/resource.h"
 
 //#########################################
-//#uni_debug
+//#uni_release
 //#########################################
 
 
@@ -57,7 +57,7 @@ END
 
 // TYPELIBS
 
-1                                      TYPELIB    ".\\uni_debug\\moe.tlb"
+1                                      TYPELIB    ".\\uni_release\\moe.tlb"
 
 
 // MENUS
