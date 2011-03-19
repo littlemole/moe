@@ -13,7 +13,8 @@ TypeInfo::TypeInfo(const TypeInfo& t)
 {
 	type_attr_ = t.type_attr_;
 	type_kind_ = t.type_kind_; 
-	t.type_info.queryInterface( IID_ITypeInfo, (void**)&type_info);
+	//t.type_info.queryInterface( IID_ITypeInfo, (void**)&type_info);
+	t.type_info.queryInterface( &type_info);
 }
 
 TypeInfo::~TypeInfo(void)

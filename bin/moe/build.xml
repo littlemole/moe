@@ -5,7 +5,11 @@
     <ProjectGuid>{73DC413C-CE91-4651-A992-3592338BE98C}</ProjectGuid>
     <RootNamespace>xmoe</RootNamespace>
     <TargetName>moe</TargetName>
+
     <rcsource>resources\mol</rcsource>
+    <tlb Condition="'$(Platform)'=='Win32'">$(Configuration)\$(TargetName).tlb</tlb>
+    <tlb Condition="'$(Platform)'=='x64'">.\x64\$(Configuration)\$(TargetName).tlb</tlb>
+
     <CustomBuildAfterTargets>Midl</CustomBuildAfterTargets>
   </PropertyGroup>
 
@@ -19,11 +23,9 @@
       <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_UNICODE;UNICODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-<!--      <AdditionalDependencies>..\..\lib\src\win\Unicode Debug\win.lib;..\..\lib\src\ole\Unicode Debug\ole.lib;..\..\lib\src\util\Unicode Debug\util.lib;..\..\lib\src\xml\Unicode Debug\xml.lib;..\..\lib\src\thread\Unicode Debug\thread.lib;..\..\3dParty\scintilla\bin\static\debug\Scintilla.lib;..\..\3dParty\scintilla\bin\static\Debug\SciLexer.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Msimg32.lib;Mpr.lib;Urlmon.lib;gdiplus.lib;..\..\3dParty\pcre\Debug\pcre.lib;..\..\3dParty\expat\Source\lib\Unicode Debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
--->
       <OutputFile>$(OutDir)moe.exe</OutputFile>
       <AdditionalManifestDependencies>%(AdditionalManifestDependencies)</AdditionalManifestDependencies>
       <SubSystem>Windows</SubSystem>
@@ -40,7 +42,6 @@
   <ItemGroup>
     <Midl Include="src\moe.idl">
       <TypeLibraryName >$(TargetName).tlb</TypeLibraryName>
-      <HeaderFileName>../../$(TargetName)_h.h</HeaderFileName>
     </Midl>
   </ItemGroup>
 
@@ -69,38 +70,20 @@
     </ClCompile>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Platform)'=='Win32'">
+  <ItemGroup>
     <CustomBuild Include="..\..\cg\js\make.js">
       <Message>code generation phase</Message>
-      <Command>cscript.exe //NoLogo ../../cg/js/make.js $(Configuration)</Command>
+      <Command>cscript.exe //NoLogo ../../cg/js/make.js TLB</Command>
       <AdditionalInputs>xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;xml/ribbon.xml;%(AdditionalInputs)</AdditionalInputs>
       <Outputs>xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;ribbonres.rc;ribbonres.h;ribbon.bml;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Platform)'=='x64'">
-    <CustomBuild Include="..\..\cg\js\make.js">
-      <Message>code generation phase</Message>
-      <Command>cscript.exe //NoLogo ../../cg/js/make.js x64/$(Configuration)</Command>
-      <AdditionalInputs>xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;xml/ribbon.xml;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs>xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;ribbonres.rc;ribbonres.h;ribbon.bml;%(Outputs)</Outputs>
-    </CustomBuild>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(Platform)'=='Win32'">
+  <ItemGroup>
     <CustomBuild Include="..\..\cg\disph.exe">
       <Message>dispid generation phase</Message>
-      <Command>..\..\cg\disph.exe $(Configuration)\$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
+      <Command>..\..\cg\disph.exe $(tlb) &gt; $(TargetName)_dispid.h</Command>
       <AdditionalInputs>$(Configuration)\$(TargetName).tlb;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs>$(TargetName)_dispid.h;%(Outputs)</Outputs>
-    </CustomBuild>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(Platform)'=='x64'">
-    <CustomBuild Include="..\..\cg\disph.exe">
-      <Message>dispid generation phase $(Configuration)\$(TargetName)</Message>
-      <Command>..\..\cg\disph.exe x64\$(Configuration)\$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
-      <AdditionalInputs>x64\$(Configuration)\$(TargetName).tlb;%(AdditionalInputs)</AdditionalInputs>
       <Outputs>$(TargetName)_dispid.h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>

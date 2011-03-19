@@ -1,3 +1,5 @@
+// generated file - do not edit //
+
 // *****************************************************************************
 // * This is an automatically generated header file for UI Element definition  *
 // * resource symbols and values. Please do not modify manually.               *

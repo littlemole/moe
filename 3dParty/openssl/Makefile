@@ -12,9 +12,9 @@ SHLIB_VERSION_HISTORY=
 SHLIB_MAJOR=0
 SHLIB_MINOR=9.8
 SHLIB_EXT=
-PLATFORM=VC-WIN32
+PLATFORM=VC-WIN64A
 OPTIONS= no-gmp no-krb5 no-mdc2 no-rc5 no-shared no-zlib no-zlib-dynamic
-CONFIGURE_ARGS=VC-WIN32
+CONFIGURE_ARGS=VC-WIN64A
 SHLIB_TARGET=
 
 # HERE indicates where this Makefile lives.  This can be used to indicate

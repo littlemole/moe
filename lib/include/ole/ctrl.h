@@ -576,7 +576,8 @@ public:
 				{
 					if ( S_OK == ps2->Load(stream) )
 					{
-						if ( S_OK == ps2.queryInterface(IID_IDataObject,(void**)ppDataObject) )
+						//if ( S_OK == ps2.queryInterface(IID_IDataObject,(void**)ppDataObject) )
+						if ( S_OK == ps2.queryInterface(ppDataObject) )
 							return S_OK;
 					}
 				}			
@@ -589,7 +590,8 @@ public:
 	virtual HRESULT __stdcall OnAmbientPropertyChange( DISPID dispID)
 	{
 		punk<IDispatch> disp;
-		if ( S_OK == clientSite_.queryInterface(IID_IDispatch,(void**)&disp) )
+		//if ( S_OK == clientSite_.queryInterface(IID_IDispatch,(void**)&disp) )
+		if ( S_OK == clientSite_.queryInterface(&disp) )
 		//if ( disp )
 		{
 			T* t = (T*)this;

@@ -279,7 +279,8 @@ public:
 		punk<IOleControlSite> cs;
 		punk<IOleInPlaceSite>& site = t->site();
 		if ( site )
-		if ( S_OK == site.queryInterface(IID_IOleControlSite,(void**)&cs) )
+		//if ( S_OK == site.queryInterface(IID_IOleControlSite,(void**)&cs) )
+		if ( S_OK == site.queryInterface(&cs) )
 		{
 			cs->LockInPlaceActive(TRUE);
 		}
@@ -292,7 +293,8 @@ public:
 		punk<IOleControlSite> cs;
 		punk<IOleInPlaceSite>& site = t->site();
 		if ( site )
-		if ( S_OK == site.queryInterface(IID_IOleControlSite,(void**)&cs) )
+		//if ( S_OK == site.queryInterface(IID_IOleControlSite,(void**)&cs) )
+		if ( S_OK == site.queryInterface(&cs) )
 		{
 			cs->LockInPlaceActive(TRUE);
 		}

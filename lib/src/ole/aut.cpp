@@ -41,7 +41,7 @@ HRESULT typeLibForInterface(REFIID iid, ITypeLib** typeLib )
 			{
 				TypeLib tl;
 				tl.load(clsid,major,minor);
-				return tl->QueryInterface(IID_ITypeLib,(void**)typeLib);
+				return tl.queryInterface(typeLib);				
 			}
 		}
 	}

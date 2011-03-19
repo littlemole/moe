@@ -1,8 +1,10 @@
+// generated file - do not edit //
+
 
 #include "include/resource.h"
 
 //#########################################
-//#x64/uni_release
+//#TLB
 //#########################################
 
 
@@ -17,8 +19,7 @@ IDI_SCINTILLA                          ICON    ".\\scintillax.ico"
 
 // TYPELIBS
 
-1                                      TYPELIB    ".\\x64/uni_release\\scintillax.tlb"
-
+1                                      TYPELIB    TLB
 
 // MENUS
 // Microsoft Visual C++ generated resource script.

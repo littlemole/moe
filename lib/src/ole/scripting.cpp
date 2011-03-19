@@ -25,7 +25,8 @@ HRESULT ActiveScript::init(const mol::string& engine)
 		return hr;
 	}
 
-	hr = activeScript.queryInterface(IID_IActiveScriptParse,(void**)&asp_);
+	//hr = activeScript.queryInterface(IID_IActiveScriptParse,(void**)&asp_);
+	hr = activeScript.queryInterface(&asp_);
 	if ( hr != S_OK )
 	{
 		ODBGS("ActiveScriptParse failed!");
@@ -450,7 +451,7 @@ HRESULT  __stdcall ScriptHost::GetItemInfo( LPCOLESTR pstrName,DWORD dwReturnMas
 			if ( _wcsicmp(mol::towstring(tmp).c_str(),pstrName) == 0 )
 			{
 				IUnknown* punk = (*it).second;
-				return punk->QueryInterface(IID_IUnknown,(void**)ppiunkItem);
+				return punk->QueryInterface(IID_IUnknown,(void**)ppiunkItem);				
 			}
 		}
 	}

@@ -404,7 +404,8 @@ HRESULT __stdcall  AxClientWndBase::IOleDocumentSite_ActivateMe(IOleDocumentView
 	else
 	{
 		documentView.release();
-		if ((!this->oleObject) || FAILED(this->oleObject->QueryInterface(IID_IOleDocument, (void **)&piod)))
+		//if ((!this->oleObject) || FAILED(this->oleObject->QueryInterface(IID_IOleDocument, (void **)&piod)))
+		if ((!this->oleObject) || FAILED(this->oleObject.queryInterface(&piod)))
 			return E_FAIL;
 
 		hr = piod->CreateView( this->getOleInPlaceSite() , NULL, 0, &documentView);
@@ -486,7 +487,8 @@ HRESULT __stdcall AxClientWndBase::IOleInPlaceSite_GetWindowContext( LPOLEINPLAC
 		*lplpFrame   = 0;
 		*lplpDoc     = 0;
 
-		if ( S_OK != oleFrame->QueryInterface(IID_IOleInPlaceFrame, (void**) lplpFrame) )
+		//if ( S_OK != oleFrame->QueryInterface(IID_IOleInPlaceFrame, (void**) lplpFrame) )
+		if ( S_OK != oleFrame.queryInterface(lplpFrame) )
 			return E_FAIL;
 
 		bool isMidi = this->getMidiState();
@@ -739,7 +741,8 @@ void AxClientWndBase::SetObjectSize(RECT& r)
 		else
 		{
 			if ( this->activeObject.interface_ )
-			if ( S_OK == activeObject->QueryInterface(IID_IOleInPlaceObject,(void**)&oip) )
+			//if ( S_OK == activeObject->QueryInterface(IID_IOleInPlaceObject,(void**)&oip) )
+			if ( S_OK == activeObject.queryInterface(&oip) )
 			{
 				oip->SetObjectRects(&r,&r);
 			}
@@ -767,7 +770,8 @@ void AxClientWndBase::updateObject()
 		else
 		{
 			if ( this->activeObject.interface_ )
-			if ( S_OK == activeObject->QueryInterface(IID_IOleInPlaceObject,(void**)&oip) )
+			//if ( S_OK == activeObject->QueryInterface(IID_IOleInPlaceObject,(void**)&oip) )
+			if ( S_OK == activeObject.queryInterface(&oip) )
 			{
 				HWND w = 0;
 				if ( S_OK == oip->GetWindow(&w) && w && ::IsWindow(w) )
@@ -802,7 +806,8 @@ HRESULT AxClientWndBase::copyStorageTemp(IStorage* src, IStorage** copy)
 	if ( S_OK == ::StgCreateDocfile( mol::towstring(file).c_str(), STGM_DELETEONRELEASE|STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE|STGM_TRANSACTED,0,&store) )
 	{
 		HRESULT hr = src->CopyTo(0,0,0,store);
-		return store->QueryInterface( IID_IStorage, (void**)copy);
+		//return store->QueryInterface( IID_IStorage, (void**)copy);
+		return store.queryInterface( copy);
 	}
 	return E_FAIL;
 }
@@ -828,7 +833,8 @@ bool AxClientWndBase::inplaceDeActivate(bool full)
 		{
 			punk<IOleInPlaceObject> ipo(activeObject);
 			if(!ipo)
-				oleObject->QueryInterface(IID_IOleInPlaceObject,(void**)&ipo);
+				//oleObject->QueryInterface(IID_IOleInPlaceObject,(void**)&ipo);
+				oleObject.queryInterface(&ipo);
 			if(ipo)
 				ipo->UIDeactivate();
 			return true;
@@ -840,7 +846,8 @@ bool AxClientWndBase::inplaceDeActivate(bool full)
 	punk<IOleDocumentView> v;
 	if ( this->documentView )						
 	{
-		documentView->QueryInterface(IID_IOleDocumentView,(void**)&v);
+		//documentView->QueryInterface(IID_IOleDocumentView,(void**)&v);
+		documentView.queryInterface(&v);
 		this->documentView.release();
 
 		if ( v )

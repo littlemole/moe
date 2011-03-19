@@ -78,7 +78,7 @@ BEGIN
 // TYPELIBS
 
 <xsl:for-each select="./*//mol:typelib">
-<xsl:value-of select="concat(./@key,substring($padding,0,40-string-length(./@key)))"/>TYPELIB    ".\\<xsl:value-of select="$outputpath" />\\<xsl:value-of select="./@src"/>"
+<xsl:value-of select="concat(./@key,substring($padding,0,40-string-length(./@key)))"/>TYPELIB    <xsl:value-of select="$outputpath" />
 </xsl:for-each>
 </xsl:template>
 

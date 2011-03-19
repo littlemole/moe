@@ -57,7 +57,7 @@
   <ItemGroup Condition="'$(Platform)'=='x86'">
     <CustomBuild Include="..\..\cg\js\make.js">
       <Message>codegen phase</Message>
-      <Command>cscript.exe ../../cg/js/make.js "$(Configuration)"</Command>
+      <Command>cscript.exe ../../cg/js/make.js "TLB"</Command>
       <AdditionalInputs>xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
       <Outputs>xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
     </CustomBuild>
@@ -66,7 +66,7 @@
   <ItemGroup Condition="'$(Platform)'=='x64'">
     <CustomBuild Include="..\..\cg\js\make.js">
       <Message>codegen phase</Message>
-      <Command>cscript.exe ../../cg/js/make.js "x64/$(Configuration)"</Command>
+      <Command>cscript.exe ../../cg/js/make.js "TLB"</Command>
       <AdditionalInputs>xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
       <Outputs>xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
     </CustomBuild>
