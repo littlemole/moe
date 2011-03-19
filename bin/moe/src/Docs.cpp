@@ -129,41 +129,39 @@ HRESULT __stdcall Docs::Activate( VARIANT i)
 
 HRESULT __stdcall Docs::New(IMoeDocument** d)
 {
-	if (!d)
-		return E_INVALIDARG;
-
-	*d = 0;
+	if (d)
+		*d = 0;
 
 	mol::punk<IMoeDocument> doc;
 	bool b = newFile(&doc);
 	if (!b || !doc)
 		return E_FAIL;
 
-	return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+	if ( d )
+		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+	return S_OK;
 }
 
 
 HRESULT __stdcall Docs::NewUserForm(IMoeDocument** d)
 {
-	if (!d)
-		return E_INVALIDARG;
-
-	*d = 0;
+	if (d)
+		*d = 0;
 
 	mol::punk<IMoeDocument> doc;
 	bool b = newUFSFile(&doc);
 	if (!b || !doc)
 		return E_FAIL;
 
-	return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+	if ( d )
+		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+	return S_OK;
 }
 
 HRESULT __stdcall Docs::Open( BSTR fPath, IMoeDocument** d)
 {
-	if (!d)
-		return E_INVALIDARG;
-
-	*d = 0;
+	if (d)
+		*d = 0;
 
 	mol::punk<IMoeDocument> doc;
 	open(-1, mol::bstr(fPath).toString(), Docs::PREF_TXT, false,&doc);
@@ -171,15 +169,16 @@ HRESULT __stdcall Docs::Open( BSTR fPath, IMoeDocument** d)
 	if ( !doc )
 		return E_FAIL;
 
-	return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+	if (d )
+		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+
+	return S_OK;
 }
 
 HRESULT __stdcall Docs::OpenUTF8( BSTR fPath, IMoeDocument** d)
 {
-	if (!d)
-		return E_INVALIDARG;
-
-	*d = 0;
+	if (d)
+		*d = 0;
 
 	mol::punk<IMoeDocument> doc;
 	open(-1, mol::bstr(fPath).toString(), Docs::PREF_UTF8, false,&doc);
@@ -187,15 +186,15 @@ HRESULT __stdcall Docs::OpenUTF8( BSTR fPath, IMoeDocument** d)
 	if ( !doc )
 		return E_FAIL;
 
-	return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+	if ( d )
+		return doc->QueryInterface( IID_IMoeDocument, (void**) d );	
+	return S_OK;
 }
 
 HRESULT __stdcall Docs::OpenDir(BSTR dir,  IMoeDocument** d)
 {
-	if (!d)
-		return E_INVALIDARG;
-
-	*d = 0;
+	if (d)
+		*d = 0;
 
 	mol::punk<IMoeDocument> doc;
 	open(-1, mol::bstr(dir).toString(), Docs::PREF_TXT, false,&doc);
@@ -203,15 +202,16 @@ HRESULT __stdcall Docs::OpenDir(BSTR dir,  IMoeDocument** d)
 	if ( !doc )
 		return E_FAIL;
 
-	return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+	if ( d )
+		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+
+	return S_OK;
 }
 
 HRESULT __stdcall Docs::OpenHexEditor(  BSTR f, VARIANT_BOOL vbReadOnly, IMoeDocument** d)
 {
-	if (!d)
-		return E_INVALIDARG;
-
-	*d = 0;
+	if (d)
+		*d = 0;
 
 	mol::punk<IMoeDocument> doc;
 	open(-1, mol::bstr(f).toString(), Docs::PREF_HEX, vbReadOnly == VARIANT_TRUE ? true : false,&doc);
@@ -219,15 +219,15 @@ HRESULT __stdcall Docs::OpenHexEditor(  BSTR f, VARIANT_BOOL vbReadOnly, IMoeDoc
 	if ( !doc )
 		return E_FAIL;
 
-	return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+	if(d)
+		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+	return S_OK;
 }
 
 HRESULT __stdcall Docs::OpenHtmlFrame(  BSTR f,  IMoeDocument** d)
 {
-	if (!d)
-		return E_INVALIDARG;
-
-	*d = 0;
+	if (d)
+		*d = 0;
 
 	mol::punk<IMoeDocument> doc;
 	open(-1, mol::bstr(f).toString(), Docs::PREF_HTML, false,&doc);
@@ -235,15 +235,16 @@ HRESULT __stdcall Docs::OpenHtmlFrame(  BSTR f,  IMoeDocument** d)
 	if ( !doc )
 		return E_FAIL;
 
-	return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+	if ( d )
+		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+
+	return S_OK;
 }
 
 HRESULT __stdcall Docs::OpenUserForm(  BSTR pathname, IMoeDocument** d )
 {
-	if (!d)
-		return E_INVALIDARG;
-
-	*d = 0;
+	if (d)
+		*d = 0;
 
 	mol::punk<IMoeDocument> doc;
 	open(-1, mol::bstr(pathname).toString(), Docs::PREF_FORM, false,&doc);
@@ -251,7 +252,10 @@ HRESULT __stdcall Docs::OpenUserForm(  BSTR pathname, IMoeDocument** d )
 	if ( !doc )
 		return E_FAIL;
 
-	return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+	if ( d )
+		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+
+	return S_OK;
 }
 
 HRESULT __stdcall Docs::SaveAll()

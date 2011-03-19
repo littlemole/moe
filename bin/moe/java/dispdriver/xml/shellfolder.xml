@@ -4,7 +4,7 @@ typeinfocount='4'
 guid='{AD81C1CC-B3F3-47E8-BB69-31912616A39F}' 
 major='1' 
 minor='0' 
-file='..\..\..\..\ax\shellfolder\uni_release\shellfolder.tlb'>
+file='..\..\..\..\ax\shellfolder\x64/uni_release\shellfolder.tlb'>
 
 <interface name='IShellPane' type='Dual' iid='{8E03AB4B-E12B-42A2-905D-F106854C7153}' base='IDispatch' members='13' desc='' >
  <property name='DisplayFiles' type='VARIANT_BOOL' dispid='1' vtindex='56' ctype='HRESULT' param='vb' desc='Get/Set Display of files'  funkind='virtual'  calltype='__stdcall' >
@@ -83,4 +83,3 @@ file='..\..\..\..\ax\shellfolder\uni_release\shellfolder.tlb'>
 
 
 </typelib>
-ib>

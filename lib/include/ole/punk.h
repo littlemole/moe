@@ -47,6 +47,12 @@ public:
         return interface_->QueryInterface( iid, iUnknown );
     }
 
+	template<class T>
+    HRESULT queryInterface( T** Unknown ) const
+    {
+		return interface_->QueryInterface( mol::uuidof<T>(), (void**)Unknown );
+    }
+
     HRESULT createObject( CLSID classId, int clsctx = CLSCTX_INPROC_SERVER )
     {
         return ::CoCreateInstance( classId, NULL, clsctx, uuidof<I>(), (void**)&interface_ );

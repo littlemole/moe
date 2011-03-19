@@ -793,7 +793,7 @@ void MoeWnd::OnTabCtrl(NMHDR* notify )
 				mol::bstr dirname;
 				if ( doc->get_FilePath(&dirname) == S_OK )
 				{
-					if ( t != 2 ) 
+					//if ( t != 2 ) 
 					{
 						mol::bstr dir( mol::Path::parentDir(dirname.toString()) );
 						docs()->OpenDir(dir,0);

@@ -6,6 +6,8 @@
 // slurp a file
 ////////////////////////////////////////////////////////////////////////
 
+var preamble = "// generated file - do not edit //\r\n\r\n";
+
 function loadFile(file)
 {
     var ret = "";
@@ -45,7 +47,7 @@ function saveFile( output, file )
     var f = fso.CreateTextFile(file, true);
 
     // write transformation result to file
-    f.Write(output);
+    f.Write(preamble+output);
     f.Close();
 }
 

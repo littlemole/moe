@@ -1,8 +1,10 @@
+// generated file - do not edit //
+
 
 #include "include/resource.h"
 
 //#########################################
-//#uni_release
+//#TLB
 //#########################################
 
 
@@ -57,8 +59,7 @@ END
 
 // TYPELIBS
 
-1                                      TYPELIB    ".\\uni_release\\moe.tlb"
-
+1                                      TYPELIB    TLB
 
 // MENUS
 #include "../ribbonres.rc"

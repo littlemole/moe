@@ -905,7 +905,8 @@ HRESULT OleCtrlBase::inplaceActivate()
 
 	if ( !site_ )
 	{
-		HRESULT hr = clientSite_.queryInterface(IID_IOleInPlaceSite,(void**)&site_);
+		//HRESULT hr = clientSite_.queryInterface(IID_IOleInPlaceSite,(void**)&site_);
+		HRESULT hr = clientSite_.queryInterface(&site_);
 		if ( hr != S_OK )
 		{	
 			return hr;
@@ -922,7 +923,8 @@ HRESULT OleCtrlBase::inplaceActivate()
 	if ( (!siteWindowless_) && (windowed_ == false) )
 	{
 		windowed_ = true;
-		HRESULT hr = clientSite_.queryInterface( IID_IOleInPlaceSiteWindowless, (void**)&siteWindowless_);
+		//HRESULT hr = clientSite_.queryInterface( IID_IOleInPlaceSiteWindowless, (void**)&siteWindowless_);
+		HRESULT hr = clientSite_.queryInterface( &siteWindowless_);
 		if ( hr == S_OK )
 		{
 			if ( S_OK == siteWindowless_->CanWindowlessActivate() )
@@ -974,7 +976,8 @@ HRESULT OleCtrlBase::inplaceActivate()
 	if ( site_)
 	{
 		punk<IOleControlSite> iocs;//(site_);
-		if ( S_OK == site_.queryInterface(IID_IOleControlSite,(void**)&iocs) )
+		//if ( S_OK == site_.queryInterface(IID_IOleControlSite,(void**)&iocs) )
+		if ( S_OK == site_.queryInterface(&iocs) )
 			if ( iocs )
 				iocs->OnFocus(TRUE);
 		::SetFocus(hwnd);

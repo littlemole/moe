@@ -32,7 +32,7 @@ public:
     virtual HRESULT __stdcall GetClassInfo( ITypeInfo **ppTI) 
 	{
 		if ( ti_ )
-			return ti_->QueryInterface( IID_ITypeInfo, (void**)ppTI );
+			return ti_.queryInterface(ppTI);
 		return E_FAIL;
 	}
 
@@ -63,7 +63,7 @@ public:
     virtual HRESULT __stdcall GetClassInfo( ITypeInfo **ppTI) 
 	{
 		if ( ti_ )
-			return ti_->QueryInterface( IID_ITypeInfo, (void**)ppTI );
+			return ti_.queryInterface(ppTI);
 		return E_FAIL;
 	}
     virtual HRESULT __stdcall GetGUID( DWORD dwGuidKind, GUID * pGUID )
@@ -116,7 +116,7 @@ public:
 
     HRESULT virtual __stdcall GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo ) 
     { 
-        typeInfo_.queryInterface(IID_ITypeInfo, (void**)ppTInfo );
+        typeInfo_.queryInterface(ppTInfo );
         return S_OK; 
     }
 
