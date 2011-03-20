@@ -90,13 +90,18 @@ mol::variant JavaMarshaler::javaObject2Variant( JavaClassStore& classes, jobject
 	{
 		varRet.vt = VT_DISPATCH;
 		jclass clazz = classes["java/lang/Class"];
-		if ( env->IsInstanceOf( obj, clazz ) )
+		jclass swing = classes["java/awt/Component"];
+		if ( env->IsInstanceOf( obj, swing ) )
 		{
-			impl::wrapJavaClass( (jclass)obj, (void**) &(varRet.pdispVal) );
+			impl::wrapSwingObject( obj, &(varRet.pdispVal) );
+		}
+		else if ( env->IsInstanceOf( obj, clazz ) )
+		{
+			impl::wrapJavaClass( (jclass)obj, &(varRet.pdispVal) );
 		}
 		else 
 		{
-			impl::wrapJavaObject( obj, (void**) &(varRet.pdispVal) );
+			impl::wrapJavaObject( obj, &(varRet.pdispVal) );
 		}
 
 	}
@@ -128,7 +133,7 @@ jobjectArray JavaMarshaler::dispArgs2JavaArray( JavaClassStore& classes, DISPPAR
 		{
 			return 0;
 		}
-		env->DeleteLocalRef(o);
+		//env->DeleteLocalRef(o);
 	}
 	return jar;
 }

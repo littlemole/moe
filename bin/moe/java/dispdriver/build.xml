@@ -82,7 +82,7 @@
 	
  <!-- compile java classes -->
  <target name="compile" description="Compiles all source code." depends="generate">
-	<javac srcdir=".\src" destdir=".\bin" classpath="" />
+	<javac srcdir=".\src" destdir=".\bin" classpath="" debug="true" debuglevel="lines,vars,source"/>
  </target>	
 	
  <!-- assemble dispdriver.jar -->

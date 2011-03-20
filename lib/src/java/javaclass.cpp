@@ -8,6 +8,8 @@
 #include "java/jmarshaler.h"
 #include "java/dispdriver.h"
 
+EXTERN_C const  CLSID CLSID_SwingObject;
+
 ///////////////////////////////////////////////////////////
 
 namespace mol {
@@ -15,7 +17,8 @@ namespace java {
 
 void JavaClass::dispose()
 {
-
+	JNIEnv* env = java();
+	env->DeleteGlobalRef((jobject)theJavaClass_);
 }
 	
 HRESULT __stdcall JavaClass::GetTypeInfoCount (unsigned int FAR*  pctinfo ) 
@@ -32,7 +35,10 @@ HRESULT __stdcall JavaClass::GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITy
 
 HRESULT __stdcall JavaClass::Initialize(long* ptr)
 {
-	theJavaClass_ = (jclass)ptr;
+	JNIEnv* env = java();
+	jobject o = env->NewGlobalRef((jobject)ptr);
+	theJavaClass_ = (jclass)o;
+		
 	return S_OK;
 }
 
@@ -53,6 +59,13 @@ HRESULT __stdcall JavaClass::GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgs
 	if ( n == "New" )
 	{
 		rgDispId[0] = 0;
+		return S_OK;
+	}
+
+
+	if ( n == "Swing" )
+	{
+		rgDispId[0] = 3;
 		return S_OK;
 	}
 
@@ -93,6 +106,36 @@ HRESULT __stdcall JavaClass::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 				::CoAllowSetForegroundWindow( (IUnknown*)v.pdispVal, 0);
 			}
 			::VariantCopy( pReturn, &v );
+		}
+		return S_OK;
+	}
+
+	// create java swing obj via constructor
+	if ( dispIdMember == 3 ) 
+	{
+		jobject obj = dispDriver.CreateSwing( theJavaClass_, args );
+		if (mol::java::exceptionOccured(env))
+			return S_FALSE;
+
+		if ( obj == 0 )
+		{
+			mol::com_throw("could not create object",CLSID_JavaClass,"Java error");
+			return S_FALSE;
+		}
+
+		if ( pReturn )
+		{
+			//mol::variant v = JavaMarshaler::javaObject2Variant(classes,obj);
+	
+			mol::punk<ISwingObject> instance;
+			HRESULT hr = instance.createObject(CLSID_SwingObject,CLSCTX_ALL);
+			if ( hr == S_OK )
+			{
+				hr = instance->Initialize((long*)obj);
+				pReturn->vt = VT_DISPATCH;
+				hr = instance.queryInterface( &(pReturn->pdispVal) );
+				::CoAllowSetForegroundWindow( (IUnknown*)(pReturn->pdispVal), 0);
+			}
 		}
 		return S_OK;
 	}

@@ -3,9 +3,12 @@ package org.oha7.dispdriver.impl;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 
+import javax.swing.SwingUtilities;
+
 import org.oha7.dispdriver.annotations.Dispid;
 import org.oha7.dispdriver.interfaces.IUnknown;
 import org.oha7.dispdriver.interfaces.RawPtr;
+import org.oha7.dispdriver.swing.Invocation;
 
 /**
  * runtime proxy wrapped around naked native IUnknown pointers
@@ -86,6 +89,19 @@ public class ComProxy implements java.lang.reflect.InvocationHandler {
      */
     public Object invoke(Object proxy, Method m, Object[] args)	throws Throwable
     {
+    	
+    	if ( SwingUtilities.isEventDispatchThread()){
+    	
+    		Method self = ComProxy.class.getMethod("invoke", new Class<?>[]{Object.class, Method.class, Object[].class} );
+    		
+    		Invocation invocation = new Invocation(self, this, new Object[]{ proxy, m, args } );
+    		
+    		Thread thread = new Thread(invocation);
+    		thread.start();
+    		
+    		return null;
+    	}
+    	
         Object result;
     
     	String methodName = m.getName();
@@ -131,6 +147,7 @@ public class ComProxy implements java.lang.reflect.InvocationHandler {
     			throw new NoSuchMethodException(methodName);
     		}
     	}
+
     	       	
     	// do the native invocation
     	result = Native.Invoke(ptr,dispid,m.getParameterTypes(),args, flags);	    	

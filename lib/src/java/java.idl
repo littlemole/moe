@@ -4,7 +4,9 @@ import "oaidl.idl";
 // mol JGLUE interfaces
 ////////////////////////////////////////////////////////////////////////////////////////
 
+	interface IJavaClass;
 	interface IJavaObject;
+	interface ISwingObject;
 
 	[ 
 	  uuid(EA028093-8B55-4D3B-8B0F-824301504455),
@@ -32,5 +34,20 @@ import "oaidl.idl";
 		HRESULT Initialize([in]long* ptr);
 
 		[id(2), helpstring("get raw java obj ptr")] 
+		HRESULT RawPtr([out,retval]long** ptr);
+	}
+
+
+	[
+	  uuid(26BA436D-6051-4264-92C6-BAEC7FA40050),
+      helpstring("ISwingObject - Java Swing Object"),
+      object,oleautomation, dual
+    ]
+	interface ISwingObject : IDispatch
+    {
+		[id(1), helpstring("initialize swing obj")] 
+		HRESULT Initialize([in]long* ptr);
+
+		[id(2), helpstring("get raw swing obj ptr")] 
 		HRESULT RawPtr([out,retval]long** ptr);
 	}

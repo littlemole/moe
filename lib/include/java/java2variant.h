@@ -7,6 +7,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 EXTERN_C const  CLSID CLSID_JavaClass;
+EXTERN_C const  CLSID CLSID_SwingObject;
 
 namespace mol {
 namespace java {
@@ -24,8 +25,10 @@ mol::variant javaArray2Variant(  JavaClassStore& classes, jobject obj );
 
 ////////////////////////////////////////////////////////////////////////
 
-void wrapJavaObject( jobject obj, void ** ppv );
-void wrapJavaClass( jclass clazz, void ** ppv );
+void wrapJavaObject( jobject obj, IDispatch ** ppv );
+void wrapSwingObject( jobject obj, IDispatch ** ppv );
+void wrapJavaClass( jclass clazz, IDispatch ** ppv );
+
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -184,7 +187,7 @@ public:
 		{
 			jobject jae = env->GetObjectArrayElement( joa, j );
 
-			wrapJavaObject(jae, (void**) &( sfa[j]) );
+			wrapJavaObject(jae, &( sfa[j]) );
 		}
 		return sab;
 	}
@@ -210,7 +213,7 @@ public:
 			jobject jae = env->GetObjectArrayElement( joa, j );
 
 			mol::variant v;
-			wrapJavaObject(jae, (void**) &(v.pdispVal) );
+			wrapJavaObject(jae, &(v.pdispVal) );
 
 			::VariantCopy( &(sfa[j]), &v );
 		}

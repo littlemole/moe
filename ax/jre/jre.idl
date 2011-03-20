@@ -125,4 +125,13 @@ library JRE
 		[default]         interface     IJavaObject;
 	}
 	
+
+	[
+		uuid(27C960C8-F6CE-4644-9D0C-088454704245),
+		helpstring("SwingObject - COM Object for Java Swing interaction")
+	]
+	coclass SwingObject
+	{
+		[default]         interface     ISwingObject;
+	}
 }

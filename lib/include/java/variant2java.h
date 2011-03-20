@@ -41,6 +41,7 @@ jobject javaVariant2java( JavaClassStore& classes, VARIANT& var )
 }
 
 
+
 template<VARTYPE VT, class T>
 jobject variantArray2JavaArray(JavaClassStore& classes, VARIANT& var)
 {
@@ -127,6 +128,10 @@ public:
 			return ret;
 
 		ret = javaVariant2java<IJavaObject>(classes,var);
+		if ( ret != 0 )
+			return ret;
+
+		ret = javaVariant2java<ISwingObject>(classes,var);
 		if ( ret != 0 )
 			return ret;
 

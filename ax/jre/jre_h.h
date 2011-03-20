@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sat Mar 19 13:29:55 2011
+/* at Sun Mar 20 20:49:43 2011
  */
 /* Compiler settings for jre.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -81,6 +81,18 @@ typedef struct JavaObject JavaObject;
 #endif /* __cplusplus */
 
 #endif 	/* __JavaObject_FWD_DEFINED__ */
+
+
+#ifndef __SwingObject_FWD_DEFINED__
+#define __SwingObject_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class SwingObject SwingObject;
+#else
+typedef struct SwingObject SwingObject;
+#endif /* __cplusplus */
+
+#endif 	/* __SwingObject_FWD_DEFINED__ */
 
 
 /* header files for imported files */
@@ -308,6 +320,14 @@ EXTERN_C const CLSID CLSID_JavaObject;
 
 class DECLSPEC_UUID("C22704EA-3233-42BC-AA5D-56543D01AA82")
 JavaObject;
+#endif
+
+EXTERN_C const CLSID CLSID_SwingObject;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("27C960C8-F6CE-4644-9D0C-088454704245")
+SwingObject;
 #endif
 #endif /* __JRE_LIBRARY_DEFINED__ */
 

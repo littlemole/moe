@@ -903,7 +903,7 @@ HRESULT __stdcall MoeWnd::get_View( IMoeView **d)
 		return E_INVALIDARG;
 	*d = 0;
 
-	return moeView->QueryInterface( IID_IMoeView, (void**) d );
+	return moeView.queryInterface( d );
 }
 
 
@@ -923,7 +923,7 @@ HRESULT __stdcall MoeWnd::get_Config( IMoeConfig **d)
 		return E_INVALIDARG;
 	*d = 0;
 
-	return moeConfig->QueryInterface( IID_IMoeConfig, (void**) d );
+	return moeConfig.queryInterface( d );
 }
 
 
@@ -933,7 +933,7 @@ HRESULT __stdcall MoeWnd::get_Script( IMoeScript **d)
 		return E_INVALIDARG;
 	*d = 0;
 
-	return moeScript->QueryInterface( IID_IMoeScript, (void**) d );
+	return moeScript.queryInterface( d );
 }
 
 
@@ -943,7 +943,7 @@ HRESULT __stdcall MoeWnd::get_Dialogs( IMoeDialogs **d)
 		return E_INVALIDARG;
 	*d = 0;
 
-	return moeDialogs->QueryInterface( IID_IMoeDialogs, (void**) d );
+	return moeDialogs.queryInterface( d );
 }
 
 
@@ -1030,7 +1030,7 @@ HRESULT __stdcall MoeWnd::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
 	{
 		mol::punk<IPersistStream> ps;
 
-		if ( S_OK == moeConfig->QueryInterface(IID_IPersistStream,(void**)&ps ))
+		if ( S_OK == moeConfig.queryInterface(&ps))
 		if ( ps )
 		{
 			ps->Save(stream,TRUE);

@@ -48,6 +48,7 @@
 		<MSBuild Projects=".\bin\WixJre\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
  </Target>
 
+
  <Target Name="cleanjre">
 		<MSBuild Projects=".\lib\src\java\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean"/>
 		<MSBuild Projects=".\ax\jre\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
@@ -55,6 +56,22 @@
 		<Exec Command='ant clean' WorkingDirectory=".\bin\moe\java\dispdriver"/>
 		<MSBuild Projects=".\bin\WixJre\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean"/>
  </Target>
+
+ <Target Name="net">
+
+		<MSBuild Projects=".\ax\net\net\net\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+		<MSBuild Projects=".\ax\net\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+		<MSBuild Projects=".\bin\WixNet\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+ </Target>
+
+
+ <Target Name="cleannet">
+
+		<MSBuild Projects=".\ax\net\net\net\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"  Targets="Clean"/>
+		<MSBuild Projects=".\ax\net\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"  Targets="Clean"/>
+		<MSBuild Projects=".\bin\WixNet\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"  Targets="Clean"/>
+ </Target>
+
 
  <Target Name="Universe">
         <CallTarget Targets="3dParty"/>

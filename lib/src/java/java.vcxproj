@@ -179,6 +179,7 @@
     <ClCompile Include="jre.cpp" />
     <ClCompile Include="jglue.cpp" />
     <ClCompile Include="jmarshaler.cpp" />
+    <ClCompile Include="swingobject.cpp" />
     <ClCompile Include="variant2java.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -189,6 +190,7 @@
     <ClInclude Include="..\..\include\java\jre.h" />
     <ClInclude Include="..\..\include\java\jglue.h" />
     <ClInclude Include="..\..\include\java\jmarshaler.h" />
+    <ClInclude Include="..\..\include\java\swingobject.h" />
     <ClInclude Include="..\..\include\java\variant2java.h" />
   </ItemGroup>
   <ItemGroup>

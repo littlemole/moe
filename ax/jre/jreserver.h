@@ -25,6 +25,7 @@
 #include "java/java.h"
 #include "java/javaclass.h"
 #include "java/javaobject.h"
+#include "java/swingobject.h"
 #include "java/jre.h"
 #include "jre_h.h"
 
@@ -103,8 +104,16 @@ class JREApp :
 									mol::ole::AggregationPolicyNonAggregable<
 													mol::java::JavaObject,
 													mol::com_obj<mol::java::JavaObject> 
-												>  > >
-	
+												>  > >,
+	public mol::exports< 
+					JREApp, 
+					mol::java::SwingObject, 
+					mol::ole::ComCreatePolicy<
+									JREApp,
+									mol::ole::AggregationPolicyNonAggregable<
+													mol::java::SwingObject,
+													mol::com_obj<mol::java::SwingObject> 
+												>  > >	
 {
 public:
 
