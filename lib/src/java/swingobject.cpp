@@ -1,10 +1,6 @@
-// types.cpp : Definiert den Einstiegspunkt für die Konsolenanwendung.
-//
-
-#include "stdafx.h"
 #include "ole/aut.h"
 #include "java/jre.h"
-#include "java/javaobject.h"
+#include "java/swingobject.h"
 #include "java/jmarshaler.h"
 #include "java/dispdriver.h"
 
@@ -12,42 +8,42 @@ namespace mol {
 namespace java {
 
 
-void JavaObject::dispose()
+void SwingObject::dispose()
 {
 	JNIEnv* env = java();
-	env->DeleteGlobalRef(theJavaObject_);
+	env->DeleteGlobalRef(theSwingObject_);
 }
 	
-HRESULT __stdcall JavaObject::GetTypeInfoCount (unsigned int FAR*  pctinfo ) 
+HRESULT __stdcall SwingObject::GetTypeInfoCount (unsigned int FAR*  pctinfo ) 
 { 
     *pctinfo = 0;
     return S_OK; 
 }
 
-HRESULT __stdcall JavaObject::GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo ) 
+HRESULT __stdcall SwingObject::GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo ) 
 { 
 	*ppTInfo = 0;
     return E_NOTIMPL; 
 }
 
-HRESULT __stdcall JavaObject::Initialize(long* ptr)
+HRESULT __stdcall SwingObject::Initialize(long* ptr)
 {
 	JNIEnv* env = java();
 	jobject o = env->NewGlobalRef((jobject)ptr);
-	theJavaObject_ = o;
+	theSwingObject_ = o;
 	return S_OK;
 }
 
-HRESULT __stdcall JavaObject::RawPtr(long** ptr)
+HRESULT __stdcall SwingObject::RawPtr(long** ptr)
 {
 	if ( !ptr )
 		return E_INVALIDARG;
 
-	*ptr = (long*)theJavaObject_;
+	*ptr = (long*)theSwingObject_;
 	return S_OK;
 }
 
-HRESULT __stdcall JavaObject::GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId ) 
+HRESULT __stdcall SwingObject::GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId ) 
 { 
 	OLECHAR* name = rgszNames[0];
 	std::string n = mol::tostring(name);
@@ -57,7 +53,7 @@ HRESULT __stdcall JavaObject::GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rg
 	return S_OK;
 }
 
-HRESULT  __stdcall JavaObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i) 
+HRESULT  __stdcall SwingObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i) 
 { 
 	std::string name = mol::singleton<JavaNames>().getName(dispIdMember);
 
@@ -71,7 +67,7 @@ HRESULT  __stdcall JavaObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lci
 
 	if (  w == DISPATCH_PROPERTYGET ) 
 	{
-		jobject ret = dispDriver.propertyGet( theJavaObject_, name, args );
+		jobject ret = dispDriver.propertyGetSwing( theSwingObject_, name, args );
 		if (mol::java::exceptionOccured(env))
 			return S_FALSE;
 
@@ -86,7 +82,7 @@ HRESULT  __stdcall JavaObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lci
 
 	if (  w == DISPATCH_PROPERTYPUT ) 
 	{
-		dispDriver.propertyPut( theJavaObject_, name, args );
+		dispDriver.propertyPutSwing( theSwingObject_, name, args );
 		if (mol::java::exceptionOccured(env))
 			return S_FALSE;
 
@@ -100,7 +96,7 @@ HRESULT  __stdcall JavaObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lci
 		return S_OK;
 	}
 
-	jobject ret = dispDriver.invoke( theJavaObject_, name , args );
+	jobject ret = dispDriver.invokeSwing( theSwingObject_, name , args );
 	if ( pReturn )
 	{
 		mol::variant v = JavaMarshaler::javaObject2Variant( classes,ret );

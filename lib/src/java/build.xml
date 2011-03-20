@@ -45,6 +45,7 @@
     <Midl Include="java.idl" />
     <ClCompile Include="javaclass.cpp" />
     <ClCompile Include="javaobject.cpp" />
+    <ClCompile Include="swingobject.cpp" />
     <ClCompile Include="jglue.cpp" />
     <ClCompile Include="jmarshaler.cpp" />
     <ClCompile Include="java2variant.cpp" />

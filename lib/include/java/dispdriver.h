@@ -24,6 +24,15 @@ public:
 		jobject obj = jre->CallStaticObjectMethod( clazz_, mid, javaClass, args );
 		return  obj;
 	}
+
+
+	jobject CreateSwing( jclass javaClass, jobjectArray args )
+	{
+		JNIEnv* jre = java();
+		jmethodID mid = jre->GetStaticMethodID( clazz_, "CreateSwing", "(Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object;" );
+		jobject obj = jre->CallStaticObjectMethod( clazz_, mid, javaClass, args );
+		return  obj;
+	}
 	
 	jobject propertyGet( jclass javaClass, const std::string& propertyName, jobjectArray args )
 	{
@@ -72,6 +81,16 @@ public:
 		return  ret;
 	}
 
+
+	jobject propertyGetSwing( jobject obj, const std::string& propertyName, jobjectArray args )
+	{
+		JNIEnv* jre = java();
+		jstring s = jre->NewString( (const jchar*) mol::towstring(propertyName.c_str()).c_str(), (jsize)propertyName.size() );
+		jmethodID mid = jre->GetStaticMethodID( clazz_, "propertyGetSwing", "(Ljava/lang/Object;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/Object;" );
+		jobject ret = jre->CallStaticObjectMethod( clazz_, mid, obj, s, args );
+		return  ret;
+	}
+
 	jobject propertyPut( jobject obj, const std::string& propertyName, jobjectArray args )
 	{
 		JNIEnv* jre = java();
@@ -82,6 +101,15 @@ public:
 	}
 
 
+	jobject propertyPutSwing( jobject obj, const std::string& propertyName, jobjectArray args )
+	{
+		JNIEnv* jre = java();
+		jstring s = jre->NewString( (const jchar*) mol::towstring(propertyName.c_str()).c_str(), (jsize)propertyName.size() );
+		jmethodID mid = jre->GetStaticMethodID( clazz_, "propertyPutSwing", "(Ljava/lang/Object;Ljava/lang/String;[Ljava/lang/Object;)" );
+		jobject ret = jre->CallStaticObjectMethod( clazz_, mid, obj, s, args );
+		return  ret;
+	}
+
 	jobject invoke( jobject obj, const std::string& methodName, jobjectArray args )
 	{
 		JNIEnv* jre = java();
@@ -91,6 +119,16 @@ public:
 		return  ret;
 	}
 
+
+
+	jobject invokeSwing( jobject obj, const std::string& methodName, jobjectArray args )
+	{
+		JNIEnv* jre = java();
+		jstring s = jre->NewString( (const jchar*)  mol::towstring(methodName.c_str()).c_str(), (jsize)methodName.size() );
+		jmethodID mid = jre->GetStaticMethodID( clazz_, "invokeSwing", "(Ljava/lang/Object;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/Object;" );
+		jobject ret = jre->CallStaticObjectMethod( clazz_, mid, obj, s, args );
+		return  ret;
+	}
 
 	jclass operator*()
 	{

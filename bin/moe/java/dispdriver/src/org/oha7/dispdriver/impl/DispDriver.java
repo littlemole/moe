@@ -9,7 +9,13 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
+
 import org.oha7.dispdriver.interfaces.RawPtr;
+import org.oha7.dispdriver.swing.Construction;
+import org.oha7.dispdriver.swing.Invocation;
+import org.oha7.dispdriver.swing.PropertyAssignment;
+import org.oha7.dispdriver.swing.PropertyFetchment;
 
 /**
  * call java objects via COM utilizing IDispatch
@@ -37,7 +43,7 @@ public class DispDriver {
 	 * @throws IllegalArgumentException 
 	 */
 	public static Object Create ( Class<?> clazz, Object[] args ) throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
-		
+				
 		Class<?>[] argTypes = new Class<?>[args.length];
 		for ( int i = 0; i < args.length; i++) {
 			argTypes[i] = args[i].getClass();
@@ -51,7 +57,29 @@ public class DispDriver {
 		
 	}
 	
-	
+	public static Object CreateSwing ( Class<?> clazz, Object[] args ) throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
+		
+		Class<?>[] argTypes = new Class<?>[args.length];
+		for ( int i = 0; i < args.length; i++) {
+			argTypes[i] = args[i].getClass();
+		}
+		Constructor<?> constructor = clazz.getConstructor(argTypes);
+		if ( constructor == null ) {
+			return null;
+		}
+		
+		Construction construction = new Construction(constructor, args);
+		
+		try {
+			SwingUtilities.invokeAndWait(construction);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			return null;
+		}				
+		
+		return construction.unwrap();
+		
+	}	
 
 	
 	/**
@@ -81,6 +109,24 @@ public class DispDriver {
 
 		return doInvoke( method, o, args );
 	}
+	
+	public static Object invokeSwing ( Object obj, String methodName, Object[] varArgs ) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		
+		Class<?>[] argTypes = getArgTypes(varArgs);
+		Object[] args = getArgs(varArgs);
+		
+		Class<?> clazz = obj.getClass();
+		
+		Method method = getMethod( clazz, methodName, args, argTypes );	
+
+		Object o = obj;
+		if ( (method.getModifiers() & Modifier.STATIC) == Modifier.STATIC) {
+				
+			o = null;				
+		}
+
+		return doInvokeSwing( method, o, args );
+	}	
 
 	/**
 	 * invoke static method of java class
@@ -101,6 +147,16 @@ public class DispDriver {
 				
 		return doInvoke(method,null,args);
 	}
+	
+	public static Object invokeSwing ( Class<?> clazz, String methodName, Object[] varArgs ) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		
+		Class<?>[] argTypes = getArgTypes(varArgs);
+		Object[] args = getArgs(varArgs);
+				
+		Method method = getMethod(clazz,methodName, args, argTypes);
+				
+		return doInvokeSwing(method,null,args);
+	}	
 	
 	/**
 	 * get a field value
@@ -165,6 +221,71 @@ public class DispDriver {
 		return retval;
 	}
 	
+	public static Object propertyGetSwing( Object obj, String name, Object[] varArgs) throws IllegalArgumentException, IllegalAccessException, SecurityException, NoSuchFieldException, InvocationTargetException {
+
+		Class<?> clazz = null;
+		if ( obj instanceof Class<?> ) {
+			clazz = (Class<?>)obj;
+		}
+		else {
+			clazz = obj.getClass();
+		}
+		
+		Field[] fields = clazz.getFields();
+		for ( Field field : fields) {
+			if ( field.getName().equals(name)) {
+			
+				Object o = obj;
+				if ( (field.getModifiers()& Modifier.STATIC) == Modifier.STATIC ) {
+					o = null;
+				}
+				
+				PropertyFetchment pf = new PropertyFetchment(field,o);
+				try {
+					SwingUtilities.invokeAndWait(pf);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					return null;
+				}
+				
+				Object retval = javaType2ObjectForVariant(pf.unwrap());
+				return retval;						
+			}
+		}
+		Field field = clazz.getField(name);
+		if ( field != null ) {
+			
+			Object o = obj;
+			if ( (field.getModifiers()& Modifier.STATIC) == Modifier.STATIC ) {
+				o = null;
+			}
+			
+			PropertyFetchment pf = new PropertyFetchment(field,o);
+			try {
+				SwingUtilities.invokeAndWait(pf);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				return null;
+			}
+			
+			Object retval = javaType2ObjectForVariant(pf.unwrap());
+			return retval;			
+		}			
+
+		Class<?>[] argTypes = getArgTypes(varArgs);
+		Object[] args = getArgs(varArgs);		
+		Method method = getMethod( clazz, "get" + name, args, argTypes );	
+
+		Object o = obj;
+		if ( (method.getModifiers() & Modifier.STATIC) == Modifier.STATIC) {
+				
+			o = null;				
+		}		
+		
+		Object retval = doInvokeSwing(method,o,args);
+		return retval;
+	}
+	
 	/**
 	 * set a Field value
 	 * @param obj
@@ -212,6 +333,54 @@ public class DispDriver {
 	}
 	
 	/**
+	 * set a Field value
+	 * @param obj
+	 * @param name
+	 * @param varArgs
+	 * @throws NoSuchFieldException 
+	 * @throws SecurityException 
+	 * @throws IllegalAccessException 
+	 * @throws IllegalArgumentException 
+	 * @throws InvocationTargetException 
+	 */
+	public static void propertyPutSwing( Object obj, String name, Object[] varArgs) throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		
+		Class<?> clazz = obj.getClass();
+		
+		if ( varArgs.length == 0 ) {
+			return;
+		}
+		
+		Object value = varArgs[0];
+		
+		Field field = clazz.getField(name);
+		if ( field != null ) {
+			
+			Object o = obj;
+			if ( (field.getModifiers()& Modifier.STATIC) == Modifier.STATIC ) {
+				o = null;
+			}
+							
+			//field.set(o,value);
+			PropertyAssignment ps = new PropertyAssignment(field, o, value);
+			SwingUtilities.invokeLater(ps);
+			return;			
+		}			
+
+		Class<?>[] argTypes = getArgTypes(varArgs);
+		Object[] args = getArgs(varArgs);		
+		Method method = getMethod( clazz, "set" + name, args, argTypes );	
+
+		Object o = obj;
+		if ( (method.getModifiers() & Modifier.STATIC) == Modifier.STATIC) {
+				
+			o = null;				
+		}		
+		
+		doInvokeSwing(method,o,args);
+	}
+	
+	/**
 	 * invoke a reflected method
 	 * @param method
 	 * @param obj
@@ -242,6 +411,37 @@ public class DispDriver {
 		retval = javaType2ObjectForVariant(retval);
 		return retval;
 	}
+	
+	private static Object doInvokeSwing( Method method, Object obj, Object[] args ) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+
+		if ( method == null) {
+			return null;
+		}
+		
+		Class<?>[] methodArgTypes = method.getParameterTypes();		
+		for ( int i = 0; i < args.length; i++) {
+			
+			Object arg = args[i];
+			
+			if ( arg instanceof RawComPtr ) {
+				RawComPtr ptr = (RawComPtr)arg;
+				Class<?> clazz = methodArgTypes[i];
+				args[i] = ComProxy.newInstance( ptr.value(), clazz);
+			}
+		}
+		//Object retval = method.invoke(obj,args);
+		
+		Invocation invocation = new Invocation(method,obj,args);
+		try {
+			SwingUtilities.invokeAndWait(invocation);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			return null;
+		}
+				
+		Object retval = javaType2ObjectForVariant(invocation.unwrap());
+		return retval;
+	}	
 	
 	/**
 	 * retrieve runtime types of passed arguments

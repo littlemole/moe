@@ -15,8 +15,7 @@ public class Main {
 	 */
 	public static void main(String[] args) throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
-		Client client = new Client();
-		client.main();
+		Client.main();
 	}
 
 }

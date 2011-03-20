@@ -15,6 +15,12 @@ public:
 	T& get() 
 	{
 		LPVOID pv = ::TlsGetValue(index_);
+		if ( !pv )
+		{
+			T* t = new T;
+			set( *t );
+			return *t;
+		}
 		return *((T*)pv);
 	}
 

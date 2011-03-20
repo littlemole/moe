@@ -3,7 +3,6 @@ package org.oha7.test;
 import java.lang.reflect.InvocationTargetException;
 
 import org.oha7.dispdriver.Factory;
-import org.oha7.dispdriver.impl.RawComPtr;
 import org.oha7.dispdriver.interfaces.IDispatch;
 import org.oha7.mol.moe.IMoe;
 import org.oha7.mol.moe.IMoeDialogs;
@@ -69,6 +68,7 @@ public class Client {
 		IMoeDialogs dialogs = moe.getDialogs();
 		dialogs.Help();
 		
+		@SuppressWarnings("unused")
 		int i = dialogs.MsgBox( "hu", "ha",0);
 		
 		dialogs.Release();

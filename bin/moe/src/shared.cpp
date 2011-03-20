@@ -581,7 +581,7 @@ HRESULT __stdcall MoeView::get_TreeView( IDispatch** tv)
 
 	if ( treeWnd()  )
 	{
-		return treeWnd()->oleObject.queryInterface(IID_IDispatch,(void**)tv);
+		return treeWnd()->oleObject.queryInterface(tv);
 	}
 	return S_OK;
 }

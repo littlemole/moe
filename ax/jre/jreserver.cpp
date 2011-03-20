@@ -13,15 +13,12 @@ JREServer::JREServer()
 
 void JREServer::dispose()
 {
-	//::PostQuitMessage(0);
 	::PostThreadMessage(mol::guithread(),WM_QUIT,0,0);
 }
 
 HRESULT __stdcall JREServer::Exit()
 {
 	::PostThreadMessage(mol::guithread(),WM_QUIT,0,0);
-	//::CoDisconnectObject( (IUnknown*)(IJVM*)this,0);
-	//((IUnknown*)(IJVM*)this)->Release();
 	return S_OK;
 }
 
@@ -93,7 +90,7 @@ HRESULT __stdcall JREServer::LoadClass( BSTR clazzName, IJavaClass** clazz)
 	if ( hr == S_OK )
 	{
 		hr = instance->Initialize( (long*)c);
-		hr = instance->QueryInterface( IID_IJavaClass, (void**)clazz);
+		hr = instance.queryInterface(clazz);
 		
 	}
 
@@ -181,7 +178,7 @@ HRESULT __stdcall JREServer::Cast( IJavaObject* javaObject, BSTR clazzName, IJav
 	if ( hr == S_OK )
 	{
 		hr = instance->Initialize( (long*)c);
-		hr = instance->QueryInterface( IID_IJavaObject, (void**)retObject);
+		hr = instance.queryInterface( retObject);
 		
 	}
 

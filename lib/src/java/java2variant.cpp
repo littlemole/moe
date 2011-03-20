@@ -124,7 +124,7 @@ mol::variant javaArray2Variant(  JavaClassStore& classes, jobject obj )
 
 
 
-void wrapJavaObject( jobject obj, void ** ppv )
+void wrapJavaObject( jobject obj, IDispatch ** ppv )
 {
 	*ppv = 0;
 	mol::punk<IJavaObject> instance;
@@ -132,11 +132,23 @@ void wrapJavaObject( jobject obj, void ** ppv )
 	if ( hr == S_OK )
 	{
 		hr = instance->Initialize((long*)obj);
-		hr = instance->QueryInterface( IID_IDispatch, ppv );
+		hr = instance.queryInterface( ppv );
 	}
 }
 
-void wrapJavaClass( jclass clazz, void ** ppv )
+void wrapSwingObject( jobject obj, IDispatch ** ppv )
+{
+	*ppv = 0;
+	mol::punk<ISwingObject> instance;
+	HRESULT hr = instance.createObject(CLSID_SwingObject,CLSCTX_ALL);
+	if ( hr == S_OK )
+	{
+		hr = instance->Initialize((long*)obj);
+		hr = instance.queryInterface( ppv );
+	}
+}
+
+void wrapJavaClass( jclass clazz, IDispatch ** ppv )
 {
 	*ppv = 0;
 	mol::punk<IJavaClass> instance;
@@ -144,7 +156,7 @@ void wrapJavaClass( jclass clazz, void ** ppv )
 	if ( hr == S_OK )
 	{
 		hr = instance->Initialize((long*)clazz);
-		hr = instance->QueryInterface( IID_IDispatch, ppv );
+		hr = instance.queryInterface( ppv );
 	}
 }
 

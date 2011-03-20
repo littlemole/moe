@@ -6,7 +6,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sat Mar 19 13:29:43 2011
+/* at Sun Mar 20 20:49:23 2011
  */
 /* Compiler settings for java.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -71,6 +71,9 @@ MIDL_DEFINE_GUID(IID, IID_IJavaClass,0xEA028093,0x8B55,0x4D3B,0x8B,0x0F,0x82,0x4
 
 
 MIDL_DEFINE_GUID(IID, IID_IJavaObject,0x1900068C,0xD7A1,0x4654,0x90,0x19,0x4F,0x28,0xDE,0x1D,0xE8,0x46);
+
+
+MIDL_DEFINE_GUID(IID, IID_ISwingObject,0x26BA436D,0x6051,0x4264,0x92,0xC6,0xBA,0xEC,0x7F,0xA4,0x00,0x50);
 
 #undef MIDL_DEFINE_GUID
 

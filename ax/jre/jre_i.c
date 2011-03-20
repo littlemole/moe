@@ -6,7 +6,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sat Mar 19 13:29:55 2011
+/* at Sun Mar 20 20:49:43 2011
  */
 /* Compiler settings for jre.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -80,6 +80,9 @@ MIDL_DEFINE_GUID(CLSID, CLSID_JavaClass,0x4CCBBB37,0xA5F2,0x47A3,0xB6,0x7B,0x53,
 
 
 MIDL_DEFINE_GUID(CLSID, CLSID_JavaObject,0xC22704EA,0x3233,0x42BC,0xAA,0x5D,0x56,0x54,0x3D,0x01,0xAA,0x82);
+
+
+MIDL_DEFINE_GUID(CLSID, CLSID_SwingObject,0x27C960C8,0xF6CE,0x4644,0x9D,0x0C,0x08,0x84,0x54,0x70,0x42,0x45);
 
 #undef MIDL_DEFINE_GUID
 

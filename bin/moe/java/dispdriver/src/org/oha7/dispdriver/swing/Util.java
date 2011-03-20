@@ -1,6 +1,5 @@
 package org.oha7.dispdriver.swing;
 
-import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -9,43 +8,17 @@ import javax.swing.SwingUtilities;
 import org.oha7.dispdriver.impl.ComProxy;
 import org.oha7.dispdriver.impl.DispDriver;
 import org.oha7.dispdriver.impl.RawComPtr;
+import org.oha7.dispdriver.interfaces.IDispatch;
 
 public class Util {
 	
-	private static class Invoker implements Runnable {
-
-		private Method method = null;
-		private Object obj = null;
-		private Object[] args = null;
-		
-		public Invoker(Method m, Object o, Object ... args ) {
-		  this.method = m;
-		  this.obj = o;
-		  this.args = args;
-		}
-		
-		@Override
-		public void run() {
-			try {
-				method.invoke(obj,args);
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		}
-		
-	}
-
 	public static void dispose( Object o ) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		
 		Class<?> clazz = o.getClass();
 		Method m = clazz.getMethod( "dispose" );
 		
 		if ( m != null ) {
-			SwingUtilities.invokeLater(new Invoker(m,o));
+			SwingUtilities.invokeLater(new Invocation(m,o));
 		}
 	}
 	
@@ -66,7 +39,7 @@ public class Util {
 				
 		Method m = DispDriver.getMethod(clazz, methodName, args, argTypes);
 		if ( m != null ) {
-			SwingUtilities.invokeLater(new Invoker(m,o,args));
+			SwingUtilities.invokeLater(new Invocation(m,o,args));
 		}
 	}	
 	
@@ -99,7 +72,7 @@ public class Util {
 				
 		Method m = DispDriver.getMethod(clazz, methodName, args, argTypes);
 		if ( m != null ) {
-			SwingUtilities.invokeLater(new Invoker(m,o,args));
+			SwingUtilities.invokeLater(new Invocation(m,o,args));
 		}
 	}	
 	
@@ -123,7 +96,7 @@ public class Util {
 				
 		Method m = DispDriver.getMethod(clazz, methodName, args, argTypes);
 		if ( m != null ) {
-			SwingUtilities.invokeLater(new Invoker(m,o,args));
+			SwingUtilities.invokeLater(new Invocation(m,o,args));
 		}
 	}	
 	
@@ -150,7 +123,7 @@ public class Util {
 				
 		Method m = DispDriver.getMethod(clazz, methodName, args, argTypes);
 		if ( m != null ) {
-			SwingUtilities.invokeLater(new Invoker(m,o,args));
+			SwingUtilities.invokeLater(new Invocation(m,o,args));
 		}
 	}	
 	
@@ -172,24 +145,42 @@ public class Util {
 		
 		Object[] args = new Object[1];
 		args[0] = i;
-		SwingUtilities.invokeLater(new Invoker(m,null,args));		
+		SwingUtilities.invokeLater(new Invocation(m,null,args));		
 	}
 	
-	public static Component Component(Object comp,String name) {
-		
-		if ( comp instanceof java.awt.Container ) {
-			java.awt.Container container = (java.awt.Container)comp;
-			Component[] components = container.getComponents();
-			for ( int i = 0; i < components.length; i++) {
-				if ( components[i].getName() != null && components[i].getName().equals(name)) {
-					return components[i];
-				}
-				Component c = Component(components[i],name);
-				if ( c != null ) {
-					return c;
-				}
-			}
+	public static Object Component(Object comp,String name) {
+				
+		ComponentLookup cl = new ComponentLookup(comp, name);
+		try {
+			SwingUtilities.invokeAndWait(cl);
+			return cl.unwrap();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 		}
+		
 		return null;
 	}
+	
+	public static void run(final IDispatch disp) {
+	
+		Runnable doRun = new Runnable() {
+			
+			@Override
+			public void run() {
+				disp.invoke();
+			}
+		};
+		
+		try {
+			SwingUtilities.invokeAndWait(doRun);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+	}	
+	
+	
 }

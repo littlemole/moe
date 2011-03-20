@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sat Mar 19 13:29:43 2011
+/* at Sun Mar 20 20:49:23 2011
  */
 /* Compiler settings for java.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -57,6 +57,12 @@ typedef interface IJavaObject IJavaObject;
 #endif 	/* __IJavaObject_FWD_DEFINED__ */
 
 
+#ifndef __ISwingObject_FWD_DEFINED__
+#define __ISwingObject_FWD_DEFINED__
+typedef interface ISwingObject ISwingObject;
+#endif 	/* __ISwingObject_FWD_DEFINED__ */
+
+
 /* header files for imported files */
 #include "oaidl.h"
 
@@ -67,6 +73,8 @@ extern "C"{
 
 /* interface __MIDL_itf_java_0000_0000 */
 /* [local] */ 
+
+
 
 
 
@@ -334,6 +342,137 @@ EXTERN_C const IID IID_IJavaObject;
 
 
 #endif 	/* __IJavaObject_INTERFACE_DEFINED__ */
+
+
+#ifndef __ISwingObject_INTERFACE_DEFINED__
+#define __ISwingObject_INTERFACE_DEFINED__
+
+/* interface ISwingObject */
+/* [dual][oleautomation][object][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_ISwingObject;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("26BA436D-6051-4264-92C6-BAEC7FA40050")
+    ISwingObject : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [in] */ long *ptr) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RawPtr( 
+            /* [retval][out] */ long **ptr) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct ISwingObjectVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISwingObject * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISwingObject * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISwingObject * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISwingObject * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISwingObject * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISwingObject * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISwingObject * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+            ISwingObject * This,
+            /* [in] */ long *ptr);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RawPtr )( 
+            ISwingObject * This,
+            /* [retval][out] */ long **ptr);
+        
+        END_INTERFACE
+    } ISwingObjectVtbl;
+
+    interface ISwingObject
+    {
+        CONST_VTBL struct ISwingObjectVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define ISwingObject_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define ISwingObject_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define ISwingObject_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define ISwingObject_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define ISwingObject_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define ISwingObject_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define ISwingObject_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define ISwingObject_Initialize(This,ptr)	\
+    ( (This)->lpVtbl -> Initialize(This,ptr) ) 
+
+#define ISwingObject_RawPtr(This,ptr)	\
+    ( (This)->lpVtbl -> RawPtr(This,ptr) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __ISwingObject_INTERFACE_DEFINED__ */
 
 
 /* Additional Prototypes for ALL interfaces */
