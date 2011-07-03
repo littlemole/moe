@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{34E2D26E-C64A-4C83-B56B-5D8738819C4C}</ProjectGuid>
+    <RootNamespace>net</RootNamespace>
+	<TargetName>net</TargetName>
+    <TargetExt>exe</TargetExt>
+  </PropertyGroup>
+
+
+  <Import Project="..\..\master.props" />
+  <Import Project="build.props" />
+
+  <ItemGroup>
+    <Midl Include="net.idl" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<ClCompile Include="dot.cpp" />
+    <ClCompile Include="net.cpp" />
+    <ClCompile Include="netserver.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+
+</Project>

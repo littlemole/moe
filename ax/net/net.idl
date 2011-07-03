@@ -1,0 +1,148 @@
+//import "oaidl.idl";
+//import "../../lib/src/java/java.idl";
+
+////////////////////////////////////////////////////////////////////////////////////////
+// mol NET COM Lib
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+[
+  uuid(FE071973-A01C-405A-B9D0-8DFF50F6320E),
+  version(1.0),
+  helpstring("NET - COM wrapper for .NET VM")
+]
+library NET
+{
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Interfaces
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+    // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
+	////////////////////////////////////////////////////////////////////////////////////
+	importlib("stdole32.tlb");
+
+	interface INetObject;
+	interface INetType;
+	interface INetAssembly;
+	interface INet;
+
+	[ 
+	  uuid(E42528B2-547D-4427-A40A-47C46219A626),
+      helpstring("INetAssembly - .NET Assembly"),
+      object,oleautomation, dual
+    ]
+	interface INetAssembly : IDispatch
+    {
+		[id(DISPID_VALUE), helpstring("load .NET type")] 
+		HRESULT Type([in] BSTR typeName, [out,retval] INetType** type);
+
+		[id(1), helpstring("initialize .NET assembly")] 
+		HRESULT Initialize([in]VARIANT ptr);
+
+		[id(2), helpstring("ret raw .NET assembly ptr")] 
+		HRESULT UnWrap([out,retval]VARIANT* ptr);
+
+		[id(3), helpstring("connect .NET event")] 
+		HRESULT Connect([in] IDispatch* ptr, [in] BSTR event,[in] VARIANT target );
+	}
+
+	[ 
+	  uuid(A203B3FE-BEF5-4746-AEE9-F198C9F624A8),
+      helpstring("INetType - .NET type"),
+      object,oleautomation, dual
+    ]
+	interface INetType : IDispatch
+    {
+		[id(1), helpstring("initialize .NET type")] 
+		HRESULT Initialize([in]VARIANT ptr);
+
+		[id(2), helpstring("ret raw .NET type ptr")] 
+		HRESULT UnWrap([out,retval]VARIANT* ptr);
+	}
+
+
+	[
+	  uuid(48CB943A-4675-4AAD-9538-2C327B3816B2),
+      helpstring("INetObject - .NET Object"),
+      object,oleautomation, dual
+    ]
+	interface INetObject : IDispatch
+    {
+		[id(1), helpstring("initialize .NET obj")] 
+		HRESULT Initialize([in]VARIANT ptr);
+
+		[id(2), helpstring("ret raw .NET obj ptr")] 
+		HRESULT UnWrap([out,retval]VARIANT* ptr);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////
+	// INet
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(A0E5BB3E-03DD-4BE1-A824-2876BAEFDF8D),
+      helpstring("INet - wraps .NET runtime hosting"),
+      object,oleautomation, dual
+    ]
+	interface INet : IDispatch
+    {
+		[id(DISPID_VALUE), helpstring("load .NET type")] 
+		HRESULT Type([in] BSTR typeName, [out,retval] INetType** type);
+
+		[id(1), helpstring("load .NET assembly")] 
+		HRESULT Import([in] BSTR clazzName, [out,retval] INetAssembly** a);
+
+		[id(2), helpstring("quit jvm")] 
+		HRESULT Exit();
+
+		[id(3), helpstring("connect .NET event")] 
+		HRESULT Connect([in] IDispatch* ptr, [in] BSTR event,[in] VARIANT target );
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Co Classes ( class factories )
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// NET
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(75B8C10C-696C-44E1-A039-A1331E9D5E61),
+		helpstring("NET - COM Object for .NET VM interaction")
+	]
+	coclass DotNet
+	{
+		[default]         interface     INet;
+	}
+
+	
+	[
+		uuid(542A2776-13B2-4689-A8DA-A4AB82BF4154),
+		helpstring("NetClass - COM Object for .NET VM interaction")
+	]
+	coclass DotNetType
+	{
+		[default]         interface     INetType;
+	}
+
+
+	[
+		uuid(68B74204-A3CD-47B4-9741-176E74199090),
+		helpstring("NetObject - COM Object for .NET VM interaction")
+	]
+	coclass DotNetObject
+	{
+		[default]         interface     INetObject;
+	}
+	
+	[
+		uuid(331790F2-442D-4CC3-A171-D375D2DFB133),
+		helpstring("NetAssembly - COM Object for .NET VM interaction")
+	]
+	coclass DotNetAssembly
+	{
+		[default]         interface     INetAssembly;
+	}
+}
