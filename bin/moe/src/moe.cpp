@@ -571,7 +571,6 @@ void MoeWnd::OnFx(int code, int id, HWND ctrl)
 	int fx =id-IDM_F1+1;
 
 	mol::ostringstream oss;
-	//oss << _T("\\fx\\F") << fx << _T(".js");
 	oss << _T("fx\\F") << fx << _T(".js");
 
 	mol::string file = findFile(oss.str());

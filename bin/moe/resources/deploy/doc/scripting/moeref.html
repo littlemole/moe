@@ -247,7 +247,8 @@ function init()
 {
 	path = new ActiveXObject("IO.Path");
 	type2Xml = new ActiveXObject("TypeToXml.TypeLibToXml");
-	type2Xml.onComplete = onComplete;
+
+
 
 	xslt = new mol.xslt.Processor();
 	xsl  = mol.xml.load("../../xsl/doc.xsl");
@@ -260,7 +261,18 @@ function init()
 	object 	= typelib != "" ? object  : "Xmoe";
     typelib = typelib != "" ? typelib  : "moe.exe";
 
-	getDocu(typelib, object);
+	var b = type2Xml.load(external.moe.Config.ModulePath + "\\" + typelib);
+//alert(b);
+
+	var s = type2Xml.transform(xsl);
+//alert(s);
+
+	docu.innerHTML = s;
+
+//	type2Xml.onComplete = onComplete;
+
+
+//	getDocu(typelib, object);
     return false;
 }
 
@@ -294,18 +306,29 @@ function getDropDownDocu( val )
 
 function getDocu( typelib, param )
 {
-	typelib = external.moe.Config.ModulePath + "\\" + typelib;
 
 	if ( typelib != "" && xsl && type2Xml )
 	{
-	    docu.innerHTML = "<img src='../../img/wait.gif' />";
-		type2Xml.onComplete = onComplete;
-		type2Xml.AsyncDocumentation(typelib,param,xsl);		
+		var t = external.moe.Config.ModulePath + "\\" + typelib;
+		window.setTimeout(function() {
+				var b = type2Xml.load(t);
+
+				if (!b)
+					return;
+				var s = type2Xml.transform(xsl);		
+
+				docu.innerHTML = s;
+		},100);
+
+	    //docu.innerHTML = "<img src='../../img/wait.gif' />";
+		//type2Xml.onComplete = onComplete;
+		//type2Xml.AsyncDocumentation(typelib,param,xsl);		
 	}
 }	
 
 function onComplete()
 {
+alert("!"+type2Xml.Result);
 	docu.innerHTML = type2Xml.Result;
 }
 
