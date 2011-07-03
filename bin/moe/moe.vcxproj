@@ -444,7 +444,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">code generation phase</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">code generation phase</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">cscript.exe ../../cg/js/make.js "x64\uni_release"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">cscript.exe "../../cg/js/make.js" "x64/uni_debug"
+      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">cscript.exe "../../cg/js/make.js" "TLB"
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
