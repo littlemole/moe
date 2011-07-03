@@ -39,7 +39,7 @@ O* That( I* i, M O::*mp )
 }
 
 //////////////////////////////////////////////////////////////////////
-// Macro for inner class Suppport. define as This() member function
+// Macro for inner class Suppport. defines a This() member function
 // pointing to your outer class this - using new template above
 //
 // still thanx to dan box :)
