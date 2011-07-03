@@ -1,0 +1,102 @@
+﻿// Created by Microsoft (R) C/C++ Compiler Version 10.00.30319.01 (378a474a).
+//
+// e:\molib\ax\net\x64\uni_debug\net.tlh
+//
+// C++ source equivalent of type library net.tlb
+// compiler-generated file created 03/08/11 at 23:35:34 - DO NOT EDIT!
+
+//
+// Cross-referenced type libraries:
+//
+//  #import "C:\Windows\Microsoft.NET\Framework\v4.0.30319\mscorlib.tlb"
+//
+
+#pragma once
+#pragma pack(push, 8)
+
+#include <comdef.h>
+
+//
+// Forward references and typedefs
+//
+
+struct __declspec(uuid("cee3fb84-b4a9-4487-8319-026ded0d1e6d"))
+/* LIBID */ __Net;
+struct /* coclass */ Net;
+struct __declspec(uuid("92aee3c7-1795-3007-b502-9d8bb7900951"))
+/* dual interface */ _Net;
+
+//
+// Smart pointer typedef declarations
+//
+
+_COM_SMARTPTR_TYPEDEF(_Net, __uuidof(_Net));
+
+//
+// Type library items
+//
+
+struct __declspec(uuid("f751b363-9e23-4da7-b18c-b835ae59df5b"))
+Net;
+    // [ default ] interface _Net
+    // interface _Object
+
+struct __declspec(uuid("92aee3c7-1795-3007-b502-9d8bb7900951"))
+_Net : IDispatch
+{
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_ToString (
+        /*[out,retval]*/ BSTR * pRetVal ) = 0;
+      virtual HRESULT __stdcall Equals (
+        /*[in]*/ VARIANT obj,
+        /*[out,retval]*/ VARIANT_BOOL * pRetVal ) = 0;
+      virtual HRESULT __stdcall GetHashCode (
+        /*[out,retval]*/ long * pRetVal ) = 0;
+      virtual HRESULT __stdcall GetType (
+        /*[out,retval]*/ struct _Type * * pRetVal ) = 0;
+      virtual HRESULT __stdcall GetLifetimeService (
+        /*[out,retval]*/ VARIANT * pRetVal ) = 0;
+      virtual HRESULT __stdcall InitializeLifetimeService (
+        /*[out,retval]*/ VARIANT * pRetVal ) = 0;
+      virtual HRESULT __stdcall CreateObjRef (
+        /*[in]*/ struct _Type * requestedType,
+        /*[out,retval]*/ struct _ObjRef * * pRetVal ) = 0;
+      virtual HRESULT __stdcall LoadClass (
+        /*[in]*/ VARIANT t,
+        /*[in]*/ BSTR name,
+        /*[out,retval]*/ VARIANT * pRetVal ) = 0;
+      virtual HRESULT __stdcall CreateObject (
+        /*[in]*/ VARIANT clazz,
+        /*[in]*/ SAFEARRAY * args,
+        /*[out,retval]*/ VARIANT * pRetVal ) = 0;
+      virtual HRESULT __stdcall InvokeMethod (
+        /*[in]*/ VARIANT clazz,
+        /*[in]*/ VARIANT that,
+        /*[in]*/ BSTR methodName,
+        /*[in]*/ SAFEARRAY * args,
+        /*[in]*/ long flags,
+        /*[out,retval]*/ VARIANT * pRetVal ) = 0;
+      virtual HRESULT __stdcall LoadAssembly (
+        /*[in]*/ BSTR name,
+        /*[out,retval]*/ VARIANT * pRetVal ) = 0;
+      virtual HRESULT __stdcall Event (
+        /*[in]*/ VARIANT target,
+        /*[in]*/ BSTR name,
+        /*[in]*/ VARIANT ptr ) = 0;
+};
+
+//
+// Named GUID constants initializations
+//
+
+extern "C" const GUID __declspec(selectany) LIBID_Net =
+    {0xcee3fb84,0xb4a9,0x4487,{0x83,0x19,0x02,0x6d,0xed,0x0d,0x1e,0x6d}};
+extern "C" const GUID __declspec(selectany) CLSID_Net =
+    {0xf751b363,0x9e23,0x4da7,{0xb1,0x8c,0xb8,0x35,0xae,0x59,0xdf,0x5b}};
+extern "C" const GUID __declspec(selectany) IID__Net =
+    {0x92aee3c7,0x1795,0x3007,{0xb5,0x02,0x9d,0x8b,0xb7,0x90,0x09,0x51}};
+
+#pragma pack(pop)
