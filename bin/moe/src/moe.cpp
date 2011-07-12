@@ -194,6 +194,8 @@ void MoeWnd::OnCreate()
 	((IMoe*)this)->QueryInterface( IID_IPersistStorage, (void**)&ps);
 	ps->Load( store );
 
+	
+
 }
 
 
