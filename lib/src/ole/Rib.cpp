@@ -615,6 +615,94 @@ bool Ribbon::tearDown()
 	
 	return true;
 }
+
+struct HSVType
+{
+	int h,s,v;
+};
+
+HSVType toHSV(int r, int g, int b)
+{
+HSVType hsv;
+
+double min,max,delta,temp;
+	min = std::min(r,std::min(g,b));	
+	max = std::max(r,std::max(g,b));
+	delta = max - min;
+	
+	hsv.v = (int)max;
+	if(!delta)
+	{
+		hsv.h = hsv.s = 0;
+	}
+	else
+	{
+		temp = delta/max;
+		hsv.s = (int)(temp*255);
+
+		if(r == (int)max)
+		{
+			temp = (double)(g-b)/delta;
+		}
+		else
+		if(g == (int)max)
+		{
+			temp = 2.0 + ((double)(b-r)/delta);
+		}
+		else
+		{
+			temp = 4.0 + ((double)(r-g)/delta);
+		}
+		temp *= 60;
+		if(temp < 0)
+		{
+			temp+=360;
+		}
+		if(temp == 360)
+		{
+			temp = 0;
+		}
+		hsv.h = (int)temp;
+	}
+	return hsv;
+}
+
+void Ribbon::setColor( UI_HSBCOLOR foreGround, UI_HSBCOLOR backGround)
+{
+	mol::punk<IPropertyStore> spPropertyStore;
+
+    if (S_OK != ribbon->QueryInterface(&spPropertyStore) )
+		return;
+
+    PROPVARIANT propvarBackground;
+    PROPVARIANT propvarText;
+ 
+    InitPropVariantFromUInt32(backGround, &propvarBackground);
+    InitPropVariantFromUInt32(foreGround, &propvarText);
+ 
+    spPropertyStore->SetValue(UI_PKEY_GlobalBackgroundColor, propvarBackground);
+    spPropertyStore->SetValue(UI_PKEY_GlobalTextColor, propvarText);
+ 
+    spPropertyStore->Commit();
+}
+
+void Ribbon::setDefaultColor()
+{
+
+    DWORD col = GetSysColor(COLOR_MENU);
+	HSVType hsv = toHSV( GetRValue(col),GetGValue(col),GetBValue(col) );
+ 
+	UI_HSBCOLOR BackgroundColor = UI_HSB(hsv.h, hsv.s, hsv.v);
+
+
+	col = GetSysColor(COLOR_MENUTEXT);
+	hsv = toHSV( GetRValue(col),GetGValue(col),GetBValue(col) );
+
+	UI_HSBCOLOR ForegroundColor = UI_HSB(hsv.h, hsv.s, hsv.v);
+
+	setColor(ForegroundColor,BackgroundColor);
+}
+
 /*
 void Ribbon::updateRecentDocs(int id)
 {
@@ -659,6 +747,7 @@ bool Ribbon::show(HWND hwnd)
     if (FAILED(hr))
         return false;
 	
+	setDefaultColor();
     return true;
 }
 

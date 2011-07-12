@@ -321,6 +321,9 @@ public:
 
 	bool tearDown();
 
+	void setColor( UI_HSBCOLOR foreGround, UI_HSBCOLOR backGround);
+	void setDefaultColor();
+
 private :
 
 	mol::punk<IUIFramework> ribbon;
