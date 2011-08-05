@@ -156,7 +156,7 @@ void ShellListCtrl::run( const mol::string& uri )
 
 LRESULT ShellListCtrl::OnDestroy(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    dirMon_.events.unSubscribe(*this);
+	dirMon_.events.clear();
 	dirMon_.cancel();
 	queue_.cancel();
 	::RevokeDragDrop(*this);
@@ -183,7 +183,7 @@ LRESULT ShellListCtrl::OnCreate(UINT msg, WPARAM wParam, LPARAM lParam)
 	
 	Drop = new ShellListCtrl_Drop(this);
 	::RegisterDragDrop(*this,Drop);
-    dirMon_.events.subscribe(*this,SHELL_LIST_CTRL_ID_DIRMON);
+    dirMon_.events = mol::events::event_handler( &ShellListCtrl::refresh, this );
 
 	return 0;
 }
@@ -781,7 +781,7 @@ void ShellListCtrl::clear()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void ShellListCtrl::refresh()
+void ShellListCtrl::refresh( mol::io::DirMon* unused )
 {
 	mol::string p(path_);
 
@@ -897,7 +897,7 @@ bool  ShellListCtrl::doHitTest()
 void ShellListCtrl::setPath(const mol::string& p)  
 { 
 	setText(p); 
-    pathEvent.fire((LPARAM)p.c_str());    
+//    pathEvent.fire((LPARAM)p.c_str());    
 	dirMon_.watch(p); 
 	queue_.push(new DirQueueAction(p,this));
 	this->fire(1,p);
@@ -1148,7 +1148,7 @@ HRESULT __stdcall ShellListCtrl::get_HasFocus( VARIANT_BOOL* vbHasFocus)
 
 HRESULT __stdcall ShellListCtrl::Load( LPSTREAM pStm)
 {
-	pStm >> mol::property( mol::DispId(this,ShellListCtrl_Dispatch_DisplayFiles,VT_BSTR) )
+	pStm >> mol::property( mol::DispId(this,ShellListCtrl_Dispatch_DisplayFiles,VT_BOOL) )
 		 >> mol::property( mol::DispId(this,ShellListCtrl_Dispatch_Selection,VT_BSTR) )
 		 >> mol::property( &sizel );
 
@@ -1157,7 +1157,7 @@ HRESULT __stdcall ShellListCtrl::Load( LPSTREAM pStm)
 
 HRESULT __stdcall ShellListCtrl::Save( LPSTREAM pStm,BOOL fClearDirty)
 {
-	pStm << mol::property( mol::DispId(this,ShellListCtrl_Dispatch_DisplayFiles,VT_BSTR) )
+	pStm << mol::property( mol::DispId(this,ShellListCtrl_Dispatch_DisplayFiles,VT_BOOL) )
 		 << mol::property( mol::DispId(this,ShellListCtrl_Dispatch_Selection,VT_BSTR) )
 		 << mol::property( &sizel );
 
@@ -1166,7 +1166,7 @@ HRESULT __stdcall ShellListCtrl::Save( LPSTREAM pStm,BOOL fClearDirty)
 
 HRESULT __stdcall ShellListCtrl::Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog)
 {
-	pPropBag >> mol::property( _T("displayfiles"), mol::DispId(this,ShellListCtrl_Dispatch_DisplayFiles,VT_BSTR) )
+	pPropBag >> mol::property( _T("displayfiles"), mol::DispId(this,ShellListCtrl_Dispatch_DisplayFiles,VT_BOOL) )
 			 >> mol::property( _T("selection"), mol::DispId(this,ShellListCtrl_Dispatch_Selection,VT_BSTR) )
 			 >> mol::property( _T("cs"), &sizel );
 
@@ -1175,7 +1175,7 @@ HRESULT __stdcall ShellListCtrl::Load( IPropertyBag *pPropBag,IErrorLog *pErrorL
 
 HRESULT __stdcall ShellListCtrl::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties)
 {
-	pPropBag << mol::property( _T("displayfiles"), mol::DispId(this,ShellListCtrl_Dispatch_DisplayFiles,VT_BSTR) )
+	pPropBag << mol::property( _T("displayfiles"), mol::DispId(this,ShellListCtrl_Dispatch_DisplayFiles,VT_BOOL) )
 			 << mol::property( _T("selection"), mol::DispId(this,ShellListCtrl_Dispatch_Selection,VT_BSTR) )
 			 << mol::property( _T("cs"), &sizel );
 

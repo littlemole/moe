@@ -194,16 +194,16 @@ HRESULT __stdcall FileObj::Read( long cnt, BSTR* file)
 
 	if ( this->codePage_ == CP_UTF8 )
 	{
-		std::wstring ws = mol::utf82wstring( buf );
+		std::wstring ws = mol::fromUTF8( buf );
 
 		if ( sg == 0 && fe.hasBOM() )
 		{
-			ws = mol::utf82wstring( std::string( buf+3, (unsigned int)(stream_.gcount()-3)) );
+			ws = mol::fromUTF8( std::string( buf+3, (unsigned int)(stream_.gcount()-3)) );
 			this->useBOM_ = VARIANT_TRUE;
 			this->eol_ = (IO_SYSTYPE)fe.eolMode();
 		}
 		else
-			ws = mol::utf82wstring( buf );
+			ws = mol::fromUTF8( buf );
 
 		if ( this->eol_ == IO_SYSTYPE_UNIX )
 			ws = mol::unix2dos(ws);
@@ -266,7 +266,7 @@ HRESULT __stdcall FileObj::ReadText( BSTR* file)
 			s = s.substr(3,s.size()-3);
 		if ( this->eol_ == IO_SYSTYPE_UNIX )
 			s = mol::unix2dos(s);
-		*file = ::SysAllocString( mol::utf82wstring( s ).c_str() );
+		*file = ::SysAllocString( mol::fromUTF8( s ).c_str() );
 		return S_OK;
 	}
 	if ( codePage_ == CP_WINUNICODE )
@@ -327,7 +327,7 @@ HRESULT __stdcall FileObj::Write( BSTR file, long len, long* s )
 				if ( this->useBOM_ == VARIANT_TRUE )
 					stream_.write( (char*)mol::FileEncoding::UTF8_BOM , 3 );
 
-			c = mol::wstring2utf8(ws);
+			c = mol::toUTF8(ws);
 		}
 		else 
 		if ( this->codePage_ == CP_WINUNICODE )
@@ -384,7 +384,7 @@ HRESULT __stdcall FileObj::WriteText( BSTR txt, long* s )
 
 		if ( this->codePage_ == CP_UTF8 )
 		{
-			c = mol::wstring2utf8(ws);
+			c = mol::toUTF8(ws);
 
 			if ( sp == 0 )
 				if ( this->useBOM_ == VARIANT_TRUE )

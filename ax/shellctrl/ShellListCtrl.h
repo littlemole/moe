@@ -60,7 +60,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-#define SHELL_LIST_CTRL_ID_DIRMON       101
+//#define SHELL_LIST_CTRL_ID_DIRMON       101
 
 
 #define ShellListCtrl_Dispatch_DisplayFiles 1
@@ -97,7 +97,7 @@ public:
     ShellListCtrl(void);
     ~ShellListCtrl();
 
-	mol::sendcmd_pubsub pathEvent;
+	//mol::sendcmd_pubsub pathEvent;
 
 
 	// COM properties
@@ -187,7 +187,7 @@ protected:
     notify_code_handler( LVN_BEGINDRAG, OnBeginDrag )
 		LRESULT virtual OnBeginDrag( UINT, WPARAM, LPARAM );
 
-    cmd_handler( SHELL_LIST_CTRL_ID_DIRMON, OnDirMon )
+ //   cmd_handler( SHELL_LIST_CTRL_ID_DIRMON, OnDirMon )
         LRESULT virtual OnDirMon( UINT, WPARAM, LPARAM );
 
 
@@ -196,7 +196,7 @@ protected:
     void setPath(const mol::string& path);
     mol::string getPath();
 
-	void refresh();
+	void refresh( mol::io::DirMon* dirmon = 0);
     BOOL sort(int c);
 	bool doHitTest();
 

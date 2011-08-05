@@ -771,7 +771,7 @@ bool ScintillAx::saveAdmin(const mol::string& location)
 
 	if ( enc == SCINTILLA_ENCODING_UTF16 )
 	{
-		txt = std::string( (char*) mol::utf82wstring(txt).c_str(), sizeof(wchar_t)*txt.size() );
+		txt = std::string( (char*) mol::fromUTF8(txt).c_str(), sizeof(wchar_t)*txt.size() );
 		if ( vb == VARIANT_TRUE  )
 		{
 			oss.write((const char*)mol::FileEncoding::UTF16LE_BOM,2);
@@ -783,7 +783,7 @@ bool ScintillAx::saveAdmin(const mol::string& location)
 	}
 	if ( enc == SCINTILLA_ENCODING_ANSI )
 	{
-		txt = mol::utf82ansi(txt);
+		txt = mol::toUTF8(txt);
 		if ( eol == SCINTILLA_SYSTYPE_UNIX )
 		{
 			txt = mol::dos2unix(txt);
@@ -794,7 +794,7 @@ bool ScintillAx::saveAdmin(const mol::string& location)
 		oss.write((const char*)mol::FileEncoding::UTF8_BOM,3);
 		if ( eol == SCINTILLA_SYSTYPE_UNIX )
 		{
-			txt = mol::wstring2utf8(mol::dos2unix(mol::utf82wstring(txt)));
+			txt = mol::toUTF8(mol::dos2unix(mol::fromUTF8(txt)));
 		}
 	}
 	
@@ -942,7 +942,7 @@ bool ScintillAx::save(const mol::string& location)
 			{
 				std::string u;
 				u = edit()->get_Text();
-				std::wstring ws = mol::utf82wstring(u);	
+				std::wstring ws = mol::fromUTF8(u);	
 				if ( vb == VARIANT_TRUE )
 					of.write((const char*)mol::FileEncoding::UTF16LE_BOM,2);
 				of.write( (char*)(ws.c_str()), ws.size()*2 );
@@ -965,7 +965,7 @@ bool ScintillAx::save(const mol::string& location)
 				u = edit()->get_Text();
 				if ( eol == SCINTILLA_SYSTYPE_UNIX )
 					u = mol::dos2unix(u);
-				std::string s = mol::utf82ansi(u);				
+				std::string s = mol::tostring(mol::fromUTF8(u));				
 				of.write( (char*)(s.c_str()), s.size() );
 				break;
 			}
@@ -1065,7 +1065,7 @@ bool ScintillAx::loadAdmin(const mol::string& p, const mol::string& ext,  bool u
 			// it really is a UCS-2 string, so cast to wchar_t (WIN32)
 			std::wstring ws((wchar_t*)(s2.data()),s2.size()/sizeof(wchar_t));
 			// now convert UTF16-LE to UTF-8
-			std::string u = mol::wstring2utf8(ws);
+			std::string u = mol::toUTF8(ws);
 			edit()->setCodePage(SC_CP_UTF8);
 			u = mol::unix2dos(u);
 			edit()->setText(u);
@@ -1089,7 +1089,7 @@ bool ScintillAx::loadAdmin(const mol::string& p, const mol::string& ext,  bool u
 		{
 			props_->put_Encoding(SCINTILLA_ENCODING_ANSI);
 			edit()->setCodePage(SC_CP_UTF8);
-			std::string s2(mol::ansi2utf8(data));
+			std::string s2(mol::toUTF8(data));
 			s2 = mol::unix2dos(s2);
 			edit()->setText(s2);			
 			break;
@@ -1290,7 +1290,7 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  bool utf8)
 			// it really is a UCS-2 string, so cast to wchar_t (WIN32)
 			std::wstring ws((wchar_t*)(s2.data()),s2.size()/sizeof(wchar_t));
 			// now convert UTF16-LE to UTF-8
-			std::string u = mol::wstring2utf8(ws);
+			std::string u = mol::toUTF8(ws);
 			edit()->setCodePage(SC_CP_UTF8);
 			u = mol::unix2dos(u);
 			edit()->setText(u);
@@ -1314,7 +1314,7 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  bool utf8)
 		{
 			props_->put_Encoding(SCINTILLA_ENCODING_ANSI);
 			edit()->setCodePage(SC_CP_UTF8);
-			std::string s2(mol::ansi2utf8(s));
+			std::string s2(mol::toUTF8(s));
 			s2 = mol::unix2dos(s2);
 			edit()->setText(s2);			
 			break;

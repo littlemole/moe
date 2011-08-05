@@ -284,7 +284,7 @@ HRESULT __stdcall ShellFolderCtrl::get_HasFocus( VARIANT_BOOL* vbHasFocus)
 
 HRESULT __stdcall ShellFolderCtrl::Load( LPSTREAM pStm)
 {
-	pStm >> mol::property( mol::DispId(this,ShellFolderCtrl_Dispatch_DisplayFiles,VT_BSTR) )
+	pStm >> mol::property( mol::DispId(this,ShellFolderCtrl_Dispatch_DisplayFiles,VT_BOOL) )
 		 >> mol::property( mol::DispId(this,ShellFolderCtrl_Dispatch_Selection,VT_BSTR) )
 		 >> mol::property( &sizel );
 
@@ -293,7 +293,7 @@ HRESULT __stdcall ShellFolderCtrl::Load( LPSTREAM pStm)
 
 HRESULT __stdcall ShellFolderCtrl::Save( LPSTREAM pStm,BOOL fClearDirty)
 {
-	pStm << mol::property( mol::DispId(this,ShellFolderCtrl_Dispatch_DisplayFiles,VT_BSTR) )
+	pStm << mol::property( mol::DispId(this,ShellFolderCtrl_Dispatch_DisplayFiles,VT_BOOL) )
 		 << mol::property( mol::DispId(this,ShellFolderCtrl_Dispatch_Selection,VT_BSTR) )
 		 << mol::property( &sizel );
 
@@ -302,7 +302,7 @@ HRESULT __stdcall ShellFolderCtrl::Save( LPSTREAM pStm,BOOL fClearDirty)
 
 HRESULT __stdcall ShellFolderCtrl::Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog)
 {
-	pPropBag >> mol::property( _T("displayfiles"), mol::DispId(this,ShellFolderCtrl_Dispatch_DisplayFiles,VT_BSTR) )
+	pPropBag >> mol::property( _T("displayfiles"), mol::DispId(this,ShellFolderCtrl_Dispatch_DisplayFiles,VT_BOOL) )
 			 >> mol::property( _T("selection"), mol::DispId(this,ShellFolderCtrl_Dispatch_Selection,VT_BSTR) )
 			 >> mol::property( _T("cs"), &sizel );
 
@@ -311,7 +311,7 @@ HRESULT __stdcall ShellFolderCtrl::Load( IPropertyBag *pPropBag,IErrorLog *pErro
 
 HRESULT __stdcall ShellFolderCtrl::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties)
 {
-	pPropBag << mol::property( _T("displayfiles"), mol::DispId(this,ShellFolderCtrl_Dispatch_DisplayFiles,VT_BSTR) )
+	pPropBag << mol::property( _T("displayfiles"), mol::DispId(this,ShellFolderCtrl_Dispatch_DisplayFiles,VT_BOOL) )
 			 << mol::property( _T("sSelection"), mol::DispId(this,ShellFolderCtrl_Dispatch_Selection,VT_BSTR) )
 			 << mol::property( _T("cs"), &sizel );
 

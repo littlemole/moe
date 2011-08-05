@@ -296,7 +296,7 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">C:\Program Files %28x86%29\Java\jdk1.6.0_22\include\win32;C:\Program Files %28x86%29\Java\jdk1.6.0_22\include;D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">E:\java\jdk\include\win32;E:\java\jdk\include;D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">C:\Program Files %28x86%29\Java\jdk1.6.0_22\include\win32;C:\Program Files %28x86%29\Java\jdk1.6.0_22\include;D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">C:\java\jdk\include\win32;C:\java\jdk\include;D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
@@ -627,7 +627,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>..\shellCtrl\;..\Scintillax\;..\..\bin\moe\;C:\SUN\sdk\jdk\include\win32;C:\SUN\sdk\jdk\include;..\..\lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\lib\include\java\;..\shellCtrl\;..\Scintillax\;..\..\bin\moe\;C:\SUN\sdk\jdk\include\win32;C:\SUN\sdk\jdk\include;..\..\lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;DEBUG;_WINDOWS;MOL_DLL;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -636,7 +636,7 @@
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\uni_Debug\win.lib;..\..\lib\src\ole\uni_Debug\ole.lib;..\..\lib\src\util\uni_Debug\util.lib;..\..\lib\src\thread\uni_Debug\thread.lib;..\..\3dParty\pcre\uni_Debug\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\uni_Debug\win.lib;..\..\lib\src\ole\uni_Debug\ole.lib;..\..\lib\src\util\uni_Debug\util.lib;..\..\lib\src\java\uni_Debug\jre.lib;..\..\lib\src\thread\uni_Debug\thread.lib;..\..\3dParty\pcre\uni_Debug\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -649,6 +649,9 @@
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>TLB=".\uni_debug\jre.tlb";_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">
     <Midl>

@@ -75,7 +75,7 @@ HRESULT __stdcall SciAxPosition::CharAt( long pos, BSTR* ch)
 		char buf[2];
 		buf[0] = (char)sci_->edit()->getCharAt(pos);
 		buf[1] = 0;
-		*ch = ::SysAllocString(mol::utf82wstring(buf).c_str());	
+		*ch = ::SysAllocString(mol::fromUTF8(buf).c_str());	
 	}
 	return S_OK; 
 }

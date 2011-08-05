@@ -183,6 +183,9 @@
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>TLB=".\uni_debug\scintillax.tlb";_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">
     <Midl>
@@ -340,7 +343,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">codegen phase</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">cscript.exe ../../cg/js/make.js "uni_release"
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">cscript.exe ../../cg/js/make.js "uni_debug"
+      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">cscript.exe "../../cg/js/make.js" "TLB"
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
@@ -350,7 +353,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">codegen phase</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">cscript.exe ../../cg/js/make.js "x64\uni_release"
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">cscript.exe "../../cg/js/make.js" "x64/uni_debug"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">cscript.exe "../../cg/js/make.js" TLB</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
@@ -361,7 +364,9 @@
     <Midl Include="ScintillAX.idl" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="resources\mol.rc" />
+    <ResourceCompile Include="resources\mol.rc">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\io\io.vcxproj">
