@@ -312,8 +312,10 @@ HRESULT __stdcall Docs::Remove( VARIANT index )
 		tab()->show(SW_HIDE);
 		Ribbon::ribbon()->mode(0);
 		Ribbon::ribbon()->maximize();
-		moe()->IOleInPlaceFrame_SetBorderSpace(0);
-		moe()->doLayout();	
+//		moe()->IOleInPlaceFrame_SetActiveObject(0,0);
+//		moe()->IOleInPlaceFrame_SetBorderSpace(0);
+		//implicit in above: moe()->doLayout();	
+//		moe()->redraw();
 		statusBar()->status(_T(""));
 	}
 	return S_OK;
@@ -521,8 +523,9 @@ bool Docs::newUFSFile(IMoeDocument** doc)
 // load a path, create MDI child
 //////////////////////////////////////////////////////////////////////////////
 
-bool Docs::open( int index, const mol::string& path, InFiles pref, bool readOnly, IMoeDocument** doc )
+bool Docs::open( int index, const mol::string& p, InFiles pref, bool readOnly, IMoeDocument** doc )
 {
+	mol::string path = p;
 	// valid path ?
 	if ( path.size() < 1 )
 	{
@@ -530,6 +533,26 @@ bool Docs::open( int index, const mol::string& path, InFiles pref, bool readOnly
 		oss << "cancelled loading empty path " << path;
 		statusBar()->status(oss.str());
 		return false;
+	}
+
+	// shell stuff ?
+	if ( path.size() > 1 && path.substr(0,2) == _T("::") ) 
+	{
+		mol::ostringstream oss;
+		oss << _T("shell:") << path;
+		path = oss.str();
+	}
+	if ( path.size() > 2 && path.substr(0,3) == _T(":::") ) 
+	{
+		mol::ostringstream oss;
+		oss << _T("shell") << path;
+		path = oss.str();
+	}
+
+	// shell link ?
+	if ( mol::icmp( mol::Path::ext(path), _T(".lnk") ) == 0 )
+	{
+		path = mol::resolveShortcut(path);
 	}
 
 
@@ -614,9 +637,24 @@ bool Docs::open( int index, const mol::string& path, InFiles pref, bool readOnly
 
 
 
-mol::MdiChild* Docs::openPath( const mol::string& path, InFiles pref, bool readOnly)
+mol::MdiChild* Docs::openPath( const mol::string& p, InFiles pref, bool readOnly)
 {
+	mol::string path = p;
 	statusBar()->status(10);
+
+	// shell stuff ?
+	if ( path.size() > 2 && path.substr(0,8) == _T("shell:::") ) 
+	{
+		// control panel ...
+		if ( path == _T("shell:::{26EE0668-A00A-44D7-9371-BEB064C98683}") )
+		{
+			mol::io::execute_shell(path);
+			return 0;
+		}
+		mol::MdiChild* ret = load<DirChild>(path);		
+		return ret;
+	}
+
 
 	// if path is directory, create dir view
 	if ( mol::Path::isDir(path) )

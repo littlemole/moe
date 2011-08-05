@@ -14,9 +14,9 @@
     <Command Name="RibbonViewGroup"  LabelTitle="View" />
     <Command Name="RibbonView"  LabelTitle="View" >
       <Command.TooltipTitle>Window Views</Command.TooltipTitle>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\View.bmp"/>
-      </Command.SmallImages>  
+      </Command.LargeImages>  
     </Command>
     <Command Name="RibbonToolGroup"  LabelTitle="Tools" />
     <Command Name="RibbonTool2Group"  LabelTitle="User" />
@@ -26,9 +26,9 @@
     <Command Name="RibbonClipboardGroup" LabelTitle="Clipboard" >
       <Command.TooltipTitle>Clipboard</Command.TooltipTitle>
       <Command.TooltipDescription>Cut, Copy &amp; Paste</Command.TooltipDescription>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\Paste.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
 
     <Command Name="RibbonUndoGroup" LabelTitle="Undo" />
@@ -54,20 +54,37 @@
     <Command Name="RibbonMRUItems"  LabelTitle="Recent Files" />
     <Command Name="RibbonAppMenuGroup"  LabelTitle="Menu" />
 
+    <Command Name="RibbonHtmlViewGroup"  LabelTitle="Navigate" />
+    
+
+    <Command Name="RibbonGoBack"  LabelTitle="Back" >
+    <Command.TooltipTitle>Go Back</Command.TooltipTitle>
+    <Command.LargeImages>
+      <Image Source="ribbon\larrow.bmp"/>
+    </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonGoNext"  LabelTitle="Next" >
+      <Command.TooltipTitle>Go Next</Command.TooltipTitle>
+      <Command.LargeImages>
+        <Image Source="ribbon\\rarrow.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
     <Command Name="RibbonHelp"  LabelTitle="Help" />
 
     <Command Name="RibbonSettingsTools"  LabelTitle="Tools" >
       <Command.TooltipTitle>Tools</Command.TooltipTitle>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\ExecScript.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
     
     <Command Name="RibbonOpenTree"  LabelTitle="Open" >
       <Command.TooltipTitle>Open</Command.TooltipTitle>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\Directory.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
     <Command Name="RibbonReloadTree" LabelTitle="Reload">
       <Command.TooltipTitle>Reload Dir</Command.TooltipTitle>
@@ -78,15 +95,15 @@
     </Command>
     <Command Name="RibbonDeleteTree"  LabelTitle="Delete" >
       <Command.TooltipTitle>Delete</Command.TooltipTitle>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\CloseAll.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
     <Command Name="RibbonRenameTree"  LabelTitle="Rename" >
       <Command.TooltipTitle>Rename</Command.TooltipTitle>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\Replace.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
     <Command Name="RibbonCutTree" LabelTitle="Cut">
       <Command.TooltipTitle>Cut</Command.TooltipTitle>
@@ -110,31 +127,31 @@
     </Command>
     <Command Name="RibbonExecuteTree"  LabelTitle="Execute" >
       <Command.TooltipTitle>Execute</Command.TooltipTitle>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\ExecScript.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
     <Command Name="RibbonNewDirTree"  LabelTitle="NewDir" >
       <Command.TooltipTitle>New Directory</Command.TooltipTitle>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\NewDir.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
     <Command Name="RibbonPropertiesTree"  LabelTitle="Properties" >
       <Command.TooltipTitle>Properties</Command.TooltipTitle>
       <Command.TooltipDescription>Show Properties</Command.TooltipDescription>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\Preferences.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
 
 
 
     <Command Name="RibbonOpenList"  LabelTitle="Open" >
       <Command.TooltipTitle>Open</Command.TooltipTitle>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\Directory.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
     <Command Name="RibbonReloadList" LabelTitle="Reload">
       <Command.TooltipTitle>Reload Dir</Command.TooltipTitle>
@@ -145,15 +162,15 @@
     </Command>
     <Command Name="RibbonDeleteList"  LabelTitle="Delete" >
       <Command.TooltipTitle>Delete</Command.TooltipTitle>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\CloseAll.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
     <Command Name="RibbonRenameList"  LabelTitle="Rename" >
       <Command.TooltipTitle>Rename</Command.TooltipTitle>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\Replace.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
     <Command Name="RibbonCutList" LabelTitle="Cut">
       <Command.TooltipTitle>Cut</Command.TooltipTitle>
@@ -177,43 +194,43 @@
     </Command>
     <Command Name="RibbonExecuteList"  LabelTitle="Execute" >
       <Command.TooltipTitle>Execute</Command.TooltipTitle>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\ExecScript.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
     <Command Name="RibbonNewDirList"  LabelTitle="NewDir" >
       <Command.TooltipTitle>New Directory</Command.TooltipTitle>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\NewDir.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
     <Command Name="RibbonPropertiesList"  LabelTitle="Properties" >
       <Command.TooltipTitle>Properties</Command.TooltipTitle>
       <Command.TooltipDescription>Show Properties</Command.TooltipDescription>
-      <Command.SmallImages>
-        <Image Source="ribbon\Preferences.bmp"/>
-      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image Source="ribbon\Settings.bmp"/>
+      </Command.LargeImages>
     </Command>
     <Command Name="RibbonUpDir"  LabelTitle="UpDir" >
       <Command.TooltipTitle>One Level Up</Command.TooltipTitle>
       <Command.TooltipDescription>Show Parent Directory</Command.TooltipDescription>
-      <Command.SmallImages>
-        <Image Source="ribbon\UpDir.bmp"/>
-      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image Source="ribbon\Up.bmp"/>
+      </Command.LargeImages>
     </Command>
     <Command Name="RibbonEnterDir"  LabelTitle="EnterDir" >
       <Command.TooltipTitle>New File</Command.TooltipTitle>
       <Command.TooltipDescription>Create a new File</Command.TooltipDescription>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\EnterDir.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
     <Command Name="RibbonEncoding"  LabelTitle="Encoding" >
       <Command.TooltipTitle>Encoding</Command.TooltipTitle>
       <Command.TooltipDescription>File Charset Encoding</Command.TooltipDescription>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\Preferences.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
     <Command Name="RibbonWriteBOM"  LabelTitle="Write BOM" >
       <Command.TooltipTitle>Write BOM</Command.TooltipTitle>
@@ -275,17 +292,17 @@
     <Command Name="RibbonFileNew"  LabelTitle="New">
       <Command.TooltipTitle>New File</Command.TooltipTitle>
       <Command.TooltipDescription>Create a new File</Command.TooltipDescription>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\New.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
 
     <Command Name="RibbonFileNewUFS"  LabelTitle="New User Form Script">
       <Command.TooltipTitle>New User Form Script</Command.TooltipTitle>
       <Command.TooltipDescription>Create a new User Form and Script module</Command.TooltipDescription>
-      <Command.SmallImages>
+      <Command.LargeImages>
         <Image Source="ribbon\New.bmp"/>
-      </Command.SmallImages>
+      </Command.LargeImages>
     </Command>
     
     <Command Name="RibbonFileOpen" LabelTitle="Open">
@@ -936,7 +953,6 @@
         <ContextMap CommandName="RibbonDocumentContextMap" ContextMenu="RibbonDocumentContextMenu" MiniToolbar="RibbonMiniToolbar"/>
         <ContextMap CommandName="RibbonTabContextMap" ContextMenu="RibbonTabContextMenu" />
         <ContextMap CommandName="RibbonTreeViewContextMap" ContextMenu="RibbonTreeViewContextMenu" />
-        <ContextMap CommandName="RibbonListViewContextMap" ContextMenu="RibbonListViewContextMenu" />
       </ContextPopup.ContextMaps>
     </ContextPopup>
 
@@ -1062,6 +1078,20 @@
           <GroupSizeDefinition Size="Medium">
             <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
             <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Small">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
+          </GroupSizeDefinition>
+        </SizeDefinition>
+        <SizeDefinition Name="TwoControls">
+          <GroupSizeDefinition Size="Large">
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Large" IsLabelVisible="true" />
+          </GroupSizeDefinition>
+          <GroupSizeDefinition Size="Medium">
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
+            <ControlSizeDefinition ImageSize="Small" IsLabelVisible="true" />
           </GroupSizeDefinition>
           <GroupSizeDefinition Size="Small">
             <ControlSizeDefinition ImageSize="Small" IsLabelVisible="false" />
@@ -1315,7 +1345,7 @@
                 <Scale Group="RibbonFileGroup" Size="Large"/>
                 <Scale Group="RibbonDocGroup" Size="Large"/>
                 <Scale Group="RibbonClipboardGroup" Size="Large"/>
-                <Scale Group="RibbonReloadGroup" Size="Large"/>
+                <Scale Group="RibbonHtmlViewGroup" Size="Large"/>
                 <Scale Group="RibbonDirGroup" Size="Large"/>
               </ScalingPolicy.IdealSizes>
               
@@ -1323,7 +1353,7 @@
               <Scale Group="RibbonDocGroup" Size="Medium"/>
               <Scale Group="RibbonDocGroup" Size="Small"/>
               <Scale Group="RibbonDirGroup" Size="Small"/>
-              <Scale Group="RibbonReloadGroup" Size="Small"/>              
+              <Scale Group="RibbonHtmlViewGroup" Size="Small"/>              
               <Scale Group="RibbonClipboardGroup" Size="Small"/>
               <Scale Group="RibbonUndoGroup" Size="Small"/>
               <Scale Group="RibbonSettingsGroup" Size="Popup"/>
@@ -1388,17 +1418,26 @@
           </Group>
           
           <!-- Clipboard Group -->
-          <Group CommandName="RibbonClipboardGroup" SizeDefinition="ClipboardGroupSize"  ApplicationModes="1,2,5,6">
+          <Group CommandName="RibbonClipboardGroup" SizeDefinition="ThreeControls"  ApplicationModes="1,2,5,6">
             <Button CommandName="RibbonEditPaste"/>
             <Button CommandName="RibbonEditCut"/>
             <Button CommandName="RibbonEditCopy"/>
           </Group>
 
-          <!-- Reload Group -->
-          <Group CommandName="RibbonReloadGroup" SizeDefinition="SingleControl" ApplicationModes="1,2,5">
+          <!-- Reload Group 
+          <Group CommandName="RibbonReloadGroup" SizeDefinition="SingleControl" ApplicationModes="1,2">
+          </Group>
+          -->
+
+          <!-- html view Group -->
+          <Group CommandName="RibbonHtmlViewGroup" SizeDefinition="ThreeControls" ApplicationModes="5">
             <Button CommandName="RibbonEditReload"/>
+            <Button CommandName="RibbonGoBack"/>
+            <Button CommandName="RibbonGoNext"/>
           </Group>
 
+
+          <!-- hexedit -->
           <Group CommandName="RibbonBytesShownGroup"  ApplicationModes="4">
             <ComboBox CommandName="RibbonBytesShown"></ComboBox>
           </Group>
@@ -1418,8 +1457,9 @@
             <Button CommandName="RibbonToolColor"/>
           </Group>
 
-          <Group CommandName="RibbonDocGroup" SizeDefinition="SingleControl"  ApplicationModes="5">
-            <Button CommandName="RibbonEditFind"/>
+          <Group CommandName="RibbonDocGroup" SizeDefinition="TwoControls"  ApplicationModes="5">
+            <Button CommandName="RibbonEditFind" />
+            <Button CommandName="RibbonSettings" />
           </Group>
 
 

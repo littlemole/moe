@@ -1117,8 +1117,11 @@ HRESULT __stdcall TreeWndSink::OnTreeSelection(BSTR filename)
 HRESULT __stdcall TreeWndSink::OnTreeDblClick(BSTR filename)
 {
 	mol::string p(mol::toString(filename));
-	if ( !mol::Path::exists(p) || mol::Path::isDir(p) )
-		return S_OK;
+	if ( !mol::Path::exists(p) && !mol::Path::isUNC(p) )
+	{
+		if ( p.substr(0,2) != _T("::") )
+			return S_OK;
+	}
 	mol::punk<IShellTree> tree(treeWnd()->oleObject);
 	if ( tree )
 	{
@@ -1139,7 +1142,7 @@ HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename)
 	if ( tree )
 	{
 		mol::string fn = mol::toString((wchar_t*)filename);
-		if ( mol::Path::isDir( fn) )
+		if ( mol::Path::isDir( fn) || fn.substr(0,2) == _T("::") )
 		{
 			statusBar()->status(fn);
 			bool result = ::docs()->open(0,fn,Docs::PREF_TXT,false,0);

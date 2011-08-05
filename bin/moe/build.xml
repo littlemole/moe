@@ -65,6 +65,7 @@
     <ClCompile Include="src\xmlrc.cpp" />
     <ClCompile Include="src\xmlrib.cpp" />
     <ClCompile Include="src\xmlui.cpp" />
+    <ClCompile Include="src\mdichild.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

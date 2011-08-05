@@ -1,3 +1,5 @@
+// generated file - do not edit //
+
 
 
 #include "stdafx.h"
@@ -89,6 +91,9 @@ extern "C" void load_codegen_metadata()
   UI().addCmd(IDM_EDIT_24BYTES,_T("24 Bytes"));  
   UI().addCmd(IDM_EDIT_28BYTES,_T("28 Bytes"));  
   UI().addCmd(IDM_EDIT_32BYTES,_T("32 Bytes"));  
+  UI().addCmd(IDM_NAVIGATE,_T("Navigate"));  
+  UI().addCmd(IDM_NAVIGATE_NEXT,_T("Next"));  
+  UI().addCmd(IDM_NAVIGATE_BACK,_T("Back"));  
   UI().addCmd(IDM_TOOLS,_T("Tools"));  
   UI().addCmd(IDM_MODE,_T("Settings"));  
   UI().addCmd(IDM_MODE_EOL,_T("Mode"));  
@@ -567,10 +572,14 @@ extern "C" void load_codegen_metadata()
         UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_UNDO, IDB_TOOLBAR, IDM_EDIT_UNDO, false, true);
         UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_REDO, IDB_TOOLBAR, IDM_EDIT_REDO, false, true);
     UI().addMenuSeparator(IDM_MOE_HTML,IDM_EDIT);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_UPDATE, IDB_TOOLBAR, IDM_EDIT_UPDATE, false, true);
-        UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_STOP, IDB_TOOLBAR, IDM_EDIT_STOP, false, true);
-    UI().addMenuSeparator(IDM_MOE_HTML,IDM_EDIT);
         UI().addMenuItem(IDM_MOE_HTML, IDM_EDIT, IDM_EDIT_COPY, IDB_TOOLBAR, IDM_EDIT_COPY, false, true);
+
+    UI().addSubMenu(  IDM_MOE_HTML,  IDM_MOE_HTML,  IDM_NAVIGATE );
+        UI().addMenuItem(IDM_MOE_HTML, IDM_NAVIGATE, IDM_NAVIGATE_BACK, IDB_TOOLBAR, IDM_NAVIGATE_BACK, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_NAVIGATE, IDM_NAVIGATE_NEXT, IDB_TOOLBAR, IDM_NAVIGATE_NEXT, false, true);
+    UI().addMenuSeparator(IDM_MOE_HTML,IDM_NAVIGATE);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_NAVIGATE, IDM_EDIT_UPDATE, IDB_TOOLBAR, IDM_EDIT_UPDATE, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_NAVIGATE, IDM_EDIT_STOP, IDB_TOOLBAR, IDM_EDIT_STOP, false, true);
 
     UI().addSubMenu(  IDM_MOE_HTML,  IDM_MOE_HTML,  IDM_VIEW );
         UI().addMenuItem(IDM_MOE_HTML, IDM_VIEW, IDM_VIEW_MAXIMIZE, IDB_TOOLBAR, IDM_VIEW_MAXIMIZE, false, true);
@@ -803,6 +812,10 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUG_STOP, make_handler(&MoeWnd::
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUG_QUIT, make_handler(&MoeWnd::OnDispatch) );
 
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_NAVIGATE_NEXT, make_handler(&MoeWnd::OnDispatch) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_NAVIGATE_BACK, make_handler(&MoeWnd::OnDispatch) );
+
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_EXECUTEFORM, make_handler(&MoeWnd::OnDispatch) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_SHOW_LINE_NUMBERS, make_handler(&MoeWnd::OnDispatch) );
@@ -1027,9 +1040,9 @@ mol::msgMap<MoeHtmlWnd>().addMsgHandler( WM_SEARCH_MSG, make_handler(&MoeHtmlWnd
 
 mol::msgMap<MoeHtmlWnd>().addMsgHandler( WM_MDIACTIVATE, make_handler(&MoeHtmlWnd::OnMDIActivate) );
 
-mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_EDIT_UNDO, make_handler(&MoeHtmlWnd::back) );
+mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_NAVIGATE_BACK, make_handler(&MoeHtmlWnd::back) );
 
-mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_EDIT_REDO, make_handler(&MoeHtmlWnd::forward) );
+mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_NAVIGATE_NEXT, make_handler(&MoeHtmlWnd::forward) );
 
 mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_EDIT_STOP, make_handler(&MoeHtmlWnd::stop) );
 

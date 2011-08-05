@@ -5,6 +5,7 @@
 #include "MoeBar.h"
 #include "xmlui.h"
 #include "ole/Rib.h"
+#include "win/async.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -514,7 +515,15 @@ HRESULT __stdcall UserForm::InitNew(IStorage *pStg)
 
 HRESULT __stdcall  UserForm::Close()
 {
-	mol::invoke<UserForm,BOOL>( *this, &UserForm::destroy );
+//	mol::invoke<UserForm,BOOL>( *this, &UserForm::destroy );
+	mol::invoke( boost::bind( &UserForm::destroy, this ) );
+	/*
+	run_on_gui_thread({
+
+		this->destroy();
+
+	});
+	*/
 	return S_OK;
 }
 

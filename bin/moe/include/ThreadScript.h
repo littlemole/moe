@@ -4,6 +4,7 @@
 #include <map>
 #include "util/uni.h"
 #include "thread/events.h"
+//#include "win/events.h"
 #include "ole/aut.h"
 #include "ole/punk.h"
 #include <ActivScp.h>
@@ -37,11 +38,8 @@ class ThreadScript :
 {
 public:
 	
-	Event<int,IRemoteDebugApplicationThread*,IActiveScriptError*> OnScriptThread;
-	Event<> OnScriptThreadDone;
-
-//	event<void(int,IRemoteDebugApplicationThread*,IActiveScriptError*)> OnScriptThread;
-	//event<void()> OnScriptThreadDone;
+	mol::events::Event<int,IRemoteDebugApplicationThread*,IActiveScriptError*> OnScriptThread;
+	mol::events::Event<> OnScriptThreadDone;
 
 	typedef mol::com_instance<ThreadScript> ScriptInstance;
 	//typedef mol::debug_com_instance<ThreadScript> ScriptInstance;

@@ -336,10 +336,14 @@
         <menu cmd="IDM_EDIT_UNDO"/>
         <menu cmd="IDM_EDIT_REDO"/>
         <menu separator="true"  />
-        <menu cmd="IDM_EDIT_UPDATE"/>
-        <menu cmd="IDM_EDIT_STOP"/>
-        <menu separator="true"  />
         <menu cmd="IDM_EDIT_COPY"/>
+      </menu>
+      <menu cmd="IDM_NAVIGATE">
+        <menu cmd="IDM_NAVIGATE_BACK"/>
+        <menu cmd="IDM_NAVIGATE_NEXT"/>
+        <menu separator="true"  />
+        <menu cmd="IDM_EDIT_UPDATE"/>
+        <menu cmd="IDM_EDIT_STOP"/>        
       </menu>
       <menu cmd="IDM_VIEW">
         <menu cmd="IDM_VIEW_MAXIMIZE" />

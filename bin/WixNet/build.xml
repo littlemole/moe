@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+ <!-- Configuration -->
+
+ <PropertyGroup Label="Configuration">
+
+  <!-- paths -->
+  <Configuration Condition=" '$(Configuration)' == '' ">uni_debug</Configuration>
+  <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
+
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' ">uni_debug</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' ">uni_release</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' ">x64\uni_debug</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' ">x64\uni_release</confPath>
+
+  <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' ">bin\Debug</netConfPath>
+  <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' ">bin\Release</netConfPath>
+  <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' ">bin\x64\Debug</netConfPath>
+  <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' ">bin\x64\Release</netConfPath>
+
+
+  <arch Condition=" '$(Platform)' == 'x64' ">x64</arch>
+  <arch Condition=" '$(Platform)' == 'Win32' ">x86</arch>
+
+  <!-- wix ui helper dll-->
+  <uiext>$(WIX)\bin\WixUIExtension.dll</uiext>
+
+  <!-- generated wix objects to link into .msi file -->
+  <genObj>obj\$(confPath)\gen.wixobj</genObj>
+  <netObj>obj\$(confPath)\net.wixobj</netObj>
+  <monObj>obj\$(confPath)\mon.wixobj</monObj>
+
+  <!-- wix output file -->
+  <msiTarget>.\bin\$(confPath)\netSetup.msi</msiTarget>
+
+  <!-- admin and non-privilegded user install packets -->
+  <deployTarget>.\deploy\$(confPath)\netSetup.msi</deployTarget>
+  <deployTargetLight>.\deploy\$(confPath)\netSetupLight.msi</deployTargetLight>
+
+  <!-- regfree -->
+  <regfree>deploy\regfree</regfree>
+  <regfreeTargetPath>deploy\regfree\$(confPath)</regfreeTargetPath>
+ </PropertyGroup>
+
+<!-- net bin files -->
+ <ItemGroup>
+  <moeFiles Include=".\moe\**\*.*" />
+ </ItemGroup>
+ <!-- Build -->
+
+
+ <Target Name="Build">
+
+		<Message Text="building Wix Installer .NET moe ext" />
+		<Message Text="Project Configuration = $(Configuration)" />
+		<Message Text="Project Platform = $(Platform)" />
+
+		<!-- prepare directory structure -->
+		<RemoveDir Directories=".\moe\*.*" />
+		<RemoveDir Directories=".\$(regfree)\moe;" />
+
+		<MakeDir Directories=".\moe"/>
+		<MakeDir Directories=".\deploy\$(confPath)"/>
+		<MakeDir Directories=".\$(regfree)\moe;" />
+		<MakeDir Directories=".\$(regfreeTargetPath)" />
+
+		<!-- copy files -->
+        <Copy
+            SourceFiles="..\moe\resources\moe.ico"
+            DestinationFiles="..\moe\resources\moe.ico"
+        />
+        <Copy
+            SourceFiles="..\..\ax\net\$(confPath)\net.exe"
+            DestinationFolder=".\moe"
+        />
+        <Copy
+            SourceFiles="..\..\ax\net\net\net\$(netConfPath)\net.dll"
+            DestinationFolder=".\moe"
+        />
+
+		<RemoveDir Directories="@(SvnFolders)" />
+
+		<!-- heat -->
+		<Exec Command='"$(WIX)\bin\heat.exe" dir . -sw5150 -sw5151 -gg -cg "NetCompGroup" -dr INSTALLLOCATION -var var.SourceDir  -o ..\gen.wxs' WorkingDirectory="./moe"/>
+
+        <!-- candle -->
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(genObj)" gen.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(netObj)" net.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(monObj)" MondoNoLicense.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+        <!-- light -->
+		<Exec Command='"$(WIX)\bin\light.exe" -ext "$(uiext)" -out "$(msiTarget)" -cultures:en-us -loc en-us.wxl "$(genObj)" "$(netObj)" "$(monObj)"' WorkingDirectory="."/>
+
+
+		<!-- nonadmin install -->
+        <Copy
+            SourceFiles="$(msiTarget)"
+            DestinationFiles="$(deployTargetLight)"
+        />
+
+		<Exec Command='cscript "..\..\cg\bin\patchMSI.wsf" $(deployTargetLight)' WorkingDirectory="."/>
+
+		<!-- admin install -->
+
+        <Copy
+            SourceFiles="$(msiTarget)"
+            DestinationFiles="$(deployTarget)"
+        />
+
+		<!-- regfree -->
+
+        <Copy
+            SourceFiles="@(moeFiles)"
+            DestinationFiles="@(moeFiles->'.\$(regfree)\moe\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+
+		<Exec Command='mt.exe -manifest .\$(regfree)\net.exe.isolated.manifest -outputresource:".\$(regfree)\moe\net.exe;#1" -hashupdate -validate_manifest -verbose' WorkingDirectory="." Condition=" '$(Platform)' == 'Win32'" />
+		<Exec Command='mt.exe -manifest .\$(regfree)\net.exe.isolated64.manifest -outputresource:".\$(regfree)\moe\net.exe;#1" -hashupdate -validate_manifest -verbose' WorkingDirectory="." Condition=" '$(Platform)' == 'x64'" />
+
+		<Exec Command='cscript "..\..\cg\bin\zip.vbs" "$(regfreeTargetPath)\jre.zip" "$(regfree)\moe"' WorkingDirectory="."/>
+
+ </Target>
+
+
+<!-- Clean -->
+
+ <Target Name="Clean">
+
+    <RemoveDir Directories=".\bin\**\*.*;" />
+    <RemoveDir Directories=".\moe\**\*.*" />
+	<RemoveDir Directories=".\$(regfree)\moe\**\*.*;" />
+
+	<Delete Files="$(regfreeTargetPath)\net.zip" />
+	<Delete Files=".\deploy\$(confPath)\netSetup.msi;.\deploy\$(confPath)\netSetupLight.msi" />
+ </Target>
+
+
+
+</Project>

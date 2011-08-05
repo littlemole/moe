@@ -183,36 +183,42 @@ bool MoeHtmlWnd::load( const mol::string& loc )
 		d = loc.substr(pos);
 	}
 
-	pos = 0;
-	while ( (pos = l.find( _T("/"), pos)) != std::string::npos ) 
+	if ( loc.substr(0,8) == _T("shell:::") )
 	{
-		l.replace(pos,1, _T("\\") );
 	}
-
-	if ( (l.substr(0,4) != _T("file")) &&
-		 (l.substr(0,4) != _T("http"))    )
+	else
 	{
-		if ( !mol::Path::exists(l) )
-		{
-			l = mol::Path::pathname(mol::app<MoeApp>().getModulePath()) + _T("\\");
-			l += loc;
 
+		pos = 0;
+		while ( (pos = l.find( _T("/"), pos)) != std::string::npos ) 
+		{
+			l.replace(pos,1, _T("\\") );
+		}
+
+		if ( (l.substr(0,4) != _T("file")) &&
+			 (l.substr(0,4) != _T("http"))    )
+		{
 			if ( !mol::Path::exists(l) )
 			{
-				l = mol::Path::pathname(mol::app<MoeApp>().getModulePath()) + _T("\\forms\\") + loc;
+				l = mol::Path::pathname(mol::app<MoeApp>().getModulePath()) + _T("\\");
+				l += loc;
+
 				if ( !mol::Path::exists(l) )
-					return false;
+				{
+					l = mol::Path::pathname(mol::app<MoeApp>().getModulePath()) + _T("\\forms\\") + loc;
+					if ( !mol::Path::exists(l) )
+						return false;
+				}
 			}
+			l = _T("file://") + l;
 		}
-		l = _T("file://") + l;
-	}
 
-	pos = 0;
-	while ( (pos = l.find(_T("\\"),pos)) != std::string::npos ) 
-	{
-		l.replace(pos,1,_T("/"));
+		pos = 0;
+		while ( (pos = l.find(_T("\\"),pos)) != std::string::npos ) 
+		{
+			l.replace(pos,1,_T("/"));
+		}
 	}
-
 	statusBar()->status(30);
 
 	// determine window menu

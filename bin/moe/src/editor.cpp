@@ -696,7 +696,7 @@ void Editor::OnSearch(FINDREPLACE* find)
     if ( (find->Flags) & FR_FINDNEXT )
     {
 		std::string what( mol::tostring(find->lpstrFindWhat));
-		std::string utf8what(mol::ansi2utf8(what));
+		std::string utf8what(mol::toUTF8(what));
 
 		VARIANT_BOOL vb;
 		txt->Search(mol::bstr(utf8what),find->Flags,&vb);
@@ -709,8 +709,8 @@ void Editor::OnSearch(FINDREPLACE* find)
     {
 		std::string what (mol::tostring(find->lpstrFindWhat));
 		std::string with(mol::tostring(find->lpstrReplaceWith));
-		std::string utf8what(mol::ansi2utf8(what));
-		std::string utf8with(mol::ansi2utf8(with));
+		std::string utf8what(mol::toUTF8(what));
+		std::string utf8with(mol::toUTF8(with));
 
 		VARIANT_BOOL vb;
 		txt->Replace(mol::bstr(utf8what),mol::bstr(utf8with),find->Flags,&vb);
@@ -723,8 +723,8 @@ void Editor::OnSearch(FINDREPLACE* find)
     {
 		std::string what (mol::tostring(find->lpstrFindWhat));
 		std::string with(mol::tostring(find->lpstrReplaceWith));
-		std::string utf8what(mol::ansi2utf8(what));
-		std::string utf8with(mol::ansi2utf8(with));
+		std::string utf8what(mol::toUTF8(what));
+		std::string utf8with(mol::toUTF8(with));
 
         int c = 0;
 
@@ -1028,8 +1028,8 @@ void Editor::OnDebugScriptGo()
 	ts_ = ThreadScript::CreateInstance( *moe(), script.toString(), filename.toString() );
 	ts_->addNamedObject((IMoe*)moe(), _T("moe"));
 	ts_->update_breakpoints(s);
-	ts_->OnScriptThread = event_handler(&Editor::OnScriptThread,this);
-	ts_->OnScriptThreadDone = event_handler(&Editor::OnScriptThreadDone,this);
+	ts_->OnScriptThread = mol::events::event_handler(&Editor::OnScriptThread,this);
+	ts_->OnScriptThreadDone = mol::events::event_handler(&Editor::OnScriptThreadDone,this);
 	ts_->execute( SCRIPTTEXT_ISVISIBLE);
 
 	mol::Ribbon::ribbon()->mode(8);
@@ -1154,7 +1154,8 @@ void Editor::OnScriptThreadDone()
 {
 	if ( mol::guithread() != mol::Thread::self() )
 	{
-		mol::invoke( *this, &Editor::OnScriptThreadDone);		
+		//mol::invoke( *this, &Editor::OnScriptThreadDone);		
+		mol::invoke( boost::bind( &Editor::OnScriptThreadDone, this) );		
 		return;
 	}
 
@@ -1228,7 +1229,8 @@ void Editor::OnScriptThread( int line, IRemoteDebugApplicationThread* remote, IA
 		if ( pError)
 			pError->Release();
 
-		mol::invoke( *this, &Editor::OnScriptThread, line, remote, pError );
+		//mol::invoke( *this, &Editor::OnScriptThread, line, remote, pError );
+		mol::invoke( boost::bind( &Editor::OnScriptThread, this, line, remote, pError ) );
 		return;
 	}
 

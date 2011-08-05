@@ -57,7 +57,7 @@ BEGIN
     RibbonView_TooltipTitle_RESID L"Window Views" /* TooltipTitle RibbonView_TooltipTitle_RESID: (null) */
 END
 
-RibbonView_SmallImages_RESID    BITMAP    "ribbon\View.bmp" /* SmallImages RibbonView_SmallImages_RESID: (null) */
+RibbonView_LargeImages_RESID    BITMAP    "ribbon\View.bmp" /* LargeImages RibbonView_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonToolGroup_LabelTitle_RESID L"Tools" /* LabelTitle RibbonToolGroup_LabelTitle_RESID: (null) */
@@ -98,7 +98,7 @@ BEGIN
     RibbonClipboardGroup_TooltipDescription_RESID L"Cut, Copy & Paste" /* TooltipDescription RibbonClipboardGroup_TooltipDescription_RESID: (null) */
 END
 
-RibbonClipboardGroup_SmallImages_RESID    BITMAP    "ribbon\Paste.bmp" /* SmallImages RibbonClipboardGroup_SmallImages_RESID: (null) */
+RibbonClipboardGroup_LargeImages_RESID    BITMAP    "ribbon\Paste.bmp" /* LargeImages RibbonClipboardGroup_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonUndoGroup_LabelTitle_RESID L"Undo" /* LabelTitle RibbonUndoGroup_LabelTitle_RESID: (null) */
@@ -186,6 +186,33 @@ END
 
 STRINGTABLE 
 BEGIN
+    RibbonHtmlViewGroup_LabelTitle_RESID L"Navigate" /* LabelTitle RibbonHtmlViewGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonGoBack_LabelTitle_RESID L"Back" /* LabelTitle RibbonGoBack_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonGoBack_TooltipTitle_RESID L"Go Back" /* TooltipTitle RibbonGoBack_TooltipTitle_RESID: (null) */
+END
+
+RibbonGoBack_LargeImages_RESID    BITMAP    "ribbon\larrow.bmp" /* LargeImages RibbonGoBack_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonGoNext_LabelTitle_RESID L"Next" /* LabelTitle RibbonGoNext_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonGoNext_TooltipTitle_RESID L"Go Next" /* TooltipTitle RibbonGoNext_TooltipTitle_RESID: (null) */
+END
+
+RibbonGoNext_LargeImages_RESID    BITMAP    "ribbon\\rarrow.bmp" /* LargeImages RibbonGoNext_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
     RibbonHelp_LabelTitle_RESID L"Help" /* LabelTitle RibbonHelp_LabelTitle_RESID: (null) */
 END
 
@@ -199,7 +226,7 @@ BEGIN
     RibbonSettingsTools_TooltipTitle_RESID L"Tools" /* TooltipTitle RibbonSettingsTools_TooltipTitle_RESID: (null) */
 END
 
-RibbonSettingsTools_SmallImages_RESID    BITMAP    "ribbon\ExecScript.bmp" /* SmallImages RibbonSettingsTools_SmallImages_RESID: (null) */
+RibbonSettingsTools_LargeImages_RESID    BITMAP    "ribbon\ExecScript.bmp" /* LargeImages RibbonSettingsTools_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonOpenTree_LabelTitle_RESID L"Open" /* LabelTitle RibbonOpenTree_LabelTitle_RESID: (null) */
@@ -210,7 +237,7 @@ BEGIN
     RibbonOpenTree_TooltipTitle_RESID L"Open" /* TooltipTitle RibbonOpenTree_TooltipTitle_RESID: (null) */
 END
 
-RibbonOpenTree_SmallImages_RESID    BITMAP    "ribbon\Directory.bmp" /* SmallImages RibbonOpenTree_SmallImages_RESID: (null) */
+RibbonOpenTree_LargeImages_RESID    BITMAP    "ribbon\Directory.bmp" /* LargeImages RibbonOpenTree_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonReloadTree_LabelTitle_RESID L"Reload" /* LabelTitle RibbonReloadTree_LabelTitle_RESID: (null) */
@@ -237,7 +264,7 @@ BEGIN
     RibbonDeleteTree_TooltipTitle_RESID L"Delete" /* TooltipTitle RibbonDeleteTree_TooltipTitle_RESID: (null) */
 END
 
-RibbonDeleteTree_SmallImages_RESID    BITMAP    "ribbon\CloseAll.bmp" /* SmallImages RibbonDeleteTree_SmallImages_RESID: (null) */
+RibbonDeleteTree_LargeImages_RESID    BITMAP    "ribbon\CloseAll.bmp" /* LargeImages RibbonDeleteTree_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonRenameTree_LabelTitle_RESID L"Rename" /* LabelTitle RibbonRenameTree_LabelTitle_RESID: (null) */
@@ -248,7 +275,7 @@ BEGIN
     RibbonRenameTree_TooltipTitle_RESID L"Rename" /* TooltipTitle RibbonRenameTree_TooltipTitle_RESID: (null) */
 END
 
-RibbonRenameTree_SmallImages_RESID    BITMAP    "ribbon\Replace.bmp" /* SmallImages RibbonRenameTree_SmallImages_RESID: (null) */
+RibbonRenameTree_LargeImages_RESID    BITMAP    "ribbon\Replace.bmp" /* LargeImages RibbonRenameTree_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonCutTree_LabelTitle_RESID L"Cut" /* LabelTitle RibbonCutTree_LabelTitle_RESID: (null) */
@@ -292,7 +319,7 @@ BEGIN
     RibbonExecuteTree_TooltipTitle_RESID L"Execute" /* TooltipTitle RibbonExecuteTree_TooltipTitle_RESID: (null) */
 END
 
-RibbonExecuteTree_SmallImages_RESID    BITMAP    "ribbon\ExecScript.bmp" /* SmallImages RibbonExecuteTree_SmallImages_RESID: (null) */
+RibbonExecuteTree_LargeImages_RESID    BITMAP    "ribbon\ExecScript.bmp" /* LargeImages RibbonExecuteTree_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonNewDirTree_LabelTitle_RESID L"NewDir" /* LabelTitle RibbonNewDirTree_LabelTitle_RESID: (null) */
@@ -303,7 +330,7 @@ BEGIN
     RibbonNewDirTree_TooltipTitle_RESID L"New Directory" /* TooltipTitle RibbonNewDirTree_TooltipTitle_RESID: (null) */
 END
 
-RibbonNewDirTree_SmallImages_RESID    BITMAP    "ribbon\NewDir.bmp" /* SmallImages RibbonNewDirTree_SmallImages_RESID: (null) */
+RibbonNewDirTree_LargeImages_RESID    BITMAP    "ribbon\NewDir.bmp" /* LargeImages RibbonNewDirTree_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonPropertiesTree_LabelTitle_RESID L"Properties" /* LabelTitle RibbonPropertiesTree_LabelTitle_RESID: (null) */
@@ -319,7 +346,7 @@ BEGIN
     RibbonPropertiesTree_TooltipDescription_RESID L"Show Properties" /* TooltipDescription RibbonPropertiesTree_TooltipDescription_RESID: (null) */
 END
 
-RibbonPropertiesTree_SmallImages_RESID    BITMAP    "ribbon\Preferences.bmp" /* SmallImages RibbonPropertiesTree_SmallImages_RESID: (null) */
+RibbonPropertiesTree_LargeImages_RESID    BITMAP    "ribbon\Preferences.bmp" /* LargeImages RibbonPropertiesTree_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonOpenList_LabelTitle_RESID L"Open" /* LabelTitle RibbonOpenList_LabelTitle_RESID: (null) */
@@ -330,7 +357,7 @@ BEGIN
     RibbonOpenList_TooltipTitle_RESID L"Open" /* TooltipTitle RibbonOpenList_TooltipTitle_RESID: (null) */
 END
 
-RibbonOpenList_SmallImages_RESID    BITMAP    "ribbon\Directory.bmp" /* SmallImages RibbonOpenList_SmallImages_RESID: (null) */
+RibbonOpenList_LargeImages_RESID    BITMAP    "ribbon\Directory.bmp" /* LargeImages RibbonOpenList_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonReloadList_LabelTitle_RESID L"Reload" /* LabelTitle RibbonReloadList_LabelTitle_RESID: (null) */
@@ -357,7 +384,7 @@ BEGIN
     RibbonDeleteList_TooltipTitle_RESID L"Delete" /* TooltipTitle RibbonDeleteList_TooltipTitle_RESID: (null) */
 END
 
-RibbonDeleteList_SmallImages_RESID    BITMAP    "ribbon\CloseAll.bmp" /* SmallImages RibbonDeleteList_SmallImages_RESID: (null) */
+RibbonDeleteList_LargeImages_RESID    BITMAP    "ribbon\CloseAll.bmp" /* LargeImages RibbonDeleteList_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonRenameList_LabelTitle_RESID L"Rename" /* LabelTitle RibbonRenameList_LabelTitle_RESID: (null) */
@@ -368,7 +395,7 @@ BEGIN
     RibbonRenameList_TooltipTitle_RESID L"Rename" /* TooltipTitle RibbonRenameList_TooltipTitle_RESID: (null) */
 END
 
-RibbonRenameList_SmallImages_RESID    BITMAP    "ribbon\Replace.bmp" /* SmallImages RibbonRenameList_SmallImages_RESID: (null) */
+RibbonRenameList_LargeImages_RESID    BITMAP    "ribbon\Replace.bmp" /* LargeImages RibbonRenameList_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonCutList_LabelTitle_RESID L"Cut" /* LabelTitle RibbonCutList_LabelTitle_RESID: (null) */
@@ -412,7 +439,7 @@ BEGIN
     RibbonExecuteList_TooltipTitle_RESID L"Execute" /* TooltipTitle RibbonExecuteList_TooltipTitle_RESID: (null) */
 END
 
-RibbonExecuteList_SmallImages_RESID    BITMAP    "ribbon\ExecScript.bmp" /* SmallImages RibbonExecuteList_SmallImages_RESID: (null) */
+RibbonExecuteList_LargeImages_RESID    BITMAP    "ribbon\ExecScript.bmp" /* LargeImages RibbonExecuteList_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonNewDirList_LabelTitle_RESID L"NewDir" /* LabelTitle RibbonNewDirList_LabelTitle_RESID: (null) */
@@ -423,7 +450,7 @@ BEGIN
     RibbonNewDirList_TooltipTitle_RESID L"New Directory" /* TooltipTitle RibbonNewDirList_TooltipTitle_RESID: (null) */
 END
 
-RibbonNewDirList_SmallImages_RESID    BITMAP    "ribbon\NewDir.bmp" /* SmallImages RibbonNewDirList_SmallImages_RESID: (null) */
+RibbonNewDirList_LargeImages_RESID    BITMAP    "ribbon\NewDir.bmp" /* LargeImages RibbonNewDirList_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonPropertiesList_LabelTitle_RESID L"Properties" /* LabelTitle RibbonPropertiesList_LabelTitle_RESID: (null) */
@@ -439,7 +466,7 @@ BEGIN
     RibbonPropertiesList_TooltipDescription_RESID L"Show Properties" /* TooltipDescription RibbonPropertiesList_TooltipDescription_RESID: (null) */
 END
 
-RibbonPropertiesList_SmallImages_RESID    BITMAP    "ribbon\Preferences.bmp" /* SmallImages RibbonPropertiesList_SmallImages_RESID: (null) */
+RibbonPropertiesList_LargeImages_RESID    BITMAP    "ribbon\Settings.bmp" /* LargeImages RibbonPropertiesList_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonUpDir_LabelTitle_RESID L"UpDir" /* LabelTitle RibbonUpDir_LabelTitle_RESID: (null) */
@@ -455,7 +482,7 @@ BEGIN
     RibbonUpDir_TooltipDescription_RESID L"Show Parent Directory" /* TooltipDescription RibbonUpDir_TooltipDescription_RESID: (null) */
 END
 
-RibbonUpDir_SmallImages_RESID    BITMAP    "ribbon\UpDir.bmp" /* SmallImages RibbonUpDir_SmallImages_RESID: (null) */
+RibbonUpDir_LargeImages_RESID    BITMAP    "ribbon\Up.bmp" /* LargeImages RibbonUpDir_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonEnterDir_LabelTitle_RESID L"EnterDir" /* LabelTitle RibbonEnterDir_LabelTitle_RESID: (null) */
@@ -471,7 +498,7 @@ BEGIN
     RibbonEnterDir_TooltipDescription_RESID L"Create a new File" /* TooltipDescription RibbonEnterDir_TooltipDescription_RESID: (null) */
 END
 
-RibbonEnterDir_SmallImages_RESID    BITMAP    "ribbon\EnterDir.bmp" /* SmallImages RibbonEnterDir_SmallImages_RESID: (null) */
+RibbonEnterDir_LargeImages_RESID    BITMAP    "ribbon\EnterDir.bmp" /* LargeImages RibbonEnterDir_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonEncoding_LabelTitle_RESID L"Encoding" /* LabelTitle RibbonEncoding_LabelTitle_RESID: (null) */
@@ -487,7 +514,7 @@ BEGIN
     RibbonEncoding_TooltipDescription_RESID L"File Charset Encoding" /* TooltipDescription RibbonEncoding_TooltipDescription_RESID: (null) */
 END
 
-RibbonEncoding_SmallImages_RESID    BITMAP    "ribbon\Preferences.bmp" /* SmallImages RibbonEncoding_SmallImages_RESID: (null) */
+RibbonEncoding_LargeImages_RESID    BITMAP    "ribbon\Preferences.bmp" /* LargeImages RibbonEncoding_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonWriteBOM_LabelTitle_RESID L"Write BOM" /* LabelTitle RibbonWriteBOM_LabelTitle_RESID: (null) */
@@ -678,7 +705,7 @@ BEGIN
     RibbonFileNew_TooltipDescription_RESID L"Create a new File" /* TooltipDescription RibbonFileNew_TooltipDescription_RESID: (null) */
 END
 
-RibbonFileNew_SmallImages_RESID    BITMAP    "ribbon\New.bmp" /* SmallImages RibbonFileNew_SmallImages_RESID: (null) */
+RibbonFileNew_LargeImages_RESID    BITMAP    "ribbon\New.bmp" /* LargeImages RibbonFileNew_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonFileNewUFS_LabelTitle_RESID L"New User Form Script" /* LabelTitle RibbonFileNewUFS_LabelTitle_RESID: (null) */
@@ -694,7 +721,7 @@ BEGIN
     RibbonFileNewUFS_TooltipDescription_RESID L"Create a new User Form and Script module" /* TooltipDescription RibbonFileNewUFS_TooltipDescription_RESID: (null) */
 END
 
-RibbonFileNewUFS_SmallImages_RESID    BITMAP    "ribbon\New.bmp" /* SmallImages RibbonFileNewUFS_SmallImages_RESID: (null) */
+RibbonFileNewUFS_LargeImages_RESID    BITMAP    "ribbon\New.bmp" /* LargeImages RibbonFileNewUFS_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonFileOpen_LabelTitle_RESID L"Open" /* LabelTitle RibbonFileOpen_LabelTitle_RESID: (null) */
@@ -1636,11 +1663,6 @@ BEGIN
 END
 
 RibbonDebugStepOut_LargeImages_RESID    BITMAP    "ribbon\\stepout.bmp" /* LargeImages RibbonDebugStepOut_LargeImages_RESID: (null) */
-STRINGTABLE 
-BEGIN
-    RibbonListViewContextMap_LabelTitle_RESID L"Label:RibbonListViewContextMap" /* LabelTitle RibbonListViewContextMap_LabelTitle_RESID: (null) */
-END
-
 STRINGTABLE 
 BEGIN
     InternalCmd2_LabelTitle_RESID L"Label:InternalCmd2" /* LabelTitle InternalCmd2_LabelTitle_RESID: (null) */
