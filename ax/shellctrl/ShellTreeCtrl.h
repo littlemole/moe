@@ -7,6 +7,7 @@
 #include "ole/DragDrop.h"
 #include "ole/Ctrl.h"
 #include "ole/punk.h"
+#include "ole/persist.h"
 #include "shellCtrl_h.h"
 #include "win/Layout.h"
 #include "win/msghandler.h"
@@ -102,7 +103,7 @@ public:
 // ShellTreeCtrl - windows explorer style
 //////////////////////////////////////////////////////////////////
 
-#define SHELL_TREE_CTRL_ON_IDATA_NOTIFY 101
+//#define SHELL_TREE_CTRL_ON_IDATA_NOTIFY 101
 
 class ShellTree: 
 	public ax_ctrl<ShellTree,CLSID_ShellTree,false,mol::Window,WS_CHILD|WS_CLIPSIBLINGS|WS_CLIPCHILDREN,0>,
@@ -147,8 +148,8 @@ public:
 	msg_handler( WM_SIZE, OnSize )
 		LRESULT virtual OnSize( UINT, WPARAM, LPARAM );
 
-	cmd_handler( SHELL_TREE_CTRL_ON_IDATA_NOTIFY, OnDataObject )
-        LRESULT virtual OnDataObject( UINT, WPARAM, LPARAM );
+//	cmd_handler( SHELL_TREE_CTRL_ON_IDATA_NOTIFY, OnDataObject )
+        LRESULT virtual OnDataObject( IDataObject* data );
 
 	notify_code_handler( TVN_ITEMEXPANDING, OnTreeItemExpanding )
 		LRESULT virtual OnTreeItemExpanding( UINT, WPARAM, LPARAM );

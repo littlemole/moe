@@ -424,7 +424,7 @@ HRESULT __stdcall Setting::Load( BSTR filename)
             if ( key != "" )
             {
 				punk<ISetting> set;
-				if ( S_OK == getKey(mol::ansi2wstring(key),&set) )
+				if ( S_OK == getKey(mol::towstring(key),&set) )
                 if ( set )
                 {
                     char bufVal[1024];

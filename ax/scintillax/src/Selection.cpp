@@ -134,7 +134,7 @@ HRESULT __stdcall SciAxSelection::put_Text( BSTR text )
 		return E_FAIL;
 
 	if ( text )
-		sci_->edit()->replaceSel(mol::wstring2utf8(text));
+		sci_->edit()->replaceSel(mol::toUTF8(text));
 	return S_OK; 
 }
 

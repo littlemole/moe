@@ -625,8 +625,8 @@ HRESULT __stdcall SciAxProperties::ConvertTabs()
 	int n = sci_->edit()->getTabWidth();
     for ( int i = 0; i < n; i++ )
         with +=" ";
-	std::string utf8what(mol::ansi2utf8(what));
-	std::string utf8with(mol::ansi2utf8(with));
+	std::string utf8what(mol::toUTF8(what));
+	std::string utf8with(mol::toUTF8(with));
 
     int c = 0;
 	while ( sci_->edit()->replace( mol::tostring(utf8what), mol::tostring(utf8with), FR_REPLACEALL ) )

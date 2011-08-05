@@ -5,6 +5,7 @@
 #include "ole/Bstr.h"
 #include "ole/enum.h"
 #include "util/Str.h"
+#include "thread/events.h"
 #include <sstream>
 
 ///////////////////////////////////////////////////////////////////////
@@ -81,9 +82,14 @@ void ShellTreeActionPath::operator() ()
 	p = mol::Path::stripToRoot(p);
 
     HTREEITEM i = sw_->tree_.getChildItem( TVI_ROOT );
+	i = sw_->tree_.getChildItem( i );
+	sw_->expandFolder(i,true);
+
 	//i = sw_->tree_.getNextItem(i);
 	//i = sw_->tree_.getChildItem( i );
-    i = sw_->tree_.getChildItem( i );
+    //
+	i = sw_->tree_.getChildItem( i );
+	//sw_->expandFolder(i,true);
     while ( i )
     {
 		TreeEntry* entry = sw_->getItemEntry(i);
@@ -508,7 +514,7 @@ LRESULT ShellTree::OnTreeBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 	v.push_back(p);
 
 	punk<IDropSource> drop = new DropSrc;
-	punk<IDataObject> ido  = new ShellDataObj(*this,SHELL_TREE_CTRL_ON_IDATA_NOTIFY,v);
+	punk<IDataObject> ido  = new ShellDataObj( mol::events::event_handler( &ShellTree::OnDataObject,this),v);
 
 	DWORD effect;
 	HRESULT r = ::DoDragDrop(ido,drop,DROPEFFECT_COPY|DROPEFFECT_MOVE ,&effect);
@@ -523,9 +529,9 @@ LRESULT ShellTree::OnTreeBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 // DataObject notifies of cut operation, update tree
 /////////////////////////////////////////////////////////////////////////////////
 
-LRESULT ShellTree::OnDataObject(UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT ShellTree::OnDataObject(IDataObject* data)
 {
-    IDataObject* data = (IDataObject*)lParam;
+//    IDataObject* data = (IDataObject*)lParam;
 	std::vector<mol::string> v = vectorFromDataObject(data);
 
 	if ( v.size() == 0 )
@@ -795,11 +801,16 @@ BOOL ShellTree::expandFolder( HTREEITEM item, bool force, int flags )
 					}
 				}
 				else
-				if (displayFiles_)
+				if (displayFiles_ && mol::Path::exists(name) )
 				{
 					mol::string name = folder.getDisplayNameOf(*it);
 					files.push_back(name);
 					filesMap[name] = it;
+				}
+				else if ( mol::Path::isUNC(name) ) 
+				{
+						dirs.push_back(name);
+						dirsMap[name] = it;
 				}
 			}
 		}
@@ -897,6 +908,7 @@ BOOL ShellTree::initDesk (bool displayFiles)
 	int drivesIcon = 0;//desk.getIconIndexReal( drives );
 
 	LPITEMIDLIST pidl = NULL;
+	//HRESULT hr = SHGetFolderLocation(NULL, CSIDL_DRIVES, NULL, 0, &pidl);
 	HRESULT hr = SHGetFolderLocation(NULL, CSIDL_DRIVES, NULL, 0, &pidl);
 
 	if (SUCCEEDED(hr))                    
@@ -911,33 +923,36 @@ BOOL ShellTree::initDesk (bool displayFiles)
 		if (SUCCEEDED(hr))
 		{
 			drivesIcon = sfi.iIcon;
+			
 		}
 	}
 	
-	ILFree(pidl);
+	TreeEntry* entry = new TreeEntry(desk.getDisplayNameOf(pidl),fi,drivesIcon);
 
 	DWORD len = 256;
 	mol::TCHAR buf[256];
 	BOOL b = ::GetComputerName( buf, &len );
 	
-	TreeEntry* entry = new TreeEntry(desk.getDisplayNameOf(*drives),fi,drivesIcon);
+	//TreeEntry* entry = new TreeEntry(desk.getDisplayNameOf(*drives),fi,drivesIcon);
+	
     entry->isParsed=true;
 	hParent = tree_.addIconNodeParam( mol::string(buf,len), (LPARAM)entry, 0, drivesIcon,drivesIcon );
 
-	ShellFolder folder(*drives,desk );
-	folder.enumObjects(0);
-	while( Shit it = folder.next() )
+	//ShellFolder folder(*drives,desk );
+	//ShellFolder folder(pidl,desk );
+	desk.enumObjects(0,SHCONTF_FOLDERS|SHCONTF_NAVIGATION_ENUM);
+	while( Shit it = desk.next() )
 	{
-		if ( it->isDir() && it->isPartOfFileSystem() )
+		//if ( it->isDir() && it->isPartOfFileSystem() )
 		{
-			if ( folder.getDisplayNameOf(*it).substr(0,2) != _T("::") )
+			//if ( folder.getDisplayNameOf(*it).substr(0,2) != _T("::") )
 			{
-				HTREEITEM hItem = addFolderNode ( folder, it, hParent, 0 );
+				HTREEITEM hItem = addFolderNode ( desk, it, hParent, 0 );
 				tree_.addNode( _T(""), hItem,0 );
 			}
 		} 
 	}
-
+	ILFree(pidl);
 	return TRUE;
 }
 
@@ -1107,7 +1122,7 @@ HRESULT ShellTree::Cut ()
 		tree_.setItemState(hit,TVIS_CUT,TVIS_CUT);
 		std::vector<mol::string> v;
 		v.push_back(getItemPath(hit));
-		punk<IDataObject> ido = new ShellDataObj(*this,SHELL_TREE_CTRL_ON_IDATA_NOTIFY, v,true);        
+		punk<IDataObject> ido = new ShellDataObj( mol::events::event_handler( &ShellTree::OnDataObject,this), v,true);        
 		HRESULT r = ::OleSetClipboard(ido);
 	}
 	return S_OK;
@@ -1127,7 +1142,7 @@ HRESULT ShellTree::Copy ()
 		tree_.setItemState(hit,TVIS_CUT,0);
 		std::vector<mol::string> v;
 		v.push_back(getItemPath(hit));
-		punk<IDataObject> ido = new ShellDataObj(*this,SHELL_TREE_CTRL_ON_IDATA_NOTIFY,v);
+		punk<IDataObject> ido = new ShellDataObj( mol::events::event_handler( &ShellTree::OnDataObject,this), v);        
 		HRESULT r = ::OleSetClipboard(ido);
 	}
 	return S_OK;
@@ -1285,34 +1300,50 @@ HRESULT ShellTree::CreateDir()
 
 HRESULT __stdcall ShellTree::Load( LPSTREAM pStm)
 {
-	pStm >> mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BSTR) )
+	pStm >> mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL) )
 		 >> mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_Selection,VT_BSTR) )
 		 >> mol::property( &sizel );
 
+	/*
+	mol::Rect r = this->posRect_;
+	r.right = r.left + sizel.cx;
+	r.bottom = r.top + sizel.cy;
+
+	this->setRects(r,r);
+	*/
 	return S_OK;
 }
 
 HRESULT __stdcall ShellTree::Save( LPSTREAM pStm,BOOL fClearDirty)
 {
-	pStm << mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BSTR) )
+	pStm << mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL) )
 		 << mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_Selection,VT_BSTR) )
 		 << mol::property( &sizel );
 
+	//pStm->Commit(STGC_DEFAULT);
 	return S_OK;
 }
 
 HRESULT __stdcall ShellTree::Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog)
 {
-	pPropBag >> mol::property( _T("displayfiles"), mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BSTR) )
+	
+	pPropBag >> mol::property( _T("displayfiles"), mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL) )
 			 >> mol::property( _T("selection"), mol::DispId(this,ShellTreeCtrl_Dispatch_Selection,VT_BSTR) )
 			 >> mol::property( _T("cs"), &sizel );
 
+	/*mol::Rect r = this->posRect_;
+	r.right = r.left + sizel.cx;
+	r.bottom = r.top + sizel.cy;
+
+	this->setRects(r,r);
+	*/
 	return S_OK;
 }
 
 HRESULT __stdcall ShellTree::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties)
 {
-	pPropBag << mol::property( _T("displayfiles"), mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BSTR) )
+	
+	pPropBag << mol::property( _T("displayfiles"), mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL) )
 			 << mol::property( _T("selection"), mol::DispId(this,ShellTreeCtrl_Dispatch_Selection,VT_BSTR) )
 			 << mol::property( _T("cs"), &sizel );
 

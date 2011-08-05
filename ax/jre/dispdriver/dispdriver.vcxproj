@@ -73,11 +73,11 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\Java\jdk1.6.0_22\include\win32;C:\Program Files %28x86%29\Java\jdk1.6.0_22\include;D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath>E:\java\jdk\include\win32;E:\java\jdk\include;D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <OutDir>$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
-    <IncludePath>C:\Java\jdk\include\win32;C:\Java\jdk\include;D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath>E:\java\jdk\include\win32;E:\java\jdk\include;D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <OutDir>$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug2|Win32'">
@@ -147,7 +147,7 @@
       <AdditionalIncludeDirectories>E:\molib\lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\..\lib\src\win\uni_release\win.lib;..\..\..\lib\src\ole\uni_release\ole.lib;..\..\..\lib\src\util\uni_release\util.lib;..\..\..\lib\src\thread\uni_release\thread.lib;..\..\..\3dParty\pcre\uni_release\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\..\lib\src\win\uni_release\win.lib;..\..\..\lib\src\ole\uni_release\ole.lib;..\..\..\lib\src\util\uni_release\util.lib;..\..\..\lib\src\java\uni_release\jre.lib;..\..\..\lib\src\thread\uni_release\thread.lib;..\..\..\3dParty\pcre\uni_release\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>dispdriver.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
@@ -190,6 +190,8 @@
     <ClCompile Include="i.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">CompileAsC</CompileAs>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">NotUsing</PrecompiledHeader>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">Default</CompileAs>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

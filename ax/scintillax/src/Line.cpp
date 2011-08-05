@@ -156,7 +156,7 @@ HRESULT __stdcall SciAxLine::LineText( long line, BSTR* text )
 		e = sci_->edit()->lineEndPos(line);
 		std::string l = "";
 		l = sci_->edit()->getTextRange(s,e);
-		*text = ::SysAllocString(mol::utf82wstring(l).c_str());
+		*text = ::SysAllocString(mol::fromUTF8(l).c_str());
 	}
 	return S_OK; 
 }

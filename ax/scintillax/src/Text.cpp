@@ -56,7 +56,7 @@ HRESULT __stdcall SciAxText::SetText( BSTR text)
 
 	std::string utf8 = "";
 	if ( text )
-		utf8 = mol::wstring2utf8(text);
+		utf8 = mol::toUTF8(text);
 	sci_->edit()->setText(utf8);
 	return S_OK; 
 }
@@ -75,7 +75,7 @@ HRESULT __stdcall SciAxText::GetText( BSTR* text)
 		char* c = new char[s+1];
 		sci_->edit()->getText(c,s+1);
 		c[s] = 0;
-		*text = ::SysAllocString(mol::utf82wstring(c).c_str());
+		*text = ::SysAllocString(mol::fromUTF8(c).c_str());
 	}
 	return S_OK; 
 }
@@ -107,7 +107,7 @@ HRESULT __stdcall SciAxText::Append( BSTR text)
 
 	if ( text )
 	{
-		sci_->edit()->appendText(mol::wstring2utf8(text));
+		sci_->edit()->appendText(mol::toUTF8(text));
 	}
 	return S_OK; 
 }
@@ -121,7 +121,7 @@ HRESULT __stdcall SciAxText::Insert( BSTR text, long pos )
 		return E_FAIL;
 
 	if ( text && sci_->edit() )
-		sci_->edit()->insertText(mol::wstring2utf8(text), pos );
+		sci_->edit()->insertText(mol::toUTF8(text), pos );
 	return S_OK; 
 }
 
@@ -194,7 +194,7 @@ HRESULT __stdcall SciAxText::GetTextRange(long start, long end, BSTR* range)
 
 	std::string s = sci_->edit()->getTextRange(start,end);
 	if ( range )
-		*range = ::SysAllocString(mol::utf82wstring(s).c_str());
+		*range = ::SysAllocString(mol::fromUTF8(s).c_str());
 	return S_OK;
 }
 
