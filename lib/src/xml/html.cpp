@@ -16,7 +16,7 @@ StackNode::StackNode( mol::Node* n )
 : node(n), type(n->nodeType()), tag(n->nodeName()),noCount(false)
 {
     if ( tag.size() > 0 )
-        mol::lowerString(tag);
+        tag = mol::str::tolower(tag);
 }
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -654,7 +654,7 @@ void HtmlDomParser::start_tag (const std::string& tag, const mol::html::VATT& at
 void HtmlDomParser::end_tag   (const std::string& tag)
 {
     std::string s = (tag.substr(1)); 
-    mol::lowerString(s);
+    s = mol::str::tolower(s);
 
     size_t size = stack_.size();
     if ( size > 0 )

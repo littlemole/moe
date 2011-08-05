@@ -27,15 +27,25 @@ public:
 
 } // end namespace threading
 
-template<class T, bool Synchronize = true, class P=mol::threading::ThreadStartPolicy, class PS=mol::threading::ThreadShutdownPolicy >
+template< class T, 
+		  bool  Synchronize = true, 
+          class P=mol::threading::ThreadStartPolicy, 
+		  class PS=mol::threading::ThreadShutdownPolicy 
+>
 class ThreadQueue 
 {
 friend class mol::Thread;
 public:
+
     ThreadQueue()
 		:go_(false),cancel_(false)
 	{
-		thread_ = threaded_fun_call( &mol::ThreadQueue<T,Synchronize,P,PS>::worker, this);
+		thread_ = mol::thread( 
+						boost::bind( 
+								&mol::ThreadQueue<T,Synchronize,P,PS>::worker, 
+								this
+							) 
+					);
 	}
 
     ~ThreadQueue()

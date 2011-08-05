@@ -20,15 +20,15 @@ namespace str {
 //////////////////////////////////////////////////////////////////////
 
 // string to lower/upper case routines. returns new strings
-std::string string2upper(std::string in );
-std::string string2lower(std::string in );
+std::string toupper(std::string in );
+std::string tolower(std::string in );
 
-std::wstring string2upper(std::wstring in );
-std::wstring string2lower(std::wstring in );
+std::wstring toupper(std::wstring in );
+std::wstring tolower(std::wstring in );
 
 // inline string to lower/upper case routines. modifies strings inplace
 
-
+/*
 class UpperCase 
 { 
 public: 
@@ -76,6 +76,11 @@ inline void upperString(std::wstring& str )
 {
 	std::transform( str.begin(), str.end(), str.begin(), ::mol::str::UpperCaseW() );
 }
+
+*/
+
+} // end namespace str
+
 
 inline int icmp( const std::string& a, const std::string& b )
 {

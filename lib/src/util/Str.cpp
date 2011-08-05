@@ -10,16 +10,21 @@ std::string unix2dos( const std::string& in )
 	std::ostringstream out;
 	if ( in[0] == '\n' )
 		out << "\r";
+
 	out << in[0];
+
 	size_t p = 1;
 	size_t len = in.size();
+
 	while( ( p < len ) )
 	{
 		if ( in[p] == '\n' )
+
 			if ( in[p-1] != '\r' )
 			{
 				out << "\r";
 			}
+
 		out << in[p];
 		p++;
 	}
@@ -31,15 +36,19 @@ std::string dos2unix( const std::string& in )
     std::ostringstream out;
     size_t p = 0;
     size_t len = in.size();
+
     while( ( p < len ) )
     {
         if ( in[p] == '\r' )
+
             if ( p+1 < len )
+
                 if ( in[p+1] == '\n' )
                 {
                     p++;
                     continue;
                 }
+
         out << in[p];
         p++;
     }
@@ -449,14 +458,12 @@ inline char x2c ( unsigned char* in)
 std::string URLencode(const std::string& in)
 {
     std::string out("");
-    const size_t nLen = in.size()+1;
+    const size_t nLen = in.size() + 1;
 
-    unsigned char* pInBuf =(unsigned char*)in.data();
+    unsigned char* pInBuf  =(unsigned char*)in.data();
     unsigned char* pOutBuf = NULL;
-//    unsigned char* b = 0;
-
     unsigned char* pOutTmp = NULL;
-    unsigned char* pInTmp = NULL;
+    unsigned char* pInTmp  = NULL;
 
     pOutBuf = new unsigned char[nLen  * 3 - 2];
 

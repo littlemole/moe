@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////////////
 // Function Signatures
 /////////////////////////////////////////////////////////////////////////////////////
-/*
+
 namespace mol {
 
 class THISCALL {};
@@ -551,8 +551,11 @@ const Signature<T,R,void,void,void,void,void,void>& signature( R ( T::*Function)
 }
 
 
-} // end namespace mol
+
+
 
 */
+
+} // end namespace mol
 
 #endif

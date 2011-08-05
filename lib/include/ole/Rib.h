@@ -289,7 +289,7 @@ public:
 	bool show(HWND wnd);
 	void dispose();
 
-	//void updateRecentDocs(int id);
+	void updateRecentDocs(int id);
 	void addRecentDoc( int id, const mol::string& path);
 
 	void registerCommand( HWND w,int rid, int cmd)
@@ -338,7 +338,6 @@ private :
 	HWND wnd_;
 
 	std::map<int,RibbonCommand*> handlers_;
-	std::vector<std::pair<mol::string,bool> > recentDocs_;
 
 };
 

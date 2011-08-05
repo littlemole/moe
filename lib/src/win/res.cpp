@@ -80,6 +80,162 @@ HBITMAP Bmp::load( int id )
 }
 /////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////////
+
+namespace win {
+
+MenuItemInfo::MenuItemInfo(const mol::string& txt, bool s, int i,HBITMAP b)
+: text_(txt), separator_(s), icon_(i), bitmap_(b)
+{}
+
+const mol::string& MenuItemInfo::text()
+{
+	return text_;
+}
+
+int MenuItemInfo::icon()
+{
+	return icon_;
+}
+
+bool MenuItemInfo::separator()
+{
+	return separator_;
+}
+
+HBITMAP MenuItemInfo::bitmap()
+{
+	return bitmap_;
+}
+
+LRESULT MenuItemInfo::OnMeasureItem( UINT, WPARAM wParam, LPARAM lParam)
+{
+	LPMEASUREITEMSTRUCT lpmis = (LPMEASUREITEMSTRUCT) lParam; 
+
+	if ( separator_ )
+	{
+		lpmis->itemWidth = 50; 
+		lpmis->itemHeight = 2; 
+		return 0;
+	}
+
+	SIZE s = {0,0};
+	mol::DC dc(::GetDesktopWindow());
+	::GetTextExtentPoint32(dc,text_.c_str(), (int)text_.size(),&s);
+    lpmis->itemWidth = s.cx+40; 
+    lpmis->itemHeight = s.cy+10; 
+	return 0;
+}
+
+LRESULT MenuItemInfo::OnDrawItem( UINT, WPARAM wParam, LPARAM lParam)
+{
+	LPDRAWITEMSTRUCT lpdis = (LPDRAWITEMSTRUCT) lParam; 
+ 
+	int wCheckX = GetSystemMetrics(SM_CXMENUCHECK); 
+    int nTextX = /*wCheckX +*/ lpdis->rcItem.left; 
+	int nTextY = lpdis->rcItem.top; 
+
+	COLORREF crBkgnd,crTxt;
+	crBkgnd,crTxt = 0;
+
+	if ( lpdis->itemState & ODS_GRAYED )
+	{
+		crTxt = ::SetTextColor( lpdis->hDC,::GetSysColor(COLOR_GRAYTEXT));
+	}
+
+    if (lpdis->itemState & ODS_SELECTED) 
+    { 
+        crBkgnd = SetBkColor(lpdis->hDC, ::GetSysColor(COLOR_BTNFACE)); 
+    } 
+	else
+	{
+		crBkgnd = SetBkColor(lpdis->hDC, ::GetSysColor(COLOR_WINDOW)); 
+	}
+
+	if ( separator_ )
+	{
+		::FillRect(lpdis->hDC,&lpdis->rcItem,(HBRUSH)::GetSysColorBrush(COLOR_BTNFACE));
+	}
+	else
+	{
+		// white bkg
+		HBRUSH brush = ::GetSysColorBrush(COLOR_WINDOW);
+		mol::Rect r2(lpdis->rcItem);
+		r2.left=r2.left+24;
+		::FillRect(lpdis->hDC,&r2,brush);
+
+		// text
+		::ExtTextOut(lpdis->hDC, nTextX + 30, nTextY+5,  ETO_OPAQUE, 
+				&lpdis->rcItem, text_.c_str(), (int) text_.size(), NULL); 
+
+
+		mol::Rect r(lpdis->rcItem);
+		r.right = r2.left;
+		::FillRect(lpdis->hDC,&r,::GetSysColorBrush(COLOR_BTNFACE));
+
+		if ( lpdis->itemState & ODS_SELECTED )
+			::FrameRect(lpdis->hDC,&lpdis->rcItem,(HBRUSH)::GetStockObject(GRAY_BRUSH));
+
+
+		if ( icon_ != -1 )
+		{
+			mol::DC mem = ::CreateCompatibleDC(lpdis->hDC);
+			HGDIOBJ def = mem.select( (HGDIOBJ)(HBITMAP)bitmap_);
+			int x = icon_*16;
+			COLORREF c = ::GetPixel(mem,0,0);
+			::TransparentBlt(lpdis->hDC,4,nTextY+5,16,16,mem,x,0,16,16,c);
+			mem.select(def);
+		}
+
+		UINT state = lpdis->itemState;
+		if ( state & ODS_CHECKED )
+		{
+			DrawCheckMark(lpdis->hDC,5,nTextY+5,RGB(64,64,128));
+		}
+	}
+    SetBkColor(lpdis->hDC, crBkgnd); 
+	if ( crTxt)
+		SetTextColor(lpdis->hDC, crTxt); 
+	return 0;
+}
+
+
+
+void MenuItemInfo::DrawCheckMark(HDC dc,int x,int y,COLORREF color)
+{
+	HPEN pen = ::CreatePen(PS_SOLID,0,color);
+	HGDIOBJ oldpen = ::SelectObject(dc, (HGDIOBJ) pen);
+
+	x += 6;
+	y += 6;
+
+	::MoveToEx( dc,x,y+2, 0);
+	::LineTo( dc,x,y+2);
+
+	::MoveToEx( dc,x+1,y+3, 0);
+	::LineTo( dc,x+1,y+6);
+	
+	::MoveToEx( dc,x+2,y+4, 0);
+	::LineTo( dc,x+2,y+7);
+	
+	::MoveToEx( dc,x+3,y+3, 0);
+	::LineTo( dc,x+3,y+6);
+	
+	::MoveToEx( dc,x+4,y+2, 0);
+	::LineTo( dc,x+4,y+5);
+	
+	::MoveToEx( dc,x+5,y+1, 0);
+	::LineTo( dc,x+5,y+4);
+
+	::MoveToEx( dc,x+6,y, 0);
+	::LineTo( dc,x+6,y+3);
+
+	::SelectObject(dc,oldpen);
+	::DeleteObject(pen);
+}
+
+}// end namespace win
+
 Menu::Menu()
 {
     atached_ = false;

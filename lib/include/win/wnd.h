@@ -211,29 +211,7 @@ protected:
 	mol::UIBuilder* uiBuilder_;
 };
 
-class MenuItemInfo
-{
-public:
-	MenuItemInfo(const mol::string& txt, bool s, int i,HBITMAP b);
 
-private:
-	mol::string text_;
-	int icon_;
-	bool separator_;
-	HBITMAP bitmap_;
-
-public:
-	const mol::string& text();
-	int icon();
-	bool separator();
-	HBITMAP bitmap();
-
-	LRESULT OnMeasureItem( UINT, WPARAM wParam, LPARAM lParam);
-	LRESULT OnDrawItem( UINT, WPARAM wParam, LPARAM lParam);
-
-private: 
-	void DrawCheckMark(HDC dc,int x,int y,COLORREF color);
-};
 
 
 } //end namespace win
@@ -335,132 +313,9 @@ class ChildFrame : public Frame<C,W,WS_BORDER|WS_CHILD|WS_VISIBLE|WS_CLIPSIBLING
 {
 };
 
-/////////////////////////////////////////////////////////////////
-// msg based callbacks
-/////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////
-// policies for msg callbacks - POST & SEND
-/////////////////////////////////////////////////////////////////
-
-namespace win {
-
-class FirePostMsgPubSubPolicy
-{
-public:
-    static LRESULT fireEvent( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam );
-};
-
-class FireSendMsgPubSubPolicy
-{
-public:
-    static LRESULT fireEvent( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam );
-};
-
-} // end namespace win
-
-/////////////////////////////////////////////////////////////////
-// template for msg based callbacks
-/////////////////////////////////////////////////////////////////
-
-template<UINT M, class T = mol::win::FirePostMsgPubSubPolicy>
-class MsgPubsub
-{
-public:
-
-    void subscribe(HWND hwnd, WPARAM wParam)
-    {
-		LOCK(mutex_);
-        subscribers_[hwnd] = wParam;
-    }
-
-    void unSubscribe(HWND hwnd)
-    {
-		LOCK(mutex_);
-        if ( subscribers_.count(hwnd) > 0 )
-            subscribers_.erase(hwnd);
-    }
-
-    void fire(LPARAM lParam = 0)
-    {
-		LOCK(mutex_);
-        for ( std::map<HWND,WPARAM>::iterator it = subscribers_.begin(); it != subscribers_.end(); 0 )
-        {
-            if ( ::IsWindow( (*it).first ) )
-            {
-                T::fireEvent( (*it).first, M, (*it).second, lParam );
-                it++;
-            }
-            else
-            {
-                it = subscribers_.erase(it);
-            }
-        }
-    }
-
-protected:
-	mol::Mutex mutex_;
-    std::map<HWND,WPARAM> subscribers_;
-};
-
-typedef MsgPubsub<WM_COMMAND>										postcmd_pubsub;
-typedef MsgPubsub<WM_COMMAND,mol::win::FireSendMsgPubSubPolicy>		sendcmd_pubsub;
-
-/////////////////////////////////////////////////////////////////
-// gui tread safe invokes
-/////////////////////////////////////////////////////////////////
-
-template<class T,class R>
-void invoke( T& t, R (T::*f)()  )
-{
-	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t) );
-	//::PostThreadMessage( mol::guithread(), WM_COMMAND,0, (LPARAM)call );
-	t.postMessage(WM_COMMAND,0,(LPARAM)call);
-}
-
-template<class T, class R, class P1>
-void invoke( T& t, R (T::*f)(P1), P1 p1 )
-{
-	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t,p1) );
-	//::PostThreadMessage( mol::guithread(), WM_COMMAND,0, (LPARAM)call );
-	t.postMessage(WM_COMMAND,0,(LPARAM)call);
-}
-
-template<class T, class R, class P1, class P2>
-void invoke( T& t, R (T::*f)(P1,P2), P1 p1, P2 p2  )
-{
-	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t,p1,p2) );
-	//::PostThreadMessage( mol::guithread(), WM_COMMAND,0, (LPARAM)call );
-	t.postMessage(WM_COMMAND,0,(LPARAM)call);
-}
-
-template<class T, class R, class P1, class P2, class P3>
-void invoke( T& t, R (T::*f)(P1,P2,P3), P1 p1, P2 p2, P3 p3 )
-{
-	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t,p1,p2,p3) );
-	//::PostThreadMessage( mol::guithread(), WM_COMMAND,0, (LPARAM)call );
-	t.postMessage(WM_COMMAND,0,(LPARAM)call);
-}
-
-template<class T, class R, class P1, class P2, class P3, class P4>
-void invoke( T& t, R (T::*f)(P1,P2,P3,P4), P1 p1, P2 p2, P3 p3, P4 p4  )
-{
-	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(f,&t,p1,p2,p3,p4) );
-	//::PostThreadMessage( mol::guithread(), WM_COMMAND,0, (LPARAM)call );
-	t.postMessage(WM_COMMAND,0,(LPARAM)call);
-}
-
-/*
-template<class T>
-void invoke_handler( T& t, LRESULT (T::*func)(UINT,WPARAM,LPARAM),UINT msg, WPARAM wParam, LPARAM lParam ) //mol::threading::Func<T,UINT,WPARAM,LPARAM,LRESULT> f, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	mol::fun::call* call = mol::fun::thread_prepare_call( boost::bind(func,&t,msg,wParam,lParam) );
-	t.postMessage(WM_COMMAND,0,(LPARAM)call);
-}
-*/
-/////////////////////////////////////////////////////////////////
 
 } // endnamespace mol
+
 
 
 #endif

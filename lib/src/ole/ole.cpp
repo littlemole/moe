@@ -118,7 +118,7 @@ std::string BSTR2ansi( BSTR bstr )
 
 BSTR ansi2BSTR( const std::string& s )
 {
-	std::wstring ws = mol::ansi2wstring(s);
+	std::wstring ws = mol::towstring(s);
 	BSTR bstr = ::SysAllocString(ws.c_str());
     return bstr;
 }

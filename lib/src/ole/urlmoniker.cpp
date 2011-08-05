@@ -153,13 +153,13 @@ HRESULT __stdcall  HttpUrl::OnDataAvailable( DWORD grfBSCF,DWORD dwSize, FORMATE
 
 HRESULT __stdcall HttpUrl::BeginningTransaction(LPCWSTR szURL,LPCWSTR szHeaders,DWORD dwReserved,LPWSTR *pszAdditionalHeaders)
 {
-    httpTransaction_ << mol::wstring2ansi(szHeaders) << std::endl;;
+    httpTransaction_ << mol::tostring(szHeaders) << std::endl;;
 
     if ( requestHeaders_.size() && (!fRedirect_) )
     {
         int len     = (int)requestHeaders_.size();
         wchar_t* wc = (wchar_t*)CoTaskMemAlloc( len*2+2);
-        std::wstring ws = mol::ansi2wstring(requestHeaders_);
+        std::wstring ws = mol::towstring(requestHeaders_);
         wcsncpy(wc,ws.c_str(),len);
         (wc[len]) = (wchar_t)0;
 
@@ -178,7 +178,7 @@ HRESULT __stdcall HttpUrl::BeginningTransaction(LPCWSTR szURL,LPCWSTR szHeaders,
 
 HRESULT __stdcall HttpUrl::OnResponse( DWORD dwResponseCode,LPCWSTR szResponseHeaders,LPCWSTR szRequestHeaders,LPWSTR *pszAdditionalRequestHeaders)
 {
-    responseHeaders_ = mol::wstring2ansi(szResponseHeaders);
+    responseHeaders_ = mol::tostring(szResponseHeaders);
     httpTransaction_ << std::endl << responseHeaders_ << std::endl;
     pszAdditionalRequestHeaders = NULL;
     return S_OK;
@@ -192,7 +192,7 @@ HRESULT __stdcall HttpUrl::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULO
     }
     if ( ulStatusCode == BINDSTATUS_MIMETYPEAVAILABLE  )
     {
-		mime_ = mol::wstring2ansi(szStatusText);
+		mime_ = mol::tostring(szStatusText);
     }
     return S_OK;
 }

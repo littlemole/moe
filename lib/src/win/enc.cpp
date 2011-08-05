@@ -157,7 +157,7 @@ int  FileEncoding::getEncoding(const std::string& c, const std::string& h )
 			HRESULT hr = multiLang_->GetCharsetInfo(bstr,&minfo);
 			if ( hr == S_OK )
 			{
-				enc_ = mol::wstring2ansi(minfo.wszCharset);
+				enc_ = mol::tostring(minfo.wszCharset);
 				codePage_ = minfo.uiInternetEncoding;
 				return minfo.uiInternetEncoding;
 			}
@@ -180,7 +180,7 @@ int  FileEncoding::getEncoding(const std::string& c, const std::string& h )
 		HRESULT hr = multiLang_->GetCharsetInfo(b,&minfo);
 		if ( hr == S_OK )
 		{
-			enc_ = mol::wstring2ansi(minfo.wszCharset);
+			enc_ = mol::tostring(minfo.wszCharset);
 			codePage_ = minfo.uiInternetEncoding;
 			return minfo.uiInternetEncoding;
 		}
@@ -203,7 +203,7 @@ int  FileEncoding::getEncoding(const std::string& c, const std::string& h )
 			HRESULT hr = multiLang_->GetCharsetInfo(b,&minfo);
 			if ( hr == S_OK )
 			{
-				enc_ = mol::wstring2ansi(minfo.wszCharset);
+				enc_ = mol::tostring(minfo.wszCharset);
 				codePage_ = minfo.uiInternetEncoding;
 				return minfo.uiInternetEncoding;
 			}
@@ -231,7 +231,7 @@ int  FileEncoding::getEncoding(const std::string& c, const std::string& h )
 		hr = multiLang_->GetCodePageInfo(dei.nCodePage,dei.nLangID,&minfo);
 		if ( hr == S_OK )
 		{
-			enc_ = mol::wstring2ansi(minfo.wszWebCharset);
+			enc_ = mol::tostring(minfo.wszWebCharset);
 		}
 		codePage_ = dei.nCodePage;
 		return dei.nCodePage;

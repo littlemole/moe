@@ -72,7 +72,7 @@ void DirMon::run()
 		// DIRMON got signalled;
         {
             LOCK(mutex_);
-            events.fire((LPARAM)this);
+            events.fire(this);
         }
 		::FindNextChangeNotification(handle_[DIRMON]);
 	}
@@ -94,7 +94,7 @@ void DirMon::resume()
 	{
         watch(path_);
 	}
-	events.fire((LPARAM)this);
+	events.fire(this);
 }
 
 void DirMon::cancel(const mol::string& path)

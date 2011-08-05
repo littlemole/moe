@@ -169,7 +169,7 @@ mol::string Path::serviceName(const mol::string& path)
 	p = removeBackSlash(p);
 	if ( isNetDrive(p) )
 	{		
-		mol::string localname(mol::str::string2upper(p));
+		mol::string localname(mol::str::toupper(p));
 		DWORD len = 0;
 		::WNetGetConnection(p.c_str(), 0, &len);
 		if ( len )
@@ -263,8 +263,8 @@ bool Path::isSubpath(const mol::string& path,const mol::string& p)
 		p2 = pathname(p2);
 	}
 
-	mol::string  ci1 = mol::str::string2lower( p1.c_str() );
-	mol::string  ci2 = mol::str::string2lower( p2.c_str() );
+	mol::string  ci1 = mol::str::tolower( p1.c_str() );
+	mol::string  ci2 = mol::str::tolower( p2.c_str() );
 
 	if ( ci1 == ci2 )
 		return false;

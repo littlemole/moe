@@ -1,19 +1,21 @@
-#ifndef _MOL_DEF_GUARD_DEFINE_EVENTS_DEF_GUARD_DEF_
-#define _MOL_DEF_GUARD_DEFINE_EVENTS_DEF_GUARD_DEF_
+#ifndef _MOL_DEF_GUARD_DEFINE_WIN_EVENTS_DEF_GUARD_DEF_
+#define _MOL_DEF_GUARD_DEFINE_WIN_EVENTS_DEF_GUARD_DEF_
 
 #include <vector>
 #include <list>
-
-#include "boost/function.hpp"
-#include "boost/bind.hpp"
-#include "boost/any.hpp"
-#include <boost/type_traits.hpp>
 #include <iostream>
 #include "util/signature.h"
 #include "util/util.h"
+#include "thread/sync.h"
+#include "win/wnd.h"
+
+#include "boost/bind.hpp"
+#include "boost/any.hpp"
 
 namespace mol {
-namespace events {
+namespace win {
+
+
 
 template<class P1,class P2, class P3, class P4>
 class EventHandler4
@@ -58,7 +60,19 @@ public:
 
 	virtual void fire( P1 p1, P2 p2, P3 p3, P4 p4 )
 	{
-		(t_->*fun_)(p1,p2,p3,p4);
+		auto a = mol::win::async_code_block( []( Function f, T* t, P1 p1, P2 p2, P3 p3, P4 p4) 
+			{
+				(t->*f)(p1,p2,p3,p4);
+			},
+			fun_,
+			t_,
+			p1,
+			p2,
+			p3,
+			p4
+		);
+
+		mol::win::run_on_gui_thread_impl( a );
 	}
 
 	Function fun_;
@@ -80,7 +94,18 @@ public:
 
 	virtual void fire( P1 p1, P2 p2, P3 p3, P4 p4 )
 	{
-		(*fun_)(p1,p2,p3,p4);
+		auto a = mol::win::async_code_block( []( Function f, P1 p1, P2 p2, P3 p3, P4 p4) 
+			{
+				(*f)(p1,p2,p3,p4);
+			},
+			fun_,
+			p1,
+			p2,
+			p3,
+			p4
+		);
+
+		mol::win::run_on_gui_thread_impl( a );
 	}
 
 	Function fun_;
@@ -98,9 +123,25 @@ public:
 		: fun_(f), t_ (t)
 	{}
 
+	virtual ~EventHandler()
+	{
+		int x = 1;
+	}
+
 	virtual void fire( P1 p1, P2 p2, P3 p3 )
 	{
-		(t_->*fun_)(p1,p2,p3);
+		auto a = mol::win::async_code_block( []( Function f, T* t, P1 p1, P2 p2, P3 p3) 
+			{
+				(t->*f)(p1,p2,p3);
+			},
+			fun_,
+			t_,
+			p1,
+			p2,
+			p3
+		);
+
+		mol::win::run_on_gui_thread_impl( a );
 	}
 
 	Function fun_;
@@ -122,7 +163,17 @@ public:
 
 	virtual void fire( P1 p1, P2 p2, P3 p3 )
 	{
-		(*fun_)(p1,p2,p3);
+		auto a = mol::win::async_code_block( []( Function f, P1 p1, P2 p2, P3 p3) 
+			{
+				(*f)(p1,p2,p3);
+			},
+			fun_,
+			p1,
+			p2,
+			p3
+		);
+
+		mol::win::run_on_gui_thread_impl( a );
 	}
 
 	Function fun_;
@@ -142,7 +193,17 @@ public:
 
 	virtual void fire( P1 p1, P2 p2 )
 	{
-		(t_->*fun_)(p1,p2);
+		auto a = mol::win::async_code_block( []( Function f, T* t, P1 p1, P2 p2) 
+			{
+				(t->*f)(p1,p2);
+			},
+			fun_,
+			t_,
+			p1,
+			p2
+		);
+
+		mol::win::run_on_gui_thread_impl( a );
 	}
 
 	Function fun_;
@@ -163,7 +224,16 @@ public:
 
 	virtual void fire( P1 p1, P2 p2 )
 	{
-		(t_->*fun_)(p1,p2);
+		auto a = mol::win::async_code_block( []( Function f, P1 p1, P2 p2) 
+			{
+				(f)(p1,p2);
+			},
+			fun_,
+			p1,
+			p2
+		);
+
+		mol::win::run_on_gui_thread_impl( a );
 	}
 
 	Function fun_;
@@ -183,7 +253,16 @@ public:
 
 	virtual void fire( P1 p1 )
 	{
-		(t_->*fun_)(p1);
+		auto a = mol::win::async_code_block( []( Function f, T* t, P1 p1) 
+			{
+				(t->*f)(p1);
+			},
+			fun_,
+			t_,
+			p1
+		);
+
+		mol::win::run_on_gui_thread_impl( a );
 	}
 
 	Function fun_;
@@ -204,7 +283,15 @@ public:
 
 	virtual void fire( P1 p1 )
 	{
-		(*fun_)(p1);
+		auto a = mol::win::async_code_block( []( Function f, T* t, P1 p1) 
+			{
+				(*f)(p1);
+			},
+			fun_,
+			p1
+		);
+
+		mol::win::run_on_gui_thread_impl( a );
 	}
 
 	Function fun_;
@@ -225,7 +312,15 @@ public:
 
 	virtual void fire(  )
 	{
-		(t_->*fun_)();
+		auto a = mol::win::async_code_block( []( Function f, T* t) 
+			{
+				(t->*f)();
+			},
+			fun_,
+			t_
+		);
+
+		mol::win::run_on_gui_thread_impl( a );
 	}
 
 	Function fun_;
@@ -247,7 +342,9 @@ public:
 
 	virtual void fire(  )
 	{
-		(*fun_)();
+		auto a = mol::win::async_code_block( fun_ );
+
+		mol::win::run_on_gui_thread_impl( a );
 	}
 
 	Function fun_;
@@ -317,8 +414,19 @@ EventHandler<R,void>* event_handler( R ( *f)() )
 	return new EventHandler<R,void>(f);
 }
 
+class EventBase
+{
+public:
+
+	virtual ~EventBase() {}
+
+protected:
+
+	mol::CriticalSection cs_;
+};
+
 template<class P1 = void, class P2 = void, class P3 = void, class P4 = void>
-class Event
+class Event : public EventBase
 {
 public:
 	Event()
@@ -331,6 +439,7 @@ public:
 
 	Event& operator+=( EventHandler4<P1,P2,P3,P4>* handler )
 	{
+		LOCK(cs_);
 		events.push_back( handler );
 		return *this;
 	}
@@ -338,18 +447,21 @@ public:
 	Event& operator=( EventHandler4<P1,P2,P3,P4>* handler )
 	{
 		clear();
+		LOCK(cs_);
 		events.push_back( handler );
 		return *this;
 	}
 
 	void clear()
 	{
+		LOCK(cs_);
 		mol::purge(events);
 		events.clear();
 	}
 
 	void fire( P1 p1, P2 p2, P3 p3, P4 p4)
 	{
+		LOCK(cs_);
 		for ( std::list<EventHandler4<P1,P2,P3,P4>*>::iterator it = events.begin(); it != events.end(); it++ )
 		{
 			EventHandler4<P1,P2,P3,P4>* e = (*it);
@@ -361,7 +473,7 @@ public:
 };
 
 template<class P1, class P2, class P3>
-class Event<P1,P2,P3>
+class Event<P1,P2,P3> : public EventBase
 {
 public:
 	Event()
@@ -374,6 +486,7 @@ public:
 
 	Event& operator+=( EventHandler3<P1,P2,P3>* handler )
 	{
+		LOCK(cs_);
 		events.push_back( handler );
 		return *this;
 	}
@@ -381,18 +494,21 @@ public:
 	Event& operator=( EventHandler3<P1,P2,P3>* handler )
 	{
 		clear();
+		LOCK(cs_);
 		events.push_back( handler );
 		return *this;
 	}
 
 	void clear()
 	{
+		LOCK(cs_);
 		mol::purge(events);
 		events.clear();
 	}
 
 	void fire( P1 p1, P2 p2, P3 p3)
 	{
+		LOCK(cs_);
 		for ( std::list<EventHandler3<P1,P2,P3>*>::iterator it = events.begin(); it != events.end(); it++ )
 		{
 			EventHandler3<P1,P2,P3>* e = (*it);
@@ -405,7 +521,7 @@ public:
 
 
 template<class P1, class P2>
-class Event<P1,P2>
+class Event<P1,P2> : public EventBase
 {
 public:
 	Event()
@@ -418,6 +534,7 @@ public:
 
 	Event& operator+=( EventHandler2<P1,P2>* handler )
 	{
+		LOCK(cs_);
 		events.push_back( handler );
 		return *this;
 	}
@@ -425,18 +542,21 @@ public:
 	Event& operator=( EventHandler2<P1,P2>* handler )
 	{
 		clear();
+		LOCK(cs_);
 		events.push_back( handler );
 		return *this;
 	}
 
 	void clear()
 	{
+		LOCK(cs_);
 		mol::purge(events);
 		events.clear();
 	}
 
 	void fire( P1 p1, P2 p2)
 	{
+		LOCK(cs_);
 		for ( std::list<EventHandler2<P1,P2>*>::iterator it = events.begin(); it != events.end(); it++ )
 		{
 			EventHandler2<P1,P2>* e = (*it);
@@ -448,7 +568,7 @@ public:
 };
 
 template<class P1>
-class Event<P1,void,void,void>
+class Event<P1,void,void,void> : public EventBase
 {
 public:
 	Event()
@@ -461,6 +581,7 @@ public:
 
 	Event& operator+=( EventHandler1<P1>* handler )
 	{
+		LOCK(cs_);
 		events.push_back( handler );
 		return *this;
 	}
@@ -468,18 +589,21 @@ public:
 	Event& operator=( EventHandler1<P1>* handler )
 	{
 		clear();
+		LOCK(cs_);
 		events.push_back( handler );
 		return *this;
 	}
 
 	void clear()
 	{
+		LOCK(cs_);
 		mol::purge(events);
 		events.clear();
 	}
 
 	void fire( P1 p1)
 	{
+		LOCK(cs_);
 		for ( std::list<EventHandler1<P1>*>::iterator 
 				it  = events.begin(); 
 				it != events.end(); 
@@ -494,7 +618,7 @@ public:
 
 
 template<>
-class Event<void,void,void,void>
+class Event<void,void,void,void> : public EventBase
 {
 public:
 	Event()
@@ -507,6 +631,7 @@ public:
 
 	Event& operator+=( EventHandler0* handler )
 	{
+		LOCK(cs_);
 		events.push_back( handler );
 		return *this;
 	}
@@ -514,18 +639,21 @@ public:
 	Event& operator=( EventHandler0* handler )
 	{
 		clear();
+		LOCK(cs_);
 		events.push_back( handler );
 		return *this;
 	}
 
 	void clear()
 	{
+		LOCK(cs_);
 		mol::purge(events);
 		events.clear();
 	}
 
 	void fire( )
 	{
+		LOCK(cs_);
 		for ( std::list<EventHandler0*>::iterator 
 				it  = events.begin(); 
 				it != events.end(); 
@@ -539,37 +667,7 @@ public:
 };
 
 
-/*
-
-nice try :(
-
-template<class F>
-class event
-{
-public:
-};
-
-
-template<class R,class P1,class P2,class P3,class P4>
-class event<R(P1,P2,P3,P4)> : public Event<P1,P2,P3,P4> {};
-
-
-template<class R,class P1,class P2,class P3>
-class event<R(P1,P2,P3)> : public Event<P1,P2,P3> {};
-
-
-template<class R,class P1,class P2>
-class event<R(P1,P2)> : public Event<P1,P2> {};
-
-template<class R,class P1>
-class event<R(P1)> : public Event<P1> {};
-
-template<class R>
-class event<R()> : public Event<> {};
-
-*/
-
-} // end namespace events
+} // end namespace win
 } // end namespace mol
 
 #endif

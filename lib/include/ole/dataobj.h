@@ -7,6 +7,7 @@
 #include "ole/punk.h"
 #include "ole/storage.h"
 #include <vector>
+#include "thread/events.h"
 
 namespace mol {
 
@@ -65,7 +66,14 @@ class ShellDataObj : public com_obj<DataObj>
 {
 public:
 	ShellDataObj( std::vector<mol::string>& v, bool cut = false );
-    ShellDataObj( HWND hwnd, int cmd, std::vector<mol::string>& v, bool cut = false );
+
+	template<class E>
+    ShellDataObj( E* e, std::vector<mol::string>& v, bool cut = false )
+		: v_(v), cut_(cut)
+	{
+	//    dropEffectEvent_.subscribe(hwnd, cmd);
+		dropEffectEvent_ += e;
+	}
 	virtual ~ShellDataObj();
 
 	HRESULT virtual __stdcall GetData( FORMATETC * pFormatetc, STGMEDIUM * pmedium );
@@ -84,7 +92,9 @@ protected:
 	format_etc_dropeffect			feDe_;
 	format_etc_pref_dropeffect		fepDe_;
 
-	mol::sendcmd_pubsub		        dropEffectEvent_;
+	//mol::sendcmd_pubsub		        dropEffectEvent_;
+
+	mol::events::Event<IDataObject*>			dropEffectEvent_;
 };
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +128,7 @@ protected:
 	std::map<CLIPFORMAT,HGLOBAL>		v_;
 	bool								cut_;
 
-	mol::sendcmd_pubsub					dropEffectEvent_;
+	//mol::sendcmd_pubsub					dropEffectEvent_;
 	format_etc_dropeffect				feDe_;
 };
 

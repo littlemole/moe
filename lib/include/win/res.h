@@ -58,6 +58,36 @@ private:
 // Menues
 //////////////////////////////////////////////////////////////////////
 
+namespace win {
+
+class MenuItemInfo
+{
+public:
+	MenuItemInfo(const mol::string& txt, bool s, int i,HBITMAP b);
+
+private:
+	mol::string text_;
+	int icon_;
+	bool separator_;
+	HBITMAP bitmap_;
+
+public:
+	const mol::string& text();
+	int icon();
+	bool separator();
+	HBITMAP bitmap();
+
+	LRESULT OnMeasureItem( UINT, WPARAM wParam, LPARAM lParam);
+	LRESULT OnDrawItem( UINT, WPARAM wParam, LPARAM lParam);
+
+private: 
+	void DrawCheckMark(HDC dc,int x,int y,COLORREF color);
+};
+
+
+} // end namespace win
+
+
 class Menu
 {
 public:

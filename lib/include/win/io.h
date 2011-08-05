@@ -6,6 +6,7 @@
 #include "util/uni.h"
 #include "util/istr.h"
 #include "win/shell.h"
+#include "thread/events.h"
 
 namespace mol {
 namespace io {
@@ -27,7 +28,9 @@ public:
 	void cancel();
     void resume();
 
-	mol::postcmd_pubsub    events;
+	//mol::postcmd_pubsub    events;
+
+	mol::events::Event<DirMon*> events;
 
 	const mol::string& path() { return path_; }
 

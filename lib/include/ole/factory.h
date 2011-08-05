@@ -283,7 +283,7 @@ class local_server : public mol::Application<T>
 public:
 	local_server()
 	{
-		idThread_ = ::GetCurrentThreadId();
+		//idThread_ = ::GetCurrentThreadId();
 	}
 
 	virtual ~local_server(void)
@@ -383,7 +383,7 @@ public:
 		lockCount_--;
 		ODBGS1("local_server::UnLock()",lockCount_);
 		if ( lockCount_ == 0 )
-			::PostThreadMessage( idThread_, WM_QUIT, 0, 0 );
+			::PostThreadMessage( guithread_, WM_QUIT, 0, 0 );
 //			::PostQuitMessage(0);
 	}
 
@@ -391,7 +391,7 @@ public:
 
 protected:
 	std::list<DWORD>										registeredObjects_;
-	DWORD idThread_;
+	//DWORD idThread_;
 
 	template<class I>
 	I* getActiveInstance( CLSID clsid )

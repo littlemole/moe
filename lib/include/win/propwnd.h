@@ -485,7 +485,7 @@ public:
 		{
 			if ( t == values_[i].first )
 			{
-				return i;
+				return (int)i;
 			}
 		}
 		return -1;
@@ -546,7 +546,7 @@ public:
 
 	virtual int cnt()
 	{
-		return props_.size() + 1;
+		return (int)props_.size() + 1;
 	}
 
 	virtual int markerWidth()

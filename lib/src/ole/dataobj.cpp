@@ -2,6 +2,7 @@
 #include "ole/dataobj.h"
 #include "ole/storage.h"
 #include "ole/enum.h"
+#include <ShlObj.h>
 
 namespace mol {
 namespace ole {
@@ -85,7 +86,8 @@ DataTransferObj::DataTransferObj(bool cut )
 DataTransferObj::DataTransferObj(  HWND hwnd, int cmd ,bool cut)
 :  cut_(cut)
 {
-    dropEffectEvent_.subscribe(hwnd, cmd);
+    //dropEffectEvent_.subscribe(hwnd, cmd);
+
 }
 
 
@@ -190,7 +192,7 @@ HRESULT __stdcall DataTransferObj::SetData(  FORMATETC * pFormatetc,  STGMEDIUM 
 
 	if ( pFormatetc->cfFormat  == feDe_.format() )
 	{
-        dropEffectEvent_.fire((LPARAM)this);
+       // dropEffectEvent_.fire((LPARAM)this);
 
 		if ( fRelease )
 			::ReleaseStgMedium(pmedium);
@@ -229,5 +231,194 @@ HRESULT __stdcall DataTransferObj::SetData(  FORMATETC * pFormatetc,  STGMEDIUM 
 	return S_OK;
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+
+
+ShellDataObj::ShellDataObj( std::vector<mol::string>& v ,bool cut)
+: v_(v), cut_(cut)
+{
+}
+
+/*
+ShellDataObj::ShellDataObj(  HWND hwnd, int cmd, std::vector<mol::string>& v ,bool cut)
+: v_(v), cut_(cut)
+{
+//    dropEffectEvent_.subscribe(hwnd, cmd);
+	dropEffectEvent_ += ::event_handler();
+}
+*/
+
+
+
+//////////////////////////////////////////////////////////////////////////////////
+
+ShellDataObj::~ShellDataObj()
+{
+	ODBGS("destroyed ShellDataObject::~DataObject");
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall ShellDataObj::GetData( FORMATETC * pFormatetc, STGMEDIUM * pmedium )
+{
+	ODBGS("ShellDataObject::GetData");
+	if ( !pFormatetc || !pmedium )
+		return E_INVALIDARG;
+
+	if ( pFormatetc->cfFormat == fepDe_.format() )
+	{
+		ODBGS("ShellDataObject::GetData FormatEtcPrefDropEffect");
+
+		mol::global glob;
+		glob.alloc(sizeof(DWORD*),GHND | GMEM_SHARE);
+		if ( cut_)
+			mol::global::set<DWORD>(glob,DROPEFFECT_MOVE);
+		else
+			mol::global::set<DWORD>(glob,DROPEFFECT_COPY);
+
+		pmedium->hGlobal = glob;
+		pmedium->tymed = TYMED_HGLOBAL;
+		pmedium->pUnkForRelease = NULL;
+
+		glob.detach();
+		return S_OK;
+	}
+
+	if ( pFormatetc->cfFormat == CF_TEXT )
+	{
+		ODBGS("ShellDataObject::GetData CF_TEXT");
+
+		std::string s;
+		for ( unsigned int i = 0; i < v_.size(); i++ )
+		{
+			s += mol::tostring(v_[i]);
+			s += "\r\n";
+		}
+		mol::global glob;
+		glob.alloc( (int)(s.size()+1),GHND | GMEM_SHARE);
+		char* c = glob.lock();
+		memcpy(c,s.c_str(),(s.size()+1)*sizeof(char));
+		glob.unLock();
+
+		pmedium->hGlobal		= glob;
+		pmedium->tymed			= TYMED_HGLOBAL;
+		pmedium->pUnkForRelease = NULL;
+
+		glob.detach();
+		return S_OK;
+	}
+
+	if ( pFormatetc->cfFormat == CF_UNICODETEXT )
+	{
+		ODBGS("ShellDataObject::GetData CF_UNICODETEXT");
+
+		std::wstring s;
+		for ( unsigned int i = 0; i < v_.size(); i++ )
+		{
+			s += mol::towstring(v_[i]);
+			s += L"\r\n";
+		}
+		mol::global glob;
+		glob.alloc( (int)(s.size()+1) * sizeof(wchar_t),GHND | GMEM_SHARE);
+		char* c = glob.lock();
+		memcpy(c,s.c_str(),(s.size()+1)*sizeof(wchar_t));
+		glob.unLock();
+
+		pmedium->hGlobal		= glob;
+		pmedium->tymed			= TYMED_HGLOBAL;
+		pmedium->pUnkForRelease = NULL;
+
+		glob.detach();
+		return S_OK;
+	}
+	if ( pFormatetc->cfFormat == CF_HDROP )
+	{
+		ODBGS("ShellDataObject::GetData CF_HDROP");
+
+		std::string s;
+		int c = 0;
+		for ( unsigned int i = 0; i < v_.size(); i++ )
+		{
+			s += mol::tostring(v_[i]);
+			s += '\0';
+			c += (int)s.size()+1;
+		}
+
+		mol::global glob;
+		glob.alloc(c+1+sizeof(DROPFILES),GHND | GMEM_SHARE);
+		DROPFILES* drop = (DROPFILES*)glob.lock();
+		drop->pFiles = sizeof(DROPFILES);
+		drop->fWide = FALSE;
+		memcpy( ((char*)drop+sizeof(DROPFILES)), s.c_str(), c+1);
+		glob.unLock();
+
+		pmedium->hGlobal = glob;
+		pmedium->tymed = TYMED_HGLOBAL;
+		pmedium->pUnkForRelease = NULL;
+
+		glob.detach();
+		return S_OK;
+	}
+	return DV_E_FORMATETC ;
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall ShellDataObj::QueryGetData( FORMATETC * pFormatetc )
+{
+	ODBGS("ShellDataObject::QueryGetData");
+
+	if ( !pFormatetc )
+		return E_INVALIDARG;
+
+	if ( pFormatetc->cfFormat == CF_TEXT )
+		return NO_ERROR;
+	if ( pFormatetc->cfFormat == CF_UNICODETEXT )
+		return NO_ERROR;
+	if ( pFormatetc->cfFormat == CF_HDROP )
+		return NO_ERROR;
+	if ( pFormatetc->cfFormat  == feDe_.format() )
+		return NO_ERROR;
+	if ( pFormatetc->cfFormat  == fepDe_.format() )
+		return NO_ERROR;
+
+	return S_FALSE;
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall ShellDataObj::EnumFormatEtc(  DWORD dwDirection,  IEnumFORMATETC ** ppenumFormatetc )
+{
+	ODBGS("ShellDataObject::EnumFormatEtc");
+
+	com_obj<enum_format>* efi = new com_obj<enum_format>;
+
+	efi->add(feDrop_);
+	efi->add(fepDe_);
+	efi->add(feText_);
+	efi->add(feUnicodeText_);
+	efi->add(fepDe_);
+
+	efi->QueryInterface(IID_IEnumFORMATETC,(void**)ppenumFormatetc);
+	return S_OK;
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall ShellDataObj::SetData(  FORMATETC * pFormatetc,  STGMEDIUM * pmedium,  BOOL fRelease )
+{
+	ODBGS("ShellDataObject::SetData");
+
+	if ( pFormatetc->cfFormat  == feDe_.format() )
+	{
+        dropEffectEvent_.fire(this);
+		//return S_OK;
+	}
+	if ( fRelease )
+		::ReleaseStgMedium(pmedium);
+	return S_OK;
+}
 
 } // end namespace mol
