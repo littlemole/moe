@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema attributeFormDefault="qualified" 
+<xs:schema attributeFormDefault="unqualified" 
            elementFormDefault="qualified" 
            xmlns:xs="http://www.w3.org/2001/XMLSchema" 
            xmlns:mol="urn:mol-codegen" targetNamespace="urn:mol-codegen">
@@ -445,7 +445,7 @@
         <xs:element name="msgs" type="mol:msgs" />
         <xs:element name="resources" type="mol:resources" />
       </xs:choice>
-      <xs:attribute name="class" type="xs:string" use="required" />
+      <xs:attribute name="class" type="xs:string"  />
     </xs:complexType>
   </xs:element>
 </xs:schema>
