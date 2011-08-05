@@ -104,8 +104,9 @@ mol::string AppBase::CreateAppPath(const mol::string& dir)
 	if ( fa != FILE_ATTRIBUTE_DIRECTORY ) 
 	{
 		BOOL r = ::CreateDirectory(path.c_str(),NULL);
-		//if ( !::CreateDirectory(path.c_str(),NULL) )
-          //; // throw mol::X("could not create app dir"); // might "fail but succeed" thanks to Vista Virtualization!
+		// might "fail but succeed" thanks to Vista Virtualization!
+		// if ( !::CreateDirectory(path.c_str(),NULL) )
+        // // throw mol::X("could not create app dir"); 
 	}
     return path;
 }
@@ -150,17 +151,17 @@ mol::string AppBase::getAppPath()
 //! basic windows msg handling
 void LoopBase::doMsg(MSG& msg, AppBase& app)
 {
-	/*
+	
 	if ( msg.hwnd == NULL )
 	{
 		if ( (msg.message == WM_COMMAND) && (msg.wParam == 0) )
 		{
-			boost::shared_ptr<mol::fun::call> call( (mol::fun::call*) (msg.lParam) );
-			(*call)();
+			boost::shared_ptr<mol::fun::task> task( (mol::fun::task*) (msg.lParam) );
+			(*task)();
 			return;
 		}
 	}
-	*/
+	
 
 	if ( dialogs().isDialogMessage(msg) )
 	  return;

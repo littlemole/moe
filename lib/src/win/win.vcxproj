@@ -154,6 +154,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)win.lib</OutputFile>
@@ -245,6 +246,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="app.cpp" />
+    <ClCompile Include="async.cpp" />
     <ClCompile Include="coctrl.cpp" />
     <ClCompile Include="codlg.cpp" />
     <ClCompile Include="core.cpp" />
@@ -253,6 +255,7 @@
     <ClCompile Include="dib.cpp" />
     <ClCompile Include="dlg.cpp" />
     <ClCompile Include="enc.cpp" />
+    <ClCompile Include="events.cpp" />
     <ClCompile Include="file.cpp" />
     <ClCompile Include="folder.cpp" />
     <ClCompile Include="folderbrowser.cpp" />
@@ -276,6 +279,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\win\app.h" />
+    <ClInclude Include="..\..\include\win\async.h" />
     <ClInclude Include="..\..\include\win\coctrl.h" />
     <ClInclude Include="..\..\include\win\codlg.h" />
     <ClInclude Include="..\..\include\win\core.h" />
@@ -284,6 +288,7 @@
     <ClInclude Include="..\..\include\win\dib.h" />
     <ClInclude Include="..\..\include\win\dlg.h" />
     <ClInclude Include="..\..\include\win\enc.h" />
+    <ClInclude Include="..\..\include\win\events.h" />
     <ClInclude Include="..\..\include\win\file.h" />
     <ClInclude Include="..\..\include\win\folder.h" />
     <ClInclude Include="..\..\include\win\gdiplus.h" />

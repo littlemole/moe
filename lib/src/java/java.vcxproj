@@ -84,9 +84,11 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">E:\java\jdk\include\win32;E:\java\jdk\include;D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">C:\java\jdk\include\win32;C:\java\jdk\include;$(IncludePath)</IncludePath>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">jre</TargetName>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">E:\java\jdk\include\win32;E:\java\jdk\include;$(IncludePath);$(VCInstallDir)atlmfc\include</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">E:\java\jdk\include\win32;E:\java\jdk\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
     <ClCompile>

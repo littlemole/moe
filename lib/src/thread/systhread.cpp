@@ -138,10 +138,10 @@ void Thread::terminate(int id)
 // encapsulated in mol::Call c
 //int Thread::start( mol::threading::CallBase* c )
 
-int Thread::start( mol::fun::call* c )
+int Thread::start( mol::fun::task* c )
 {
 	start_.reset();
-	call_ = c;
+	task_ = c;
 	
 #ifdef WIN32
 
@@ -199,8 +199,8 @@ THREAD_RET_VAL MOL_THREAD_CALL_TYPE Thread::threadFunction(void* t)
 	}
 
 	thread->start_.signal();
-	ThreadCallType* call = (ThreadCallType*)(thread->call_);
-	(*call)();
+	ThreadCallType* task = (ThreadCallType*)(thread->task_);
+	(*task)();
 
 	mol::Sleep(1); //cygwin will deadlock w/o this
 	{
@@ -211,7 +211,7 @@ THREAD_RET_VAL MOL_THREAD_CALL_TYPE Thread::threadFunction(void* t)
 
 	thread->done_.signal();
 	delete thread;
-	delete call;
+	delete task;
 
     return (THREAD_RET_VAL) 0;
 }
@@ -223,7 +223,7 @@ THREAD_RET_VAL MOL_THREAD_CALL_TYPE Thread::threadFunction(void* t)
 void Sleep(int delay)
 {
 #ifdef WIN32
-	::Sleep(delay);
+	::SleepEx(delay,TRUE);
 #else
 	timeval timeout = { (delay/1000) , ((delay*1000)%1000000) };
 	select( 0, (fd_set*)NULL,(fd_set*)NULL,(fd_set*)NULL,&timeout);

@@ -897,6 +897,7 @@ mol::Rect AxClientWndBase:: handleDoLayout(mol::Rect r, mol::LayoutMgr* layout)
 
 	// if we have an embedded obj
 	this->SetObjectSize(r);
+	this->updateObject();
 
 	// do a relayout
 	if ( layout )
@@ -1049,16 +1050,10 @@ bool AxClientWndBase::instantiateObject( REFCLSID iid , bool create )
 LRESULT AxClientWndBase::wndProcAxImpl( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
-	{		
-		case WM_NCACTIVATE :
-		{
-			this->redrawOleFrameLater();
-			return this->callAxDefWndProc( hWnd, message,wParam,lParam);
-		}
+	{				
 		case WM_MDIACTIVATE:
 		{
 
-			// delay this or OLE embedded WORD will complaint in some cases
 			activateLater(wParam,lParam);
 			this->callAxDefWndProc( hWnd, message,wParam,lParam);
 
@@ -1202,7 +1197,7 @@ LRESULT AxClientWndBase::OnMDIActivateLater(WPARAM unused, HWND activated)
 	}	
 
 	// redraw oleframe
-	this->redrawOleFrame();
+	this->redrawOleFrameLater();
 
 	return 0;
 }

@@ -28,7 +28,7 @@ public:
     Thread ( );
 	~Thread();
 
-	int start( mol::fun::call* obj);
+	int start( mol::fun::task* obj);
 
 	static unsigned int self();
 	static bool stop(int id);
@@ -40,7 +40,7 @@ public:
 
 	static int threads() { LOCK(cs_map_); return (int)map().size(); }
 
-	static inline int call( mol::fun::call* fc) 
+	static inline int call( mol::fun::task* fc) 
 	{
 		return (new mol::Thread)->start(fc);
 	}
@@ -50,7 +50,7 @@ protected:
     void  detach();
     void  kill();
 
-	typedef mol::fun::call ThreadCallType;
+	typedef mol::fun::task ThreadCallType;
 
 	typedef THREAD_RET_VAL 
 		(MOL_THREAD_CALL_TYPE *threadFunctionPointer)(void* t);
@@ -62,7 +62,7 @@ protected:
 	mol::Event                   start_;
 	mol::Event                   stop_;
 	mol::Event                   done_;
-	mol::fun::call*				 call_;
+	mol::fun::task*				 task_;
 
 	typedef std::map<int,mol::Thread*>   MapType;
 

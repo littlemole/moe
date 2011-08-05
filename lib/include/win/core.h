@@ -216,7 +216,7 @@ public:
         kill();
     }
 
-	void set(int delay, mol::fun::call* c )
+	void set(int delay, mol::fun::task* c )
     {
         kill();
         id_ = ::SetTimer( 0,0, delay, TimerProc );
@@ -228,7 +228,7 @@ public:
     {
         kill();
         id_ = ::SetTimer( 0,0, delay, TimerProc );
-		map()[id_] = mol::fun::thread_prepare_call( t );
+		map()[id_] = mol::fun::make_task( t );
     }
 
 
@@ -250,7 +250,7 @@ protected:
     {
         if ( map().count(idEvent) )
         {
-			mol::fun::call* p  = map()[idEvent];
+			mol::fun::task* p  = map()[idEvent];
             if ( p )
 			{
                 (*p)();
@@ -259,9 +259,9 @@ protected:
         }
     }
 
-    static std::map<UINT_PTR,mol::fun::call*>& map()
+    static std::map<UINT_PTR,mol::fun::task*>& map()
     {
-        static std::map<UINT_PTR, mol::fun::call*> theMap;
+        static std::map<UINT_PTR, mol::fun::task*> theMap;
         return theMap;
     }
 };

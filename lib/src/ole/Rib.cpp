@@ -1,10 +1,48 @@
 #include "ole/Rib.h"
+#include "ole/com.h"
 #include "win/shell.h"
 #include <uiribbonpropertyhelpers.h>
+#include <Shobjidl.h>
+#include <ObjectArray.h>
+#include <initguid.h>
+
+DEFINE_GUID(IID_molIApplicationDocumentLists,0x3c594f9fL,0x9f30, 0x47a1, 0x97, 0x9a, 0xc9,0xe8,0x3d,0x3d,0x0a,0x06);
 
 
 namespace mol
 {
+
+namespace ole
+{
+
+typedef enum MOLAPPDOCLISTTYPE
+{	
+	ADLT_RECENT	    = 0,
+	ADLT_FREQUENT	= ( ADLT_RECENT + 1 ) 
+} 	
+MOLAPPDOCLISTTYPE;
+
+
+class molIApplicationDocumentLists : public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE SetAppID( LPCWSTR pszAppID) = 0;        
+    virtual HRESULT STDMETHODCALLTYPE GetList( MOLAPPDOCLISTTYPE listtype, UINT cItemsDesired, REFIID riid, void **ppv) = 0;        
+};
+
+} // end namespace ole
+
+template <> 
+class uuid_info<mol::ole::molIApplicationDocumentLists>
+{
+ public:
+   static REFIID uuidof; 
+   typedef mol::ole::molIApplicationDocumentLists uuid_type;
+};
+
+REFIID uuid_info<mol::ole::molIApplicationDocumentLists>::uuidof = IID_molIApplicationDocumentLists;
+
+
 
 namespace Ribbon
 {
@@ -703,15 +741,48 @@ void Ribbon::setDefaultColor()
 	setColor(ForegroundColor,BackgroundColor);
 }
 
-/*
+
+
 void Ribbon::updateRecentDocs(int id)
 {
 	if (!ribbon )
 		return;
 
-	mol::Ribbon::handler(id)->items(recentDocs_);
+	mol::punk<mol::ole::molIApplicationDocumentLists> appDocLists;
+	HRESULT hr = appDocLists.createObject(CLSID_ApplicationDocumentLists);
+	if ( hr != S_OK )
+		return;
+
+	mol::punk<IObjectArray> objects; 
+	hr = appDocLists->GetList( mol::ole::ADLT_RECENT, 10, IID_IObjectArray,(void**)&objects);
+
+	if ( hr != S_OK || !objects )
+		return;
+
+	unsigned int cnt = 0;
+	hr = objects->GetCount(&cnt);
+	for ( unsigned int i = 0; i < cnt; i++) 
+	{
+		mol::punk<IUnknown> unk;
+		hr = objects->GetAt(i,IID_IUnknown,(void**)(&unk));
+		if ( hr != S_OK ) 
+			break;
+
+		mol::punk<IShellItem> shit(unk);
+		if ( !shit )
+			continue;
+
+		wchar_t* buf = 0;
+		hr = shit->GetDisplayName(SIGDN_FILESYSPATH,&buf);
+		if ( hr != S_OK )
+			continue;
+
+		mol::string path(buf);
+		::CoTaskMemFree(buf);
+		mol::Ribbon::ribbon()->addRecentDoc(id,path);
+	}
 }
-*/
+
 void Ribbon::addRecentDoc( int id, const mol::string& path)
 {
 	if (!ribbon )

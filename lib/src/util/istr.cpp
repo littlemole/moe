@@ -3,27 +3,28 @@
 
 namespace mol {
 namespace str {
-std::string string2upper(std::string in )
+
+std::string toupper(std::string in )
 {
 	for ( unsigned int i = 0; i < in.size(); i++ )
 	{
-		in[i] = toupper(in[i]);
+		in[i] = ::toupper(in[i]);
 	}
 	return in;
 }
 
-std::string string2lower(std::string in )
+std::string tolower(std::string in )
 {
 	for ( unsigned int i = 0; i < in.size(); i++ )
 	{
-		in[i] = tolower(in[i]);
+		in[i] = ::tolower(in[i]);
 	}
 	return in;
 }
 
 
 
-std::wstring string2upper(std::wstring in )
+std::wstring toupper(std::wstring in )
 {
 	for ( unsigned int i = 0; i < in.size(); i++ )
 	{
@@ -32,7 +33,7 @@ std::wstring string2upper(std::wstring in )
 	return in;
 }
 
-std::wstring string2lower(std::wstring in )
+std::wstring tolower(std::wstring in )
 {
 	for ( unsigned int i = 0; i < in.size(); i++ )
 	{

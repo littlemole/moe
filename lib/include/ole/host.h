@@ -3,6 +3,7 @@
 
 #pragma once
 #include "ole/container.h"
+#include "win/async.h"
 #include "win/layout.h"
 #include "win/shell.h"
 #include "win/Taskbar.h"
@@ -420,7 +421,7 @@ private:
 	// delay the ax mdi activation handling until base mdi processing is done
 	virtual void activateLater( WPARAM wParam, LPARAM lParam)
 	{
-		mol::invoke<mol::AxClientWnd<C,W> >( *(mol::AxClientWnd<C,W>*)this, &mol::AxClientWnd<C,W>::OnMDIActivateLater, wParam, (HWND)lParam );
+		mol::dispatch<AxClientWnd<C,W> >( *((AxClientWnd<C,W>*)this), &AxClientWnd<C,W>::OnMDIActivateLater, wParam, (HWND)lParam );
 	}
 
 	// layout helper, resizes the embedded ax obj
@@ -447,25 +448,13 @@ protected:
 		f->OnLayout(0,0,0);
 		f->redraw();
 
-		if ( this->getMidiState() )
-		{
-			mol::MdiFrame* frame = mol::wndFromHWND<mol::MdiFrame>(getParent());
-			if ( frame )
-			{
-				HWND active = frame->getActive();
-				if ( active && ::IsWindow(active) )
-				{
-					::PostMessage( active, WM_MDIACTIVATE, 0, (LPARAM)active );
-				}
-			}
-		}
 	}
 
 	// hack to redraw after all OLE window messages involved in
 	// re-activation are eaten before
 	virtual void redrawOleFrameLater()
 	{
-		mol::invoke( *this, &AxClientWnd<C,W>::redrawOleFrame );
+		mol::dispatch<AxClientWnd<C,W> >( *((AxClientWnd<C,W>*)this), &AxClientWnd<C,W>::redrawOleFrame );
 	}
 
 

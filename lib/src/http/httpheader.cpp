@@ -197,13 +197,13 @@ std::string  HttpHeaders::getHeaders()
 std::string HttpHeaders::getHeader( const std::string& str )
 {
     std::string tmp = trim(str);
-	tmp = mol::str::string2lower(str);
+	tmp = mol::str::tolower(str);
     for ( HttpHiterator hit = begin(); hit != end(); hit++ )
     {
-        std::string s = mol::str::string2lower(hit->first);
+        std::string s = mol::str::tolower(hit->first);
         if ( s == tmp )
         {
-            s = mol::str::string2lower(hit->second);
+            s = mol::str::tolower(hit->second);
             return s;
         }
     }
@@ -213,10 +213,10 @@ std::string HttpHeaders::getHeader( const std::string& str )
 HttpHiterator HttpHeaders::iterator( const std::string& str )
 {
     std::string tmp = trim(str);
-	tmp = mol::str::string2lower(str);
+	tmp = mol::str::tolower(str);
     for ( HttpHiterator hit = begin(); hit != end(); hit++ )
     {
-		std::string s = mol::str::string2lower(hit->first);
+		std::string s = mol::str::tolower(hit->first);
         if ( s == tmp )
         {
 			return hit;
@@ -329,22 +329,22 @@ void HttpHeaders::contentType(const std::string& c)
 
 std::string HttpHeaders::contentEncoding()
 {
-	return mol::str::string2lower(getHeader("Content-Encoding"));
+	return mol::str::tolower(getHeader("Content-Encoding"));
 }
 
 std::string HttpHeaders::transferEncoding()
 {
-	return mol::str::string2lower(getHeader("Transfer-Encoding"));
+	return mol::str::tolower(getHeader("Transfer-Encoding"));
 }
 
 std::string HttpHeaders::contentType()
 {
-	return mol::str::string2lower(getHeader("Content-Type"));
+	return mol::str::tolower(getHeader("Content-Type"));
 }
 
 std::string HttpHeaders::connection()
 {
-	return mol::str::string2lower(getHeader("Connection"));
+	return mol::str::tolower(getHeader("Connection"));
 }
 
 bool HttpHeaders::wantShutDown()

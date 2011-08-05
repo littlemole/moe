@@ -206,7 +206,7 @@ void HtmlWndBase::getSourceImpl(std::string& src)
 	std::string cs = mol::tostring(charsetImpl());
 	if ( cs == "utf-8" )
 	{
-		src = mol::utf82ansi(src);
+		src = mol::tostring(mol::fromUTF8(src));
 	}
 	else if ( cs == "unicode" )
 	{
@@ -217,7 +217,7 @@ void HtmlWndBase::getSourceImpl(std::string& src)
 		{
 			w = (wchar_t*)(src.data()+2);
 		}    		
-		std::string tmp = mol::wstring2ansi(std::wstring(w,(src.size()-2)/2));		
+		std::string tmp = mol::tostring(std::wstring(w,(src.size()-2)/2));		
 		src = tmp;
 	}
 }

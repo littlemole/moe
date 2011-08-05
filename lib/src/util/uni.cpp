@@ -15,6 +15,86 @@ std::ostream&  cerr  = std::cerr;
 #endif
 
 
+#ifdef _WIN32
+
+
+
+std::string wstring2ansi(const std::wstring& in)
+{
+    int len = ::WideCharToMultiByte(CP_ACP,0,in.c_str(),(int)in.size(),0,0,0,0);
+    char* buf = new char[len];
+    int n = ::WideCharToMultiByte(CP_ACP,0,in.c_str(),(int)in.size(),buf,len,0,0);
+    std::string ret(buf,len);
+    delete[] buf;
+    return ret;
+}
+
+std::wstring ansi2wstring( const std::string& in )
+{
+	int len = ::MultiByteToWideChar( CP_ACP, 0, in.c_str(), (int)in.size(), 0, 0 );
+	wchar_t* buf = new wchar_t[len];
+	::MultiByteToWideChar( CP_ACP, 0, in.c_str(), (int)in.size(), buf, len );
+	std::wstring out(buf,len);
+	delete[] buf;
+	return out;
+}
+
+std::string wstring2utf8( const std::wstring& in )
+{
+	int len = ::WideCharToMultiByte( CP_UTF8, 0, in.c_str(), (int)in.size(), 0, 0,0,0 );
+	char* buf = new char[len];
+	int r = ::WideCharToMultiByte( CP_UTF8, 0, in.c_str(),(int)in.size(), buf, len,0,0 );
+	std::string out(buf,len);
+	delete[] buf;
+	return out;
+}
+
+std::string ansi2utf8( const std::string& in )
+{
+	std::wstring ws = ansi2wstring(in);
+	return wstring2utf8(ws);
+}
+
+std::wstring utf82wstring( const std::string& in )
+{
+	int len = ::MultiByteToWideChar( CP_UTF8, 0, in.c_str(), (int)in.size(), 0, 0 );
+	wchar_t* buf = new wchar_t[len];
+	int r = ::MultiByteToWideChar( CP_UTF8, 0, in.c_str(), (int)in.size(), buf, len );
+	std::wstring out(buf,len);
+	delete[] buf;
+	return out;
+}
+
+std::string utf82ansi( const std::string& in )
+{
+	std::wstring ws = utf82wstring(in);
+	return wstring2ansi(ws);
+}
+
+#endif
+
+std::string toUTF8( const std::string& in)
+{
+	std::wstring ws = ansi2wstring(in);
+	return wstring2utf8(ws);
+}
+
+std::string toUTF8( const std::wstring& str)
+{
+	return wstring2utf8(str);
+}
+
+std::wstring fromUTF8(const std::string& in)
+{
+	int len = ::MultiByteToWideChar( CP_UTF8, 0, in.c_str(), (int)in.size(), 0, 0 );
+	wchar_t* buf = new wchar_t[len];
+	int r = ::MultiByteToWideChar( CP_UTF8, 0, in.c_str(), (int)in.size(), buf, len );
+	std::wstring out(buf,len);
+	delete[] buf;
+	return out;
+}
+
+
 std::string  tostring( const std::string& str)
 {
 	return str;
@@ -105,59 +185,5 @@ mol::string  toString( const wchar_t* wstr)
 #endif
 }
 
-#ifdef _WIN32
-
-std::string wstring2ansi(const std::wstring& in)
-{
-    int len = ::WideCharToMultiByte(CP_ACP,0,in.c_str(),(int)in.size(),0,0,0,0);
-    char* buf = new char[len];
-    int n = ::WideCharToMultiByte(CP_ACP,0,in.c_str(),(int)in.size(),buf,len,0,0);
-    std::string ret(buf,len);
-    delete[] buf;
-    return ret;
-}
-
-std::wstring ansi2wstring( const std::string& in )
-{
-	int len = ::MultiByteToWideChar( CP_ACP, 0, in.c_str(), (int)in.size(), 0, 0 );
-	wchar_t* buf = new wchar_t[len];
-	::MultiByteToWideChar( CP_ACP, 0, in.c_str(), (int)in.size(), buf, len );
-	std::wstring out(buf,len);
-	delete[] buf;
-	return out;
-}
-std::string ansi2utf8( const std::string& in )
-{
-	std::wstring ws = ansi2wstring(in);
-	return wstring2utf8(ws);
-}
-
-std::string wstring2utf8( const std::wstring& in )
-{
-	int len = ::WideCharToMultiByte( CP_UTF8, 0, in.c_str(), (int)in.size(), 0, 0,0,0 );
-	char* buf = new char[len];
-	int r = ::WideCharToMultiByte( CP_UTF8, 0, in.c_str(),(int)in.size(), buf, len,0,0 );
-	std::string out(buf,len);
-	delete[] buf;
-	return out;
-}
-
-std::string utf82ansi( const std::string& in )
-{
-	std::wstring ws = utf82wstring(in);
-	return wstring2ansi(ws);
-}
-
-std::wstring utf82wstring( const std::string& in )
-{
-	int len = ::MultiByteToWideChar( CP_UTF8, 0, in.c_str(), (int)in.size(), 0, 0 );
-	wchar_t* buf = new wchar_t[len];
-	int r = ::MultiByteToWideChar( CP_UTF8, 0, in.c_str(), (int)in.size(), buf, len );
-	std::wstring out(buf,len);
-	delete[] buf;
-	return out;
-}
-
-#endif
 
 } //end namespace mol

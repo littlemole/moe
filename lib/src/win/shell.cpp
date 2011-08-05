@@ -304,6 +304,11 @@ int ShellFolder::getIconIndex( mol::io::Shit& it, DWORD flag )
 		attributes = FILE_ATTRIBUTE_NORMAL;
     }
 	else
+	if( path.substr(0,2) == _T("::") )
+	{
+		attributes = FILE_ATTRIBUTE_NORMAL;
+	}
+	else
     {
 		//p = _T("C:\\");
 		attributes = FILE_ATTRIBUTE_DEVICE;
@@ -317,6 +322,11 @@ int ShellFolder::getIconIndex( mol::io::Shit& it, DWORD flag )
 	DWORD_PTR ret = ::SHGetFileInfo( p.c_str(),attributes,&shInfo,sizeof(shInfo), //SHGFI_ICON|SHGFI_SMALLICON);
 		SHGFI_USEFILEATTRIBUTES|SHGFI_SYSICONINDEX|SHGFI_TYPENAME|flag);//SHGFI_SYSICONINDEX|SHGFI_TYPENAME|flag);//|SHGFI_TYPENAME)SHGFI_PIDL
 
+	if (  (shInfo.hIcon == 0) ) // (ret != 0) ) //&&)
+	{
+		return getIconIndexReal(it,flag);
+	}
+
 	::DestroyIcon(shInfo.hIcon);
     iconMap_[p] = shInfo.iIcon;
 	return shInfo.iIcon;
@@ -329,8 +339,17 @@ int ShellFolder::getIconIndexReal( mol::io::Shit& it, DWORD flag )
 	SHFILEINFO  shInfo;
     ::ZeroMemory(&shInfo,sizeof(SHFILEINFO));
 
-	DWORD_PTR ret = ::SHGetFileInfo( p.c_str(),0,&shInfo,sizeof(shInfo), //SHGFI_ICON|SHGFI_SMALLICON);
-		SHGFI_ICON|SHGFI_SMALLICON|SHGFI_SYSICONINDEX|SHGFI_TYPENAME|flag);//SHGFI_SYSICONINDEX|SHGFI_TYPENAME|flag);//|SHGFI_TYPENAME)SHGFI_PIDL
+	if ( path.substr(0,2) == _T("::") )
+	{
+		DWORD_PTR ret = ::SHGetFileInfo( (LPCWSTR)(LPITEMIDLIST)(*it),0,&shInfo,sizeof(shInfo), SHGFI_SYSICONINDEX|SHGFI_TYPENAME|SHGFI_PIDL );
+	}
+	else 
+	{
+		DWORD_PTR ret = ::SHGetFileInfo( p.c_str(),0,&shInfo,sizeof(shInfo), SHGFI_SYSICONINDEX|SHGFI_SMALLICON|SHGFI_TYPENAME);
+		//SHGFI_ICON|SHGFI_SMALLICON|SHGFI_SYSICONINDEX|SHGFI_TYPENAME|flag);//SHGFI_SYSICONINDEX|SHGFI_TYPENAME|flag);//|SHGFI_TYPENAME)SHGFI_PIDL
+	}
+	
+
 
 	::DestroyIcon(shInfo.hIcon);
     iconMap_[p] = shInfo.iIcon;
