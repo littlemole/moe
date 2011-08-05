@@ -72,6 +72,10 @@
     <cmd id="IDM_EDIT_28BYTES" title="28 Bytes" />
     <cmd id="IDM_EDIT_32BYTES" title="32 Bytes" />
 
+    <cmd id="IDM_NAVIGATE" title="Navigate"  />
+    <cmd id="IDM_NAVIGATE_NEXT" title="Next" ribbon="RibbonGoNext" />
+    <cmd id="IDM_NAVIGATE_BACK" title="Back" ribbon="RibbonGoBack" />
+    
     <cmd id="IDM_TOOLS" title="Tools"  />
     <cmd id="IDM_MODE" title="Settings"/>
     <cmd id="IDM_MODE_EOL" title="Mode" ribbon="RibbonModeGroup" />

@@ -11,7 +11,7 @@
 #include "moe_i.c"
 #include "xmlui.h"
 #include "moe_dispid.h"
-#include "win/gdiplus.h"
+
 
 #define min std::min
 #define max std::max
@@ -22,8 +22,20 @@
 int MoeLoop::operator() ( mol::win::AppBase& app )
 {
   MSG msg;
-  while( ::GetMessage(&msg,0,0,0) )
+
+  while(true)
   {
+  	    DWORD r = ::MsgWaitForMultipleObjectsEx(0,0,INFINITE,QS_ALLINPUT,MWMO_INPUTAVAILABLE|MWMO_ALERTABLE);
+		if ( r == WAIT_IO_COMPLETION ) 
+		{
+			continue;
+		}
+
+		if (!::GetMessage(&msg,0,0,0)) 
+		{
+			break;
+        }
+
 		// check ioleactive obj accel here
 		if ( 
 				moe() && 
@@ -35,7 +47,9 @@ int MoeLoop::operator() ( mol::win::AppBase& app )
 		if (!::TranslateMDISysAccel( mol::win::mdiClient(), &msg) )
 			doMsg( msg, app );
   }
+
   return (int)msg.wParam ;
+
 }
 
 
@@ -75,8 +89,7 @@ int MoeApp::run(const mol::string& cmdline)
 	return local_server<MoeLoop>::run(cmdline);
 }
 
-// embedded moe currenlty uses default impl
-
+// embedded moe 
 int MoeApp::runEmbedded(const mol::string& cmdline)
 {
 	::load_codegen_metadata();
@@ -235,7 +248,7 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 	if (!m )
 		return;
 
-	::CoAllowSetForegroundWindow(moe,0);
+	//::CoAllowSetForegroundWindow(moe,0);
 
 	mol::RegExp rgxp("(\"([^\"]*)\")|([^ ]+)");
 	while ( rgxp.nextMatch( cl ) )
@@ -357,7 +370,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	ODBGS("moe startup");
 	ODBGS(lpCmdLine);
 
-	mol::GdiPlusUser gdip_;
+	//mol::GdiPlusUser gdip_;
 
 	int result = 0;
 	try {

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <!-- the product (net) to install -->
+  <Product Id="D2D1615A-1EF2-40DD-B8AE-61EC3CBB1847"
+           Name="net" Language="1033" Version="1.0.0.0"
+           Manufacturer="mole"
+           UpgradeCode="79023DF4-65C3-46EC-B9DD-D7DC042C546E">
+
+
+    <?if $(var.BuildArch) = "x86" ?>
+    <?define PF = ProgramFilesFolder ?>
+    <?define Win64 = "no" ?>
+    <?elseif $(var.BuildArch) = "x64" ?>
+    <?define PF = ProgramFiles64Folder ?>
+    <?define Win64 = "yes" ?>
+    <?endif?>
+
+    <!-- msi version and packaging-->
+    <Package InstallerVersion="200" Compressed="yes" />
+
+    <!-- msi media: use single embedded cabinet archive-->
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+    <!-- package icon -->
+    <Icon Id="icon.ico" SourceFile=".\moe\net.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
+
+    <!-- COM register custom actions-->
+    <Property Id='REGSVR32'>regsvr32.exe</Property>
+
+    <CustomAction Id="NETEXE" Property='NETEXE' Value='[INSTALLLOCATION]\moe\net.exe' />
+
+    <!-- register/unregister moe executable -->
+    <CustomAction Id="EXEREG_net"  Property="NETEXE" ExeCommand="/REGSERVER" Execute="deferred" Impersonate="no"  />
+    <CustomAction Id="EXEUNREG_net" Property="NETEXE" ExeCommand="/UNREGSERVER" Execute="deferred" Impersonate="no" Return="ignore"/>
+
+    <!-- installation directory structure -->
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+
+      <!-- Binaries -->
+      <Directory Id="$(var.PF)">
+        <Directory Id="INSTALLLOCATION" Name="mol">
+
+          <Component Id="moe" Guid="{CD5E5A8F-4340-47DF-9968-2FE26D5A1095}"
+            SharedDllRefCount="no" KeyPath="no" NeverOverwrite="yes" Permanent="no" Transitive="no"
+            Win64="$(var.Win64)" Location="either">
+            <CreateFolder/> 
+          </Component>
+          
+        </Directory>
+      </Directory>
+
+    </Directory>
+
+    <!-- Features -->
+
+    <Feature AllowAdvertise='no' InstallDefault='local' Absent='disallow'
+             Id='NetMain' Title='net' Description='moe .NET application binaries'
+             Level='1' ConfigurableDirectory="INSTALLLOCATION">
+      <ComponentRef Id="moe" />
+      <ComponentGroupRef Id='NetCompGroup' />
+
+    </Feature>
+
+
+
+    <!-- fire custom actions -->
+
+    <InstallExecuteSequence>
+
+      <!-- set path to moe.exe -->
+      <Custom Action='NETEXE' Before='InstallFiles' />
+
+
+      <!-- register COM objects  -->
+      <Custom Action='EXEREG_net' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
+
+      <!-- unregister COM objects  -->
+      <Custom Action='EXEUNREG_net' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+
+    </InstallExecuteSequence>
+
+    <!-- WIX UI overrides-->
+    <WixVariable Id="WixUILicenseRtf" Value=".\res\License.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value=".\res\moeinstall.jpg" />
+    <WixVariable Id="WixUIDialogBmp" Value=".\res\front.jpg" />
+
+    <!-- WIX UI support -->
+    <UIRef Id="WixUI_ErrorProgressText" />
+    <UIRef Id="WixUI_MondoNoLicense"/>
+    
+  </Product>
+</Wix>

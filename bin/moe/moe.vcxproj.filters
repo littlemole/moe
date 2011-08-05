@@ -51,6 +51,9 @@
     <ClCompile Include="src\ThreadScript.cpp">
       <Filter>widget</Filter>
     </ClCompile>
+    <ClCompile Include="src\mdichild.cpp">
+      <Filter>mdi</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\app.h" />
@@ -112,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="include\resource.h">
       <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\mdichild.h">
+      <Filter>mdi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

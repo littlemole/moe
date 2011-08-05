@@ -2,6 +2,7 @@
 #define MOL_MOE_DEF_GUARD_
 
 #include "win/msgloop.h"
+#include "win/gdiplus.h"
 #include "moe.h"
 
 
@@ -33,6 +34,7 @@ private:
 	// windows libraries
     mol::ole_init       oi_;
     mol::comm_ctrl_init cci_;
+	mol::GdiPlusUser    gdip_;
 
 	void init_extensions_if();
 	bool enableExtensions_;

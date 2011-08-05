@@ -174,8 +174,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <BrowseInformation>
-      </BrowseInformation>
+      <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
@@ -196,6 +195,9 @@
     <Manifest>
       <AdditionalManifestFiles>resources/moe.exe.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
     </Manifest>
+    <ResourceCompile>
+      <PreprocessorDefinitions>TLB=uni_debug\moe.tlb;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">
     <Midl>
@@ -344,6 +346,7 @@
     <ClCompile Include="src\hex.cpp" />
     <ClCompile Include="src\html.cpp" />
     <ClCompile Include="src\Img.cpp" />
+    <ClCompile Include="src\mdichild.cpp" />
     <ClCompile Include="src\moe.cpp" />
     <ClCompile Include="src\MoeBar.cpp" />
     <ClCompile Include="src\ole.cpp" />
@@ -372,6 +375,7 @@
     <ClInclude Include="include\hex.h" />
     <ClInclude Include="include\html.h" />
     <ClInclude Include="include\Img.h" />
+    <ClInclude Include="include\mdichild.h" />
     <ClInclude Include="include\moe.h" />
     <ClInclude Include="include\ThreadScript.h" />
     <ClInclude Include="moe_dispid.h" />
@@ -435,8 +439,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">code generation phase</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">cscript.exe ../../cg/js/make.js "uni_release"
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">cscript.exe ../../cg/js/make.js "uni_debug"
-</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">cscript.exe "../../cg/js/make.js" "TLB"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;xml/ribbon.xml;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;xml/ribbon.xml;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">xmlrc.cpp;xmlrib.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;ribbonres.h;ribbonres.rc;ribbon.bml;%(Outputs)</Outputs>

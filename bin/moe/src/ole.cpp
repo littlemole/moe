@@ -95,11 +95,6 @@ OleChild::Instance* OleChild::CreateInstance( const mol::string& p, CLSID& clsid
 
 void OleChild::OnDestroy()
 {
-
-	mol::variant v(filename_);
-	docs()->Remove(v);	
-
-
 }
 
 
@@ -111,10 +106,12 @@ void OleChild::OnPaint()
 
 void OleChild::OnNcDestroy()
 {
-		
+	// excel specific: don't do this in OnDestroy or garbage layout
+	// when excel doc is last document
+	mol::variant v(filename_);
+	docs()->Remove(v);	
 
-
-		IMoeDocument* doc = (IMoeDocument*)this;	
+	IMoeDocument* doc = (IMoeDocument*)this;	
 	::CoDisconnectObject( doc,0);
 	doc->Release();
 }
@@ -132,6 +129,10 @@ void OleChild::OnMDIActivate(WPARAM unused, HWND activated)
 	{
 		mol::Ribbon::ribbon()->mode(0);
 		mol::Ribbon::ribbon()->minimize();
+	}
+	else 
+	{
+		//moe()->IOleInPlaceFrame_SetBorderSpace(0);
 	}
 
 	//BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );

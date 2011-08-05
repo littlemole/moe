@@ -179,6 +179,9 @@ public:
 
 private:
 	
+	// load conf
+	void loadPersistUIstate();
+
 	// initial Ribbon UI setup
 	void initRibbon(IStorage* store);
 

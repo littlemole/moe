@@ -15,6 +15,8 @@
 #include "shared.h"
 #include "Ribbonres.h"
 #include "win/taskbar.h"
+#include "ole/enum.h"
+	
 
 using namespace mol::io;
 using namespace mol;
@@ -51,7 +53,7 @@ MoeWnd::MoeWnd()
 	fullScreen_			= VARIANT_FALSE;
 
 	// don't erase window background, avoid flicker
-    eraseBackground_ = 0;
+    eraseBackground_    = 0;
 
 	// tell MDI impl where mdi child ids start (enable window menu)
     setFirstChildId(ID_FIRST_CHILD_WND);	
@@ -60,6 +62,7 @@ MoeWnd::MoeWnd()
 	icon.load(IDI_MOE);
 	wndClass().setIcon(icon);		
 
+	// sub objects
 	moeScript  = new MoeScript::Instance;
 	moeDialogs = new MoeDialogs::Instance;
 	moeView    = new MoeView::Instance;
@@ -93,6 +96,8 @@ MoeWnd::Instance* MoeWnd::CreateInstance()
 
 	Instance* moe = new Instance;
 	moe->AddRef();
+
+	::CoAllowSetForegroundWindow((IMoe*)moe,0);
 
 	build_ui<MoeWnd>(moe);
 
@@ -142,6 +147,8 @@ HRESULT EnableBlurBehind(HWND hwnd)
     return hr;
 }
 */
+
+
 /////////////////////////////////////////////////////////////////////
 
 void MoeWnd::OnCreate()
@@ -150,7 +157,7 @@ void MoeWnd::OnCreate()
 	// initialize critical GUI parts now
 
 	ODBGS("MoeWnd::OnCreate()");
-	getClientRect(clientRect_);
+	//getClientRect(clientRect_);
 
 	// register us as active instance
 	HRESULT hr = ::RegisterActiveObject( (IMoe*)this,CLSID_Application,ACTIVEOBJECT_STRONG,&activeObj_);
@@ -166,15 +173,22 @@ void MoeWnd::OnCreate()
 	// update the menu
 	::DrawMenuBar(*this);
 
+	// pre-init the debug dialog (hidden)
 	debugDlg()->doModeless( IDD_DIALOG_DEBUG, *this );
 	debugDlg()->show(SW_HIDE);
 
+	// initialize win7 taskbar
 	mol::taskbar()->init(*this);
 
-	// ------------------  //
+    // update ribbon
+	mol::Ribbon::ribbon()->updateRecentDocs(RibbonMRUItems);
 
-    // load persist UI state
+	// load UI state
+	loadPersistUIstate();
+}
 
+void MoeWnd::loadPersistUIstate()
+{
 	// determine ui.xmo filepath or use fallback
 	mol::string p(appPath() + _T("\\ui.xmo"));
 	if ( !mol::Path::exists(p) )
@@ -192,10 +206,7 @@ void MoeWnd::OnCreate()
 	// load moe config data from storage
 	mol::punk<IPersistStorage> ps;
 	((IMoe*)this)->QueryInterface( IID_IPersistStorage, (void**)&ps);
-	ps->Load( store );
-
-	
-
+	HRESULT hr = ps->Load( store );
 }
 
 
@@ -242,17 +253,7 @@ void MoeWnd::OnDestroy()
 }
 
 void MoeWnd::OnNcDestroy()
-{/*
-	Ribbon::ribbon()->tearDown();
-
-	treeWndSink()->UnAdvise(treeWnd()->oleObject);
-	::CoDisconnectObject(treeWnd()->oleObject,0);
-	scriptlet()->close();
-	::RevokeDragDrop(*this);
-
-	if ( activeObj_ )
-		::RevokeActiveObject(activeObj_,0);
-	*/
+{
 	::CoDisconnectObject( (IMoeDocumentCollection*)(docs()),0);
 	::CoDisconnectObject(((IMoe*)this),0);
 	((IMoe*)this)->Release();

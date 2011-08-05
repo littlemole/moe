@@ -1,3 +1,5 @@
+// generated file - do not edit //
+
 
 #include "stdafx.h"
 #include "win/res.h"
@@ -91,6 +93,10 @@ void init_ribbon_ui(  mol::win::WndProc* wnd )
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonDebugPause, IDM_EDIT_DEBUG_STOP );
   
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonDebugQuit, IDM_EDIT_DEBUG_QUIT );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonGoNext, IDM_NAVIGATE_NEXT );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonGoBack, IDM_NAVIGATE_BACK );
   
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonModeGroup, IDM_MODE_EOL );
   

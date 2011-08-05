@@ -119,6 +119,9 @@
         <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_STEPOUT" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_STOP" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_QUIT" />
+
+        <msg  handler="OnDispatch" cmd="IDM_NAVIGATE_NEXT" />
+        <msg  handler="OnDispatch" cmd="IDM_NAVIGATE_BACK" />
      
         <msg  handler="OnDispatch" cmd="IDM_MODE_EXECUTEFORM" />
         <msg  handler="OnDispatch" cmd="IDM_MODE_SHOW_LINE_NUMBERS" />
@@ -283,8 +286,8 @@
       <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
 
       <!-- menu -->
-      <msg  handler="back" cmd="IDM_EDIT_UNDO" />
-      <msg  handler="forward" cmd="IDM_EDIT_REDO" />
+      <msg  handler="back" cmd="IDM_NAVIGATE_BACK" />
+      <msg  handler="forward" cmd="IDM_NAVIGATE_NEXT" />
       <msg  handler="stop" cmd="IDM_EDIT_STOP" />
       <msg  handler="reload" cmd="IDM_EDIT_UPDATE" />
       <msg  handler="options" cmd="IDM_MODE_SETTINGS" />

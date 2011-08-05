@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="INSTALLLOCATION">
+            <Directory Id="dirD024566BCA42D8BA29DEC8C793A7EB92" Name="moe" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="NetCompGroup">
+            <Component Id="cmp268905818713CA1C5FA1A48E8E7B5A82" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{646CEDDD-AFE7-482A-B6CA-2BCA45467E1C}">
+                <File Id="filE68E8B6EA0DE9360E00950CFFB3259F2" KeyPath="yes" Source="$(var.SourceDir)\net.ico" />
+            </Component>
+            <Component Id="cmp2E8C704E56DDE6913D68AC369B2B43D6" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{0AC71CCC-0051-46B4-ABD4-DE6D4BC3D659}">
+                <File Id="filE0128D303B52ABB4E6817067271917CA" KeyPath="yes" Source="$(var.SourceDir)\net.exe" />
+            </Component>
+            <Component Id="cmp90625598B9D7D2472F65D1959541B5F7" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{B9843051-27A8-4626-9089-AC062677A0BA}">
+                <File Id="filCDE0AF3312FF5C0A2EDFDA4991DE1056" KeyPath="yes" Source="$(var.SourceDir)\net.dll" />
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirD024566BCA42D8BA29DEC8C793A7EB92" />
+    </Fragment>
+</Wix>
