@@ -211,9 +211,23 @@ bool Path::isDir(const mol::string& path)
 	if ( path.empty() )
 		return false;
 
+	if ( isUNC(path) ) 
+	{
+		mol::string tmp = path.substr(2);
+		size_t p = tmp.find_first_of(_T("/\\"));
+		if ( p == mol::string::npos ) 
+		{
+			// top level network share
+			return true;
+		}
+	}
+
 	DWORD attributes = ::GetFileAttributesW(wpath(path).c_str());
 	if ( attributes == INVALID_FILE_ATTRIBUTES )
 	{
+		DWORD e = ::GetLastError();
+		if (  e == ERROR_BAD_NETPATH )
+			return true;
 		return false;
 	}
 	return (attributes & FILE_ATTRIBUTE_DIRECTORY) != 0;

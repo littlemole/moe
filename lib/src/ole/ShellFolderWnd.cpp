@@ -476,6 +476,9 @@ HRESULT __stdcall ShellFolderWnd::OnDefaultCommand( IShellView *ppshv)
 				this->OnUserSelect( v );
 			}
 		}
+		else 
+		{
+		}
 	}
 
 	return S_OK;
