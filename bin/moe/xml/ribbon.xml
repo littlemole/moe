@@ -884,7 +884,7 @@
           <MenuGroup>
             <CheckBox CommandName="RibbonSelectModeUnix"/>
             <CheckBox CommandName="RibbonSelectModeWin32"/>
-            <ToggleButton CommandName="RibbonShowLineNumbers"></ToggleButton>
+            <CheckBox CommandName="RibbonShowLineNumbers"></CheckBox>
           </MenuGroup>
           <MenuGroup>
             <Button CommandName="RibbonSettings"/>
@@ -1658,7 +1658,7 @@
 
             <CheckBox CommandName="RibbonSelectModeUnix"/>
             <CheckBox CommandName="RibbonSelectModeWin32"/>
-            <ToggleButton CommandName="RibbonShowLineNumbers"></ToggleButton>
+            <CheckBox CommandName="RibbonShowLineNumbers"></CheckBox>
 
           </Group>
           <!-- View Group -->

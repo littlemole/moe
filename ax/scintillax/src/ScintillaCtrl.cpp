@@ -70,7 +70,7 @@ public:
 
 		std::string data = pipe.read();
 
-		ODBGS1("data read: ", data.size());
+		ODBGS1("data read: ", (int)data.size());
 
 		pipe.disconnect();
 		pipe.close();

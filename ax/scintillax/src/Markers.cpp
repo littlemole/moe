@@ -115,7 +115,7 @@ HRESULT __stdcall SciAxMarkers::GetMarkers( SAFEARRAY** markers )
 
 	std::set<int> lines = sci_->edit()->getMarkers();
 
-	mol::ArrayBound ab(lines.size());
+	mol::ArrayBound ab((long)lines.size());
 	mol::SafeArray<VT_I4> sf(ab);
 	{
 		mol::SFAccess<long> sfa(sf);

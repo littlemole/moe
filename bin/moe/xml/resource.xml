@@ -145,6 +145,62 @@
         <index cmd="IDM_EDIT_DEBUG_STEPOVER" />
         <index cmd="IDM_EDIT_DEBUG_STOP" />
       </bitmap>
+
+      <!--
+      <bitmap id="IDB_TOOLBAR2" src="resources/bigtb.bmp" >
+        <index cmd="IDM_FILE_NEW" />
+        <index cmd="IDM_FILE_OPEN" />
+        <index cmd="IDM_FILE_OPEN_FOLDER" />
+        <index cmd="IDM_FILE_SAVE" />
+        <index cmd="IDM_FILE_SAVE_AS" />
+        <index cmd="IDM_FILE_PRINT" />
+        <index cmd="IDM_FILE_EXIT" />
+        <index cmd="IDM_EDIT_UNDO" />
+        <index cmd="IDM_EDIT_REDO" />
+        <index cmd="IDM_EDIT_CUT" />
+        <index cmd="IDM_EDIT_COPY" />
+        <index cmd="IDM_EDIT_PASTE" />
+        <index cmd="IDM_EDIT_FIND" />
+        <index cmd="IDM_EDIT_REPLACE" />
+        <index cmd="IDM_EDIT_EXECUTESCRIPT" />
+        <index cmd="IDM_MODE_EXECUTEFORM" />
+        <index cmd="IDM_USER_SCRIPT" />
+        <index cmd="IDM_USER_BATCH" />
+        <index cmd="IDM_USER_FORM" />
+        <index cmd="IDM_USER_SHORTCUT" />
+        <index cmd="IDM_EDIT_COLOR" />
+        <index cmd="IDM_MODE_EOL" />
+        <index cmd="IDM_MODE_LANGUAGE" />
+        <index cmd="IDM_MODE_SETTINGS" />
+        <index cmd="IDM_MODE_PREFERENCES" />
+        <index cmd="IDM_MODE_EDITSETTINGS" />
+        <index cmd="" />
+        <index cmd="IDM_TAB_CLOSEALLBUTTHIS" />
+        <index cmd="IDM_VIEW_MAXIMIZE" />
+        <index cmd="IDM_VIEW_MINIMIZE" />
+        <index cmd="IDM_VIEW_CASCADE" />
+        <index cmd="IDM_VIEW_TILE" />
+        <index cmd="IDM_VIEW_NEXT" />
+        <index cmd="IDM_TAB_RELOADTAB" />
+        <index cmd="IDM_TAB_DIRTAB" />
+        <index cmd="IDM_VIEW_WINDOWS" />
+        <index cmd="" />
+        <index cmd="IDM_HELP_ABOUT" />
+        <index cmd="IDM_VIEW_CLOSE" />
+        <index cmd="IDM_VIEW_CLOSEALL" />
+        <index cmd="IDM_FILE_OPEN_HTML" />
+        <index cmd="IDM_VIEW_TOOLBARS" />
+        <index cmd="IDM_TAB_JUMPTAB" />
+        <index cmd="IDM_FILE_NEW_UFS" />
+        <index cmd="IDM_EDIT_DEBUG_GO" />
+        <index cmd="IDM_EDIT_DEBUG_QUIT" />
+        <index cmd="IDM_EDIT_DEBUG_STEPIN" />
+        <index cmd="IDM_EDIT_DEBUG_STEPOUT" />
+        <index cmd="IDM_EDIT_DEBUG_STEPOVER" />
+        <index cmd="IDM_EDIT_DEBUG_STOP" />
+      </bitmap>
+-->
+      
       <bitmap id="IDB_MOE_FAV" src="resources/favs.bmp" />
       <bitmap id="IDB_MOE_GO" src="resources/next.bmp" />
 

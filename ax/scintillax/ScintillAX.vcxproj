@@ -235,7 +235,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;..\..\3dParty\scintilla\bin\static64\debug\SciLexer.lib;..\..\\3dParty\scintilla\bin\static\Scintilla.lib;..\..\3dParty\pcre\x64\uni_debug_64\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Imm32.lib;Msimg32.lib;..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\x64\uni_debug_64\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;..\..\3dParty\scintilla\bin\static64\debug\SciLexer.lib;..\..\\3dParty\scintilla\bin\static\Scintilla.lib;..\..\3dParty\pcre\x64\uni_debug\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Imm32.lib;Msimg32.lib;..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\x64\uni_debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>ScintillAx.def</ModuleDefinitionFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -249,7 +249,7 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <ResourceCompile>
-      <PreprocessorDefinitions>TLB=x64\uni_debug_64\scintillax.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TLB=x64\uni_debug\scintillax.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release_64|Win32'">
@@ -314,8 +314,10 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">$(TargetName)_dispid_h</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">$(TargetName)_dispid_h</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">$(TargetName)_dispid_h</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">$(TargetName)_dispid.h</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">Generating DISPIDs</Message>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">$(IntDir)$(TargetName).tlb</AdditionalInputs>
     </CustomBuild>
     <None Include="ScintillAX.def" />
     <None Include="xml\cmd.xml" />
@@ -366,6 +368,7 @@
   <ItemGroup>
     <ResourceCompile Include="resources\mol.rc">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">TLB=x64\uni_debug\scintillax.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>

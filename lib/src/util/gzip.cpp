@@ -340,7 +340,7 @@ void GzipImpl::dozip ()
      write( (GZIP*)header, 10 );
 
      zstream_.next_in = (Bytef*)lpsz;
-     zstream_.avail_in = len;
+     zstream_.avail_in = (uInt)len;
 
      while (zstream_.avail_in != 0)
      {
@@ -355,7 +355,7 @@ void GzipImpl::dozip ()
           break;
     }
     
-    crc = crc32(crc, (const Bytef *)lpsz, len);
+    crc = crc32(crc, (const Bytef *)lpsz, (uInt)len);
     if (finish())
     { 
       destroy();
@@ -373,7 +373,7 @@ int GzipImpl::write( LPGZIP buf, int count )
      
      if ( size_ + count > (size_t)currentBufferSize_ )
      {
-	   int nTimes = ( size_ + count ) / nBufferLen_ +1;
+	   int nTimes = (int)(( size_ + count ) / nBufferLen_ +1);
 	   LPGZIP pTemp = pgzip_;
 	   pgzip_ = static_cast<LPGZIP>( malloc( nTimes * nBufferLen_) );
 	   currentBufferSize_ = nTimes * nBufferLen_;
@@ -454,7 +454,7 @@ init();
 
 GunzipImpl::GunzipImpl(const std::string& gzipped)
 	: gzip_( (unsigned char*)gzipped.c_str() ),
-	  gziplen_( gzipped.size() + 1 ),
+	  gziplen_( (int)(gzipped.size() + 1) ),
 	  psz_(0),
 	  length_(0),
 	  pos_(0)

@@ -448,9 +448,15 @@ LRESULT ShellTree::OnTreeItemExpanding(UINT msg, WPARAM wParam, LPARAM lParam)
 LRESULT ShellTree::OnTreeDblClick(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	mol::Crack message(msg,wParam,lParam);
+	
+	HTREEITEM root = TreeView_GetRoot(((HWND)tree_));
+
     HTREEITEM hit = getHitTest();
 	if ( hit )
 	{
+		if ( hit == root )
+			return 1;
+
 		mol::string p = this->getPath();
 		this->fire(2,variant(p));
 	}
@@ -788,7 +794,7 @@ BOOL ShellTree::expandFolder( HTREEITEM item, bool force, int flags )
 		ShellFolder folder( *shit,desk );
 		if ( folder )
 		{
-			HRESULT hr = folder.enumObjects(0);
+			HRESULT hr = folder.enumObjects(0,SHCONTF_FOLDERS|SHCONTF_NONFOLDERS|SHCONTF_NAVIGATION_ENUM);
 			while( Shit it = folder.next() )
 			{
 				mol::string name = folder.getDisplayNameOf(*it);
@@ -909,7 +915,7 @@ BOOL ShellTree::initDesk (bool displayFiles)
 
 	LPITEMIDLIST pidl = NULL;
 	//HRESULT hr = SHGetFolderLocation(NULL, CSIDL_DRIVES, NULL, 0, &pidl);
-	HRESULT hr = SHGetFolderLocation(NULL, CSIDL_DRIVES, NULL, 0, &pidl);
+	HRESULT hr = SHGetFolderLocation(NULL, CSIDL_DESKTOP, NULL, 0, &pidl);
 
 	if (SUCCEEDED(hr))                    
 	{

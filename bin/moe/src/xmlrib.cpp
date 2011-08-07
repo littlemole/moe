@@ -1,5 +1,3 @@
-// generated file - do not edit //
-
 
 #include "stdafx.h"
 #include "win/res.h"

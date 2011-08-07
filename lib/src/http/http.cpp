@@ -217,7 +217,7 @@ void Http::doTCP()
 	}
 
 	if ( request.headers.getCmd() == "POST" )
-		request.headers.contentLength(request.body.body().size());
+		request.headers.contentLength( (int)(request.body.body().size()) );
 
 	*tcp_ << request;
 
