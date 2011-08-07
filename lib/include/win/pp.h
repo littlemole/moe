@@ -100,6 +100,7 @@ protected:
 	int	nPages_;
 	std::vector<HPROPSHEETPAGE> pages_;
 	PROPSHEETHEADER ph_;
+	mol::string title_;
 };
 
 

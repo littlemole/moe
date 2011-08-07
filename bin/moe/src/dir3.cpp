@@ -189,7 +189,7 @@ HRESULT __stdcall DirChild::DirChild_Events::OnDirChanged(BSTR dir)
 {
 	mol::string filename = This()->getText();
 
-	docs()->Rename( mol::variant(filename),mol::variant(dir));
+	//docs()->Rename( mol::variant(filename),mol::variant(dir));
 	This()->setText( mol::bstr(dir).toString() );
 	return S_OK;
 }

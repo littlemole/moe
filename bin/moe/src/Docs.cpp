@@ -314,8 +314,8 @@ HRESULT __stdcall Docs::Remove( VARIANT index )
 		Ribbon::ribbon()->maximize();
 //		moe()->IOleInPlaceFrame_SetActiveObject(0,0);
 //		moe()->IOleInPlaceFrame_SetBorderSpace(0);
-		//implicit in above: moe()->doLayout();	
-//		moe()->redraw();
+		moe()->doLayout();	
+		moe()->redraw();
 		statusBar()->status(_T(""));
 	}
 	return S_OK;

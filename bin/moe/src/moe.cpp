@@ -180,11 +180,11 @@ void MoeWnd::OnCreate()
 	// initialize win7 taskbar
 	mol::taskbar()->init(*this);
 
-    // update ribbon
-	mol::Ribbon::ribbon()->updateRecentDocs(RibbonMRUItems);
-
 	// load UI state
 	loadPersistUIstate();
+
+    // update ribbon
+	mol::Ribbon::ribbon()->updateRecentDocs(RibbonMRUItems);
 }
 
 void MoeWnd::loadPersistUIstate()

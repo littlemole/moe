@@ -129,12 +129,13 @@ BOOL CALLBACK  PropPage::dialogProcedure (HWND hwnd, UINT message, WPARAM wParam
 
 PropSheet::PropSheet(HWND owner, const mol::string& title, int flags )
 {
+	title_ = title;
 	::ZeroMemory(&ph_,sizeof(&ph_) );
 	ph_.dwSize = sizeof(PROPSHEETHEADER);
 	ph_.dwFlags = flags;
 	ph_.hwndParent = owner;
 	ph_.hInstance = mol::hinstance();
-	ph_.pszCaption = title.c_str();
+	ph_.pszCaption = title_.c_str();
 	ph_.pfnCallback = &PropSheet::PropSheetProc;
 	startPage_ = 0;
 	centered_ = false;

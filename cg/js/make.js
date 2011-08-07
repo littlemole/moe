@@ -47,7 +47,7 @@ function saveFile( output, file )
     var f = fso.CreateTextFile(file, true);
 
     // write transformation result to file
-    f.Write(preamble+output);
+    f.Write(output);
     f.Close();
 }
 
