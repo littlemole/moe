@@ -86,6 +86,8 @@ bool DirChild::initialize(const mol::string& p)
 	// display winows 7 task bar thumbnail
 	thumb = mol::taskbar()->addTab( *this,p );
 
+	filename_ = p;
+
 	return true;
 }
 
@@ -98,8 +100,8 @@ bool DirChild::initialize(const mol::string& p)
 
 void DirChild::OnDestroy()
 {
-	mol::string filename = getText();
-	docs()->Remove(mol::variant(filename));
+	//mol::string filename = getText();
+	docs()->Remove(mol::variant(filename_));
 	events.UnAdvise(oleObject);
 
 }

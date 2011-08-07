@@ -29,6 +29,7 @@ public:
 
 private:
 
+	mol::string	filename_;
 	mol::punk<IShellPane> list;
 
 	// directory events sink

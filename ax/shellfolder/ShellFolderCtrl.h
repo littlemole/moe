@@ -26,7 +26,7 @@ using namespace mol::io;
 #define ShellFolderCtrl_Dispatch_Selection 2
 
 class ShellFolderCtrl: 
-	public ax_ctrl<ShellFolderCtrl,CLSID_ShellPane,false,mol::Window,WS_BORDER|WS_CHILD|WS_CLIPSIBLINGS|WS_CLIPCHILDREN,0>,
+	public ax_ctrl<ShellFolderCtrl,CLSID_ShellPane,false,mol::Window,WS_CHILD|WS_CLIPSIBLINGS|WS_CLIPCHILDREN,0>,
 	public Dispatch<IShellPane>,
 	public ctrl_events<ShellFolderCtrl,_IShellPaneEvents>,
 	public ProvideClassInfo<ShellFolderCtrl>,
