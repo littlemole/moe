@@ -1,4 +1,5 @@
 #include "ole/stream.h"
+#include <Shlwapi.h> 
 
 namespace mol {
 
@@ -98,6 +99,11 @@ HRESULT Stream::create(const char* data , size_t size, int opt  )
 	return Create(&interface_, data, size, opt);
 }
 
+HRESULT Stream::create(IStream** pStream, const mol::string& path, DWORD flags)
+{
+	release();
+	return Create( &interface_, path, flags );
+}
 
 HGLOBAL Stream::Global(IStream* str)
 {
@@ -157,6 +163,11 @@ HRESULT Stream::Create( IStream** pStream, const char* data , size_t size , int 
 	HRESULT hr = ::CreateStreamOnHGlobal( glob, TRUE, pStream);
 	glob.detach();
 	return hr;
+}
+
+HRESULT Stream::Create(IStream** pStream, const mol::string& path, DWORD flags )
+{
+	return ::SHCreateStreamOnFile( path.c_str(), flags, pStream);
 }
 
 

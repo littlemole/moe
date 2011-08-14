@@ -15,6 +15,25 @@ LRESULT DlgBase::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			return ::CallWindowProc( defProc, hwnd, message, wParam, lParam );
 		}
+		case WM_ERASEBKGND : 
+		{
+			if ( hbrushBackground_ != 0 )
+			{
+				RECT r;
+				getClientRect(r);				
+				::FillRect( (HDC)wParam, &r,hbrushBackground_);
+				return 1;
+			}
+			break;
+		}
+		case WM_CTLCOLORDLG : 
+		{
+			if ( hbrushBackground_ != 0 )
+			{
+				return (LRESULT)hbrushBackground_;
+			}
+			break;
+		}
 /*		case WM_COMMAND:
 		{
 			if ( wParam == 0 )

@@ -27,9 +27,11 @@ public:
 	void OnNcDestroy();
 	void OnDestroy();
 
+   virtual HRESULT __stdcall get_FilePath( BSTR *fname);
+
 private:
 
-	mol::string	filename_;
+	mol::string	location_;
 	mol::punk<IShellPane> list;
 
 	// directory events sink

@@ -46,12 +46,7 @@ void ImgViewer::OnCreate()
 
 LRESULT ImgViewer::OnDestroy()
 {
-	mol::bstr filename;
-	if ( S_OK == get_FilePath(&filename) )
-	{
-		mol::variant v(filename);
-		docs()->Remove(v);
-	}
+	docs()->remove(this);
 	return 0;
 }
 
@@ -88,7 +83,7 @@ void ImgViewer::OnPaint()
 
 void ImgViewer::OnMDIActivate( HWND activated )
 {
-	tab()->select( getText() );
+	tab()->select( *this );
 	updateUI();
 }
 
@@ -105,7 +100,7 @@ bool ImgViewer::load(const mol::string& p)
 	// determine window menu
 	windowMenu_ = mol::UI().SubMenu(IDM_MOE_IMG,IDM_VIEW_WINDOWS );
 
-	create(p,(HMENU)mol::UI().Menu(IDM_MOE_IMG),Rect(0,0,500,500),*moe());			
+	hWnd_ = create(p,(HMENU)mol::UI().Menu(IDM_MOE_IMG),Rect(0,0,500,500),*moe());			
 	show(SW_SHOW);
 	//maximize();
 
@@ -148,4 +143,18 @@ void ImgViewer::updateUI()
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////////
 
+HRESULT __stdcall ImgViewer::get_Object( IDispatch **d)
+{
+	if ( !d )
+		return E_INVALIDARG;
+	*d = 0;
+	   
+	mol::punk<IPictureDisp> disp;
+	HRESULT hr = pic_.copy(&disp);
+	if ( hr != S_OK )
+		return hr;
+
+	return disp->QueryInterface( IID_IDispatch, (void**)d );
+}

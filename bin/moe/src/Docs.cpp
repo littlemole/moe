@@ -33,20 +33,73 @@ Docs::~Docs()
 	ODBGS("~DOCS subobj dead");
 }
 
+void Docs::remove( mol::MdiChild* mdi )
+{
+	for ( childlist::iterator it = children_.begin(); it != children_.end(); it++)
+	{
+		if ( *it == mdi ) 
+		{
+			children_.erase(it);
+
+			// update tab window
+			tab()->remove( (HWND)(*mdi) );
+			if ( children_.empty() )
+			{
+				tab()->show(SW_HIDE);
+				Ribbon::ribbon()->mode(0);
+				Ribbon::ribbon()->maximize();
+				moe()->doLayout();	
+				moe()->redraw();
+				statusBar()->status(_T(""));
+			}
+			return;
+		}
+	}
+}
+
+void Docs::rename( mol::MdiChild* mdi, const mol::string& path )
+{
+	// update tab window
+	tab()->rename( (HWND)(*mdi), path, mol::Path::filename(path) );
+
+	// update taskbar
+	taskbar()->renameTab( ((HWND)(*mdi)), path );
+}
+
+void Docs::move( mol::MdiChild* mdi, int pos )
+{
+	remove(mdi);
+
+	childlist::iterator it = iterator(mol::variant(pos));
+
+	taskbar()->moveTab( (HWND)(*mdi), (HWND)(**it) );
+
+	// update tab window
+	int index = tab()->index((HWND)(*mdi));
+	//int indexTo = pos;
+	mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*) tab()->getTabCtrlItem(index);
+	mol::TabCtrl::TabCtrlItem* nc = new mol::TabCtrl::TabCtrlItem( c->title, c->tooltip, c->lparam );
+	tab()->remove( (HWND)(*mdi) );
+	tab()->insertItem(nc, pos );
+	tab()->select((HWND)(*mdi));
+	mdi->activate();
+}
+
 /////////////////////////////////////////////////////////////////////
 
+/*
 mol::MdiChild* Docs::child( const mol::string& path)
 {
 	childlist::iterator& it = iterator(mol::variant(path));
 	if ( it == children_.end() )
 		return 0;
 
-	mol::MdiChild* mdi = dynamic_cast<mol::MdiChild*>((*it).second);
+	mol::MdiChild* mdi = dynamic_cast<mol::MdiChild*>((*it));
 
 	return mdi;
 }
 
-
+*/
 /////////////////////////////////////////////////////////////////////
 
 HRESULT __stdcall  Docs::_NewEnum(IEnumVARIANT** newEnum)
@@ -54,7 +107,7 @@ HRESULT __stdcall  Docs::_NewEnum(IEnumVARIANT** newEnum)
 	punk<com_obj<enum_variant> > ev = new com_obj<enum_variant>;
 	for ( childlist::iterator it = children_.begin(); it != children_.end(); it++)
 	{
-		mol::variant v( (IDispatch*) (*it).second );
+		mol::variant v( (IDispatch*) (*it) );
 		ev->add(v);
 	}
 	return ev->QueryInterface(IID_IEnumVARIANT,(void**)newEnum);
@@ -81,7 +134,7 @@ HRESULT __stdcall  Docs::Item( VARIANT index, IMoeDocument** item)
 	if ( it == children_.end() )
 		return S_FALSE;
 
-	IMoeDocument* doc = dynamic_cast<IMoeDocument*>((*it).second);
+	IMoeDocument* doc = dynamic_cast<IMoeDocument*>((*it));
 
 	HRESULT hr = doc->QueryInterface( IID_IMoeDocument, (void**)item);
 	return hr == S_OK ? S_OK : S_FALSE;
@@ -291,7 +344,7 @@ HRESULT __stdcall Docs::CloseAll()
 {
 	for ( childlist::iterator it = children_.begin(); it != children_.end(); it++ )
 	{
-		(*it).second->postMessage(WM_CLOSE,0,0);
+		(*it)->postMessage(WM_CLOSE,0,0);
 	}
 
 	return S_OK;
@@ -303,21 +356,7 @@ HRESULT __stdcall Docs::Remove( VARIANT index )
 	if ( it == children_.end() )
 		return S_FALSE;
 
-	children_.erase(it);
-
-	// update tab window
-	tab()->remove( mol::variant(index).toString() );
-	if ( children_.empty() )
-	{
-		tab()->show(SW_HIDE);
-		Ribbon::ribbon()->mode(0);
-		Ribbon::ribbon()->maximize();
-//		moe()->IOleInPlaceFrame_SetActiveObject(0,0);
-//		moe()->IOleInPlaceFrame_SetBorderSpace(0);
-		moe()->doLayout();	
-		moe()->redraw();
-		statusBar()->status(_T(""));
-	}
+	remove(*it);
 	return S_OK;
 }
 
@@ -331,14 +370,10 @@ HRESULT __stdcall Docs::Rename(VARIANT index, VARIANT newIndex )
 	if ( it == children_.end() )
 		return S_FALSE;
 
-	(*it).first = newIndex;
+	//(*it).first = newIndex;
 	mol::string newTitle =  mol::valueOf(mol::variant(newIndex));
 
-	// update tab window
-	tab()->rename( mol::valueOf(mol::variant(index)), newTitle, mol::Path::filename(newTitle) );
-
-	// update taskbar
-	taskbar()->renameTab( ((HWND)(*it).second), newTitle );
+	rename(*it,newTitle);
 	return S_OK;
 }
 
@@ -350,6 +385,7 @@ HRESULT __stdcall Docs::Move( VARIANT what, VARIANT to )
 	if ( it == children_.end() )
 		return S_FALSE;
 
+
 	childlist::iterator jt = iterator(to);
 	if ( jt == children_.end() )
 		return S_FALSE;
@@ -357,28 +393,11 @@ HRESULT __stdcall Docs::Move( VARIANT what, VARIANT to )
 	if ( it == jt )
 		return S_FALSE;
 
-	mol::variant   key( (*it).first );
-	mol::MdiChild* val( (*it).second );
-
-	children_.erase(it);
-
-	jt = iterator(to);
-	if ( jt == children_.end() )
+	int pos = key2index(to);
+	if ( pos == -1  )
 		return S_FALSE;
 
-	mol::MdiChild* mc( (*jt).second );
-	taskbar()->moveTab( (HWND)(*val), (HWND)(*mc) );
-
-	tab()->remove( key.toString() );
-	children_.insert(jt,std::make_pair( what, val) );
-
-	// update tab window
-	int index = tab()->index(mol::variant(to).toString());
-	tab()->insertItem( mol::Path::filename( key.toString() ), key.toString(), index );
-	tab()->select(key.toString());
-	val->activate();
-
-
+	move(*it,pos);
 	return S_OK;
 }
 
@@ -388,16 +407,18 @@ int Docs::key2index( VARIANT& index )
 {
 	childlist::iterator it = children_.begin();
 	int c = 0;
+	
 	if ( (index.vt == VT_BSTR) && (index.bstrVal) )
 	{
 		for ( it; it != children_.end(); it++ )
 		{
-			variant key = (*it).first;
-			key.changeType(VT_BSTR);
-			if ( key.bstrVal )
+			IMoeDocument* doc = dynamic_cast<IMoeDocument*>(*it);
+			if ( doc )
 			{
-				int hr = _wcsicmp( key.bstrVal, index.bstrVal );
-				if ( hr == 0)
+				mol::bstr path;
+				HRESULT hr = doc->get_FilePath(&path);
+				int h = _wcsicmp( path.bstr_, index.bstrVal );
+				if ( h == 0)
 				{				
 					return c;
 				}
@@ -405,7 +426,7 @@ int Docs::key2index( VARIANT& index )
 			c++;
 		}
 	}
-
+	
 	c = 0;
 	variant i(index);
 	i.changeType( VT_INT );
@@ -449,7 +470,7 @@ mol::string Docs::getNewFileName(const mol::string& ext)
 
 		mol::string f = oss.str();
 
-		if ( !mol::Path::exists(f) )
+		if ( !mol::Path::exists(f) && key2index(mol::variant(f)) == -1 )
 		{
 			punk<IMoeDocument> doc;
 			if ( S_FALSE == Item( variant(bstr(f)), &doc ) )
@@ -480,9 +501,10 @@ bool Docs::newFile(IMoeDocument** doc)
 		moe()->doLayout();
 	}
 
-	children_.push_back( std::make_pair( mol::variant(p), dynamic_cast<mol::MdiChild*>(edit)) );
-	tab()->insertItem( mol::Path::filename(p),p);//,0);
-	tab()->select(p);
+	mol::MdiChild* c = dynamic_cast<mol::MdiChild*>(edit);
+	children_.push_back( c );
+	tab()->insertItem( new mol::TabCtrl::TabCtrlItem(mol::Path::filename(p),p,(LPARAM)(HWND)(*c)) );
+	tab()->select((HWND)(*c));
 
 	progress()->show(SW_HIDE);
 	if (doc)
@@ -507,10 +529,10 @@ bool Docs::newUFSFile(IMoeDocument** doc)
 		moe()->doLayout();
 	}
 
-	children_.push_back( std::make_pair( mol::variant(p), dynamic_cast<mol::MdiChild*>(edit)) );
-	tab()->insertItem( mol::Path::filename(p),p);//,0);
-	tab()->select(p);
-
+	mol::MdiChild* c = dynamic_cast<mol::MdiChild*>(edit);
+	children_.push_back( c  );
+	tab()->insertItem( new mol::TabCtrl::TabCtrlItem( mol::Path::filename(p),p, (LPARAM)(HWND)(*c)) );
+	tab()->select( (HWND)(*c) );
 
 	progress()->show(SW_HIDE);
 	if (doc)
@@ -585,7 +607,7 @@ bool Docs::open( int index, const mol::string& p, InFiles pref, bool readOnly, I
 		return false;
 	}
 
-	// inactive any active object
+	// deactive any active object
 	if ( moe()->activeObject)
 		moe()->activeObject->OnDocWindowActivate(FALSE);
 
@@ -613,13 +635,13 @@ bool Docs::open( int index, const mol::string& p, InFiles pref, bool readOnly, I
 	// insert document into collection
 	childlist::iterator it = iterator( mol::variant(index) );
 	if ( it == children_.end() )
-		children_.push_back( std::make_pair(mol::variant(path), mdi) );
+		children_.push_back( mdi );
 	else
-		children_.insert( it, std::make_pair(mol::variant(path), mdi) );
+		children_.insert( it,  mdi );
 
 	// update child selector tab window
-	tab()->insertItem( mol::Path::filename(path),path,index);
-	tab()->select(path);
+	tab()->insertItem( new mol::TabCtrl::TabCtrlItem( mol::Path::filename(path),path, (LPARAM)(HWND)(*mdi) ),index);
+	tab()->select( (HWND)(*mdi) );
 
 	// add document to ribbon recent docs
 	mol::Ribbon::ribbon()->addRecentDoc(RibbonMRUItems,path);

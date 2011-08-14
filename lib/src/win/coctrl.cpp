@@ -999,8 +999,9 @@ TabCtrl::~TabCtrl()
 
 	for ( int i = 0; i < count(); i++ )
 	{
-		char* c = (char*)getItemLPARAM(i);
-		delete c;
+		TabCtrlItem* c = (TabCtrlItem*)getTabCtrlItem(i);
+		if ( c  )
+			delete c;
 	}
 }
 
@@ -1040,8 +1041,8 @@ LRESULT TabCtrl::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				int i = hitTest();
 				if ( i != -1 )
 				{
-					mol::TCHAR* c = (mol::TCHAR*)getItemLPARAM(i);
-					di->lpszText = c;
+					TabCtrlItem* c = (TabCtrlItem*)getTabCtrlItem(i);
+					di->lpszText = (LPWSTR)(c->tooltip.c_str());
 				}
 			}
 			return 0;
@@ -1065,7 +1066,7 @@ int TabCtrl::style()
     return WS_CHILD|WS_VISIBLE|TCS_BUTTONS|WS_CLIPCHILDREN; 
 }
 
-LRESULT TabCtrl::insertItem( const mol::string& txt, const mol::string& tool, int index, int img )
+LRESULT TabCtrl::insertItem( TabCtrlItem* titem, int index, int img )
 {
 	int c = (int)count();
     //default: add to back
@@ -1082,11 +1083,10 @@ LRESULT TabCtrl::insertItem( const mol::string& txt, const mol::string& tool, in
 
     TCITEM item;
     item.mask = TCIF_TEXT| TCIF_IMAGE|TCIF_PARAM;
-	item.pszText = (mol::TCHAR*)(txt.c_str());
-    item.cchTextMax = (int)txt.size();
+	item.pszText = (mol::TCHAR*)(titem->title.c_str());
+	item.cchTextMax = (int)titem->title.size();
     item.iImage = img;
-	item.lParam = (LPARAM)(new mol::TCHAR[tool.size()+1]);
-	memcpy((char*)(item.lParam),(char*)(tool.c_str()),(tool.size()+1)*sizeof(mol::TCHAR));
+	item.lParam = (LPARAM)(titem);
 
     LRESULT i = sendMessage( TCM_INSERTITEM, (WPARAM)index,(LPARAM) (const LPTCITEM) (&item) );
     return i;
@@ -1107,31 +1107,30 @@ mol::string TabCtrl::getItemText(int index)
 
 mol::string TabCtrl::getItemTooltipText(int index)
 {
-	return (mol::TCHAR*)(getItemLPARAM(index));
+	return (mol::TCHAR*)(getTabCtrlItem(index)->tooltip.c_str());
 }
 
-LPARAM TabCtrl::getItemLPARAM(int index)
+TabCtrl::TabCtrlItem* TabCtrl::getTabCtrlItem(int index)
 {
     TCITEM item;
 	ZeroMemory(&item,sizeof(item));
     item.mask = TCIF_PARAM;
     sendMessage( TCM_GETITEM, (WPARAM)index,(LPARAM) (const LPTCITEM) (&item) );
-	return item.lParam;
+	return (TabCtrlItem*)(item.lParam);
 }
 
-LRESULT TabCtrl::renameItem( const mol::string& txt, int index, const mol::string& tool, int img )
+LRESULT TabCtrl::renameItem( TabCtrlItem* titem, int index, const mol::string& tool, int img )
 {
-	mol::TCHAR* c = (mol::TCHAR*)getItemLPARAM(index);
+	TabCtrlItem* c = (TabCtrlItem*)getTabCtrlItem(index);
 	if ( c )
-		delete[] c;
+		delete c;
+
     TCITEM item;
     item.mask = TCIF_TEXT| TCIF_IMAGE|TCIF_PARAM;
-	item.pszText = (mol::TCHAR*)(txt.c_str());
-    item.cchTextMax = (int)txt.size();
+	item.pszText = (mol::TCHAR*)(titem->title.c_str());
+	item.cchTextMax = (int)titem->title.size();
     item.iImage = img;
-	c = new mol::TCHAR[tool.size()+1];
-	memcpy(c,tool.c_str(),(tool.size()+1)*sizeof(mol::TCHAR));
-	item.lParam = (LPARAM)c;
+	item.lParam = (LPARAM)titem;
 
     LRESULT i = sendMessage( TCM_SETITEM, (WPARAM)index,(LPARAM) (const LPTCITEM) (&item) );
     select(index);
@@ -1140,7 +1139,7 @@ LRESULT TabCtrl::renameItem( const mol::string& txt, int index, const mol::strin
 
 LRESULT TabCtrl::removeItem( int index ) 
 {
-	mol::TCHAR* c = (mol::TCHAR*)getItemLPARAM(index);
+	TabCtrlItem* c = (TabCtrlItem*)getTabCtrlItem(index);
 	LRESULT lr = (LRESULT)TabCtrl_DeleteItem(hWnd_, index);
 
 	if ( this->count() == 0 )
@@ -1151,7 +1150,7 @@ LRESULT TabCtrl::removeItem( int index )
 	}
 
 	if ( c )
-		delete[] c;
+		delete c;
     return lr; 
 }
 

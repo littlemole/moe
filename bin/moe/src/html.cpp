@@ -55,7 +55,7 @@ MoeHtmlWnd::Instance* MoeHtmlWnd::CreateInstance( const mol::string& loc)
 
 void MoeHtmlWnd::OnMDIActivate( HWND activated )
 {
-	tab()->select( location );
+	tab()->select( *this );
 	statusBar()->status( location );
 
 	mol::Ribbon::ribbon()->maximize();
@@ -221,19 +221,22 @@ bool MoeHtmlWnd::load( const mol::string& loc )
 	}
 	statusBar()->status(30);
 
-	// determine window menu
+	// determine window menu & create the view
 
 	windowMenu_ = mol::UI().SubMenu( IDM_MOE_HTML, IDM_VIEW_WINDOWS );
-	create( loc.c_str(), (HMENU)mol::UI().Menu(IDM_MOE_HTML), mol::stdRect ,  *moe() );//hWnd() );
+	create( loc.c_str(), (HMENU)mol::UI().Menu(IDM_MOE_HTML), mol::stdRect ,  *moe() );
 	statusBar()->status(40);
 
+	// show window and set location
 	show(SW_SHOW);
 	setLocation( l + d );
 
+	// hook COM events
 	advise(htmlSink);
 
 	statusBar()->status(50);
 
+	// adjust win7 taskbar if avail
 	thumb = mol::taskbar()->addTab( *this,loc );
 
 	return true;
@@ -249,12 +252,7 @@ void MoeHtmlWnd::OnDestroy()
 {
 	ODBGS("MoeHtmlWndImpl::OnDestroy");
 
-	mol::bstr filename;
-	if ( S_OK == get_FilePath(&filename) )
-	{
-		mol::variant v(filename);
-		docs()->Remove(v);
-	}
+	docs()->remove(this);
 
 	::CoDisconnectObject(((IExternalMoe*)&external_),0);
 
@@ -264,8 +262,6 @@ void MoeHtmlWnd::OnDestroy()
 void MoeHtmlWnd::OnNcDestroy()
 {
 	ODBGS("MoeHtmlWndImpl::OnNcDestroy");
-
-
 
 	((IMoeDocument*)this)->Release();
 }
@@ -380,7 +376,6 @@ HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_htmlSink::BeforeNavigate2(IDispatch* pD
 		This()->postMessage(WM_CLOSE,0,0);
 		*Cancel = VARIANT_TRUE;
 	}
-
 	return S_OK;
 }
 
@@ -440,5 +435,15 @@ HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_htmlSink::DocumentComplete( IDispatch* 
 		oct->Exec(0,OLECMDID_HIDETOOLBARS,1,0,0);
 	}
 	statusBar()->status(_T(""));	
+	mol::bstr url;
+	ie->get_LocationURL(&url);
+	if ( url )
+	{
+		This()->location = url.toString();
+		if ( This()->location == _T("about:blank") )
+			return S_OK;
+
+		docs()->rename(This(),This()->location);
+	}
 	return S_OK;
 }

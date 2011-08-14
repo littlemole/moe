@@ -394,7 +394,7 @@ void MoeWnd::OnFileOpenDir()
 void MoeWnd::OnFileOpenHex()
 {
 	mol::FilenameDlg dlg(*this);	
-	if ( dlg.dlgOpen(OFN_READONLY|OFN_EXPLORER) )
+	if ( IDOK == dlg.dlgOpen(OFN_READONLY|OFN_EXPLORER) )
 	{
 		bool result = docs()->open( -1, dlg.fileName(), Docs::PREF_HEX, dlg.readOnly(), 0 );
 		if (!result)
@@ -445,7 +445,7 @@ void MoeWnd::OnTreeOpen()
 		mol::FilenameDlg dlg(*moe());
 		dlg.setFilter( InFilesFilter );	
 		dlg.fileName(fn);
-		if ( !dlg.dlgOpen(OFN_ALLOWMULTISELECT | OFN_EXPLORER) )
+		if ( IDOK != dlg.dlgOpen(OFN_ALLOWMULTISELECT | OFN_EXPLORER) )
 			return;
 
 		int s = dlg.selections();
@@ -722,19 +722,26 @@ void MoeWnd::OnTabCtrl(NMHDR* notify )
     if ( notify->code  == TCN_SELCHANGE )
     {
         int sel = (int)tab()->selection();
-		mol::string path = (mol::TCHAR*)tab()->getItemLPARAM(sel);
+		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)tab()->getTabCtrlItem(sel);
+		HWND h = (HWND)c->lparam;
+		if ( !h ) 
+			return;
 
-		mol::punk<IMoeDocument> doc;
-		if ( S_OK == docs()->Item( mol::variant(path), &doc ) )
+		mol::MdiChild* mdi = mol::wndFromHWND<mol::MdiChild>(h);
+		if (!mdi) 
+			return;
+
+		IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mdi);
+		if (!doc)
+			return;
+
+		if ( doc )
 		{
-			if ( doc )
+			mol::punk<IMoeDocumentView> view;
+			HRESULT hr = doc->get_View(&view);
+			if ( hr == S_OK )
 			{
-				mol::punk<IMoeDocumentView> view;
-				HRESULT hr = doc->get_View(&view);
-				if ( hr == S_OK )
-				{
-					view->Activate();
-				}
+				view->Activate();
 			}
 		}
         return ;
@@ -746,12 +753,17 @@ void MoeWnd::OnTabCtrl(NMHDR* notify )
 		if ( i == -1 )
 			return ;
 
-		mol::string path = (mol::TCHAR*)tab()->getItemLPARAM(i);
-		mol::punk<IMoeDocument> doc;
-		if ( S_OK != docs()->Item(variant(path),&doc) && doc )
-			return ;
+		int sel = (int)tab()->selection();
+		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)tab()->getTabCtrlItem(sel);
+		HWND h = (HWND)c->lparam;
+		if ( !h ) return;
 
-		mol::MdiChild* mdi = docs()->child(path);
+		mol::MdiChild* mdi = mol::wndFromHWND<mol::MdiChild>(h);
+		if (!mdi) return;
+
+		IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mdi);
+		if (!doc)
+			return;
 
 		long t;
 		if ( !doc || (S_OK != doc->get_Type(&t) ) )
@@ -1027,7 +1039,6 @@ HRESULT __stdcall MoeWnd::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
 	stream.release();
 
 	// save moe default settings
-	//punk<IStream> stream;
 	if ( S_OK == pStgSave->CreateStream( L"DEFAULTS", STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,0,&stream) )
 	{
 		mol::punk<IPersistStream> ps;
@@ -1069,7 +1080,6 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 	stream.release();
 
 	// open UI stream
-	//punk<IStream> stream;
 	hr = pStgLoad->OpenStream( con, NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
 	if ( !stream || (hr != S_OK) )
 		return S_OK;

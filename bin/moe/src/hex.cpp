@@ -54,7 +54,7 @@ bool Hex::initialize(const mol::string& p, bool readOnly)
 	// determine window menu
 	windowMenu_ = mol::UI().SubMenu( IDM_MOE_DIR, IDM_VIEW_WINDOWS );
 
-	HWND hc = create(p,(HMENU)mol::UI().Menu(IDM_MOE_HEX),Rect(0,0,500,500),*moe());
+	create(p,(HMENU)mol::UI().Menu(IDM_MOE_HEX),Rect(0,0,500,500),*moe());
 
 	// determine window menu
 	HMENU m = mol::UI().Menu(IDM_MOE);
@@ -110,21 +110,12 @@ void Hex::OnClose()
 
 void Hex::OnDestroy()
 {
-	mol::bstr filename;
-	if ( S_OK == get_FilePath(&filename) )
-	{
-		mol::variant v(filename);
-		docs()->Remove(v);
-	}
-
+	docs()->remove(this);
 	sink.UnAdvise(oleObject);
-
 }
 
 void Hex::OnNcDestroy()
 {
-
-
 	::CoDisconnectObject(((IMoeDocument*)this),0);
 	((IMoeDocument*)this)->Release();
 }
@@ -135,7 +126,7 @@ void Hex::OnMDIActivate(HWND activated)
 {
 	if ( activated == this->hWnd_ )
 	{
-		tab()->select( getText() );
+		tab()->select( *this );
 		statusBar()->status( getText() );
 		updateUI();
 		setFocus();

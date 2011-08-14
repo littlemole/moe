@@ -12,6 +12,9 @@
 //
 /////////////////////////////////////////////////////////////////////
 
+FILETIME getLastWriteTime(const mol::string& path);
+
+
 template<class C,class I, long T>
 class DispatchMdiWindow
 	: public mol::Dispatch<I>

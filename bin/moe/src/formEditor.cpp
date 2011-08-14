@@ -31,6 +31,14 @@ FormEditor::~FormEditor()
 	ODBGS("~FormEditor dead");
 };
 
+void FormEditor::OnFileChangeNotify(mol::io::DirMon* dirmon)
+{
+}
+
+void FormEditor::checkModifiedOnDisk(const mol::string& path)
+{
+
+}
 //////////////////////////////////////////////////////////////////////////////
 FormEditor::Instance* FormEditor::CreateInstance(const mol::string& file)
 {
@@ -66,7 +74,7 @@ bool FormEditor::initialize(const mol::string& p)
 	statusBar()->status(40);
 
 	// create the win window
-	HWND hc = create(p,(HMENU)m,r,*moe());
+	create(p,(HMENU)m,r,*moe());
 
 	// hook up com event handlers
 	events.Advise(oleObject);
@@ -76,97 +84,31 @@ bool FormEditor::initialize(const mol::string& p)
 
 	statusBar()->status(50);
 
+	// keep an IScintillAx interface pointer at hand
 	sci = oleObject;
 
-	bool createNew = false;
-
+	// get properties from scintilla ax ctrl
 	mol::punk<IScintillAxProperties> props;
 	sci->get_Properties(&props);
 
+	// set the filename
 	props->put_Filename(mol::bstr(p));
 
-	// if file exists, load
-	if ( !mol::Path::exists(p) )
-		createNew = true;
-
-	// load ?
-	props->put_Filename(mol::bstr(p));
-
-	mol::punk<IStorage> src;
-	mol::punk<IStorage> store;
-	
-	HRESULT hr = E_FAIL;
-
-	if ( !createNew )
-	{
-		hr = ::StgOpenStorage( 
-					mol::towstring(p).c_str(), 
-					NULL,
-					STGM_READ|STGM_SHARE_EXCLUSIVE,
-					0,
-					0,
-					&src);
-	}
-	if ( hr != S_OK )
-	{
-		createNew = true;
-	}
-	else 
-	{
-		copyStorageTemp(src,&store);
-		
-		mol::punk<IStream> stream;
-		hr = store->OpenStream( L"CONTENT",0,STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,&stream);
-		if ( hr == S_OK )
-		{
-			ULONG nread = 0;
-			DWORD size = 0;
-
-			hr = stream->Read( &size, sizeof(DWORD), &nread);
-
-			if ( hr == S_OK )
-			{
-				wchar_t* buf = new wchar_t[size];
-
-				hr = stream->Read( buf, size*sizeof(wchar_t), &nread);
-				std::wstring ws = std::wstring( buf, size );
-				delete[] buf;
-
-				mol::punk<IScintillAxText> txt;
-				sci->get_Text(&txt);
-
-				hr = txt->SetText( mol::bstr(ws) );
-				hr = sci->SavePoint();
-			}
-		}
-
-
-		src.release();
-		store.release();
-		userForm = UserForm::CreateInstance(p,true);
-	}
-	if ( createNew == true )
-	{
-		props->put_Filename(mol::bstr(p));
-		userForm = UserForm::CreateInstance(p,true);
-
-	}
-
-	statusBar()->status(80);
-
+	// try to load or create new
+	OnReload();
 
 	// get default values from config and init scintilla
 
 	moe()->moeConfig->InitializeEditorFromPreferences( (IMoeDocument*)this );
-
-
 	props->put_ReadOnly( VARIANT_FALSE );
 
+	// use ribbon context menue if avail
 	if ( mol::Ribbon::ribbon()->enabled() )
 	{
 		props->put_UseContext(VARIANT_FALSE);
 	}
 
+	// initialize win7 taskbar if avail
 	thumb = mol::taskbar()->addTab( *this,p );
 
 	// now maximize the window
@@ -191,33 +133,11 @@ void FormEditor::OnDestroy()
 		userForm->Close();
 		userForm.release();
 	}
-
-	/*
-	mol::punk<IScintillAxProperties> props;
-	HRESULT hr = sci->get_Properties(&props);
-	if ( hr != S_OK )
-		return ;
-
-	mol::bstr path;
-	hr = props->get_Filename(&path);
-	if ( hr != S_OK )
-		return ;
-
-	docs()->Remove(mol::variant(path));
- 	events.UnAdvise(oleObject);
-	sci.release();
-	*/
 	return ;
 }
 
 void FormEditor::OnNcDestroy()
-{/*
-	if ( userForm )
-	{
-		userForm->Close();
-		userForm.release();
-	}
-	*/
+{
 	return ;
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -233,8 +153,6 @@ void FormEditor::OnMDIActivate(WPARAM unused, HWND activated)
 	{
 		userForm->Hide();
 	}
-//	BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
-  //  return 0;
 }
 
 
@@ -289,52 +207,91 @@ LRESULT FormEditor::OnDebugScript()
 
 void FormEditor::OnReload()
 {
-	return;
+	bool createNew = false;
+	mol::bstr filename;
 
+	// get properties from scintilla ax ctrl
 	mol::punk<IScintillAxProperties> props;
 	sci->get_Properties(&props);
 
-	mol::punk<IScintillAxText> txt;
-	sci->get_Text(&txt);
+	// set the filename
+	HRESULT hr = props->get_Filename(&filename);
+	if ( hr != S_OK )
+		return;
 
-	//TODO FIXME
+	mol::string path = mol::toString(filename);
 
-	VARIANT_BOOL vb;
-	if ( S_OK != txt->get_Modified(&vb) )
-		return ;
+		// if file exists, load
+	if ( !mol::Path::exists(path) )
+		createNew = true;
 
-	if ( vb == VARIANT_TRUE )
+	mol::punk<IStorage> src;
+	mol::punk<IStorage> store;
+	
+	// load
+	if ( !createNew )
 	{
-		mol::bstr path;
-		props->get_Filename(&path);
-		if ( IDYES != ::MessageBox(*this,_T("File is modified.\r\nClose without Save?"), path.toString().c_str() ,MB_YESNO|MB_ICONEXCLAMATION) )
-			return ;
+		// try to open storage
+		hr = ::StgOpenStorage( 
+					mol::towstring(path).c_str(), 
+					NULL,
+					STGM_READ|STGM_SHARE_EXCLUSIVE,
+					0,
+					0,
+					&src);
 	}
-	mol::bstr filename;
-	if ( S_OK != get_FilePath(&filename) )
-	{
-		return ;
-	}
-	if ( S_OK != props->get_ReadOnly(&vb) )
-	{
-		return ;
-	}
-	long t;
-	if ( S_OK != props->get_Encoding(&t) )
-	{
-		return ;
-	}
-	if ( t == SCINTILLA_ENCODING_UTF8 )
-	{
 
-		sci->LoadUTF8(filename);
-		props->put_ReadOnly(vb);
-		statusBar()->status( filename.toString() );
-		return ;
+	// could open storage?
+	if ( (hr != S_OK) || (!src))
+	{
+		// if load failed, we opt for create new instead
+		createNew = true;
 	}
-	sci->Load(filename);
-	props->put_ReadOnly(vb);
-	statusBar()->status( filename.toString() );
+	else 
+	{
+		// its OK to load from storage
+		copyStorageTemp(src,&store);
+		
+		mol::punk<IStream> stream;
+		hr = store->OpenStream( L"CONTENT",0,STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,&stream);
+		if ( hr == S_OK )
+		{
+			ULONG nread = 0;
+			DWORD size = 0;
+
+			hr = stream->Read( &size, sizeof(DWORD), &nread);
+
+			if ( hr == S_OK )
+			{
+				wchar_t* buf = new wchar_t[size];
+
+				hr = stream->Read( buf, size*sizeof(wchar_t), &nread);
+				std::wstring ws = std::wstring( buf, size );
+				delete[] buf;
+
+				mol::punk<IScintillAxText> txt;
+				sci->get_Text(&txt);
+
+				hr = txt->SetText( mol::bstr(ws) );
+				hr = sci->SavePoint();
+			}
+		}
+
+		src.release();
+		store.release();
+		userForm = UserForm::CreateInstance(path,true);
+	}
+
+	// if create new flag is set
+	if ( createNew == true )
+	{
+		props->put_Filename(filename);
+		userForm = UserForm::CreateInstance(path,true);
+	}
+
+	statusBar()->status(80);
+	statusBar()->status( path );
+	return;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -366,7 +323,7 @@ LRESULT FormEditor::OnSaveAs()
 	sci->get_Text(&txt);
 
 
-	if ( ofn.dlgSave( OFN_OVERWRITEPROMPT ) )
+	if ( IDOK == ofn.dlgSave( OFN_OVERWRITEPROMPT ) )
 	{
 		if ( ofn.fileName() != path.toString() )
 		{
@@ -400,7 +357,7 @@ LRESULT FormEditor::OnSaveAs()
 			hr = userForm->Save(dest,FALSE);
 			hr = dest->Commit(STGC_DEFAULT);
 
-			docs()->Rename( mol::variant(path), mol::variant(ofn.fileName()) );
+			docs()->rename( this, ofn.fileName() );
 
 			props->put_Filename( mol::bstr(ofn.fileName()) );
 		}

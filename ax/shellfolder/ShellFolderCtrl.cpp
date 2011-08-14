@@ -100,7 +100,8 @@ LRESULT ShellFolderCtrl::OnSize(UINT msg, WPARAM wParam, LPARAM lParam)
 
 HRESULT __stdcall ShellFolderCtrl::UpDir()
 {
-	wnd_.updir();
+	wnd_.updir();	
+	fire(4,mol::bstr(wnd_.path()));
 	return S_OK;
 }
 

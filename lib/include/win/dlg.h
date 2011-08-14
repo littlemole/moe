@@ -17,7 +17,12 @@ class DlgBase : public WndProc
 public:
 		typedef DlgBase BaseWindowType;
 
-        virtual ~DlgBase() {};
+		DlgBase()
+			:hbrushBackground_(0)
+		{}
+
+        virtual ~DlgBase() 
+		{};
 
         virtual LRESULT endDlg(int n);
 		
@@ -55,9 +60,12 @@ protected:
         // remember default wndproc
         WNDPROC	defProc;
 
+		HBRUSH hbrushBackground_;
+
 private:
         //disable that
         HWND virtual createWindow( const mol::string& windowName, HMENU hMenu=0,const Rect& r=stdRect , HWND parent=0 ) { return 0;};
+
 };
 
 //////////////////////////////////////////////////////////////////////

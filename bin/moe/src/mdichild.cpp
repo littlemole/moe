@@ -6,6 +6,19 @@
 #include "form.h"
 #include "xmlui.h"
 
+FILETIME getLastWriteTime(const mol::string& path)
+{
+	mol::filestream fs;
+	FILETIME ft = {0,0};
+	bool b = fs.open( mol::tostring(path),GENERIC_READ,FILE_SHARE_READ,0,OPEN_EXISTING);
+	if (!b )
+		return ft;
+
+	ft = fs.fileInfo().ftLastWriteTime;
+	fs.close();
+	return ft;
+}
+
 MoeChildView::~MoeChildView()
 {
 	ODBGS("~MoeChildView dies ...");

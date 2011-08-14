@@ -23,12 +23,10 @@ public:
 	DirMon();
 	virtual ~DirMon();
 
-	void watch( const mol::string& path );
+	void watch( const mol::string& path, int flags = FILE_NOTIFY_CHANGE_DIR_NAME | FILE_NOTIFY_CHANGE_FILE_NAME, bool subtree = true );
 	virtual void run();
 	void cancel();
     void resume();
-
-	//mol::postcmd_pubsub    events;
 
 	mol::events::Event<DirMon*> events;
 
@@ -42,9 +40,14 @@ private:
 	HANDLE		                    handle_[3];
 	enum		                    EHANDLE { EVENT, DIRMON, CANCEL };
     mol::Mutex				        mutex_;
+	int								flags_;
+	bool							subtree_;
 
     static std::multimap<mol::string,DirMon*> monitorMap_;
 };
+
+
+
 
 
 } // end namespace mol::win::io;

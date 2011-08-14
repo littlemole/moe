@@ -34,19 +34,7 @@ public:
 
 	/////////////////////////////////////////////////////////////////////
 
-   virtual HRESULT __stdcall get_Object( IDispatch **d)
-   {
-	   if ( !d )
-		   return E_INVALIDARG;
-	   *d = 0;
-	   
-	   mol::punk<IPictureDisp> disp;
-	   HRESULT hr = pic_.copy(&disp);
-	   if ( hr != S_OK )
-		   return hr;
-
-	   return disp->QueryInterface( IID_IDispatch, (void**)d );
-   }
+   virtual HRESULT __stdcall get_Object( IDispatch **d);
 
 	// dummy
 	punk<IUnknown> oleObject;

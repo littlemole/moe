@@ -68,28 +68,12 @@ OleChild::Instance* OleChild::CreateInstance( const mol::string& p, CLSID& clsid
 		return doc;
 
 	doc = new Instance;
-
-	doc->filename_ = p;
 	doc->AddRef();
-
-	statusBar()->status(30);
-	doc->create(p,0 ,mol::Rect(0,0,500,500),*moe());
-
-	doc->show(SW_SHOW);
-	statusBar()->status(50);
-
-	doc->newObjectFromStorage(clsid);
-	statusBar()->status(80);
-
-	doc->maximize();
-	statusBar()->status(100);
-
-	doc->OnLayout(0,0,0);	
-
-	doc->thumb = mol::taskbar()->addTab( *doc,p );
-
+	doc->load(p,clsid);
     return doc;
 }
+
+
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -108,8 +92,7 @@ void OleChild::OnNcDestroy()
 {
 	// excel specific: don't do this in OnDestroy or garbage layout
 	// when excel doc is last document
-	mol::variant v(filename_);
-	docs()->Remove(v);	
+	docs()->remove(this);
 
 	IMoeDocument* doc = (IMoeDocument*)this;	
 	::CoDisconnectObject( doc,0);
@@ -123,7 +106,7 @@ void OleChild::OnMDIActivate(WPARAM unused, HWND activated)
 
 	mol::string filename = getText();
 	statusBar()->status( filename );
-	tab()->select( filename );
+	tab()->select( *this );
 
 	if ( activated == *this )
 	{
@@ -132,27 +115,37 @@ void OleChild::OnMDIActivate(WPARAM unused, HWND activated)
 	}
 	else 
 	{
-		//moe()->IOleInPlaceFrame_SetBorderSpace(0);
+		mol::Ribbon::ribbon()->maximize();
 	}
-
-	//BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
-    //return 0;
 }
-/*
-LRESULT OleChild::OnMDIActivateLater(WPARAM unused, HWND activated)
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// impl
+//
+//////////////////////////////////////////////////////////////////////////////
+
+void OleChild::load(const mol::string& p, CLSID& clsid)
 {
+	filename_ = p;
 
+	statusBar()->status(30);
+	hWnd_ = create(p,0 ,mol::Rect(0,0,500,500),*moe());
 
-	BaseWindowType::wndProc( hWnd_, WM_MDIACTIVATE, (WPARAM)unused, (LPARAM)activated );
-    return 0;
+	show(SW_SHOW);
+	statusBar()->status(50);
+
+	newObjectFromStorage(clsid);
+	statusBar()->status(80);
+
+	maximize();
+	statusBar()->status(100);
+
+	OnLayout(0,0,0);	
+
+	thumb = mol::taskbar()->addTab( *this,p );
+
 }
-*/
-//////////////////////////////////////////////////////////////////////////////
-//
-// COM section
-//
-//////////////////////////////////////////////////////////////////////////////
-
 
 bool OleChild::openFile( const mol::string& path )
 {
@@ -222,7 +215,6 @@ bool OleChild::openFile( const mol::string& path )
 
 HRESULT __stdcall OleChild::IOleClientSite_SaveObject( )
 { 
-	//mol::string filename = getText();
 	statusBar()->status(10);
 
 	// have we loaded from tmp file 

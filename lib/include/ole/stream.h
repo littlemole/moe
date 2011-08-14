@@ -29,6 +29,7 @@ public:
 	HRESULT create();
 	HRESULT create(HGLOBAL glob);
 	HRESULT create(const char* data , size_t size = 0, int opt = GMEM_MOVEABLE | GMEM_NODISCARD );
+	HRESULT create(IStream** pStream, const mol::string& path, DWORD flags = STGM_READWRITE | STGM_SHARE_DENY_WRITE | STGM_CREATE);
 
 	HRESULT reset();
 
@@ -38,6 +39,7 @@ public:
 	static HRESULT Create(IStream** pStream);
 	static HRESULT Create(IStream** pStream, HGLOBAL glob);
 	static HRESULT Create(IStream** pStream, const char* data , size_t size = 0, int opt = GMEM_MOVEABLE | GMEM_NODISCARD );
+	static HRESULT Create(IStream** pStream, const mol::string& path, DWORD flags = STGM_READWRITE | STGM_SHARE_DENY_WRITE | STGM_CREATE );
 
 	HRESULT copyTo( IStream* pStream );
 	HRESULT copyFrom( IStream* pStream );
