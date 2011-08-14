@@ -40,16 +40,16 @@ public:
 	MoeTabControl();
 	virtual ~MoeTabControl();
 
-	void select( const mol::string& path );
+	void select( HWND d );
 
 private:
 
 	virtual void OnCtrlCreated();
 
-	int  index ( const mol::string& path );
-	void remove( const mol::string& path );
-	void move  ( const mol::string& what, const mol::string& to );
-	void rename( const mol::string& oldpath,const mol::string& newpath, const mol::string& name );
+	int  index ( HWND d );
+	void remove( HWND d );
+	void move  ( HWND what, HWND to );
+	void rename( HWND d,const mol::string& newpath, const mol::string& name );
 
 	virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 

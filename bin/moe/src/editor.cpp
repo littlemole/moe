@@ -62,9 +62,46 @@ Editor::Editor()
 {
 	ts_ = 0;
     eraseBackground_ = 1;
+	lastWriteTime_.dwHighDateTime = 0;
+	lastWriteTime_.dwLowDateTime = 0;
 	wndClass().setIcon(moe()->icon); 
 	wndClass().hIconSm(moe()->icon); 
+
+	monitor_.events += mol::events::event_handler( &Editor::OnFileChangeNotify, this );
 }
+
+void Editor::OnFileChangeNotify(mol::io::DirMon* dirmon)
+{
+	SciMember<IScintillAxProperties> props(sci);
+	mol::bstr path;
+	props->get_Filename(&path);
+
+	checkModifiedOnDisk(path.toString());
+}
+
+void Editor::checkModifiedOnDisk(const mol::string& path)
+{
+//	static volatile long updating = 0;
+
+//	long l = ::InterlockedCompareExchange( &updating, 1, 0 );
+//	if ( l )
+		//return;
+
+	FILETIME ft = getLastWriteTime( path );
+
+
+	if ( (ft.dwHighDateTime != lastWriteTime_.dwHighDateTime) || (ft.dwLowDateTime != lastWriteTime_.dwLowDateTime) )
+	{
+		lastWriteTime_ = ft;
+		if ( IDOK == ::MessageBoxA(*this,"reload file?","file has been modified on disk, reload?",MB_ICONEXCLAMATION|MB_OKCANCEL) )
+		{
+			OnReload();
+		}
+	}
+//	::InterlockedExchange( &updating, 0 );
+//	updating = false;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 
 Editor::~Editor() 
@@ -95,6 +132,7 @@ Editor::Instance* Editor::CreateInstance(const mol::string& file, bool utf8, boo
 	return e;
 }
 
+
 bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 {
 	// get client rectangle
@@ -107,8 +145,11 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 
 	statusBar()->status(40);
 
+	// init last write timestamp for p
+	lastWriteTime_ = getLastWriteTime(p);
+
 	// create the win window
-	HWND hc = create(p,(HMENU)m,r,*moe());
+	create(p,(HMENU)m,r,*moe());
 
 	// hook up com event handlers
 	events.Advise(oleObject);
@@ -136,6 +177,15 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 			if ( S_OK != sci->Load(mol::bstr(p)) )
 				return false;
 		}
+		monitor_.watch( 
+			mol::Path::parentDir(p), 
+			FILE_NOTIFY_CHANGE_FILE_NAME
+				| FILE_NOTIFY_CHANGE_ATTRIBUTES
+				| FILE_NOTIFY_CHANGE_FILE_NAME
+				| FILE_NOTIFY_CHANGE_LAST_WRITE
+				| FILE_NOTIFY_CHANGE_SECURITY
+				| FILE_NOTIFY_CHANGE_SIZE,
+			false);
 	}
 	else
 	{
@@ -218,8 +268,7 @@ void Editor::OnDestroy()
 	mol::bstr path;
 	props->get_Filename(&path);
 
-	mol::variant v(path);
-	docs()->Remove(v);
+	docs()->remove(this);
 	
  	events.UnAdvise(oleObject);
 	sci.release();
@@ -249,9 +298,11 @@ void Editor::OnMDIActivate(WPARAM unused, HWND activated)
 		mol::bstr path;
 		props->get_Filename(&path);
 
-		tab()->select( path.toString() );
+		tab()->select( *this );
 		updateUI();
 		setFocus();
+
+		checkModifiedOnDisk(path.toString());
 	}
 }
 
@@ -402,6 +453,9 @@ void Editor::OnReload()
 	{
 		return ;
 	}
+
+	lastWriteTime_ = getLastWriteTime(filename.toString());
+
 	if ( S_OK != props->get_ReadOnly(&vb) )
 	{
 		return ;
@@ -877,7 +931,7 @@ void Editor::OnSaveAs()
 
 			if ( S_OK == sci->SaveAs( mol::bstr(ofn.fileName() ) ) )
 			{
-				docs()->Rename( mol::variant(p), mol::variant(ofn.fileName()) );
+				docs()->rename( this, ofn.fileName() );
 				props->put_Filename(mol::bstr(ofn.fileName()));
 
 				oss << _T("file saved as ") << ofn.fileName() << _T(" saved");

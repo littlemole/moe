@@ -679,7 +679,8 @@ LRESULT WndProc::OnInvoke( UINT message, WPARAM wParam, LPARAM lParam)
 
 HWND WndProc::create( mol::string windowName, HMENU id, const Rect& r, HWND parent )
 {
-    return createWindow( windowName, id, r, parent);
+    hWnd_ = createWindow( windowName, id, r, parent);
+	return hWnd_;
 }
 
 HWND WndProc::create( HMENU id, const Rect& r, HWND parent)

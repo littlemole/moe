@@ -28,25 +28,36 @@ DirMon::~DirMon()
     monitorMap_.erase(path_);
 }
 
-void DirMon::watch( const mol::string& path )
+void DirMon::watch( const mol::string& path, int flags, bool subtree )
 { 
-	if ( (!Path::exists(path)) || (!Path::isDir(path)) )
+    if ( path.size() == 0 )
+	{
+		return;
+	}
+
+	flags_ = flags;
+	subtree_ = subtree;
+
+	path_ = path;
+
+	if  (Path::isDir(path_)) 
+	{
+		path_ = Path::addBackSlash(path_);
+	}
+
+	if ( !Path::exists(path_) )
         return;
 
-    if ( path.size() != 0 )
+	for( std::multimap<mol::string,DirMon*>::iterator it = monitorMap_.begin(); it != monitorMap_.end(); it++)
 	{
-		for( std::multimap<mol::string,DirMon*>::iterator it = monitorMap_.begin(); it != monitorMap_.end(); it++)
+		if ( (*it).second == this )
 		{
-			if ( (*it).second == this )
-			{
-				monitorMap_.erase(it);
-				break;
-			}
+			monitorMap_.erase(it);
+			break;
 		}
 	}
 
 	cancel();
-	path_ = Path::addBackSlash(path);
     monitorMap_.insert(std::make_pair(path_,this));
 	mol::thread( boost::bind( &DirMon::run, this) );
 }
@@ -55,13 +66,12 @@ void DirMon::run()
 {
 	handle_[DIRMON] = ::FindFirstChangeNotificationW(	Path::wpath(path_).c_str(), 
 														FALSE, 
-														FILE_NOTIFY_CHANGE_DIR_NAME|
-														FILE_NOTIFY_CHANGE_FILE_NAME
+														flags_
 													);
 	while ( handle_[DIRMON] != INVALID_HANDLE_VALUE )
 	{
 		DWORD wait = ::WaitForMultipleObjects(2,handle_,FALSE,INFINITE);
-		if ( wait == WAIT_OBJECT_0 ) // EVENT got signalled
+		if ( wait == WAIT_OBJECT_0 ) // cancel EVENT got signalled
 		{
 			::FindCloseChangeNotification(handle_[DIRMON]);	
 			::ResetEvent(handle_[EVENT]);
@@ -92,7 +102,7 @@ void DirMon::resume()
 {
 	if ( Path::exists(path_) && Path::isDir(path_) )
 	{
-        watch(path_);
+        watch(path_,flags_,subtree_);
 	}
 	events.fire(this);
 }

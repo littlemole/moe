@@ -4,6 +4,7 @@
 #include "shared.h"
 #include "resource.h"
 #include "MoeBar.h"
+#include "win/io.h"
 
 //////////////////////////////////////////////////////////////////////////////////
 // Editor Wnd
@@ -111,7 +112,8 @@ protected:
 	void populateMenuFromConf( HMENU submenu, ISetting* set, std::map<int,ISetting*>& confMap, int& id);
 
 
-
+	virtual void OnFileChangeNotify(mol::io::DirMon*);
+	virtual void checkModifiedOnDisk(const mol::string& path);
 protected:
 
 	// scintilla events sink
@@ -135,12 +137,13 @@ protected:
 	std::map<int,ISetting*>		batchMap;
 	std::map<int,ISetting*>		formMap;
 
-	//mol::string filename_;
+	mol::io::DirMon monitor_;
 
 	mol::punk<IRemoteDebugApplicationThread> remote_;
 	ThreadScript* ts_;
 	mol::string	lasterror_;
-
+	FILETIME lastWriteTime_;
+	
 };
 
 //////////////////////////////////////////////////////////////////////////////////

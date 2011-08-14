@@ -86,7 +86,7 @@ bool DirChild::initialize(const mol::string& p)
 	// display winows 7 task bar thumbnail
 	thumb = mol::taskbar()->addTab( *this,p );
 
-	filename_ = p;
+	location_ = p;
 
 	return true;
 }
@@ -100,17 +100,26 @@ bool DirChild::initialize(const mol::string& p)
 
 void DirChild::OnDestroy()
 {
-	//mol::string filename = getText();
-	docs()->Remove(mol::variant(filename_));
+	docs()->remove(this);
 	events.UnAdvise(oleObject);
 
 }
 
 void DirChild::OnNcDestroy()
 {
-
 	::CoDisconnectObject(((IMoeDocument*)this),0);
 	((IMoeDocument*)this)->Release();
+}
+
+
+HRESULT __stdcall DirChild::get_FilePath( BSTR *fname)
+{
+	if ( fname  )
+	{
+		*fname = 0;
+		*fname = ::SysAllocString( mol::towstring(location_).c_str() );
+	}
+	return S_OK;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -122,10 +131,8 @@ void DirChild::OnNcDestroy()
 
 void DirChild::OnMDIActivate( HWND activated )
 {
-	mol::bstr filename;
-	get_FilePath(&filename);
-	statusBar()->status(filename.toString());
-	tab()->select( filename.toString() );
+	statusBar()->status(location_);
+	tab()->select( *this );
 
 	mol::Ribbon::ribbon()->mode(2);
 	mol::Ribbon::ribbon()->maximize();
@@ -189,9 +196,8 @@ HRESULT __stdcall DirChild::DirChild_Events::OnListOpen(BSTR filename)
 
 HRESULT __stdcall DirChild::DirChild_Events::OnDirChanged(BSTR dir)
 {
-	mol::string filename = This()->getText();
-
-	//docs()->Rename( mol::variant(filename),mol::variant(dir));
-	This()->setText( mol::bstr(dir).toString() );
+	This()->location_ = mol::toString(dir);
+	docs()->rename( This(),This()->location_ );
+	This()->setText( This()->location_ );
 	return S_OK;
 }

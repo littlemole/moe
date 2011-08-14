@@ -40,6 +40,7 @@ protected:
 
 	virtual void OnLoadProgress(int n);
 	bool openFile( const mol::string& path );
+	void load(const mol::string& p, CLSID& clsid);
 
 	mol::string			filename_;
 };

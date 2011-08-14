@@ -292,10 +292,37 @@ protected:
 class TabCtrl : public mol::win::CtrlClass<mol::win::tab_ctrl_class>
 {
 public:
+
+		class TabCtrlItem 
+		{
+		public:
+			TabCtrlItem() 
+				: title(_T("")),tooltip(_T("")),lparam(0)
+			{}
+
+			TabCtrlItem(const mol::string& t) 
+				: title(t),tooltip(_T("")),lparam(0)
+			{}
+
+			TabCtrlItem(const mol::string& t,const mol::string& tt) 
+				: title(t),tooltip(tt),lparam(0)
+			{}
+
+			TabCtrlItem(const mol::string& t,const mol::string& tt, LPARAM p) 
+				: title(t),tooltip(tt),lparam(p)
+			{}
+
+			mol::string title;
+			mol::string tooltip;
+			LPARAM lparam;
+
+		};
+
+
 		~TabCtrl();
 
-        LRESULT insertItem( const mol::string& txt , const mol::string& tool = _T(""), int index = -1, int img = -1);
-		LRESULT renameItem( const mol::string& txt ,int index, const mol::string& tool = _T(""), int img = -1 );
+        LRESULT insertItem( TabCtrlItem* item, int index = -1, int img = -1);
+		LRESULT renameItem( TabCtrlItem* titem,int index, const mol::string& tool = _T(""), int img = -1 );
         LRESULT removeItem( int index = -1);
         LRESULT count();
         LRESULT select(int i);
@@ -303,7 +330,7 @@ public:
         LRESULT getRect(RECT& r);
         mol::string getItemText(int i);
 		mol::string getItemTooltipText(int i);
-		LPARAM getItemLPARAM(int i);
+		TabCtrlItem* getTabCtrlItem(int i);
 		HWND    hToolTip();
 		LRESULT showToolTip( LPARAM& lParam,const mol::string& txt);
         int hitTest();

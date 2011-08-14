@@ -43,6 +43,9 @@ public:
 
 protected:
 
+	virtual void OnFileChangeNotify(mol::io::DirMon*);
+	void checkModifiedOnDisk(const mol::string& path);
+
 	bool initialize(const mol::string& p);
 
 };

@@ -61,8 +61,11 @@ public:
 
 	bool open( int index, const mol::string& dir, InFiles pref, bool readOnly, IMoeDocument** doc  );
 
-	mol::MdiChild* child( const mol::string& path);
+	//mol::MdiChild* child( const mol::string& path);
 	
+	void remove( mol::MdiChild* mdi );
+	void rename( mol::MdiChild* mdi, const mol::string& path );
+	void move( mol::MdiChild* mdi, int pos );
 private:
 
 	Docs() {}
@@ -98,7 +101,7 @@ private:
 		return dynamic_cast<mol::MdiChild*>(t);
 	}
 
-	typedef std::list<std::pair<mol::variant,mol::MdiChild*> > childlist;
+	typedef std::list<mol::MdiChild* > childlist;
 	childlist	children_;
 
 	childlist::iterator iterator(VARIANT& index);

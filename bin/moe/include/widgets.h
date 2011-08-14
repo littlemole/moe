@@ -432,6 +432,10 @@ class PrefPage  : public mol::ole::OlePropPage
 {
 public:
 
+	PrefPage()
+	{
+		hbrushBackground_ = (HBRUSH)::GetStockObject(WHITE_BRUSH);
+	}
 	virtual void setObjects();
 };
 

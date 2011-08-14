@@ -96,12 +96,13 @@ void MoeTabControl::OnCtrlCreated()
 
 // helpers
 
-int MoeTabControl::index( const mol::string& path )
+int MoeTabControl::index( HWND d )
 {
 	for ( int i = 0; i < count(); i++ )
 	{
-		mol::string p = getItemTooltipText(i);
-		if ( mol::icmp( path, p ) == 0 )
+		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)getTabCtrlItem(i);
+		HWND mdi = (HWND)(c->lparam);
+		if ( mdi == d )
 		{
 			return i;
 		}
@@ -109,12 +110,13 @@ int MoeTabControl::index( const mol::string& path )
 	return -1;
 }
 
-void MoeTabControl::select( const mol::string& path )
+void MoeTabControl::select( HWND d )
 {
 	for ( int i = 0; i < count(); i++ )
 	{
-		mol::string p = getItemTooltipText(i);
-		if ( mol::icmp( path, p ) == 0 )
+		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)getTabCtrlItem(i);
+		HWND mdi = (HWND)(c->lparam);
+		if ( mdi == d )
 		{
 			mol::TabCtrl::select(i);
 			return;
@@ -122,38 +124,44 @@ void MoeTabControl::select( const mol::string& path )
 	}
 }
 
-void MoeTabControl::move( const mol::string& what, const mol::string& to )
+void MoeTabControl::move( HWND what, HWND to )
 {
 	int iwhat = -1;
 	int ito   = -1;
 
+	mol::TabCtrl::TabCtrlItem* tiwhat = 0;
+	mol::TabCtrl::TabCtrlItem* tito = 0;
+
 	for ( int i = 0; i < count(); i++ )
 	{
-		mol::string p = getItemTooltipText(i);
-		if ( mol::icmp( what, p ) == 0 )
+		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)getTabCtrlItem(i);
+		HWND mdi = (HWND)(c->lparam);
+		if ( mdi == what )
 		{
 			iwhat = i;
+			tiwhat = c;
 		}
-		if ( mol::icmp( to, p ) == 0 )
+		if ( mdi == to )
 		{
 			ito = i;
+			tito = c;
 		}
 	}
 
 	if ( ito == -1 || iwhat == -1 )
 		return;
 
-	mol::string name = getItemText(iwhat);
 	removeItem(iwhat);
-	insertItem( name, what, ito );
+	insertItem( tiwhat, ito );
 }
 
-void MoeTabControl::remove( const mol::string& path )
+void MoeTabControl::remove( HWND d )
 {
 	for ( int i = 0; i < count(); i++ )
 	{
-		mol::string p = getItemTooltipText(i);
-		if ( mol::icmp( path, p ) == 0 )
+		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)getTabCtrlItem(i);
+		HWND mdi = (HWND)(c->lparam);
+		if ( mdi == d )
 		{
 			removeItem(i);
 			return;
@@ -161,14 +169,16 @@ void MoeTabControl::remove( const mol::string& path )
 	}
 }
 
-void MoeTabControl::rename( const mol::string& oldpath,const mol::string& newpath, const mol::string& name )
+void MoeTabControl::rename( HWND d, const mol::string& newpath, const mol::string& name )
 {
 	for ( int i = 0; i < count(); i++ )
 	{
-		mol::string path = getItemTooltipText(i);
-		if ( mol::icmp( oldpath, path ) == 0 )
+		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)getTabCtrlItem(i);
+		HWND mdi = (HWND)(c->lparam);
+		if ( mdi == d )
 		{
-			this->renameItem( name, i, newpath );
+			mol::TabCtrl::TabCtrlItem* nc = new mol::TabCtrl::TabCtrlItem(name,newpath,c->lparam);
+			this->renameItem( nc, i );
 			return;
 		}
 	}

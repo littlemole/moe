@@ -248,7 +248,7 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 	if (!m )
 		return;
 
-	//::CoAllowSetForegroundWindow(moe,0);
+	::CoAllowSetForegroundWindow(moe,0);
 
 	mol::RegExp rgxp("(\"([^\"]*)\")|([^ ]+)");
 	while ( rgxp.nextMatch( cl ) )
