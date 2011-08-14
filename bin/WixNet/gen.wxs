@@ -7,18 +7,63 @@
     </Fragment>
     <Fragment>
         <ComponentGroup Id="NetCompGroup">
-            <Component Id="cmp268905818713CA1C5FA1A48E8E7B5A82" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{646CEDDD-AFE7-482A-B6CA-2BCA45467E1C}">
+            <Component Id="cmp268905818713CA1C5FA1A48E8E7B5A82" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{B9D4EA78-F33B-4E65-8FAE-DB06A523361D}">
                 <File Id="filE68E8B6EA0DE9360E00950CFFB3259F2" KeyPath="yes" Source="$(var.SourceDir)\net.ico" />
             </Component>
-            <Component Id="cmp2E8C704E56DDE6913D68AC369B2B43D6" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{0AC71CCC-0051-46B4-ABD4-DE6D4BC3D659}">
+            <Component Id="cmp2E8C704E56DDE6913D68AC369B2B43D6" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{05C9CB48-6B41-48E0-83C1-B956F7FDE9EF}">
                 <File Id="filE0128D303B52ABB4E6817067271917CA" KeyPath="yes" Source="$(var.SourceDir)\net.exe" />
             </Component>
-            <Component Id="cmp90625598B9D7D2472F65D1959541B5F7" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{B9843051-27A8-4626-9089-AC062677A0BA}">
+            <Component Id="cmp90625598B9D7D2472F65D1959541B5F7" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{E520E1FA-4E72-484E-B578-4221F87B8916}">
                 <File Id="filCDE0AF3312FF5C0A2EDFDA4991DE1056" KeyPath="yes" Source="$(var.SourceDir)\net.dll" />
+            </Component>
+            <Component Id="cmpF59640B7AEDC503EFF9209D7FAD9F183" Directory="dir6A0F8CB8636386F511F078EBBB9903CA" Guid="{998F7D0F-79FA-44E1-9723-78ADF2132768}">
+                <File Id="fil33E1FF1D27D0E62234CBC03F8D0C9B37" KeyPath="yes" Source="$(var.SourceDir)\.svn\entries" />
+            </Component>
+            <Component Id="cmp12A69857E43DCCB57402C9A13BBA28DC" Directory="dir2B6B1458DC06F7F9813C955FE3F07652" Guid="{DF9DAC0D-4446-46C2-BB26-448A52088903}">
+                <File Id="fil741BCEF4B3EB4CA7635FD760157E6997" KeyPath="yes" Source="$(var.SourceDir)\.svn\text-base\net.dll.svn-base" />
+            </Component>
+            <Component Id="cmp43DE854B7FDF76384AE5294F475EE97A" Directory="dir2B6B1458DC06F7F9813C955FE3F07652" Guid="{8EE25359-6813-4A09-BE21-F0E178044AB7}">
+                <File Id="fil987D079444B0446D56173033076BD038" KeyPath="yes" Source="$(var.SourceDir)\.svn\text-base\net.exe.svn-base" />
+            </Component>
+            <Component Id="cmpC30E72E565AA14447E39165CD8BE802C" Directory="dir2B6B1458DC06F7F9813C955FE3F07652" Guid="{24AD5729-DF9B-4F58-AD8C-92D31798B970}">
+                <File Id="fil5DB75D975E3C1486A9327B273B62639A" KeyPath="yes" Source="$(var.SourceDir)\.svn\text-base\net.ico.svn-base" />
+            </Component>
+            <Component Id="cmp7426D6D09C258699D03C4DD7504458F5" Directory="dirBC52C9019AD64A4F9F48C0AC51BB94FE" Guid="{8E1686C6-B83D-49EB-A429-9FC477B8490A}">
+                <File Id="filD2D3FE801915B875C1104190C8DC9024" KeyPath="yes" Source="$(var.SourceDir)\.svn\prop-base\net.dll.svn-base" />
+            </Component>
+            <Component Id="cmp1C83A7A91C1FC6DD609FBDEBA3CB5271" Directory="dirBC52C9019AD64A4F9F48C0AC51BB94FE" Guid="{4681245E-73F4-4E2F-92C2-1BB20CFE3A85}">
+                <File Id="filEA7EB037E3DCC578498022E98F700C70" KeyPath="yes" Source="$(var.SourceDir)\.svn\prop-base\net.exe.svn-base" />
+            </Component>
+            <Component Id="cmp7731891728B11FB48FE1223191E56A4F" Directory="dirBC52C9019AD64A4F9F48C0AC51BB94FE" Guid="{DBB3E7EA-A203-4B5E-AC35-FEAA5078E69D}">
+                <File Id="filA19E41870D0EDF43CB70086747EDED6C" KeyPath="yes" Source="$(var.SourceDir)\.svn\prop-base\net.ico.svn-base" />
             </Component>
         </ComponentGroup>
     </Fragment>
     <Fragment>
+        <DirectoryRef Id="dir2B6B1458DC06F7F9813C955FE3F07652" />
+    </Fragment>
+    <Fragment>
         <DirectoryRef Id="dirD024566BCA42D8BA29DEC8C793A7EB92" />
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirBC52C9019AD64A4F9F48C0AC51BB94FE" />
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6A0F8CB8636386F511F078EBBB9903CA" />
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6A0F8CB8636386F511F078EBBB9903CA">
+            <Directory Id="dir2B6B1458DC06F7F9813C955FE3F07652" Name="text-base" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dirD024566BCA42D8BA29DEC8C793A7EB92">
+            <Directory Id="dir6A0F8CB8636386F511F078EBBB9903CA" Name=".svn" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir6A0F8CB8636386F511F078EBBB9903CA">
+            <Directory Id="dirBC52C9019AD64A4F9F48C0AC51BB94FE" Name="prop-base" />
+        </DirectoryRef>
     </Fragment>
 </Wix>
