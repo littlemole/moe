@@ -9,12 +9,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 class DirChild 
-	: 
-	public mol::MdiChildFrame<DirChild,mol::AxWnd<DirChild,mol::MdiChild,&CLSID_ShellPane>>,
-	public DispatchMdiWindow<DirChild,IMoeDocument,MOE_DOCTYPE_DIR>,
-	public mol::ProvideClassInfo<DirChild>,
-	public mol::interfaces< DirChild, 
-			mol::implements< IDispatch, IMoeDocument, IProvideClassInfo> >
+	: public MoeAxChild<
+				DirChild,
+				MOE_DOCTYPE_DIR,
+				&CLSID_ShellPane
+			>
 {
 public:
 

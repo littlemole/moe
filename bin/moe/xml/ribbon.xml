@@ -434,7 +434,15 @@
 
     <Command Name="RibbonEditPaste" LabelTitle="Paste">
       <Command.TooltipTitle>Paste</Command.TooltipTitle>
-      <Command.TooltipDescription>Paste to Clipboard</Command.TooltipDescription>
+      <Command.TooltipDescription>Paste from Clipboard</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Paste.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
+    <Command Name="RibbonEditPasteAs" LabelTitle="Paste As">
+      <Command.TooltipTitle>Paste As Format</Command.TooltipTitle>
+      <Command.TooltipDescription>Paste from Clipboard and choose format</Command.TooltipDescription>
       <Command.LargeImages>
         <Image Source="ribbon\Paste.bmp"/>
       </Command.LargeImages>
@@ -879,7 +887,16 @@
           <MenuGroup>
             <Button CommandName="RibbonEditCut" />
             <Button CommandName="RibbonEditCopy" />
-            <Button CommandName="RibbonEditPaste" />
+            <SplitButton>
+              <SplitButton.ButtonItem>
+                <Button CommandName="RibbonEditPaste"/>
+              </SplitButton.ButtonItem>
+              <SplitButton.MenuGroups>
+                <MenuGroup >
+                  <Button CommandName="RibbonEditPasteAs"/>
+                </MenuGroup>
+              </SplitButton.MenuGroups>
+            </SplitButton>
           </MenuGroup>
           <MenuGroup>
             <CheckBox CommandName="RibbonSelectModeUnix"/>
@@ -1419,9 +1436,22 @@
           
           <!-- Clipboard Group -->
           <Group CommandName="RibbonClipboardGroup" SizeDefinition="ThreeControls"  ApplicationModes="1,2,5,6">
-            <Button CommandName="RibbonEditPaste"/>
+
             <Button CommandName="RibbonEditCut"/>
             <Button CommandName="RibbonEditCopy"/>
+
+            <SplitButton>
+              <SplitButton.ButtonItem>
+                <Button CommandName="RibbonEditPaste"/>
+              </SplitButton.ButtonItem>
+              <SplitButton.MenuGroups>
+                <MenuGroup >
+                  <Button CommandName="RibbonEditPaste"/>
+                  <Button CommandName="RibbonEditPasteAs"/>
+                </MenuGroup>
+              </SplitButton.MenuGroups>
+            </SplitButton>
+
           </Group>
 
           <!-- Reload Group 

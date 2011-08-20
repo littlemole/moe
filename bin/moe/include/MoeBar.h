@@ -1,10 +1,8 @@
 #ifndef MOE_REBAR_DEF_GUARD_
 #define MOE_REBAR_DEF_GUARD_
 
-#include "win/res.h"
-#include "win/wnd.h"
-#include "shared.h"
 #include "widgets.h"
+#include "resource.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // widgets for moe

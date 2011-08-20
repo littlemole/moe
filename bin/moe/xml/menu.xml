@@ -38,6 +38,7 @@
         <menu cmd="IDM_EDIT_CUT" />
         <menu cmd="IDM_EDIT_COPY" />
         <menu cmd="IDM_EDIT_PASTE" />
+        <menu cmd="IDM_EDIT_PASTEAS" />
       </menu>
       <menu cmd="IDM_TOOLS" >
         <menu cmd="IDM_EDIT_COLOR" />

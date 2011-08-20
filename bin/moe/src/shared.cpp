@@ -861,7 +861,7 @@ HRESULT __stdcall MoeConfig::get_ShowLineNumbers(  VARIANT_BOOL* vb)
 
 HRESULT __stdcall MoeConfig::EditPreferences( )
 {
-	PropSheet ps( *moe(), _T("Moe") );
+	PropSheet ps( *moe(), _T("Moe"));
 
 	ps.addPage<TabPage>		(	_T("new doc prefs"), IDD_DIALOG_TAB );
 	ps.addPage<ExportPage>	(	_T("export/import"), IDD_DIALOG_EXPORT );

@@ -5,53 +5,15 @@
 #include "Docs.h"
 #include "moebar.h"
 #include "xmlui.h"
-#include "ole/Rib.h"
-#include "win/TaskBar.h"
 #include "ribbonres.h"
 #include "ThreadScript.h"
 #include "ActivDbg.h"
-#include "boost/function.hpp"
 
 using namespace mol::win;
 using namespace mol::ole;
 using namespace mol::io;
 
 mol::TCHAR OutFilesFilter[]   = _T("ANSI\0*.*\0UTF-8\0*.*\0UTF-16 (LE)\0*.*\0\0");
-
-//////////////////////////////////////////////////////////////////////////////
-// helpers for easy access of scintillAx members. just to save some repetition
-//////////////////////////////////////////////////////////////////////////////
-
-template<class T>
-class SciMember
-{};
-
-template<class T>
-struct SciMemberBase
-{
-	T* operator->() { return ptr_; }
-
-	mol::punk<T> ptr_;
-};
-
-#define SciMemberImpl(Prop)																			\
-template<>																							\
-struct SciMember<IScintillAx##Prop> : public SciMemberBase<IScintillAx##Prop>						\
-{																									\
-	SciMember(IScintillAx* sci)																		\
-	{																								\
-		sci->get_##Prop(&ptr_);																		\
-	}																								\
-};																									\
-
-SciMemberImpl(Properties);
-SciMemberImpl(Position);
-SciMemberImpl(Selection);
-SciMemberImpl(Line);
-SciMemberImpl(Annotation);
-SciMemberImpl(Markers);
-SciMemberImpl(Text);
-
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -68,38 +30,6 @@ Editor::Editor()
 	wndClass().hIconSm(moe()->icon); 
 
 	monitor_.events += mol::events::event_handler( &Editor::OnFileChangeNotify, this );
-}
-
-void Editor::OnFileChangeNotify(mol::io::DirMon* dirmon)
-{
-	SciMember<IScintillAxProperties> props(sci);
-	mol::bstr path;
-	props->get_Filename(&path);
-
-	checkModifiedOnDisk(path.toString());
-}
-
-void Editor::checkModifiedOnDisk(const mol::string& path)
-{
-//	static volatile long updating = 0;
-
-//	long l = ::InterlockedCompareExchange( &updating, 1, 0 );
-//	if ( l )
-		//return;
-
-	FILETIME ft = getLastWriteTime( path );
-
-
-	if ( (ft.dwHighDateTime != lastWriteTime_.dwHighDateTime) || (ft.dwLowDateTime != lastWriteTime_.dwLowDateTime) )
-	{
-		lastWriteTime_ = ft;
-		if ( IDOK == ::MessageBoxA(*this,"reload file?","file has been modified on disk, reload?",MB_ICONEXCLAMATION|MB_OKCANCEL) )
-		{
-			OnReload();
-		}
-	}
-//	::InterlockedExchange( &updating, 0 );
-//	updating = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -156,13 +86,19 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 
 	statusBar()->status(50);
 
+	// prepare interface pointers
 	sci = oleObject;
+	sci->get_Properties(&props_);
+	sci->get_Annotation(&annotation_);
+	sci->get_Line(&line_);
+	sci->get_Markers(&markers_);
+	sci->get_Position(&position_);
+	sci->get_Selection(&selection_);
+	sci->get_Text(&text_);
 
 	// get default values from config and init scintilla
 
 	moe()->moeConfig->InitializeEditorFromPreferences( (IMoeDocument*)this );
-
-	SciMember<IScintillAxProperties> props(sci);
 
 	// if file exists, load
 	if ( mol::Path::exists(p) )
@@ -190,7 +126,7 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 	else
 	{
 
-		props->put_Filename(mol::bstr(p));
+		props_->put_Filename(mol::bstr(p));
 	}
 
 	statusBar()->status(80);
@@ -200,15 +136,15 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 	show(SW_SHOW);
 
 	//TODO: user config? just while debugging? UI based?
-	SciMember<IScintillAxMarkers>(sci)->put_UseMarkers(VARIANT_TRUE);
+	markers_->put_UseMarkers(VARIANT_TRUE);
 
 	//override read only
-	props->put_ReadOnly( readOnly ? VARIANT_TRUE : VARIANT_FALSE );
+	props_->put_ReadOnly( readOnly ? VARIANT_TRUE : VARIANT_FALSE );
 
 	// if we have a ribbon, we use our own context menu
 	if ( mol::Ribbon::ribbon()->enabled() )
 	{
-		props->put_UseContext(VARIANT_FALSE);
+		props_->put_UseContext(VARIANT_FALSE);
 	}
 
 	statusBar()->status(100);
@@ -233,16 +169,16 @@ LRESULT Editor::OnClose()
 		return 1;
 
 	VARIANT_BOOL vb;
-	SciMember<IScintillAxText>(sci)->get_Modified(&vb);
+	text_->get_Modified(&vb);
 
 	if ( vb == VARIANT_TRUE )
 	{
 		mol::bstr p;
-		SciMember<IScintillAxProperties>(sci)->get_Filename(&p);
+		props_->get_Filename(&p);
 		mol::ostringstream oss;
-		oss << p.toString() << _T(" is modified! \r\n close without save?");
-		LRESULT r = ::MessageBox( *this, oss.str().c_str(), _T("document modified!"), MB_ICONEXCLAMATION|MB_OKCANCEL );
-		if ( r != IDOK )
+		oss << p.toString() << _T("\r\nis modified! ");
+		LRESULT r = ::msgbox( _T("close without save?"), _T("document modified!"),oss.str().c_str() );
+		if ( r != IDYES )
 		{
 			return 1;
 		}
@@ -263,22 +199,28 @@ void Editor::OnDestroy()
 
 	ODBGS("Editor::OnDestroy()");
 	
-	
-	SciMember<IScintillAxProperties> props(sci);
 	mol::bstr path;
-	props->get_Filename(&path);
+	props_->get_Filename(&path);
 
 	docs()->remove(this);
 	
  	events.UnAdvise(oleObject);
+
+	props_.release();
+	position_.release();
+	selection_.release();
+	line_.release();
+	annotation_.release();
+	markers_.release();
+	text_.release();
 	sci.release();
+
 }
 
 void Editor::OnNcDestroy()
 {
 
 	ODBGS("Editor::OnNcDestroy()");
-
 	
 	IMoeDocument*e = (IMoeDocument*)this;
 	::CoDisconnectObject(((IMoeDocument*)this),0);
@@ -294,9 +236,8 @@ void Editor::OnMDIActivate(WPARAM unused, HWND activated)
 
 	if ( activated == hWnd_ )
 	{
-		SciMember<IScintillAxProperties> props(sci);
 		mol::bstr path;
-		props->get_Filename(&path);
+		props_->get_Filename(&path);
 
 		tab()->select( *this );
 		updateUI();
@@ -306,20 +247,46 @@ void Editor::OnMDIActivate(WPARAM unused, HWND activated)
 	}
 }
 
-void Editor::OnCliReturn()
+void Editor::OnFileChangeNotify(mol::io::DirMon* dirmon)
 {
-	//mol::string txt = cli()->getText();
+	mol::bstr path;
+	props_->get_Filename(&path);
 
-
+	checkModifiedOnDisk(path.toString());
 }
 
+void Editor::checkModifiedOnDisk(const mol::string& path)
+{
+	if ( moe()->getActive() != (HWND)*this )
+	{
+		return;
+	}
+
+	FILETIME ft = getLastWriteTime( path );
+
+
+	if ( (ft.dwHighDateTime != lastWriteTime_.dwHighDateTime) || (ft.dwLowDateTime != lastWriteTime_.dwLowDateTime) )
+	{
+		lastWriteTime_ = ft;
+		if ( IDYES == msgbox( _T("reload file?"),_T("file is modified!"),_T("file has been modified on disk, reload?")) )
+		{
+			OnReload();
+		}
+	}
+}
+
+
+void Editor::OnCliReturn()
+{
+
+}
 
 void Editor::OnCut()
 {
 	if ( !sci )
 		return;
 
-	SciMember<IScintillAxSelection>(sci)->Cut();
+	selection_->Cut();
 }
 
 void Editor::OnCopy()
@@ -327,7 +294,7 @@ void Editor::OnCopy()
 	if ( !sci )
 		return;
 
-	SciMember<IScintillAxSelection>(sci)->Copy();
+	selection_->Copy();
 }
 
 void Editor::OnPaste()
@@ -335,16 +302,33 @@ void Editor::OnPaste()
 	if ( !sci )
 		return;
 
-	SciMember<IScintillAxSelection>(sci)->Paste();
+	selection_->Paste();
 }
 
+
+void Editor::OnPasteAs()
+{
+	if ( !sci )
+		return;
+
+	PasteAs pasteAs;
+
+	std::wstring data = pasteAs.get();
+
+	if ( data.empty() )
+	{
+		return OnPaste();
+	}
+
+	selection_->put_Text( mol::bstr(data) );
+}
 
 void Editor::OnConvertTabs()
 {
 	if ( !sci )
 		return;
 
-	SciMember<IScintillAxProperties>(sci)->ConvertTabs();
+	props_->ConvertTabs();
 }
 
 void Editor::OnEncoding()
@@ -354,9 +338,7 @@ void Editor::OnEncoding()
 
 	// get chosen lexer id
 	int enc = mol::Ribbon::handler(RibbonEncoding)->index();
-
-	SciMember<IScintillAxProperties>(sci)->put_Encoding(enc);
-
+	props_->put_Encoding(enc);
 }
 
 
@@ -375,8 +357,7 @@ void Editor::OnTabUsage()
 		return;
 
 	VARIANT_BOOL vb = mol::Ribbon::handler(RibbonTabUseTabs)->checked() ? VARIANT_TRUE: VARIANT_FALSE;
-
-	SciMember<IScintillAxProperties>(sci)->put_TabUsage(vb);
+	props_->put_TabUsage(vb);
 }
 
 void Editor::OnTabWidth()
@@ -388,8 +369,7 @@ void Editor::OnTabWidth()
 
 	DECIMAL d = v.decVal;
 	long w = d.Lo32;
-
-	SciMember<IScintillAxProperties>(sci)->put_TabWidth(w);
+	props_->put_TabWidth(w);
 
 }
 
@@ -399,9 +379,7 @@ void Editor::OnTabIndents()
 		return;
 
 	VARIANT_BOOL vb = mol::Ribbon::handler(RibbonTabIndents)->checked() ? VARIANT_TRUE: VARIANT_FALSE;
-
-	SciMember<IScintillAxProperties>(sci)->put_TabIndents(vb);
-
+	props_->put_TabIndents(vb);
 }
 
 void Editor::OnBackspaceUnindents()
@@ -410,8 +388,7 @@ void Editor::OnBackspaceUnindents()
 		return;
 
 	VARIANT_BOOL vb = mol::Ribbon::handler(RibbonTabBackSpaceUnIndents)->checked() ? VARIANT_TRUE: VARIANT_FALSE;
-
-	SciMember<IScintillAxProperties>(sci)->put_BackSpaceUnindents(vb);
+	props_->put_BackSpaceUnindents(vb);
 
 }
 
@@ -421,9 +398,7 @@ void Editor::OnWriteBOM()
 		return;
 
 	VARIANT_BOOL vb = mol::Ribbon::handler(RibbonWriteBOM)->checked() ? VARIANT_TRUE: VARIANT_FALSE;
-
-	SciMember<IScintillAxProperties>(sci)->put_WriteBOM(vb);
-
+	props_->put_WriteBOM(vb);
 }
 
 
@@ -434,18 +409,16 @@ void Editor::OnReload()
 	if ( !sci )
 		return;
 
-	SciMember<IScintillAxProperties> props(sci);
-	SciMember<IScintillAxText> txt(sci);
-
 	VARIANT_BOOL vb;
-	if ( S_OK != txt->get_Modified(&vb) )
+	if ( S_OK != text_->get_Modified(&vb) )
 		return ;
 
 	if ( vb == VARIANT_TRUE )
 	{
 		mol::bstr path;
-		props->get_Filename(&path);
-		if ( IDYES != ::MessageBox(*this,_T("File is modified.\r\nClose without Save?"), path.toString().c_str() ,MB_YESNO|MB_ICONEXCLAMATION) )
+		props_->get_Filename(&path);
+		LRESULT r = ::msgbox( _T("you have unsaved changes."), _T("document modified!"),_T("discard all changes and proceed.") );
+		if ( r != IDYES )
 			return ;
 	}
 	mol::bstr filename;
@@ -456,12 +429,12 @@ void Editor::OnReload()
 
 	lastWriteTime_ = getLastWriteTime(filename.toString());
 
-	if ( S_OK != props->get_ReadOnly(&vb) )
+	if ( S_OK != props_->get_ReadOnly(&vb) )
 	{
 		return ;
 	}
 	long t;
-	if ( S_OK != props->get_Encoding(&t) )
+	if ( S_OK != props_->get_Encoding(&t) )
 	{
 		return ;
 	}
@@ -469,12 +442,12 @@ void Editor::OnReload()
 	{
 
 		sci->LoadUTF8(filename);
-		props->put_ReadOnly(vb);
+		props_->put_ReadOnly(vb);
 		statusBar()->status(filename.toString());
 		return ;
 	}
 	sci->Load(filename);
-	props->put_ReadOnly(vb);
+	props_->put_ReadOnly(vb);
 	statusBar()->status(filename.toString());
 }
 
@@ -501,13 +474,10 @@ void Editor::OnSelectAll()
 	if ( !sci )
 		return;
 
-	SciMember<IScintillAxSelection> sel(sci);
-	SciMember<IScintillAxText> txt(sci);
-
 	long len = 0;
-	txt->get_Length(&len);
+	text_->get_Length(&len);
 
-	sel->SetSelection(0,len);
+	selection_->SetSelection(0,len);
 }
 
 void Editor::OnUserCommand(int code, int id, HWND ctrl)
@@ -519,11 +489,8 @@ void Editor::OnUserCommand(int code, int id, HWND ctrl)
     if ( !set ) 
 		return ;
 
-	SciMember<IScintillAxSelection> s(sci);
-	SciMember<IScintillAxText> txt(sci);
-
 	long sel;
-	if ( S_OK != s->get_Start(&sel) )
+	if ( S_OK != selection_->get_Start(&sel) )
 		return ;
 
 	mol::bstr val;
@@ -537,12 +504,12 @@ void Editor::OnUserCommand(int code, int id, HWND ctrl)
 		tmp = tmp.substr(0,pos)+tmp.substr(pos+19);
 	}
 						
-	if ( S_OK != txt->Insert(mol::bstr(tmp),sel) )
+	if ( S_OK != text_->Insert(mol::bstr(tmp),sel) )
 		return ;
 
 	if ( pos != std::string::npos )
 	{
-		s->SetSelection( (long)(sel+pos), (long)(sel+pos));
+		selection_->SetSelection( (long)(sel+pos), (long)(sel+pos));
 	}
 }
 
@@ -609,6 +576,20 @@ void Editor::OnUserForm(int code, int id, HWND ctrl)
 	int h = r.bottom-r.top-100;
 	int o = 2;
 
+	std::vector<mol::string> v = mol::split(path,_T(","));
+
+	switch ( v.size() )
+	{
+		case 6 : o = atoi(mol::tostring(v[5]).c_str());
+		case 5 : h = atoi(mol::tostring(v[4]).c_str());
+		case 4 : w = atoi(mol::tostring(v[3]).c_str());
+		case 3 : t = t + atoi(mol::tostring(v[2]).c_str());			
+		case 2 : l = l + atoi(mol::tostring(v[1]).c_str());
+		case 1 : file = v[0];
+		default : ;
+	}
+
+	/*
 	size_t p = path.find( _T(","));
 	if ( p != mol::string::npos )
 	{
@@ -653,6 +634,7 @@ void Editor::OnUserForm(int code, int id, HWND ctrl)
 			l = l + atoi( mol::tostring( path.substr(p+1) ).c_str() );
 		}
 	}
+	*/
 
 	moe()->moeScript->ShowHtmlForm( mol::bstr(file), l, t, w, h, o );
 }
@@ -710,15 +692,12 @@ void Editor::OnBeautify()
 	if ( !sci )
 		return;
 
-	SciMember<IScintillAxText> txt(sci);
-	SciMember<IScintillAxProperties> props(sci);
-
 	long type;
-	if ( S_OK != props->get_Syntax(&type) || type != SCINTILLA_SYNTAX_HTML )
+	if ( S_OK != props_->get_Syntax(&type) || type != SCINTILLA_SYNTAX_HTML )
 		return ;
 
 	mol::bstr b;
-	if ( S_OK != txt->GetText(&b) || b.bstr_ == 0 )
+	if ( S_OK != text_->GetText(&b) || b.bstr_ == 0 )
 		return ;
 
 	mol::HtmlDocument doc;
@@ -737,7 +716,7 @@ void Editor::OnBeautify()
 		os << "\r\n";
 	}
 
-	txt->SetText(mol::bstr(os.str()));
+	text_->SetText(mol::bstr(os.str()));
 }
 
 void Editor::OnSearch(FINDREPLACE* find)
@@ -745,15 +724,13 @@ void Editor::OnSearch(FINDREPLACE* find)
 	if ( !sci )
 		return;
 
-	SciMember<IScintillAxText> txt(sci);
-
     if ( (find->Flags) & FR_FINDNEXT )
     {
 		std::string what( mol::tostring(find->lpstrFindWhat));
 		std::string utf8what(mol::toUTF8(what));
 
 		VARIANT_BOOL vb;
-		txt->Search(mol::bstr(utf8what),find->Flags,&vb);
+		text_->Search(mol::bstr(utf8what),find->Flags,&vb);
 		if ( VARIANT_FALSE == vb )
 		{
 			statusBar()->status(_T("Search: end of doc"));
@@ -767,7 +744,7 @@ void Editor::OnSearch(FINDREPLACE* find)
 		std::string utf8with(mol::toUTF8(with));
 
 		VARIANT_BOOL vb;
-		txt->Replace(mol::bstr(utf8what),mol::bstr(utf8with),find->Flags,&vb);
+		text_->Replace(mol::bstr(utf8what),mol::bstr(utf8with),find->Flags,&vb);
 		if ( VARIANT_FALSE == vb )
 		{
 			statusBar()->status(_T("Replace: end of doc"));
@@ -785,7 +762,7 @@ void Editor::OnSearch(FINDREPLACE* find)
 		VARIANT_BOOL vb = VARIANT_TRUE;
 		while ( vb == VARIANT_TRUE )
 		{
-			txt->Replace(mol::bstr(utf8what),mol::bstr(utf8with),find->Flags,&vb);
+			text_->Replace(mol::bstr(utf8what),mol::bstr(utf8with),find->Flags,&vb);
 				
 			if ( VARIANT_FALSE == vb )
 			{
@@ -806,28 +783,18 @@ void Editor::OnSearch(FINDREPLACE* find)
 
 void Editor::OnUnix()
 {
-	if ( !sci )
-		return;
-
-	SciMember<IScintillAxProperties>(sci)->put_SysType(SCINTILLA_SYSTYPE_UNIX);
-	statusBar()->status( _T("set EOL type to UNIX (\\n)"));
+	props_->put_SysType(SCINTILLA_SYSTYPE_UNIX);
 }
 
 
 void Editor::OnWin32()
 {
-	if ( !sci )
-		return;
-
-	SciMember<IScintillAxProperties>(sci)->put_SysType(SCINTILLA_SYSTYPE_WIN32);
+	props_->put_SysType(SCINTILLA_SYSTYPE_WIN32);
 	statusBar()->status( _T("set EOL type to WIN32 (\\r\\n)"));
 }
 
 void Editor::OnSettings()
 {
-	if ( !sci )
-		return;
-
 	mol::punk<IUnknown> unk(oleObject);
 	if ( !unk )
 		return;
@@ -840,10 +807,8 @@ void Editor::OnSettings()
 	if ( S_OK != spp->GetPages(&pages) )
 		return;
 
-	SciMember<IScintillAxProperties> props(sci);
-
 	mol::bstr filename;
-	if ( S_OK == props->get_Filename(&filename) )
+	if ( S_OK == props_->get_Filename(&filename) )
 	{
 		mol::string p(filename.toString());
 		::OleCreatePropertyFrame( *this, 10, 10,
@@ -857,9 +822,6 @@ void Editor::OnSettings()
 
 void Editor::OnInsertColorDialog()
 {
-	if ( !sci )
-		return;
-
 	sci->InsertColorDialog();
 }
 
@@ -879,11 +841,10 @@ void Editor::OnLexer(int code, int id, HWND ctrl)
 
 	syntax -= IDM_LEXER_PLAIN;
 
-	SciMember<IScintillAxProperties> props(sci);
-	props->put_Syntax(syntax);
+	props_->put_Syntax(syntax);
 
 	mol::bstr displayname;
-	if ( S_OK == props->GetSyntaxDisplayName(syntax,&displayname) )
+	if ( S_OK == props_->GetSyntaxDisplayName(syntax,&displayname) )
 	{
 		statusBar()->status(displayname.toString());
 	}
@@ -902,29 +863,29 @@ void Editor::OnSaveAs()
 	long enc;
 	mol::bstr p;
 
-	SciMember<IScintillAxProperties> props(sci);
-
 	mol::FilenameDlg ofn(*this);
 	ofn.setFilter( OutFilesFilter );		
-	if ( S_OK == props->get_Encoding(&enc) )
+	if ( S_OK == props_->get_Encoding(&enc) )
 		ofn.index(enc+1);
-	if ( S_OK == props->get_Filename(&p) )
+	if ( S_OK == props_->get_Filename(&p) )
 		ofn.fileName(p.toString());
 
 	if ( ofn.dlgSave( OFN_OVERWRITEPROMPT| OFN_NOTESTFILECREATE| OFN_NOVALIDATE) )
 	{	
 		if ( ofn.fileName() != p.toString() )
 		{
+			/*
 			mol::punk<IMoeDocument> doc;
 			if ( (S_OK == docs()->Item(mol::variant(ofn.fileName()),&doc)) && doc )
 			{
 				::MessageBox(*this, _T("File already open in other editor window!"), _T("error"),MB_ICONERROR);
 				return ;
 			}
+			*/
 		}
 
 		if ( enc != ofn.index()-1 )
-			props->put_Encoding(ofn.index()-1);
+			props_->put_Encoding(ofn.index()-1);
 		if (sci)
 		{
 			mol::ostringstream oss;
@@ -932,7 +893,7 @@ void Editor::OnSaveAs()
 			if ( S_OK == sci->SaveAs( mol::bstr(ofn.fileName() ) ) )
 			{
 				docs()->rename( this, ofn.fileName() );
-				props->put_Filename(mol::bstr(ofn.fileName()));
+				props_->put_Filename(mol::bstr(ofn.fileName()));
 
 				oss << _T("file saved as ") << ofn.fileName() << _T(" saved");
 			}
@@ -953,7 +914,7 @@ void Editor::OnSave()
 		return;
 
 	mol::bstr filename;
-	SciMember<IScintillAxProperties>(sci)->get_Filename(&filename);
+	props_->get_Filename(&filename);
 
 	mol::ostringstream oss;
 
@@ -978,7 +939,7 @@ void Editor::OnExecForm()
 	sci->Save();
 
 	mol::bstr filename;
-	SciMember<IScintillAxProperties>(sci)->get_Filename(&filename);
+	props_->get_Filename(&filename);
 		
 	RECT r;
 	moe()->getWindowRect(r);
@@ -996,16 +957,14 @@ void Editor::OnExecForm()
 void Editor::OnShowLineNumbers()
 {
 	if ( !sci )
-		return;
-
-	SciMember<IScintillAxProperties> props(sci);
+		return;	
 
 	VARIANT_BOOL vb;
-	if ( S_OK != props->get_ShowLineNumbers(&vb) )
+	if ( S_OK != props_->get_ShowLineNumbers(&vb) )
 		return;
 
 	vb = vb == VARIANT_FALSE ? VARIANT_TRUE : VARIANT_FALSE;
-	props->put_ShowLineNumbers(vb);
+	props_->put_ShowLineNumbers(vb);
 
 	mol::Menu mode(mol::UI().SubMenu(IDM_MOE,IDM_MODE));
 
@@ -1022,14 +981,8 @@ void Editor::OnDebugScriptGo()
 
 	debugDlg()->show(SW_HIDE);
 
-	SciMember<IScintillAxProperties> props(sci);
-	SciMember<IScintillAxLine> line(sci);
-	SciMember<IScintillAxAnnotation> anno(sci);
-	SciMember<IScintillAxText> txt(sci);
-	SciMember<IScintillAxMarkers> markers(sci);
-
-	line->Highlite(-1);
-	anno->ClearAll();
+	line_->Highlite(-1);
+	annotation_->ClearAll();
 
 	if ( remote_ )
 	{		
@@ -1054,11 +1007,11 @@ void Editor::OnDebugScriptGo()
 	}
 
 	mol::bstr filename;
-	if ( S_OK != props->get_Filename(&filename) )
+	if ( S_OK != props_->get_Filename(&filename) )
 		return ;
 
 	mol::bstr script;
-	if ( S_OK != txt->GetText(&script) )
+	if ( S_OK != text_->GetText(&script) )
 		return ;
 
 	mol::string engine = engineFromPath(filename.tostring());
@@ -1069,7 +1022,7 @@ void Editor::OnDebugScriptGo()
 
 
 	std::set<int> s;
-	if ( S_OK == markers->GetMarkers(&sf) )
+	if ( S_OK == markers_->GetMarkers(&sf) )
 	{
 		mol::SFAccess<long> sfa(sf);
 
@@ -1095,8 +1048,8 @@ void Editor::OnDebugScriptStepIn()
 	if ( !sci )
 		return;
 
-	SciMember<IScintillAxLine>(sci)->Highlite(-1);
-	SciMember<IScintillAxAnnotation>(sci)->ClearAll();
+	line_->Highlite(-1);
+	annotation_->ClearAll();
 
 	if ( !remote_)
 		return;
@@ -1119,8 +1072,8 @@ void Editor::OnDebugScriptStepOver()
 	if ( !sci )
 		return;
 
-	SciMember<IScintillAxLine>(sci)->Highlite(-1);
-	SciMember<IScintillAxAnnotation>(sci)->ClearAll();
+	line_->Highlite(-1);
+	annotation_->ClearAll();
 
 	if ( !remote_)
 		return;
@@ -1143,8 +1096,8 @@ void Editor::OnDebugScriptStepOut()
 	if ( !sci )
 		return;
 
-	SciMember<IScintillAxLine>(sci)->Highlite(-1);
-	SciMember<IScintillAxAnnotation>(sci)->ClearAll();
+	line_->Highlite(-1);
+	annotation_->ClearAll();
 
 	if ( !remote_)
 		return;
@@ -1167,8 +1120,8 @@ void Editor::OnDebugScriptStop()
 	if ( !sci )
 		return;
 
-	SciMember<IScintillAxLine>(sci)->Highlite(-1);
-	SciMember<IScintillAxAnnotation>(sci)->ClearAll();
+	line_->Highlite(-1);
+	annotation_->ClearAll();
 
 	if ( !ts_ )
 		return;
@@ -1185,7 +1138,7 @@ void Editor::OnDebugScriptQuit()
 
 	debugDlg()->show(SW_HIDE);
 
-	SciMember<IScintillAxLine>(sci)->Highlite(-1);
+	line_->Highlite(-1);
 
 	mol::Ribbon::ribbon()->mode(1);
 
@@ -1218,7 +1171,7 @@ void Editor::OnScriptThreadDone()
 	ts_ = 0;
 
 	if ( sci)
-		SciMember<IScintillAxLine>(sci)->Highlite(-1);
+		line_->Highlite(-1);
 
 	mol::Ribbon::ribbon()->mode(1);
 }
@@ -1299,17 +1252,14 @@ void Editor::OnScriptThread( int line, IRemoteDebugApplicationThread* remote, IA
 	debugDlg()->remote = remote;
 	debugDlg()->show( remote ? SW_SHOW : SW_HIDE );
 
-	SciMember<IScintillAxLine> lines(sci);
-	SciMember<IScintillAxAnnotation> anno(sci);
-
-	anno->ClearAll();
+	annotation_->ClearAll();
 	if ( !lasterror_.empty())
 	{
-		anno->SetText( line, mol::bstr(lasterror_) );
+		annotation_->SetText( line, mol::bstr(lasterror_) );
 	}
 
-	lines->Goto(line);
-	lines->Highlite(line);
+	line_->Goto(line);
+	line_->Highlite(line);
 
 	mol::Ribbon::ribbon()->mode(9);
 	/*
@@ -1365,11 +1315,8 @@ void Editor::OnExecScript()
 	if ( !sci )
 		return;
 
-	SciMember<IScintillAxProperties> props(sci);
-	SciMember<IScintillAxText> txt(sci);
-
 	mol::bstr filename;
-	if ( S_OK != props->get_Filename(&filename) )
+	if ( S_OK != props_->get_Filename(&filename) )
 		return ;
 
 	mol::string engine = engineFromPath(filename.tostring());
@@ -1377,7 +1324,7 @@ void Editor::OnExecScript()
 		return ;
 
 	mol::bstr script;
-	if ( S_OK != txt->GetText(&script) )
+	if ( S_OK != text_->GetText(&script) )
 		return ;
 
 	scriptlet()->eval(engine,script.toString(),sci);
@@ -1413,9 +1360,8 @@ HRESULT __stdcall Editor::get_FilePath( BSTR *fname)
 	if ( fname  )
 	{
 		*fname = 0;
-		SciMember<IScintillAxProperties> props(sci);
 		mol::bstr path;
-		props->get_Filename(&path);
+		props_->get_Filename(&path);
 		*fname = ::SysAllocString(path.bstr_);
 	}
 	return S_OK;
@@ -1447,24 +1393,20 @@ HRESULT __stdcall  Editor::Sintilla_Events::OnPosChange( long line )
 	if ( !This()->sci )
 		return S_OK;
 
-	SciMember<IScintillAxPosition> p(This()->sci);
-	SciMember<IScintillAxLine> lines(This()->sci);
-
 	mol::ostringstream oss;
 	oss << (line+1);
 
 	long pos = 0;
 	long linepos = 0;
-	p->get_Caret(&pos);
-	lines->PosFromLine(line,&linepos);
+	This()->position_->get_Caret(&pos);
+	This()->line_->PosFromLine(line,&linepos);
 
 	long col = pos-linepos;
 	mol::ostringstream oss2;
 	oss2 << col << " ";
 
-	SciMember<IScintillAxProperties> props(This()->sci);
 	mol::bstr path;
-	props->get_Filename(&path);
+	This()->props_->get_Filename(&path);
 
 	statusBar()->setText( path.toString(), oss.str(), oss2.str());
 	return S_OK;
@@ -1499,8 +1441,7 @@ HRESULT __stdcall Editor::Sintilla_Events::OnMarker( long line)
 	if ( !This()->sci )
 		return S_OK;
 
-	SciMember<IScintillAxMarkers> m(This()->sci);
-	m->ToggleMarker(line);
+	This()->markers_->ToggleMarker(line);
 
 	if ( This()->ts_ )
 	{
@@ -1508,7 +1449,7 @@ HRESULT __stdcall Editor::Sintilla_Events::OnMarker( long line)
 		mol::SafeArray<VT_I4> sf;
 
 		std::set<int> s;
-		if ( S_OK == m->GetMarkers(&sf) )
+		if ( S_OK == This()->markers_->GetMarkers(&sf) )
 		{
 			mol::SFAccess<long> sfa(sf);
 
@@ -1533,26 +1474,22 @@ void Editor::updateUI()
 		return;
 	}
 
-	SciMember<IScintillAxPosition> p(sci);
-	SciMember<IScintillAxLine> lines(sci);
-	SciMember<IScintillAxProperties> props(sci);
-
 	mol::bstr path;
-	HRESULT hr = props->get_Filename(&path);
+	HRESULT hr = props_->get_Filename(&path);
 	if ( hr != S_OK )
 		return;
 
 	mol::string title = path.toString();
 
 	long line=0;
-	lines->get_Current(&line);
+	line_->get_Current(&line);
 	mol::ostringstream oss;
 	oss << line;
 
 	long pos = 0;
 	long linepos = 0;
-	p->get_Caret(&pos);
-	lines->PosFromLine(line-1,&linepos);
+	position_->get_Caret(&pos);
+	line_->PosFromLine(line-1,&linepos);
 
 	long col = pos-linepos;
 	mol::ostringstream oss2;
@@ -1561,7 +1498,7 @@ void Editor::updateUI()
 	statusBar()->setText( path.toString(), oss.str(), oss2.str() );
 
 	long encoding;
-	if ( S_OK == props->get_Encoding(&encoding) )
+	if ( S_OK == props_->get_Encoding(&encoding) )
 	{
 		switch ( encoding )
 		{
@@ -1589,7 +1526,7 @@ void Editor::updateUI()
 	}
 	
 	long systype;
-	if ( S_OK == props->get_SysType(&systype) )
+	if ( S_OK == props_->get_SysType(&systype) )
 	{
 		if ( systype ==  SCINTILLA_SYSTYPE_UNIX )
 		{
@@ -1612,7 +1549,7 @@ void Editor::updateUI()
 	}
 
 	LONG type = 0;
-	props->get_Syntax(&type);
+	props_->get_Syntax(&type);
 	syntax()->setCurSel(type);
 
 	if ( mol::Ribbon::ribbon()->enabled())
@@ -1621,7 +1558,7 @@ void Editor::updateUI()
 	}
 
 	VARIANT_BOOL vb;
-	if ( S_OK == props->get_ReadOnly(&vb) )
+	if ( S_OK == props_->get_ReadOnly(&vb) )
 	{
 		if ( vb == VARIANT_TRUE )
 			title += _T(" [ReadOnly]");
@@ -1631,20 +1568,20 @@ void Editor::updateUI()
 
 	if ( mol::Ribbon::ribbon()->enabled())
 	{
-		if ( S_OK == props->get_TabUsage(&vb) )
+		if ( S_OK == props_->get_TabUsage(&vb) )
 		{
 			mol::Ribbon::handler(RibbonTabUseTabs)->check(vb == VARIANT_TRUE ? true : false );
 		}
-		if ( S_OK == props->get_TabIndents(&vb) )
+		if ( S_OK == props_->get_TabIndents(&vb) )
 		{
 			mol::Ribbon::handler(RibbonTabIndents)->check(vb == VARIANT_TRUE ? true : false );
 		}
-		if ( S_OK == props->get_BackSpaceUnindents(&vb) )
+		if ( S_OK == props_->get_BackSpaceUnindents(&vb) )
 		{
 			mol::Ribbon::handler(RibbonTabBackSpaceUnIndents)->check(vb == VARIANT_TRUE ? true : false );
 		}
 		long w = 0;
-		if ( S_OK == props->get_TabWidth(&w) )
+		if ( S_OK == props_->get_TabWidth(&w) )
 		{
 			DECIMAL d;
 			::ZeroMemory(&d,sizeof(d));
@@ -1661,14 +1598,14 @@ void Editor::updateUI()
 
 			::VariantClear(&v);
 		}
-		if ( S_OK == props->get_WriteBOM(&vb) )
+		if ( S_OK == props_->get_WriteBOM(&vb) )
 		{
 			mol::Ribbon::handler(RibbonWriteBOM)->check(vb == VARIANT_TRUE ? true : false );
 		}
 	}
 
 
-	if ( S_OK != props->get_ShowLineNumbers(&vb) )
+	if ( S_OK != props_->get_ShowLineNumbers(&vb) )
 		return;
 
 	if ( mol::Ribbon::ribbon()->enabled() )
@@ -1719,10 +1656,8 @@ void Editor::updateModeMenu( mol::Menu& mode )
 	if ( !sci )
 		return;
 
-	SciMember<IScintillAxProperties> props(sci);
-
 	long systype;
-	if ( S_OK == props->get_SysType(&systype) )
+	if ( S_OK == props_->get_SysType(&systype) )
 	{
 		if ( systype == SCINTILLA_SYSTYPE_WIN32 )
 		{
@@ -1736,7 +1671,7 @@ void Editor::updateModeMenu( mol::Menu& mode )
 		}
 	}
 	long encoding;
-	if ( S_OK == props->get_Encoding(&encoding) )
+	if ( S_OK == props_->get_Encoding(&encoding) )
 	{
 		if ( encoding == SCINTILLA_ENCODING_UTF16 )
 		{

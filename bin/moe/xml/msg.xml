@@ -61,6 +61,7 @@
         <notify handler="OnToolbarRightClick" code="NM_RCLICK" />
 
         <!-- dispatched to active mdi child window -->
+        <msg  handler="OnDispatch" cmd="IDM_EDIT_PASTEAS" />
         <msg  handler="OnDispatch" cmd="IDM_FILE_PRINT" />
         <msg  handler="OnDispatch" msg="WM_SEARCH_MSG" />
         <msg  handler="OnDispatch" cmd="IDM_FILE_SAVE" />
@@ -219,6 +220,7 @@
         <msg  handler="OnCut" cmd="IDM_EDIT_CUT" />
         <msg  handler="OnCopy" cmd="IDM_EDIT_COPY" />
         <msg  handler="OnPaste" cmd="IDM_EDIT_PASTE" />
+        <msg  handler="OnPasteAs" cmd="IDM_EDIT_PASTEAS" />
 
       <!-- choose lexer -->
         <msgrange type="cmd" from="IDM_LEXER_PLAIN" to="IDM_LEXER_CSHARP" handler="OnLexer" />

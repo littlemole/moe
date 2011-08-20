@@ -1,13 +1,9 @@
 #ifndef _MAINFRAME_WND_X_DEF_
 #define _MAINFRAME_WND_X_DEF_
 
-#include "win/res.h"
-#include "win/wnd.h"
 #include "widgets.h"
 #include "Docs.h"
 #include "resource.h"
-
-
 
 
 class MoeWnd;

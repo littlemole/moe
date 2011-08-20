@@ -1,22 +1,21 @@
 #include "stdafx.h"
-
-
 #include "app.h"
 #include "util/regex.h"
 #include "thread/sync.h"
+#include "xmlui.h"
+#include "moe_dispid.h"
+
+#include "moe_i.c"
 #include "ax/scintillax/scintillax_i.c"
 #include "ax/shellctrl/shellctrl_i.c"
 #include "ax/shellfolder/shellfolder_i.c"
 #include "ax/setting/setting_i.c"
-#include "moe_i.c"
-#include "xmlui.h"
-#include "moe_dispid.h"
 
-
+/*
 #define min std::min
 #define max std::max
 #include <gdiplus.h>
-
+*/
 
 //! Moe specific MDI message loop override
 int MoeLoop::operator() ( mol::win::AppBase& app )
@@ -363,14 +362,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
                      LPTSTR    lpCmdLine,
                      int       nCmdShow)
 {
-	//::DebugBreak();
-
 
 	ODBGS(">>>>>>>>>>>>>>>> ENTER MAIN <<<<<<<<<<<<<<<<<<<<<<<<");
 	ODBGS("moe startup");
 	ODBGS(lpCmdLine);
-
-	//mol::GdiPlusUser gdip_;
 
 	int result = 0;
 	try {
@@ -388,6 +383,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	ODBGS("<<<<<<<<<<<<<<<< LEAVE MAIN >>>>>>>>>>>>>>>>>>>>>>>>>>");
     return result;
 }
+
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////

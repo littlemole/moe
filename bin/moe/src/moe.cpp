@@ -11,11 +11,9 @@
 #include "MoeBar.h"
 #include "Docs.h"
 #include "xmlui.h"
-#include "ole/Rib.h"
-#include "shared.h"
+
 #include "Ribbonres.h"
-#include "win/taskbar.h"
-#include "ole/enum.h"
+
 	
 
 using namespace mol::io;

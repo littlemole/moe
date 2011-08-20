@@ -7,8 +7,10 @@
 
 // mol libs
 #include "util/istr.h"
+#include "xml/html.h"
 
 #include "win/app.h"
+#include "win/wnd.h"
 #include "win/mdi.h"
 #include "win/res.h"
 #include "win/dlg.h"
@@ -20,6 +22,12 @@
 #include "win/folder.h"
 #include "win/path.h"
 #include "win/file.h"
+#include "win/TaskBar.h"
+#include "win/msgloop.h"
+#include "win/msghandler.h"
+#include "win/msg_macro.h"
+#include "win/gdiplus.h"
+#include "win/clipboard.h"
 
 #include "ole/aut.h"
 #include "ole/obj.h"
@@ -34,9 +42,13 @@
 #include "ole/ie.h"
 #include "ole/bookmark.h"
 #include "ole/img.h"
+#include "ole/cp.h"
+#include "ole/propertypage.h"
+#include "ole/Rib.h"
+#include "ole/enum.h"
 
-#include "xml/html.h"
-
+#include <activdbg.h>
+#include <Prsht.h>
 #include <mshtml.h>
 
 // ax impl

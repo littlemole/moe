@@ -972,10 +972,26 @@ END
 
 STRINGTABLE 
 BEGIN
-    RibbonEditPaste_TooltipDescription_RESID L"Paste to Clipboard" /* TooltipDescription RibbonEditPaste_TooltipDescription_RESID: (null) */
+    RibbonEditPaste_TooltipDescription_RESID L"Paste from Clipboard" /* TooltipDescription RibbonEditPaste_TooltipDescription_RESID: (null) */
 END
 
 RibbonEditPaste_LargeImages_RESID    BITMAP    "ribbon\Paste.bmp" /* LargeImages RibbonEditPaste_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonEditPasteAs_LabelTitle_RESID L"Paste As" /* LabelTitle RibbonEditPasteAs_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditPasteAs_TooltipTitle_RESID L"Paste As Format" /* TooltipTitle RibbonEditPasteAs_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonEditPasteAs_TooltipDescription_RESID L"Paste from Clipboard and choose format" /* TooltipDescription RibbonEditPasteAs_TooltipDescription_RESID: (null) */
+END
+
+RibbonEditPasteAs_LargeImages_RESID    BITMAP    "ribbon\Paste.bmp" /* LargeImages RibbonEditPasteAs_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonEditUndo_LabelTitle_RESID L"Undo" /* LabelTitle RibbonEditUndo_LabelTitle_RESID: (null) */
@@ -1699,6 +1715,16 @@ END
 STRINGTABLE 
 BEGIN
     InternalCmd16_LabelTitle_RESID L"Label:InternalCmd16" /* LabelTitle InternalCmd16_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    InternalCmd18_LabelTitle_RESID L"Label:InternalCmd18" /* LabelTitle InternalCmd18_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    InternalCmd20_LabelTitle_RESID L"Label:InternalCmd20" /* LabelTitle InternalCmd20_LabelTitle_RESID: (null) */
 END
 
 APPLICATION_RIBBON    UIFILE    "ribbon.bml"

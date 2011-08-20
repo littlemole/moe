@@ -13,7 +13,6 @@
 #include "html.h"
 #include "ole.h"
 #include "ribbonres.h"
-#include "ole/Rib.h"
 
 
 /////////////////////////////////////////////////////////////////////
@@ -579,11 +578,12 @@ bool Docs::open( int index, const mol::string& p, InFiles pref, bool readOnly, I
 
 
 	// already open?
+	/*
 	punk<IMoeDocument> d;
 	if ( S_OK == Item(variant(bstr(path)),&d) )
 	{
 		//TODO:fix me
-		/*if ( IDYES !=*/// ::MessageBox( *moe(), _T("close file?"), _T("file already open!"), MB_ICONEXCLAMATION); //|MB_YESNO ) )
+		/*if ( IDYES !=* /// ::MessageBox( *moe(), _T("close file?"), _T("file already open!"), MB_ICONEXCLAMATION); //|MB_YESNO ) )
 		{
 			mol::ostringstream oss;
 			oss << "file already open!" << path;
@@ -606,6 +606,7 @@ bool Docs::open( int index, const mol::string& p, InFiles pref, bool readOnly, I
 
 		return false;
 	}
+	*/
 
 	// deactive any active object
 	if ( moe()->activeObject)

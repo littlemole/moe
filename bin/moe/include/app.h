@@ -1,8 +1,6 @@
 #ifndef MOL_MOE_DEF_GUARD_
 #define MOL_MOE_DEF_GUARD_
 
-#include "win/msgloop.h"
-#include "win/gdiplus.h"
 #include "moe.h"
 
 

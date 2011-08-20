@@ -54,6 +54,7 @@
     <cmd id="IDM_EDIT_CUT" title="Cut" ribbon="RibbonEditCut"/>
     <cmd id="IDM_EDIT_COPY" title="Copy" ribbon="RibbonEditCopy"/>
     <cmd id="IDM_EDIT_PASTE"  title="Paste" ribbon="RibbonEditPaste"/>
+    <cmd id="IDM_EDIT_PASTEAS"  title="Paste As ..." ribbon="RibbonEditPasteAs"/>
     <cmd id="IDM_EDIT_COLOR" title="Insert Color" ribbon="RibbonToolColor"/>
     <cmd id="IDM_EDIT_UPDATE" title="Update" ribbon="RibbonEditReload"/>
     <cmd id="IDM_EDIT_STOP" title="Stop" />
