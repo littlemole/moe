@@ -38,6 +38,7 @@
     <ClCompile Include="taskbar.cpp" />
     <ClCompile Include="propwnd.cpp" />
     <ClCompile Include="wnd.cpp" />
+    <ClCompile Include="clipboard.cpp" />
     <ClCompile Include="wndclass.cpp" />
   </ItemGroup>
 

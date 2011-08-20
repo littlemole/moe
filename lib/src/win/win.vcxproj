@@ -248,6 +248,7 @@
   <ItemGroup>
     <ClCompile Include="app.cpp" />
     <ClCompile Include="async.cpp" />
+    <ClCompile Include="clipboard.cpp" />
     <ClCompile Include="coctrl.cpp" />
     <ClCompile Include="codlg.cpp" />
     <ClCompile Include="core.cpp" />
@@ -281,6 +282,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\win\app.h" />
     <ClInclude Include="..\..\include\win\async.h" />
+    <ClInclude Include="..\..\include\win\clipboard.h" />
     <ClInclude Include="..\..\include\win\coctrl.h" />
     <ClInclude Include="..\..\include\win\codlg.h" />
     <ClInclude Include="..\..\include\win\core.h" />
