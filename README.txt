@@ -1,7 +1,28 @@
 building moe
 ------------
 
-a) setup the env
+a) pre-requisites:
+
+
+	* Win 7.1 SDK
+	* boost 
+	* activestate perl
+        * ant ( for extensions )
+
+
+
+b) setup paths
+
+
+check master.props for paths to external dependencies:
+
+  * boost
+  * java (for extentions, see below)
+
+
+
+c) setup the env
+
 
 call env.bat specifying configuration and platform:
 
@@ -17,21 +38,32 @@ it expects the platform sdk at the default location, modify if necessary:
 "C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\SetEnv.Cmd"
 
 
-b) optional: use msbuild to (re)build 3dparty libs
+
+d) optional: use msbuild to (re)build 3dparty libs
+
 
 	cd 3dParty
 	msbuild build.xml /t:Clean
 	msbuild build.xml
 	cd ..
 
-c) build moe
+
+e) build moe
 
 	msbuild build.xml /t:Clean
 	msbuild build.xml
 
 
-pre-requisites:
 
-	* Win 7.1 SDK
-	* boost 
-	* activestate perl
+f) building moe extension (jre and net)
+
+	* moe must be installed in the version (win32/x64) matching the
+	  build environment
+        * ant must be in the path (for java)
+
+
+        msbuild build.xml /t:cleanjre
+        msbuild build.xml /t:jre
+
+        msbuild build.xml /t:cleannet
+        msbuild build.xml /t:net
