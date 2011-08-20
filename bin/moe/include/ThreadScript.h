@@ -4,12 +4,10 @@
 #include <map>
 #include "util/uni.h"
 #include "thread/events.h"
-//#include "win/events.h"
 #include "ole/aut.h"
 #include "ole/punk.h"
 #include <ActivScp.h>
 #include <ActivDbg.h>
-//#include "shared.h"
 
 class Editor;
 

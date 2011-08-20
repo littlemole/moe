@@ -1,9 +1,6 @@
 #ifndef MOE_DOCS_DEF_GUARD_
 #define MOE_DOCS_DEF_GUARD_
 
-#include "win/res.h"
-#include "win/wnd.h"
-#include "shared.h"
 #include "widgets.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////

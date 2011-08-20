@@ -9,15 +9,12 @@ using namespace mol;
 // img viewer
 //////////////////////////////////////////////////////////////////////////////////
 
-class ImgViewer : 
-	public MdiChildFrame<ImgViewer,MdiChild>,
-	public DispatchMdiWindow<ImgViewer,IMoeDocument,MOE_DOCTYPE_PIC>,
-	public ProvideClassInfo<ImgViewer>,
-	public interfaces< ImgViewer, 
-			implements< 
-				IDispatch, 
-				IMoeDocument, 
-				IProvideClassInfo> >
+class ImgViewer 
+	: public MoeChild<
+				ImgViewer,
+				mol::MdiChild,
+				MOE_DOCTYPE_PIC
+			>
 {
 public:
 

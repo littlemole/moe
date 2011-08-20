@@ -3,9 +3,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "shared.h"
 #include "widgets.h"
-//#include "ax/jre/jre_h.h"
 
 class TaskbarWnd;
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -21,15 +19,12 @@ class MoeWnd;
 // html form window
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-class MoeHtmlWnd  : 
-	public mol::MdiChildFrame<MoeHtmlWnd,mol::HtmlWnd<MoeHtmlWnd,mol::MdiChild>>,
-	public DispatchMdiWindow<MoeHtmlWnd,IMoeDocument,MOE_DOCTYPE_HTML>,
-	public mol::ProvideClassInfo<MoeHtmlWnd>,
-	public mol::interfaces< MoeHtmlWnd, 
-			mol::implements< 
-				IDispatch, 
-				IMoeDocument, 
-				IProvideClassInfo> >
+class MoeHtmlWnd 
+	: public MoeChild<
+				MoeHtmlWnd,
+				mol::HtmlWnd<MoeHtmlWnd,mol::MdiChild>,
+				MOE_DOCTYPE_HTML
+			>
 {
 public:
 

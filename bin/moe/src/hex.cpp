@@ -4,8 +4,6 @@
 #include "xmlui.h"
 #include "MoeBar.h"
 #include "Ribbonres.h"
-#include "ole/Rib.h"
-#include "win/TaskBar.h"
 
 using namespace mol::io;
 

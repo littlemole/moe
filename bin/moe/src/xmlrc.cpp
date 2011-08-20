@@ -72,6 +72,7 @@ extern "C" void load_codegen_metadata()
   UI().addCmd(IDM_EDIT_CUT,_T("Cut"));  
   UI().addCmd(IDM_EDIT_COPY,_T("Copy"));  
   UI().addCmd(IDM_EDIT_PASTE,_T("Paste"));  
+  UI().addCmd(IDM_EDIT_PASTEAS,_T("Paste As ..."));  
   UI().addCmd(IDM_EDIT_COLOR,_T("Insert Color"));  
   UI().addCmd(IDM_EDIT_UPDATE,_T("Update"));  
   UI().addCmd(IDM_EDIT_STOP,_T("Stop"));  
@@ -292,6 +293,7 @@ extern "C" void load_codegen_metadata()
         UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_CUT, IDB_TOOLBAR, IDM_EDIT_CUT, false, true);
         UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_COPY, IDB_TOOLBAR, IDM_EDIT_COPY, false, true);
         UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_PASTE, IDB_TOOLBAR, IDM_EDIT_PASTE, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_EDIT, IDM_EDIT_PASTEAS, IDB_TOOLBAR, IDM_EDIT_PASTEAS, false, true);
 
     UI().addSubMenu(  IDM_MOE,  IDM_MOE,  IDM_TOOLS );
         UI().addMenuItem(IDM_MOE, IDM_TOOLS, IDM_EDIT_COLOR, IDB_TOOLBAR, IDM_EDIT_COLOR, false, true);
@@ -700,6 +702,8 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_CLI_RETURN, make_handler(&MoeWnd::OnDis
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_RIBBON_RECENTITEMS, make_handler(&MoeWnd::OnRecentItems) );
 
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_PASTEAS, make_handler(&MoeWnd::OnDispatch) );
+
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_PRINT, make_handler(&MoeWnd::OnDispatch) );
 
 mol::msgMap<MoeWnd>().addMsgHandler( WM_SEARCH_MSG, make_handler(&MoeWnd::OnDispatch) );
@@ -963,6 +967,8 @@ mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_CUT, make_handler(&Editor::OnCut) 
 mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_COPY, make_handler(&Editor::OnCopy) );
 
 mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_PASTE, make_handler(&Editor::OnPaste) );
+
+mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_PASTEAS, make_handler(&Editor::OnPasteAs) );
 
 mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_UNDO, make_ole_handler<Editor>(&IScintillAx::Undo) );
 

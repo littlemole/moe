@@ -3,8 +3,6 @@
 
 #include "commons.h"
 #include "Docs.h"
-#include "win/TaskBar.h"
-#include "ole/cp.h"
 
 /////////////////////////////////////////////////////////////////////
 //
@@ -94,6 +92,19 @@ public:
 
 };
 
+template<class C, class T, long D>
+class MoeChild :
+	public mol::MdiChildFrame<C,T>,
+	public DispatchMdiWindow<C,IMoeDocument,D>,
+	public mol::ProvideClassInfo<C>,
+	public mol::interfaces< C, mol::implements< IDispatch, IMoeDocument, IProvideClassInfo> >
+
+{};
+
+
+template<class C, long D, const CLSID* clsid>
+class MoeAxChild : public MoeChild<C,mol::AxWnd<C,mol::MdiChild,clsid>,D>
+{};
 
 /////////////////////////////////////////////////////////////////////
 //

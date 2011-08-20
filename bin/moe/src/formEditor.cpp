@@ -4,8 +4,6 @@
 #include "Docs.h"
 #include "moebar.h"
 #include "xmlui.h"
-#include "ole/Rib.h"
-#include "win/TaskBar.h"
 #include "ribbonres.h"
 
 using namespace mol::win;

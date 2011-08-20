@@ -1,13 +1,9 @@
 #ifndef USERFORM_DEF_GUARD_
 #define USERFORM_DEF_GUARD_
 
-#include "shared.h"
 #include "widgets.h"
-#include "ole/obj.h"
 #include "ole/SimpleHost.h"
 #include "fm20_tlh.h"
-#include "win/msghandler.h"
-#include "win/msg_macro.h"
 
 #include "resource.h"
 

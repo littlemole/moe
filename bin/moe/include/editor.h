@@ -16,11 +16,11 @@ class MoeCLIBar;
 class CLIControl;
 
 class Editor 
-	: 
-	public mol::MdiChildFrame<Editor,mol::AxWnd<Editor,mol::MdiChild,&CLSID_ScintillAx>>,
-	public DispatchMdiWindow<Editor,IMoeDocument,MOE_DOCTYPE_DOC>,
-	public mol::ProvideClassInfo<Editor>,
-	public mol::interfaces< Editor, mol::implements< IDispatch, IMoeDocument, IProvideClassInfo> >
+	: public MoeAxChild<
+				Editor,
+				MOE_DOCTYPE_DOC,
+				&CLSID_ScintillAx
+			>
 {
 public:
 
@@ -30,7 +30,6 @@ public:
 	virtual ~Editor();
 
 	static Instance* CreateInstance(const mol::string& p, bool utf8, bool readOnly);
-
 
 	// std windows msgs
 
@@ -75,6 +74,7 @@ public:
 	void OnCut();
 	void OnCopy();
 	void OnPaste();
+	void OnPasteAs();
 
 	void OnCliReturn();
 
@@ -143,6 +143,16 @@ protected:
 	ThreadScript* ts_;
 	mol::string	lasterror_;
 	FILETIME lastWriteTime_;
+
+
+	mol::punk<IScintillAxProperties> props_;
+	mol::punk<IScintillAxPosition> position_;
+	mol::punk<IScintillAxSelection> selection_;
+	mol::punk<IScintillAxLine> line_;
+	mol::punk<IScintillAxAnnotation> annotation_;
+	mol::punk<IScintillAxMarkers> markers_;
+	mol::punk<IScintillAxText> text_;
+
 	
 };
 

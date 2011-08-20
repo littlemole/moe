@@ -3,8 +3,6 @@
 
 #include "commons.h"
 #include "Docs.h"
-#include "win/TaskBar.h"
-#include "ole/cp.h"
 #include "mdichild.h"
 
 /////////////////////////////////////////////////////////////////////

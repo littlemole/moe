@@ -5,16 +5,70 @@
 #include "MoeBar.h"
 #include "ole/Rib.h"
 #include "ribbonres.h"
-//#include "Moe.h"
 #include "Shared.h"
 #include "fm20_tlh.h"
+#include <Commctrl.h>
+#include "util/regex.h"
 
-/*
-mol::string engineFromPath(const std::string& path)
+// ==================== platform specific: TaskDialog  =======================
+
+enum _MOLTASKDIALOG_COMMON_BUTTON_FLAGS
 {
-	return mol::toString(mol::engineFromExtension(mol::Path::ext(mol::toString(path))));
+    TDCBF_OK_BUTTON            = 0x0001, // selected control return value IDOK
+    TDCBF_YES_BUTTON           = 0x0002, // selected control return value IDYES
+    TDCBF_NO_BUTTON            = 0x0004, // selected control return value IDNO
+    TDCBF_CANCEL_BUTTON        = 0x0008, // selected control return value IDCANCEL
+    TDCBF_RETRY_BUTTON         = 0x0010, // selected control return value IDRETRY
+    TDCBF_CLOSE_BUTTON         = 0x0020  // selected control return value IDCLOSE
+};
+typedef int MOLTASKDIALOG_COMMON_BUTTON_FLAGS;           // Note: _TASKDIALOG_COMMON_BUTTON_FLAGS is an int
+
+
+typedef 
+WINCOMMCTRLAPI HRESULT WINAPI 
+MOLTaskDialogPtr( 
+	HWND hwndParent, 
+	HINSTANCE hInstance, 
+	PCWSTR pszWindowTitle, 
+	PCWSTR pszMainInstruction, 
+	PCWSTR pszContent, 
+	MOLTASKDIALOG_COMMON_BUTTON_FLAGS dwCommonButtons, 
+	PCWSTR pszIcon, 
+	int *pnButton
+);
+
+// ==================== End TaskDialog =======================
+
+
+MOLTaskDialogPtr* MOLTaskDialog = (MOLTaskDialogPtr*)mol::dllFunc( _T("Comctl32.dll"), _T("TaskDialog") );
+
+
+/////////////////////////////////////////////////////////////////////
+// msgbox trampoline - either classic or win7 style
+/////////////////////////////////////////////////////////////////////
+
+int msgbox( const mol::string& txt, const mol::string& title, const mol::string& detail )
+{
+	if ( MOLTaskDialog )
+	{
+		int result = 0;
+		HRESULT hr = MOLTaskDialog( 
+						*moe(), 
+						mol::hinstance(), 
+						title.c_str(), 
+						txt.c_str(), 
+						detail.c_str(), 
+						TDCBF_YES_BUTTON|TDCBF_NO_BUTTON,
+						MAKEINTRESOURCE(IDI_MOE),
+						&result
+					);
+		return result;
+	}
+	else
+	{
+		return ::MessageBox( *moe(), txt.c_str(), title.c_str(), MB_YESNO|MB_ICONINFORMATION );
+	}
 }
-*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -532,21 +586,6 @@ HRESULT __stdcall  DebugDlg::ExpCallback::onComplete()
 
 LRESULT DebugDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	/*
-	static HANDLE imgGo    = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_GO),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
-	static HANDLE imgPause = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_PAUSE),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
-	static HANDLE imgQuit  = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_QUIT),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
-
-	static HANDLE imgStepIn    = mol::UI().Bitmap(IDB_DEBUG_STEPIN);
-	static HANDLE imgStepOver  = mol::UI().Bitmap(IDB_DEBUG_STEPOVER);
-	static HANDLE imgStepOut   = mol::UI().Bitmap(IDB_DEBUG_STEPOUT);
-	// ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_STEPIN),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
-	//static HANDLE imgStepOver  = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_STEPOVER),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
-	//static HANDLE imgStepOut   = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_DEBUG_STEPOUT),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
-
-
-		*/	
-
 	switch (message)
     {
 		case WM_INITDIALOG:
@@ -802,17 +841,12 @@ UrlDlg::UrlDlg(  )
 LRESULT UrlDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	static mol::Menu menu( mol::bookmarks().getMenu() ); 
-	//static HANDLE imgFavs = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_MOE_FAV),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
-	//static HANDLE imgGo   = ::LoadImage( mol::hinstance(), MAKEINTRESOURCE(IDB_MOE_GO),IMAGE_BITMAP,0,0,LR_LOADTRANSPARENT| LR_LOADMAP3DCOLORS ) ;
 	switch (message)
     {
 		case WM_INITDIALOG:
 		{
 			setDlgButtonImg( IDC_BUTTON_BOOKMARK, mol::UI().Bitmap(IDB_MOE_FAV) );
 			setDlgButtonImg( IDOK, mol::UI().Bitmap(IDB_MOE_GO) );
-
-//			sendDlgItemMsg( IDC_BUTTON_BOOKMARK, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgFavs) );
-	//		sendDlgItemMsg( IDOK, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP,  (LPARAM)(imgGo) );			
 			urlBox_.subClass( getDlgItem(IDC_EDIT_URL) );
 			urlBox_.updateGUI();
 			
@@ -878,67 +912,8 @@ HRESULT __stdcall UrlDlg::GetSizeMax( ULARGE_INTEGER *pCbSize)
 {
 	return urlBox_.GetSizeMax(pCbSize);
 }
-//////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-/*
-TabDlg::TabDlg(  )
-{
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-LRESULT TabDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	switch (message)
-    {
-		case WM_INITDIALOG:
-		{
-			setDlgItemInt(IDC_EDIT_TAB,width);
-			if ( usetabs )
-				sendDlgItemMsg(IDC_CHECK_USETABS,BM_SETCHECK,BST_CHECKED,0);
-			if ( tabindents )
-				sendDlgItemMsg(IDC_CHECK_TABINDENTS,BM_SETCHECK,BST_CHECKED,0);
-			if ( backspaceunindents  )
-				sendDlgItemMsg(IDC_CHECK_BACKSPACEUNINDENTS,BM_SETCHECK,BST_CHECKED,0);
-
-			return FALSE; // note: false! look into PSDK!
-		}
-        case WM_COMMAND:
-		{
-			if (LOWORD(wParam) == IDOK )
-			{
-                getDlgItemInt(IDC_EDIT_TAB,width);
-				if ( BST_CHECKED == sendDlgItemMsg(IDC_CHECK_USETABS,BM_GETCHECK,0,0) )
-					usetabs = true;
-				else
-					usetabs = false;
-
-				if ( BST_CHECKED == sendDlgItemMsg(IDC_CHECK_TABINDENTS,BM_GETCHECK,0,0) )
-					tabindents = true;
-				else
-					tabindents = false;
-
-				if ( BST_CHECKED == sendDlgItemMsg(IDC_CHECK_BACKSPACEUNINDENTS,BM_GETCHECK,0,0) )
-					backspaceunindents = true;
-				else
-					backspaceunindents = false;
-
-				endDlg(LOWORD(wParam));
-				return FALSE;
-			}
-			if (LOWORD(wParam) == IDCANCEL )
-			{
-				endDlg(LOWORD(wParam));
-				return FALSE;
-			}
-		}
-    }
-	return mol::win::Dialog::wndProc(hDlg, message, wParam, lParam);
-}
-
-*/
 
 mol::string findFile(const mol::string& f)
 {
@@ -1042,7 +1017,7 @@ MoeTreeWnd::~MoeTreeWnd()
 /*
 void MoeTreeWnd::OnCreate()
 {
-	// hook up tree window COM events
+
 }
 */
 
@@ -1260,272 +1235,11 @@ HRESULT __stdcall TreeWndSink::OnContextMenu(BSTR fname)
 
 
 
-//HWND PropSheet::hWnd_;
-
-
-
-/*PropPage::PropPage()
-{
-	deleteOnNCDestroy_ = true;
-}
-
-void PropPage::create(PropSheet* ps, const mol::string& tab, int id, int flags)
-{
-	tab_ = tab;
-	id_ =id;
-	ps_ = ps;
-
-	//::ZeroMemory(&psp_,sizeof(PROPSHEETPAGE) );
-	mol::zero(psp_);
-	psp_.dwSize = sizeof(PROPSHEETPAGE);
-	psp_.dwFlags = flags;
-	psp_.hInstance = mol::hinstance();
-	psp_.pszTemplate = MAKEINTRESOURCE(id);
-	psp_.pszTitle = tab.c_str();
-	psp_.lParam = (LPARAM)this;
-	psp_.pfnDlgProc = &PropPage::dialogProcedure;
-
-	page_ = ::CreatePropertySheetPage(&psp_);
-}
-
-PropPage::~PropPage()
-{
-	ODBGS("~PropPage");
-}
-
-void PropPage::init()
-{}
-
-void PropPage::command(int c)
-{}
-
-int PropPage::apply()
-{
-	return PSNRET_NOERROR;
-}
-
-void PropPage::reset()
-{
-}
-
-int  PropPage::translateAccel( LPMSG msg)
-{
-	return PSNRET_NOERROR ;
-}
-
-LRESULT PropPage::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	if ( message == WM_INITDIALOG )
-	{
-		init();
-		PropSheet_Changed( ::GetParent(hDlg), hDlg);
-		return FALSE; // note: false! look into PSDK!
-	}
-	if ( message == WM_COMMAND )
-	{
-		command( LOWORD(wParam) );
-	}
-	if ( message == WM_NCDESTROY )
-	{
-		mol::win::dialogs().unregisterDialog(hDlg);
-		if ( this->deleteOnNCDestroy_ )
-			delete this;
-	}
-
-	return mol::win::Dialog::wndProc(hDlg, message, wParam, lParam);
-}
-
-BOOL CALLBACK PropPage::dialogProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-		if ( message == WM_NOTIFY )
-		{
-			mol::Crack msg(message,wParam,lParam);
-			if ( msg.nmhdr()->code == PSN_APPLY )
-			{
-				PropPage* pThis = mol::wndFromHWND<PropPage>(hwnd);
-				int r = pThis->apply();
-				::SetWindowLong(hwnd,DWL_MSGRESULT,r);
-				return TRUE;
-			}
-			if ( msg.nmhdr()->code == PSN_RESET  )
-			{
-				PropPage* pThis = mol::wndFromHWND<PropPage>(hwnd);
-				pThis->reset();
-			}
-			if ( msg.nmhdr()->code == PSN_TRANSLATEACCELERATOR )
-			{
-				PropPage* pThis = mol::wndFromHWND<PropPage>(hwnd);
-				PSHNOTIFY * psn = (PSHNOTIFY *)lParam;
-				LPMSG m = (LPMSG)(msg.propSheetNotify()->lParam);
-				int r = pThis->translateAccel(m);
-				::SetWindowLong(hwnd,DWL_MSGRESULT,r);
-				return TRUE;
-			}
-		}
-		if (message == WM_INITDIALOG)
-		{
-			PROPSHEETPAGE* psp = (PROPSHEETPAGE*)lParam;
-			PropPage* pThis = (PropPage*)(psp->lParam);
-			pThis->subClass(hwnd);
-			mol::win::dialogs().registerDialog(hwnd);
-			pThis->ps_->center(::GetParent(hwnd));
-			return (BOOL)(pThis->wndProc( hwnd, message,wParam,lParam));
-		}
-		return FALSE;
-}
-
-OlePropPage::OlePropPage()
-{
-	deleteOnNCDestroy_ = true;
-}
-
-
-void OlePropPage::create(PropSheet* ps, const mol::string& tab, REFCLSID clsid, int id,int flags )
-{
-	PropPage::create(ps,tab,id,flags);
-
-	prop_.createObject(clsid);
-	
-}
-void OlePropPage::init()
-{
-	prop_->SetPageSite(&propertyPageSite_);
-	RECT r;
-	::GetClientRect( *this,&r );
-
-	IUnknown* unk(config());
-	prop_->SetObjects( 1, &unk );
-
-	prop_->Activate( *this, &r, TRUE );
-	prop_->Show(SW_SHOW);
-
-}
-
-int OlePropPage::apply()
-{
-	prop_->Apply();
-	return PSNRET_NOERROR;
-}
-
-void OlePropPage::reset()
-{
-	prop_->Deactivate();
-	prop_->SetObjects(0,0);
-	prop_.release();
-	ODBGS(_T("OlePropPage::reset()"));
-}
-
-
-int  OlePropPage::translateAccel( LPMSG msg)
-{
-	if ( prop_ )
-	{
-		HRESULT hr = prop_->TranslateAcceleratorW(msg);
-		if ( hr == S_OK )
-			return PSNRET_MESSAGEHANDLED;
-	}
-	return PSNRET_NOERROR ;
-}
-
-HRESULT STDMETHODCALLTYPE OlePropPage::PropertyPageSite::OnStatusChange( DWORD dwFlags)
-{
-	if ( dwFlags == PROPPAGESTATUS_DIRTY )
-	{
-		HWND hwnd = (HWND)*(This());
-		PropSheet_Changed( ::GetParent(hwnd), hwnd );
-	}
-
-	if ( dwFlags == PROPPAGESTATUS_VALIDATE )
-	{
-		This()->apply();
-	}
-	return S_OK;
-}
-        
-HRESULT STDMETHODCALLTYPE OlePropPage::PropertyPageSite::GetLocaleID( LCID *pLocaleID)
-{
-	return LOCALE_USER_DEFAULT;
-}
-        
-HRESULT STDMETHODCALLTYPE OlePropPage::PropertyPageSite::GetPageContainer( IUnknown **ppUnk)
-{
-	return E_NOTIMPL;
-}
-        
-HRESULT STDMETHODCALLTYPE OlePropPage::PropertyPageSite::TranslateAccelerator( MSG* pMsg)
-{
-	return E_NOTIMPL;
-}
-
-PropSheet::PropSheet(HWND owner, const mol::string& title, int flags )
-{
-	::ZeroMemory(&ph_,sizeof(&ph_) );
-	ph_.dwSize = sizeof(PROPSHEETHEADER);
-	ph_.dwFlags = flags;
-	ph_.hwndParent = owner;
-	ph_.hInstance = mol::hinstance();
-	ph_.pszCaption = title.c_str();
-	ph_.pfnCallback = &PropSheet::PropSheetProc;
-	startPage_ = 0;
-	centered_ = false;
-}
-
-HPROPSHEETPAGE PropSheet::addPage(PropPage* page)
-{
-	pages_.push_back( *page );
-	return *page;
-}
-
-
-INT_PTR PropSheet::create()
-{		
-	ph_.nPages = pages_.size();
-	ph_.nStartPage = startPage_;
-	ph_.phpage = &(pages_.front());
-
-	return ::PropertySheet(&ph_);
-}
-
-void PropSheet::center(HWND hwnd)
-{
-	if ( centered_ )
-		return;
-
-	centered_ = true;
-
-    RECT r;
-    ::GetWindowRect(hwnd,&r);
-
-    RECT s;
-    ::GetWindowRect( ::GetDesktopWindow(),&s);
-
-    int x = s.right/2  - (r.right-r.left)/2;
-    int y = s.bottom/2 - (r.bottom-r.top)/2;
-    int w = (r.right-r.left);
-    int h = (r.bottom-r.top);
-	
-	POINT p = {x,y};
-	::ScreenToClient( hwnd, &p );
-
-	::MoveWindow( hwnd, p.x, p.y, w, h, 0 );
-}
-
-int CALLBACK PropSheet::PropSheetProc( HWND hwndDlg, UINT uMsg, LPARAM lParam )
-{
-	if ( uMsg == PSCB_INITIALIZED )
-	{
-	}
-	return 0;
-}
-
-*/
 //////////////////////////////////////////////////////////////////////////////
 
 
 TabPage::TabPage(  )
-{
-
-}
+{}
 
 
 void TabPage::init()
@@ -1577,7 +1291,7 @@ int TabPage::apply()
 	return PSNRET_NOERROR;
 }
 
-
+//////////////////////////////////////////////////////////////////////////////
 
 void ExportPage::command(int c)
 {
@@ -1600,8 +1314,126 @@ void ExportPage::command(int c)
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////////
+
 void PrefPage::setObjects()
 {
 	IUnknown* unk(config());
 	prop_->SetObjects( 1, &unk );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// PasteAs
+//////////////////////////////////////////////////////////////////////////////
+
+PasteAs::PasteAs()
+	:clipboard_(*moe())
+{
+}
+
+
+
+PasteAs::~PasteAs()
+{}
+
+std::wstring PasteAs::get()
+{
+	const int HTML_CTX = 999;
+
+	std::map<UINT,mol::win::ClipBoard::Entry> formats;
+
+	const std::vector<mol::win::ClipBoard::Entry>& v = clipboard_.formats();
+	for ( unsigned int i = 0; i < v.size(); i++)
+	{
+		if ( v[i].format == clipboard_.format(clipboard_.CSV) )
+		{
+			formats.insert(std::make_pair(v[i].format,v[i]));
+			continue;
+		}
+		if ( v[i].format == clipboard_.format(clipboard_.HTML) )
+		{
+			formats.insert(std::make_pair(v[i].format,v[i]));
+			continue;
+		}
+		if ( v[i].format == clipboard_.format(clipboard_.TEXT_HTML) )
+		{
+			formats.insert(std::make_pair(v[i].format,v[i]));
+			continue;
+		}
+		if ( v[i].format == clipboard_.format(clipboard_.TEXT) )
+		{
+			formats.insert(std::make_pair(v[i].format,v[i]));
+			continue;
+		}
+		if ( v[i].format == clipboard_.format(clipboard_.UNICODE_TEXT) )
+		{
+			formats.insert(std::make_pair(v[i].format,v[i]));
+			continue;
+		}
+		if ( v[i].format == clipboard_.format(clipboard_.RTF) )
+		{
+			formats.insert(std::make_pair(v[i].format,v[i]));
+			continue;
+		}
+
+		mol::RegExp regex( PCRE_CASELESS,"xml" );
+		if ( regex.imatch( mol::tostring(v[i].title) ) )
+		{
+			formats.insert(std::make_pair(v[i].format,v[i]));
+			continue;
+		}
+	}
+
+	if ( formats.empty() )
+	{
+		return L"";
+	}
+
+	mol::Menu menu;
+	menu.createContext();
+
+	for ( std::map<UINT,mol::win::ClipBoard::Entry>::iterator it = formats.begin();
+		  it != formats.end(); it ++ )
+	{
+		menu.addItem( (*it).second.format, (*it).second.title );
+
+		if ( (*it).second.format == clipboard_.format(mol::win::ClipBoard::HTML) )
+		{
+			menu.addItem( HTML_CTX, L"HTML with context" );
+		}
+	}
+
+	POINT pt = {0,0};
+	::GetCursorPos(&pt);
+	UINT format = menu.returnTrackPopup( *moe(), pt.x, pt.y );
+
+	if ( format == clipboard_.format(clipboard_.CSV) )
+	{
+		return mol::towstring( clipboard_.getAnsiText(format) );
+	}
+	if ( format ==  clipboard_.format(clipboard_.HTML) )
+	{
+		return mol::fromUTF8(( clipboard_.getHTMLfragment()) );
+	}
+	if ( format == clipboard_.format(clipboard_.TEXT_HTML) )
+	{
+		return clipboard_.getUnicodeText(format);
+	}
+	if ( format == clipboard_.format(clipboard_.TEXT) )
+	{
+		return mol::towstring( clipboard_.getAnsiText(format) );
+	}
+	if ( format == clipboard_.format(clipboard_.UNICODE_TEXT) )
+	{
+		return clipboard_.getUnicodeText(format);
+	}
+	if ( format == clipboard_.format(clipboard_.RTF) )
+	{
+		return mol::towstring( clipboard_.getAnsiText(format) );
+	}
+	if ( format == HTML_CTX )
+	{
+		return mol::towstring( clipboard_.getHTML() );
+	}
+	return mol::fromUTF8( clipboard_.getAnsiText(format) );
 }

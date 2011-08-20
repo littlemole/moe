@@ -11,12 +11,12 @@ using namespace mol;
 // Editor Wnd
 //////////////////////////////////////////////////////////////////////////////////
 
-class Hex 
-	: 
-	public MdiChildFrame<Hex,AxWnd<Hex,MdiChild,&CLSID_HexCtrl>>,
-	public DispatchMdiWindow<Hex,IMoeDocument,MOE_DOCTYPE_HEX>,
-	public ProvideClassInfo<Hex>,
-	public interfaces< Hex, implements< IDispatch, IMoeDocument, IProvideClassInfo> >
+class Hex  : public 
+	MoeAxChild<
+		Hex,
+		MOE_DOCTYPE_HEX,
+		&CLSID_HexCtrl
+	>
 {
 public:
 

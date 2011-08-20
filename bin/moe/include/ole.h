@@ -9,12 +9,11 @@ class TaskbarWnd;
 ///////////////////////////////////////////////////////////////////////////////
 
 class OleChild 
-: 
-public mol::MdiChildFrame<OleChild, mol::AxClientWnd<OleChild,mol::MdiChild>>,
-	public DispatchMdiWindow<OleChild,IMoeDocument,MOE_DOCTYPE_OLE>,
-	public mol::ProvideClassInfo<OleChild>,
-	public mol::interfaces< OleChild, 
-			mol::implements< IDispatch, IMoeDocument, IProvideClassInfo> >
+	: public MoeChild<
+				OleChild,
+				mol::AxClientWnd<OleChild,mol::MdiChild>,
+				MOE_DOCTYPE_OLE
+			>
 {
 public:
 

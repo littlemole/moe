@@ -2,9 +2,7 @@
 #include "html.h"
 #include "app.h"
 #include "xmlui.h"
-#include "ole/Rib.h"
 #include "MoeBar.h"
-#include "win/TaskBar.h"
 
 MoeHtmlWnd::MoeHtmlWnd( )
 {

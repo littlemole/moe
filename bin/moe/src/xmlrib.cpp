@@ -74,6 +74,8 @@ void init_ribbon_ui(  mol::win::WndProc* wnd )
   
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonEditPaste, IDM_EDIT_PASTE );
   
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonEditPasteAs, IDM_EDIT_PASTEAS );
+  
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonToolColor, IDM_EDIT_COLOR );
   
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonEditReload, IDM_EDIT_UPDATE );
