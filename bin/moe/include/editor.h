@@ -153,7 +153,7 @@ protected:
 	mol::punk<IScintillAxMarkers> markers_;
 	mol::punk<IScintillAxText> text_;
 
-	
+	bool saving_;
 };
 
 //////////////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,7 @@
 #define MOL_MOE_DEF_GUARD_
 
 #include "moe.h"
-
+#include "win/RTFedit.h"
 
 class MoeLoop: public mol::win::MdiLoop
 {
@@ -33,6 +33,7 @@ private:
     mol::ole_init       oi_;
     mol::comm_ctrl_init cci_;
 	mol::GdiPlusUser    gdip_;
+	mol::richedit_init  rei_;
 
 	void init_extensions_if();
 	bool enableExtensions_;

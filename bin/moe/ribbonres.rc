@@ -42,6 +42,11 @@ END
 
 STRINGTABLE 
 BEGIN
+    RibbonFontGroup_LabelTitle_RESID L"Font" /* LabelTitle RibbonFontGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
     RibbonViewGroup_LabelTitle_RESID L"View" /* LabelTitle RibbonViewGroup_LabelTitle_RESID: (null) */
 END
 
@@ -88,15 +93,9 @@ END
 
 STRINGTABLE 
 BEGIN
-    RibbonClipboardGroup_TooltipTitle_RESID L"Clipboard" /* TooltipTitle RibbonClipboardGroup_TooltipTitle_RESID: (null) */
+    RibbonClipboardGroupEx_LabelTitle_RESID L"Clipboard" /* LabelTitle RibbonClipboardGroupEx_LabelTitle_RESID: (null) */
 END
 
-STRINGTABLE 
-BEGIN
-    RibbonClipboardGroup_TooltipDescription_RESID L"Cut, Copy & Paste" /* TooltipDescription RibbonClipboardGroup_TooltipDescription_RESID: (null) */
-END
-
-RibbonClipboardGroup_LargeImages_RESID    BITMAP    "ribbon\Paste.bmp" /* LargeImages RibbonClipboardGroup_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonUndoGroup_LabelTitle_RESID L"Undo" /* LabelTitle RibbonUndoGroup_LabelTitle_RESID: (null) */
@@ -144,6 +143,11 @@ END
 
 STRINGTABLE 
 BEGIN
+    RibbonRTFDocumentContextMap_LabelTitle_RESID L"Context Menu" /* LabelTitle RibbonRTFDocumentContextMap_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
     RibbonTabContextMap_LabelTitle_RESID L"Tab Context Menu" /* LabelTitle RibbonTabContextMap_LabelTitle_RESID: (null) */
 END
 
@@ -185,6 +189,11 @@ END
 STRINGTABLE 
 BEGIN
     RibbonHtmlViewGroup_LabelTitle_RESID L"Navigate" /* LabelTitle RibbonHtmlViewGroup_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFontControl_Keytip_RESID L"F" /* Keytip RibbonFontControl_Keytip_RESID: (null) */
 END
 
 STRINGTABLE 
@@ -720,6 +729,22 @@ BEGIN
 END
 
 RibbonFileNewUFS_LargeImages_RESID    BITMAP    "ribbon\New.bmp" /* LargeImages RibbonFileNewUFS_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonFileNewRTF_LabelTitle_RESID L"New RTF Document" /* LabelTitle RibbonFileNewRTF_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileNewRTF_TooltipTitle_RESID L"New RTF Doucment" /* TooltipTitle RibbonFileNewRTF_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileNewRTF_TooltipDescription_RESID L"Create a new RTF Document" /* TooltipDescription RibbonFileNewRTF_TooltipDescription_RESID: (null) */
+END
+
+RibbonFileNewRTF_LargeImages_RESID    BITMAP    "ribbon\New.bmp" /* LargeImages RibbonFileNewRTF_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonFileOpen_LabelTitle_RESID L"Open" /* LabelTitle RibbonFileOpen_LabelTitle_RESID: (null) */

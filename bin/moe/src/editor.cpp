@@ -28,6 +28,7 @@ Editor::Editor()
 	lastWriteTime_.dwLowDateTime = 0;
 	wndClass().setIcon(moe()->icon); 
 	wndClass().hIconSm(moe()->icon); 
+	saving_ = false;
 
 	monitor_.events += mol::events::event_handler( &Editor::OnFileChangeNotify, this );
 }
@@ -257,7 +258,7 @@ void Editor::OnFileChangeNotify(mol::io::DirMon* dirmon)
 
 void Editor::checkModifiedOnDisk(const mol::string& path)
 {
-	if ( moe()->getActive() != (HWND)*this )
+	if ( moe()->getActive() != (HWND)*this || saving_ )
 	{
 		return;
 	}
@@ -918,6 +919,7 @@ void Editor::OnSave()
 
 	mol::ostringstream oss;
 
+	saving_ = true;
 	HRESULT hr = sci->Save();
 	if ( hr == S_OK )
 	{
@@ -929,6 +931,9 @@ void Editor::OnSave()
 	}
 
 	statusBar()->status(oss.str());
+
+	lastWriteTime_ = getLastWriteTime( filename.toString() );
+	saving_ = false;
 }
 
 void Editor::OnExecForm()

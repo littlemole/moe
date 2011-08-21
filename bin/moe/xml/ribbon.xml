@@ -11,6 +11,7 @@
     
     <Command Name="RibbonFileGroup" LabelTitle="File" />
     <Command Name="RibbonFileGroup2" LabelTitle="Persist" />
+    <Command Name="RibbonFontGroup" LabelTitle="Font" />    
     <Command Name="RibbonViewGroup"  LabelTitle="View" />
     <Command Name="RibbonView"  LabelTitle="View" >
       <Command.TooltipTitle>Window Views</Command.TooltipTitle>
@@ -23,13 +24,8 @@
     <Command Name="RibbonSyntaxGroup"  LabelTitle="Tools" />
     <Command Name="RibbonDirGroup"  LabelTitle="Directory" />
     <Command Name="RibbonDir2Group"  LabelTitle="Edit" />
-    <Command Name="RibbonClipboardGroup" LabelTitle="Clipboard" >
-      <Command.TooltipTitle>Clipboard</Command.TooltipTitle>
-      <Command.TooltipDescription>Cut, Copy &amp; Paste</Command.TooltipDescription>
-      <Command.LargeImages>
-        <Image Source="ribbon\Paste.bmp"/>
-      </Command.LargeImages>
-    </Command>
+    <Command Name="RibbonClipboardGroup" LabelTitle="Clipboard" />
+    <Command Name="RibbonClipboardGroupEx" LabelTitle="Clipboard" />
 
     <Command Name="RibbonUndoGroup" LabelTitle="Undo" />
     <Command Name="RibbonDocGroup" LabelTitle="Doc" />
@@ -41,6 +37,7 @@
     <Command Name="RibbonTemplateGroup" LabelTitle="Template" />
 
     <Command Name="RibbonDocumentContextMap" LabelTitle="Context Menu" />
+    <Command Name="RibbonRTFDocumentContextMap" LabelTitle="Context Menu" />
     <Command Name="RibbonTabContextMap" LabelTitle="Tab Context Menu" />
     <Command Name="RibbonTreeViewContextMap" LabelTitle="Tree Context Menu" />
     <Command Name="RibbonPrefGroup" LabelTitle="Settings" />
@@ -55,7 +52,8 @@
     <Command Name="RibbonAppMenuGroup"  LabelTitle="Menu" />
 
     <Command Name="RibbonHtmlViewGroup"  LabelTitle="Navigate" />
-    
+
+    <Command Name="RibbonFontControl" Keytip="F" />
 
     <Command Name="RibbonGoBack"  LabelTitle="Back" >
     <Command.TooltipTitle>Go Back</Command.TooltipTitle>
@@ -304,7 +302,15 @@
         <Image Source="ribbon\New.bmp"/>
       </Command.LargeImages>
     </Command>
-    
+
+    <Command Name="RibbonFileNewRTF"  LabelTitle="New RTF Document">
+      <Command.TooltipTitle>New RTF Doucment</Command.TooltipTitle>
+      <Command.TooltipDescription>Create a new RTF Document</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\New.bmp"/>
+      </Command.LargeImages>
+    </Command>
+
     <Command Name="RibbonFileOpen" LabelTitle="Open">
       <Command.TooltipTitle>Open File</Command.TooltipTitle>
       <Command.TooltipDescription>Open a File</Command.TooltipDescription>
@@ -875,6 +881,19 @@
             <ComboBox CommandName="RibbonSelectLanguage"></ComboBox>
           </MenuGroup>
         </MiniToolbar>
+        <MiniToolbar Name="RibbonRTFToolbar">
+          <MenuGroup>
+            <Button CommandName="RibbonEditUndo" />
+            <Button CommandName="RibbonEditRedo" />
+            <Button CommandName="RibbonViewClose" />
+          </MenuGroup>
+          <MenuGroup Class="StandardItems">
+            <FontControl CommandName="RibbonFontControl"  />
+          </MenuGroup>
+        </MiniToolbar>
+        
+        
+        
       </ContextPopup.MiniToolbars>
       <ContextPopup.ContextMenus>
         <ContextMenu Name="RibbonDocumentContextMenu">
@@ -965,15 +984,32 @@
             <Button CommandName="RibbonNewDirList" />
           </MenuGroup>
         </ContextMenu>
-      </ContextPopup.ContextMenus>      
+
+        <ContextMenu Name="RibbonRTFDocumentContextMenu">
+            <MenuGroup>
+              <Button CommandName="RibbonEditSelectAll" />
+            </MenuGroup>
+            <MenuGroup>
+              <Button CommandName="RibbonEditCut" />
+              <Button CommandName="RibbonEditCopy" />
+              <Button CommandName="RibbonEditPaste"/>
+            </MenuGroup>                          
+          </ContextMenu>
+
+        </ContextPopup.ContextMenus>      
       <ContextPopup.ContextMaps>
         <ContextMap CommandName="RibbonDocumentContextMap" ContextMenu="RibbonDocumentContextMenu" MiniToolbar="RibbonMiniToolbar"/>
         <ContextMap CommandName="RibbonTabContextMap" ContextMenu="RibbonTabContextMenu" />
         <ContextMap CommandName="RibbonTreeViewContextMap" ContextMenu="RibbonTreeViewContextMenu" />
+        <ContextMap CommandName="RibbonRTFDocumentContextMap" ContextMenu="RibbonRTFDocumentContextMenu" MiniToolbar="RibbonRTFToolbar" />
       </ContextPopup.ContextMaps>
     </ContextPopup>
 
-    
+    <!-- 
+              <Group CommandName="RibbonFontGroup" SizeDefinition="SingleControl"  ApplicationModes="10">
+            <FontControl CommandName="RibbonFontControl" FontType="RichFont" />
+          </Group>
+    -->
 
     <Ribbon Name="macRib" GroupSpacing="Large">
       <Ribbon.SizeDefinitions>
@@ -1321,6 +1357,7 @@
                 <MenuGroup >
                   <Button CommandName="RibbonFileNew"/>
                   <Button CommandName="RibbonFileNewUFS"/>
+                  <Button CommandName="RibbonFileNewRTF"/>
                 </MenuGroup>
               </SplitButton.MenuGroups>
             </SplitButton>
@@ -1398,7 +1435,7 @@
               </SplitButton.MenuGroups>
             </SplitButton>
           </Group>
-          <Group CommandName="RibbonFileGroup2" SizeDefinition="FileGroupSize" ApplicationModes="1,6" >
+          <Group CommandName="RibbonFileGroup2" SizeDefinition="FileGroupSize" ApplicationModes="1,6,10" >
               <SplitButton >
               <SplitButton.ButtonItem>
                 <Button CommandName="RibbonFileSave"/>
@@ -1418,7 +1455,7 @@
           </Group>
 
           <!-- Undo Group -->
-          <Group CommandName="RibbonUndoGroup" SizeDefinition="SingleControl" ApplicationModes="1,6" >
+          <Group CommandName="RibbonUndoGroup" SizeDefinition="SingleControl" ApplicationModes="1,6,10" >
 
             <SplitButton >
               <SplitButton.ButtonItem>
@@ -1435,7 +1472,15 @@
           </Group>
           
           <!-- Clipboard Group -->
-          <Group CommandName="RibbonClipboardGroup" SizeDefinition="ThreeControls"  ApplicationModes="1,2,5,6">
+          <Group CommandName="RibbonClipboardGroup" SizeDefinition="ThreeControls"  ApplicationModes="2,5,6,10">
+
+            <Button CommandName="RibbonEditCut"/>
+            <Button CommandName="RibbonEditCopy"/>
+            <Button CommandName="RibbonEditPaste"/>
+
+          </Group>
+          
+          <Group CommandName="RibbonClipboardGroupEx" SizeDefinition="ThreeControls"  ApplicationModes="1">
 
             <Button CommandName="RibbonEditCut"/>
             <Button CommandName="RibbonEditCopy"/>
@@ -1481,7 +1526,7 @@
           </Group>
           
           <!-- Document Group -->
-          <Group CommandName="RibbonDocGroup" SizeDefinition="DocGroupSize"  ApplicationModes="1">
+          <Group CommandName="RibbonDocGroup" SizeDefinition="DocGroupSize"  ApplicationModes="1,10">
             <Button CommandName="RibbonEditFind"/>
             <Button CommandName="RibbonEditReplace"/>
             <Button CommandName="RibbonToolColor"/>
@@ -1492,6 +1537,9 @@
             <Button CommandName="RibbonSettings" />
           </Group>
 
+          <Group CommandName="RibbonFontGroup" SizeDefinition="SingleControl"  ApplicationModes="10">
+            <FontControl CommandName="RibbonFontControl" FontType="RichFont" />
+          </Group>
 
           <!-- Settings Group -->
           <Group CommandName="RibbonSettingsGroup" SizeDefinition="SettingsGroupSize2"  ApplicationModes="1">
@@ -1570,7 +1618,7 @@
 
           <!-- Command Groups -->
 
-          <Group CommandName="RibbonTemplateGroup" SizeDefinition="SingleControl"  ApplicationModes="1">
+          <Group CommandName="RibbonTemplateGroup" SizeDefinition="SingleControl"  ApplicationModes="1,10">
             <Button CommandName="RibbonToolUserTemplate"/>
           </Group>
           
@@ -1594,7 +1642,7 @@
             <Button CommandName="RibbonDebugStepOut"/>
           </Group>
           
-          <Group CommandName="RibbonTool2Group" SizeDefinition="ThreeControls"  ApplicationModes="1">
+          <Group CommandName="RibbonTool2Group" SizeDefinition="ThreeControls"  ApplicationModes="1,10">
             <Button CommandName="RibbonToolUserBatch"/>
             <Button CommandName="RibbonToolUserForm"/>
             <Button CommandName="RibbonToolUserScript"/>
@@ -1660,6 +1708,8 @@
           <Group CommandName="RibbonPrefGroup" SizeDefinition="SingleControl"  ApplicationModes="1">
             <Button CommandName="RibbonSettings"/>
           </Group>
+
+
 
 
           <!-- Settings Group -->

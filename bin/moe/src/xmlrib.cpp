@@ -14,6 +14,8 @@ void init_ribbon_ui(  mol::win::WndProc* wnd )
 
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonFileNew, IDM_FILE_NEW );
   
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonFileNewRTF, IDM_FILE_NEW_RTF );
+  
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonFileOpen, IDM_FILE_OPEN );
   
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonFileOpenUrl, IDM_FILE_OPEN_HTML );
@@ -57,6 +59,8 @@ void init_ribbon_ui(  mol::win::WndProc* wnd )
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonWriteBOM, IDM_RIBBON_WRITE_BOM );
   
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonBytesShown, IDM_RIBBON_BYTES_SHOWN );
+  
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonFontControl, IDM_RIBBON_FONT_CTRL );
   
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonEditSelectAll, IDM_EDIT_SELECT );
   

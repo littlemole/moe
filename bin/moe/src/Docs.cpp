@@ -9,9 +9,11 @@
 #include "Dir3.h"
 #include "Form.h"
 #include "Editor.h"
+#include "rtf.h"
 #include "hex.h"
 #include "html.h"
 #include "ole.h"
+#include "rtf.h"
 #include "ribbonres.h"
 
 
@@ -203,6 +205,22 @@ HRESULT __stdcall Docs::NewUserForm(IMoeDocument** d)
 
 	mol::punk<IMoeDocument> doc;
 	bool b = newUFSFile(&doc);
+	if (!b || !doc)
+		return E_FAIL;
+
+	if ( d )
+		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+	return S_OK;
+}
+
+
+HRESULT __stdcall Docs::NewRTFDocument(IMoeDocument** d)
+{
+	if (d)
+		*d = 0;
+
+	mol::punk<IMoeDocument> doc;
+	bool b = newRTFFile(&doc);
 	if (!b || !doc)
 		return E_FAIL;
 
@@ -539,6 +557,35 @@ bool Docs::newUFSFile(IMoeDocument** doc)
 	return true;
 }
 
+bool Docs::newRTFFile(IMoeDocument** doc)
+{
+	if ( moe()->activeObject)
+		moe()->activeObject->OnDocWindowActivate(FALSE);
+
+	mol::string p = getNewFileName(_T(".rtf"));
+
+	RTFEditor::Instance* edit = RTFEditor::CreateInstance( p );
+	if (!edit)
+		return false;
+
+	if ( children_.empty() )
+	{
+		tab()->show(SW_SHOW);
+		moe()->doLayout();
+	}
+
+	mol::MdiChild* c = dynamic_cast<mol::MdiChild*>(edit);
+	children_.push_back( c  );
+	tab()->insertItem( new mol::TabCtrl::TabCtrlItem( mol::Path::filename(p),p, (LPARAM)(HWND)(*c)) );
+	tab()->select( (HWND)(*c) );
+
+	progress()->show(SW_HIDE);
+	if (doc)
+		return edit->QueryInterface(IID_IMoeDocument,(void**)doc) == S_OK;
+	return true;
+}
+
+
 
 //////////////////////////////////////////////////////////////////////////////
 // load a path, create MDI child
@@ -714,6 +761,12 @@ mol::MdiChild* Docs::openPath( const mol::string& p, InFiles pref, bool readOnly
 	if ( mol::icmp( ext,  _T("ufs") ) == 0 )
 	{
 		return load<FormEditor>(path);
+	}
+
+	// rtf support
+	if ( mol::icmp( ext, _T("rtf") ) == 0 && pref == Docs::PREF_RTF)
+	{
+		return load<RTFEditor>(path);
 	}
 
 	// office support

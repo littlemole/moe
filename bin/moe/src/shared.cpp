@@ -437,15 +437,24 @@ HRESULT __stdcall MoeDialogs::MsgBox( BSTR text, BSTR title, long flags, long* r
 HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 {
 	
-	static mol::TCHAR  InFilesFilter[] = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open file in hexviewer *.*\0*.*\0\0");
+	static mol::TCHAR  InFilesFilter[] = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0\0");
 
 	mol::FilenameDlg ofn(*moe());
 	ofn.setFilter( InFilesFilter );			
 
 	if ( ofn.dlgOpen( OFN_NOVALIDATE | OFN_ALLOWMULTISELECT | OFN_EXPLORER  | OFN_NOTESTFILECREATE ) )
 	{
+		// open rtf
+		if ( ofn.index() == 4 )
+		{
+			for ( int i = 0; i < ofn.selections(); i++ )
+			{
+				ODBGS(ofn.fileName(i).c_str());
+				bool result = docs()->open( -1, ofn.fileName(i), Docs::PREF_RTF,ofn.readOnly(), 0);
+			}
+		}
 		// open html
-		if ( ofn.index() == 3 )
+		else if ( ofn.index() == 3 )
 		{
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
@@ -454,7 +463,7 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 			}
 		}
 		// open hex
-		else if ( ofn.index() == 4 )
+		else if ( ofn.index() == 5 )
 		{
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{

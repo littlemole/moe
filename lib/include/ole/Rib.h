@@ -1,9 +1,11 @@
 #ifndef MOL_LIB_DEFINE_MAC_RIB_DEFINITION_GUARD_DEF_
 #define MOL_LIB_DEFINE_MAC_RIB_DEFINITION_GUARD_DEF_
 
+
 #include "ole/ole.h"
 #include "ole/obj.h"
 #include "ole/aut.h"
+#include "win/RTFedit.h"
 #include <UIRibbon.h>
 
 namespace mol
@@ -69,6 +71,7 @@ public:
 	mol::variant decimal();
 	std::vector<mol::string> items();
 	std::vector<std::pair<mol::string,bool> > recent_items();
+	CHARFORMAT2& font();
 
 
 	void minimize(bool);
@@ -102,6 +105,7 @@ protected:
 	int decimalPlaces_;
 	mol::variant decimal_;
 	int index_;
+	CHARFORMAT2 charFormat_;
 };
 
 /////////////////////////////////////////////////////

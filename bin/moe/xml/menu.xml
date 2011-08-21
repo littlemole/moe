@@ -24,6 +24,7 @@
         <menu cmd="IDM_FILE_PRINT" />
         <menu cmd="IDM_MODE_PREFERENCES" />
         <menu separator="true"  />
+        <menu cmd="IDM_FILE_NEW_RTF" />
         <menu cmd="IDM_FILE_NEW_UFS" />
         <menu separator="true"  />
         <menu cmd="IDM_FILE_EXIT" />
@@ -424,6 +425,76 @@
         <menu cmd="IDM_TREE_NEWDIR" bmp="IDM_FILE_NEW" />        
       </menu>
     </menu>
+
+
+    <!-- RTF editor menu -->
+    <menu  id="IDM_MOE_RTF"  bmp="IDB_TOOLBAR" >
+      <menu  cmd="IDM_FILE">
+        <menu cmd="IDM_FILE_NEW" />
+        <menu separator="true"  />
+        <menu cmd="IDM_FILE_OPEN" />
+        <menu cmd="IDM_FILE_OPEN_HTML" />
+        <menu cmd="IDM_FILE_OPEN_FOLDER"/>
+        <menu separator="true"  />
+        <menu cmd="IDM_FILE_SAVE" />
+        <menu cmd="IDM_FILE_SAVE_AS" />
+        <menu separator="true"  />
+        <menu cmd="IDM_FILE_PRINT" />
+        <menu cmd="IDM_MODE_PREFERENCES" />
+        <menu separator="true"  />
+        <menu cmd="IDM_FILE_NEW_RTF" />
+        <menu cmd="IDM_FILE_NEW_UFS" />
+        <menu separator="true"  />
+        <menu cmd="IDM_FILE_EXIT" />
+      </menu>
+      <menu cmd="IDM_EDIT">
+        <menu cmd="IDM_EDIT_FIND"/>
+        <menu cmd="IDM_EDIT_REPLACE"/>
+        <menu separator="true"  />
+        <menu cmd="IDM_EDIT_UNDO" />
+        <menu cmd="IDM_EDIT_REDO" />
+        <menu separator="true"  />
+        <menu cmd="IDM_EDIT_CUT" />
+        <menu cmd="IDM_EDIT_COPY" />
+        <menu cmd="IDM_EDIT_PASTE" />
+        <menu cmd="IDM_EDIT_PASTEAS" />
+      </menu>
+      <menu cmd="IDM_TOOLS" >
+        <menu cmd="IDM_USER_SCRIPT" popup="true"/>
+        <menu cmd="IDM_USER_BATCH" popup="true" />
+        <menu cmd="IDM_USER_FORM" popup="true" />
+        <menu cmd="IDM_USER_SHORTCUT" popup="true" />
+      </menu>
+      <menu cmd="IDM_VIEW">
+        <menu cmd="IDM_VIEW_MAXIMIZE" />
+        <menu cmd="IDM_VIEW_MINIMIZE" />
+        <menu cmd="IDM_VIEW_TILE" />
+        <menu cmd="IDM_VIEW_CASCADE" />
+        <menu separator="true"  />
+        <menu cmd="IDM_VIEW_CLOSE" />
+        <menu cmd="IDM_VIEW_CLOSEALL" />
+        <menu separator="true"  />
+        <menu cmd="IDM_VIEW_TOOLBARS" >
+          <menu cmd="IDM_VIEW_DIRVIEW" checked="true" />
+          <menu separator="true"  />
+          <menu cmd="IDM_TOOLBARS_FILEBAR" checked="true" />
+          <menu cmd="IDM_TOOLBARS_EDITBAR" checked="true" />
+          <menu cmd="IDM_TOOLBARS_TOOLBAR" checked="true" />
+          <menu cmd="IDM_TOOLBARS_SETTINGBAR" checked="true" />
+          <menu cmd="IDM_TOOLBARS_VIEWBAR" checked="false" />
+          <menu cmd="IDM_TOOLBARS_USERBAR" checked="false" />
+          <menu separator="true"  />
+          <menu cmd="IDM_TOOLBARS_FREEZE" checked="false" />
+        </menu>
+        <menu cmd="IDM_VIEW_WINDOWS" >
+          <menu cmd="IDM_VIEW_WINDOWS_TEXT" enabled="false"/>
+        </menu>
+      </menu>
+      <menu cmd="IDM_HELP" >
+        <menu cmd="IDM_HELP_ABOUT" />
+      </menu>
+    </menu>
+
   </menus>
 
 </mol:codegen>

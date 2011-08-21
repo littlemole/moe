@@ -82,15 +82,18 @@ bool FormEditor::initialize(const mol::string& p)
 
 	statusBar()->status(50);
 
-	// keep an IScintillAx interface pointer at hand
+	// prepare interface pointers
 	sci = oleObject;
-
-	// get properties from scintilla ax ctrl
-	mol::punk<IScintillAxProperties> props;
-	sci->get_Properties(&props);
+	sci->get_Properties(&props_);
+	sci->get_Annotation(&annotation_);
+	sci->get_Line(&line_);
+	sci->get_Markers(&markers_);
+	sci->get_Position(&position_);
+	sci->get_Selection(&selection_);
+	sci->get_Text(&text_);
 
 	// set the filename
-	props->put_Filename(mol::bstr(p));
+	props_->put_Filename(mol::bstr(p));
 
 	// try to load or create new
 	OnReload();
@@ -98,12 +101,12 @@ bool FormEditor::initialize(const mol::string& p)
 	// get default values from config and init scintilla
 
 	moe()->moeConfig->InitializeEditorFromPreferences( (IMoeDocument*)this );
-	props->put_ReadOnly( VARIANT_FALSE );
+	props_->put_ReadOnly( VARIANT_FALSE );
 
 	// use ribbon context menue if avail
 	if ( mol::Ribbon::ribbon()->enabled() )
 	{
-		props->put_UseContext(VARIANT_FALSE);
+		props_->put_UseContext(VARIANT_FALSE);
 	}
 
 	// initialize win7 taskbar if avail

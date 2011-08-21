@@ -171,5 +171,106 @@ bool RichEditCtrl::search( int options)
     return true;
 }
 
+HDC choosePrinterDC(HWND owner, int& copies, bool& collate)
+{
+	PRINTDLG pd;
+
+	// Initialize PRINTDLG
+	ZeroMemory(&pd, sizeof(pd));
+	pd.lStructSize = sizeof(pd);
+	pd.hwndOwner   = owner;
+	pd.hDevMode    = NULL;     // Don't forget to free or store hDevMode
+	pd.hDevNames   = NULL;     // Don't forget to free or store hDevNames
+	pd.Flags       = PD_USEDEVMODECOPIESANDCOLLATE | PD_RETURNDC |PD_NOPAGENUMS|PD_NOSELECTION; 
+	pd.nCopies     = 1;
+	pd.nFromPage   = 0xFFFF; 
+	pd.nToPage     = 0xFFFF; 
+	pd.nMinPage    = 1; 
+	pd.nMaxPage    = 0xFFFF; 
+
+	copies = 0;
+	collate = false;
+	if (PrintDlg(&pd)==TRUE) 
+	{
+		collate = (pd.Flags & PD_COLLATE) != 0;
+		copies  = pd.nCopies;
+		return pd.hDC;
+	}
+	return 0;
+}
+
+BOOL RichEditCtrl::PrintRTF()
+{
+	static DOCINFO di = { sizeof(DOCINFO), _T("mol scintilla print job") };
+
+	int copies = 0;
+	bool collate = false;
+	HDC hdcPrinter = mol::choosePrinterDC(*this,copies,collate);
+	if ( NULL == hdcPrinter )
+		return FALSE;
+    
+    if (!StartDoc(hdcPrinter, &di))
+    {
+        return FALSE;
+    }
+
+    int cxPhysOffset = GetDeviceCaps(hdcPrinter, PHYSICALOFFSETX);
+    int cyPhysOffset = GetDeviceCaps(hdcPrinter, PHYSICALOFFSETY);
+    
+    int cxPhys = GetDeviceCaps(hdcPrinter, PHYSICALWIDTH);
+    int cyPhys = GetDeviceCaps(hdcPrinter, PHYSICALHEIGHT);
+
+    // Create "print preview". 
+    SendMessage(*this, EM_SETTARGETDEVICE, (WPARAM)hdcPrinter, cxPhys/2);
+
+    FORMATRANGE fr;
+    
+    fr.hdc       = hdcPrinter;
+    fr.hdcTarget = hdcPrinter;
+    fr.rc.left   = cxPhysOffset;
+    fr.rc.right  = cxPhysOffset + cxPhys;
+    fr.rc.top    = cyPhysOffset;
+    fr.rc.bottom = cyPhysOffset + cyPhys;
+
+    SendMessage(*this, EM_SETSEL, 0, (LPARAM)-1);          // Select the entire contents.
+    SendMessage(*this, EM_EXGETSEL, 0, (LPARAM)&fr.chrg);  // Get the selection into a CHARRANGE.
+
+    BOOL fSuccess = TRUE;
+
+    // Use GDI to print successive pages.
+    while (fr.chrg.cpMin < fr.chrg.cpMax && fSuccess) 
+    {
+        fSuccess = StartPage(hdcPrinter) > 0;
+        
+        if (!fSuccess) break;
+        
+        int cpMin = SendMessage(*this, EM_FORMATRANGE, TRUE, (LPARAM)&fr);
+        
+        if (cpMin <= fr.chrg.cpMin) 
+        {
+            fSuccess = FALSE;
+            break;
+        }
+        
+        fr.chrg.cpMin = cpMin;
+        fSuccess = EndPage(hdcPrinter) > 0;
+    }
+    
+    SendMessage(*this, EM_FORMATRANGE, FALSE, 0);
+    
+    if (fSuccess)
+    {
+        EndDoc(hdcPrinter);
+    } 
+    
+    else 
+    
+    {
+        AbortDoc(hdcPrinter);
+    }
+    
+    return fSuccess;
+    
+}
 
 } // end namespace mol
