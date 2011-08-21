@@ -37,7 +37,8 @@ library Moe
 		MOE_DOCTYPE_HEX    = 4,
 		MOE_DOCTYPE_HTML   = 5,
 		MOE_DOCTYPE_OLE    = 6,
-		MOE_DOCTYPE_FORM   = 7
+		MOE_DOCTYPE_FORM   = 7,
+		MOE_DOCTYPE_RTF    = 8
 	} MOE_DOCTYPE;
 
 	typedef enum MOE_SEARCHFLAG {
@@ -163,6 +164,8 @@ library Moe
 		[id(15), helpstring("Move object from index/path to new index")] 
 		HRESULT Move( [in] VARIANT what, [in] VARIANT to);
 
+		[id(16), helpstring("New RTF document")] 
+		HRESULT NewRTFDocument( [out,retval] IMoeDocument** d);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////

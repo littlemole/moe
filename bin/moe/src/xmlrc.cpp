@@ -22,6 +22,8 @@
 
 #include "form.h"
 
+#include "rtf.h"
+
 #include "Docs.h"
 
 #include "MoeBar.h"
@@ -40,6 +42,7 @@ extern "C" void load_codegen_metadata()
   // prepare commands - associates a title string for each command identifier
     UI().addCmd(IDM_FILE,_T("File"));  
   UI().addCmd(IDM_FILE_NEW,_T("New File"));  
+  UI().addCmd(IDM_FILE_NEW_RTF,_T("New RTF Document"));  
   UI().addCmd(IDM_FILE_OPEN,_T("File Open"));  
   UI().addCmd(IDM_FILE_OPEN_HEX,_T("Open Hex"));  
   UI().addCmd(IDM_FILE_OPEN_HTML,_T("Open Url"));  
@@ -63,6 +66,7 @@ extern "C" void load_codegen_metadata()
   UI().addCmd(IDM_RIBBON_BACKSPACE_UNIDENTS,_T("Backspace Unindents"));  
   UI().addCmd(IDM_RIBBON_WRITE_BOM,_T("Write BOM"));  
   UI().addCmd(IDM_RIBBON_BYTES_SHOWN,_T("Show #Bytes"));  
+  UI().addCmd(IDM_RIBBON_FONT_CTRL,_T("Font"));  
   UI().addCmd(IDM_EDIT,_T("Edit"));  
   UI().addCmd(IDM_EDIT_SELECT,_T("Select All"));  
   UI().addCmd(IDM_EDIT_FIND,_T("Find"));  
@@ -279,6 +283,7 @@ extern "C" void load_codegen_metadata()
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_PRINT, IDB_TOOLBAR, IDM_FILE_PRINT, false, true);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_FILE);
+        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW_RTF, IDB_TOOLBAR, IDM_FILE_NEW_RTF, false, true);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, IDM_FILE_NEW_UFS, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_FILE);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, IDM_FILE_EXIT, false, true);
@@ -649,6 +654,71 @@ extern "C" void load_codegen_metadata()
         UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_TREE_PROPERTIES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
         UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_TREE_EXECUTE, IDB_TOOLBAR, IDM_USER_SCRIPT, false, true);
         UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_TREE_NEWDIR, IDB_TOOLBAR, IDM_FILE_NEW, false, true);
+  
+  // a main menu
+  UI().addMenu(IDM_MOE_RTF);    
+
+    UI().addSubMenu(  IDM_MOE_RTF,  IDM_MOE_RTF,  IDM_FILE );
+        UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_FILE_NEW, IDB_TOOLBAR, IDM_FILE_NEW, false, true);
+    UI().addMenuSeparator(IDM_MOE_RTF,IDM_FILE);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_FILE_OPEN, IDB_TOOLBAR, IDM_FILE_OPEN, false, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_FILE_OPEN_HTML, IDB_TOOLBAR, IDM_FILE_OPEN_HTML, false, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, IDM_FILE_OPEN_FOLDER, false, true);
+    UI().addMenuSeparator(IDM_MOE_RTF,IDM_FILE);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_FILE_SAVE, IDB_TOOLBAR, IDM_FILE_SAVE, false, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_FILE_SAVE_AS, IDB_TOOLBAR, IDM_FILE_SAVE_AS, false, true);
+    UI().addMenuSeparator(IDM_MOE_RTF,IDM_FILE);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_FILE_PRINT, IDB_TOOLBAR, IDM_FILE_PRINT, false, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
+    UI().addMenuSeparator(IDM_MOE_RTF,IDM_FILE);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_FILE_NEW_RTF, IDB_TOOLBAR, IDM_FILE_NEW_RTF, false, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, IDM_FILE_NEW_UFS, false, true);
+    UI().addMenuSeparator(IDM_MOE_RTF,IDM_FILE);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, IDM_FILE_EXIT, false, true);
+
+    UI().addSubMenu(  IDM_MOE_RTF,  IDM_MOE_RTF,  IDM_EDIT );
+        UI().addMenuItem(IDM_MOE_RTF, IDM_EDIT, IDM_EDIT_FIND, IDB_TOOLBAR, IDM_EDIT_FIND, false, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_EDIT, IDM_EDIT_REPLACE, IDB_TOOLBAR, IDM_EDIT_REPLACE, false, true);
+    UI().addMenuSeparator(IDM_MOE_RTF,IDM_EDIT);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_EDIT, IDM_EDIT_UNDO, IDB_TOOLBAR, IDM_EDIT_UNDO, false, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_EDIT, IDM_EDIT_REDO, IDB_TOOLBAR, IDM_EDIT_REDO, false, true);
+    UI().addMenuSeparator(IDM_MOE_RTF,IDM_EDIT);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_EDIT, IDM_EDIT_CUT, IDB_TOOLBAR, IDM_EDIT_CUT, false, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_EDIT, IDM_EDIT_COPY, IDB_TOOLBAR, IDM_EDIT_COPY, false, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_EDIT, IDM_EDIT_PASTE, IDB_TOOLBAR, IDM_EDIT_PASTE, false, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_EDIT, IDM_EDIT_PASTEAS, IDB_TOOLBAR, IDM_EDIT_PASTEAS, false, true);
+
+    UI().addSubMenu(  IDM_MOE_RTF,  IDM_MOE_RTF,  IDM_TOOLS );
+    UI().addSubMenu(  IDM_MOE_RTF, IDM_TOOLS, IDM_USER_SCRIPT, IDB_TOOLBAR);
+    UI().addSubMenu(  IDM_MOE_RTF, IDM_TOOLS, IDM_USER_BATCH, IDB_TOOLBAR);
+    UI().addSubMenu(  IDM_MOE_RTF, IDM_TOOLS, IDM_USER_FORM, IDB_TOOLBAR);
+    UI().addSubMenu(  IDM_MOE_RTF, IDM_TOOLS, IDM_USER_SHORTCUT, IDB_TOOLBAR);
+
+    UI().addSubMenu(  IDM_MOE_RTF,  IDM_MOE_RTF,  IDM_VIEW );
+        UI().addMenuItem(IDM_MOE_RTF, IDM_VIEW, IDM_VIEW_MAXIMIZE, IDB_TOOLBAR, IDM_VIEW_MAXIMIZE, false, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_VIEW, IDM_VIEW_MINIMIZE, IDB_TOOLBAR, IDM_VIEW_MINIMIZE, false, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_VIEW, IDM_VIEW_TILE, IDB_TOOLBAR, IDM_VIEW_TILE, false, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_VIEW, IDM_VIEW_CASCADE, IDB_TOOLBAR, IDM_VIEW_CASCADE, false, true);
+    UI().addMenuSeparator(IDM_MOE_RTF,IDM_VIEW);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_VIEW, IDM_VIEW_CLOSE, IDB_TOOLBAR, IDM_VIEW_CLOSE, false, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_VIEW, IDM_VIEW_CLOSEALL, IDB_TOOLBAR, IDM_VIEW_CLOSEALL, false, true);
+    UI().addMenuSeparator(IDM_MOE_RTF,IDM_VIEW);
+    UI().addSubMenu(  IDM_MOE_RTF, IDM_VIEW, IDM_VIEW_TOOLBARS, IDB_TOOLBAR);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_VIEW_TOOLBARS, IDM_VIEW_DIRVIEW, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+    UI().addMenuSeparator(IDM_MOE_RTF,IDM_VIEW_TOOLBARS);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FILEBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_EDITBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_TOOLBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_SETTINGBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, true, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_VIEWBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_USERBAR, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
+    UI().addMenuSeparator(IDM_MOE_RTF,IDM_VIEW_TOOLBARS);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_VIEW_TOOLBARS, IDM_TOOLBARS_FREEZE, IDB_TOOLBAR, IDM_VIEW_TOOLBARS, false, true);
+    UI().addSubMenu(  IDM_MOE_RTF, IDM_VIEW, IDM_VIEW_WINDOWS, IDB_TOOLBAR);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_VIEW_WINDOWS, IDM_VIEW_WINDOWS_TEXT, IDB_TOOLBAR, IDM_VIEW_WINDOWS, false, false);
+
+    UI().addSubMenu(  IDM_MOE_RTF,  IDM_MOE_RTF,  IDM_HELP );
+        UI().addMenuItem(IDM_MOE_RTF, IDM_HELP, IDM_HELP_ABOUT, IDB_TOOLBAR, IDM_HELP_ABOUT, false, true);
 
 mol::msgMap<MoeWnd>().addMsgHandler( WM_CREATE, make_handler(&MoeWnd::OnCreate) );
 
@@ -665,6 +735,8 @@ mol::msgMap<MoeWnd>().addMsgHandler( WM_INITMENUPOPUP, make_handler(&MoeWnd::OnM
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_NEW, make_handler(&MoeWnd::OnFileNew) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_NEW_UFS, make_handler(&MoeWnd::OnFileNewUFS) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_NEW_RTF, make_handler(&MoeWnd::OnFileNewRTF) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_OPEN, make_handler(&MoeWnd::OnFileOpen) );
 
@@ -821,6 +893,8 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_NAVIGATE_BACK, make_handler(&MoeWnd::On
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_EXECUTEFORM, make_handler(&MoeWnd::OnDispatch) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_SHOW_LINE_NUMBERS, make_handler(&MoeWnd::OnDispatch) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_RIBBON_FONT_CTRL, make_handler(&MoeWnd::OnDispatch) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_TREE_OPEN, make_handler(&MoeWnd::OnDispatchTree) );
 
@@ -1127,6 +1201,48 @@ mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_EDIT_CUT, make_handler(&MoeTreeWnd:
 mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_EDIT_COPY, make_handler(&MoeTreeWnd::OnEditCopy) );
 
 mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_EDIT_PASTE, make_handler(&MoeTreeWnd::OnEditPaste) );
+
+mol::msgMap<RTFEditor>().addMsgHandler( WM_MDIACTIVATE, make_handler(&RTFEditor::OnMDIActivate) );
+
+mol::msgMap<RTFEditor>().addMsgHandler( WM_CREATE, make_handler(&RTFEditor::OnCreate) );
+
+mol::msgMap<RTFEditor>().addMsgHandler( WM_DESTROY, make_handler(&RTFEditor::OnDestroy) );
+
+mol::msgMap<RTFEditor>().addMsgHandler( WM_NCDESTROY, make_handler(&RTFEditor::OnNcDestroy) );
+
+mol::msgMap<RTFEditor>().addMsgHandler( WM_PAINT, make_handler(&RTFEditor::OnPaint) );
+
+mol::msgMap<RTFEditor>().addCmdHandler( IDM_FILE_SAVE, make_handler(&RTFEditor::OnSave) );
+
+mol::msgMap<RTFEditor>().addCmdHandler( IDM_FILE_SAVE_AS, make_handler(&RTFEditor::OnSaveAs) );
+
+mol::msgMap<RTFEditor>().addCmdHandler( IDM_EDIT_CUT, make_handler(&RTFEditor::OnCut) );
+
+mol::msgMap<RTFEditor>().addCmdHandler( IDM_EDIT_COPY, make_handler(&RTFEditor::OnCopy) );
+
+mol::msgMap<RTFEditor>().addCmdHandler( IDM_EDIT_PASTE, make_handler(&RTFEditor::OnPaste) );
+
+mol::msgMap<RTFEditor>().addCmdHandler( IDM_EDIT_UNDO, make_handler(&RTFEditor::OnUndo) );
+
+mol::msgMap<RTFEditor>().addCmdHandler( IDM_EDIT_REDO, make_handler(&RTFEditor::OnRedo) );
+
+mol::msgMap<RTFEditor>().addCmdHandler( IDM_RIBBON_FONT_CTRL, make_handler(&RTFEditor::OnFont) );
+
+mol::msgMap<RTFEditor>().addCmdHandler( IDM_EDIT_SELECT, make_handler(&RTFEditor::OnSelectAll) );
+
+mol::msgMap<RTFEditor>().addCmdHandler( IDM_EDIT_COLOR, make_handler(&RTFEditor::OnInsertColorDialog) );
+
+mol::msgMap<RTFEditor>().addCmdHandler( IDM_FILE_PRINT, make_handler(&RTFEditor::OnPrint) );
+
+mol::msgMap<RTFEditor>().addCmdHandler( IDM_EDIT_UPDATE, make_handler(&RTFEditor::OnReload) );
+
+mol::msgMap<RTFEditor>().addMsgHandler( WM_SEARCH_MSG, make_handler(&RTFEditor::OnSearch) );
+
+mol::msgMap<RTFEditor>().addNotifyCodeHandler( EN_MSGFILTER, make_handler(&RTFEditor::OnFilter) );
+
+mol::msgMap<RTFEditor>().addNotifyCodeHandler( EN_SELCHANGE, make_handler(&RTFEditor::OnSelectionChange) );
+
+mol::msgMap<RTFEditor>().addNotifyCodeHandler( EN_LINK, make_handler(&RTFEditor::OnLink) );
 
 
 }

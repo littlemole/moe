@@ -54,6 +54,9 @@
     <ClCompile Include="src\mdichild.cpp">
       <Filter>mdi</Filter>
     </ClCompile>
+    <ClCompile Include="src\rtf.cpp">
+      <Filter>mdi</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\app.h" />

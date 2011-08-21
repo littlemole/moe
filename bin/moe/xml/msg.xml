@@ -23,7 +23,8 @@
 
         <!-- main menu handlers -->
         <msg  handler="OnFileNew" cmd="IDM_FILE_NEW" />
-        <msg  handler="OnFileNewUFS" cmd="IDM_FILE_NEW_UFS" />      
+        <msg  handler="OnFileNewUFS" cmd="IDM_FILE_NEW_UFS" />
+        <msg  handler="OnFileNewRTF" cmd="IDM_FILE_NEW_RTF" />
         <msg  handler="OnFileOpen" cmd="IDM_FILE_OPEN"  />
         <msg  handler="OnFileOpenHtml" cmd="IDM_FILE_OPEN_HTML"  />
         <msg  handler="OnFileOpenDir" cmd="IDM_FILE_OPEN_FOLDER"  />
@@ -126,7 +127,8 @@
      
         <msg  handler="OnDispatch" cmd="IDM_MODE_EXECUTEFORM" />
         <msg  handler="OnDispatch" cmd="IDM_MODE_SHOW_LINE_NUMBERS" />
-
+        <msg  handler="OnDispatch" cmd="IDM_RIBBON_FONT_CTRL" />
+      
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_OPEN" />
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_RENAME" />
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_DELETE" />
@@ -356,7 +358,36 @@
       <msg  handler="OnEditPaste" cmd="IDM_EDIT_PASTE" />
       
     </class>
-    
+
+    <class type="RTFEditor" >
+
+      <!-- std windows msgs -->
+      <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
+      <msg  handler="OnCreate" msg="WM_CREATE" />
+      <msg  handler="OnDestroy" msg="WM_DESTROY" />
+      <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
+      <msg  handler="OnPaint" msg="WM_PAINT" />
+      
+      <msg  handler="OnSave" cmd="IDM_FILE_SAVE" />
+      <msg  handler="OnSaveAs" cmd="IDM_FILE_SAVE_AS" />
+      <msg  handler="OnCut" cmd="IDM_EDIT_CUT" />
+      <msg  handler="OnCopy" cmd="IDM_EDIT_COPY" />
+      <msg  handler="OnPaste" cmd="IDM_EDIT_PASTE" />
+      <msg  handler="OnUndo" cmd="IDM_EDIT_UNDO" />
+      <msg  handler="OnRedo" cmd="IDM_EDIT_REDO" />
+      <msg  handler="OnFont" cmd="IDM_RIBBON_FONT_CTRL" />
+      <msg  handler="OnSelectAll" cmd="IDM_EDIT_SELECT" />
+      <msg  handler="OnInsertColorDialog" cmd="IDM_EDIT_COLOR" />
+      <msg  handler="OnPrint" cmd="IDM_FILE_PRINT"  />
+      <msg  handler="OnReload" cmd="IDM_EDIT_UPDATE" />
+      <msg  handler="OnSearch" msg="WM_SEARCH_MSG" />
+
+      <notify handler="OnFilter" code="EN_MSGFILTER" />      
+      <notify handler="OnSelectionChange" code="EN_SELCHANGE" />
+      <notify handler="OnLink" code="EN_LINK" />
+      
+    </class>
+
   </msgs>
 
 </mol:codegen>

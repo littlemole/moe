@@ -18,6 +18,7 @@
   <cmds >
     <cmd id="IDM_FILE" title="File" />
     <cmd id="IDM_FILE_NEW" title="New File"   ribbon="RibbonFileNew" />
+    <cmd id="IDM_FILE_NEW_RTF" title="New RTF Document"   ribbon="RibbonFileNewRTF" />
     <cmd id="IDM_FILE_OPEN" title="File Open" ribbon="RibbonFileOpen"/>
     <cmd id="IDM_FILE_OPEN_HEX" title="Open Hex" />
     <cmd id="IDM_FILE_OPEN_HTML" title="Open Url" ribbon="RibbonFileOpenUrl" />
@@ -43,6 +44,7 @@
     <cmd id="IDM_RIBBON_BACKSPACE_UNIDENTS" title="Backspace Unindents" ribbon="RibbonTabBackSpaceUnIndents"/>
     <cmd id="IDM_RIBBON_WRITE_BOM" title="Write BOM" ribbon="RibbonWriteBOM"/>
     <cmd id="IDM_RIBBON_BYTES_SHOWN" title="Show #Bytes" ribbon="RibbonBytesShown"/>
+    <cmd id="IDM_RIBBON_FONT_CTRL" title="Font" ribbon="RibbonFontControl" />
     
 
     <cmd id="IDM_EDIT" title="Edit" />

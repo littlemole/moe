@@ -22,6 +22,8 @@
 
 #include "form.h"
 
+#include "rtf.h"
+
 #include "Docs.h"
 
 #include "MoeBar.h"

@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sun Aug 14 21:40:25 2011
+/* at Sun Aug 21 21:38:33 2011
  */
 /* Compiler settings for src\moe.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -168,7 +168,8 @@ enum MOE_DOCTYPE
 	MOE_DOCTYPE_HEX	= 4,
 	MOE_DOCTYPE_HTML	= 5,
 	MOE_DOCTYPE_OLE	= 6,
-	MOE_DOCTYPE_FORM	= 7
+	MOE_DOCTYPE_FORM	= 7,
+	MOE_DOCTYPE_RTF	= 8
     } 	MOE_DOCTYPE;
 
 typedef 
@@ -2319,6 +2320,9 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
             /* [in] */ VARIANT what,
             /* [in] */ VARIANT to) = 0;
         
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NewRTFDocument( 
+            /* [retval][out] */ IMoeDocument **d) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -2443,6 +2447,10 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
             /* [in] */ VARIANT what,
             /* [in] */ VARIANT to);
         
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NewRTFDocument )( 
+            IMoeDocumentCollection * This,
+            /* [retval][out] */ IMoeDocument **d);
+        
         END_INTERFACE
     } IMoeDocumentCollectionVtbl;
 
@@ -2529,6 +2537,9 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
 
 #define IMoeDocumentCollection_Move(This,what,to)	\
     ( (This)->lpVtbl -> Move(This,what,to) ) 
+
+#define IMoeDocumentCollection_NewRTFDocument(This,d)	\
+    ( (This)->lpVtbl -> NewRTFDocument(This,d) ) 
 
 #endif /* COBJMACROS */
 

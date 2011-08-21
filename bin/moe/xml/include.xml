@@ -18,6 +18,7 @@
   <include>img.h</include>
   <include>ole.h</include>
   <include>form.h</include>
+  <include>rtf.h</include>
   <include>Docs.h</include>
   <include>MoeBar.h</include>
   <include>win/msghandler.h</include>

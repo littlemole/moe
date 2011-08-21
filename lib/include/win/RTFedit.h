@@ -47,7 +47,7 @@ public:
     }
 
     // styles
-    virtual int style()   { return WS_CHILD|WS_VISIBLE; }
+    virtual int style()   { return WS_CHILD|WS_VISIBLE|ES_MULTILINE; }
 
     LRESULT streamIn(  const std::string c, int type = SF_TEXT);
     LRESULT streamOut( std::string&, int type = SF_TEXT);
@@ -57,6 +57,8 @@ public:
     bool search(int options );
 
     const std::string& getSearchText() { return searchText_; };
+
+	BOOL PrintRTF();
 
 private:
 	mol::win::RichEditStreamCallBack	cb_;

@@ -43,7 +43,7 @@
 	  <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\uni_debug\win.lib;..\..\lib\src\ole\uni_debug\ole.lib;..\..\lib\src\util\uni_debug\util.lib;..\..\3dParty\pcre\Debug\pcre.lib;..\..\lib\src\thread\uni_debug\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\lib\src\xml\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\uni_debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\uni_debug\win.lib;..\..\lib\src\ole\uni_debug\ole.lib;..\..\lib\src\util\uni_debug\util.lib;..\..\3dParty\pcre\Debug\pcre.lib;..\..\lib\src\thread\uni_debug\thread.lib;Propsys.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\lib\src\xml\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\uni_debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
       <MinimumRequiredVersion>5.0</MinimumRequiredVersion>
@@ -58,7 +58,7 @@
       <MinimumRequiredVersion>5.0</MinimumRequiredVersion>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\uni_release\win.lib;..\..\lib\src\ole\uni_release\ole.lib;..\..\lib\src\util\uni_release\util.lib;..\..\3dParty\pcre\uni_release\pcre.lib;..\..\lib\src\thread\uni_release\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\lib\src\xml\uni_release\xml.lib;..\..\3dParty\expat\Source\lib\uni_release\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\uni_release\win.lib;..\..\lib\src\ole\uni_release\ole.lib;..\..\lib\src\util\uni_release\util.lib;..\..\3dParty\pcre\uni_release\pcre.lib;..\..\lib\src\thread\uni_release\thread.lib;shlwapi.lib;Mpr.lib;Propsys.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\lib\src\xml\uni_release\xml.lib;..\..\3dParty\expat\Source\lib\uni_release\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
@@ -74,7 +74,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\3dParty\pcre\x64\uni_debug\pcre.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\x64\uni_debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\3dParty\pcre\x64\uni_debug\pcre.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;shlwapi.lib;Propsys.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\x64\uni_debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
@@ -91,7 +91,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
-     <AdditionalDependencies>..\..\lib\src\win\x64\uni_release\win.lib;..\..\lib\src\ole\x64\uni_release\ole.lib;..\..\lib\src\util\x64\uni_release\util.lib;..\..\3dParty\pcre\x64\uni_release\pcre.lib;..\..\lib\src\thread\x64\uni_release\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\lib\src\xml\x64\uni_release\xml.lib;..\..\3dParty\expat\Source\lib\x64\uni_release\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     <AdditionalDependencies>..\..\lib\src\win\x64\uni_release\win.lib;..\..\lib\src\ole\x64\uni_release\ole.lib;..\..\lib\src\util\x64\uni_release\util.lib;..\..\3dParty\pcre\x64\uni_release\pcre.lib;..\..\lib\src\thread\x64\uni_release\thread.lib;Propsys.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\lib\src\xml\x64\uni_release\xml.lib;..\..\3dParty\expat\Source\lib\x64\uni_release\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
      <GenerateDebugInformation>false</GenerateDebugInformation>
      <TargetMachine>MachineX64</TargetMachine>
     </Link>
