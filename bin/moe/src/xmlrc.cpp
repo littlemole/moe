@@ -768,8 +768,6 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_TOOLBARS_FREEZE, make_handler(&MoeWnd::
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDW_SYNTAX_BOX, make_handler(&MoeWnd::OnSyntax) );
 
-mol::msgMap<MoeWnd>().addCmdHandler( IDM_TREE_OPEN, make_handler(&MoeWnd::OnTreeOpen) );
-
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_CLI_RETURN, make_handler(&MoeWnd::OnDispatch) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_RIBBON_RECENTITEMS, make_handler(&MoeWnd::OnRecentItems) );
@@ -897,6 +895,8 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_SHOW_LINE_NUMBERS, make_handler(&M
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_RIBBON_FONT_CTRL, make_handler(&MoeWnd::OnDispatch) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_TREE_OPEN, make_handler(&MoeWnd::OnDispatchTree) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_TREE_UPDATE, make_handler(&MoeWnd::OnDispatchTree) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_TREE_RENAME, make_handler(&MoeWnd::OnDispatchTree) );
 
@@ -1173,8 +1173,6 @@ mol::msgMap<OleChild>().addCmdHandler( IDM_EDIT_REDO, make_generic_handler(&OleC
 mol::msgMap<MoeFormWnd>().addMsgHandler( WM_CLOSE, make_handler(&MoeFormWnd::OnClose) );
 
 mol::msgMap<MoeFormWnd>().addMsgHandler( WM_NCDESTROY, make_handler(&MoeFormWnd::OnNcDestroy) );
-
-mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_FILE_OPEN, make_handler(&MoeTreeWnd::OnTreeOpen) );
 
 mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_TREE_OPEN, make_handler(&MoeTreeWnd::OnTreeOpen) );
 

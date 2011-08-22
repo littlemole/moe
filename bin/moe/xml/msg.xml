@@ -43,7 +43,6 @@
         <msg  handler="OnFreezeToolBar" cmd="IDM_TOOLBARS_FREEZE" />
         <msg  handler="OnSyntax" cmd="IDW_SYNTAX_BOX" />
 
-        <msg  handler="OnTreeOpen" cmd="IDM_TREE_OPEN" />
 
         <msg  handler="OnDispatch" cmd="IDM_CLI_RETURN" />
       
@@ -130,6 +129,7 @@
         <msg  handler="OnDispatch" cmd="IDM_RIBBON_FONT_CTRL" />
       
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_OPEN" />
+        <msg  handler="OnDispatchTree" cmd="IDM_TREE_UPDATE" />
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_RENAME" />
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_DELETE" />
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_CUT" />
@@ -138,6 +138,7 @@
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_PROPERTIES" />
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_EXECUTE" />
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_NEWDIR" />
+
 
       <msgrange type="cmd" from="ID_FIRST_USER_CMD" to="ID_LAST_USER_CMD" handler="OnDispatch" />
         <msgrange type="cmd" from="ID_FIRST_USER_SCRIPT" to="ID_LAST_USER_SCRIPT" handler="OnDispatch" />
@@ -340,9 +341,7 @@
     </class>
 
     <class type="MoeTreeWnd" >
-
       
-      <msg  handler="OnTreeOpen" cmd="IDM_FILE_OPEN" />
       <msg  handler="OnTreeOpen" cmd="IDM_TREE_OPEN" />
       <msg  handler="OnTreeUpdate" cmd="IDM_TREE_UPDATE" />
       <msg  handler="OnTreeRename" cmd="IDM_TREE_RENAME" />

@@ -235,7 +235,7 @@ public:
 
 protected:
 
-    virtual int treeStyle()   { return WS_CHILD|WS_VISIBLE|TVS_HASLINES|TVS_EDITLABELS|TVS_HASBUTTONS; }
+    virtual int treeStyle()   { return WS_CHILD|WS_VISIBLE|TVS_HASLINES|TVS_EDITLABELS|TVS_HASBUTTONS|TVS_SHOWSELALWAYS; }
     virtual int treeExStyle() { return WS_EX_ACCEPTFILES; }
 
 	class ShellTreeCtrl : 

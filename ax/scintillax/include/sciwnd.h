@@ -151,11 +151,11 @@ public:
             {
                 if ( (options & FR_DOWN) == 0 )
                 {
-                    nextSearchPos_-=2;
+                   // nextSearchPos_-=2;
                 }
                 else
                 {
-                    nextSearchPos_+=2;
+                   // nextSearchPos_+=2;
                 }
             }
 
@@ -163,7 +163,7 @@ public:
         chrg.cpMin = nextSearchPos_;
         chrg.cpMax = this->getLength();
 
-        if ( 0 == (options & FR_DOWN) )
+        if ( !(options & FR_DOWN) )
         {
 			int len = this->getLength();
 
@@ -189,10 +189,10 @@ public:
         chrg.cpMin = r;
         chrg.cpMax = r + (long)what.size();
 
-        if ( 0 == (options & FR_DOWN) )
+        if ( !(options & FR_DOWN) )
             nextSearchPos_ =r-1;
         else
-            nextSearchPos_ =chrg.cpMax+1;
+            nextSearchPos_ = r + (long)whith.size();//chrg.cpMax;//+1;
 
 		setSel( chrg.cpMin, chrg.cpMax );
 		replaceSel(mol::tostring(whith));

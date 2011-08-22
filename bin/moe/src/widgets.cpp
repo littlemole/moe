@@ -1100,11 +1100,11 @@ HRESULT __stdcall TreeWndSink::OnTreeDblClick(BSTR filename)
 	mol::punk<IShellTree> tree(treeWnd()->oleObject);
 	if ( tree )
 	{
-		bool result = ::docs()->open(0,mol::toString(filename),Docs::PREF_TXT,false,0);
-		statusBar()->status(mol::toString(filename));
+		bool result = ::docs()->open(0,p,Docs::PREF_TXT,false,0);
+		statusBar()->status(p);
 		if (!result)
 		{
-			statusBar()->status( mol::string(_T("failed to load ")) + mol::toString(filename));
+			statusBar()->status( mol::string(_T("failed to load ")) + p);
 			return S_FALSE;
 		}
 	}
@@ -1113,37 +1113,43 @@ HRESULT __stdcall TreeWndSink::OnTreeDblClick(BSTR filename)
 
 HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename)
 {
+	mol::string p(mol::toString(filename));
+	if ( !mol::Path::exists(p) && !mol::Path::isUNC(p) )
+	{
+		if ( p.substr(0,2) != _T("::") )
+			return S_OK;
+	}
+
 	mol::punk<IShellTree> tree(treeWnd()->oleObject);
 	if ( tree )
 	{
-		mol::string fn = mol::toString((wchar_t*)filename);
-		if ( mol::Path::isDir( fn) || fn.substr(0,2) == _T("::") )
+		if ( mol::Path::isDir( p) || p.substr(0,2) == _T("::") )
 		{
-			statusBar()->status(fn);
-			bool result = ::docs()->open(0,fn,Docs::PREF_TXT,false,0);
+			statusBar()->status(p);
+			bool result = ::docs()->open(0,p,Docs::PREF_TXT,false,0);
 
 			if (!result)
 			{
-				statusBar()->status( mol::string(_T("failed to load ")) + fn);
+				statusBar()->status( mol::string(_T("failed to load ")) + p);
 				return S_OK;
 			}
 			return S_OK;
 		}
 		mol::FilenameDlg dlg(*moe());
 		dlg.setFilter( InFilesFilter );	
-		dlg.fileName(fn);
+		dlg.fileName(p);
 		if ( !dlg.dlgOpen(OFN_ALLOWMULTISELECT | OFN_EXPLORER) )
 			return S_OK;
 
 		int s = dlg.selections();
-		int p = dlg.index();
+		int c = dlg.index();
 		for ( int i = 0; i < s; i++ )
 		{
 			mol::string f = dlg.fileName(i);
 			statusBar()->status(f);
 
 
-			bool result = ::docs()->open(0,f,(Docs::InFiles)(p-1 >=0 ? p-1 :0),false,0);
+			bool result = ::docs()->open(0,f,(Docs::InFiles)(c-1 >=0 ? c-1 :0),false,0);
 
 			if (!result)
 			{

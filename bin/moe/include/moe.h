@@ -48,15 +48,12 @@ public:
 	static Instance* CreateInstance();
 
 
-	// public members
+	// moe COM subobjects
 
 	mol::punk<IMoeScript> moeScript;
 	mol::punk<IMoeDialogs> moeDialogs;
 	mol::punk<IMoeView> moeView;
 	mol::punk<IMoeConfig> moeConfig;
-
-	// shared small moe icon
-	mol::Icon						icon;
 
 	/////////////////////////////////////////////////////////////////////
 	// std windows msgs - Creation / Activation / Destruction
@@ -71,6 +68,20 @@ public:
 	LRESULT OnCloseAllButThis();
 	LRESULT OnMenu(UINT, WPARAM, LPARAM );
 
+
+	/////////////////////////////////////////////////////////////////////
+    // dispatch to active child
+	/////////////////////////////////////////////////////////////////////
+
+	LRESULT OnDispatch(UINT, WPARAM, LPARAM );
+	LRESULT OnDispatchTree(UINT, WPARAM, LPARAM );
+
+	// dispatch to tree if active, else  to active child
+	LRESULT OnEditCut(UINT, WPARAM, LPARAM );
+	LRESULT OnEditCopy(UINT, WPARAM, LPARAM  );
+	LRESULT OnEditPaste(UINT, WPARAM, LPARAM );
+
+
 	/////////////////////////////////////////////////////////////////////
 	// Menu command handlers
 	/////////////////////////////////////////////////////////////////////
@@ -82,44 +93,24 @@ public:
 	 void OnFileOpenHtml ();
      void OnFileOpenDir ();
      void OnFileOpenHex ();
-	 void OnTreeOpen();
-
-	 void OnFileExit ( );
-	 void OnFind ();
-	 void OnReplace ();
 
 	 void OnEditSettings();
 	 void OnEditPrefs();
      void OnHelpAbout();
+	 void OnFileExit ( );
+
+	 // toggle dirview
 	 void OnShowDirView();
 
-	 LRESULT OnEditCut(UINT, WPARAM, LPARAM );
-	 LRESULT OnEditCopy(UINT, WPARAM, LPARAM  );
-	 LRESULT OnEditPaste(UINT, WPARAM, LPARAM );
-
-	 void OnFreezeToolBar();
-	 void OnSyntax(int code, int id, HWND ctrl);
-
-	// FX Shortcuts (F1 through F12)
-	void OnFx(int code, int id, HWND ctrl);
-
-	// show toolbar switches
-	 void OnShowToolBar(int code, int id, HWND ctrl);
-
-	// tab-ctrl events
+	 // document chooser tab-ctrl events
 	 void OnTabCtrl( NMHDR* notify );
 
-	// toolbar right click event
- 	 void OnToolbarRightClick(NMHDR* notify );
+	 // FX Shortcuts (F1 through F12)
+	 void OnFx(int code, int id, HWND ctrl);
 
-
-
-	/////////////////////////////////////////////////////////////////////
-    // dispatch to active child
-	/////////////////////////////////////////////////////////////////////
-
-	LRESULT OnDispatch(UINT, WPARAM, LPARAM );
-	LRESULT OnDispatchTree(UINT, WPARAM, LPARAM );
+	 // open find and replace dialogs
+	 void OnFind ();
+	 void OnReplace ();
 
 	/////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////
@@ -135,25 +126,14 @@ public:
 	/////////////////////////////////////////////////////////////////////
 
 
-    virtual HRESULT __stdcall get_Documents( IMoeDocumentCollection **d);
-    
-    virtual HRESULT __stdcall get_View( IMoeView **d);
-    
-    virtual HRESULT __stdcall get_ActiveDoc( IMoeDocument **d);
-    
-    virtual HRESULT __stdcall get_Config( IMoeConfig **d);
-    
-    virtual HRESULT __stdcall get_Script( IMoeScript **d);
-    
-    virtual HRESULT __stdcall get_Dialogs( IMoeDialogs **d);
-    
+    virtual HRESULT __stdcall get_Documents( IMoeDocumentCollection **d);    
+    virtual HRESULT __stdcall get_View( IMoeView **d);    
+    virtual HRESULT __stdcall get_ActiveDoc( IMoeDocument **d);    
+    virtual HRESULT __stdcall get_Config( IMoeConfig **d);    
+    virtual HRESULT __stdcall get_Script( IMoeScript **d);    
+    virtual HRESULT __stdcall get_Dialogs( IMoeDialogs **d);    
     virtual HRESULT __stdcall Exit();
 
-	/////////////////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////////////////
-
-	/////////////////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////////////////
 
 	/////////////////////////////////////////////////////////////////////
 	// persistence
@@ -173,6 +153,26 @@ public:
 
 	// OLE status messages override - display OLE status in moe status bar
 	virtual HRESULT __stdcall IOleInPlaceFrame_SetStatusText(LPCOLESTR txt);
+
+	// shared small moe icon
+	mol::Icon						icon;
+
+	/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+
+	 // toolbars (winxp style only)
+
+	 // freeze the toolbars
+	 void OnFreezeToolBar();
+
+	 // select syntax dropdown box
+	 void OnSyntax(int code, int id, HWND ctrl);
+
+	 // show toolbar switches
+	 void OnShowToolBar(int code, int id, HWND ctrl);
+
+	 // toolbar right click event
+ 	 void OnToolbarRightClick(NMHDR* notify );
 
 private:
 	

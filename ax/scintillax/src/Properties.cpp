@@ -629,7 +629,7 @@ HRESULT __stdcall SciAxProperties::ConvertTabs()
 	std::string utf8with(mol::toUTF8(with));
 
     int c = 0;
-	while ( sci_->edit()->replace( mol::tostring(utf8what), mol::tostring(utf8with), FR_REPLACEALL ) )
+	while ( sci_->edit()->replace( mol::tostring(utf8what), mol::tostring(utf8with), FR_DOWN|FR_REPLACEALL ) )
     {
         c++;
     }

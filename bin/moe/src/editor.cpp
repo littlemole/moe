@@ -873,18 +873,6 @@ void Editor::OnSaveAs()
 
 	if ( ofn.dlgSave( OFN_OVERWRITEPROMPT| OFN_NOTESTFILECREATE| OFN_NOVALIDATE) )
 	{	
-		if ( ofn.fileName() != p.toString() )
-		{
-			/*
-			mol::punk<IMoeDocument> doc;
-			if ( (S_OK == docs()->Item(mol::variant(ofn.fileName()),&doc)) && doc )
-			{
-				::MessageBox(*this, _T("File already open in other editor window!"), _T("error"),MB_ICONERROR);
-				return ;
-			}
-			*/
-		}
-
 		if ( enc != ofn.index()-1 )
 			props_->put_Encoding(ofn.index()-1);
 		if (sci)
@@ -919,7 +907,7 @@ void Editor::OnSave()
 
 	mol::ostringstream oss;
 
-	saving_ = true;
+	//saving_ = true;
 	HRESULT hr = sci->Save();
 	if ( hr == S_OK )
 	{
@@ -933,7 +921,7 @@ void Editor::OnSave()
 	statusBar()->status(oss.str());
 
 	lastWriteTime_ = getLastWriteTime( filename.toString() );
-	saving_ = false;
+	//saving_ = false;
 }
 
 void Editor::OnExecForm()
