@@ -172,7 +172,7 @@
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\uni_debug\win.lib;..\..\lib\src\ole\uni_debug\ole.lib;..\..\lib\src\util\uni_debug\util.lib;..\..\lib\src\thread\uni_debug\thread.lib;..\..\3dParty\pcre\uni_debug\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Msimg32.lib;..\..\lib\src\xml\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\uni_debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\uni_debug\win.lib;..\..\lib\src\ole\uni_debug\ole.lib;..\..\lib\src\util\uni_debug\util.lib;..\..\lib\src\thread\uni_debug\thread.lib;..\..\3dParty\pcre\uni_debug\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Msimg32.lib;Propsys.lib;..\..\lib\src\xml\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\uni_debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>shellCtrl.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
