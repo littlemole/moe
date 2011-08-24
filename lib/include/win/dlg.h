@@ -99,8 +99,6 @@ public:
 class MainDialog : public mol::win::windowclass<mol::win::DlgBase>
 {
 public:
-		//WINDOWCLASS
-
 	    // create a main Dlg from template
         virtual HWND createDlg(int lpTemplate, const mol::string& className );
 

@@ -195,8 +195,6 @@ LRESULT TaskbarWnd::wndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 			if ( lr == 0 )
 			{
 				::DestroyWindow(hWnd_);	
-				//tb_->RemoveTab(doc);
-				//destroy();
 			}
 			break;
 		}

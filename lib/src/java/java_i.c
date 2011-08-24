@@ -6,7 +6,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Fri Aug 19 23:45:50 2011
+/* at Tue Aug 23 00:08:58 2011
  */
 /* Compiler settings for java.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 7.00.0555 

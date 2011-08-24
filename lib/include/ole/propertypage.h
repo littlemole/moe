@@ -72,8 +72,6 @@ private:
 
 	void create( mol::PropSheet* ps, const mol::string& tab, REFCLSID clsid , int id,int flags = PSP_DEFAULT|PSP_USETITLE);
 
-	void create( mol::PropSheet* ps, const mol::string& tab, int id, int flags = PSP_DEFAULT|PSP_USETITLE) {};
-
 	class PropertyPageSite :
 		public IPropertyPageSite,
 		public mol::interfaces< PropertyPageSite, mol::implements<IPropertyPageSite> >

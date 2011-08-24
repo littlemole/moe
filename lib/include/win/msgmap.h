@@ -8,23 +8,13 @@
 #include <commdlg.h>
 #include "util/Signature.h"
 #include "thread/fun.h"
-/*
-#include "boost/function.hpp"
-#include "boost/bind.hpp"
-#include <boost/type_traits.hpp>
-#include "boost/lexical_cast.hpp"
-#include "boost/scoped_ptr.hpp"
-#include "boost/shared_ptr.hpp"
-#include "boost/weak_ptr.hpp"
-#include "boost/any.hpp"
-#include "boost/call_traits.hpp"
-#include <boost/preprocessor.hpp>
-*/
 
 namespace mol {
 
 namespace win {
+
 class WndProc;
+
 } //end namespace;
 
 ///////////////////////////////////////////////////////////////////

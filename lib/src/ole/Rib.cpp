@@ -51,170 +51,198 @@ REFIID uuid_info<mol::ole::molIApplicationDocumentLists>::uuidof = IID_molIAppli
 namespace Ribbon
 {
 
-
-// Convert from IPropertyStore to CHARFORMAT2 so it can be used formatting text.
-void GetCharFormat2FromIPropertyStore(__in IPropertyStore* pPropStore, __out CHARFORMAT2 *pCharFormat)
+class PropVariant : public PROPVARIANT
 {
-    // Initialize the output parameter.
+public:
+
+	PropVariant()
+	{
+		::PropVariantInit(this);
+
+	}
+	~PropVariant()
+	{
+		::PropVariantClear(this);
+	}
+};
+
+
+// Convert IPropertyStore to CHARFORMAT2 
+void GetCharFormat2FromIPropertyStore( IPropertyStore* pPropStore, CHARFORMAT2 *pCharFormat)
+{
     ZeroMemory(pCharFormat, sizeof(*pCharFormat));
     pCharFormat->cbSize = sizeof(CHARFORMAT2);
     
-    PROPVARIANT propvar;
-    PropVariantInit(&propvar);
-    UINT uValue;
+	{
+		// Get bold value
+	    PropVariant propVar;
+		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_Bold, &propVar) )
+		{
+			UINT uValue = 0;
+			UIPropertyToUInt32(UI_PKEY_FontProperties_Bold, propVar, &uValue);
+			if ((UI_FONTPROPERTIES) uValue != UI_FONTPROPERTIES_NOTAVAILABLE)
+			{
+				pCharFormat->dwMask |= CFM_BOLD;
+				pCharFormat->dwEffects |= ((UI_FONTPROPERTIES) uValue == UI_FONTPROPERTIES_SET) ? CFE_BOLD : 0;
+			}
+		}
+	}
 
-    // Get the bold value from the property store.
-    if (SUCCEEDED(pPropStore->GetValue(UI_PKEY_FontProperties_Bold, &propvar)))
-    {
-        UIPropertyToUInt32(UI_PKEY_FontProperties_Bold, propvar, &uValue);
-        if ((UI_FONTPROPERTIES) uValue != UI_FONTPROPERTIES_NOTAVAILABLE)
-        {
-            // There is a value assigned, so set the corresponding members in CharFormat2 variable.
-            pCharFormat->dwMask |= CFM_BOLD;
-            pCharFormat->dwEffects |= ((UI_FONTPROPERTIES) uValue == UI_FONTPROPERTIES_SET) ? CFE_BOLD : 0;
-        }
-    }
-    PropVariantClear(&propvar);
+	{
+		// Get italic value
+	    PropVariant propVar;
+		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_Italic, &propVar) ) 
+		{
+			UINT uValue = 0;
+			UIPropertyToUInt32(UI_PKEY_FontProperties_Italic, propVar, &uValue);
+			if ((UI_FONTPROPERTIES) uValue != UI_FONTPROPERTIES_NOTAVAILABLE)
+			{
+				pCharFormat->dwMask |= CFM_ITALIC;
+				pCharFormat->dwEffects |= ((UI_FONTPROPERTIES) uValue == UI_FONTPROPERTIES_SET) ? CFE_ITALIC : 0;
+			}
+		}
+	}
 
-    // Get the italic value from the property store.
-    if (SUCCEEDED(pPropStore->GetValue(UI_PKEY_FontProperties_Italic, &propvar)))
-    {
-        UIPropertyToUInt32(UI_PKEY_FontProperties_Italic, propvar, &uValue);
-        if ((UI_FONTPROPERTIES) uValue != UI_FONTPROPERTIES_NOTAVAILABLE)
-        {
-            // There is a value assigned, so set the corresponding members in CharFormat2 variable.
-            pCharFormat->dwMask |= CFM_ITALIC;
-            pCharFormat->dwEffects |= ((UI_FONTPROPERTIES) uValue == UI_FONTPROPERTIES_SET) ? CFE_ITALIC : 0;
-        }
-    }
-    PropVariantClear(&propvar);
+	{
+		// Get underline value
+	    PropVariant propVar;
+		if (SUCCEEDED(pPropStore->GetValue(UI_PKEY_FontProperties_Underline, &propVar)))
+		{
+			UINT uValue = 0;
+			UIPropertyToUInt32(UI_PKEY_FontProperties_Underline, propVar, &uValue);
+			if ((UI_FONTUNDERLINE) uValue != UI_FONTUNDERLINE_NOTAVAILABLE)
+			{
+				pCharFormat->dwMask |= CFM_UNDERLINE;
+				pCharFormat->dwEffects |= ((UI_FONTUNDERLINE) uValue == UI_FONTUNDERLINE_SET) ? CFE_UNDERLINE : 0;
+			}
+		}
+	}
 
-    // Get the underline value from the property store.
-    if (SUCCEEDED(pPropStore->GetValue(UI_PKEY_FontProperties_Underline, &propvar)))
-    {
-        UIPropertyToUInt32(UI_PKEY_FontProperties_Underline, propvar, &uValue);
-        if ((UI_FONTUNDERLINE) uValue != UI_FONTUNDERLINE_NOTAVAILABLE)
-        {
-            // There is a value assigned, so set the corresponding members in CharFormat2 variable.
-            pCharFormat->dwMask |= CFM_UNDERLINE;
-            pCharFormat->dwEffects |= ((UI_FONTUNDERLINE) uValue == UI_FONTUNDERLINE_SET) ? CFE_UNDERLINE : 0;
-        }
-    }
-    PropVariantClear(&propvar);
+	{
+		// Get strikethrough value
+		PropVariant propVar;
+		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_Strikethrough, &propVar) )
+		{
+			UINT uValue = 0;
+			UIPropertyToUInt32(UI_PKEY_FontProperties_Strikethrough, propVar, &uValue);
+			if ((UI_FONTPROPERTIES) uValue != UI_FONTPROPERTIES_NOTAVAILABLE)
+			{
+				pCharFormat->dwMask |= CFM_STRIKEOUT;
+				pCharFormat->dwEffects |= ((UI_FONTPROPERTIES) uValue == UI_FONTPROPERTIES_SET) ? CFE_STRIKEOUT : 0;
+			}
+		}    
+	}
 
-    // Get the strikethrough value from the property store.
-    if (SUCCEEDED(pPropStore->GetValue(UI_PKEY_FontProperties_Strikethrough, &propvar)))
-    {
-        UIPropertyToUInt32(UI_PKEY_FontProperties_Strikethrough, propvar, &uValue);
-        if ((UI_FONTPROPERTIES) uValue != UI_FONTPROPERTIES_NOTAVAILABLE)
-        {
-            // There is a value assigned, so set the corresponding members in CharFormat2 variable.
-            pCharFormat->dwMask |= CFM_STRIKEOUT;
-            pCharFormat->dwEffects |= ((UI_FONTPROPERTIES) uValue == UI_FONTPROPERTIES_SET) ? CFE_STRIKEOUT : 0;
-        }
-    }    
-    PropVariantClear(&propvar);
+	{
+		// Get vertical positioning 
+		PropVariant propVar;
+		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_VerticalPositioning, &propVar ) )
+		{
+			UINT uValue = 0;
+			UIPropertyToUInt32(UI_PKEY_FontProperties_VerticalPositioning, propVar, &uValue);
+			UI_FONTVERTICALPOSITION uVerticalPosition = (UI_FONTVERTICALPOSITION) uValue;
+			if ((uVerticalPosition != UI_FONTVERTICALPOSITION_NOTAVAILABLE))
+			{
+				pCharFormat->dwMask |= (CFM_SUPERSCRIPT | CFM_SUBSCRIPT);
+				if (uVerticalPosition != UI_FONTVERTICALPOSITION_NOTSET)
+				{
+					pCharFormat->dwEffects |= (uVerticalPosition == UI_FONTVERTICALPOSITION_SUPERSCRIPT) ? CFE_SUPERSCRIPT : CFE_SUBSCRIPT;
+				}
+			}
+		}
+	}
 
-    // Get the vertical positioning value from the property store.
-    if (SUCCEEDED(pPropStore->GetValue(UI_PKEY_FontProperties_VerticalPositioning, &propvar)))
-    {
-        UIPropertyToUInt32(UI_PKEY_FontProperties_VerticalPositioning, propvar, &uValue);
-        UI_FONTVERTICALPOSITION uVerticalPosition = (UI_FONTVERTICALPOSITION) uValue;
-        if ((uVerticalPosition != UI_FONTVERTICALPOSITION_NOTAVAILABLE))
-        {
-            // There is a value assigned, so set the corresponding members in CharFormat2 variable.
-            pCharFormat->dwMask |= (CFM_SUPERSCRIPT | CFM_SUBSCRIPT);
-            if (uVerticalPosition != UI_FONTVERTICALPOSITION_NOTSET)
-            {
-                pCharFormat->dwEffects |= (uVerticalPosition == UI_FONTVERTICALPOSITION_SUPERSCRIPT) ? CFE_SUPERSCRIPT : CFE_SUBSCRIPT;
-            }
-        }
-    }
-    PropVariantClear(&propvar);
+	{
+		// Get font family 
+		PropVariant propVar;
+		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_Family, &propVar) )
+		{
+			PWSTR pszFamily;
+			UIPropertyToStringAlloc(UI_PKEY_FontProperties_Family, propVar, &pszFamily);
+			// Blank string is used as "Not Available" value.
+			if (lstrcmp(pszFamily, L"")) 
+			{
+				StringCchCopyW(pCharFormat->szFaceName, ARRAYSIZE(pCharFormat->szFaceName), pszFamily);
+				pCharFormat->dwMask |= CFM_FACE;
+			}
+			CoTaskMemFree(pszFamily);
+		}
+	}
 
-    // Get the font family value from the property store.
-    if (SUCCEEDED(pPropStore->GetValue(UI_PKEY_FontProperties_Family, &propvar)))
-    {
-        // Get the string for the font family.
-        PWSTR pszFamily;
-        UIPropertyToStringAlloc(UI_PKEY_FontProperties_Family, propvar, &pszFamily);
-        // Blank string is used as "Not Available" value.
-        if (lstrcmp(pszFamily, L"")) 
-        {
-            // There is a value assigned, so set the corresponding members in CharFormat2 variable.
-            // Copy the string for font family.
-            StringCchCopyW(pCharFormat->szFaceName, ARRAYSIZE(pCharFormat->szFaceName), pszFamily);
-            pCharFormat->dwMask |= CFM_FACE;
-        }
-        // Free the allocated string.
-        CoTaskMemFree(pszFamily);
-    }
-    PropVariantClear(&propvar);
+	{
+		// Get font size
+		PropVariant propVar;
+		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_Size, &propVar ) )
+		{
+			DECIMAL decSize;
+			UIPropertyToDecimal(UI_PKEY_FontProperties_Size, propVar, &decSize);
+			DOUBLE dSize;
+			VarR8FromDec(&decSize, &dSize);
+			// Zero is used as "Not Available" value.
+			if (dSize > 0)
+			{
+				pCharFormat->dwMask |= CFM_SIZE;
+				// Set the height as twips.
+				pCharFormat->yHeight = (LONG)(dSize * TWIPS_PER_POINT);
+			}
+		}
+	}
 
-    // Get the font size value from the property store.
-    if (SUCCEEDED(pPropStore->GetValue(UI_PKEY_FontProperties_Size, &propvar)))
-    {
-        // Get the decimal font size value.
-        DECIMAL decSize;
-        UIPropertyToDecimal(UI_PKEY_FontProperties_Size, propvar, &decSize);
-        DOUBLE dSize;
-        VarR8FromDec(&decSize, &dSize);
-        // Zero is used as "Not Available" value.
-        if (dSize > 0)
-        {
-            // There is a value assigned, so set the corresponding members in CharFormat2 variable.
-            pCharFormat->dwMask |= CFM_SIZE;
-            // Set the height as twips.
-            pCharFormat->yHeight = (LONG)(dSize * TWIPS_PER_POINT);
-        }
-    }
-    PropVariantClear(&propvar);
+	{
+		// Get font foreground color
+		PropVariant propVar;
+		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_ForegroundColorType, &propVar ) )
+		{
+			UINT uValue = 0;
+			UIPropertyToUInt32(UI_PKEY_FontProperties_ForegroundColorType, propVar, &uValue);
+			if (UI_SWATCHCOLORTYPE_AUTOMATIC == (UI_SWATCHCOLORTYPE)uValue)
+			{
+				// The color type is automatic, so set the corresponding members in CharFormat2 variable.
+				pCharFormat->dwMask |= CFM_COLOR;
+				pCharFormat->dwEffects |= CFE_AUTOCOLOR;
+			}
+		}
+	}
 
-    // Get the foreground color type value from the property store.
-    if (SUCCEEDED(pPropStore->GetValue(UI_PKEY_FontProperties_ForegroundColorType, &propvar)))
-    {
-        UIPropertyToUInt32(UI_PKEY_FontProperties_ForegroundColorType, propvar, &uValue);
-        if (UI_SWATCHCOLORTYPE_AUTOMATIC == (UI_SWATCHCOLORTYPE)uValue)
-        {
-            // The color type is automatic, so set the corresponding members in CharFormat2 variable.
-            pCharFormat->dwMask |= CFM_COLOR;
-            pCharFormat->dwEffects |= CFE_AUTOCOLOR;
-        }
-    }
-    PropVariantClear(&propvar);
+	{
+		// Get font foreground color 
+		PropVariant propVar;
+		if (S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_ForegroundColor, &propVar) )
+		{
+			UINT uValue = 0;
+			UIPropertyToUInt32(UI_PKEY_FontProperties_ForegroundColor, propVar, &uValue);
+			pCharFormat->dwMask |= CFM_COLOR;
+			pCharFormat->crTextColor = (COLORREF)uValue;
+		}
+	}
 
-    // Get the foreground color value from the property store.
-    if (SUCCEEDED(pPropStore->GetValue(UI_PKEY_FontProperties_ForegroundColor, &propvar)))
-    {
-        // A font color is specified so set the corresponding members in CharFormat2 variable.
-        UIPropertyToUInt32(UI_PKEY_FontProperties_ForegroundColor, propvar, &uValue);
-        pCharFormat->dwMask |= CFM_COLOR;
-        pCharFormat->crTextColor = (COLORREF)uValue;
-    }
-    PropVariantClear(&propvar);
+	{
+		// Get background color type value
+		PropVariant propVar;
+		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_BackgroundColorType, &propVar) )
+		{
+			UINT uValue = 0;
+			UIPropertyToUInt32(UI_PKEY_FontProperties_BackgroundColorType, propVar, &uValue);
+			if (UI_SWATCHCOLORTYPE_NOCOLOR == (UI_SWATCHCOLORTYPE)uValue)
+			{
+				// The color type is no color, so set the corresponding members in CharFormat2 variable.
+				pCharFormat->dwMask |= CFM_BACKCOLOR;
+				pCharFormat->dwEffects |= CFE_AUTOBACKCOLOR;
+			}
+		}
+	}
 
-    // Get the background color type value from the property store.
-    if (SUCCEEDED(pPropStore->GetValue(UI_PKEY_FontProperties_BackgroundColorType, &propvar)))
-    {
-        UIPropertyToUInt32(UI_PKEY_FontProperties_BackgroundColorType, propvar, &uValue);
-        if (UI_SWATCHCOLORTYPE_NOCOLOR == (UI_SWATCHCOLORTYPE)uValue)
-        {
-            // The color type is no color, so set the corresponding members in CharFormat2 variable.
-            pCharFormat->dwMask |= CFM_BACKCOLOR;
-            pCharFormat->dwEffects |= CFE_AUTOBACKCOLOR;
-        }
-    }
-    PropVariantClear(&propvar);
-
-    // Get the background color value from the property store.
-    if (SUCCEEDED(pPropStore->GetValue(UI_PKEY_FontProperties_BackgroundColor, &propvar)))
-    {
-        // A color is specified so set the corresponding members in CharFormat2 variable.
-        UIPropertyToUInt32(UI_PKEY_FontProperties_BackgroundColor, propvar, &uValue);
-        pCharFormat->dwMask |= CFM_BACKCOLOR;
-        pCharFormat->crBackColor = (COLORREF)uValue;
-    }
-    PropVariantClear(&propvar);
+	{
+		// Get the background color 
+		PropVariant propVar;
+		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_BackgroundColor, &propVar) )
+		{
+			UINT uValue = 0;
+			UIPropertyToUInt32(UI_PKEY_FontProperties_BackgroundColor, propVar, &uValue);
+			pCharFormat->dwMask |= CFM_BACKCOLOR;
+			pCharFormat->crBackColor = (COLORREF)uValue;
+		}
+	}
 }
 
 // Convert from CHARFORMAT2 to IPropertyStore so it can be passed to the font control.
