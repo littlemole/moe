@@ -184,9 +184,6 @@ public:
 	}
 
 	// IActiveScriptSiteDebug Implementation
-	// Used by the language engine to delegate IDebugCodeContext::GetSourceContext. 
-
-	//HRESULT virtual __stdcall GetDocumentContextFromPosition(DWORD dwSourceContext, ULONG uCharacterOffset,ULONG uNumChars,IDebugDocumentContext **ppsc);
 	virtual HRESULT  __stdcall GetDocumentContextFromPosition(
 #ifdef _WIN64
 								  DWORDLONG dwSourceContext,	

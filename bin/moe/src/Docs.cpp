@@ -69,38 +69,35 @@ void Docs::rename( mol::MdiChild* mdi, const mol::string& path )
 
 void Docs::move( mol::MdiChild* mdi, int pos )
 {
-	remove(mdi);
+	// get index of document to be moved in tab ctrl
+	int index = tab()->index((HWND)(*mdi));
 
+	// get iter for the document where to move to
 	childlist::iterator it = iterator(mol::variant(pos));
 
+	// update the win7 taskbar document order
 	taskbar()->moveTab( (HWND)(*mdi), (HWND)(**it) );
-
-	// update tab window
-	int index = tab()->index((HWND)(*mdi));
-	//int indexTo = pos;
+	
+	// get the tab to be moved's item and clone it
 	mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*) tab()->getTabCtrlItem(index);
 	mol::TabCtrl::TabCtrlItem* nc = new mol::TabCtrl::TabCtrlItem( c->title, c->tooltip, c->lparam );
+
+	// update the tab ctrl	(remove and reinsert)
 	tab()->remove( (HWND)(*mdi) );
 	tab()->insertItem(nc, pos );
 	tab()->select((HWND)(*mdi));
+
+	// update our internal document collection to match order of tab ctrl (and win7 taskbar, if any)
+	remove(mdi);
+
+	it = iterator(mol::variant(pos));
+	this->children_.insert(it,mdi);
+
 	mdi->activate();
 }
 
 /////////////////////////////////////////////////////////////////////
-
-/*
-mol::MdiChild* Docs::child( const mol::string& path)
-{
-	childlist::iterator& it = iterator(mol::variant(path));
-	if ( it == children_.end() )
-		return 0;
-
-	mol::MdiChild* mdi = dynamic_cast<mol::MdiChild*>((*it));
-
-	return mdi;
-}
-
-*/
+// COM
 /////////////////////////////////////////////////////////////////////
 
 HRESULT __stdcall  Docs::_NewEnum(IEnumVARIANT** newEnum)

@@ -168,7 +168,7 @@ mol::string browseForFolder( HWND owner )
 	if ( hr == HRESULT_FROM_WIN32(ERROR_CANCELLED) )
 		return retval;
 
-	FolderBrowser fb( _T("browse folders, select folder"), _T("Browser for Folder"));
+	FolderBrowser fb( _T("browse filesystem to select folder"), _T("Browse for Folder"));
 	retval = fb.select(owner,BIF_USENEWUI|BIF_STATUSTEXT|BIF_BROWSEINCLUDEURLS); //BIF_SHAREABLE probs on vista :O
 
 	return retval;
