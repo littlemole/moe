@@ -197,7 +197,7 @@ LRESULT Editor::OnClose()
 
 void Editor::OnDestroy()
 {
-
+	scriptlet()->close();
 	ODBGS("Editor::OnDestroy()");
 	
 	mol::bstr path;
@@ -215,7 +215,13 @@ void Editor::OnDestroy()
 	markers_.release();
 	text_.release();
 	sci.release();
-
+	if ( ts_)
+	{
+		((IActiveScriptSite*)(ts_))->Release();
+		ts_ = 0;
+	}
+	remote_.release();
+	
 }
 
 void Editor::OnNcDestroy()
@@ -1352,7 +1358,7 @@ HRESULT __stdcall  Editor::Sintilla_Events::OnPosChange( long line )
 
 	long col = pos-linepos;
 	mol::ostringstream oss2;
-	oss2 << col << " ";
+	oss2 << col << " "; 
 
 	mol::bstr path;
 	This()->props_->get_Filename(&path);

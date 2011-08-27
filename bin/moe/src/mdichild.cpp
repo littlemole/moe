@@ -46,7 +46,6 @@ bool MoeChildView::CreateInstance( mol::MdiChild* wnd, IMoeDocumentView** v )
 
 void MoeChildView::dispose() 
 {
-
 }
 
 REFGUID MoeChildView::getCoClassID()
