@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Wed Aug 24 08:14:48 2011
+/* at Sat Aug 27 23:31:25 2011
  */
 /* Compiler settings for src\moe.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -107,6 +107,12 @@ typedef interface IMoeDialogView IMoeDialogView;
 #endif 	/* __IMoeDialogView_FWD_DEFINED__ */
 
 
+#ifndef __IMoeRichText_FWD_DEFINED__
+#define __IMoeRichText_FWD_DEFINED__
+typedef interface IMoeRichText IMoeRichText;
+#endif 	/* __IMoeRichText_FWD_DEFINED__ */
+
+
 #ifndef __IMoeUserForm_FWD_DEFINED__
 #define __IMoeUserForm_FWD_DEFINED__
 typedef interface IMoeUserForm IMoeUserForm;
@@ -146,6 +152,7 @@ extern "C"{
 
 /* library Moe */
 /* [helpstring][version][uuid] */ 
+
 
 
 
@@ -3374,6 +3381,161 @@ EXTERN_C const IID IID_IMoeDialogView;
 
 
 #endif 	/* __IMoeDialogView_INTERFACE_DEFINED__ */
+
+
+#ifndef __IMoeRichText_INTERFACE_DEFINED__
+#define __IMoeRichText_INTERFACE_DEFINED__
+
+/* interface IMoeRichText */
+/* [dual][oleautomation][object][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IMoeRichText;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("B1BA1196-9BA2-44EE-A444-FEFC4EFD2950")
+    IMoeRichText : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_Text( 
+            /* [retval][out] */ IDispatch **d) = 0;
+        
+        virtual /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_Length( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Range( 
+            /* [in] */ long start,
+            /* [in] */ long end,
+            /* [retval][out] */ IDispatch **d) = 0;
+        
+        virtual /* [helpstring][id][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_Selection( 
+            /* [retval][out] */ IDispatch **d) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMoeRichTextVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMoeRichText * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMoeRichText * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMoeRichText * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMoeRichText * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMoeRichText * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMoeRichText * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMoeRichText * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Text )( 
+            IMoeRichText * This,
+            /* [retval][out] */ IDispatch **d);
+        
+        /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Length )( 
+            IMoeRichText * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Range )( 
+            IMoeRichText * This,
+            /* [in] */ long start,
+            /* [in] */ long end,
+            /* [retval][out] */ IDispatch **d);
+        
+        /* [helpstring][id][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Selection )( 
+            IMoeRichText * This,
+            /* [retval][out] */ IDispatch **d);
+        
+        END_INTERFACE
+    } IMoeRichTextVtbl;
+
+    interface IMoeRichText
+    {
+        CONST_VTBL struct IMoeRichTextVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMoeRichText_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IMoeRichText_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IMoeRichText_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IMoeRichText_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IMoeRichText_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IMoeRichText_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IMoeRichText_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IMoeRichText_get_Text(This,d)	\
+    ( (This)->lpVtbl -> get_Text(This,d) ) 
+
+#define IMoeRichText_get_Length(This,d)	\
+    ( (This)->lpVtbl -> get_Length(This,d) ) 
+
+#define IMoeRichText_Range(This,start,end,d)	\
+    ( (This)->lpVtbl -> Range(This,start,end,d) ) 
+
+#define IMoeRichText_get_Selection(This,d)	\
+    ( (This)->lpVtbl -> get_Selection(This,d) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IMoeRichText_INTERFACE_DEFINED__ */
 
 
 #ifndef __IMoeUserForm_INTERFACE_DEFINED__

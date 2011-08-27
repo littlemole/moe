@@ -140,6 +140,10 @@
 #define DISPID_IMOEHTMLFRAME_EVAL                                              				 3
 #define DISPID_IMOEHTMLFRAME_OLECMD                                            				 4
 #define DISPID_IMOEHTMLFRAME_FILEPATH                                          				 5
+#define DISPID_IMOERICHTEXT_TEXT                                               				 0
+#define DISPID_IMOERICHTEXT_LENGTH                                             				 1
+#define DISPID_IMOERICHTEXT_RANGE                                              				 2
+#define DISPID_IMOERICHTEXT_SELECTION                                          				 3
 #define DISPID_IEXTERNALMOE_MOE                                                				 0
 #define DISPID_IEXTERNALMOE_FRAME                                              				 1
 #define DISPID_IEXTERNALMOE_CLOSE                                              				 2

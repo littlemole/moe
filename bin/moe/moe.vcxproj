@@ -184,7 +184,7 @@
       <OutputFile>$(OutDir)moe.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>NotSet</SubSystem>
-      <OptimizeReferences>true</OptimizeReferences>
+      <OptimizeReferences>false</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
@@ -363,7 +363,10 @@
     <ClCompile Include="src\xmlui.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Midl Include="src\moe.idl" />
+    <Midl Include="src\moe.idl">
+      <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">moe_i.c</InterfaceIdentifierFileName>
+      <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">src\moe_i.c</InterfaceIdentifierFileName>
+    </Midl>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\app.h" />
@@ -378,6 +381,7 @@
     <ClInclude Include="include\Img.h" />
     <ClInclude Include="include\mdichild.h" />
     <ClInclude Include="include\moe.h" />
+    <ClInclude Include="include\rtf.h" />
     <ClInclude Include="include\ThreadScript.h" />
     <ClInclude Include="moe_dispid.h" />
     <ClInclude Include="moe_h.h" />

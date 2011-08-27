@@ -146,8 +146,9 @@ HWND HexToolBar::createWindow(  const mol::string& wndName, HMENU hMenu, const m
 	::GetTextExtentPoint32( dc, tmp.c_str(), (int)tmp.size(), &s );
 
 	offsetLabel1_.create(tmp,(HMENU)IDC_LABEL1,mol::Rect(4,6,s.cx,22),*this);
+	offsetLabel1_.setFont((HFONT)::GetStockObject(ANSI_VAR_FONT));
 
-	mol::Rect rc(s.cx + tt.tmMaxCharWidth , 3 , tt.tmMaxCharWidth*8 + 8, tt.tmHeight+7 );
+	mol::Rect rc(s.cx + tt.tmMaxCharWidth + 4, 3 , tt.tmMaxCharWidth*8 + 8 + 4, tt.tmHeight+7 );
 	offsetEdit_.create((HMENU)IDC_OFFSET, rc, *this);
 	offsetEdit_.setFont( font );
 	offsetEdit_.sendMessage(EM_SETLIMITTEXT,(WPARAM)8,0);
@@ -162,7 +163,7 @@ HWND HexToolBar::createWindow(  const mol::string& wndName, HMENU hMenu, const m
 
 
 	rc.left  += rc.right+4;
-	rc.right =  w;
+	rc.right =  w+4;
 
 	hexEdit_.create((HMENU)IDC_HEXEDIT, rc, *this);
 	hexEdit_.setFont( font );
@@ -176,7 +177,7 @@ HWND HexToolBar::createWindow(  const mol::string& wndName, HMENU hMenu, const m
 
 	w = rc.right;
 	rc.left  += w+4;
-	rc.right = tt.tmMaxCharWidth*3 + 8;
+	rc.right = tt.tmMaxCharWidth*3 + 8 + 4;
 
 	byteEdit1_.create((HMENU)IDC_BYTEEDIT1,rc, *this);
 	byteEdit1_.setFont( font );

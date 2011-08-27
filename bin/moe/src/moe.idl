@@ -27,6 +27,7 @@ library Moe
 	interface IMoeHtmlFrame;
 	interface IMoeUserFrame;
 	interface IMoeDialogView;
+	interface IMoeRichText;
 
 
 	typedef enum MOE_DOCTYPE {
@@ -629,6 +630,40 @@ library Moe
 		HRESULT SaveAs( [in] BSTR f );
 	}
 
+	////////////////////////////////////////////////////////////////////////////////////
+	// IMoeRichText
+	////////////////////////////////////////////////////////////////////////////////////
+	
+	[
+      uuid(B1BA1196-9BA2-44EE-A444-FEFC4EFD2950),
+      helpstring("IMoeRichText Interface - Common Interface for moe's RTF MDI Child document"),
+      object,oleautomation, dual
+    ]
+	interface IMoeRichText : IDispatch
+    {
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(DISPID_VALUE), 
+		  helpstring("Get whole text as ITextRange ")
+		]
+		HRESULT Text( [out,retval] IDispatch** d);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get Range Length")
+		]
+		HRESULT Length( [out,retval] long* d);
+
+		/////////////////////////////////////////////////////////////////////
+		[ id(2), helpstring("Get Range") ]
+		HRESULT Range( [in] long start, [in] long end,  [out,retval] IDispatch** d);
+
+		/////////////////////////////////////////////////////////////////////
+		[ propget,bindable,displaybind, id(3), helpstring("Get Selection") ]
+		HRESULT Selection( [out,retval] IDispatch** d);
+
+	}
 
 
 	////////////////////////////////////////////////////////////////////////////////////

@@ -751,8 +751,11 @@ void DebugDlg::update_variables(IEnumDebugStackFrames* frames)
 	d.pdsf->Release();
 }
 
-HRESULT DebugDlg::addPropertyToList(HWND tree, TV_INSERTSTRUCTW *insertStruct, IDebugProperty *prop)
+HRESULT DebugDlg::addPropertyToList(HWND tree, TV_INSERTSTRUCTW *insertStruct, IDebugProperty *prop, int level )
 {
+	if ( level > 5 )
+		return S_OK;
+
 	HRESULT		hr;
 
 	mol::punk<IEnumDebugPropertyInfo> dpis;
@@ -811,7 +814,7 @@ HRESULT DebugDlg::addPropertyToList(HWND tree, TV_INSERTSTRUCTW *insertStruct, I
 		{
 			if ( pi.m_pDebugProp && pi.m_pDebugProp != prop )
 			{
-				addPropertyToList( tree, insertStruct, pi.m_pDebugProp);
+				addPropertyToList( tree, insertStruct, pi.m_pDebugProp,level++);
 				pi.m_pDebugProp->Release();
 			}
 		}

@@ -6,9 +6,9 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sat Sep 11 18:57:11 2010
+/* at Sat Aug 27 21:41:06 2011
  */
-/* Compiler settings for .\src\moe.idl:
+/* Compiler settings for src\moe.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 7.00.0555 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
@@ -101,6 +101,9 @@ MIDL_DEFINE_GUID(IID, IID_IMoeHtmlFrame,0x08B6F80E,0x72E9,0x4a97,0x86,0x72,0x92,
 
 
 MIDL_DEFINE_GUID(IID, IID_IMoeDialogView,0x54E27AFE,0x3872,0x481c,0x96,0x8F,0x20,0xBF,0x61,0xB1,0x94,0x96);
+
+
+MIDL_DEFINE_GUID(IID, IID_IMoeRichText,0xB1BA1196,0x9BA2,0x44EE,0xA4,0x44,0xFE,0xFC,0x4E,0xFD,0x29,0x50);
 
 
 MIDL_DEFINE_GUID(IID, IID_IMoeUserForm,0x0DFFAACE,0x906D,0x4545,0x85,0x3A,0xBE,0xE5,0x93,0x28,0x3B,0xDB);

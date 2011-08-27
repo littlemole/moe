@@ -58,6 +58,17 @@ public:
         return ::CoCreateInstance( classId, NULL, clsctx, uuidof<I>(), (void**)&interface_ );
     }
 
+
+    HRESULT createObject( const std::wstring& progid, int clsctx = CLSCTX_INPROC_SERVER )
+    {
+		CLSID classId;
+		HRESULT hr = ::CLSIDFromProgID(progid.c_str(),&classId);
+		if ( hr != S_OK )
+			return hr;
+
+        return createObject(classId,clsctx);
+    }
+
     const I* operator->() const  { return interface_; }
     I* operator->()				 { return interface_; }
     operator I*()				 { return interface_; }

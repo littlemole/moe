@@ -189,7 +189,7 @@ public:
 	void update_variables(IEnumDebugStackFrames* frames);
 
 private:
-	HRESULT addPropertyToList(HWND tree, TV_INSERTSTRUCTW *insertStruct, IDebugProperty *debugProperty);
+	HRESULT addPropertyToList(HWND tree, TV_INSERTSTRUCTW *insertStruct, IDebugProperty *debugProperty, int level = 0);
 
 	mol::stack_obj<ExpCallback> expCallback;
 	mol::punk<IDebugExpression> exp_;
