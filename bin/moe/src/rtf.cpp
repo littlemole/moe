@@ -73,6 +73,7 @@ void RTFEditor::OnCreate()
 
 LRESULT RTFEditor::OnDestroy()
 {
+	scriptlet()->close();
 	docs()->remove(this);
 	return 0;
 }

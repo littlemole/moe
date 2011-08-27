@@ -108,6 +108,7 @@ void Hex::OnClose()
 
 void Hex::OnDestroy()
 {
+	scriptlet()->close();
 	docs()->remove(this);
 	sink.UnAdvise(oleObject);
 }

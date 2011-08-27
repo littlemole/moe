@@ -44,6 +44,7 @@ void ImgViewer::OnCreate()
 
 LRESULT ImgViewer::OnDestroy()
 {
+	scriptlet()->close();
 	docs()->remove(this);
 	return 0;
 }
