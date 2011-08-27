@@ -51,6 +51,8 @@ DWORD CALLBACK RichEditStreamCallBack::outStreamCallback( DWORD_PTR dwCookie, LP
     return 0;
 }
 
+
+
 } // end namespace mol::win
 
 LRESULT RichEditCtrl::streamIn( const std::string c, int type )
@@ -170,6 +172,7 @@ bool RichEditCtrl::search( int options)
 
     return true;
 }
+
 
 HDC choosePrinterDC(HWND owner, int& copies, bool& collate)
 {

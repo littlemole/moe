@@ -3,11 +3,24 @@
 
 #include "win/Ctrl.h"
 #include <Richedit.h>
+#include <Richole.h>
 #include <Commdlg.h>
+#include <ole/obj.h>
+#include <ole/punk.h>
 
 ////////////////////////////////////////////////////////////////////////////
 // Richeditcrtl
 ////////////////////////////////////////////////////////////////////////////
+
+
+template <> 
+class mol::uuid_info<IRichEditOleCallback>
+{
+ public:
+   static REFIID uuidof;
+   typedef IRichEditOleCallback uuid_type;
+};
+
 
 namespace mol  {
 
@@ -36,6 +49,88 @@ public:
 
 extern const mol::TCHAR richedit_class[];
 
+
+
+class IRichEditOleCallbackImpl : 
+	public IRichEditOleCallback ,
+	public mol::interfaces< 
+			IRichEditOleCallbackImpl,
+			mol::implements<IRichEditOleCallback> 
+	>
+{
+	public: 
+
+		IRichEditOleCallbackImpl()
+		{
+			HRESULT hr = ::CreateILockBytesOnHGlobal(NULL, TRUE, &bytes_);    
+			if ( hr == S_OK )
+			{
+				hr = ::StgCreateDocfileOnILockBytes(
+							bytes_, 
+							STGM_SHARE_EXCLUSIVE | STGM_CREATE | STGM_READWRITE, 
+							0, 
+							&store_
+						);
+			}
+		}
+
+		virtual HRESULT __stdcall GetNewStorage(LPSTORAGE* lplpstg)
+		{
+			HRESULT hr = store_->CreateStorage( L"subobj", STGM_SHARE_EXCLUSIVE | STGM_CREATE | STGM_READWRITE,0,0,lplpstg);
+			return S_OK;
+		}
+
+		virtual HRESULT __stdcall GetInPlaceContext(LPOLEINPLACEFRAME* lplpFrame, LPOLEINPLACEUIWINDOW* lplpDoc, LPOLEINPLACEFRAMEINFO lpFrameInfo)
+		{
+			return E_NOTIMPL;
+		}
+
+		virtual HRESULT __stdcall ShowContainerUI(BOOL fShow)
+		{
+			return S_OK;
+		}
+
+		virtual HRESULT __stdcall QueryInsertObject(LPCLSID lpclsid, LPSTORAGE lpstg, LONG cp)
+		{
+			return S_OK;
+		}
+
+		virtual HRESULT __stdcall DeleteObject(LPOLEOBJECT lpoleobj)
+		{
+			return S_OK;
+		}
+
+		virtual HRESULT __stdcall QueryAcceptData(LPDATAOBJECT lpdataobj, CLIPFORMAT FAR * lpcfFormat, DWORD reco,BOOL fReally, HGLOBAL hMetaPict)
+		{
+			return S_OK;
+		}
+
+		virtual HRESULT __stdcall ContextSensitiveHelp(BOOL fEnterMode)
+		{
+			return S_OK;
+		}
+
+		virtual HRESULT __stdcall GetClipboardData(CHARRANGE FAR * lpchrg, DWORD reco,LPDATAOBJECT FAR * lplpdataobj)
+		{
+			return E_NOTIMPL;
+		}
+
+		virtual HRESULT __stdcall GetDragDropEffect(BOOL fDrag, DWORD grfKeyState,LPDWORD pdwEffect)
+		{
+			return S_OK;
+		}
+
+		virtual HRESULT __stdcall GetContextMenu( WORD seltype, LPOLEOBJECT lpoleobj, CHARRANGE* lpchrg, HMENU* lphmenu)
+		{
+			return E_NOTIMPL;
+		}
+
+
+	private:
+		mol::punk<ILockBytes> bytes_;
+		mol::punk<IStorage> store_;
+};
+
 } // end namespace win
 
 class RichEditCtrl : public mol::win::CtrlClass<mol::win::richedit_class>
@@ -61,6 +156,7 @@ public:
 	BOOL PrintRTF();
 
 private:
+
 	mol::win::RichEditStreamCallBack	cb_;
 
     std::string				searchText_;

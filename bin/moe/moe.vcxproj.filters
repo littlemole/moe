@@ -122,6 +122,9 @@
     <ClInclude Include="include\mdichild.h">
       <Filter>mdi</Filter>
     </ClInclude>
+    <ClInclude Include="include\rtf.h">
+      <Filter>mdi</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="src\moe.idl" />

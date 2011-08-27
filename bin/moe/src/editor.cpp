@@ -1154,7 +1154,6 @@ void Editor::OnScriptThreadDone()
 {
 	if ( mol::guithread() != mol::Thread::self() )
 	{
-		//mol::invoke( *this, &Editor::OnScriptThreadDone);		
 		mol::invoke( boost::bind( &Editor::OnScriptThreadDone, this) );		
 		return;
 	}
@@ -1180,13 +1179,15 @@ void Editor::OnScriptThread( int line, IRemoteDebugApplicationThread* remote, IA
 		::ZeroMemory(&desc,sizeof(DebugStackFrameDescriptor));
 
 		mol::punk<IEnumDebugStackFrames> frames;
-		HRESULT hr = remote->EnumStackFrames( &frames );
-		if ( S_OK == hr && frames )
+		if ( remote )
 		{
-			// update variable window
-			debugDlg()->update_variables(frames);
+			HRESULT hr = remote->EnumStackFrames( &frames );
+			if ( S_OK == hr && frames )
+			{
+				// update variable window
+				debugDlg()->update_variables(frames);
+			}
 		}
-
 		mol::ostringstream oss;
 		if ( pError )
 		{
@@ -1229,7 +1230,6 @@ void Editor::OnScriptThread( int line, IRemoteDebugApplicationThread* remote, IA
 		if ( pError)
 			pError->Release();
 
-		//mol::invoke( *this, &Editor::OnScriptThread, line, remote, pError );
 		mol::invoke( boost::bind( &Editor::OnScriptThread, this, line, remote, pError ) );
 		return;
 	}
@@ -1246,7 +1246,7 @@ void Editor::OnScriptThread( int line, IRemoteDebugApplicationThread* remote, IA
 	debugDlg()->show( remote ? SW_SHOW : SW_HIDE );
 
 	annotation_->ClearAll();
-	if ( !lasterror_.empty())
+	if ( !lasterror_.empty() && line >= 0 )
 	{
 		annotation_->SetText( line, mol::bstr(lasterror_) );
 	}
@@ -1255,50 +1255,6 @@ void Editor::OnScriptThread( int line, IRemoteDebugApplicationThread* remote, IA
 	line_->Highlite(line);
 
 	mol::Ribbon::ribbon()->mode(9);
-	/*
-	std::wostringstream oss;
-
-	if ( pError )
-	{
-		oss << _T("line: ") << (line+1) << _T(" ");
-
-		EXCEPINFO ex;
-		pError->GetExceptionInfo(&ex);
-
-		DWORD context;
-		ULONG line;
-		LONG pos;
-		pError->GetSourcePosition(&context,&line,&pos);
-		
-		mol::punk<IActiveScriptErrorDebug> de(pError);
-		if ( de )
-		{
-			mol::punk<IDebugStackFrame> f;
-			de->GetStackFrame(&f);
-
-			if ( f )
-			{
-				mol::bstr e;
-				f->GetDescriptionString(TRUE,&e);
-
-				if ( e )
-					oss << e.toString() << std::endl;
-			}
-		}
-
-		if ( ex.bstrDescription )
-		{
-			oss << mol::bstr(ex.bstrDescription).toString();
-		}
-		oss << std::endl;
-		anno->SetText( line, mol::bstr(oss.str()) );
-	}
-
-	if ( remote )
-		remote->Release();
-	if ( pError)
-		pError->Release();
-		*/
 	ODBGS1("Leaving OnScriptThread:",line);
 }
 
@@ -1616,12 +1572,16 @@ void Editor::updateUI()
 			mode.unCheckItem( IDM_MODE_SHOW_LINE_NUMBERS );
 	}
 
-
-	if ( mol::Ribbon::ribbon()->enabled())
-	{
-		mol::Ribbon::ribbon()->maximize();
-		mol::Ribbon::ribbon()->mode(1);
+	if (!ts_)
+	{		
+		mol::Ribbon::ribbon()->mode(1);		
 	}
+	else
+	{
+		debugDlg()->show(SW_SHOW);
+		mol::Ribbon::ribbon()->mode(10);		
+	}
+	mol::Ribbon::ribbon()->maximize();
 }
 
 
