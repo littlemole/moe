@@ -250,6 +250,7 @@ void MoeHtmlWnd::OnDestroy()
 {
 	ODBGS("MoeHtmlWndImpl::OnDestroy");
 
+	scriptlet()->close();
 	docs()->remove(this);
 
 	::CoDisconnectObject(((IExternalMoe*)&external_),0);

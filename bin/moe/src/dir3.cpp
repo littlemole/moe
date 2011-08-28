@@ -98,6 +98,7 @@ bool DirChild::initialize(const mol::string& p)
 
 void DirChild::OnDestroy()
 {
+	scriptlet()->close();
 	docs()->remove(this);
 	events.UnAdvise(oleObject);
 
