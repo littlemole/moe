@@ -12,7 +12,8 @@ class DirChild
 	: public MoeAxChild<
 				DirChild,
 				MOE_DOCTYPE_DIR,
-				&CLSID_ShellPane
+				&CLSID_ShellPane,
+				IDM_MOE_DIR
 			>
 {
 public:

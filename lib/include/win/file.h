@@ -162,11 +162,20 @@ public:
 	{
 		std::ostringstream oss;
 
+		bool firstline = true;
 		while(!eof())
 		{
-			std::string s = getLine();
-			//if ( !s.empty() )
-				oss << s << std::endl;
+			if (firstline) {
+				firstline = false;
+				std::string s = getLine();
+				if ( !s.empty() )
+					oss << s;
+			}
+			else {
+				std::string s = getLine();
+				if ( !s.empty() )
+					oss << std::endl << s;
+			}
 		}
 		return oss.str();
 	}
@@ -184,6 +193,16 @@ public:
 	const mol::string path()
 	{
 		return buf_->path();
+	}
+
+	void seek(int n)
+	{
+		buf_->seek(n);
+	}
+
+	void seek()
+	{
+		buf_->seek();
 	}
 
 private:

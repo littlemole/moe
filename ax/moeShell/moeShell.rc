@@ -130,7 +130,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // TYPELIB
 //
 
-1                       TYPELIB                 "C:\\molib8\\ax\\moeShell\\Debug\\moeShell.tlb"
+1                       TYPELIB                 TLB
 
 /////////////////////////////////////////////////////////////////////////////
 //

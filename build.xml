@@ -17,6 +17,7 @@
 		<MSBuild Projects=".\ax\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		<MSBuild Projects=".\bin\prw\prw\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		<MSBuild Projects=".\bin\moe\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild Projects=".\ax\moeShell\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		<MSBuild Projects=".\bin\WixMoe\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"  />
 
  </Target>

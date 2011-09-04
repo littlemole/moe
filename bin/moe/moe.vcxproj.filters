@@ -57,6 +57,9 @@
     <ClCompile Include="src\rtf.cpp">
       <Filter>mdi</Filter>
     </ClCompile>
+    <ClCompile Include="src\tailEditor.cpp">
+      <Filter>mdi</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\app.h" />
@@ -123,6 +126,9 @@
       <Filter>mdi</Filter>
     </ClInclude>
     <ClInclude Include="include\rtf.h">
+      <Filter>mdi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tailEditor.h">
       <Filter>mdi</Filter>
     </ClInclude>
   </ItemGroup>

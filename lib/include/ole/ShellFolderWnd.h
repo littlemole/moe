@@ -32,13 +32,15 @@ class ShellFolderWnd :
 	public IShellBrowser,
 	public IServiceProvider,
 	public ICommDlgBrowser2,
+	public IContextMenuSite,
 	public mol::interfaces< ShellFolderWnd,
 		mol::implements<
 			IOleWindow,
 			IShellBrowser,
 			IServiceProvider,
 			ICommDlgBrowser,
-			ICommDlgBrowser2> 
+			ICommDlgBrowser2,
+			IContextMenuSite> 
 		>
 
 {
@@ -91,6 +93,7 @@ public:
 	virtual HRESULT __stdcall GetDefaultMenuText( IShellView *pshv, WCHAR *pszText, int cchMax);
 	virtual HRESULT __stdcall GetViewFlags( DWORD *pdwFlags );
 	virtual HRESULT __stdcall Notify( IShellView *pshv, DWORD dwNotifyType);
+	virtual HRESULT __stdcall DoContextMenuPopup( IUnknown *punkContextMenu, UINT fFlags, POINT pt);
 
 	HWND viewWnd_;
 

@@ -24,6 +24,8 @@
   <genObj>obj\$(confPath)\gen.wixobj</genObj>
   <moeObj>obj\$(confPath)\moe.wixobj</moeObj>
   <monObj>obj\$(confPath)\mon.wixobj</monObj>
+  <regProtoObj>obj\$(confPath)\reg.proto.wixobj</regProtoObj>
+  <regContextObj>obj\$(confPath)\reg.context.wixobj</regContextObj>
 
   <!-- wix output file -->
   <msiTarget>.\bin\$(confPath)\moeSetup.msi</msiTarget>
@@ -39,8 +41,8 @@
 
 <!-- java source files -->
  <ItemGroup>
-  <moeResourceFiles Include="..\moe\resources\deploy\**\*.*" Exclude="..\moe\resources\deploy\**\.svn\*.*" />
-  <SvnFolders Include=".\moe\**\*.svn" />
+  <moeResourceFiles Include="..\moe\resources\deploy\**\*.*" Exclude="..\moe\resources\deploy\**\.svn\*.*;..\moe\resources\deploy\**\.svn" />
+  <SvnFolders Include=".\moe\**\.svn" />
   <moeFiles Include=".\moe\**\*.*" />
  </ItemGroup>
 
@@ -116,20 +118,33 @@
             DestinationFolder=".\moe"
         />
 
+        <Copy
+            SourceFiles="..\..\ax\moeShell\$(confPath)\moeShell.dll"
+            DestinationFolder=".\moe"
+        />
 		<RemoveDir Directories="@(SvnFolders)" />
 
 		<!-- heat -->
 		<Exec Command='"$(WIX)\bin\heat.exe" dir . -sw5150 -sw5151 -gg -cg "MoeCompGroup" -dr INSTALLLOCATION -var var.SourceDir  -o ..\gen.wxs' WorkingDirectory="./moe"/>
 
+		<Exec Command='"$(WIX)\bin\heat.exe" reg .\moe.protocol.reg -gg -o ..\reg.proto.wxs -cg "MoeRegProtoCompGroup"'  WorkingDirectory="./moe"/>
+		<Exec Command='"$(WIX)\bin\heat.exe" reg .\moe.context.reg -gg -o ..\reg.context.wxs -cg "MoeRegContextCompGroup"'  WorkingDirectory="./moe"/>
+
+
+
         <!-- candle -->
 		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(genObj)" gen.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(regProtoObj)" reg.proto.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(regContextObj)" reg.context.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
 
 		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(moeObj)" moe.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
 
 		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(monObj)" MondoNoLicense.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
 
         <!-- light -->
-		<Exec Command='"$(WIX)\bin\light.exe" -ext "$(uiext)" -out "$(msiTarget)" -cultures:en-us -loc en-us.wxl "$(genObj)" "$(moeObj)" "$(monObj)"' WorkingDirectory="."/>
+		<Exec Command='"$(WIX)\bin\light.exe" -ext "$(uiext)" -out "$(msiTarget)" -cultures:en-us -loc en-us.wxl "$(regProtoObj)" "$(regContextObj)" "$(genObj)" "$(moeObj)" "$(monObj)"' WorkingDirectory="."/>
 
 
 		<!-- nonadmin install -->

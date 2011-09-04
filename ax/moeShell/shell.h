@@ -1,18 +1,17 @@
 #ifndef MOL_DEF_SETTING_VIEW_DEF_GUARDING_
 #define MOL_DEF_SETTING_VIEW_DEF_GUARDING_
 
-#include "win/ole/aut.h"
-#include "win/ole/factory.h"
-#include "win/ole/bstr.h"
-#include "win/ole/dll.h"
-#include "win/io/shell.h"
+#include "ole/aut.h"
+#include "ole/factory.h"
+#include "ole/bstr.h"
+#include "ole/dll.h"
+#include "win/shell.h"
 
 #include "moeShell_h.h"
 
 #include "resource.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,19 +20,20 @@ template <>
 class mol::uuid_info<IContextMenu>
 {
  public:
-   static const GUID& uuidof() { return IID_IContextMenu; }
+   static REFIID uuidof;
+//   static const GUID& uuidof() { return IID_IContextMenu; }
    typedef IContextMenu uuid_type;
 };
 
 
+
 class moeShell : 
-	public mol::com_creatable<moeShell,CLSID_moeShell>,
+	public mol::com_registerobj<moeShell,CLSID_moeShell>,
 	public mol::Dispatch<ImoeShell>,
 	public IShellExtInit,
 	public IContextMenu,
 	public mol::interfaces< moeShell,
 			mol::implements<
-				ImoeShell,
 				IDispatch,
 				IShellExtInit,
 				IContextMenu>
@@ -53,6 +53,11 @@ public:
 protected:
 
 	mol::TCHAR filename_[MAX_PATH];
+	UINT open_cmd;
+	UINT open_utf8_cmd;
+	UINT open_html_cmd;
+	UINT open_hex_cmd;
+	UINT open_tail_cmd;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -60,11 +60,7 @@ bool DirChild::initialize(const mol::string& p)
 	// initial Addref
 	((IMoeDocument*)this)->AddRef();
 
-	// determine window menu
-	windowMenu_ = mol::UI().SubMenu(IDM_MOE_DIR,IDM_VIEW_WINDOWS);
-
-	// create window
-	create(p,(HMENU)mol::UI().Menu(IDM_MOE_DIR),mol::Rect(0,0,500,500),*moe());			
+	initializeMoeChild(p);
 
 	// advise event sink
 	list = oleObject;
@@ -77,12 +73,6 @@ bool DirChild::initialize(const mol::string& p)
 
 	// set initial dirchild dir to display
 	list->put_Selection(mol::variant(p));
-
-	show(SW_SHOW);
-	maximize();
-
-	// display winows 7 task bar thumbnail
-	thumb = mol::taskbar()->addTab( *this,p );
 
 	location_ = p;
 

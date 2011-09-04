@@ -1242,6 +1242,8 @@ mol::msgMap<RTFEditor>().addNotifyCodeHandler( EN_SELCHANGE, make_handler(&RTFEd
 
 mol::msgMap<RTFEditor>().addNotifyCodeHandler( EN_LINK, make_handler(&RTFEditor::OnLink) );
 
+mol::msgMap<RTFEditor>().addCmdHandler( IDM_EDIT_UPDATE, make_handler(&RTFEditor::OnReload) );
+
 
 }
 

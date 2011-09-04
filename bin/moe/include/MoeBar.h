@@ -10,27 +10,13 @@
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-// customizable toolbar
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-class MoeToolBar : public mol::Control< mol::CustomToolBar,
-					  WS_CHILD|CCS_NORESIZE |CCS_NOPARENTALIGN|
-					  CCS_NODIVIDER|TBSTYLE_FLAT|
-					  WS_CLIPCHILDREN|TBSTYLE_TOOLTIPS|CCS_ADJUSTABLE ,
-					  TBSTYLE_EX_MIXEDBUTTONS  >
-{};
-
-/////////////////////////////////////////////////////////////////////////////////////////////
 // the document selector tab control
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-class  MoeTabControl : public mol::Control< mol::TabCtrl, 
-						WS_CHILD|WS_VISIBLE|WS_CLIPCHILDREN|
-					  //TCS_FLATBUTTONS|
-					  //TCS_BUTTONS|
-					  TCS_BOTTOM|
-					  TCS_TOOLTIPS,
-					  0  > 
+class  MoeTabControl : public mol::Control< 
+									mol::TabCtrl, 
+									WS_CHILD|WS_VISIBLE|WS_CLIPCHILDREN|TCS_BOTTOM|TCS_TOOLTIPS,
+									0  > 
 {
 friend class Docs;
 public:
@@ -51,8 +37,6 @@ private:
 
 	virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-
-
 	bool				isMouseDown_;
 	CLIPFORMAT			dragTabFormat_;
 	
@@ -66,6 +50,18 @@ private:
 			HRESULT virtual __stdcall DragLeave();
     } Drop;
 };
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+// customizable toolbar
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+class MoeToolBar : public mol::Control< mol::CustomToolBar,
+					  WS_CHILD|CCS_NORESIZE |CCS_NOPARENTALIGN|
+					  CCS_NODIVIDER|TBSTYLE_FLAT|
+					  WS_CLIPCHILDREN|TBSTYLE_TOOLTIPS|CCS_ADJUSTABLE ,
+					  TBSTYLE_EX_MIXEDBUTTONS  >
+{};
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // the syntax selector cobox control

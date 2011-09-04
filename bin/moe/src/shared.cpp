@@ -437,7 +437,7 @@ HRESULT __stdcall MoeDialogs::MsgBox( BSTR text, BSTR title, long flags, long* r
 HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 {
 	
-	static mol::TCHAR  InFilesFilter[] = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0\0");
+	static mol::TCHAR  InFilesFilter[] = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
 
 	mol::FilenameDlg ofn(*moe());
 	ofn.setFilter( InFilesFilter );			
@@ -468,6 +468,14 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
 				bool result = docs()->open( -1, ofn.fileName(i), Docs::PREF_HEX, ofn.readOnly(), 0);
+			}
+		}
+		// open log
+		else if ( ofn.index() == 6 )
+		{
+			for ( int i = 0; i < ofn.selections(); i++ )
+			{
+				bool result = docs()->open( -1, ofn.fileName(i), Docs::PREF_TAIL, TRUE, 0);
 			}
 		}
 		// open text
@@ -980,6 +988,14 @@ HRESULT __stdcall MoeConfig::InitializeEditorFromPreferences( IMoeDocument* d )
 	hr = props->put_ShowLineNumbers(showLineNumbers_);
 	if ( hr != S_OK )
 		return hr;
+
+	// use ribbon context menue if avail
+	if ( mol::Ribbon::ribbon()->enabled() )
+	{
+		hr = props->put_UseContext(VARIANT_FALSE);
+		if ( hr != S_OK )
+			return hr;
+	}
 
 	return S_OK;
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{84ACFB84-49D5-46A4-906B-ADB24170AC46}</ProjectGuid>
+    <RootNamespace>moe.context</RootNamespace>
+	<TargetName>moeShell</TargetName>
+  </PropertyGroup>
+
+  <Import Project="..\..\master.props" />
+  <Import Project="..\build.props" />
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+	  <AdditionalIncludeDirectories>..\..\bin\moe;..\..\ax\shellctrl;..\..\ax\scintillax;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+	</ClCompile>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <Midl Include="moeShell.idl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="moeShell.cpp" />
+    <ClCompile Include="shell.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+
+</Project>

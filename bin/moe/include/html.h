@@ -23,7 +23,8 @@ class MoeHtmlWnd
 	: public MoeChild<
 				MoeHtmlWnd,
 				mol::HtmlWnd<MoeHtmlWnd,mol::MdiChild>,
-				MOE_DOCTYPE_HTML
+				MOE_DOCTYPE_HTML,
+				IDM_MOE_HTML
 			>
 {
 public:

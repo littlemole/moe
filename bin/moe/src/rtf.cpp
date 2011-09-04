@@ -20,8 +20,6 @@ RTFEditor::RTFEditor()
 	findText_.chrg.cpMin = 0;
 	findText_.chrg.cpMax = -1;
 	findText_.lpstrText = 0;
-
-	//rtfDocument_ = new mol::stack_obj<RTFDocument>;
 }
 
 RTFEditor::~RTFEditor() 
@@ -34,18 +32,7 @@ RTFEditor::Instance* RTFEditor::CreateInstance( const mol::string& file )
 	Instance* iv = new Instance;
 	iv->AddRef();
 
-	
-	statusBar()->status(30);
-
-	// determine window menu
-	iv->windowMenu_ = mol::UI().SubMenu(IDM_MOE_IMG,IDM_VIEW_WINDOWS );
-
-	iv->create(file,(HMENU)mol::UI().Menu(IDM_MOE_RTF),Rect(0,0,500,500),*moe());			
-	iv->show(SW_SHOW);
-	iv->maximize();
-
-	iv->thumb = mol::taskbar()->addTab( *iv,file );
-
+	iv->initializeMoeChild(file);
 	if ( !iv->load(file) )
 	{
 		iv->Release();
@@ -477,10 +464,6 @@ HRESULT __stdcall RTFEditor::RTFDocument::get_Text( IDispatch** d)
 	*d = 0;
 
     mol::punk<IRichEditOle> richEditOle;
-	//LPRICHEDITOLE richEditOle = 0;
-
-	//RTF& rtf = This()->rtf_;
-
 	LRESULT r = This()->rtf_.sendMessage(EM_GETOLEINTERFACE, 0, (LPARAM)(IRichEditOle**)(&richEditOle));
 	if ( richEditOle )
 	{
@@ -498,7 +481,6 @@ HRESULT __stdcall RTFEditor::RTFDocument::get_Text( IDispatch** d)
 				return range.queryInterface(d);				
 			}		
 		}
-		//richEditOle->Release();
 	}
 	return S_OK;
 }
@@ -511,7 +493,6 @@ HRESULT __stdcall RTFEditor::RTFDocument::get_Length( long* d)
 	*d = 0;
 
     mol::punk<IRichEditOle> richEditOle;
-	//LPRICHEDITOLE richEditOle = 0;
 	LRESULT r = This()->rtf_.sendMessage(EM_GETOLEINTERFACE, 0, (LPARAM)(IRichEditOle**)(&richEditOle));
 	if ( richEditOle )
 	{
@@ -529,7 +510,6 @@ HRESULT __stdcall RTFEditor::RTFDocument::get_Length( long* d)
 				*d = end;
 			}		
 		}
-		//richEditOle->Release();
 	}
 	return S_OK;
 }
@@ -542,7 +522,6 @@ HRESULT __stdcall RTFEditor::RTFDocument::Range( long start, long end,  IDispatc
 	*d = 0;
 
     mol::punk<IRichEditOle> richEditOle;
-	//LPRICHEDITOLE richEditOle = 0;
 	LRESULT r = This()->rtf_.sendMessage(EM_GETOLEINTERFACE, 0, (LPARAM)(IRichEditOle**)(&richEditOle));
 	if ( richEditOle )
 	{
@@ -556,7 +535,6 @@ HRESULT __stdcall RTFEditor::RTFDocument::Range( long start, long end,  IDispatc
 				return range.queryInterface(d);				
 			}		
 		}
-		//richEditOle->Release();
 	}
 	return S_OK;
 }
@@ -569,7 +547,6 @@ HRESULT __stdcall RTFEditor::RTFDocument::get_Selection( IDispatch** d)
 	*d = 0;
 
    mol::punk<IRichEditOle> richEditOle;
-	//LPRICHEDITOLE richEditOle = 0;
 	LRESULT r = This()->rtf_.sendMessage(EM_GETOLEINTERFACE, 0, (LPARAM)(IRichEditOle**)(&richEditOle));
 	if ( richEditOle )
 	{
@@ -583,7 +560,6 @@ HRESULT __stdcall RTFEditor::RTFDocument::get_Selection( IDispatch** d)
 				return selection.queryInterface(d);
 			}		
 		}
-		//richEditOle->Release();
 	}
 	return S_OK;
 }

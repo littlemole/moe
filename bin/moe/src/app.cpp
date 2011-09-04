@@ -235,7 +235,6 @@ std::string resolvePath(const std::string& p)
 
 void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 {
-	
 	std::string cl = mol::tostring(cmdline);
 
 	mol::variant v;
@@ -257,11 +256,7 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 		{
 			s = rgxp.subString( cl, 3 );
 		}
-
-		s = resolvePath(s);
-		if ( s.empty() )
-			continue;
-
+		
 		if ( s.substr(0,4) == "moe:" ) 
 		{
 			s = s.substr(4);
@@ -298,8 +293,17 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 			}
 			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR, mol::variant(s) );					
 		}
+		else if ( s.substr(0,9) == "moe-tail:" ) 
+		{
+			s = s.substr(9);
+			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENTAILDOCUMENT, mol::variant(s) );					
+		}
 		else
 		{
+			s = resolvePath(s);
+			if ( s.empty() )
+				continue;
+
 			if ( mol::Path::isDir(mol::toString(s)) )
 			{
 				mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR, mol::variant(s) );
