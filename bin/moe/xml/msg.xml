@@ -387,6 +387,12 @@
       
     </class>
 
+    <class type="RTFEditor" >
+
+      <msg  handler="OnReload" cmd="IDM_EDIT_UPDATE" />
+
+    </class>
+
   </msgs>
 
 </mol:codegen>

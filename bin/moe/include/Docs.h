@@ -42,7 +42,8 @@ public:
 	virtual HRESULT __stdcall OpenHtmlFrame(  BSTR f,  IMoeDocument** htmlWnd);
 	virtual HRESULT __stdcall OpenUserForm(  BSTR pathname, IMoeDocument** form );	
 	virtual HRESULT __stdcall NewUserForm(  IMoeDocument** form );	
-	virtual HRESULT __stdcall NewRTFDocument(  IMoeDocument** form );	
+	virtual HRESULT __stdcall NewRTFDocument(IMoeDocument** d);
+	virtual HRESULT __stdcall OpenTailDocument( BSTR pathname, IMoeDocument** doc );	
 
 	virtual HRESULT __stdcall SaveAll();
 	virtual HRESULT __stdcall CloseAll();
@@ -55,7 +56,8 @@ public:
 	  PREF_HTML,
 	  PREF_HEX,
 	  PREF_FORM,
-	  PREF_RTF
+	  PREF_RTF,
+	  PREF_TAIL
 	};
 
 	bool open( int index, const mol::string& dir, InFiles pref, bool readOnly, IMoeDocument** doc  );
@@ -75,6 +77,7 @@ private:
 	bool newFile(IMoeDocument** doc);
 	bool newUFSFile(IMoeDocument** doc);
 	bool newRTFFile(IMoeDocument** doc);
+	bool openTailFile(const mol::string& fp, IMoeDocument** doc);
 
 	mol::MdiChild* openPath( const mol::string& dir, InFiles pref, bool readOnly);
 

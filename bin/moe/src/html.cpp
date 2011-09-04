@@ -219,23 +219,11 @@ bool MoeHtmlWnd::load( const mol::string& loc )
 	}
 	statusBar()->status(30);
 
-	// determine window menu & create the view
-
-	windowMenu_ = mol::UI().SubMenu( IDM_MOE_HTML, IDM_VIEW_WINDOWS );
-	create( loc.c_str(), (HMENU)mol::UI().Menu(IDM_MOE_HTML), mol::stdRect ,  *moe() );
-	statusBar()->status(40);
-
-	// show window and set location
-	show(SW_SHOW);
+	initializeMoeChild(loc);
 	setLocation( l + d );
 
 	// hook COM events
 	advise(htmlSink);
-
-	statusBar()->status(50);
-
-	// adjust win7 taskbar if avail
-	thumb = mol::taskbar()->addTab( *this,loc );
 
 	return true;
 }

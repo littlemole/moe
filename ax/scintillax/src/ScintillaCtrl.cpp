@@ -1192,8 +1192,12 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  bool utf8)
 	//filename_ = p;
 
 	std::stringstream is;
-	std::ifstream in;
-	in.open( p.c_str(), std::ios::binary );
+	
+	//std::ifstream in;
+	//in.open( p.c_str(), std::ios::binary );
+
+	mol::filestream in;
+	in.open( mol::tostring(p),GENERIC_READ,FILE_SHARE_READ,0,OPEN_EXISTING);
 
     std::string s;
     if ( !in.good() )

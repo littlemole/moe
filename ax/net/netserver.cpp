@@ -147,7 +147,7 @@ HRESULT  __stdcall NetObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid
 		return S_FALSE;
 
 	mol::variant vRet;
-	if (  w & DISPATCH_PROPERTYGET ) 
+	if (  w == DISPATCH_PROPERTYGET ) 
 	{	
 		if ( pDisp->cArgs == 0 )
 		{

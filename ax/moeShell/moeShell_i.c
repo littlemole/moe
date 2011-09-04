@@ -5,18 +5,18 @@
 /* link this file in with the server and any clients */
 
 
- /* File created by MIDL compiler version 6.00.0366 */
-/* at Fri Aug 03 04:32:09 2007
+ /* File created by MIDL compiler version 7.00.0555 */
+/* at Sun Sep 04 22:53:30 2011
  */
-/* Compiler settings for .\moeShell.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
+/* Compiler settings for moeShell.idl:
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
          DECLSPEC_UUID(), MIDL_INTERFACE()
 */
-//@@MIDL_FILE_HEADING(  )
+/* @@MIDL_FILE_HEADING(  ) */
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 

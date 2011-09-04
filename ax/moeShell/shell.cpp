@@ -1,12 +1,15 @@
 #include "stdafx.h"
 #include "shell.h"
-#include "win/io/path.h"
+#include "win/path.h"
 #include "shellCtrl_h.h"
 #include "ScintillAX_h.h"
-#include "xmoe_h.h"
+#include "moe_h.h"
 
 #include "moeShell_i.c"
-#include "xmoe_i.c"
+#include "moe_i.c"
+
+
+REFIID mol::uuid_info<IContextMenu>::uuidof = IID_IContextMenu;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -36,11 +39,41 @@ HRESULT __stdcall moeShell::GetCommandString( UINT_PTR idCmd, UINT uFlags, UINT 
 	{
 		if (uFlags & GCS_UNICODE)
 		{
-            lstrcpynW((LPWSTR)pszName, L"open with moe", cchMax);
+			if ( idCmd == open_cmd )
+			{
+				lstrcpynW((LPWSTR)pszName, L"open with moe", cchMax);
+			}
+			else if ( idCmd == open_tail_cmd )
+			{
+				lstrcpynW((LPWSTR)pszName, L"tail with moe", cchMax);
+			}
+			else if ( idCmd == open_html_cmd )
+			{
+				lstrcpynW((LPWSTR)pszName, L"view HTML with moe", cchMax);
+			}
+			else if ( idCmd == open_utf8_cmd )
+			{
+				lstrcpynW((LPWSTR)pszName, L"open with moe (force UTF-8)", cchMax);
+			}
 		}
 		else
 		{
-			lstrcpynA(pszName, "open with moe", cchMax);
+			if ( idCmd == open_cmd )
+			{
+				lstrcpynA(pszName, "open with moe", cchMax);
+			}
+			else if ( idCmd == open_tail_cmd )
+			{
+				lstrcpynA(pszName, "tail with moe", cchMax);
+			}
+			else if ( idCmd == open_html_cmd )
+			{
+				lstrcpynA(pszName, "view HTML with moe", cchMax);
+			}
+			else if ( idCmd == open_utf8_cmd )
+			{
+				lstrcpynA(pszName, "open with moe (force UTF-8)", cchMax);
+			}
 		}
 	}
 	return S_OK;
@@ -48,18 +81,47 @@ HRESULT __stdcall moeShell::GetCommandString( UINT_PTR idCmd, UINT uFlags, UINT 
 
 HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 {
+	if ( HIWORD(pici->lpVerb) != 0 )
+		return S_OK;
+
+	UINT cmd = (UINT)(pici->lpVerb);
+
 	//check if moe is running
 	mol::punk<IUnknown> punk;
-	HRESULT hr = ::GetActiveObject( CLSID_Xmoe,0,&punk );
+	HRESULT hr = ::GetActiveObject( CLSID_Application,0,&punk );
 	if ( (hr == S_OK) )
 	{
-		mol::punk<IXmoe> moe(punk);
+		mol::punk<IMoe> moe(punk);
 		if (moe)
 		{
 			// found running moe instance
 			// open doc in moe
-			mol::punk<IDoc> pdoc;
-			moe->Open( mol::bstr(filename_), &pdoc );
+			::CoAllowSetForegroundWindow(punk,0);
+			mol::punk<IMoeDocumentCollection> pdocs;
+			moe->get_Documents(&pdocs);
+
+			mol::punk<IMoeDocument> pdoc;
+
+			if ( cmd == open_tail_cmd )
+			{
+				pdocs->OpenTailDocument(mol::bstr(filename_), &pdoc);
+			}
+			else if ( cmd == open_html_cmd )
+			{
+				pdocs->OpenHtmlFrame(mol::bstr(filename_), &pdoc );
+			}
+			else if ( cmd == open_utf8_cmd )
+			{
+				pdocs->OpenUTF8(mol::bstr(filename_), &pdoc );
+			}
+			else if ( cmd == open_cmd )
+			{
+				pdocs->Open(mol::bstr(filename_), &pdoc );
+			}
+
+			mol::punk<IMoeView> view;
+			moe->get_View(&view);
+			view->Show();
 			return S_OK;
 		}
 	}
@@ -72,9 +134,21 @@ HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 		<< mol::Path::pathname(p) 
 		<< "\\"
 		<< "moe.exe" 
-		<< "\" \"" 
-		<< filename_ 
-		<< "\"";
+		<< "\" \"" ;
+
+	if (cmd == open_tail_cmd )
+	{
+		oss << "moe-tail:";
+	}
+	else if (cmd == open_utf8_cmd )
+	{
+		oss << "moe-utf8:";
+	}
+	else if (cmd == open_html_cmd )
+	{
+		oss << "moe-html:";
+	}
+	oss << filename_ << "\"";
 
 	mol::io::exec_cmdline( oss.str() );
 	return S_OK;
@@ -83,12 +157,43 @@ HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 HRESULT __stdcall moeShell::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
 {
 	UINT icmd = idCmdFirst;
+
+	open_cmd = 0;
+	open_utf8_cmd = 1;
+	open_html_cmd = 2;
+	open_tail_cmd = 3;
+
 	::InsertMenu( hmenu,
-				  indexMenu++,
+				  indexMenu,
 				  MF_STRING|MF_BYPOSITION , 
-				  icmd++, 
-				  _T("edit with moe")
+				  icmd, 
+				  _T("open with moe")
 				);
+
+	icmd++;
+	indexMenu++;
+
+	mol::Menu menu;
+	menu.createContext();
+	menu.addItem(icmd,_T("force UTF8"));
+	icmd++;
+
+	menu.addItem(icmd,_T("show HTML"));
+	icmd++;
+
+	menu.addItem(icmd,_T("tail -f log"));
+	icmd++;
+
+
+
+	::InsertMenu( hmenu,
+				  indexMenu,
+				  MF_STRING|MF_BYPOSITION|MF_POPUP , 
+				  (UINT_PTR)(HMENU)(menu), 
+				  _T("open with moe as ...")
+				);
+
+	menu.detach();
 
 	return MAKE_HRESULT( 
 				SEVERITY_SUCCESS,

@@ -33,7 +33,7 @@ void FormEditor::OnFileChangeNotify(mol::io::DirMon* dirmon)
 {
 }
 
-void FormEditor::checkModifiedOnDisk(const mol::string& path)
+void FormEditor::checkModifiedOnDisk()
 {
 
 }
@@ -61,59 +61,25 @@ FormEditor::Instance* FormEditor::CreateInstance(const mol::string& file)
 
 bool FormEditor::initialize(const mol::string& p)
 {
-	// get client rectangle
-	mol::Rect r;
-	::GetClientRect(mdiParent(),&r);
-
-	// determine window menu
-	HMENU m = mol::UI().Menu(IDM_MOE);
-	windowMenu_ = mol::UI().SubMenu( IDM_MOE ,IDM_VIEW_WINDOWS);
-
-	statusBar()->status(40);
-
-	// create the win window
-	create(p,(HMENU)m,r,*moe());
+	initializeMoeChild(p);
 
 	// hook up com event handlers
 	events.Advise(oleObject);
 
-	// show the window
-	show(SW_SHOW);
-
-	statusBar()->status(50);
-
 	// prepare interface pointers
-	sci = oleObject;
-	sci->get_Properties(&props_);
-	sci->get_Annotation(&annotation_);
-	sci->get_Line(&line_);
-	sci->get_Markers(&markers_);
-	sci->get_Position(&position_);
-	sci->get_Selection(&selection_);
-	sci->get_Text(&text_);
+	prepareInterfaces();
 
 	// set the filename
 	props_->put_Filename(mol::bstr(p));
 
-	// try to load or create new
+	// try to load form or create new
 	OnReload();
+	if ( !userForm )
+		return false;
 
 	// get default values from config and init scintilla
-
 	moe()->moeConfig->InitializeEditorFromPreferences( (IMoeDocument*)this );
 	props_->put_ReadOnly( VARIANT_FALSE );
-
-	// use ribbon context menue if avail
-	if ( mol::Ribbon::ribbon()->enabled() )
-	{
-		props_->put_UseContext(VARIANT_FALSE);
-	}
-
-	// initialize win7 taskbar if avail
-	thumb = mol::taskbar()->addTab( *this,p );
-
-	// now maximize the window
-	maximize();
 
 	return true;
 }

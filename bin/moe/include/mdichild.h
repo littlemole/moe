@@ -3,6 +3,7 @@
 
 #include "commons.h"
 #include "Docs.h"
+#include "resource.h"
 
 /////////////////////////////////////////////////////////////////////
 //
@@ -92,18 +93,44 @@ public:
 
 };
 
-template<class C, class T, long D>
+template<class C, class T, long D, UINT M>
 class MoeChild :
 	public mol::MdiChildFrame<C,T>,
 	public DispatchMdiWindow<C,IMoeDocument,D>,
 	public mol::ProvideClassInfo<C>,
 	public mol::interfaces< C, mol::implements< IDispatch, IMoeDocument, IProvideClassInfo> >
 
-{};
+{
+protected:
+
+	void initializeMoeChild( const mol::string& p)
+	{
+		// get client rectangle
+		mol::Rect r;
+		::GetClientRect(mdiClient(),&r);
+
+		// determine window menu
+		HMENU m = mol::UI().Menu(M);
+		windowMenu_ = mol::UI().SubMenu( M ,IDM_VIEW_WINDOWS);
+		statusBar()->status(40);
+
+		// create
+		create(p,(HMENU)m,r,*moe());
+		show(SW_SHOW);	
+		statusBar()->status(50);
+
+		// taskbar thumbnail (win7)
+		thumb = mol::taskbar()->addTab( *this,p );
+
+		// maximize
+		maximize();
+		redraw();
+	}
+};
 
 
-template<class C, long D, const CLSID* clsid>
-class MoeAxChild : public MoeChild<C,mol::AxWnd<C,mol::MdiChild,clsid>,D>
+template<class C, long D, const CLSID* clsid, UINT M>
+class MoeAxChild : public MoeChild<C,mol::AxWnd<C,mol::MdiChild,clsid>,D,M>
 {};
 
 /////////////////////////////////////////////////////////////////////

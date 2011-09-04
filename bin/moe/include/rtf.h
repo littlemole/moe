@@ -15,7 +15,8 @@ class RTFEditor
 	: public MoeChild<
 				RTFEditor,
 				mol::MdiChild,
-				MOE_DOCTYPE_RTF
+				MOE_DOCTYPE_RTF,
+				IDM_MOE_RTF
 			>
 {
 public:
@@ -95,12 +96,9 @@ private:
 	};
 
 	mol::stack_obj<RTFDocument> rtfDocument_;
-	//mol::punk< mol::stack_obj<RTFDocument> > rtfDocument_;
 
 	bool load(const mol::string& path);
 	void updateUI();
-
-
 
 	FINDTEXT findText_;
 };

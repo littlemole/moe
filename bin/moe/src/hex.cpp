@@ -49,22 +49,9 @@ Hex::Instance* Hex::CreateInstance(const mol::string& file, bool readOnly)
 
 bool Hex::initialize(const mol::string& p, bool readOnly)
 {
-	// determine window menu
-	windowMenu_ = mol::UI().SubMenu( IDM_MOE_DIR, IDM_VIEW_WINDOWS );
-
-	create(p,(HMENU)mol::UI().Menu(IDM_MOE_HEX),Rect(0,0,500,500),*moe());
-
-	// determine window menu
-	HMENU m = mol::UI().Menu(IDM_MOE);
-	windowMenu_ = mol::UI().SubMenu( IDM_MOE_HEX ,IDM_VIEW_WINDOWS);
-
-	statusBar()->status(40);
+	initializeMoeChild(p);
 
 	sink.Advise(oleObject);
-	show(SW_SHOW);
-	maximize();
-
-	statusBar()->status(50);
 
 	punk<IDispatch> disp;
 	get_Object(&disp);
@@ -93,7 +80,6 @@ bool Hex::initialize(const mol::string& p, bool readOnly)
 			}
 		}
 	}
-	thumb = mol::taskbar()->addTab( *this,p );
 	return true;
 }
 

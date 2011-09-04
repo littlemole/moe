@@ -1,12 +1,12 @@
 #include "ole/Rib.h"
 #include "ole/com.h"
 #include "win/shell.h"
-#include <uiribbonpropertyhelpers.h>
+//#include <uiribbonpropertyhelpers.h>
 #include <Shobjidl.h>
 #include <ObjectArray.h>
 #include <initguid.h>
 //#include "PropertyStore.h"
-#include <UIRibbonPropertyHelpers.h>
+//#include <UIRibbonPropertyHelpers.h>
 #include <strsafe.h>
 #define TWIPS_PER_POINT 20 // For setting font size in CHARFORMAT2.
 
@@ -67,7 +67,18 @@ public:
 };
 
 
+typedef HRESULT __stdcall PropVariantToUInt32Ptr( REFPROPVARIANT propvarIn, ULONG *pulRet);
+typedef HRESULT __stdcall PropVariantToDoublePtr( REFPROPVARIANT propvarIn, DOUBLE *pdblRet);
+typedef HRESULT __stdcall PropVariantToDecimalPtr( REFPROPVARIANT propvarIn, DECIMAL *pdblRet);
+typedef HRESULT __stdcall PropVariantToStringAllocPtr( REFPROPVARIANT propvarIn, PWSTR *ppszOut);
+
+PropVariantToUInt32Ptr* PropVariantToUInt32 = (PropVariantToUInt32Ptr*)mol::dllFunc( _T("propsys.dll"), _T("PropVariantToUInt32") );
+PropVariantToDoublePtr* PropVariantToDouble = (PropVariantToDoublePtr*)mol::dllFunc( _T("propsys.dll"), _T("PropVariantToDouble") );
+PropVariantToDecimalPtr* PropVariantToDecimal = (PropVariantToDecimalPtr*)mol::dllFunc( _T("propsys.dll"), _T("PropVariantToDecimal") );
+PropVariantToStringAllocPtr* PropVariantToStringAlloc = (PropVariantToStringAllocPtr*)mol::dllFunc( _T("propsys.dll"), _T("PropVariantToStringAlloc") );
+
 // Convert IPropertyStore to CHARFORMAT2 
+
 void GetCharFormat2FromIPropertyStore( IPropertyStore* pPropStore, CHARFORMAT2 *pCharFormat)
 {
     ZeroMemory(pCharFormat, sizeof(*pCharFormat));
@@ -78,8 +89,9 @@ void GetCharFormat2FromIPropertyStore( IPropertyStore* pPropStore, CHARFORMAT2 *
 	    PropVariant propVar;
 		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_Bold, &propVar) )
 		{
-			UINT uValue = 0;
-			UIPropertyToUInt32(UI_PKEY_FontProperties_Bold, propVar, &uValue);
+			ULONG uValue = 0;
+			PropVariantToUInt32(propVar, &uValue);
+			//UIPropertyToUInt32(UI_PKEY_FontProperties_Bold, propVar, &uValue);
 			if ((UI_FONTPROPERTIES) uValue != UI_FONTPROPERTIES_NOTAVAILABLE)
 			{
 				pCharFormat->dwMask |= CFM_BOLD;
@@ -93,8 +105,10 @@ void GetCharFormat2FromIPropertyStore( IPropertyStore* pPropStore, CHARFORMAT2 *
 	    PropVariant propVar;
 		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_Italic, &propVar) ) 
 		{
-			UINT uValue = 0;
-			UIPropertyToUInt32(UI_PKEY_FontProperties_Italic, propVar, &uValue);
+			ULONG uValue = 0;
+			//UIPropertyToUInt32(UI_PKEY_FontProperties_Italic, propVar, &uValue);
+			PropVariantToUInt32( propVar, &uValue);
+
 			if ((UI_FONTPROPERTIES) uValue != UI_FONTPROPERTIES_NOTAVAILABLE)
 			{
 				pCharFormat->dwMask |= CFM_ITALIC;
@@ -108,8 +122,9 @@ void GetCharFormat2FromIPropertyStore( IPropertyStore* pPropStore, CHARFORMAT2 *
 	    PropVariant propVar;
 		if (SUCCEEDED(pPropStore->GetValue(UI_PKEY_FontProperties_Underline, &propVar)))
 		{
-			UINT uValue = 0;
-			UIPropertyToUInt32(UI_PKEY_FontProperties_Underline, propVar, &uValue);
+			ULONG uValue = 0;
+			//UIPropertyToUInt32(UI_PKEY_FontProperties_Underline, propVar, &uValue);
+			PropVariantToUInt32( propVar, &uValue);
 			if ((UI_FONTUNDERLINE) uValue != UI_FONTUNDERLINE_NOTAVAILABLE)
 			{
 				pCharFormat->dwMask |= CFM_UNDERLINE;
@@ -123,8 +138,9 @@ void GetCharFormat2FromIPropertyStore( IPropertyStore* pPropStore, CHARFORMAT2 *
 		PropVariant propVar;
 		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_Strikethrough, &propVar) )
 		{
-			UINT uValue = 0;
-			UIPropertyToUInt32(UI_PKEY_FontProperties_Strikethrough, propVar, &uValue);
+			ULONG uValue = 0;
+			//UIPropertyToUInt32(UI_PKEY_FontProperties_Strikethrough, propVar, &uValue);
+			PropVariantToUInt32(propVar, &uValue);
 			if ((UI_FONTPROPERTIES) uValue != UI_FONTPROPERTIES_NOTAVAILABLE)
 			{
 				pCharFormat->dwMask |= CFM_STRIKEOUT;
@@ -138,8 +154,10 @@ void GetCharFormat2FromIPropertyStore( IPropertyStore* pPropStore, CHARFORMAT2 *
 		PropVariant propVar;
 		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_VerticalPositioning, &propVar ) )
 		{
-			UINT uValue = 0;
-			UIPropertyToUInt32(UI_PKEY_FontProperties_VerticalPositioning, propVar, &uValue);
+			ULONG uValue = 0;
+			//UIPropertyToUInt32(UI_PKEY_FontProperties_VerticalPositioning, propVar, &uValue);
+			PropVariantToUInt32(propVar, &uValue);
+
 			UI_FONTVERTICALPOSITION uVerticalPosition = (UI_FONTVERTICALPOSITION) uValue;
 			if ((uVerticalPosition != UI_FONTVERTICALPOSITION_NOTAVAILABLE))
 			{
@@ -158,7 +176,8 @@ void GetCharFormat2FromIPropertyStore( IPropertyStore* pPropStore, CHARFORMAT2 *
 		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_Family, &propVar) )
 		{
 			PWSTR pszFamily;
-			UIPropertyToStringAlloc(UI_PKEY_FontProperties_Family, propVar, &pszFamily);
+			//UIPropertyToStringAlloc(UI_PKEY_FontProperties_Family, propVar, &pszFamily);
+			PropVariantToStringAlloc( propVar, &pszFamily);
 			// Blank string is used as "Not Available" value.
 			if (lstrcmp(pszFamily, L"")) 
 			{
@@ -175,7 +194,8 @@ void GetCharFormat2FromIPropertyStore( IPropertyStore* pPropStore, CHARFORMAT2 *
 		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_Size, &propVar ) )
 		{
 			DECIMAL decSize;
-			UIPropertyToDecimal(UI_PKEY_FontProperties_Size, propVar, &decSize);
+			//UIPropertyToDecimal(UI_PKEY_FontProperties_Size, propVar, &decSize);
+			PropVariantToDecimal( propVar, &decSize);
 			DOUBLE dSize;
 			VarR8FromDec(&decSize, &dSize);
 			// Zero is used as "Not Available" value.
@@ -193,8 +213,9 @@ void GetCharFormat2FromIPropertyStore( IPropertyStore* pPropStore, CHARFORMAT2 *
 		PropVariant propVar;
 		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_ForegroundColorType, &propVar ) )
 		{
-			UINT uValue = 0;
-			UIPropertyToUInt32(UI_PKEY_FontProperties_ForegroundColorType, propVar, &uValue);
+			ULONG uValue = 0;
+			//UIPropertyToUInt32(UI_PKEY_FontProperties_ForegroundColorType, propVar, &uValue);
+			PropVariantToUInt32( propVar, &uValue);
 			if (UI_SWATCHCOLORTYPE_AUTOMATIC == (UI_SWATCHCOLORTYPE)uValue)
 			{
 				// The color type is automatic, so set the corresponding members in CharFormat2 variable.
@@ -209,8 +230,9 @@ void GetCharFormat2FromIPropertyStore( IPropertyStore* pPropStore, CHARFORMAT2 *
 		PropVariant propVar;
 		if (S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_ForegroundColor, &propVar) )
 		{
-			UINT uValue = 0;
-			UIPropertyToUInt32(UI_PKEY_FontProperties_ForegroundColor, propVar, &uValue);
+			ULONG uValue = 0;
+			//UIPropertyToUInt32(UI_PKEY_FontProperties_ForegroundColor, propVar, &uValue);
+			PropVariantToUInt32( propVar, &uValue);
 			pCharFormat->dwMask |= CFM_COLOR;
 			pCharFormat->crTextColor = (COLORREF)uValue;
 		}
@@ -221,8 +243,9 @@ void GetCharFormat2FromIPropertyStore( IPropertyStore* pPropStore, CHARFORMAT2 *
 		PropVariant propVar;
 		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_BackgroundColorType, &propVar) )
 		{
-			UINT uValue = 0;
-			UIPropertyToUInt32(UI_PKEY_FontProperties_BackgroundColorType, propVar, &uValue);
+			ULONG uValue = 0;
+			//UIPropertyToUInt32(UI_PKEY_FontProperties_BackgroundColorType, propVar, &uValue);
+			PropVariantToUInt32( propVar, &uValue);
 			if (UI_SWATCHCOLORTYPE_NOCOLOR == (UI_SWATCHCOLORTYPE)uValue)
 			{
 				// The color type is no color, so set the corresponding members in CharFormat2 variable.
@@ -237,13 +260,86 @@ void GetCharFormat2FromIPropertyStore( IPropertyStore* pPropStore, CHARFORMAT2 *
 		PropVariant propVar;
 		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_BackgroundColor, &propVar) )
 		{
-			UINT uValue = 0;
-			UIPropertyToUInt32(UI_PKEY_FontProperties_BackgroundColor, propVar, &uValue);
+			ULONG uValue = 0;
+			//UIPropertyToUInt32(UI_PKEY_FontProperties_BackgroundColor, propVar, &uValue);
+			PropVariantToUInt32( propVar, &uValue);
 			pCharFormat->dwMask |= CFM_BACKCOLOR;
 			pCharFormat->crBackColor = (COLORREF)uValue;
 		}
 	}
 }
+
+inline HRESULT InitPropVariantFromUInt32( ULONG ulVal,  PROPVARIANT *ppropvar)
+{
+    ppropvar->vt = VT_UI4;
+    ppropvar->ulVal = ulVal;
+    return S_OK;
+}
+
+// Creates a VT_LPWSTR propvariant.
+inline HRESULT InitPropVariantFromString( PCWSTR psz,  PROPVARIANT *ppropvar)
+{
+    ppropvar->vt = VT_LPWSTR;
+    HRESULT hr = SHStrDupW(psz, &ppropvar->pwszVal);
+    if (FAILED(hr))
+    {
+        PropVariantInit(ppropvar);
+    }
+    return hr;
+}
+
+inline HRESULT InitPropVariantFromDecimal(const DECIMAL& decValue, PROPVARIANT* pPropVar)
+{
+    pPropVar->decVal = decValue;
+    pPropVar->vt = VT_DECIMAL;
+    return S_OK;
+}
+
+inline HRESULT InitPropVariantFromInterface(IUnknown* pUnk,  PROPVARIANT* pPropVar)
+{
+    pPropVar->vt = VT_UNKNOWN;
+    pPropVar->punkVal = pUnk;
+    if (pUnk)
+    {
+        pUnk->AddRef();
+    }
+    return S_OK;
+}
+
+inline HRESULT PropVariantToIUnknownArrayAlloc(REFPROPVARIANT propvarIn, SAFEARRAY** ppsa)
+{
+    return ::SafeArrayCopy(propvarIn.parray, ppsa);
+}
+
+
+template<class I>
+HRESULT PropVariantToInterface(REFPROPVARIANT propvarIn, I** ppObj)
+{
+    *ppObj = NULL;
+    if (propvarIn.punkVal)
+    {
+        return propvarIn.punkVal->QueryInterface( mol::uuidof<I>(), (void**)ppObj);
+    }
+    return S_OK;
+}
+
+inline HRESULT InitPropVariantFromBoolean( BOOL fVal, PROPVARIANT *ppropvar)
+{
+    ppropvar->vt = VT_BOOL;
+    ppropvar->boolVal = fVal ? VARIANT_TRUE : VARIANT_FALSE;
+    return S_OK;
+}
+
+HRESULT InitPropVariantFromIUnknownArray( SAFEARRAY* psa,  PROPVARIANT* pPropVar)
+{
+   HRESULT hr = ::SafeArrayCopy(psa, &pPropVar->parray);
+    if (SUCCEEDED(hr))
+    {
+        pPropVar->vt = VT_ARRAY|VT_UNKNOWN;
+    }
+    return hr;
+}
+
 
 // Convert from CHARFORMAT2 to IPropertyStore so it can be passed to the font control.
 void GetIPropStoreFromCharFormat2(const __in CHARFORMAT2* pCharFormat, __in IPropertyStore *pPropStore)
@@ -254,12 +350,14 @@ void GetIPropStoreFromCharFormat2(const __in CHARFORMAT2* pCharFormat, __in IPro
     if (pCharFormat->dwMask & CFM_BOLD)
     {
         // Set the bold value to UI_FONTPROPERTIES_SET or UI_FONTPROPERTIES_NOTSET.
-        UIInitPropertyFromUInt32(UI_PKEY_FontProperties_Bold, (pCharFormat->dwEffects & CFE_BOLD) ? UI_FONTPROPERTIES_SET : UI_FONTPROPERTIES_NOTSET, &propvar);
+        //UIInitPropertyFromUInt32(UI_PKEY_FontProperties_Bold, (pCharFormat->dwEffects & CFE_BOLD) ? UI_FONTPROPERTIES_SET : UI_FONTPROPERTIES_NOTSET, &propvar);
+		InitPropVariantFromUInt32((pCharFormat->dwEffects & CFE_BOLD) ? UI_FONTPROPERTIES_SET : UI_FONTPROPERTIES_NOTSET, &propvar);
     }
     else
     {
         // The bold value is not available so set it to UI_FONTPROPERTIES_NOTAVAILABLE.
-        UIInitPropertyFromUInt32(UI_PKEY_FontProperties_Bold, UI_FONTPROPERTIES_NOTAVAILABLE, &propvar);
+        // UIInitPropertyFromUInt32(UI_PKEY_FontProperties_Bold, UI_FONTPROPERTIES_NOTAVAILABLE, &propvar);
+		InitPropVariantFromUInt32(UI_FONTPROPERTIES_NOTAVAILABLE, &propvar);
     }
     // Set UI_PKEY_FontProperties_Bold value in property store.
     pPropStore->SetValue(UI_PKEY_FontProperties_Bold, propvar);
@@ -268,12 +366,14 @@ void GetIPropStoreFromCharFormat2(const __in CHARFORMAT2* pCharFormat, __in IPro
     if (pCharFormat->dwMask & CFM_ITALIC)
     {
         // Set the italic value to UI_FONTPROPERTIES_SET or UI_FONTPROPERTIES_NOTSET.
-        UIInitPropertyFromUInt32(UI_PKEY_FontProperties_Italic, (pCharFormat->dwEffects & CFE_ITALIC)?UI_FONTPROPERTIES_SET:UI_FONTPROPERTIES_NOTSET, &propvar);
+        //UIInitPropertyFromUInt32(UI_PKEY_FontProperties_Italic, (pCharFormat->dwEffects & CFE_ITALIC)?UI_FONTPROPERTIES_SET:UI_FONTPROPERTIES_NOTSET, &propvar);
+		InitPropVariantFromUInt32((pCharFormat->dwEffects & CFE_ITALIC)?UI_FONTPROPERTIES_SET:UI_FONTPROPERTIES_NOTSET, &propvar);
     }
     else
     {
         // The italic value is not available so set it to UI_FONTPROPERTIES_NOTAVAILABLE.
-        UIInitPropertyFromUInt32(UI_PKEY_FontProperties_Italic, UI_FONTPROPERTIES_NOTAVAILABLE, &propvar);
+        //UIInitPropertyFromUInt32(UI_PKEY_FontProperties_Italic, UI_FONTPROPERTIES_NOTAVAILABLE, &propvar);
+		InitPropVariantFromUInt32(UI_FONTPROPERTIES_NOTAVAILABLE, &propvar);
     }
     // Set UI_PKEY_FontProperties_Italic value in property store.
     pPropStore->SetValue(UI_PKEY_FontProperties_Italic, propvar);
@@ -282,12 +382,14 @@ void GetIPropStoreFromCharFormat2(const __in CHARFORMAT2* pCharFormat, __in IPro
     if (pCharFormat->dwMask & CFM_UNDERLINE)
     {
         // Set the underline value to UI_FONTUNDERLINE_SET or UI_FONTUNDERLINE_NOTSET.
-        UIInitPropertyFromUInt32(UI_PKEY_FontProperties_Underline, (pCharFormat->dwEffects & CFE_UNDERLINE) ? UI_FONTUNDERLINE_SET : UI_FONTUNDERLINE_NOTSET, &propvar);
+        //UIInitPropertyFromUInt32(UI_PKEY_FontProperties_Underline, (pCharFormat->dwEffects & CFE_UNDERLINE) ? UI_FONTUNDERLINE_SET : UI_FONTUNDERLINE_NOTSET, &propvar);
+		InitPropVariantFromUInt32( (pCharFormat->dwEffects & CFE_UNDERLINE) ? UI_FONTUNDERLINE_SET : UI_FONTUNDERLINE_NOTSET, &propvar);
     }
     else
     {
         // The underline value is not available so set it to UI_FONTUNDERLINE_NOTAVAILABLE.
-        UIInitPropertyFromUInt32(UI_PKEY_FontProperties_Underline, UI_FONTUNDERLINE_NOTAVAILABLE, &propvar);
+        //UIInitPropertyFromUInt32(UI_PKEY_FontProperties_Underline, UI_FONTUNDERLINE_NOTAVAILABLE, &propvar);
+		InitPropVariantFromUInt32( UI_FONTUNDERLINE_NOTAVAILABLE, &propvar);
     }
     // Set UI_PKEY_FontProperties_Underline value in property store.
     pPropStore->SetValue(UI_PKEY_FontProperties_Underline, propvar);
@@ -296,12 +398,14 @@ void GetIPropStoreFromCharFormat2(const __in CHARFORMAT2* pCharFormat, __in IPro
     if (pCharFormat->dwMask & CFM_STRIKEOUT)
     {
         // Set the strikethrough value to UI_FONTPROPERTIES_SET or UI_FONTPROPERTIES_NOTSET.
-        UIInitPropertyFromUInt32(UI_PKEY_FontProperties_Strikethrough, (pCharFormat->dwEffects & CFE_STRIKEOUT) ? UI_FONTPROPERTIES_SET : UI_FONTPROPERTIES_NOTSET, &propvar);
+        //UIInitPropertyFromUInt32(UI_PKEY_FontProperties_Strikethrough, (pCharFormat->dwEffects & CFE_STRIKEOUT) ? UI_FONTPROPERTIES_SET : UI_FONTPROPERTIES_NOTSET, &propvar);
+		InitPropVariantFromUInt32( (pCharFormat->dwEffects & CFE_STRIKEOUT) ? UI_FONTPROPERTIES_SET : UI_FONTPROPERTIES_NOTSET, &propvar);
     }
     else
     {
         // The strikethrough value is not available so set it to UI_FONTPROPERTIES_NOTAVAILABLE.
-        UIInitPropertyFromUInt32(UI_PKEY_FontProperties_Strikethrough, UI_FONTPROPERTIES_NOTAVAILABLE, &propvar);
+        //UIInitPropertyFromUInt32(UI_PKEY_FontProperties_Strikethrough, UI_FONTPROPERTIES_NOTAVAILABLE, &propvar);
+		InitPropVariantFromUInt32( UI_FONTPROPERTIES_NOTAVAILABLE, &propvar);
     }
     // Set UI_PKEY_FontProperties_Strikethrough value in property store.
     pPropStore->SetValue(UI_PKEY_FontProperties_Strikethrough, propvar);
@@ -312,12 +416,14 @@ void GetIPropStoreFromCharFormat2(const __in CHARFORMAT2* pCharFormat, __in IPro
         if ((pCharFormat->dwMask & CFM_SUBSCRIPT) && (pCharFormat->dwEffects & CFE_SUBSCRIPT))
         {
             // Set the vertical positioning value to UI_FONTVERTICALPOSITION_SUBSCRIPT.
-            UIInitPropertyFromUInt32(UI_PKEY_FontProperties_VerticalPositioning, UI_FONTVERTICALPOSITION_SUBSCRIPT, &propvar);
+            //UIInitPropertyFromUInt32(UI_PKEY_FontProperties_VerticalPositioning, UI_FONTVERTICALPOSITION_SUBSCRIPT, &propvar);
+			InitPropVariantFromUInt32( UI_FONTVERTICALPOSITION_SUBSCRIPT, &propvar);
         }
         else if (pCharFormat->dwEffects & CFE_SUPERSCRIPT)
         {
             // Set the vertical positioning value to UI_FONTVERTICALPOSITION_SUPERSCRIPT.
-            UIInitPropertyFromUInt32(UI_PKEY_FontProperties_VerticalPositioning, UI_FONTVERTICALPOSITION_SUPERSCRIPT, &propvar);
+            //UIInitPropertyFromUInt32(UI_PKEY_FontProperties_VerticalPositioning, UI_FONTVERTICALPOSITION_SUPERSCRIPT, &propvar);
+			InitPropVariantFromUInt32( UI_FONTVERTICALPOSITION_SUPERSCRIPT, &propvar);
         }
     }
     else if (pCharFormat->dwMask & CFM_OFFSET)
@@ -325,17 +431,20 @@ void GetIPropStoreFromCharFormat2(const __in CHARFORMAT2* pCharFormat, __in IPro
         if (pCharFormat->yOffset > 0)
         {
             // Set the vertical positioning value to UI_FONTVERTICALPOSITION_SUPERSCRIPT.
-            UIInitPropertyFromUInt32(UI_PKEY_FontProperties_VerticalPositioning, UI_FONTVERTICALPOSITION_SUPERSCRIPT, &propvar);
+           // UIInitPropertyFromUInt32(UI_PKEY_FontProperties_VerticalPositioning, UI_FONTVERTICALPOSITION_SUPERSCRIPT, &propvar);
+		   InitPropVariantFromUInt32( UI_FONTVERTICALPOSITION_SUPERSCRIPT, &propvar);
         }
         else if (pCharFormat->yOffset < 0)
         {
             // Set the vertical positioning value to UI_FONTVERTICALPOSITION_SUBSCRIPT.
-            UIInitPropertyFromUInt32(UI_PKEY_FontProperties_VerticalPositioning, UI_FONTVERTICALPOSITION_SUBSCRIPT, &propvar);
+            //UIInitPropertyFromUInt32(UI_PKEY_FontProperties_VerticalPositioning, UI_FONTVERTICALPOSITION_SUBSCRIPT, &propvar);
+			InitPropVariantFromUInt32( UI_FONTVERTICALPOSITION_SUBSCRIPT, &propvar);
         }
         else
         {
             // The value is not available so set the vertical positioning value to UI_FONTVERTICALPOSITION_NOTAVAILABLE.
-            UIInitPropertyFromUInt32(UI_PKEY_FontProperties_VerticalPositioning, UI_FONTVERTICALPOSITION_NOTAVAILABLE, &propvar);
+            //UIInitPropertyFromUInt32(UI_PKEY_FontProperties_VerticalPositioning, UI_FONTVERTICALPOSITION_NOTAVAILABLE, &propvar);
+			InitPropVariantFromUInt32( UI_FONTVERTICALPOSITION_NOTAVAILABLE, &propvar);
         }
 
     }
@@ -346,12 +455,14 @@ void GetIPropStoreFromCharFormat2(const __in CHARFORMAT2* pCharFormat, __in IPro
     if (pCharFormat->dwMask & CFM_FACE)
     {
         // Set the font family value to the font name.
-        UIInitPropertyFromString(UI_PKEY_FontProperties_Family, pCharFormat->szFaceName, &propvar);
+        //UIInitPropertyFromString(UI_PKEY_FontProperties_Family, pCharFormat->szFaceName, &propvar);
+		InitPropVariantFromString( pCharFormat->szFaceName, &propvar);		
     }
     else
     {
         // Font family name is not available so set it to blank string.
-        UIInitPropertyFromString(UI_PKEY_FontProperties_Family, L"", &propvar);
+        //UIInitPropertyFromString(UI_PKEY_FontProperties_Family, L"", &propvar);
+		InitPropVariantFromString( L"", &propvar);
     }
     // Set UI_PKEY_FontProperties_Family value in property store.
     pPropStore->SetValue(UI_PKEY_FontProperties_Family, propvar);
@@ -369,25 +480,31 @@ void GetIPropStoreFromCharFormat2(const __in CHARFORMAT2* pCharFormat, __in IPro
         VarDecFromI4(0, &decSize);
     }
     // Set UI_PKEY_FontProperties_Size value in property store.
-    UIInitPropertyFromDecimal(UI_PKEY_FontProperties_Size, decSize, &propvar); 
+    //UIInitPropertyFromDecimal(UI_PKEY_FontProperties_Size, decSize, &propvar); 
+	InitPropVariantFromDecimal( decSize, &propvar); 
     pPropStore->SetValue(UI_PKEY_FontProperties_Size, propvar);
     PropVariantClear(&propvar);
+
+	
 
     if ((pCharFormat->dwMask & CFM_COLOR) && !(pCharFormat->dwEffects & CFE_AUTOCOLOR))
     {
         // There is a color value so set the type to UI_SWATCHCOLORTYPE_RGB in property store.
-        UIInitPropertyFromUInt32(UI_PKEY_FontProperties_ForegroundColorType, UI_SWATCHCOLORTYPE_RGB, &propvar);
+        //UIInitPropertyFromUInt32(UI_PKEY_FontProperties_ForegroundColorType, UI_SWATCHCOLORTYPE_RGB, &propvar);
+		InitPropVariantFromUInt32( UI_SWATCHCOLORTYPE_RGB, &propvar);
         pPropStore->SetValue(UI_PKEY_FontProperties_ForegroundColorType, propvar);
         PropVariantClear(&propvar);
         
         // Set the color value in property store.
-        UIInitPropertyFromUInt32(UI_PKEY_FontProperties_ForegroundColor, pCharFormat->crTextColor, &propvar);
+        //UIInitPropertyFromUInt32(UI_PKEY_FontProperties_ForegroundColor, pCharFormat->crTextColor, &propvar);
+		InitPropVariantFromUInt32( pCharFormat->crTextColor, &propvar);
         pPropStore->SetValue(UI_PKEY_FontProperties_ForegroundColor, propvar);
     }
     else if ((pCharFormat->dwMask & CFM_COLOR) && (pCharFormat->dwEffects & CFE_AUTOCOLOR))
     {
         // The color is automatic color so set the type to UI_SWATCHCOLORTYPE_AUTOMATIC in property store.
-        UIInitPropertyFromUInt32(UI_PKEY_FontProperties_ForegroundColorType, UI_SWATCHCOLORTYPE_AUTOMATIC, &propvar);
+       // UIInitPropertyFromUInt32(UI_PKEY_FontProperties_ForegroundColorType, UI_SWATCHCOLORTYPE_AUTOMATIC, &propvar);
+		 InitPropVariantFromUInt32( UI_SWATCHCOLORTYPE_AUTOMATIC, &propvar);
         pPropStore->SetValue(UI_PKEY_FontProperties_ForegroundColorType, propvar);
     }
     PropVariantClear(&propvar);
@@ -395,18 +512,22 @@ void GetIPropStoreFromCharFormat2(const __in CHARFORMAT2* pCharFormat, __in IPro
     if ((pCharFormat->dwMask & CFM_BACKCOLOR) && !(pCharFormat->dwEffects & CFE_AUTOBACKCOLOR))
     {
         // There is a color value so set the type to UI_SWATCHCOLORTYPE_RGB in property store.
-        UIInitPropertyFromUInt32(UI_PKEY_FontProperties_BackgroundColorType, UI_SWATCHCOLORTYPE_RGB, &propvar);
+        //UIInitPropertyFromUInt32(UI_PKEY_FontProperties_BackgroundColorType, UI_SWATCHCOLORTYPE_RGB, &propvar);
+		//UIInitPropertyFromUInt32(UI_PKEY_FontProperties_BackgroundColorType, UI_SWATCHCOLORTYPE_RGB, &propvar);
+		InitPropVariantFromUInt32( UI_SWATCHCOLORTYPE_RGB, &propvar);
         pPropStore->SetValue(UI_PKEY_FontProperties_BackgroundColorType, propvar);
         PropVariantClear(&propvar);
         
         // Set the color value in property store.
-        UIInitPropertyFromUInt32(UI_PKEY_FontProperties_BackgroundColor, pCharFormat->crBackColor, &propvar);
+        //UIInitPropertyFromUInt32(UI_PKEY_FontProperties_BackgroundColor, pCharFormat->crBackColor, &propvar);
+		InitPropVariantFromUInt32( pCharFormat->crBackColor, &propvar);
         pPropStore->SetValue(UI_PKEY_FontProperties_BackgroundColor, propvar);
     }
     else
     {
         // There is no color so set the type to UI_SWATCHCOLORTYPE_NOCOLOR in property store.
-        UIInitPropertyFromUInt32(UI_PKEY_FontProperties_BackgroundColorType, UI_SWATCHCOLORTYPE_NOCOLOR, &propvar);
+       // UIInitPropertyFromUInt32(UI_PKEY_FontProperties_BackgroundColorType, UI_SWATCHCOLORTYPE_NOCOLOR, &propvar);
+		 InitPropVariantFromUInt32( UI_SWATCHCOLORTYPE_NOCOLOR, &propvar);
         pPropStore->SetValue(UI_PKEY_FontProperties_BackgroundColorType, propvar);
     }
 }
@@ -461,33 +582,38 @@ HRESULT __stdcall PropertySet::GetValue( REFPROPERTYKEY key, PROPVARIANT *ppropv
     {
         if (pimgItem_)
         {
-            return UIInitPropertyFromImage(UI_PKEY_ItemImage, pimgItem_, ppropvar);
+            //return UIInitPropertyFromImage(UI_PKEY_ItemImage, pimgItem_, ppropvar);
+			return InitPropVariantFromInterface( pimgItem_, ppropvar);
         }
         return S_FALSE;
     }
     else if (key == UI_PKEY_Label)
     {
-		return UIInitPropertyFromString(UI_PKEY_Label, mol::towstring(label_).c_str(), ppropvar);
+		//return UIInitPropertyFromString(UI_PKEY_Label, mol::towstring(label_).c_str(), ppropvar);
+		return InitPropVariantFromString(mol::towstring(label_).c_str(), ppropvar);
     }
     else if (key == UI_PKEY_CategoryId)
     {
-        return UIInitPropertyFromUInt32(UI_PKEY_CategoryId, categoryId_, ppropvar);
+		return InitPropVariantFromUInt32(categoryId_, ppropvar);
     }
     else if (key == UI_PKEY_CommandId)
     {
         if(commandId_ != -1)
         {
-            return UIInitPropertyFromUInt32(UI_PKEY_CommandId, commandId_, ppropvar);
+            //return UIInitPropertyFromUInt32(UI_PKEY_CommandId, commandId_, ppropvar);
+			return InitPropVariantFromUInt32(commandId_, ppropvar);
         }
         return S_FALSE;
     }
     else if (key == UI_PKEY_CommandType)
     {
-        return UIInitPropertyFromUInt32(UI_PKEY_CommandType, commandType_, ppropvar);
+        //return UIInitPropertyFromUInt32(UI_PKEY_CommandType, commandType_, ppropvar);
+		return InitPropVariantFromUInt32( commandType_, ppropvar);
     }
 	else if (key == UI_PKEY_Pinned)
     {
-        return UIInitPropertyFromBoolean(UI_PKEY_Pinned, pinned_, ppropvar);
+        //return UIInitPropertyFromBoolean(UI_PKEY_Pinned, pinned_, ppropvar);
+		return InitPropVariantFromUInt32( pinned_, ppropvar);
     }
     return E_FAIL;
 }
@@ -579,7 +705,8 @@ HRESULT __stdcall HandlerBase::Execute( UINT nCmdID, UI_EXECUTIONVERB verb, cons
 				HRESULT hr = E_FAIL;
 
 				SAFEARRAY* psa = 0;
-				hr = UIPropertyToIUnknownArrayAlloc( UI_PKEY_RecentItems, *ppropvarValue, &psa );
+				//hr = UIPropertyToIUnknownArrayAlloc( UI_PKEY_RecentItems, *ppropvarValue, &psa );
+				hr = PropVariantToIUnknownArrayAlloc( *ppropvarValue, &psa );
 				if ( hr == S_OK )
 				{
 					mol::SFAccess<IUnknown*> sfa(psa);
@@ -618,7 +745,9 @@ HRESULT __stdcall HandlerBase::Execute( UINT nCmdID, UI_EXECUTIONVERB verb, cons
 				  if (SUCCEEDED(hr))
 				  {
 					IPropertyStore *store = 0;
-					hr = UIPropertyToInterface(UI_PKEY_FontProperties, varValues, &store);
+					//hr = UIPropertyToInterface(UI_PKEY_FontProperties, varValues, &store);
+					hr = PropVariantToInterface( varValues, &store);
+					
 					if (SUCCEEDED(hr))
 					{
 						::ZeroMemory(&charFormat_,sizeof(charFormat_));
@@ -674,42 +803,50 @@ HRESULT __stdcall HandlerBase::UpdateProperty( UINT nCmdID, REFPROPERTYKEY key, 
 	}
 	else if (key == UI_PKEY_SelectedItem)
 	{
-		hr = UIInitPropertyFromUInt32(UI_PKEY_SelectedItem, index_, ppropvarNewValue);
+		//hr = UIInitPropertyFromUInt32(UI_PKEY_SelectedItem, index_, ppropvarNewValue);
+		hr = InitPropVariantFromUInt32( index_, ppropvarNewValue);
 		return hr;
 	}
 	else if (key == UI_PKEY_StringValue)
 	{      
-		hr = UIInitPropertyFromString(UI_PKEY_StringValue, mol::bstr(value_), ppropvarNewValue);
+		//hr = UIInitPropertyFromString(UI_PKEY_StringValue, mol::bstr(value_), ppropvarNewValue);
+		hr = InitPropVariantFromString( mol::bstr(value_), ppropvarNewValue);
 		return hr;
 	}
 	else if (key == UI_PKEY_Enabled)
 	{
-		hr = UIInitPropertyFromBoolean(UI_PKEY_Enabled, enabled_, ppropvarNewValue);
+		//hr = UIInitPropertyFromBoolean(UI_PKEY_Enabled, enabled_, ppropvarNewValue);
+		hr = InitPropVariantFromBoolean( enabled_, ppropvarNewValue);
 		return hr;
 	}
 	else if (key == UI_PKEY_BooleanValue)
 	{
-		hr = UIInitPropertyFromBoolean(UI_PKEY_BooleanValue, bValue_, ppropvarNewValue);
+		//hr = UIInitPropertyFromBoolean(UI_PKEY_BooleanValue, bValue_, ppropvarNewValue);
+		hr = InitPropVariantFromBoolean( bValue_, ppropvarNewValue);
 		return hr;
 	}
 	else if (key == UI_PKEY_Minimized)
 	{
-		hr = UIInitPropertyFromBoolean(UI_PKEY_Minimized, minimized_, ppropvarNewValue);
+		//hr = UIInitPropertyFromBoolean(UI_PKEY_Minimized, minimized_, ppropvarNewValue);
+		hr = InitPropVariantFromBoolean( minimized_, ppropvarNewValue);
 		return hr;
 	}
     else if ( key == UI_PKEY_Label )
 	{
-		hr = UIInitPropertyFromString(UI_PKEY_Label, mol::bstr(label_), ppropvarNewValue);
+		//hr = UIInitPropertyFromString(UI_PKEY_Label, mol::bstr(label_), ppropvarNewValue);
+		hr = InitPropVariantFromString( mol::bstr(label_), ppropvarNewValue);
 		return hr;
 	}
 	else if (key == UI_PKEY_DecimalValue)
 	{
-		hr = UIInitPropertyFromDecimal( UI_PKEY_DecimalValue, decimal_.decVal, ppropvarNewValue);
+		//hr = UIInitPropertyFromDecimal( UI_PKEY_DecimalValue, decimal_.decVal, ppropvarNewValue);
+		hr = InitPropVariantFromDecimal(  decimal_.decVal, ppropvarNewValue);
 		return hr;
 	}
     else if (key == UI_PKEY_DecimalPlaces)
 	{
-		hr = UIInitPropertyFromUInt32( UI_PKEY_DecimalPlaces, decimalPlaces_, ppropvarNewValue);
+		//hr = UIInitPropertyFromUInt32( UI_PKEY_DecimalPlaces, decimalPlaces_, ppropvarNewValue);
+		hr = InitPropVariantFromUInt32(  decimalPlaces_, ppropvarNewValue);
 		return hr;
 	}
     else if ( key == UI_PKEY_RecentItems )
@@ -745,7 +882,8 @@ HRESULT __stdcall HandlerBase::UpdateProperty( UINT nCmdID, REFPROPERTYKEY key, 
 			}
 		}
 
-		hr = UIInitPropertyFromIUnknownArray(UI_PKEY_RecentItems, sa, ppropvarNewValue);
+		//hr = UIInitPropertyFromIUnknownArray(UI_PKEY_RecentItems, sa, ppropvarNewValue);
+		hr = InitPropVariantFromIUnknownArray( sa, ppropvarNewValue);
 		return hr;
 	}
 	else if (key == UI_PKEY_FontProperties)
@@ -756,7 +894,8 @@ HRESULT __stdcall HandlerBase::UpdateProperty( UINT nCmdID, REFPROPERTYKEY key, 
 			hr = E_POINTER;
 			// Get the font values for the selected text in the font control.
 			IPropertyStore *pValues;
-			hr = UIPropertyToInterface(UI_PKEY_FontProperties, *ppropvarCurrentValue, &pValues);
+			//hr = UIPropertyToInterface(UI_PKEY_FontProperties, *ppropvarCurrentValue, &pValues);
+			hr = PropVariantToInterface( *ppropvarCurrentValue, &pValues);
 			if (SUCCEEDED(hr))
 			{
 				//IPropertyStore* pps = 0;
@@ -764,7 +903,9 @@ HRESULT __stdcall HandlerBase::UpdateProperty( UINT nCmdID, REFPROPERTYKEY key, 
 				// Provide the new values to the font control.
 				//if ( pps )
 				{
-					hr = UIInitPropertyFromInterface(UI_PKEY_FontProperties, pValues, ppropvarNewValue);
+					//hr = UIInitPropertyFromInterface(UI_PKEY_FontProperties, pValues, ppropvarNewValue);
+					//hr = PropVariantToInterface(pValues, &(ppropvarNewValue->punkVal));
+					hr = InitPropVariantFromInterface(pValues, ppropvarNewValue);
 					//pps->Release();
 				}
 				pValues->Release();
@@ -1351,7 +1492,7 @@ void Ribbon::minimize()
 
     PROPVARIANT propvar;
     PropVariantInit(&propvar);
-    UIInitPropertyFromBoolean(UI_PKEY_Minimized, true, &propvar);
+	InitPropVariantFromBoolean(true, &propvar);
 	HRESULT hr = pPropertyStore->SetValue(UI_PKEY_Minimized, propvar);
 	if ( hr != S_OK )
 		return;
@@ -1376,7 +1517,7 @@ void Ribbon::maximize()
 
     PROPVARIANT propvar;
     PropVariantInit(&propvar);
-    UIInitPropertyFromBoolean(UI_PKEY_Minimized, false, &propvar);
+	InitPropVariantFromBoolean(false, &propvar);
     HRESULT hr = pPropertyStore->SetValue(UI_PKEY_Minimized, propvar);
 	if ( hr != S_OK )
 		return;

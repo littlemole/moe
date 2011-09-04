@@ -15,7 +15,8 @@ class Hex  : public
 	MoeAxChild<
 		Hex,
 		MOE_DOCTYPE_HEX,
-		&CLSID_HexCtrl
+		&CLSID_HexCtrl,
+		IDM_MOE_HEX
 	>
 {
 public:

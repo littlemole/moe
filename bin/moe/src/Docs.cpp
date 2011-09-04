@@ -9,6 +9,7 @@
 #include "Dir3.h"
 #include "Form.h"
 #include "Editor.h"
+#include "TailEditor.h"
 #include "rtf.h"
 #include "hex.h"
 #include "html.h"
@@ -47,6 +48,17 @@ void Docs::remove( mol::MdiChild* mdi )
 			if ( children_.empty() )
 			{
 				tab()->show(SW_HIDE);
+
+				// assure any border space reserved for embedded clients gets resetted. greetings to MS Excel!
+				mol::punk<IOleInPlaceFrame> frame;
+				if ( moe()->axFrameSite )
+				{
+					HRESULT hr = moe()->axFrameSite->QueryInterface(IID_IOleInPlaceFrame,(void**)&frame);
+					if (hr == S_OK && frame)
+					{
+						frame->SetBorderSpace(0);
+					}
+				}
 				Ribbon::ribbon()->mode(0);
 				Ribbon::ribbon()->maximize();
 				moe()->doLayout();	
@@ -218,6 +230,26 @@ HRESULT __stdcall Docs::NewRTFDocument(IMoeDocument** d)
 
 	mol::punk<IMoeDocument> doc;
 	bool b = newRTFFile(&doc);
+	if (!b || !doc)
+		return E_FAIL;
+
+	if ( d )
+		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
+	return S_OK;
+}
+
+
+
+HRESULT __stdcall Docs::OpenTailDocument(BSTR fp, IMoeDocument** d)
+{
+	if (d)
+		*d = 0;
+
+	if(!fp)
+		return E_INVALIDARG;
+
+	mol::punk<IMoeDocument> doc;
+	bool b = openTailFile(mol::toString(fp),&doc);
 	if (!b || !doc)
 		return E_FAIL;
 
@@ -583,6 +615,35 @@ bool Docs::newRTFFile(IMoeDocument** doc)
 }
 
 
+bool Docs::openTailFile(const mol::string& fp, IMoeDocument** doc)
+{
+
+	if ( !mol::Path::exists(fp) )
+		return false;
+
+	if ( moe()->activeObject)
+		moe()->activeObject->OnDocWindowActivate(FALSE);
+
+	TailEditor::Instance* edit = TailEditor::CreateInstance( fp );
+	if (!edit)
+		return false;
+
+	if ( children_.empty() )
+	{
+		tab()->show(SW_SHOW);
+		moe()->doLayout();
+	}
+
+	mol::MdiChild* c = dynamic_cast<mol::MdiChild*>(edit);
+	children_.push_back( c  );
+	tab()->insertItem( new mol::TabCtrl::TabCtrlItem( mol::Path::filename(fp),fp, (LPARAM)(HWND)(*c)) );
+	tab()->select( (HWND)(*c) );
+
+	progress()->show(SW_HIDE);
+	if (doc)
+		return edit->QueryInterface(IID_IMoeDocument,(void**)doc) == S_OK;
+	return true;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // load a path, create MDI child
@@ -727,11 +788,16 @@ mol::MdiChild* Docs::openPath( const mol::string& p, InFiles pref, bool readOnly
 	if ( mol::Path::isDir(path) )
 	{
 		return load<DirChild>(path);
-	}			
+	}
 
+	if ( pref == PREF_TAIL )
+	{
+		return load<TailEditor>(path);
+	}
 	if ( pref == PREF_HTML )
+	{
 		return load<MoeHtmlWnd>(path);
-
+	}
 	
 	if ( !mol::Path::exists(path) )
 	{

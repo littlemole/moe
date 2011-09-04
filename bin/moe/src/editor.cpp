@@ -30,7 +30,7 @@ Editor::Editor()
 	wndClass().hIconSm(moe()->icon); 
 	saving_ = false;
 
-	monitor_.events += mol::events::event_handler( &Editor::OnFileChangeNotify, this );
+	//monitor_.events += mol::events::event_handler( &Editor::OnFileChangeNotify, this );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -63,31 +63,8 @@ Editor::Instance* Editor::CreateInstance(const mol::string& file, bool utf8, boo
 	return e;
 }
 
-
-bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
+void Editor::prepareInterfaces()
 {
-	// get client rectangle
-	mol::Rect r;
-	::GetClientRect(mdiClient(),&r);
-
-	// determine window menu
-	HMENU m = mol::UI().Menu(IDM_MOE);
-	windowMenu_ = mol::UI().SubMenu( IDM_MOE ,IDM_VIEW_WINDOWS);
-
-	statusBar()->status(40);
-
-	// init last write timestamp for p
-	lastWriteTime_ = getLastWriteTime(p);
-
-	// create the win window
-	create(p,(HMENU)m,r,*moe());
-
-	// hook up com event handlers
-	events.Advise(oleObject);
-
-	statusBar()->status(50);
-
-	// prepare interface pointers
 	sci = oleObject;
 	sci->get_Properties(&props_);
 	sci->get_Annotation(&annotation_);
@@ -96,6 +73,22 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 	sci->get_Position(&position_);
 	sci->get_Selection(&selection_);
 	sci->get_Text(&text_);
+}
+
+bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
+{
+	initializeMoeChild(p);
+
+	monitor_.events += mol::events::event_handler( &Editor::OnFileChangeNotify, this );
+
+	// init last write timestamp for p
+	lastWriteTime_ = getLastWriteTime(p);
+
+	// hook up com event handlers
+	events.Advise(oleObject);
+
+	// prepare interface pointers
+	prepareInterfaces();
 
 	// get default values from config and init scintilla
 
@@ -116,12 +109,7 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 		}
 		monitor_.watch( 
 			mol::Path::parentDir(p), 
-			FILE_NOTIFY_CHANGE_FILE_NAME
-				| FILE_NOTIFY_CHANGE_ATTRIBUTES
-				| FILE_NOTIFY_CHANGE_FILE_NAME
-				| FILE_NOTIFY_CHANGE_LAST_WRITE
-				| FILE_NOTIFY_CHANGE_SECURITY
-				| FILE_NOTIFY_CHANGE_SIZE,
+		    FILE_NOTIFY_CHANGE_LAST_WRITE,
 			false);
 	}
 	else
@@ -132,29 +120,14 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 
 	statusBar()->status(80);
 
-
-	// show the window
-	show(SW_SHOW);
-
 	//TODO: user config? just while debugging? UI based?
 	markers_->put_UseMarkers(VARIANT_TRUE);
 
 	//override read only
 	props_->put_ReadOnly( readOnly ? VARIANT_TRUE : VARIANT_FALSE );
 
-	// if we have a ribbon, we use our own context menu
-	if ( mol::Ribbon::ribbon()->enabled() )
-	{
-		props_->put_UseContext(VARIANT_FALSE);
-	}
-
 	statusBar()->status(100);
 
-	// add a windows7 taskbar thumbnail
-	thumb = mol::taskbar()->addTab(* this,p );
-
-	// now maximize the window
-	maximize();
 	OnLayout(0,0,0);
 
 	return true;
@@ -250,26 +223,27 @@ void Editor::OnMDIActivate(WPARAM unused, HWND activated)
 		updateUI();
 		setFocus();
 
-		checkModifiedOnDisk(path.toString());
+		checkModifiedOnDisk();
 	}
 }
 
 void Editor::OnFileChangeNotify(mol::io::DirMon* dirmon)
 {
+	::Sleep(1000);
+	mol::invoke( boost::bind( &Editor::checkModifiedOnDisk, this) );
+}
+
+void Editor::checkModifiedOnDisk()
+{
 	mol::bstr path;
 	props_->get_Filename(&path);
 
-	checkModifiedOnDisk(path.toString());
-}
-
-void Editor::checkModifiedOnDisk(const mol::string& path)
-{
 	if ( moe()->getActive() != (HWND)*this || saving_ )
 	{
 		return;
 	}
 
-	FILETIME ft = getLastWriteTime( path );
+	FILETIME ft = getLastWriteTime( path.toString() );
 
 
 	if ( (ft.dwHighDateTime != lastWriteTime_.dwHighDateTime) || (ft.dwLowDateTime != lastWriteTime_.dwLowDateTime) )

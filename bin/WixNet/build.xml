@@ -45,6 +45,7 @@
 
 <!-- net bin files -->
  <ItemGroup>
+  <moeResourceFiles Include="..\moe\resources\deploy-net\**\*.*" Exclude="..\moe\resources\deploy-net\**\.svn\*.*" />
   <moeFiles Include=".\moe\**\*.*" />
  </ItemGroup>
  <!-- Build -->
@@ -66,6 +67,10 @@
 		<MakeDir Directories=".\$(regfreeTargetPath)" />
 
 		<!-- copy files -->
+        <Copy
+            SourceFiles="@(moeResourceFiles)"
+            DestinationFiles="@(moeResourceFiles->'.\moe\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
         <Copy
             SourceFiles="..\moe\resources\moe.ico"
             DestinationFiles="..\moe\resources\moe.ico"

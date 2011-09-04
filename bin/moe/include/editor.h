@@ -19,7 +19,8 @@ class Editor
 	: public MoeAxChild<
 				Editor,
 				MOE_DOCTYPE_DOC,
-				&CLSID_ScintillAx
+				&CLSID_ScintillAx,
+				IDM_MOE
 			>
 {
 public:
@@ -110,10 +111,10 @@ protected:
 	void updateToolMenu( HMENU tools );
 	void updateDebugMenu( HMENU debug );
 	void populateMenuFromConf( HMENU submenu, ISetting* set, std::map<int,ISetting*>& confMap, int& id);
-
+	void prepareInterfaces();
 
 	virtual void OnFileChangeNotify(mol::io::DirMon*);
-	virtual void checkModifiedOnDisk(const mol::string& path);
+	virtual void checkModifiedOnDisk();
 protected:
 
 	// scintilla events sink

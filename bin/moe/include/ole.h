@@ -12,7 +12,8 @@ class OleChild
 	: public MoeChild<
 				OleChild,
 				mol::AxClientWnd<OleChild,mol::MdiChild>,
-				MOE_DOCTYPE_OLE
+				MOE_DOCTYPE_OLE,
+				IDM_MOE
 			>
 {
 public:
@@ -31,7 +32,6 @@ public:
 	void OnPaint();
 
 	void OnMDIActivate(WPARAM unused,HWND activated);
-	//LRESULT OnMDIActivateLater(WPARAM unused,HWND activated);
 
     virtual HRESULT __stdcall IOleClientSite_SaveObject();
 

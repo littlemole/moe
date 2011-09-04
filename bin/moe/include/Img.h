@@ -2,6 +2,7 @@
 #define IMG_VIEWER_DEF_GUARD_
 
 #include "shared.h"
+#include "resource.h"
 
 using namespace mol;
 
@@ -13,7 +14,8 @@ class ImgViewer
 	: public MoeChild<
 				ImgViewer,
 				mol::MdiChild,
-				MOE_DOCTYPE_PIC
+				MOE_DOCTYPE_PIC,
+				IDM_MOE_IMG
 			>
 {
 public:

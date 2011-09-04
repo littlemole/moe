@@ -77,7 +77,6 @@ OleChild::Instance* OleChild::CreateInstance( const mol::string& p, CLSID& clsid
 
 void OleChild::OnDestroy()
 {
-	
 }
 
 
@@ -97,7 +96,7 @@ void OleChild::OnNcDestroy()
 
 	IMoeDocument* doc = (IMoeDocument*)this;	
 	::CoDisconnectObject( doc,0);
-	doc->Release();
+	doc->Release();	
 }
 
 

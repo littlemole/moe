@@ -39,7 +39,9 @@ library Moe
 		MOE_DOCTYPE_HTML   = 5,
 		MOE_DOCTYPE_OLE    = 6,
 		MOE_DOCTYPE_FORM   = 7,
-		MOE_DOCTYPE_RTF    = 8
+		MOE_DOCTYPE_RTF    = 8,
+		MOE_DOCTYPE_TAIL   = 9
+
 	} MOE_DOCTYPE;
 
 	typedef enum MOE_SEARCHFLAG {
@@ -167,6 +169,9 @@ library Moe
 
 		[id(16), helpstring("New RTF document")] 
 		HRESULT NewRTFDocument( [out,retval] IMoeDocument** d);
+
+		[id(17), helpstring("tail -f document")] 
+		HRESULT OpenTailDocument( [in] BSTR fPath, [out,retval] IMoeDocument** d);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////

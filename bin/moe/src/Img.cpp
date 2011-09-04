@@ -96,13 +96,7 @@ void ImgViewer::OnMDIActivate( HWND activated )
 
 bool ImgViewer::load(const mol::string& p)
 {
-	// determine window menu
-	windowMenu_ = mol::UI().SubMenu(IDM_MOE_IMG,IDM_VIEW_WINDOWS );
-
-	hWnd_ = create(p,(HMENU)mol::UI().Menu(IDM_MOE_IMG),Rect(0,0,500,500),*moe());			
-	show(SW_SHOW);
-	//maximize();
-
+	initializeMoeChild(p);
 	if (!pic_.load(p))
 	{
 		statusBar()->status(p + _T(" load failed") );
@@ -118,8 +112,6 @@ bool ImgViewer::load(const mol::string& p)
 	statusBar()->status(80);
 	move(0,0,s.cx+pt.x-rw.left,s.cy+pt.y-rw.top,TRUE);
 	
-	thumb = mol::taskbar()->addTab( *this,p );
-
 	return true;
 }
 

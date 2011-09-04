@@ -360,6 +360,8 @@ HRESULT __stdcall ShellFolderWnd::ContextSensitiveHelp( BOOL fEnterMode)
 
 HRESULT __stdcall ShellFolderWnd::InsertMenusSB(  HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths)
 {
+	
+	
 	return S_OK ;
 }
 
@@ -445,6 +447,13 @@ HRESULT  ShellFolderWnd::QueryService( REFGUID guidService, REFIID riid, void **
 	}
 	
 	return E_NOINTERFACE;
+}
+
+
+HRESULT __stdcall ShellFolderWnd::DoContextMenuPopup( IUnknown *punkContextMenu, UINT fFlags, POINT pt)
+{
+
+	return S_OK;
 }
 
 HRESULT __stdcall ShellFolderWnd::IncludeObject( IShellView *ppshv, LPCITEMIDLIST pidl )
