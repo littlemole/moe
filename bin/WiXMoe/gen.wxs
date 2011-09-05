@@ -7,538 +7,565 @@
     </Fragment>
     <Fragment>
         <ComponentGroup Id="MoeCompGroup">
-            <Component Id="cmp5079776DD2AF2FCD30A37B42E56777BF" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{D95B1032-7434-42BD-A921-0BA05D39AC69}">
+            <Component Id="cmp5079776DD2AF2FCD30A37B42E56777BF" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{9ACF73A8-3BF5-4BB6-A727-4DB7D6E1231F}">
                 <File Id="fil5F29FF253D91AD008AA07F101D7AD7F5" KeyPath="yes" Source="$(var.SourceDir)\ui.xmo" />
             </Component>
-            <Component Id="cmp5373DF996125BD2263F6F39A2A2F5571" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{DA4B9291-3461-4909-ADDA-B08FAB62F4DB}">
+            <Component Id="cmp5373DF996125BD2263F6F39A2A2F5571" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{98C45707-0806-47DF-B40B-AF244AEE6F16}">
                 <File Id="fil042CFF43BCC820108AB628A52703AEBA" KeyPath="yes" Source="$(var.SourceDir)\moe.protocol.reg" />
             </Component>
-            <Component Id="cmp57D5B011F0420CCA292F8CB72DFFB54C" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{1C9EBA0B-7F8D-4FE3-8BF6-4DA43E39D405}">
+            <Component Id="cmp57D5B011F0420CCA292F8CB72DFFB54C" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{FD7D0429-23B7-4CFC-B418-9C295D184CBC}">
                 <File Id="fil6D0FD20F55760AEB01F0A6C19EAF095A" KeyPath="yes" Source="$(var.SourceDir)\moe.ico" />
             </Component>
-            <Component Id="cmpD31720AE1A7C0C356C9FD4535A338AE3" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{F8DF0CB7-7FDD-4621-AAE1-D86DCB9550AD}">
+            <Component Id="cmpD31720AE1A7C0C356C9FD4535A338AE3" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{55DC5413-BBE0-4751-8D43-F626972E77F5}">
                 <File Id="fil7B60441F1543F1758FEC61E948241100" KeyPath="yes" Source="$(var.SourceDir)\moe.exe" />
             </Component>
-            <Component Id="cmp3F5BED51E12494E03A21D54DEA8D836A" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{D21BEBB2-28DE-4028-A64C-2BDA77369FD5}">
+            <Component Id="cmp3F5BED51E12494E03A21D54DEA8D836A" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{826E69CC-9978-4563-BB2A-4C503F06D96B}">
                 <File Id="filFD4FBC96A131FF0A8EE8282D4852D832" KeyPath="yes" Source="$(var.SourceDir)\prw.exe" />
             </Component>
-            <Component Id="cmpA031C671DB8C531438534814CF9B0EC8" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{043B0D15-BF48-4CF5-890F-AB18730469DA}">
+            <Component Id="cmpA031C671DB8C531438534814CF9B0EC8" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{4277F08B-0979-49C0-A72C-038ACC135752}">
                 <File Id="filF0527009A011A9C684542071E3A20CBD" KeyPath="yes" Source="$(var.SourceDir)\io.dll" />
             </Component>
-            <Component Id="cmp1615F07A3784CD4D041EA33A12F1EE32" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{879FECAF-1B1C-4ED3-9415-B11A7C86B4C1}">
+            <Component Id="cmp1615F07A3784CD4D041EA33A12F1EE32" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{21790BB5-E67E-4965-8EA3-82098495F60E}">
                 <File Id="filEF836B468E95CA9E44895094A27DE00D" KeyPath="yes" Source="$(var.SourceDir)\pipedprocess.dll" />
             </Component>
-            <Component Id="cmpA1ACFFAE9D7701C88732506756D01FEC" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{A07A76D5-E80A-4607-8847-4CC5E5645660}">
+            <Component Id="cmpA1ACFFAE9D7701C88732506756D01FEC" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{90F2CB93-BF43-4028-B1A7-59E6165A51FD}">
                 <File Id="fil127AA9D2C54E87C8F51A91CD2FCA5DF5" KeyPath="yes" Source="$(var.SourceDir)\comtypes.dll" />
             </Component>
-            <Component Id="cmpA3E9661E1757B4DD75FDF90E7497B55A" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{6952C06E-0AB6-4051-93FD-143B82EC5565}">
+            <Component Id="cmpA3E9661E1757B4DD75FDF90E7497B55A" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{6D6D53ED-F38B-4840-816F-1BA6B5C4853F}">
                 <File Id="filF7B3ED4105C7490A807B0B3F5BCC7EAF" KeyPath="yes" Source="$(var.SourceDir)\ScintillAx.dll" />
             </Component>
-            <Component Id="cmpF66A938DEBDF007AB4AF56482301319A" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{85E0A494-4812-41B4-BDF4-4CBB5B417EDD}">
+            <Component Id="cmpF66A938DEBDF007AB4AF56482301319A" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{67AB2290-3CB7-43F1-AAFB-B032EC7F9ACC}">
                 <File Id="filBEE1178D7381038B959827D0A1560557" KeyPath="yes" Source="$(var.SourceDir)\setting.dll" />
             </Component>
-            <Component Id="cmp29116624F99446EF2B7C51F917D799A7" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{A79E87BD-4344-4B26-BF8A-8E94219923A3}">
+            <Component Id="cmp29116624F99446EF2B7C51F917D799A7" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{B43F09A2-D826-48BA-A5AF-BE34B8A5A62B}">
                 <File Id="fil984A3588EB629C2B4F626C868693CFAA" KeyPath="yes" Source="$(var.SourceDir)\shellctrl.dll" />
             </Component>
-            <Component Id="cmp76B0D9A0E6E898AD70D39FD6172AA3FC" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{D6546950-23B4-4503-A14A-88FBDECEE797}">
+            <Component Id="cmp76B0D9A0E6E898AD70D39FD6172AA3FC" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{4345DCC9-573A-44EE-B3F6-D2E670186732}">
                 <File Id="filDD9A53DAAB7222056355AE475132B762" KeyPath="yes" Source="$(var.SourceDir)\shellfolder.dll" />
             </Component>
-            <Component Id="cmp6491CD7F696C6CB024BD4FF8FD72133C" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{347BCAD5-C6BB-47B0-AFB6-40242219149A}">
+            <Component Id="cmp6491CD7F696C6CB024BD4FF8FD72133C" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{0F24F056-7C1A-4097-BEE4-8BB728EC00FA}">
                 <File Id="fil212194AB8AF24BFD202D076161FD8A87" KeyPath="yes" Source="$(var.SourceDir)\svn-prop.tmp~" />
             </Component>
-            <Component Id="cmp5D480DD643524FCAC473E438EEF93FCC" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{0AA329B4-7394-4980-97C9-C5E0E56BF722}">
+            <Component Id="cmp5D480DD643524FCAC473E438EEF93FCC" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{A681E0AB-EA3D-4997-8900-78F04679BB87}">
                 <File Id="fil53A3CC28A5EDCFF8744CB580577ABB40" KeyPath="yes" Source="$(var.SourceDir)\deinstall moe.lnk" />
             </Component>
-            <Component Id="cmpB70FE7A6596D3A7C6FB1AAE46DF3E7E7" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{64A5513D-A86B-46E7-9169-75AAEF72719B}">
+            <Component Id="cmpB70FE7A6596D3A7C6FB1AAE46DF3E7E7" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{E63493A5-79BB-4F68-B22C-DB0C61B88595}">
                 <File Id="filD439CDE97DC05494EE9BB5DD561EC979" KeyPath="yes" Source="$(var.SourceDir)\moeShell.dll" />
             </Component>
-            <Component Id="cmp17427B66C3BF3E328A4BB958F5D45FA9" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{168CAD4B-0E72-4191-9CE8-C283A0E38B0C}">
+            <Component Id="cmp17427B66C3BF3E328A4BB958F5D45FA9" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{2A9A020C-33CB-48C1-8F2B-E25EC90A2597}">
                 <File Id="fil47EBF8AB7C52BBCAE03FCEB03AA702E9" KeyPath="yes" Source="$(var.SourceDir)\moe.context.reg" />
             </Component>
-            <Component Id="cmp78CB8A44E20882492CFF14657C80A261" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{27C8DE3E-3E72-4831-9F8A-93DF0B907A5F}">
+            <Component Id="cmp78CB8A44E20882492CFF14657C80A261" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{CF617E96-448D-4B4E-BF2C-DC0B9DFCEBE2}">
                 <File Id="filA375A990DB42A0819C99260E38D8AEB1" KeyPath="yes" Source="$(var.SourceDir)\moe.context.user.reg" />
             </Component>
-            <Component Id="cmpB0D4400FFD31B5DA8A351DF250510626" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{98BE1D82-4350-45A2-BCB9-A530AD5D1A68}">
+            <Component Id="cmpB0D4400FFD31B5DA8A351DF250510626" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{D555B98D-B663-464C-8757-32DFF501F839}">
                 <File Id="fil926550EA44E52B3CEE79927F5D68C3B4" KeyPath="yes" Source="$(var.SourceDir)\moe.protocol.user.reg" />
             </Component>
-            <Component Id="cmpD3BA761AD0835C588A80BD615EAF2926" Directory="dir6A0F8CB8636386F511F078EBBB9903CA" Guid="{EFAA8E6D-3DB7-460D-96F4-2B543955494D}">
+            <Component Id="cmpCBC1C055E725D25B509D36E7ACF00D39" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{376E256D-4A51-496F-8F52-5C47B3C7438A}">
+                <File Id="fil3E7A0360BB16EC7B5359CB6CB1934186" KeyPath="yes" Source="$(var.SourceDir)\deinstall-moe.lnk" />
+            </Component>
+            <Component Id="cmpD3BA761AD0835C588A80BD615EAF2926" Directory="dir6A0F8CB8636386F511F078EBBB9903CA" Guid="{CD96A2EE-CFCC-4F91-AC10-9274763FC499}">
                 <File Id="fil4FB4F21F8DD89E974398D9CA4963283D" KeyPath="yes" Source="$(var.SourceDir)\.svn\dir-prop-base" />
             </Component>
-            <Component Id="cmpF59640B7AEDC503EFF9209D7FAD9F183" Directory="dir6A0F8CB8636386F511F078EBBB9903CA" Guid="{6BDA6E27-E1A9-49F6-817B-42E581669206}">
+            <Component Id="cmpF59640B7AEDC503EFF9209D7FAD9F183" Directory="dir6A0F8CB8636386F511F078EBBB9903CA" Guid="{BE52B47D-CA67-4DB2-98D1-4C165E5CED2D}">
                 <File Id="fil33E1FF1D27D0E62234CBC03F8D0C9B37" KeyPath="yes" Source="$(var.SourceDir)\.svn\entries" />
             </Component>
-            <Component Id="cmp493A4CB95A42B8392EA47AC5626942B3" Directory="dir2B6B1458DC06F7F9813C955FE3F07652" Guid="{C8B62A13-CE6B-4C4E-A6D7-D802F4E33A22}">
+            <Component Id="cmp493A4CB95A42B8392EA47AC5626942B3" Directory="dir2B6B1458DC06F7F9813C955FE3F07652" Guid="{90C7EA8A-B924-4BC1-BAC2-5C524D288B2B}">
                 <File Id="fil18DEEF59D24095C9B2F54837C5861F02" KeyPath="yes" Source="$(var.SourceDir)\.svn\text-base\moe.protocol.reg.svn-base" />
             </Component>
-            <Component Id="cmpC05BEA7923B45704CD076CA19976FD93" Directory="dir2B6B1458DC06F7F9813C955FE3F07652" Guid="{BB817323-15B2-4DEA-B745-B200CCE5B9A2}">
+            <Component Id="cmpC05BEA7923B45704CD076CA19976FD93" Directory="dir2B6B1458DC06F7F9813C955FE3F07652" Guid="{A04D309A-CB0A-40A9-9A63-7EA8A574A31F}">
                 <File Id="filEA95D395A31E7028CFB7D38380A3778F" KeyPath="yes" Source="$(var.SourceDir)\.svn\text-base\ui.xmo.svn-base" />
             </Component>
-            <Component Id="cmpCED3EE676F01CB44BA8E08CD2720C8C2" Directory="dirBC52C9019AD64A4F9F48C0AC51BB94FE" Guid="{E5F84326-2247-44A8-B0CD-86736414842A}">
+            <Component Id="cmpCD0AEBBC2D6F093F56136499D277AD84" Directory="dir2B6B1458DC06F7F9813C955FE3F07652" Guid="{15C4660F-8674-4DEA-8B0E-39B1B91570D3}">
+                <File Id="fil29EEA90C0BA99D22385D1D1E13D29892" KeyPath="yes" Source="$(var.SourceDir)\.svn\text-base\deinstall-moe.lnk.svn-base" />
+            </Component>
+            <Component Id="cmpAB77B2768EF5C62E2BF3A668A1624798" Directory="dir2B6B1458DC06F7F9813C955FE3F07652" Guid="{BF0597F2-5ED8-4AD9-86C7-449D0424691C}">
+                <File Id="fil2F34A2A9782DB7ED5C50BDDC8DDC5FA9" KeyPath="yes" Source="$(var.SourceDir)\.svn\text-base\moe.context.reg.svn-base" />
+            </Component>
+            <Component Id="cmp6F7846C3AB412885B5485FC6B7660B45" Directory="dir2B6B1458DC06F7F9813C955FE3F07652" Guid="{165782AD-98AC-4DC3-A50E-D6B2A98EB18B}">
+                <File Id="fil4AEC047CD0A32F874F03BFD91A03CECA" KeyPath="yes" Source="$(var.SourceDir)\.svn\text-base\moe.context.user.reg.svn-base" />
+            </Component>
+            <Component Id="cmp66D70A85036149AF912D5D978243A1DF" Directory="dir2B6B1458DC06F7F9813C955FE3F07652" Guid="{2390DFA2-A35D-4947-A3BB-B0545C1DF7FC}">
+                <File Id="fil25E44A0D27E2DAF220A0648B4C4912A3" KeyPath="yes" Source="$(var.SourceDir)\.svn\text-base\moe.protocol.user.reg.svn-base" />
+            </Component>
+            <Component Id="cmpCED3EE676F01CB44BA8E08CD2720C8C2" Directory="dirBC52C9019AD64A4F9F48C0AC51BB94FE" Guid="{557974A4-A18E-457C-9CA4-30C865DD139D}">
                 <File Id="filAD23F373E38F17AAF0C4CB942192D014" KeyPath="yes" Source="$(var.SourceDir)\.svn\prop-base\moe.protocol.reg.svn-base" />
             </Component>
-            <Component Id="cmp519650336E34B42F3B56DECDD5E5C3BB" Directory="dirBC52C9019AD64A4F9F48C0AC51BB94FE" Guid="{D418942D-C8FA-4C3D-AB1A-4FB23C6A44F1}">
+            <Component Id="cmp519650336E34B42F3B56DECDD5E5C3BB" Directory="dirBC52C9019AD64A4F9F48C0AC51BB94FE" Guid="{58D707F0-9A4B-4BD9-9524-050E78764A00}">
                 <File Id="filA7101E06DC7E69C36D50F8A3C5F2CFE5" KeyPath="yes" Source="$(var.SourceDir)\.svn\prop-base\ui.xmo.svn-base" />
             </Component>
-            <Component Id="cmpDF7FF5F8454CBD394C3B2A39767A8291" Directory="dir69194766107969FF0E17C37445D2D481" Guid="{08035E19-16EE-47E3-BB94-4DEA612B94A7}">
+            <Component Id="cmp830092690B38337A7D8FABE32FABD15B" Directory="dirBC52C9019AD64A4F9F48C0AC51BB94FE" Guid="{3AB040F0-18B4-496C-A38F-A2FC4D528733}">
+                <File Id="filE671FBB1F4E600B760B108938DC7805F" KeyPath="yes" Source="$(var.SourceDir)\.svn\prop-base\deinstall-moe.lnk.svn-base" />
+            </Component>
+            <Component Id="cmp8FB7DE1AC7C2E7B20AEF046826FB7725" Directory="dirBC52C9019AD64A4F9F48C0AC51BB94FE" Guid="{F925B10A-1CEC-4716-8EDF-05C7B706B79C}">
+                <File Id="filB7B3311E531C5F25EF031D36DDA9AE3D" KeyPath="yes" Source="$(var.SourceDir)\.svn\prop-base\moe.context.reg.svn-base" />
+            </Component>
+            <Component Id="cmp9FFBF3CD8126F7B3357DF126C9185382" Directory="dirBC52C9019AD64A4F9F48C0AC51BB94FE" Guid="{510EE19D-5179-464F-BB43-876720452D2C}">
+                <File Id="filBC51EFF501FF73E848A114F0554EF3E1" KeyPath="yes" Source="$(var.SourceDir)\.svn\prop-base\moe.context.user.reg.svn-base" />
+            </Component>
+            <Component Id="cmpF99F9D759AED8C0D4815F5C92803EC1E" Directory="dirBC52C9019AD64A4F9F48C0AC51BB94FE" Guid="{AC63A3F3-8C73-45C3-B942-09CAE6AAE166}">
+                <File Id="filB6B8B605ED288C8A6CD8A91EFFADA9B8" KeyPath="yes" Source="$(var.SourceDir)\.svn\prop-base\moe.protocol.user.reg.svn-base" />
+            </Component>
+            <Component Id="cmpDF7FF5F8454CBD394C3B2A39767A8291" Directory="dir69194766107969FF0E17C37445D2D481" Guid="{98FBB2C6-9D86-4B62-93AE-A208A908B2F9}">
                 <File Id="fil232D0EE7DDE335E1E8BAD0581AD77159" KeyPath="yes" Source="$(var.SourceDir)\doc\features.html" />
             </Component>
-            <Component Id="cmp98201E342EFD2CB347B2F97E15F1A08C" Directory="dir69194766107969FF0E17C37445D2D481" Guid="{99FE458A-A957-4488-911E-20AA4EADBB3D}">
+            <Component Id="cmp98201E342EFD2CB347B2F97E15F1A08C" Directory="dir69194766107969FF0E17C37445D2D481" Guid="{C7A58E8A-A180-41F2-9F51-F2298AEDEDB5}">
                 <File Id="fil886885F7D6E87C7132FFEAAEAC08FB67" KeyPath="yes" Source="$(var.SourceDir)\doc\copyleft.html" />
             </Component>
-            <Component Id="cmpAFFB065E79263D2306BF7A793CD4C055" Directory="dir69194766107969FF0E17C37445D2D481" Guid="{9FEA19C5-0805-4456-AF32-F3F3ACABF50E}">
+            <Component Id="cmpAFFB065E79263D2306BF7A793CD4C055" Directory="dir69194766107969FF0E17C37445D2D481" Guid="{01243E57-96B6-4E0A-A97E-3DCDA3F3F13E}">
                 <File Id="filF971C64D5937F256B8BF3B36E239253B" KeyPath="yes" Source="$(var.SourceDir)\doc\index.html" />
             </Component>
-            <Component Id="cmpBA8074E3987C6BFE2951A5C1BA7C97BC" Directory="dir69194766107969FF0E17C37445D2D481" Guid="{E8FD53DC-4805-42C2-B32B-6EE7F3718E26}">
+            <Component Id="cmpBA8074E3987C6BFE2951A5C1BA7C97BC" Directory="dir69194766107969FF0E17C37445D2D481" Guid="{AE6F9D08-7720-474A-B11E-BCA188BBCD86}">
                 <File Id="fil24EE82F97BCEC0C0BDF1D3885B936510" KeyPath="yes" Source="$(var.SourceDir)\doc\customizing.html" />
             </Component>
-            <Component Id="cmp8BDE5CB2DBBB3774201E3737C7367C47" Directory="dir3C03A0B7D8774F193AA1C34CBC1043EE" Guid="{1DD97519-F06A-47BC-9718-E275CCE7775D}">
+            <Component Id="cmp8BDE5CB2DBBB3774201E3737C7367C47" Directory="dir3C03A0B7D8774F193AA1C34CBC1043EE" Guid="{D93AAB6A-5CBE-4662-A1EE-35618FFEBF8D}">
                 <File Id="fil2383F285E68A7B4FD2840ED0DE129B72" KeyPath="yes" Source="$(var.SourceDir)\doc\scripting\moeref.html" />
             </Component>
-            <Component Id="cmp6D59650431012BC1ABED5FFBFF5F91A8" Directory="dir3C03A0B7D8774F193AA1C34CBC1043EE" Guid="{13739833-6BF3-46EF-BCE6-35B51BB445D5}">
+            <Component Id="cmp6D59650431012BC1ABED5FFBFF5F91A8" Directory="dir3C03A0B7D8774F193AA1C34CBC1043EE" Guid="{8A5F68AB-C177-4352-991A-55F95888A07B}">
                 <File Id="fil29888BCD2AA6730E017021D21A56D577" KeyPath="yes" Source="$(var.SourceDir)\doc\scripting\scripting.html" />
             </Component>
-            <Component Id="cmp33A4D10C13594FDDA03605245DDF927E" Directory="dirAC86874EF3453C11684066087B4ACB07" Guid="{542798B6-A77E-4DF4-9E4B-2DBE24323BC0}">
+            <Component Id="cmp33A4D10C13594FDDA03605245DDF927E" Directory="dirAC86874EF3453C11684066087B4ACB07" Guid="{7EACE638-E9A3-43B3-B889-294F44EE6CB1}">
                 <File Id="fil16A9F01F4B44EF18873950BC512C44D2" KeyPath="yes" Source="$(var.SourceDir)\doc\scripting\.svn\entries" />
             </Component>
-            <Component Id="cmp75A66A660FB6B2D7364DA2D2E81510E9" Directory="dir6782AFCBBA09B4D229C1709052E7A31C" Guid="{DA350CAF-7017-4F19-861B-AE0E080872AD}">
+            <Component Id="cmp75A66A660FB6B2D7364DA2D2E81510E9" Directory="dir6782AFCBBA09B4D229C1709052E7A31C" Guid="{A5B06FBB-6070-47C6-B4BA-09865836A94D}">
                 <File Id="fil4AEEAD7D10A64EE441724F7BDD6B41E6" KeyPath="yes" Source="$(var.SourceDir)\doc\scripting\.svn\text-base\moeref.html.svn-base" />
             </Component>
-            <Component Id="cmpA6B3BF270A5D0FDB660B5236191267DE" Directory="dir6782AFCBBA09B4D229C1709052E7A31C" Guid="{936629C5-B1B3-4107-98E3-A8F8F3515834}">
+            <Component Id="cmpA6B3BF270A5D0FDB660B5236191267DE" Directory="dir6782AFCBBA09B4D229C1709052E7A31C" Guid="{0F16B9A7-30D9-4A14-A90A-C4DD21E3D7A0}">
                 <File Id="fil854113B655F40482C98342AF11CE6E63" KeyPath="yes" Source="$(var.SourceDir)\doc\scripting\.svn\text-base\scripting.html.svn-base" />
             </Component>
-            <Component Id="cmp51B9FD6BE1B2E9C0F16F20F9A31C13A9" Directory="dir5D27B0D892A3398722B2241CDE5F8E88" Guid="{A2B84020-3CDC-47BB-B46B-891EBC473979}">
+            <Component Id="cmp51B9FD6BE1B2E9C0F16F20F9A31C13A9" Directory="dir5D27B0D892A3398722B2241CDE5F8E88" Guid="{C19C1AE5-54CD-4E49-9F37-34BAE4462381}">
                 <File Id="fil11F649E01CFB1DE9A949A03CBD691429" KeyPath="yes" Source="$(var.SourceDir)\doc\.svn\entries" />
             </Component>
-            <Component Id="cmp16572CD78FAB03EF69E5F19E91D3B07E" Directory="dir064E2E4296F904FFAA1D113B638B6D5C" Guid="{3B00EFEB-A6D2-4F9B-A9B8-5B94734649BB}">
+            <Component Id="cmp16572CD78FAB03EF69E5F19E91D3B07E" Directory="dir064E2E4296F904FFAA1D113B638B6D5C" Guid="{339BD586-2203-41B6-8619-41FE614A2AC8}">
                 <File Id="fil0B1DF27E625DF7F5E74360F1AE68E75F" KeyPath="yes" Source="$(var.SourceDir)\doc\.svn\text-base\copyleft.html.svn-base" />
             </Component>
-            <Component Id="cmpA57BE96FDC100C798A3FDEAD0FDE3877" Directory="dir064E2E4296F904FFAA1D113B638B6D5C" Guid="{3023DCCD-317D-4086-9C88-944EFCE562F2}">
+            <Component Id="cmpA57BE96FDC100C798A3FDEAD0FDE3877" Directory="dir064E2E4296F904FFAA1D113B638B6D5C" Guid="{B017C570-6C91-43C4-B5C1-BED337CA0BB7}">
                 <File Id="fil68D287BF1C1A63B67E9D677077C1A025" KeyPath="yes" Source="$(var.SourceDir)\doc\.svn\text-base\customizing.html.svn-base" />
             </Component>
-            <Component Id="cmp231EA80559986752043390040CA450D5" Directory="dir064E2E4296F904FFAA1D113B638B6D5C" Guid="{8707EED4-BB6B-47BB-A329-763CE03CE99D}">
+            <Component Id="cmp231EA80559986752043390040CA450D5" Directory="dir064E2E4296F904FFAA1D113B638B6D5C" Guid="{AE688FC4-3975-4E6E-B871-0A864CE3CB0A}">
                 <File Id="fil3BD9B77FCD604A648983B5D02C6C8699" KeyPath="yes" Source="$(var.SourceDir)\doc\.svn\text-base\features.html.svn-base" />
             </Component>
-            <Component Id="cmpBDC96B548FC15CF327E8477D72EB38B9" Directory="dir064E2E4296F904FFAA1D113B638B6D5C" Guid="{8C254DEC-ACEB-44B5-970D-6A84EF6B8419}">
+            <Component Id="cmpBDC96B548FC15CF327E8477D72EB38B9" Directory="dir064E2E4296F904FFAA1D113B638B6D5C" Guid="{E38052BD-D002-4A97-A49D-1147BDE854BE}">
                 <File Id="filE1CF81A7808957B14D279FA6389C82C8" KeyPath="yes" Source="$(var.SourceDir)\doc\.svn\text-base\index.html.svn-base" />
             </Component>
-            <Component Id="cmp7608082764826C498B7AB9E189B33E23" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{EFB5D62B-EF78-4269-8381-0CB4FA30C638}">
+            <Component Id="cmp7608082764826C498B7AB9E189B33E23" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{FDD7CB6D-7F89-4885-B5CD-876F4A7FEC0D}">
                 <File Id="filE84E82A0C92DB7BB3BBF6169CCDE596A" KeyPath="yes" Source="$(var.SourceDir)\forms\w3c.html" />
             </Component>
-            <Component Id="cmp4772F773425B3C237931718D7E77C31A" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{C688F888-8221-44CD-A60E-F269234325AE}">
+            <Component Id="cmp4772F773425B3C237931718D7E77C31A" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{7D12DB3C-5451-4D97-A800-3DFA4BAB82FB}">
                 <File Id="fil51872CC04C6756A47E95C1FF27FC20F0" KeyPath="yes" Source="$(var.SourceDir)\forms\grep.html" />
             </Component>
-            <Component Id="cmp4D0EA4AAC582B2DD90D2093A916F3B39" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{19D47FAA-04E7-4D2C-946C-0387BF4C3629}">
+            <Component Id="cmp4D0EA4AAC582B2DD90D2093A916F3B39" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{E4FC4C6D-C919-4907-B369-D0F67B7E16D6}">
                 <File Id="fil71A69EE1CC32646F3FD9F234B24F74CC" KeyPath="yes" Source="$(var.SourceDir)\forms\grep.cs" />
             </Component>
-            <Component Id="cmpE2F7941A64BDE2FD834D8468291B05F6" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{0B42AF44-0D94-4DCC-8073-DF4E04698D5E}">
+            <Component Id="cmpE2F7941A64BDE2FD834D8468291B05F6" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{516B02B9-B3C9-458D-94A0-DBA8AAD865F7}">
                 <File Id="fil1AE28762A131BC1ADE57176F73542AE3" KeyPath="yes" Source="$(var.SourceDir)\forms\prefs.html" />
             </Component>
-            <Component Id="cmp09EE394467519D2A8F48C25DC3532D78" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{9F264F31-3E5F-4ED6-AEB4-6C28B0C2AEE6}">
+            <Component Id="cmp09EE394467519D2A8F48C25DC3532D78" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{636D255D-2EC5-4059-BEE2-05D6FDEF9866}">
                 <File Id="filE98160B75BE3F1A631CCDE887CF11EAA" KeyPath="yes" Source="$(var.SourceDir)\forms\test.cs" />
             </Component>
-            <Component Id="cmpC3C57C7607781449C9C307A04C0C7A09" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{69E42358-0BAE-4DFD-BCC5-25F9E1663B7C}">
+            <Component Id="cmpC3C57C7607781449C9C307A04C0C7A09" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{A90158FE-C19B-416B-9291-B0ED8226B992}">
                 <File Id="fil2544886AC9C7AD69A2354EB774B52792" KeyPath="yes" Source="$(var.SourceDir)\forms\perl.html" />
             </Component>
-            <Component Id="cmp10C30973134BA6494160C34FF0212E5A" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{BF06A7E8-5489-49B5-BF58-3711168A7507}">
+            <Component Id="cmp10C30973134BA6494160C34FF0212E5A" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{25CAAA7F-477C-4EA5-AAFE-4D7B85258B6D}">
                 <File Id="fil6AFD24C65FF7434E0196CC4E80C77812" KeyPath="yes" Source="$(var.SourceDir)\forms\search.html" />
             </Component>
-            <Component Id="cmpDE36712D14E7A14CD6CD8AF4A3427DD6" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{549125DD-074F-45A5-9F70-73AD5BAE786A}">
+            <Component Id="cmpDE36712D14E7A14CD6CD8AF4A3427DD6" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{47D508CB-9D35-4CB2-9322-3F16FA97DD8B}">
                 <File Id="fil16CFB3741F1ABA59DA7ECCC5ECCCD1A2" KeyPath="yes" Source="$(var.SourceDir)\forms\object.html" />
             </Component>
-            <Component Id="cmp977FB04E64F912B2555002F42CA8F0D3" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{A4F8E7C6-E911-4F04-A710-CFDBD675737A}">
+            <Component Id="cmp977FB04E64F912B2555002F42CA8F0D3" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{0E7D4D07-CAE3-4C8C-8887-D787ED790808}">
                 <File Id="fil34652658D546B85F054CAD86A40D8E9D" KeyPath="yes" Source="$(var.SourceDir)\forms\typelib.html" />
             </Component>
-            <Component Id="cmp61E3F4CB8C05868F20F0F4CBFCF80B1B" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{50AC2AC4-CFC1-453C-BE01-5826557ACFDB}">
+            <Component Id="cmp61E3F4CB8C05868F20F0F4CBFCF80B1B" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{83A7260D-79F6-432C-B10F-251436CB7281}">
                 <File Id="filF5D12B84AC09C5E84CAB0F0D7499098A" KeyPath="yes" Source="$(var.SourceDir)\forms\tidy.html" />
             </Component>
-            <Component Id="cmpE0A9A6FFE58821883BE5948700A3E40B" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{34A1EA97-D23A-4AC5-B366-81F419198D00}">
+            <Component Id="cmpE0A9A6FFE58821883BE5948700A3E40B" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{7B48DB71-BA6C-4392-9384-C1F9F4992271}">
                 <File Id="filE47E36938083A21425AA1EDBC5D173EB" KeyPath="yes" Source="$(var.SourceDir)\forms\wsdl.html" />
             </Component>
-            <Component Id="cmpD95F54E57BBB60DD447D666C5FFC5D59" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{86E42A3B-5CEC-4785-B445-71CA9A3C1A23}">
+            <Component Id="cmpD95F54E57BBB60DD447D666C5FFC5D59" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{F3E87646-8BA3-429D-A539-2BF727E36B42}">
                 <File Id="filE3229D0AF9A34811FBEDC8B239C14844" KeyPath="yes" Source="$(var.SourceDir)\forms\grep.exe" />
             </Component>
-            <Component Id="cmp71D032C5926F5D1199B5EBD5EC03785E" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{AC7CB6C8-D8EA-4081-8119-965047B56DE6}">
+            <Component Id="cmp71D032C5926F5D1199B5EBD5EC03785E" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{8F250F8B-863C-4115-B4DB-122A5E10BEB7}">
                 <File Id="fil0F233D0776E4560B645A3C26FFC40793" KeyPath="yes" Source="$(var.SourceDir)\forms\regexp.html" />
             </Component>
-            <Component Id="cmpD35375F6A39C5853C4374533688FD3EB" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{4F151597-F97B-4D76-9F23-33D073AE3780}">
+            <Component Id="cmpD35375F6A39C5853C4374533688FD3EB" Directory="dir4112194AF7F1E2B35178A36C36BF209C" Guid="{835750FF-0234-41FE-BBEE-A74B18FA26EF}">
                 <File Id="fil7ED4027036B907D5A9BEBDB5F49B9165" KeyPath="yes" Source="$(var.SourceDir)\forms\xslt.html" />
             </Component>
-            <Component Id="cmp1500ECAF45AA84F6F1036ACC12F28B3E" Directory="dir3FA19C217B31F0B922A6F77788339742" Guid="{367A6955-221E-42A8-A70B-34862E560F69}">
+            <Component Id="cmp1500ECAF45AA84F6F1036ACC12F28B3E" Directory="dir3FA19C217B31F0B922A6F77788339742" Guid="{36443AB0-5738-45B8-B307-7398CEC87A7C}">
                 <File Id="fil1670B2A6D04A91485E5804552C66A8FD" KeyPath="yes" Source="$(var.SourceDir)\forms\.svn\entries" />
             </Component>
-            <Component Id="cmp0A710712151E837D7EE0423D5CC62493" Directory="dir085416553DE0E6A3865415829B6761F1" Guid="{CC9500E4-0D99-4905-887C-ECB4DF884F51}">
+            <Component Id="cmp0A710712151E837D7EE0423D5CC62493" Directory="dir085416553DE0E6A3865415829B6761F1" Guid="{4691CC05-86CA-448E-A47E-82BF1A98E979}">
                 <File Id="filD0087A094DC96B5BCB9BA78BDD85616D" KeyPath="yes" Source="$(var.SourceDir)\forms\.svn\prop-base\grep.exe.svn-base" />
             </Component>
-            <Component Id="cmp35987AA63D65FAA9CA6CD501B9431ED4" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{F529DCEB-0533-4B69-8E3C-82EE291CFF34}">
+            <Component Id="cmp35987AA63D65FAA9CA6CD501B9431ED4" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{5D2C5B74-6E92-44B8-8E64-0AD2160E537B}">
                 <File Id="fil65846DCF2FDED5AD15FDC910E097426A" KeyPath="yes" Source="$(var.SourceDir)\forms\.svn\text-base\grep.cs.svn-base" />
             </Component>
-            <Component Id="cmp1DB1E119933F53488AE0731B2AD7F4B7" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{4BDB05A5-1C56-4C0C-ACDA-ED11B9EC4037}">
+            <Component Id="cmp1DB1E119933F53488AE0731B2AD7F4B7" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{A5977C92-B846-44B5-BD0A-D8913C6D94B8}">
                 <File Id="fil092E84D594966B7FF5DE5E233F2555AF" KeyPath="yes" Source="$(var.SourceDir)\forms\.svn\text-base\grep.exe.svn-base" />
             </Component>
-            <Component Id="cmp51106A41B46BA1EF7E3986ED5183B2A4" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{4A7F7764-8F46-45E3-B1CC-CCDBDEA81F31}">
+            <Component Id="cmp51106A41B46BA1EF7E3986ED5183B2A4" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{23108520-BE98-4CA0-9436-AB5C251544D3}">
                 <File Id="filA5CE96A8B02E48D66982C2BE584D7F75" KeyPath="yes" Source="$(var.SourceDir)\forms\.svn\text-base\grep.html.svn-base" />
             </Component>
-            <Component Id="cmp55BC6E08EA547C8080A37C5366A550B5" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{A31ECFA2-5BED-4C3A-AE34-8BDD901C2A7B}">
+            <Component Id="cmp55BC6E08EA547C8080A37C5366A550B5" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{0B1A6FF8-78E8-4201-8D7C-AF14EDA74DAC}">
                 <File Id="fil5DC562BC54B8D6DBC0835AFFE05120EE" KeyPath="yes" Source="$(var.SourceDir)\forms\.svn\text-base\object.html.svn-base" />
             </Component>
-            <Component Id="cmp515B5364A3EFE2B4B570B890B223EF4E" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{CA801FB8-33F3-4EE3-A860-32FDE8576807}">
+            <Component Id="cmp515B5364A3EFE2B4B570B890B223EF4E" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{8FD79CDB-4523-42AD-9192-1A2FCFE2D9AC}">
                 <File Id="fil8738C7224153A98A063F351C014601DA" KeyPath="yes" Source="$(var.SourceDir)\forms\.svn\text-base\perl.html.svn-base" />
             </Component>
-            <Component Id="cmp59BD189459F5FFE1390EFDF5F6E428B2" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{86D62E4D-6261-4AC6-86E9-F819223BECAA}">
+            <Component Id="cmp59BD189459F5FFE1390EFDF5F6E428B2" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{92D900DD-6131-43C2-82A8-0144F9EA59D0}">
                 <File Id="filFD90614E278895B74181B367D3D13E24" KeyPath="yes" Source="$(var.SourceDir)\forms\.svn\text-base\prefs.html.svn-base" />
             </Component>
-            <Component Id="cmp876217599FF8DC3AD9F8510BC997AAB3" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{3648CCCD-10CC-4436-B363-9E0364EDF09C}">
+            <Component Id="cmp876217599FF8DC3AD9F8510BC997AAB3" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{73FAEFAF-FD93-412C-8E40-D0744C6815B3}">
                 <File Id="filA3CC1EF0E031E610D50A85131E28B6A1" KeyPath="yes" Source="$(var.SourceDir)\forms\.svn\text-base\regexp.html.svn-base" />
             </Component>
-            <Component Id="cmp30D7D82C15094A240BC885DA2AFBB1D1" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{9DB02C80-05BC-4670-A400-A5777ED44DF4}">
+            <Component Id="cmp30D7D82C15094A240BC885DA2AFBB1D1" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{2132830C-DAB2-4191-9AF7-0A824CCDAE82}">
                 <File Id="fil5ADFCAFCE6375370418A2C6C8F714EE6" KeyPath="yes" Source="$(var.SourceDir)\forms\.svn\text-base\search.html.svn-base" />
             </Component>
-            <Component Id="cmp2067DAE34C48225CF77DC0278515E80C" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{C04DDE1D-9B65-405F-BF2D-D8669C7990F3}">
+            <Component Id="cmp2067DAE34C48225CF77DC0278515E80C" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{70201D8F-ED8F-4AD1-A121-9503520CDD4A}">
                 <File Id="filA71D58C1876187DAE4EAF15C7A68645A" KeyPath="yes" Source="$(var.SourceDir)\forms\.svn\text-base\test.cs.svn-base" />
             </Component>
-            <Component Id="cmpD7C4A3C95E5622F15E340BADB2082375" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{44C41BFC-F1CC-446A-B7BE-87CD6F1506E9}">
+            <Component Id="cmpD7C4A3C95E5622F15E340BADB2082375" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{B8D5BBBD-C936-450B-B780-A85F8070FCA2}">
                 <File Id="filD445B88922CB68B8A2D11CC8E42E8681" KeyPath="yes" Source="$(var.SourceDir)\forms\.svn\text-base\tidy.html.svn-base" />
             </Component>
-            <Component Id="cmp62760411E355A7568C66F523CF20092D" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{F478E3E3-0D34-40F7-B704-673E26638169}">
+            <Component Id="cmp62760411E355A7568C66F523CF20092D" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{1951E2CF-56A5-4995-BCC2-353EA1D87BB2}">
                 <File Id="fil2DA8977803721CAAE2FB1C8C506E3E00" KeyPath="yes" Source="$(var.SourceDir)\forms\.svn\text-base\typelib.html.svn-base" />
             </Component>
-            <Component Id="cmp690A9307CF113103E9C9A81BB7E3E370" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{A123E23B-94AF-49D8-ABF9-BE9E8C4C0E89}">
+            <Component Id="cmp690A9307CF113103E9C9A81BB7E3E370" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{CAD4A48C-292C-4B11-83DE-70FDAC7B313C}">
                 <File Id="fil42A781DB78A07A237B3BDF28BA65AFD8" KeyPath="yes" Source="$(var.SourceDir)\forms\.svn\text-base\w3c.html.svn-base" />
             </Component>
-            <Component Id="cmp055BD28012B999B10B8BA2C39510B529" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{00C91DB6-F985-4110-B7FA-2460751529D8}">
+            <Component Id="cmp055BD28012B999B10B8BA2C39510B529" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{80ED7E8C-D679-4DB7-98A3-C66184473FB9}">
                 <File Id="filDCFD178AFE47490F3475AA435BE07D0C" KeyPath="yes" Source="$(var.SourceDir)\forms\.svn\text-base\wsdl.html.svn-base" />
             </Component>
-            <Component Id="cmp8EFCE85536901961B5FC850527338937" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{A01AFC77-7D78-49DC-B6DD-F792C0E9F637}">
+            <Component Id="cmp8EFCE85536901961B5FC850527338937" Directory="dir17D171FA4ECCF5B2C02B3714A34488F2" Guid="{4C15A6DF-D943-459B-AE95-0452F5BF2F8D}">
                 <File Id="fil0D0778C52F889CAB688637033C9EDA55" KeyPath="yes" Source="$(var.SourceDir)\forms\.svn\text-base\xslt.html.svn-base" />
             </Component>
-            <Component Id="cmp9B6E10B5EF10B574A052C7A258569DFF" Directory="dirAA7C53CBD25648A811EE40DE9A0AE473" Guid="{DBCF163C-073A-461D-BBB4-E684ED137F0A}">
+            <Component Id="cmp9B6E10B5EF10B574A052C7A258569DFF" Directory="dirAA7C53CBD25648A811EE40DE9A0AE473" Guid="{529919EE-022B-40A3-8B3B-B4050A62E2B2}">
                 <File Id="filDC83E612F64C86F59C924A484180B467" KeyPath="yes" Source="$(var.SourceDir)\xsl\doc.xsl" />
             </Component>
-            <Component Id="cmp4A6255E7F8D2A9E93417BC3DD3D52B14" Directory="dir0F4216D0B9407547E5A2767AEAF3848F" Guid="{FA14D5B5-1B44-4376-B61F-E40C2DCCE99D}">
+            <Component Id="cmp4A6255E7F8D2A9E93417BC3DD3D52B14" Directory="dir0F4216D0B9407547E5A2767AEAF3848F" Guid="{C3F31994-A945-4862-B461-8731160E00B1}">
                 <File Id="fil5545F879E323CFBFB4540C65BC8EC069" KeyPath="yes" Source="$(var.SourceDir)\xsl\.svn\entries" />
             </Component>
-            <Component Id="cmpC958C2E893AFE8F2E795BF46D70C7E69" Directory="dirE4659238739D7B693F434870F83CBB70" Guid="{FB4822D9-3DCE-42E5-836A-964044240631}">
+            <Component Id="cmpC958C2E893AFE8F2E795BF46D70C7E69" Directory="dirE4659238739D7B693F434870F83CBB70" Guid="{3A9D2BA3-B79C-4BAE-A187-A97DDDEE0214}">
                 <File Id="fil65CE840F2FDA6E63CE08D3096C2737F8" KeyPath="yes" Source="$(var.SourceDir)\xsl\.svn\text-base\doc.xsl.svn-base" />
             </Component>
-            <Component Id="cmp0375F0AEF53E6EA00888CA925C213741" Directory="dir64A4DE330EDF55335AE1CD1E71BA721B" Guid="{7F2F6E12-09B9-4CF7-898F-A80E7FE3BFDD}">
+            <Component Id="cmp0375F0AEF53E6EA00888CA925C213741" Directory="dir64A4DE330EDF55335AE1CD1E71BA721B" Guid="{3A2F00AE-F217-4375-860A-A85AD7CB6F6D}">
                 <File Id="fil46464C8AA507F3FBA51D250CC3CE0C08" KeyPath="yes" Source="$(var.SourceDir)\css\dialog.css" />
             </Component>
-            <Component Id="cmp7139BA8FFC2BFC75DEB54F0E31AE227E" Directory="dir64A4DE330EDF55335AE1CD1E71BA721B" Guid="{8FB3BC15-6729-416F-A02F-E460A183097A}">
+            <Component Id="cmp7139BA8FFC2BFC75DEB54F0E31AE227E" Directory="dir64A4DE330EDF55335AE1CD1E71BA721B" Guid="{0675B0BC-5C37-4AAC-B733-09F8704A3524}">
                 <File Id="filCBD23BCEB3EBF49F92A32FA1217CD694" KeyPath="yes" Source="$(var.SourceDir)\css\doc.css" />
             </Component>
-            <Component Id="cmp35A8AF6DE52A130A3F626F8DFBF82E7E" Directory="dir9C2B0ACFC0EBC0C892CAFE52BF1A93FE" Guid="{57BF0FEC-3268-4146-8107-CF7BC839A317}">
+            <Component Id="cmp35A8AF6DE52A130A3F626F8DFBF82E7E" Directory="dir9C2B0ACFC0EBC0C892CAFE52BF1A93FE" Guid="{D890CCB3-506D-4D80-9327-3FCB24694C62}">
                 <File Id="filA46C6B47882B074ECAD97E3BCF7F2A40" KeyPath="yes" Source="$(var.SourceDir)\css\.svn\entries" />
             </Component>
-            <Component Id="cmp6FFB8555267106438B54F84D8C785154" Directory="dir17F0FE60830995C0F20CFE2BB5EA51EE" Guid="{9218D96C-5084-4FF7-AAE1-C26E1F058AC2}">
+            <Component Id="cmp6FFB8555267106438B54F84D8C785154" Directory="dir17F0FE60830995C0F20CFE2BB5EA51EE" Guid="{EE03850A-B660-4F10-9844-AE3310329532}">
                 <File Id="filD6718BD26F2C5D1DB5B9E65922DF6F8A" KeyPath="yes" Source="$(var.SourceDir)\css\.svn\text-base\dialog.css.svn-base" />
             </Component>
-            <Component Id="cmp8C4C4D2793CD99EB4F8A8090EF78C6FF" Directory="dir17F0FE60830995C0F20CFE2BB5EA51EE" Guid="{98724518-69BA-4F2C-A9E2-7E54C03E8733}">
+            <Component Id="cmp8C4C4D2793CD99EB4F8A8090EF78C6FF" Directory="dir17F0FE60830995C0F20CFE2BB5EA51EE" Guid="{F14EBC0B-2CBA-4B6D-94F5-3DA47587771C}">
                 <File Id="fil986CA0A9C7CC52FC6C3F078272096164" KeyPath="yes" Source="$(var.SourceDir)\css\.svn\text-base\doc.css.svn-base" />
             </Component>
-            <Component Id="cmp06243064ECC76F231B0F95168838CA21" Directory="dir4C7B1855C05D7EA68134A725E6828968" Guid="{6875350F-30B4-411C-BE50-9B64EE8650DF}">
+            <Component Id="cmp06243064ECC76F231B0F95168838CA21" Directory="dir4C7B1855C05D7EA68134A725E6828968" Guid="{0D44E1DE-A8FF-406A-B487-EE1D2D701AB0}">
                 <File Id="filA38E45376EF930ADA7BE16E1876D4951" KeyPath="yes" Source="$(var.SourceDir)\img\moe.jpg" />
             </Component>
-            <Component Id="cmpFC07E3FA91B4AF8596B589FC6FC95930" Directory="dir4C7B1855C05D7EA68134A725E6828968" Guid="{66610A29-1EFE-4AD5-847A-E38874017787}">
+            <Component Id="cmpFC07E3FA91B4AF8596B589FC6FC95930" Directory="dir4C7B1855C05D7EA68134A725E6828968" Guid="{8D9C3D58-D0D8-46CD-A168-4F9F572DF0BA}">
                 <File Id="filD83658C7AF9984A4A412FBF61948722D" KeyPath="yes" Source="$(var.SourceDir)\img\moeinstall.jpg" />
             </Component>
-            <Component Id="cmp7A6C4E5177D558B4AEC3AC1BD7EF035E" Directory="dir4C7B1855C05D7EA68134A725E6828968" Guid="{C1E487E3-680C-4A40-823A-1FFA0E1B68DE}">
+            <Component Id="cmp7A6C4E5177D558B4AEC3AC1BD7EF035E" Directory="dir4C7B1855C05D7EA68134A725E6828968" Guid="{40930E0A-3408-47F3-B6D8-EAFFB9908AF1}">
                 <File Id="filEA3B6E25B3FFEF8ADB94CC7990EC97AD" KeyPath="yes" Source="$(var.SourceDir)\img\xmoe.jpg" />
             </Component>
-            <Component Id="cmp109DD27B734E9F5B236C3FA129610401" Directory="dir4C7B1855C05D7EA68134A725E6828968" Guid="{CE8A73FC-05FD-4687-B95C-6A350EAAD1BD}">
+            <Component Id="cmp109DD27B734E9F5B236C3FA129610401" Directory="dir4C7B1855C05D7EA68134A725E6828968" Guid="{98464217-2D66-4E4F-8666-1834166314D9}">
                 <File Id="fil9A36C91C96E46F120861791D79E119AF" KeyPath="yes" Source="$(var.SourceDir)\img\bar.gif" />
             </Component>
-            <Component Id="cmp1EA943ACAC196BD7AF27640782F7C41E" Directory="dir4C7B1855C05D7EA68134A725E6828968" Guid="{56242FF4-9435-40BA-A825-0C7EE0BB7778}">
+            <Component Id="cmp1EA943ACAC196BD7AF27640782F7C41E" Directory="dir4C7B1855C05D7EA68134A725E6828968" Guid="{51A2140B-EDB1-4E5D-A22E-57925EECE32D}">
                 <File Id="fil7F9CB4162D0732D94CCC01AF1602D14E" KeyPath="yes" Source="$(var.SourceDir)\img\wait.gif" />
             </Component>
-            <Component Id="cmp03BECE5554761CAC0A540FBC1E4446DD" Directory="dir4C7B1855C05D7EA68134A725E6828968" Guid="{B1648389-1373-4B0F-BCF3-C87E6E619B46}">
+            <Component Id="cmp03BECE5554761CAC0A540FBC1E4446DD" Directory="dir4C7B1855C05D7EA68134A725E6828968" Guid="{56886500-4E95-4601-B56C-FD36E6FEB4CD}">
                 <File Id="filE080C04E056336F91E95309B3FDDC004" KeyPath="yes" Source="$(var.SourceDir)\img\alert.gif" />
             </Component>
-            <Component Id="cmpF85B10BE658F15BF1637C2EAB119A76B" Directory="dir108DB9791E5B9E28E7A87BB0811744A8" Guid="{D6DB1623-4052-463C-89B4-B850B43131E2}">
+            <Component Id="cmpF85B10BE658F15BF1637C2EAB119A76B" Directory="dir108DB9791E5B9E28E7A87BB0811744A8" Guid="{E823EF70-94A2-4639-AAC9-3797D9D3EB35}">
                 <File Id="fil6F7235E2EBBB638696FB9CECB5026822" KeyPath="yes" Source="$(var.SourceDir)\img\.svn\entries" />
             </Component>
-            <Component Id="cmp42C6D7977F8CA2AB7AF1CE73ED3F52D5" Directory="dir888180D4631C4F8D8D618659CEDD30B2" Guid="{59A0BFA1-6874-47D6-9C9C-BB4A2D74567F}">
+            <Component Id="cmp42C6D7977F8CA2AB7AF1CE73ED3F52D5" Directory="dir888180D4631C4F8D8D618659CEDD30B2" Guid="{95C9EAA3-F578-4562-A284-0AC95739EE21}">
                 <File Id="fil71F43260D704C8E52971AC15E532444F" KeyPath="yes" Source="$(var.SourceDir)\img\.svn\prop-base\alert.gif.svn-base" />
             </Component>
-            <Component Id="cmp22CDD84403B10F87A3DAA3E344726F43" Directory="dir888180D4631C4F8D8D618659CEDD30B2" Guid="{5317801E-A48F-40A3-8F08-003B5E79D58B}">
+            <Component Id="cmp22CDD84403B10F87A3DAA3E344726F43" Directory="dir888180D4631C4F8D8D618659CEDD30B2" Guid="{45B682D8-3FAE-41AA-9267-1B22C502C160}">
                 <File Id="fil5718EC81E00E78707D9369975951425F" KeyPath="yes" Source="$(var.SourceDir)\img\.svn\prop-base\bar.gif.svn-base" />
             </Component>
-            <Component Id="cmpC54C9E2925972822D956D684F2283C88" Directory="dir888180D4631C4F8D8D618659CEDD30B2" Guid="{25965764-228D-48DE-B19E-2D72A6C10397}">
+            <Component Id="cmpC54C9E2925972822D956D684F2283C88" Directory="dir888180D4631C4F8D8D618659CEDD30B2" Guid="{7B0B25C0-438D-4103-AD61-35B47A7D3E15}">
                 <File Id="fil33CA174E5276A8E181BB7AB465E43228" KeyPath="yes" Source="$(var.SourceDir)\img\.svn\prop-base\moe.jpg.svn-base" />
             </Component>
-            <Component Id="cmp14ED521847F57E93642B9E0DEC1BBE96" Directory="dir888180D4631C4F8D8D618659CEDD30B2" Guid="{BC0A44E8-31A1-43FE-9B24-953408360A00}">
+            <Component Id="cmp14ED521847F57E93642B9E0DEC1BBE96" Directory="dir888180D4631C4F8D8D618659CEDD30B2" Guid="{0F8173E4-D2C0-4FBB-9273-EA5A0C73C3B3}">
                 <File Id="fil8322BCA328A81F36D2EB120EB01036FA" KeyPath="yes" Source="$(var.SourceDir)\img\.svn\prop-base\moeinstall.jpg.svn-base" />
             </Component>
-            <Component Id="cmp297C270FEC6675D0C7F60D81D299B1A8" Directory="dir888180D4631C4F8D8D618659CEDD30B2" Guid="{E78AE345-A81A-4EB2-AC23-6802661452EC}">
+            <Component Id="cmp297C270FEC6675D0C7F60D81D299B1A8" Directory="dir888180D4631C4F8D8D618659CEDD30B2" Guid="{675BD145-C0B2-4B23-B228-E593AC882763}">
                 <File Id="filB45AD8A9E126D8653167E516C8A63650" KeyPath="yes" Source="$(var.SourceDir)\img\.svn\prop-base\wait.gif.svn-base" />
             </Component>
-            <Component Id="cmpEE72B93C0C6BAF64C58E15B940727598" Directory="dir888180D4631C4F8D8D618659CEDD30B2" Guid="{EB8751D3-C9B9-4AE9-A531-7F87A1B1E8AB}">
+            <Component Id="cmpEE72B93C0C6BAF64C58E15B940727598" Directory="dir888180D4631C4F8D8D618659CEDD30B2" Guid="{674A2D8D-E4BC-47F0-BD31-2BE040598172}">
                 <File Id="filA7E8F499E9F8550442CD11A016862F4F" KeyPath="yes" Source="$(var.SourceDir)\img\.svn\prop-base\xmoe.jpg.svn-base" />
             </Component>
-            <Component Id="cmpD0166F76E5431C91C7EB35330E28D289" Directory="dirDDE9016AD6670B9F33120BE9AA1F950D" Guid="{D3141D98-FEAB-4DCE-8491-4798A2797029}">
+            <Component Id="cmpD0166F76E5431C91C7EB35330E28D289" Directory="dirDDE9016AD6670B9F33120BE9AA1F950D" Guid="{3F030D89-0217-4DE4-A9C1-63EF6148FBC5}">
                 <File Id="fil279902F14DC825755087C2CE6FE7BC82" KeyPath="yes" Source="$(var.SourceDir)\img\.svn\text-base\alert.gif.svn-base" />
             </Component>
-            <Component Id="cmp7260E03EB3C6BB2BE8E17AB2DFEF5B99" Directory="dirDDE9016AD6670B9F33120BE9AA1F950D" Guid="{A016CDC6-3F04-496B-903B-59178681EAB2}">
+            <Component Id="cmp7260E03EB3C6BB2BE8E17AB2DFEF5B99" Directory="dirDDE9016AD6670B9F33120BE9AA1F950D" Guid="{0992E7C9-5316-46F0-863E-16D36D44626F}">
                 <File Id="fil15FC6573D77F9D56227AC867F3EBD13C" KeyPath="yes" Source="$(var.SourceDir)\img\.svn\text-base\bar.gif.svn-base" />
             </Component>
-            <Component Id="cmp7FDEA13B1BC39A999E15A744E9E5ACDA" Directory="dirDDE9016AD6670B9F33120BE9AA1F950D" Guid="{25E27DF1-C5E7-445F-B293-2B8446A20630}">
+            <Component Id="cmp7FDEA13B1BC39A999E15A744E9E5ACDA" Directory="dirDDE9016AD6670B9F33120BE9AA1F950D" Guid="{9573E681-AF8D-47D1-BEB9-8958AB2E6A98}">
                 <File Id="fil65C5A9345BD03725B17B786BBFD113AA" KeyPath="yes" Source="$(var.SourceDir)\img\.svn\text-base\moe.jpg.svn-base" />
             </Component>
-            <Component Id="cmp8725A3D9AEDB629DA5C351A256FF9333" Directory="dirDDE9016AD6670B9F33120BE9AA1F950D" Guid="{F6ABEE4A-C6E2-426B-8AFA-21BFB17DFB87}">
+            <Component Id="cmp8725A3D9AEDB629DA5C351A256FF9333" Directory="dirDDE9016AD6670B9F33120BE9AA1F950D" Guid="{9D71619B-B95F-4F06-89DE-35F93A3C568E}">
                 <File Id="filDFC19A2402B09453D44452A4F77164D8" KeyPath="yes" Source="$(var.SourceDir)\img\.svn\text-base\moeinstall.jpg.svn-base" />
             </Component>
-            <Component Id="cmpB05829CC54616C65E7772C3C7BF5BECE" Directory="dirDDE9016AD6670B9F33120BE9AA1F950D" Guid="{EF1CCE74-9EBA-4203-AF69-F8087D974A19}">
+            <Component Id="cmpB05829CC54616C65E7772C3C7BF5BECE" Directory="dirDDE9016AD6670B9F33120BE9AA1F950D" Guid="{6426CC61-F12D-461F-9DAD-8AA4BFCD3713}">
                 <File Id="filA9BF1CC25380EE9CB4E79025FDB7DAAB" KeyPath="yes" Source="$(var.SourceDir)\img\.svn\text-base\wait.gif.svn-base" />
             </Component>
-            <Component Id="cmp6FA301430742AA4192C76FFAC308D6EE" Directory="dirDDE9016AD6670B9F33120BE9AA1F950D" Guid="{1F63AF3F-E46B-4F9D-ACE2-76667F5EE5FA}">
+            <Component Id="cmp6FA301430742AA4192C76FFAC308D6EE" Directory="dirDDE9016AD6670B9F33120BE9AA1F950D" Guid="{E357559B-AEA5-42D8-86BD-49CF984F18E8}">
                 <File Id="filA7E62430A0EBBEAC9859761B53210769" KeyPath="yes" Source="$(var.SourceDir)\img\.svn\text-base\xmoe.jpg.svn-base" />
             </Component>
-            <Component Id="cmp49AA11E51B4F9CB17AE3099A64D3D7E5" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{CE3BEDE9-21EF-4A35-A113-433C488D9059}">
+            <Component Id="cmp49AA11E51B4F9CB17AE3099A64D3D7E5" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{D3D9F3D7-4230-43EC-986F-EEABD5E0BFB3}">
                 <File Id="filCFD5F9A28852933805FAEED76607688B" KeyPath="yes" Source="$(var.SourceDir)\js\search.js" />
             </Component>
-            <Component Id="cmp175CF5F93697F1F65A2DD947D269978B" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{291164E6-4BCB-4236-BF73-02D5BFC733B3}">
+            <Component Id="cmp175CF5F93697F1F65A2DD947D269978B" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{1DDF0BB6-7241-444F-9776-FC0A92A2E6A4}">
                 <File Id="filF355886C47DE6C2437D46EC8F89A2E9E" KeyPath="yes" Source="$(var.SourceDir)\js\class.js" />
             </Component>
-            <Component Id="cmp34E184BCA6ABA87454FC6CF2342F9F49" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{9B8612FB-1B59-4D2B-8730-BAE30930933D}">
+            <Component Id="cmp34E184BCA6ABA87454FC6CF2342F9F49" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{CFAFE09F-10DC-4CCA-AA34-68C923A39858}">
                 <File Id="fil2FAF0E1F18C9E62EF328E09A402C9802" KeyPath="yes" Source="$(var.SourceDir)\js\w.js" />
             </Component>
-            <Component Id="cmp0DF7D016731A63FCB500FD5F4B58528B" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{0BCF40F5-702C-48DE-ABF2-2EF48E73B58D}">
+            <Component Id="cmp0DF7D016731A63FCB500FD5F4B58528B" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{B8AD8361-46BF-41F5-8C5A-963CEBA36E4B}">
                 <File Id="fil17EB4D563E8B1E057FD095F6139FFEE7" KeyPath="yes" Source="$(var.SourceDir)\js\javascript.js" />
             </Component>
-            <Component Id="cmpA9721DEBA80D4896714B7DCB73EF1FCB" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{59919C75-38E4-46CE-B1C7-01CD5512B465}">
+            <Component Id="cmpA9721DEBA80D4896714B7DCB73EF1FCB" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{BE959D95-9AA7-43DC-A6BF-19CBD38C79E4}">
                 <File Id="fil6B020973146069D5CE95DE331F162E92" KeyPath="yes" Source="$(var.SourceDir)\js\object.js" />
             </Component>
-            <Component Id="cmpE3EF2E3DCE5A5DA29E01F1D58D93DD0D" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{1E8C1264-A897-4674-A8F3-F99D04CB29C0}">
+            <Component Id="cmpE3EF2E3DCE5A5DA29E01F1D58D93DD0D" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{D67C25AF-6C6D-4718-91A4-E2D1ABF401E5}">
                 <File Id="fil659CBCF937447312EB45A41E043EB55C" KeyPath="yes" Source="$(var.SourceDir)\js\x.js" />
             </Component>
-            <Component Id="cmp31159FA81682A7B8698D21C578670982" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{D82808D8-E375-4193-BE68-2FD4CFB63A76}">
+            <Component Id="cmp31159FA81682A7B8698D21C578670982" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{9BF6563F-4904-447D-83A9-2451A30494F6}">
                 <File Id="filFFD5DA01F6CA829BFB04DD5B1CB8564D" KeyPath="yes" Source="$(var.SourceDir)\js\tidy.js" />
             </Component>
-            <Component Id="cmpBC4FBB656699BB2FCE424E46DDC8465A" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{F5323C29-7998-489A-9BA6-ABCCF2C60EEE}">
+            <Component Id="cmpBC4FBB656699BB2FCE424E46DDC8465A" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{E873C911-8BAC-418E-A263-3C985DAD9127}">
                 <File Id="fil7C6054A09DF518FD93F3ABA646312580" KeyPath="yes" Source="$(var.SourceDir)\js\drag.js" />
             </Component>
-            <Component Id="cmp40FCD2D7B5A169054239FAE966EF6B1A" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{3F7A20B6-85BA-411E-A5C0-01935CBBD2C8}">
+            <Component Id="cmp40FCD2D7B5A169054239FAE966EF6B1A" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{BB70F54C-C791-413E-96DC-A779DA8622E3}">
                 <File Id="fil3DCFF78C6BF4BAB4A1D1546C373CE63C" KeyPath="yes" Source="$(var.SourceDir)\js\tl.js" />
             </Component>
-            <Component Id="cmp1656ED60B446CA0E4A061555B82E3386" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{FA616958-C927-4C5B-A95E-1BB25196365C}">
+            <Component Id="cmp1656ED60B446CA0E4A061555B82E3386" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{6A9BAEE7-B396-4A98-91A1-25FAAF3E08EE}">
                 <File Id="fil58FF529A5079E83159B91F5DE7866CD2" KeyPath="yes" Source="$(var.SourceDir)\js\dom.js" />
             </Component>
-            <Component Id="cmp953001A539132468189906FF0F2167EA" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{F8E7241D-8D52-4A94-AAB5-8CF20A4A6930}">
+            <Component Id="cmp953001A539132468189906FF0F2167EA" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{471EBA76-5095-46E5-BC24-1EF15FB3C506}">
                 <File Id="fil218CA7A70EA5C74E52DEC24CAA815765" KeyPath="yes" Source="$(var.SourceDir)\js\http.js" />
             </Component>
-            <Component Id="cmp7923DA037EBE48DF03C594EB99A17A18" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{531766BA-D74B-4AE5-9838-DB0B94310F0F}">
+            <Component Id="cmp7923DA037EBE48DF03C594EB99A17A18" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{687C0451-67DD-456C-9AD9-6A1C174CAE74}">
                 <File Id="fil43A9AB7CA4871BE195BB39E97FD8B210" KeyPath="yes" Source="$(var.SourceDir)\js\prefs.js" />
             </Component>
-            <Component Id="cmp8D921F2AE1F3B7E8EB50FABA272F9E82" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{548E3058-1E56-4A87-8097-C1E1A0768B12}">
+            <Component Id="cmp8D921F2AE1F3B7E8EB50FABA272F9E82" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{CC63B1C4-35B8-4EE3-B419-DE8452ABA7CA}">
                 <File Id="filA43019EF3C2A20A9FB0F876C5D52EDF4" KeyPath="yes" Source="$(var.SourceDir)\js\event.js" />
             </Component>
-            <Component Id="cmp494011B9094F36B902CAAD903E215E41" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{C9F19EF4-410F-4833-AE0E-7A6E25F6DCF0}">
+            <Component Id="cmp494011B9094F36B902CAAD903E215E41" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{28147969-39EC-40BD-AD67-D86E6426C7D2}">
                 <File Id="fil37B17691FDCC477DD3F09C6CF6272A3E" KeyPath="yes" Source="$(var.SourceDir)\js\htmlencode.js" />
             </Component>
-            <Component Id="cmp70823EEEABFE7FE4D6AC904075F13555" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{21D20C46-CE7F-4E1F-817F-0C243B01FD61}">
+            <Component Id="cmp70823EEEABFE7FE4D6AC904075F13555" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{E08B07CB-8371-4508-A25C-BF5BEEB4B9FE}">
                 <File Id="fil0C555FE112F3BABF35C84580365D8EC8" KeyPath="yes" Source="$(var.SourceDir)\js\g.js" />
             </Component>
-            <Component Id="cmp51567B24184F576F9041B1F55EE4ED96" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{8ECA4335-9955-4424-A061-35B1FD1FFD81}">
+            <Component Id="cmp51567B24184F576F9041B1F55EE4ED96" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{5F6667DD-A10C-4C63-9713-16BAF7B00928}">
                 <File Id="filE6A2B62C42A03FEC96485897E4C96F59" KeyPath="yes" Source="$(var.SourceDir)\js\help.js" />
             </Component>
-            <Component Id="cmpC3AF0ECB93872D0DFD79AF2026A648FF" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{25F79BD4-F581-4ECC-930D-9418BB66A0A8}">
+            <Component Id="cmpC3AF0ECB93872D0DFD79AF2026A648FF" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{E91ABA01-FFF8-429C-8AB6-4C2F7B122C0B}">
                 <File Id="fil818B26B0D2A76583BA41E4EF3495DF05" KeyPath="yes" Source="$(var.SourceDir)\js\validate.js" />
             </Component>
-            <Component Id="cmpAB3D3BCF3869F142879170C1C5C19429" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{079675E2-4EEB-4B02-A02D-13FA9E5E1626}">
+            <Component Id="cmpAB3D3BCF3869F142879170C1C5C19429" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{9C0A98F7-8BBB-44FF-91E1-B128184535B8}">
                 <File Id="fil826138EB27C1BA00968FBDB4F54EBC0E" KeyPath="yes" Source="$(var.SourceDir)\js\regexp.js" />
             </Component>
-            <Component Id="cmp81DCBB8DA56DA8430320B08B09A405D2" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{7FED9D9E-387A-4FC8-A64A-85512FFC9D59}">
+            <Component Id="cmp81DCBB8DA56DA8430320B08B09A405D2" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{22A0A873-4CAE-475F-8116-B71967990A2B}">
                 <File Id="fil0D51376660C5C473B222651A2D561F3E" KeyPath="yes" Source="$(var.SourceDir)\js\namespace.js" />
             </Component>
-            <Component Id="cmp25A4A660151DD44FD69DEC57DBF688A6" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{877A6110-0804-4FFF-8839-F99EFCC51875}">
+            <Component Id="cmp25A4A660151DD44FD69DEC57DBF688A6" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{4E8E4937-382B-4C58-85C4-50CEC374C698}">
                 <File Id="filBA76D28CC1A3D3A8FCA39F10DA0D1298" KeyPath="yes" Source="$(var.SourceDir)\js\w3c.js" />
             </Component>
-            <Component Id="cmp657991F68330803CD59E97362BD11F21" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{51232523-D366-4B2B-AB6E-224DA2AA9EA8}">
+            <Component Id="cmp657991F68330803CD59E97362BD11F21" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{7C234BB0-0226-40F1-8289-B6D2C4957E78}">
                 <File Id="fil88C48E1FC2CDFA6FBFD6FD4F24D2C0D4" KeyPath="yes" Source="$(var.SourceDir)\js\o.js" />
             </Component>
-            <Component Id="cmpB45FF5AA767AAD2E47A1F27E957B62A4" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{C56885A3-8C02-4BB5-BFD6-09461D94BFA8}">
+            <Component Id="cmpB45FF5AA767AAD2E47A1F27E957B62A4" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{586BB412-D33F-4CAE-B100-E96BD633AD78}">
                 <File Id="fil19189E0220270F301202A9DA1D4C2CBA" KeyPath="yes" Source="$(var.SourceDir)\js\dialog.js" />
             </Component>
-            <Component Id="cmp39481181C10221DD369429696BD9263E" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{8E3AD3ED-E9AA-439E-86DA-53B5C17B151C}">
+            <Component Id="cmp39481181C10221DD369429696BD9263E" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{192C406D-0B0F-4933-AF16-D48101228096}">
                 <File Id="filFEBE879664A9BB06E6F165EFC4EAD55E" KeyPath="yes" Source="$(var.SourceDir)\js\schema.js" />
             </Component>
-            <Component Id="cmpF97AD26CD5A2A70D858870D1AF001ED0" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{9F506731-BD8C-42E9-BCFF-F06070AB29A7}">
+            <Component Id="cmpF97AD26CD5A2A70D858870D1AF001ED0" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{2DBED03C-BCBC-498F-9F56-5C7F7235D3B9}">
                 <File Id="fil09134B27744060419FF761BBE1B68ADD" KeyPath="yes" Source="$(var.SourceDir)\js\r.js" />
             </Component>
-            <Component Id="cmpA8F48114FCAC8F5A6E6A1E606AFD26B0" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{D08E1CC2-C53F-476E-838C-1BCE2DC5BC1B}">
+            <Component Id="cmpA8F48114FCAC8F5A6E6A1E606AFD26B0" Directory="dir5F899A24C7D7B00CAB327A54DC3E165C" Guid="{071F59C7-1302-4278-ADBF-E2C679CE6C28}">
                 <File Id="filDF43C4D11EF65EE910348E0AD3F82BCC" KeyPath="yes" Source="$(var.SourceDir)\js\t.js" />
             </Component>
-            <Component Id="cmp72752EB2B4F20CC47C677BBCE6728555" Directory="dirC21E07D8DB0231CA433B121D42AAEBCB" Guid="{A155D48D-2CBA-4B67-9A22-0057AAD1FA9F}">
+            <Component Id="cmp72752EB2B4F20CC47C677BBCE6728555" Directory="dirC21E07D8DB0231CA433B121D42AAEBCB" Guid="{E6E66961-41F9-4E6A-BA72-49FB235A995F}">
                 <File Id="filA7FC13449E9A3066DAF48F72DA96C4CD" KeyPath="yes" Source="$(var.SourceDir)\js\xml\xpath.js" />
             </Component>
-            <Component Id="cmp2238BE9BFCF15D60B99CFF663C27F3EB" Directory="dirC21E07D8DB0231CA433B121D42AAEBCB" Guid="{6ACC4ECB-2BBD-4C09-9DF0-BB456C0D6899}">
+            <Component Id="cmp2238BE9BFCF15D60B99CFF663C27F3EB" Directory="dirC21E07D8DB0231CA433B121D42AAEBCB" Guid="{50D0BD1F-56F8-490C-BB8D-96B46AABC28B}">
                 <File Id="fil6B99EBB35048A5ECC8B2117F92A79EDB" KeyPath="yes" Source="$(var.SourceDir)\js\xml\xslt.js" />
             </Component>
-            <Component Id="cmp6553E2C90068D2A6535D28CEB6EFC2C2" Directory="dirC21E07D8DB0231CA433B121D42AAEBCB" Guid="{AE85C843-FB63-49B5-A6F3-77F925D70E40}">
+            <Component Id="cmp6553E2C90068D2A6535D28CEB6EFC2C2" Directory="dirC21E07D8DB0231CA433B121D42AAEBCB" Guid="{D648AFD0-85C2-473E-A992-EEFD91F582E8}">
                 <File Id="fil6A092E28C90208413D9D8FFD61175579" KeyPath="yes" Source="$(var.SourceDir)\js\xml\xml.js" />
             </Component>
-            <Component Id="cmp2F896CFA63DA446C067520199521DAF9" Directory="dir7E0C69E20101B59B76943403FE58D772" Guid="{488F3D32-91C8-435C-B26A-A98760F3AAA1}">
+            <Component Id="cmp2F896CFA63DA446C067520199521DAF9" Directory="dir7E0C69E20101B59B76943403FE58D772" Guid="{C080F62A-98F2-46F3-BEC2-BCB92E8A7B3B}">
                 <File Id="filE96585AF4F426B151F3D1C1A9850C06F" KeyPath="yes" Source="$(var.SourceDir)\js\xml\.svn\entries" />
             </Component>
-            <Component Id="cmpA8FCAC948CA511E2C0D6FF5B673109A8" Directory="dir0590A57333FA38E97DF0D8B3577BBA2C" Guid="{8C5DF10F-53D8-4D93-BBDC-E4D5D130376F}">
+            <Component Id="cmpA8FCAC948CA511E2C0D6FF5B673109A8" Directory="dir0590A57333FA38E97DF0D8B3577BBA2C" Guid="{E82D87F4-DF57-4C84-8533-3DC8D9F0B387}">
                 <File Id="fil4ECCA82133867E475CBD6539C929736E" KeyPath="yes" Source="$(var.SourceDir)\js\xml\.svn\text-base\xml.js.svn-base" />
             </Component>
-            <Component Id="cmpC20F0BB0B1FDB7AB358A03F61DBD25F7" Directory="dir0590A57333FA38E97DF0D8B3577BBA2C" Guid="{459CF3A3-2638-43A3-A267-D0C8D8606C8E}">
+            <Component Id="cmpC20F0BB0B1FDB7AB358A03F61DBD25F7" Directory="dir0590A57333FA38E97DF0D8B3577BBA2C" Guid="{1E8CCAD2-9EB6-48DA-8A1E-B0D2D77294C2}">
                 <File Id="fil99A99E5DE5E55FE050BBDE8FD0CCEFE0" KeyPath="yes" Source="$(var.SourceDir)\js\xml\.svn\text-base\xpath.js.svn-base" />
             </Component>
-            <Component Id="cmpB613E6889D3D922854D4B168C7FD9B10" Directory="dir0590A57333FA38E97DF0D8B3577BBA2C" Guid="{35AB03B7-38E1-4E16-8519-F2AA107561A0}">
+            <Component Id="cmpB613E6889D3D922854D4B168C7FD9B10" Directory="dir0590A57333FA38E97DF0D8B3577BBA2C" Guid="{FABB0D6C-3132-43F2-A8CA-A230162EC4C7}">
                 <File Id="filABCAEF171B8E55680246B40A330F17D4" KeyPath="yes" Source="$(var.SourceDir)\js\xml\.svn\text-base\xslt.js.svn-base" />
             </Component>
-            <Component Id="cmpBC084D27AD7DEEB3CB1469D7723D73CF" Directory="dir46246D67AE1954A8956FD0CD16C04D40" Guid="{15D4B995-4CC1-439E-867E-328557C79A17}">
+            <Component Id="cmpBC084D27AD7DEEB3CB1469D7723D73CF" Directory="dir46246D67AE1954A8956FD0CD16C04D40" Guid="{AB442D64-5AE8-457F-BF72-029609A81910}">
                 <File Id="filBCAD3EECCB1BA8C49D9E5DB0604EC975" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\entries" />
             </Component>
-            <Component Id="cmp754BE9544D1CD78CF471E7ED26187F74" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{96025664-4E9A-4E07-8AD8-2E70DB27A8C9}">
+            <Component Id="cmp754BE9544D1CD78CF471E7ED26187F74" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{A2039A6F-A053-4643-ACA0-9E3BF56A78BB}">
                 <File Id="fil4B433D318902696F306D3AE3C5B2FD8B" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\class.js.svn-base" />
             </Component>
-            <Component Id="cmpE20BFCABFB203D4B097007EA08034B09" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{35C49419-6187-40EE-AB1B-86F503336CF4}">
+            <Component Id="cmpE20BFCABFB203D4B097007EA08034B09" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{3C98EEEC-4BB4-470F-ABC4-CFD8B697089B}">
                 <File Id="filE03AE9BF2F59422BCFBF57D99473EDEF" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\dialog.js.svn-base" />
             </Component>
-            <Component Id="cmp8593F724DFA7501D76E3A69F29AB0BF5" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{73A9754A-54F4-42FE-8C50-F266F50B2E41}">
+            <Component Id="cmp8593F724DFA7501D76E3A69F29AB0BF5" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{BA2B1398-E1B0-4641-8531-F4A6E3012757}">
                 <File Id="fil91FD8508C97C0557F8860EEF6E69295C" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\dom.js.svn-base" />
             </Component>
-            <Component Id="cmp281ACF0B5CC71ABD55506159CA3F5A42" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{34379FF9-C0D7-48DD-9191-625F466FDCB2}">
+            <Component Id="cmp281ACF0B5CC71ABD55506159CA3F5A42" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{EFAF78C0-88A4-41F0-89B5-94CB048D6421}">
                 <File Id="fil4E655BB7CC224B7FBA96F75FB19FC719" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\drag.js.svn-base" />
             </Component>
-            <Component Id="cmpB9B74B1DA1BB47AA2F50DFFC8938D5A6" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{79151E8D-121C-4D69-9B79-EAB963E57D05}">
+            <Component Id="cmpB9B74B1DA1BB47AA2F50DFFC8938D5A6" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{70A33414-770B-4580-8EE8-A1D95E45B4B8}">
                 <File Id="filEE5354C71D269D6FE75E762C6C807B48" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\event.js.svn-base" />
             </Component>
-            <Component Id="cmp05ABA3BE3C1F78DB3DC1D0556D8344DF" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{6D884EAB-70F3-4E2F-9CCB-7F503653CF6A}">
+            <Component Id="cmp05ABA3BE3C1F78DB3DC1D0556D8344DF" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{5DF3579D-4DCD-43A1-B455-8BA3B56D1EF8}">
                 <File Id="fil5B8E6DAD952586AC7265A90EB2991D05" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\g.js.svn-base" />
             </Component>
-            <Component Id="cmpDA29937986593C1F9DDA3D28281BE55D" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{2C37DEF4-BDAF-4922-862D-D9D4CEB396C8}">
+            <Component Id="cmpDA29937986593C1F9DDA3D28281BE55D" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{564C5D5E-52BE-40E5-A8B9-BDFCD1947502}">
                 <File Id="fil1EC6EF4C7DEEBAE535122E84F470F5F3" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\help.js.svn-base" />
             </Component>
-            <Component Id="cmpAC8E3B42D4BEAD585FEFF58D740EB1CC" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{CAA99D64-23FA-4211-8A0B-444C476FBE61}">
+            <Component Id="cmpAC8E3B42D4BEAD585FEFF58D740EB1CC" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{420CC4A4-6358-4E00-9496-F4B3FF3BEB74}">
                 <File Id="fil863C23FB2E8C7277201C2A38E6B49C15" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\htmlencode.js.svn-base" />
             </Component>
-            <Component Id="cmp35B7DAF2142E8DA50E7E74C275B42094" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{691271A3-0AF7-49A0-A745-377AF36CED18}">
+            <Component Id="cmp35B7DAF2142E8DA50E7E74C275B42094" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{102D49DC-2CCC-47B8-BF36-1D384FB84C73}">
                 <File Id="fil19DF1360BE29BE675E27722773371B8A" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\http.js.svn-base" />
             </Component>
-            <Component Id="cmp0A05824599598EBBB8215D6B367A093F" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{70162E4D-0F8A-40B2-9B8C-FAEC5724C875}">
+            <Component Id="cmp0A05824599598EBBB8215D6B367A093F" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{38E99670-8D94-4678-88B2-5B560819911A}">
                 <File Id="fil9AD4F7A3812D4ABDF2024C374898B904" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\javascript.js.svn-base" />
             </Component>
-            <Component Id="cmp1208AD5B8B6A5F129E2126C9537853EA" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{6D894D08-D214-4E98-BE40-68E5723B6D35}">
+            <Component Id="cmp1208AD5B8B6A5F129E2126C9537853EA" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{B20B4ADE-0631-4A07-B4DA-F4730C59200E}">
                 <File Id="fil398CDABD064F5795510AC1C8D51EF79A" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\namespace.js.svn-base" />
             </Component>
-            <Component Id="cmp8C90B700F09FBE960F8C0EE8CB525095" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{38B0B2E3-1850-4911-B2DC-458B27127A44}">
+            <Component Id="cmp8C90B700F09FBE960F8C0EE8CB525095" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{EE1F9ABC-6A6F-43F3-B90B-5351EC5FC534}">
                 <File Id="filBF659B9FFC41595A74AAADA9568BF72B" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\o.js.svn-base" />
             </Component>
-            <Component Id="cmp6628727928284C327BBBFF74571C38AE" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{4D55D24B-4808-4D6B-8132-D3F096238D76}">
+            <Component Id="cmp6628727928284C327BBBFF74571C38AE" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{5180E9CF-04BE-4288-A28E-C873E23B25FF}">
                 <File Id="fil71511E956DE6674BBBA2CBB8A9BC623F" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\object.js.svn-base" />
             </Component>
-            <Component Id="cmp637751127373D4E024F5AE7118F3C22F" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{EB32FA29-67F8-472A-8D9A-BCFB12E6E890}">
+            <Component Id="cmp637751127373D4E024F5AE7118F3C22F" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{C544BFF2-A8C5-4162-ADCA-DE357B00C9B4}">
                 <File Id="filE7D118EC231EE5C30DF106BD00C6DB0F" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\prefs.js.svn-base" />
             </Component>
-            <Component Id="cmpBE23498D79E0F1935D91EAA86D1FFF92" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{58CE96DE-BA38-405F-8177-148FEC305133}">
+            <Component Id="cmpBE23498D79E0F1935D91EAA86D1FFF92" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{639DEC35-5CB9-486F-B93A-9C7910CE602A}">
                 <File Id="fil6CFDD751EC6F748BE57D092CB7A74A6B" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\r.js.svn-base" />
             </Component>
-            <Component Id="cmp25E4264B97C6208504821A49CFA92BE7" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{EA120881-838D-4A3D-AAB6-20EED9672C99}">
+            <Component Id="cmp25E4264B97C6208504821A49CFA92BE7" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{9258E3EF-DAB9-463A-9A52-62D4F25AB09B}">
                 <File Id="fil8A03F1713D1A8EB533D967B44527E582" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\regexp.js.svn-base" />
             </Component>
-            <Component Id="cmp20C72DB2C42B112577A977D84E2258DE" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{821AFFE2-7092-45DF-AB5C-98716AF254CB}">
+            <Component Id="cmp20C72DB2C42B112577A977D84E2258DE" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{585D10C1-0AAA-4080-8F7C-B741EE9C3DB1}">
                 <File Id="filEB92B957D73298E7C49ABAEAA7FD9D94" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\schema.js.svn-base" />
             </Component>
-            <Component Id="cmp19715068AB16E6CD6AB4C4DA65DAF789" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{3BDC306C-8A2A-4B5F-8AF6-5C1A26B5D1CD}">
+            <Component Id="cmp19715068AB16E6CD6AB4C4DA65DAF789" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{898BD690-CA78-4DA5-A671-BC94F3C6DE28}">
                 <File Id="fil97ADBF1C0964B15FCED531D2F52AE269" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\search.js.svn-base" />
             </Component>
-            <Component Id="cmp5B64B7AC572342A431BCFBCDC4095269" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{1F30B8BC-E5A1-4F1C-AFF7-6587FF1EA8C4}">
+            <Component Id="cmp5B64B7AC572342A431BCFBCDC4095269" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{8E14D4F5-6E0D-4013-BEAA-B87C0E88A2AB}">
                 <File Id="fil128B5F01D2E0E05EE0935D15E3EECFC7" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\t.js.svn-base" />
             </Component>
-            <Component Id="cmp19DF7C343F6014FEC292EF6ECCA9C855" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{9C5F8E2C-834D-4A95-84DA-628CBA8CC848}">
+            <Component Id="cmp19DF7C343F6014FEC292EF6ECCA9C855" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{34A32F8F-9A9C-49C9-8896-43900C4A1EF7}">
                 <File Id="filA92DF4AB4A3061F6E7F8E2F90B11DC3F" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\tidy.js.svn-base" />
             </Component>
-            <Component Id="cmp8E70531D9F22FA49FC17452A1A224D86" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{39E4AC51-8AEF-486F-9930-9EE7C341E60F}">
+            <Component Id="cmp8E70531D9F22FA49FC17452A1A224D86" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{74617BBA-476D-43BC-B464-1BE365306645}">
                 <File Id="fil32F3E1D51566FC4BF6D04FC2EF08F593" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\tl.js.svn-base" />
             </Component>
-            <Component Id="cmp2FE86AD504CDDBEC8CA483D45FFFAFBD" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{5156339B-6669-4CC9-A6D8-09BDB273D9F6}">
+            <Component Id="cmp2FE86AD504CDDBEC8CA483D45FFFAFBD" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{500503B8-8032-4F3F-804C-0D4D47F13CBE}">
                 <File Id="fil5D4479967CECE20049907F4797A0058D" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\validate.js.svn-base" />
             </Component>
-            <Component Id="cmpF2111392C40ACDA414E592226719539C" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{B1B28EA8-7E6F-497A-AF3F-BC3C6BDE77BD}">
+            <Component Id="cmpF2111392C40ACDA414E592226719539C" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{1FDBA240-CAF8-4F05-8B75-20BB0A35385D}">
                 <File Id="fil8C3B8B28CFDDC77C4BECD76EF16E8470" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\w.js.svn-base" />
             </Component>
-            <Component Id="cmp25516793E51E1E87148071DAB09B8ED7" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{2B1DF4F2-2FC8-414D-BE59-8A1CBB44C900}">
+            <Component Id="cmp25516793E51E1E87148071DAB09B8ED7" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{A65D2F46-80FF-4F14-B220-DCC7F5021282}">
                 <File Id="filB18E1AFBD7E4D058597DC6C5DDD59295" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\w3c.js.svn-base" />
             </Component>
-            <Component Id="cmp81A12B09149978700CD11A46DE1DAE6D" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{4AC8471F-6C58-40BD-A69C-46A603E94034}">
+            <Component Id="cmp81A12B09149978700CD11A46DE1DAE6D" Directory="dir47015632ECDCF1083A4F5E14E8626496" Guid="{A8B88079-E8CB-46AD-AD2D-7ACEBBF8E11C}">
                 <File Id="fil20E129441C776F969595DEBCE4162E6D" KeyPath="yes" Source="$(var.SourceDir)\js\.svn\text-base\x.js.svn-base" />
             </Component>
-            <Component Id="cmp9ED9EEED8C5C05306A3014F1E484352E" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{F31A3C78-DC04-4FF6-A721-87275CADAB0E}">
+            <Component Id="cmp9ED9EEED8C5C05306A3014F1E484352E" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{6EC3EC66-F5E4-46BC-8FDE-1D00E5CAC87A}">
                 <File Id="fil7C5B57B67D479DA73AF7BFF594A9AA49" KeyPath="yes" Source="$(var.SourceDir)\fx\F1.js" />
             </Component>
-            <Component Id="cmpFC9C1CF2A33EDA5A8FAC44955A2E9774" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{D187F230-1E54-42BC-A621-34C68E4E1EEB}">
+            <Component Id="cmpFC9C1CF2A33EDA5A8FAC44955A2E9774" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{85FAE842-80F3-481E-A763-C7EE37BECE5A}">
                 <File Id="fil5171FBF4E110E8E4F369DC4CDF2B0EFF" KeyPath="yes" Source="$(var.SourceDir)\fx\F10.js" />
             </Component>
-            <Component Id="cmpAF4CB1AAF09EC6A4E0A20008F52E426B" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{C35D88DC-80FA-494E-A437-AD8BB4CF4634}">
+            <Component Id="cmpAF4CB1AAF09EC6A4E0A20008F52E426B" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{A9F31B0D-A1DD-4C1A-941D-0DE5B51BCFDC}">
                 <File Id="fil0F7908FFCF817A107A5D33B784B5CF49" KeyPath="yes" Source="$(var.SourceDir)\fx\F11.js" />
             </Component>
-            <Component Id="cmpE50772827C1B28D30797D102BF88CAC7" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{114ABCDD-8F80-4698-986F-1628B467A535}">
+            <Component Id="cmpE50772827C1B28D30797D102BF88CAC7" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{3CD80986-0FF3-4505-8D4C-5FF08741338B}">
                 <File Id="filB020B0C7B9F8E283C96769050E374BB7" KeyPath="yes" Source="$(var.SourceDir)\fx\F2.js" />
             </Component>
-            <Component Id="cmp67253206A7EECA7E538800B77A51CD8F" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{B621AE17-D636-4272-8E5F-7CC46113F86C}">
+            <Component Id="cmp67253206A7EECA7E538800B77A51CD8F" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{425AB810-3F54-4256-A116-62BF3BF4CB8D}">
                 <File Id="filCACC6FDD3D754CFFE9B82D32A0DF06C7" KeyPath="yes" Source="$(var.SourceDir)\fx\F12.js" />
             </Component>
-            <Component Id="cmp5B2E18DDCC22A3281EC59D8A93D03772" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{833C5FE4-EFA5-4F43-B9FF-2A0462FFE457}">
+            <Component Id="cmp5B2E18DDCC22A3281EC59D8A93D03772" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{A3103E86-683F-4455-89BF-A66F9756F972}">
                 <File Id="fil21BFB14839C0EB6FF7CDE91F91B41061" KeyPath="yes" Source="$(var.SourceDir)\fx\F3.js" />
             </Component>
-            <Component Id="cmp9332E8E9B35F86F841B241C6D8B567EE" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{A021B983-8EEC-4EF1-88AC-228540ACBFB4}">
+            <Component Id="cmp9332E8E9B35F86F841B241C6D8B567EE" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{C9F460A6-1FEF-4E01-B9E4-C646DFBC90CF}">
                 <File Id="fil5A28BE191D9710D61D02E91906C3D830" KeyPath="yes" Source="$(var.SourceDir)\fx\F4.js" />
             </Component>
-            <Component Id="cmp861DE66F73D057F41170512540BB20C6" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{4BD95454-2722-4431-9F39-011588B2D17C}">
+            <Component Id="cmp861DE66F73D057F41170512540BB20C6" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{DFD2FAFB-D0E5-42D2-8188-E3FDAE666755}">
                 <File Id="filB472175604284A83BEF1AED126F10A4D" KeyPath="yes" Source="$(var.SourceDir)\fx\F5.js" />
             </Component>
-            <Component Id="cmp9B49BC74AD0403BC35FCED6AA8821F72" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{BD1972DD-70E2-413E-B27D-52BFBC660D40}">
+            <Component Id="cmp9B49BC74AD0403BC35FCED6AA8821F72" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{BC86B86B-C106-4A7A-BC51-7AC3081D89E8}">
                 <File Id="filE4435A0A90964215472AB0A7ED6579A9" KeyPath="yes" Source="$(var.SourceDir)\fx\F6.js" />
             </Component>
-            <Component Id="cmpF0C2D225D6DF231FD876ACD425DB0A5B" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{2044F96A-ADB7-4FE7-9E6B-C6BA2968C71B}">
+            <Component Id="cmpF0C2D225D6DF231FD876ACD425DB0A5B" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{CEFACC50-E2CB-46DB-9A9A-2FB26566514F}">
                 <File Id="fil05ACE151FBC38D558D05408D1F4ECEF4" KeyPath="yes" Source="$(var.SourceDir)\fx\F7.js" />
             </Component>
-            <Component Id="cmpF81CFC4601164930E0C2FAC018E55BED" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{E2217657-1533-40E2-8EF8-25D66FFEADE0}">
+            <Component Id="cmpF81CFC4601164930E0C2FAC018E55BED" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{50761BB7-7158-48C0-A2F8-16C21D97A36E}">
                 <File Id="filAD80B860074E930DD54D48FB905430E7" KeyPath="yes" Source="$(var.SourceDir)\fx\F8.js" />
             </Component>
-            <Component Id="cmp0AAD29DBC92519866BC83FDD43ACEBB0" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{EF280A76-C668-4030-872B-25BCEE7310FB}">
+            <Component Id="cmp0AAD29DBC92519866BC83FDD43ACEBB0" Directory="dirA9480DFC059001CF8F9C6958F3A39CDC" Guid="{11A3751F-4470-4685-979B-CFEDBE26DC09}">
                 <File Id="fil0FE754189B1BC0D2BF05A22EF09E99C6" KeyPath="yes" Source="$(var.SourceDir)\fx\F9.js" />
             </Component>
-            <Component Id="cmp81415BE57F07C1535A9D2A25DD882171" Directory="dir039F68622177EC9A2846ACE71BD01806" Guid="{8B01A904-4452-410F-80A6-9D80BE59F6A2}">
+            <Component Id="cmp81415BE57F07C1535A9D2A25DD882171" Directory="dir039F68622177EC9A2846ACE71BD01806" Guid="{A140EAE8-EB85-41E1-BAFF-80937DA09FA9}">
                 <File Id="filB58A8594FD47371B18CE8F997655A04C" KeyPath="yes" Source="$(var.SourceDir)\fx\.svn\entries" />
             </Component>
-            <Component Id="cmp47D1CD597A792D553FF6A2687E7EB571" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{AC147A2D-EA1E-4765-9F95-09B03AE7345C}">
+            <Component Id="cmp47D1CD597A792D553FF6A2687E7EB571" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{212233DA-893B-457A-BFB5-B97E8F58F116}">
                 <File Id="fil2B5A1C642DDE737BB279D19E81751FF4" KeyPath="yes" Source="$(var.SourceDir)\fx\.svn\text-base\F1.js.svn-base" />
             </Component>
-            <Component Id="cmpB6E2DEEB1BFBA26BA30CAA5CB417E6DE" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{9E79E00F-821D-4E12-B2FC-0515627174A5}">
+            <Component Id="cmpB6E2DEEB1BFBA26BA30CAA5CB417E6DE" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{00AA9F14-5078-4E12-B991-30A90DBFC3B2}">
                 <File Id="filB34F307A6739B674D718529D49FD83B0" KeyPath="yes" Source="$(var.SourceDir)\fx\.svn\text-base\F10.js.svn-base" />
             </Component>
-            <Component Id="cmpEB1959A4E5580BB54A6A23C3B328089A" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{BB09FD0F-113C-4E68-9907-0A022B834350}">
+            <Component Id="cmpEB1959A4E5580BB54A6A23C3B328089A" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{A158B99A-5977-4B78-8C81-374B402F74E6}">
                 <File Id="filE4219A267666E309FAD1C3328077C083" KeyPath="yes" Source="$(var.SourceDir)\fx\.svn\text-base\F11.js.svn-base" />
             </Component>
-            <Component Id="cmp290345F6E478AC0036491E07D4D0D7C2" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{9C467E75-1C3F-4AF9-9EC9-39135E985A52}">
+            <Component Id="cmp290345F6E478AC0036491E07D4D0D7C2" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{79400F79-F872-4F93-B888-914911CCC26D}">
                 <File Id="filEE9EFA28C25D93F2AE68E4806C922665" KeyPath="yes" Source="$(var.SourceDir)\fx\.svn\text-base\F12.js.svn-base" />
             </Component>
-            <Component Id="cmp90C936B1E746534BA4A03B38123F5D64" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{7A4E63AE-9314-478A-9218-2BCAEA1E89C6}">
+            <Component Id="cmp90C936B1E746534BA4A03B38123F5D64" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{7C2B9C68-A050-40BE-85D4-D4F1BE5633E4}">
                 <File Id="fil5A74B024DB2DE7A9AECC6EC52807F89C" KeyPath="yes" Source="$(var.SourceDir)\fx\.svn\text-base\F2.js.svn-base" />
             </Component>
-            <Component Id="cmpC4404769022AA5B30D5707C8679B346C" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{4DFA4446-7931-4B1A-998F-3C64550C227F}">
+            <Component Id="cmpC4404769022AA5B30D5707C8679B346C" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{8EDB25A4-47A4-457C-A186-6EACDDB9E49B}">
                 <File Id="filE196C36780716BC295AD764F6C4CC3B2" KeyPath="yes" Source="$(var.SourceDir)\fx\.svn\text-base\F3.js.svn-base" />
             </Component>
-            <Component Id="cmp8A3CA08F23C35C6CB6847B24523038B9" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{5B61873F-31C7-4DD6-893B-E79B29ED9ED7}">
+            <Component Id="cmp8A3CA08F23C35C6CB6847B24523038B9" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{A045C6D9-0CEC-4B34-8FB2-EC3A65071CFA}">
                 <File Id="filC821B34E9DB40FEDD953D62A3A6DCBB0" KeyPath="yes" Source="$(var.SourceDir)\fx\.svn\text-base\F4.js.svn-base" />
             </Component>
-            <Component Id="cmpD6307A2BBA417B977688A6C76D92B309" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{AB408B7C-E58B-4967-9A7A-E11F37FC3352}">
+            <Component Id="cmpD6307A2BBA417B977688A6C76D92B309" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{A3E29616-DD37-45E6-930C-C48D4DFDC6BB}">
                 <File Id="fil31E4B17BB10525BA0F3B1F53AF9D0669" KeyPath="yes" Source="$(var.SourceDir)\fx\.svn\text-base\F5.js.svn-base" />
             </Component>
-            <Component Id="cmp4707D423BAF16B3BBAF80AFE6C8C2C8E" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{B09A0400-C6FA-404F-8919-845787453C16}">
+            <Component Id="cmp4707D423BAF16B3BBAF80AFE6C8C2C8E" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{2D310689-828E-415D-AA24-495DF8C92595}">
                 <File Id="fil07A5D4D9D9BF93A0F3C3699B3CF771BF" KeyPath="yes" Source="$(var.SourceDir)\fx\.svn\text-base\F6.js.svn-base" />
             </Component>
-            <Component Id="cmp4ACE2D9FA660086FC3C95B063B2F8C20" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{3827F845-3DCF-45D5-A9FE-C33F9DABF342}">
+            <Component Id="cmp4ACE2D9FA660086FC3C95B063B2F8C20" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{E1BFD819-7E36-420A-808F-8C34F94DE3DF}">
                 <File Id="filC3CBE926A4C36F16AC5B3981640275E7" KeyPath="yes" Source="$(var.SourceDir)\fx\.svn\text-base\F7.js.svn-base" />
             </Component>
-            <Component Id="cmpCB3935126377C0A0D13E5686AE395F32" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{8831FCDF-C685-4760-9AF7-D7B63774451A}">
+            <Component Id="cmpCB3935126377C0A0D13E5686AE395F32" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{2F69BD59-D562-4ECB-ABD3-57735F961056}">
                 <File Id="filF266819A56956D9879FD83449D772887" KeyPath="yes" Source="$(var.SourceDir)\fx\.svn\text-base\F8.js.svn-base" />
             </Component>
-            <Component Id="cmp42DF57245F853127F2C50312DE4C399E" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{A98CAB55-0817-4CDF-8102-9D1F19C50C7A}">
+            <Component Id="cmp42DF57245F853127F2C50312DE4C399E" Directory="dir374E3B1493C741C4EE4DFE36FDFD0190" Guid="{8BB089B5-993F-468B-A71A-2729D703DB3B}">
                 <File Id="filE5E026DC9F977094C3AFD49B656F3FAF" KeyPath="yes" Source="$(var.SourceDir)\fx\.svn\text-base\F9.js.svn-base" />
             </Component>
         </ComponentGroup>
