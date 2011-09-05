@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sun Aug 28 01:16:11 2011
+/* at Mon Sep 05 23:16:00 2011
  */
 /* Compiler settings for src\moe.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -176,7 +176,8 @@ enum MOE_DOCTYPE
 	MOE_DOCTYPE_HTML	= 5,
 	MOE_DOCTYPE_OLE	= 6,
 	MOE_DOCTYPE_FORM	= 7,
-	MOE_DOCTYPE_RTF	= 8
+	MOE_DOCTYPE_RTF	= 8,
+	MOE_DOCTYPE_TAIL	= 9
     } 	MOE_DOCTYPE;
 
 typedef 
@@ -2330,6 +2331,10 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NewRTFDocument( 
             /* [retval][out] */ IMoeDocument **d) = 0;
         
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenTailDocument( 
+            /* [in] */ BSTR fPath,
+            /* [retval][out] */ IMoeDocument **d) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -2458,6 +2463,11 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
             IMoeDocumentCollection * This,
             /* [retval][out] */ IMoeDocument **d);
         
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OpenTailDocument )( 
+            IMoeDocumentCollection * This,
+            /* [in] */ BSTR fPath,
+            /* [retval][out] */ IMoeDocument **d);
+        
         END_INTERFACE
     } IMoeDocumentCollectionVtbl;
 
@@ -2547,6 +2557,9 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
 
 #define IMoeDocumentCollection_NewRTFDocument(This,d)	\
     ( (This)->lpVtbl -> NewRTFDocument(This,d) ) 
+
+#define IMoeDocumentCollection_OpenTailDocument(This,fPath,d)	\
+    ( (This)->lpVtbl -> OpenTailDocument(This,fPath,d) ) 
 
 #endif /* COBJMACROS */
 
