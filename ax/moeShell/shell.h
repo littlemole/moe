@@ -21,7 +21,6 @@ class mol::uuid_info<IContextMenu>
 {
  public:
    static REFIID uuidof;
-//   static const GUID& uuidof() { return IID_IContextMenu; }
    typedef IContextMenu uuid_type;
 };
 
@@ -36,23 +35,19 @@ class moeShell :
 			mol::implements<
 				IDispatch,
 				IShellExtInit,
-				IContextMenu>//,
-				//IContextMenu2,
-				//IContextMenu3>
+				IContextMenu>
 			>
 
 {
 public:
 
-	moeShell() ;
-	~moeShell() {};
+	moeShell();
+	~moeShell();
 
 	HRESULT __stdcall Initialize( LPCITEMIDLIST pidlFolder, IDataObject *pdtobj, HKEY hkeyProgID );
 	HRESULT __stdcall GetCommandString( UINT_PTR idCmd, UINT uFlags, UINT *pwReserved, LPSTR pszName, UINT cchMax );
 	HRESULT __stdcall InvokeCommand(LPCMINVOKECOMMANDINFO pici);		HRESULT __stdcall QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);		
 	HRESULT __stdcall About();
-	HRESULT __stdcall HandleMenuMsg(  UINT uMsg,  WPARAM wParam,  LPARAM lParam);
-	HRESULT __stdcall HandleMenuMsg2(UINT uMsg,  WPARAM wParam,  LPARAM lParam,  LRESULT *plResult);
 
 
 protected:
@@ -67,13 +62,7 @@ protected:
 	UINT open_hex_cmd;
 	UINT open_tail_cmd;
 
-	UINT open_id;
-	UINT open_utf8_id;
-	UINT open_html_id;
-	UINT open_hex_id;
-	UINT open_tail_id;
-
-//	mol::Icon icon_;
+	
 };
 
 ///////////////////////////////////////////////////////////////////////////////
