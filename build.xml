@@ -6,7 +6,7 @@
   <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
  </PropertyGroup>
 
- <Target Name="Build" DependsOnTargets="3dParty">
+ <Target Name="build" DependsOnTargets="3dParty">
 
 		<Message Text="Project Configuration = $(Configuration)" />
 		<Message Text="Project Platform = $(Platform)" />
@@ -22,9 +22,9 @@
 
  </Target>
 
- <Target Name="Clean">
-<!--		<MSBuild Projects=".\3dParty\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" /> -->
-        <MSBuild Projects=".\lib\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+ <Target Name="clean">
+		<MSBuild Projects=".\3dParty\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" /> 
+	        <MSBuild Projects=".\lib\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 		<MSBuild Projects=".\ax\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 		<MSBuild Projects=".\bin\prw\prw\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 		<MSBuild Projects=".\bin\moe\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
@@ -73,10 +73,22 @@
 		<MSBuild Projects=".\bin\WixNet\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"  Targets="Clean"/>
  </Target>
 
-
- <Target Name="Universe">
+ <Target Name="universe">
         <CallTarget Targets="3dParty"/>
-  	    <CallTarget Targets="Build"/>
+  	<CallTarget Targets="build"/>
+ </Target>
+
+ <Target Name="kosmos">
+        <CallTarget Targets="Universe"/>
+  	<CallTarget Targets="net"/>
+	<CallTarget Targets="jre"/>
+ </Target>
+
+ <Target Name="armageddon">
+        <CallTarget Targets="clean"/>
+        <CallTarget Targets="cleannet"/>
+        <CallTarget Targets="cleanjre"/>
+  	<CallTarget Targets="kosmos"/>
  </Target>
 
 </Project>
