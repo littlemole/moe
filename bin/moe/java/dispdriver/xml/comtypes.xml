@@ -7,32 +7,32 @@ minor='0'
 file='..\..\..\..\ax\comtypes\x64/uni_release\comtypes.tlb'>
 
 <interface name='ITypeLibToXml' type='Dual' iid='{2D9ABF3A-0013-4761-9F9F-9AFA71AF123C}' base='IDispatch' members='8' desc='' >
- <method name='Load' type='VARIANT_BOOL*' dispid='1' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='load a Type library from file' >
+ <method name='Load' type='VARIANT_BOOL*' dispid='1' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='load a Type library from file' >
   <param type='BSTR' dir='IN' name='filename' />
  </method>
- <property name='XML' type='BSTR*' dispid='2' vtindex='64' ctype='HRESULT' param='xmlDoc' desc='Get XML representation for loaded typelib'  funkind='virtual'  calltype='__stdcall' >
+ <property name='XML' type='BSTR*' dispid='2' vtindex='32' ctype='HRESULT' param='xmlDoc' desc='Get XML representation for loaded typelib'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <method name='Transform' type='BSTR*' dispid='3' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='transform a loaded type library via XSLT' >
+ <method name='Transform' type='BSTR*' dispid='3' vtindex='36' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='transform a loaded type library via XSLT' >
   <param type='VARIANT' dir='IN' name='xsltDoc' />
  </method>
- <method name='AsyncDocumentation' type='void' dispid='4' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='asynchronous transformation - specify type library file, optional filter and XSL Document' >
+ <method name='AsyncDocumentation' type='void' dispid='4' vtindex='40' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='asynchronous transformation - specify type library file, optional filter and XSL Document' >
   <param type='BSTR' dir='IN' name='filename' />
   <param type='BSTR' dir='IN' name='filter' />
   <param type='VARIANT' dir='IN' name='xsltDoc' />
  </method>
- <property name='onComplete' type='IDispatch*' dispid='5' vtindex='88' ctype='HRESULT' param='onCompleteHandler' desc='on Complete script handler'  funkind='virtual'  calltype='__stdcall' >
+ <property name='onComplete' type='IDispatch*' dispid='5' vtindex='44' ctype='HRESULT' param='onCompleteHandler' desc='on Complete script handler'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='onStatus' type='IDispatch*' dispid='6' vtindex='104' ctype='HRESULT' param='onStatusHandler' desc='on Status script handler'  funkind='virtual'  calltype='__stdcall' >
+ <property name='onStatus' type='IDispatch*' dispid='6' vtindex='52' ctype='HRESULT' param='onStatusHandler' desc='on Status script handler'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='Error' type='VARIANT_BOOL*' dispid='7' vtindex='120' ctype='HRESULT' param='vbIsError' desc='on Complete script handler'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Error' type='VARIANT_BOOL*' dispid='7' vtindex='60' ctype='HRESULT' param='vbIsError' desc='on Complete script handler'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <property name='Result' type='BSTR*' dispid='8' vtindex='128' ctype='HRESULT' param='resultDoc' desc='Get Result Doc as String'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Result' type='BSTR*' dispid='8' vtindex='64' ctype='HRESULT' param='resultDoc' desc='Get Result Doc as String'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
 </interface>
@@ -56,3 +56,4 @@ file='..\..\..\..\ax\comtypes\x64/uni_release\comtypes.tlb'>
 
 
 </typelib>
+

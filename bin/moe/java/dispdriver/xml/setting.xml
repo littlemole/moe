@@ -7,66 +7,66 @@ minor='0'
 file='..\..\..\..\ax\setting\x64/uni_release\setting.tlb'>
 
 <interface name='ISetting' type='Dual' iid='{2DD18900-95F3-46A8-98B8-03F3843DE635}' base='IDispatch' members='20' desc='' >
- <property name='Key' type='BSTR' dispid='1' vtindex='56' ctype='HRESULT' param='k' desc='Get/Set Key Name'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Key' type='BSTR' dispid='1' vtindex='28' ctype='HRESULT' param='k' desc='Get/Set Key Name'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='Value' type='BSTR' dispid='2' vtindex='72' ctype='HRESULT' param='v' desc='Get/Set Value'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Value' type='BSTR' dispid='2' vtindex='36' ctype='HRESULT' param='v' desc='Get/Set Value'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='Parent' type='ISetting*' dispid='3' vtindex='88' ctype='HRESULT' param='s' desc='Parent Put'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Parent' type='ISetting*' dispid='3' vtindex='44' ctype='HRESULT' param='s' desc='Parent Put'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='ChildrenAllowed' type='VARIANT_BOOL' dispid='4' vtindex='104' ctype='HRESULT' param='vb' desc='controls whether Children modification is allowedllowed'  funkind='virtual'  calltype='__stdcall' >
+ <property name='ChildrenAllowed' type='VARIANT_BOOL' dispid='4' vtindex='52' ctype='HRESULT' param='vb' desc='controls whether Children modification is allowedllowed'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='KeyReadOnly' type='VARIANT_BOOL' dispid='5' vtindex='120' ctype='HRESULT' param='vb' desc='controls whether key is Readonly'  funkind='virtual'  calltype='__stdcall' >
+ <property name='KeyReadOnly' type='VARIANT_BOOL' dispid='5' vtindex='60' ctype='HRESULT' param='vb' desc='controls whether key is Readonly'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='ValueReadOnly' type='VARIANT_BOOL' dispid='6' vtindex='136' ctype='HRESULT' param='vb' desc='controls whether Value of Key is Readonly'  funkind='virtual'  calltype='__stdcall' >
+ <property name='ValueReadOnly' type='VARIANT_BOOL' dispid='6' vtindex='68' ctype='HRESULT' param='vb' desc='controls whether Value of Key is Readonly'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='IsDirty' type='VARIANT_BOOL*' dispid='7' vtindex='152' ctype='HRESULT' param='vb' desc='key or subkeys have changed'  funkind='virtual'  calltype='__stdcall' >
+ <property name='IsDirty' type='VARIANT_BOOL*' dispid='7' vtindex='76' ctype='HRESULT' param='vb' desc='key or subkeys have changed'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <method name='_NewEnum' type='IEnumVARIANT**' dispid='-4' vtindex='168' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='New Enum - enumeration for scripting languages' >
+ <method name='_NewEnum' type='IEnumVARIANT**' dispid='-4' vtindex='84' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='New Enum - enumeration for scripting languages' >
  </method>
- <method name='Item' type='ISetting**' dispid='0' vtindex='176' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Item - get subkey at specific index' >
+ <method name='Item' type='ISetting**' dispid='0' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Item - get subkey at specific index' >
   <param type='VARIANT' dir='IN' name='index' />
  </method>
- <method name='Count' type='long*' dispid='8' vtindex='184' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns number of subkeys for this key' >
+ <method name='Count' type='long*' dispid='8' vtindex='92' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns number of subkeys for this key' >
  </method>
- <method name='Root' type='ISetting**' dispid='9' vtindex='192' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns the root key' >
+ <method name='Root' type='ISetting**' dispid='9' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns the root key' >
  </method>
- <method name='KeyName' type='BSTR*' dispid='10' vtindex='200' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns Full Key Name' >
+ <method name='KeyName' type='BSTR*' dispid='10' vtindex='100' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns Full Key Name' >
  </method>
- <method name='Add' type='void' dispid='11' vtindex='208' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Add a new Setting as subkey' >
+ <method name='Add' type='void' dispid='11' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Add a new Setting as subkey' >
   <param type='ISetting*' dir='IN' name='s' />
  </method>
- <method name='New' type='ISetting**' dispid='12' vtindex='216' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Add a New subsetting Setting' >
+ <method name='New' type='ISetting**' dispid='12' vtindex='108' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Add a New subsetting Setting' >
   <param type='BSTR' dir='IN' name='k' />
   <param type='BSTR' dir='IN' name='v' />
  </method>
- <method name='Remove' type='void' dispid='13' vtindex='224' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Remove this setting from parent' >
+ <method name='Remove' type='void' dispid='13' vtindex='112' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Remove this setting from parent' >
  </method>
- <method name='RemoveItem' type='void' dispid='14' vtindex='232' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Remove subsetting at given index' >
+ <method name='RemoveItem' type='void' dispid='14' vtindex='116' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Remove subsetting at given index' >
   <param type='VARIANT' dir='IN' name='i' />
  </method>
- <method name='Clear' type='void' dispid='15' vtindex='240' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Clear Children - remove all subsettings' >
+ <method name='Clear' type='void' dispid='15' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Clear Children - remove all subsettings' >
  </method>
- <method name='Load' type='void' dispid='16' vtindex='248' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='load setting from file' >
+ <method name='Load' type='void' dispid='16' vtindex='124' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='load setting from file' >
   <param type='BSTR' dir='IN' name='fname' />
  </method>
- <method name='Save' type='void' dispid='17' vtindex='256' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='save settings to file' >
+ <method name='Save' type='void' dispid='17' vtindex='128' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='save settings to file' >
   <param type='BSTR' dir='IN' name='fname' />
  </method>
- <method name='Clone' type='ISetting**' dispid='18' vtindex='264' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Clone settings' >
+ <method name='Clone' type='ISetting**' dispid='18' vtindex='132' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Clone settings' >
  </method>
 </interface>
 
@@ -81,7 +81,7 @@ file='..\..\..\..\ax\setting\x64/uni_release\setting.tlb'>
 
 
 <interface name='_ISettingChangedDual' type='Dual' iid='{0DB8CB91-F13F-4374-BDD8-FDEEED4210F6}' base='IDispatch' members='1' desc='' >
- <method name='OnChange' type='void' dispid='1' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='setting changed' >
+ <method name='OnChange' type='void' dispid='1' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='setting changed' >
   <param type='BSTR' name='fullkey' />
   <param type='BSTR' name='Key' />
   <param type='BSTR' name='val' />
@@ -102,3 +102,4 @@ file='..\..\..\..\ax\setting\x64/uni_release\setting.tlb'>
 
 
 </typelib>
+

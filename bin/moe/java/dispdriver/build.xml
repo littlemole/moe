@@ -16,10 +16,12 @@
   </condition>
  </target>	
 
+
  <!-- clean -->
  <target name="clean" description="Cleanup" depends="set">
- 	<delete dir=".\bin" includes="**\*.class"/>
+    <delete dir=".\bin" includes="**\*.class"/>
     <delete dir="." includes="dispdriver.jar"/>
+    <delete dir=".\src\org\oha7\mol" includes="**\*.java"/>
  </target>	
 
  <!-- generate java code from typelib -->

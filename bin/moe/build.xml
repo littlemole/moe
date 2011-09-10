@@ -49,6 +49,7 @@
     <ClCompile Include="src\app.cpp" />
     <ClCompile Include="src\dir3.cpp" />
     <ClCompile Include="src\Docs.cpp" />
+    <ClCompile Include="src\DocFactory.cpp" />
     <ClCompile Include="src\editor.cpp" />
     <ClCompile Include="src\form.cpp" />
     <ClCompile Include="src\formEditor.cpp" />

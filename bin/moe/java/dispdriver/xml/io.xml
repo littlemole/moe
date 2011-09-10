@@ -7,129 +7,129 @@ minor='0'
 file='..\..\..\..\ax\io\x64/uni_release\io.tlb'>
 
 <interface name='IFile' type='Dual' iid='{5AF00596-158A-4DDD-BC20-83BC8D5E432F}' base='IDispatch' members='16' desc='' >
- <property name='Filename' type='BSTR*' dispid='1' vtindex='56' ctype='HRESULT' param='f' desc='Get Filename'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Filename' type='BSTR*' dispid='1' vtindex='28' ctype='HRESULT' param='f' desc='Get Filename'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <property name='EoL' type='long' dispid='2' vtindex='64' ctype='HRESULT' param='t' desc='Set EOL mode'  funkind='virtual'  calltype='__stdcall' >
- <get />
- <put />
-</property>
- <property name='Encoding' type='long' dispid='3' vtindex='80' ctype='HRESULT' param='cp' desc='Set Encoding'  funkind='virtual'  calltype='__stdcall' >
+ <property name='EoL' type='long' dispid='2' vtindex='32' ctype='HRESULT' param='t' desc='Set EOL mode'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='UseBOM' type='VARIANT_BOOL' dispid='4' vtindex='96' ctype='HRESULT' param='vb' desc='Set BOM Usage'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Encoding' type='long' dispid='3' vtindex='40' ctype='HRESULT' param='cp' desc='Set Encoding'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='EoF' type='VARIANT_BOOL*' dispid='5' vtindex='112' ctype='HRESULT' param='vb' desc='Get End of File - indicates whether end of file reached'  funkind='virtual'  calltype='__stdcall' >
+ <property name='UseBOM' type='VARIANT_BOOL' dispid='4' vtindex='48' ctype='HRESULT' param='vb' desc='Set BOM Usage'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='EoF' type='VARIANT_BOOL*' dispid='5' vtindex='56' ctype='HRESULT' param='vb' desc='Get End of File - indicates whether end of file reached'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <property name='Size' type='long*' dispid='6' vtindex='120' ctype='HRESULT' param='s' desc='Get File Size'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Size' type='long*' dispid='6' vtindex='60' ctype='HRESULT' param='s' desc='Get File Size'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <method name='Open' type='VARIANT_BOOL*' dispid='7' vtindex='128' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open File' >
+ <method name='Open' type='VARIANT_BOOL*' dispid='7' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open File' >
   <param type='BSTR' dir='IN' name='file' />
  </method>
- <method name='OpenReadOnly' type='VARIANT_BOOL*' dispid='8' vtindex='136' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open File Read Only' >
+ <method name='OpenReadOnly' type='VARIANT_BOOL*' dispid='8' vtindex='68' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open File Read Only' >
   <param type='BSTR' dir='IN' name='file' />
  </method>
- <method name='OpenAppend' type='VARIANT_BOOL*' dispid='9' vtindex='144' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open File for Append' >
+ <method name='OpenAppend' type='VARIANT_BOOL*' dispid='9' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open File for Append' >
   <param type='BSTR' dir='IN' name='file' />
  </method>
- <method name='Close' type='void' dispid='10' vtindex='152' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Close File' >
+ <method name='Close' type='void' dispid='10' vtindex='76' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Close File' >
  </method>
- <method name='Read' type='BSTR*' dispid='11' vtindex='160' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Read up to a specific count from file' >
+ <method name='Read' type='BSTR*' dispid='11' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Read up to a specific count from file' >
   <param type='long' dir='IN' name='cnt' />
  </method>
- <method name='ReadText' type='BSTR*' dispid='12' vtindex='168' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Read complete File as one Text String' >
+ <method name='ReadText' type='BSTR*' dispid='12' vtindex='84' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Read complete File as one Text String' >
  </method>
- <method name='Seek' type='void' dispid='13' vtindex='176' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Seek a specific file position before reading/writing' >
+ <method name='Seek' type='void' dispid='13' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Seek a specific file position before reading/writing' >
   <param type='long' dir='IN' name='pos' />
  </method>
- <method name='Write' type='long*' dispid='14' vtindex='184' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Write a string to a file' >
+ <method name='Write' type='long*' dispid='14' vtindex='92' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Write a string to a file' >
   <param type='BSTR' dir='IN' name='file' />
   <param type='long' dir='IN' name='len' />
  </method>
- <method name='WriteText' type='long*' dispid='15' vtindex='192' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='WriteText writes a String to a text file in one batch' >
+ <method name='WriteText' type='long*' dispid='15' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='WriteText writes a String to a text file in one batch' >
   <param type='BSTR' dir='IN' name='txt' />
  </method>
- <method name='Create' type='VARIANT_BOOL*' dispid='16' vtindex='200' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='create a new file' >
+ <method name='Create' type='VARIANT_BOOL*' dispid='16' vtindex='100' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='create a new file' >
   <param type='BSTR' dir='IN' name='txt' />
  </method>
 </interface>
 
 
 <interface name='IDir' type='Dual' iid='{92AF3107-79EB-480F-A118-6A3FF41E5085}' base='IDispatch' members='3' desc='' >
- <method name='_NewEnum' type='IEnumVARIANT**' dispid='-4' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='New Enum - scripting language enumaration support' >
+ <method name='_NewEnum' type='IEnumVARIANT**' dispid='-4' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='New Enum - scripting language enumaration support' >
  </method>
- <method name='Item' type='BSTR*' dispid='0' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Item - returns directory entry for index' >
+ <method name='Item' type='BSTR*' dispid='0' vtindex='32' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Item - returns directory entry for index' >
   <param type='long' dir='IN' name='i' />
  </method>
- <method name='Count' type='long*' dispid='1' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Count - returns number of files in directory' >
+ <method name='Count' type='long*' dispid='1' vtindex='36' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Count - returns number of files in directory' >
  </method>
 </interface>
 
 
 <interface name='IPath' type='Dual' iid='{FFEB4898-0ECC-465A-851E-F5F7BB4136A8}' base='IDispatch' members='20' desc='' >
- <method name='Extension' type='BSTR*' dispid='1' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns file Extension' >
+ <method name='Extension' type='BSTR*' dispid='1' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns file Extension' >
   <param type='BSTR' dir='IN' name='f' />
  </method>
- <method name='Filename' type='BSTR*' dispid='2' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns Filename w/o path' >
+ <method name='Filename' type='BSTR*' dispid='2' vtindex='32' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns Filename w/o path' >
   <param type='BSTR' dir='IN' name='f' />
  </method>
- <method name='Path' type='BSTR*' dispid='3' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns Path w/o filename' >
+ <method name='Path' type='BSTR*' dispid='3' vtindex='36' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns Path w/o filename' >
   <param type='BSTR' dir='IN' name='f' />
  </method>
- <method name='StripRoot' type='BSTR*' dispid='4' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='strips Root directory' >
+ <method name='StripRoot' type='BSTR*' dispid='4' vtindex='40' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='strips Root directory' >
   <param type='BSTR' dir='IN' name='f' />
  </method>
- <method name='Root' type='BSTR*' dispid='5' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns Root directory' >
+ <method name='Root' type='BSTR*' dispid='5' vtindex='44' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns Root directory' >
   <param type='BSTR' dir='IN' name='f' />
  </method>
- <method name='AddBackSlash' type='BSTR*' dispid='6' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Adds BackSlash, if not yet present' >
+ <method name='AddBackSlash' type='BSTR*' dispid='6' vtindex='48' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Adds BackSlash, if not yet present' >
   <param type='BSTR' dir='IN' name='f' />
  </method>
- <method name='RemoveBackSlash' type='BSTR*' dispid='7' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Removes BackSlash, if any' >
+ <method name='RemoveBackSlash' type='BSTR*' dispid='7' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Removes BackSlash, if any' >
   <param type='BSTR' dir='IN' name='f' />
  </method>
- <method name='AddExtension' type='BSTR*' dispid='8' vtindex='112' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Adds an Extension' >
+ <method name='AddExtension' type='BSTR*' dispid='8' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Adds an Extension' >
   <param type='BSTR' dir='IN' name='f' />
   <param type='BSTR' dir='IN' name='e' />
  </method>
- <method name='IsSubPath' type='VARIANT_BOOL*' dispid='9' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns true if p1 is a subpath of p2 ' >
+ <method name='IsSubPath' type='VARIANT_BOOL*' dispid='9' vtindex='60' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns true if p1 is a subpath of p2 ' >
   <param type='BSTR' dir='IN' name='p1' />
   <param type='BSTR' dir='IN' name='p2' />
  </method>
- <method name='Exists' type='VARIANT_BOOL*' dispid='10' vtindex='128' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns true if given path exists' >
+ <method name='Exists' type='VARIANT_BOOL*' dispid='10' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns true if given path exists' >
   <param type='BSTR' dir='IN' name='f' />
  </method>
- <method name='IsDir' type='VARIANT_BOOL*' dispid='11' vtindex='136' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='return true if given path is a directory' >
+ <method name='IsDir' type='VARIANT_BOOL*' dispid='11' vtindex='68' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='return true if given path is a directory' >
   <param type='BSTR' dir='IN' name='f' />
  </method>
- <method name='IsRoot' type='VARIANT_BOOL*' dispid='12' vtindex='144' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns true if given path is a root directory' >
+ <method name='IsRoot' type='VARIANT_BOOL*' dispid='12' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns true if given path is a root directory' >
   <param type='BSTR' dir='IN' name='f' />
  </method>
- <method name='IsUNC' type='VARIANT_BOOL*' dispid='13' vtindex='152' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns true if given path is a UNC path' >
+ <method name='IsUNC' type='VARIANT_BOOL*' dispid='13' vtindex='76' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns true if given path is a UNC path' >
   <param type='BSTR' dir='IN' name='f' />
  </method>
- <method name='IsNetDrive' type='VARIANT_BOOL*' dispid='14' vtindex='160' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns true if given path is a mapped Net Drive' >
+ <method name='IsNetDrive' type='VARIANT_BOOL*' dispid='14' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns true if given path is a mapped Net Drive' >
   <param type='BSTR' dir='IN' name='f' />
  </method>
- <method name='ParentDir' type='BSTR*' dispid='15' vtindex='168' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns Parent Directory of a directory path, otherwise behaves like pathname' >
+ <method name='ParentDir' type='BSTR*' dispid='15' vtindex='84' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='returns Parent Directory of a directory path, otherwise behaves like pathname' >
   <param type='BSTR' dir='IN' name='f' />
  </method>
- <method name='OpenDir' type='IDir**' dispid='16' vtindex='176' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open a Directory path for enumeration' >
+ <method name='OpenDir' type='IDir**' dispid='16' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open a Directory path for enumeration' >
   <param type='BSTR' dir='IN' name='f' />
  </method>
- <method name='OpenFile' type='IFile**' dispid='17' vtindex='184' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open path as File, returning file object' >
+ <method name='OpenFile' type='IFile**' dispid='17' vtindex='92' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open path as File, returning file object' >
   <param type='BSTR' dir='IN' name='f' />
  </method>
- <method name='ChooseDir' type='BSTR*' dispid='18' vtindex='192' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Choose Directory - displays DirectoryBrowser to choose a Directory, returns path' >
+ <method name='ChooseDir' type='BSTR*' dispid='18' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Choose Directory - displays DirectoryBrowser to choose a Directory, returns path' >
  </method>
- <method name='FileOpenDlg' type='BSTR*' dispid='19' vtindex='200' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Choose File to open - displays Filebrowser to open a file, returns path to file' >
+ <method name='FileOpenDlg' type='BSTR*' dispid='19' vtindex='100' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Choose File to open - displays Filebrowser to open a file, returns path to file' >
  </method>
- <method name='FileSaveDlg' type='BSTR*' dispid='20' vtindex='208' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Choose File to save - displays the FileSave dialog, returns filename' >
+ <method name='FileSaveDlg' type='BSTR*' dispid='20' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Choose File to save - displays the FileSave dialog, returns filename' >
  </method>
 </interface>
 
@@ -154,3 +154,4 @@ file='..\..\..\..\ax\io\x64/uni_release\io.tlb'>
 
 
 </typelib>
+

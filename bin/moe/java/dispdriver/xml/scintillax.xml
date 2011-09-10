@@ -7,108 +7,108 @@ minor='0'
 file='..\..\..\..\ax\scintillax\x64/uni_release\scintillax.tlb'>
 
 <interface name='IScintillAxProperties' type='Dual' iid='{65BC59C3-3E46-4F80-8B4A-13AADF1A58EB}' base='IDispatch' members='18' desc='' >
- <property name='Font' type='IFontDisp*' dispid='-512' vtindex='56' ctype='HRESULT' param='fnt' desc='Get/Set Font'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Font' type='IFontDisp*' dispid='-512' vtindex='28' ctype='HRESULT' param='fnt' desc='Get/Set Font'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
  <putref />
 </property>
- <property name='Filename' type='BSTR' dispid='1' vtindex='80' ctype='HRESULT' param='fname' desc='Get/Set Filename'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Filename' type='BSTR' dispid='1' vtindex='40' ctype='HRESULT' param='fname' desc='Get/Set Filename'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='ReadOnly' type='VARIANT_BOOL' dispid='2' vtindex='96' ctype='HRESULT' param='vbReadOnly' desc='Set/Get ReadOnly Mode'  funkind='virtual'  calltype='__stdcall' >
+ <property name='ReadOnly' type='VARIANT_BOOL' dispid='2' vtindex='48' ctype='HRESULT' param='vbReadOnly' desc='Set/Get ReadOnly Mode'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='Syntax' type='long' dispid='3' vtindex='112' ctype='HRESULT' param='typ' desc='Get/Set Coloring Syntax'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Syntax' type='long' dispid='3' vtindex='56' ctype='HRESULT' param='typ' desc='Get/Set Coloring Syntax'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='SysType' type='long' dispid='4' vtindex='128' ctype='HRESULT' param='typ' desc='get/Set SysTypec (UNIX/Win32)'  funkind='virtual'  calltype='__stdcall' >
+ <property name='SysType' type='long' dispid='4' vtindex='64' ctype='HRESULT' param='typ' desc='get/Set SysTypec (UNIX/Win32)'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='Encoding' type='long' dispid='5' vtindex='144' ctype='HRESULT' param='typ' desc='Set/Get Encoding (UTF-8,Ansi,...)'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Encoding' type='long' dispid='5' vtindex='72' ctype='HRESULT' param='typ' desc='Set/Get Encoding (UTF-8,Ansi,...)'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='TabUsage' type='VARIANT_BOOL' dispid='6' vtindex='160' ctype='HRESULT' param='vbTabUsage' desc='Set/Get Usage of Tabulator chars, setting to false converts tabs to spaces'  funkind='virtual'  calltype='__stdcall' >
+ <property name='TabUsage' type='VARIANT_BOOL' dispid='6' vtindex='80' ctype='HRESULT' param='vbTabUsage' desc='Set/Get Usage of Tabulator chars, setting to false converts tabs to spaces'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='TabIndents' type='VARIANT_BOOL' dispid='7' vtindex='176' ctype='HRESULT' param='vbTabIndents' desc='Set/Get whether Tabulator indents'  funkind='virtual'  calltype='__stdcall' >
+ <property name='TabIndents' type='VARIANT_BOOL' dispid='7' vtindex='88' ctype='HRESULT' param='vbTabIndents' desc='Set/Get whether Tabulator indents'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='BackSpaceUnindents' type='VARIANT_BOOL' dispid='8' vtindex='192' ctype='HRESULT' param='vbBackSpaceIndents' desc='Get/Set whether BackSpace unindents'  funkind='virtual'  calltype='__stdcall' >
+ <property name='BackSpaceUnindents' type='VARIANT_BOOL' dispid='8' vtindex='96' ctype='HRESULT' param='vbBackSpaceIndents' desc='Get/Set whether BackSpace unindents'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='TabWidth' type='long' dispid='9' vtindex='208' ctype='HRESULT' param='w' desc='get/Set Tabulator width'  funkind='virtual'  calltype='__stdcall' >
+ <property name='TabWidth' type='long' dispid='9' vtindex='104' ctype='HRESULT' param='w' desc='get/Set Tabulator width'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='Overtype' type='VARIANT_BOOL' dispid='10' vtindex='224' ctype='HRESULT' param='over_type' desc='GetSet Overtype mode'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Overtype' type='VARIANT_BOOL' dispid='10' vtindex='112' ctype='HRESULT' param='over_type' desc='GetSet Overtype mode'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='UseContext' type='VARIANT_BOOL' dispid='11' vtindex='240' ctype='HRESULT' param='useMenu' desc='Get/Set Use Context Menue'  funkind='virtual'  calltype='__stdcall' >
+ <property name='UseContext' type='VARIANT_BOOL' dispid='11' vtindex='120' ctype='HRESULT' param='useMenu' desc='Get/Set Use Context Menue'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='WriteBOM' type='VARIANT_BOOL' dispid='12' vtindex='256' ctype='HRESULT' param='vb' desc='Set WriteBOM'  funkind='virtual'  calltype='__stdcall' >
+ <property name='WriteBOM' type='VARIANT_BOOL' dispid='12' vtindex='128' ctype='HRESULT' param='vb' desc='Set WriteBOM'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='ShowLineNumbers' type='VARIANT_BOOL' dispid='13' vtindex='272' ctype='HRESULT' param='useLineNums' desc='Get/Set Show LineNumbers'  funkind='virtual'  calltype='__stdcall' >
+ <property name='ShowLineNumbers' type='VARIANT_BOOL' dispid='13' vtindex='136' ctype='HRESULT' param='useLineNums' desc='Get/Set Show LineNumbers'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <method name='SyntaxDisplayName' type='BSTR*' dispid='14' vtindex='288' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Syntax' >
+ <method name='SyntaxDisplayName' type='BSTR*' dispid='14' vtindex='144' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Syntax' >
  </method>
- <method name='GetSyntaxDisplayName' type='BSTR*' dispid='15' vtindex='296' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='SyntaxDisplayName' >
+ <method name='GetSyntaxDisplayName' type='BSTR*' dispid='15' vtindex='148' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='SyntaxDisplayName' >
   <param type='long' dir='IN' name='type' />
  </method>
- <method name='SetIndent' type='void' dispid='16' vtindex='304' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set Indent' >
+ <method name='SetIndent' type='void' dispid='16' vtindex='152' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set Indent' >
   <param type='long' dir='IN' name='i' />
  </method>
- <method name='ConvertTabs' type='void' dispid='17' vtindex='312' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Convert Tabs' >
+ <method name='ConvertTabs' type='void' dispid='17' vtindex='156' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Convert Tabs' >
  </method>
 </interface>
 
 
 <interface name='IScintillAxText' type='Dual' iid='{A479AEBD-ED80-4451-8C83-8E422EBC20A1}' base='IDispatch' members='10' desc='' >
- <property name='Value' type='BSTR' dispid='0' vtindex='56' ctype='HRESULT' param='txt' desc='Get/Set Text Value'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Value' type='BSTR' dispid='0' vtindex='28' ctype='HRESULT' param='txt' desc='Get/Set Text Value'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='Modified' type='VARIANT_BOOL*' dispid='1' vtindex='72' ctype='HRESULT' param='vbModified' desc='Get Modified flag'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Modified' type='VARIANT_BOOL*' dispid='1' vtindex='36' ctype='HRESULT' param='vbModified' desc='Get Modified flag'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <property name='Length' type='long*' dispid='2' vtindex='80' ctype='HRESULT' param='len' desc='returns whole document&apos;s Text Length'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Length' type='long*' dispid='2' vtindex='40' ctype='HRESULT' param='len' desc='returns whole document&apos;s Text Length'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <method name='SetText' type='void' dispid='3' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set whole document Text' >
+ <method name='SetText' type='void' dispid='3' vtindex='44' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set whole document Text' >
   <param type='BSTR' dir='IN' name='txt' />
  </method>
- <method name='GetText' type='BSTR*' dispid='4' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Get whole document Text' >
+ <method name='GetText' type='BSTR*' dispid='4' vtindex='48' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Get whole document Text' >
  </method>
- <method name='GetTextRange' type='BSTR*' dispid='5' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Get Text Range' >
+ <method name='GetTextRange' type='BSTR*' dispid='5' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Get Text Range' >
   <param type='long' dir='IN' name='pStart' />
   <param type='long' dir='IN' name='pEnd' />
  </method>
- <method name='Append' type='void' dispid='6' vtindex='112' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Append Text to document' >
+ <method name='Append' type='void' dispid='6' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Append Text to document' >
   <param type='BSTR' dir='IN' name='txt' />
  </method>
- <method name='Insert' type='void' dispid='7' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Insert Text to document at specific position' >
+ <method name='Insert' type='void' dispid='7' vtindex='60' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Insert Text to document at specific position' >
   <param type='BSTR' dir='IN' name='txt' />
   <param type='long' dir='IN' name='p' />
  </method>
- <method name='Search' type='VARIANT_BOOL*' dispid='8' vtindex='128' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Search in page' >
+ <method name='Search' type='VARIANT_BOOL*' dispid='8' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Search in page' >
   <param type='BSTR' dir='IN' name='sWhat' />
   <param type='long' dir='IN' name='lFlags' />
  </method>
- <method name='Replace' type='VARIANT_BOOL*' dispid='9' vtindex='136' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Replace in page' >
+ <method name='Replace' type='VARIANT_BOOL*' dispid='9' vtindex='68' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Replace in page' >
   <param type='BSTR' dir='IN' name='sWhat' />
   <param type='BSTR' dir='IN' name='w' />
   <param type='long' dir='IN' name='lFlags' />
@@ -117,110 +117,110 @@ file='..\..\..\..\ax\scintillax\x64/uni_release\scintillax.tlb'>
 
 
 <interface name='IScintillAxPosition' type='Dual' iid='{AE7C2E4D-1AD1-48E8-A376-6C6DA26707E8}' base='IDispatch' members='6' desc='' >
- <property name='Caret' type='long' dispid='0' vtindex='56' ctype='HRESULT' param='p' desc='Get/Set Caret position'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Caret' type='long' dispid='0' vtindex='28' ctype='HRESULT' param='p' desc='Get/Set Caret position'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='SearchPos' type='long' dispid='1' vtindex='72' ctype='HRESULT' param='p' desc='Get/Set Search Position'  funkind='virtual'  calltype='__stdcall' >
+ <property name='SearchPos' type='long' dispid='1' vtindex='36' ctype='HRESULT' param='p' desc='Get/Set Search Position'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='Anchor' type='long' dispid='2' vtindex='88' ctype='HRESULT' param='p' desc='Get/Set Anchor'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Anchor' type='long' dispid='2' vtindex='44' ctype='HRESULT' param='p' desc='Get/Set Anchor'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <method name='CharAt' type='BSTR*' dispid='3' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Character At' >
+ <method name='CharAt' type='BSTR*' dispid='3' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Character At' >
   <param type='long' dir='IN' name='p' />
  </method>
- <method name='Scroll' type='void' dispid='4' vtindex='112' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Scroll by cols / lines' >
+ <method name='Scroll' type='void' dispid='4' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Scroll by cols / lines' >
   <param type='long' dir='IN' name='cCols' />
   <param type='long' dir='IN' name='cLines' />
  </method>
- <method name='ScrollIntoView' type='void' dispid='5' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Scroll into View' >
+ <method name='ScrollIntoView' type='void' dispid='5' vtindex='60' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Scroll into View' >
  </method>
 </interface>
 
 
 <interface name='IScintillAxSelection' type='Dual' iid='{76D700E6-D9F1-4D92-AEEF-658773834226}' base='IDispatch' members='8' desc='' >
- <property name='Start' type='long' dispid='1' vtindex='56' ctype='HRESULT' param='p' desc='Get/Set Selection Start Position'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Start' type='long' dispid='1' vtindex='28' ctype='HRESULT' param='p' desc='Get/Set Selection Start Position'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='End' type='long' dispid='2' vtindex='72' ctype='HRESULT' param='p' desc='Get/Set Selection End Position'  funkind='virtual'  calltype='__stdcall' >
+ <property name='End' type='long' dispid='2' vtindex='36' ctype='HRESULT' param='p' desc='Get/Set Selection End Position'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='Text' type='BSTR' dispid='3' vtindex='88' ctype='HRESULT' param='txt' desc='Get/Set Selection Text'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Text' type='BSTR' dispid='3' vtindex='44' ctype='HRESULT' param='txt' desc='Get/Set Selection Text'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <method name='GetSelection' type='void' dispid='4' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Get current selection' >
+ <method name='GetSelection' type='void' dispid='4' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Get current selection' >
   <param type='long*' dir='OUT' name='pFirst' />
   <param type='long*' dir='OUT' name='pLast' />
  </method>
- <method name='SetSelection' type='void' dispid='5' vtindex='112' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set current selection' >
+ <method name='SetSelection' type='void' dispid='5' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set current selection' >
   <param type='long' dir='IN' name='pFirst' />
   <param type='long' dir='IN' name='pLast' />
  </method>
- <method name='Cut' type='void' dispid='6' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Cut current selection' >
+ <method name='Cut' type='void' dispid='6' vtindex='60' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Cut current selection' >
  </method>
- <method name='Copy' type='void' dispid='7' vtindex='128' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Copy current selection' >
+ <method name='Copy' type='void' dispid='7' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Copy current selection' >
  </method>
- <method name='Paste' type='void' dispid='8' vtindex='136' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Paste current selection' >
+ <method name='Paste' type='void' dispid='8' vtindex='68' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Paste current selection' >
  </method>
 </interface>
 
 
 <interface name='IScintillAxLine' type='Dual' iid='{B22C83F1-785D-4007-BE8D-DA5CE333D9D4}' base='IDispatch' members='12' desc='' >
- <property name='Current' type='long*' dispid='0' vtindex='56' ctype='HRESULT' param='p' desc='Get/Set current line'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Current' type='long*' dispid='0' vtindex='28' ctype='HRESULT' param='p' desc='Get/Set current line'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <property name='Count' type='long*' dispid='1' vtindex='64' ctype='HRESULT' param='p' desc=''  funkind='virtual'  calltype='__stdcall' >
+ <property name='Count' type='long*' dispid='1' vtindex='32' ctype='HRESULT' param='p' desc=''  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <method name='LineFromPos' type='long*' dispid='2' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Line from position' >
+ <method name='LineFromPos' type='long*' dispid='2' vtindex='36' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Line from position' >
   <param type='long' dir='IN' name='p' />
  </method>
- <method name='PosFromLine' type='long*' dispid='3' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='pos for line' >
+ <method name='PosFromLine' type='long*' dispid='3' vtindex='40' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='pos for line' >
   <param type='long' dir='IN' name='l' />
  </method>
- <method name='LineEndPos' type='long*' dispid='4' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='endpos for line' >
+ <method name='LineEndPos' type='long*' dispid='4' vtindex='44' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='endpos for line' >
   <param type='long' dir='IN' name='l' />
  </method>
- <method name='FirstVisibleLine' type='long*' dispid='5' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='First Visible Line' >
+ <method name='FirstVisibleLine' type='long*' dispid='5' vtindex='48' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='First Visible Line' >
  </method>
- <method name='LinesOnScreen' type='long*' dispid='6' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Visible Lines Count' >
+ <method name='LinesOnScreen' type='long*' dispid='6' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Visible Lines Count' >
  </method>
- <method name='LineLength' type='long*' dispid='7' vtindex='112' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Line Length' >
+ <method name='LineLength' type='long*' dispid='7' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Line Length' >
   <param type='long' dir='IN' name='l' />
  </method>
- <method name='LineText' type='BSTR*' dispid='8' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Get Line Text' >
+ <method name='LineText' type='BSTR*' dispid='8' vtindex='60' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Get Line Text' >
   <param type='long' dir='IN' name='l' />
  </method>
- <method name='SetLineText' type='void' dispid='9' vtindex='128' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set Line Text' >
+ <method name='SetLineText' type='void' dispid='9' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set Line Text' >
   <param type='long' dir='IN' name='l' />
   <param type='BSTR' dir='IN' name='txt' />
  </method>
- <method name='Goto' type='void' dispid='10' vtindex='136' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Line' >
+ <method name='Goto' type='void' dispid='10' vtindex='68' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Line' >
   <param type='long' dir='IN' name='l' />
  </method>
- <method name='Highlite' type='void' dispid='11' vtindex='144' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Highlite Line' >
+ <method name='Highlite' type='void' dispid='11' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Highlite Line' >
   <param type='long' dir='IN' name='line' />
  </method>
 </interface>
 
 
 <interface name='IScintillAxAnnotation' type='Dual' iid='{D0799D5B-E2EC-4877-99A3-03ADD1895B17}' base='IDispatch' members='4' desc='' >
- <method name='SetText' type='void' dispid='1' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='SetAnnotation Text' >
+ <method name='SetText' type='void' dispid='1' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='SetAnnotation Text' >
   <param type='long' dir='IN' name='line' />
   <param type='BSTR' dir='IN' name='txt' />
  </method>
- <method name='Clear' type='void' dispid='2' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='ClearAnnotation Text' >
+ <method name='Clear' type='void' dispid='2' vtindex='32' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='ClearAnnotation Text' >
   <param type='long' dir='IN' name='line' />
  </method>
- <method name='ClearAll' type='void' dispid='3' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='ClearAnnotations' >
+ <method name='ClearAll' type='void' dispid='3' vtindex='36' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='ClearAnnotations' >
  </method>
- <method name='SetStyle' type='void' dispid='4' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='SetAnnotation Style' >
+ <method name='SetStyle' type='void' dispid='4' vtindex='40' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='SetAnnotation Style' >
   <param type='long' dir='IN' name='line' />
   <param type='long' dir='IN' name='style' />
  </method>
@@ -228,80 +228,80 @@ file='..\..\..\..\ax\scintillax\x64/uni_release\scintillax.tlb'>
 
 
 <interface name='IScintillAxMarkers' type='Dual' iid='{6F7991E0-0762-452C-A6D4-649847D136DC}' base='IDispatch' members='7' desc='' >
- <property name='UseMarkers' type='VARIANT_BOOL' dispid='1' vtindex='56' ctype='HRESULT' param='vbMarkers' desc='Get/Set Use markers'  funkind='virtual'  calltype='__stdcall' >
+ <property name='UseMarkers' type='VARIANT_BOOL' dispid='1' vtindex='28' ctype='HRESULT' param='vbMarkers' desc='Get/Set Use markers'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <method name='ToggleMarker' type='void' dispid='2' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Toggle a Marker at the left widnow border' >
+ <method name='ToggleMarker' type='void' dispid='2' vtindex='36' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Toggle a Marker at the left widnow border' >
   <param type='long' dir='IN' name='line' />
  </method>
- <method name='SetMarker' type='void' dispid='3' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set a Marker' >
+ <method name='SetMarker' type='void' dispid='3' vtindex='40' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set a Marker' >
   <param type='long' dir='IN' name='line' />
  </method>
- <method name='Remove' type='void' dispid='4' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Remove a Marker' >
+ <method name='Remove' type='void' dispid='4' vtindex='44' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Remove a Marker' >
   <param type='long' dir='IN' name='line' />
  </method>
- <method name='RemoveAll' type='void' dispid='5' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Remove all Markers' >
+ <method name='RemoveAll' type='void' dispid='5' vtindex='48' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Remove all Markers' >
  </method>
- <method name='HasMarker' type='void' dispid='6' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Test for Marker at line' >
+ <method name='HasMarker' type='void' dispid='6' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Test for Marker at line' >
   <param type='long' dir='IN' name='line' />
  </method>
- <method name='GetMarkers' type='void' dispid='7' vtindex='112' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Get all Markers' >
+ <method name='GetMarkers' type='void' dispid='7' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Get all Markers' >
   <param type='SAFEARRAY*' dir='OUT' name='markers' />
  </method>
 </interface>
 
 
 <interface name='IScintillAx' type='Dual' iid='{1120EC6A-130F-440E-9B1D-F02D505FB5BC}' base='IDispatch' members='20' desc='' >
- <property name='Properties' type='IScintillAxProperties**' dispid='1' vtindex='56' ctype='HRESULT' param='d' desc='Get the Properties for this Document'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Properties' type='IScintillAxProperties**' dispid='1' vtindex='28' ctype='HRESULT' param='d' desc='Get the Properties for this Document'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <property name='Text' type='IScintillAxText**' dispid='2' vtindex='64' ctype='HRESULT' param='d' desc='Get the Text for this Document'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Text' type='IScintillAxText**' dispid='2' vtindex='32' ctype='HRESULT' param='d' desc='Get the Text for this Document'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <property name='Position' type='IScintillAxPosition**' dispid='3' vtindex='72' ctype='HRESULT' param='d' desc='Access Positions in this Document'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Position' type='IScintillAxPosition**' dispid='3' vtindex='36' ctype='HRESULT' param='d' desc='Access Positions in this Document'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <property name='Selection' type='IScintillAxSelection**' dispid='4' vtindex='80' ctype='HRESULT' param='d' desc='Access the Current Selection in this Document'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Selection' type='IScintillAxSelection**' dispid='4' vtindex='40' ctype='HRESULT' param='d' desc='Access the Current Selection in this Document'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <property name='line' type='IScintillAxLine**' dispid='5' vtindex='88' ctype='HRESULT' param='d' desc='Access Lines of this Document'  funkind='virtual'  calltype='__stdcall' >
+ <property name='line' type='IScintillAxLine**' dispid='5' vtindex='44' ctype='HRESULT' param='d' desc='Access Lines of this Document'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <property name='Annotation' type='IScintillAxAnnotation**' dispid='6' vtindex='96' ctype='HRESULT' param='d' desc='Access Annotations in this Document'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Annotation' type='IScintillAxAnnotation**' dispid='6' vtindex='48' ctype='HRESULT' param='d' desc='Access Annotations in this Document'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <property name='markers' type='IScintillAxMarkers**' dispid='7' vtindex='104' ctype='HRESULT' param='d' desc='Access Markers in this Document'  funkind='virtual'  calltype='__stdcall' >
+ <property name='markers' type='IScintillAxMarkers**' dispid='7' vtindex='52' ctype='HRESULT' param='d' desc='Access Markers in this Document'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <method name='Load' type='void' dispid='8' vtindex='112' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Load File form disk' >
+ <method name='Load' type='void' dispid='8' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Load File form disk' >
   <param type='BSTR' dir='IN' name='fname' />
  </method>
- <method name='LoadUTF8' type='void' dispid='9' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Load File from disk - Force UTF8' >
+ <method name='LoadUTF8' type='void' dispid='9' vtindex='60' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Load File from disk - Force UTF8' >
   <param type='BSTR' dir='IN' name='fname' />
  </method>
- <method name='Save' type='void' dispid='10' vtindex='128' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Save File to disk' >
+ <method name='Save' type='void' dispid='10' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Save File to disk' >
  </method>
- <method name='SaveAs' type='void' dispid='11' vtindex='136' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Save As - save File to disk to path' >
+ <method name='SaveAs' type='void' dispid='11' vtindex='68' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Save As - save File to disk to path' >
   <param type='BSTR' dir='IN' name='fname' />
  </method>
- <method name='Undo' type='void' dispid='12' vtindex='144' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Undo' >
+ <method name='Undo' type='void' dispid='12' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Undo' >
  </method>
- <method name='Redo' type='void' dispid='13' vtindex='152' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Redo' >
+ <method name='Redo' type='void' dispid='13' vtindex='76' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Redo' >
  </method>
- <method name='SavePoint' type='void' dispid='14' vtindex='160' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set SavePoint' >
+ <method name='SavePoint' type='void' dispid='14' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set SavePoint' >
  </method>
- <method name='SetFocus' type='void' dispid='15' vtindex='168' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set Focus' >
+ <method name='SetFocus' type='void' dispid='15' vtindex='84' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set Focus' >
  </method>
- <method name='ZoomIn' type='void' dispid='16' vtindex='176' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Zoom in' >
+ <method name='ZoomIn' type='void' dispid='16' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Zoom in' >
  </method>
- <method name='ZoomOut' type='void' dispid='17' vtindex='184' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Zoom out' >
+ <method name='ZoomOut' type='void' dispid='17' vtindex='92' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Zoom out' >
  </method>
- <method name='Print' type='void' dispid='18' vtindex='192' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Print' >
+ <method name='Print' type='void' dispid='18' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Print' >
  </method>
- <method name='ShowProperties' type='void' dispid='19' vtindex='200' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Show Properties' >
+ <method name='ShowProperties' type='void' dispid='19' vtindex='100' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Show Properties' >
  </method>
- <method name='InsertColorDialog' type='void' dispid='20' vtindex='208' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Show the Insert Color Dialog' >
+ <method name='InsertColorDialog' type='void' dispid='20' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Show the Insert Color Dialog' >
  </method>
 </interface>
 
@@ -336,29 +336,29 @@ file='..\..\..\..\ax\scintillax\x64/uni_release\scintillax.tlb'>
 
 
 <interface name='IScintillAxEvents' type='Dual' iid='{E3766918-A0A4-48B7-942A-BA4B4D524CD0}' base='IDispatch' members='8' desc='' >
- <method name='OnFileNameChanged' type='void' dispid='1' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Name changed' >
+ <method name='OnFileNameChanged' type='void' dispid='1' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Name changed' >
   <param type='BSTR' dir='IN' name='fname' />
   <param type='BSTR' dir='IN' name='fPath' />
  </method>
- <method name='OnShowMenu' type='void' dispid='2' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Show Menue' >
+ <method name='OnShowMenu' type='void' dispid='2' vtindex='32' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Show Menue' >
   <param type='VARIANT_BOOL*' dir='OUT' name='vbShowMenue' />
  </method>
- <method name='OnPosChange' type='void' dispid='3' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Pos change' >
+ <method name='OnPosChange' type='void' dispid='3' vtindex='36' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Pos change' >
   <param type='long' dir='IN' name='iLine' />
  </method>
- <method name='OnChar' type='void' dispid='4' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Char entered' >
+ <method name='OnChar' type='void' dispid='4' vtindex='40' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Char entered' >
   <param type='BSTR' dir='IN' name='ch' />
  </method>
- <method name='OnMarker' type='void' dispid='5' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Marker click' >
+ <method name='OnMarker' type='void' dispid='5' vtindex='44' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Marker click' >
   <param type='long' dir='IN' name='iLine' />
  </method>
- <method name='OnSyntax' type='void' dispid='6' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Syntax changed' >
+ <method name='OnSyntax' type='void' dispid='6' vtindex='48' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Syntax changed' >
   <param type='long' dir='IN' name='s' />
  </method>
- <method name='OnSystem' type='void' dispid='7' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='System change' >
+ <method name='OnSystem' type='void' dispid='7' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='System change' >
   <param type='long' dir='IN' name='s' />
  </method>
- <method name='OnEncoding' type='void' dispid='8' vtindex='112' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Encoding changed' >
+ <method name='OnEncoding' type='void' dispid='8' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Encoding changed' >
   <param type='long' dir='IN' name='e' />
  </method>
 </interface>
@@ -402,3 +402,4 @@ file='..\..\..\..\ax\scintillax\x64/uni_release\scintillax.tlb'>
 
 
 </typelib>
+

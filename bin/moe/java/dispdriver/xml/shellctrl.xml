@@ -7,42 +7,42 @@ minor='0'
 file='..\..\..\..\ax\shellctrl\x64/uni_release\shellctrl.tlb'>
 
 <interface name='IShellTree' type='Dual' iid='{67282F00-10CA-4540-92B1-37DF10A3CD7B}' base='IDispatch' members='15' desc='' >
- <property name='DisplayFiles' type='VARIANT_BOOL' dispid='1' vtindex='56' ctype='HRESULT' param='vb' desc='Get/Set Display of files'  funkind='virtual'  calltype='__stdcall' >
+ <property name='DisplayFiles' type='VARIANT_BOOL' dispid='1' vtindex='28' ctype='HRESULT' param='vb' desc='Get/Set Display of files'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='Selection' type='BSTR' dispid='2' vtindex='72' ctype='HRESULT' param='fname' desc='Get/Set the current selection path'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Selection' type='BSTR' dispid='2' vtindex='36' ctype='HRESULT' param='fname' desc='Get/Set the current selection path'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='HasFocus' type='VARIANT_BOOL*' dispid='3' vtindex='88' ctype='HRESULT' param='vbHasFocus' desc='returns true when Treeview has the focus'  funkind='virtual'  calltype='__stdcall' >
+ <property name='HasFocus' type='VARIANT_BOOL*' dispid='3' vtindex='44' ctype='HRESULT' param='vbHasFocus' desc='returns true when Treeview has the focus'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <method name='Update' type='void' dispid='4' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Updates the Treeview' >
+ <method name='Update' type='void' dispid='4' vtindex='48' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Updates the Treeview' >
  </method>
- <method name='Cut' type='void' dispid='5' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Cut current selection' >
+ <method name='Cut' type='void' dispid='5' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Cut current selection' >
  </method>
- <method name='Copy' type='void' dispid='6' vtindex='112' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Copy current selection' >
+ <method name='Copy' type='void' dispid='6' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Copy current selection' >
  </method>
- <method name='Paste' type='void' dispid='7' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Paste current selection' >
+ <method name='Paste' type='void' dispid='7' vtindex='60' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Paste current selection' >
  </method>
- <method name='Rename' type='void' dispid='8' vtindex='128' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Rename current selection' >
+ <method name='Rename' type='void' dispid='8' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Rename current selection' >
  </method>
- <method name='Delete' type='void' dispid='9' vtindex='136' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Delete current selection' >
+ <method name='Delete' type='void' dispid='9' vtindex='68' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Delete current selection' >
  </method>
- <method name='Properties' type='void' dispid='10' vtindex='144' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Properties for current selection' >
+ <method name='Properties' type='void' dispid='10' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Properties for current selection' >
  </method>
- <method name='Execute' type='void' dispid='11' vtindex='152' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='ShellExecute current selection' >
+ <method name='Execute' type='void' dispid='11' vtindex='76' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='ShellExecute current selection' >
  </method>
- <method name='AddFolder' type='void' dispid='12' vtindex='160' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Add a network folder' >
+ <method name='AddFolder' type='void' dispid='12' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Add a network folder' >
   <param type='BSTR' dir='IN' name='dname' />
  </method>
- <method name='RemoveFolder' type='void' dispid='13' vtindex='168' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Remove a network folder' >
+ <method name='RemoveFolder' type='void' dispid='13' vtindex='84' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Remove a network folder' >
   <param type='BSTR' dir='IN' name='dname' />
  </method>
- <method name='CreateDir' type='void' dispid='14' vtindex='176' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Create a new directory at current selection' >
+ <method name='CreateDir' type='void' dispid='14' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Create a new directory at current selection' >
  </method>
- <property name='UseContext' type='VARIANT_BOOL' dispid='15' vtindex='184' ctype='HRESULT' param='vb' desc='Get/Set embedded context menu usage'  funkind='virtual'  calltype='__stdcall' >
+ <property name='UseContext' type='VARIANT_BOOL' dispid='15' vtindex='92' ctype='HRESULT' param='vb' desc='Get/Set embedded context menu usage'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
@@ -50,116 +50,116 @@ file='..\..\..\..\ax\shellctrl\x64/uni_release\shellctrl.tlb'>
 
 
 <interface name='IHexCtrl' type='Dual' iid='{3F6F041B-6B7A-4465-9542-4652528C3FB7}' base='IDispatch' members='17' desc='' >
- <property name='ReadOnly' type='VARIANT_BOOL*' dispid='1' vtindex='56' ctype='HRESULT' param='vb' desc='Get/Set Readonly mode'  funkind='virtual'  calltype='__stdcall' >
+ <property name='ReadOnly' type='VARIANT_BOOL*' dispid='1' vtindex='28' ctype='HRESULT' param='vb' desc='Get/Set Readonly mode'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='DisplayColumns' type='long*' dispid='2' vtindex='72' ctype='HRESULT' param='cols' desc='Get/Set width of columns to display'  funkind='virtual'  calltype='__stdcall' >
+ <property name='DisplayColumns' type='long*' dispid='2' vtindex='36' ctype='HRESULT' param='cols' desc='Get/Set width of columns to display'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='Filename' type='BSTR*' dispid='3' vtindex='88' ctype='HRESULT' param='fname' desc='Get/Set Filename'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Filename' type='BSTR*' dispid='3' vtindex='44' ctype='HRESULT' param='fname' desc='Get/Set Filename'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='HasFocus' type='VARIANT_BOOL*' dispid='4' vtindex='104' ctype='HRESULT' param='vbHasFocus' desc='returns true when Controls has the focus'  funkind='virtual'  calltype='__stdcall' >
+ <property name='HasFocus' type='VARIANT_BOOL*' dispid='4' vtindex='52' ctype='HRESULT' param='vbHasFocus' desc='returns true when Controls has the focus'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <property name='ShowToolbar' type='VARIANT_BOOL*' dispid='5' vtindex='112' ctype='HRESULT' param='vb' desc='Get/Set display of Toolbar'  funkind='virtual'  calltype='__stdcall' >
- <get />
- <put />
-</property>
- <property name='ScrollPos' type='long*' dispid='6' vtindex='128' ctype='HRESULT' param='pos' desc='Get/Set ScrollPos'  funkind='virtual'  calltype='__stdcall' >
+ <property name='ShowToolbar' type='VARIANT_BOOL*' dispid='5' vtindex='56' ctype='HRESULT' param='vb' desc='Get/Set display of Toolbar'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='ScrollMax' type='long*' dispid='7' vtindex='144' ctype='HRESULT' param='pos' desc='return the maximum scroll position'  funkind='virtual'  calltype='__stdcall' >
- <get />
-</property>
- <property name='Offset' type='long*' dispid='8' vtindex='152' ctype='HRESULT' param='off' desc='Get/Set the current offset into file to display'  funkind='virtual'  calltype='__stdcall' >
+ <property name='ScrollPos' type='long*' dispid='6' vtindex='64' ctype='HRESULT' param='pos' desc='Get/Set ScrollPos'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='FileSize' type='long*' dispid='9' vtindex='168' ctype='HRESULT' param='s' desc='Get the File&apos;s size'  funkind='virtual'  calltype='__stdcall' >
+ <property name='ScrollMax' type='long*' dispid='7' vtindex='72' ctype='HRESULT' param='pos' desc='return the maximum scroll position'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <property name='SearchPos' type='long*' dispid='10' vtindex='176' ctype='HRESULT' param='pos' desc='Get/Set current Search position'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Offset' type='long*' dispid='8' vtindex='76' ctype='HRESULT' param='off' desc='Get/Set the current offset into file to display'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <method name='Open' type='VARIANT_BOOL*' dispid='11' vtindex='192' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open a File' >
+ <property name='FileSize' type='long*' dispid='9' vtindex='84' ctype='HRESULT' param='s' desc='Get the File&apos;s size'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='SearchPos' type='long*' dispid='10' vtindex='88' ctype='HRESULT' param='pos' desc='Get/Set current Search position'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <method name='Open' type='VARIANT_BOOL*' dispid='11' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open a File' >
   <param type='BSTR' dir='IN' name='file' />
  </method>
- <method name='OpenReadOnly' type='VARIANT_BOOL*' dispid='12' vtindex='200' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open a File ReadOnly' >
+ <method name='OpenReadOnly' type='VARIANT_BOOL*' dispid='12' vtindex='100' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open a File ReadOnly' >
   <param type='BSTR' dir='IN' name='file' />
  </method>
- <method name='SetOffsetDWORD' type='void' dispid='13' vtindex='208' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set DWORD value (in hex chars) at Offset' >
+ <method name='SetOffsetDWORD' type='void' dispid='13' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set DWORD value (in hex chars) at Offset' >
   <param type='long' dir='IN' name='Offset' />
   <param type='BSTR' dir='IN' name='val' />
  </method>
- <method name='SetOffsetByte' type='void' dispid='14' vtindex='216' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set BYTE value (in hex chars) at Offset' >
+ <method name='SetOffsetByte' type='void' dispid='14' vtindex='108' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set BYTE value (in hex chars) at Offset' >
   <param type='long' dir='IN' name='Offset' />
   <param type='BSTR' dir='IN' name='val' />
  </method>
- <method name='SetOffsetChar' type='void' dispid='15' vtindex='224' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set Char value at Offset' >
+ <method name='SetOffsetChar' type='void' dispid='15' vtindex='112' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set Char value at Offset' >
   <param type='long' dir='IN' name='Offset' />
   <param type='long' dir='IN' name='val' />
  </method>
- <method name='Search' type='void' dispid='16' vtindex='232' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Search in file ' >
+ <method name='Search' type='void' dispid='16' vtindex='116' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Search in file ' >
   <param type='BSTR' dir='IN' name='what' />
   <param type='long' dir='IN' name='flags' />
  </method>
- <method name='Value' type='BSTR*' dispid='17' vtindex='240' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Get Value at specific offset' >
+ <method name='Value' type='BSTR*' dispid='17' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Get Value at specific offset' >
   <param type='long' dir='IN' name='off' />
  </method>
 </interface>
 
 
 <interface name='IShellList' type='Dual' iid='{9C93223B-E503-415A-811A-B817D7B1BC43}' base='IDispatch' members='13' desc='' >
- <property name='DisplayFiles' type='VARIANT_BOOL' dispid='1' vtindex='56' ctype='HRESULT' param='vb' desc='Get/Set Display of files'  funkind='virtual'  calltype='__stdcall' >
+ <property name='DisplayFiles' type='VARIANT_BOOL' dispid='1' vtindex='28' ctype='HRESULT' param='vb' desc='Get/Set Display of files'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='Selection' type='VARIANT' dispid='2' vtindex='72' ctype='HRESULT' param='fname' desc='Get/Set current selection'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Selection' type='VARIANT' dispid='2' vtindex='36' ctype='HRESULT' param='fname' desc='Get/Set current selection'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='HasFocus' type='VARIANT_BOOL*' dispid='3' vtindex='88' ctype='HRESULT' param='vbHasFocus' desc='returns true when Listview has the focus'  funkind='virtual'  calltype='__stdcall' >
+ <property name='HasFocus' type='VARIANT_BOOL*' dispid='3' vtindex='44' ctype='HRESULT' param='vbHasFocus' desc='returns true when Listview has the focus'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <method name='Update' type='void' dispid='4' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Update Listview' >
+ <method name='Update' type='void' dispid='4' vtindex='48' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Update Listview' >
  </method>
- <method name='Cut' type='void' dispid='5' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Cut current selection' >
+ <method name='Cut' type='void' dispid='5' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Cut current selection' >
  </method>
- <method name='Copy' type='void' dispid='6' vtindex='112' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Copy current selection' >
+ <method name='Copy' type='void' dispid='6' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Copy current selection' >
  </method>
- <method name='Paste' type='void' dispid='7' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Paste current selection' >
+ <method name='Paste' type='void' dispid='7' vtindex='60' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Paste current selection' >
  </method>
- <method name='Rename' type='void' dispid='8' vtindex='128' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Rename current selection' >
+ <method name='Rename' type='void' dispid='8' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Rename current selection' >
  </method>
- <method name='Delete' type='void' dispid='9' vtindex='136' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Delete current selection' >
+ <method name='Delete' type='void' dispid='9' vtindex='68' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Delete current selection' >
  </method>
- <method name='Properties' type='void' dispid='10' vtindex='144' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Properties for current selection' >
+ <method name='Properties' type='void' dispid='10' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Properties for current selection' >
  </method>
- <method name='Execute' type='void' dispid='11' vtindex='152' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='ShellExecute current selection' >
+ <method name='Execute' type='void' dispid='11' vtindex='76' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='ShellExecute current selection' >
  </method>
- <method name='CreateDir' type='void' dispid='12' vtindex='160' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Create new directory' >
+ <method name='CreateDir' type='void' dispid='12' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Create new directory' >
  </method>
- <method name='UpDir' type='void' dispid='13' vtindex='168' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Up to parent directory' >
+ <method name='UpDir' type='void' dispid='13' vtindex='84' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Up to parent directory' >
  </method>
 </interface>
 
 
 <interface name='IColorPicker' type='Dual' iid='{60B3F5EC-7FC7-417A-9D90-F21C78B3FC05}' base='IDispatch' members='3' desc='' >
- <property name='Color' type='OLE_COLOR' dispid='1' vtindex='56' ctype='HRESULT' param='cl' desc='get/set current Color as OLE_COLOR'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Color' type='OLE_COLOR' dispid='1' vtindex='28' ctype='HRESULT' param='cl' desc='get/set current Color as OLE_COLOR'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='HexColor' type='BSTR' dispid='2' vtindex='72' ctype='HRESULT' param='cl' desc='get/set Color as HexValue (HTML-Format)'  funkind='virtual'  calltype='__stdcall' >
+ <property name='HexColor' type='BSTR' dispid='2' vtindex='36' ctype='HRESULT' param='cl' desc='get/set Color as HexValue (HTML-Format)'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <method name='Show' type='VARIANT_BOOL*' dispid='3' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='show the ColorPicker dialog' >
+ <method name='Show' type='VARIANT_BOOL*' dispid='3' vtindex='44' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='show the ColorPicker dialog' >
  </method>
 </interface>
 
@@ -213,47 +213,47 @@ file='..\..\..\..\ax\shellctrl\x64/uni_release\shellctrl.tlb'>
 
 
 <interface name='IShellTreeEvents' type='Dual' iid='{D975C13F-537C-4065-A27A-D25A271A7A6E}' base='IDispatch' members='4' desc='' >
- <method name='OnTreeSelection' type='void' dispid='1' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Tree Selection changed' >
+ <method name='OnTreeSelection' type='void' dispid='1' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Tree Selection changed' >
   <param type='BSTR' dir='IN' name='fname' />
  </method>
- <method name='OnTreeDblClick' type='void' dispid='2' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Tree Item DblClick' >
+ <method name='OnTreeDblClick' type='void' dispid='2' vtindex='32' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Tree Item DblClick' >
   <param type='BSTR' dir='IN' name='fname' />
  </method>
- <method name='OnTreeOpen' type='void' dispid='3' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Tree Item Open' >
+ <method name='OnTreeOpen' type='void' dispid='3' vtindex='36' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Tree Item Open' >
   <param type='BSTR' dir='IN' name='fname' />
  </method>
- <method name='OnContextMenu' type='void' dispid='4' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='On Context Menu' >
+ <method name='OnContextMenu' type='void' dispid='4' vtindex='40' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='On Context Menu' >
   <param type='BSTR' dir='IN' name='fname' />
  </method>
 </interface>
 
 
 <interface name='IShellListEvents' type='Dual' iid='{2ED442CD-E289-46C3-AB7B-8DE1CEF89DB4}' base='IDispatch' members='4' desc='' >
- <method name='OnListSelection' type='void' dispid='1' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='List Selection changed' >
+ <method name='OnListSelection' type='void' dispid='1' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='List Selection changed' >
   <param type='BSTR' dir='IN' name='fname' />
  </method>
- <method name='OnListDblClick' type='void' dispid='2' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='List Item DblClick' >
+ <method name='OnListDblClick' type='void' dispid='2' vtindex='32' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='List Item DblClick' >
   <param type='BSTR' dir='IN' name='fname' />
  </method>
- <method name='OnListOpen' type='void' dispid='3' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='List Item Open' >
+ <method name='OnListOpen' type='void' dispid='3' vtindex='36' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='List Item Open' >
   <param type='BSTR' dir='IN' name='fname' />
  </method>
- <method name='OnDirChanged' type='void' dispid='4' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Active Directory changed' >
+ <method name='OnDirChanged' type='void' dispid='4' vtindex='40' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Active Directory changed' >
   <param type='BSTR' dir='IN' name='dir' />
  </method>
 </interface>
 
 
 <interface name='IHexCtrlEvents' type='Dual' iid='{2031340D-A1E9-4FCF-8774-B94A565D6225}' base='IDispatch' members='3' desc='' >
- <method name='OnNewFile' type='void' dispid='1' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='HexWnd filename changed' >
+ <method name='OnNewFile' type='void' dispid='1' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='HexWnd filename changed' >
   <param type='BSTR' dir='IN' name='fname' />
   <param type='VARIANT_BOOL' dir='IN' name='vbReadOnly' />
  </method>
- <method name='OnNewOffset' type='void' dispid='2' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Offset changed' >
+ <method name='OnNewOffset' type='void' dispid='2' vtindex='32' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Offset changed' >
   <param type='BSTR' dir='IN' name='address' />
   <param type='BSTR' dir='IN' name='Value' />
  </method>
- <method name='OnNewValue' type='void' dispid='3' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Value changed' >
+ <method name='OnNewValue' type='void' dispid='3' vtindex='36' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Value changed' >
   <param type='BSTR' dir='IN' name='address' />
   <param type='BSTR' dir='IN' name='Value' />
  </method>
@@ -281,3 +281,4 @@ file='..\..\..\..\ax\shellctrl\x64/uni_release\shellctrl.tlb'>
 
 
 </typelib>
+

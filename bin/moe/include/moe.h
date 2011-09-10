@@ -36,6 +36,7 @@ class MoeWnd  :
 {
 friend class Exec;
 friend class Docs;
+friend class DocFactory;
 friend class MoeFormWnd;
 public:
 

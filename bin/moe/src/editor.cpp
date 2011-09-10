@@ -861,6 +861,7 @@ void Editor::OnSaveAs()
 
 			if ( S_OK == sci->SaveAs( mol::bstr(ofn.fileName() ) ) )
 			{
+				lastWriteTime_ = getLastWriteTime( ofn.fileName() );
 				docs()->rename( this, ofn.fileName() );
 				props_->put_Filename(mol::bstr(ofn.fileName()));
 
@@ -887,10 +888,11 @@ void Editor::OnSave()
 
 	mol::ostringstream oss;
 
-	//saving_ = true;
+	saving_ = true;
 	HRESULT hr = sci->Save();
 	if ( hr == S_OK )
 	{
+		lastWriteTime_ = getLastWriteTime( filename.toString() );
 		oss << _T("saved file ") << filename.toString() ;
 	}
 	else
@@ -900,8 +902,7 @@ void Editor::OnSave()
 
 	statusBar()->status(oss.str());
 
-	lastWriteTime_ = getLastWriteTime( filename.toString() );
-	//saving_ = false;
+	saving_ = false;
 }
 
 void Editor::OnExecForm()
