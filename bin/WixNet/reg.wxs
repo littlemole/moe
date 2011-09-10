@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <ComponentGroup Id="NetRegProtoCompGroup">
+            <Component Id="cmpF14EC352643C629431040CB982AC0459" Directory="TARGETDIR" Guid="{B7C99C4A-E888-4C9E-81A9-DF9F128583CA}" KeyPath="yes">
+                <RegistryKey Key="org.oha7.dotnet.Net" Root="HKCR">
+                    <RegistryValue Value="org.oha7.dotnet.Net" Type="string" />
+                </RegistryKey>
+            </Component>
+            <Component Id="cmpF186671B5CFF371E83FDC5583FE411FA" Directory="TARGETDIR" Guid="{2BBFC235-70D0-4E2A-9C6D-FE985BEEC687}" KeyPath="yes">
+                <RegistryKey Key="org.oha7.dotnet.Net\CLSID" Root="HKCR">
+                    <RegistryValue Value="{F751B363-9E23-4DA7-B18C-B835AE59DF5B}" Type="string" />
+                </RegistryKey>
+            </Component>
+            <Component Id="cmpA85EB112F7B9E1583A7FA3B62B201658" Directory="TARGETDIR" Guid="{A1D1B895-ABBF-46FB-BD93-FA1991200CAE}" KeyPath="yes">
+                <RegistryKey Key="CLSID\{F751B363-9E23-4DA7-B18C-B835AE59DF5B}" Root="HKCR">
+                    <RegistryValue Value="org.oha7.dotnet.Net" Type="string" />
+                </RegistryKey>
+            </Component>
+            <Component Id="cmp86E1A2576E5BF4A9E790D950D5186FC8" Directory="TARGETDIR" Guid="{CE1922F1-AE2A-4D1F-A12E-FFFBBEAF77A4}" KeyPath="yes">
+                <RegistryKey Key="CLSID\{F751B363-9E23-4DA7-B18C-B835AE59DF5B}\InprocServer32" Root="HKCR">
+                    <RegistryValue Value="mscoree.dll" Type="string" />
+                    <RegistryValue Name="ThreadingModel" Value="Both" Type="string" />
+                    <RegistryValue Name="Class" Value="org.oha7.dotnet.Net" Type="string" />
+                    <RegistryValue Name="Assembly" Value="net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" />
+                    <RegistryValue Name="RuntimeVersion" Value="v4.0.30319" Type="string" />
+                </RegistryKey>
+            </Component>
+            <Component Id="cmp3AE22ED79965C1F4F5939E236624662A" Directory="TARGETDIR" Guid="{F3F4E11C-7C83-4E48-98F2-30F6D4C1E238}" KeyPath="yes">
+                <RegistryKey Key="CLSID\{F751B363-9E23-4DA7-B18C-B835AE59DF5B}\InprocServer32\1.0.0.0" Root="HKCR">
+                    <RegistryValue Name="Class" Value="org.oha7.dotnet.Net" Type="string" />
+                    <RegistryValue Name="Assembly" Value="net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" />
+                    <RegistryValue Name="RuntimeVersion" Value="v4.0.30319" Type="string" />
+                </RegistryKey>
+            </Component>
+            <Component Id="cmp8F61F3CF8D9BA92342842C5DBCE48A47" Directory="TARGETDIR" Guid="{122BC827-020E-4662-BFD2-0EC296C17A18}" KeyPath="yes">
+                <RegistryKey Key="CLSID\{F751B363-9E23-4DA7-B18C-B835AE59DF5B}\ProgId" Root="HKCR">
+                    <RegistryValue Value="org.oha7.dotnet.Net" Type="string" />
+                </RegistryKey>
+            </Component>
+            <Component Id="cmp070E8287691AEE666456C1970E1289F9" Directory="TARGETDIR" Guid="{0751B6E3-81C1-4B35-95A7-B9FE7F00D0A8}" KeyPath="yes">
+                <RegistryKey Action="createAndRemoveOnUninstall" Key="CLSID\{F751B363-9E23-4DA7-B18C-B835AE59DF5B}\Implemented Categories\{62C8FE65-4EBB-45E7-B440-6E39B2CDBF29}" Root="HKCR" />
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="TARGETDIR" />
+    </Fragment>
+</Wix>

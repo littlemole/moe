@@ -30,6 +30,7 @@
   <genObj>obj\$(confPath)\gen.wixobj</genObj>
   <netObj>obj\$(confPath)\net.wixobj</netObj>
   <monObj>obj\$(confPath)\mon.wixobj</monObj>
+  <regObj>obj\$(confPath)\reg.wixobj</regObj>
 
   <!-- wix output file -->
   <msiTarget>.\bin\$(confPath)\netSetup.msi</msiTarget>
@@ -59,11 +60,11 @@
 
 		<!-- prepare directory structure -->
 		<RemoveDir Directories=".\moe\*.*" />
-		<RemoveDir Directories=".\$(regfree)\moe;" />
+		<RemoveDir Directories=".\$(regfree)\moe\*.*" />
 
 		<MakeDir Directories=".\moe"/>
 		<MakeDir Directories=".\deploy\$(confPath)"/>
-		<MakeDir Directories=".\$(regfree)\moe;" />
+		<MakeDir Directories=".\$(regfree)\moe" />
 		<MakeDir Directories=".\$(regfreeTargetPath)" />
 
 		<!-- copy files -->
@@ -83,21 +84,28 @@
             SourceFiles="..\..\ax\net\net\net\$(netConfPath)\net.dll"
             DestinationFolder=".\moe"
         />
+        <Copy
+            SourceFiles="..\..\ax\net\net\net\net.reg"
+            DestinationFolder=".\moe"
+        />
 
 		<RemoveDir Directories="@(SvnFolders)" />
 
 		<!-- heat -->
 		<Exec Command='"$(WIX)\bin\heat.exe" dir . -sw5150 -sw5151 -gg -cg "NetCompGroup" -dr INSTALLLOCATION -var var.SourceDir  -o ..\gen.wxs' WorkingDirectory="./moe"/>
+		<Exec Command='"$(WIX)\bin\heat.exe" reg .\net.reg -gg -o ..\reg.wxs -cg "NetRegProtoCompGroup"'  WorkingDirectory="./moe"/>
 
         <!-- candle -->
 		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(genObj)" gen.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
 
 		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(netObj)" net.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
 
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(regObj)" reg.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
 		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(monObj)" MondoNoLicense.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
 
         <!-- light -->
-		<Exec Command='"$(WIX)\bin\light.exe" -ext "$(uiext)" -out "$(msiTarget)" -cultures:en-us -loc en-us.wxl "$(genObj)" "$(netObj)" "$(monObj)"' WorkingDirectory="."/>
+		<Exec Command='"$(WIX)\bin\light.exe" -ext "$(uiext)" -out "$(msiTarget)" -cultures:en-us -loc en-us.wxl "$(regObj)" "$(genObj)" "$(netObj)" "$(monObj)"' WorkingDirectory="."/>
 
 
 		<!-- nonadmin install -->
