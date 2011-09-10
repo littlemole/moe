@@ -5,8 +5,10 @@ a) pre-requisites:
 
 
 	* Win 7.1 SDK
+        * WIX 3.5
 	* boost 
 	* activestate perl
+        * java jdk
         * ant ( for extensions )
 
 
@@ -19,6 +21,7 @@ check master.props for paths to external dependencies:
   * boost
   * java (for extentions, see below)
 
+perl and ant are supposed to be in the path
 
 
 c) setup the env
