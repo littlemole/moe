@@ -16,7 +16,7 @@
 #include "ole.h"
 #include "rtf.h"
 #include "ribbonres.h"
-
+#include "DocFactory.h"
 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
@@ -30,9 +30,20 @@ Docs::Instance* Docs::CreateInstance()
 	return d;
 }
 
+Docs::Docs() 
+{
+	factory_ = new DocFactory;
+}
+
 Docs::~Docs() 
 {
+	delete factory_;
 	ODBGS("~DOCS subobj dead");
+}
+
+bool Docs::open( int index, const mol::string& dir, InFiles pref, bool readOnly, IMoeDocument** doc  )
+{
+	return factory_->open(index,dir,pref,readOnly,doc) == S_OK;
 }
 
 void Docs::remove( mol::MdiChild* mdi )
@@ -193,169 +204,55 @@ HRESULT __stdcall Docs::Activate( VARIANT i)
 
 HRESULT __stdcall Docs::New(IMoeDocument** d)
 {
-	if (d)
-		*d = 0;
-
-	mol::punk<IMoeDocument> doc;
-	bool b = newFile(&doc);
-	if (!b || !doc)
-		return E_FAIL;
-
-	if ( d )
-		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
-	return S_OK;
+	return factory_->newDocument(Docs::PREF_UTF8,d);
 }
 
 
 HRESULT __stdcall Docs::NewUserForm(IMoeDocument** d)
 {
-	if (d)
-		*d = 0;
-
-	mol::punk<IMoeDocument> doc;
-	bool b = newUFSFile(&doc);
-	if (!b || !doc)
-		return E_FAIL;
-
-	if ( d )
-		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
-	return S_OK;
+	return factory_->newDocument(Docs::PREF_FORM,d);
 }
 
 
 HRESULT __stdcall Docs::NewRTFDocument(IMoeDocument** d)
 {
-	if (d)
-		*d = 0;
-
-	mol::punk<IMoeDocument> doc;
-	bool b = newRTFFile(&doc);
-	if (!b || !doc)
-		return E_FAIL;
-
-	if ( d )
-		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
-	return S_OK;
+	return factory_->newDocument(Docs::PREF_RTF,d);
 }
-
 
 
 HRESULT __stdcall Docs::OpenTailDocument(BSTR fp, IMoeDocument** d)
 {
-	if (d)
-		*d = 0;
-
-	if(!fp)
-		return E_INVALIDARG;
-
-	mol::punk<IMoeDocument> doc;
-	bool b = openTailFile(mol::toString(fp),&doc);
-	if (!b || !doc)
-		return E_FAIL;
-
-	if ( d )
-		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
-	return S_OK;
+	return factory_->openDocument(Docs::PREF_TAIL,mol::toString(fp),false,d);
 }
 
 HRESULT __stdcall Docs::Open( BSTR fPath, IMoeDocument** d)
 {
-	if (d)
-		*d = 0;
-
-	mol::punk<IMoeDocument> doc;
-	open(-1, mol::bstr(fPath).toString(), Docs::PREF_TXT, false,&doc);
-
-	if ( !doc )
-		return E_FAIL;
-
-	if (d )
-		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
-
-	return S_OK;
+	return factory_->openDocument(Docs::PREF_TXT,mol::toString(fPath),false,d);
 }
 
 HRESULT __stdcall Docs::OpenUTF8( BSTR fPath, IMoeDocument** d)
 {
-	if (d)
-		*d = 0;
-
-	mol::punk<IMoeDocument> doc;
-	open(-1, mol::bstr(fPath).toString(), Docs::PREF_UTF8, false,&doc);
-
-	if ( !doc )
-		return E_FAIL;
-
-	if ( d )
-		return doc->QueryInterface( IID_IMoeDocument, (void**) d );	
-	return S_OK;
+	return factory_->openDocument(Docs::PREF_UTF8,mol::toString(fPath),false,d);
 }
 
 HRESULT __stdcall Docs::OpenDir(BSTR dir,  IMoeDocument** d)
 {
-	if (d)
-		*d = 0;
-
-	mol::punk<IMoeDocument> doc;
-	open(-1, mol::bstr(dir).toString(), Docs::PREF_TXT, false,&doc);
-
-	if ( !doc )
-		return E_FAIL;
-
-	if ( d )
-		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
-
-	return S_OK;
+	return factory_->open(-1,mol::toString(dir),Docs::PREF_TXT,false,d);
 }
 
 HRESULT __stdcall Docs::OpenHexEditor(  BSTR f, VARIANT_BOOL vbReadOnly, IMoeDocument** d)
 {
-	if (d)
-		*d = 0;
-
-	mol::punk<IMoeDocument> doc;
-	open(-1, mol::bstr(f).toString(), Docs::PREF_HEX, vbReadOnly == VARIANT_TRUE ? true : false,&doc);
-
-	if ( !doc )
-		return E_FAIL;
-
-	if(d)
-		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
-	return S_OK;
+	return factory_->open(-1,mol::toString(f),Docs::PREF_HEX,false,d);
 }
 
 HRESULT __stdcall Docs::OpenHtmlFrame(  BSTR f,  IMoeDocument** d)
 {
-	if (d)
-		*d = 0;
-
-	mol::punk<IMoeDocument> doc;
-	open(-1, mol::bstr(f).toString(), Docs::PREF_HTML, false,&doc);
-
-	if ( !doc )
-		return E_FAIL;
-
-	if ( d )
-		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
-
-	return S_OK;
+	return factory_->open(-1,mol::toString(f),Docs::PREF_HTML,false,d);
 }
 
 HRESULT __stdcall Docs::OpenUserForm(  BSTR pathname, IMoeDocument** d )
 {
-	if (d)
-		*d = 0;
-
-	mol::punk<IMoeDocument> doc;
-	open(-1, mol::bstr(pathname).toString(), Docs::PREF_FORM, false,&doc);
-
-	if ( !doc )
-		return E_FAIL;
-
-	if ( d )
-		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
-
-	return S_OK;
+	return factory_->open(-1,mol::toString(pathname),Docs::PREF_FORM,false,d);
 }
 
 HRESULT __stdcall Docs::SaveAll()
@@ -500,36 +397,7 @@ Docs::childlist::iterator Docs::iterator(VARIANT& index)
 
 //////////////////////////////////////////////////////////////////////////////
 
-mol::string Docs::getNewFileName(const mol::string& ext)
-{
-	mol::TCHAR buf[MAX_PATH];
-	::SHGetSpecialFolderPath( *moe(), buf, CSIDL_MYDOCUMENTS, TRUE );
-
-	mol::string p(buf);
-	p = mol::Path::addBackSlash(p);
-
-	int i = 1;
-	while (i<999)
-	{
-		mol::ostringstream oss;
-		oss << p << _T("NewFile") << i << ext;
-
-		mol::string f = oss.str();
-
-		if ( !mol::Path::exists(f) && key2index(mol::variant(f)) == -1 )
-		{
-			punk<IMoeDocument> doc;
-			if ( S_FALSE == Item( variant(bstr(f)), &doc ) )
-			{
-				return f;
-			}
-		}
-		i++;
-	}
-	return p + _T("NewFile.txt");
-}
-
-
+/*
 bool Docs::newFile(IMoeDocument** doc)
 {
 	if ( moe()->activeObject)
@@ -711,7 +579,7 @@ bool Docs::open( int index, const mol::string& p, InFiles pref, bool readOnly, I
 
 		return false;
 	}
-	*/
+	*//*
 
 	// deactive any active object
 	if ( moe()->activeObject)
@@ -862,4 +730,33 @@ mol::MdiChild* Docs::openPath( const mol::string& p, InFiles pref, bool readOnly
 	return load<Editor>(path, pref == PREF_UTF8, readOnly );
 }
 	
+*/
 
+mol::string Docs::getNewFileName(const mol::string& ext)
+{
+	mol::TCHAR buf[MAX_PATH];
+	::SHGetSpecialFolderPath( *moe(), buf, CSIDL_MYDOCUMENTS, TRUE );
+
+	mol::string p(buf);
+	p = mol::Path::addBackSlash(p);
+
+	int i = 1;
+	while (i<999)
+	{
+		mol::ostringstream oss;
+		oss << p << _T("NewFile") << i << ext;
+
+		mol::string f = oss.str();
+
+		if ( !mol::Path::exists(f) && key2index(mol::variant(f)) == -1 )
+		{
+			punk<IMoeDocument> doc;
+			if ( S_FALSE == Item( variant(bstr(f)), &doc ) )
+			{
+				return f;
+			}
+		}
+		i++;
+	}
+	return p + _T("NewFile.txt");
+}

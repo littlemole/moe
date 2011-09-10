@@ -16,7 +16,7 @@ function loadFile(file)
     }
     catch(e)
     {
-        WScript.StdOut.WriteLine( file + " " + e.message );
+        //WScript.StdOut.WriteLine( e.message + " " + file );
     }
     return ret;
 }
@@ -47,6 +47,7 @@ function saveFile( output, file )
     // write transformation result to file
     f.Write(output);
     f.Close();
+   // WScript.StdOut.WriteLine( "finished writting to " + file );
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -107,8 +108,13 @@ var shell = new ActiveXObject("WScript.Shell");
 var xml = new ActiveXObject("Msxml2.DOMDocument.3.0");
 xml.async = false;
 
+// command line arguments
+
 var typelib = WScript.Arguments.Item(0);
 var package = WScript.Arguments.Item(1);
+
+
+// generate package structure
 WScript.StdOut.WriteLine("generating package " + package);
 
 var packages = package.split(".");
@@ -122,54 +128,56 @@ for ( var i = 0; i < packages.length; i++ )
 	catch(e)
 	{}
 }
+
 WScript.StdOut.WriteLine("generated package path" + package);
+
+// read typeib and generate xml
 
 WScript.StdOut.WriteLine("reading type library from " + typelib);
 
-var comTypes = new ActiveXObject("TypeToXml.TypeLibToXml");
 
+var a = typelib.split("\\");
+var typelibname = a[a.length-1];
+var xmlfile = typelibname.substr(0,typelibname.length-3) + "xml";
+xmlfile = shell.CurrentDirectory + "\\xml\\" + xmlfile;
 
-var b = comTypes.Load(typelib);
-if (!b)
+var commandline = '..\\..\\..\\..\\cg\\comtyper.exe "' + typelib  +'" "' + xmlfile + '"';
+WScript.StdOut.WriteLine(commandline );
+
+var oExec = shell.Exec( commandline );
+while (oExec.Status == 0)
 {
-	WScript.StdOut.WriteLine("could not load typelib " + typelib);
-	WScript.Quit (1);
+     WScript.Sleep(100);
 }
 
-//WScript.StdOut.WriteLine(comTypes.XML);
 
-var file = new ActiveXObject("IO.File");
-var Path = new ActiveXObject("IO.Path");
 
-var typelibname = Path.Filename(typelib);
-var n = typelibname.substr(0,typelibname.length-3) + "xml";
-n = shell.CurrentDirectory + "\\xml\\" + n;
-WScript.StdOut.WriteLine("saving typelib info as xml to " + n);
+// transform xml into java src
 
-file.Open(n);
-file.Write(comTypes.XML,comTypes.XML.length); 
-file.Close();
+WScript.StdOut.WriteLine("transforming " + xmlfile );
 
-WScript.StdOut.WriteLine("transforming " + n);
 
-xml.load(n);
+xml.load(xmlfile );
 xml.setProperty("SelectionLanguage", "XPath");
 var result = xml.selectNodes("//interface");
+
 
 for ( var i = 0; i < result.length; i++ )
 {
   var iface = result[i].getAttribute("name");
-
   WScript.StdOut.WriteLine("write interface " + iface);
 
-  var output = transform(shell.CurrentDirectory + "\\jcg-import.xsl", "filter", iface);
 
+  var output = transform(shell.CurrentDirectory + "\\jcg-import.xsl", "filter", iface);
   output += transform(shell.CurrentDirectory + "\\jcg.xsl", "filter", iface);
+
 
   saveFile(output, path + "\\" + iface + ".java");
 }
+
+
 WScript.StdOut.WriteLine("SUCCESS");
 WScript.StdOut.WriteLine("----------------------------------");
 
-
+WScript.Sleep(1000);
 

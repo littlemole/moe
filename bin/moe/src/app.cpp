@@ -298,6 +298,11 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 			s = s.substr(9);
 			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENTAILDOCUMENT, mol::variant(s) );					
 		}
+		else if ( s.substr(0,8) == "moe-hex:" ) 
+		{
+			s = s.substr(8);
+			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENHEXEDITOR, mol::variant(s), mol::variant(true) );					
+		}
 		else
 		{
 			s = resolvePath(s);

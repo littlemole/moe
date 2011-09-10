@@ -60,5 +60,11 @@ public interface IMoeDocumentCollection extends IUnknown {
     @Dispid(15)
     void Move( Object what, Object to);
 
+    @Dispid(16)
+    IMoeDocument NewRTFDocument( );
+
+    @Dispid(17)
+    IMoeDocument OpenTailDocument( String fPath);
+
 
 }

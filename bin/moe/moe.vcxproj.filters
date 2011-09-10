@@ -60,6 +60,7 @@
     <ClCompile Include="src\tailEditor.cpp">
       <Filter>mdi</Filter>
     </ClCompile>
+    <ClCompile Include="src\DocFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\app.h" />

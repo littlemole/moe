@@ -14,6 +14,7 @@ class Docs :
 {
 friend mol::Singleton<Docs>; 
 friend mol::stack_obj<Docs>;
+friend class DocFactory;
 public:
 
 	typedef mol::stack_obj<Docs> Instance;
@@ -49,7 +50,7 @@ public:
 	virtual HRESULT __stdcall CloseAll();
 
 	// helpers
-
+	
 	enum InFiles {
 	  PREF_TXT,
 	  PREF_UTF8,
@@ -59,21 +60,31 @@ public:
 	  PREF_RTF,
 	  PREF_TAIL
 	};
-
+	/*
 	bool open( int index, const mol::string& dir, InFiles pref, bool readOnly, IMoeDocument** doc  );
 
 	//mol::MdiChild* child( const mol::string& path);
-	
+	*/
+
+	bool open( int index, const mol::string& dir, InFiles pref, bool readOnly, IMoeDocument** doc  );
+
 	void remove( mol::MdiChild* mdi );
 	void rename( mol::MdiChild* mdi, const mol::string& path );
 	void move( mol::MdiChild* mdi, int pos );
-private:
-
-	Docs() {}
-	virtual ~Docs(); 
 
 	mol::string getNewFileName(const mol::string& ext);
 
+	size_t size() { return children_.size(); }
+
+private:
+
+	Docs();
+	virtual ~Docs(); 
+
+	
+	DocFactory* factory_;
+
+	/*
 	bool newFile(IMoeDocument** doc);
 	bool newUFSFile(IMoeDocument** doc);
 	bool newRTFFile(IMoeDocument** doc);
@@ -103,7 +114,7 @@ private:
 		typename T::Instance* t = T::CreateInstance( path );
 		return dynamic_cast<mol::MdiChild*>(t);
 	}
-
+	*/
 	typedef std::list<mol::MdiChild* > childlist;
 	childlist	children_;
 
