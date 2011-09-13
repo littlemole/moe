@@ -5,7 +5,7 @@
 #include "util/uni.h"
 #include "thread/sync.h"
 
-#include <jni.h>
+#include "jni.h"
 
 EXTERN_C const  CLSID CLSID_JavaObject;
 

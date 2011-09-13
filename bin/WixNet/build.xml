@@ -46,8 +46,9 @@
 
 <!-- net bin files -->
  <ItemGroup>
-  <moeResourceFiles Include="..\moe\resources\deploy-net\**\*.*" Exclude="..\moe\resources\deploy-net\**\.svn\*.*" />
-  <moeFiles Include=".\moe\**\*.*" />
+  <moeResourceFiles Include="..\moe\resources\deploy-net\**\*.*" Exclude="..\moe\resources\deploy-net\**\.svn\*.*;..\moe\resources\deploy-net\**\.svn" />
+  <moeFiles Include=".\moe\**\*.*" Exclude=".\moe\**\.svn\*.*;.\moe\**\.svn"/>
+  <SvnFolders Include=".\moe\**\.svn" />
  </ItemGroup>
  <!-- Build -->
 
@@ -61,6 +62,7 @@
 		<!-- prepare directory structure -->
 		<RemoveDir Directories=".\moe\*.*" />
 		<RemoveDir Directories=".\$(regfree)\moe\*.*" />
+		<RemoveDir Directories=".\$(regfree)\moe\**\.svn" />
 
 		<MakeDir Directories=".\moe"/>
 		<MakeDir Directories=".\deploy\$(confPath)"/>
@@ -74,7 +76,7 @@
         />
         <Copy
             SourceFiles="..\moe\resources\moe.ico"
-            DestinationFiles="..\moe\resources\moe.ico"
+            DestinationFiles=".\moe\net.ico"
         />
         <Copy
             SourceFiles="..\..\ax\net\$(confPath)\net.exe"

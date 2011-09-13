@@ -159,25 +159,25 @@ HRESULT __stdcall JREServer::Cast( IJavaObject* javaObject, BSTR clazzName, IJav
 	mol::java::JavaClassStore classes(*env);
 
 	jclass objectClazz = classes["java/lang/Object"];
+	mol::java::DispDriver dispDriver = classes["org/oha7/dispdriver/impl/DispDriver"];
+
+	//jclass objectClazz = classes["java/lang/Object"];
 	
 	std::string s = mol::bstr(clazzName).tostring();
-	size_t pos = s.find('.');
-	while ( pos != std::string::npos )
-	{
-		s = s.replace( pos, 1, "/" );	
-		pos = s.find('.');
-	}
 
-	jclass c = env->FindClass(s.c_str());
+	long* ptr = 0;
+	HRESULT hr = javaObject->RawPtr(&ptr);
+
+	jobject o = dispDriver.Cast( (jobject)ptr, s );
 
 	if (mol::java::exceptionOccured(*env))
 		return E_FAIL;
 
 	mol::punk<IJavaObject> instance;
-	HRESULT hr = instance.createObject(CLSID_JavaObject,CLSCTX_ALL);
+	hr = instance.createObject(CLSID_JavaObject,CLSCTX_ALL);
 	if ( hr == S_OK )
 	{
-		hr = instance->Initialize( (long*)c);
+		hr = instance->Initialize( (long*)o);
 		hr = instance.queryInterface( retObject);
 		
 	}

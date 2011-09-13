@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
+<assemblyIdentity
+    type="win32"
+    name="scintillax"
+    version="1.0.0.0" />
+
+
+
+<file name="scintillax.dll" hashalg="SHA1">
+<comClass 
+	clsid="{9B5488B0-33FB-44DF-8D58-672A1C1E08C1}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}"
+  progid="Scintilla.ScintillAx" description="">
+</comClass>
+<comClass 
+	clsid="{C16CD143-5126-414A-AFDE-406F31E95D13}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+  progid="Scintilla.ScintillAxProperties"
+	description="IScintillAx Property Page">
+</comClass>
+<typelib 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+	version="1.0" 
+	helpdir="" 
+	flags="HASDISKIMAGE">
+</typelib>
+</file>
+
+<comInterfaceExternalProxyStub name="IScintillAx" 
+	iid="{1120EC6A-130F-440E-9B1D-F02D505FB5BC}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+
+<comInterfaceExternalProxyStub name="IScintillAxEvents" 
+	iid="{E3766918-A0A4-48B7-942A-BA4B4D524CD0}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+
+<comInterfaceExternalProxyStub  name="IScintillAxDispose" 
+	iid="{87084618-4FF1-4AF1-9098-7D679C6C0B86}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+
+<comInterfaceExternalProxyStub name="IScintillAxProperties" 
+	iid="{65BC59C3-3E46-4F80-8B4A-13AADF1A58EB}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+
+<comInterfaceExternalProxyStub name="IScintillAxText" 
+	iid="{A479AEBD-ED80-4451-8C83-8E422EBC20A1}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+
+<comInterfaceExternalProxyStub name="IScintillAxPosition" 
+	iid="{AE7C2E4D-1AD1-48E8-A376-6C6DA26707E8}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+
+<comInterfaceExternalProxyStub name="IScintillAxSelection" 
+	iid="{76D700E6-D9F1-4D92-AEEF-658773834226}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+
+<comInterfaceExternalProxyStub name="IScintillAxLine" 
+	iid="{B22C83F1-785D-4007-BE8D-DA5CE333D9D4}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+
+
+<comInterfaceExternalProxyStub name="IScintillAxAnnotation" 
+	iid="{D0799D5B-E2EC-4877-99A3-03ADD1895B17}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+
+
+<comInterfaceExternalProxyStub name="IScintillAxMarkers" 
+	iid="{6F7991E0-0762-452C-A6D4-649847D136DC}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+
+
+
+</assembly>

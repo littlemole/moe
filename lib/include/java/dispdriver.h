@@ -72,6 +72,16 @@ public:
 		return Create(c, args);
 	}
 
+	jobject Cast( jobject obj, const std::string& className )
+	{
+		JNIEnv* jre = java();
+		jstring s = jre->NewString( (const jchar*) mol::towstring(className.c_str()).c_str(), (jsize)className.size() );
+		jmethodID mid = jre->GetStaticMethodID( clazz_, "Cast", "(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;" );
+		jobject ret = jre->CallStaticObjectMethod( clazz_, mid, obj, s );
+
+		return ret;
+	}
+
 	jobject propertyGet( jobject obj, const std::string& propertyName, jobjectArray args )
 	{
 		JNIEnv* jre = java();
