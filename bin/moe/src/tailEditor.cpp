@@ -48,8 +48,8 @@ void TailEditor::checkModifiedOnDisk( )
 
 	unsigned long long size = mol::File::size(path.toString());
 
-	ODBGS1("size",size);
-	ODBGS1("size_",size_);
+	ODBGS1("size",(int)size);
+	ODBGS1("size_",(int)size_);
 	if ( size > size_ )
 	{
 		append(path.toString(),size);
@@ -134,8 +134,8 @@ void TailEditor::OnReload()
 
 	sci->Load(filename);
 
-	position_->put_Anchor(size_);
-	position_->put_Caret(size_);
+	position_->put_Anchor((long)size_);
+	position_->put_Caret((long)size_);
 	position_->ScrollIntoView();
 
 	statusBar()->status(filename.toString());
@@ -147,13 +147,11 @@ void TailEditor::append(const mol::string& path,unsigned long long size)
 	if ( !sci )
 		return;
 
-
-
 	mol::filestream fs;
 	if (!fs.open(mol::tostring(path),GENERIC_READ,FILE_SHARE_READ,0,OPEN_EXISTING) )
 		return;
 
-	fs.seek(size_);
+	fs.seek((int)size_);
 
 	std::string buf = fs.readAll();
 	fs.close();
@@ -163,8 +161,8 @@ void TailEditor::append(const mol::string& path,unsigned long long size)
 	mol::bstr tmp(buf);
 	text_->Append(tmp);
 
-	position_->put_Anchor(size_);
-	position_->put_Caret(size_);
+	position_->put_Anchor((long)size_);
+	position_->put_Caret((long)size_);
 	position_->ScrollIntoView();
 
 	size_ = size;

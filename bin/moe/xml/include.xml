@@ -21,6 +21,7 @@
   <include>rtf.h</include>
   <include>Docs.h</include>
   <include>MoeBar.h</include>
+  <include>tree.h</include>
   <include>win/msghandler.h</include>
 </mol:codegen>
 

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "UserForm.h"
 #include "shared.h"
+#include "tree.h"
 #include "moe.h"
 #include "app.h"
 #include "form.h"

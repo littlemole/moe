@@ -8,7 +8,7 @@
 
 class MoeWnd;
 
-extern mol::TCHAR  InFilesFilter[];
+
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -51,10 +51,10 @@ public:
 
 	// moe COM subobjects
 
-	mol::punk<IMoeScript> moeScript;
+	mol::punk<IMoeScript>  moeScript;
 	mol::punk<IMoeDialogs> moeDialogs;
-	mol::punk<IMoeView> moeView;
-	mol::punk<IMoeConfig> moeConfig;
+	mol::punk<IMoeView>    moeView;
+	mol::punk<IMoeConfig>  moeConfig;
 
 	/////////////////////////////////////////////////////////////////////
 	// std windows msgs - Creation / Activation / Destruction

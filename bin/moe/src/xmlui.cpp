@@ -28,6 +28,8 @@
 
 #include "MoeBar.h"
 
+#include "tree.h"
+
 #include "win/msghandler.h"
 
 

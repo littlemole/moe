@@ -269,7 +269,7 @@ void RTFEditor::OnSearch( FINDREPLACE* find )
 
 		if ( findText_.chrg.cpMin == 0 )
 		{
-			int w = rtf_.sendMessage(WM_GETTEXTLENGTH,0,0);
+			int w = (int)rtf_.sendMessage(WM_GETTEXTLENGTH,0,0);
 			findText_.chrg.cpMin = w;
 		}
 	}
@@ -297,8 +297,8 @@ void RTFEditor::OnSearch( FINDREPLACE* find )
 		else 
 		{
 			CHARRANGE cr;
-			cr.cpMin = r;
-			cr.cpMax = cr.cpMin + wcslen(find->lpstrFindWhat);
+			cr.cpMin = (LONG)r;
+			cr.cpMax = (LONG)(cr.cpMin + wcslen(find->lpstrFindWhat));
 			rtf_.sendMessage( EM_EXSETSEL, 0 ,(LPARAM)&cr);
 		}
     }
@@ -324,8 +324,8 @@ void RTFEditor::OnSearch( FINDREPLACE* find )
 		else 
 		{
 			CHARRANGE cr;
-			cr.cpMin = findText_.chrg.cpMin + r;
-			cr.cpMax = cr.cpMin + wcslen(find->lpstrFindWhat);
+			cr.cpMin = (LONG)(findText_.chrg.cpMin + r);
+			cr.cpMax = (LONG)(cr.cpMin + wcslen(find->lpstrFindWhat));
 			rtf_.sendMessage( EM_EXSETSEL, 0 ,(LPARAM)&cr);
 			rtf_.sendMessage(EM_REPLACESEL,(WPARAM)TRUE,(LPARAM) (find->lpstrReplaceWith) );
 		}
@@ -350,8 +350,8 @@ void RTFEditor::OnSearch( FINDREPLACE* find )
 
 			i++;
 			CHARRANGE cr;
-			cr.cpMin = findText_.chrg.cpMin + r;
-			cr.cpMax = cr.cpMin + wcslen(find->lpstrFindWhat);
+			cr.cpMin = (LONG)(findText_.chrg.cpMin + r);
+			cr.cpMax = (LONG)(cr.cpMin + wcslen(find->lpstrFindWhat));
 			rtf_.sendMessage( EM_EXSETSEL, 0 ,(LPARAM)&cr);
 			rtf_.sendMessage(EM_REPLACESEL,(WPARAM)TRUE,(LPARAM) (find->lpstrReplaceWith) );
 

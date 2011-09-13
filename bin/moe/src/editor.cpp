@@ -910,11 +910,14 @@ void Editor::OnExecForm()
 	if ( !sci )
 		return;
 
-	sci->Save();
-
 	mol::bstr filename;
 	props_->get_Filename(&filename);
-		
+
+	saving_ = true;
+	sci->Save();
+	lastWriteTime_ = getLastWriteTime( filename.toString() );
+	saving_ = false;
+
 	RECT r;
 	moe()->getWindowRect(r);
 

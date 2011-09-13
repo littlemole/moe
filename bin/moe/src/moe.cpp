@@ -11,7 +11,7 @@
 #include "MoeBar.h"
 #include "Docs.h"
 #include "xmlui.h"
-
+#include "tree.h"
 #include "Ribbonres.h"
 
 	
@@ -22,7 +22,6 @@ using namespace mol::ole;
 using namespace mol::win;
 
 
-mol::TCHAR  InFilesFilter[]   = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
 
 
 
@@ -37,7 +36,7 @@ MoeWnd::MoeWnd()
 {
 	ODBGS("MoeWnd::MoeWnd()");
 
-	// registered instance
+	// registered active instance
 	activeObj_			= 0;
 
 	// default settings for new editor documents
@@ -53,14 +52,14 @@ MoeWnd::MoeWnd()
 	// don't erase window background, avoid flicker
     eraseBackground_    = 0;
 
-	// tell MDI impl where mdi child ids start (enable window menu)
+	// tell MDI impl where mdi child ids start (enable window menu - XP style only)
     setFirstChildId(ID_FIRST_CHILD_WND);	
 
-	// set icon
+	// set window icon
 	icon.load(IDI_MOE);
 	wndClass().setIcon(icon);		
 
-	// sub objects
+	// create sub objects
 	moeScript  = new MoeScript::Instance;
 	moeDialogs = new MoeDialogs::Instance;
 	moeView    = new MoeView::Instance;
@@ -97,6 +96,7 @@ MoeWnd::Instance* MoeWnd::CreateInstance()
 
 	::CoAllowSetForegroundWindow((IMoe*)moe,0);
 
+	// create the generated UI widgets
 	build_ui<MoeWnd>(moe);
 
 	ODBGS("MoeWnd::CreateInstance() end");
@@ -119,7 +119,7 @@ void MoeWnd::OnCreate()
 	// hide the progress window
 	progress()->show(SW_HIDE);
 
-	// hook up tree window COM events
+	// initialize tree child window and hook up tree window COM events
 	mol::punk<IShellTree> tree(treeWnd()->oleObject);
 	tree->put_UseContext(VARIANT_FALSE);
 	treeWndSink()->Advise(treeWnd()->oleObject);
@@ -137,7 +137,7 @@ void MoeWnd::OnCreate()
 	// load UI state
 	loadPersistUIstate();
 
-    // update ribbon
+    // update ribbon's recent documents
 	mol::Ribbon::ribbon()->updateRecentDocs(RibbonMRUItems);
 }
 
