@@ -28,6 +28,8 @@
 
 #include "MoeBar.h"
 
+#include "tree.h"
+
 #include "win/msghandler.h"
 
 
@@ -196,6 +198,22 @@ extern "C" void load_codegen_metadata()
   //foreach bitmap - loads and registers bitmap
   // optionally associate cmds to toolbar icons on bitmap
     
+  UI().addBmp(IDB_MOE_FAV);
+  
+  UI().addBmp(IDB_MOE_GO);
+  
+  UI().addBmp(IDB_DEBUG_GO);
+  
+  UI().addBmp(IDB_DEBUG_PAUSE);
+  
+  UI().addBmp(IDB_DEBUG_QUIT);
+  
+  UI().addBmp(IDB_DEBUG_STEPIN);
+  
+  UI().addBmp(IDB_DEBUG_STEPOVER);
+  
+  UI().addBmp(IDB_DEBUG_STEPOUT);
+  
   UI().addBmp(IDB_TOOLBAR);
   UI().addBmpCmd( IDB_TOOLBAR, IDM_FILE_NEW );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_FILE_OPEN );
@@ -247,22 +265,6 @@ extern "C" void load_codegen_metadata()
   UI().addBmpCmd( IDB_TOOLBAR, IDM_EDIT_DEBUG_STEPOUT );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_EDIT_DEBUG_STEPOVER );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_EDIT_DEBUG_STOP );
-  
-  UI().addBmp(IDB_MOE_FAV);
-  
-  UI().addBmp(IDB_MOE_GO);
-  
-  UI().addBmp(IDB_DEBUG_GO);
-  
-  UI().addBmp(IDB_DEBUG_PAUSE);
-  
-  UI().addBmp(IDB_DEBUG_QUIT);
-  
-  UI().addBmp(IDB_DEBUG_STEPIN);
-  
-  UI().addBmp(IDB_DEBUG_STEPOVER);
-  
-  UI().addBmp(IDB_DEBUG_STEPOUT);
 
 
   // menus

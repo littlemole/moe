@@ -11,12 +11,6 @@
 #include "ax/shellfolder/shellfolder_i.c"
 #include "ax/setting/setting_i.c"
 
-/*
-#define min std::min
-#define max std::max
-#include <gdiplus.h>
-*/
-
 //! Moe specific MDI message loop override
 int MoeLoop::operator() ( mol::win::AppBase& app )
 {
@@ -57,12 +51,8 @@ MoeApp::MoeApp()
 	// do not enable extensions by default
 	enableExtensions_ = false;
 
-	// call this only if avail (naked IE6 on win2k will not have this)
-	const DWORD SET_FEATURE_ON_PROCESS = 0x00000002;
-	typedef HRESULT  (__stdcall *CoInternetSetFeatureEnabledImpl)( mol::ie::INTERNETFEATURELIST FeatureEntry, DWORD dwFlags, BOOL fEnable );
-	CoInternetSetFeatureEnabledImpl impl = (CoInternetSetFeatureEnabledImpl)mol::dllFunc( _T("urlmon.dll"), _T("CoInternetSetFeatureEnabled"));
-	if ( impl )
-		impl(mol::ie::FEATURE_LOCALMACHINE_LOCKDOWN, SET_FEATURE_ON_PROCESS, FALSE); 
+	// unlock embedded IE restrictions
+	unlockInternetExplorer();
 }
 
 MoeApp::~MoeApp()
@@ -70,27 +60,10 @@ MoeApp::~MoeApp()
 	ODBGS(">>>>>>>>>>>>>>>>>>>>>>> ~MoeApp <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 }
 
-// we override run as we check for extensions before running
-
-int MoeApp::run(const mol::string& cmdline)
-{
-	// enable extension libs loading ?
-	if ( _tcsicmp(cmdline.c_str(), _T("/enable")) == 0 )
-	{
-		ODBGS("enable extensions");
-		enableExtensions_ = true;
-	}
-
-	// load GTK and .NET dlls dynamically
-	init_extensions_if();
-
-	// std local server startup
-	return local_server<MoeLoop>::run(cmdline);
-}
-
 // embedded moe 
 int MoeApp::runEmbedded(const mol::string& cmdline)
 {
+	// load the generated metadata
 	::load_codegen_metadata();
 	return local_server<MoeLoop>::runEmbedded(cmdline);
 }
@@ -116,27 +89,19 @@ int MoeApp::runStandalone(const mol::string& cmdline)
 		// pass any commandline parameters thru
 
 		openDocsFromCommandLine( m, cmdline );
-		//mol::disp_invoke(m, 28 );
-		return 0;
-		
+		return 0;		
 	}
 
-	// standalone
-
+	// load the generated metadata
 	::load_codegen_metadata();
-
-	ODBGS("MoeApp::createMainWindow()");
 
 	MoeWnd::Instance*			moe = MoeWnd::CreateInstance();
 
-	ODBGS("MoeApp::createMainWindow() end");
-
-	std::string c = mol::tostring(mol::trim(cmdline));
-	mol::RegExp rgxp("(\"([^\"]*)\")|([^ ]+)");
-
+	// open any filepaths passed via command line using IDispatch
 	mol::punk<IDispatch> disp(moe);
 	openDocsFromCommandLine(disp,cmdline);
 
+	// bring moe to front
 	mol::punk<IMoeView> view;
 	HRESULT hr = moe->get_View(&view);
 	if ( hr == S_OK )
@@ -149,88 +114,22 @@ int MoeApp::runStandalone(const mol::string& cmdline)
 }
 
 
-std::string resolvePath(const std::string& p)
+// we override run as we check for extensions before running
+
+int MoeApp::run(const mol::string& cmdline)
 {
-	if ( mol::Path::exists(mol::toString(p)) )
+	// enable extension libs loading ?
+	if ( _tcsicmp(cmdline.c_str(), _T("/enable")) == 0 )
 	{
-		return p;
+		ODBGS("enable extensions");
+		enableExtensions_ = true;
 	}
 
-	std::ostringstream oss;
-	for ( size_t i = 0; i < p.size(); i++ ) 
-	{
-		if ( p[i] == '/' )
-			oss << '\\';
-		else
-			oss << p[i];
-	}
+	// load GTK and .NET dlls dynamically
+	init_extensions_if();
 
-	std::vector<std::string> v = mol::split( oss.str(), "\\" );
-
-	std::vector<std::string> v2;
-	if ( !v.empty() )
-		v2.push_back(v[0]);
-
-	for ( size_t i = 1; i < v.size(); i++ )
-	{
-		if ( i < v.size()-1 && v[i+1] == ".." )
-		{
-			continue;
-		}
-		if ( v[i] == ".." )
-		{
-			continue;
-		}
-
-		if ( v[i] == "." ) 
-		{
-			continue;
-		}
-		if ( v[i] == "" ) 
-		{
-			continue;
-		}
-
-		v2.push_back(v[i]);
-	}
-
-	std::ostringstream oss2;
-	if ( !v2.empty() )
-	{
-		oss2 << v2[0];
-	}
-	for ( size_t i = 1; i < v2.size(); i++ )
-	{
-		oss2 << "\\" << v2[i];
-	}
-
-	std::string s = oss2.str();
-
-	const std::string cygdrive("\\cygdrive\\");
-
-	size_t pos = s.find(cygdrive);
-	if ( pos == 0 )
-	{
-		return s.substr(cygdrive.size(),1) + ":\\" + s.substr(cygdrive.size()+2);
-	}
-
-	if ( mol::Path::exists(mol::toString(s)) )
-	{
-		return s;
-	}
-
-	char buf[MAX_PATH];
-	::GetCurrentDirectoryA(MAX_PATH,buf);
-
-	std::ostringstream oss3;
-	oss3 << buf << "\\" << s;
-
-	std::string path = oss3.str();
-	if ( mol::Path::exists(mol::toString(path)) )
-	{
-		return path;
-	}
-	return "";
+	// std local server startup
+	return local_server<MoeLoop>::run(cmdline);
 }
 
 void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )

@@ -52,19 +52,12 @@
       <!-- the directory tree view -->
       <window name="treeWnd" id="IDW_TREE_VIEW" class="MoeTreeWnd" pos="mol::Rect(0,0,160,200)"
              visible="true" layout="BorderLayout::WEST" advise="moe->treeSink"/>
-<!--
-      <window name="cli"  id="IDW_CLI_CTRL" class="CLIControl" pos="mol::Rect(0,0,160,26)" visible="true" layout="BorderLayout::FILL" >
-      </window>
--->
+
       <!-- the child window selector tab control -->      
       <window name="tab"  id="IDW_TAB_CTRL" class="MoeTabControl" pos="mol::Rect(0,0,160,26)" visible="false" layout="BorderLayout::SOUTH" >
       </window>
       
-      <!--
-      <window name="cli"  id="IDW_CLI_CTRL" class="CLIControl" pos="mol::Rect(0,0,160,26)" visible="true" layout="BorderLayout::SOUTH" >
-      </window>
-      -->
-    
+   
       <!-- application status bar -->
       <statusbar name="statusBar" id="IDW_STATUS" class="MoeStatusBar" pos="mol::stdRect" >        
         <set member="Text">_T("")</set>
@@ -224,9 +217,7 @@
     <singleton name="docs" class="Documents" />
     
     <!-- events -->
-    <!-- 
-    <singleton name="compilerSink" class="CompilerSink" />
-    -->
+
     <singleton name="treeWndSink" class="TreeWndSink" />
     <singleton name="moeDropTarget" class="MoeDrop" />
     

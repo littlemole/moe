@@ -10,6 +10,11 @@
 #include <Commctrl.h>
 #include "util/regex.h"
 
+// open file dialog std filte for moe
+mol::TCHAR  InFilesFilter[]   = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
+
+
+
 // ==================== platform specific: TaskDialog  =======================
 
 enum _MOLTASKDIALOG_COMMON_BUTTON_FLAGS
@@ -126,6 +131,7 @@ void Script::eval(  const mol::string& engine, const mol::string& script, IScint
 	if ( hr != S_OK )
 	{
 		ODBGS("failed to init engine");
+		this->Release();
 		return;
 	}
 	ODBGS("engine initialized");
@@ -269,16 +275,27 @@ HRESULT  __stdcall Script::GetWindow(HWND *phwnd )
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
+
+void unlockInternetExplorer()
+{
+	// call this only if avail (naked IE6 on win2k will not have this)
+	const DWORD SET_FEATURE_ON_PROCESS = 0x00000002;
+	typedef HRESULT  (__stdcall *CoInternetSetFeatureEnabledImpl)( mol::ie::INTERNETFEATURELIST FeatureEntry, DWORD dwFlags, BOOL fEnable );
+	CoInternetSetFeatureEnabledImpl impl = (CoInternetSetFeatureEnabledImpl)mol::dllFunc( _T("urlmon.dll"), _T("CoInternetSetFeatureEnabled"));
+	if ( impl )
+		impl(mol::ie::FEATURE_LOCALMACHINE_LOCKDOWN, SET_FEATURE_ON_PROCESS, FALSE); 
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-ScriptEventHandler::~ScriptEventHandler()
+FormScriptEventHandler::~FormScriptEventHandler()
 {
-	ODBGS("ScriptEventHandler dead");
+	ODBGS("FormScriptEventHandler dead");
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void ScriptEventHandler::init(Script* s, REFIID iid, const mol::string& on)
+void FormScriptEventHandler::init(Script* s, REFIID iid, const mol::string& on)
 {
 	riid = iid;
 	script = s;
@@ -292,7 +309,7 @@ void ScriptEventHandler::init(Script* s, REFIID iid, const mol::string& on)
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-HRESULT __stdcall ScriptEventHandler::QueryInterfaceImpl(REFIID iid , LPVOID* ppv)  
+HRESULT __stdcall FormScriptEventHandler::QueryInterfaceImpl(REFIID iid , LPVOID* ppv)  
 {                                                                       
 	ODBGS("::QueryInterface ScriptEventHandler");                                        
 	if (ppv==(void**)0)                                                 
@@ -323,7 +340,7 @@ HRESULT __stdcall ScriptEventHandler::QueryInterfaceImpl(REFIID iid , LPVOID* pp
        
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-HRESULT __stdcall ScriptEventHandler::GetTypeInfoCount (unsigned int FAR*  pctinfo ) 
+HRESULT __stdcall FormScriptEventHandler::GetTypeInfoCount (unsigned int FAR*  pctinfo ) 
 { 
     *pctinfo = 1;
     return S_OK; 
@@ -331,21 +348,21 @@ HRESULT __stdcall ScriptEventHandler::GetTypeInfoCount (unsigned int FAR*  pctin
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-HRESULT __stdcall ScriptEventHandler::GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo ) 
+HRESULT __stdcall FormScriptEventHandler::GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo ) 
 { 
 	return info->QueryInterface(IID_ITypeInfo,(void**)ppTInfo);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-HRESULT __stdcall ScriptEventHandler::GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId ) 
+HRESULT __stdcall FormScriptEventHandler::GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId ) 
 { 
 	return info->GetIDsOfNames( rgszNames, cNames, rgDispId );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-HRESULT __stdcall ScriptEventHandler::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i) 
+HRESULT __stdcall FormScriptEventHandler::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i) 
 { 
 	UINT nNames = 0;
 	mol::bstr name;
@@ -918,6 +935,91 @@ HRESULT __stdcall UrlDlg::GetSizeMax( ULARGE_INTEGER *pCbSize)
 
 //////////////////////////////////////////////////////////////////////////////
 
+std::string resolvePath(const std::string& p)
+{
+	if ( mol::Path::exists(mol::toString(p)) )
+	{
+		return p;
+	}
+
+	std::ostringstream oss;
+	for ( size_t i = 0; i < p.size(); i++ ) 
+	{
+		if ( p[i] == '/' )
+			oss << '\\';
+		else
+			oss << p[i];
+	}
+
+	std::vector<std::string> v = mol::split( oss.str(), "\\" );
+
+	std::vector<std::string> v2;
+	if ( !v.empty() )
+		v2.push_back(v[0]);
+
+	for ( size_t i = 1; i < v.size(); i++ )
+	{
+		if ( i < v.size()-1 && v[i+1] == ".." )
+		{
+			continue;
+		}
+		if ( v[i] == ".." )
+		{
+			continue;
+		}
+
+		if ( v[i] == "." ) 
+		{
+			continue;
+		}
+		if ( v[i] == "" ) 
+		{
+			continue;
+		}
+
+		v2.push_back(v[i]);
+	}
+
+	std::ostringstream oss2;
+	if ( !v2.empty() )
+	{
+		oss2 << v2[0];
+	}
+	for ( size_t i = 1; i < v2.size(); i++ )
+	{
+		oss2 << "\\" << v2[i];
+	}
+
+	std::string s = oss2.str();
+
+	const std::string cygdrive("\\cygdrive\\");
+
+	size_t pos = s.find(cygdrive);
+	if ( pos == 0 )
+	{
+		return s.substr(cygdrive.size(),1) + ":\\" + s.substr(cygdrive.size()+2);
+	}
+
+	if ( mol::Path::exists(mol::toString(s)) )
+	{
+		return s;
+	}
+
+	char buf[MAX_PATH];
+	::GetCurrentDirectoryA(MAX_PATH,buf);
+
+	std::ostringstream oss3;
+	oss3 << buf << "\\" << s;
+
+	std::string path = oss3.str();
+	if ( mol::Path::exists(mol::toString(path)) )
+	{
+		return path;
+	}
+	return "";
+}
+
+
 mol::string findFile(const mol::string& f)
 {
 	ODBGS(f);
@@ -951,7 +1053,7 @@ mol::string findFile(const mol::string& f)
 		return modulePath;
 	}
 
-	return _T("");
+	return mol::toString(resolvePath(mol::tostring(f)));
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1009,238 +1111,6 @@ HRESULT  __stdcall MoeDrop::DragLeave()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// tree events sink
-//////////////////////////////////////////////////////////////////////////////
-
-MoeTreeWnd::~MoeTreeWnd() 
-{
-	ODBGS("~MoeTreeWnd");
-}
-/*
-void MoeTreeWnd::OnCreate()
-{
-
-}
-*/
-
-void MoeTreeWnd::OnTreeOpen()
-{
-	mol::bstr p;
-	mol::punk<IShellTree> tree(oleObject);
-	tree->get_Selection(&p);
-	treeWndSink()->OnTreeOpen(p);
-}
-
-void MoeTreeWnd::OnTreeUpdate()
-{
-	mol::punk<IShellTree> tree(oleObject);
-	tree->Update();
-}			
-
-void MoeTreeWnd::OnTreeRename()
-{
-	mol::punk<IShellTree> tree(oleObject);
-	tree->Rename();
-}
-
-void MoeTreeWnd::OnTreeDelete()
-{
-	mol::punk<IShellTree> tree(oleObject);
-	tree->Delete();
-}
-
-void MoeTreeWnd::OnTreeExecute()
-{
-	mol::punk<IShellTree> tree(oleObject);
-	tree->Execute();
-}
-
-void MoeTreeWnd::OnTreeProperties()
-{
-	mol::punk<IShellTree> tree(oleObject);
-	tree->Properties();
-}
-
-void MoeTreeWnd::OnTreeNewDir()
-{
-	mol::punk<IShellTree> tree(oleObject);
-	tree->CreateDir();
-}
-
-void MoeTreeWnd::OnEditCut()
-{
-	mol::punk<IShellTree> tree(oleObject);
-	tree->Cut();
-}
-
-void MoeTreeWnd::OnEditCopy()
-{
-	mol::punk<IShellTree> tree(oleObject);
-	tree->Copy();
-}
-
-void MoeTreeWnd::OnEditPaste()
-{
-	mol::punk<IShellTree> tree(oleObject);
-	tree->Paste();
-}
-
-
-HRESULT __stdcall TreeWndSink::OnTreeSelection(BSTR filename)
-{
-	return moe()->IOleInPlaceFrame_SetStatusText(filename);
-}
-
-HRESULT __stdcall TreeWndSink::OnTreeDblClick(BSTR filename)
-{
-	mol::string p(mol::toString(filename));
-	if ( !mol::Path::exists(p) && !mol::Path::isUNC(p) )
-	{
-		if ( p.substr(0,2) != _T("::") )
-			return S_OK;
-	}
-	mol::punk<IShellTree> tree(treeWnd()->oleObject);
-	if ( tree )
-	{
-		bool result = ::docs()->open(0,p,Docs::PREF_TXT,false,0);
-		statusBar()->status(p);
-		if (!result)
-		{
-			statusBar()->status( mol::string(_T("failed to load ")) + p);
-			return S_FALSE;
-		}
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename)
-{
-	mol::string p(mol::toString(filename));
-	if ( !mol::Path::exists(p) && !mol::Path::isUNC(p) )
-	{
-		if ( p.substr(0,2) != _T("::") )
-			return S_OK;
-	}
-
-	mol::punk<IShellTree> tree(treeWnd()->oleObject);
-	if ( tree )
-	{
-		if ( mol::Path::isDir( p) || p.substr(0,2) == _T("::") )
-		{
-			statusBar()->status(p);
-			bool result = ::docs()->open(0,p,Docs::PREF_TXT,false,0);
-
-			if (!result)
-			{
-				statusBar()->status( mol::string(_T("failed to load ")) + p);
-				return S_OK;
-			}
-			return S_OK;
-		}
-		mol::FilenameDlg dlg(*moe());
-		dlg.setFilter( InFilesFilter );	
-		dlg.fileName(p);
-		if ( !dlg.dlgOpen(OFN_ALLOWMULTISELECT | OFN_EXPLORER) )
-			return S_OK;
-
-		int s = dlg.selections();
-		int c = dlg.index();
-		for ( int i = 0; i < s; i++ )
-		{
-			mol::string f = dlg.fileName(i);
-			statusBar()->status(f);
-
-
-			bool result = ::docs()->open(0,f,(Docs::InFiles)(c-1 >=0 ? c-1 :0),false,0);
-
-			if (!result)
-			{
-				statusBar()->status( mol::string(_T("failed to load ")) + f);
-				return S_OK;
-			}
-		}
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall TreeWndSink::OnContextMenu(BSTR fname)
-{
-	mol::punk<IShellTree> tree(treeWnd()->oleObject);
-	if ( !tree )
-		return S_OK;
-
-	POINT pt;
-	::GetCursorPos(&pt);
-
-	if ( mol::Ribbon::ribbon()->enabled() )
-	{
-		mol::Ribbon::ribbon()->showContextualUI( RibbonTreeViewContextMap, pt.x, pt.y);
-		return 0;
-	}
-
-	mol::Menu sub = mol::UI().SubMenu(IDM_CONTEXT_TREE,IDM_TREE);
-
-	moe()->showContext(sub);
-
-	return 0;
-
-	int id = sub.returnTrackPopup(*moe(),pt.x-10,pt.y-10);
-	switch ( id )
-	{
-		case IDM_TREE_OPEN:
-		{
-			OnTreeOpen(fname);
-			break;
-		}
-		case IDM_TREE_UPDATE:
-		{
-			tree->Update();
-			break;
-		}
-		case IDM_TREE_RENAME:
-		{
-			tree->Rename();
-			break;
-		}
-		case IDM_TREE_DELETE:
-		{
-			tree->Delete();
-			break;
-		}
-		case IDM_EDIT_CUT:
-		{
-			tree->Cut();
-			break;
-		}
-		case IDM_EDIT_COPY:
-		{
-			tree->Copy();
-			break;
-		}
-		case IDM_EDIT_PASTE:
-		{
-			tree->Paste();
-			break;
-		}
-		case IDM_TREE_PROPERTIES:
-		{
-			tree->Properties();
-			break;
-		}
-		case IDM_TREE_EXECUTE:
-		{
-			tree->Execute();
-			break;
-		}
-		case IDM_TREE_NEWDIR:
-		{
-			tree->CreateDir();
-			break;
-		}
-	}
-	return S_OK;
-}
 
 
 
@@ -1446,3 +1316,4 @@ std::wstring PasteAs::get()
 	}
 	return mol::fromUTF8( clipboard_.getAnsiText(format) );
 }
+

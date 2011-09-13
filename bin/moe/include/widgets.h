@@ -3,6 +3,7 @@
 
 #include "shared.h"
 
+extern mol::TCHAR  InFilesFilter[];
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // widgets for moe
@@ -12,9 +13,11 @@ class MoeWnd;
 
 mol::string findFile(const mol::string& f);
 mol::string engineFromPath(const std::string& path);
-
+std::string resolvePath(const std::string& p);
 
 int msgbox( const mol::string& txt, const mol::string& title, const mol::string& detail );
+
+void unlockInternetExplorer();
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // Status Bar
@@ -29,68 +32,6 @@ public:
 	void status( const mol::string& txt );
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-// the resizable directory tree widget
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-
-typedef mol::CtrlResizer< 
-						mol::Window , 
-                        100,0,
-						mol::win::CtrlResizerImpl::RIGHT> 
-RTree;
-
-class MoeTreeWnd : 
-	public mol::Frame< 
-					MoeTreeWnd,
-						mol::AxWnd<
-								MoeTreeWnd,
-								RTree,
-								&CLSID_ShellTree> , 
-					    WS_CHILD|WS_VISIBLE|WS_CLIPSIBLINGS|
-					    WS_CLIPCHILDREN|WS_THICKFRAME,
-					    WS_EX_STATICEDGE >
-{
-public:
-
-	~MoeTreeWnd();
-
-	//msg_handler(WM_CREATE,OnCreate)
-	//LRESULT OnCreate();
-
-	void OnTreeOpen();
-	void OnTreeUpdate();
-
-	void OnTreeRename();
-	void OnTreeDelete();
-
-	void OnTreeExecute();
-	void OnTreeProperties();
-	void OnTreeNewDir();
-
-	void OnEditCut();
-	void OnEditCopy();
-	void OnEditPaste();
-
-};
-
-/////////////////////////////////////////////////////////////////////
-// tree events sink
-/////////////////////////////////////////////////////////////////////
-
-class TreeWndSink : public mol::stack_obj<ShellTreeEvents>
-{
-friend mol::Singleton<TreeWndSink>; 
-friend mol::stack_obj<TreeWndSink>;
-public :
-	HRESULT virtual __stdcall OnTreeSelection(BSTR filename);
-	HRESULT virtual __stdcall OnTreeDblClick(BSTR filename);
-	HRESULT virtual __stdcall OnTreeOpen(BSTR filename); 
-	HRESULT virtual __stdcall OnContextMenu(BSTR filename); 
-private:
-	TreeWndSink() {}
-	~TreeWndSink() {}
-};
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // the url box
@@ -215,10 +156,8 @@ public:
 	void formdebug( const mol::string& engine, const mol::string& script, IDispatch* form );
 	void formcontrols( IUnknown* form );
 
-
-
-	 virtual HRESULT  __stdcall OnScriptError( IActiveScriptError *pscripterror);
-	 virtual HRESULT  __stdcall GetWindow(HWND *phwnd );
+    virtual HRESULT  __stdcall OnScriptError( IActiveScriptError *pscripterror);
+	virtual HRESULT  __stdcall GetWindow(HWND *phwnd );
 
 private:
 	 IScintillAx* sci_;
@@ -230,10 +169,10 @@ typedef mol::punk<Script>		ScriptingHost;
 
 /////////////////////////////////////////////////////////////////////
 
-class ScriptEventHandler : public IDispatch
+class FormScriptEventHandler : public IDispatch
 {
 public:
-	~ScriptEventHandler();
+	~FormScriptEventHandler();
 
 	void init(Script* s, REFIID iid, const mol::string& on);
 	virtual void dispose() {}

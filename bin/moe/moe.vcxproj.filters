@@ -61,6 +61,9 @@
       <Filter>mdi</Filter>
     </ClCompile>
     <ClCompile Include="src\DocFactory.cpp" />
+    <ClCompile Include="src\tree.cpp">
+      <Filter>widget</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\app.h" />
@@ -131,6 +134,9 @@
     </ClInclude>
     <ClInclude Include="include\tailEditor.h">
       <Filter>mdi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\tree.h">
+      <Filter>widget</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

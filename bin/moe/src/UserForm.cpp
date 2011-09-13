@@ -587,7 +587,7 @@ void UserForm::adviseControls(  )
 			if ( S_OK == findSourceOnCP(disp,&iid) )
 			{
 				DWORD cookie;
-				mol::com_obj<ScriptEventHandler>* handler = new mol::com_obj<ScriptEventHandler>;
+				mol::com_obj<FormScriptEventHandler>* handler = new mol::com_obj<FormScriptEventHandler>;
 				handler->AddRef();
 
 				//TODO: assure only to advis IF script handler present

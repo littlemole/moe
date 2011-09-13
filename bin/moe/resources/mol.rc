@@ -13,7 +13,6 @@ IDI_MOE                                ICON    ".\\resources\\moe.ico"
 
 // BITMAPS
 
-IDB_TOOLBAR                            BITMAP    "resources/moe.bmp"
 IDB_MOE_FAV                            BITMAP    "resources/favs.bmp"
 IDB_MOE_GO                             BITMAP    "resources/next.bmp"
 IDB_DEBUG_GO                           BITMAP    "resources/nresume.bmp"
@@ -22,6 +21,7 @@ IDB_DEBUG_QUIT                         BITMAP    "resources/ntermin.bmp"
 IDB_DEBUG_STEPIN                       BITMAP    "resources/nstepinf.bmp"
 IDB_DEBUG_STEPOVER                     BITMAP    "resources/nstepovn.bmp"
 IDB_DEBUG_STEPOUT                      BITMAP    "resources/nstepout.bmp"
+IDB_TOOLBAR                            BITMAP    "resources/moe.bmp"
 
 
 // ACCELERATORS

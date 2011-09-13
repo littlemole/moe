@@ -88,7 +88,7 @@ void ThreadScript::init(const mol::string& engine)
 	if ( hr != S_OK )
 		return;
 
-	hr = activeScript_->SetScriptState(SCRIPTSTATE_INITIALIZED);//SCRIPTSTATE_STARTED);//SCRIPTSTATE_INITIALIZED);
+	hr = activeScript_->SetScriptState(SCRIPTSTATE_INITIALIZED);//SCRIPTSTATE_STARTED);
 	if ( hr != S_OK )
 		return;
 
@@ -417,7 +417,7 @@ HRESULT  __stdcall  ThreadScript::onDebugOutput(LPCOLESTR pstr)
 		return S_OK;
 }
 
-extern void enumProps( mol::ostringstream& oss, IDebugProperty* prop, int level = 0 );
+//extern void enumProps( mol::ostringstream& oss, IDebugProperty* prop, int level = 0 );
 
 HRESULT  __stdcall  ThreadScript::onHandleBreakPoint(IRemoteDebugApplicationThread *remote, BREAKREASON br, IActiveScriptErrorDebug *pError)
 {

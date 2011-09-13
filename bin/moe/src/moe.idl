@@ -661,11 +661,11 @@ library Moe
 		HRESULT Length( [out,retval] long* d);
 
 		/////////////////////////////////////////////////////////////////////
-		[ id(2), helpstring("Get Range") ]
+		[ id(2), helpstring("Get Range as ITextRange") ]
 		HRESULT Range( [in] long start, [in] long end,  [out,retval] IDispatch** d);
 
 		/////////////////////////////////////////////////////////////////////
-		[ propget,bindable,displaybind, id(3), helpstring("Get Selection") ]
+		[ propget,bindable,displaybind, id(3), helpstring("Get Selection as ITextSelection") ]
 		HRESULT Selection( [out,retval] IDispatch** d);
 
 	}

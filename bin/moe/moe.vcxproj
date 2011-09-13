@@ -358,6 +358,7 @@
     </ClCompile>
     <ClCompile Include="src\tailEditor.cpp" />
     <ClCompile Include="src\ThreadScript.cpp" />
+    <ClCompile Include="src\tree.cpp" />
     <ClCompile Include="src\UserForm.cpp" />
     <ClCompile Include="src\widgets.cpp" />
     <ClCompile Include="src\xmlrc.cpp" />
@@ -386,6 +387,7 @@
     <ClInclude Include="include\rtf.h" />
     <ClInclude Include="include\tailEditor.h" />
     <ClInclude Include="include\ThreadScript.h" />
+    <ClInclude Include="include\tree.h" />
     <ClInclude Include="moe_dispid.h" />
     <ClInclude Include="moe_h.h" />
     <ClInclude Include="include\MoeBar.h" />
