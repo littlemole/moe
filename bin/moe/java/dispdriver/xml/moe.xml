@@ -493,11 +493,11 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
  <property name='Length' type='long*' dispid='1' vtindex='32' ctype='HRESULT' param='d' desc='Get Range Length'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <method name='Range' type='IDispatch**' dispid='2' vtindex='36' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Get Range' >
+ <method name='Range' type='IDispatch**' dispid='2' vtindex='36' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Get Range as ITextRange' >
   <param type='long' dir='IN' name='start' />
   <param type='long' dir='IN' name='end' />
  </method>
- <property name='Selection' type='IDispatch**' dispid='3' vtindex='40' ctype='HRESULT' param='d' desc='Get Selection'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Selection' type='IDispatch**' dispid='3' vtindex='40' ctype='HRESULT' param='d' desc='Get Selection as ITextSelection'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
 </interface>
