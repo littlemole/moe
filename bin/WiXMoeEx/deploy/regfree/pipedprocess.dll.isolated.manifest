@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+
+<assemblyIdentity
+      type="win32"
+      name="pipedprocess"
+      version="1.0.0.0" />
+
+
+
+<file name="pipedprocess.dll" hashalg="SHA1">
+<comClass 
+	clsid="{3E08871B-09B9-4E04-B9F7-64D2F9F4E854}" 
+	tlbid="{9E61E3FC-FC64-4164-A9AC-BDEDC3116BA7}" 
+  progid="PipedProcess.PipedProcessControl"
+	description="PipedProcess - Object for executing external process and piping results">
+</comClass>
+<typelib 
+	tlbid="{9E61E3FC-FC64-4164-A9AC-BDEDC3116BA7}" 
+	version="1.0" 
+	helpdir="" 
+	flags="HASDISKIMAGE">
+</typelib>
+</file>
+<comInterfaceExternalProxyStub name="IPipedProcess" 
+	iid="{263ABFD3-6D9F-4C0B-861A-4D22E0AA9529}" 
+	tlbid="{9E61E3FC-FC64-4164-A9AC-BDEDC3116BA7}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+<comInterfaceExternalProxyStub name="IPipedProcessCompleteDual" 
+	iid="{7FBB9268-45D9-43DF-BE32-A5FFED60B456}" 
+	tlbid="{9E61E3FC-FC64-4164-A9AC-BDEDC3116BA7}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+</assembly>

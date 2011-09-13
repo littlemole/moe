@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+
+  <String Id="WelcomeDlgTitle">{\WixUI_Font_Title}Welcome to the moe installer!</String>  
+  <String Id="WelcomeDlgDescription">this will install the moe binaries on your computer</String>
+
+  <String Id="LicenseAgreementDlgDescription" >Please ignore the following license agreement carefully</String>
+  <String Id="LicenseAgreementDlgTitle" >{\WixUI_Font_Title}Moe License Agreement</String>
+
+  <String Id="ExitDialogDescription" Overridable="yes">Click finish to close the installer.</String>
+  <String Id="ExitDialogTitle" Overridable="yes">{\WixUI_Font_Bigger}Moe installed succesfully!</String>
+
+</WixLocalization>

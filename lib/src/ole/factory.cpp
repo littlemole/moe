@@ -300,7 +300,11 @@ HRESULT ComRegisterObjBase::UnRegisterObject(REFGUID guid, DWORD miscStatus, OLE
 	mol::string typelib_guid;
 
 	TypeLib tl;
-	tl.load();
+	if(!tl.load()) 
+	{
+		ODBGS("failed to load typelib");
+		return S_OK;
+	}
 
 	typelib_guid = stringFromCLSID(tl.getGUID());
 
@@ -348,13 +352,19 @@ HRESULT ComRegisterObjBase::UnRegisterObject(REFGUID guid, DWORD miscStatus, OLE
 	}
 	catch(...)
 	{
-		mol::RegKey user = HKEY_CURRENT_USER;
+		try {
+			mol::RegKey user = HKEY_CURRENT_USER;
 
-		//CLSID entries
-		mol::RegKey software = user.open(_T("Software"));
-		root   = software.open(_T("Classes"));
-		AppIds = root.open(_T("AppID"));
-		CLSIDs = root.open(_T("CLSID"));
+			//CLSID entries
+			mol::RegKey software = user.open(_T("Software"));
+			root   = software.open(_T("Classes"));
+			AppIds = root.open(_T("AppID"));
+			CLSIDs = root.open(_T("CLSID"));
+		}
+		catch(...)
+		{
+			return S_OK;
+		}
 	}
 
 	// erase AppId entries
