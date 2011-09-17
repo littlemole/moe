@@ -76,9 +76,21 @@ int msgbox( const mol::string& txt, const mol::string& title, const mol::string&
 	}
 }
 
+MIDL_INTERFACE("1f76a169-f994-40ac-8fc8-0959e8874710")
+IMoeApplicationAssociationRegistrationUI : public IUnknown
+{
+public:
+    virtual HRESULT __stdcall LaunchAdvancedAssociationUI( LPCWSTR pszAppRegistryName) = 0;        
+};
+
 void editFileExtensions()
 {
-
+	mol::punk<IMoeApplicationAssociationRegistrationUI> aaru;
+	HRESULT hr = aaru.createObject(CLSID_ApplicationAssociationRegistrationUI);
+	if ( hr == S_OK )
+	{
+		aaru->LaunchAdvancedAssociationUI(L"moe");
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -1196,6 +1208,11 @@ void ExportPage::command(int c)
 		{
 			moe()->moeConfig->ImportSettings( mol::bstr( dlg.fileName() ) );
 		}
+	}
+
+	if ( c == IDC_BUTTON_EXTENSIONS )
+	{
+		editFileExtensions();
 	}
 }
 
