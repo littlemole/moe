@@ -39,9 +39,9 @@
 
 <!-- java source files -->
  <ItemGroup>
-  <JavaSrcFiles Include="..\moe\java\dispdriver\src\**\*.*" />
+  <JavaSrcFiles Include="..\moe\java\dispdriver\src\**\*.*" Exclude="..\moe\java\**\.svn\**\*.*;..\moe\java\**\.svn\**\*"/>
   <SvnFolders Include=".\moe\**\*.svn" />
-  <moeFiles Include=".\moe\**\*.*" />
+  <moeFiles Include=".\moe\**\*.*" Exclude=".\moe\**\.svn\**\*.*;.\moe\**\.svn\**\*"/>
  </ItemGroup>
 
  <!-- Build -->
