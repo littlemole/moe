@@ -146,7 +146,7 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
 </interface>
 
 
-<interface name='IMoeDocumentCollection' type='Dual' iid='{B2FC978E-28F5-49E0-B363-8C78DE7FC50F}' base='IDispatch' members='19' desc='' >
+<interface name='IMoeDocumentCollection' type='Dual' iid='{B2FC978E-28F5-49E0-B363-8C78DE7FC50F}' base='IDispatch' members='20' desc='' >
  <method name='_NewEnum' type='IEnumVARIANT**' dispid='-4' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='New Enum - enable iteration from script' >
  </method>
  <method name='Item' type='IMoeDocument**' dispid='0' vtindex='32' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Item - retrieve child document by numeric or string (full document path) index' >
@@ -198,6 +198,9 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
  <method name='NewRTFDocument' type='IMoeDocument**' dispid='16' vtindex='96' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='New RTF document' >
  </method>
  <method name='OpenTailDocument' type='IMoeDocument**' dispid='17' vtindex='100' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='tail -f document' >
+  <param type='BSTR' dir='IN' name='fPath' />
+ </method>
+ <method name='OpenRTFDocument' type='IMoeDocument**' dispid='18' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open RTF document' >
   <param type='BSTR' dir='IN' name='fPath' />
  </method>
 </interface>
