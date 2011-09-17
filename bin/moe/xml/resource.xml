@@ -99,7 +99,8 @@
       <!-- export -->
       <control id="IDC_BUTTON_EXPORT" />
       <control id="IDC_BUTTON_IMPORT" />
-
+      <control id="IDC_BUTTON_EXTENSIONS" />
+      
       <!-- user form dialogs -->
       <window id="IDW_EDITOR_VIEW" />
       <control id="IDC_TREE_EVENTS" />
