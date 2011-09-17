@@ -172,6 +172,11 @@ library Moe
 
 		[id(17), helpstring("tail -f document")] 
 		HRESULT OpenTailDocument( [in] BSTR fPath, [out,retval] IMoeDocument** d);
+
+		[id(18), helpstring("Open RTF document")] 
+		HRESULT OpenRTFDocument( [in] BSTR fPath, [out,retval] IMoeDocument** d);
+
+
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////

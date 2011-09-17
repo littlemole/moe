@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+ <!-- Configuration -->
+
+ <PropertyGroup Label="Configuration">
+
+  <!-- paths -->
+  <Configuration Condition=" '$(Configuration)' == '' ">uni_debug</Configuration>
+  <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
+
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' ">uni_debug</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' ">uni_release</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' ">x64\uni_debug</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' ">x64\uni_release</confPath>
+
+  <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' ">bin\Debug</netConfPath>
+  <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' ">bin\Release</netConfPath>
+  <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' ">bin\x64\Debug</netConfPath>
+  <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' ">bin\x64\Release</netConfPath>
+
+  <arch Condition=" '$(Platform)' == 'x64' ">x64</arch>
+  <arch Condition=" '$(Platform)' == 'Win32' ">x86</arch>
+
+  <!-- wix ui helper dll-->
+  <uiext>$(WIX)\bin\WixUIExtension.dll</uiext>
+
+  <!-- generated wix objects to link into .msi file -->
+  <genObj>obj\$(confPath)\gen.wixobj</genObj>
+  <netgenObj>obj\$(confPath)\netgen.wixobj</netgenObj>
+  <moeObj>obj\$(confPath)\moe.wixobj</moeObj>
+  <monObj>obj\$(confPath)\mon.wixobj</monObj>
+  <regProtoObj>obj\$(confPath)\reg.proto.wixobj</regProtoObj>
+  <regContextObj>obj\$(confPath)\reg.context.wixobj</regContextObj>
+  <regNetObj>obj\$(confPath)\reg.net.wixobj</regNetObj>
+  <jreObj>obj\$(confPath)\jre.wixobj</jreObj>
+
+  <!-- wix output file -->
+  <msiTarget>.\bin\$(confPath)\moeSetup.msi</msiTarget>
+
+  <!-- admin and non-privilegded user install packets -->
+  <deployTarget>.\deploy\$(confPath)\moeSetup.msi</deployTarget>
+  <deployTargetLight>.\deploy\$(confPath)\moeSetupLight.msi</deployTargetLight>
+
+ </PropertyGroup>
+
+<!-- java source files -->
+ <ItemGroup>
+  <moeResourceFiles Include="..\moe\resources\deploy\**\*.*" Exclude="..\moe\resources\deploy\**\.svn\**\*.*;..\moe\resources\deploy\**\.svn\**\*" />
+  <SvnFolders Include=".\moe\**\*.svn" />
+  <SvnFiles Include=".\moe\**\.svn\**\*.*" />
+
+  <moeFiles Include=".\moe\**\*.*" Exclude=".\moe\**\.svn\**\*.*;.\moe\**\.svn\**\*"/>
+  <javaFiles Include=".\java\moe\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
+  <netFiles Include=".\net\moe\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
+
+  <moeDirs Include="@(moeFiles->'%(RootDir)%(Directory)')" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
+  <javaDirs Include="@(javaFiles->'%(RootDir)%(Directory)')" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
+  <netDirs Include="@(netFiles->'%(RootDir)%(Directory)')" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
+
+  <moeNetResourceFiles Include="..\moe\resources\deploy-net\**\*.*" Exclude="..\moe\resources\deploy-net\**\.svn\**\*.*;..\moe\resources\deploy-net\**\.svn\**\*" />
+  <moeJavaResourceFiles Include="..\moe\resources\deploy-java\**\*.*" Exclude="..\moe\resources\deploy-java\**\.svn\**\*.*;..\moe\resources\deploy-java\**\.svn\**\*" />
+  <JavaSrcFiles Include="..\moe\java\dispdriver\src\**\*.*" Exclude="..\moe\java\dispdriver\src\**\.svn\**\*.*;..\moe\java\dispdriver\src\**\.svn\**\*" />
+ </ItemGroup>
+
+ <!-- Build -->
+
+
+ <Target Name="Build" DependsOnTargets="Clean">
+
+		<Message Text="building Wix Installer JRE" />
+		<Message Text="Project Configuration = $(Configuration)" />
+		<Message Text="Project Platform = $(Platform)" />
+
+		<!-- prepare directory structure -->
+
+		<MakeDir Directories=".\moe"/>
+		<MakeDir Directories=".\net"/>
+		<MakeDir Directories=".\net\moe"/>
+		<MakeDir Directories=".\java"/>
+		<MakeDir Directories=".\java\moe"/>
+		<MakeDir Directories=".\java\moe\lib"/>
+		<MakeDir Directories=".\java\moe\lib\src"/>
+		<MakeDir Directories=".\moe\lib"/>
+		<MakeDir Directories=".\moe\lib\classes"/>
+		<MakeDir Directories=".\moe\lib\src"/>
+
+		<MakeDir Directories=".\deploy\$(confPath)"/>
+
+		<!-- copy files -->
+        <Copy
+            SourceFiles="@(JavaSrcFiles)"
+            DestinationFiles="@(JavaSrcFiles->'.\java\moe\lib\src\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+        <Copy
+            SourceFiles="@(moeNetResourceFiles)"
+            DestinationFiles="@(moeNetResourceFiles->'.\net\moe\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+        <Copy
+            SourceFiles="@(moeResourceFiles)"
+            DestinationFiles="@(moeResourceFiles->'.\moe\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+        <Copy
+            SourceFiles="..\moe\resources\moe.ico"
+            DestinationFiles=".\moe\moe.ico"
+        />
+
+        <Copy
+            SourceFiles="..\moe\$(confPath)\moe.exe"
+            DestinationFolder=".\moe"
+        />
+        <Copy
+            SourceFiles="..\prw\prw\$(confPath)\prw.exe"
+            DestinationFolder=".\moe"
+        />
+
+        <Copy
+            SourceFiles="..\..\ax\io\$(confPath)\io.dll"
+            DestinationFolder=".\moe"
+        />
+        <Copy
+            SourceFiles="..\..\ax\process\$(confPath)\pipedprocess.dll"
+            DestinationFolder=".\moe"
+        />
+        <Copy
+            SourceFiles="..\..\ax\comtypes\$(confPath)\comtypes.dll"
+            DestinationFolder=".\moe"
+        />
+        <Copy
+            SourceFiles="..\..\ax\scintillax\$(confPath)\scintillax.dll"
+            DestinationFolder=".\moe"
+        />
+        <Copy
+            SourceFiles="..\..\ax\setting\$(confPath)\setting.dll"
+            DestinationFolder=".\moe"
+        />
+
+        <Copy
+            SourceFiles="..\..\ax\shellctrl\$(confPath)\shellctrl.dll"
+            DestinationFolder=".\moe"
+        />
+
+        <Copy
+            SourceFiles="..\..\ax\shellfolder\$(confPath)\shellfolder.dll"
+            DestinationFolder=".\moe"
+        />
+
+        <Copy
+            SourceFiles="..\..\ax\moeShell\$(confPath)\moeShell.dll"
+            DestinationFolder=".\moe"
+        />
+        <Copy
+            SourceFiles="..\..\ax\net\$(confPath)\net.exe"
+            DestinationFolder=".\net\moe"
+        />
+        <Copy
+            SourceFiles="..\..\ax\net\net\net\$(netConfPath)\net.dll"
+            DestinationFolder=".\net\moe"
+        />
+        <Copy
+            SourceFiles="..\..\ax\net\net\net\net.reg"
+            DestinationFolder=".\net\moe"
+        />
+       <Copy
+            SourceFiles="..\moe\java\dispdriver\dispdriver.jar"
+            DestinationFolder=".\java\moe\lib"
+        />
+        <Copy
+            SourceFiles="..\..\ax\jre\$(confPath)\jre.exe"
+            DestinationFolder=".\java\moe"
+        />
+        <Copy
+            SourceFiles="..\..\ax\jre\dispdriver\$(confPath)\dispdriver.dll"
+            DestinationFolder=".\java\moe\lib"
+        />
+
+	 <ItemGroup>
+	  <moeResourceFiles Include="..\moe\resources\deploy\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*" />
+	  <SvnFolders Include=".\moe\**\*.svn" />
+	  <SvnFiles Include=".\moe\**\.svn\**\*.*" />
+
+	  <moeFiles Include=".\moe\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
+	  <javaFiles Include=".\java\moe\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
+	  <netFiles Include=".\net\moe\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
+	</ItemGroup>
+
+	<!-- heat -->
+		<Exec Command='"$(WIX)\bin\heat.exe" dir . -sw5150 -sw5151 -gg -cg "MoeCompGroup" -dr INSTALLLOCATION -var var.SourceDir  -o ..\gen.wxs' WorkingDirectory="./moe"/>
+
+		<Exec Command='"$(WIX)\bin\heat.exe" reg .\moe.protocol.reg -gg -o ..\reg.proto.wxs -cg "MoeRegProtoCompGroup"'  WorkingDirectory="./moe"/>
+		<Exec Command='"$(WIX)\bin\heat.exe" reg .\moe.context.reg -gg -o ..\reg.context.wxs -cg "MoeRegContextCompGroup"'  WorkingDirectory="./moe"/>
+
+		<Exec Command='"$(WIX)\bin\heat.exe" dir . -srd -sw5150 -sw5151 -gg -cg "NetCompGroup" -dr "MOEPATH" -var var.SourceDir  -o ..\..\netgen.wxs' WorkingDirectory="./net/moe"/>
+		<Exec Command='"$(WIX)\bin\heat.exe" reg .\net.reg -gg -o ..\..\netreg.wxs -cg "NetRegProtoCompGroup"'  WorkingDirectory="./net/moe"/>
+
+		<Exec Command='"$(WIX)\bin\heat.exe" dir . -srd -sw5150 -sw5151 -gg -cg "JreCompGroup" -dr "MOEPATH" -var var.SourceDir  -o ..\..\jre.wxs' WorkingDirectory="./java/moe"/>
+
+
+        <Copy
+            SourceFiles="@(netFiles)"
+	    DestinationFiles="@(netFiles->'.\moe\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+        <Copy
+            SourceFiles="@(javaFiles)"
+	    DestinationFiles="@(javaFiles->'.\moe\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+
+        <!-- candle -->
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(genObj)" gen.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(regProtoObj)" reg.proto.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(regContextObj)" reg.context.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(moeObj)" moe.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(monObj)" MondoNoLicense.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(netgenObj)" netgen.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(regNetObj)" netreg.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(jreObj)" jre.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+
+
+
+        <!-- light -->
+		<Exec Command='"$(WIX)\bin\light.exe" -ext "$(uiext)" -out "$(msiTarget)" -cultures:en-us -loc en-us.wxl "$(jreObj)" "$(netgenObj)" "$(regNetObj)" "$(regProtoObj)" "$(regContextObj)" "$(genObj)" "$(moeObj)" "$(monObj)"' WorkingDirectory="."/>
+
+
+		<!-- nonadmin install -->
+        <Copy
+            SourceFiles="$(msiTarget)"
+            DestinationFiles="$(deployTargetLight)"
+        />
+
+		<Exec Command='cscript "..\..\cg\bin\patchMSI.wsf" $(deployTargetLight)' WorkingDirectory="."/>
+
+		<!-- admin install -->
+
+        <Copy
+            SourceFiles="$(msiTarget)"
+            DestinationFiles="$(deployTarget)"
+        />
+
+
+ </Target>
+
+
+<!-- Clean -->
+
+ <Target Name="Clean">
+
+
+  <ItemGroup>
+   <moeResourceFiles Include="..\moe\resources\deploy\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*" />
+   <SvnFolders Include=".\moe\**\*.svn" />
+   <SvnFiles Include=".\moe\**\.svn\**\*.*" />
+
+   <moeFiles Include=".\moe\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
+   <javaFiles Include=".\java\moe\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
+   <netFiles Include=".\net\moe\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
+  </ItemGroup>
+
+    <Delete Files="@(moeFiles)" ContinueOnError="true" />
+    <Delete Files="@(netFiles)" ContinueOnError="true" />
+    <Delete Files="@(javaFiles)" ContinueOnError="true" />
+
+    <RemoveDir Directories=".\bin\**\*.*;" ContinueOnError="true" />
+    <RemoveDir Directories="@(moeDirs)" ContinueOnError="true" />
+    <RemoveDir Directories="@(netDirs)" ContinueOnError="true" />
+    <RemoveDir Directories="@(javaDirs)" ContinueOnError="true" />
+	
+    <Delete Files=".\deploy\$(confPath)\moeSetup.msi;.\deploy\$(confPath)\moeSetupLight.msi" ContinueOnError="true" />
+ </Target>
+
+
+
+</Project>

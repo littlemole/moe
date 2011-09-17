@@ -61,6 +61,7 @@ protected:
 	UINT open_html_cmd;
 	UINT open_hex_cmd;
 	UINT open_tail_cmd;
+	UINT open_rtf_cmd;
 
 	
 };

@@ -104,6 +104,7 @@ int  FileEncoding::investigate(const std::string& c, const std::string& h )
 		{
 			case CP_WINUNICODE :
 			{
+				//TODO: smell
 				if ( (p != c.size()) && ((p+1)%2 != 0) )
 					isBinary_ = true;
 				break;

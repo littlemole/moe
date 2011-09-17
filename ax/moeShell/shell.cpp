@@ -68,6 +68,10 @@ HRESULT __stdcall moeShell::GetCommandString( UINT_PTR idCmd, UINT uFlags, UINT 
 			{
 				lstrcpynW((LPWSTR)pszName, L"open with moe (force UTF-8)", cchMax);
 			}
+			else if ( idCmd == open_rtf_cmd )
+			{
+				lstrcpynW((LPWSTR)pszName, L"view as as rtf", cchMax);
+			}
 		}
 		else
 		{
@@ -90,6 +94,10 @@ HRESULT __stdcall moeShell::GetCommandString( UINT_PTR idCmd, UINT uFlags, UINT 
 			else if ( idCmd == open_utf8_cmd )
 			{
 				lstrcpynA(pszName, "open with moe (force UTF-8)", cchMax);
+			}
+			else if ( idCmd == open_rtf_cmd )
+			{
+				lstrcpynA(pszName, "view as rtf", cchMax);
 			}
 		}
 	}
@@ -139,6 +147,10 @@ HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 			{
 				pdocs->OpenHexEditor(mol::bstr(filename_),VARIANT_TRUE, &pdoc );
 			}
+			else if ( cmd == open_hex_cmd )
+			{
+				pdocs->OpenRTFDocument(mol::bstr(filename_),&pdoc );
+			}
 			mol::punk<IMoeView> view;
 			moe->get_View(&view);
 			view->Show();
@@ -172,6 +184,10 @@ HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 	{
 		oss << "moe-hex:";
 	}
+	else if (cmd == open_rtf_cmd )
+	{
+		oss << "moe-rtf:";
+	}
 	oss << filename_ << "\"";
 
 	mol::io::exec_cmdline( oss.str() );
@@ -200,8 +216,9 @@ HRESULT __stdcall moeShell::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT i
 	open_cmd = 0;
 	open_utf8_cmd = 1;
 	open_html_cmd = 2;
-	open_hex_cmd  = 3;
-	open_tail_cmd = 4;
+	open_rtf_cmd  = 3;
+	open_hex_cmd  = 4;
+	open_tail_cmd = 5;
 
 	::InsertMenu( hmenu,
 				  indexMenu,
@@ -222,6 +239,9 @@ HRESULT __stdcall moeShell::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT i
 	icmd++;
 
 	menu.addItem(icmd,_T("show HTML"));
+	icmd++;
+
+	menu.addItem(icmd,_T("show RTF"));
 	icmd++;
 
 	menu.addItem(icmd,_T("show hexdump"));

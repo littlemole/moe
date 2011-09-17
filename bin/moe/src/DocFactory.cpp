@@ -16,7 +16,7 @@
 #include "ole.h"
 #include "rtf.h"
 #include "ribbonres.h"
-
+#include "win/enc.h"
 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
@@ -28,178 +28,40 @@ DocFactory::~DocFactory()
 
 
 /////////////////////////////////////////////////////////////////////
-// COM
+// COM impl used by DocumentCollection
 /////////////////////////////////////////////////////////////////////
+
 HRESULT __stdcall DocFactory::newDocument(Docs::InFiles inf, IMoeDocument** d)
 {
 	if (d)
 		*d = 0;
 
-	bool b = false;
-	mol::punk<IMoeDocument> doc;
 	switch(inf)
 	{
 		case Docs::PREF_TXT :
 		case Docs::PREF_UTF8 :
 		{
-			b = newFile(&doc);
-			break;
+			mol::string p = docs()->getNewFileName(_T(".txt"));
+			return createFile<Editor>(p,d);
 		}
 		case Docs::PREF_RTF :
 		{
-			b = newRTFFile(&doc);
-			break;
+			mol::string p = docs()->getNewFileName(_T(".rtf"));
+			return createFile<FormEditor>(p,d);
 		}
 		case Docs::PREF_FORM :
 		{
-			b = newUFSFile(&doc);
-			break;
+			mol::string p = docs()->getNewFileName(_T(".ufs"));
+			return createFile<FormEditor>(p,d);
 		}
 	}
-
-	if ( b && doc )
-		return doc->QueryInterface( IID_IMoeDocument, (void**) d );
 
 	return E_FAIL;
 }
 
+/////////////////////////////////////////////////////////////////////
 
-HRESULT __stdcall DocFactory::openDocument(Docs::InFiles inf , const mol::string& path, bool readOnly, IMoeDocument** doc)
-{
-	if (doc)
-		*doc = 0;
-
-	return open(-1,path,inf,readOnly,doc);
-}
-
-
-
-//////////////////////////////////////////////////////////////////////////////
-
-
-
-
-bool DocFactory::newFile(IMoeDocument** doc)
-{
-	if ( moe()->activeObject)
-		moe()->activeObject->OnDocWindowActivate(FALSE);
-
-	mol::string p = docs()->getNewFileName(_T(".txt"));
-
-	Editor::Instance* edit = Editor::CreateInstance( p, false, false );
-	if (!edit)
-		return false;
-
-	//if ( children_.empty() )
-	if ( docs()->size() == 0 )
-	{
-		tab()->show(SW_SHOW);
-		moe()->doLayout();
-	}
-
-	mol::MdiChild* c = dynamic_cast<mol::MdiChild*>(edit);
-	docs()->children_.push_back( c );
-	tab()->insertItem( new mol::TabCtrl::TabCtrlItem(mol::Path::filename(p),p,(LPARAM)(HWND)(*c)) );
-	tab()->select((HWND)(*c));
-
-	progress()->show(SW_HIDE);
-	if (doc)
-		return edit->QueryInterface(IID_IMoeDocument,(void**)doc) == S_OK;
-	return true;
-}
-
-bool DocFactory::newUFSFile(IMoeDocument** doc)
-{
-	if ( moe()->activeObject)
-		moe()->activeObject->OnDocWindowActivate(FALSE);
-
-	mol::string p = docs()->getNewFileName(_T(".ufs"));
-
-	FormEditor::Instance* edit = FormEditor::CreateInstance( p );
-	if (!edit)
-		return false;
-
-	if ( docs()->size() == 0 )
-	{
-		tab()->show(SW_SHOW);
-		moe()->doLayout();
-	}
-
-	mol::MdiChild* c = dynamic_cast<mol::MdiChild*>(edit);
-	docs()->children_.push_back( c  );
-	tab()->insertItem( new mol::TabCtrl::TabCtrlItem( mol::Path::filename(p),p, (LPARAM)(HWND)(*c)) );
-	tab()->select( (HWND)(*c) );
-
-	progress()->show(SW_HIDE);
-	if (doc)
-		return edit->QueryInterface(IID_IMoeDocument,(void**)doc) == S_OK;
-	return true;
-}
-
-bool DocFactory::newRTFFile(IMoeDocument** doc)
-{
-	if ( moe()->activeObject)
-		moe()->activeObject->OnDocWindowActivate(FALSE);
-
-	mol::string p = docs()->getNewFileName(_T(".rtf"));
-
-	RTFEditor::Instance* edit = RTFEditor::CreateInstance( p );
-	if (!edit)
-		return false;
-
-	if ( docs()->size() == 0 )
-	{
-		tab()->show(SW_SHOW);
-		moe()->doLayout();
-	}
-
-	mol::MdiChild* c = dynamic_cast<mol::MdiChild*>(edit);
-	docs()->children_.push_back( c  );
-	tab()->insertItem( new mol::TabCtrl::TabCtrlItem( mol::Path::filename(p),p, (LPARAM)(HWND)(*c)) );
-	tab()->select( (HWND)(*c) );
-
-	progress()->show(SW_HIDE);
-	if (doc)
-		return edit->QueryInterface(IID_IMoeDocument,(void**)doc) == S_OK;
-	return true;
-}
-
-
-bool DocFactory::openTailFile(const mol::string& fp, IMoeDocument** doc)
-{
-
-	if ( !mol::Path::exists(fp) )
-		return false;
-
-	if ( moe()->activeObject)
-		moe()->activeObject->OnDocWindowActivate(FALSE);
-
-	TailEditor::Instance* edit = TailEditor::CreateInstance( fp );
-	if (!edit)
-		return false;
-
-	if ( docs()->size() )
-	{
-		tab()->show(SW_SHOW);
-		moe()->doLayout();
-	}
-
-	mol::MdiChild* c = dynamic_cast<mol::MdiChild*>(edit);
-	docs()->children_.push_back( c  );
-	tab()->insertItem( new mol::TabCtrl::TabCtrlItem( mol::Path::filename(fp),fp, (LPARAM)(HWND)(*c)) );
-	tab()->select( (HWND)(*c) );
-
-	progress()->show(SW_HIDE);
-	if (doc)
-		return edit->QueryInterface(IID_IMoeDocument,(void**)doc) == S_OK;
-	return true;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// load a path, create MDI child
-//////////////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall  DocFactory::open( int index, const mol::string& p, Docs::InFiles pref, bool readOnly, IMoeDocument** doc )
+HRESULT __stdcall  DocFactory::openDocument( const mol::string& p, Docs::InFiles pref, bool readOnly, IMoeDocument** doc )
 {
 	mol::string path = p;
 	// valid path ?
@@ -211,64 +73,12 @@ HRESULT __stdcall  DocFactory::open( int index, const mol::string& p, Docs::InFi
 		return E_FAIL;
 	}
 
-	// shell stuff ?
-	if ( path.size() > 1 && path.substr(0,2) == _T("::") ) 
-	{
-		mol::ostringstream oss;
-		oss << _T("shell:") << path;
-		path = oss.str();
-	}
-	if ( path.size() > 2 && path.substr(0,3) == _T(":::") ) 
-	{
-		mol::ostringstream oss;
-		oss << _T("shell") << path;
-		path = oss.str();
-	}
-
-	// shell link ?
-	if ( mol::icmp( mol::Path::ext(path), _T(".lnk") ) == 0 )
-	{
-		path = mol::resolveShortcut(path);
-	}
-
-
-	// already open?
-	/*
-	punk<IMoeDocument> d;
-	if ( S_OK == Item(variant(bstr(path)),&d) )
-	{
-		//TODO:fix me
-		/*if ( IDYES !=* /// ::MessageBox( *moe(), _T("close file?"), _T("file already open!"), MB_ICONEXCLAMATION); //|MB_YESNO ) )
-		{
-			mol::ostringstream oss;
-			oss << "file already open!" << path;
-			statusBar()->status(oss.str());
-			if (d)
-			{
-				mol::punk<IMoeDocumentView> view;
-				HRESULT hr = d->get_View(&view);
-				view->Activate();
-				view.release();
-
-				if (doc)
-				{
-					d->QueryInterface( IID_IMoeDocument, (void**) doc );
-				}
-			}
-
-			return true;
-		}
-
-		return false;
-	}
-	*/
-
 	// deactive any active object
 	if ( moe()->activeObject)
 		moe()->activeObject->OnDocWindowActivate(FALSE);
 
 	// try to load and create mdi child 
-	mol::MdiChild* mdi = openPath( path, pref, readOnly );
+	mol::MdiChild* mdi = documentFactory( path, pref, readOnly );
 	if (!mdi)
 	{
 		// failed to load
@@ -289,14 +99,10 @@ HRESULT __stdcall  DocFactory::open( int index, const mol::string& p, Docs::InFi
 	}
 
 	// insert document into collection
-	Docs::childlist::iterator it = docs()->iterator( mol::variant(index) );
-	if ( it == docs()->children_.end() )
-		docs()->children_.push_back( mdi );
-	else
-		docs()->children_.insert( it,  mdi );
+	docs()->children_.push_back( mdi );
 
 	// update child selector tab window
-	tab()->insertItem( new mol::TabCtrl::TabCtrlItem( mol::Path::filename(path),path, (LPARAM)(HWND)(*mdi) ),index);
+	tab()->insertItem( new mol::TabCtrl::TabCtrlItem( mol::Path::filename(path),path, (LPARAM)(HWND)(*mdi) ) );
 	tab()->select( (HWND)(*mdi) );
 
 	// add document to ribbon recent docs
@@ -314,13 +120,54 @@ HRESULT __stdcall  DocFactory::open( int index, const mol::string& p, Docs::InFi
 }
 
 
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+// Document from existing file factory impl
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
-mol::MdiChild* DocFactory::openPath( const mol::string& p, Docs::InFiles pref, bool readOnly)
+
+// file opening helpers
+
+template<class T>
+mol::MdiChild* load( const mol::string& path, bool utf8, bool readOnly )
+{
+	typename T::Instance* t = T::CreateInstance( path, utf8, readOnly );
+	return dynamic_cast<mol::MdiChild*>(t);
+}
+
+template<class T>
+mol::MdiChild* load( const mol::string& path, bool readOnly )
+{
+	typename T::Instance* t = T::CreateInstance( path, readOnly );
+	return dynamic_cast<mol::MdiChild*>(t);
+}
+
+template<class T>
+mol::MdiChild* load( const mol::string& path)
+{
+	typename T::Instance* t = T::CreateInstance( path );
+	return dynamic_cast<mol::MdiChild*>(t);
+}
+
+/////////////////////////////////////////////////////////////////////
+
+mol::MdiChild* handleShellPath(  const mol::string& p )
 {
 	mol::string path = p;
-	statusBar()->status(10);
-
-	// shell stuff ?
+	if ( path.size() > 1 && path.substr(0,2) == _T("::") ) 
+	{
+		mol::ostringstream oss;
+		oss << _T("shell:") << path;
+		path = oss.str();
+	}
+	if ( path.size() > 2 && path.substr(0,3) == _T(":::") ) 
+	{
+		mol::ostringstream oss;
+		oss << _T("shell") << path;
+		path = oss.str();
+	}
+	
 	if ( path.size() > 2 && path.substr(0,8) == _T("shell:::") ) 
 	{
 		// control panel ...
@@ -332,7 +179,30 @@ mol::MdiChild* DocFactory::openPath( const mol::string& p, Docs::InFiles pref, b
 		mol::MdiChild* ret = load<DirChild>(path);		
 		return ret;
 	}
+	return 0;
+}
 
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+mol::MdiChild* DocFactory::documentFactory( const mol::string& p, Docs::InFiles pref, bool readOnly)
+{
+	mol::string path = p;
+	statusBar()->status(10);
+
+	// shell link ?
+	if ( mol::icmp( mol::Path::ext(path), _T(".lnk") ) == 0 )
+	{
+		path = mol::resolveShortcut(path);
+	}
+
+	// shell special folder stuff ?
+	mol::MdiChild* ret =  handleShellPath(path);
+	if ( ret )
+	{
+		return ret;
+	}
 
 	// if path is directory, create dir view
 	if ( mol::Path::isDir(path) )
@@ -408,8 +278,51 @@ mol::MdiChild* DocFactory::openPath( const mol::string& p, Docs::InFiles pref, b
 		return load<ImgViewer>(path);
     }
 
+	std::stringstream is;
+	mol::filestream in;
+	in.open( mol::tostring(p),GENERIC_READ,FILE_SHARE_READ,0,OPEN_EXISTING);
+
+    char buf[1024];
+    if ( !in.eof() )
+    {
+        in.read(buf,1023);
+		is.write(buf,in.gcount());
+    }
+	in.close();
+
+	mol::FileEncoding e;
+	DWORD cp = e.investigate(is.str());
+	if ( cp == CP_WINUNICODE )
+	{
+		pref = Docs::PREF_TXT;
+	}
+
+	if ( e.isBinary() )
+	{
+		return load<Hex>(path,readOnly);
+	}
+
 	// ... so try open in text editor
 	return load<Editor>(path, pref == Docs::PREF_UTF8, readOnly );
 }
 	
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 
+void DocFactory::updateUI(const mol::string& p, mol::MdiChild* c)
+{
+	if ( moe()->activeObject)
+		moe()->activeObject->OnDocWindowActivate(FALSE);
+
+	if ( docs()->size() == 0 )
+	{
+		tab()->show(SW_SHOW);
+		moe()->doLayout();
+	}
+		
+	docs()->children_.push_back( c );
+	tab()->insertItem( new mol::TabCtrl::TabCtrlItem(mol::Path::filename(p),p,(LPARAM)(HWND)(*c)) );
+	tab()->select((HWND)(*c));
+
+	progress()->show(SW_HIDE);
+}

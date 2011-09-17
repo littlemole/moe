@@ -15,43 +15,30 @@ public:
 	virtual ~DocFactory(); 
 
 	virtual HRESULT __stdcall newDocument(Docs::InFiles inf , IMoeDocument** doc);
-	virtual HRESULT __stdcall openDocument(Docs::InFiles inf , const mol::string& path, bool readOnly, IMoeDocument** doc);
-
-	virtual HRESULT __stdcall open( int index, const mol::string& dir, Docs::InFiles pref, bool readOnly, IMoeDocument** doc  );
+	virtual HRESULT __stdcall openDocument( const mol::string& dir, Docs::InFiles pref, bool readOnly, IMoeDocument** doc  );
 
 private:
 
-	bool newFile(IMoeDocument** doc);
-	bool newUFSFile(IMoeDocument** doc);
-	bool newRTFFile(IMoeDocument** doc);
-	bool openTailFile(const mol::string& fp, IMoeDocument** doc);
+	mol::MdiChild* documentFactory( const mol::string& dir, Docs::InFiles pref, bool readOnly);
 
-	mol::MdiChild* openPath( const mol::string& dir, Docs::InFiles pref, bool readOnly);
-
-	// file opening helpers
-
-	template<class T>
-	mol::MdiChild* load( const mol::string& path, bool utf8, bool readOnly )
+	template<class E>
+	HRESULT createFile(const mol::string& p, IMoeDocument** doc)
 	{
-		typename T::Instance* t = T::CreateInstance( path, utf8, readOnly );
-		return dynamic_cast<mol::MdiChild*>(t);
+		E::Instance* edit = E::CreateInstance( p );
+		if (!edit)
+			return E_FAIL;
+
+		mol::MdiChild* c = dynamic_cast<mol::MdiChild*>(edit);
+
+		updateUI(p,c);
+
+		if (doc)
+			return edit->QueryInterface(IID_IMoeDocument,(void**)doc);
+		return S_OK;
 	}
 
-	template<class T>
-	mol::MdiChild* load( const mol::string& path, bool readOnly )
-	{
-		typename T::Instance* t = T::CreateInstance( path, readOnly );
-		return dynamic_cast<mol::MdiChild*>(t);
-	}
-
-	template<class T>
-	mol::MdiChild* load( const mol::string& path)
-	{
-		typename T::Instance* t = T::CreateInstance( path );
-		return dynamic_cast<mol::MdiChild*>(t);
-	}
-
-};
+	void updateUI(const mol::string& p, mol::MdiChild* c);
+}; 
 
 
 #endif

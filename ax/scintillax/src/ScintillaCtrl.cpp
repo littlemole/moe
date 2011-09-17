@@ -323,6 +323,8 @@ LRESULT ScintillAx::OnCreate(UINT msg, WPARAM wParam, LPARAM lParam)
 				
 		//this->put_Font(font_);
 		//this->put_Syntax(syntax_);				
+
+		edit()->setCodePage(SC_CP_UTF8);
 	}
 
 	return 0;

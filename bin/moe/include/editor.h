@@ -30,7 +30,7 @@ public:
 	Editor();
 	virtual ~Editor();
 
-	static Instance* CreateInstance(const mol::string& p, bool utf8, bool readOnly);
+	static Instance* CreateInstance(const mol::string& p, bool utf8 = false, bool readOnly = false);
 
 	// std windows msgs
 
