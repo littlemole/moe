@@ -46,8 +46,8 @@
 
 <!-- net bin files -->
  <ItemGroup>
-  <moeResourceFiles Include="..\moe\resources\deploy-net\**\*.*" Exclude="..\moe\resources\deploy-net\**\.svn\*.*;..\moe\resources\deploy-net\**\.svn" />
-  <moeFiles Include=".\moe\**\*.*" Exclude=".\moe\**\.svn\*.*;.\moe\**\.svn"/>
+  <moeResourceFiles Include="..\moe\resources\deploy-net\**\*.*" Exclude="..\moe\resources\deploy-net\**\.svn\**\*.*;..\moe\resources\deploy-net\**\.svn\**\*" />
+  <moeFiles Include=".\moe\**\*.*" Exclude=".\moe\**\.svn\**\*.*;.\moe\**\.svn\**\*"/>
   <SvnFolders Include=".\moe\**\.svn" />
  </ItemGroup>
  <!-- Build -->

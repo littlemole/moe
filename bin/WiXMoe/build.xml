@@ -41,9 +41,9 @@
 
 <!-- java source files -->
  <ItemGroup>
-  <moeResourceFiles Include="..\moe\resources\deploy\**\*.*" Exclude="..\moe\resources\deploy\**\.svn\*.*;..\moe\resources\deploy\**\.svn" />
+  <moeResourceFiles Include="..\moe\resources\deploy\**\*.*" Exclude="..\moe\resources\deploy\**\.svn\**\*.*;..\moe\resources\deploy\**\.svn\**\*" />
   <SvnFolders Include=".\moe\**\.svn" />
-  <moeFiles Include=".\moe\**\*.*" />
+  <moeFiles Include=".\moe\**\*.*" Exclude=".\moe\**\.svn\**\*.*;.\moe\**\.svn\**\*" />
  </ItemGroup>
 
  <!-- Build -->
