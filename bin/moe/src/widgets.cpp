@@ -9,6 +9,7 @@
 #include "fm20_tlh.h"
 #include <Commctrl.h>
 #include "util/regex.h"
+#include "Shobjidl.h"
 
 // open file dialog std filte for moe
 mol::TCHAR  InFilesFilter[]   = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
@@ -73,6 +74,11 @@ int msgbox( const mol::string& txt, const mol::string& title, const mol::string&
 	{
 		return ::MessageBox( *moe(), txt.c_str(), title.c_str(), MB_YESNO|MB_ICONINFORMATION );
 	}
+}
+
+void editFileExtensions()
+{
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -1074,7 +1080,7 @@ HRESULT __stdcall MoeDrop::Drop( IDataObject* pDataObject, DWORD keyState, POINT
 	mol::ImageList::drop(*moe());
 	for ( unsigned int i = 0; i < v.size(); i++ )
 	{
-		bool result = ::docs()->open(0,v[i],Docs::PREF_TXT,false,0);
+		bool result = ::docs()->open(v[i],Docs::PREF_TXT,false,0);
 		statusBar()->status(v[i]);
 		if (!result)
 		{

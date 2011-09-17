@@ -2,9 +2,52 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <ComponentGroup Id="MoeRegContextCompGroup">
-            <Component Id="cmp7EF36E1EC531694EDA32BFC07DF42FF1" Directory="TARGETDIR" Guid="{EB82F1D0-288A-42D5-A8B4-2660359A4444}" KeyPath="yes">
+            <Component Id="cmp7EF36E1EC531694EDA32BFC07DF42FF1" Directory="TARGETDIR" Guid="{5A7C608C-51FD-4C27-B660-A53620506932}" KeyPath="yes">
                 <RegistryKey Key="*\shellex\ContextMenuHandlers\{AF110465-5902-4db8-8DF3-FBA079547D08}" Root="HKCR">
                     <RegistryValue Value="moe shell context menu handler" Type="string" />
+                </RegistryKey>
+            </Component>
+            <Component Id="cmpDEF4511B8FF81B271FCD3C88427489BC" Directory="TARGETDIR" Guid="{DFAB935F-1F2F-45F9-9084-79D039B249F3}" KeyPath="yes">
+                <RegistryKey Action="createAndRemoveOnUninstall" Key="SOFTWARE\mol" Root="HKLM" />
+            </Component>
+            <Component Id="cmpE0CD74E39C5F3352B3E44862ED1EABAE" Directory="TARGETDIR" Guid="{7B2EC655-0FFA-47AA-BE53-10D016D97963}" KeyPath="yes">
+                <RegistryKey Action="createAndRemoveOnUninstall" Key="SOFTWARE\mol\moe" Root="HKLM" />
+            </Component>
+            <Component Id="cmpA06107A321E0481B5A993CFBDCD91BAE" Directory="TARGETDIR" Guid="{C25F061F-C208-4AAD-8E35-C82813AFB76F}" KeyPath="yes">
+                <RegistryKey Key="SOFTWARE\mol\moe\Capabilities" Root="HKLM">
+                    <RegistryValue Name="ApplicationDescription" Value="mole's own editor" Type="string" />
+                    <RegistryValue Name="ApplicationName" Value="moe" Type="string" />
+                </RegistryKey>
+            </Component>
+            <Component Id="cmp35C55E5607714300984E9203FF44323E" Directory="TARGETDIR" Guid="{15218D41-ED62-4706-A32E-EE0EF7775F79}" KeyPath="yes">
+                <RegistryKey Key="SOFTWARE\mol\moe\Capabilities\FileAssociations" Root="HKLM">
+                    <RegistryValue Name=".txt" Value="moe" Type="string" />
+                    <RegistryValue Name=".html" Value="moe" Type="string" />
+                    <RegistryValue Name=".htm" Value="moe" Type="string" />
+                    <RegistryValue Name=".mhtml" Value="moe" Type="string" />
+                    <RegistryValue Name=".java" Value="moe" Type="string" />
+                    <RegistryValue Name=".cs" Value="moe" Type="string" />
+                    <RegistryValue Name=".js" Value="moe" Type="string" />
+                    <RegistryValue Name=".vbs" Value="moe" Type="string" />
+                    <RegistryValue Name=".pl" Value="moe" Type="string" />
+                    <RegistryValue Name=".pls" Value="moe" Type="string" />
+                    <RegistryValue Name=".pm" Value="moe" Type="string" />
+                    <RegistryValue Name=".css" Value="moe" Type="string" />
+                    <RegistryValue Name=".inc" Value="moe" Type="string" />
+                    <RegistryValue Name=".h" Value="moe" Type="string" />
+                    <RegistryValue Name=".cpp" Value="moe" Type="string" />
+                    <RegistryValue Name=".c" Value="moe" Type="string" />
+                    <RegistryValue Name=".xml" Value="moe" Type="string" />
+                    <RegistryValue Name=".xhtml" Value="moe" Type="string" />
+                    <RegistryValue Name=".xsl" Value="moe" Type="string" />
+                    <RegistryValue Name=".xslt" Value="moe" Type="string" />
+                    <RegistryValue Name=".xsd" Value="moe" Type="string" />
+                    <RegistryValue Name=".properties" Value="moe" Type="string" />
+                </RegistryKey>
+            </Component>
+            <Component Id="cmp9A801BCD8700C850371F0D5B77106737" Directory="TARGETDIR" Guid="{140A70E7-DEB2-4113-9341-774C87CE4FB9}" KeyPath="yes">
+                <RegistryKey Key="SOFTWARE\RegisteredApplications" Root="HKLM">
+                    <RegistryValue Name="moe" Value="Software\mol\moe\Capabilities" Type="string" />
                 </RegistryKey>
             </Component>
         </ComponentGroup>

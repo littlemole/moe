@@ -146,7 +146,7 @@ HRESULT __stdcall DirChild::DirChild_Events::OnListDblClick(BSTR filename)
 			{
 				return S_OK;
 			}
-			bool result = docs()->open(-1,p,Docs::PREF_TXT,false,0);
+			bool result = docs()->open(p,Docs::PREF_TXT,false,0);
 			if (!result)
 			{
 				mol::ostringstream oss;
@@ -172,7 +172,7 @@ HRESULT __stdcall DirChild::DirChild_Events::OnListSelection(BSTR filename)
 HRESULT __stdcall DirChild::DirChild_Events::OnListOpen(BSTR filename)
 {
 	mol::string p(mol::toString(filename));
-	bool result = docs()->open(-1,p,Docs::PREF_TXT,false,0);
+	bool result = docs()->open(p,Docs::PREF_TXT,false,0);
 	if (!result)
 	{
 		mol::ostringstream oss;

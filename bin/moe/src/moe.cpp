@@ -357,7 +357,7 @@ void MoeWnd::OnFileOpenHex()
 	mol::FilenameDlg dlg(*this);	
 	if ( IDOK == dlg.dlgOpen(OFN_READONLY|OFN_EXPLORER) )
 	{
-		bool result = docs()->open( -1, dlg.fileName(), Docs::PREF_HEX, dlg.readOnly(), 0 );
+		bool result = docs()->open( dlg.fileName(), Docs::PREF_HEX, dlg.readOnly(), 0 );
 		if (!result)
 		{
 			::MessageBox(*this,dlg.fileName().c_str(),_T("failed to load"),MB_ICONERROR);
@@ -373,7 +373,7 @@ void MoeWnd::OnFileOpenHtml()
 	{
 		if ( !urlDlg()->url.empty() )
 		{
-			bool result = docs()->open( -1, urlDlg()->url, Docs::PREF_HTML, true, 0 );
+			bool result = docs()->open( urlDlg()->url, Docs::PREF_HTML, true, 0 );
 			if (!result)
 			{
 				::MessageBox(*this,urlDlg()->url.c_str(),_T("failed to load"),MB_ICONERROR);

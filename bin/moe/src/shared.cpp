@@ -451,7 +451,7 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
 				ODBGS(ofn.fileName(i).c_str());
-				bool result = docs()->open( -1, ofn.fileName(i), Docs::PREF_RTF,ofn.readOnly(), 0);
+				bool result = docs()->open( ofn.fileName(i), Docs::PREF_RTF,ofn.readOnly(), 0);
 			}
 		}
 		// open html
@@ -460,7 +460,7 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
 				ODBGS(ofn.fileName(i).c_str());
-				bool result = docs()->open( -1, ofn.fileName(i), Docs::PREF_HTML,ofn.readOnly(), 0);
+				bool result = docs()->open( ofn.fileName(i), Docs::PREF_HTML,ofn.readOnly(), 0);
 			}
 		}
 		// open hex
@@ -468,7 +468,7 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 		{
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
-				bool result = docs()->open( -1, ofn.fileName(i), Docs::PREF_HEX, ofn.readOnly(), 0);
+				bool result = docs()->open( ofn.fileName(i), Docs::PREF_HEX, ofn.readOnly(), 0);
 			}
 		}
 		// open log
@@ -476,7 +476,7 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 		{
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
-				bool result = docs()->open( -1, ofn.fileName(i), Docs::PREF_TAIL, TRUE, 0);
+				bool result = docs()->open( ofn.fileName(i), Docs::PREF_TAIL, TRUE, 0);
 			}
 		}
 		// open text
@@ -484,7 +484,7 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 		{
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
-				bool result = docs()->open(-1, ofn.fileName(i), ofn.index() == 2 ? Docs::PREF_UTF8 : Docs::PREF_TXT, ofn.readOnly(), 0);
+				bool result = docs()->open(ofn.fileName(i), ofn.index() == 2 ? Docs::PREF_UTF8 : Docs::PREF_TXT, ofn.readOnly(), 0);
 			}
 		}
 	}	
@@ -500,7 +500,7 @@ HRESULT __stdcall MoeDialogs::OpenDir( IMoeDocument** d)
 		if ( s != _T("") )
 		{
 			if ( mol::Path::exists(s) )
-				docs()->open( -1, s, Docs::PREF_TXT, false, d);
+				docs()->open( s, Docs::PREF_TXT, false, d);
 		}
 
 	}

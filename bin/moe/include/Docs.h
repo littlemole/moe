@@ -44,6 +44,7 @@ public:
 	virtual HRESULT __stdcall OpenUserForm(  BSTR pathname, IMoeDocument** form );	
 	virtual HRESULT __stdcall NewUserForm(  IMoeDocument** form );	
 	virtual HRESULT __stdcall NewRTFDocument(IMoeDocument** d);
+	virtual HRESULT __stdcall OpenRTFDocument(BSTR pathname, IMoeDocument** d);
 	virtual HRESULT __stdcall OpenTailDocument( BSTR pathname, IMoeDocument** doc );	
 
 	virtual HRESULT __stdcall SaveAll();
@@ -60,14 +61,8 @@ public:
 	  PREF_RTF,
 	  PREF_TAIL
 	};
-	/*
-	bool open( int index, const mol::string& dir, InFiles pref, bool readOnly, IMoeDocument** doc  );
 
-	//mol::MdiChild* child( const mol::string& path);
-	*/
-
-	bool open( int index, const mol::string& dir, InFiles pref, bool readOnly, IMoeDocument** doc  );
-
+	bool open( const mol::string& dir, InFiles pref, bool readOnly, IMoeDocument** doc  );
 	void remove( mol::MdiChild* mdi );
 	void rename( mol::MdiChild* mdi, const mol::string& path );
 	void move( mol::MdiChild* mdi, int pos );
@@ -83,38 +78,6 @@ private:
 
 	
 	DocFactory* factory_;
-
-	/*
-	bool newFile(IMoeDocument** doc);
-	bool newUFSFile(IMoeDocument** doc);
-	bool newRTFFile(IMoeDocument** doc);
-	bool openTailFile(const mol::string& fp, IMoeDocument** doc);
-
-	mol::MdiChild* openPath( const mol::string& dir, InFiles pref, bool readOnly);
-
-	// file opening helpers
-
-	template<class T>
-	mol::MdiChild* load( const mol::string& path, bool utf8, bool readOnly )
-	{
-		typename T::Instance* t = T::CreateInstance( path, utf8, readOnly );
-		return dynamic_cast<mol::MdiChild*>(t);
-	}
-
-	template<class T>
-	mol::MdiChild* load( const mol::string& path, bool readOnly )
-	{
-		typename T::Instance* t = T::CreateInstance( path, readOnly );
-		return dynamic_cast<mol::MdiChild*>(t);
-	}
-
-	template<class T>
-	mol::MdiChild* load( const mol::string& path)
-	{
-		typename T::Instance* t = T::CreateInstance( path );
-		return dynamic_cast<mol::MdiChild*>(t);
-	}
-	*/
 	typedef std::list<mol::MdiChild* > childlist;
 	childlist	children_;
 
