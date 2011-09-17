@@ -60,6 +60,7 @@
 #define DISPID_IMOEDOCUMENTCOLLECTION_MOVE                                     				 15
 #define DISPID_IMOEDOCUMENTCOLLECTION_NEWRTFDOCUMENT                           				 16
 #define DISPID_IMOEDOCUMENTCOLLECTION_OPENTAILDOCUMENT                         				 17
+#define DISPID_IMOEDOCUMENTCOLLECTION_OPENRTFDOCUMENT                          				 18
 #define DISPID_IMOEDOCUMENT_OBJECT                                             				 0
 #define DISPID_IMOEDOCUMENT_VIEW                                               				 1
 #define DISPID_IMOEDOCUMENT_FILEPATH                                           				 2

@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Mon Sep 12 21:49:32 2011
+/* at Sat Sep 17 13:33:14 2011
  */
 /* Compiler settings for src\moe.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -2335,6 +2335,10 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
             /* [in] */ BSTR fPath,
             /* [retval][out] */ IMoeDocument **d) = 0;
         
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenRTFDocument( 
+            /* [in] */ BSTR fPath,
+            /* [retval][out] */ IMoeDocument **d) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -2468,6 +2472,11 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
             /* [in] */ BSTR fPath,
             /* [retval][out] */ IMoeDocument **d);
         
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OpenRTFDocument )( 
+            IMoeDocumentCollection * This,
+            /* [in] */ BSTR fPath,
+            /* [retval][out] */ IMoeDocument **d);
+        
         END_INTERFACE
     } IMoeDocumentCollectionVtbl;
 
@@ -2560,6 +2569,9 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
 
 #define IMoeDocumentCollection_OpenTailDocument(This,fPath,d)	\
     ( (This)->lpVtbl -> OpenTailDocument(This,fPath,d) ) 
+
+#define IMoeDocumentCollection_OpenRTFDocument(This,fPath,d)	\
+    ( (This)->lpVtbl -> OpenRTFDocument(This,fPath,d) ) 
 
 #endif /* COBJMACROS */
 
