@@ -147,7 +147,7 @@ HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 			{
 				pdocs->OpenHexEditor(mol::bstr(filename_),VARIANT_TRUE, &pdoc );
 			}
-			else if ( cmd == open_hex_cmd )
+			else if ( cmd == open_rtf_cmd )
 			{
 				pdocs->OpenRTFDocument(mol::bstr(filename_),&pdoc );
 			}
