@@ -47,7 +47,7 @@ HRESULT __stdcall DocFactory::newDocument(Docs::InFiles inf, IMoeDocument** d)
 		case Docs::PREF_RTF :
 		{
 			mol::string p = docs()->getNewFileName(_T(".rtf"));
-			return createFile<FormEditor>(p,d);
+			return createFile<RTFEditor>(p,d);
 		}
 		case Docs::PREF_FORM :
 		{

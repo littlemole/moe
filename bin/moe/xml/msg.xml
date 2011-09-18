@@ -366,6 +366,7 @@
       <msg  handler="OnDestroy" msg="WM_DESTROY" />
       <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
       <msg  handler="OnPaint" msg="WM_PAINT" />
+      <msg  handler="OnClose" msg="WM_CLOSE" />
       
       <msg  handler="OnSave" cmd="IDM_FILE_SAVE" />
       <msg  handler="OnSaveAs" cmd="IDM_FILE_SAVE_AS" />
@@ -387,11 +388,7 @@
       
     </class>
 
-    <class type="RTFEditor" >
 
-      <msg  handler="OnReload" cmd="IDM_EDIT_UPDATE" />
-
-    </class>
 
   </msgs>
 

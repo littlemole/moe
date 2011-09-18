@@ -6,7 +6,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sat Sep 17 16:00:32 2011
+/* at Sun Sep 18 02:13:59 2011
  */
 /* Compiler settings for jre.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 

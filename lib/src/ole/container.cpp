@@ -231,6 +231,7 @@ HRESULT __stdcall OleContainerBase::handleSetBorderSpace( LPCBORDERWIDTHS pborde
 	}
 	
 	ODBGS("<------IOleInPlaceFrame_SetBorderSpace END");
+	this->redrawOleContainer();
 
 	return S_OK;
 }

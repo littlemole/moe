@@ -146,7 +146,17 @@ HMODULE JRE::loadJVM()
 	}
 	catch(...)
 	{
-		return 0;
+		mol::TCHAR buf[MAX_PATH];
+		if (::GetEnvironmentVariable( _T("JAVA_HOME"), buf, MAX_PATH ))
+		{
+			mol::string jh(buf);
+			if ( !jh.empty() )
+			{
+				path = jh + _T("\\jre\\bin\\client\\jvm.dll");
+			}
+		}
+		else
+			return 0;
 	}
 
 	HMODULE module = ::LoadLibrary(path.c_str());

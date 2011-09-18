@@ -8,7 +8,6 @@ namespace mol {
 
 HWND MdiChild::createWindow( const mol::string& windowName, HMENU hMenu, const Rect& r, HWND p )
 {
-	//isMidi_ = true;
     registerClass(hMenu);
     parent_ = p;
     HWND client_ = addChild(parent_);
@@ -23,7 +22,6 @@ HWND MdiChild::createWindow( const mol::string& windowName, HMENU hMenu, const R
     ::SetWindowLongPtr(hWnd_,GWL_EXSTYLE,(LONG_PTR)exstyle());
 
 	show(SW_SHOW);
-	//activate();
 	return hWnd_;
 }
 
@@ -59,6 +57,7 @@ LRESULT CALLBACK MdiChild::windowProcedure (HWND hwnd, UINT message, WPARAM wPar
                 HWND frame = ::GetParent(client_);
 
 				MdiFrame* mdi = wndFromHWND<MdiFrame>(frame);
+
                 // kill child
                 mdi->releaseChild(pThis);
 
@@ -81,12 +80,16 @@ LRESULT CALLBACK MdiChild::windowProcedure (HWND hwnd, UINT message, WPARAM wPar
             {
                 LPCREATESTRUCT lpcs = (LPCREATESTRUCT)lParam;
                 LPMDICREATESTRUCT lpmdics = (LPMDICREATESTRUCT)lpcs->lpCreateParams;
+
                 // get this pointer stored in lParam from create()
 				pThis = dynamic_cast<MdiChild*>( (mol::win::WndProc*)(lpmdics->lParam)  );
+
                 // set THIS _hWnd
                 pThis->hWnd_ = hwnd;
+
                 // store the this-pointer in the HWND
                 ::SetWindowLongPtr(hwnd, GWLP_USERDATA, (ULONG_PTR) dynamic_cast<WndProc*>(pThis));
+
                 // call wndproc
                 return (pThis->wndProc( hwnd, message,wParam,lParam));
             }
@@ -160,6 +163,9 @@ LRESULT MdiChild::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
         case WM_MDIACTIVATE :
         {
+			if ( mol::Ribbon::ribbon()->enabled() )
+				break;
+
 			MdiFrame* mdi = wndFromHWND<MdiFrame>(mdiParent());
         	HWND newWnd = (HWND)lParam;
 	        if ( newWnd == hWnd_ )
@@ -289,6 +295,7 @@ void MdiChild::changeMenu( HMENU hmenu, HMENU wndMenu)
 {
 	if ( (wndMenu == 0) && (windowMenu_ != 0 ))
 		wndMenu = windowMenu_;
+
 	mol::MdiFrame* frame = mol::wndFromHWND<MdiFrame>(mdiParent());
 	frame->changeMenu(hmenu, wndMenu);
 }
@@ -413,6 +420,7 @@ void  MdiFrame::addChild(MdiChild* c)
 {
 	this->OnAddChild(*c);
     children_.push_back(c);
+
 	if ( !mol::Ribbon::ribbon()->enabled())
 		::DrawMenuBar(hWnd_);
 }
@@ -507,10 +515,13 @@ LRESULT CALLBACK MdiFrame::windowProcedure (HWND hwnd, UINT message, WPARAM wPar
             {
                 // get this pointer stored in lParam from Wnd::create()
 				pThis = dynamic_cast<MdiFrame*>( (mol::win::WndProc*)(((LPCREATESTRUCT)lParam)->lpCreateParams ));
+
                 // set THIS _hWnd
                 pThis->hWnd_ = hwnd;
+
                 // store the this-pointer in the HWND
                 ::SetWindowLongPtr(hwnd, GWLP_USERDATA, (ULONG_PTR) dynamic_cast<WndProc*>(pThis));
+
                 // call wndproc
                 return (pThis->wndProc( hwnd, message,wParam,lParam));
             }
@@ -569,8 +580,6 @@ LRESULT MdiFrame::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				}
 				case TTN_GETDISPINFO : 
 				{
-					//mol::win::AppBase& a = app<mol::win::AppBase>();
-					//if ( !a.TabToolNotify(msg.nmhdr()->hwndFrom,message,wParam,lParam) )
 					if ( !mol::win::tabToolTips().tabToolNotify(msg.nmhdr()->hwndFrom,message,wParam,lParam) )
 						::SendMessage(msg.nmhdr()->hwndFrom,message,wParam,lParam);
 					return 0;
@@ -721,7 +730,6 @@ void MdiFrame::createMDIClient( LPCREATESTRUCT lpcs )
 								(HMENU)1,
 								mol::hinstance(),
 								(PSTR)&cs);
-//	mol::win::AppBase::app<mol::win::AppBase>().OnMDIClient(client_);
 	mol::win::mdiClient().set(client_);
 
 }
@@ -774,25 +782,7 @@ void MdiFrame::setMenu( HMENU newMenu, HMENU windowMenu   )
 		::DrawMenuBar( *this );
 	}
 }
-/*
-BOOL MdiFrame::destroy( )
-{
-	for (int i = this->count()-1; i >= 0; i-- )
-		//::SendMessage( childAt(i), WM_MDIDESTROY, (WPARAM)(HWND)(this->childAt(i)), 0);
-		::SendMessage( childAt(i), WM_CLOSE, 0, 0);
 
-	mol::invoke( *this, &MdiFrame::mdiDestroy );
-	//Wnd::destroy();
-
-	return TRUE;
-}
-
-BOOL MdiFrame::mdiDestroy( )
-{
-	return mol::win::Wnd::destroy();
-	return TRUE;
-}
-*/
 void MdiFrame::redraw()
 {
 	::RedrawWindow(mdiClient(),0,0,RDW_FRAME|RDW_INVALIDATE);			
