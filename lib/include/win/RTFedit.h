@@ -60,25 +60,9 @@ class IRichEditOleCallbackImpl :
 {
 	public: 
 
-		IRichEditOleCallbackImpl()
-		{
-			HRESULT hr = ::CreateILockBytesOnHGlobal(NULL, TRUE, &bytes_);    
-			if ( hr == S_OK )
-			{
-				hr = ::StgCreateDocfileOnILockBytes(
-							bytes_, 
-							STGM_SHARE_EXCLUSIVE | STGM_CREATE | STGM_READWRITE, 
-							0, 
-							&store_
-						);
-			}
-		}
+		IRichEditOleCallbackImpl();
 
-		virtual HRESULT __stdcall GetNewStorage(LPSTORAGE* lplpstg)
-		{
-			HRESULT hr = store_->CreateStorage( L"subobj", STGM_SHARE_EXCLUSIVE | STGM_CREATE | STGM_READWRITE,0,0,lplpstg);
-			return S_OK;
-		}
+		virtual HRESULT __stdcall GetNewStorage(LPSTORAGE* lplpstg);
 
 		virtual HRESULT __stdcall GetInPlaceContext(LPOLEINPLACEFRAME* lplpFrame, LPOLEINPLACEUIWINDOW* lplpDoc, LPOLEINPLACEFRAMEINFO lpFrameInfo)
 		{
@@ -129,6 +113,7 @@ class IRichEditOleCallbackImpl :
 	private:
 		mol::punk<ILockBytes> bytes_;
 		mol::punk<IStorage> store_;
+		int cnt_;
 };
 
 } // end namespace win

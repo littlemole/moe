@@ -221,7 +221,8 @@ void Editor::OnMDIActivate(WPARAM unused, HWND activated)
 
 		tab()->select( *this );
 		updateUI();
-		setFocus();
+		this->sci->SetFocus();
+		//setFocus();
 
 		checkModifiedOnDisk();
 	}

@@ -20,6 +20,10 @@ RTFEditor::RTFEditor()
 	findText_.chrg.cpMin = 0;
 	findText_.chrg.cpMax = -1;
 	findText_.lpstrText = 0;
+
+	shuttingDown_ = false;
+
+	rtfDocument_.QueryInterface(IID_IUnknown,(void**)&oleObject);
 }
 
 RTFEditor::~RTFEditor() 
@@ -55,18 +59,38 @@ void RTFEditor::OnCreate()
 
 	rtf_.sendMessage(EM_SETOLECALLBACK,0,(LPARAM)(IRichEditOleCallback*)&reolecb_);
 
+	rtf_.sendMessage(EM_GETOLEINTERFACE, 0, (LPARAM)(IRichEditOle**)(&richEditOle));
+
 }
 //////////////////////////////////////////////////////////////////////////////
 
+LRESULT RTFEditor::OnClose()
+{
+	if ( moe()->activeObject )
+	{
+		if ( richEditOle )
+		{
+			richEditOle->InPlaceDeactivate();
+			return 1;
+		}
+	}
+	this->destroy();
+	return 0;
+}
+
 LRESULT RTFEditor::OnDestroy()
 {
+	shuttingDown_ = true;
 	scriptlet()->close();
-	docs()->remove(this);
 	return 0;
 }
 
 LRESULT RTFEditor::OnNcDestroy()
 {
+	oleObject.release();
+	richEditOle.release();
+
+	docs()->remove(this);
 	::CoDisconnectObject(((IMoeDocument*)this),0);
 	((IMoeDocument*)this)->Release();
 	return 0;
@@ -93,10 +117,41 @@ LRESULT RTFEditor::OnSize(UINT msg, WPARAM wParam, LPARAM lParam)
 
 //////////////////////////////////////////////////////////////////////////////
 
-void RTFEditor::OnMDIActivate( HWND activated )
+void RTFEditor::OnMDIActivate( WPARAM unused, HWND activated)
 {
-	tab()->select( *this );
-	updateUI();
+	if ( activated != *this )
+	{
+		if ( moe()->activeObject )
+			moe()->activeObject->OnDocWindowActivate(false);
+
+		
+		mol::punk<IOleInPlaceFrame> frame;
+		moe()->axFrameSite.queryInterface(&frame);
+		if ( frame )
+		{
+			frame->SetBorderSpace(0);
+		}
+		
+
+		//mol::punk<IRichEditOle> richEditOle;
+		//LRESULT r = rtf_.sendMessage(EM_GETOLEINTERFACE, 0, (LPARAM)(IRichEditOle**)(&richEditOle));
+		if ( richEditOle )
+		{
+			richEditOle->InPlaceDeactivate();
+		}
+		
+		mol::Ribbon::ribbon()->mode(10);
+		mol::Ribbon::ribbon()->maximize();
+	}
+	else 
+	{
+		if (!shuttingDown_)
+		{
+			tab()->select( *this );
+			Ribbon::ribbon()->mode(10);
+		}
+		//updateUI();
+	}
 }
 
 void RTFEditor::OnSave()
@@ -429,19 +484,10 @@ bool RTFEditor::load(const mol::string& p)
 			}
 		}
 	}	
+
 	return true;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-void RTFEditor::updateUI()
-{
-	if ( mol::Ribbon::ribbon()->enabled())
-	{
-		Ribbon::ribbon()->mode(10);
-		mol::Ribbon::ribbon()->maximize();
-	}
-}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -463,11 +509,9 @@ HRESULT __stdcall RTFEditor::RTFDocument::get_Text( IDispatch** d)
 
 	*d = 0;
 
-    mol::punk<IRichEditOle> richEditOle;
-	LRESULT r = This()->rtf_.sendMessage(EM_GETOLEINTERFACE, 0, (LPARAM)(IRichEditOle**)(&richEditOle));
-	if ( richEditOle )
+	if ( This()->richEditOle )
 	{
-		mol::punk<ITextDocument> textDoc(richEditOle);
+		mol::punk<ITextDocument> textDoc(This()->richEditOle);
 		if ( textDoc )
 		{
 			mol::punk<ITextRange> range;
@@ -492,11 +536,9 @@ HRESULT __stdcall RTFEditor::RTFDocument::get_Length( long* d)
 
 	*d = 0;
 
-    mol::punk<IRichEditOle> richEditOle;
-	LRESULT r = This()->rtf_.sendMessage(EM_GETOLEINTERFACE, 0, (LPARAM)(IRichEditOle**)(&richEditOle));
-	if ( richEditOle )
+	if ( This()->richEditOle )
 	{
-		mol::punk<ITextDocument> textDoc(richEditOle);
+		mol::punk<ITextDocument> textDoc(This()->richEditOle);
 		if ( textDoc )
 		{
 			mol::punk<ITextRange> range;
@@ -521,11 +563,9 @@ HRESULT __stdcall RTFEditor::RTFDocument::Range( long start, long end,  IDispatc
 
 	*d = 0;
 
-    mol::punk<IRichEditOle> richEditOle;
-	LRESULT r = This()->rtf_.sendMessage(EM_GETOLEINTERFACE, 0, (LPARAM)(IRichEditOle**)(&richEditOle));
-	if ( richEditOle )
+	if ( This()->richEditOle )
 	{
-		mol::punk<ITextDocument> textDoc(richEditOle);
+		mol::punk<ITextDocument> textDoc(This()->richEditOle);
 		if ( textDoc )
 		{
 			mol::punk<ITextRange> range;
@@ -546,11 +586,9 @@ HRESULT __stdcall RTFEditor::RTFDocument::get_Selection( IDispatch** d)
 
 	*d = 0;
 
-   mol::punk<IRichEditOle> richEditOle;
-	LRESULT r = This()->rtf_.sendMessage(EM_GETOLEINTERFACE, 0, (LPARAM)(IRichEditOle**)(&richEditOle));
-	if ( richEditOle )
+	if ( This()->richEditOle )
 	{
-		mol::punk<ITextDocument> textDoc(richEditOle);
+		mol::punk<ITextDocument> textDoc(This()->richEditOle);
 		if ( textDoc )
 		{
 			mol::punk<ITextSelection> selection;
@@ -564,3 +602,156 @@ HRESULT __stdcall RTFEditor::RTFDocument::get_Selection( IDispatch** d)
 	return S_OK;
 }
 
+HRESULT __stdcall RTFEditor::RichEditOleCallback::QueryAcceptData(LPDATAOBJECT lpdataobj, CLIPFORMAT FAR * lpcfFormat, DWORD reco,BOOL fReally, HGLOBAL hMetaPict)
+{
+	static CLIPFORMAT cf_DATAOBJ = ::RegisterClipboardFormat(_T("DataObject"));
+	mol::punk<IEnumFORMATETC> enumFormat;
+
+	if ( fReally == false )
+	{
+		return S_OK;
+	}
+
+	if ( !This()->richEditOle )
+		return S_OK;
+
+	LPSTORAGE store = 0;
+	HRESULT hr = this->GetNewStorage(&store);
+
+	/*
+	LPLOCKBYTES pLockBytes = NULL;
+	HRESULT hr = ::CreateILockBytesOnHGlobal(NULL, TRUE, &pLockBytes);
+	if (FAILED(hr))
+	{
+		return S_OK;
+	}
+
+	LPSTORAGE pStorage;
+	hr = ::StgCreateDocfileOnILockBytes(pLockBytes, 
+			STGM_SHARE_EXCLUSIVE | STGM_CREATE | STGM_READWRITE, 
+			0, &pStorage);
+			*/
+	if (FAILED(hr))
+	{
+		return S_OK;
+	}
+	
+
+	FORMATETC formatEtc;
+	formatEtc.cfFormat = 0;
+	formatEtc.ptd = NULL;
+	formatEtc.dwAspect = DVASPECT_CONTENT;
+	formatEtc.lindex = -1;
+	formatEtc.tymed = TYMED_NULL;
+
+	mol::punk<IOleClientSite>	pClientSite;
+	hr = This()->richEditOle->GetClientSite(&pClientSite);
+	if (FAILED(hr))
+	{
+		return S_OK;
+	}
+
+	mol::punk<IUnknown> pUnk;
+	CLSID clsid = CLSID_NULL;
+
+	hr = ::OleCreateFromData( lpdataobj,IID_IUnknown,OLERENDER_DRAW,&formatEtc,pClientSite, store, (void**)&pUnk);					
+	if (FAILED(hr))
+	{
+		return S_OK;
+	}
+
+	mol::punk<IOleObject> oleObject;
+	hr = pUnk->QueryInterface(IID_IOleObject, (void**)&oleObject);
+	if (FAILED(hr))
+	{
+		return S_OK;
+	}
+
+	::OleSetContainedObject(oleObject, TRUE);
+	REOBJECT reobject = { sizeof(REOBJECT)};
+	hr = oleObject->GetUserClassID(&clsid);
+	if (FAILED(hr))
+	{
+		return S_OK;
+	}
+
+	reobject.clsid = clsid;
+	reobject.cp = REO_CP_SELECTION;
+	reobject.dvaspect = DVASPECT_CONTENT;
+	reobject.dwFlags = REO_RESIZABLE | REO_BELOWBASELINE;
+	reobject.dwUser = 0;
+	reobject.poleobj = oleObject;
+	reobject.polesite = pClientSite;
+	reobject.pstg = store;
+	SIZEL sizel = { 0 };
+	reobject.sizel = sizel;
+
+	/*This()->rtf_.sendMessage( EM_SETSEL, 0, -1);
+	DWORD dwStart, dwEnd;
+	This()->rtf_.sendMessage( EM_GETSEL, (WPARAM)&dwStart, (LPARAM)&dwEnd);
+	This()->rtf_.sendMessage( EM_SETSEL, dwEnd+1, dwEnd+1);
+	*/
+	This()->rtf_.sendMessage( EM_REPLACESEL, TRUE, (WPARAM)L"\n"); 
+	hr = This()->richEditOle->InsertObject(&reobject);
+	if (FAILED(hr))
+	{
+		return S_OK;
+	}
+    
+	return S_FALSE;
+}
+
+HRESULT __stdcall RTFEditor::RichEditOleCallback::GetInPlaceContext(LPOLEINPLACEFRAME* lplpFrame, LPOLEINPLACEUIWINDOW* lplpDoc, LPOLEINPLACEFRAMEINFO lpFrameInfo)
+{
+	mol::punk<IOleClientSite>	pClientSite;
+	HRESULT hr = This()->richEditOle->GetClientSite(&pClientSite);
+
+	if ( lplpFrame )
+	{
+		moe()->axFrameSite->QueryInterface(IID_IOleInPlaceFrame,(void**)lplpFrame);
+	}
+	if ( lplpDoc )
+	{
+		//moe()->axFrameSite->QueryInterface(IID_IOleInPlaceUIWindow,(void**)lplpDoc);
+		pClientSite->QueryInterface(IID_IOleInPlaceUIWindow,(void**)lplpDoc);
+	}
+	if ( lpFrameInfo)
+	{
+		lpFrameInfo->cAccelEntries = 0;
+		lpFrameInfo->fMDIApp = TRUE;
+		lpFrameInfo->haccel = 0;
+		lpFrameInfo->hwndFrame = *moe();
+	}
+	return S_OK;
+}
+
+HRESULT __stdcall RTFEditor::RichEditOleCallback::ShowContainerUI(BOOL fShow)
+{
+	if ( fShow)
+	{
+		
+		mol::punk<IOleInPlaceFrame> frame;
+		if ( moe()->axFrameSite )
+		{
+			moe()->axFrameSite.queryInterface(&frame);
+			if ( frame )
+			{
+				frame->SetBorderSpace(0);
+			}
+		}
+		
+		//mol::Ribbon::ribbon()->maximize();
+		mol::Ribbon::ribbon()->mode(10);
+		This()->rtf_.redraw();
+	}
+	else
+	{
+		mol::Ribbon::ribbon()->mode(0);
+		//mol::Ribbon::ribbon()->minimize();
+		if (!This()->shuttingDown_)
+		{
+			This()->rtf_.redraw();
+		}
+	}
+	return S_OK;
+}

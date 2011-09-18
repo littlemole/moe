@@ -944,9 +944,11 @@ bool ScintillAx::save(const mol::string& location)
 			{
 				std::string u;
 				u = edit()->get_Text();
+
 				std::wstring ws = mol::fromUTF8(u);	
 				if ( vb == VARIANT_TRUE )
 					of.write((const char*)mol::FileEncoding::UTF16LE_BOM,2);
+
 				of.write( (char*)(ws.c_str()), ws.size()*2 );
 				break;
 			}
@@ -954,10 +956,13 @@ bool ScintillAx::save(const mol::string& location)
 			{
 				std::string u;
 				u = edit()->get_Text();
+
 				if ( eol == SCINTILLA_SYSTYPE_UNIX )
 					u = mol::dos2unix(u);
+
 				if ( vb == VARIANT_TRUE )
 					of.write((const char*)mol::FileEncoding::UTF8_BOM,3);
+
 				of.write( (char*)(u.c_str()), u.size() );
 				break;
 			}
@@ -967,11 +972,13 @@ bool ScintillAx::save(const mol::string& location)
 				u = edit()->get_Text();
 				if ( eol == SCINTILLA_SYSTYPE_UNIX )
 					u = mol::dos2unix(u);
+
 				std::string s = mol::tostring(mol::fromUTF8(u));				
 				of.write( (char*)(s.c_str()), s.size() );
 				break;
 			}
 		}
+
 		of.close();
 		edit()->setSavePoint();
 		setDirty(FALSE);
@@ -1043,11 +1050,11 @@ bool ScintillAx::loadAdmin(const mol::string& p, const mol::string& ext,  bool u
 			return false;
 	}
 
-	//std::string title(p);
 	if ( utf8 )
 	{
 		props_->put_Encoding(SCINTILLA_ENCODING_UTF8);
 		edit()->setCodePage(SC_CP_UTF8);
+
 		std::string s2(data);
 		if ( data.substr(0,3) == std::string((char*)mol::FileEncoding::UTF8_BOM,3) )
 			s2 = std::string( data.c_str()+3, data.size()-3);
@@ -1064,11 +1071,14 @@ bool ScintillAx::loadAdmin(const mol::string& p, const mol::string& ext,  bool u
 			std::string s2(data);
 			if ( data.substr(0,2) == std::string((char*)mol::FileEncoding::UTF16LE_BOM,2) )
 				s2 = std::string( data.data()+2, data.size()-2);
+
 			// it really is a UCS-2 string, so cast to wchar_t (WIN32)
 			std::wstring ws((wchar_t*)(s2.data()),s2.size()/sizeof(wchar_t));
+
 			// now convert UTF16-LE to UTF-8
 			std::string u = mol::toUTF8(ws);
 			edit()->setCodePage(SC_CP_UTF8);
+
 			u = mol::unix2dos(u);
 			edit()->setText(u);
 			break;
@@ -1077,6 +1087,7 @@ bool ScintillAx::loadAdmin(const mol::string& p, const mol::string& ext,  bool u
 		{
 			props_->put_Encoding(SCINTILLA_ENCODING_UTF8);
 			edit()->setCodePage(SC_CP_UTF8);
+
 			std::string s2;
 			if ( data.substr(0,3) == std::string((char*)mol::FileEncoding::UTF8_BOM,3) )
 				s2 = std::string(data.c_str()+3,data.size()-3);
@@ -1091,6 +1102,7 @@ bool ScintillAx::loadAdmin(const mol::string& p, const mol::string& ext,  bool u
 		{
 			props_->put_Encoding(SCINTILLA_ENCODING_ANSI);
 			edit()->setCodePage(SC_CP_UTF8);
+
 			std::string s2(mol::toUTF8(data));
 			s2 = mol::unix2dos(s2);
 			edit()->setText(s2);			
@@ -1171,7 +1183,6 @@ bool ScintillAx::loadAdminCOM(const mol::string& p, const mol::string& ext,  boo
 		props_->put_Encoding(SCINTILLA_ENCODING_UTF8);
 	}
 
-	//this->put_Encoding(enc_);
 	edit()->setCodePage(SC_CP_UTF8);
 	edit()->setText("");
 	edit()->appendText(content.tostring());
@@ -1191,13 +1202,8 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  bool utf8)
 {
 	edit()->clearAnnotations();
 
-	//filename_ = p;
-
 	std::stringstream is;
 	
-	//std::ifstream in;
-	//in.open( p.c_str(), std::ios::binary );
-
 	mol::filestream in;
 	in.open( mol::tostring(p),GENERIC_READ,FILE_SHARE_READ,0,OPEN_EXISTING);
 
@@ -1272,7 +1278,6 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  bool utf8)
     in.close();
 	s = is.str();
 
-	//std::string title(p);
 	if ( utf8 )
 	{
 		props_->put_Encoding(SCINTILLA_ENCODING_UTF8);
@@ -1293,8 +1298,10 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  bool utf8)
 			std::string s2(s);
 			if ( s.substr(0,2) == std::string((char*)mol::FileEncoding::UTF16LE_BOM,2) )
 				s2 = std::string(s.data()+2,s.size()-2);
+
 			// it really is a UCS-2 string, so cast to wchar_t (WIN32)
 			std::wstring ws((wchar_t*)(s2.data()),s2.size()/sizeof(wchar_t));
+
 			// now convert UTF16-LE to UTF-8
 			std::string u = mol::toUTF8(ws);
 			edit()->setCodePage(SC_CP_UTF8);
@@ -1306,6 +1313,7 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  bool utf8)
 		{
 			props_->put_Encoding(SCINTILLA_ENCODING_UTF8);
 			edit()->setCodePage(SC_CP_UTF8);
+
 			std::string s2;
 			if ( s.substr(0,3) == std::string((char*)mol::FileEncoding::UTF8_BOM,3) )
 				s2 = std::string(s.c_str()+3,s.size()-3);
@@ -1320,6 +1328,7 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  bool utf8)
 		{
 			props_->put_Encoding(SCINTILLA_ENCODING_ANSI);
 			edit()->setCodePage(SC_CP_UTF8);
+
 			std::string s2(mol::toUTF8(s));
 			s2 = mol::unix2dos(s2);
 			edit()->setText(s2);			

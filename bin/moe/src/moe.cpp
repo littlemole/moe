@@ -685,7 +685,7 @@ void MoeWnd::OnTabCtrl(NMHDR* notify )
     {
         int sel = (int)tab()->selection();
 		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)tab()->getTabCtrlItem(sel);
-		HWND h = (HWND)c->lparam;
+		HWND h = (HWND)(c->lparam);
 		if ( !h ) 
 			return;
 
@@ -693,6 +693,9 @@ void MoeWnd::OnTabCtrl(NMHDR* notify )
 		if (!mdi) 
 			return;
 
+		mdi->activate();
+
+		/*
 		IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mdi);
 		if (!doc)
 			return;
@@ -706,35 +709,54 @@ void MoeWnd::OnTabCtrl(NMHDR* notify )
 				view->Activate();
 			}
 		}
+		*/
         return ;
     }		
 
     if ( notify->code  == NM_RCLICK   )
     {
+		// check whether right click hit a tab
 		int i = tab()->hitTest();
 		if ( i == -1 )
 			return ;
 
-		int sel = (int)tab()->selection();
-		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)tab()->getTabCtrlItem(sel);
+		// get right click tab item and retrieve HWND
+		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)tab()->getTabCtrlItem(i);
 		HWND h = (HWND)c->lparam;
-		if ( !h ) return;
+		if ( !h ) 
+			return;
 
+		// get mdi child from HWND
 		mol::MdiChild* mdi = mol::wndFromHWND<mol::MdiChild>(h);
-		if (!mdi) return;
+		if (!mdi) 
+			return;
 
+		// cast mdi child to IMoeDocument
 		IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mdi);
 		if (!doc)
 			return;
 
+		// get type of doc
 		long t;
 		if ( !doc || (S_OK != doc->get_Type(&t) ) )
 			return ;
 
+		// get doc filepath
+		mol::bstr path;
+		if ( doc->get_FilePath(&path) != S_OK )
+			return;
+
+		// parent dir of filepath
+		mol::bstr dir( mol::Path::parentDir(path.toString()) );
+
+		// fetch tab context menu
 		mol::Menu sub = mol::UI().SubMenu(IDM_MENU_TAB,IDM_TAB);
 
+		// current mouse pos
 		POINT pt;
 		::GetCursorPos(&pt);
+
+		// display context menut
 		int id = sub.returnTrackPopup(*this,pt.x-10,pt.y-10);
 		switch ( id )
 		{
@@ -766,29 +788,15 @@ void MoeWnd::OnTabCtrl(NMHDR* notify )
 			}
 			case IDM_TAB_DIRTAB:
 			{
-				mol::bstr dirname;
-				if ( doc->get_FilePath(&dirname) == S_OK )
-				{
-					//if ( t != 2 ) 
-					{
-						mol::bstr dir( mol::Path::parentDir(dirname.toString()) );
-						docs()->OpenDir(dir,0);
-					}
-				}
+				docs()->OpenDir(dir,0);
 				break;
 			}
 			case IDM_TAB_JUMPTAB:
 			{
-				mol::bstr fn;
-				if ( doc->get_FilePath(&fn) == S_OK )
+				mol::punk<IShellTree> tree(treeWnd()->oleObject);
+				if ( tree )
 				{
-					mol::bstr dir( mol::Path::parentDir(fn.toString()) );
-
-					mol::punk<IShellTree> tree(treeWnd()->oleObject);
-					if ( tree )
-					{
-						tree->put_Selection(dir);
-					}
+					tree->put_Selection(dir);
 				}
 				break;
 			}
@@ -932,7 +940,6 @@ HRESULT __stdcall MoeWnd::Exit()
 		return hr;
 
 	long i = cnt;
-	//while ( i > 0 )
 	for( i = 0; i < cnt; i++ )
 	{
 		mol::punk<IMoeDocument> doc;
@@ -948,7 +955,6 @@ HRESULT __stdcall MoeWnd::Exit()
 		hr = view->Close();
 		if( hr != S_OK )
 			return S_FALSE;
-		//i--;
 	}
 
 	// if we have ribbon, maximize it before persistence

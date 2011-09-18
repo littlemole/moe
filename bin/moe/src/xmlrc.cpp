@@ -1212,6 +1212,8 @@ mol::msgMap<RTFEditor>().addMsgHandler( WM_NCDESTROY, make_handler(&RTFEditor::O
 
 mol::msgMap<RTFEditor>().addMsgHandler( WM_PAINT, make_handler(&RTFEditor::OnPaint) );
 
+mol::msgMap<RTFEditor>().addMsgHandler( WM_CLOSE, make_handler(&RTFEditor::OnClose) );
+
 mol::msgMap<RTFEditor>().addCmdHandler( IDM_FILE_SAVE, make_handler(&RTFEditor::OnSave) );
 
 mol::msgMap<RTFEditor>().addCmdHandler( IDM_FILE_SAVE_AS, make_handler(&RTFEditor::OnSaveAs) );
@@ -1243,8 +1245,6 @@ mol::msgMap<RTFEditor>().addNotifyCodeHandler( EN_MSGFILTER, make_handler(&RTFEd
 mol::msgMap<RTFEditor>().addNotifyCodeHandler( EN_SELCHANGE, make_handler(&RTFEditor::OnSelectionChange) );
 
 mol::msgMap<RTFEditor>().addNotifyCodeHandler( EN_LINK, make_handler(&RTFEditor::OnLink) );
-
-mol::msgMap<RTFEditor>().addCmdHandler( IDM_EDIT_UPDATE, make_handler(&RTFEditor::OnReload) );
 
 
 }

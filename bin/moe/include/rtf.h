@@ -26,9 +26,11 @@ public:
 
 	static Instance* CreateInstance( const mol::string& p );
 
-	void OnMDIActivate(HWND activated);
+	void OnMDIActivate(WPARAM unused, HWND activated);
 	void OnCreate();
 	void OnPaint();
+
+	LRESULT OnClose();
 	LRESULT OnDestroy();
 	LRESULT OnNcDestroy();
 	LRESULT OnSize(UINT msg, WPARAM wParam, LPARAM lParam);
@@ -58,12 +60,21 @@ public:
 
    virtual HRESULT __stdcall get_Object( IDispatch **d);
 
-	// dummy
 	punk<IUnknown> oleObject;
+	punk<IRichEditOle> richEditOle;
 
 private:
 
-	mol::stack_obj<mol::win::IRichEditOleCallbackImpl> reolecb_;
+	class RichEditOleCallback : public mol::win::IRichEditOleCallbackImpl
+	{
+		public:  outer_this(RTFEditor,reolecb_); 
+
+		virtual HRESULT __stdcall QueryAcceptData(LPDATAOBJECT lpdataobj, CLIPFORMAT FAR * lpcfFormat, DWORD reco,BOOL fReally, HGLOBAL hMetaPict);
+		virtual HRESULT __stdcall GetInPlaceContext(LPOLEINPLACEFRAME* lplpFrame, LPOLEINPLACEUIWINDOW* lplpDoc, LPOLEINPLACEFRAMEINFO lpFrameInfo);
+		virtual HRESULT __stdcall ShowContainerUI(BOOL fShow);
+	};
+
+	mol::stack_obj<RichEditOleCallback> reolecb_;
 
 	mol::string filename_;
 
@@ -98,9 +109,11 @@ private:
 	mol::stack_obj<RTFDocument> rtfDocument_;
 
 	bool load(const mol::string& path);
-	void updateUI();
 
 	FINDTEXT findText_;
+
+	bool shuttingDown_;	
+
 };
 
 #endif

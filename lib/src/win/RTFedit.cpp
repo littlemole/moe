@@ -276,4 +276,36 @@ BOOL RichEditCtrl::PrintRTF()
     
 }
 
+namespace win {
+
+IRichEditOleCallbackImpl::IRichEditOleCallbackImpl()
+{
+	cnt_ = 0;
+	HRESULT hr = ::CreateILockBytesOnHGlobal(NULL, TRUE, &bytes_);    
+	if ( hr == S_OK )
+	{
+		hr = ::StgCreateDocfileOnILockBytes(
+					bytes_, 
+					STGM_SHARE_EXCLUSIVE | STGM_CREATE | STGM_READWRITE, 
+					0, 
+					&store_
+				);
+	}
+}
+
+HRESULT __stdcall IRichEditOleCallbackImpl::GetNewStorage(LPSTORAGE* lplpstg)
+{
+	cnt_++;
+	std::wostringstream oss;
+	oss << L"subobj" << cnt_;
+
+	HRESULT hr = store_->CreateStorage( 
+							oss.str().c_str(), 
+							STGM_SHARE_EXCLUSIVE | STGM_CREATE | STGM_READWRITE,
+							0,0,lplpstg
+						);
+	return S_OK;
+}
+
+} // end namespace win
 } // end namespace mol
