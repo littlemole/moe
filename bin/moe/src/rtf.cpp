@@ -132,9 +132,6 @@ void RTFEditor::OnMDIActivate( WPARAM unused, HWND activated)
 			frame->SetBorderSpace(0);
 		}
 		
-
-		//mol::punk<IRichEditOle> richEditOle;
-		//LRESULT r = rtf_.sendMessage(EM_GETOLEINTERFACE, 0, (LPARAM)(IRichEditOle**)(&richEditOle));
 		if ( richEditOle )
 		{
 			richEditOle->InPlaceDeactivate();
@@ -150,7 +147,6 @@ void RTFEditor::OnMDIActivate( WPARAM unused, HWND activated)
 			tab()->select( *this );
 			Ribbon::ribbon()->mode(10);
 		}
-		//updateUI();
 	}
 }
 
@@ -617,20 +613,6 @@ HRESULT __stdcall RTFEditor::RichEditOleCallback::QueryAcceptData(LPDATAOBJECT l
 
 	LPSTORAGE store = 0;
 	HRESULT hr = this->GetNewStorage(&store);
-
-	/*
-	LPLOCKBYTES pLockBytes = NULL;
-	HRESULT hr = ::CreateILockBytesOnHGlobal(NULL, TRUE, &pLockBytes);
-	if (FAILED(hr))
-	{
-		return S_OK;
-	}
-
-	LPSTORAGE pStorage;
-	hr = ::StgCreateDocfileOnILockBytes(pLockBytes, 
-			STGM_SHARE_EXCLUSIVE | STGM_CREATE | STGM_READWRITE, 
-			0, &pStorage);
-			*/
 	if (FAILED(hr))
 	{
 		return S_OK;
@@ -686,11 +668,6 @@ HRESULT __stdcall RTFEditor::RichEditOleCallback::QueryAcceptData(LPDATAOBJECT l
 	SIZEL sizel = { 0 };
 	reobject.sizel = sizel;
 
-	/*This()->rtf_.sendMessage( EM_SETSEL, 0, -1);
-	DWORD dwStart, dwEnd;
-	This()->rtf_.sendMessage( EM_GETSEL, (WPARAM)&dwStart, (LPARAM)&dwEnd);
-	This()->rtf_.sendMessage( EM_SETSEL, dwEnd+1, dwEnd+1);
-	*/
 	This()->rtf_.sendMessage( EM_REPLACESEL, TRUE, (WPARAM)L"\n"); 
 	hr = This()->richEditOle->InsertObject(&reobject);
 	if (FAILED(hr))
@@ -712,7 +689,6 @@ HRESULT __stdcall RTFEditor::RichEditOleCallback::GetInPlaceContext(LPOLEINPLACE
 	}
 	if ( lplpDoc )
 	{
-		//moe()->axFrameSite->QueryInterface(IID_IOleInPlaceUIWindow,(void**)lplpDoc);
 		pClientSite->QueryInterface(IID_IOleInPlaceUIWindow,(void**)lplpDoc);
 	}
 	if ( lpFrameInfo)
@@ -740,14 +716,12 @@ HRESULT __stdcall RTFEditor::RichEditOleCallback::ShowContainerUI(BOOL fShow)
 			}
 		}
 		
-		//mol::Ribbon::ribbon()->maximize();
 		mol::Ribbon::ribbon()->mode(10);
 		This()->rtf_.redraw();
 	}
 	else
 	{
 		mol::Ribbon::ribbon()->mode(0);
-		//mol::Ribbon::ribbon()->minimize();
 		if (!This()->shuttingDown_)
 		{
 			This()->rtf_.redraw();

@@ -180,8 +180,8 @@ HRESULT __stdcall TreeWndSink::OnContextMenu(BSTR fname)
 
 	moe()->showContext(sub);
 
-	return 0;
-
+	return S_OK;
+/*
 	int id = sub.returnTrackPopup(*moe(),pt.x-10,pt.y-10);
 	switch ( id )
 	{
@@ -237,4 +237,5 @@ HRESULT __stdcall TreeWndSink::OnContextMenu(BSTR fname)
 		}
 	}
 	return S_OK;
+	*/
 }
