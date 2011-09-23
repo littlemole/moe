@@ -1,9 +1,6 @@
 #include "stdafx.h"
-//#include "widgets.h"
-//#include "app.h"
-#include "xmlui.h"
 #include "MoeBar.h"
-#include "Docs.h"
+#include "xmlui.h"
 
 using namespace mol::io;
 

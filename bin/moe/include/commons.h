@@ -14,6 +14,7 @@
 #include "win/mdi.h"
 #include "win/res.h"
 #include "win/dlg.h"
+#include "win/enc.h"
 #include "win/codlg.h"
 #include "win/coctrl.h"
 #include "win/core.h"
@@ -28,6 +29,7 @@
 #include "win/msg_macro.h"
 #include "win/gdiplus.h"
 #include "win/clipboard.h"
+#include "win/RTFedit.h"
 
 #include "ole/aut.h"
 #include "ole/obj.h"

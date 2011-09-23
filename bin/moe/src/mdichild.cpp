@@ -1,9 +1,6 @@
 #include "stdafx.h"
-#include "UserForm.h"
 #include "mdichild.h"
 #include "moe.h"
-#include "app.h"
-#include "form.h"
 #include "xmlui.h"
 
 FILETIME getLastWriteTime(const mol::string& path)

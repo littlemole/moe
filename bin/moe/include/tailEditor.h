@@ -26,10 +26,8 @@ public:
 
 	// std windows msgs
 
-	void OnMDIActivate(WPARAM unused,HWND activated);
-	void OnNcDestroy();
-	void OnDestroy();
 	void OnReload();
+	LRESULT OnClose();
 
 protected:
 

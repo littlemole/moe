@@ -6,7 +6,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sun Sep 18 21:07:43 2011
+/* at Thu Sep 22 22:41:28 2011
  */
 /* Compiler settings for shellCtrl.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 

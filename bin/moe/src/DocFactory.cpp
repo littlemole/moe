@@ -1,22 +1,19 @@
 #include "stdafx.h"
-#include "FormEditor.h"
-#include "widgets.h"
-#include "app.h"
-#include "xmlui.h"
-#include "DocFactory.h"
-#include "MoeBar.h"
+#include "FormEditor.h" // keep this one include at top ...
+#include "TailEditor.h"
+#include "Editor.h"
 #include "Img.h"
 #include "Dir3.h"
 #include "Form.h"
-#include "Editor.h"
-#include "TailEditor.h"
 #include "rtf.h"
 #include "hex.h"
 #include "html.h"
 #include "ole.h"
 #include "rtf.h"
+#include "moe.h"
+#include "xmlui.h"
 #include "ribbonres.h"
-#include "win/enc.h"
+#include "DocFactory.h"
 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////

@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "app.h"
-#include "xmlui.h"
-#include "MoeBar.h"
-#include "ole/Rib.h"
-#include "ribbonres.h"
 #include "tree.h"
+#include "moe.h"
+#include "moeBar.h"
+#include "xmlui.h"
+#include "ribbonres.h"
+
 
 //////////////////////////////////////////////////////////////////////////////
 // tree events sink

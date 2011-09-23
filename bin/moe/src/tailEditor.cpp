@@ -59,6 +59,14 @@ void TailEditor::checkModifiedOnDisk( )
 		OnReload();
 	}
 }
+
+
+LRESULT TailEditor::OnClose()
+{
+	this->destroy();
+	return 0;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 TailEditor::Instance* TailEditor::CreateInstance(const mol::string& file)
 {
@@ -161,8 +169,11 @@ void TailEditor::append(const mol::string& path,unsigned long long size)
 	mol::bstr tmp(buf);
 	text_->Append(tmp);
 
-	position_->put_Anchor((long)size_);
-	position_->put_Caret((long)size_);
+	LONG len = 0;
+	text_->get_Length(&len);
+
+	position_->put_Anchor((long)len);
+	position_->put_Caret((long)len);
 	position_->ScrollIntoView();
 
 	size_ = size;

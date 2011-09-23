@@ -115,6 +115,8 @@ OleContainerBase::OleContainerBase()
 {
 	nMenus_			= 0;
 	phMenus_		= 0;
+	origMenu_		= 0;
+	hMenuActive_	= 0;
 	nHelpMenuItems_ = 0;
 	winMenu_		= 0;
 }

@@ -1,22 +1,11 @@
 #include "stdafx.h"
-#include "FormEditor.h"
-#include "widgets.h"
-#include "app.h"
-#include "xmlui.h"
 #include "Docs.h"
 #include "MoeBar.h"
-#include "Img.h"
-#include "Dir3.h"
-#include "Form.h"
-#include "Editor.h"
-#include "TailEditor.h"
-#include "rtf.h"
-#include "hex.h"
-#include "html.h"
-#include "ole.h"
-#include "rtf.h"
-#include "ribbonres.h"
+#include "Moe.h"
+#include "xmlui.h"
 #include "DocFactory.h"
+
+using namespace mol;
 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
@@ -69,8 +58,8 @@ void Docs::remove( mol::MdiChild* mdi )
 						frame->SetBorderSpace(0);
 					}
 				}
-				Ribbon::ribbon()->mode(0);
-				Ribbon::ribbon()->maximize();
+				mol::Ribbon::ribbon()->mode(0);
+				mol::Ribbon::ribbon()->maximize();
 				moe()->doLayout();	
 				moe()->redraw();
 				statusBar()->status(_T(""));
@@ -86,7 +75,7 @@ void Docs::rename( mol::MdiChild* mdi, const mol::string& path )
 	tab()->rename( (HWND)(*mdi), path, mol::Path::filename(path) );
 
 	// update taskbar
-	taskbar()->renameTab( ((HWND)(*mdi)), path );
+	mol::taskbar()->renameTab( ((HWND)(*mdi)), path );
 }
 
 void Docs::move( mol::MdiChild* mdi, int pos )
@@ -98,7 +87,7 @@ void Docs::move( mol::MdiChild* mdi, int pos )
 	childlist::iterator it = iterator(mol::variant(pos));
 
 	// update the win7 taskbar document order
-	taskbar()->moveTab( (HWND)(*mdi), (HWND)(**it) );
+	mol::taskbar()->moveTab( (HWND)(*mdi), (HWND)(**it) );
 	
 	// get the tab to be moved's item and clone it
 	mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*) tab()->getTabCtrlItem(index);

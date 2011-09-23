@@ -166,12 +166,12 @@ LRESULT MdiChild::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			if ( mol::Ribbon::ribbon()->enabled() )
 				break;
 
-			MdiFrame* mdi = wndFromHWND<MdiFrame>(mdiParent());
+			//MdiFrame* mdi = wndFromHWND<MdiFrame>(mdiParent());
         	HWND newWnd = (HWND)lParam;
-	        if ( newWnd == hWnd_ )
+	        if ( newWnd == hwnd )
 	        {				
 				if ( menue_ )
-					changeMenu(menue_),windowMenu_;
+					changeMenu(menue_,windowMenu_);
 				OnLayout(0,0,0);
 				break;
 	        }

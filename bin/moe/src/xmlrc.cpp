@@ -12,6 +12,8 @@
 
 #include "formeditor.h"
 
+#include "taileditor.h"
+
 #include "hex.h"
 
 #include "html.h"
@@ -190,7 +192,7 @@ extern "C" void load_codegen_metadata()
   UI().addCmd(IDM_TREE_COPY,_T("Delete"));  
   UI().addCmd(IDM_TREE_PASTE,_T("Execute"));  
   UI().addCmd(IDM_TREE_PROPERTIES,_T("Properties"));  
-  UI().addCmd(IDM_TREE_EXECUTE,_T("Properties"));  
+  UI().addCmd(IDM_TREE_EXECUTE,_T("Execute"));  
   UI().addCmd(IDM_TREE_NEWDIR,_T("New Directory"));  
   UI().addCmd(IDM_CLI_RETURN,_T(""));  
 
@@ -1201,6 +1203,10 @@ mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_EDIT_CUT, make_handler(&MoeTreeWnd:
 mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_EDIT_COPY, make_handler(&MoeTreeWnd::OnEditCopy) );
 
 mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_EDIT_PASTE, make_handler(&MoeTreeWnd::OnEditPaste) );
+
+mol::msgMap<TailEditor>().addMsgHandler( WM_CLOSE, make_handler(&TailEditor::OnClose) );
+
+mol::msgMap<TailEditor>().addCmdHandler( IDM_EDIT_UPDATE, make_handler(&TailEditor::OnReload) );
 
 mol::msgMap<RTFEditor>().addMsgHandler( WM_MDIACTIVATE, make_handler(&RTFEditor::OnMDIActivate) );
 

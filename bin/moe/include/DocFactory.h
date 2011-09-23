@@ -1,7 +1,7 @@
 #ifndef MOE_DOCFACTORY_DEF_GUARD_
 #define MOE_DOCFACTORY_DEF_GUARD_
 
-#include "widgets.h"
+#include "Docs.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // the document collection automation impl

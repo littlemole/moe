@@ -4,8 +4,6 @@
 #include "Docs.h"
 #include "MoeBar.h"
 #include "xmlui.h"
-#include "ole/Rib.h"
-#include "win/async.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "app.h"
+#include "widgets.h"
 #include "util/regex.h"
 #include "thread/sync.h"
 #include "xmlui.h"
