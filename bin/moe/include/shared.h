@@ -1,9 +1,7 @@
 #ifndef MOE_COM_COMWNDIMPL_DEF_GUARD_
 #define MOE_COM_COMWNDIMPL_DEF_GUARD_
 
-#include "commons.h"
 #include "Docs.h"
-#include "mdichild.h"
 
 /////////////////////////////////////////////////////////////////////
 // moe view sub obj

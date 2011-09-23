@@ -176,7 +176,7 @@
     <cmd id="IDM_TREE_COPY" title="Delete" ribbon="RibbonCopyTree" />
     <cmd id="IDM_TREE_PASTE" title="Execute" ribbon="RibbonPasteTree" />
     <cmd id="IDM_TREE_PROPERTIES"  title="Properties" ribbon="RibbonPropertiesTree" />
-    <cmd id="IDM_TREE_EXECUTE"  title="Properties" ribbon="RibbonExecuteTree" />
+    <cmd id="IDM_TREE_EXECUTE"  title="Execute" ribbon="RibbonExecuteTree" />
     <cmd id="IDM_TREE_NEWDIR" title="New Directory" ribbon="RibbonNewDirTree" />
 
     <cmd id="IDM_CLI_RETURN"/>

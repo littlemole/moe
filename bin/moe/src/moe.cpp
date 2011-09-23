@@ -139,6 +139,8 @@ void MoeWnd::OnCreate()
 
     // update ribbon's recent documents
 	mol::Ribbon::ribbon()->updateRecentDocs(RibbonMRUItems);
+
+	//this->changeMenu( mol::UI().Menu(IDM_MOE) );
 }
 
 void MoeWnd::loadPersistUIstate()

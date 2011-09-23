@@ -1,8 +1,7 @@
 #ifndef MOE_TREE_DEF_GUARD_
 #define MOE_TREE_DEF_GUARD_
 
-#include "shared.h"
-#include "widgets.h"
+#include "commons.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // the resizable directory tree widget

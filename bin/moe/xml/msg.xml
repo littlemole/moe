@@ -358,6 +358,14 @@
       
     </class>
 
+    <class type="TailEditor" >
+
+      <!-- std windows msgs -->
+      <msg  handler="OnClose" msg="WM_CLOSE" />
+      <msg  handler="OnReload" cmd="IDM_EDIT_UPDATE" />
+
+    </class>
+
     <class type="RTFEditor" >
 
       <!-- std windows msgs -->

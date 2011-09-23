@@ -2,7 +2,6 @@
 #define MOE_COM_COMWNDIMPL_MDICHILD_DEF_GUARD_
 
 #include "commons.h"
-#include "Docs.h"
 #include "resource.h"
 
 /////////////////////////////////////////////////////////////////////

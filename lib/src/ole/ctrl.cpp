@@ -765,8 +765,11 @@ HRESULT __stdcall OleCtrlBase::OleInPlaceActiveObjBase::OnDocWindowActivate(BOOL
 		if ( ctrl_->frame_ )
 		{
 			ctrl_->frame_->SetActiveObject(this,0);
-			ctrl_->frame_->SetMenu(ctrl_->sharedMenu_,ctrl_->holemenu_,ctrl_->getOleWindow());
-			ctrl_->createInplaceMenu();
+			if ( ctrl_->sharedMenu_ )
+			{
+				ctrl_->frame_->SetMenu(ctrl_->sharedMenu_,ctrl_->holemenu_,ctrl_->getOleWindow());
+				ctrl_->createInplaceMenu();
+			}
 		}
 	}
 	else

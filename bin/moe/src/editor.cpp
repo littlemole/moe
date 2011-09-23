@@ -431,6 +431,13 @@ void Editor::OnReload()
 	sci->Load(filename);
 	props_->put_ReadOnly(vb);
 	statusBar()->status(filename.toString());
+
+	LONG len = 0;
+	text_->get_Length(&len);
+
+	position_->put_Anchor((long)len);
+	position_->put_Caret((long)len);
+	position_->ScrollIntoView();
 }
 
 LRESULT Editor::OnToolbarDropDown(NMTOOLBAR* toolbar)
@@ -919,6 +926,21 @@ void Editor::OnExecForm()
 	lastWriteTime_ = getLastWriteTime( filename.toString() );
 	saving_ = false;
 
+	mol::punk<IMoeDocument> doc;
+	docs()->OpenHtmlFrame(filename,&doc);
+	if (doc)
+	{
+		/*
+		mol::punk<IMoeDocumentView> view;
+		doc->get_View(&view);
+		if ( view )
+		{
+			view->Activate();
+		}
+		*/
+	}
+
+	/*
 	RECT r;
 	moe()->getWindowRect(r);
 
@@ -930,6 +952,7 @@ void Editor::OnExecForm()
 			r.bottom-r.top-100,
 			1
 	);
+	*/
 }
 
 void Editor::OnShowLineNumbers()

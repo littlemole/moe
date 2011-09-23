@@ -76,6 +76,10 @@ bool DirChild::initialize(const mol::string& p)
 
 	location_ = p;
 
+	// necessary to adjust the embedded ole obj
+	// otherwise resize bug with new opened dir mdi child
+	// if it is not the only one, haha
+	mol::invoke( boost::bind( &MoeWnd::OnLayout,moe(),0,0,0));
 	return true;
 }
 
@@ -125,6 +129,7 @@ void DirChild::OnMDIActivate( HWND activated )
 
 	mol::Ribbon::ribbon()->mode(2);
 	mol::Ribbon::ribbon()->maximize();
+
 }
 
 
