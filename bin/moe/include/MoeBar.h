@@ -24,7 +24,7 @@ public:
 	virtual ~MoeTabControl();
 
 	void select( HWND d );
-
+	
 private:
 
 	virtual void OnCtrlCreated();

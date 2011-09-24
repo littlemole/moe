@@ -312,6 +312,26 @@ HRESULT __stdcall OleContainerBase::handleRemoveMenus( HMENU hmenuShared)
 	UINT    cItems;
 	HMENU   hMenuTemp;
 
+	if ( !this->getMidiState() )
+	{
+		this->setFrameMenu( origMenu_, 0 );
+	}
+	else
+	{
+		HMENU wm = ::GetSubMenu(hMenuActive_,::GetMenuItemCount(hMenuActive_)-1);
+		if ( winMenu_ )
+			wm = winMenu_;
+		else
+		{
+			if ( windowMenus_.size() > 0 )
+			{
+				wm = windowMenus_[0].second;
+			}
+		}
+
+		this->setFrameMenu( origMenu_, wm );
+	}
+
 	if (!(hmenuShared) || (0 == (cItems = ::GetMenuItemCount(hmenuShared))))
 		return S_OK;
 

@@ -87,8 +87,6 @@ void MoeTabControl::OnCtrlCreated()
 {
 	// enable tab ctrl drag drop support
 	TabCtrl_SetExtendedStyle(*this,TCS_EX_REGISTERDROP );
-
-	//::RegisterDragDrop(*this,&Drop);
 }
 
 // helpers
@@ -109,76 +107,53 @@ int MoeTabControl::index( HWND d )
 
 void MoeTabControl::select( HWND d )
 {
-	for ( int i = 0; i < count(); i++ )
-	{
-		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)getTabCtrlItem(i);
-		HWND mdi = (HWND)(c->lparam);
-		if ( mdi == d )
-		{
-			mol::TabCtrl::select(i);
-			return;
-		}
-	}
+	int i = index(d);
+	if ( i == -1 )
+		return;
+
+	mol::TabCtrl::select(i);
 }
 
 void MoeTabControl::move( HWND what, HWND to )
-{
-	int iwhat = -1;
-	int ito   = -1;
-
-	mol::TabCtrl::TabCtrlItem* tiwhat = 0;
-	mol::TabCtrl::TabCtrlItem* tito = 0;
-
-	for ( int i = 0; i < count(); i++ )
-	{
-		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)getTabCtrlItem(i);
-		HWND mdi = (HWND)(c->lparam);
-		if ( mdi == what )
-		{
-			iwhat = i;
-			tiwhat = c;
-		}
-		if ( mdi == to )
-		{
-			ito = i;
-			tito = c;
-		}
-	}
-
-	if ( ito == -1 || iwhat == -1 )
+{	
+	int iwhat = index(what);
+	if ( iwhat == -1 )
 		return;
 
+	int ito = index(what);
+	if ( ito == -1 )
+		return;
+
+	mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)getTabCtrlItem(iwhat);
+	mol::TabCtrl::TabCtrlItem* tiwhat = new mol::TabCtrl::TabCtrlItem(c->title,c->tooltip,c->lparam);
+
 	removeItem(iwhat);
+
+	ito = index(what);
+	if ( ito == -1 )
+		return;
+
 	insertItem( tiwhat, ito );
 }
 
 void MoeTabControl::remove( HWND d )
 {
-	for ( int i = 0; i < count(); i++ )
-	{
-		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)getTabCtrlItem(i);
-		HWND mdi = (HWND)(c->lparam);
-		if ( mdi == d )
-		{
-			removeItem(i);
-			return;
-		}
-	}
+	int i = index(d);
+	if ( i == -1 )
+		return;
+
+	removeItem(i);
 }
 
 void MoeTabControl::rename( HWND d, const mol::string& newpath, const mol::string& name )
 {
-	for ( int i = 0; i < count(); i++ )
-	{
-		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)getTabCtrlItem(i);
-		HWND mdi = (HWND)(c->lparam);
-		if ( mdi == d )
-		{
-			mol::TabCtrl::TabCtrlItem* nc = new mol::TabCtrl::TabCtrlItem(name,newpath,c->lparam);
-			this->renameItem( nc, i );
-			return;
-		}
-	}
+	int i = index(d);
+	if ( i == -1 )
+		return;
+
+	mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)getTabCtrlItem(i);
+	mol::TabCtrl::TabCtrlItem* nc = new mol::TabCtrl::TabCtrlItem(name,newpath,c->lparam);
+	renameItem( nc, i );
 }
 
 //////////////////////////////////////////////////////////////////////////////////

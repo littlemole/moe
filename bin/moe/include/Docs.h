@@ -82,7 +82,11 @@ private:
 	childlist	children_;
 
 	childlist::iterator iterator(VARIANT& index);
+	childlist::iterator iterator(mol::MdiChild* mdi);
 	int key2index( VARIANT& index );
+
+	void erase(mol::MdiChild* mdi);
+	void insert(mol::MdiChild* mdiPos,mol::MdiChild* mdi);
 };
 
 class Documents : public mol::stack_obj<Docs>

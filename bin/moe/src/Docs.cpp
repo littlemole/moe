@@ -29,10 +29,16 @@ Docs::~Docs()
 	ODBGS("~DOCS subobj dead");
 }
 
+/////////////////////////////////////////////////////////////////////
+// impl
+/////////////////////////////////////////////////////////////////////
+
 bool Docs::open( const mol::string& dir, InFiles pref, bool readOnly, IMoeDocument** doc  )
 {
 	return factory_->openDocument(dir,pref,readOnly,doc) == S_OK;
 }
+
+/////////////////////////////////////////////////////////////////////
 
 void Docs::remove( mol::MdiChild* mdi )
 {
@@ -69,6 +75,8 @@ void Docs::remove( mol::MdiChild* mdi )
 	}
 }
 
+/////////////////////////////////////////////////////////////////////
+
 void Docs::rename( mol::MdiChild* mdi, const mol::string& path )
 {
 	// update tab window
@@ -78,33 +86,51 @@ void Docs::rename( mol::MdiChild* mdi, const mol::string& path )
 	mol::taskbar()->renameTab( ((HWND)(*mdi)), path );
 }
 
+/////////////////////////////////////////////////////////////////////
+
+void Docs::erase(mol::MdiChild* mdi)
+{
+	for ( childlist::iterator it = children_.begin(); it != children_.end(); it++)
+	{
+		if ( *it == mdi ) 
+		{
+			children_.erase(it);
+			break;
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////
+
+void Docs::insert(mol::MdiChild* mdiPos,mol::MdiChild* mdi)
+{
+	for ( childlist::iterator it = children_.begin(); it != children_.end(); it++)
+	{
+		if ( *it == mdiPos ) 
+		{
+			this->children_.insert(it,mdi);
+			break;
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////
+
 void Docs::move( mol::MdiChild* mdi, int pos )
 {
-	// get index of document to be moved in tab ctrl
-	int index = tab()->index((HWND)(*mdi));
+	mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*) tab()->getTabCtrlItem(pos);
+	HWND w = (HWND)(c->lparam);
 
-	// get iter for the document where to move to
+	tab()->move(*mdi,w);
+
 	childlist::iterator it = iterator(mol::variant(pos));
+	mol::MdiChild* posMdi = *it;
 
-	// update the win7 taskbar document order
-	mol::taskbar()->moveTab( (HWND)(*mdi), (HWND)(**it) );
-	
-	// get the tab to be moved's item and clone it
-	mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*) tab()->getTabCtrlItem(index);
-	mol::TabCtrl::TabCtrlItem* nc = new mol::TabCtrl::TabCtrlItem( c->title, c->tooltip, c->lparam );
-
-	// update the tab ctrl	(remove and reinsert)
-	tab()->remove( (HWND)(*mdi) );
-	tab()->insertItem(nc, pos );
-	tab()->select((HWND)(*mdi));
-
-	// update our internal document collection to match order of tab ctrl (and win7 taskbar, if any)
-	remove(mdi);
-
-	it = iterator(mol::variant(pos));
-	this->children_.insert(it,mdi);
+	erase(mdi);
+	insert(posMdi,mdi);
 
 	mdi->activate();
+	tab()->select((HWND)(*mdi));
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -171,6 +197,16 @@ HRESULT __stdcall Docs::get_ActiveDoc( IMoeDocument** d )
 
 HRESULT __stdcall Docs::Activate( VARIANT i)
 {
+
+	childlist::iterator it = iterator(i);
+	if ( it == children_.end() )
+		return S_FALSE;
+
+	(*it)->activate();
+
+	return S_OK;
+
+	/*
 	mol::punk<IMoeDocument> d;
 	HRESULT hr = Item(i,&d);
 	if ( hr != S_OK )
@@ -188,6 +224,7 @@ HRESULT __stdcall Docs::Activate( VARIANT i)
 		return E_FAIL;
 
 	return view->Activate();
+	*/
 }
 
 HRESULT __stdcall Docs::New(IMoeDocument** d)
@@ -253,15 +290,16 @@ HRESULT __stdcall Docs::SaveAll()
 {
 	statusBar()->status(_T("saving all open documents ..."));
 
+	/*
 	long cnt = 0;
 	HRESULT hr = docs()->get_Count(&cnt);
 	if (hr != S_OK )
 		return hr;
+		*/
 
-	for ( int i = 0; i < cnt; i++ )
+	for ( int i = 0; i < size(); i++ )
 	{
 		punk<IMoeDocument> doc;
-
 		if ( S_OK == docs()->Item(variant(i),&doc) && doc )
 		{
 			long t;
@@ -307,9 +345,7 @@ HRESULT __stdcall Docs::Rename(VARIANT index, VARIANT newIndex )
 	if ( it == children_.end() )
 		return S_FALSE;
 
-	//(*it).first = newIndex;
 	mol::string newTitle =  mol::valueOf(mol::variant(newIndex));
-
 	rename(*it,newTitle);
 	return S_OK;
 }
@@ -338,6 +374,8 @@ HRESULT __stdcall Docs::Move( VARIANT what, VARIANT to )
 	return S_OK;
 }
 
+/////////////////////////////////////////////////////////////////////
+// helpers
 /////////////////////////////////////////////////////////////////////
 
 int Docs::key2index( VARIANT& index )
@@ -375,6 +413,8 @@ int Docs::key2index( VARIANT& index )
 	return i.intVal;
 }
 
+/////////////////////////////////////////////////////////////////////
+
 Docs::childlist::iterator Docs::iterator(VARIANT& index)
 {
 	int pos = key2index(index);
@@ -389,6 +429,19 @@ Docs::childlist::iterator Docs::iterator(VARIANT& index)
 	return it;
 }
 
+/////////////////////////////////////////////////////////////////////
+
+Docs::childlist::iterator Docs::iterator(mol::MdiChild* mdi)
+{
+	for ( childlist::iterator it = children_.begin(); it != children_.end(); it++)
+	{
+		if ( *it == mdi ) 
+		{
+			return it;
+		}
+	}
+	return children_.end();
+}
 //////////////////////////////////////////////////////////////////////////////
 
 mol::string Docs::getNewFileName(const mol::string& ext)

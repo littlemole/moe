@@ -61,14 +61,6 @@ HRESULT __stdcall DocFactory::newDocument(Docs::InFiles inf, IMoeDocument** d)
 HRESULT __stdcall  DocFactory::openDocument( const mol::string& p, Docs::InFiles pref, bool readOnly, IMoeDocument** doc )
 {
 	mol::string path = p;
-	// valid path ?
-	if ( path.size() < 1 )
-	{
-		mol::ostringstream oss;
-		oss << "cancelled loading empty path " << path;
-		statusBar()->status(oss.str());
-		return E_FAIL;
-	}
 
 	// deactive any active object
 	if ( moe()->activeObject)
@@ -88,22 +80,9 @@ HRESULT __stdcall  DocFactory::openDocument( const mol::string& p, Docs::InFiles
 		return E_FAIL;
 	}
 
-	// if first document, show tab
-	if ( docs()->children_.empty() )
-	{
-		tab()->show(SW_SHOW);
-		moe()->doLayout();
-	}
+	updateUI(path,mdi);
 
-	// insert document into collection
-	docs()->children_.push_back( mdi );
 
-	// update child selector tab window
-	tab()->insertItem( new mol::TabCtrl::TabCtrlItem( mol::Path::filename(path),path, (LPARAM)(HWND)(*mdi) ) );
-	tab()->select( (HWND)(*mdi) );
-
-	// add document to ribbon recent docs
-	mol::Ribbon::ribbon()->addRecentDoc(RibbonMRUItems,path);
 
 	// deliver return value if desired
 	if ( doc )
@@ -275,6 +254,7 @@ mol::MdiChild* DocFactory::documentFactory( const mol::string& p, Docs::InFiles 
 		return load<ImgViewer>(path);
     }
 
+	// assuming text so far - sniff encoding, try to detect binaries ...
 	std::stringstream is;
 	mol::filestream in;
 	in.open( mol::tostring(p),GENERIC_READ,FILE_SHARE_READ,0,OPEN_EXISTING);
@@ -308,9 +288,6 @@ mol::MdiChild* DocFactory::documentFactory( const mol::string& p, Docs::InFiles 
 
 void DocFactory::updateUI(const mol::string& p, mol::MdiChild* c)
 {
-	if ( moe()->activeObject)
-		moe()->activeObject->OnDocWindowActivate(FALSE);
-
 	if ( docs()->size() == 0 )
 	{
 		tab()->show(SW_SHOW);
@@ -322,4 +299,27 @@ void DocFactory::updateUI(const mol::string& p, mol::MdiChild* c)
 	tab()->select((HWND)(*c));
 
 	progress()->show(SW_HIDE);
+
+	mol::Ribbon::ribbon()->addRecentDoc(RibbonMRUItems,p);
+
 }
+
+
+	/*
+	// if first document, show tab
+	if ( docs()->children_.empty() )
+	{
+		tab()->show(SW_SHOW);
+		moe()->doLayout();
+	}
+
+	// insert document into collection
+	docs()->children_.push_back( mdi );
+
+	// update child selector tab window
+	tab()->insertItem( new mol::TabCtrl::TabCtrlItem( mol::Path::filename(path),path, (LPARAM)(HWND)(*mdi) ) );
+	tab()->select( (HWND)(*mdi) );
+
+	// add document to ribbon recent docs
+	mol::Ribbon::ribbon()->addRecentDoc(RibbonMRUItems,path);
+	*/
