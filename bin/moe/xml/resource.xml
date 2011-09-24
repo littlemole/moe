@@ -190,12 +190,15 @@
         <index cmd="IDM_VIEW_TOOLBARS" />
         <index cmd="IDM_TAB_JUMPTAB" />
         <index cmd="IDM_FILE_NEW_UFS" />
-        <index cmd="IDM_EDIT_DEBUG_GO" />
+        <index cmd="IDM_EDIT_DEBUG" />
         <index cmd="IDM_EDIT_DEBUG_QUIT" />
         <index cmd="IDM_EDIT_DEBUG_STEPIN" />
         <index cmd="IDM_EDIT_DEBUG_STEPOUT" />
         <index cmd="IDM_EDIT_DEBUG_STEPOVER" />
         <index cmd="IDM_EDIT_DEBUG_STOP" />
+        <index cmd="IDM_EDIT_DEBUG_GO" />
+        <index cmd="IDM_FILE_NEW_RTF" />
+        <index cmd="IDM_EDIT_PASTEAS" />
       </bitmap>
 
 
