@@ -1,5 +1,23 @@
 #include "StdAfx.h"
 #include "ScintillAxProp.h"
+#include "win/enc.h"
+#include <Windowsx.h>
+
+
+ScintillAxProperties::ScintillAxProperties()
+{
+	title_  = _T("Edit Settings");
+
+	codePages_.push_back( CodePage(std::make_pair(CP_ACP,L"Ansi Default")) );
+	codePages_.push_back( CodePage(std::make_pair(CP_UTF8,L"UTF-8")) );
+	codePages_.push_back( CodePage(std::make_pair(CP_WINUNICODE,L"Unicode (UTF-16)")) );
+
+	const mol::CodePages::Entries& cps = mol::CodePages::codePages();
+	for ( mol::CodePages::Iterator it = cps.begin(); it != cps.end(); it++)
+	{
+		codePages_.push_back( CodePage( std::make_pair( (*it).first, (*it).second.second)) );
+	}
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Message Handlers
@@ -47,12 +65,21 @@ LRESULT ScintillAxProperties::OnConvert(UINT msg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
+
 LRESULT ScintillAxProperties::OnInitDialog(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	combo_.attach(getDlgItem(IDC_COMBO_ENCODING));
+
+	for ( size_t i = 0; i < codePages_.size(); i++ )
+	{
+		combo_.addString(codePages_[i].second);
+	}
+
+	/*
 	combo_.addString(_T("Ansi"));
 	combo_.addString(_T("UTF8"));
 	combo_.addString(_T("UTF16 (LE)"));
+	*/
 
 	if ( objects_.size() > 0 )
 	{
@@ -87,7 +114,14 @@ LRESULT ScintillAxProperties::OnInitDialog(UINT msg, WPARAM wParam, LPARAM lPara
 			if ( systype_ == SCINTILLA_SYSTYPE_WIN32 )
 				this->sendDlgItemMsg(IDC_RADIO_WIN32,BM_SETCHECK ,BST_CHECKED,0);
 
-			combo_.setCurSel(encoding_);
+			for ( size_t i = 0; i < codePages_.size(); i++ )
+			{
+				if ( codePages_[i].first == encoding_ )
+				{
+					combo_.setCurSel(i);
+				}
+			}
+
 			this->setDlgItemInt(IDC_EDIT_TABWIDTH,tabwidth_);
 
 			if ( vbUseTabs_ == VARIANT_TRUE )
@@ -139,7 +173,7 @@ HRESULT ScintillAxProperties::Apply( void)
 	if ( BST_CHECKED == this->sendDlgItemMsg(IDC_RADIO_WIN32,BM_GETCHECK ,BST_CHECKED,0) )
 		systype_ = SCINTILLA_SYSTYPE_WIN32;
 
-	encoding_ = combo_.getCurSel();
+	encoding_ = codePages_[combo_.getCurSel()].first;
 
 	int w;
 	this->getDlgItemInt(IDC_EDIT_TABWIDTH,w,FALSE);
@@ -200,4 +234,58 @@ HRESULT ScintillAxProperties::Apply( void)
 	}
 	bDirty_ = FALSE;
 	return S_OK;
+}
+
+
+LRESULT EncodingDialog::wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	mol::Crack msg(message,wParam,lParam);
+	switch(message)
+	{
+		case WM_INITDIALOG :
+		{
+			cp_ = CP_ACP;
+
+			HWND list = this->getDlgItem(IDC_LIST_ENCODING);
+			const mol::CodePages::Entries& codePages = mol::CodePages::codePages();
+			for ( mol::CodePages::Iterator it = codePages.begin(); it != codePages.end(); it++)
+			{
+				ListBox_AddString( list, (*it).second.second.c_str() );
+			}
+			break;
+		}
+		case WM_COMMAND :
+		{
+			switch(msg.id())
+			{
+				case IDOK :
+				{
+					HWND list = this->getDlgItem(IDC_LIST_ENCODING);
+					int i = ListBox_GetCurSel(list);
+					if ( i != LB_ERR )
+					{
+						const mol::CodePages::Entries& codePages = mol::CodePages::codePages();
+						int c = 0;
+						for ( mol::CodePages::Iterator it = codePages.begin(); it != codePages.end(); it++)
+						{
+							if ( c == i )
+							{
+								cp_ = (*it).first;
+								break;
+							}
+						}
+					}
+					endDlg(0);
+					break;
+				}
+				case IDCANCEL :
+				{
+					endDlg(0);
+					break;
+				}
+			}
+			break;
+		}
+	}
+	return mol::Dlg<EncodingDialog>::wndProc(hWnd,message,wParam,lParam);
 }

@@ -117,25 +117,25 @@ std::string  utf82ansi   ( const std::string&  in );
 std::wstring utf82wstring( const std::string&  in );
 */
 
-std::string toUTF8( const std::string& str);
-std::string toUTF8( const std::wstring& str);
+std::string toUTF8( const std::string& str, int cp = CP_ACP);
+std::string toUTF8( const std::wstring& str, int cp = CP_ACP);
 
-std::wstring fromUTF8(const std::string& str);
+std::wstring fromUTF8(const std::string& str, int cp = CP_ACP);
 
-std::string  tostring( const std::string& str);
-std::string  tostring( const std::wstring& str);
-std::string  tostring( const char* str);
-std::string  tostring( const wchar_t* wstr);
+std::string  tostring( const std::string& str, int cp = CP_ACP);
+std::string  tostring( const std::wstring& str, int cp = CP_ACP);
+std::string  tostring( const char* str, int cp = CP_ACP);
+std::string  tostring( const wchar_t* wstr, int cp = CP_ACP);
 
-std::wstring  towstring( const std::string& str);
-std::wstring  towstring( const std::wstring& str);
-std::wstring  towstring( const char* str);
-std::wstring  towstring( const wchar_t* wstr);
+std::wstring  towstring( const std::string& str, int cp = CP_ACP);
+std::wstring  towstring( const std::wstring& str, int cp = CP_ACP);
+std::wstring  towstring( const char* str, int cp = CP_ACP);
+std::wstring  towstring( const wchar_t* wstr, int cp = CP_ACP);
 
-mol::string  toString( const std::string& str);
-mol::string  toString( const std::wstring& str);
-mol::string  toString( const char* str);
-mol::string  toString( const wchar_t* wstr);
+mol::string  toString( const std::string& str, int cp = CP_ACP);
+mol::string  toString( const std::wstring& str, int cp = CP_ACP);
+mol::string  toString( const char* str, int cp = CP_ACP);
+mol::string  toString( const wchar_t* wstr, int cp = CP_ACP);
 
 #endif
 

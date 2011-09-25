@@ -99,7 +99,7 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 	{
 		if ( utf8 )
 		{
-			if ( S_OK != sci->LoadUTF8(mol::bstr(p)) )
+			if ( S_OK != sci->LoadEncoding(mol::bstr(p),CP_UTF8) )
 				return false;
 		}
 		else
@@ -423,7 +423,7 @@ void Editor::OnReload()
 	if ( t == SCINTILLA_ENCODING_UTF8 )
 	{
 
-		sci->LoadUTF8(filename);
+		sci->LoadEncoding(filename,CP_UTF8);
 		props_->put_ReadOnly(vb);
 		statusBar()->status(filename.toString());
 		return ;

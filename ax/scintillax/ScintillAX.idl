@@ -31,8 +31,8 @@ library Scintilla
 
 	enum SCINTILLA_ENCODING {
 		SCINTILLA_ENCODING_ANSI  = 0,
-		SCINTILLA_ENCODING_UTF8  = 1,
-		SCINTILLA_ENCODING_UTF16 = 2
+		SCINTILLA_ENCODING_UTF8  = 65001,
+		SCINTILLA_ENCODING_UTF16 = 1200
 	};
 
 	enum SCINTILLA_SYNTAX {
@@ -1130,8 +1130,8 @@ library Scintilla
 		[id(8), helpstring("Load File form disk")] 
 		HRESULT Load( [in] BSTR fname );
 
-		[id(9), helpstring("Load File from disk - Force UTF8")] 
-		HRESULT LoadUTF8( [in] BSTR fname);
+		[id(9), helpstring("Load File from disk - prefer specified encoding")] 
+		HRESULT LoadEncoding( [in] BSTR fname, [in] long enc);
 
 		[id(10), helpstring("Save File to disk")] 
 		HRESULT Save();

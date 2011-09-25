@@ -75,7 +75,7 @@
 #define DISPID_ISCINTILLAX_ANNOTATION                                          				 6
 #define DISPID_ISCINTILLAX_MARKERS                                             				 7
 #define DISPID_ISCINTILLAX_LOAD                                                				 8
-#define DISPID_ISCINTILLAX_LOADUTF8                                            				 9
+#define DISPID_ISCINTILLAX_LOADENCODING                                        				 9
 #define DISPID_ISCINTILLAX_SAVE                                                				 10
 #define DISPID_ISCINTILLAX_SAVEAS                                              				 11
 #define DISPID_ISCINTILLAX_UNDO                                                				 12

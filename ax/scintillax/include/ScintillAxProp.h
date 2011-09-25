@@ -22,10 +22,7 @@ class ScintillAxProperties :
 			mol::implements<IPropertyPage> >
 {
 public:
-	ScintillAxProperties()
-	{
-		title_  = _T("Edit Settings");
-	}
+	ScintillAxProperties();
 
 	//msg_handler( WM_INITDIALOG,	OnInitDialog )
 	LRESULT OnInitDialog(UINT msg, WPARAM wParam, LPARAM lParam);
@@ -55,7 +52,25 @@ protected:
 	VARIANT_BOOL vbWriteBOM_;
 	VARIANT_BOOL vbShowLineNumbers_;
 	mol::ComboBox combo_;
+
+	typedef std::pair<int,std::wstring> CodePage;
+	std::vector<CodePage> codePages_;
 };
 
+class EncodingDialog : public mol::Dlg<EncodingDialog>
+{
+public:
+
+	LRESULT virtual wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+	int getCodePage()
+	{
+		return cp_;
+	}
+
+private:
+	int cp_;
+
+};
 
 #endif
