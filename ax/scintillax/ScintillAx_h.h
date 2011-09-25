@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sat Sep 24 00:53:38 2011
+/* at Sun Sep 25 20:38:50 2011
  */
 /* Compiler settings for ScintillAX.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -236,8 +236,8 @@ enum SCINTILLA_SYSTYPE
 
 enum SCINTILLA_ENCODING
     {	SCINTILLA_ENCODING_ANSI	= 0,
-	SCINTILLA_ENCODING_UTF8	= 1,
-	SCINTILLA_ENCODING_UTF16	= 2
+	SCINTILLA_ENCODING_UTF8	= 65001,
+	SCINTILLA_ENCODING_UTF16	= 1200
     } ;
 
 enum SCINTILLA_SYNTAX
@@ -1988,8 +1988,9 @@ EXTERN_C const IID IID_IScintillAx;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Load( 
             /* [in] */ BSTR fname) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LoadUTF8( 
-            /* [in] */ BSTR fname) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LoadEncoding( 
+            /* [in] */ BSTR fname,
+            /* [in] */ long enc) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Save( void) = 0;
         
@@ -2095,9 +2096,10 @@ EXTERN_C const IID IID_IScintillAx;
             IScintillAx * This,
             /* [in] */ BSTR fname);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LoadUTF8 )( 
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LoadEncoding )( 
             IScintillAx * This,
-            /* [in] */ BSTR fname);
+            /* [in] */ BSTR fname,
+            /* [in] */ long enc);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Save )( 
             IScintillAx * This);
@@ -2193,8 +2195,8 @@ EXTERN_C const IID IID_IScintillAx;
 #define IScintillAx_Load(This,fname)	\
     ( (This)->lpVtbl -> Load(This,fname) ) 
 
-#define IScintillAx_LoadUTF8(This,fname)	\
-    ( (This)->lpVtbl -> LoadUTF8(This,fname) ) 
+#define IScintillAx_LoadEncoding(This,fname,enc)	\
+    ( (This)->lpVtbl -> LoadEncoding(This,fname,enc) ) 
 
 #define IScintillAx_Save(This)	\
     ( (This)->lpVtbl -> Save(This) ) 

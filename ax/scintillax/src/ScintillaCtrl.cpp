@@ -490,7 +490,7 @@ HRESULT __stdcall ScintillAx::Load( BSTR file )
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
-HRESULT __stdcall ScintillAx::LoadUTF8( BSTR file )
+HRESULT __stdcall ScintillAx::LoadEncoding( BSTR file, long enc )
 { 
 	if (file)
 	{
@@ -509,9 +509,9 @@ HRESULT __stdcall ScintillAx::LoadUTF8( BSTR file )
 					 mol::icmp( ext, _T("jpeg")) != 0 &&
 					 mol::icmp( ext, _T("bmp")) != 0 )
 				{
-					if ( load(p, ext, true ) )
+					if ( load(p, ext, enc ) )
 					{
-						props_->put_Encoding(SCINTILLA_ENCODING_UTF8);
+						props_->put_Encoding(enc);
 						props_->put_Filename(file);
 						this->SavePoint();
 						return S_OK; 
@@ -783,20 +783,22 @@ bool ScintillAx::saveAdmin(const mol::string& location)
 			txt = mol::dos2unix(txt);
 		}
 	}
-	if ( enc == SCINTILLA_ENCODING_ANSI )
-	{
-		txt = mol::toUTF8(txt);
-		if ( eol == SCINTILLA_SYSTYPE_UNIX )
-		{
-			txt = mol::dos2unix(txt);
-		}
-	}
+	else
 	if ( enc == SCINTILLA_ENCODING_UTF8 )
 	{
 		oss.write((const char*)mol::FileEncoding::UTF8_BOM,3);
 		if ( eol == SCINTILLA_SYSTYPE_UNIX )
 		{
 			txt = mol::toUTF8(mol::dos2unix(mol::fromUTF8(txt)));
+		}
+	}
+	else
+	//if ( enc == SCINTILLA_ENCODING_ANSI )
+	{
+		txt = mol::toUTF8(txt,enc);
+		if ( eol == SCINTILLA_SYSTYPE_UNIX )
+		{
+			txt = mol::dos2unix(txt);
 		}
 	}
 	
@@ -866,7 +868,7 @@ bool ScintillAx::saveAdminCOM(const mol::string& location)
 		}
 		default :
 		{
-			enc = CP_ACP;
+			enc = e;
 			break;
 		}
 	}
@@ -973,7 +975,7 @@ bool ScintillAx::save(const mol::string& location)
 				if ( eol == SCINTILLA_SYSTYPE_UNIX )
 					u = mol::dos2unix(u);
 
-				std::string s = mol::tostring(mol::fromUTF8(u));				
+				std::string s = mol::tostring(mol::fromUTF8(u,e));				
 				of.write( (char*)(s.c_str()), s.size() );
 				break;
 			}
@@ -993,7 +995,7 @@ bool ScintillAx::save(const mol::string& location)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-bool ScintillAx::loadAdmin(const mol::string& p, const mol::string& ext,  bool utf8)
+bool ScintillAx::loadAdmin(const mol::string& p, const mol::string& ext,  long enc)
 {
 	edit()->setText("");
 
@@ -1014,45 +1016,45 @@ bool ScintillAx::loadAdmin(const mol::string& p, const mol::string& ext,  bool u
 		return false;
 	}
 
-	mol::FileEncoding e;
-	DWORD cp = e.investigate(data);
+	mol::FileEncoding fe;
+	DWORD cp = fe.investigate(data);
 
-	long enc;
+	long e;
 	long eol;
 
 	switch(cp)
 	{
 		case CP_UTF8:
 		{
-			enc = SCINTILLA_ENCODING_UTF8;
+			e = SCINTILLA_ENCODING_UTF8;
 			break;
 		}
 		case CP_WINUNICODE:
 		{
-			enc = SCINTILLA_ENCODING_UTF16;
+			e = SCINTILLA_ENCODING_UTF16;
 			break;
 		}
 		default:
 		{
-			enc = SCINTILLA_ENCODING_ANSI;
+			e = cp;
 			break;
 		}
 	}
 
-	eol = (SCINTILLA_SYSTYPE)(e.eolMode());
+	eol = (SCINTILLA_SYSTYPE)(fe.eolMode());
 
 	props_->put_SysType(eol);
 	props_->put_Encoding(enc);
 
-	if ( e.isBinary() )
+	if ( fe.isBinary() )
 	{
 		if ( IDCANCEL == ::MessageBox(*this,_T("this looks like a BINARY\r\nopen anyway?"),mol::toString(p).c_str(),MB_OKCANCEL|MB_ICONQUESTION ) )
 			return false;
 	}
 
-	if ( utf8 )
+	if ( enc == SCINTILLA_ENCODING_UTF8 )
 	{
-		props_->put_Encoding(SCINTILLA_ENCODING_UTF8);
+		props_->put_Encoding(enc);
 		edit()->setCodePage(SC_CP_UTF8);
 
 		std::string s2(data);
@@ -1100,15 +1102,15 @@ bool ScintillAx::loadAdmin(const mol::string& p, const mol::string& ext,  bool u
 		}
 		default:
 		{
-			props_->put_Encoding(SCINTILLA_ENCODING_ANSI);
+			props_->put_Encoding(enc);
 			edit()->setCodePage(SC_CP_UTF8);
 
-			std::string s2(mol::toUTF8(data));
+			std::string s2(mol::toUTF8(data,enc));
 			s2 = mol::unix2dos(s2);
 			edit()->setText(s2);			
 			break;
 		}
-	}
+	}	
 	edit()->mode(p,ext);
 	edit()->setSavePoint();
 	setDirty(FALSE);
@@ -1121,7 +1123,7 @@ bool ScintillAx::loadAdmin(const mol::string& p, const mol::string& ext,  bool u
 //
 //////////////////////////////////////////////////////////////////////////////
 
-bool ScintillAx::loadAdminCOM(const mol::string& p, const mol::string& ext,  bool utf8)
+bool ScintillAx::loadAdminCOM(const mol::string& p, const mol::string& ext,  long enc)
 {
 	mol::punk<IUnknown> unk;
 
@@ -1144,28 +1146,26 @@ bool ScintillAx::loadAdminCOM(const mol::string& p, const mol::string& ext,  boo
 	if ( hr != S_OK )
 		return false;
 
-	long enc=0;
-	hr = file->get_Encoding(&enc);
+	long e=0;
+	hr = file->get_Encoding(&e);
 	if ( hr != S_OK )
 		return false;
 
-	long e;
-
-	switch(enc)
+	switch(e)
 	{
 		case CP_UTF8:
 		{
-			e = SCINTILLA_ENCODING_UTF8;
+			enc = SCINTILLA_ENCODING_UTF8;
 			break;
 		}
 		case CP_WINUNICODE:
 		{
-			e = SCINTILLA_ENCODING_UTF16;
+			enc = SCINTILLA_ENCODING_UTF16;
 			break;
 		}
 		default:
 		{
-			e = SCINTILLA_ENCODING_ANSI;
+			//e = enc;
 			break;
 		}
 	}
@@ -1174,14 +1174,10 @@ bool ScintillAx::loadAdminCOM(const mol::string& p, const mol::string& ext,  boo
 	if ( hr != S_OK )
 		return false;
 
-	props_->put_Encoding(e);
+	props_->put_Encoding(enc);
 	props_->put_SysType(eol);
 
 	file->Close();
-	if ( utf8 )
-	{
-		props_->put_Encoding(SCINTILLA_ENCODING_UTF8);
-	}
 
 	edit()->setCodePage(SC_CP_UTF8);
 	edit()->setText("");
@@ -1198,7 +1194,7 @@ bool ScintillAx::loadAdminCOM(const mol::string& p, const mol::string& ext,  boo
 //
 //////////////////////////////////////////////////////////////////////////////
 
-bool ScintillAx::load(const mol::string& p, const mol::string& ext,  bool utf8)
+bool ScintillAx::load(const mol::string& p, const mol::string& ext,  long enc)
 {
 	edit()->clearAnnotations();
 
@@ -1221,7 +1217,7 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  bool utf8)
 				//return true;
 			if ( mol::OS::has_uac() )
 			{
-				return this->loadAdmin(p,ext,utf8);
+				return this->loadAdmin(p,ext,enc);
 			}
 		}
 		return false;
@@ -1235,35 +1231,35 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  bool utf8)
 		is.write(buf,in.gcount());
     }
 	s = is.str();
-	mol::FileEncoding e;
-	DWORD cp = e.investigate(s);
+	mol::FileEncoding fe;
+	DWORD cp = fe.investigate(s);
 
-	long enc;
-	switch(cp)
+	long e;
+	switch(enc)
 	{
 		case CP_UTF8:
 		{
-			enc = SCINTILLA_ENCODING_UTF8;
+			e = SCINTILLA_ENCODING_UTF8;
 			break;
 		}
 		case CP_WINUNICODE:
 		{
-			enc = SCINTILLA_ENCODING_UTF16;
+			e = SCINTILLA_ENCODING_UTF16;
 			break;
 		}
 		default:
 		{
-			enc = SCINTILLA_ENCODING_ANSI;
+			e = cp;
 			break;
 		}
 	}
 
-	long eol = (SCINTILLA_SYSTYPE)(e.eolMode());
+	long eol = (SCINTILLA_SYSTYPE)(fe.eolMode());
 
 	props_->put_SysType(eol);
-	props_->put_Encoding(enc);
+	props_->put_Encoding(e);
 
-	if ( e.isBinary() )
+	if ( fe.isBinary() )
 	{
 		if ( IDCANCEL == ::MessageBox(*this,_T("this looks like a BINARY\r\nopen anyway?"),mol::toString(p).c_str(),MB_OKCANCEL|MB_ICONQUESTION ) )
 			return false;
@@ -1278,7 +1274,7 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  bool utf8)
     in.close();
 	s = is.str();
 
-	if ( utf8 )
+	if ( enc == CP_UTF8 )
 	{
 		props_->put_Encoding(SCINTILLA_ENCODING_UTF8);
 		edit()->setCodePage(SC_CP_UTF8);
@@ -1289,7 +1285,7 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  bool utf8)
 		edit()->appendText(s2);
 	}
 	else
-	switch ( enc )
+	switch ( e )
 	{
 		case SCINTILLA_ENCODING_UTF16 :
 		{
@@ -1326,10 +1322,10 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  bool utf8)
 		}
 		default:
 		{
-			props_->put_Encoding(SCINTILLA_ENCODING_ANSI);
+			props_->put_Encoding(e);
 			edit()->setCodePage(SC_CP_UTF8);
 
-			std::string s2(mol::toUTF8(s));
+			std::string s2(mol::toUTF8(s,e));
 			s2 = mol::unix2dos(s2);
 			edit()->setText(s2);			
 			break;

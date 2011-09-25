@@ -10,6 +10,20 @@
 
 namespace mol {
 
+BOOL CALLBACK CodePages::codePageEnumProc( LPTSTR lpCodePageString)
+{
+	int cp = _wtoi(lpCodePageString);
+
+	CPINFOEX cpi;
+	if ( ::GetCPInfoEx(cp,0,&cpi) )
+	{
+		std::wstring s(cpi.CodePageName);
+		instance().codePages_.insert( std::make_pair(cp,std::make_pair(cp,s)) );
+	}
+	return TRUE;
+}
+
+
 const unsigned char FileEncoding::UTF8_BOM[]    = { 0xef, 0xbb, 0xbf };
 const unsigned char FileEncoding::UTF16LE_BOM[] = { 0xff, 0xfe, 0x00 };
 

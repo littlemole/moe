@@ -277,8 +277,9 @@ file='..\..\..\..\ax\scintillax\x64/uni_release\scintillax.tlb'>
  <method name='Load' type='void' dispid='8' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Load File form disk' >
   <param type='BSTR' dir='IN' name='fname' />
  </method>
- <method name='LoadUTF8' type='void' dispid='9' vtindex='60' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Load File from disk - Force UTF8' >
+ <method name='LoadEncoding' type='void' dispid='9' vtindex='60' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Load File from disk - prefer specified encoding' >
   <param type='BSTR' dir='IN' name='fname' />
+  <param type='long' dir='IN' name='enc' />
  </method>
  <method name='Save' type='void' dispid='10' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Save File to disk' >
  </method>
@@ -380,8 +381,8 @@ file='..\..\..\..\ax\scintillax\x64/uni_release\scintillax.tlb'>
 
 <enum type='SCINTILLA_ENCODING' desc='' >
 <element name='SCINTILLA_ENCODING_ANSI' value='0' />
-<element name='SCINTILLA_ENCODING_UTF8' value='1' />
-<element name='SCINTILLA_ENCODING_UTF16' value='2' />
+<element name='SCINTILLA_ENCODING_UTF8' value='65001' />
+<element name='SCINTILLA_ENCODING_UTF16' value='1200' />
 </enum>
 
 <enum type='SCINTILLA_SYNTAX' desc='' >

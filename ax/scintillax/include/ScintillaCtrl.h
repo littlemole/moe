@@ -108,7 +108,7 @@ public:
 		// Load / Save
 
 		HRESULT virtual __stdcall Load( BSTR file );
-		HRESULT virtual __stdcall LoadUTF8( BSTR file );
+		HRESULT virtual __stdcall LoadEncoding( BSTR file, long enc );
 		HRESULT virtual __stdcall Save();
 		HRESULT virtual __stdcall SaveAs( BSTR filename );
 
@@ -169,11 +169,11 @@ protected:
 	void Init();
 	void disposeObject(IUnknown* unk);
 
-	bool loadAdminCOM(const mol::string& p, const mol::string& ext,  bool utf8);
+	bool loadAdminCOM(const mol::string& p, const mol::string& ext,  long enc);
 	bool saveAdminCOM(const mol::string& p);
-	bool loadAdmin(const mol::string& p, const mol::string& ext,  bool utf8);
+	bool loadAdmin(const mol::string& p, const mol::string& ext,  long enc);
 	bool saveAdmin(const mol::string& p);
-	bool load(const mol::string& p, const mol::string& ext,  bool utf8);
+	bool load(const mol::string& p, const mol::string& ext,  long enc);
 	bool save(const mol::string& location);
 };
 

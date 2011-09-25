@@ -18,7 +18,7 @@
     <dialogs>
       <!-- scintillax property dialog -->
       <dialog id="IDD_DIALOG_PROP" >
-
+        
         <!-- dialog child control ids  -->
         <controls>
           <control id="IDC_RADIO_UNIX" />
@@ -31,8 +31,14 @@
           <control id="IDC_CONVERT_BUTTON" />
           <control id="IDC_CHECK_WRITEBOM" />
           <control id="IDC_CHECK_LINE_NUMBERS" />
+
         </controls>
       </dialog>
+
+      <dialog id="IDD_DIALOG_ENC" >
+        <control id="IDC_LIST_ENCODING" />
+      </dialog>
+
     </dialogs>
     <!-- other controls we just define ids for -->
 
