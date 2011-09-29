@@ -70,6 +70,24 @@ mol::msgMap<ScintillAxProperties>().addCmdHandler( IDC_CHECK_WRITEBOM, make_hand
 
 mol::msgMap<ScintillAxProperties>().addCmdHandler( IDC_CONVERT_BUTTON, make_handler(&ScintillAxProperties::OnConvert) );
 
+mol::msgMap<ScintillAxSettings>().addMsgHandler( WM_INITDIALOG, make_handler(&ScintillAxSettings::OnInitDialog) );
+
+mol::msgMap<ScintillAxSettings>().addCmdHandler( IDC_RADIO_UNIX, make_handler(&ScintillAxSettings::OnDirty) );
+
+mol::msgMap<ScintillAxSettings>().addCmdHandler( IDC_RADIO_WIN32, make_handler(&ScintillAxSettings::OnDirty) );
+
+mol::msgMap<ScintillAxSettings>().addCmdHandler( IDC_COMBO_ENCODING, make_handler(&ScintillAxSettings::OnDirty) );
+
+mol::msgMap<ScintillAxSettings>().addCmdHandler( IDC_CHECK_USETABS, make_handler(&ScintillAxSettings::OnDirty) );
+
+mol::msgMap<ScintillAxSettings>().addCmdHandler( IDC_CHECK_TABINDENTS, make_handler(&ScintillAxSettings::OnDirty) );
+
+mol::msgMap<ScintillAxSettings>().addCmdHandler( IDC_EDIT_TABWIDTH, make_handler(&ScintillAxSettings::OnDirty) );
+
+mol::msgMap<ScintillAxSettings>().addCmdHandler( IDC_CHECK_BACKSPACEUNINDENTS, make_handler(&ScintillAxSettings::OnDirty) );
+
+mol::msgMap<ScintillAxSettings>().addCmdHandler( IDC_CHECK_WRITEBOM, make_handler(&ScintillAxSettings::OnDirty) );
+
 
 }
 

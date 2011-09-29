@@ -435,15 +435,41 @@ HRESULT __stdcall MoeDialogs::MsgBox( BSTR text, BSTR title, long flags, long* r
 	return S_OK;
 }
 
+
 HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 {
-	
-	static mol::TCHAR  InFilesFilter[] = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
 
-	mol::FilenameDlg ofn(*moe());
+	static mol::TCHAR  InFilesFilter[] = _T("open text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
+
+	if ( mol::Ribbon::ribbon()->enabled() )
+	{
+		const COMDLG_FILTERSPEC c_rgSaveTypes[] =
+		{
+			{ L"open text files",       L"*.*"},
+			{ L"open HTML files",	    L"*.*"},
+			{ L"hexviewer",			    L"*.*"},
+			{ L"tail logfile",          L"*.*"}
+		};
+
+		MoeVistaFileDialog fd(*moe());
+		fd.setFilter((COMDLG_FILTERSPEC*)&c_rgSaveTypes,ARRAYSIZE(c_rgSaveTypes));
+		fd.open(FOS_ALLOWMULTISELECT | FOS_FILEMUSTEXIST | FOS_NOVALIDATE);
+
+		MOE_DOCTYPE docType = index2type(fd.type());
+		std::vector<std::wstring> paths = fd.paths();
+		for ( size_t i = 0; i < paths.size(); i++)
+		{
+			bool result = docs()->open( paths[i], docType,fd.encoding(),fd.readOnly(), d);
+		}
+
+		return S_OK;
+	}
+
+	//mol::FilenameDlg ofn(*moe());
+	MolFileFialog ofn(*moe());
 	ofn.setFilter( InFilesFilter );			
 
-	if ( ofn.dlgOpen( OFN_NOVALIDATE | OFN_ALLOWMULTISELECT | OFN_EXPLORER  | OFN_NOTESTFILECREATE ) )
+	if ( ofn.dlgOpen( OFN_NOVALIDATE | OFN_ALLOWMULTISELECT | OFN_EXPLORER  | OFN_NOTESTFILECREATE | OFN_ENABLEHOOK | OFN_ENABLETEMPLATE ) )
 	{
 		// open rtf
 		if ( ofn.index() == 4 )
@@ -451,7 +477,7 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
 				ODBGS(ofn.fileName(i).c_str());
-				bool result = docs()->open( ofn.fileName(i), Docs::PREF_RTF,ofn.readOnly(), 0);
+				bool result = docs()->open( ofn.fileName(i), MOE_DOCTYPE_RTF,-1,ofn.readOnly(), 0);
 			}
 		}
 		// open html
@@ -460,7 +486,7 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
 				ODBGS(ofn.fileName(i).c_str());
-				bool result = docs()->open( ofn.fileName(i), Docs::PREF_HTML,ofn.readOnly(), 0);
+				bool result = docs()->open( ofn.fileName(i), MOE_DOCTYPE_HTML,-1,ofn.readOnly(), 0);
 			}
 		}
 		// open hex
@@ -468,7 +494,7 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 		{
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
-				bool result = docs()->open( ofn.fileName(i), Docs::PREF_HEX, ofn.readOnly(), 0);
+				bool result = docs()->open( ofn.fileName(i), MOE_DOCTYPE_HEX,-1, ofn.readOnly(), 0);
 			}
 		}
 		// open log
@@ -476,7 +502,7 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 		{
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
-				bool result = docs()->open( ofn.fileName(i), Docs::PREF_TAIL, TRUE, 0);
+				bool result = docs()->open( ofn.fileName(i), MOE_DOCTYPE_TAIL,-1, TRUE, 0);
 			}
 		}
 		// open text
@@ -484,7 +510,7 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 		{
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
-				bool result = docs()->open(ofn.fileName(i), ofn.index() == 2 ? Docs::PREF_UTF8 : Docs::PREF_TXT, ofn.readOnly(), 0);
+				bool result = docs()->open(ofn.fileName(i),MOE_DOCTYPE_DOC, ofn.codePage(), ofn.readOnly(), 0);
 			}
 		}
 	}	
@@ -500,7 +526,7 @@ HRESULT __stdcall MoeDialogs::OpenDir( IMoeDocument** d)
 		if ( s != _T("") )
 		{
 			if ( mol::Path::exists(s) )
-				docs()->open( s, Docs::PREF_TXT, false, d);
+				docs()->open( s, MOE_DOCTYPE_DIR,-1, false, d);
 		}
 
 	}

@@ -222,16 +222,15 @@ HRESULT __stdcall SciAxProperties::put_Encoding( long type)
 	if (!sci_)
 		return E_FAIL;
 
-	if ( type >= 0 && type <= 2 )
-	{
-		this->enc_ = (SCINTILLA_ENCODING)type;
-		if ( type == SCINTILLA_ENCODING_UTF16 )
-			this->put_WriteBOM(VARIANT_TRUE);
-		else
-			this->put_WriteBOM(VARIANT_FALSE);
+	this->enc_ = type;	
 
-		sci_->fire(DISPID_ISCINTILLAXEVENTS_ONENCODING,type);
-	}
+	if ( type == SCINTILLA_ENCODING_UTF16 )
+		this->put_WriteBOM(VARIANT_TRUE);
+	else
+		this->put_WriteBOM(VARIANT_FALSE);
+
+	sci_->fire(DISPID_ISCINTILLAXEVENTS_ONENCODING,type);
+	
 	return S_OK; 
 }
 

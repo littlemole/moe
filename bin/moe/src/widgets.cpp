@@ -1090,7 +1090,7 @@ HRESULT __stdcall MoeDrop::Drop( IDataObject* pDataObject, DWORD keyState, POINT
 	mol::ImageList::drop(*moe());
 	for ( unsigned int i = 0; i < v.size(); i++ )
 	{
-		bool result = ::docs()->open(v[i],Docs::PREF_TXT,false,0);
+		bool result = ::docs()->open(v[i],MOE_DOCTYPE_DOC,-1,false,0);
 		statusBar()->status(v[i]);
 		if (!result)
 		{
@@ -1336,5 +1336,329 @@ std::wstring PasteAs::get()
 		return mol::towstring( clipboard_.getHTML() );
 	}
 	return mol::fromUTF8( clipboard_.getAnsiText(format) );
+}
+
+
+MolFileFialog::MolFileFialog( HWND parent )
+	: FilenameDlg(parent), index_(-1)
+{
+}
+
+
+void MolFileFialog::OnCustomize()
+{
+	this->of_.lpfnHook = &mol::FilenameDlg::hook;
+	this->of_.lpTemplateName = MAKEINTRESOURCE(IDD_DIALOG_OFN);
+	this->of_.hInstance = ::GetModuleHandle(0);
+}
+
+void MolFileFialog::OnInit()
+{
+	combo_.attach(::GetDlgItem(dlg_,IDC_COMBO_ENC));
+	for ( size_t i = 0; i < moe()->codePages().size(); i++)
+	{
+		combo_.addString(moe()->codePages()[i].second);
+	}
+
+	if ( index_ != -1 )
+	{
+		combo_.setCurSel(index_);
+	}
+}
+	
+void MolFileFialog::OnDestroy()
+{
+	index_ = combo_.getCurSel();
+}
+
+int MolFileFialog::codePage()
+{
+	if ( index_ == -1 )
+		return -1;
+
+	return moe()->codePages()[index_].first;
+}
+
+void MolFileFialog::codePage(int cp)
+{
+	index_ = (int)moe()->codePageIndex(cp);
+}
+
+
+MoeVistaFileDialog::MoeVistaFileDialog(HWND parent)
+	: parent_(parent),filter_(0),nFilters_(0),readOnly_(false),encoding_(CP_ACP)
+{}
+
+void MoeVistaFileDialog::setFilter(COMDLG_FILTERSPEC* filter, int size)
+{
+	filter_ = filter;
+	nFilters_ = size;
+}
+
+
+HRESULT MoeVistaFileDialog::open(int options)
+{
+	HRESULT hr = init(options,CLSID_FileOpenDialog);
+	if (hr != S_OK)
+		return hr;
+
+	hr = fdc_->EnableOpenDropDown(OPENCHOICES);
+	if (hr != S_OK)
+		return hr;
+
+	hr = fdc_->AddControlItem(OPENCHOICES, OPENCHOICES_OPEN, L"&Open");
+	if (hr != S_OK)
+		return hr;
+
+	hr = fdc_->AddControlItem(OPENCHOICES, OPENCHOICES_OPEN_READONLY, L"Open &read-only");
+	if (hr != S_OK)
+		return hr;
+
+	addEncodingComboBox();
+
+	// Now show the dialog.
+	hr = fd_->Show(parent_);
+	if (hr != S_OK)
+		return hr;
+
+	mol::punk<IFileOpenDialog> fod(fd_);
+	if (!fod)
+		return hr;
+
+	mol::punk<IShellItemArray> psiResult;
+	hr = fod->GetResults(&psiResult);
+	if (hr != S_OK)
+		return hr;
+
+	DWORD numItems = 0;
+	psiResult->GetCount(&numItems);
+	for ( DWORD i = 0; i < numItems; i++ )
+	{
+		mol::punk<IShellItem> shit;
+		hr = psiResult->GetItemAt(i,&shit);
+		if (hr != S_OK)
+			return hr;
+
+		PWSTR pszFilePath = NULL;
+		hr = shit->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+		paths_.push_back(pszFilePath);
+		::CoTaskMemFree(pszFilePath);
+	}
+
+	DWORD openChoices = 0;
+	hr = fdc_->GetSelectedControlItem(OPENCHOICES,&openChoices);
+	if (hr != S_OK)
+		return hr;
+
+	readOnly_ = openChoices == 0 ? false : true;
+
+	DWORD enc = 0;
+	hr = fdc_->GetSelectedControlItem(CONTROL_COMBOBOX,&enc);
+	//if (hr != S_OK)
+		//return hr;
+
+	encoding_ = enc;
+
+	hr = fd_->GetFileTypeIndex(&type_);
+	//if (hr != S_OK)
+		//return hr;
+		
+	return S_OK;
+}
+
+
+HRESULT MoeVistaFileDialog::save(int options)
+{
+	HRESULT hr = init(options,CLSID_FileSaveDialog);
+	if (hr != S_OK)
+		return hr;
+
+	hr = fd_->SetFileName(path_.c_str());
+	if (hr != S_OK)
+		return hr;
+
+	// Create a Visual Group.
+	hr = fdc_->StartVisualGroup(CONTROL_GROUP, L"Encoding");
+	if (hr != S_OK)
+		return hr;
+
+	// Add a combo box
+	hr = fdc_->AddComboBox(CONTROL_COMBOBOX);
+	if (hr != S_OK)
+		return hr;
+
+	// populate box
+	hr = fdc_->SetControlState(CONTROL_COMBOBOX, CDCS_VISIBLE | CDCS_ENABLED);
+	if (hr != S_OK)
+		return hr;
+
+	for ( size_t i = 0; i < moe()->codePages().size(); i++)
+	{
+		const mol::CodePages::Entry codePage = moe()->codePages()[i];
+		hr = fdc_->AddControlItem(CONTROL_COMBOBOX, (DWORD)i, codePage.second.c_str() );
+		if (hr != S_OK)
+			return hr;
+	}
+
+	hr = fdc_->SetSelectedControlItem(CONTROL_COMBOBOX,encoding_);
+	if (hr != S_OK)
+		return hr;
+
+	// End the visual group.
+	hr = fdc_->EndVisualGroup();
+	if (hr != S_OK)
+		return hr;
+
+
+	// Now show the dialog.
+	hr = fd_->Show(parent_);
+	if (hr != S_OK)
+		return hr;
+
+	mol::punk<IShellItem> psiResult;
+	hr = fd_->GetResult(&psiResult);
+	if (hr != S_OK)
+		return hr;
+
+	PWSTR pszFilePath = NULL;
+	hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+	paths_.push_back(pszFilePath);
+	::CoTaskMemFree(pszFilePath);
+
+	DWORD enc = 0;
+	hr = fdc_->GetSelectedControlItem(CONTROL_COMBOBOX,&enc);
+	//if (hr != S_OK)
+		//return hr;
+
+	encoding_ = enc;
+	type_ = 0;
+		
+	return S_OK;
+}
+
+
+long MoeVistaFileDialog::encoding()
+{
+	return moe()->codePages()[encoding_].first;
+}
+
+void MoeVistaFileDialog::encoding(long enc)
+{
+	encoding_ = (int)moe()->codePageIndex(enc);
+}
+
+long MoeVistaFileDialog::type()
+{
+	return type_;
+}
+
+bool MoeVistaFileDialog::readOnly()
+{
+	return readOnly_;
+}
+
+const std::vector<std::wstring>& MoeVistaFileDialog::paths()
+{
+	return paths_;
+}
+
+const std::wstring& MoeVistaFileDialog::path()
+{
+	return paths_[0];
+}
+
+
+HRESULT MoeVistaFileDialog::addEncodingComboBox()
+{
+	// Create a Visual Group.
+	HRESULT hr = fdc_->StartVisualGroup(CONTROL_GROUP, L"Encoding");
+	if (hr != S_OK)
+		return hr;
+
+	// Add a combo box
+	hr = fdc_->AddComboBox(CONTROL_COMBOBOX);
+	if (hr != S_OK)
+		return hr;
+
+	// populate box
+	hr = fdc_->SetControlState(CONTROL_COMBOBOX, CDCS_VISIBLE | CDCS_ENABLED);
+	if (hr != S_OK)
+		return hr;
+
+	for ( size_t i = 0; i < moe()->codePages().size(); i++)
+	{
+		const mol::CodePages::Entry codePage = moe()->codePages()[i];
+		hr = fdc_->AddControlItem(CONTROL_COMBOBOX, (DWORD)i, codePage.second.c_str() );
+		if (hr != S_OK)
+			return hr;
+	}
+	// Set the default selection to option 1.
+	//hr = pfdc->SetSelectedControlItem(CONTROL_COMBOBOX,-1);
+
+	// End the visual group.
+	hr = fdc_->EndVisualGroup();
+	if (hr != S_OK)
+		return hr;
+
+	return S_OK;
+}
+
+HRESULT MoeVistaFileDialog::init(int options, REFCLSID clsid)
+{
+	fd_.release();
+	fdc_.release();
+
+	HRESULT hr = fd_.createObject(clsid);
+	if (hr != S_OK)
+		return hr;
+
+	hr = fd_.queryInterface(&fdc_);
+	if ( hr != S_OK )
+		return hr;
+
+	DWORD dwFlags;
+	hr = fd_->GetOptions(&dwFlags);
+	if (hr != S_OK)
+		return hr;
+	
+	hr = fd_->SetOptions(dwFlags | options );
+	if (hr != S_OK)
+		return hr;
+
+	hr = fd_->SetFileTypes(nFilters_, filter_);
+	if (hr != S_OK)
+		return hr;
+
+	return hr;
+}
+
+void MoeVistaFileDialog::path(const std::wstring& path)
+{
+	path_ = path;
+}
+
+
+MOE_DOCTYPE index2type(int index)
+{
+	switch(index)
+	{
+		case 1 :
+		{
+			return MOE_DOCTYPE_DOC;
+		}
+		case 2 :
+		{
+			return MOE_DOCTYPE_HTML;
+		}
+		case 3 :
+		{
+			return MOE_DOCTYPE_HEX;
+		}
+		case 4 :
+		{
+			return MOE_DOCTYPE_TAIL;
+		}
+	}
+	return MOE_DOCTYPE_DOC;
 }
 

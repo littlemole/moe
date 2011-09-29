@@ -6,7 +6,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sun Sep 25 20:38:50 2011
+/* at Thu Sep 29 21:58:08 2011
  */
 /* Compiler settings for ScintillAX.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -107,6 +107,9 @@ MIDL_DEFINE_GUID(CLSID, CLSID_ScintillAx,0x9B5488B0,0x33FB,0x44df,0x8D,0x58,0x67
 
 
 MIDL_DEFINE_GUID(CLSID, CLSID_ScintillAxProperties,0xC16CD143,0x5126,0x414a,0xAF,0xDE,0x40,0x6F,0x31,0xE9,0x5D,0x13);
+
+
+MIDL_DEFINE_GUID(CLSID, CLSID_ScintillAxSettings,0x3039CC18,0x067B,0x450F,0x95,0x2D,0x7C,0xE2,0xAD,0xD7,0x9F,0x88);
 
 #undef MIDL_DEFINE_GUID
 

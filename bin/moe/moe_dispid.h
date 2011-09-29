@@ -47,7 +47,7 @@
 #define DISPID_IMOEDOCUMENTCOLLECTION_ACTIVEDOC                                				 2
 #define DISPID_IMOEDOCUMENTCOLLECTION_NEW                                      				 3
 #define DISPID_IMOEDOCUMENTCOLLECTION_OPEN                                     				 4
-#define DISPID_IMOEDOCUMENTCOLLECTION_OPENUTF8                                 				 5
+#define DISPID_IMOEDOCUMENTCOLLECTION_OPENENCODING                             				 5
 #define DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR                                  				 6
 #define DISPID_IMOEDOCUMENTCOLLECTION_OPENHEXEDITOR                            				 7
 #define DISPID_IMOEDOCUMENTCOLLECTION_OPENHTMLFRAME                            				 8

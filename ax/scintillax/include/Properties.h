@@ -118,7 +118,7 @@ private:
 	VARIANT_BOOL			vbOverType_;
 
 	SCINTILLA_SYSTYPE		eol_;
-	SCINTILLA_ENCODING		enc_;
+	long					enc_;
 	SCINTILLA_SYNTAX        syntax_;
 
 	mol::punk<IFontDisp>	font_;

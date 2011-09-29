@@ -13,7 +13,8 @@ using namespace mol::win;
 using namespace mol::ole;
 using namespace mol::io;
 
-mol::TCHAR OutFilesFilter[]   = _T("ANSI\0*.*\0UTF-8\0*.*\0UTF-16 (LE)\0*.*\0\0");
+//mol::TCHAR OutFilesFilter[]   = _T("ANSI\0*.*\0UTF-8\0*.*\0UTF-16 (LE)\0*.*\0\0");
+mol::TCHAR OutFilesFilter[]   = _T("all files (*.*)\0*.*\0\0");
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -42,7 +43,7 @@ Editor::~Editor()
 
 
 //////////////////////////////////////////////////////////////////////////////
-Editor::Instance* Editor::CreateInstance(const mol::string& file, bool utf8, bool readOnly)
+Editor::Instance* Editor::CreateInstance(const mol::string& file, long enc, bool readOnly)
 {
 	statusBar()->status(20);
 
@@ -55,7 +56,7 @@ Editor::Instance* Editor::CreateInstance(const mol::string& file, bool utf8, boo
 	Instance* e = new Instance;
 	e->AddRef();
 
-	if ( !e->initialize(file,utf8,readOnly) )
+	if ( !e->initialize(file,enc,readOnly) )
 	{
 		e->destroy();
 		return 0;
@@ -75,7 +76,7 @@ void Editor::prepareInterfaces()
 	sci->get_Text(&text_);
 }
 
-bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
+bool Editor::initialize(const mol::string& p, long enc, bool readOnly)
 {
 	initializeMoeChild(p);
 
@@ -97,9 +98,9 @@ bool Editor::initialize(const mol::string& p, bool utf8, bool readOnly)
 	// if file exists, load
 	if ( mol::Path::exists(p) )
 	{
-		if ( utf8 )
+		if ( enc != -1 )
 		{
-			if ( S_OK != sci->LoadEncoding(mol::bstr(p),CP_UTF8) )
+			if ( S_OK != sci->LoadEncoding(mol::bstr(p),enc) )
 				return false;
 		}
 		else
@@ -318,9 +319,9 @@ void Editor::OnEncoding()
 	if ( !sci )
 		return;
 
-	// get chosen lexer id
+	// get chosen encoding index
 	int enc = mol::Ribbon::handler(RibbonEncoding)->index();
-	props_->put_Encoding(enc);
+	props_->put_Encoding( moe()->codePages()[enc].first );
 }
 
 
@@ -788,6 +789,9 @@ void Editor::OnSettings()
 	if ( !unk )
 		return;
 
+	//sci->ShowProperties();
+
+	
 	CAUUID pages;
 	mol::punk<ISpecifyPropertyPages> spp(unk);
 	if (!spp)
@@ -799,14 +803,16 @@ void Editor::OnSettings()
 	mol::bstr filename;
 	if ( S_OK == props_->get_Filename(&filename) )
 	{
+		LPUNKNOWN unks[2] = { (IUnknown*)unk, (IUnknown*)unk };
 		mol::string p(filename.toString());
 		::OleCreatePropertyFrame( *this, 10, 10,
 								  mol::towstring(mol::Path::filename(p)).c_str(),
-								  1, &unk, pages.cElems,
+								  1, unks, pages.cElems,
 								  pages.pElems, 0, 0, 0 );
 
 		::CoTaskMemFree(pages.pElems);
 	}
+	
 }
 
 void Editor::OnInsertColorDialog()
@@ -852,14 +858,58 @@ void Editor::OnSaveAs()
 	long enc;
 	mol::bstr p;
 
-	mol::FilenameDlg ofn(*this);
-	ofn.setFilter( OutFilesFilter );		
-	if ( S_OK == props_->get_Encoding(&enc) )
-		ofn.index(enc+1);
-	if ( S_OK == props_->get_Filename(&p) )
-		ofn.fileName(p.toString());
+	if ( S_OK != props_->get_Encoding(&enc) )
+	{
+		return;
+	}
 
-	if ( ofn.dlgSave( OFN_OVERWRITEPROMPT| OFN_NOTESTFILECREATE| OFN_NOVALIDATE) )
+	if ( S_OK != props_->get_Filename(&p) )
+	{
+		return;
+	}
+
+	if ( mol::Ribbon::ribbon()->enabled() )
+	{
+		const COMDLG_FILTERSPEC c_rgSaveTypes[] =
+		{
+			{ L"all files (*.*)",       L"*.*"}
+		};
+
+		MoeVistaFileDialog fd(*moe());
+		fd.setFilter((COMDLG_FILTERSPEC*)&c_rgSaveTypes,ARRAYSIZE(c_rgSaveTypes));
+		fd.encoding( enc );
+		fd.path(mol::towstring(p));
+		fd.save(FOS_NOVALIDATE);
+
+		enc = fd.encoding();
+		props_->put_Encoding(enc);
+
+		mol::ostringstream oss;
+		if ( S_OK == sci->SaveAs( mol::bstr(fd.path() ) ) )
+		{
+			lastWriteTime_ = getLastWriteTime( fd.path() );
+			docs()->rename( this, fd.path() );
+			props_->put_Filename(mol::bstr(fd.path()));
+
+			oss << _T("file saved as ") << fd.path() << _T(" saved");
+		}
+		else
+		{
+			oss << _T("failed to saved file ") << fd.path() ;
+		}
+		statusBar()->status(oss.str());
+		return;
+	}
+
+	//mol::FilenameDlg ofn(*this);
+	MolFileFialog ofn(*this);
+
+	ofn.setFilter( OutFilesFilter );		
+	ofn.index(0);
+	ofn.codePage(enc);
+	ofn.fileName(p.toString());
+
+	if ( ofn.dlgSave( OFN_OVERWRITEPROMPT| OFN_NOTESTFILECREATE| OFN_NOVALIDATE |OFN_EXPLORER | OFN_ENABLEHOOK | OFN_ENABLETEMPLATE ) )
 	{	
 		if ( enc != ofn.index()-1 )
 			props_->put_Encoding(ofn.index()-1);
@@ -1421,6 +1471,16 @@ HRESULT __stdcall Editor::Sintilla_Events::OnMarker( long line)
 }
 
 
+int indexFromCodePage(int cp)
+{
+	for ( size_t i = 0; i < moe()->codePages().size(); i++)
+	{
+		if ( moe()->codePages()[i].first == cp )
+			return (int)i;
+	}
+	return -1;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1471,14 +1531,13 @@ void Editor::updateUI()
 			}
 			default:
 			{
-				encoding = SCINTILLA_ENCODING_ANSI;
-				title += _T(" - ANSI");
+				title += _T(" ");
 				break;
 			}
 		}
 		if ( mol::Ribbon::ribbon()->enabled())
 		{
-			mol::Ribbon::handler(RibbonEncoding)->select(encoding);
+			mol::Ribbon::handler(RibbonEncoding)->select(indexFromCodePage(encoding));
 		}
 	}
 	
@@ -1487,7 +1546,7 @@ void Editor::updateUI()
 	{
 		if ( systype ==  SCINTILLA_SYSTYPE_UNIX )
 		{
-			title += _T("/UNIX");
+			title += _T(" UNIX");
 			if ( mol::Ribbon::ribbon()->enabled())
 			{
 				mol::Ribbon::handler(RibbonSelectModeUnix)->check(true); 
@@ -1496,7 +1555,7 @@ void Editor::updateUI()
 		}
 		else
 		{
-			title += _T("/WIN32");
+			title += _T(" WIN32");
 			if ( mol::Ribbon::ribbon()->enabled())
 			{
 				mol::Ribbon::handler(RibbonSelectModeUnix)->check(false); 

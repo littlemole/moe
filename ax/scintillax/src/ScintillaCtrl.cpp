@@ -2,6 +2,7 @@
 #include "ScintillaCtrl.h"
 #include "win/path.h"
 #include "win/shell.h"
+#include "win/pp.h"
 #include "util/istr.h"
 #include <sstream>
 #include <fstream>
@@ -658,7 +659,7 @@ HRESULT __stdcall ScintillAx::GetPages( CAUUID *pPages)
 	pPages->cElems = 2;
 	pPages->pElems = (GUID*)::CoTaskMemAlloc(sizeof(GUID)*2);
 	pPages->pElems[0] = CLSID_ScintillAxProperties;
-	pPages->pElems[1] = CLSID_StockFontPage;
+	pPages->pElems[1] = CLSID_ScintillAxSettings;
 
 	return S_OK;
 }
@@ -684,10 +685,10 @@ HRESULT __stdcall ScintillAx::ShowProperties()
 	mol::bstr filename;
 	props_->get_Filename(&filename);
 
-	LPUNKNOWN punks[] = { (IUnknown*)(IScintillAx*)this };
-	CLSID pages[]     = { CLSID_ScintillAxProperties };
+	LPUNKNOWN punks[] = { (IUnknown*)(IScintillAx*)this, (IUnknown*)(IScintillAx*)this };
+	CLSID pages[]     = { CLSID_ScintillAxProperties,CLSID_ScintillAxSettings };
 
-	::OleCreatePropertyFrame(*this,100,100,filename.towstring().c_str(),1,punks,1,pages,0,0,0);
+	::OleCreatePropertyFrame(*this,100,100,filename.towstring().c_str(),2,punks,2,pages,0,0,0);
 
 	return S_OK;
 }
@@ -975,7 +976,7 @@ bool ScintillAx::save(const mol::string& location)
 				if ( eol == SCINTILLA_SYSTYPE_UNIX )
 					u = mol::dos2unix(u);
 
-				std::string s = mol::tostring(mol::fromUTF8(u,e));				
+				std::string s = mol::tostring(mol::fromUTF8(u,e),e);				
 				of.write( (char*)(s.c_str()), s.size() );
 				break;
 			}
@@ -1247,10 +1248,14 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  long enc)
 			e = SCINTILLA_ENCODING_UTF16;
 			break;
 		}
-		default:
+		case -1:
 		{
 			e = cp;
 			break;
+		}
+		default:
+		{
+			e = enc;
 		}
 	}
 

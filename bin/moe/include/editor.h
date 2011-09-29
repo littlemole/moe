@@ -30,7 +30,7 @@ public:
 	Editor();
 	virtual ~Editor();
 
-	static Instance* CreateInstance(const mol::string& p, bool utf8 = false, bool readOnly = false);
+	static Instance* CreateInstance(const mol::string& p, long enc = CP_UTF8, bool readOnly = false);
 
 	// std windows msgs
 
@@ -103,7 +103,7 @@ public:
 
 protected:
 
-	bool initialize(const mol::string& p, bool utf8, bool readOnly);
+	bool initialize(const mol::string& p, long enc, bool readOnly);
 	void updateUI();		
 	void createMenuFromConf(HMENU m,HMENU popup);
 	void walkConf(HMENU parent, ISetting* set, std::map<int,ISetting*>& confMap, int& id);

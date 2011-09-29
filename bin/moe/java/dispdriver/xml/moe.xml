@@ -163,8 +163,9 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
  <method name='Open' type='IMoeDocument**' dispid='4' vtindex='48' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open existing Document in Text-Editor' >
   <param type='BSTR' dir='IN' name='fPath' />
  </method>
- <method name='OpenUTF8' type='IMoeDocument**' dispid='5' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open Document in Text-Editor, forcing UTF-8 mode' >
+ <method name='OpenEncoding' type='IMoeDocument**' dispid='5' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open Document in Text-Editor forcing encoding' >
   <param type='BSTR' dir='IN' name='fPath' />
+  <param type='long' dir='IN' name='enc' />
  </method>
  <method name='OpenDir' type='IMoeDocument**' dispid='6' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open Directory View as MDI child' >
   <param type='BSTR' dir='IN' name='dir' />

@@ -61,7 +61,7 @@ END
 
 // MENUS
 #include "../ribbonres.rc"
-
+#include "dlgs.h"
 /////////////////////////////////////////////////////////////////////////////
 //
 // Dialog
@@ -111,7 +111,24 @@ BEGIN
 
 END
 
+/*
+IDD_DIALOG_OFN DIALOGEX 0, 0, 316, 153
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD |WS_CLIPSIBLINGS
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Static",stc32,28,19,256,82
+    COMBOBOX        IDC_COMBO_ENC,59,121,233,21,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Encoding",IDC_STATIC,17,122,32,16
+END
+*/
 
+IDD_DIALOG_OFN DIALOGEX 0, 0, 365, 28
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    COMBOBOX        IDC_COMBO_ENC,128,8,203,21,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Encoding",IDC_STATIC,69,9,32,16
+END
 
 
 IDD_DIALOG_URL DIALOGEX 0, 0, 231, 44

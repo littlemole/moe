@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sun Sep 25 20:38:50 2011
+/* at Thu Sep 29 21:58:08 2011
  */
 /* Compiler settings for ScintillAX.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -133,6 +133,18 @@ typedef struct ScintillAxProperties ScintillAxProperties;
 #endif /* __cplusplus */
 
 #endif 	/* __ScintillAxProperties_FWD_DEFINED__ */
+
+
+#ifndef __ScintillAxSettings_FWD_DEFINED__
+#define __ScintillAxSettings_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class ScintillAxSettings ScintillAxSettings;
+#else
+typedef struct ScintillAxSettings ScintillAxSettings;
+#endif /* __cplusplus */
+
+#endif 	/* __ScintillAxSettings_FWD_DEFINED__ */
 
 
 /* header files for imported files */
@@ -2556,6 +2568,14 @@ EXTERN_C const CLSID CLSID_ScintillAxProperties;
 
 class DECLSPEC_UUID("C16CD143-5126-414a-AFDE-406F31E95D13")
 ScintillAxProperties;
+#endif
+
+EXTERN_C const CLSID CLSID_ScintillAxSettings;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("3039CC18-067B-450F-952D-7CE2ADD79F88")
+ScintillAxSettings;
 #endif
 #endif /* __Scintilla_LIBRARY_DEFINED__ */
 

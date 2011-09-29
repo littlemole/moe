@@ -77,6 +77,8 @@
       <dialog id="IDD_DIALOG_DEBUG" />
       <dialog id="IDD_DIALOG_EXPORT"/>
       <dialog id="IDD_DIALOG_SETWRAPPER"/>
+      <dialog id="IDD_DIALOG_OFN"/>
+      
     </dialogs>
 
     <!-- other controls we just define ids for -->
@@ -119,7 +121,10 @@
       <control id="IDC_BUTTON_DEBUG_STEPOVER" />
       <control id="IDC_BUTTON_DEBUG_STEPOUT" />
 
-<!--
+      <control id="IDC_COMBO_ENC" />
+      
+
+      <!--
       <control id="IDC_STATIC_SETWRAPPER"/>
       -->
     </controls>
