@@ -49,13 +49,22 @@ public:
 
 		bool readOnly();
 
-private:
+		virtual void OnCustomize() {};
+		virtual void OnInit() {};
+		virtual void OnDestroy() {};
+		virtual LRESULT OnMsg(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
+
+protected:
+
+		HWND dlg_;
 		std::vector<mol::string> filenames_;
 
         mol::string			filename_;
         mol::string			extension_;
         mol::string			filetitle_;
         OPENFILENAME		of_;
+
+		static UINT_PTR __stdcall hook(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 };
 
 

@@ -64,10 +64,12 @@ HRESULT __stdcall moeShell::GetCommandString( UINT_PTR idCmd, UINT uFlags, UINT 
 			{
 				lstrcpynW((LPWSTR)pszName, L"view as hex dump", cchMax);
 			}
+			/*
 			else if ( idCmd == open_utf8_cmd )
 			{
 				lstrcpynW((LPWSTR)pszName, L"open with moe (force UTF-8)", cchMax);
 			}
+			*/
 			else if ( idCmd == open_rtf_cmd )
 			{
 				lstrcpynW((LPWSTR)pszName, L"view as as rtf", cchMax);
@@ -91,10 +93,12 @@ HRESULT __stdcall moeShell::GetCommandString( UINT_PTR idCmd, UINT uFlags, UINT 
 			{
 				lstrcpynA(pszName, "view as hex dump", cchMax);
 			}
+			/*
 			else if ( idCmd == open_utf8_cmd )
 			{
 				lstrcpynA(pszName, "open with moe (force UTF-8)", cchMax);
 			}
+			*/
 			else if ( idCmd == open_rtf_cmd )
 			{
 				lstrcpynA(pszName, "view as rtf", cchMax);
@@ -137,7 +141,7 @@ HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 			}
 			else if ( cmd == open_utf8_cmd )
 			{
-				pdocs->OpenUTF8(mol::bstr(filename_), &pdoc );
+				pdocs->Open(mol::bstr(filename_), &pdoc );
 			}
 			else if ( cmd == open_cmd )
 			{
@@ -214,11 +218,11 @@ HRESULT __stdcall moeShell::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT i
 	UINT icmd = idCmdFirst;
 
 	open_cmd = 0;
-	open_utf8_cmd = 1;
-	open_html_cmd = 2;
-	open_rtf_cmd  = 3;
-	open_hex_cmd  = 4;
-	open_tail_cmd = 5;
+	//open_utf8_cmd = 1;
+	open_html_cmd = 1;
+	open_rtf_cmd  = 2;
+	open_hex_cmd  = 3;
+	open_tail_cmd = 4;
 
 	::InsertMenu( hmenu,
 				  indexMenu,
@@ -235,8 +239,8 @@ HRESULT __stdcall moeShell::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT i
 	
 	mol::Menu menu;
 	menu.createContext();
-	menu.addItem(icmd,_T("force UTF8"));
-	icmd++;
+//	menu.addItem(icmd,_T("force UTF8"));
+//	icmd++;
 
 	menu.addItem(icmd,_T("show HTML"));
 	icmd++;

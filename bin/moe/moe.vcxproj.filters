@@ -9,9 +9,6 @@
     <ClCompile Include="src\dir3.cpp">
       <Filter>mdi</Filter>
     </ClCompile>
-    <ClCompile Include="src\editor.cpp">
-      <Filter>mdi</Filter>
-    </ClCompile>
     <ClCompile Include="src\formEditor.cpp">
       <Filter>mdi</Filter>
     </ClCompile>
@@ -63,6 +60,9 @@
     <ClCompile Include="src\DocFactory.cpp" />
     <ClCompile Include="src\tree.cpp">
       <Filter>widget</Filter>
+    </ClCompile>
+    <ClCompile Include="src\editor.cpp">
+      <Filter>mdi</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

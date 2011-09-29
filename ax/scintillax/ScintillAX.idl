@@ -1286,4 +1286,13 @@ library Scintilla
 	{
 		[default] interface IUnknown;
 	};
+
+	[
+		uuid(3039CC18-067B-450F-952D-7CE2ADD79F88),
+		helpstring("IScintillAx Settings Page")
+	]
+	coclass ScintillAxSettings
+	{
+		[default] interface IUnknown;
+	};
 }

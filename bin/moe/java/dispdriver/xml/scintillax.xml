@@ -1,6 +1,6 @@
 <typelib name='Scintilla' 
 desc='ScintillAx' 
-typeinfocount='15' 
+typeinfocount='16' 
 guid='{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}' 
 major='1' 
 minor='0' 
@@ -372,6 +372,9 @@ file='..\..\..\..\ax\scintillax\x64/uni_release\scintillax.tlb'>
 </object>
 <object name='ScintillAxProperties' guid='{C16CD143-5126-414A-AFDE-406F31E95D13}' major='1' minor='0' progId='Scintilla.ScintillAxProperties' desc='ScintillAx' >
 <implements type='IUnknown' guid='{C16CD143-5126-414A-AFDE-406F31E95D13}' default='true'  />
+</object>
+<object name='ScintillAxSettings' guid='{3039CC18-067B-450F-952D-7CE2ADD79F88}' major='1' minor='0' progId='Scintilla.ScintillAxSettings' desc='ScintillAx' >
+<implements type='IUnknown' guid='{3039CC18-067B-450F-952D-7CE2ADD79F88}' default='true'  />
 </object>
 
 <enum type='SCINTILLA_SYSTYPE' desc='' >

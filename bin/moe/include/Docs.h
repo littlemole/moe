@@ -37,7 +37,7 @@ public:
 
 	virtual HRESULT __stdcall Open( BSTR fPath, IMoeDocument** d);
 
-	virtual HRESULT __stdcall OpenUTF8( BSTR fPath, IMoeDocument** d);
+	virtual HRESULT __stdcall OpenEncoding( BSTR fPath, long enc, IMoeDocument** d);
 	virtual HRESULT __stdcall OpenDir(BSTR dir,  IMoeDocument** d);
 	virtual HRESULT __stdcall OpenHexEditor(  BSTR f, VARIANT_BOOL vbReadOnly, IMoeDocument** hex);
 	virtual HRESULT __stdcall OpenHtmlFrame(  BSTR f,  IMoeDocument** htmlWnd);
@@ -52,6 +52,7 @@ public:
 
 	// helpers
 	
+	/*
 	enum InFiles {
 	  PREF_TXT,
 	  PREF_UTF8,
@@ -61,8 +62,9 @@ public:
 	  PREF_RTF,
 	  PREF_TAIL
 	};
+	*/
 
-	bool open( const mol::string& dir, InFiles pref, bool readOnly, IMoeDocument** doc  );
+	bool open( const mol::string& dir, MOE_DOCTYPE type, long enc, bool readOnly, IMoeDocument** doc  );
 	void remove( mol::MdiChild* mdi );
 	void rename( mol::MdiChild* mdi, const mol::string& path );
 	void move( mol::MdiChild* mdi, int pos );

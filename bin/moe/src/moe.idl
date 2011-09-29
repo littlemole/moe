@@ -129,8 +129,8 @@ library Moe
 		[id(4), helpstring("Open existing Document in Text-Editor")] 
 		HRESULT Open([in] BSTR fPath,[out,retval] IMoeDocument** d);
 
-		[id(5), helpstring("Open Document in Text-Editor, forcing UTF-8 mode")] 
-		HRESULT OpenUTF8([in] BSTR fPath,[out,retval] IMoeDocument** d);
+		[id(5), helpstring("Open Document in Text-Editor forcing encoding")] 
+		HRESULT OpenEncoding([in] BSTR fPath,[in] long enc, [out,retval] IMoeDocument** d);
 
 		[id(6), helpstring("Open Directory View as MDI child")] 
 		HRESULT OpenDir([in]BSTR dir, [out,retval] IMoeDocument** d);

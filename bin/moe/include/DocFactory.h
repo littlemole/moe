@@ -14,12 +14,12 @@ public:
 	DocFactory() {}
 	virtual ~DocFactory(); 
 
-	virtual HRESULT __stdcall newDocument(Docs::InFiles inf , IMoeDocument** doc);
-	virtual HRESULT __stdcall openDocument( const mol::string& dir, Docs::InFiles pref, bool readOnly, IMoeDocument** doc  );
+	virtual HRESULT __stdcall newDocument(MOE_DOCTYPE type , IMoeDocument** doc);
+	virtual HRESULT __stdcall openDocument( const mol::string& dir, MOE_DOCTYPE type, long enc, bool readOnly, IMoeDocument** doc  );
 
 private:
 
-	mol::MdiChild* documentFactory( const mol::string& dir, Docs::InFiles pref, bool readOnly);
+	mol::MdiChild* documentFactory( const mol::string& dir, MOE_DOCTYPE type, long enc, bool readOnly);
 
 	template<class E>
 	HRESULT createFile(const mol::string& p, IMoeDocument** doc)

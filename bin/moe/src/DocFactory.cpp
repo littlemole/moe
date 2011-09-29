@@ -28,25 +28,24 @@ DocFactory::~DocFactory()
 /////////////////////////////////////////////////////////////////////
 
 
-HRESULT __stdcall DocFactory::newDocument(Docs::InFiles inf, IMoeDocument** d)
+HRESULT __stdcall DocFactory::newDocument(MOE_DOCTYPE typ, IMoeDocument** d)
 {
 	if (d)
 		*d = 0;
 
-	switch(inf)
+	switch(typ)
 	{
-		case Docs::PREF_TXT :
-		case Docs::PREF_UTF8 :
+		case MOE_DOCTYPE_DOC :
 		{
 			mol::string p = docs()->getNewFileName(_T(".txt"));
 			return createFile<Editor>(p,d);
 		}
-		case Docs::PREF_RTF :
+		case MOE_DOCTYPE_RTF :
 		{
 			mol::string p = docs()->getNewFileName(_T(".rtf"));
 			return createFile<RTFEditor>(p,d);
 		}
-		case Docs::PREF_FORM :
+		case MOE_DOCTYPE_FORM :
 		{
 			mol::string p = docs()->getNewFileName(_T(".ufs"));
 			return createFile<FormEditor>(p,d);
@@ -58,7 +57,7 @@ HRESULT __stdcall DocFactory::newDocument(Docs::InFiles inf, IMoeDocument** d)
 
 /////////////////////////////////////////////////////////////////////
 
-HRESULT __stdcall  DocFactory::openDocument( const mol::string& p, Docs::InFiles pref, bool readOnly, IMoeDocument** doc )
+HRESULT __stdcall  DocFactory::openDocument( const mol::string& p, MOE_DOCTYPE typ, long enc, bool readOnly, IMoeDocument** doc )
 {
 	mol::string path = p;
 
@@ -67,7 +66,7 @@ HRESULT __stdcall  DocFactory::openDocument( const mol::string& p, Docs::InFiles
 		moe()->activeObject->OnDocWindowActivate(FALSE);
 
 	// try to load and create mdi child 
-	mol::MdiChild* mdi = documentFactory( path, pref, readOnly );
+	mol::MdiChild* mdi = documentFactory( path, typ, enc,readOnly );
 	if (!mdi)
 	{
 		// failed to load
@@ -81,8 +80,6 @@ HRESULT __stdcall  DocFactory::openDocument( const mol::string& p, Docs::InFiles
 	}
 
 	updateUI(path,mdi);
-
-
 
 	// deliver return value if desired
 	if ( doc )
@@ -106,9 +103,9 @@ HRESULT __stdcall  DocFactory::openDocument( const mol::string& p, Docs::InFiles
 // file opening helpers
 
 template<class T>
-mol::MdiChild* load( const mol::string& path, bool utf8, bool readOnly )
+mol::MdiChild* load( const mol::string& path, long enc, bool readOnly )
 {
-	typename T::Instance* t = T::CreateInstance( path, utf8, readOnly );
+	typename T::Instance* t = T::CreateInstance( path, enc, readOnly );
 	return dynamic_cast<mol::MdiChild*>(t);
 }
 
@@ -162,7 +159,7 @@ mol::MdiChild* handleShellPath(  const mol::string& p )
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
-mol::MdiChild* DocFactory::documentFactory( const mol::string& p, Docs::InFiles pref, bool readOnly)
+mol::MdiChild* DocFactory::documentFactory( const mol::string& p,MOE_DOCTYPE type, long enc, bool readOnly)
 {
 	mol::string path = p;
 	statusBar()->status(10);
@@ -186,11 +183,11 @@ mol::MdiChild* DocFactory::documentFactory( const mol::string& p, Docs::InFiles 
 		return load<DirChild>(path);
 	}
 
-	if ( pref == Docs::PREF_TAIL )
+	if ( type == MOE_DOCTYPE_TAIL )
 	{
 		return load<TailEditor>(path);
 	}
-	if ( pref == Docs::PREF_HTML )
+	if ( type == MOE_DOCTYPE_HTML )
 	{
 		return load<MoeHtmlWnd>(path);
 	}
@@ -200,7 +197,7 @@ mol::MdiChild* DocFactory::documentFactory( const mol::string& p, Docs::InFiles 
 		return false;
 	}
 
-	if ( pref == Docs::PREF_HEX )
+	if ( type == MOE_DOCTYPE_HEX )
 		return load<Hex>(path,readOnly);
 
 
@@ -223,7 +220,7 @@ mol::MdiChild* DocFactory::documentFactory( const mol::string& p, Docs::InFiles 
 	}
 
 	// rtf support
-	if ( mol::icmp( ext, _T("rtf") ) == 0 && pref == Docs::PREF_RTF)
+	if ( mol::icmp( ext, _T("rtf") ) == 0 && type == MOE_DOCTYPE_RTF)
 	{
 		return load<RTFEditor>(path);
 	}
@@ -271,7 +268,11 @@ mol::MdiChild* DocFactory::documentFactory( const mol::string& p, Docs::InFiles 
 	DWORD cp = e.investigate(is.str());
 	if ( cp == CP_WINUNICODE )
 	{
-		pref = Docs::PREF_TXT;
+		enc = CP_WINUNICODE;
+	}
+	if ( cp == CP_UTF8 )
+	{
+		enc = CP_UTF8;
 	}
 
 	if ( e.isBinary() )
@@ -280,7 +281,7 @@ mol::MdiChild* DocFactory::documentFactory( const mol::string& p, Docs::InFiles 
 	}
 
 	// ... so try open in text editor
-	return load<Editor>(path, pref == Docs::PREF_UTF8, readOnly );
+	return load<Editor>(path, enc, readOnly );
 }
 	
 /////////////////////////////////////////////////////////////////////

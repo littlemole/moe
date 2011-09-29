@@ -19,7 +19,7 @@ std::ostream&  cerr  = std::cerr;
 
 
 
-std::string wstring2ansi(const std::wstring& in, int cp)
+std::string wstring2ansi(const std::wstring& in, long cp)
 {
     int len = ::WideCharToMultiByte(cp,0,in.c_str(),(int)in.size(),0,0,0,0);
     char* buf = new char[len];
@@ -29,7 +29,7 @@ std::string wstring2ansi(const std::wstring& in, int cp)
     return ret;
 }
 
-std::wstring ansi2wstring( const std::string& in, int cp )
+std::wstring ansi2wstring( const std::string& in, long cp )
 {
 	int len = ::MultiByteToWideChar( cp, 0, in.c_str(), (int)in.size(), 0, 0 );
 	wchar_t* buf = new wchar_t[len];
@@ -39,7 +39,7 @@ std::wstring ansi2wstring( const std::string& in, int cp )
 	return out;
 }
 
-std::string wstring2utf8( const std::wstring& in, int cp )
+std::string wstring2utf8( const std::wstring& in, long cp )
 {
 	int len = ::WideCharToMultiByte( CP_UTF8, 0, in.c_str(), (int)in.size(), 0, 0,0,0 );
 	char* buf = new char[len];
@@ -49,13 +49,13 @@ std::string wstring2utf8( const std::wstring& in, int cp )
 	return out;
 }
 
-std::string ansi2utf8( const std::string& in, int cp )
+std::string ansi2utf8( const std::string& in, long cp )
 {
 	std::wstring ws = ansi2wstring(in,cp);
 	return wstring2utf8(ws,cp);
 }
 
-std::wstring utf82wstring( const std::string& in, int cp )
+std::wstring utf82wstring( const std::string& in, long cp )
 {
 	int len = ::MultiByteToWideChar( CP_UTF8, 0, in.c_str(), (int)in.size(), 0, 0 );
 	wchar_t* buf = new wchar_t[len];
@@ -65,7 +65,7 @@ std::wstring utf82wstring( const std::string& in, int cp )
 	return out;
 }
 
-std::string utf82ansi( const std::string& in, int cp )
+std::string utf82ansi( const std::string& in, long cp )
 {
 	std::wstring ws = utf82wstring(in,cp);
 	return wstring2ansi(ws,cp);
@@ -73,18 +73,18 @@ std::string utf82ansi( const std::string& in, int cp )
 
 
 
-std::string toUTF8( const std::string& in, int cp)
+std::string toUTF8( const std::string& in, long cp)
 {
 	std::wstring ws = ansi2wstring(in,cp);
 	return wstring2utf8(ws,cp);
 }
 
-std::string toUTF8( const std::wstring& str, int cp)
+std::string toUTF8( const std::wstring& str, long cp)
 {
 	return wstring2utf8(str,cp);
 }
 
-std::wstring fromUTF8(const std::string& in, int cp)
+std::wstring fromUTF8(const std::string& in, long cp)
 {
 	int len = ::MultiByteToWideChar( CP_UTF8, 0, in.c_str(), (int)in.size(), 0, 0 );
 	wchar_t* buf = new wchar_t[len];
@@ -95,24 +95,24 @@ std::wstring fromUTF8(const std::string& in, int cp)
 }
 
 
-std::string  tostring( const std::string& str, int cp)
+std::string  tostring( const std::string& str, long cp)
 {
 	return str;
 }
 
-std::string  tostring( const std::wstring& str, int cp)
+std::string  tostring( const std::wstring& str, long cp)
 {
 	return mol::wstring2ansi( str,cp );
 }
 
-std::string  tostring( const char* str, int cp)
+std::string  tostring( const char* str, long cp)
 {
 	if (!str)
 		return "";
 	return std::string( str );
 }
 
-std::string  tostring( const wchar_t* wstr, int cp)
+std::string  tostring( const wchar_t* wstr, long cp)
 {
 	if (!wstr)
 		return "";
@@ -120,24 +120,24 @@ std::string  tostring( const wchar_t* wstr, int cp)
 }
 
 
-std::wstring  towstring( const std::string& str, int cp)
+std::wstring  towstring( const std::string& str, long cp)
 {
 	return mol::ansi2wstring( str,cp );
 }
 
-std::wstring  towstring( const std::wstring& str, int cp)
+std::wstring  towstring( const std::wstring& str, long cp)
 {
 	return str;
 }
 
-std::wstring  towstring( const char* str, int cp)
+std::wstring  towstring( const char* str, long cp)
 {
 	if (!str)
 		return L"";
 	return mol::ansi2wstring( std::string(str),cp );
 }
 
-std::wstring  towstring( const wchar_t* wstr, int cp)
+std::wstring  towstring( const wchar_t* wstr, long cp)
 {
 	if (!wstr)
 		return L"";
@@ -145,7 +145,7 @@ std::wstring  towstring( const wchar_t* wstr, int cp)
 }
 
 
-mol::string  toString( const std::string& str, int cp)
+mol::string  toString( const std::string& str, long cp)
 {
 #ifdef _UNICODE
 	return mol::towstring(str,cp);
@@ -154,7 +154,7 @@ mol::string  toString( const std::string& str, int cp)
 #endif
 }
 
-mol::string  toString( const std::wstring& str, int cp)
+mol::string  toString( const std::wstring& str, long cp)
 {
 #ifdef _UNICODE
 	return str;
@@ -163,7 +163,7 @@ mol::string  toString( const std::wstring& str, int cp)
 #endif
 }
 
-mol::string  toString( const char* str, int cp)
+mol::string  toString( const char* str, long cp)
 {
 	if (!str)
 		return _T("");
@@ -174,7 +174,7 @@ mol::string  toString( const char* str, int cp)
 #endif
 }
 
-mol::string  toString( const wchar_t* wstr, int cp)
+mol::string  toString( const wchar_t* wstr, long cp)
 {
 	if (!wstr)
 		return _T("");

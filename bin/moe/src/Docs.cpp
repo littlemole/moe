@@ -33,9 +33,9 @@ Docs::~Docs()
 // impl
 /////////////////////////////////////////////////////////////////////
 
-bool Docs::open( const mol::string& dir, InFiles pref, bool readOnly, IMoeDocument** doc  )
+bool Docs::open( const mol::string& dir, MOE_DOCTYPE type,long enc, bool readOnly, IMoeDocument** doc  )
 {
-	return factory_->openDocument(dir,pref,readOnly,doc) == S_OK;
+	return factory_->openDocument(dir,type,enc,readOnly,doc) == S_OK;
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -229,61 +229,61 @@ HRESULT __stdcall Docs::Activate( VARIANT i)
 
 HRESULT __stdcall Docs::New(IMoeDocument** d)
 {
-	return factory_->newDocument(Docs::PREF_UTF8,d);	
+	return factory_->newDocument(MOE_DOCTYPE_DOC,d);	
 }
 
 
 HRESULT __stdcall Docs::NewUserForm(IMoeDocument** d)
 {
-	return factory_->newDocument(Docs::PREF_FORM,d);
+	return factory_->newDocument(MOE_DOCTYPE_FORM,d);
 }
 
 
 HRESULT __stdcall Docs::NewRTFDocument(IMoeDocument** d)
 {
-	return factory_->newDocument(Docs::PREF_RTF,d);
+	return factory_->newDocument(MOE_DOCTYPE_RTF,d);
 }
 
 
 HRESULT __stdcall Docs::OpenTailDocument(BSTR fp, IMoeDocument** d)
 {
-	return factory_->openDocument(mol::toString(fp),Docs::PREF_TAIL,false,d);
+	return factory_->openDocument(mol::toString(fp),MOE_DOCTYPE_TAIL,-1,false,d);
 }
 
 HRESULT __stdcall Docs::Open( BSTR fPath, IMoeDocument** d)
 {
-	return factory_->openDocument(mol::toString(fPath),Docs::PREF_TXT,false,d);
+	return factory_->openDocument(mol::toString(fPath),MOE_DOCTYPE_DOC,-1,false,d);
 }
 
 
 HRESULT __stdcall Docs::OpenRTFDocument( BSTR fPath, IMoeDocument** d)
 {
-	return factory_->openDocument(mol::toString(fPath),Docs::PREF_RTF,false,d);
+	return factory_->openDocument(mol::toString(fPath),MOE_DOCTYPE_RTF,false,1,d);
 }
 
-HRESULT __stdcall Docs::OpenUTF8( BSTR fPath, IMoeDocument** d)
+HRESULT __stdcall Docs::OpenEncoding( BSTR fPath, long enc, IMoeDocument** d)
 {
-	return factory_->openDocument(mol::toString(fPath),Docs::PREF_UTF8,false,d);
+	return factory_->openDocument(mol::toString(fPath),MOE_DOCTYPE_DOC,enc,false,d);
 }
 
 HRESULT __stdcall Docs::OpenDir(BSTR dir,  IMoeDocument** d)
 {
-	return factory_->openDocument(mol::toString(dir),Docs::PREF_TXT,false,d);
+	return factory_->openDocument(mol::toString(dir),MOE_DOCTYPE_DIR,-1,false,d);
 }
 
 HRESULT __stdcall Docs::OpenHexEditor(  BSTR f, VARIANT_BOOL vbReadOnly, IMoeDocument** d)
 {
-	return factory_->openDocument(mol::toString(f),Docs::PREF_HEX,false,d);
+	return factory_->openDocument(mol::toString(f),MOE_DOCTYPE_HEX,-1,vbReadOnly == VARIANT_TRUE ? true : false,d);
 }
 
 HRESULT __stdcall Docs::OpenHtmlFrame(  BSTR f,  IMoeDocument** d)
 {
-	return factory_->openDocument(mol::toString(f),Docs::PREF_HTML,false,d);
+	return factory_->openDocument(mol::toString(f),MOE_DOCTYPE_HTML,-1,false,d);
 }
 
 HRESULT __stdcall Docs::OpenUserForm(  BSTR pathname, IMoeDocument** d )
 {
-	return factory_->openDocument(mol::toString(pathname),Docs::PREF_FORM,false,d);
+	return factory_->openDocument(mol::toString(pathname),MOE_DOCTYPE_FORM,-1,false,d);
 }
 
 HRESULT __stdcall Docs::SaveAll()

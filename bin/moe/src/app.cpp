@@ -172,7 +172,7 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 		else if ( s.substr(0,9) == "moe-utf8:" ) 
 		{
 			s = s.substr(9);
-			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENUTF8, mol::variant(s) );					
+			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPEN, mol::variant(s) );					
 		}
 		else if ( s.substr(0,8) == "moe-bin:" ) 
 		{

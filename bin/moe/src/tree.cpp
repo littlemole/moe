@@ -100,7 +100,7 @@ HRESULT __stdcall TreeWndSink::OnTreeDblClick(BSTR filename)
 	mol::punk<IShellTree> tree(treeWnd()->oleObject);
 	if ( tree )
 	{
-		bool result = ::docs()->open(p,Docs::PREF_TXT,false,0);
+		bool result = ::docs()->open(p,MOE_DOCTYPE_DOC,-1,false,0);
 		statusBar()->status(p);
 		if (!result)
 		{
@@ -109,6 +109,37 @@ HRESULT __stdcall TreeWndSink::OnTreeDblClick(BSTR filename)
 		}
 	}
 	return S_OK;
+}
+
+MOE_DOCTYPE index2DocType(int i)
+{
+	switch(i)
+	{
+		case 0 :
+		{
+			return MOE_DOCTYPE_DOC;
+		}
+		case 1 :
+		{
+			return MOE_DOCTYPE_HTML;
+		}
+		case 2 :
+		{
+			return MOE_DOCTYPE_RTF;
+		}
+		case 3 :
+		{
+			return MOE_DOCTYPE_HEX;
+		}
+		case 4 :
+		{
+			return MOE_DOCTYPE_TAIL;
+		}
+		default :
+		{
+			return MOE_DOCTYPE_DOC;
+		}
+	}
 }
 
 HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename)
@@ -126,7 +157,7 @@ HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename)
 		if ( mol::Path::isDir( p) || p.substr(0,2) == _T("::") )
 		{
 			statusBar()->status(p);
-			bool result = ::docs()->open(p,Docs::PREF_TXT,false,0);
+			bool result = ::docs()->open(p,MOE_DOCTYPE_DIR,-1,false,0);
 
 			if (!result)
 			{
@@ -149,7 +180,7 @@ HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename)
 			statusBar()->status(f);
 
 
-			bool result = ::docs()->open(f,(Docs::InFiles)(c-1 >=0 ? c-1 :0),false,0);
+			bool result = ::docs()->open(f,index2DocType(c),-1,false,0);
 
 			if (!result)
 			{

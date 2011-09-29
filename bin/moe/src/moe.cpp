@@ -64,6 +64,16 @@ MoeWnd::MoeWnd()
 	moeDialogs = new MoeDialogs::Instance;
 	moeView    = new MoeView::Instance;
 	moeConfig  = new MoeConfig::Instance;
+
+	codePages_.push_back( CodePage(std::make_pair(CP_ACP,L"Default CodePage")) );
+	codePages_.push_back( CodePage(std::make_pair(CP_UTF8,L"UTF-8")) );
+	codePages_.push_back( CodePage(std::make_pair(CP_WINUNICODE,L"Unicode (UTF-16)")) );
+
+	const mol::CodePages::Entries& cps = mol::CodePages::codePages();
+	for ( mol::CodePages::Iterator it = cps.begin(); it != cps.end(); it++)
+	{
+		codePages_.push_back( CodePage( std::make_pair( (*it).first, (*it).second.second)) );
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -359,7 +369,7 @@ void MoeWnd::OnFileOpenHex()
 	mol::FilenameDlg dlg(*this);	
 	if ( IDOK == dlg.dlgOpen(OFN_READONLY|OFN_EXPLORER) )
 	{
-		bool result = docs()->open( dlg.fileName(), Docs::PREF_HEX, dlg.readOnly(), 0 );
+		bool result = docs()->open( dlg.fileName(), MOE_DOCTYPE_HEX,-1, dlg.readOnly(), 0 );
 		if (!result)
 		{
 			::MessageBox(*this,dlg.fileName().c_str(),_T("failed to load"),MB_ICONERROR);
@@ -375,7 +385,7 @@ void MoeWnd::OnFileOpenHtml()
 	{
 		if ( !urlDlg()->url.empty() )
 		{
-			bool result = docs()->open( urlDlg()->url, Docs::PREF_HTML, true, 0 );
+			bool result = docs()->open( urlDlg()->url, MOE_DOCTYPE_HTML, -1, true, 0 );
 			if (!result)
 			{
 				::MessageBox(*this,urlDlg()->url.c_str(),_T("failed to load"),MB_ICONERROR);
@@ -1152,9 +1162,12 @@ void  MoeWnd::initRibbon(IStorage* store)
 
 	// encoding dropdown handler
 	std::vector<mol::string> ve;
-	ve.push_back(_T("Ansi"));
-	ve.push_back(_T("UTF8"));
-	ve.push_back(_T("UTF16 (LE)"));
+
+	for ( size_t i = 0; i < codePages_.size(); i++)
+	{
+		ve.push_back(codePages_[i].second );
+	}
+
 	mol::Ribbon::handler(RibbonEncoding)->items(ve);
 
 	// tab size spinner

@@ -38,6 +38,23 @@
         <msg  handler="OnConvert" cmd="IDC_CONVERT_BUTTON"  />
    </class>
 
+
+
+
+    <class type="ScintillAxSettings">
+
+      <msg  handler="OnInitDialog" msg="WM_INITDIALOG" />
+      <msg  handler="OnDirty" cmd="IDC_RADIO_UNIX"  />
+      <msg  handler="OnDirty" cmd="IDC_RADIO_WIN32"  />
+      <msg  handler="OnDirty" cmd="IDC_COMBO_ENCODING"  />
+      <msg  handler="OnDirty" cmd="IDC_CHECK_USETABS"  />
+      <msg  handler="OnDirty" cmd="IDC_CHECK_TABINDENTS"  />
+      <msg  handler="OnDirty" cmd="IDC_EDIT_TABWIDTH"  />
+      <msg  handler="OnDirty" cmd="IDC_CHECK_BACKSPACEUNINDENTS"  />
+      <msg  handler="OnDirty" cmd="IDC_CHECK_WRITEBOM"  />
+
+    </class>
+
   </msgs>
 </mol:codegen>
 

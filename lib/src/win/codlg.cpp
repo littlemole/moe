@@ -83,6 +83,7 @@ FilenameDlg::FilenameDlg( HWND parent)
     of_.lStructSize = sizeof(OPENFILENAME);
     of_.hwndOwner   = parent;
     of_.lpstrFilter = filter;
+	dlg_ = 0;
 }
 
 void FilenameDlg::setFilter(const mol::TCHAR* filter )
@@ -152,11 +153,14 @@ BOOL FilenameDlg::dlgOpen( int flags)
     buf[0]  = 0;
     buf2[0] = 0;
 
+	this->OnCustomize();
+
     of_.lpstrFile      = buf;
     of_.lpstrFileTitle = buf2;
     of_.nMaxFile	   = 1024;
     of_.nMaxFileTitle  = 1024;
     of_.Flags		   = flags;
+	of_.lCustData      = (LPARAM)this;
 
 	if ( filename_.size() > 0 )
 		::memcpy( buf, filename_.c_str(), (filename_.size()+1)*sizeof(mol::TCHAR) );
@@ -215,11 +219,15 @@ BOOL FilenameDlg::dlgSave( int flags)
     buf[0]  = 0;
     buf2[0] = 0;
 
+	this->OnCustomize();
+
+
     of_.lpstrFile       = buf;
     of_.lpstrFileTitle  = buf2;
     of_.nMaxFile	    = 1024;
     of_.nMaxFileTitle   = 1024;
     of_.Flags		    = flags;
+	of_.lCustData       = (LPARAM)this;
 
 	if ( filename_.size() > 0 )
 		::memcpy( buf, filename_.c_str(), (filename_.size()+1)*sizeof(mol::TCHAR) );
@@ -237,6 +245,41 @@ BOOL FilenameDlg::dlgSave( int flags)
     return ret;
 }
 
+LRESULT FilenameDlg::OnMsg(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	dlg_ = hDlg;
+	mol::Crack message(msg,wParam,lParam);
+	switch(msg)
+	{
+		case WM_NOTIFY :
+		{
+			if ( message.nmhdr()->code == CDN_INITDONE )
+			{
+				this->OnInit();
+				break;
+			}
+		}
+		case WM_DESTROY :
+		{
+				this->OnDestroy();
+				break;
+		}
+	}
+	return 0;
+}
+
+UINT_PTR __stdcall FilenameDlg::hook(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	if (msg == WM_NOTIFY && lParam )
+	{
+		OFNOTIFY* ofn = (OFNOTIFY*)lParam;
+		if ( ofn->lpOFN && ofn->lpOFN->lCustData )
+		{
+			return ((FilenameDlg*)(ofn->lpOFN->lCustData))->OnMsg(hDlg,msg,wParam,lParam);
+		}
+	}
+	return 0;
+}
 
 
 

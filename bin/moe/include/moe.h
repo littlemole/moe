@@ -171,7 +171,28 @@ public:
 	 // toolbar right click event
  	 void OnToolbarRightClick(NMHDR* notify );
 
+	 typedef std::pair<int,std::wstring> CodePage;
+
+	 const std::vector<CodePage>& codePages()
+	 {
+		 return codePages_;
+	 }
+
+	 size_t codePageIndex( int cp )
+	 {
+		 for ( size_t i = 0; i < codePages_.size(); i++)
+		 {
+			 if ( codePages_[i].first == cp )
+			 {
+				 return i;
+			 }
+		 }
+		 return -1;
+	 }
+
 private:
+
+	std::vector<CodePage> codePages_;
 	
 	// load conf
 	void loadPersistUIstate();

@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sun Sep 25 20:40:07 2011
+/* at Thu Sep 29 21:59:08 2011
  */
 /* Compiler settings for src\moe.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -2290,8 +2290,9 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
             /* [in] */ BSTR fPath,
             /* [retval][out] */ IMoeDocument **d) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenUTF8( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenEncoding( 
             /* [in] */ BSTR fPath,
+            /* [in] */ long enc,
             /* [retval][out] */ IMoeDocument **d) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenDir( 
@@ -2414,9 +2415,10 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
             /* [in] */ BSTR fPath,
             /* [retval][out] */ IMoeDocument **d);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OpenUTF8 )( 
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OpenEncoding )( 
             IMoeDocumentCollection * This,
             /* [in] */ BSTR fPath,
+            /* [in] */ long enc,
             /* [retval][out] */ IMoeDocument **d);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OpenDir )( 
@@ -2531,8 +2533,8 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
 #define IMoeDocumentCollection_Open(This,fPath,d)	\
     ( (This)->lpVtbl -> Open(This,fPath,d) ) 
 
-#define IMoeDocumentCollection_OpenUTF8(This,fPath,d)	\
-    ( (This)->lpVtbl -> OpenUTF8(This,fPath,d) ) 
+#define IMoeDocumentCollection_OpenEncoding(This,fPath,enc,d)	\
+    ( (This)->lpVtbl -> OpenEncoding(This,fPath,enc,d) ) 
 
 #define IMoeDocumentCollection_OpenDir(This,dir,d)	\
     ( (This)->lpVtbl -> OpenDir(This,dir,d) ) 
