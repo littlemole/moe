@@ -262,7 +262,7 @@ public:
 	static REFGUID getCoClassID();
 
 	virtual HRESULT __stdcall MsgBox( BSTR text, BSTR title, long flags, long* result);
-	virtual HRESULT __stdcall Open(IMoeDocument** d);
+	virtual HRESULT __stdcall Open(BSTR path, IMoeDocument** d);
 	virtual HRESULT __stdcall OpenDir( IMoeDocument** d);
 	virtual HRESULT __stdcall ChooseFile( BSTR* f );
 	virtual HRESULT __stdcall ChooseDir( BSTR* d );

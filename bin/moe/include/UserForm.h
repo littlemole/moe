@@ -104,6 +104,7 @@ private:
 	bool initialize(const mol::string& p, bool designMode, bool Debug);
 
 	void adviseControls();
+	void adviseControl(mol::bstr& name, IDispatch* disp);
 	void unAdviseControls();
 	void disconnectObjects();
 

@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Thu Sep 29 21:59:08 2011
+/* at Mon Oct 03 18:20:40 2011
  */
 /* Compiler settings for src\moe.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -2094,6 +2094,7 @@ EXTERN_C const IID IID_IMoeDialogs;
             /* [retval][out] */ long *result) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Open( 
+            /* [in] */ BSTR path,
             /* [retval][out] */ IMoeDocument **d) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenDir( 
@@ -2167,6 +2168,7 @@ EXTERN_C const IID IID_IMoeDialogs;
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
             IMoeDialogs * This,
+            /* [in] */ BSTR path,
             /* [retval][out] */ IMoeDocument **d);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OpenDir )( 
@@ -2226,8 +2228,8 @@ EXTERN_C const IID IID_IMoeDialogs;
 #define IMoeDialogs_MsgBox(This,text,title,flags,result)	\
     ( (This)->lpVtbl -> MsgBox(This,text,title,flags,result) ) 
 
-#define IMoeDialogs_Open(This,d)	\
-    ( (This)->lpVtbl -> Open(This,d) ) 
+#define IMoeDialogs_Open(This,path,d)	\
+    ( (This)->lpVtbl -> Open(This,path,d) ) 
 
 #define IMoeDialogs_OpenDir(This,d)	\
     ( (This)->lpVtbl -> OpenDir(This,d) ) 

@@ -77,7 +77,7 @@ library Moe
 		HRESULT MsgBox( [in] BSTR text, [in] BSTR title, [in] long flags, [out,retval] long* result);
 
 		[id(2), helpstring("Open existing Document in Text-Editor")] 
-		HRESULT Open( [out,retval] IMoeDocument** d);
+		HRESULT Open( [in] BSTR path, [out,retval] IMoeDocument** d);
 
 		[id(4), helpstring("Open Directory View as MDI child")] 
 		HRESULT OpenDir( [out,retval] IMoeDocument** d);

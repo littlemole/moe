@@ -335,7 +335,7 @@ void MoeWnd::OnFileNewRTF()
 void MoeWnd::OnFileOpen()
 {
 	mol::punk<IMoeDocument> doc;
-	moeDialogs->Open(&doc);
+	moeDialogs->Open(0,&doc);
 }
 
 void MoeWnd::OnRecentItems()

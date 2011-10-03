@@ -140,6 +140,9 @@ bool Editor::initialize(const mol::string& p, long enc, bool readOnly)
 
 LRESULT Editor::OnClose()
 {
+	if (saving_ )
+		return 1;
+
 	if ( ts_ )
 		return 1;
 
@@ -152,7 +155,7 @@ LRESULT Editor::OnClose()
 		props_->get_Filename(&p);
 		mol::ostringstream oss;
 		oss << p.toString() << _T("\r\nis modified! ");
-		LRESULT r = ::msgbox( _T("close without save?"), _T("document modified!"),oss.str().c_str() );
+		LRESULT r = mol::v7::msgbox( *moe(), _T("close without save?"), _T("document modified!"),oss.str().c_str(), IDI_MOE );
 		if ( r != IDYES )
 		{
 			return 1;
@@ -231,7 +234,10 @@ void Editor::OnMDIActivate(WPARAM unused, HWND activated)
 
 void Editor::OnFileChangeNotify(mol::io::DirMon* dirmon)
 {
-	::Sleep(1000);
+	//::Sleep(1000); uh-oh!
+	if ( saving_)
+		return;
+
 	mol::invoke( boost::bind( &Editor::checkModifiedOnDisk, this) );
 }
 
@@ -251,7 +257,7 @@ void Editor::checkModifiedOnDisk()
 	if ( (ft.dwHighDateTime != lastWriteTime_.dwHighDateTime) || (ft.dwLowDateTime != lastWriteTime_.dwLowDateTime) )
 	{
 		lastWriteTime_ = ft;
-		if ( IDYES == msgbox( _T("reload file?"),_T("file is modified!"),_T("file has been modified on disk, reload?")) )
+		if ( IDYES == mol::v7::msgbox( *moe(),_T("reload file?"),_T("file is modified!"),_T("file has been modified on disk, reload?"),IDI_MOE) )
 		{
 			OnReload();
 		}
@@ -400,7 +406,7 @@ void Editor::OnReload()
 	{
 		mol::bstr path;
 		props_->get_Filename(&path);
-		LRESULT r = ::msgbox( _T("you have unsaved changes."), _T("document modified!"),_T("discard all changes and proceed.") );
+		LRESULT r = mol::v7::msgbox(*moe(), _T("you have unsaved changes."), _T("document modified!"),_T("discard all changes and proceed."),IDI_MOE );
 		if ( r != IDYES )
 			return ;
 	}
@@ -870,16 +876,18 @@ void Editor::OnSaveAs()
 
 	if ( mol::Ribbon::ribbon()->enabled() )
 	{
-		const COMDLG_FILTERSPEC c_rgSaveTypes[] =
+		const mol::v7::COMDLG_FILTERSPEC c_rgSaveTypes[] =
 		{
 			{ L"all files (*.*)",       L"*.*"}
 		};
 
 		MoeVistaFileDialog fd(*moe());
-		fd.setFilter((COMDLG_FILTERSPEC*)&c_rgSaveTypes,ARRAYSIZE(c_rgSaveTypes));
+		fd.setFilter((mol::v7::COMDLG_FILTERSPEC*)&c_rgSaveTypes,ARRAYSIZE(c_rgSaveTypes));
 		fd.encoding( enc );
 		fd.path(mol::towstring(p));
-		fd.save(FOS_NOVALIDATE);
+		HRESULT hr = fd.save(mol::v7::FOS_NOVALIDATE);
+		if ( hr != S_OK )
+			return;
 
 		enc = fd.encoding();
 		props_->put_Encoding(enc);

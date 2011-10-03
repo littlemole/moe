@@ -166,6 +166,15 @@ HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename)
 			}
 			return S_OK;
 		}
+
+		mol::punk<IMoeDialogs> dialogs;
+		moe()->get_Dialogs(&dialogs);
+		if ( dialogs )
+		{
+			dialogs->Open(filename,0);
+		}
+
+		/*
 		mol::FilenameDlg dlg(*moe());
 		dlg.setFilter( InFilesFilter );	
 		dlg.fileName(p);
@@ -188,6 +197,7 @@ HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename)
 				return S_OK;
 			}
 		}
+		*/
 	}
 	return S_OK;
 }
