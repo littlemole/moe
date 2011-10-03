@@ -323,7 +323,7 @@ void Category::draw( mol::win::DCbase& dc, RECT& r, int& offset )
 	int o = propWnd_->borderWidth();
 	int s = propWnd_->spin();
 
-	int total_h =  (h) * ( props_.size() +1 );
+	int total_h =  (h) * ( (int)props_.size() +1 );
 
 	if ( collapsed_)
 	{

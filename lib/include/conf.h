@@ -1,9 +1,6 @@
 #ifndef MOL_PLATFORM_CONFIG_DEF_GUARD_DEF_
 #define MOL_PLATFORM_CONFIG_DEF_GUARD_DEF_
 
-////////////////////////////////////////////////////////////////////////
-// TODO: move config out of concrete lib (top dir)
-////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////
@@ -23,7 +20,7 @@
 #ifdef _WIN32
 
 #define NOMINMAX // use c++ even on win32
-
+/*
 // minimum windows target version
 #define WINVER  _WIN32_WINNT_WIN2K
 #define _WIN32_WINDOWS _WIN32_WINNT_WIN2K
@@ -31,6 +28,20 @@
 #define _WIN32_WINNT _WIN32_WINNT_WIN2K
 //#define _WIN32_IE 0x0501
 #define _WIN32_IE _WIN32_IE_IE60 //SP2
+*/
+
+
+// minimum windows target version
+#define WINVER  _WIN32_WINNT_WINXP
+#define _WIN32_WINDOWS _WIN32_WINNT_WINXP
+//#define _WIN32_WINNT 0x0400 
+#define _WIN32_WINNT _WIN32_WINNT_WINXP
+//#define _WIN32_IE 0x0501
+#define _WIN32_IE _WIN32_IE_IE80 //SP2
+
+
+
+
 // main windows headers
 
 #define NO_WINDOWS_LEAN_AND_MEAN
