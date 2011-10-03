@@ -22,10 +22,10 @@ AS = ml
 LD = link
 AR = lib
 RC = rc
-CFLAGS  = -nologo -MT -W3 -O2 -Oy- -Zi -Fd"zlib" $(LOC) /Machine:X64
-WFLAGS  = -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE
+CFLAGS  = -nologo -MT -W3 -O2 -Oy- -Zi -Fd"zlib" $(LOC)
+WFLAGS  = -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -DWIN64 -D_WIN64 -D_WINDOWS
 ASFLAGS = -coff -Zi $(LOC)
-LDFLAGS = -nologo -debug -incremental:no -opt:ref
+LDFLAGS = -nologo -debug -incremental:no -opt:ref -MACHINE:X64
 ARFLAGS = -nologo
 RCFLAGS = /dWIN32 /r
 
