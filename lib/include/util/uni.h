@@ -99,23 +99,6 @@ typedef std::basic_fstream<TCHAR, std::char_traits<TCHAR> >
 
 #ifdef WIN32
 
-/*
-std::string  wstring2ansi( const std::wstring& in);
-std::wstring ansi2wstring( const std::string& in );
-
-std::string  ansi2utf8   ( const std::string&  in );
-std::string  wstring2utf8( const std::wstring& in );
-std::string  utf82ansi   ( const std::string&  in );
-std::wstring utf82wstring( const std::string&  in );
-
-std::string  wstring2ansi( const std::wstring& in);
-std::wstring ansi2wstring( const std::string& in );
-
-std::string  ansi2utf8   ( const std::string&  in );
-std::string  wstring2utf8( const std::wstring& in );
-std::string  utf82ansi   ( const std::string&  in );
-std::wstring utf82wstring( const std::string&  in );
-*/
 
 std::string toUTF8( const std::string& str, long cp = CP_ACP);
 std::string toUTF8( const std::wstring& str, long cp = CP_ACP);

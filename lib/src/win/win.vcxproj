@@ -192,7 +192,7 @@
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <AdditionalIncludeDirectories>D:\boost\boost_1_44_0;..\..\..\3dParty\expat\Source\lib;..\..\..\3dParty\pcre;..\..\..\lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WIN64;WIN64;DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;SUPPORT_UTF8;STATIC;PCRE_STATIC;POSIX_MALLOC_THRESHOLD=10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WIN64;WIN64;DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;_SCL_SECURE_NO_WARNINGS;SUPPORT_UTF8;STATIC;PCRE_STATIC;POSIX_MALLOC_THRESHOLD=10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -276,6 +276,7 @@
     <ClCompile Include="shell.cpp" />
     <ClCompile Include="taskbar.cpp" />
     <ClCompile Include="tls.cpp" />
+    <ClCompile Include="v7.cpp" />
     <ClCompile Include="wnd.cpp" />
     <ClCompile Include="wndclass.cpp" />
   </ItemGroup>
@@ -314,6 +315,7 @@
     <ClInclude Include="..\..\include\win\shell.h" />
     <ClInclude Include="..\..\include\win\Taskbar.h" />
     <ClInclude Include="..\..\include\win\tls.h" />
+    <ClInclude Include="..\..\include\win\v7.h" />
     <ClInclude Include="..\..\include\win\wnd.h" />
     <ClInclude Include="..\..\include\win\wndclass.h" />
   </ItemGroup>

@@ -40,6 +40,7 @@
     <ClCompile Include="wnd.cpp" />
     <ClCompile Include="clipboard.cpp" />
     <ClCompile Include="wndclass.cpp" />
+    <ClCompile Include="v7.cpp" />
   </ItemGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

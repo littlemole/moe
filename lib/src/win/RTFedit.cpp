@@ -247,7 +247,7 @@ BOOL RichEditCtrl::PrintRTF()
         
         if (!fSuccess) break;
         
-        int cpMin = SendMessage(*this, EM_FORMATRANGE, TRUE, (LPARAM)&fr);
+        int cpMin = (int)SendMessage(*this, EM_FORMATRANGE, TRUE, (LPARAM)&fr);
         
         if (cpMin <= fr.chrg.cpMin) 
         {
