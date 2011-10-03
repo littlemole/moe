@@ -64,12 +64,12 @@ HRESULT __stdcall moeShell::GetCommandString( UINT_PTR idCmd, UINT uFlags, UINT 
 			{
 				lstrcpynW((LPWSTR)pszName, L"view as hex dump", cchMax);
 			}
-			/*
-			else if ( idCmd == open_utf8_cmd )
+			
+			else if ( idCmd == open_open_cmd )
 			{
-				lstrcpynW((LPWSTR)pszName, L"open with moe (force UTF-8)", cchMax);
+				lstrcpynW((LPWSTR)pszName, L"open with moe (open as ...)", cchMax);
 			}
-			*/
+			
 			else if ( idCmd == open_rtf_cmd )
 			{
 				lstrcpynW((LPWSTR)pszName, L"view as as rtf", cchMax);
@@ -93,12 +93,12 @@ HRESULT __stdcall moeShell::GetCommandString( UINT_PTR idCmd, UINT uFlags, UINT 
 			{
 				lstrcpynA(pszName, "view as hex dump", cchMax);
 			}
-			/*
-			else if ( idCmd == open_utf8_cmd )
+			
+			else if ( idCmd == open_open_cmd )
 			{
-				lstrcpynA(pszName, "open with moe (force UTF-8)", cchMax);
+				lstrcpynA(pszName, "open with moe (open as ...)", cchMax);
 			}
-			*/
+			
 			else if ( idCmd == open_rtf_cmd )
 			{
 				lstrcpynA(pszName, "view as rtf", cchMax);
@@ -126,8 +126,12 @@ HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 			// found running moe instance
 			// open doc in moe
 			::CoAllowSetForegroundWindow(punk,0);
+
 			mol::punk<IMoeDocumentCollection> pdocs;
 			moe->get_Documents(&pdocs);
+
+			mol::punk<IMoeDialogs> pddialogs;
+			moe->get_Dialogs(&pddialogs);
 
 			mol::punk<IMoeDocument> pdoc;
 
@@ -139,9 +143,9 @@ HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 			{
 				pdocs->OpenHtmlFrame(mol::bstr(filename_), &pdoc );
 			}
-			else if ( cmd == open_utf8_cmd )
+			else if ( cmd == open_open_cmd )
 			{
-				pdocs->Open(mol::bstr(filename_), &pdoc );
+				pddialogs->Open(mol::bstr(filename_),&pdoc );
 			}
 			else if ( cmd == open_cmd )
 			{
@@ -176,9 +180,9 @@ HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 	{
 		oss << "moe-tail:";
 	}
-	else if (cmd == open_utf8_cmd )
+	else if (cmd == open_open_cmd )
 	{
-		oss << "moe-utf8:";
+		oss << "moe-open:";
 	}
 	else if (cmd == open_html_cmd )
 	{
@@ -218,11 +222,11 @@ HRESULT __stdcall moeShell::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT i
 	UINT icmd = idCmdFirst;
 
 	open_cmd = 0;
-	//open_utf8_cmd = 1;
-	open_html_cmd = 1;
-	open_rtf_cmd  = 2;
-	open_hex_cmd  = 3;
-	open_tail_cmd = 4;
+	open_open_cmd = 1;
+	open_html_cmd = 2;
+	open_rtf_cmd  = 3;
+	open_hex_cmd  = 4;
+	open_tail_cmd = 5;
 
 	::InsertMenu( hmenu,
 				  indexMenu,
@@ -239,8 +243,8 @@ HRESULT __stdcall moeShell::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT i
 	
 	mol::Menu menu;
 	menu.createContext();
-//	menu.addItem(icmd,_T("force UTF8"));
-//	icmd++;
+	menu.addItem(icmd,_T("open as ..."));
+	icmd++;
 
 	menu.addItem(icmd,_T("show HTML"));
 	icmd++;

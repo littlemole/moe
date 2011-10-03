@@ -57,7 +57,7 @@ protected:
 
 	mol::TCHAR filename_[MAX_PATH];
 	UINT open_cmd;
-	UINT open_utf8_cmd;
+	UINT open_open_cmd;
 	UINT open_html_cmd;
 	UINT open_hex_cmd;
 	UINT open_tail_cmd;
