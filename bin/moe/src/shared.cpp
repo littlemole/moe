@@ -436,14 +436,14 @@ HRESULT __stdcall MoeDialogs::MsgBox( BSTR text, BSTR title, long flags, long* r
 }
 
 
-HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
+HRESULT __stdcall MoeDialogs::Open(BSTR path,IMoeDocument** d)
 {
 
 	static mol::TCHAR  InFilesFilter[] = _T("open text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
 
 	if ( mol::Ribbon::ribbon()->enabled() )
 	{
-		const COMDLG_FILTERSPEC c_rgSaveTypes[] =
+		const mol::v7::COMDLG_FILTERSPEC c_rgSaveTypes[] =
 		{
 			{ L"open text files",       L"*.*"},
 			{ L"open HTML files",	    L"*.*"},
@@ -452,8 +452,18 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 		};
 
 		MoeVistaFileDialog fd(*moe());
-		fd.setFilter((COMDLG_FILTERSPEC*)&c_rgSaveTypes,ARRAYSIZE(c_rgSaveTypes));
-		fd.open(FOS_ALLOWMULTISELECT | FOS_FILEMUSTEXIST | FOS_NOVALIDATE);
+		fd.setFilter((mol::v7::COMDLG_FILTERSPEC*)&c_rgSaveTypes,ARRAYSIZE(c_rgSaveTypes));
+		if ( path )
+		{
+			std::wstring p = mol::towstring(path);
+			if ( !p.empty())
+			{
+				fd.path(p);
+			}
+		}
+		HRESULT hr = fd.open(mol::v7::FOS_ALLOWMULTISELECT | mol::v7::FOS_FILEMUSTEXIST | mol::v7::FOS_NOVALIDATE);
+		if ( hr != S_OK )
+			return hr;
 
 		MOE_DOCTYPE docType = index2type(fd.type());
 		std::vector<std::wstring> paths = fd.paths();
@@ -468,6 +478,11 @@ HRESULT __stdcall MoeDialogs::Open(IMoeDocument** d)
 	//mol::FilenameDlg ofn(*moe());
 	MolFileFialog ofn(*moe());
 	ofn.setFilter( InFilesFilter );			
+	if ( path )
+	{
+		mol::string p = mol::toString(path);
+		ofn.fileName(p);
+	}
 
 	if ( ofn.dlgOpen( OFN_NOVALIDATE | OFN_ALLOWMULTISELECT | OFN_EXPLORER  | OFN_NOTESTFILECREATE | OFN_ENABLEHOOK | OFN_ENABLETEMPLATE ) )
 	{

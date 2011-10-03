@@ -6,12 +6,13 @@
   <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
  </PropertyGroup>
 
- <Target Name="build" DependsOnTargets="3dParty">
+ <Target Name="build" DependsOnTargets="">
 
 		<Message Text="Project Configuration = $(Configuration)" />
 		<Message Text="Project Platform = $(Platform)" />
-
+<!--
         <MSBuild Projects=".\3dParty\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+-->
 
         <MSBuild Projects=".\lib\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		<MSBuild Projects=".\ax\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
@@ -23,7 +24,9 @@
  </Target>
 
  <Target Name="clean">
+<!--
 		<MSBuild Projects=".\3dParty\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" /> 
+-->
 	        <MSBuild Projects=".\lib\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 		<MSBuild Projects=".\ax\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 		<MSBuild Projects=".\bin\prw\prw\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
@@ -86,6 +89,7 @@
 
  <Target Name="armageddon">
         <CallTarget Targets="clean"/>
+        <CallTarget Targets="clean3dParty"/>
         <CallTarget Targets="cleannet"/>
         <CallTarget Targets="cleanjre"/>
   	<CallTarget Targets="kosmos"/>

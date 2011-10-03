@@ -453,6 +453,7 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
   <param type='long' dir='IN' name='Flags' />
  </method>
  <method name='Open' type='IMoeDocument**' dispid='2' vtindex='32' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open existing Document in Text-Editor' >
+  <param type='BSTR' dir='IN' name='path' />
  </method>
  <method name='OpenDir' type='IMoeDocument**' dispid='4' vtindex='36' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open Directory View as MDI child' >
  </method>

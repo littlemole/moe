@@ -2,6 +2,7 @@
 #include "app.h"
 #include "widgets.h"
 #include "util/regex.h"
+#include "win/v7.h"
 #include "thread/sync.h"
 #include "xmlui.h"
 #include "moe_dispid.h"
@@ -53,7 +54,7 @@ MoeApp::MoeApp()
 	enableExtensions_ = false;
 
 	// unlock embedded IE restrictions
-	unlockInternetExplorer();
+	mol::v7::unlockInternetExplorer();
 }
 
 MoeApp::~MoeApp()
@@ -142,8 +143,13 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 	if ( hr != S_OK )
 		return;
 
-	mol::punk<IDispatch> m(v.pdispVal);
-	if (!m )
+	mol::punk<IDispatch> dispDoc(v.pdispVal);
+	if (!dispDoc )
+		return;
+
+	mol::variant dialogs;
+	hr = mol::get( moe, DISPID_IMOE_DIALOGS, &dialogs);
+	if ( hr != S_OK )
 		return;
 
 	::CoAllowSetForegroundWindow(moe,0);
@@ -162,27 +168,27 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 			s = s.substr(4);
 			if ( mol::Path::isDir(mol::toString(s)) )
 			{
-				mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR , mol::variant(s) );
+				mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR , mol::variant(s) );
 			}
 			else
 			{
-				mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPEN, mol::variant(s) );
+				mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPEN, mol::variant(s) );
 			}
 		}
-		else if ( s.substr(0,9) == "moe-utf8:" ) 
+		else if ( s.substr(0,9) == "moe-open:" ) 
 		{
 			s = s.substr(9);
-			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPEN, mol::variant(s) );					
+			mol::disp_invoke(dialogs.pdispVal, DISPID_IMOEDIALOGS_OPEN, mol::variant(s) );					
 		}
 		else if ( s.substr(0,8) == "moe-bin:" ) 
 		{
 			s = s.substr(8);
-			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENHEXEDITOR, mol::variant(s), mol::variant(true) );					
+			mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENHEXEDITOR, mol::variant(s), mol::variant(true) );					
 		}
 		else if ( s.substr(0,9) == "moe-html:" ) 
 		{
 			s = s.substr(9);
-			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENHTMLFRAME, mol::variant(s) );					
+			mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENHTMLFRAME, mol::variant(s) );					
 		}
 		else if ( s.substr(0,8) == "moe-dir:" ) 
 		{
@@ -191,22 +197,22 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 			{
 				s = mol::tostring(mol::Path::parentDir(mol::toString(s)));
 			}
-			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR, mol::variant(s) );					
+			mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR, mol::variant(s) );					
 		}
 		else if ( s.substr(0,9) == "moe-tail:" ) 
 		{
 			s = s.substr(9);
-			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENTAILDOCUMENT, mol::variant(s) );					
+			mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENTAILDOCUMENT, mol::variant(s) );					
 		}
 		else if ( s.substr(0,8) == "moe-hex:" ) 
 		{
 			s = s.substr(8);
-			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENHEXEDITOR, mol::variant(s), mol::variant(true) );					
+			mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENHEXEDITOR, mol::variant(s), mol::variant(true) );					
 		}
 		else if ( s.substr(0,8) == "moe-rtf:" ) 
 		{
 			s = s.substr(8);
-			mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENRTFDOCUMENT, mol::variant(s) );					
+			mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENRTFDOCUMENT, mol::variant(s) );					
 		}
 		else
 		{
@@ -216,11 +222,11 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 
 			if ( mol::Path::isDir(mol::toString(s)) )
 			{
-				mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR, mol::variant(s) );
+				mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR, mol::variant(s) );
 			}
 			else
 			{
-				mol::disp_invoke(m, DISPID_IMOEDOCUMENTCOLLECTION_OPEN, mol::variant(s) );
+				mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPEN, mol::variant(s) );
 			}
 		}
 	}

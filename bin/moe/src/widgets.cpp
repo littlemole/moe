@@ -13,84 +13,6 @@
 mol::TCHAR  InFilesFilter[]   = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
 
 
-
-// ==================== platform specific: TaskDialog  =======================
-
-enum _MOLTASKDIALOG_COMMON_BUTTON_FLAGS
-{
-    TDCBF_OK_BUTTON            = 0x0001, // selected control return value IDOK
-    TDCBF_YES_BUTTON           = 0x0002, // selected control return value IDYES
-    TDCBF_NO_BUTTON            = 0x0004, // selected control return value IDNO
-    TDCBF_CANCEL_BUTTON        = 0x0008, // selected control return value IDCANCEL
-    TDCBF_RETRY_BUTTON         = 0x0010, // selected control return value IDRETRY
-    TDCBF_CLOSE_BUTTON         = 0x0020  // selected control return value IDCLOSE
-};
-typedef int MOLTASKDIALOG_COMMON_BUTTON_FLAGS;           // Note: _TASKDIALOG_COMMON_BUTTON_FLAGS is an int
-
-
-typedef 
-WINCOMMCTRLAPI HRESULT WINAPI 
-MOLTaskDialogPtr( 
-	HWND hwndParent, 
-	HINSTANCE hInstance, 
-	PCWSTR pszWindowTitle, 
-	PCWSTR pszMainInstruction, 
-	PCWSTR pszContent, 
-	MOLTASKDIALOG_COMMON_BUTTON_FLAGS dwCommonButtons, 
-	PCWSTR pszIcon, 
-	int *pnButton
-);
-
-// ==================== End TaskDialog =======================
-
-
-MOLTaskDialogPtr* MOLTaskDialog = (MOLTaskDialogPtr*)mol::dllFunc( _T("Comctl32.dll"), _T("TaskDialog") );
-
-
-/////////////////////////////////////////////////////////////////////
-// msgbox trampoline - either classic or win7 style
-/////////////////////////////////////////////////////////////////////
-
-int msgbox( const mol::string& txt, const mol::string& title, const mol::string& detail )
-{
-	if ( MOLTaskDialog )
-	{
-		int result = 0;
-		HRESULT hr = MOLTaskDialog( 
-						*moe(), 
-						mol::hinstance(), 
-						title.c_str(), 
-						txt.c_str(), 
-						detail.c_str(), 
-						TDCBF_YES_BUTTON|TDCBF_NO_BUTTON,
-						MAKEINTRESOURCE(IDI_MOE),
-						&result
-					);
-		return result;
-	}
-	else
-	{
-		return ::MessageBox( *moe(), txt.c_str(), title.c_str(), MB_YESNO|MB_ICONINFORMATION );
-	}
-}
-
-MIDL_INTERFACE("1f76a169-f994-40ac-8fc8-0959e8874710")
-IMoeApplicationAssociationRegistrationUI : public IUnknown
-{
-public:
-    virtual HRESULT __stdcall LaunchAdvancedAssociationUI( LPCWSTR pszAppRegistryName) = 0;        
-};
-
-void editFileExtensions()
-{
-	mol::punk<IMoeApplicationAssociationRegistrationUI> aaru;
-	HRESULT hr = aaru.createObject(CLSID_ApplicationAssociationRegistrationUI);
-	if ( hr == S_OK )
-	{
-		aaru->LaunchAdvancedAssociationUI(L"moe");
-	}
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 CLIControl::CLIControl()
@@ -292,15 +214,6 @@ HRESULT  __stdcall Script::GetWindow(HWND *phwnd )
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-void unlockInternetExplorer()
-{
-	// call this only if avail (naked IE6 on win2k will not have this)
-	const DWORD SET_FEATURE_ON_PROCESS = 0x00000002;
-	typedef HRESULT  (__stdcall *CoInternetSetFeatureEnabledImpl)( mol::ie::INTERNETFEATURELIST FeatureEntry, DWORD dwFlags, BOOL fEnable );
-	CoInternetSetFeatureEnabledImpl impl = (CoInternetSetFeatureEnabledImpl)mol::dllFunc( _T("urlmon.dll"), _T("CoInternetSetFeatureEnabled"));
-	if ( impl )
-		impl(mol::ie::FEATURE_LOCALMACHINE_LOCKDOWN, SET_FEATURE_ON_PROCESS, FALSE); 
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1210,7 +1123,7 @@ void ExportPage::command(int c)
 
 	if ( c == IDC_BUTTON_EXTENSIONS )
 	{
-		editFileExtensions();
+		mol::v7::editFileExtensions(L"moe");
 	}
 }
 
@@ -1389,7 +1302,7 @@ MoeVistaFileDialog::MoeVistaFileDialog(HWND parent)
 	: parent_(parent),filter_(0),nFilters_(0),readOnly_(false),encoding_(CP_ACP)
 {}
 
-void MoeVistaFileDialog::setFilter(COMDLG_FILTERSPEC* filter, int size)
+void MoeVistaFileDialog::setFilter(mol::v7::COMDLG_FILTERSPEC* filter, int size)
 {
 	filter_ = filter;
 	nFilters_ = size;
@@ -1421,7 +1334,7 @@ HRESULT MoeVistaFileDialog::open(int options)
 	if (hr != S_OK)
 		return hr;
 
-	mol::punk<IFileOpenDialog> fod(fd_);
+	mol::punk<mol::v7::IFileOpenDialog> fod(fd_);
 	if (!fod)
 		return hr;
 
@@ -1473,10 +1386,6 @@ HRESULT MoeVistaFileDialog::save(int options)
 	if (hr != S_OK)
 		return hr;
 
-	hr = fd_->SetFileName(path_.c_str());
-	if (hr != S_OK)
-		return hr;
-
 	// Create a Visual Group.
 	hr = fdc_->StartVisualGroup(CONTROL_GROUP, L"Encoding");
 	if (hr != S_OK)
@@ -1488,7 +1397,7 @@ HRESULT MoeVistaFileDialog::save(int options)
 		return hr;
 
 	// populate box
-	hr = fdc_->SetControlState(CONTROL_COMBOBOX, CDCS_VISIBLE | CDCS_ENABLED);
+	hr = fdc_->SetControlState(CONTROL_COMBOBOX, mol::v7::CDCS_VISIBLE |mol::v7::CDCS_ENABLED);
 	if (hr != S_OK)
 		return hr;
 
@@ -1581,7 +1490,7 @@ HRESULT MoeVistaFileDialog::addEncodingComboBox()
 		return hr;
 
 	// populate box
-	hr = fdc_->SetControlState(CONTROL_COMBOBOX, CDCS_VISIBLE | CDCS_ENABLED);
+	hr = fdc_->SetControlState(CONTROL_COMBOBOX, mol::v7::CDCS_VISIBLE | mol::v7::CDCS_ENABLED);
 	if (hr != S_OK)
 		return hr;
 
@@ -1592,8 +1501,6 @@ HRESULT MoeVistaFileDialog::addEncodingComboBox()
 		if (hr != S_OK)
 			return hr;
 	}
-	// Set the default selection to option 1.
-	//hr = pfdc->SetSelectedControlItem(CONTROL_COMBOBOX,-1);
 
 	// End the visual group.
 	hr = fdc_->EndVisualGroup();
@@ -1602,6 +1509,8 @@ HRESULT MoeVistaFileDialog::addEncodingComboBox()
 
 	return S_OK;
 }
+
+
 
 HRESULT MoeVistaFileDialog::init(int options, REFCLSID clsid)
 {
@@ -1628,6 +1537,32 @@ HRESULT MoeVistaFileDialog::init(int options, REFCLSID clsid)
 	hr = fd_->SetFileTypes(nFilters_, filter_);
 	if (hr != S_OK)
 		return hr;
+
+	if ( !path_.empty() )
+	{
+		hr = fd_->SetFileName(path_.c_str());
+		if (hr != S_OK)
+			return hr;
+
+		if ( mol::v7::SHCreateItemFromParsingName )
+		{
+			mol::punk<IShellItem> shit;
+			hr = mol::v7::SHCreateItemFromParsingName( 
+						mol::Path::parentDir(path_).c_str(),
+						NULL,
+						IID_IShellItem,
+						(void**)&shit
+					);
+
+			if (hr != S_OK)
+				return hr;
+
+			hr = fd_->SetFolder(shit);			
+			if (hr != S_OK)
+				return hr;
+		}
+
+	}
 
 	return hr;
 }

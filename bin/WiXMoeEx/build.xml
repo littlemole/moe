@@ -47,7 +47,8 @@
 <!-- java source files -->
  <ItemGroup>
   <moeResourceFiles Include="..\moe\resources\deploy\**\*.*" Exclude="..\moe\resources\deploy\**\.svn\**\*.*;..\moe\resources\deploy\**\.svn\**\*" />
-  <SvnFolders Include=".\moe\**\*.svn" />
+
+  <SvnFolders Include=".\moe\**\.svn" />
   <SvnFiles Include=".\moe\**\.svn\**\*.*" />
 
   <moeFiles Include=".\moe\**\*.*" Exclude=".\moe\**\.svn\**\*.*;.\moe\**\.svn\**\*"/>
@@ -61,6 +62,7 @@
   <moeNetResourceFiles Include="..\moe\resources\deploy-net\**\*.*" Exclude="..\moe\resources\deploy-net\**\.svn\**\*.*;..\moe\resources\deploy-net\**\.svn\**\*" />
   <moeJavaResourceFiles Include="..\moe\resources\deploy-java\**\*.*" Exclude="..\moe\resources\deploy-java\**\.svn\**\*.*;..\moe\resources\deploy-java\**\.svn\**\*" />
   <JavaSrcFiles Include="..\moe\java\dispdriver\src\**\*.*" Exclude="..\moe\java\dispdriver\src\**\.svn\**\*.*;..\moe\java\dispdriver\src\**\.svn\**\*" />
+<!--  <JavaClassFiles Include="..\moe\java\dispdriver\bin\**\*.*" Exclude="..\moe\java\dispdriver\bin\**\.svn\**\*.*;..\moe\java\dispdriver\bin\**\.svn\**\*" /> -->
  </ItemGroup>
 
  <!-- Build -->
@@ -71,6 +73,7 @@
 		<Message Text="building Wix Installer JRE" />
 		<Message Text="Project Configuration = $(Configuration)" />
 		<Message Text="Project Platform = $(Platform)" />
+		<Message Text="$(MSBuildProjectDirectory)" />
 
 		<!-- prepare directory structure -->
 
@@ -88,18 +91,22 @@
 		<MakeDir Directories=".\deploy\$(confPath)"/>
 
 		<!-- copy files -->
-        <Copy
-            SourceFiles="@(JavaSrcFiles)"
-            DestinationFiles="@(JavaSrcFiles->'.\java\moe\lib\src\%(RecursiveDir)%(Filename)%(Extension)')"
-        />
-        <Copy
-            SourceFiles="@(moeNetResourceFiles)"
-            DestinationFiles="@(moeNetResourceFiles->'.\net\moe\%(RecursiveDir)%(Filename)%(Extension)')"
-        />
+
         <Copy
             SourceFiles="@(moeResourceFiles)"
             DestinationFiles="@(moeResourceFiles->'.\moe\%(RecursiveDir)%(Filename)%(Extension)')"
         />
+
+        <Copy
+            SourceFiles="@(JavaSrcFiles)"
+            DestinationFiles="@(JavaSrcFiles->'.\java\moe\lib\src\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+
+        <Copy
+            SourceFiles="@(moeNetResourceFiles)"
+            DestinationFiles="@(moeNetResourceFiles->'.\net\moe\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+
         <Copy
             SourceFiles="..\moe\resources\moe.ico"
             DestinationFiles=".\moe\moe.ico"
@@ -174,15 +181,15 @@
             DestinationFolder=".\java\moe\lib"
         />
 
-	 <ItemGroup>
-	  <moeResourceFiles Include="..\moe\resources\deploy\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*" />
-	  <SvnFolders Include=".\moe\**\*.svn" />
-	  <SvnFiles Include=".\moe\**\.svn\**\*.*" />
+		<RemoveDir Directories="@(SvnFolders)" />
 
-	  <moeFiles Include=".\moe\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
-	  <javaFiles Include=".\java\moe\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
-	  <netFiles Include=".\net\moe\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
+	 <ItemGroup>
+
+	  <moeFiles Include=".\moe\**\*.*" Exclude=".\moe\**\.svn\**\*.*;.\moe\**\.svn\**\*"/>
+	  <javaFiles Include=".\java\moe\**\*.*" Exclude=".\java\moe\**\.svn\**\*.*;.\java\moe\**\.svn\**\*"/>
+	  <netFiles Include=".\net\moe\**\*.*" Exclude=".\net\moe\**\.svn\**\*.*;.\net\moe\**\.svn\**\*"/>
 	</ItemGroup>
+
 
 	<!-- heat -->
 		<Exec Command='"$(WIX)\bin\heat.exe" dir . -sw5150 -sw5151 -gg -cg "MoeCompGroup" -dr INSTALLLOCATION -var var.SourceDir  -o ..\gen.wxs' WorkingDirectory="./moe"/>
@@ -204,6 +211,8 @@
             SourceFiles="@(javaFiles)"
 	    DestinationFiles="@(javaFiles->'.\moe\%(RecursiveDir)%(Filename)%(Extension)')"
         />
+
+		<RemoveDir Directories="@(SvnFolders)" />
 
         <!-- candle -->
 		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(genObj)" gen.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
@@ -251,28 +260,16 @@
 <!-- Clean -->
 
  <Target Name="Clean">
-
-
-  <ItemGroup>
-   <moeResourceFiles Include="..\moe\resources\deploy\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*" />
-   <SvnFolders Include=".\moe\**\*.svn" />
-   <SvnFiles Include=".\moe\**\.svn\**\*.*" />
-
-   <moeFiles Include=".\moe\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
-   <javaFiles Include=".\java\moe\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
-   <netFiles Include=".\net\moe\**\*.*" Exclude="**\.svn\**\*.*;**\.svn\**\*"/>
-  </ItemGroup>
-
-    <Delete Files="@(moeFiles)" ContinueOnError="true" />
-    <Delete Files="@(netFiles)" ContinueOnError="true" />
-    <Delete Files="@(javaFiles)" ContinueOnError="true" />
-
-    <RemoveDir Directories=".\bin\**\*.*;" ContinueOnError="true" />
-    <RemoveDir Directories="@(moeDirs)" ContinueOnError="true" />
-    <RemoveDir Directories="@(netDirs)" ContinueOnError="true" />
-    <RemoveDir Directories="@(javaDirs)" ContinueOnError="true" />
+    <RemoveDir Directories=".\deploy\$(confPath)\**\*.*;" />
+    <RemoveDir Directories=".\bin\**\*.*;" />
+    <RemoveDir Directories=".\moe\**\*.*;.\moe\**\*;.\moe" />
+    <RemoveDir Directories=".\net\**\*.*" />
+    <RemoveDir Directories=".\java\**\*.*" />
+	<RemoveDir Directories=".\$(regfree)\moe\**\*.*;" />
 	
-    <Delete Files=".\deploy\$(confPath)\moeSetup.msi;.\deploy\$(confPath)\moeSetupLight.msi" ContinueOnError="true" />
+	<Delete Files="$(regfreeTargetPath)\moe.zip" />
+	<Delete Files=".\deploy\$(confPath)\moeSetup.msi;.\deploy\$(confPath)\moeSetupLight.msi" />
+
  </Target>
 
 

@@ -260,6 +260,32 @@ bool UserForm::initialize(const mol::string& p, bool designMode, bool Debug)
 							script->formdebug( scriptEngine_, mol::toString(ws), (IMoeUserForm*)this);
 
 						script->formcontrols(form);
+
+						
+						mol::punk<IDispatch> disp;
+						if ( (S_OK == script->getScript(_T(""),&disp)) )
+						{
+							DISPID dispid;
+							std::wstring ws = mol::towstring("Form_Load");
+							mol::bstr func(ws);
+							DISPPARAMS dispparams;
+							memset(&dispparams, 0, sizeof dispparams);
+							HRESULT hr = disp->GetIDsOfNames(IID_NULL, &(func), 1, 0, &dispid);
+							if ( hr == S_OK )
+							{
+							    EXCEPINFO excepInfo;
+							    memset(&excepInfo, 0, sizeof excepInfo);
+								UINT nArgErr = (UINT)-1;
+								mol::variant varResult;
+								disp->Invoke( dispid, IID_NULL, 
+											  LOCALE_SYSTEM_DEFAULT, 
+											  DISPATCH_METHOD, 
+											  &dispparams, 
+											  &varResult, &excepInfo,&nArgErr
+											 );
+							}				
+						}
+						
 					}					
 				}
 			}
@@ -574,6 +600,8 @@ void UserForm::adviseControls(  )
 		if ( S_OK != controls->Item(mol::variant(i),&disp) )
 			continue;
 
+		
+
 		mol::punk<MSForms::IControl> c(disp);
 		if ( !c )
 			continue;
@@ -581,6 +609,8 @@ void UserForm::adviseControls(  )
 		mol::bstr name;
 		if ( (S_OK == c->get_Name(&name)) && name )
 		{
+			adviseControl(name,disp);
+			/*
 			IID iid;
 			if ( S_OK == findSourceOnCP(disp,&iid) )
 			{
@@ -604,8 +634,38 @@ void UserForm::adviseControls(  )
 				ctrls[cookie] = disp;
 				iids[cookie] = iid;
 			}
+			*/
 		}
+		
 	}	
+}
+
+void UserForm::adviseControl(mol::bstr& name, IDispatch* disp)
+{
+	IID iid;
+	mol::punk<IUnknown> unk(disp);
+	if ( S_OK == mol::findSourceOnCP(unk,&iid) )
+	{
+		DWORD cookie;
+		mol::com_obj<FormScriptEventHandler>* handler = new mol::com_obj<FormScriptEventHandler>;
+		handler->AddRef();
+
+		//TODO: assure only to advis IF script handler present
+		// use static factory func pattern
+		handler->init(script,iid,name.toString());
+
+		mol::punk<IConnectionPointContainer>	icPc(disp);
+		mol::punk<IConnectionPoint>			icP;
+		HRESULT hr = icPc->FindConnectionPoint( iid, &icP);
+		if( S_OK == hr )
+		{
+			hr = icP->Advise( handler,&cookie);
+		}
+		sinks[cookie] = handler;
+		disp->AddRef();
+		ctrls[cookie] = disp;
+		iids[cookie] = iid;
+	}
 }
 
 void UserForm::unAdviseControls()
