@@ -9,5 +9,5 @@
   /* auto-generated/updated by util/mk1mf.pl for crypto/cversion.c */
   #define CFLAGS "cl  /MD /W3 /Ox /Gs0 /GF /Gy /nologo -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DOPENSSL_SYSNAME_WIN32 -DOPENSSL_SYSNAME_WINNT -DUNICODE -D_UNICODE -DOPENSSL_USE_APPLINK -I. /Fdout32dll -DOPENSSL_NO_RC5 -DOPENSSL_NO_MDC2 -DOPENSSL_NO_KRB5    "
   #define PLATFORM "VC-WIN64A"
-  #define DATE "Mon Oct  3 16:11:28 2011"
+  #define DATE "Mon Oct  3 22:39:46 2011"
 #endif

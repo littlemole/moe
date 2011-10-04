@@ -11,6 +11,7 @@
 #define IDM_EXIT                        105
 #define IDI_SHELLCTRL                   107
 #define IDC_SKELETON                    109
+#define IDB_MOE							110
 #define IDR_MAINFRAME                   128
 #define IDR_HTML1                       129
 #define IDR_JPEG1                       132
