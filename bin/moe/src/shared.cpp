@@ -739,6 +739,25 @@ HRESULT __stdcall MoeScript::System( BSTR f)
 	return S_OK;
 }
 
+HRESULT __stdcall MoeScript::Picture( BSTR f, IDispatch** disp )
+{
+	if ( !disp ) 
+		return E_INVALIDARG;
+	*disp = 0;
+
+	mol::Picture pic;
+	HRESULT hr = pic.load( mol::toString(f) );
+	if ( hr != S_OK )
+		return S_OK;
+
+	mol::punk<IPictureDisp> p;
+	hr = pic.copy(&p);
+	if ( hr != S_OK )
+		return S_OK;
+
+	return p.queryInterface(disp);
+}
+
 /////////////////////////////////////////////////////////////////////
 //
 // moe config sub obj
@@ -917,6 +936,12 @@ HRESULT __stdcall MoeConfig::get_ShowLineNumbers(  VARIANT_BOOL* vb)
 	}
 	return S_OK;
 }
+
+HRESULT __stdcall  MoeConfig::get_Settings( IDispatch** settings)
+{
+	return config()->QueryInterface(IID_IDispatch,(void**)settings);
+}
+
 
 HRESULT __stdcall MoeConfig::EditPreferences( )
 {

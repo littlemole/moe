@@ -106,6 +106,7 @@
 #define DISPID_IMOECONFIG_EXPORTSETTINGS                                       				 12
 #define DISPID_IMOECONFIG_IMPORTSETTINGS                                       				 13
 #define DISPID_IMOECONFIG_INITIALIZEEDITORFROMPREFERENCES                      				 14
+#define DISPID_IMOECONFIG_SETTINGS                                             				 15
 #define DISPID_IMOESCRIPT_RUN                                                  				 1
 #define DISPID_IMOESCRIPT_EVAL                                                 				 2
 #define DISPID_IMOESCRIPT_DEBUG                                                				 3
@@ -114,6 +115,7 @@
 #define DISPID_IMOESCRIPT_SHOWUSERFORM                                         				 6
 #define DISPID_IMOESCRIPT_DEBUGUSERFORM                                        				 7
 #define DISPID_IMOESCRIPT_SYSTEM                                               				 8
+#define DISPID_IMOESCRIPT_PICTURE                                              				 9
 #define DISPID_IMOEUSERFORM_OBJECT                                             				 0
 #define DISPID_IMOEUSERFORM_VIEW                                               				 1
 #define DISPID_IMOEUSERFORM_SCRIPT                                             				 2
