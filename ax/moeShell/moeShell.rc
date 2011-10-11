@@ -32,6 +32,7 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 // remains consistent on all systems.
 IDI_SHELLCTRL           ICON                    "moeShell.ico"
 IDB_MOE					BITMAP                  "moe.bmp"
+IDB_MOE2				BITMAP                  "moe2.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

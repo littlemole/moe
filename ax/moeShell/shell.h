@@ -12,8 +12,6 @@
 #include "resource.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
 template <> 
@@ -24,22 +22,35 @@ class mol::uuid_info<IContextMenu>
    typedef IContextMenu uuid_type;
 };
 
+///////////////////////////////////////////////////////////////////////////////
 
+class moeShellMenuItem
+{
+public:
+	moeShellMenuItem(int cmd, const mol::string& p,const mol::string& desc)
+		: iCmd(cmd), proto(p), description(desc)
+	{}
+
+	UINT iCmd;
+	mol::string proto;
+	mol::string description;
+
+	HRESULT __stdcall InvokeCommand(const mol::string& filepath, LPCMINVOKECOMMANDINFO pici);
+};
+
+///////////////////////////////////////////////////////////////////////////////
 
 class moeShell : 
 	public mol::com_registerobj<moeShell,CLSID_moeShell>,
 	public mol::Dispatch<ImoeShell>,
 	public IShellExtInit,
-	public IContextMenu3,
+	public IContextMenu,
 	public mol::interfaces< moeShell,
 			mol::implements<
 				IDispatch,
 				IShellExtInit,
-				mol::interface_ex<IContextMenu,IContextMenu3>,
-				mol::interface_ex<IContextMenu2,IContextMenu3>,
-				IContextMenu3>
+				IContextMenu>
 			>
-
 {
 public:
 
@@ -48,43 +59,25 @@ public:
 
 	HRESULT __stdcall Initialize( LPCITEMIDLIST pidlFolder, IDataObject *pdtobj, HKEY hkeyProgID );
 	HRESULT __stdcall GetCommandString( UINT_PTR idCmd, UINT uFlags, UINT *pwReserved, LPSTR pszName, UINT cchMax );
-	HRESULT __stdcall InvokeCommand(LPCMINVOKECOMMANDINFO pici);		HRESULT __stdcall QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);		
+	HRESULT __stdcall InvokeCommand(LPCMINVOKECOMMANDINFO pici);		
+	HRESULT __stdcall QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);		
 	HRESULT __stdcall About();
 
-	HRESULT __stdcall HandleMenuMsg(UINT, WPARAM, LPARAM);
-	HRESULT __stdcall HandleMenuMsg2(UINT, WPARAM, LPARAM, LRESULT*);
 protected:
 
-	HRESULT __stdcall HandleMenuMsgImpl(UINT uMsg,  WPARAM wParam,  LPARAM lParam,  LRESULT *plResult);
-	HRESULT __stdcall OnMeasureItem ( MEASUREITEMSTRUCT* mis, LRESULT* pResult );
-	HRESULT __stdcall OnDrawItem ( DRAWITEMSTRUCT* dis, LRESULT* pResult );
-
-//	mol::TCHAR filename_[MAX_PATH];
+	void registerMenuItem( UINT& iCmd, const mol::string& proto, const mol::string& desc );
 
 	mol::string filepath_;
 
-	
-	UINT open_cmd;
-	UINT open_open_cmd;
-	UINT open_html_cmd;
-	UINT open_hex_cmd;
-	UINT open_tail_cmd;
-	UINT open_rtf_cmd;
-	UINT open_as_cmd;
-
-	UINT open_cmd_id;
-	UINT open_as_cmd_id;
-	
-
 	mol::Bmp bmp_;
+	mol::Bmp bmp2_;
 
 	typedef std::vector<UINT> IndexVector;
-
 	IndexVector cmd_indexes_;
 
-	typedef std::pair<mol::string,mol::string> CmdLabel;
-	typedef std::map<UINT,CmdLabel> CmdLapelMap;
-	CmdLapelMap cmd_labels_;
+	typedef std::map<UINT,moeShellMenuItem*> MenuCmdMap;
+	MenuCmdMap menu_cmds_;
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -96,5 +89,8 @@ class moeShellDll :
 	public mol::Dll,
 	public mol::exports<moeShellDll,moeShell>
 {};
+
+///////////////////////////////////////////////////////////////////////////////
+
 
 #endif

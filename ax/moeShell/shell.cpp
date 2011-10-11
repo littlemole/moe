@@ -8,20 +8,45 @@
 #include "moeShell_i.c"
 #include "moe_i.c"
 
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df' language='*'\"")
+
+///////////////////////////////////////////////////////////////////////////////
 
 REFIID mol::uuid_info<IContextMenu>::uuidof = IID_IContextMenu;
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+enum cmds {
+	open_cmd = 0,
+	open_open_cmd,
+	open_html_cmd,
+	open_rtf_cmd,
+	open_hex_cmd,
+	open_tail_cmd,
+	open_as_cmd
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 
 moeShell::moeShell() 
 {
 	bmp_.load(IDB_MOE);
+	bmp2_.load(IDB_MOE2);
+
 };
 
 moeShell::~moeShell() 
-{	
+{
+	for ( MenuCmdMap::iterator it = menu_cmds_.begin(); it != menu_cmds_.end(); it++)
+	{
+		delete (*it).second;
+	}
+}
+
+void  moeShell::registerMenuItem( UINT& iCmd, const mol::string& proto, const mol::string& desc )
+{
+	moeShellMenuItem* cmd = new moeShellMenuItem(iCmd,proto,desc);
+	menu_cmds_.insert( std::make_pair(iCmd, cmd) );
+	cmd_indexes_.push_back(iCmd);
+	iCmd++;
 }
 
 HRESULT __stdcall moeShell::Initialize( LPCITEMIDLIST pidlFolder, IDataObject *pdtobj, HKEY hkeyProgID )
@@ -42,6 +67,12 @@ HRESULT __stdcall moeShell::Initialize( LPCITEMIDLIST pidlFolder, IDataObject *p
 	filepath_ = mol::string(filename);
 
 	::ReleaseStgMedium(&medium);
+
+/*	if ( GetThemePartSize )
+	{
+		vistaMetrics_ = new VistaMenuMetrics(::GetDesktopWindow());
+	}
+	*/
 	return hr;
 }
 
@@ -55,87 +86,56 @@ HRESULT __stdcall moeShell::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT i
 		return MAKE_HRESULT(SEVERITY_SUCCESS, 0, 0);
 	}
 	
-
 	UINT icmd = idCmdFirst;	
-	open_cmd_id = icmd;
 	
-	open_cmd      = 0;
-	open_open_cmd = 1;
-	open_html_cmd = 2;
-	open_rtf_cmd  = 3;
-	open_hex_cmd  = 4;
-	open_tail_cmd = 5;
-	open_as_cmd   = 6;
-	
+    MENUITEMINFO mii = { sizeof(mii) };
+    mii.fMask = MIIM_BITMAP;
+    mii.hbmpItem = bmp2_;
 
 	cmd_indexes_.clear();
-	cmd_labels_.clear();
+	menu_cmds_.clear();
 
-	CmdLabel label1( _T("open with moe"), _T("open with moe") );
-	cmd_labels_.insert( std::make_pair(icmd, label1) );
-	cmd_indexes_.push_back(icmd);
-
+	// menu item #1
 	::InsertMenu( hmenu,
 				  indexMenu,
-				  MF_STRING|MF_BYPOSITION|MF_OWNERDRAW, 
+				  MF_STRING|MF_BYPOSITION,
 				  icmd, 
 				  _T("open with moe")
 				);
 
-	icmd++;	
+    ::SetMenuItemInfo(hmenu, indexMenu, TRUE, &mii);
+	registerMenuItem(icmd,_T("moe:"),_T("open with moe") );
 	indexMenu++;
 
-	
+	// submenu for menu item #2	
 	mol::Menu menu;
 	menu.createContext();
 	menu.addItem(icmd,_T("open as ..."));
-
-	CmdLabel label2( _T("open as ..."), _T("open with moe as ...") );
-	cmd_labels_.insert( std::make_pair(icmd, label2) );
-	cmd_indexes_.push_back(icmd);
-
-	icmd++;
+	registerMenuItem(icmd,_T("moe-open:"),_T("open as ...") );
 
 	menu.addItem(icmd,_T("show HTML"));
-	CmdLabel label3( _T("show HTML"), _T("show in moes HTML viewer") );
-	cmd_labels_.insert( std::make_pair(icmd, label3) );
-	cmd_indexes_.push_back(icmd);
-
-	icmd++;
+	registerMenuItem(icmd,_T("moe-html:"),_T("show in moes HTML viewer") );
 
 	menu.addItem(icmd,_T("show RTF"));
-	CmdLabel label4( _T("show RTF"), _T("show in moes RTF viewer") );
-	cmd_labels_.insert( std::make_pair(icmd, label4) );
-	cmd_indexes_.push_back(icmd);
-
-	icmd++;
+	registerMenuItem(icmd,_T("moe-rtf:"),_T("show in moes RTF viewer") );
 
 	menu.addItem(icmd,_T("show hexdump"));
-	CmdLabel label5( _T("show hexdump"), _T("show in moes hexdump viewer") );
-	cmd_labels_.insert( std::make_pair(icmd, label5) );
-	cmd_indexes_.push_back(icmd);
-	icmd++;
+	registerMenuItem(icmd,_T("moe-hex:"),_T("show in moes hexdump viewer") );
 
 	menu.addItem(icmd,_T("tail -f log"));
-	CmdLabel label6( _T("tail -f log"), _T("tail -f log") );
-	cmd_labels_.insert( std::make_pair(icmd, label6) );
-	cmd_indexes_.push_back(icmd);
+	registerMenuItem(icmd,_T("moe-tail:"),_T("tail -f log") );
 
-	icmd++;
-	
-	open_as_cmd_id = icmd;
-
+	// menu item #2
 	::InsertMenu( hmenu,
 				  indexMenu,
 				  MF_STRING|MF_BYPOSITION|MF_POPUP, 
 				  (UINT_PTR)(HMENU)(menu), 
 				  _T("open with moe as ...")
-				);
-				
-	CmdLabel label7( _T("open with moe as ..."), _T("open with moe as ...") );
-	cmd_labels_.insert( std::make_pair(icmd, label7) );
-	cmd_indexes_.push_back(icmd);
+				);	
+    ::SetMenuItemInfo(hmenu, indexMenu, TRUE, &mii);
+	registerMenuItem(icmd,_T(""),_T("open with moe as ...") );
 
+	// done
 	menu.detach();
 	return MAKE_HRESULT( 
 				SEVERITY_SUCCESS,
@@ -154,7 +154,7 @@ HRESULT __stdcall moeShell::GetCommandString( UINT_PTR idCmd, UINT uFlags, UINT 
 			if ( idCmd < cmd_indexes_.size() )
 			{
 				UINT cmd = cmd_indexes_[idCmd];
-				std::wstring s = mol::towstring(cmd_labels_[cmd].second);
+				std::wstring s = mol::towstring(menu_cmds_[cmd]->description);
 				lstrcpynW((LPWSTR)pszName, s.c_str(), cchMax);
 			}
 		}
@@ -163,7 +163,7 @@ HRESULT __stdcall moeShell::GetCommandString( UINT_PTR idCmd, UINT uFlags, UINT 
 			if ( idCmd < cmd_indexes_.size() )
 			{
 				UINT cmd = cmd_indexes_[idCmd];
-				std::string s = mol::tostring(cmd_labels_[cmd].second);
+				std::string s = mol::tostring(menu_cmds_[cmd]->description);
 				lstrcpynA((LPSTR)pszName, s.c_str(), cchMax);
 			}
 		}
@@ -172,6 +172,18 @@ HRESULT __stdcall moeShell::GetCommandString( UINT_PTR idCmd, UINT uFlags, UINT 
 }
 
 HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
+{
+	if ( HIWORD(pici->lpVerb) != 0 )
+		return S_OK;
+
+	UINT cmd = (UINT)(pici->lpVerb);
+	cmd = cmd_indexes_[cmd];
+	return menu_cmds_[cmd]->InvokeCommand(filepath_,pici);
+}
+
+
+
+HRESULT __stdcall moeShellMenuItem::InvokeCommand(const mol::string& filepath, LPCMINVOKECOMMANDINFO pici)
 {
 	if ( HIWORD(pici->lpVerb) != 0 )
 		return S_OK;
@@ -200,27 +212,27 @@ HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 
 			if ( cmd == open_tail_cmd )
 			{
-				pdocs->OpenTailDocument(mol::bstr(filepath_), &pdoc);
+				pdocs->OpenTailDocument(mol::bstr(filepath), &pdoc);
 			}
 			else if ( cmd == open_html_cmd )
 			{
-				pdocs->OpenHtmlFrame(mol::bstr(filepath_), &pdoc );
+				pdocs->OpenHtmlFrame(mol::bstr(filepath), &pdoc );
 			}
 			else if ( cmd == open_open_cmd )
 			{
-				pddialogs->Open(mol::bstr(filepath_),&pdoc );
+				pddialogs->Open(mol::bstr(filepath),&pdoc );
 			}
 			else if ( cmd == open_cmd )
 			{
-				pdocs->Open(mol::bstr(filepath_), &pdoc );
+				pdocs->Open(mol::bstr(filepath), &pdoc );
 			}
 			else if ( cmd == open_hex_cmd )
 			{
-				pdocs->OpenHexEditor(mol::bstr(filepath_),VARIANT_TRUE, &pdoc );
+				pdocs->OpenHexEditor(mol::bstr(filepath),VARIANT_TRUE, &pdoc );
 			}
 			else if ( cmd == open_rtf_cmd )
 			{
-				pdocs->OpenRTFDocument(mol::bstr(filepath_),&pdoc );
+				pdocs->OpenRTFDocument(mol::bstr(filepath),&pdoc );
 			}
 			mol::punk<IMoeView> view;
 			moe->get_View(&view);
@@ -233,38 +245,22 @@ HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 	mol::string p = mol::singleton<moeShellDll>().getModulePath();
 
 	mol::stringstream oss;
-	oss << "\"" 
+	oss << _T("\"")
 		<< mol::Path::pathname(p) 
-		<< "\\"
-		<< "moe.exe" 
-		<< "\" \"" ;
-
-	if (cmd == open_tail_cmd )
-	{
-		oss << "moe-tail:";
-	}
-	else if (cmd == open_open_cmd )
-	{
-		oss << "moe-open:";
-	}
-	else if (cmd == open_html_cmd )
-	{
-		oss << "moe-html:";
-	}
-	else if (cmd == open_hex_cmd )
-	{
-		oss << "moe-hex:";
-	}
-	else if (cmd == open_rtf_cmd )
-	{
-		oss << "moe-rtf:";
-	}
-	oss << filepath_ << "\"";
+		<< _T("\\")
+		<< _T("moe.exe")
+		<< _T("\" \"")
+		<< proto 
+		<< filepath << _T("\"");
 
 	mol::io::exec_cmdline( oss.str() );
 	return S_OK;
 }
 
+
+
+
+/*
 HRESULT __stdcall moeShell::HandleMenuMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	LRESULT dummy = 0;
@@ -303,11 +299,18 @@ HRESULT __stdcall moeShell::OnMeasureItem ( MEASUREITEMSTRUCT* mis, LRESULT* pRe
 
 	mol::string tmp = cmd_labels_[mis->itemID].second;
 
-	SIZE s = {0,0};
 	mol::DC dc(::GetDesktopWindow());
+
+	if ( vistaMetrics_ )
+	{
+		RECT rx;
+		GetThemeTextExtent( vistaMetrics_->hTheme,dc,MENU_POPUPITEM,0,tmp.c_str(),tmp.size(),DT_LEFT | DT_SINGLELINE,0,&rx);
+	}
+
+	SIZE s = {0,0};
 	::GetTextExtentPoint32(dc,tmp.c_str(), tmp.size(),&s);
     mis->itemWidth = s.cx+40; 
-    mis->itemHeight = s.cy+10; 
+    mis->itemHeight = s.cy+4;//+10; 
 
 	*pResult = TRUE;  // we handled the message
 	return S_OK;
@@ -318,11 +321,48 @@ HRESULT __stdcall moeShell::OnDrawItem ( DRAWITEMSTRUCT* dis, LRESULT* pResult )
 	if ( (dis->itemID != open_cmd_id) && (dis->itemID != open_as_cmd_id) )
 		return S_OK;
 
+
+	if ( vistaMetrics_ )
+	{
+		mol::string tmp = cmd_labels_[dis->itemID].second;
+
+		POPUPITEMSTATES iStateId = MPI_NORMAL;
+		if ( dis->itemState & ODS_SELECTED )
+			iStateId = MPI_HOT;
+
+		if (IsThemeBackgroundPartiallyTransparent(vistaMetrics_->hTheme, MENU_POPUPITEM, iStateId))
+	    {
+		    DrawThemeBackground(vistaMetrics_->hTheme, dis->hDC, MENU_POPUPBACKGROUND, 0, &dis->rcItem, NULL);
+		}
+
+
+		//DrawThemeBackground( vistaMetrics_->hTheme, dis->hDC,MENU_POPUPGUTTER,0,&dim.rcGutter,NULL);             
+
+        // Item selection
+        DrawThemeBackground(vistaMetrics_->hTheme, dis->hDC, MENU_POPUPITEM, iStateId, &dis->rcItem, NULL);
+
+        // Draw the text.
+        //ULONG uAccel = ((dis->itemState & ODS_NOACCEL) ? DT_HIDEPREFIX : 0);
+
+		RECT rb;
+		RECT rx = dis->rcItem;
+		GetThemeTextExtent( vistaMetrics_->hTheme,dis->hDC,MENU_POPUPITEM,0,tmp.c_str(),tmp.size(),DT_LEFT | DT_SINGLELINE,0,&rx);
+
+		RECT r = dis->rcItem;
+		r.left = dis->rcItem.left + vistaMetrics_->sizePopupCheck.cx;
+		r.top = dis->rcItem.top;
+        DrawThemeText(vistaMetrics_->hTheme,dis->hDC, MENU_POPUPITEM, iStateId, tmp.c_str(), tmp.size(), DT_SINGLELINE | DT_LEFT , 0, &r);
+
+		*pResult = TRUE;
+		return S_OK;
+	}
+
 	mol::string tmp = cmd_labels_[dis->itemID].second;
 
 	int wCheckX = ::GetSystemMetrics(SM_CXMENUCHECK); 
-    int nTextX = /*wCheckX +*/ dis->rcItem.left; 
+    int nTextX = /*wCheckX +* / dis->rcItem.left; 
 	int nTextY = dis->rcItem.top; 
+	int h = dis->rcItem.bottom -dis->rcItem.top;
 
 	COLORREF crBkgnd,crTxt;
 	crBkgnd,crTxt = 0;
@@ -345,7 +385,7 @@ HRESULT __stdcall moeShell::OnDrawItem ( DRAWITEMSTRUCT* dis, LRESULT* pResult )
 	::FillRect(dis->hDC,&r2,brush);
 
 	// text
-	::ExtTextOut(dis->hDC, nTextX + 30, nTextY+5,  ETO_OPAQUE, 
+	::ExtTextOut(dis->hDC, nTextX + 20, nTextY+2,  ETO_OPAQUE, 
 			&dis->rcItem, tmp.c_str(), tmp.size(), NULL); 
 
 
@@ -360,7 +400,7 @@ HRESULT __stdcall moeShell::OnDrawItem ( DRAWITEMSTRUCT* dis, LRESULT* pResult )
 	mol::DC mem = ::CreateCompatibleDC(dis->hDC);
 	HGDIOBJ def = mem.select( (HGDIOBJ)(HBITMAP)bmp_);
 	COLORREF c = ::GetPixel(mem,0,0);
-	::TransparentBlt(dis->hDC,4,nTextY+5,16,16,mem,0,0,64,64,c);
+	::TransparentBlt(dis->hDC,2,nTextY+2,16,16,mem,0,0,64,64,c);
 	mem.select(def);
 	
     SetBkColor(dis->hDC, crBkgnd); 
@@ -370,7 +410,7 @@ HRESULT __stdcall moeShell::OnDrawItem ( DRAWITEMSTRUCT* dis, LRESULT* pResult )
 	*pResult = TRUE;
 	return S_OK;
 }
-
+*/
 
 HRESULT __stdcall moeShell::About()
 {
