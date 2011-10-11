@@ -1,0 +1,210 @@
+import "oaidl.idl";
+import "ocidl.idl";
+
+////////////////////////////////////////////////////////////////////////////////////////
+// TreeCtrl Library
+////////////////////////////////////////////////////////////////////////////////////////
+
+[
+  uuid(B260A11D-A05C-4B63-8D53-ABA9FAB74B29),
+  version(1.0),
+  helpstring("TreeCtrl")
+]
+library TreeCtrl
+{
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Interfaces
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+    // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
+	////////////////////////////////////////////////////////////////////////////////////
+	importlib("stdole32.tlb");
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// ITreeElement
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(5295C21C-760F-4EB9-AA4C-29ED6EA710C9),
+      helpstring("ITreeElement Interface"),
+      object,oleautomation, dual
+    ]
+	interface ITreeElement : IDispatch
+    {
+		// properties
+		[ 
+		  propput,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get/Set Element Label")
+		] 
+		HRESULT Label([in] BSTR txt);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1)
+		] 
+		HRESULT Label([out,retval] BSTR* txt);
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get/Set Element Value")
+		] 
+		HRESULT Value([in] VARIANT v);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2)
+		] 
+		HRESULT Value([out,retval] VARIANT* v);
+
+		[ 
+		  propget,bindable,displaybind,id(3), 
+		  helpstring("Get number of elements")
+		] 
+		HRESULT Count([out,retval] long* cnt);
+
+		[ 
+		  id(DISPID_VALUE),
+		  helpstring("Get Element by index")
+		] 
+		HRESULT Element([in] long index, [out,retval] ITreeElement** el );
+
+		[ 
+		  id(5),
+		  helpstring("Add Element")
+		] 
+		HRESULT Add([in] ITreeElement* el );
+
+		[ 
+		  id(6),
+		  helpstring("Remove Element")
+		] 
+		HRESULT Remove([in] long index );
+
+		[ 
+		  id(7),
+		  helpstring("Remove all Elements")
+		] 
+		HRESULT Clear();
+	};
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// ITreeCtrl
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(43D7B7ED-68B6-402E-B703-F6699C059C73),
+      helpstring("ITreeCtrl Interface"),
+      object,oleautomation, dual
+    ]
+	interface ITreeCtrl : IDispatch
+    {
+
+		[ 
+		  propget,id(DISPID_VALUE),
+		  helpstring("Get RootElement")
+		] 
+		HRESULT Root( [out,retval] ITreeElement** el);
+
+
+		[ 
+		  id(1),
+		  helpstring("Create")
+		] 
+		HRESULT Create([in] ITreeElement* parent,  [in] BSTR txt, [in] VARIANT value, [out,retval] ITreeElement** el);
+
+
+		[ 
+		  id(2),
+		  helpstring("Clear Tree")
+		] 
+		HRESULT Clear();
+
+		[ 
+		  id(3),
+		  helpstring("Scroll Element into View")
+		] 
+		HRESULT ScrollIntoView([in] ITreeElement* el);
+    };
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Event Disp Interfaces
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// _ITreeCtrlEvents
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+	  uuid(F27F6A86-58C6-40FD-AEE3-E7FB9F0BB37B),
+	  helpstring("ITreeCtrl Event Source Interface")
+	]
+	dispinterface _ITreeCtrlEvents
+	{
+		properties:
+		methods:
+
+		[id(1), helpstring("Tree click event")]  
+		void OnTreeClick([in] ITreeElement* el);
+
+		[id(2), helpstring("Tree double-click event")]  
+		void OnTreeDblClick([in] ITreeElement* el);
+
+		[id(3), helpstring("Tree right-click event")]  
+		void OnTreeRightClick([in] ITreeElement* el);
+	};
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Event Dual Interfaces
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// ITreeCtrlEvents
+	////////////////////////////////////////////////////////////////////////////////////
+
+    [
+      uuid(7216C1FA-5960-4F88-86EF-168DD83ACFAB),
+      helpstring("dual events for ITreeCtrlEvents"),
+      object,oleautomation, dual
+    ]
+    interface ITreeCtrlEvents : IDispatch
+    {
+		[id(1), helpstring("Tree click event")]  
+		HRESULT OnTreeClick([in] ITreeElement* el);
+
+		[id(2), helpstring("Tree double-click event")]  
+		HRESULT OnTreeDblClick([in] ITreeElement* el);
+
+		[id(3), helpstring("Tree right-click event")]  
+		HRESULT OnTreeRightClick([in] ITreeElement* el);
+
+	};
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Co Classes ( class factories )
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// TreeCtrl
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(876266EE-AE01-402B-845F-5852E7CB32EA),
+		aggregatable
+	]
+
+	
+	coclass TreeControl
+	{
+		[default]         interface     ITreeCtrl;
+		[default, source] dispinterface _ITreeCtrlEvents;
+	}
+
+	
+	[
+		uuid(29737AFE-9748-4762-B661-49F157C16085),
+		aggregatable
+	]
+	coclass TreeElement
+	{
+		[default]         interface     ITreeElement;
+	}
+}

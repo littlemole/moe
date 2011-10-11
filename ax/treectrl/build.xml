@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5BE5FD30-6794-4253-B358-CAA5144A0CB0}</ProjectGuid>
+    <RootNamespace>mol</RootNamespace>
+    <TargetName>treectrl</TargetName>
+  </PropertyGroup>
+
+  <Import Project="..\..\master.props" />
+  <Import Project="..\build.props" />
+
+  <ItemGroup>
+    <Midl Include="treectrl.idl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="tree.cpp" />
+    <ClCompile Include="treeCtrl.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+
+</Project>
