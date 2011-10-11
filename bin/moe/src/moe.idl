@@ -792,6 +792,12 @@ library Moe
 
 		[id(14), helpstring("Initiaize Editor with default values")]
 		HRESULT InitializeEditorFromPreferences( [in] IMoeDocument* d );
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(15), 
+		  helpstring("Get the settings disp interface")
+		]		
+		HRESULT Settings( [out,retval] IDispatch** settings);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////
@@ -827,6 +833,9 @@ library Moe
 
 		[id(8), helpstring("Execute a Shell command")]
 		HRESULT System( [in] BSTR f);
+
+		[id(9), helpstring("Get a IPictureDispatch for image on disk")]
+		HRESULT Picture( [in] BSTR f, [out,retval] IDispatch** disp );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////

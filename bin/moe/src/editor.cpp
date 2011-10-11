@@ -198,7 +198,7 @@ void Editor::OnDestroy()
 		ts_ = 0;
 	}
 	remote_.release();
-	
+	monitor_.cancel();
 }
 
 void Editor::OnNcDestroy()

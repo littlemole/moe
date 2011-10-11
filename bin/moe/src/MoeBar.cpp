@@ -120,7 +120,7 @@ void MoeTabControl::move( HWND what, HWND to )
 	if ( iwhat == -1 )
 		return;
 
-	int ito = index(what);
+	int ito = index(to);
 	if ( ito == -1 )
 		return;
 
@@ -129,7 +129,7 @@ void MoeTabControl::move( HWND what, HWND to )
 
 	removeItem(iwhat);
 
-	ito = index(what);
+	ito = index(to);
 	if ( ito == -1 )
 		return;
 

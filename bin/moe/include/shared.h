@@ -92,6 +92,7 @@ public:
 	virtual HRESULT __stdcall ShowUserForm( BSTR pathname, IMoeUserForm** form );
 	virtual HRESULT __stdcall DebugUserForm( BSTR pathname, IMoeUserForm** form );
 	virtual HRESULT __stdcall System( BSTR f);
+	virtual HRESULT __stdcall Picture( BSTR f, IDispatch** disp );
 
 };
 
@@ -168,6 +169,8 @@ public:
 
 	virtual HRESULT __stdcall put_ShowLineNumbers( VARIANT_BOOL vb);
 	virtual HRESULT __stdcall get_ShowLineNumbers(  VARIANT_BOOL* vb);
+
+	virtual HRESULT __stdcall get_Settings( IDispatch** settings);
 
 	virtual HRESULT __stdcall EditPreferences( );
 	virtual HRESULT __stdcall EditSettings( );

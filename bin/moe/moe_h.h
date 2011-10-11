@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Tue Oct 04 00:47:01 2011
+/* at Sun Oct 09 23:07:14 2011
  */
 /* Compiler settings for src\moe.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -1592,6 +1592,10 @@ EXTERN_C const IID IID_IMoeScript;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE System( 
             /* [in] */ BSTR f) = 0;
         
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Picture( 
+            /* [in] */ BSTR f,
+            /* [retval][out] */ IDispatch **disp) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -1684,6 +1688,11 @@ EXTERN_C const IID IID_IMoeScript;
             IMoeScript * This,
             /* [in] */ BSTR f);
         
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Picture )( 
+            IMoeScript * This,
+            /* [in] */ BSTR f,
+            /* [retval][out] */ IDispatch **disp);
+        
         END_INTERFACE
     } IMoeScriptVtbl;
 
@@ -1743,6 +1752,9 @@ EXTERN_C const IID IID_IMoeScript;
 
 #define IMoeScript_System(This,f)	\
     ( (This)->lpVtbl -> System(This,f) ) 
+
+#define IMoeScript_Picture(This,f,disp)	\
+    ( (This)->lpVtbl -> Picture(This,f,disp) ) 
 
 #endif /* COBJMACROS */
 
@@ -1830,6 +1842,9 @@ EXTERN_C const IID IID_IMoeConfig;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InitializeEditorFromPreferences( 
             /* [in] */ IMoeDocument *d) = 0;
+        
+        virtual /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_Settings( 
+            /* [retval][out] */ IDispatch **settings) = 0;
         
     };
     
@@ -1962,6 +1977,10 @@ EXTERN_C const IID IID_IMoeConfig;
             IMoeConfig * This,
             /* [in] */ IMoeDocument *d);
         
+        /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Settings )( 
+            IMoeConfig * This,
+            /* [retval][out] */ IDispatch **settings);
+        
         END_INTERFACE
     } IMoeConfigVtbl;
 
@@ -2060,6 +2079,9 @@ EXTERN_C const IID IID_IMoeConfig;
 
 #define IMoeConfig_InitializeEditorFromPreferences(This,d)	\
     ( (This)->lpVtbl -> InitializeEditorFromPreferences(This,d) ) 
+
+#define IMoeConfig_get_Settings(This,settings)	\
+    ( (This)->lpVtbl -> get_Settings(This,settings) ) 
 
 #endif /* COBJMACROS */
 

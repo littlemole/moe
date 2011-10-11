@@ -13,16 +13,12 @@
 #include "xmlui.h"
 #include "tree.h"
 #include "Ribbonres.h"
-
 	
 
 using namespace mol::io;
 using namespace mol;
 using namespace mol::ole;
 using namespace mol::win;
-
-
-
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -65,6 +61,7 @@ MoeWnd::MoeWnd()
 	moeView    = new MoeView::Instance;
 	moeConfig  = new MoeConfig::Instance;
 
+	//capture supported codepages. we add three pretty well-known to the list
 	codePages_.push_back( CodePage(std::make_pair(CP_ACP,L"Default CodePage")) );
 	codePages_.push_back( CodePage(std::make_pair(CP_UTF8,L"UTF-8")) );
 	codePages_.push_back( CodePage(std::make_pair(CP_WINUNICODE,L"Unicode (UTF-16)")) );
@@ -99,8 +96,6 @@ MoeWnd::~MoeWnd()
 
 MoeWnd::Instance* MoeWnd::CreateInstance()
 {
-	ODBGS("MoeWnd::CreateInstance()");
-
 	Instance* moe = new Instance;
 	moe->AddRef();
 
@@ -108,8 +103,6 @@ MoeWnd::Instance* MoeWnd::CreateInstance()
 
 	// create the generated UI widgets
 	build_ui<MoeWnd>(moe);
-
-	ODBGS("MoeWnd::CreateInstance() end");
 	return moe;
 }
 
@@ -150,7 +143,6 @@ void MoeWnd::OnCreate()
     // update ribbon's recent documents
 	mol::Ribbon::ribbon()->updateRecentDocs(RibbonMRUItems);
 
-	//this->changeMenu( mol::UI().Menu(IDM_MOE) );
 }
 
 void MoeWnd::loadPersistUIstate()
@@ -204,8 +196,7 @@ LRESULT MoeWnd::OnCloseAllButThis()
 }
 
 void MoeWnd::OnDestroy()
-{
-	
+{	
 	Ribbon::ribbon()->tearDown();
 
 	treeWndSink()->UnAdvise(treeWnd()->oleObject);
@@ -341,7 +332,6 @@ void MoeWnd::OnFileOpen()
 void MoeWnd::OnRecentItems()
 {
 	// click on recent items list - retrieve filename
-	// and open utilizing COM api
 	int selected = mol::Ribbon::handler(RibbonMRUItems)->index();
 	mol::string f = mol::Ribbon::handler(RibbonMRUItems)->recent_items()[selected].first;
 
@@ -685,18 +675,39 @@ void MoeWnd::OnHelpAbout()
 }
 
 
+
+
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // TabControl Events
 //
 //////////////////////////////////////////////////////////////////////////////
 
+mol::string dirPathFromChildHWND(HWND hwnd)
+{
+	// get mdi child from HWND
+	mol::MdiChild* mdi = mol::wndFromHWND<mol::MdiChild>(hwnd);
+	if (!mdi) 
+		return _T("");
+
+	// cast mdi child to IMoeDocument
+	IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mdi);
+	if (!doc)
+		return _T("");
+
+	mol::bstr path;
+	if ( doc->get_FilePath(&path) != S_OK )
+		return _T("");
+	return mol::Path::parentDir(mol::toString(path));
+}
+
 void MoeWnd::OnTabCtrl(NMHDR* notify )
 {
     if ( notify->code  == TCN_SELCHANGE )
     {
         int sel = (int)tab()->selection();
-		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)tab()->getTabCtrlItem(sel);
+		mol::TabCtrl::TabCtrlItem* c = tab()->getTabCtrlItem(sel);
 		HWND h = (HWND)(c->lparam);
 		if ( !h ) 
 			return;
@@ -706,22 +717,6 @@ void MoeWnd::OnTabCtrl(NMHDR* notify )
 			return;
 
 		mdi->activate();
-
-		/*
-		IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mdi);
-		if (!doc)
-			return;
-
-		if ( doc )
-		{
-			mol::punk<IMoeDocumentView> view;
-			HRESULT hr = doc->get_View(&view);
-			if ( hr == S_OK )
-			{
-				view->Activate();
-			}
-		}
-		*/
         return ;
     }		
 
@@ -738,48 +733,23 @@ void MoeWnd::OnTabCtrl(NMHDR* notify )
 		if ( !h ) 
 			return;
 
-		// get mdi child from HWND
-		mol::MdiChild* mdi = mol::wndFromHWND<mol::MdiChild>(h);
-		if (!mdi) 
-			return;
-
-		// cast mdi child to IMoeDocument
-		IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mdi);
-		if (!doc)
-			return;
-
-		// get type of doc
-		long t;
-		if ( !doc || (S_OK != doc->get_Type(&t) ) )
-			return ;
-
-		// get doc filepath
-		mol::bstr path;
-		if ( doc->get_FilePath(&path) != S_OK )
-			return;
-
-		// parent dir of filepath
-		mol::bstr dir( mol::Path::parentDir(path.toString()) );
-
-		// fetch tab context menu
-		mol::Menu sub = mol::UI().SubMenu(IDM_MENU_TAB,IDM_TAB);
-
 		// current mouse pos
 		POINT pt;
 		::GetCursorPos(&pt);
 
 		// display context menut
+		mol::Menu sub = mol::UI().SubMenu(IDM_MENU_TAB,IDM_TAB);
 		int id = sub.returnTrackPopup(*this,pt.x-10,pt.y-10);
 		switch ( id )
 		{
 			case IDM_VIEW_CLOSE:
 			{
-				::PostMessage( *mdi, WM_CLOSE, 0, 0 );
+				::PostMessage( h, WM_CLOSE, 0, 0 );
 				break;
 			}
 			case IDM_TAB_CLOSEALLBUTTHIS:
 			{
-				HWND m = (HWND)*mdi;
+				HWND m = h;
 				for ( int i = 0; i < count(); i++ )
 				{
 					if ( childAt(i) != m )
@@ -789,18 +759,18 @@ void MoeWnd::OnTabCtrl(NMHDR* notify )
 			}
 			case IDM_TAB_RELOADTAB:
 			{
-				::PostMessage( *mdi, WM_COMMAND, IDM_EDIT_UPDATE, 0 );
+				::PostMessage( h, WM_COMMAND, IDM_EDIT_UPDATE, 0 );
 
 				break;
 			}
 			case IDM_FILE_SAVE:
 			{
-				::PostMessage( *mdi, WM_COMMAND, IDM_FILE_SAVE, 0 );
+				::PostMessage( h, WM_COMMAND, IDM_FILE_SAVE, 0 );
 				break;
 			}
 			case IDM_TAB_DIRTAB:
 			{
-				docs()->OpenDir(dir,0);
+				docs()->OpenDir( mol::bstr(dirPathFromChildHWND(h)), 0 );
 				break;
 			}
 			case IDM_TAB_JUMPTAB:
@@ -808,7 +778,7 @@ void MoeWnd::OnTabCtrl(NMHDR* notify )
 				mol::punk<IShellTree> tree(treeWnd()->oleObject);
 				if ( tree )
 				{
-					tree->put_Selection(dir);
+					tree->put_Selection( mol::bstr(dirPathFromChildHWND(h)) );
 				}
 				break;
 			}
@@ -855,12 +825,6 @@ void MoeWnd::OnSyntax(int code, int id, HWND ctrl)
 		::PostMessage(getActive(),WM_COMMAND,IDM_LEXER_PLAIN+sel,(LPARAM)ctrl);
 	}
 }
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//		helpers
-//
-////////////////////////////////////////////////////////////////////////////// 
 
 /////////////////////////////////////////////////////////////////////////
 
