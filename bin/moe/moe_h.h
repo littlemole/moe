@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sun Oct 09 23:07:14 2011
+/* at Fri Oct 14 00:56:51 2011
  */
 /* Compiler settings for src\moe.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 

@@ -7,13 +7,13 @@
     </Fragment>
     <Fragment>
         <ComponentGroup Id="NetCompGroup">
-            <Component Id="cmp268905818713CA1C5FA1A48E8E7B5A82" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{E8933943-E0CC-442B-B877-10187918C9AA}">
+            <Component Id="cmp268905818713CA1C5FA1A48E8E7B5A82" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{3DDC93BE-4FAC-41A7-A3ED-A382CF0F1348}">
                 <File Id="filE68E8B6EA0DE9360E00950CFFB3259F2" KeyPath="yes" Source="$(var.SourceDir)\net.ico" />
             </Component>
-            <Component Id="cmp2E8C704E56DDE6913D68AC369B2B43D6" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{30798141-9D2C-4198-983B-41A9F333B5DF}">
+            <Component Id="cmp2E8C704E56DDE6913D68AC369B2B43D6" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{FD4AAC4F-3E41-4AFA-9971-674369010F20}">
                 <File Id="filE0128D303B52ABB4E6817067271917CA" KeyPath="yes" Source="$(var.SourceDir)\net.exe" />
             </Component>
-            <Component Id="cmp90625598B9D7D2472F65D1959541B5F7" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{B91518D7-8F3B-4FED-8BFF-3DA23D9C4742}">
+            <Component Id="cmp90625598B9D7D2472F65D1959541B5F7" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{CBF74483-0FE9-4AA3-BFB8-376E2BCE4715}">
                 <Class Id="{F751B363-9E23-4DA7-B18C-B835AE59DF5B}" Context="InprocServer32" Description="org.oha7.dotnet.Net" ThreadingModel="both" ForeignServer="mscoree.dll">
                     <ProgId Id="org.oha7.dotnet.Net" Description="org.oha7.dotnet.Net" />
                 </Class>
@@ -28,40 +28,40 @@
                 <RegistryValue Root="HKCR" Key="CLSID\{F751B363-9E23-4DA7-B18C-B835AE59DF5B}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
                 <RegistryValue Root="HKCR" Key="CLSID\{F751B363-9E23-4DA7-B18C-B835AE59DF5B}\InprocServer32" Name="CodeBase" Value="file:///[#filCDE0AF3312FF5C0A2EDFDA4991DE1056]" Type="string" Action="write" />
             </Component>
-            <Component Id="cmpFA128C92ED2942B79530DF147104A502" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{3A4566C9-F9CF-4430-9457-D5DBB8F57069}">
+            <Component Id="cmpFA128C92ED2942B79530DF147104A502" Directory="dirD024566BCA42D8BA29DEC8C793A7EB92" Guid="{CA19082D-016E-4440-BEEA-0AE314F1988E}">
                 <File Id="filBAC8DC4013485394870AC43461885407" KeyPath="yes" Source="$(var.SourceDir)\net.reg" />
             </Component>
-            <Component Id="cmpF59640B7AEDC503EFF9209D7FAD9F183" Directory="dir6A0F8CB8636386F511F078EBBB9903CA" Guid="{6C987398-925C-4601-A8B6-56E2372C6443}">
+            <Component Id="cmpF59640B7AEDC503EFF9209D7FAD9F183" Directory="dir6A0F8CB8636386F511F078EBBB9903CA" Guid="{C953DC67-0AD5-40DA-AB88-2EA3F1D40CB7}">
                 <File Id="fil33E1FF1D27D0E62234CBC03F8D0C9B37" KeyPath="yes" Source="$(var.SourceDir)\.svn\entries" />
             </Component>
-            <Component Id="cmp6C9CEB0C1AC0EA7510DBBA0060253C91" Directory="dirA269C9AD7F3A1747E905F5BF3F035E92" Guid="{F7FB8F59-BD14-4956-A666-43776FCB005C}">
+            <Component Id="cmp6C9CEB0C1AC0EA7510DBBA0060253C91" Directory="dirA269C9AD7F3A1747E905F5BF3F035E92" Guid="{CD8DFF16-5F31-400E-BB0E-59858150B33A}">
                 <File Id="filE2ECF25130289D7C291D07EAE34518C9" KeyPath="yes" Source="$(var.SourceDir)\js\net\testNet.js" />
             </Component>
-            <Component Id="cmp032B0E61680197CF46C43C1FF5B9F2F2" Directory="dirA269C9AD7F3A1747E905F5BF3F035E92" Guid="{7E371465-ADE2-4408-97BC-A9C4EF118E99}">
+            <Component Id="cmp032B0E61680197CF46C43C1FF5B9F2F2" Directory="dirA269C9AD7F3A1747E905F5BF3F035E92" Guid="{60E4A881-7159-4EE8-BD84-354A2EB39AD3}">
                 <File Id="fil623C9E6080E540BF9998EC2E6DA64791" KeyPath="yes" Source="$(var.SourceDir)\js\net\testNet2.js" />
             </Component>
-            <Component Id="cmp2DBE06A0D736256DCE79F153ACAD39AA" Directory="dirA269C9AD7F3A1747E905F5BF3F035E92" Guid="{27803327-8C25-4A3E-BCAE-4CCC192AB326}">
+            <Component Id="cmp2DBE06A0D736256DCE79F153ACAD39AA" Directory="dirA269C9AD7F3A1747E905F5BF3F035E92" Guid="{0F49F602-8EF4-443A-91F6-9E303EAA7771}">
                 <File Id="filC0065B8DB24891E89D3EFC7A1004C629" KeyPath="yes" Source="$(var.SourceDir)\js\net\testNet3.js" />
             </Component>
-            <Component Id="cmpB56A1F6EAC1426C8498DE88701E99B12" Directory="dirA269C9AD7F3A1747E905F5BF3F035E92" Guid="{1F59A697-A957-4733-8FF9-DD3B1A059D3E}">
+            <Component Id="cmpB56A1F6EAC1426C8498DE88701E99B12" Directory="dirA269C9AD7F3A1747E905F5BF3F035E92" Guid="{433E4F73-5601-49D5-BC0C-859C54CD5E94}">
                 <File Id="fil2A74D291801A69FB9C8E09064006D8B3" KeyPath="yes" Source="$(var.SourceDir)\js\net\testNet4.js" />
             </Component>
-            <Component Id="cmpE2FCB83450DA9A43DF430A1BAB80C449" Directory="dirA269C9AD7F3A1747E905F5BF3F035E92" Guid="{08AF1026-551B-4013-A51D-18D4ACFD0E91}">
+            <Component Id="cmpE2FCB83450DA9A43DF430A1BAB80C449" Directory="dirA269C9AD7F3A1747E905F5BF3F035E92" Guid="{4A1C795D-805E-4272-8E22-712CEEE14961}">
                 <File Id="fil89A299BB02AD6597B44623C325612B4B" KeyPath="yes" Source="$(var.SourceDir)\js\net\testNet5.js" />
             </Component>
-            <Component Id="cmpEEE76887F847D0FAE25B6843882D90CB" Directory="dirE7857D41B2BD2C29BEDB126E59C6ADF7" Guid="{F24BACC0-5DC5-4014-83B9-550EADF050D9}">
+            <Component Id="cmpEEE76887F847D0FAE25B6843882D90CB" Directory="dirE7857D41B2BD2C29BEDB126E59C6ADF7" Guid="{18C6F2BE-B320-4A99-8763-565E4ABDFC87}">
                 <File Id="fil3B8E2C580630C67E3987A751A28EC086" KeyPath="yes" Source="$(var.SourceDir)\js\net\.svn\text-base\testNet.js.svn-base" />
             </Component>
-            <Component Id="cmpC915FF055E1DDBA719FDF2CA45A9BCA0" Directory="dirE7857D41B2BD2C29BEDB126E59C6ADF7" Guid="{E1E111E7-313E-4216-B5B7-A5E13B463D91}">
+            <Component Id="cmpC915FF055E1DDBA719FDF2CA45A9BCA0" Directory="dirE7857D41B2BD2C29BEDB126E59C6ADF7" Guid="{6E5626AE-A772-48D1-A948-1CC64FA58363}">
                 <File Id="fil00A2AFE0D05D8165B1E08F28375FFD1A" KeyPath="yes" Source="$(var.SourceDir)\js\net\.svn\text-base\testNet2.js.svn-base" />
             </Component>
-            <Component Id="cmp911F30C05E1C94D21982DB48144B2FF4" Directory="dirE7857D41B2BD2C29BEDB126E59C6ADF7" Guid="{1D907BA5-D13A-4F22-B109-94E5BA898001}">
+            <Component Id="cmp911F30C05E1C94D21982DB48144B2FF4" Directory="dirE7857D41B2BD2C29BEDB126E59C6ADF7" Guid="{5DDE3B61-DF69-4EC2-A336-C9DC768F672B}">
                 <File Id="filC8915FD96312E74AECD2A5530F3DFDFB" KeyPath="yes" Source="$(var.SourceDir)\js\net\.svn\text-base\testNet3.js.svn-base" />
             </Component>
-            <Component Id="cmp7B8A065A826501B70814445B0D383BB9" Directory="dirE7857D41B2BD2C29BEDB126E59C6ADF7" Guid="{0CE733E9-7D23-491B-9E5D-1717ACFF6A99}">
+            <Component Id="cmp7B8A065A826501B70814445B0D383BB9" Directory="dirE7857D41B2BD2C29BEDB126E59C6ADF7" Guid="{BB848BB8-302F-4131-B8C2-774A33C38A42}">
                 <File Id="fil440F6E1803C6708A618641E43A86C041" KeyPath="yes" Source="$(var.SourceDir)\js\net\.svn\text-base\testNet4.js.svn-base" />
             </Component>
-            <Component Id="cmp98B38B5D35F372A14680FAAEF0A64879" Directory="dirE7857D41B2BD2C29BEDB126E59C6ADF7" Guid="{1BD47E30-8809-419C-8248-84D7710CA2D6}">
+            <Component Id="cmp98B38B5D35F372A14680FAAEF0A64879" Directory="dirE7857D41B2BD2C29BEDB126E59C6ADF7" Guid="{46A20E5A-1305-4AB7-9AD2-6921F984C750}">
                 <File Id="filCE280986DC36FF9ED6BA869853B09C73" KeyPath="yes" Source="$(var.SourceDir)\js\net\.svn\text-base\testNet5.js.svn-base" />
             </Component>
         </ComponentGroup>
