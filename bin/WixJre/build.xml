@@ -72,7 +72,7 @@
         />
         <Copy
             SourceFiles="..\moe\resources\moe.ico"
-            DestinationFiles="..\moe\resources\moe.ico"
+            DestinationFiles=".\moe\jre.ico"
         />
         <Copy
             SourceFiles="..\moe\java\dispdriver\dispdriver.jar"

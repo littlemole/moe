@@ -54,12 +54,18 @@ public:
 
 	void del( const mol::string& subkey, REGSAM sam = KEY_ALL_ACCESS)
 	{
+		if ( subkey.empty() )
+			return;
+
 		if ( ERROR_SUCCESS != ::RegDeleteKey( hkey_, subkey.c_str() ) )
 			throw mol::X(_T("RegDeleteKey failed"));
 	}
 
 	void erase( const mol::string& subkey )
 	{
+		if ( subkey.empty() )
+			return;
+
 		if ( ERROR_SUCCESS != ::SHDeleteKey( hkey_, subkey.c_str() ) )
 		{
 			throw mol::X(_T("erase RegKey failed"));

@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Fri Oct 14 00:53:35 2011
+/* at Sun Oct 16 23:27:43 2011
  */
 /* Compiler settings for HtmlEvents.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 

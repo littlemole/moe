@@ -324,12 +324,20 @@ HRESULT ComRegisterObjBase::UnRegisterObject(REFGUID guid, DWORD miscStatus, OLE
 
 	}
 
+	if ( coClassName.empty() )
+		return S_OK;
+
 	mol::ostringstream oss;
 	oss << tl.getName() << _T(".") << coClassName;
 	version_independent_progid = oss.str();
 	oss << _T(".") << tl.major() << _T(".") << tl.minor();
 	versioned_progid = oss.str();
 
+	if ( version_independent_progid.empty() )
+		return S_OK;
+
+	if ( versioned_progid.empty() )
+		return S_OK;
 	//::MessageBox(0,version_independent_progid.c_str(),_T("UnRegisterObject"),0);
 
 	// start deleting reg entries
