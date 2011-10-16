@@ -68,12 +68,22 @@
 		<MSBuild Projects=".\bin\WixNet\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
  </Target>
 
-
  <Target Name="cleannet">
 
 		<MSBuild Projects=".\ax\net\net\net\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"  Targets="Clean"/>
 		<MSBuild Projects=".\ax\net\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"  Targets="Clean"/>
 		<MSBuild Projects=".\bin\WixNet\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"  Targets="Clean"/>
+ </Target>
+
+ <Target Name="WixmoeEx">
+
+		<MSBuild Projects=".\bin\WixMoeEx\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+ </Target>
+
+
+ <Target Name="cleanWixmoeEx">
+
+		<MSBuild Projects=".\bin\WixMoeEx\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"  Targets="Clean"/>
  </Target>
 
  <Target Name="universe">
@@ -85,6 +95,7 @@
         <CallTarget Targets="Universe"/>
   	<CallTarget Targets="net"/>
 	<CallTarget Targets="jre"/>
+	<CallTarget Targets="WixmoeEx"/>
  </Target>
 
  <Target Name="armageddon">
@@ -92,6 +103,7 @@
         <CallTarget Targets="clean3dParty"/>
         <CallTarget Targets="cleannet"/>
         <CallTarget Targets="cleanjre"/>
+        <CallTarget Targets="cleanWixmoeEx"/>
   	<CallTarget Targets="kosmos"/>
  </Target>
 

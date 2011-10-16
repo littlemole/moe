@@ -648,7 +648,7 @@ extern "C" void load_codegen_metadata()
   UI().addMenu(IDM_CONTEXT_TREE);    
 
     UI().addSubMenu(  IDM_CONTEXT_TREE,  IDM_CONTEXT_TREE,  IDM_TREE );
-        UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_TREE_OPEN, IDB_TOOLBAR, IDM_TREE_OPEN, false, true);
+        UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_TREE_OPEN, IDB_TOOLBAR, IDM_FILE_OPEN, false, true);
         UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_TREE_UPDATE, IDB_TOOLBAR, IDM_TREE_UPDATE, false, true);
     UI().addMenuSeparator(IDM_CONTEXT_TREE,IDM_TREE);
         UI().addMenuItem(IDM_CONTEXT_TREE, IDM_TREE, IDM_TREE_RENAME, IDB_TOOLBAR, IDM_TREE_RENAME, false, true);

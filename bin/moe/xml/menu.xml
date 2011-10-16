@@ -410,19 +410,19 @@
     <!-- the tree wnd context menu -->
     <menu id="IDM_CONTEXT_TREE" bmp="IDB_TOOLBAR">
       <menu cmd="IDM_TREE" >
-        <menu cmd="IDM_TREE_OPEN" bmp="IDM_FILE_OPEN"/>
-        <menu cmd="IDM_TREE_UPDATE" bmp="IDM_FILE_OPEN_FOLDER"/>
+        <menu cmd="IDM_TREE_OPEN" icon="IDM_FILE_OPEN"/>
+        <menu cmd="IDM_TREE_UPDATE" />
         <menu separator="true"  />
-        <menu cmd="IDM_TREE_RENAME"  bmp="IDM_MODE_EDITSETTINGS"/>
-        <menu cmd="IDM_TREE_DELETE" bmp="IDM_VIEW_CLOSE" />
+        <menu cmd="IDM_TREE_RENAME"  />
+        <menu cmd="IDM_TREE_DELETE"  />
         <menu separator="true"  />
         <menu cmd="IDM_EDIT_CUT"  />
         <menu cmd="IDM_EDIT_COPY"  />
         <menu cmd="IDM_EDIT_PASTE"  />
         <menu separator="true"  />
-        <menu cmd="IDM_TREE_PROPERTIES" bmp="IDM_MODE_PREFERENCES" />
-        <menu cmd="IDM_TREE_EXECUTE"  bmp="IDM_USER_SCRIPT"/>
-        <menu cmd="IDM_TREE_NEWDIR" bmp="IDM_FILE_NEW" />        
+        <menu cmd="IDM_TREE_PROPERTIES"  />
+        <menu cmd="IDM_TREE_EXECUTE" />
+        <menu cmd="IDM_TREE_NEWDIR"  />        
       </menu>
     </menu>
 
