@@ -411,18 +411,18 @@
     <menu id="IDM_CONTEXT_TREE" bmp="IDB_TOOLBAR">
       <menu cmd="IDM_TREE" >
         <menu cmd="IDM_TREE_OPEN" icon="IDM_FILE_OPEN"/>
-        <menu cmd="IDM_TREE_UPDATE" />
+        <menu cmd="IDM_TREE_UPDATE" icon="IDM_TAB_RELOADTAB"/>
         <menu separator="true"  />
-        <menu cmd="IDM_TREE_RENAME"  />
-        <menu cmd="IDM_TREE_DELETE"  />
+        <menu cmd="IDM_TREE_RENAME" icon="IDM_EDIT_PASTE" />
+        <menu cmd="IDM_TREE_DELETE" icon="IDM_VIEW_CLOSE" />
         <menu separator="true"  />
         <menu cmd="IDM_EDIT_CUT"  />
         <menu cmd="IDM_EDIT_COPY"  />
         <menu cmd="IDM_EDIT_PASTE"  />
         <menu separator="true"  />
-        <menu cmd="IDM_TREE_PROPERTIES"  />
-        <menu cmd="IDM_TREE_EXECUTE" />
-        <menu cmd="IDM_TREE_NEWDIR"  />        
+        <menu cmd="IDM_TREE_PROPERTIES"  icon="IDM_MODE_PREFERENCES" />
+        <menu cmd="IDM_TREE_EXECUTE" icon="IDM_EDIT_EXECUTESCRIPT" />
+        <menu cmd="IDM_TREE_NEWDIR"  icon="IDM_FILE_OPEN_FOLDER" />        
       </menu>
     </menu>
 

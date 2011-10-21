@@ -487,7 +487,7 @@ HRESULT __stdcall MoeDialogs::Open(BSTR path,IMoeDocument** d)
 	if ( ofn.dlgOpen( OFN_NOVALIDATE | OFN_ALLOWMULTISELECT | OFN_EXPLORER  | OFN_NOTESTFILECREATE | OFN_ENABLEHOOK | OFN_ENABLETEMPLATE ) )
 	{
 		// open rtf
-		if ( ofn.index() == 4 )
+		if ( ofn.index() == 3 )
 		{
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
@@ -496,7 +496,7 @@ HRESULT __stdcall MoeDialogs::Open(BSTR path,IMoeDocument** d)
 			}
 		}
 		// open html
-		else if ( ofn.index() == 3 )
+		else if ( ofn.index() == 2 )
 		{
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
@@ -505,7 +505,7 @@ HRESULT __stdcall MoeDialogs::Open(BSTR path,IMoeDocument** d)
 			}
 		}
 		// open hex
-		else if ( ofn.index() == 5 )
+		else if ( ofn.index() == 4 )
 		{
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
@@ -513,7 +513,7 @@ HRESULT __stdcall MoeDialogs::Open(BSTR path,IMoeDocument** d)
 			}
 		}
 		// open log
-		else if ( ofn.index() == 6 )
+		else if ( ofn.index() == 5 )
 		{
 			for ( int i = 0; i < ofn.selections(); i++ )
 			{
