@@ -4,6 +4,7 @@
 #include "win/file.h"
 #include <docobj.h>
 #include "xml/xml.h"
+#include "win/v7.h"
 
 namespace mol  {
 	 
@@ -555,7 +556,9 @@ int UserInterface::BitmapCmd(unsigned int id, unsigned int index)
 	if ( index >= bmps_[id].index.size()  )
 		return 0;
 
-	return bmps_[id].index[index];
+	int r = bmps_[id].index[index];
+
+	return r;
 }
 
 int UserInterface::BitmapCmdIndex(unsigned int id, unsigned int cmd)
@@ -600,6 +603,31 @@ void UserInterface::addBmpCmd(int bmp, int cmd)
 	if ( bmps_.count(bmp) > 0 ) {
 		bmps_[bmp].index.push_back(cmd);
 	}
+
+	int index = (int)bmps_[bmp].index.size()-1;
+
+	HDC desk = ::GetDC(::GetDesktopWindow());
+	
+	HDC memDCsrc  = ::CreateCompatibleDC(desk);
+	HDC memDCdest = ::CreateCompatibleDC(desk);
+	
+	HBITMAP oldBmpSrc = (HBITMAP)::SelectObject( memDCsrc,(HGDIOBJ)Bitmap(bmp));
+
+	HBITMAP compatBmp  = ::CreateCompatibleBitmap(desk,16,16);
+	HBITMAP oldBmpDest = (HBITMAP)::SelectObject( memDCdest,(HGDIOBJ)compatBmp);
+
+	::BitBlt(memDCdest,0,0,16,16,memDCsrc,index*16,0,SRCCOPY);
+//	::TransparentBlt( memDCdest,0,0,16,16,memDCsrc,index*16,0,16,16, ::GetPixel(memDCsrc,0,0) );
+
+	::SelectObject( memDCsrc,(HGDIOBJ)oldBmpSrc);
+	::SelectObject( memDCdest,(HGDIOBJ)oldBmpDest);
+
+	::DeleteDC(memDCsrc);
+	::DeleteDC(memDCdest);
+
+	::ReleaseDC(::GetDesktopWindow(),desk);
+
+	explodedBmps_.insert( std::make_pair( cmd, compatBmp ) );
 }
 
 void UserInterface::addMenu(int menu)
@@ -611,8 +639,17 @@ void UserInterface::addMenu(int menu)
 
 void UserInterface::addMenuSeparator(int root, int menu)
 {
-	mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo(_T(""),true,-1,0);
-	::AppendMenu( SubMenu(root,menu),MF_SEPARATOR|MF_OWNERDRAW,(UINT_PTR)0,(TCHAR*)inf);
+	if ( mol::OS::has_uac() )
+	{
+		// vista++
+		::AppendMenu( SubMenu(root,menu),MF_SEPARATOR,0,0);
+	}
+	else
+	{
+		// winxp
+		mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo(_T(""),true,-1,0);
+		::AppendMenu( SubMenu(root,menu),MF_SEPARATOR|MF_OWNERDRAW,(UINT_PTR)0,(TCHAR*)inf);
+	}
 }
 
 void UserInterface::addSubMenu(int root, int menu, int subMenu)
@@ -625,6 +662,7 @@ void UserInterface::addSubMenu(int root, int menu, int subMenu)
 void UserInterface::addSubMenu(int root, int menu, int cmd, int bmp)
 {
 	HMENU popup = ::CreateMenu();
+	HMENU submenu  = SubMenu(root,menu);
 
 	int iicon = -1;
 	HBITMAP b = 0;
@@ -637,8 +675,28 @@ void UserInterface::addSubMenu(int root, int menu, int cmd, int bmp)
 			b = bmps_[bmp].hbitmap;
 		}
 	}
-	mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo( CmdString(cmd).c_str(),false,iicon,b);
-	::AppendMenu( UI().SubMenu(root,menu),MF_OWNERDRAW|MF_POPUP|MF_STRING|MF_ENABLED,(UINT_PTR)popup,(TCHAR*)inf);
+
+	mol::string label = CmdString(cmd);
+	
+	if ( mol::OS::has_uac() )
+	{
+		// vista++
+		::AppendMenu( submenu,MF_POPUP|MF_STRING|MF_ENABLED,(UINT_PTR)popup,(TCHAR*)label.c_str());
+
+		int index = ::GetMenuItemCount(submenu)-1;
+
+		MENUITEMINFO mii = { sizeof(mii) };
+		mii.fMask = MIIM_BITMAP;
+		mii.hbmpItem = explodedBmps_[cmd];
+		::SetMenuItemInfo(submenu, index, TRUE, &mii);
+	}
+	else
+	{
+		//winxp
+		mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo( label.c_str(),false,iicon,b);
+		::AppendMenu( submenu,MF_OWNERDRAW|MF_POPUP|MF_STRING|MF_ENABLED,(UINT_PTR)popup,(TCHAR*)inf);
+	}
+
 	submenus_[root].insert(std::make_pair(cmd,popup));
 }
 
@@ -656,19 +714,43 @@ void UserInterface::addMenuItem( int root, int menu, int cmd, int bmp, int index
 		}
 	}
 
-	mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo(CmdString(cmd).c_str(),false,iicon,b);
+	mol::string label = CmdString(cmd);
+	HMENU submenu = SubMenu(root,menu);
+	int cnt = ::GetMenuItemCount( submenu );
 
-	MENUITEMINFO mi;
-	::ZeroMemory(&mi,sizeof(mi));
-	mi.cbSize = sizeof(mi);
-	mi.dwItemData = (ULONG_PTR)inf;
-	mi.fMask = MIIM_DATA|MIIM_TYPE|MIIM_ID|MIIM_STATE;
-	int e = enabled ? MFS_ENABLED : MFS_DISABLED;
-	mi.fState = checked ? MFS_CHECKED|e : e;
-	mi.wID = cmd;
-	mi.fType = MFT_OWNERDRAW;
+	if ( mol::OS::has_uac() )
+	{
+		// vista++
+		MENUITEMINFO mii = { sizeof(mii) };
+		mii.fMask = MIIM_BITMAP;
+		mii.hbmpItem = explodedBmps_[index];
 
-	::InsertMenuItem( SubMenu(root,menu),::GetMenuItemCount( SubMenu(root,menu)),TRUE,&mi);		
+		::InsertMenu( submenu,
+					  cnt,
+					  MF_STRING|MF_BYPOSITION,
+					  cmd, 
+					  label.c_str()
+					);
+
+		::SetMenuItemInfo(submenu, cnt, TRUE, &mii);
+	}
+	else
+	{
+		//winxp
+		mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo(label.c_str(),false,iicon,b);
+
+		MENUITEMINFO mi;
+		::ZeroMemory(&mi,sizeof(mi));
+		mi.cbSize = sizeof(mi);
+		mi.dwItemData = (ULONG_PTR)inf;
+		mi.fMask = MIIM_DATA|MIIM_TYPE|MIIM_ID|MIIM_STATE;
+		int e = enabled ? MFS_ENABLED : MFS_DISABLED;
+		mi.fState = checked ? MFS_CHECKED|e : e;
+		mi.wID = cmd;
+		mi.fType = MFT_OWNERDRAW;
+
+		::InsertMenuItem(submenu,index,TRUE,&mi);		
+	}
 }
 
 

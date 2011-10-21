@@ -1,5 +1,6 @@
 #include "win/v7.h"
 #include "ole/ie.h"
+#include "Uxtheme.h"
 
 namespace mol {
 namespace v7  {
@@ -68,6 +69,10 @@ void editFileExtensions( const std::wstring& app)
 		aaru->LaunchAdvancedAssociationUI(app.c_str());
 	}
 }
+
+
+
+IsAppThemedPtr* IsAppThemed = (IsAppThemedPtr*)mol::dllFunc( _T("UxTheme.dll"), _T("IsAppThemed") );
 
 
 // TODO: make them public

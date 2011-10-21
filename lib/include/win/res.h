@@ -396,6 +396,7 @@ private:
 	std::map<int,std::map<int,HMENU>> submenus_;
 	std::map<int,bitmapinfo> bmps_;
 	std::map<int,HWND> hWnds_;
+	std::map<int,HBITMAP> explodedBmps_;
 
 };
 

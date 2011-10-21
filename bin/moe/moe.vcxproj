@@ -474,7 +474,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="xml\include.xml" />
-    <None Include="xml\menu.xml" />
+    <None Include="xml\menu.xml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="xml\msg.xml">
       <SubType>Designer</SubType>
     </None>
