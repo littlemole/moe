@@ -8,6 +8,10 @@
 #include "ribbonres.h"
 #include "ThreadScript.h"
 #include "ActivDbg.h"
+#include "tcp/sockets.h"
+#include "ssh/ssh.h"
+#include "ssh/scp.h"
+#include "ssh/sftp.h"
 
 using namespace mol::win;
 using namespace mol::ole;
@@ -944,6 +948,8 @@ void Editor::OnSaveAs()
 
 //////////////////////////////////////////////////////////////////////////////
 
+//mol::ssh::PasswordCredentials credentials2("",0,"","");
+
 void Editor::OnSave()
 {
 	if ( !sci )
@@ -951,6 +957,100 @@ void Editor::OnSave()
 
 	mol::bstr filename;
 	props_->get_Filename(&filename);
+
+	mol::string path = mol::toString(filename);
+
+	if ( path.substr(0,6) == _T("ssh://") || path.substr(0,6) == _T("moe-ssh://") )
+	{
+		mol::bstr txt;
+		text_->GetText(&txt);
+
+		std::wstring content = mol::towstring(txt);
+		std::string raw_bytes;
+
+		long encoding = CP_UTF8;
+		props_->get_Encoding(&encoding);
+		long eol = 0;
+		props_->get_SysType(&eol);
+		VARIANT_BOOL vbBOM;
+		props_->get_WriteBOM(&vbBOM);
+
+		if ( eol == SCINTILLA_SYSTYPE_WIN32 )
+		{
+			content = mol::unix2dos(content);
+		}
+
+		if ( encoding == CP_WINUNICODE )
+		{
+			raw_bytes = std::string( (char*)(content.c_str()), content.size()*sizeof(wchar_t));
+
+			if ( vbBOM == VARIANT_TRUE )
+			{
+				raw_bytes = std::string( (char*)mol::FileEncoding::UTF16LE_BOM,2) + raw_bytes;
+			}
+		}
+		else
+		if ( encoding == CP_WINUNICODE )
+		{
+			raw_bytes = std::string( mol::toUTF8(content) );
+			if ( vbBOM == VARIANT_TRUE )
+			{
+				raw_bytes = std::string( (char*)mol::FileEncoding::UTF8_BOM,3) + raw_bytes;
+			}
+		}
+		else
+		{
+			raw_bytes = mol::tostring( content, encoding );
+		}
+
+		mol::Uri uri( mol::tostring(path) );
+		std::string user = uri.getUser();
+		std::string pwd= uri.getPwd();
+		std::string host = uri.getHost();
+		int port = uri.getPort();
+		std::string p = uri.getPath();
+
+		size_t pos = p.find_last_of("/");
+		std::string parentdir(p);
+		std::string file(p);
+		if ( pos != std::string::npos )
+		{
+			parentdir = p.substr(0,pos);
+			file = p.substr(pos+1);
+		}
+
+		if ( !host.empty() && !path.empty() )
+		{
+			try {
+
+				mol::ostringstream oss;
+				oss << _T("connecting: ") << mol::toString(host) << _T(":") << port;
+				statusBar()->status(oss.str());
+
+				mol::ssh::Session ssh;
+				if ( ssh.open(host,&(moe()->credentials),port) )
+				{
+					mol::ostringstream oss;
+					oss << _T("writing: ") << mol::toString(host) << _T(":") << port;
+					statusBar()->status(oss.str());
+
+					mol::scp::Session scp(ssh);
+					if (scp.open( mol::SSH_SCP_WRITE, parentdir) )
+					{
+						if (scp.push_file( file, raw_bytes, 0 ))
+						{
+							sci->SavePoint();
+							return;
+						}
+					}
+				}
+			}
+			catch(...)
+			{
+			}
+			return;
+		}
+	}
 
 	mol::ostringstream oss;
 

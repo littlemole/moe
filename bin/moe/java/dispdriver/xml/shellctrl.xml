@@ -1,6 +1,6 @@
 <typelib name='ShellCtrls' 
 desc='ShellCtrls' 
-typeinfocount='14' 
+typeinfocount='20' 
 guid='{74618F47-2F2A-4B0F-BDCA-344BE3208ECE}' 
 major='1' 
 minor='0' 
@@ -150,6 +150,84 @@ file='..\..\..\..\ax\shellctrl\x64/uni_release\shellctrl.tlb'>
 </interface>
 
 
+<interface name='IScpPasswordCredentials' type='Dual' iid='{BD96818E-5DAB-4305-B283-527D632C68D2}' base='IDispatch' members='2' desc='' >
+ <property name='Username' type='BSTR' dispid='1' vtindex='28' ctype='HRESULT' param='user' desc='Get/Set Username'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Password' type='BSTR' dispid='2' vtindex='36' ctype='HRESULT' param='pwd' desc='Get/Set Password'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+</interface>
+
+
+<interface name='IScpCredentialProvider' type='Dual' iid='{6A66D47E-519D-4CA8-9B39-892E9CC7D3AF}' base='IDispatch' members='5' desc='' >
+ <method name='getCredentials' type='IScpPasswordCredentials**' dispid='1' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='get password credentials' >
+  <param type='BSTR' dir='IN' name='host' />
+  <param type='long' dir='IN' name='port' />
+ </method>
+ <method name='promptCredentials' type='VARIANT*' dispid='2' vtindex='32' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='prompt for keyboard-interactive' >
+  <param type='BSTR' dir='IN' name='prompt' />
+  <param type='BSTR' dir='IN' name='description' />
+  <param type='VARIANT_BOOL' dir='IN' name='echo' />
+ </method>
+ <method name='acceptHost' type='VARIANT_BOOL*' dispid='3' vtindex='36' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='accept an unknown host' >
+  <param type='BSTR' dir='IN' name='host' />
+  <param type='long' dir='IN' name='port' />
+  <param type='BSTR' dir='IN' name='hash' />
+ </method>
+ <method name='remberSessionCredentials' type='void' dispid='4' vtindex='40' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='remember credentials for session' >
+  <param type='BSTR' dir='IN' name='host' />
+  <param type='long' dir='IN' name='port' />
+  <param type='IScpPasswordCredentials*' dir='IN' name='credentials' />
+ </method>
+ <method name='removeSessionCredentials' type='void' dispid='5' vtindex='44' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='remove credentials for session' >
+  <param type='BSTR' dir='IN' name='host' />
+  <param type='long' dir='IN' name='port' />
+ </method>
+</interface>
+
+
+<interface name='IScpList' type='Dual' iid='{D30F5C7F-CFAB-4D26-8FF3-0C7F67A0269D}' base='IDispatch' members='14' desc='' >
+ <property name='CredentialProvider' type='IScpCredentialProvider*' dispid='1' vtindex='28' ctype='HRESULT' param='provider' desc='Get/Set CredentialProvider'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Location' type='BSTR' dispid='2' vtindex='36' ctype='HRESULT' param='dir' desc='Get/Set current directory'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='HasFocus' type='VARIANT_BOOL*' dispid='3' vtindex='44' ctype='HRESULT' param='vbHasFocus' desc='returns true when Listview has the focus'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='Selection' type='BSTR*' dispid='4' vtindex='48' ctype='HRESULT' param='path' desc=''  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <method name='Update' type='void' dispid='5' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Update Listview' >
+ </method>
+ <method name='Cut' type='void' dispid='6' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Cut current selection' >
+ </method>
+ <method name='Copy' type='void' dispid='7' vtindex='60' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Copy current selection' >
+ </method>
+ <method name='Paste' type='void' dispid='8' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Paste current selection' >
+ </method>
+ <method name='Rename' type='void' dispid='9' vtindex='68' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Rename current selection' >
+ </method>
+ <method name='Delete' type='void' dispid='10' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Delete current selection' >
+ </method>
+ <method name='Properties' type='void' dispid='11' vtindex='76' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Properties for current selection' >
+ </method>
+ <method name='CreateDir' type='void' dispid='12' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Create new directory' >
+ </method>
+ <method name='UpDir' type='void' dispid='13' vtindex='84' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Up to parent directory' >
+ </method>
+ <method name='CopyTo' type='void' dispid='14' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Copy current selection to local directory' >
+  <param type='BSTR' dir='IN' name='dir' />
+ </method>
+</interface>
+
+
 <interface name='IColorPicker' type='Dual' iid='{60B3F5EC-7FC7-417A-9D90-F21C78B3FC05}' base='IDispatch' members='3' desc='' >
  <property name='Color' type='OLE_COLOR' dispid='1' vtindex='28' ctype='HRESULT' param='cl' desc='get/set current Color as OLE_COLOR'  funkind='virtual'  calltype='__stdcall' >
  <get />
@@ -275,6 +353,16 @@ file='..\..\..\..\ax\shellctrl\x64/uni_release\shellctrl.tlb'>
 <object name='HexCtrl' guid='{E83EC0F6-6AF3-44F8-901E-AF01F84FE6D0}' major='1' minor='0' progId='ShellCtrls.HexCtrl' desc='ShellCtrls' >
 <implements type='IHexCtrl' guid='{E83EC0F6-6AF3-44F8-901E-AF01F84FE6D0}' default='true'  />
 <implements type='_IHexCtrlEvents' guid='{E83EC0F6-6AF3-44F8-901E-AF01F84FE6D0}' default='true' source='true'  />
+</object>
+<object name='ScpPasswordCredentials' guid='{46861300-31F7-44F9-B4F6-449D66F3AC77}' major='1' minor='0' progId='ShellCtrls.ScpPasswordCredentials' desc='ShellCtrls' >
+<implements type='IScpPasswordCredentials' guid='{46861300-31F7-44F9-B4F6-449D66F3AC77}' default='true'  />
+</object>
+<object name='DefaultScpCredentialProvider' guid='{CF5BF8BD-DC91-43CA-AB1A-FF04CCACEFB6}' major='1' minor='0' progId='ShellCtrls.DefaultScpCredentialProvider' desc='ShellCtrls' >
+<implements type='IScpCredentialProvider' guid='{CF5BF8BD-DC91-43CA-AB1A-FF04CCACEFB6}' default='true'  />
+</object>
+<object name='ScpList' guid='{CD199DC9-8BA4-4F7A-BCFA-4C3473C06F03}' major='1' minor='0' progId='ShellCtrls.ScpList' desc='ShellCtrls' >
+<implements type='IScpList' guid='{CD199DC9-8BA4-4F7A-BCFA-4C3473C06F03}' default='true'  />
+<implements type='_IShellListEvents' guid='{CD199DC9-8BA4-4F7A-BCFA-4C3473C06F03}' default='true' source='true'  />
 </object>
 
 

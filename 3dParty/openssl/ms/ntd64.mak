@@ -57,7 +57,7 @@ RMD160_ASM_SRC=
 # The output directory for everything intersting
 OUT_D=out64D
 # The output directory for all the temporary muck
-TMP_D=tmp64
+TMP_D=tmp64D
 # The output directory for the header files
 INC_D=inc64
 INCO_D=inc64\openssl
@@ -2780,4 +2780,5 @@ $(BIN_D)\$(E_EXE).exe: $(E_OBJ) $(LIBS_DEP)
   $(LINK) $(LFLAGS) /out:$(BIN_D)\$(E_EXE).exe @<<
   $(APP_EX_OBJ) $(E_OBJ) $(L_LIBS) $(EX_LIBS)
 <<
+
 

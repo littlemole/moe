@@ -174,7 +174,24 @@
       <msg  ole="CreateDir" cmd="IDM_FILE_NEWDIR" interface="IShellPane"/>
       <msg  ole="UpDir" cmd="IDM_FILE_UPDIR" interface="IShellPane"/>
     </class>
-    
+
+    <class type="ScpDirChild" >
+
+      <!-- std windows msgs -->
+      <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
+      <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
+      <msg  handler="OnDestroy" msg="WM_DESTROY" />
+
+      <!-- pass messages to embedded ole object -->
+      <msg  ole="Update" cmd="IDM_EDIT_UPDATE" interface="IScpList"/>
+      <msg  ole="Cut" cmd="IDM_EDIT_CUT" interface="IScpList"/>
+      <msg  ole="Copy" cmd="IDM_EDIT_COPY" interface="IScpList"/>
+      <msg  ole="Paste" cmd="IDM_EDIT_PASTE" interface="IScpList"/>     
+      <msg  ole="Properties" cmd="IDM_FILE_DIRPROP" interface="IScpList"/>
+      <msg  ole="CreateDir" cmd="IDM_FILE_NEWDIR" interface="IScpList"/>
+      <msg  ole="UpDir" cmd="IDM_FILE_UPDIR" interface="IScpList"/>
+    </class>
+
     <class type="Editor" >
 
         <!-- std windows msgs -->

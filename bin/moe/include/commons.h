@@ -60,6 +60,7 @@
 #include "ax/shellctrl/ShellTreeEvents.h"
 #include "ax/shellctrl/HexCtrlEvents.h"
 #include "ax/ScintillAx/include/ScintillaxEvents.h"
+#include "ax/shellctrl/ScpListCtrl.h"
 
 // moe idl
 #include "moe_h.h"

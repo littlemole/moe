@@ -1530,7 +1530,7 @@ HRESULT MoeVistaFileDialog::init(int options, REFCLSID clsid)
 	if (hr != S_OK)
 		return hr;
 	
-	hr = fd_->SetOptions(dwFlags | options );
+	hr = fd_->SetOptions(/*dwFlags |*/ options );
 	if (hr != S_OK)
 		return hr;
 

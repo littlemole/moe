@@ -81,6 +81,58 @@ BEGIN
 END
 
 
+
+IDM_SCP_LIST_DIR MENU 
+BEGIN
+    POPUP "Context"
+    BEGIN
+        MENUITEM "Open",                        IDM_LIST_OPEN
+        MENUITEM "Update",                      IDM_LIST_UPDATE
+        MENUITEM SEPARATOR
+        MENUITEM "Up Dir",                      IDM_LIST_UPDIR
+        MENUITEM "New Dir",                     IDM_LIST_NEWDIR
+        MENUITEM SEPARATOR
+        MENUITEM "Rename",                      IDM_LIST_RENAME
+        MENUITEM "Delete",                      IDM_LIST_DELETE
+        MENUITEM SEPARATOR
+        MENUITEM "Copy",                        IDM_LIST_COPY
+        MENUITEM "Cut",                         IDM_LIST_CUT
+        MENUITEM "Paste",                       IDM_LIST_PASTE
+        MENUITEM SEPARATOR
+        MENUITEM "Properties",                  IDM_LIST_PROPERTIES
+    END
+END
+
+IDD_SCP_PWD_DIALOG DIALOGEX 0, 0, 290, 110
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "SSH Credentials"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Login",IDOK,224,89,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,15,89,50,14
+    LTEXT           "Provide SSH Credentials to connect to host:",IDC_STATIC,17,14,150,10
+    EDITTEXT        IDC_EDIT_HOST,16,27,189,14,ES_AUTOHSCROLL
+    LTEXT           "Port:",IDC_STATIC,215,29,18,14
+    EDITTEXT        IDC_EDIT_PORT,239,27,33,15,ES_AUTOHSCROLL
+    LTEXT           "Username:",IDC_STATIC,17,48,40,9
+    LTEXT           "Password:",IDC_STATIC,161,48,40,10
+    EDITTEXT        IDC_EDIT_USER,15,62,116,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_PWD,157,62,116,15,ES_PASSWORD | ES_AUTOHSCROLL
+END
+
+IDD_DIALOG_SSH_ACCEPT_HOST DIALOGEX 0, 0, 316, 159
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Accept unknown host?"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,205,138,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,259,138,50,14
+    LTEXT           "If you trust that host, click OK to accept. Otherwise click Cancel.",IDC_STATIC,23,123,264,12
+    EDITTEXT        IDC_EDIT_HOST_HASH,23,66,267,48,ES_MULTILINE | ES_AUTOHSCROLL
+    LTEXT           "Static\r\nnewline\r\nyanl",IDC_STATIC_UNKNOWN_HOST_MSG,17,23,278,26
+    LTEXT           "The host key footprint hash is:",IDC_STATIC,25,55,124,9
+END
+
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -138,7 +190,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 // Generated from the TEXTINCLUDE 3 resource.
 //
-
+ 
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED

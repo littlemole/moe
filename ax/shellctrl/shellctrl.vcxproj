@@ -132,6 +132,8 @@
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">Midl</CustomBuildAfterTargets>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">Midl</CustomBuildAfterTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
     <ClCompile>
@@ -145,7 +147,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\uni_Release\win.lib;..\..\lib\src\ole\uni_Release\ole.lib;..\..\lib\src\util\uni_Release\util.lib;..\..\lib\src\thread\uni_Release\thread.lib;..\..\3dParty\pcre\uni_Release\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Msimg32.lib;..\..\lib\src\xml\uni_Release\xml.lib;..\..\3dParty\expat\Source\lib\uni_release\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\uni_Release\win.lib;..\..\lib\src\ole\uni_Release\ole.lib;..\..\lib\src\util\uni_Release\util.lib;..\..\lib\src\tcp\uni_Release\tcp.lib;..\..\lib\src\thread\uni_Release\thread.lib;..\..\3dParty\pcre\uni_Release\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Msimg32.lib;..\..\lib\src\xml\uni_Release\xml.lib;..\..\3dParty\expat\Source\lib\uni_release\libexpatMT.lib;..\..\3dParty\zlib\zlib.lib;..\..\3dParty\openssl\out32\libeay32.lib;..\..\3dParty\openssl\out32\ssleay32.lib;..\..\3dParty\libssh\build\src\static\Win32\release\ssh.lib;..\..\lib\src\ssh\uni_Release\ssh.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>shellCtrl.def</ModuleDefinitionFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -199,10 +201,10 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <BrowseInformation>true</BrowseInformation>
+      <BrowseInformation>false</BrowseInformation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\x64\uni_Release\win.lib;..\..\lib\src\ole\x64\uni_Release\ole.lib;..\..\lib\src\util\x64\uni_Release\util.lib;..\..\lib\src\thread\x64\uni_Release\thread.lib;..\..\3dParty\pcre\x64\uni_Release\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Msimg32.lib;..\..\lib\src\xml\x64\uni_Release\xml.lib;..\..\3dParty\expat\Source\lib\x64\uni_Release_64\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\x64\uni_Release\win.lib;..\..\lib\src\ole\x64\uni_Release\ole.lib;..\..\lib\src\util\x64\uni_Release\util.lib;..\..\lib\src\tcp\x64\uni_Release\tcp.lib;..\..\lib\src\thread\x64\uni_Release\thread.lib;..\..\3dParty\pcre\x64\uni_Release\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Msimg32.lib;..\..\lib\src\xml\x64\uni_Release\xml.lib;..\..\3dParty\expat\Source\lib\x64\uni_Release\libexpatMT.lib;..\..\3dParty\zlib\x64\release\zlib.lib;..\..\3dParty\openssl\out64\libeay32.lib;..\..\3dParty\openssl\out64\ssleay32.lib;..\..\3dParty\libssh\build\src\static\x64\release\ssh.lib;..\..\lib\src\ssh\x64\uni_Release\ssh.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>shellCtrl.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -214,6 +216,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX64</TargetMachine>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <ResourceCompile>
       <PreprocessorDefinitions>TLB=x64\uni_release\shellctrl.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -227,7 +230,7 @@
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <AdditionalIncludeDirectories>..\..\lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN64;DEBUG;_WINDOWS;MOL_DLL;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WIN32;WIN32;WIN64;DEBUG;_WINDOWS;MOL_DLL;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
@@ -235,7 +238,7 @@
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;..\..\3dParty\pcre\x64\uni_debug\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Msimg32.lib;..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\x64\uni_debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\lib\src\tcp\x64\uni_debug\tcp.lib;..\..\lib\src\ssh\x64\uni_debug\ssh.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;..\..\3dParty\pcre\x64\uni_debug\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Msimg32.lib;..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\x64\uni_debug\libexpatMT.lib;..\..\3dParty\libssh\build\src\static\x64\Debug\ssh.lib;..\..\3dParty\zlib\x64\debug\zlib.lib;..\..\3dParty\openssl\out64D\libeay32.lib;..\..\3dParty\openssl\out64D\ssleay32.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>shellCtrl.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -247,9 +250,10 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX64</TargetMachine>
+      <ShowProgress>NotSet</ShowProgress>
     </Link>
     <ResourceCompile>
-      <PreprocessorDefinitions>TLB=x64/uni_debug_64/shellctrl.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TLB=x64/uni_debug/shellctrl.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release_64|Win32'">
@@ -310,6 +314,7 @@
   <ItemGroup>
     <ClCompile Include="ColorPickerDlg.cpp" />
     <ClCompile Include="HexCtrl.cpp" />
+    <ClCompile Include="ScpListCtrl.cpp" />
     <ClCompile Include="shellCtrl.cpp" />
     <ClCompile Include="ShellListCtrl.cpp" />
     <ClCompile Include="ShellTreeCtrl.cpp" />
@@ -337,6 +342,10 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">$(TargetName)_dispid.h</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">generate dispids from typelib</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">generate dispids from typelib</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">$(TargetName)_dispid.h</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">$(IntDir)$(TargetName).tlb</AdditionalInputs>
     </CustomBuild>
     <None Include="shellCtrl.def" />
     <None Include="CCHSB.bmp" />
@@ -352,6 +361,7 @@
     <ClInclude Include="HexCtrl.h" />
     <ClInclude Include="HexCtrlEvents.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="ScpListCtrl.h" />
     <ClInclude Include="shellctrl_dispid.h" />
     <ClInclude Include="ShellListCtrl.h" />
     <ClInclude Include="ShellListEvents.h" />
@@ -366,6 +376,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">TLB=.\\x64\\uni_release_64\\shellCtrl.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">TLB=.\\uni_release\\shellCtrl.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">TLB=.\\uni_debug\\shellCtrl.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">TLB=x64/uni_debug/shellctrl.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -8,6 +8,8 @@
 
 #include "dir3.h"
 
+#include "scpdir.h"
+
 #include "editor.h"
 
 #include "formeditor.h"

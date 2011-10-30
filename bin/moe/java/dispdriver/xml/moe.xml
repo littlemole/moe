@@ -542,6 +542,7 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
 <element name='MOE_DOCTYPE_FORM' value='7' />
 <element name='MOE_DOCTYPE_RTF' value='8' />
 <element name='MOE_DOCTYPE_TAIL' value='9' />
+<element name='MOE_DOCTYPE_SFTP' value='10' />
 </enum>
 
 <enum type='MOE_SEARCHFLAG' desc='' >

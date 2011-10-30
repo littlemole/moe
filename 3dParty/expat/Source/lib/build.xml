@@ -28,19 +28,15 @@
       <OutputFile>.\uni_release\libexpatMT.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug_64|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
     <Lib>
-      <OutputFile>x64\uni_debug_64\libexpatMT.lib</OutputFile>
+      <OutputFile>x64\uni_debug\libexpatMT.lib</OutputFile>
     </Lib>
+ 
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release_64|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">
     <Lib>
-      <OutputFile>Release_static\libexpatMT.lib</OutputFile>
-    </Lib>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">
-    <Lib>
-      <OutputFile>.\x64\uni_release_64\libexpatMT.lib</OutputFile>
+      <OutputFile>.\x64\uni_release\libexpatMT.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
 

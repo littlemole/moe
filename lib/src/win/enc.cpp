@@ -254,6 +254,78 @@ int  FileEncoding::getEncoding(const std::string& c, const std::string& h )
     return 0;
 }
 
+std::string FileEncoding::convertToUTF8(const std::string& raw_bytes, long enc_hint)
+{
+	DWORD cp = investigate(raw_bytes);
+
+	codePage_ = CP_UTF8;
+	switch(cp)
+	{
+		case CP_UTF8:
+		{
+			break;
+		}
+		case CP_WINUNICODE:
+		{
+			codePage_ = CP_WINUNICODE;
+			break;
+		}
+		case -1:
+		{
+			codePage_ = enc_hint;
+			break;
+		}
+		default:
+		{
+			if ( enc_hint == CP_UTF8 )
+				codePage_ = CP_UTF8;
+			else
+				codePage_ = cp;
+		}
+	}
+
+	if ( isBinary() )
+	{
+		return "";
+	}
+
+	switch ( codePage_ )
+	{
+		case CP_WINUNICODE :
+		{
+			// jump over BOM
+			std::string s2(raw_bytes);
+			if ( raw_bytes.substr(0,2) == std::string((char*)mol::FileEncoding::UTF16LE_BOM,2) )
+				s2 = std::string(raw_bytes.data()+2,raw_bytes.size()-2);
+
+			// it really is a UCS-2 string, so cast to wchar_t (WIN32)
+			std::wstring ws((wchar_t*)(s2.data()),s2.size()/sizeof(wchar_t));
+
+			// now convert UTF16-LE to UTF-8
+			std::string u = mol::toUTF8(ws);
+			return mol::unix2dos(u);
+		}
+		case CP_UTF8 :
+		{
+			std::string s2;
+			if ( raw_bytes.substr(0,3) == std::string((char*)mol::FileEncoding::UTF8_BOM,3) )
+				s2 = std::string(raw_bytes.c_str()+3,raw_bytes.size()-3);
+			else
+				s2 = raw_bytes;
+
+			s2 = mol::unix2dos(s2);
+			return s2;
+		}
+		default:
+		{
+			std::string s2(mol::toUTF8(raw_bytes,codePage_));
+			s2 = mol::unix2dos(s2);
+			return s2;
+		}
+	}
+
+	return "";
+}
 
 
 }

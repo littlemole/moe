@@ -80,6 +80,7 @@ public:
 	int  investigate(const std::string& c);
 	int  investigate(const std::string& c, const std::string& h);
 
+	int codePage() { return codePage_; }
 	std::string Encoding();
 
 	eol_mode eolMode();
@@ -92,6 +93,8 @@ public:
     static const unsigned char UTF8_BOM[]; 
 	static const unsigned char UTF16LE_BOM[];
 
+	std::string convertToUTF8(const std::string& raw_bytes, long enc_hint);
+
 private:
 
 	int  getEncoding(const std::string& c, const std::string& h );
@@ -103,6 +106,8 @@ private:
 	int									codePage_;
     mol::punk<IMultiLanguage2>			multiLang_;
 };
+
+
 
 }
 

@@ -330,7 +330,7 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <ResourceCompile>
-      <PreprocessorDefinitions>TLB=x64\uni_debug_64\shellFolder.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TLB=x64\uni_debug\shellFolder.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release_64|Win32'">
@@ -421,6 +421,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">TLB=.\\x64\\uni_release_64\\shellfolder.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">TLB=.\\uni_release\\shellfolder.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">TLB=.\\uni_release\\shellfolder.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">TLB=x64\uni_debug\shellFolder.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

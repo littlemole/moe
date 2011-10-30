@@ -4,7 +4,7 @@
 #include "ColorPickerDlg.h"
 #include "ShellTreeCtrl.h"
 #include "ShellListCtrl.h"
-//#include "WorkSpaceCtrl.h"
+#include "ScpListCtrl.h"
 #include "HexCtrl.h"
 
 #include "ShellCtrl_i.c"
@@ -14,7 +14,10 @@ class shellCtrlDll :
 	public exports_aggregable< shellCtrlDll, ShellTree >,
 	public exports_aggregable< shellCtrlDll, ShellListCtrl >,
 	public exports_aggregable< shellCtrlDll, ColorDlg >,
-	public exports_aggregable< shellCtrlDll, HexCtrl >
+	public exports_aggregable< shellCtrlDll, HexCtrl >,
+	public exports_aggregable< shellCtrlDll, ScpPasswordCredentials >,
+	public exports_aggregable< shellCtrlDll, ScpCredentialProvider >,
+	public exports_aggregable< shellCtrlDll, ScpListCtrl >
 {};
 
 DLL_COCLASS_EXPORTS(shellCtrlDll);

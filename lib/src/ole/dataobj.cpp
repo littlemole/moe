@@ -104,16 +104,16 @@ DataTransferObj::~DataTransferObj()
 }
 
 
-void DataTransferObj::addData( CLIPFORMAT format, const mol::string & data )
+void DataTransferObj::addData( CLIPFORMAT format, const mol::string & data, int index  )
 {
-	format_etc fe( format, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL );
+	format_etc fe( format, NULL, DVASPECT_CONTENT, index, TYMED_HGLOBAL );
 	StgMedium sm((mol::string &)data);
 	SetData(  &fe,  &sm,  false );
 }
 
-void DataTransferObj::addData( CLIPFORMAT format, void* v, int size )
+void DataTransferObj::addData( CLIPFORMAT format, void* v, size_t size, int index  )
 {
-	format_etc fe( format, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL );
+	format_etc fe( format, NULL, DVASPECT_CONTENT, index, TYMED_HGLOBAL );
 	StgMedium sm(v,size);
 	SetData(  &fe,  &sm,  false );
 }

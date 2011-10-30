@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Fri Oct 21 20:06:24 2011
+/* at Sun Oct 30 16:04:05 2011
  */
 /* Compiler settings for src\moe.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -177,7 +177,8 @@ enum MOE_DOCTYPE
 	MOE_DOCTYPE_OLE	= 6,
 	MOE_DOCTYPE_FORM	= 7,
 	MOE_DOCTYPE_RTF	= 8,
-	MOE_DOCTYPE_TAIL	= 9
+	MOE_DOCTYPE_TAIL	= 9,
+	MOE_DOCTYPE_SFTP	= 10
     } 	MOE_DOCTYPE;
 
 typedef 

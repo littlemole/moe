@@ -68,6 +68,7 @@ LRESULT ShellFolderCtrl::OnCreate(UINT msg, WPARAM wParam, LPARAM lParam)
 
 	mol::string s = mol::io::desktop().getDisplayNameOf(*mol::io::desktop().getSpecialFolder(CSIDL_DESKTOP));
 	wnd_.path(s);
+	wnd_.setFocus();
 	return 0;
 }
 
@@ -80,6 +81,7 @@ LRESULT ShellFolderCtrl::OnSize(UINT msg, WPARAM wParam, LPARAM lParam)
 	clientRect_.bottom = HIWORD (lParam) ;
 
 	wnd_.move(clientRect_);
+
 	return 0;
 }
 //////////////////////////////////////////////////////////////////////////////

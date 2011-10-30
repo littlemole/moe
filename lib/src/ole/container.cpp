@@ -500,6 +500,7 @@ LRESULT OleContainerBase::handleOnLayout( UINT message, WPARAM wParam, LPARAM lP
 			activeObject->ResizeBorder( &r, uiwin, TRUE);
 	}
 
+
 	handleDoLayout( clientRect );
 	ODBGS("<-------OleContainer::OnLayout END");
 	return 0;

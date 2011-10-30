@@ -169,9 +169,9 @@ protected:
 	void Init();
 	void disposeObject(IUnknown* unk);
 
-	bool loadAdminCOM(const mol::string& p, const mol::string& ext,  long enc);
-	bool saveAdminCOM(const mol::string& p);
-	bool loadAdmin(const mol::string& p, const mol::string& ext,  long enc);
+	//bool loadAdminCOM(const mol::string& p, const mol::string& ext,  long enc);
+	//bool saveAdminCOM(const mol::string& p);
+	std::string loadAdmin(const mol::string& p);
 	bool saveAdmin(const mol::string& p);
 	bool load(const mol::string& p, const mol::string& ext,  long enc);
 	bool save(const mol::string& location);

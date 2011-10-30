@@ -2,24 +2,24 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <ComponentGroup Id="MoeRegContextCompGroup">
-            <Component Id="cmp7EF36E1EC531694EDA32BFC07DF42FF1" Directory="TARGETDIR" Guid="{67A58AAA-278F-4BCE-A33D-BEF4CA596C1A}" KeyPath="yes">
+            <Component Id="cmp7EF36E1EC531694EDA32BFC07DF42FF1" Directory="TARGETDIR" Guid="{262DB27C-6AC6-4C5B-A01F-91CF42B3D878}" KeyPath="yes">
                 <RegistryKey Key="*\shellex\ContextMenuHandlers\{AF110465-5902-4db8-8DF3-FBA079547D08}" Root="HKCR">
                     <RegistryValue Value="moe shell context menu handler" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmpDEF4511B8FF81B271FCD3C88427489BC" Directory="TARGETDIR" Guid="{036B01DB-53CF-4344-A999-7482FD4C25F4}" KeyPath="yes">
+            <Component Id="cmpDEF4511B8FF81B271FCD3C88427489BC" Directory="TARGETDIR" Guid="{85B498FB-6A51-452D-A5C9-108761CBC236}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="SOFTWARE\mol" Root="HKLM" />
             </Component>
-            <Component Id="cmpE0CD74E39C5F3352B3E44862ED1EABAE" Directory="TARGETDIR" Guid="{642CA83F-DB9A-48C0-9217-0BA9F182D191}" KeyPath="yes">
+            <Component Id="cmpE0CD74E39C5F3352B3E44862ED1EABAE" Directory="TARGETDIR" Guid="{053064E7-D531-4E22-8C2C-AA87E7CCE5B2}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="SOFTWARE\mol\moe" Root="HKLM" />
             </Component>
-            <Component Id="cmpA06107A321E0481B5A993CFBDCD91BAE" Directory="TARGETDIR" Guid="{7FFFE159-3D34-456D-8778-4585FF8C7C1A}" KeyPath="yes">
+            <Component Id="cmpA06107A321E0481B5A993CFBDCD91BAE" Directory="TARGETDIR" Guid="{ED7BE151-6D76-42A0-B474-40554817182B}" KeyPath="yes">
                 <RegistryKey Key="SOFTWARE\mol\moe\Capabilities" Root="HKLM">
                     <RegistryValue Name="ApplicationDescription" Value="mole's own editor" Type="string" />
                     <RegistryValue Name="ApplicationName" Value="moe" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp35C55E5607714300984E9203FF44323E" Directory="TARGETDIR" Guid="{292E0722-ED50-4C97-A549-32AAF84A5106}" KeyPath="yes">
+            <Component Id="cmp35C55E5607714300984E9203FF44323E" Directory="TARGETDIR" Guid="{29A9E21B-BB5A-40B0-986B-263FF1D0622D}" KeyPath="yes">
                 <RegistryKey Key="SOFTWARE\mol\moe\Capabilities\FileAssociations" Root="HKLM">
                     <RegistryValue Name=".txt" Value="moe" Type="string" />
                     <RegistryValue Name=".html" Value="moe" Type="string" />
@@ -45,7 +45,7 @@
                     <RegistryValue Name=".properties" Value="moe" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp9A801BCD8700C850371F0D5B77106737" Directory="TARGETDIR" Guid="{757240CB-EA29-48DB-84D3-08FC1470465F}" KeyPath="yes">
+            <Component Id="cmp9A801BCD8700C850371F0D5B77106737" Directory="TARGETDIR" Guid="{AE07938F-3FCC-41FE-A1FC-6334CC9E31B2}" KeyPath="yes">
                 <RegistryKey Key="SOFTWARE\RegisteredApplications" Root="HKLM">
                     <RegistryValue Name="moe" Value="Software\mol\moe\Capabilities" Type="string" />
                 </RegistryKey>

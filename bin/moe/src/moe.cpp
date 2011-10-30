@@ -71,6 +71,8 @@ MoeWnd::MoeWnd()
 	{
 		codePages_.push_back( CodePage( std::make_pair( (*it).first, (*it).second.second)) );
 	}
+
+	credentialProvider.createObject(CLSID_DefaultScpCredentialProvider);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -375,6 +377,11 @@ void MoeWnd::OnFileOpenHtml()
 	{
 		if ( !urlDlg()->url.empty() )
 		{
+			if (  urlDlg()->url.substr(0,6) == _T("ssh://") ||  urlDlg()->url.substr(0,10) == _T("moe-ssh://") )
+			{
+				bool result = docs()->open( urlDlg()->url, MOE_DOCTYPE_DOC, -1, false, 0 );
+				return;
+			}
 			bool result = docs()->open( urlDlg()->url, MOE_DOCTYPE_HTML, -1, true, 0 );
 			if (!result)
 			{
@@ -1219,6 +1226,83 @@ HRESULT __stdcall MoeWnd::InitNew()
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
+
+
+bool MoeWnd::Credentials::getCredentials(const std::string& host, int port, std::string& user, std::string& pwd)
+{
+	if ( !This()->credentialProvider )
+		return false;
+
+	mol::punk<IScpPasswordCredentials> creds;
+	HRESULT hr = This()->credentialProvider->getCredentials( mol::bstr(host), port, &creds );
+	if ( hr != S_OK )
+		return false;
+
+	mol::bstr u;
+	creds->get_Username(&u);
+
+	mol::bstr p;
+	creds->get_Password(&p);
+
+	user = mol::tostring(u);
+	pwd  = mol::tostring(p);
+
+	return true;
+}
+
+bool MoeWnd::Credentials::promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,std::string& value,bool echo)
+{
+	
+	return false;
+}
+
+bool MoeWnd::Credentials::acceptHost(const std::string& host, int port, const std::string& hash)
+{
+	if ( !This()->credentialProvider )
+		return false;
+
+	VARIANT_BOOL vb;
+	HRESULT hr = This()->credentialProvider->acceptHost( mol::bstr(host), port, mol::bstr(hash), &vb );
+	if ( hr != S_OK )
+		return false;
+
+	if ( vb == VARIANT_TRUE )
+		return true;
+
+	return true;
+}
+
+bool MoeWnd::Credentials::rememberHostCredentials(const std::string& host, int port, const std::string& user, const std::string& pwd)
+{
+	if ( !This()->credentialProvider )
+		return false;
+
+	mol::punk<IScpPasswordCredentials> creds;
+	HRESULT hr = creds.createObject(CLSID_ScpPasswordCredentials);
+	if ( hr != S_OK )
+		return false;
+
+	creds->put_Username( mol::bstr(user) );
+	creds->put_Password( mol::bstr(pwd) );
+	
+	hr = This()->credentialProvider->remberSessionCredentials( mol::bstr(host), port, creds );
+	if ( hr != S_OK )
+		return false;
+
+	return true;
+}
+
+bool MoeWnd::Credentials::deleteHostCredentials(const std::string& host, int port)
+{
+	if ( !This()->credentialProvider )
+		return false;
+
+	HRESULT hr = This()->credentialProvider->removeSessionCredentials(mol::bstr(host), port);
+	if ( hr != S_OK )
+		return false;
+
+	return true;
+}
 
 
 

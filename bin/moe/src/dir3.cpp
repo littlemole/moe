@@ -124,11 +124,17 @@ HRESULT __stdcall DirChild::get_FilePath( BSTR *fname)
 
 void DirChild::OnMDIActivate( HWND activated )
 {
-	statusBar()->status(location_);
-	tab()->select( *this );
+	if ( activated == *this )
+	{
+		if ( mol::Ribbon::ribbon()->enabled())
+		{
+			mol::Ribbon::ribbon()->mode(2);
+			mol::Ribbon::ribbon()->maximize();
+		}
+		statusBar()->status(location_);
+		tab()->select( *this );
 
-	mol::Ribbon::ribbon()->mode(2);
-	mol::Ribbon::ribbon()->maximize();
+	}
 
 }
 
