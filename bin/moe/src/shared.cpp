@@ -461,7 +461,7 @@ HRESULT __stdcall MoeDialogs::Open(BSTR path,IMoeDocument** d)
 				fd.path(p);
 			}
 		}
-		HRESULT hr = fd.open(mol::v7::FOS_ALLOWMULTISELECT | mol::v7::FOS_FILEMUSTEXIST | mol::v7::FOS_NOVALIDATE);
+		HRESULT hr = fd.open(mol::v7::FOS_ALLOWMULTISELECT  | mol::v7::FOS_NOVALIDATE | mol::v7::FOS_ALLNONSTORAGEITEMS);
 		if ( hr != S_OK )
 			return hr;
 

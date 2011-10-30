@@ -4,6 +4,7 @@
 #include "Editor.h"
 #include "Img.h"
 #include "Dir3.h"
+#include "ScpDir.h"
 #include "Form.h"
 #include "rtf.h"
 #include "hex.h"
@@ -14,6 +15,11 @@
 #include "xmlui.h"
 #include "ribbonres.h"
 #include "DocFactory.h"
+
+#include "tcp/sockets.h"
+#include "ssh/ssh.h"
+#include "ssh/scp.h"
+#include "ssh/sftp.h"
 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
@@ -157,6 +163,11 @@ mol::MdiChild* handleShellPath(  const mol::string& p )
 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
+
+//mol::ssh::PasswordCredentials credentials("",0,"","");
+
+
+
 /////////////////////////////////////////////////////////////////////
 
 mol::MdiChild* DocFactory::documentFactory( const mol::string& p,MOE_DOCTYPE type, long enc, bool readOnly)
@@ -194,6 +205,103 @@ mol::MdiChild* DocFactory::documentFactory( const mol::string& p,MOE_DOCTYPE typ
 	
 	if ( !mol::Path::exists(path) )
 	{
+		if ( path.substr(0,6) == _T("ssh://") || path.substr(0,10) == _T("moe-ssh://") )
+		{
+			mol::Uri uri(mol::tostring(path));
+
+			std::string user = uri.getUser();
+			std::string pwd= uri.getPwd();
+			std::string host = uri.getHost();
+			int port = uri.getPort();
+			std::string p = uri.getPath();
+			if ( !host.empty() && !path.empty() )
+			{
+				try {
+					mol::ssh::Session ssh;
+
+					mol::ostringstream oss;
+					oss << _T("connecting: ") << mol::toString(host) << _T(":") << port;
+					statusBar()->status(oss.str());
+
+					if ( !ssh.open(host,&(moe()->credentials),port) )
+					{
+					}
+					else
+					{
+						mol::ostringstream oss;
+						oss << _T("retrieving: ") << mol::toString(host) << _T(":") << port;
+						statusBar()->status(oss.str());
+
+						mol::sftp::Session sftp;
+						if(!sftp.open(ssh))
+							return false;
+
+						mol::sftp::RemoteFile rf = sftp.stat(p);
+
+						if ( rf.isDir() )
+						{
+							return load<ScpDirChild>(path);
+						}
+
+						mol::scp::Session scp(ssh);
+						if (scp.open( mol::SSH_SCP_READ, p))
+						{
+							std::string content;
+							if (scp.read_file(content))
+							{
+								Editor::Instance* edit = Editor::CreateInstance( mol::toString(path) );
+								if (!edit)
+									return false;
+
+								mol::MdiChild* c = dynamic_cast<mol::MdiChild*>(edit);
+								if (!c)
+									return false;
+
+								mol::punk<IMoeDocument> doc;
+								HRESULT hr = edit->QueryInterface(IID_IMoeDocument, (void**)&doc);
+								if ( hr == S_OK)
+								{
+									mol::punk<IDispatch> disp;
+									hr = doc->get_Object(&disp);
+									if ( hr == S_OK )
+									{
+										mol::punk<IScintillAx> sciAx(disp);
+										if ( sciAx)
+										{
+											mol::punk<IScintillAxText> text;
+											hr = sciAx->get_Text(&text);
+											if ( hr == S_OK )
+											{
+												mol::FileEncoding fe;
+												std::string utf8 = fe.convertToUTF8( content, CP_UTF8);
+												hr = text->Append( mol::bstr(mol::fromUTF8(utf8)) );
+												if ( hr != S_OK )
+													return false;
+
+												mol::punk<IScintillAxProperties> props;
+												hr = sciAx->get_Properties(&props);
+												if ( hr == S_OK )
+												{
+													props->put_Encoding(fe.codePage());
+													props->put_SysType((long)(fe.eolMode()));
+													props->put_Filename(mol::bstr(path));
+												}
+
+												hr = sciAx->SavePoint();
+												if ( hr == S_OK )
+													return c;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				catch(...)
+				{}
+			}
+		}
 		return false;
 	}
 

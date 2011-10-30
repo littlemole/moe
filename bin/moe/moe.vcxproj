@@ -191,7 +191,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
-      <Profile>false</Profile>
+      <Profile>true</Profile>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>resources/moe.exe.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
@@ -254,7 +254,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/SUBSYSTEM:WINDOWS,4.00 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Mpr.lib;urlmon.lib;..\..\3dParty\pcre\x64\uni_debug\pcre.lib;Msimg32.lib;..\..\3dParty\expat\Source\lib\x64\uni_debug\libexpatMT.lib;gdiplus.lib;Propsys.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;..\..\lib\src\ssh\x64\uni_debug\ssh.lib;..\..\lib\src\tcp\x64\uni_debug\tcp.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Mpr.lib;urlmon.lib;Ws2_32.lib;..\..\3dParty\pcre\x64\uni_debug\pcre.lib;..\..\3dParty\openssl\out64D\libeay32.lib;..\..\3dParty\openssl\out64D\ssleay32.lib;Msimg32.lib;..\..\3dParty\expat\Source\lib\x64\uni_debug\libexpatMT.lib;..\..\3dParty\zlib\x64\debug\zlib.lib;gdiplus.lib;Propsys.lib;..\..\3dParty\libssh\build\src\static\x64\Debug\ssh.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)moe.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -264,7 +264,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX64</TargetMachine>
-      <Profile>false</Profile>
+      <Profile>true</Profile>
       <MinimumRequiredVersion>
       </MinimumRequiredVersion>
       <Version>502</Version>
@@ -356,6 +356,7 @@
     <ClCompile Include="src\MoeBar.cpp" />
     <ClCompile Include="src\ole.cpp" />
     <ClCompile Include="src\rtf.cpp" />
+    <ClCompile Include="src\ScpDir.cpp" />
     <ClCompile Include="src\shared.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">Create</PrecompiledHeader>
@@ -389,6 +390,7 @@
     <ClInclude Include="include\mdichild.h" />
     <ClInclude Include="include\moe.h" />
     <ClInclude Include="include\rtf.h" />
+    <ClInclude Include="include\ScpDir.h" />
     <ClInclude Include="include\tailEditor.h" />
     <ClInclude Include="include\ThreadScript.h" />
     <ClInclude Include="include\tree.h" />

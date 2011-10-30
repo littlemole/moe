@@ -2,6 +2,8 @@
 #define MOL_MOE_DEF_GUARD_
 
 #include "moe.h"
+#include "ssh/ssh.h"
+#include "tcp/sockets.h"
 
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
@@ -37,6 +39,8 @@ private:
     mol::comm_ctrl_init cci_;
 	mol::GdiPlusUser    gdip_;
 	mol::richedit_init  rei_;
+	mol::ssh::Init      si_;
+	mol::WinSockUser    wsu_;
 
 	void init_extensions_if();
 	bool enableExtensions_;

@@ -41,7 +41,7 @@ public:
 	}
 
 
-	StgMedium( void* v, int size, int opt = GMEM_MOVEABLE|GMEM_NODISCARD, IUnknown* pUnk = 0)
+	StgMedium( void* v, size_t size, int opt = GMEM_MOVEABLE|GMEM_NODISCARD, IUnknown* pUnk = 0)
 	{
 		mol::global glob( v, size );
 		this->tymed          = TYMED_HGLOBAL;

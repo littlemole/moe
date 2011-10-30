@@ -41,6 +41,8 @@
 	<Exec Command="nmake -f ms\nt64.mak" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' "  />
 	<Exec Command="nmake -f ms\ntd64.mak" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' "  />
 
+    <MSBuild Projects="libssh/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+
  </Target>
 
 
@@ -66,8 +68,8 @@
 	<Exec Command="nmake -f ms\nt64.mak clean" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' "  />
 	<Exec Command="nmake -f ms\ntd64.mak clean" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' "  />
 
-
+	<MSBuild Projects="libssh/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
  </Target>
 
 </Project>
-
+

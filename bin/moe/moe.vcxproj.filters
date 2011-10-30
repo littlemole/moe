@@ -64,6 +64,9 @@
     <ClCompile Include="src\editor.cpp">
       <Filter>mdi</Filter>
     </ClCompile>
+    <ClCompile Include="src\ScpDir.cpp">
+      <Filter>mdi</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\app.h" />
@@ -137,6 +140,9 @@
     </ClInclude>
     <ClInclude Include="include\tree.h">
       <Filter>widget</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ScpDir.h">
+      <Filter>mdi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

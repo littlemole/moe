@@ -108,8 +108,8 @@ public:
 	DataTransferObj(HWND hwnd, int cmd, bool cut = false);
     virtual ~DataTransferObj();
 
-	void addData( CLIPFORMAT format, const mol::string & data ); 
-	void addData( CLIPFORMAT format, void* vv, int size );
+	void addData( CLIPFORMAT format, const mol::string & data, int index = -1 ); 
+	void addData( CLIPFORMAT format, void* vv, size_t size, int index = -1 );
 /*	template<class T>
 	void addData( CLIPFORMAT format, T& t )
 	{

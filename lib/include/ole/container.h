@@ -4,6 +4,7 @@
 #pragma once
 #include "util/uni.h"
 #include "win/Wnd.h"
+#include "win/mdi.h"
 #include "win/dlg.h"
 #include "win/layout.h"
 #include "ole/ole.h"
@@ -378,7 +379,9 @@ protected:
 	LRESULT doLayout()
 	{
 		ODBGS1("OleContainer::doLayout ",(int)(activeObject.interface_));
-		return this->handleDoLayout( clientRect_ );
+
+		RECT r = prepareClientRect();
+		return this->handleDoLayout( r );
 	}
 
 	// communication with OleContainerBase
@@ -391,7 +394,7 @@ protected:
 	virtual RECT prepareClientRect()
 	{
 		RECT r;
-		this->getClientRect(r);
+		getClientRect(r);
 		return r;
 	}
 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C30B9869-9223-4802-86D7-66AE90A193A5}</ProjectGuid>
+    <RootNamespace>ssh</RootNamespace>
+    <TargetName>ssh</TargetName>  
+  </PropertyGroup>
+
+  <Import Project="..\..\..\master.props" />
+  <Import Project="..\build.props" />
+
+  <ItemDefinitionGroup>
+    <ClCompile Condition=" '$(Platform)'=='x64' ">
+      <AdditionalIncludeDirectories>..\..\..\3dParty\libssh\include\;..\..\..\3dParty\openssl\inc64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WIN32;LIBSSH_STATIC;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Condition=" '$(Platform)'=='Win32' ">
+      <AdditionalIncludeDirectories>..\..\..\3dParty\libssh\include\;..\..\..\3dParty\openssl\inc32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WIN32;LIBSSH_STATIC;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup>
+    <Lib>
+      <OutputFile>$(OutDir)ssh.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <ClCompile Include="ssh.cpp" />
+    <ClCompile Include="scp.cpp" />
+    <ClCompile Include="sftp.cpp" />
+	<ClCompile Include="scpDataTransferObj.cpp" />
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

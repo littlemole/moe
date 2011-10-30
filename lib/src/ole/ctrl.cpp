@@ -745,11 +745,15 @@ HRESULT __stdcall OleCtrlBase::OleInPlaceActiveObjBase::ContextSensitiveHelp( BO
 HRESULT __stdcall OleCtrlBase::OleInPlaceActiveObjBase::TranslateAccelerator(LPMSG lpmsg) 
 {
 	LRESULT res = 0;
-	ctrl_->OnWindowMessage(lpmsg->message,lpmsg->wParam,lpmsg->lParam,&res);
-	if ( res == 0 )
-		return S_FALSE ;
-	else
-		return S_OK;
+	if ( (lpmsg->message == WM_KEYDOWN) || (lpmsg->message == WM_SYSKEYDOWN))
+	{
+		ctrl_->OnWindowMessage(lpmsg->message,lpmsg->wParam,lpmsg->lParam,&res);
+		if ( res == 0 )
+			return S_FALSE ;
+		else
+			return S_OK;
+	}
+	return S_FALSE;
 }
 
 HRESULT __stdcall OleCtrlBase::OleInPlaceActiveObjBase::OnFrameWindowActivate(BOOL fActivate) 

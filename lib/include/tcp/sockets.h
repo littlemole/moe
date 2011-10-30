@@ -99,6 +99,8 @@ public:
   const std::string& getHost() const  { return host_;  }
   const std::string& getProto() const { return proto_; }
   const std::string& getPath() const  { return path_;  }
+  const std::string& getUser() const  { return user_;  }
+  const std::string& getPwd() const   { return pwd_;   }
   const std::string  getFullPath() const;
   int getPort()	const			      { return port_;  }
   const std::string getQuery() const ;
@@ -112,6 +114,9 @@ public:
   void setQuery    ( const std::string& query );
   void setAnchor   ( const std::string& anchor);
 
+  void setUser (const std::string& user );
+  void setPwd (const std::string& p );
+
   void addParam  ( const std::string& key, const std::string& val );
   std::string getParam(const std::string& key);
   std::vector<std::string> getParams(const std::string& key);
@@ -123,6 +128,8 @@ private:
   std::string   proto_;
   std::string   path_;
   std::string   anchor_;
+  std::string   user_;
+  std::string   pwd_;
 
   typedef std::pair<std::string,std::string> KeyVal;
 

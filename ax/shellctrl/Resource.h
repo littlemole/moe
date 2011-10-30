@@ -49,6 +49,17 @@
 #define IDC_LABEL3                      1753
 #define IDC_LABEL4                      1754
 
+#define IDD_SCP_PWD_DIALOG				2001
+#define IDC_EDIT_HOST					2002
+#define IDC_EDIT_PORT					2003
+#define IDC_EDIT_USER					2004
+#define IDC_EDIT_PWD					2005
+#define IDD_DIALOG_SSH_ACCEPT_HOST		2101
+#define IDC_EDIT_HOST_HASH				2102
+#define IDC_STATIC_UNKNOWN_HOST_MSG		2103
+
+#define IDC_STATIC -1
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

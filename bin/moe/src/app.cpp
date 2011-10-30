@@ -214,6 +214,11 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 			s = s.substr(8);
 			mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENRTFDOCUMENT, mol::variant(s) );					
 		}
+		else if ( s.substr(0,8) == "moe-ssh:" ) 
+		{
+			s = s.substr(4);
+			mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPEN, mol::variant(s) );					
+		}
 		else
 		{
 			s = resolvePath(s);

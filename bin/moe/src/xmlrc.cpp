@@ -8,6 +8,8 @@
 
 #include "dir3.h"
 
+#include "scpdir.h"
+
 #include "editor.h"
 
 #include "formeditor.h"
@@ -976,6 +978,26 @@ mol::msgMap<DirChild>().addCmdHandler( IDM_FILE_DIRPROP, make_ole_handler<DirChi
 mol::msgMap<DirChild>().addCmdHandler( IDM_FILE_NEWDIR, make_ole_handler<DirChild>(&IShellPane::CreateDir) );
 
 mol::msgMap<DirChild>().addCmdHandler( IDM_FILE_UPDIR, make_ole_handler<DirChild>(&IShellPane::UpDir) );
+
+mol::msgMap<ScpDirChild>().addMsgHandler( WM_MDIACTIVATE, make_handler(&ScpDirChild::OnMDIActivate) );
+
+mol::msgMap<ScpDirChild>().addMsgHandler( WM_NCDESTROY, make_handler(&ScpDirChild::OnNcDestroy) );
+
+mol::msgMap<ScpDirChild>().addMsgHandler( WM_DESTROY, make_handler(&ScpDirChild::OnDestroy) );
+
+mol::msgMap<ScpDirChild>().addCmdHandler( IDM_EDIT_UPDATE, make_ole_handler<ScpDirChild>(&IScpList::Update) );
+
+mol::msgMap<ScpDirChild>().addCmdHandler( IDM_EDIT_CUT, make_ole_handler<ScpDirChild>(&IScpList::Cut) );
+
+mol::msgMap<ScpDirChild>().addCmdHandler( IDM_EDIT_COPY, make_ole_handler<ScpDirChild>(&IScpList::Copy) );
+
+mol::msgMap<ScpDirChild>().addCmdHandler( IDM_EDIT_PASTE, make_ole_handler<ScpDirChild>(&IScpList::Paste) );
+
+mol::msgMap<ScpDirChild>().addCmdHandler( IDM_FILE_DIRPROP, make_ole_handler<ScpDirChild>(&IScpList::Properties) );
+
+mol::msgMap<ScpDirChild>().addCmdHandler( IDM_FILE_NEWDIR, make_ole_handler<ScpDirChild>(&IScpList::CreateDir) );
+
+mol::msgMap<ScpDirChild>().addCmdHandler( IDM_FILE_UPDIR, make_ole_handler<ScpDirChild>(&IScpList::UpDir) );
 
 mol::msgMap<Editor>().addMsgHandler( WM_MDIACTIVATE, make_handler(&Editor::OnMDIActivate) );
 

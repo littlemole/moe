@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Fri Oct 21 20:04:49 2011
+/* at Sun Oct 30 16:02:22 2011
  */
 /* Compiler settings for shellCtrl.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -57,6 +57,24 @@ typedef interface IHexCtrl IHexCtrl;
 #define __IShellList_FWD_DEFINED__
 typedef interface IShellList IShellList;
 #endif 	/* __IShellList_FWD_DEFINED__ */
+
+
+#ifndef __IScpPasswordCredentials_FWD_DEFINED__
+#define __IScpPasswordCredentials_FWD_DEFINED__
+typedef interface IScpPasswordCredentials IScpPasswordCredentials;
+#endif 	/* __IScpPasswordCredentials_FWD_DEFINED__ */
+
+
+#ifndef __IScpCredentialProvider_FWD_DEFINED__
+#define __IScpCredentialProvider_FWD_DEFINED__
+typedef interface IScpCredentialProvider IScpCredentialProvider;
+#endif 	/* __IScpCredentialProvider_FWD_DEFINED__ */
+
+
+#ifndef __IScpList_FWD_DEFINED__
+#define __IScpList_FWD_DEFINED__
+typedef interface IScpList IScpList;
+#endif 	/* __IScpList_FWD_DEFINED__ */
 
 
 #ifndef __IColorPicker_FWD_DEFINED__
@@ -147,6 +165,42 @@ typedef struct HexCtrl HexCtrl;
 #endif /* __cplusplus */
 
 #endif 	/* __HexCtrl_FWD_DEFINED__ */
+
+
+#ifndef __ScpPasswordCredentials_FWD_DEFINED__
+#define __ScpPasswordCredentials_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class ScpPasswordCredentials ScpPasswordCredentials;
+#else
+typedef struct ScpPasswordCredentials ScpPasswordCredentials;
+#endif /* __cplusplus */
+
+#endif 	/* __ScpPasswordCredentials_FWD_DEFINED__ */
+
+
+#ifndef __DefaultScpCredentialProvider_FWD_DEFINED__
+#define __DefaultScpCredentialProvider_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class DefaultScpCredentialProvider DefaultScpCredentialProvider;
+#else
+typedef struct DefaultScpCredentialProvider DefaultScpCredentialProvider;
+#endif /* __cplusplus */
+
+#endif 	/* __DefaultScpCredentialProvider_FWD_DEFINED__ */
+
+
+#ifndef __ScpList_FWD_DEFINED__
+#define __ScpList_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class ScpList ScpList;
+#else
+typedef struct ScpList ScpList;
+#endif /* __cplusplus */
+
+#endif 	/* __ScpList_FWD_DEFINED__ */
 
 
 /* header files for imported files */
@@ -1045,6 +1099,593 @@ EXTERN_C const IID IID_IShellList;
 
 
 #endif 	/* __IShellList_INTERFACE_DEFINED__ */
+
+
+#ifndef __IScpPasswordCredentials_INTERFACE_DEFINED__
+#define __IScpPasswordCredentials_INTERFACE_DEFINED__
+
+/* interface IScpPasswordCredentials */
+/* [dual][oleautomation][object][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IScpPasswordCredentials;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("BD96818E-5DAB-4305-B283-527D632C68D2")
+    IScpPasswordCredentials : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT STDMETHODCALLTYPE put_Username( 
+            /* [in] */ BSTR user) = 0;
+        
+        virtual /* [id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_Username( 
+            /* [retval][out] */ BSTR *user) = 0;
+        
+        virtual /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT STDMETHODCALLTYPE put_Password( 
+            /* [in] */ BSTR pwd) = 0;
+        
+        virtual /* [id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_Password( 
+            /* [retval][out] */ BSTR *pwd) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IScpPasswordCredentialsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IScpPasswordCredentials * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IScpPasswordCredentials * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IScpPasswordCredentials * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IScpPasswordCredentials * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IScpPasswordCredentials * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IScpPasswordCredentials * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IScpPasswordCredentials * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Username )( 
+            IScpPasswordCredentials * This,
+            /* [in] */ BSTR user);
+        
+        /* [id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Username )( 
+            IScpPasswordCredentials * This,
+            /* [retval][out] */ BSTR *user);
+        
+        /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Password )( 
+            IScpPasswordCredentials * This,
+            /* [in] */ BSTR pwd);
+        
+        /* [id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Password )( 
+            IScpPasswordCredentials * This,
+            /* [retval][out] */ BSTR *pwd);
+        
+        END_INTERFACE
+    } IScpPasswordCredentialsVtbl;
+
+    interface IScpPasswordCredentials
+    {
+        CONST_VTBL struct IScpPasswordCredentialsVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IScpPasswordCredentials_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IScpPasswordCredentials_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IScpPasswordCredentials_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IScpPasswordCredentials_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IScpPasswordCredentials_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IScpPasswordCredentials_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IScpPasswordCredentials_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IScpPasswordCredentials_put_Username(This,user)	\
+    ( (This)->lpVtbl -> put_Username(This,user) ) 
+
+#define IScpPasswordCredentials_get_Username(This,user)	\
+    ( (This)->lpVtbl -> get_Username(This,user) ) 
+
+#define IScpPasswordCredentials_put_Password(This,pwd)	\
+    ( (This)->lpVtbl -> put_Password(This,pwd) ) 
+
+#define IScpPasswordCredentials_get_Password(This,pwd)	\
+    ( (This)->lpVtbl -> get_Password(This,pwd) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IScpPasswordCredentials_INTERFACE_DEFINED__ */
+
+
+#ifndef __IScpCredentialProvider_INTERFACE_DEFINED__
+#define __IScpCredentialProvider_INTERFACE_DEFINED__
+
+/* interface IScpCredentialProvider */
+/* [dual][oleautomation][object][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IScpCredentialProvider;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("6A66D47E-519D-4CA8-9B39-892E9CC7D3AF")
+    IScpCredentialProvider : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getCredentials( 
+            /* [in] */ BSTR host,
+            /* [in] */ long port,
+            /* [retval][out] */ IScpPasswordCredentials **credentials) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE promptCredentials( 
+            /* [in] */ BSTR prompt,
+            /* [in] */ BSTR description,
+            /* [in] */ VARIANT_BOOL echo,
+            /* [retval][out] */ VARIANT *value) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE acceptHost( 
+            /* [in] */ BSTR host,
+            /* [in] */ long port,
+            /* [in] */ BSTR hash,
+            /* [retval][out] */ VARIANT_BOOL *accept) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE remberSessionCredentials( 
+            /* [in] */ BSTR host,
+            /* [in] */ long port,
+            /* [in] */ IScpPasswordCredentials *credentials) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeSessionCredentials( 
+            /* [in] */ BSTR host,
+            /* [in] */ long port) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IScpCredentialProviderVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IScpCredentialProvider * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IScpCredentialProvider * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IScpCredentialProvider * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IScpCredentialProvider * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IScpCredentialProvider * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IScpCredentialProvider * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IScpCredentialProvider * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getCredentials )( 
+            IScpCredentialProvider * This,
+            /* [in] */ BSTR host,
+            /* [in] */ long port,
+            /* [retval][out] */ IScpPasswordCredentials **credentials);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *promptCredentials )( 
+            IScpCredentialProvider * This,
+            /* [in] */ BSTR prompt,
+            /* [in] */ BSTR description,
+            /* [in] */ VARIANT_BOOL echo,
+            /* [retval][out] */ VARIANT *value);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *acceptHost )( 
+            IScpCredentialProvider * This,
+            /* [in] */ BSTR host,
+            /* [in] */ long port,
+            /* [in] */ BSTR hash,
+            /* [retval][out] */ VARIANT_BOOL *accept);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *remberSessionCredentials )( 
+            IScpCredentialProvider * This,
+            /* [in] */ BSTR host,
+            /* [in] */ long port,
+            /* [in] */ IScpPasswordCredentials *credentials);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeSessionCredentials )( 
+            IScpCredentialProvider * This,
+            /* [in] */ BSTR host,
+            /* [in] */ long port);
+        
+        END_INTERFACE
+    } IScpCredentialProviderVtbl;
+
+    interface IScpCredentialProvider
+    {
+        CONST_VTBL struct IScpCredentialProviderVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IScpCredentialProvider_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IScpCredentialProvider_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IScpCredentialProvider_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IScpCredentialProvider_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IScpCredentialProvider_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IScpCredentialProvider_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IScpCredentialProvider_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IScpCredentialProvider_getCredentials(This,host,port,credentials)	\
+    ( (This)->lpVtbl -> getCredentials(This,host,port,credentials) ) 
+
+#define IScpCredentialProvider_promptCredentials(This,prompt,description,echo,value)	\
+    ( (This)->lpVtbl -> promptCredentials(This,prompt,description,echo,value) ) 
+
+#define IScpCredentialProvider_acceptHost(This,host,port,hash,accept)	\
+    ( (This)->lpVtbl -> acceptHost(This,host,port,hash,accept) ) 
+
+#define IScpCredentialProvider_remberSessionCredentials(This,host,port,credentials)	\
+    ( (This)->lpVtbl -> remberSessionCredentials(This,host,port,credentials) ) 
+
+#define IScpCredentialProvider_removeSessionCredentials(This,host,port)	\
+    ( (This)->lpVtbl -> removeSessionCredentials(This,host,port) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IScpCredentialProvider_INTERFACE_DEFINED__ */
+
+
+#ifndef __IScpList_INTERFACE_DEFINED__
+#define __IScpList_INTERFACE_DEFINED__
+
+/* interface IScpList */
+/* [dual][oleautomation][object][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IScpList;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("D30F5C7F-CFAB-4D26-8FF3-0C7F67A0269D")
+    IScpList : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CredentialProvider( 
+            /* [in] */ IScpCredentialProvider *provider) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CredentialProvider( 
+            /* [retval][out] */ IScpCredentialProvider **provider) = 0;
+        
+        virtual /* [helpstring][id][requestedit][displaybind][bindable][defaultbind][propput] */ HRESULT STDMETHODCALLTYPE put_Location( 
+            /* [in] */ BSTR dir) = 0;
+        
+        virtual /* [id][requestedit][displaybind][bindable][defaultbind][propget] */ HRESULT STDMETHODCALLTYPE get_Location( 
+            /* [retval][out] */ BSTR *dir) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HasFocus( 
+            /* [retval][out] */ VARIANT_BOOL *vbHasFocus) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Selection( 
+            /* [retval][out] */ BSTR *path) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Update( void) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Cut( void) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Copy( void) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Paste( void) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Rename( void) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Delete( void) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Properties( void) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateDir( void) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE UpDir( void) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CopyTo( 
+            /* [in] */ BSTR dir) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IScpListVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IScpList * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IScpList * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IScpList * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IScpList * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IScpList * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IScpList * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IScpList * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CredentialProvider )( 
+            IScpList * This,
+            /* [in] */ IScpCredentialProvider *provider);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CredentialProvider )( 
+            IScpList * This,
+            /* [retval][out] */ IScpCredentialProvider **provider);
+        
+        /* [helpstring][id][requestedit][displaybind][bindable][defaultbind][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Location )( 
+            IScpList * This,
+            /* [in] */ BSTR dir);
+        
+        /* [id][requestedit][displaybind][bindable][defaultbind][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Location )( 
+            IScpList * This,
+            /* [retval][out] */ BSTR *dir);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HasFocus )( 
+            IScpList * This,
+            /* [retval][out] */ VARIANT_BOOL *vbHasFocus);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Selection )( 
+            IScpList * This,
+            /* [retval][out] */ BSTR *path);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Update )( 
+            IScpList * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Cut )( 
+            IScpList * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Copy )( 
+            IScpList * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Paste )( 
+            IScpList * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Rename )( 
+            IScpList * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+            IScpList * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Properties )( 
+            IScpList * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateDir )( 
+            IScpList * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *UpDir )( 
+            IScpList * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
+            IScpList * This,
+            /* [in] */ BSTR dir);
+        
+        END_INTERFACE
+    } IScpListVtbl;
+
+    interface IScpList
+    {
+        CONST_VTBL struct IScpListVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IScpList_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IScpList_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IScpList_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IScpList_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IScpList_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IScpList_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IScpList_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IScpList_put_CredentialProvider(This,provider)	\
+    ( (This)->lpVtbl -> put_CredentialProvider(This,provider) ) 
+
+#define IScpList_get_CredentialProvider(This,provider)	\
+    ( (This)->lpVtbl -> get_CredentialProvider(This,provider) ) 
+
+#define IScpList_put_Location(This,dir)	\
+    ( (This)->lpVtbl -> put_Location(This,dir) ) 
+
+#define IScpList_get_Location(This,dir)	\
+    ( (This)->lpVtbl -> get_Location(This,dir) ) 
+
+#define IScpList_get_HasFocus(This,vbHasFocus)	\
+    ( (This)->lpVtbl -> get_HasFocus(This,vbHasFocus) ) 
+
+#define IScpList_get_Selection(This,path)	\
+    ( (This)->lpVtbl -> get_Selection(This,path) ) 
+
+#define IScpList_Update(This)	\
+    ( (This)->lpVtbl -> Update(This) ) 
+
+#define IScpList_Cut(This)	\
+    ( (This)->lpVtbl -> Cut(This) ) 
+
+#define IScpList_Copy(This)	\
+    ( (This)->lpVtbl -> Copy(This) ) 
+
+#define IScpList_Paste(This)	\
+    ( (This)->lpVtbl -> Paste(This) ) 
+
+#define IScpList_Rename(This)	\
+    ( (This)->lpVtbl -> Rename(This) ) 
+
+#define IScpList_Delete(This)	\
+    ( (This)->lpVtbl -> Delete(This) ) 
+
+#define IScpList_Properties(This)	\
+    ( (This)->lpVtbl -> Properties(This) ) 
+
+#define IScpList_CreateDir(This)	\
+    ( (This)->lpVtbl -> CreateDir(This) ) 
+
+#define IScpList_UpDir(This)	\
+    ( (This)->lpVtbl -> UpDir(This) ) 
+
+#define IScpList_CopyTo(This,dir)	\
+    ( (This)->lpVtbl -> CopyTo(This,dir) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IScpList_INTERFACE_DEFINED__ */
 
 
 #ifndef __IColorPicker_INTERFACE_DEFINED__
@@ -2008,6 +2649,30 @@ EXTERN_C const CLSID CLSID_HexCtrl;
 
 class DECLSPEC_UUID("E83EC0F6-6AF3-44f8-901E-AF01F84FE6D0")
 HexCtrl;
+#endif
+
+EXTERN_C const CLSID CLSID_ScpPasswordCredentials;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("46861300-31F7-44F9-B4F6-449D66F3AC77")
+ScpPasswordCredentials;
+#endif
+
+EXTERN_C const CLSID CLSID_DefaultScpCredentialProvider;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("CF5BF8BD-DC91-43CA-AB1A-FF04CCACEFB6")
+DefaultScpCredentialProvider;
+#endif
+
+EXTERN_C const CLSID CLSID_ScpList;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("CD199DC9-8BA4-4F7A-BCFA-4C3473C06F03")
+ScpList;
 #endif
 #endif /* __ShellCtrls_LIBRARY_DEFINED__ */
 

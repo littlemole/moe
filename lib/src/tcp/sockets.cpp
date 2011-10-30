@@ -105,6 +105,14 @@ bool Uri::set( const std::string& url )
 		{
 			port_ = 443;
 		}
+		if ( mol::stricmp( proto_.c_str(), "ssh" ) == 0 )
+		{
+			port_ = 22;
+		}
+		if ( mol::stricmp( proto_.c_str(), "scp" ) == 0 )
+		{
+			port_ = 22;
+		}
 		host_  = url.substr(pos+3);
 	}
 	else
@@ -118,7 +126,27 @@ bool Uri::set( const std::string& url )
     {
          path  = host_.substr(pos);
          host_ = host_.substr(0,pos);
+		 if ( pos > 0 && host_[pos-1] == ':' )
+		 {
+			 host_ = host_.substr(0,host_.size()-1);
+		 }
     }
+	pos = host_.find("@");
+    if ( pos != std::string::npos )
+    {
+		std::string tmp = host_.substr(0,pos);
+		host_ = host_.substr(pos+1);
+		pos = tmp.find(":");
+		if ( pos != std::string::npos )
+		{
+			user_ = tmp.substr(0,pos);
+			pwd_ = tmp.substr(pos+1);
+		}
+		else
+		{
+			user_ = tmp;
+		}
+	}
     pos = host_.find(":");
     if ( pos != std::string::npos )
     {
@@ -133,8 +161,21 @@ bool Uri::set( const std::string& url )
 std::string Uri::toString()
 {
   std::ostringstream oss;
-  oss << proto_ << "://" << host_;
-  if ( port_ != 80 && port_ != 443 )
+  oss << proto_ << "://";
+  
+  if ( !user_.empty() )
+  {
+	  oss << user_;
+	  if ( !pwd_.empty() )
+	  {
+		oss << ":" << pwd_;
+	  }
+	  oss << "@";
+  }
+	  
+  oss << host_;
+
+  if ( port_ != 80 && port_ != 443 && port_ != 22 )
   {
 	  oss << ":" << port_;
   }
@@ -143,6 +184,16 @@ std::string Uri::toString()
   if ( anchor_.size() > 0 )
 	  oss << "#" << anchor_;
   return oss.str();
+}
+
+void Uri::setUser   ( const std::string& u  ) 
+{ 
+	user_ = u;
+}
+
+void Uri::setPwd   ( const std::string& pwd  ) 
+{ 
+	pwd_ = pwd;
 }
 
 void Uri::setHost   ( const std::string& host  ) 
