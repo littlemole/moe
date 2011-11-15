@@ -68,6 +68,7 @@
 #define DISPID_ISCPLIST_CREATEDIR                                              				 12
 #define DISPID_ISCPLIST_UPDIR                                                  				 13
 #define DISPID_ISCPLIST_COPYTO                                                 				 14
+#define DISPID_ISCPLIST_EXECUTE                                                				 15
 #define DISPID_ICOLORPICKER_COLOR                                              				 1
 #define DISPID_ICOLORPICKER_HEXCOLOR                                           				 2
 #define DISPID_ICOLORPICKER_SHOW                                               				 3

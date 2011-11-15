@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MoeBar.h"
 #include "xmlui.h"
+#include "moe.h"
 
 using namespace mol::io;
 
@@ -10,18 +11,20 @@ using namespace mol::win;
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-// simple app-internal dragDrop passing a simple string
+// simple app-internal dragDrop passing a HWND
 class TxtDragDrop
 {
 public:
 
 	// start drag drop
-	static int doDragDrop( CLIPFORMAT format, const mol::string& content )
+	static int doDragDrop( CLIPFORMAT format, HWND from )
 	{
 		punk<IDropSource> source = new mol::DropSrc();
 
+		size_t i = moe()->index(from);
+
 		punk<mol::DataTransferObj> ido = new mol::DataTransferObj(true);
-		ido->addData(format,content);
+		ido->addData(format,(void*)&i,sizeof(size_t));
 
 		DWORD effect;
 		if ( DRAGDROP_S_DROP == ::DoDragDrop( 
@@ -48,23 +51,25 @@ public:
 	}
 
 	// retrieve dragDrop txt value for custom format from IDataObject
-	static mol::string getTxt( IDataObject* ido, CLIPFORMAT format )
+	static HWND getHWND( IDataObject* ido, CLIPFORMAT format )
 	{
 		format_etc fe( format );
 
 		STGMEDIUM sm;
 		HRESULT hr = ido->GetData( &fe, &sm );
 		if (hr != S_OK )
-			return _T("");
+			return 0;
 
 		if ( sm.tymed != TYMED_HGLOBAL || !sm.hGlobal )
-			return _T("");
+			return 0;
 
-		mol::string txt;
-		mol::global::get(sm.hGlobal,txt);
+		HWND hwnd = 0;
+		size_t i = 0;
+		mol::global::get(sm.hGlobal,i);
+		hwnd = moe()->childAt((int)i);
 
 		::ReleaseStgMedium(&sm);
-		return txt;
+		return hwnd;
 	}
 };
 
@@ -208,8 +213,8 @@ LRESULT MoeTabControl::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lP
 				if ( i!= -1 )
 				{
 					// do a simple dragDrop
-					mol::string txt = tab()->getItemTooltipText(i);
-					TxtDragDrop::doDragDrop( dragTabFormat_, txt );
+					mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)getTabCtrlItem(i);
+					TxtDragDrop::doDragDrop( dragTabFormat_, (HWND)(c->lparam) );
 				}
 			}
 			break;
@@ -234,11 +239,20 @@ LRESULT MoeTabControl::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lP
 
 HRESULT __stdcall MoeTabControl::MoeTabControl_Drop::Drop( IDataObject* pDataObject, DWORD keyState, POINTL pt , DWORD* pEffect)
 {
+	*pEffect = DROPEFFECT_NONE;
+
 	ODBGS("Tab Drop");
 	// get the dropped tabs path
-	mol::string path = TxtDragDrop::getTxt( pDataObject, tab()->dragTabFormat_ );
+	HWND from = TxtDragDrop::getHWND( pDataObject, tab()->dragTabFormat_ );
 
-	if ( path.empty() )
+	if ( !from )
+		return S_OK;
+
+	if(!::IsWindow(from))
+		return S_OK;
+
+	mol::MdiChild* m = mol::wndFromHWND<mol::MdiChild>(from);
+	if (!m)
 		return S_OK;
 
 	// determine drop target tab
@@ -252,24 +266,14 @@ HRESULT __stdcall MoeTabControl::MoeTabControl_Drop::Drop( IDataObject* pDataObj
 	}
 	*/
 	if ( index == -1 )
-		index = (int)tab()->count()-1;
+		index = (int)tab()->count();
 	if ( index == -1 )
 		index = 0;
 
-	// try find dest tab by path index
-	bool result = false;
-	mol::punk<IMoeDocument> doc;
-	if ( S_OK == docs()->Item( mol::variant(path), &doc) && doc )
-	{
-		mol::string fn = tab()->getItemTooltipText(index);
-		docs()->Move( mol::variant(path), mol::variant(fn) );
-		result = true;
-	}
-	else 
-	{
-		*pEffect = DROPEFFECT_NONE;
+	if ( index == tab()->index(from) )
 		return S_OK;
-	}
+
+	docs()->move( m, index );
 
 	// clear highlight bits from tabctrl
 	for ( int i = 0; i < tab()->count(); i++ )

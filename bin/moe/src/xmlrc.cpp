@@ -993,6 +993,8 @@ mol::msgMap<ScpDirChild>().addCmdHandler( IDM_EDIT_COPY, make_ole_handler<ScpDir
 
 mol::msgMap<ScpDirChild>().addCmdHandler( IDM_EDIT_PASTE, make_ole_handler<ScpDirChild>(&IScpList::Paste) );
 
+mol::msgMap<ScpDirChild>().addCmdHandler( IDM_FILE_DIREXEC, make_ole_handler<ScpDirChild>(&IScpList::Execute) );
+
 mol::msgMap<ScpDirChild>().addCmdHandler( IDM_FILE_DIRPROP, make_ole_handler<ScpDirChild>(&IScpList::Properties) );
 
 mol::msgMap<ScpDirChild>().addCmdHandler( IDM_FILE_NEWDIR, make_ole_handler<ScpDirChild>(&IScpList::CreateDir) );

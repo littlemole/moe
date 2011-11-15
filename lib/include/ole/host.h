@@ -422,6 +422,7 @@ private:
 	virtual void activateLater( WPARAM wParam, LPARAM lParam)
 	{
 		mol::dispatch<AxClientWnd<C,W> >( *((AxClientWnd<C,W>*)this), &AxClientWnd<C,W>::OnMDIActivateLater, wParam, (HWND)lParam );
+		//OnMDIActivateLater(wParam,(HWND)lParam);
 	}
 
 	// layout helper, resizes the embedded ax obj

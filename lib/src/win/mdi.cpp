@@ -8,6 +8,7 @@ namespace mol {
 
 HWND MdiChild::createWindow( const mol::string& windowName, HMENU hMenu, const Rect& r, HWND p )
 {
+	this->isMidi_ = true;
     registerClass(hMenu);
     parent_ = p;
     HWND client_ = addChild(parent_);
@@ -151,6 +152,15 @@ LRESULT MdiChild::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			delete this;
 			return 0;
 		}
+		case WM_NCPAINT :
+		{
+			HWND active = (HWND)(::SendMessage( mdiClient(), WM_MDIGETACTIVE, 0, 0));
+			if ( (active != *this) && ::IsZoomed(active) )
+			{
+				return 0;			
+			}
+			break;
+		}
 		case WM_PAINT :
 		{
 			mol::PaintDC dc(hwnd);
@@ -163,13 +173,15 @@ LRESULT MdiChild::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
         case WM_MDIACTIVATE :
         {
-			if ( mol::Ribbon::ribbon()->enabled() )
-				break;
-
-			//MdiFrame* mdi = wndFromHWND<MdiFrame>(mdiParent());
         	HWND newWnd = (HWND)lParam;
 	        if ( newWnd == hwnd )
-	        {				
+	        {			
+				if ( mol::Ribbon::ribbon()->enabled() )
+				{
+					OnLayout(0,0,0);
+					break;
+				}
+
 				if ( menue_ )
 					changeMenu(menue_,windowMenu_);
 				OnLayout(0,0,0);
@@ -179,8 +191,16 @@ LRESULT MdiChild::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
 		case WM_SIZE :
 		{		
+			HWND active = (HWND)(::SendMessage( mdiClient(), WM_MDIGETACTIVE, 0, 0));
+
+			if ( active != *this && ( wParam == SIZE_MAXIMIZED ) )			
+				setRedraw(false);
+
 			OnSize(message,wParam,lParam);
 			LRESULT ret = ::DefMDIChildProc(hwnd,message,wParam,lParam);
+
+			if ( active != *this && wParam == SIZE_MAXIMIZED )		
+				setRedraw(true);
 			return ret;
 		}
 		case WM_NOTIFY:
@@ -272,6 +292,9 @@ void MdiChild::activate( )
 
 void MdiChild::maximize( )
 {
+	if ( ::IsZoomed(*this) )
+		return;
+
 	::PostMessage(  mdiClient(), WM_MDIMAXIMIZE, (WPARAM)(HWND)(*this), 0);
 }
 
@@ -786,16 +809,19 @@ void MdiFrame::setMenu( HMENU newMenu, HMENU windowMenu   )
 void MdiFrame::redraw()
 {
 	::RedrawWindow(mdiClient(),0,0,RDW_FRAME|RDW_INVALIDATE);			
+	//::RedrawWindow( mdiClient(),NULL,NULL,RDW_FRAME|RDW_INVALIDATE|RDW_UPDATENOW|RDW_ALLCHILDREN|RDW_INTERNALPAINT);
 	::InvalidateRect(mdiClient(),0,TRUE);
 
 	ODBGS("MdiFrame::redraw()");
 	for ( int i = 0; i < count(); i++ )
 	{
 		::RedrawWindow(childAt(i),0,0,RDW_FRAME|RDW_INVALIDATE);			
+		//::RedrawWindow( childAt(i),NULL,NULL,RDW_FRAME|RDW_INVALIDATE|RDW_UPDATENOW|RDW_ALLCHILDREN|RDW_INTERNALPAINT);
 		::InvalidateRect(childAt(i),0,TRUE);
 	}
 
-	::RedrawWindow(*this,0,0,RDW_FRAME|RDW_INVALIDATE);			
+	::RedrawWindow(*this,0,0,RDW_FRAME|RDW_INVALIDATE);		
+	//::RedrawWindow( *this,NULL,NULL,RDW_FRAME|RDW_INVALIDATE|RDW_UPDATENOW|RDW_ALLCHILDREN|RDW_INTERNALPAINT);
 	::InvalidateRect(*this,0,TRUE);
 }
 

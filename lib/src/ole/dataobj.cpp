@@ -132,7 +132,7 @@ HRESULT __stdcall DataTransferObj::GetData( FORMATETC * pFormatetc, STGMEDIUM * 
 		{
 			mol::global glob( (*it).second );
 
-			char* c = glob.lock();
+			void* c = glob.lock();
 			mol::global copy( (void*)c, (size_t)glob.size() );
 			pmedium->hGlobal = copy;
 			pmedium->pUnkForRelease = 0;
@@ -210,7 +210,9 @@ HRESULT __stdcall DataTransferObj::SetData(  FORMATETC * pFormatetc,  STGMEDIUM 
 
 	mol::global glob(pmedium->hGlobal);
 
-	char* s = glob.lock();
+	void* s = glob.lock();
+
+	/*
 	mol::TCHAR* ts = (mol::TCHAR*)s;
 
 	size_t len = 0;
@@ -218,6 +220,9 @@ HRESULT __stdcall DataTransferObj::SetData(  FORMATETC * pFormatetc,  STGMEDIUM 
 		len = _tcslen(ts)+1;
 
 	mol::global copy( (void*)ts,len*sizeof(mol::TCHAR));
+	*/
+
+	mol::global copy( s, glob.size() );
 
 	v_.insert( std::make_pair(pFormatetc->cfFormat, (HGLOBAL)copy) );
 
@@ -298,7 +303,7 @@ HRESULT __stdcall ShellDataObj::GetData( FORMATETC * pFormatetc, STGMEDIUM * pme
 		}
 		mol::global glob;
 		glob.alloc( (int)(s.size()+1),GHND | GMEM_SHARE);
-		char* c = glob.lock();
+		void* c = glob.lock();
 		memcpy(c,s.c_str(),(s.size()+1)*sizeof(char));
 		glob.unLock();
 
@@ -322,7 +327,7 @@ HRESULT __stdcall ShellDataObj::GetData( FORMATETC * pFormatetc, STGMEDIUM * pme
 		}
 		mol::global glob;
 		glob.alloc( (int)(s.size()+1) * sizeof(wchar_t),GHND | GMEM_SHARE);
-		char* c = glob.lock();
+		void* c = glob.lock();
 		memcpy(c,s.c_str(),(s.size()+1)*sizeof(wchar_t));
 		glob.unLock();
 

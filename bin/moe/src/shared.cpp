@@ -447,6 +447,7 @@ HRESULT __stdcall MoeDialogs::Open(BSTR path,IMoeDocument** d)
 		{
 			{ L"open text files",       L"*.*"},
 			{ L"open HTML files",	    L"*.*"},
+			{ L"open RTF  files",	    L"*.*"},
 			{ L"hexviewer",			    L"*.*"},
 			{ L"tail logfile",          L"*.*"}
 		};

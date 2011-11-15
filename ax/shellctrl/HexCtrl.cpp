@@ -207,15 +207,19 @@ HWND HexToolBar::createWindow(  const mol::string& wndName, HMENU hMenu, const m
 	rc.left  += rc.right+4;
 	rc.right  = tt.tmMaxCharWidth*1 + 8;
 	charEdit1_.create((HMENU)IDC_CHAREDIT1,rc, *this);
+	charEdit1_.setFont(font);
 
 	rc.left  += rc.right+4;
 	charEdit2_.create((HMENU)IDC_CHAREDIT2,rc, *this);
+	charEdit2_.setFont(font);
 
 	rc.left  += rc.right+4;
 	charEdit3_.create((HMENU)IDC_CHAREDIT3,rc, *this);
+	charEdit3_.setFont(font);
 
 	rc.left  += rc.right+4;
 	charEdit4_.create((HMENU)IDC_CHAREDIT4,rc, *this);
+	charEdit4_.setFont(font);
 
 	return hWnd;
 }

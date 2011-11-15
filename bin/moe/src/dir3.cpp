@@ -76,12 +76,12 @@ bool DirChild::initialize(const mol::string& p)
 
 	location_ = p;
 
-	// necessary to adjust the embedded ole obj
-	// otherwise resize bug with new opened dir mdi child
-	// if it is not the only one, haha
-	mol::invoke( boost::bind( &MoeWnd::OnLayout,moe(),0,0,0));
+	//getClientRect(clientRect_);
+	//this->SetObjectSize(clientRect_);
+	OnLayout(0,0,0);
 	return true;
 }
+
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -133,9 +133,8 @@ void DirChild::OnMDIActivate( HWND activated )
 		}
 		statusBar()->status(location_);
 		tab()->select( *this );
-
 	}
-
+	
 }
 
 

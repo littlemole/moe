@@ -152,6 +152,13 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 	if ( hr != S_OK )
 		return;
 
+	mol::variant view;
+	hr = mol::get( moe, DISPID_IMOE_VIEW, &view);
+	if ( hr != S_OK )
+		return;
+
+	mol::disp_invoke( view.pdispVal, DISPID_IMOEVIEW_SHOW );
+
 	::CoAllowSetForegroundWindow(moe,0);
 
 	mol::RegExp rgxp("(\"([^\"]*)\")|([^ ]+)");
@@ -235,13 +242,6 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 			}
 		}
 	}
-
-	mol::variant view;
-	hr = mol::get( moe, DISPID_IMOE_VIEW, &view);
-	if ( hr != S_OK )
-		return;
-
-	mol::disp_invoke( view.pdispVal, DISPID_IMOEVIEW_SHOW );
 }
 
 /////////////////////////////////////////////////////////////////////////

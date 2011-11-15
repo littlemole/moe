@@ -51,12 +51,7 @@ public:
 		return invalidateRect(0,erase);
 	}
 
-    virtual void redraw()
-	{
-		::RedrawWindow(*this,0,0,RDW_FRAME|RDW_INVALIDATE);	
-		invalidateRect(0,TRUE);
-		::UpdateWindow(*this);
-	}
+    virtual void redraw();
 
     BOOL validateRect( const RECT* r );
 

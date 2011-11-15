@@ -14,7 +14,41 @@
 #include "win/dlg.h"
 #include "ssh/sftp.h"
 
+class EncryptedMemory
+{
+public:
 
+	EncryptedMemory();
+	~EncryptedMemory();
+	void dispose();
+
+	size_t encrypt( void* data, size_t size, DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
+	std::string decrypt( DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
+
+	void* data();
+	size_t size();
+
+private:
+
+	void* encrypted_;
+	size_t size_;
+};
+
+class EncryptedMap
+{
+public:
+
+	typedef std::map<std::wstring,std::wstring> MapType;
+
+	EncryptedMap();
+
+	void encrypt(const MapType& map);
+	MapType decrypt();
+
+private:
+
+	EncryptedMemory secure_;
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -24,49 +58,20 @@ class ScpPasswordCredentials :
 	public mol::interfaces< ScpPasswordCredentials, mol::implements< IDispatch, IScpPasswordCredentials> >
 {
 public:
-		HRESULT virtual __stdcall put_Username( BSTR user)
-		{
-			if ( user )
-			{
-				user_ = user;
-			}
-			return S_OK;
-		}
-
-		HRESULT virtual __stdcall get_Username( BSTR* user)
-		{
-			if ( !user )
-				return E_INVALIDARG;
-
-			*user = ::SysAllocString( user_.bstr_ );			
-			return S_OK;
-		}
-
-		HRESULT virtual __stdcall put_Password( BSTR pwd)
-		{
-			if ( pwd )
-			{
-				pwd_ = pwd;
-			}
-			return S_OK;
-		}
-
-		HRESULT virtual __stdcall get_Password( BSTR* pwd)
-		{
-			if ( !pwd )
-				return E_INVALIDARG;
-
-			*pwd = ::SysAllocString( pwd_.bstr_ );			
-			return S_OK;
-		}
-
+		HRESULT virtual __stdcall put_Username( BSTR user);
+		HRESULT virtual __stdcall get_Username( BSTR* user);
+		HRESULT virtual __stdcall put_Password( BSTR pwd);
+		HRESULT virtual __stdcall get_Password( BSTR* pwd);
 private:
 
-	mol::bstr user_;
-	mol::bstr pwd_;
+	EncryptedMap secure_;
+
+	//mol::bstr user_;
+	//mol::bstr pwd_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+/*
 struct Credentials
 {
 	Credentials( const mol::string& h, int p, const mol::string& u, const mol::string& pass)
@@ -76,6 +81,22 @@ struct Credentials
 	int port;
 	mol::string user;
 	mol::string pwd;
+};
+*/
+
+struct SecureCredentials
+{
+	SecureCredentials( const mol::string& h, int p, const mol::string& u, const mol::string& pass);
+	~SecureCredentials();
+
+	mol::string host;
+	int port;
+
+	void decrypt( mol::string& u, mol::string& pass );
+
+private:
+	EncryptedMap secure_;
+
 };
 
 class ScpCredentialProvider : 
@@ -87,7 +108,7 @@ public:
 
 	void dispose()
 	{
-		for ( std::map<mol::string,Credentials*>::iterator it = credentials_.begin(); it!=credentials_.end();it++)
+		for ( std::map<mol::string,SecureCredentials*>::iterator it = credentials_.begin(); it!=credentials_.end();it++)
 		{
 			delete (*it).second;
 		}
@@ -118,7 +139,7 @@ public:
 		mol::bstr pwd;
 		credentials->get_Password(&pwd);
 
-		Credentials* creds = new Credentials( mol::toString(host), port, mol::toString(user), mol::toString(pwd) );
+		SecureCredentials* creds = new SecureCredentials( mol::toString(host), port, mol::toString(user), mol::toString(pwd) );
 		credentials_.insert( std::make_pair( mol::toString(host), creds) );
 		return S_OK;
 	}
@@ -130,7 +151,7 @@ public:
 		while(go)
 		{
 			go = false;
-			for ( std::map<mol::string,Credentials*>::iterator it = credentials_.begin(); it!=credentials_.end();it++)
+			for ( std::map<mol::string,SecureCredentials*>::iterator it = credentials_.begin(); it!=credentials_.end();it++)
 			{
 				if ( (*it).first == mol::toString(host) && (*it).second->port == port )
 				{
@@ -145,7 +166,7 @@ public:
 	}
 
 private:
-	std::map<mol::string,Credentials*> credentials_;
+	std::map<mol::string,SecureCredentials*> credentials_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -171,11 +192,55 @@ struct ScpListEntry
 
 ///////////////////////////////////////////////////////////////////////////////
 
+class ScpListCtrl;
+
+class ScpDirQueueAction
+{
+public:
+		virtual void operator()() = 0;
+};
+
+class ScpDirQueueLoadAction : public ScpDirQueueAction
+{
+public:
+	ScpDirQueueLoadAction( const mol::string& p, ScpListCtrl* dl );
+
+	virtual void operator()();
+
+	mol::string		    path;
+	ScpListCtrl*		scpList;
+};
+
+
+class ScpCreateDirQueueAction : public ScpDirQueueAction
+{
+public:
+	ScpCreateDirQueueAction( ScpListCtrl* dl );
+
+	virtual void operator()();
+
+	ScpListCtrl*		scpList;
+};
+
+
+class ScpUnlinkQueueAction : public ScpDirQueueAction
+{
+public:
+	ScpUnlinkQueueAction( const std::vector<mol::string>& v, ScpListCtrl* dl );
+
+	virtual void operator()();
+
+	std::vector<mol::string> v;
+	ScpListCtrl*		scpList;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
 
 class ScpListCtrl: 
 	public mol::ax_ctrl<ScpListCtrl,CLSID_ScpList,false,mol::Window,WS_BORDER|WS_CHILD|WS_CLIPSIBLINGS|WS_CLIPCHILDREN,0>,
 	public mol::Dispatch<IScpList>,
-	public mol::ctrl_events<ScpListCtrl,_IShellListEvents>,
+	public mol::CtrlConnectionPoint<ScpListCtrl,_IShellListEvents,mol::ole::ConnectionPointAdviseMultiThreadPolicy<_IShellListEvents> >,
 	public mol::ProvideClassInfo<ScpListCtrl>,
 	public mol::interfaces< ScpListCtrl, 
 				mol::implements<
@@ -202,6 +267,13 @@ public:
     ScpListCtrl(void);
     ~ScpListCtrl();
 
+	void load( const mol::string& uri );
+	void load_async( const mol::string& uri );
+	void mkdir();
+	void unlink( const std::vector<mol::string>& v);
+	void put( std::vector<mol::string>& v, const mol::string& path);
+
+	void EndRename(const mol::string& oldpath, const mol::string& newpath);
 
 	// COM properties
 
@@ -257,6 +329,8 @@ public:
 		}
 	}
 
+
+
 protected:
 
 	msg_handler( WM_CREATE,	OnCreate ) 
@@ -310,7 +384,7 @@ protected:
 
 	bool  doHitTest();
 
-	void load( const mol::string& uri );
+
 
 //    virtual int compare(LPARAM lParam1, LPARAM lParam2);
 //    static int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
@@ -331,10 +405,10 @@ protected:
 		public: 
 		outer_this(ScpListCtrl,credentials_);
 
-		virtual bool getCredentials(const std::string& host, int port,std::string& user, std::string& pwd);
-		virtual bool promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,std::string& value,bool echo);
+		virtual bool getCredentials(const std::string& host, int port,char** user, char** pwd);
+		virtual bool promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo);
 		virtual bool acceptHost(const std::string& host, int port, const std::string& hash);
-		virtual bool rememberHostCredentials(const std::string& host, int port, const std::string& user, const std::string& pwd);
+		virtual bool rememberHostCredentials(const std::string& host, int port, const char* user, const char* pwd);
 		virtual bool deleteHostCredentials(const std::string& host, int port);
 
 	} credentials_;
@@ -361,6 +435,8 @@ protected:
 	OLE_COLOR				bgCol_;
 	OLE_COLOR				foreCol_;
 	mol::Menu				listMenu_;
+
+	mol::ThreadQueue<ScpDirQueueAction>			queue_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

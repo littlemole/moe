@@ -109,9 +109,10 @@ void Docs::insert(mol::MdiChild* mdiPos,mol::MdiChild* mdi)
 		if ( *it == mdiPos ) 
 		{
 			this->children_.insert(it,mdi);
-			break;
+			return;
 		}
 	}
+	this->children_.push_back(mdi);
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -119,6 +120,9 @@ void Docs::insert(mol::MdiChild* mdiPos,mol::MdiChild* mdi)
 void Docs::move( mol::MdiChild* mdi, int pos )
 {
 	mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*) tab()->getTabCtrlItem(pos);
+	if (!c)
+		return;
+
 	HWND w = (HWND)(c->lparam);
 
 	tab()->move(*mdi,w);

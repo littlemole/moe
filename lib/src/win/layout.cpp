@@ -36,12 +36,17 @@ void Widget::remove(HWND w)
 } // end namespace mol::win
 
 LayoutMgr::LayoutMgr()
-:toolbar_(0),statusbar_(0),rebar_(0)
+:toolbar_(0),statusbar_(0),rebar_(0),hasRibbon_(false)
 {}
 
 LayoutMgr::~LayoutMgr()
 {
 	mol::purge(widgets_);
+}
+
+void LayoutMgr::hasRibbon(bool rib )
+{
+	hasRibbon_ = rib;
 }
 
 mol::Rect LayoutMgr::availClientRect(mol::Rect& r)
@@ -51,7 +56,7 @@ mol::Rect LayoutMgr::availClientRect(mol::Rect& r)
 	RECT rrb;
 	RECT rtb;
 
-	if ( mol::Ribbon::ribbon()->enabled() )
+	if ( mol::Ribbon::ribbon()->enabled() && hasRibbon_)
 	{
 		clientRect_.top           += (mol::Ribbon::ribbon()->height());   
 		clientRect_.bottom        -= (mol::Ribbon::ribbon()->height());                    
@@ -90,7 +95,7 @@ mol::Rect LayoutMgr::availBorderRect(mol::Rect& r)
 	RECT rrb;
 	RECT rtb;
 
-	if ( mol::Ribbon::ribbon()->enabled() )
+	if ( mol::Ribbon::ribbon()->enabled() && hasRibbon_ )
 	{
 		clientRect_.top           += (mol::Ribbon::ribbon()->height());   
 	}

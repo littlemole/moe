@@ -454,6 +454,8 @@ library ShellCtrls
 		[id(14), helpstring("Copy current selection to local directory")] 
 		HRESULT CopyTo([in] BSTR dir);
 
+		[id(15), helpstring("Execute remote cmd")] 
+		HRESULT Execute();
     };
 
 	////////////////////////////////////////////////////////////////////////////////////

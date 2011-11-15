@@ -72,10 +72,10 @@ class CredentialCallback
 {
 public:
 
-	virtual bool getCredentials(const std::string& host, int port,std::string& user, std::string& pwd) = 0;
-	virtual bool promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,std::string& value,bool echo) = 0;
+	virtual bool getCredentials(const std::string& host, int port,char** user, char** pwd) = 0;
+	virtual bool promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo) = 0;
 	virtual bool acceptHost(const std::string& host, int port, const std::string& hash) = 0;
-	virtual bool rememberHostCredentials(const std::string& host, int port, const std::string& user, const std::string& pwd) = 0;
+	virtual bool rememberHostCredentials(const std::string& host, int port, const char* user, const char* pwd) = 0;
 	virtual bool deleteHostCredentials(const std::string& host, int port) = 0;
 };
 
@@ -89,10 +89,10 @@ public:
 	PasswordCredentials();	
 	PasswordCredentials(const std::string& host, int port,const std::string& user, const std::string& pwd);
 
-	virtual bool getCredentials(const std::string& host, int port,std::string& user, std::string& pwd);
-	virtual bool promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,std::string& value,bool echo);
-	virtual bool acceptHost(const std::string& host, int port,const std::string& hash);
-	virtual bool rememberHostCredentials(const std::string& host, int port, const std::string& user, const std::string& pwd);
+	virtual bool getCredentials(const std::string& host, int port,char** user, char** pwd);
+	virtual bool promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo);
+	virtual bool acceptHost(const std::string& host, int port, const std::string& hash);
+	virtual bool rememberHostCredentials(const std::string& host, int port, const char* user, const char* pwd);
 	virtual bool deleteHostCredentials(const std::string& host, int port);
 
 private:
@@ -130,7 +130,7 @@ public:
 	bool auth_none();
 	bool auth_pubkey();
 	bool auth_password();
-	bool auth_password(const std::string& user, const std::string& pwd);
+	bool auth_password(const char* user, const char* pwd);
 	bool auth_kbdint();
 
 	std::string exec_remote(const std::string& cmd);
@@ -144,6 +144,12 @@ public:
 
 	std::string server_hash();
 	std::string error();
+
+	std::string username(uint32_t uid);
+	uint32_t userid(std::string uid);
+
+	std::string groupname(uint32_t uid);
+	uint32_t groupid(std::string uid);
 
 	operator ssh_session_struct*()
 	{

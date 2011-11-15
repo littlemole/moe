@@ -948,8 +948,6 @@ void Editor::OnSaveAs()
 
 //////////////////////////////////////////////////////////////////////////////
 
-//mol::ssh::PasswordCredentials credentials2("",0,"","");
-
 void Editor::OnSave()
 {
 	if ( !sci )
@@ -979,6 +977,10 @@ void Editor::OnSave()
 		{
 			content = mol::unix2dos(content);
 		}
+		else
+		{
+			content = mol::dos2unix(content);
+		}
 
 		if ( encoding == CP_WINUNICODE )
 		{
@@ -1003,7 +1005,7 @@ void Editor::OnSave()
 			raw_bytes = mol::tostring( content, encoding );
 		}
 
-		mol::Uri uri( mol::tostring(path) );
+		mol::Uri uri( mol::toUTF8(path) );
 		std::string user = uri.getUser();
 		std::string pwd= uri.getPwd();
 		std::string host = uri.getHost();
@@ -1024,20 +1026,20 @@ void Editor::OnSave()
 			try {
 
 				mol::ostringstream oss;
-				oss << _T("connecting: ") << mol::toString(host) << _T(":") << port;
+				oss << _T("connecting: ") << mol::fromUTF8(host) << _T(":") << port;
 				statusBar()->status(oss.str());
 
 				mol::ssh::Session ssh;
-				if ( ssh.open(host,&(moe()->credentials),port) )
+				if ( ssh.open( host,&(moe()->credentials),port) )
 				{
 					mol::ostringstream oss;
-					oss << _T("writing: ") << mol::toString(host) << _T(":") << port;
+					oss << _T("writing: ") << mol::fromUTF8(host) << _T(":") << port;
 					statusBar()->status(oss.str());
 
 					mol::scp::Session scp(ssh);
-					if (scp.open( mol::SSH_SCP_WRITE, parentdir) )
+					if (scp.open( mol::SSH_SCP_WRITE, mol::fromUTF8(parentdir)) )
 					{
-						if (scp.push_file( file, raw_bytes, 0 ))
+						if (scp.push_file( mol::fromUTF8(file), raw_bytes, 0 ))
 						{
 							sci->SavePoint();
 							return;

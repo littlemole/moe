@@ -31,10 +31,10 @@ void Session::dispose()
 	scp_ = 0;
 }
 
-bool Session::open( ssh_session_struct* session, int mode, const std::string& path )
+bool Session::open( ssh_session_struct* session, int mode, const std::wstring& path )
 {
 	dispose();
-	scp_ = ssh_scp_new(session, mode, path.c_str() );
+	scp_ = ssh_scp_new(session, mode, mol::toUTF8(path).c_str() );
 	if (scp_ == NULL)
 	{
 		throw mol::ssh::Ex("open scp session failed");
@@ -49,14 +49,14 @@ bool Session::open( ssh_session_struct* session, int mode, const std::string& pa
 	return true;
 }
 
-bool Session::open( int mode, const std::string& path )
+bool Session::open( int mode, const std::wstring& path )
 {
 	return open( ssh_, mode, path);
 }
 
-bool Session::enter_dir(  const std::string& dir, int mode )
+bool Session::enter_dir(  const std::wstring& dir, int mode )
 {
-	int rc = ssh_scp_push_directory(scp_, dir.c_str(), mode );
+	int rc = ssh_scp_push_directory(scp_, mol::toUTF8(dir).c_str(), mode );
 	if (rc != SSH_OK)
 	{
 		dispose();
@@ -76,41 +76,40 @@ bool Session::leave_dir()
 	return true;
 }
 
-bool Session::push_dir(  const std::string& localdir, int mode )
+bool Session::push_dir(  const std::wstring& localdir, int mode )
 {
-	mol::string dir = mol::toString(localdir);
-	mol::string dirname = mol::Path::filename(dir);
+	std::wstring dirname = mol::Path::filename(localdir);
 
-	if ( !mol::Path::exists(dir) )
+	if ( !mol::Path::exists(localdir) )
 		return false;
 
-	if ( !mol::Path::isDir(dir) )
+	if ( !mol::Path::isDir(localdir) )
 		return false;
 
-	enter_dir( mol::tostring(dirname),0700);
-	std::vector<mol::string> files = mol::Directory::List(dir);
+	enter_dir( dirname,0700);
+	std::vector<std::wstring> files = mol::Directory::List(localdir);
 
 	for ( size_t i = 0; i < files.size(); i++)
 	{
-		mol::string path = mol::Path::addBackSlash(dir) + files[i];
+		std::wstring path = mol::Path::addBackSlash(localdir) + files[i];
 		if ( mol::Path::isDir(path) )
 		{
-			enter_dir( mol::tostring(files[i]), mode);
-			push_dir(mol::tostring(path),mode);
+			enter_dir( files[i], mode);
+			push_dir(path,mode);
 			leave_dir();
 		}
 		else
 		{
-			push_file( mol::tostring(path), mode );
+			push_file( path, mode );
 		}
 	}
 	leave_dir();
 	return true;
 }
 
-bool Session::push_file( const std::string& file, const std::string& content, int mode )
+bool Session::push_file( const std::wstring& file, const std::string& content, int mode )
 {
-	int rc = ssh_scp_push_file(scp_, file.c_str(), content.size(), mode );
+	int rc = ssh_scp_push_file(scp_, mol::toUTF8(file).c_str(), content.size(), mode );
 	if (rc != SSH_OK)
 	{
 		dispose();
@@ -126,9 +125,9 @@ bool Session::push_file( const std::string& file, const std::string& content, in
 	return true;
 }
 
-bool Session::push_file( const std::string& path, int mode )
+bool Session::push_file( const std::wstring& path, int mode )
 {
-	const std::string& file = mol::tostring(mol::Path::filename(mol::toString(path)));
+	const std::wstring file = mol::Path::filename(path);
 
 	mol::filestream fs;
 	if (!fs.open(mol::tostring(path)))
@@ -137,7 +136,7 @@ bool Session::push_file( const std::string& path, int mode )
 	std::string s = fs.readAll();
 	fs.close();
 
-	int rc = ssh_scp_push_file(scp_, file.c_str(), s.size(), mode );
+	int rc = ssh_scp_push_file(scp_, mol::toUTF8(file).c_str(), s.size(), mode );
 	if (rc != SSH_OK)
 	{
 		dispose();
@@ -153,7 +152,7 @@ bool Session::push_file( const std::string& path, int mode )
 	return true;
 }
 
-bool Session::pull_file( const std::string& localdir)
+bool Session::pull_file( const std::wstring& localdir)
 {
 	int rc = ssh_scp_pull_request(scp_);
 	if (rc != SSH_SCP_REQUEST_NEWFILE)
@@ -181,7 +180,7 @@ bool Session::pull_file( const std::string& localdir)
 		throw mol::ssh::Ex("error reading file");
 	}
 
-	mol::string localpath = mol::Path::addBackSlash(mol::toString(localdir)) + mol::toString(filename);
+	std::wstring localpath = mol::Path::addBackSlash(localdir) + mol::fromUTF8(filename);
 		
 
 	mol::filestream fs;
@@ -245,9 +244,9 @@ bool Session::read_file(  std::string& content)
 	return true;
 }
 
-bool Session::pull_dir( const std::string& localdir)
+bool Session::pull_dir( const std::wstring& localdir)
 {
-	std::string local = localdir;
+	std::wstring local = localdir;
 
 	bool eof = false;
 	while(!eof)
@@ -275,7 +274,7 @@ bool Session::pull_dir( const std::string& localdir)
 					throw mol::ssh::Ex("error reading file");
 				}
 
-				mol::string localpath = mol::Path::addBackSlash(mol::toString(local)) + mol::toString(filename);
+				std::wstring localpath = mol::Path::addBackSlash(local) + mol::fromUTF8(filename);
 		
 
 				mol::filestream fs;
@@ -302,8 +301,8 @@ bool Session::pull_dir( const std::string& localdir)
 
 				ssh_scp_accept_request(scp_);
 
-				mol::string localpath = mol::Path::addBackSlash(mol::toString(local)) + mol::toString(filename);
-				local = mol::tostring(localpath);		
+				std::wstring localpath = mol::Path::addBackSlash(local) + mol::fromUTF8(filename);
+				local = localpath;		
 
 				if ( mol::Path::exists(localpath) && !mol::Path::isDir(localpath) )
 				{
@@ -319,9 +318,9 @@ bool Session::pull_dir( const std::string& localdir)
 			}
 			case SSH_SCP_REQUEST_ENDDIR :
 			{
-				mol::string localpath = mol::Path::parentDir(mol::toString(local));
+				std::wstring localpath = mol::Path::parentDir(local);
 
-				local = mol::tostring(localpath);		
+				local = localpath;		
 				break;
 			}
 			case SSH_SCP_REQUEST_WARNING :
