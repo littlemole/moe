@@ -261,6 +261,7 @@ private:
 };
 
 mol::string resolveShortcut( const mol::string& link);
+mol::string resolveInternetShortcut( const mol::string& link);
 
 } // end namespace mol;
 

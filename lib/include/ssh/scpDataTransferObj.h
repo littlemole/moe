@@ -101,7 +101,7 @@ protected:
 		if ( connected_)
 			return;
 
-		if (!ssh_.open( mol::tostring(host_),cb_,port_))
+		if (!ssh_.open( mol::toUTF8(host_),cb_,port_))
 		{
 			return ;
 		}

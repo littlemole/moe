@@ -59,6 +59,7 @@ public:
 	void addToolBar( mol::ToolBar* tb );
 	void addRebar( mol::ReBar* rb );
 	void addStatusBar( mol::StatusBar * sb );
+	void hasRibbon(bool rib = true);
 
 	void resize(WPARAM wParam, LPARAM lParam);
 
@@ -75,6 +76,7 @@ protected:
 	mol::StatusBar*        statusbar_;
 	mol::ReBar*			   rebar_;
 	mol::Rect		  	   clientRect_;
+	bool				   hasRibbon_;
 };
 
 //////////////////////////////////////////////////////////////////////

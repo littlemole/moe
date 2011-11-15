@@ -61,27 +61,46 @@ LRESULT ShellFolderCtrl::OnDestroy(UINT msg, WPARAM wParam, LPARAM lParam)
 
 LRESULT ShellFolderCtrl::OnCreate(UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	ODBGS("ShellFolderCtrl::OnCreate");
+	
+
     RECT clientRect;
-	getClientRect(clientRect);
+	getClientRect(clientRect); //!!!!!
+
+	//clientRect.right = clientRect.right - clientRect.left;
+	//clientRect.bottom = clientRect.bottom - clientRect.top;
+	//clientRect.left = clientRect.top = 0;
+	ODBGS1("right:",clientRect.right);
+	ODBGS1("bottom:",clientRect.bottom);
+
 	wnd_.create(0,clientRect,*this);
-	wnd_.show(SW_SHOW);
+	wnd_.setRedraw(false);
 
 	mol::string s = mol::io::desktop().getDisplayNameOf(*mol::io::desktop().getSpecialFolder(CSIDL_DESKTOP));
 	wnd_.path(s);
-	wnd_.setFocus();
+	wnd_.setFocus();	
+	wnd_.show(SW_SHOW);
+	wnd_.setRedraw(true);
 	return 0;
 }
 
 LRESULT ShellFolderCtrl::OnSize(UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	ODBGS("ShellFolderCtrl::OnSize");
 	getClientRect(clientRect_);
 		
 	// get new width and height
 	clientRect_.right  = LOWORD (lParam) ;
 	clientRect_.bottom = HIWORD (lParam) ;
 
-	wnd_.move(clientRect_);
+	ODBGS1("sfc right:",clientRect_.right);
+	ODBGS1("sfc bottom:",clientRect_.bottom);
 
+	//wnd_.move(clientRect_);
+
+	::SetWindowPos( wnd_, NULL, 0,0, clientRect_.right, clientRect_.bottom,SWP_NOZORDER|SWP_DRAWFRAME|SWP_FRAMECHANGED|SWP_NOACTIVATE|SWP_NOOWNERZORDER|SWP_NOMOVE|SWP_NOCOPYBITS);
+	::RedrawWindow( wnd_,NULL,NULL,RDW_FRAME|RDW_INVALIDATE|RDW_UPDATENOW|RDW_ALLCHILDREN|RDW_INTERNALPAINT);
+	ODBGS("ShellFolderCtrl::OnSize END");
 	return 0;
 }
 //////////////////////////////////////////////////////////////////////////////

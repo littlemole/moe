@@ -69,19 +69,19 @@ public:
 
 	bool open(ssh_session_struct* session);
 
-	bool mkdir(const std::string& dir,int mode);
-	bool rmdir(const std::string& dir);
-	bool rename(const std::string& oldName, const std::string& newName);
+	bool mkdir(const std::wstring& dir,int mode);
+	bool rmdir(const std::wstring& dir);
+	bool rename(const std::wstring& oldName, const std::wstring& newName);
 
-	bool unlink(const std::string& file);
-	bool chown(const std::string& file, uint32_t owner, uint32_t group);
-	bool chmod(const std::string& file, int mode);
+	bool unlink(const std::wstring& file);
+	bool chown(const std::wstring& file, uint32_t owner, uint32_t group);
+	bool chmod(const std::wstring& file, int mode);
 
-	RemoteFile stat( const std::string& file );
-	RemoteFile lstat( const std::string& file );
+	RemoteFile stat( const std::wstring& file );
+	RemoteFile lstat( const std::wstring& file );
 
-	std::vector<std::string> files( const std::string& dir );
-	std::vector<RemoteFile> list( const std::string& dir );
+	std::vector<std::wstring> files( const std::wstring& dir );
+	std::vector<RemoteFile> list( const std::wstring& dir );
 
 	operator sftp_session_struct*()
 	{
@@ -103,13 +103,13 @@ public:
 	filestream_buf(sftp_session_struct* session);
 	~filestream_buf(void);
 
-	bool open( const std::string& fn, std::ios_base::openmode mode = std::ios_base::in, int permissions = 0 );
+	bool open( const std::wstring& fn, std::ios_base::openmode mode = std::ios_base::in, int permissions = 0 );
 	void close();
 
 	int seek();
 	int seek(int s);
 
-	const mol::string path();
+	const std::wstring path();
 
 private:
 
@@ -121,7 +121,7 @@ private:
 	pos_type seekoff( off_type off, std::ios_base::seekdir way, std::ios_base::openmode which = std::ios_base::in | std::ios_base::out );
 
 	sftp_file_struct* handle_;
-	std::string filename_;
+	std::wstring filename_;
 
 	sftp_session_struct* session_;
 };
@@ -138,12 +138,12 @@ public:
     typedef std::basic_iostream< char, std::char_traits<char> >	base_type;
 
 	basic_FileStream(sftp_session_struct* session);
-	basic_FileStream(sftp_session_struct* session, const std::string& fn);
+	basic_FileStream(sftp_session_struct* session, const std::wstring& fn);
 	basic_FileStream(T* s);
 
 	~basic_FileStream();
 
-	bool open( const std::string& fn, std::ios_base::openmode mode = std::ios_base::in, int permissions = 0 )
+	bool open( const std::wstring& fn, std::ios_base::openmode mode = std::ios_base::in, int permissions = 0 )
 	{
 		clear();
 		return buf_->open(fn,mode,permissions);
@@ -181,7 +181,7 @@ public:
 		return write( s.c_str(), s.size() ) != 0;
 	}
 
-	const mol::string path()
+	const std::wstring path()
 	{
 		return buf_->path();
 	}
@@ -230,7 +230,7 @@ basic_FileStream<T>::basic_FileStream(sftp_session_struct* session)
 }
 
 template<class T>
-basic_FileStream<T>::basic_FileStream( sftp_session_struct* session, const std::string& fn )
+basic_FileStream<T>::basic_FileStream( sftp_session_struct* session, const std::wstring& fn )
 	: basic_FileStream<T>::base_type(createBuf(session))
 {
 	if ( !open( fn ) )

@@ -43,7 +43,7 @@ public:
 
 	StgMedium( void* v, size_t size, int opt = GMEM_MOVEABLE|GMEM_NODISCARD, IUnknown* pUnk = 0)
 	{
-		mol::global glob( v, size );
+		mol::global glob( v, size, opt );
 		this->tymed          = TYMED_HGLOBAL;
 		this->pUnkForRelease = pUnk;
 		this->hGlobal		 = glob;

@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sun Oct 30 16:02:22 2011
+/* at Tue Nov 15 00:00:21 2011
  */
 /* Compiler settings for shellCtrl.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -1489,6 +1489,8 @@ EXTERN_C const IID IID_IScpList;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CopyTo( 
             /* [in] */ BSTR dir) = 0;
         
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Execute( void) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -1593,6 +1595,9 @@ EXTERN_C const IID IID_IScpList;
             IScpList * This,
             /* [in] */ BSTR dir);
         
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Execute )( 
+            IScpList * This);
+        
         END_INTERFACE
     } IScpListVtbl;
 
@@ -1676,6 +1681,9 @@ EXTERN_C const IID IID_IScpList;
 
 #define IScpList_CopyTo(This,dir)	\
     ( (This)->lpVtbl -> CopyTo(This,dir) ) 
+
+#define IScpList_Execute(This)	\
+    ( (This)->lpVtbl -> Execute(This) ) 
 
 #endif /* COBJMACROS */
 

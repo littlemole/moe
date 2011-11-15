@@ -103,34 +103,51 @@ PasswordCredentials::PasswordCredentials(const std::string& host, int port, cons
 	: host_(host),port_(port),user_(user),pwd_(pwd)
 {}
 
-bool PasswordCredentials::getCredentials(const std::string& host, int port,std::string& user, std::string& pwd)
+bool PasswordCredentials::getCredentials(const std::string& host, int port,char** user, char** pwd)
 {
-	user = user_;
-	pwd = pwd_;
+	if (!user || !pwd)
+		return false;
+
+	size_t size = (user_.size()+1);
+	*user = (char*)malloc( size );
+	memcpy(*user, user_.data(), size );
+
+	size = (pwd_.size()+1);
+	*pwd = (char*)malloc( size );
+	memcpy(*pwd, pwd_.data(), size );
+
 	return true;
 }
 
-bool PasswordCredentials::promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,std::string& value,bool echo)
+bool PasswordCredentials::promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo)
 {
-	std::cout << desc << std::endl << prompt;
-	std::string in;
-	std::cin >> in;
-	value = in;
+	if (!value)
+		return false;
+
+	std::wstring in;
+	std::wcin >> in;
+
+	std::string s = mol::toUTF8(in);
+
+	size_t size = (s.size()+1) ;
+	*value = (char*)malloc( size );
+	memcpy(*value, s.data(), size );
+
 	return true;
 }
 
 bool PasswordCredentials::acceptHost(const std::string& host, int port,const std::string& hash)
 {
-	std::cout << "accept host " << host << ":" << port << std::endl << " hash: " << hash << " ?" << std::endl;
-	std::string in;
-	std::cin >> in;
-	if ( in == "yes")
+	std::wcout << L"accept host " << mol::fromUTF8(host) << L":" << port << std::endl << L" hash: " << mol::fromUTF8(hash) << L" ?" << std::endl;
+	std::wstring in;
+	std::wcin >> in;
+	if ( in == L"yes")
 		return true;
 	else
 		return false;
 }
 
-bool PasswordCredentials::rememberHostCredentials(const std::string& host, int port, const std::string& user, const std::string& pwd)
+bool PasswordCredentials::rememberHostCredentials(const std::string& host, int port, const char* user, const char* pwd)
 {
 	return true;
 }
@@ -219,7 +236,7 @@ bool Session::open(const std::string& host, CredentialCallback* cb , int port )
 			port_ = port;
 
 		ssh_options_set(session_, SSH_OPTIONS_PORT, &port );
-		ssh_options_set(session_, SSH_OPTIONS_HOST, host.c_str() );
+		ssh_options_set(session_, SSH_OPTIONS_HOST, mol::toUTF8(host).c_str() );
 
 		int rc = ssh_connect(session_);
 		if (rc != SSH_OK)
@@ -377,16 +394,26 @@ bool Session::auth_password()
 	if (!cb_)
 		return false;
 
-	std::string user;
-	std::string pwd;
-	cb_->getCredentials(hostname_,port_,user,pwd);
+	char* user = 0;
+	char* pwd = 0;
+	if(!cb_->getCredentials(hostname_,port_,&user,&pwd))
+		return false;
 
-	int rc = ssh_userauth_password(session_, user.c_str(), pwd.c_str() );
+	int rc = ssh_userauth_password(session_, user, pwd );
+	if ( rc == SSH_AUTH_SUCCESS )
+	{
+		cb_->rememberHostCredentials(hostname_,port_,user,pwd);
+	}
+
+	if ( user )
+		free(user);
+	if ( pwd )
+		free(pwd);
+
 	switch(rc)
 	{
 		case SSH_AUTH_SUCCESS:
 		{
-			cb_->rememberHostCredentials(hostname_,port_,user,pwd);
 			return true;
 		}
 		case SSH_AUTH_ERROR:
@@ -409,10 +436,10 @@ bool Session::auth_password()
 	return false;
 }
 
-bool Session::auth_password(const std::string& user, const std::string& pwd)
+bool Session::auth_password(const char* user, const char* pwd)
 {
 
-	int rc = ssh_userauth_password(session_, user.c_str(), pwd.c_str() );
+	int rc = ssh_userauth_password(session_, user, pwd );
 	switch(rc)
 	{
 		case SSH_AUTH_SUCCESS:
@@ -466,13 +493,17 @@ bool Session::auth_kbdint()
 
 			prompt = ssh_userauth_kbdint_getprompt(session_, iprompt, &echo);
 
-			std::string value;
-			if ( cb_->promptCredentials(hostname_,port_,name,instruction,value, echo ? true : false ) )
+			char* value = 0;
+			if ( cb_->promptCredentials(hostname_,port_,name,instruction,&value, echo ? true : false ) )
 			{
-				if ( ssh_userauth_kbdint_setanswer(session_,iprompt,value.c_str()) <0 )
+				if ( ssh_userauth_kbdint_setanswer(session_,iprompt,value ) <0 )
 				{
+					if ( value )
+						free(value);
 					throw Ex("SSH_AUTH_ERROR");
 				}
+				if ( value )
+					free(value);
 			}
 		}
 		rc = ssh_userauth_kbdint(session_, NULL, NULL);
@@ -496,7 +527,7 @@ std::string Session::exec_remote(const std::string& cmd)
 		throw Ex("SSH_ERROR open channel");
 	}
 
-	rc = ssh_channel_request_exec(channel, cmd.c_str());
+	rc = ssh_channel_request_exec( channel, cmd.c_str() );
 	if (rc != SSH_OK)
 	{
 		ssh_channel_close(channel);
@@ -639,12 +670,12 @@ std::string Session::getBanner()
 	std::string ret;
 	char* banner = ssh_get_issue_banner(session_);
 	if (banner)
-		{
-			ret = std::string(banner);
-			ssh_string_free_char(banner);
-			return ret;
-		}
-		return "";
+	{
+		ret = std::string(banner);
+		ssh_string_free_char(banner);
+		return  ret;
+	}
+	return "";
 }
 
 std::string Session::server_hash()
@@ -656,9 +687,51 @@ std::string Session::server_hash()
 std::string Session::error() 
 {
 	std::string s(ssh_get_error(session_));
+	return  s;
+}
+
+
+std::string Session::username(uint32_t uid)
+{
+	std::stringstream oss;
+	oss << "getent passwd " << uid << "|cut -d: -f1";
+	std::string s = exec_remote(oss.str());
 	return s;
 }
 
+uint32_t Session::userid(std::string uid)
+{
+	std::stringstream oss;
+	oss << "getent passwd " << uid << "|cut -d: -f3";
+	std::string s = exec_remote(oss.str());
+
+	uint32_t v = 0;
+	std::istringstream iss(s);
+	iss >> v;
+	return v;
+}
+
+
+std::string Session::groupname(uint32_t uid)
+{
+	std::stringstream oss;
+	oss << "getent group " << uid << "|cut -d: -f1";
+	std::string s = exec_remote(oss.str());
+	return s;
+}
+
+
+uint32_t Session::groupid(std::string uid)
+{
+	std::stringstream oss;
+	oss << "getent group " << uid << "|cut -d: -f3";
+	std::string s = exec_remote(oss.str());
+
+	uint32_t v = 0;
+	std::istringstream iss(s);
+	iss >> v;
+	return v;
+}
 
 } // end namespace ssh
 } // end namespace mol

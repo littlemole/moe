@@ -18,18 +18,18 @@ public:
 	~Session();
 	void dispose();
 
-	bool open( int mode, const std::string& path );
-	bool open( ssh_session_struct* session, int mode, const std::string& path );
-	bool enter_dir(  const std::string& dir, int mode );
+	bool open( int mode, const std::wstring& path );
+	bool open( ssh_session_struct* session, int mode, const std::wstring& path );
+	bool enter_dir(  const std::wstring& dir, int mode );
 	bool leave_dir();
 
-	bool push_dir(  const std::string& localdir, int mode );
-	bool push_file( const std::string& file, const std::string& content, int mode );
-	bool push_file( const std::string& path, int mode );
+	bool push_dir(  const std::wstring& localdir, int mode );
+	bool push_file( const std::wstring& file, const std::string& content, int mode );
+	bool push_file( const std::wstring& path, int mode );
 
-	bool pull_file( const std::string& localdir);
+	bool pull_file( const std::wstring& localdir);
 	bool read_file( std::string& content);
-	bool pull_dir( const std::string& localdir);
+	bool pull_dir( const std::wstring& localdir);
 
 	operator ssh_scp_struct*()
 	{

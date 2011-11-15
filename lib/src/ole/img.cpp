@@ -87,7 +87,7 @@ BOOL Picture::load(const mol::string& pathName)
         return FALSE;
     }
 
-    char* lpBuffer = glob.lock();
+    char* lpBuffer = (char*)glob.lock();
     DWORD dwBytesRead = 0;
 
     while ( ::ReadFile(hFile, lpBuffer, 4096, &dwBytesRead, NULL) )

@@ -48,7 +48,12 @@ LRESULT ShellFolderWnd::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 		clientRect_.right  = LOWORD (lParam) ;
 		clientRect_.bottom = HIWORD (lParam) ;
 
-		::MoveWindow( viewWnd_,clientRect_.left, clientRect_.top, clientRect_.right, clientRect_.bottom, TRUE);	
+		ODBGS1("sfw right:",clientRect_.right);
+		ODBGS1("sfw bottom:",clientRect_.bottom);
+
+		//::MoveWindow( viewWnd_,clientRect_.left, clientRect_.top, clientRect_.right, clientRect_.bottom, TRUE);	
+		::SetWindowPos( viewWnd_, NULL, 0,0, clientRect_.right, clientRect_.bottom,SWP_NOZORDER|SWP_DRAWFRAME|SWP_FRAMECHANGED|SWP_NOACTIVATE|SWP_NOOWNERZORDER|SWP_NOMOVE|SWP_NOCOPYBITS);
+		::RedrawWindow( viewWnd_,NULL,NULL,RDW_FRAME|RDW_INVALIDATE|RDW_UPDATENOW|RDW_ALLCHILDREN|RDW_INTERNALPAINT);
 	}
 	return mol::Window::wndProc(hwnd,message,wParam,lParam);
 }

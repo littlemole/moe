@@ -5,10 +5,10 @@
 <Target Name="Build">
 
         <MSBuild Projects=".\build\src\ssh_static.vcxproj" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' " Properties="Configuration=Release;Platform=$(Platform)"/>
-		<MSBuild Projects=".\build\src\ssh_static.vcxproj" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' " Properties="Configuration=Debug;Platform=$(Platform)"/>
+	<MSBuild Projects=".\build\src\ssh_static.vcxproj" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' " Properties="Configuration=Debug;Platform=$(Platform)"/>
 
         <MSBuild Projects=".\build\src\ssh_static.vcxproj" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' " Properties="Configuration=Release;Platform=$(Platform)"/>
-		<MSBuild Projects=".\build\src\ssh_static.vcxproj" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' " Properties="Configuration=Debug;Platform=$(Platform)"/>
+	<MSBuild Projects=".\build\src\ssh_static.vcxproj" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' " Properties="Configuration=Debug;Platform=$(Platform)"/>
 
 </Target>
 

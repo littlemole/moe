@@ -2,6 +2,8 @@
 #include "win/path.h"
 #include "util/uni.h"
 
+#include <IntShCut.h>
+
 namespace mol {
 namespace io {
 
@@ -759,6 +761,33 @@ mol::string resolveShortcut( const mol::string& link)
 		return _T("");
 
 	return mol::string(szPath);
+}
+
+mol::string resolveInternetShortcut( const mol::string& link)
+{
+    HRESULT hr = E_FAIL;
+
+	mol::punk<IUniformResourceLocator> url;
+	url.createObject(CLSID_InternetShortcut);
+	if ( !url )
+		return _T("");
+
+	mol::punk<IPersistFile> pf(url);
+	if ( !pf )
+		return _T("");
+
+	hr = pf->Load(link.c_str(),0);
+	if ( hr != S_OK )
+		return _T("");	
+
+	wchar_t* purl = 0;
+	hr = url->GetURL(&purl);
+	if ( hr != S_OK )
+		return _T("");
+
+	mol::string ret(purl);
+	::CoTaskMemFree(purl);
+	return ret;
 }
 
 } // end namespace mol;

@@ -173,6 +173,10 @@ public:
 	 // toolbar right click event
  	 void OnToolbarRightClick(NMHDR* notify );
 
+	/////////////////////////////////////////////////////////////////////
+	// codepage support
+	/////////////////////////////////////////////////////////////////////
+
 	 typedef std::pair<int,std::wstring> CodePage;
 
 	 const std::vector<CodePage>& codePages()
@@ -192,15 +196,19 @@ public:
 		 return -1;
 	 }
 
+	/////////////////////////////////////////////////////////////////////
+	// ssh credentials
+	/////////////////////////////////////////////////////////////////////
+
 	class Credentials : public mol::ssh::CredentialCallback
 	{
 		public: 
 		outer_this(MoeWnd,credentials);
 
-		virtual bool getCredentials(const std::string& host, int port,std::string& user, std::string& pwd);
-		virtual bool promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,std::string& value,bool echo);
+		virtual bool getCredentials(const std::string& host, int port, char** user, char** pwd);
+		virtual bool promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo);
 		virtual bool acceptHost(const std::string& host, int port, const std::string& hash);
-		virtual bool rememberHostCredentials(const std::string& host, int port, const std::string& user, const std::string& pwd);
+		virtual bool rememberHostCredentials(const std::string& host, int port, const char* user, const char* pwd);
 		virtual bool deleteHostCredentials(const std::string& host, int port);
 
 	} credentials;

@@ -40,7 +40,7 @@ public:
     ~global();
 
 	BOOL alloc( size_t size, int opt = GMEM_MOVEABLE | GMEM_NODISCARD);
-    char* lock();
+    void* lock();
     void unLock();
     void release();
 
@@ -89,7 +89,9 @@ public:
 	template<class T>
 	static void get(mol::global& g, T& t)
 	{
-		t = *((T*)g.lock());
+		void* v = g.lock();
+		T* tp = (T*)v;
+		t = *tp;
 		g.unLock();
 	}
 

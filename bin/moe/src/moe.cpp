@@ -72,6 +72,7 @@ MoeWnd::MoeWnd()
 		codePages_.push_back( CodePage( std::make_pair( (*it).first, (*it).second.second)) );
 	}
 
+	// prepare ssh credentials
 	credentialProvider.createObject(CLSID_DefaultScpCredentialProvider);
 }
 
@@ -116,6 +117,8 @@ void MoeWnd::OnCreate()
 	// the main window and GUI elements have been created
 	// initialize critical GUI parts now
 
+	this->layout_->hasRibbon(true);
+
 	ODBGS("MoeWnd::OnCreate()");
 
 	// register us as active instance
@@ -144,6 +147,8 @@ void MoeWnd::OnCreate()
 
     // update ribbon's recent documents
 	mol::Ribbon::ribbon()->updateRecentDocs(RibbonMRUItems);
+
+	
 
 }
 
@@ -1228,9 +1233,12 @@ HRESULT __stdcall MoeWnd::InitNew()
 //////////////////////////////////////////////////////////////////////////////
 
 
-bool MoeWnd::Credentials::getCredentials(const std::string& host, int port, std::string& user, std::string& pwd)
+bool MoeWnd::Credentials::getCredentials(const std::string& host, int port, char** user, char** pwd)
 {
 	if ( !This()->credentialProvider )
+		return false;
+
+	if(!user || !pwd)
 		return false;
 
 	mol::punk<IScpPasswordCredentials> creds;
@@ -1238,19 +1246,25 @@ bool MoeWnd::Credentials::getCredentials(const std::string& host, int port, std:
 	if ( hr != S_OK )
 		return false;
 
-	mol::bstr u;
-	creds->get_Username(&u);
+	mol::bstr bu;
+	creds->get_Username(&bu);
 
-	mol::bstr p;
-	creds->get_Password(&p);
+	mol::bstr bp;
+	creds->get_Password(&bp);
 
-	user = mol::tostring(u);
-	pwd  = mol::tostring(p);
+	std::string u = mol::toUTF8(bu.towstring());
+	std::string p = mol::toUTF8(bp.towstring());
+
+	*user = (char*)malloc(u.size()+1);
+	*pwd  = (char*)malloc(p.size()+1);
+
+	memcpy(*user,u.data(),u.size()+1);
+	memcpy(*pwd, p.data(),p.size()+1);
 
 	return true;
 }
 
-bool MoeWnd::Credentials::promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,std::string& value,bool echo)
+bool MoeWnd::Credentials::promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo)
 {
 	
 	return false;
@@ -1272,7 +1286,7 @@ bool MoeWnd::Credentials::acceptHost(const std::string& host, int port, const st
 	return true;
 }
 
-bool MoeWnd::Credentials::rememberHostCredentials(const std::string& host, int port, const std::string& user, const std::string& pwd)
+bool MoeWnd::Credentials::rememberHostCredentials(const std::string& host, int port, const char* user, const char* pwd)
 {
 	if ( !This()->credentialProvider )
 		return false;

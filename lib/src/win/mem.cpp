@@ -40,10 +40,10 @@ global::global( const std::wstring& s, int opt )
 	size_t l = (s.size()+1)*sizeof(wchar_t);
 	if ( alloc( l, opt ) )
 	{
-		char* tmp = (char*)lock();
+		void* tmp = lock();
 		if ( tmp )
 		{
-			memcpy(tmp,(char*)s.c_str(),l);
+			memcpy(tmp,s.c_str(),l);
 			unLock();
 		}
 	}
@@ -53,7 +53,7 @@ global::global( void* v, size_t size, int opt )
 {
 	if ( alloc(size,opt) )
 	{
-		char* tmp = lock();
+		void* tmp = lock();
 		if ( tmp )
 		{
 			memcpy( tmp, v, size );
@@ -79,9 +79,9 @@ BOOL global::alloc( size_t size, int opt )
 
 /////////////////////////////////////////////////////////////////////
 
-char* global::lock()
+void* global::lock()
 {
-    return (char*)(::GlobalLock( hGlobal_ ));
+    return (void*)(::GlobalLock( hGlobal_ ));
 }
 
 /////////////////////////////////////////////////////////////////////

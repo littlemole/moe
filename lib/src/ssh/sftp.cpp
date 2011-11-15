@@ -21,13 +21,13 @@ RemoteFile::RemoteFile(sftp_attributes_struct* att)
 
 	size_  = att->size;
 	if ( att->name )
-		name_  = mol::toString(att->name);
+		name_  = mol::fromUTF8(att->name);
 
 	if ( att->owner)
-		owner_ = mol::toString(att->owner);
+		owner_ = mol::fromUTF8(att->owner);
 
 	if ( att->group)
-		group_ = mol::toString(att->group);
+		group_ = mol::fromUTF8(att->group);
 
 	type_  = att->type;
 	mtime_ = att->mtime;
@@ -151,17 +151,17 @@ void Session::dispose()
 	sftp_ = 0;
 }
 
-RemoteFile Session::stat( const std::string& file )
+RemoteFile Session::stat( const std::wstring& file )
 {
-	sftp_attributes att = sftp_stat( sftp_, file.c_str() );
+	sftp_attributes att = sftp_stat( sftp_, mol::toUTF8(file).c_str() );
 	RemoteFile rf(att);
     sftp_attributes_free(att);
 	return rf;
 }
 
-RemoteFile Session::lstat( const std::string& file )
+RemoteFile Session::lstat( const std::wstring& file )
 {
-	sftp_attributes att = sftp_lstat( sftp_, file.c_str() );
+	sftp_attributes att = sftp_lstat( sftp_, mol::toUTF8(file).c_str() );
 	RemoteFile rf(att);
     sftp_attributes_free(att);
 	return rf;
@@ -185,9 +185,9 @@ bool Session::open(ssh_session_struct* session)
 	return true;
 }
 
-bool Session::mkdir(const std::string& dir,int mode)
+bool Session::mkdir(const std::wstring& dir,int mode)
 {
-	int rc = sftp_mkdir(sftp_, dir.c_str(), mode);
+	int rc = sftp_mkdir(sftp_, mol::toUTF8(dir).c_str(), mode);
 	if (rc != SSH_OK)
 	{
 		return false;
@@ -195,9 +195,9 @@ bool Session::mkdir(const std::string& dir,int mode)
 	return true;
 }
 
-bool Session::rename(const std::string& oldName, const std::string& newName)
+bool Session::rename(const std::wstring& oldName, const std::wstring& newName)
 {
-	int rc = sftp_rename( sftp_, oldName.c_str(), newName.c_str() );
+	int rc = sftp_rename( sftp_, mol::toUTF8(oldName).c_str(), mol::toUTF8(newName).c_str() );
 	if (rc != SSH_OK)
 	{
 		return false;
@@ -205,9 +205,9 @@ bool Session::rename(const std::string& oldName, const std::string& newName)
 	return true;
 }
 
-bool Session::rmdir(const std::string& dir)
+bool Session::rmdir(const std::wstring& dir)
 {
-	int rc = sftp_rmdir(sftp_, dir.c_str());
+	int rc = sftp_rmdir(sftp_, mol::toUTF8(dir).c_str());
 	if (rc != SSH_OK)
 	{
 		return false;
@@ -215,9 +215,9 @@ bool Session::rmdir(const std::string& dir)
 	return true;
 }
 
-bool Session::unlink(const std::string& file)
+bool Session::unlink(const std::wstring& file)
 {
-	int rc = sftp_unlink(sftp_, file.c_str());
+	int rc = sftp_unlink(sftp_, mol::toUTF8(file).c_str());
 	if (rc != SSH_OK)
 	{
 		return false;
@@ -225,9 +225,9 @@ bool Session::unlink(const std::string& file)
 	return true;
 }
 
-bool Session::chown(const std::string& file, uint32_t owner, uint32_t group)
+bool Session::chown(const std::wstring& file, uint32_t owner, uint32_t group)
 {
-	int rc = sftp_chown(sftp_, file.c_str(),owner,group);
+	int rc = sftp_chown(sftp_, mol::toUTF8(file).c_str(),owner,group);
 	if (rc != SSH_OK)
 	{
 		return false;
@@ -235,9 +235,9 @@ bool Session::chown(const std::string& file, uint32_t owner, uint32_t group)
 	return true;
 }
 
-bool Session::chmod(const std::string& file, int mode)
+bool Session::chmod(const std::wstring& file, int mode)
 {
-	int rc = sftp_chmod(sftp_, file.c_str(),mode);
+	int rc = sftp_chmod(sftp_, mol::toUTF8(file).c_str(),mode);
 	if (rc != SSH_OK)
 	{
 		return false;
@@ -245,17 +245,17 @@ bool Session::chmod(const std::string& file, int mode)
 	return true;
 }
 
-std::vector<std::string> Session::files( const std::string& dir )
+std::vector<std::wstring> Session::files( const std::wstring& dir )
 {
 	sftp_attributes attributes;
-	std::vector<std::string> v;
-	sftp_dir remote_dir = sftp_opendir(sftp_,dir.c_str());
+	std::vector<std::wstring> v;
+	sftp_dir remote_dir = sftp_opendir(sftp_,mol::toUTF8(dir).c_str());
 	if ( !remote_dir)
 		return v;
 
 	while ((attributes = sftp_readdir(sftp_, remote_dir)) != NULL)
 	{
-		v.push_back( std::string(attributes->name) );
+		v.push_back( mol::fromUTF8(attributes->name) );
 
 		sftp_attributes_free(attributes);
 	}
@@ -273,11 +273,11 @@ std::vector<std::string> Session::files( const std::string& dir )
 	return v;
 }
 
-std::vector<RemoteFile> Session::list( const std::string& dir )
+std::vector<RemoteFile> Session::list( const std::wstring& dir )
 {
 	sftp_attributes attributes;
 	std::vector<RemoteFile> v;
-	sftp_dir remote_dir = sftp_opendir(sftp_,dir.c_str());
+	sftp_dir remote_dir = sftp_opendir(sftp_,mol::toUTF8(dir).c_str());
 	if ( !remote_dir)
 		return v;
 
@@ -301,6 +301,9 @@ std::vector<RemoteFile> Session::list( const std::string& dir )
 	return v;
 }
 
+
+
+
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
@@ -320,7 +323,7 @@ filestream_buf::~filestream_buf(void)
 	}
 }
 
-bool filestream_buf::open( const std::string& fn, std::ios_base::openmode mode, int permissions )
+bool filestream_buf::open( const std::wstring& fn, std::ios_base::openmode mode, int permissions )
 {
 	filename_ = fn;
 
@@ -332,7 +335,7 @@ bool filestream_buf::open( const std::string& fn, std::ios_base::openmode mode, 
 		access_type |= O_CREAT;
 	}
 
-	handle_ =  sftp_open(session_, fn.c_str(), access_type, permissions);
+	handle_ =  sftp_open(session_, mol::toUTF8(fn).c_str(), access_type, permissions);
 	if (handle_ == NULL)
     {
 		return false;
@@ -360,9 +363,9 @@ int filestream_buf::seek(int s)
 	return sftp_seek( handle_, s );
 }
 
-const mol::string filestream_buf::path()
+const std::wstring filestream_buf::path()
 {
-	return mol::toString(filename_);
+	return filename_;
 }
 
 

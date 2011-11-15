@@ -1354,8 +1354,20 @@ HRESULT MoeVistaFileDialog::open(int options)
 
 		PWSTR pszFilePath = NULL;
 		hr = shit->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
-		paths_.push_back(pszFilePath);
-		::CoTaskMemFree(pszFilePath);
+		if ( hr == S_OK )
+		{
+			paths_.push_back(pszFilePath);
+			::CoTaskMemFree(pszFilePath);
+		}
+		else
+		{
+			hr = shit->GetDisplayName(SIGDN_URL, &pszFilePath);
+			if ( hr == S_OK )
+			{
+				paths_.push_back(pszFilePath);
+				::CoTaskMemFree(pszFilePath);
+			}
+		}
 	}
 
 	DWORD openChoices = 0;
@@ -1587,9 +1599,13 @@ MOE_DOCTYPE index2type(int index)
 		}
 		case 3 :
 		{
-			return MOE_DOCTYPE_HEX;
+			return MOE_DOCTYPE_RTF;
 		}
 		case 4 :
+		{
+			return MOE_DOCTYPE_HEX;
+		}
+		case 5 :
 		{
 			return MOE_DOCTYPE_TAIL;
 		}

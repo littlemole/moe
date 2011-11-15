@@ -134,7 +134,7 @@ HttpUrl::HttpUrl(const mol::string& loc, const mol::string& p, const mol::string
     
     postdataGlob_.alloc(postdatasize_,GPTR);
     
-    char* c=postdataGlob_.lock();
+    char* c= (char*)postdataGlob_.lock();
     memcpy(c,p.c_str(),postdatasize_);
     postdataGlob_.unLock();
 

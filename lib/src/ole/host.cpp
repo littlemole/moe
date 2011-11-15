@@ -394,8 +394,6 @@ HRESULT __stdcall  AxClientWndBase::IOleDocumentSite_ActivateMe(IOleDocumentView
 	IOleDocument*    piod = NULL;
 	mol::Rect        rc;    
 
-	rc = this->prepareClientRect();
-
 	if (pViewToActivate)
 	{
 		pViewToActivate->SetInPlaceSite( this->getOleInPlaceSite() );
@@ -421,6 +419,8 @@ HRESULT __stdcall  AxClientWndBase::IOleDocumentSite_ActivateMe(IOleDocumentView
 	hr = documentView->UIActivate(TRUE);
 	if ( hr != S_OK )
 		return hr;
+
+	rc = this->prepareClientRect();
 
 	hr = documentView->SetRect(&clientRect_);
 	if ( hr != S_OK )
@@ -747,6 +747,13 @@ void AxClientWndBase::SetObjectSize(RECT& r)
 				oip->SetObjectRects(&r,&r);
 			}
 		}
+		/*
+		HWND w = 0;
+		if ( S_OK == oip->GetWindow(&w) && w && ::IsWindow(w) )
+		{
+			::SetWindowPos( w, NULL, 0,0, r.right, r.bottom,SWP_NOZORDER|SWP_DRAWFRAME|SWP_FRAMECHANGED|SWP_NOACTIVATE|SWP_NOOWNERZORDER|SWP_NOMOVE|SWP_NOCOPYBITS);
+		}
+		*/
 	}
 }
 
@@ -878,9 +885,25 @@ LRESULT AxClientWndBase::handleOnSize( UINT message, WPARAM wParam, LPARAM lPara
 	if ( wParam == SIZE_MINIMIZED )
 		return 0;
 
+	/*
+	HWND hwnd = this->getHostingWindow();
+	mol::MdiChild* mdi = mol::wndFromHWND<mol::MdiChild>(hwnd);
+	if ( mdi)
+	{
+		HWND parent = mdi->getParent();
+		mol::MdiFrame* frame = mol::wndFromHWND<mol::MdiFrame>(parent);
+		HWND active = frame->getActive();
+		if ( active != hwnd )
+			return 0;
+	}
+	*/
+
 	clientRect_.left = clientRect_.top = 0;
 	clientRect_.right  = LOWORD (lParam) ;
 	clientRect_.bottom = HIWORD (lParam) ;
+
+	ODBGS1("AxClient OnSize r: ",clientRect_.right);
+	ODBGS1("AxClient OnSize b: ",clientRect_.bottom);
 
 	handleDoLayout( clientRect_, layout );
 	return 0;
@@ -894,6 +917,9 @@ mol::Rect AxClientWndBase:: handleDoLayout(mol::Rect r, mol::LayoutMgr* layout)
 	// determine avail rect
 	if ( layout )
 		r = layout->availClientRect(r);
+
+	ODBGS1("doLayout r: ",r.right);
+	ODBGS1("doLayout b: ",r.bottom);
 
 	// if we have an embedded obj
 	this->SetObjectSize(r);

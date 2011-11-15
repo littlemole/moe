@@ -10,8 +10,283 @@
 #include "win/shell.h"
 #include "ssh/scpDataTransferObj.h"
 #include "Resource.h"
+#include <Wincrypt.h>
+
+
+EncryptedMemory::EncryptedMemory()
+	:encrypted_(0),size_(0)
+{
+
+}
+
+EncryptedMemory::~EncryptedMemory()
+{
+	dispose();
+}
+
+void EncryptedMemory::dispose()
+{
+	if ( encrypted_ )
+	{
+		::LocalFree(encrypted_);
+		encrypted_ = 0;
+		size_ = 0;
+	}
+}
+
+size_t EncryptedMemory::encrypt( void* data, size_t size, DWORD flags )
+{
+	static std::string padding('X',CRYPTPROTECTMEMORY_BLOCK_SIZE);
+
+	dispose();
+
+	size_ = size;
+
+	DWORD mod = size % CRYPTPROTECTMEMORY_BLOCK_SIZE;
+	if ( mod )
+	{
+		size_ = size_ + (CRYPTPROTECTMEMORY_BLOCK_SIZE-mod);
+	}
+
+	encrypted_ = ::LocalAlloc(LPTR,size_);
+	ZeroMemory(encrypted_,size_);
+	memcpy( encrypted_, data, size);
+
+	if (!::CryptProtectMemory( encrypted_, (DWORD)size_,flags))
+	{
+		throw mol::X("CryptProtectMemory failed!");
+	}
+	return size;
+}
+
+std::string EncryptedMemory::decrypt( DWORD flags )
+{
+	void* v = malloc(size_);
+	if(!v)
+		return "";
+
+	memcpy(v,encrypted_,size_);
+
+	if (::CryptUnprotectMemory(v,(DWORD)size_,flags))
+	{
+		std::string s( (char*)v, size_ );
+		return s;
+	}
+	free(v);
+	return "";
+}
+
+void* EncryptedMemory::data()
+{
+	return encrypted_;
+}
+
+size_t EncryptedMemory::size()
+{
+	return size_;
+}
+
+EncryptedMap::EncryptedMap()
+{
+}
+
+void EncryptedMap::encrypt(const EncryptedMap::MapType& map)
+{
+	std::wostringstream oss;
+	for ( MapType::const_iterator it = map.begin(); it!=map.end(); it++)
+	{
+		oss << (*it).first << L'\0' << (*it).second << L'\0';
+	}
+
+	std::wstring tmp(oss.str());
+
+	secure_.encrypt( (void*)tmp.data(), tmp.size()*sizeof(wchar_t) );
+}
+
+EncryptedMap::MapType EncryptedMap::decrypt()
+{
+	MapType map;
+	std::string tmp = secure_.decrypt();
+	// but it is really a wstr
+	std::wstring plain( (wchar_t*)(tmp.data()), tmp.size()/sizeof(wchar_t));
+	size_t pos = 0;
+	size_t p   = 0;
+
+	while( pos != std::wstring::npos && p < plain.size() )
+	{
+		pos = plain.find(L'\0',p);
+		if ( pos == std::wstring::npos || pos == p)
+			break;
+
+		std::wstring key = plain.substr(p,pos-p);
+		if(key.empty())
+			break;
+
+		p = plain.find(L'\0',pos+1);
+		if ( p == std::wstring::npos || p == pos+1)
+			break;
+
+		std::wstring val = plain.substr(pos+1,p-pos);
+		if(val.empty())
+			break;
+
+		map.insert( std::make_pair(key,val) );
+
+		p = p + 1;
+	}
+	return map;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
+
+SecureCredentials::SecureCredentials( const mol::string& h, int p, const mol::string& u, const mol::string& pass)
+		: host(h),port(p)//,encrypted_(0),size_(0)
+{
+
+	EncryptedMap::MapType map;
+	map.insert( std::make_pair(std::wstring(L"user"),std::wstring(mol::towstring(u))));
+	map.insert( std::make_pair(std::wstring(L"pwd"), std::wstring(mol::towstring(pass))));
+
+	secure_.encrypt(map);
+
+	/*
+
+	mol::string padding(L'X',CRYPTPROTECTMEMORY_BLOCK_SIZE);
+
+	mol::ostringstream oss;
+	oss << u;
+	oss << _T('\0');
+	oss << pass;
+	oss << _T('\0');
+	mol::string plaintext = oss.str();
+
+	size_ = plaintext.size() *sizeof(mol::TCHAR);
+
+	DWORD mod = size_ % CRYPTPROTECTMEMORY_BLOCK_SIZE;
+	if ( mod )
+	{
+		plaintext.append( padding.substr(0, (CRYPTPROTECTMEMORY_BLOCK_SIZE-mod)/sizeof(mol::TCHAR)));
+	}
+	size_ = plaintext.size() *sizeof(mol::TCHAR);
+
+	encrypted_ = ::LocalAlloc( LPTR, size_ );
+	memcpy(encrypted_,plaintext.data(),size_);
+	
+	if (!::CryptProtectMemory(encrypted_, (DWORD)size_,CRYPTPROTECTMEMORY_SAME_LOGON))
+	{
+		ODBGS("encryption failed!");
+	}
+	*/
+}
+
+SecureCredentials::~SecureCredentials()
+{
+	/*if ( encrypted_ )
+	{
+		::LocalFree(encrypted_);
+		encrypted_ = 0;
+	}
+	*/
+}
+
+
+void SecureCredentials::decrypt( mol::string& u, mol::string& pass )
+{
+	EncryptedMap::MapType map = secure_.decrypt();
+
+	if ( map.count(L"user") > 0 )
+		u = map[L"user"];
+
+	if ( map.count(L"pwd") > 0 )
+		pass = map[L"pwd"];
+
+	/*
+	void* v = malloc(size_);
+	memcpy(v,encrypted_,size_);
+
+	if (::CryptUnprotectMemory(v,(DWORD)size_,CRYPTPROTECTMEMORY_SAME_LOGON))
+	{
+		mol::string s( (mol::TCHAR*)v, size_/sizeof(mol::TCHAR) );
+		if (!s.empty())
+		{
+			size_t pos = s.find(_T('\0'));
+			if ( pos != mol::string::npos )
+			{
+				u = s.substr(0,pos);
+			}
+
+			size_t p = s.find(_T('\0'),pos+1);
+			if ( p != mol::string::npos )
+			{
+				pass = s.substr(pos+1,p-pos);
+			}
+		}
+	}
+	if ( v )
+		free(v);
+		*/
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+HRESULT __stdcall ScpPasswordCredentials::put_Username( BSTR user)
+{
+	if ( user )
+	{
+		EncryptedMap::MapType map = secure_.decrypt();
+		map.insert( std::make_pair(L"user", mol::towstring(user)) );
+		secure_.encrypt(map);
+	}
+	return S_OK;
+}
+
+HRESULT __stdcall ScpPasswordCredentials::get_Username( BSTR* user)
+{
+	if ( !user )
+		return E_INVALIDARG;
+	*user = 0;
+
+	EncryptedMap::MapType map = secure_.decrypt();
+	if ( map.count(L"user") > 0 )
+	{
+		*user = ::SysAllocString( map[L"user"].c_str() );			
+	}
+	return S_OK;
+}
+
+HRESULT __stdcall ScpPasswordCredentials::put_Password( BSTR pwd)
+{
+	if ( pwd )
+	{
+		EncryptedMap::MapType map = secure_.decrypt();
+		map.insert( std::make_pair(L"pwd", mol::towstring(pwd)) );
+		secure_.encrypt(map);
+	}
+	return S_OK;
+}
+
+HRESULT __stdcall ScpPasswordCredentials::get_Password( BSTR* pwd)
+{
+	if ( !pwd )
+		return E_INVALIDARG;
+
+	*pwd = 0;
+
+	EncryptedMap::MapType map = secure_.decrypt();
+	if ( map.count(L"pwd") > 0 )
+	{
+		*pwd = ::SysAllocString( map[L"pwd"].c_str() );			
+	}
+
+	return S_OK;
+}
+
+
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -109,6 +384,205 @@ private:
 };
 
 
+class PermissionDlg  : public mol::win::Dialog
+{
+public:
+
+	PermissionDlg(const mol::string& filename, int perm, int own, int grp)
+		: filename_(filename), permission_(perm), owner_(own), group_(grp)
+	{}
+
+	virtual LRESULT wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+	{
+		switch (message)
+		{
+			case WM_INITDIALOG:
+			{
+				setDlgItemText(IDC_SCP_PROP_EDIT_FILENAME,filename_);
+				mol::ostringstream oss;
+				oss << std::oct << permission_;
+				setDlgItemText(IDC_SCP_PROP_EDIT_PERMISSION,oss.str());
+				setDlgItemInt(IDC_SCP_PROP_EDIT_OWNER,owner_);
+				setDlgItemInt(IDC_SCP_PROP_EDIT_GROUP,group_);
+				this->center();
+				return FALSE; // note: false! look into PSDK!
+			}
+			case WM_COMMAND:
+			{
+				if (LOWORD(wParam) == IDOK )
+				{
+					mol::string s;
+					getDlgItemText(IDC_SCP_PROP_EDIT_PERMISSION,s);
+					mol::istringstream iss(s);
+					iss >> std::oct >> permission_;
+
+					getDlgItemInt(IDC_SCP_PROP_EDIT_OWNER,owner_);
+					getDlgItemInt(IDC_SCP_PROP_EDIT_GROUP,group_);
+
+					endDlg(LOWORD(wParam));
+					return FALSE;
+				}
+				if (LOWORD(wParam) == IDCANCEL )
+				{
+					endDlg(LOWORD(wParam));
+					return FALSE;
+				}
+			}
+		}
+		return mol::win::Dialog::wndProc(hDlg, message, wParam, lParam);
+	}
+
+
+	
+	int permission()
+	{
+		return permission_;
+	}
+
+	int owner()
+	{
+		return owner_;
+	}
+
+	int group()
+	{
+		return group_;
+	}
+
+
+private:
+	
+
+	mol::string filename_;
+	int permission_;
+	int owner_;
+	int group_;
+
+};
+
+class RemoteExecDlg  : public mol::win::Dialog
+{
+public:
+
+	RemoteExecDlg(const mol::string& host, int port, mol::ssh::CredentialCallback* cb)
+		: host_(host), port_(port), cb_(cb)
+	{}
+
+	virtual LRESULT wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+	{
+		switch (message)
+		{
+			case WM_INITDIALOG:
+			{
+				setDlgItemText(IDC_EDIT_SSH_EXEC_CMD,_T(""));
+				setDlgItemFont(IDC_EDIT_SSH_EXEC_CMD,(HFONT)::GetStockObject(ANSI_FIXED_FONT));
+				setDlgItemText(IDC_EDIT_SSH_EXEC_OUTPUT,_T("Absolute paths, honey!"));
+				setDlgItemFont(IDC_EDIT_SSH_EXEC_OUTPUT,(HFONT)::GetStockObject(ANSI_FIXED_FONT));
+				this->center();
+				return FALSE; // note: false! look into PSDK!
+			}
+			case WM_COMMAND:
+			{
+				if (LOWORD(wParam) == IDOK )
+				{
+					mol::string s;
+					getDlgItemText(IDC_EDIT_SSH_EXEC_CMD,s);
+					if ( s.empty())
+					{
+						return FALSE;
+					}
+
+					mol::string o = exec_cmd(s);
+					setDlgItemText(IDC_EDIT_SSH_EXEC_OUTPUT,mol::unix2dos(o));
+
+					return FALSE;
+				}
+				if (LOWORD(wParam) == IDCANCEL )
+				{
+					endDlg(LOWORD(wParam));
+					return FALSE;
+				}
+			}
+		}
+		return mol::win::Dialog::wndProc(hDlg, message, wParam, lParam);
+	}
+
+	
+	mol::string cli()
+	{
+		return cli_;
+	}
+
+	mol::string out()
+	{
+		return out_;
+	}
+private:
+
+	mol::string exec_cmd( const mol::string& cmd)
+	{
+
+		try
+		{
+			mol::ssh::Session ssh;
+			if (!ssh.open( mol::toUTF8(host_),cb_,port_))
+			{
+				return _T("");
+			}
+
+			return mol::fromUTF8( ssh.exec_remote(mol::toUTF8(cmd)) );			
+		}
+		catch(...)
+		{
+			return _T("");
+		}
+	}
+
+	mol::string cli_;
+	mol::string out_;
+	mol::string host_;
+	int port_;
+
+	mol::ssh::CredentialCallback* cb_;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+ScpDirQueueLoadAction::ScpDirQueueLoadAction( const mol::string& p, ScpListCtrl* dl )
+	: path(p), scpList(dl)
+{}
+
+void ScpDirQueueLoadAction::operator()()
+{
+	scpList->load_async(path);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+ScpCreateDirQueueAction::ScpCreateDirQueueAction( ScpListCtrl* dl )
+	: scpList(dl)
+{}
+
+void ScpCreateDirQueueAction::operator()()
+{
+	scpList->mkdir();
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+ScpUnlinkQueueAction::ScpUnlinkQueueAction( const std::vector<mol::string>& vec, ScpListCtrl* dl )
+	: v(vec), scpList(dl)
+{}
+
+void ScpUnlinkQueueAction::operator()()
+{
+	scpList->unlink(v);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -133,10 +607,14 @@ ScpListCtrl::~ScpListCtrl()
 {
 }
 
-//mol::ssh::PasswordCredentials credentials("","");
-
 void ScpListCtrl::load( const mol::string& url )
 {
+	queue_.push( new ScpDirQueueLoadAction(url,this) );
+}
+
+void ScpListCtrl::load_async( const mol::string& url )
+{
+	::CoInitialize(0);
 	clear();
 
 	mol::string path = url;
@@ -145,10 +623,7 @@ void ScpListCtrl::load( const mol::string& url )
 		path = path + _T("/");
 	}
 
-
-	mol::Uri uri( mol::tostring(path) );
-	std::string user = uri.getUser();
-	std::string pwd= uri.getPwd();
+	mol::Uri uri( mol::toUTF8(path) );
 	std::string host = uri.getHost();
 	int port = uri.getPort();
 	std::string p = uri.getPath();
@@ -162,11 +637,11 @@ void ScpListCtrl::load( const mol::string& url )
 	try
 	{
 		std::wstringstream oss;
-		oss << L"connecting to " << mol::towstring(host) << L":" << port;
+		oss << L"connecting to " << mol::fromUTF8(host) << L":" << port;
 		this->frame_->SetStatusText(oss.str().c_str());
 
 		mol::ssh::Session ssh;
-		if (!ssh.open(host,&credentials_,port))
+		if (!ssh.open( host,&credentials_,port))
 		{
 			return;
 		}
@@ -185,7 +660,7 @@ void ScpListCtrl::load( const mol::string& url )
 		if ( grr[grr.size()-1] == _T('/') )
 			grr = grr.substr(0,grr.size()-1);
 
-		mol::sftp::RemoteFile rf = sftp.stat( mol::tostring(p) );
+		mol::sftp::RemoteFile rf = sftp.stat( mol::fromUTF8(p) );
 		if ( !rf.isDir() )
 			return;
 
@@ -193,7 +668,7 @@ void ScpListCtrl::load( const mol::string& url )
 		::GetTempPath(MAX_PATH,buf);
 		int dirIcon = mol::io::ShellInfo::Icon(buf);
 
-		std::vector<mol::sftp::RemoteFile> v = sftp.list(p);
+		std::vector<mol::sftp::RemoteFile> v = sftp.list(mol::fromUTF8(p));
 
 		ListView_SetItemCount(list_,v.size());
 
@@ -227,6 +702,7 @@ void ScpListCtrl::load( const mol::string& url )
 	}
 	catch(...)
 	{
+		::CoUninitialize();
 		return;
 	}
 
@@ -275,13 +751,11 @@ void ScpListCtrl::load( const mol::string& url )
         index++;
 	}
 
-	::ShowScrollBar(list_,SB_VERT,TRUE);
-	list_.setFocus();
-	list_.show(SW_SHOW);
 	list_.setRedraw(true);
-
+	list_.redraw();
 	this->fire(DISPID_ISHELLLISTEVENTS_ONDIRCHANGED,mol::bstr(path_));
 	
+	::CoUninitialize();
 	//sortDir_ = 1;
 	//sortCol_ = 0;
 }
@@ -294,6 +768,7 @@ void ScpListCtrl::load( const mol::string& url )
 
 LRESULT ScpListCtrl::OnDestroy(UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	queue_.cancel();
 	provider_.release();
 	clear();
 	::RevokeDragDrop(*this);
@@ -324,6 +799,10 @@ LRESULT ScpListCtrl::OnCreate(UINT msg, WPARAM wParam, LPARAM lParam)
 	Drop = new ShellListCtrl_Drop(this);
 	::RegisterDragDrop(*this,Drop);
 
+	::ShowScrollBar(list_,SB_VERT,TRUE);
+	list_.setFocus();
+	list_.show(SW_SHOW);
+	list_.setRedraw(true);
 	return 0;
 }
 
@@ -436,19 +915,101 @@ LRESULT ScpListCtrl::OnBeginLabelEdit(UINT msg, WPARAM wParam, LPARAM lParam)
 	return FALSE;
 }
 
+void ScpListCtrl::EndRename(const mol::string& oldpath, const mol::string& newpath)
+{
+	::CoInitialize(0);
+
+	mol::Uri uri( mol::toUTF8(path_) );
+	std::string host = uri.getHost();
+	int port = uri.getPort();
+	std::string p = uri.getPath();
+
+	mol::string pFrom( mol::fromUTF8(p) ); 
+	pFrom += oldpath;
+
+	mol::string tmp = pFrom;
+	size_t pos = pFrom.find_last_of(_T("/"));
+	if ( pos != std::string::npos )
+		tmp = pFrom.substr(0,pos+1);
+
+	mol::string pTo(tmp);
+	pTo += mol::string(newpath);
+
+	std::wstringstream oss;
+	oss << L"connecting to " << mol::fromUTF8(host) << L":" << port;
+	this->frame_->SetStatusText(oss.str().c_str());
+
+	try {
+		mol::ssh::Session ssh;
+		if (!ssh.open(host,&credentials_,port))
+		{
+			std::wstringstream oss;
+			oss << L"failed to connect to " << mol::fromUTF8(host) << L":" << port;
+			this->frame_->SetStatusText(oss.str().c_str());
+			::CoUninitialize();
+			return;
+		}
+
+		std::wstringstream oss2;
+		oss2 << L"renaming " << mol::towstring(pTo);
+		this->frame_->SetStatusText(oss2.str().c_str());
+
+		mol::sftp::Session sftp;
+		if(!sftp.open(ssh))
+		{
+			std::wstringstream oss;
+			oss << L"failed to rename " << mol::towstring(pFrom);
+			this->frame_->SetStatusText(oss.str().c_str());
+			::CoUninitialize();
+			return;
+		}
+
+		if(sftp.rename(pFrom, pTo ))
+		{
+			load(path_);
+		}
+		else
+		{
+			std::wstringstream oss;
+			oss << L"failed to rename " << mol::towstring(pFrom);
+			this->frame_->SetStatusText(oss.str().c_str());
+		}
+	}
+	catch(...)
+	{
+		std::wstringstream oss;
+		oss << L"failed to rename " << mol::towstring(pFrom);
+		this->frame_->SetStatusText(oss.str().c_str());
+	}
+	::CoUninitialize();
+}
+
 LRESULT ScpListCtrl::OnEndRename(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	mol::Crack message(msg,wParam,lParam);
 	if ( message.listviewDispInfo()->item.pszText)
 	{
-		mol::Uri uri( mol::tostring(path_) );
-		std::string user = uri.getUser();
-		std::string pwd= uri.getPwd();
+		mol::string displayname = message.listviewDispInfo()->item.pszText;
+		mol::string path = getItemEntry(message.listviewDispInfo()->item.iItem)->fileinfo.getName();
+
+		EndRename(path,displayname);
+	}
+	return 0;
+}
+
+
+/*
+LRESULT ScpListCtrl::OnEndRename(UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	mol::Crack message(msg,wParam,lParam);
+	if ( message.listviewDispInfo()->item.pszText)
+	{
+		mol::Uri uri( mol::toUTF8(path_) );
 		std::string host = uri.getHost();
 		int port = uri.getPort();
 		std::string p = uri.getPath();
 
-		mol::string pFrom( mol::toString(p) ); 
+		mol::string pFrom( mol::fromUTF8(p) ); 
 		pFrom += getItemEntry(message.listviewDispInfo()->item.iItem)->fileinfo.getName();
 
 		mol::string tmp = pFrom;
@@ -460,7 +1021,7 @@ LRESULT ScpListCtrl::OnEndRename(UINT msg, WPARAM wParam, LPARAM lParam)
 		pTo += mol::string(message.listviewDispInfo()->item.pszText);
 
 		std::wstringstream oss;
-		oss << L"connecting to " << mol::towstring(host) << L":" << port;
+		oss << L"connecting to " << mol::fromUTF8(host) << L":" << port;
 		this->frame_->SetStatusText(oss.str().c_str());
 
 		try {
@@ -468,7 +1029,7 @@ LRESULT ScpListCtrl::OnEndRename(UINT msg, WPARAM wParam, LPARAM lParam)
 			if (!ssh.open(host,&credentials_,port))
 			{
 				std::wstringstream oss;
-				oss << L"failed to connect to " << mol::towstring(host) << L":" << port;
+				oss << L"failed to connect to " << mol::fromUTF8(host) << L":" << port;
 				this->frame_->SetStatusText(oss.str().c_str());
 				return S_FALSE;
 			}
@@ -486,7 +1047,7 @@ LRESULT ScpListCtrl::OnEndRename(UINT msg, WPARAM wParam, LPARAM lParam)
 				return S_FALSE;
 			}
 
-			if(sftp.rename( mol::tostring(pFrom), mol::tostring(pTo) ))
+			if(sftp.rename(pFrom, pTo ))
 			{
 				load(path_);
 			}
@@ -506,7 +1067,7 @@ LRESULT ScpListCtrl::OnEndRename(UINT msg, WPARAM wParam, LPARAM lParam)
 	}	
 	return 0;
 }
-
+*/
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -529,7 +1090,7 @@ LRESULT ScpListCtrl::OnBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 	for ( size_t i = 1; i < vi.size(); i++ )
 	{
 		HIMAGELIST h  = ListView_CreateDragImage( list_, vi[i], &pt );
-		HIMAGELIST hh = ImageList_Merge(hi,0,h,0,0,20*i);
+		HIMAGELIST hh = ImageList_Merge(hi,0,h,0,0,(int)(20*i));
 		ImageList_Destroy(hi);
 		ImageList_Destroy(h);
 		hi = hh;
@@ -537,9 +1098,7 @@ LRESULT ScpListCtrl::OnBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 
 	ScpListEntry* e = getItemEntry(vi[0]);
 
-	mol::Uri uri( mol::tostring(path_) );
-	std::string user = uri.getUser();
-	std::string pwd= uri.getPwd();
+	mol::Uri uri( mol::toUTF8(path_) );
 	std::string host = uri.getHost();
 	int port = uri.getPort();
 	std::string p = uri.getPath();
@@ -548,21 +1107,17 @@ LRESULT ScpListCtrl::OnBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 	mol::punk<mol::com_obj<mol::scp::DelayedDataTransferObj> > ido  = 
 		new mol::com_obj<mol::scp::DelayedDataTransferObj>;
 
-	ido->init( mol::toString(host), port, &credentials_);
-	ido->add( mol::toString(p) + e->fileinfo.getName() );
+	ido->init( mol::fromUTF8(host), port, &credentials_);
+	ido->add( mol::fromUTF8(p) + e->fileinfo.getName() );
 
 	for ( size_t i = 1; i < vi.size(); i++ )
 	{
 		e = getItemEntry(vi[i]);
 
-		mol::Uri uri( mol::tostring(path_) );
-		std::string user = uri.getUser();
-		std::string pwd= uri.getPwd();
-		std::string host = uri.getHost();
-		int port = uri.getPort();
+		mol::Uri uri( mol::toUTF8(path_) );
 		std::string p = uri.getPath();
 
-		ido->add( mol::toString(p) + e->fileinfo.getName() );
+		ido->add( mol::fromUTF8(p) + e->fileinfo.getName() );
 	}
 
 	mol::ImageList::beginDrag(*this,hi);
@@ -744,12 +1299,16 @@ HRESULT __stdcall ScpListCtrl::Update()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-
 HRESULT __stdcall ScpListCtrl::CreateDir()
 {
-	mol::Uri uri( mol::tostring(path_) );
-	std::string user = uri.getUser();
-	std::string pwd= uri.getPwd();
+	queue_.push(new ScpCreateDirQueueAction(this));
+	return S_OK;
+}
+
+void ScpListCtrl::mkdir()
+{
+	::CoInitialize(0);
+	mol::Uri uri( mol::toUTF8(path_) );
 	std::string host = uri.getHost();
 	int port = uri.getPort();
 	std::string p = uri.getPath();
@@ -758,16 +1317,17 @@ HRESULT __stdcall ScpListCtrl::CreateDir()
 		p += "/";
 
 	std::wstringstream oss;
-	oss << L"connecting to " << mol::towstring(host) << L":" << port;
+	oss << L"connecting to " << mol::fromUTF8(host) << L":" << port;
 	this->frame_->SetStatusText(oss.str().c_str());
 
 	mol::ssh::Session ssh;
-	if (!ssh.open(host,&credentials_,port))
+	if (!ssh.open( host,&credentials_,port))
 	{
 		std::wstringstream oss;
-		oss << L"failed to connect to " << mol::towstring(host) << L":" << port;
+		oss << L"failed to connect to " << mol::fromUTF8(host) << L":" << port;
 		this->frame_->SetStatusText(oss.str().c_str());
-		return S_FALSE;
+		::CoUninitialize();
+		return;
 	}
 
 	std::wstringstream oss2;
@@ -780,10 +1340,11 @@ HRESULT __stdcall ScpListCtrl::CreateDir()
 		std::wstringstream oss;
 		oss << L"failed to create new dir ";
 		this->frame_->SetStatusText(oss.str().c_str());
-		return S_FALSE;
+		::CoUninitialize();
+		return;
 	}
 
-	std::vector<mol::sftp::RemoteFile> v = sftp.list( p );
+	std::vector<mol::sftp::RemoteFile> v = sftp.list( mol::fromUTF8(p) );
 	
 	mol::string tmp = _T("newDir_");	
 	int i = 0;
@@ -809,19 +1370,21 @@ HRESULT __stdcall ScpListCtrl::CreateDir()
 			continue;
 		}
 
-		if (!sftp.mkdir( p + mol::tostring( newDir), 0700 ))
+		if (!sftp.mkdir( mol::fromUTF8(p) + newDir, 0700 ))
 		{
 			std::wstringstream oss;
 			oss << L"failed to create new dir " << newDir;
 			this->frame_->SetStatusText(oss.str().c_str());
-			return S_FALSE;
+			::CoUninitialize();
+			return;
 		}
 
 		this->Update();
-		return S_OK;
+		::CoUninitialize();
+		return;
 	}
-
-	return S_OK;
+	::CoUninitialize();
+	return;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -842,34 +1405,49 @@ HRESULT __stdcall ScpListCtrl::Rename()
 // delete selected tree or dir item
 //
 //////////////////////////////////////////////////////////////////////////////
-
 HRESULT __stdcall ScpListCtrl::Delete()
 {
 	std::vector<ScpListEntry*> v = selectionEntries();
 	if ( v.size() == 0 )
 	{
-		return 0;
+		return S_OK;
 	}
+
+	std::vector<mol::string> tmp;
+	for(size_t i = 0; i < v.size(); i++)
+	{
+		tmp.push_back(v[i]->filename);
+	}
+
+	queue_.push( new ScpUnlinkQueueAction(tmp,this) );
+
+	return S_OK;
+}
+
+void ScpListCtrl::unlink( const std::vector<mol::string>& v )
+{
+	if ( v.empty() )
+		return;
 
 	try 
 	{
-		mol::string path(v[0]->filename);
-
-		mol::Uri uri( mol::tostring(path) );
+		::CoInitialize(0);
+		mol::Uri uri( mol::toUTF8(path_) );
 		std::string host = uri.getHost();
 		int port = uri.getPort();
 
 		std::wstringstream oss;
-		oss << L"connecting to " << mol::towstring(host) << L":" << port;
+		oss << L"connecting to " << mol::fromUTF8(host) << L":" << port;
 		this->frame_->SetStatusText(oss.str().c_str());
 
 		mol::ssh::Session ssh;
-		if (!ssh.open(host,&credentials_,port))
+		if (!ssh.open( host,&credentials_,port))
 		{
 			std::wstringstream oss;
 			oss << L"failed to connect ";
 			this->frame_->SetStatusText(oss.str().c_str());
-			return S_FALSE;
+			::CoUninitialize();
+			return;
 		}
 
 		mol::sftp::Session sftp;
@@ -878,28 +1456,29 @@ HRESULT __stdcall ScpListCtrl::Delete()
 			std::wstringstream oss;
 			oss << L"failed to open sftp session ";
 			this->frame_->SetStatusText(oss.str().c_str());
-			return S_FALSE;
+			::CoUninitialize();
+			return;
 		}
 
 		for ( size_t i = 0; i < v.size(); i++)
 		{
-			mol::string path(v[i]->filename);
+			std::wstring path(v[i]);
 
-			mol::Uri uri( mol::tostring(path) );
+			mol::Uri uri( mol::toUTF8(path) );
 			std::string p = uri.getPath();
 
-			mol::sftp::RemoteFile rf = sftp.stat(p);
+			mol::sftp::RemoteFile rf = sftp.stat(mol::fromUTF8(p));
 
 			if ( rf.isDir() )
 			{
-				if (!sftp.rmdir(p))
+				if (!sftp.rmdir(mol::fromUTF8(p)))
 				{
 					continue;
 				}
 			}
 			else
 			{
-				if(!sftp.unlink(p))
+				if(!sftp.unlink(mol::fromUTF8(p)))
 				{
 					continue;
 				}
@@ -911,35 +1490,96 @@ HRESULT __stdcall ScpListCtrl::Delete()
 		std::wstringstream oss;
 		oss << L"failure while deleting remote files ";
 		this->frame_->SetStatusText(oss.str().c_str());
-		return S_FALSE;
+		::CoUninitialize();
+		return;
 	}
 	load(path_);
-	return S_OK;
+	::CoUninitialize();
+	return;
 }
 
 HRESULT __stdcall ScpListCtrl::Properties()
-{
-	/*
+{	
 	std::vector<mol::string> v = selectionPaths();
 
 	if ( v.size() > 0 )
 	{
-		execute_shell( v[0], _T("properties"),1,SEE_MASK_INVOKEIDLIST );		
+		mol::string path = v[0];
+
+		try 
+		{
+			mol::Uri uri( mol::toUTF8(path) );
+			std::string host = uri.getHost();
+			int port = uri.getPort();
+			std::string p = uri.getPath();
+
+			std::wstringstream oss;
+			oss << L"connecting to " << mol::fromUTF8(host) << L":" << port;
+			this->frame_->SetStatusText(oss.str().c_str());
+
+			mol::ssh::Session ssh;
+			if (!ssh.open( host,&credentials_,port))
+			{
+				std::wstringstream oss;
+				oss << L"failed to connect ";
+				this->frame_->SetStatusText(oss.str().c_str());
+				return S_FALSE;
+			}
+
+			mol::sftp::Session sftp;
+			if(!sftp.open(ssh))
+			{
+				std::wstringstream oss;
+				oss << L"failed to open sftp session ";
+				this->frame_->SetStatusText(oss.str().c_str());
+				return S_FALSE;
+			}
+
+			this->frame_->SetStatusText(path.c_str());
+
+			mol::sftp::RemoteFile rf = sftp.stat(mol::fromUTF8(p));
+			int perm = rf.getPermissions();
+			int owner = rf.getUID();
+			int group = rf.getGID();
+			PermissionDlg dlg(path,perm,owner,group);
+			LRESULT r = dlg.doModal(IDD_DIALOG_SCP_PROPERTIES,*this);
+			if ( r == IDOK )
+			{
+				perm = dlg.permission();
+				owner = dlg.owner();
+				group = dlg.group();
+				if ( perm != rf.getPermissions() )
+				{
+					sftp.chmod(mol::fromUTF8(p),perm);
+				}
+				if ( owner != rf.getUID() || group != rf.getGID())
+				{
+					sftp.chown(mol::fromUTF8(p),owner,group);
+				}
+				load(path_);
+			}
+		}
+		catch(...)
+		{
+			std::wstringstream oss;
+			oss << L"failure showing properties ";
+			this->frame_->SetStatusText(oss.str().c_str());
+			return S_FALSE;
+		}		
 	}
-	*/
+	
 	return S_OK;
 }
 
 HRESULT __stdcall ScpListCtrl::Execute()
 {
-	/*
-	std::vector<mol::string> v = selectionPaths();
+	mol::Uri uri( mol::toUTF8(path_) );
+	std::string host = uri.getHost();
+	int port = uri.getPort();
 
-	if ( v.size() > 0 )
-	{
-		execute_shell( v[0] );		
-	}
-	*/
+	RemoteExecDlg dlg(mol::fromUTF8(host),port,&credentials_);
+	dlg.doModal(IDD_DIALOG_SSH_EXEC,*this);
+	
 	return S_OK;
 }
 
@@ -968,7 +1608,7 @@ HRESULT __stdcall ScpListCtrl::Copy ()
 
 	ScpListEntry* e = getItemEntry(vi[0]);
 
-	mol::Uri uri( mol::tostring(path_) );
+	mol::Uri uri( mol::toUTF8(path_) );
 	std::string host = uri.getHost();
 	int port = uri.getPort();
 	std::string p = uri.getPath();
@@ -977,12 +1617,12 @@ HRESULT __stdcall ScpListCtrl::Copy ()
 	mol::punk<mol::com_obj<mol::scp::DelayedDataTransferObj> >ido  = 
 		new mol::com_obj<mol::scp::DelayedDataTransferObj>;
 
-	ido->init( mol::toString(host), port, &credentials_);
+	ido->init( mol::fromUTF8(host), port, &credentials_);
 
 	for ( size_t i = 0; i < vi.size(); i++ )
 	{
 		e = getItemEntry(vi[i]);
-		ido->add(mol::toString(p)+e->fileinfo.getName() );
+		ido->add(mol::fromUTF8(p)+e->fileinfo.getName() );
 	}
 
 	HRESULT r = ::OleSetClipboard(ido);		
@@ -1001,9 +1641,7 @@ HRESULT __stdcall ScpListCtrl::Paste ()
 		e = getItemEntry(vi[0]);
 	}
 
-	mol::Uri uri( mol::tostring(path_) );
-	std::string user = uri.getUser();
-	std::string pwd= uri.getPwd();
+	mol::Uri uri( mol::toUTF8(path_) );
 	std::string host = uri.getHost();
 	int port = uri.getPort();
 	std::string p = uri.getPath();
@@ -1051,8 +1689,11 @@ HRESULT __stdcall ScpListCtrl::Paste ()
 	{
 		try {
 
+			this->put(v,path);
+
+			/*
 			std::wstringstream oss;
-			oss << L"connecting to " << mol::towstring(host) << L":" << port;
+			oss << L"connecting to " << mol::fromUTF8(host) << L":" << port;
 			this->frame_->SetStatusText(oss.str().c_str());
 
 			mol::ssh::Session ssh;
@@ -1060,7 +1701,7 @@ HRESULT __stdcall ScpListCtrl::Paste ()
 				return S_OK;
 
 			mol::scp::Session scp(ssh);
-			if(!scp.open(mol::SSH_SCP_WRITE|mol::SSH_SCP_RECURSIVE,mol::tostring(path)) )
+			if(!scp.open(mol::SSH_SCP_WRITE|mol::SSH_SCP_RECURSIVE,path) )
 			{
 				return S_OK;
 			}
@@ -1074,16 +1715,17 @@ HRESULT __stdcall ScpListCtrl::Paste ()
 
 				if ( mol::Path::isDir(v[i]) )
 				{
-					if (!scp.push_dir( mol::tostring(v[i]),0700))
+					if (!scp.push_dir(v[i], 0700))
 						break;
 				}
 				else
 				{
-					if (!scp.push_file( mol::tostring(v[i]),0600))
+					if (!scp.push_file( v[i], 0600))
 						break;
 				}
 			}
 			this->Update();
+			*/
 		}
 		catch(...)
 		{
@@ -1319,9 +1961,7 @@ HRESULT __stdcall ScpListCtrl::ShellListCtrl_Drop::Drop( IDataObject* pDataObjec
 	if ( i != -1 )
 		e = list_->getItemEntry(i);
 
-	mol::Uri uri( mol::tostring(list_->path_) );
-	std::string user = uri.getUser();
-	std::string pwd= uri.getPwd();
+	mol::Uri uri( mol::toUTF8(list_->path_) );
 	std::string host = uri.getHost();
 	int port = uri.getPort();
 	std::string p = uri.getPath();
@@ -1343,18 +1983,21 @@ HRESULT __stdcall ScpListCtrl::ShellListCtrl_Drop::Drop( IDataObject* pDataObjec
 	{
 		try {
 
+			list_->put(v,path);
+
+			/*
 			std::wstringstream oss;
-			oss << L"connecting to " << mol::towstring(host) << L":" << port;
+			oss << L"connecting to " << mol::fromUTF8(host) << L":" << port;
 			list_->frame_->SetStatusText(oss.str().c_str());
 
 			mol::ssh::Session ssh;
-			if (!ssh.open(host,&(list_->credentials_),port))
+			if (!ssh.open( host, &(list_->credentials_), port))
 			{
 				return S_OK;
 			}
 
 			mol::scp::Session scp(ssh);
-			if(!scp.open(mol::SSH_SCP_WRITE|mol::SSH_SCP_RECURSIVE,mol::tostring(path)) )
+			if(!scp.open(mol::SSH_SCP_WRITE|mol::SSH_SCP_RECURSIVE,path) )
 			{
 				return S_OK;
 			}
@@ -1367,16 +2010,17 @@ HRESULT __stdcall ScpListCtrl::ShellListCtrl_Drop::Drop( IDataObject* pDataObjec
 
 				if ( mol::Path::isDir(v[i]) )
 				{
-					if (!scp.push_dir( mol::tostring(v[i]),0700))
+					if (!scp.push_dir( v[i],0700))
 						break;
 				}
 				else
 				{
-					if (!scp.push_file( mol::tostring(v[i]),0600))
+					if (!scp.push_file( v[i],0600))
 						break;
 				}
 			}
 			list_->Update();
+			*/
 		}
 		catch(...)
 		{
@@ -1392,6 +2036,60 @@ HRESULT __stdcall ScpListCtrl::ShellListCtrl_Drop::Drop( IDataObject* pDataObjec
 	*pEffect = DROPEFFECT_NONE;
 	
 	return S_OK;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void ScpListCtrl::put( std::vector<mol::string>& v, const mol::string& path)
+{
+	try
+	{
+		mol::Uri uri( mol::toUTF8(path_) );
+		std::string host = uri.getHost();
+		int port = uri.getPort();
+		std::string p = uri.getPath();
+
+		std::wstringstream oss;
+		oss << L"connecting to " << mol::fromUTF8(host) << L":" << port;
+		frame_->SetStatusText(oss.str().c_str());
+
+		mol::ssh::Session ssh;
+		if (!ssh.open( host, &(credentials_), port))
+		{
+			return;
+		}
+
+		mol::scp::Session scp(ssh);
+		if(!scp.open(mol::SSH_SCP_WRITE|mol::SSH_SCP_RECURSIVE,mol::towstring(path)) )
+		{
+			return;
+		}
+
+		for( size_t i = 0; i < v.size(); i++)
+		{
+			std::wstringstream oss;
+			oss << L"writing " << mol::towstring(v[i]);
+			frame_->SetStatusText(oss.str().c_str());
+
+			if ( mol::Path::isDir(v[i]) )
+			{
+				if (!scp.push_dir( v[i],0700))
+					break;
+			}
+			else
+			{
+				if (!scp.push_file( v[i],0600))
+					break;
+			}
+		}
+		Update();
+	}
+	catch(...)
+	{
+		ODBGS("WTF!?");
+		return;
+	}
+	return;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1473,6 +2171,7 @@ HRESULT __stdcall ScpListCtrl::put_Location		( BSTR  dirname )
 	{
 		path_ = mol::toString(dirname);
 		load(path_);
+		
 		this->OnChanged(2);
 	}
 	return S_OK;
@@ -1560,9 +2259,12 @@ HRESULT __stdcall ScpListCtrl::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOO
 }
 
 
-bool ScpListCtrl::Credentials::getCredentials(const std::string& host, int port, std::string& user, std::string& pwd)
+bool ScpListCtrl::Credentials::getCredentials(const std::string& host, int port, char** user, char** pwd)
 {
 	if ( !This()->provider_ )
+		return false;
+
+	if(!user||!pwd)
 		return false;
 
 	mol::punk<IScpPasswordCredentials> creds;
@@ -1570,19 +2272,27 @@ bool ScpListCtrl::Credentials::getCredentials(const std::string& host, int port,
 	if ( hr != S_OK )
 		return false;
 
-	mol::bstr u;
-	creds->get_Username(&u);
+	mol::bstr bu;
+	creds->get_Username(&bu);
 
-	mol::bstr p;
-	creds->get_Password(&p);
+	mol::bstr bp;
+	creds->get_Password(&bp);
 
-	user = mol::tostring(u);
-	pwd  = mol::tostring(p);
+	//TODO: wipe bstrs ???
+
+	std::string u = mol::toUTF8(bu.bstr_);
+	std::string p = mol::toUTF8(bp.bstr_);
+
+	*user = (char*)malloc(u.size()+1);
+	*pwd  = (char*)malloc(p.size()+1);
+
+	memcpy( *user, u.data(), u.size()+1);
+	memcpy( *pwd,  p.data(), p.size()+1);
 
 	return true;
 }
 
-bool ScpListCtrl::Credentials::promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,std::string& value,bool echo)
+bool ScpListCtrl::Credentials::promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo)
 {
 	
 	return false;
@@ -1594,7 +2304,7 @@ bool ScpListCtrl::Credentials::acceptHost(const std::string& host, int port, con
 		return false;
 
 	VARIANT_BOOL vb;
-	HRESULT hr = This()->provider_->acceptHost( mol::bstr(host), port, mol::bstr(hash), &vb );
+	HRESULT hr = This()->provider_->acceptHost( mol::bstr(mol::fromUTF8(host)), port, mol::bstr(mol::fromUTF8(hash)), &vb );
 	if ( hr != S_OK )
 		return false;
 
@@ -1604,7 +2314,7 @@ bool ScpListCtrl::Credentials::acceptHost(const std::string& host, int port, con
 	return true;
 }
 
-bool ScpListCtrl::Credentials::rememberHostCredentials(const std::string& host, int port, const std::string& user, const std::string& pwd)
+bool ScpListCtrl::Credentials::rememberHostCredentials(const std::string& host, int port, const char* user, const char* pwd)
 {
 	if ( !This()->provider_ )
 		return false;
@@ -1614,10 +2324,10 @@ bool ScpListCtrl::Credentials::rememberHostCredentials(const std::string& host, 
 	if ( hr != S_OK )
 		return false;
 
-	creds->put_Username( mol::bstr(user) );
-	creds->put_Password( mol::bstr(pwd) );
+	creds->put_Username( mol::bstr(mol::fromUTF8(user)) );
+	creds->put_Password( mol::bstr(mol::fromUTF8(pwd)) );
 	
-	hr = This()->provider_->remberSessionCredentials( mol::bstr(host), port, creds );
+	hr = This()->provider_->remberSessionCredentials( mol::bstr(mol::fromUTF8(host)), port, creds );
 	if ( hr != S_OK )
 		return false;
 
@@ -1629,7 +2339,7 @@ bool ScpListCtrl::Credentials::deleteHostCredentials(const std::string& host, in
 	if ( !This()->provider_ )
 		return false;
 
-	HRESULT hr = This()->provider_->removeSessionCredentials(mol::bstr(host), port);
+	HRESULT hr = This()->provider_->removeSessionCredentials(mol::bstr(mol::fromUTF8(host)), port);
 	if ( hr != S_OK )
 		return false;
 
@@ -1646,13 +2356,17 @@ HRESULT __stdcall ScpCredentialProvider::getCredentials( BSTR host, long port, I
 
 	if ( credentials_.count( h ) != 0 )
 	{
-		Credentials* creds = credentials_[h];
+		SecureCredentials* creds = credentials_[h];
 		mol::punk<IScpPasswordCredentials> c;
 		HRESULT hr = c.createObject(CLSID_ScpPasswordCredentials);
 		if ( hr == S_OK )
 		{
-			c->put_Username( mol::bstr(creds->user) );
-			c->put_Password( mol::bstr(creds->pwd) );
+			mol::string user;
+			mol::string pwd;
+			creds->decrypt(user,pwd);
+
+			c->put_Username( mol::bstr(user) );
+			c->put_Password( mol::bstr(pwd) );
 			return c.queryInterface(credentials);
 		}
 	}

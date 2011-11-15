@@ -25,6 +25,14 @@ BOOL Wnd::update()
     return ::UpdateWindow(hWnd_);
 }
 
+void Wnd::redraw()
+{
+	::RedrawWindow(*this,0,0,RDW_FRAME|RDW_INVALIDATE);	
+	//::RedrawWindow( *this,NULL,NULL,RDW_FRAME|RDW_INVALIDATE|RDW_UPDATENOW|RDW_ALLCHILDREN|RDW_INTERNALPAINT);
+	invalidateRect(0,TRUE);
+	::UpdateWindow(*this);
+}
+
 int Wnd::show( int nCmdShow )
 {
     return ::ShowWindow(hWnd_, nCmdShow );

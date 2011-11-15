@@ -32,7 +32,7 @@ bool scpStream::connect()
 
 	nread_ = 0;
 		
-	scp_.open( *ssh_, mol::SSH_SCP_READ, mol::tostring(filename_) );
+	scp_.open( *ssh_, mol::SSH_SCP_READ, filename_ );
 
 	int rc = ssh_scp_pull_request(scp_);
 	if (rc != SSH_SCP_REQUEST_NEWFILE)
@@ -42,7 +42,7 @@ bool scpStream::connect()
 
 	size_ = ssh_scp_request_get_size(scp_);
 	const char* filename = ssh_scp_request_get_filename(scp_);
-	filename_ = mol::toString(filename);
+	filename_ = mol::fromUTF8(filename);
 	int mode = ssh_scp_request_get_permissions(scp_);
 
 	connected_ = true;
@@ -268,11 +268,11 @@ void DelayedDataTransferObj::enumerateRemoteDir(const mol::string& filename)
 	{			
 		connect();
 
-		mol::sftp::RemoteFile rf = sftp_.stat(mol::tostring(filename));
+		mol::sftp::RemoteFile rf = sftp_.stat(filename);
 
 		if ( rf.isDir())
 		{
-			std::vector<mol::sftp::RemoteFile> v = sftp_.list(mol::tostring(filename));
+			std::vector<mol::sftp::RemoteFile> v = sftp_.list(filename);
 			for ( size_t i = 0; i < v.size(); i++)
 			{
 				if ( v[i].getName() == _T(".") )
@@ -293,7 +293,7 @@ void DelayedDataTransferObj::enumerateRemoteDir(const mol::string& filename)
 						oss << L"/";
 					}
 
-					oss <<  mol::toString(v[i].getName());
+					oss << v[i].getName();
 					tmp = oss.str();
 
 					FILEDESCRIPTOR* fd = new FILEDESCRIPTOR;
@@ -319,7 +319,7 @@ void DelayedDataTransferObj::enumerateRemoteDir(const mol::string& filename)
 						oss << L"/";
 					}
 
-					oss <<  mol::toString(v[i].getName());
+					oss <<  v[i].getName();
 					tmp = oss.str();
 
 					FILEDESCRIPTOR* fd = new FILEDESCRIPTOR;

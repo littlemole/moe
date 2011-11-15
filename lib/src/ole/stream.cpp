@@ -152,7 +152,7 @@ HRESULT Stream::Create( IStream** pStream, const char* data , size_t size , int 
 	if (!glob.alloc(size, opt) )
 		return S_FALSE;
 
-	char* pDest = glob.lock();
+	char* pDest = (char*)glob.lock();
 
 	if (!data || !pDest)
 		return S_FALSE;

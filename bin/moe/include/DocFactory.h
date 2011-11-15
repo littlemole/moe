@@ -37,6 +37,8 @@ private:
 		return S_OK;
 	}
 
+	mol::MdiChild* openSSH(const mol::string& p,MOE_DOCTYPE type, long enc, bool readOnly);
+
 	void updateUI(const mol::string& p, mol::MdiChild* c);
 }; 
 
