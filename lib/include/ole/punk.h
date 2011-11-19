@@ -71,6 +71,7 @@ public:
 
     const I* operator->() const  { return interface_; }
     I* operator->()				 { return interface_; }
+	I* operator*()				 { return interface_; }
     operator I*()				 { return interface_; }
     operator const I*() const	 { return interface_; }
     I** operator&()				 { return &interface_; }
