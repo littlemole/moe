@@ -119,6 +119,11 @@
         />
 
         <Copy
+            SourceFiles="..\..\ax\ssh\$(confPath)\ssh.dll"
+            DestinationFolder=".\moe"
+        />
+
+        <Copy
             SourceFiles="..\..\ax\moeShell\$(confPath)\moeShell.dll"
             DestinationFolder=".\moe"
         />
@@ -164,6 +169,10 @@
 
 		<!-- regfree -->
 
+ <ItemGroup>
+  <moeFiles Include=".\moe\**\*.*" Exclude=".\moe\**\.svn\**\*.*;.\moe\**\.svn\**\*" />
+ </ItemGroup>
+
         <Copy
             SourceFiles="@(moeFiles)"
             DestinationFiles="@(moeFiles->'.\$(regfree)\moe\%(RecursiveDir)%(Filename)%(Extension)')"
@@ -179,6 +188,7 @@
 		<Exec Command='mt.exe -manifest .\$(regfree)\shellctrl.dll.isolated.manifest -outputresource:".\$(regfree)\moe\shellctrl.dll;#2" -verbose' WorkingDirectory="."/>
 		<Exec Command='mt.exe -manifest .\$(regfree)\scintillax.dll.isolated.manifest -outputresource:".\$(regfree)\moe\scintillax.dll;#2" -verbose' WorkingDirectory="."/>
 		<Exec Command='mt.exe -manifest .\$(regfree)\shellfolder.dll.isolated.manifest -outputresource:".\$(regfree)\moe\shellfolder.dll;#2" -verbose' WorkingDirectory="."/>
+		<Exec Command='mt.exe -manifest .\$(regfree)\sshax.dll.isolated.manifest -outputresource:".\$(regfree)\moe\ssh.dll;#2" -verbose' WorkingDirectory="."/>
 
 		<Exec Command='cscript "..\..\cg\bin\zip.vbs" "$(regfreeTargetPath)\moe.zip" "$(regfree)\moe"' WorkingDirectory="."/>
 

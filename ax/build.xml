@@ -11,6 +11,7 @@
         <MSBuild Projects="shellctrl/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
         <MSBuild Projects="shellfolder/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
         <MSBuild Projects="scintillax/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild Projects="ssh/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
  </Target>
 
 
@@ -22,6 +23,7 @@
         <MSBuild Projects="shellctrl/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
         <MSBuild Projects="shellfolder/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
         <MSBuild Projects="scintillax/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+		<MSBuild Projects="ssh/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 
 		<MSBuild Projects="jre/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 		<MSBuild Projects="jre/dispdriver/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />

@@ -57,6 +57,9 @@
     <CustomAction Id="DLLREG_moeShell" Property="REGSVR32" ExeCommand='/s "[INSTALLLOCATION]\moe\moeShell.dll"' Execute="deferred" Impersonate="no" />
     <CustomAction Id="DLLUNREG_moeShell" Property="REGSVR32" ExeCommand='/s /u "[INSTALLLOCATION]\moe\moeShell.dll"' Execute="deferred" Impersonate="no" Return="ignore"/>
 
+    <CustomAction Id="DLLREG_sshax" Property="REGSVR32" ExeCommand='/s "[INSTALLLOCATION]\moe\ssh.dll"' Execute="deferred" Impersonate="no" />
+    <CustomAction Id="DLLUNREG_sshax" Property="REGSVR32" ExeCommand='/s /u "[INSTALLLOCATION]\moe\ssh.dll"' Execute="deferred" Impersonate="no" Return="ignore"/>
+
     <!-- register/unregister moe executable -->
     <CustomAction Id="EXEREG_moe"  Property="MOEEXE" ExeCommand="/REGSERVER" Execute="deferred" Impersonate="no"  />
     <CustomAction Id="EXEUNREG_moe" Property="MOEEXE" ExeCommand="/UNREGSERVER" Execute="deferred" Impersonate="no" Return="ignore"/>
@@ -158,6 +161,8 @@
       <Custom Action='DLLREG_shellFolder' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLREG_setting' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
 	  <Custom Action='DLLREG_moeShell' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
+	  <Custom Action='DLLREG_sshax' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
+
 
       <!-- unregister COM objects  -->
       <Custom Action='EXEUNREG_moe' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
@@ -169,6 +174,7 @@
       <Custom Action='DLLUNREG_shellFolder' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLUNREG_setting' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
 	  <Custom Action='DLLUNREG_moeShell' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+	  <Custom Action='DLLUNREG_sshax' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
 
       <Custom Action="CopyFx" After="InstallFinalize">Not Installed</Custom>
 
@@ -184,4 +190,4 @@
     <UIRef Id="WixUI_MondoNoLicense"/>
     
   </Product>
-</Wix>
+</Wix>

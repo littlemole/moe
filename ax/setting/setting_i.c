@@ -6,7 +6,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sat Nov 19 18:41:33 2011
+/* at Sun Nov 20 16:54:18 2011
  */
 /* Compiler settings for setting.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
