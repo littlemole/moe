@@ -102,6 +102,7 @@ public:
   const std::string& getUser() const  { return user_;  }
   const std::string& getPwd() const   { return pwd_;   }
   const std::string  getFullPath() const;
+  const std::string  getParentDir() const;
   int getPort()	const			      { return port_;  }
   const std::string getQuery() const ;
   const std::string& getAnchor() const { return anchor_;  }

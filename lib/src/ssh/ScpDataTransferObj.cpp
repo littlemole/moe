@@ -18,21 +18,26 @@ scpStream::~scpStream()
 {
 }
 
-void scpStream::initScp(mol::ssh::Session* ssh, const mol::string& filename, mol::ssh::CredentialCallback* cb)
+void scpStream::initScp(const mol::string& host, int port, const mol::string& filename, mol::ssh::CredentialCallback* cb)
 {
-	ssh_	  = ssh;
 	filename_ = filename;
 	cb_		  = cb;
+	host_	  = host;
+	port_	  = port;
 }
 
 bool scpStream::connect()
 {
-	if (connected_)
-		return true;
+	if ( !ssh_.is_connected() )
+	{
+		ssh_.open( mol::toUTF8(host_),cb_,port_);
+		if ( !ssh_.is_connected() )
+			return false;
+	}
 
 	nread_ = 0;
 		
-	scp_.open( *ssh_, mol::SSH_SCP_READ, filename_ );
+	scp_.open( ssh_, mol::SSH_SCP_READ, filename_ );
 
 	int rc = ssh_scp_pull_request(scp_);
 	if (rc != SSH_SCP_REQUEST_NEWFILE)
@@ -204,7 +209,6 @@ HRESULT __stdcall scpStream::Clone( IStream **ppstm)
 
 
 DelayedDataTransferObj::DelayedDataTransferObj()
-	: connected_(false)
 {
 	asyncSupported_    = false;
 	asyncInProgress_   = false;
@@ -213,11 +217,12 @@ DelayedDataTransferObj::DelayedDataTransferObj()
 	cf_filedescriptor_ = ::RegisterClipboardFormat(CFSTR_FILEDESCRIPTOR);
 }
 
-bool DelayedDataTransferObj::init(const mol::string& host, int port, mol::ssh::CredentialCallback* cb)
+bool DelayedDataTransferObj::init(const mol::string& host, int port, mol::ssh::CredentialCallback* cb, BOOL cancel)
 {
-	host_ = host;
-	port_ = port;
-	cb_ = cb;
+	host_   = host;
+	port_   = port;
+	cb_     = cb;
+	cancel_ = cancel;
 
 	cf_filecontents_   = ::RegisterClipboardFormat(CFSTR_FILECONTENTS);
 	cf_filedescriptor_ = ::RegisterClipboardFormat(CFSTR_FILEDESCRIPTOR);
@@ -225,7 +230,7 @@ bool DelayedDataTransferObj::init(const mol::string& host, int port, mol::ssh::C
 	return true;
 }
 
-bool DelayedDataTransferObj::add(const mol::string& remotefile)
+bool DelayedDataTransferObj::add(const mol::string& remotefile,unsigned long long size,bool isdir)
 {
 	mol::string tmp = remotefile;
 
@@ -242,7 +247,7 @@ bool DelayedDataTransferObj::add(const mol::string& remotefile)
 		remoteroot_ = tmp;
 	}
 
-	enumerateRemoteDir(remotefile);
+	enumerateRemoteDir(remotefile,size,isdir);
 
 	return true;
 }
@@ -260,18 +265,15 @@ DelayedDataTransferObj::~DelayedDataTransferObj()
 }
 
 
-void DelayedDataTransferObj::enumerateRemoteDir(const mol::string& filename)
+void DelayedDataTransferObj::enumerateRemoteDir(const mol::string& filename,unsigned long long size,bool isdir)
 {
 	ODBGS("DelayedDataTransferObj enumerateRemoteDir");
 
 	try 
 	{			
-		connect();
-
-		mol::sftp::RemoteFile rf = sftp_.stat(filename);
-
-		if ( rf.isDir())
+		if ( isdir )
 		{
+			connect();
 			std::vector<mol::sftp::RemoteFile> v = sftp_.list(filename);
 			for ( size_t i = 0; i < v.size(); i++)
 			{
@@ -305,7 +307,7 @@ void DelayedDataTransferObj::enumerateRemoteDir(const mol::string& filename)
 
 					fds_.push_back(fd);
 
-					enumerateRemoteDir(tmp);
+					enumerateRemoteDir(tmp,v[i].getSize(),true);
 	
 				}
 				else
@@ -346,7 +348,7 @@ void DelayedDataTransferObj::enumerateRemoteDir(const mol::string& filename)
 					fd->dwFileAttributes = FILE_ATTRIBUTE_NORMAL;
 
 					LARGE_INTEGER li;
-					li.QuadPart = rf.getSize();
+					li.QuadPart = size;
 					fd->nFileSizeHigh = li.HighPart;
 					fd->nFileSizeLow = li.LowPart;
 
@@ -421,7 +423,7 @@ HRESULT __stdcall DelayedDataTransferObj::GetData( FORMATETC * pFormatetc, STGME
 			mol::string s = fds_[pFormatetc->lindex]->cFileName;
 
 			mol::punk< mol::com_obj<scpStream> > scpstream = new mol::com_obj<scpStream>;	
-			scpstream->initScp( &ssh_,s,cb_);
+			scpstream->initScp( host_, port_,s,cb_);
 
 			HRESULT hr = scpstream.queryInterface(&(pmedium->pstm));
 			return hr;

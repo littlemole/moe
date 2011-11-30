@@ -36,7 +36,7 @@ public:
 		disconnect();
 	}
 
-	void initScp(mol::ssh::Session* ssh, const mol::string& filename, mol::ssh::CredentialCallback* cb);
+	void initScp(const mol::string& host, int port, const mol::string& filename, mol::ssh::CredentialCallback* cb);
 
 	virtual HRESULT __stdcall  Read( void *pv, ULONG cb, ULONG *pcbRead);
     virtual HRESULT __stdcall  Write( const void *pv, ULONG cb, ULONG *pcbWritten);
@@ -60,8 +60,11 @@ private:
 	size_t nread_;
 	bool connected_;
 
-	mol::ssh::Session* ssh_;
+	mol::ssh::Session ssh_;
 	mol::scp::Session scp_;
+
+	mol::string host_;
+	int port_;
 
 	mol::ssh::CredentialCallback* cb_;
 };
@@ -78,8 +81,8 @@ public:
 	DelayedDataTransferObj();	
     virtual ~DelayedDataTransferObj();
 
-	bool init (const mol::string& host, int port, mol::ssh::CredentialCallback* cb);
-	bool add (const mol::string& remotefile);
+	bool init (const mol::string& host, int port, mol::ssh::CredentialCallback* cb, BOOL cancel = false);
+	bool add (const mol::string& remotefile,unsigned long long size,bool isdir);
 
 	HRESULT virtual __stdcall GetData( FORMATETC * pFormatetc, STGMEDIUM * pmedium );
 	HRESULT virtual __stdcall QueryGetData( FORMATETC * pFormatetc );
@@ -94,36 +97,28 @@ public:
 
 protected:
 
-	void enumerateRemoteDir(const mol::string& filename);
+	void enumerateRemoteDir(const mol::string& filename,unsigned long long size,bool isdir);
 
 	void connect()
 	{
-		if ( connected_)
+		if ( ssh_.is_connected() )
 			return;
 
-		if (!ssh_.open( mol::toUTF8(host_),cb_,port_))
-		{
-			return ;
-		}
-		if (!sftp_.open(ssh_))
-		{
-			return ;
-		}
-		connected_ = true;
+		ssh_.open( mol::toUTF8(host_),cb_,port_);
+		sftp_.open(ssh_);
 	}
 
 	mol::string host_;
 	int port_;
 
 	mol::string remoteroot_;
-	bool connected_;
 
 	mol::ssh::CredentialCallback* cb_;
 
 	UINT cf_filecontents_;
 	UINT cf_filedescriptor_;
 
-	//mol::format_etc_dropeffect	feDe_;
+	mol::format_etc_dropeffect	feDe_;
 
 	std::vector<FILEDESCRIPTOR*> fds_;
 
@@ -132,6 +127,7 @@ protected:
 
 	BOOL asyncSupported_;
 	BOOL asyncInProgress_;
+	BOOL cancel_;
 };
 
 

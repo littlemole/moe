@@ -21,6 +21,8 @@
 #include "ssh/scp.h"
 #include "ssh/sftp.h"
 
+#include "../../ax/ssh/ssh_h.h"
+
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
@@ -79,9 +81,25 @@ HRESULT __stdcall  DocFactory::openDocument( const mol::string& p, MOE_DOCTYPE t
 		if ( moe()->activeObject)
 			moe()->activeObject->OnDocWindowActivate(TRUE);
 
-		mol::ostringstream oss;
-		oss << _T(" failed to load ") << path;
-		statusBar()->status( oss.str() );
+		mol::punk<IErrorInfo> ei;
+		if ( S_OK == ::GetErrorInfo(0,&ei) )
+		{
+			mol::bstr desc;
+			HRESULT hr = ei->GetDescription(&desc);
+
+			mol::bstr src;
+			hr = ei->GetSource(&src);
+
+			mol::ostringstream oss;
+			oss << _T(" failed to load ") << path << _T(" ") << desc;
+			statusBar()->status( oss.str() );
+		}
+		else
+		{
+			mol::ostringstream oss;
+			oss << _T(" failed to load ") << path;
+			statusBar()->status( oss.str() );
+		}
 		return E_FAIL;
 	}
 
@@ -161,6 +179,8 @@ mol::MdiChild* handleShellPath(  const mol::string& p )
 	return 0;
 }
 
+class ComSSHErr
+{};
 
 /////////////////////////////////////////////////////////////////////
 
@@ -175,45 +195,57 @@ mol::MdiChild* DocFactory::openSSH(const mol::string& path,MOE_DOCTYPE type, lon
 	{
 		try {
 
-			mol::ssh::Session ssh;
+			//mol::ssh::Session& ssh = moe()->connect(uri);
 
-			mol::ostringstream oss;
-			oss << _T("connecting: ") << mol::toString(host) << _T(":") << port;
-			statusBar()->status(oss.str());
+			mol::punk<ISSH> ssh;
+			HRESULT hr = ssh.createObject(CLSID_SSH,CLSCTX_LOCAL_SERVER);
+			if (hr!=S_OK)
+				return 0;
 
-			if ( !ssh.open(host,&(moe()->credentials),port) )
-				return false;
+			::CoAllowSetForegroundWindow(ssh,0);
 
+			mol::punk<ISSHConnection> conn;
+			hr = ssh->Connect( mol::bstr(mol::fromUTF8(uri.getHost())),uri.getPort(),&conn);
+			if (hr!=S_OK)
+				return 0;
+
+			//::CoAllowSetForegroundWindow(conn,0);
+
+			mol::punk<ISFTP> sftp;
+			hr = conn->get_SFTP(&sftp);
+			if (hr!=S_OK)
+				return 0;
 
 			mol::ostringstream oss2;
 			oss2 << _T("retrieving: ") << mol::fromUTF8(host) << _T(":") << port;
 			statusBar()->status(oss2.str());
 
-			mol::sftp::Session sftp;
-			if(!sftp.open(ssh))
-				return false;
+			//mol::sftp::Session sftp;
+			//sftp.open(ssh);
 
-			mol::sftp::RemoteFile rf = sftp.stat(mol::fromUTF8(p));
+			mol::punk<IRemoteFile> rf;
+			hr = sftp->Stat( mol::bstr(mol::fromUTF8(p)), &rf);
+			if (hr!=S_OK)
+				return 0;
+			//mol::sftp::RemoteFile rf = sftp.stat(mol::fromUTF8(p));
 
-			if ( rf.isDir() )
+			VARIANT_BOOL vb;
+			hr = rf->get_IsDir(&vb);
+			if (hr!=S_OK)
+				return 0;
+
+			if ( vb == VARIANT_TRUE )
 			{
 				return load<ScpDirChild>(path);
 			}
 
-			mol::scp::Session scp(ssh);
-			if (!scp.open( mol::SSH_SCP_READ, mol::fromUTF8(p)))
-				return false;
-
-			std::string content;
-			if (!scp.read_file(content))
-				return false;
 
 			Editor::Instance* edit = Editor::CreateInstance( mol::toString(path) );
 			if (!edit)
 				return false;
 
 			mol::punk<IMoeDocument> doc;
-			HRESULT hr = edit->QueryInterface(IID_IMoeDocument, (void**)&doc);
+			hr = edit->QueryInterface(IID_IMoeDocument, (void**)&doc);
 			if ( hr != S_OK)
 				return false;
 
@@ -231,6 +263,27 @@ mol::MdiChild* DocFactory::openSSH(const mol::string& path,MOE_DOCTYPE type, lon
 			if ( hr != S_OK )
 				return false;
 
+			mol::punk<ISCP> scp;
+			hr = conn->get_SCP(&scp);
+			if (hr!=S_OK)
+				return 0;
+
+			SAFEARRAY* sa;
+
+//			mol::scp::Session scp(ssh);
+	//		scp.open( mol::SSH_SCP_READ, mol::fromUTF8(p));
+
+			hr = scp->GetFile( mol::bstr(mol::fromUTF8(p)),&sa);
+			if (hr!=S_OK)
+				return 0;
+
+			std::string content;
+			{
+				mol::SFAccess<BYTE> sf(sa);
+				content = std::string ((char*)sf(),sf.size());
+			}
+			::SafeArrayDestroy(sa);
+			
 			mol::FileEncoding fe;
 			std::string utf8 = fe.convertToUTF8( content, CP_UTF8);
 			hr = text->Append( mol::bstr(mol::fromUTF8(utf8)) );
@@ -250,12 +303,24 @@ mol::MdiChild* DocFactory::openSSH(const mol::string& path,MOE_DOCTYPE type, lon
 			if ( hr != S_OK )
 				return false;
 
+			statusBar()->status(path);
+
 			mol::MdiChild* c = dynamic_cast<mol::MdiChild*>(edit);
 			return c;
 
 		}
+		catch(mol::ssh::Ex& ex)
+		{
+			//std::wstringstream oss;
+			//oss << L"failed to open " << mol::towstring(path) << L" " << mol::towstring(ex.msg());
+			//statusBar()->status(oss.str());
+		}
 		catch(...)
-		{}
+		{
+			//std::wstringstream oss;
+			//oss << L"failed to open " << mol::towstring(path);
+			//statusBar()->status(oss.str());
+		}
 	}
 	return false;
 }

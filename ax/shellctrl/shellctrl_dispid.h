@@ -47,13 +47,6 @@
 #define DISPID_ISHELLLIST_EXECUTE                                              				 11
 #define DISPID_ISHELLLIST_CREATEDIR                                            				 12
 #define DISPID_ISHELLLIST_UPDIR                                                				 13
-#define DISPID_ISCPPASSWORDCREDENTIALS_USERNAME                                				 1
-#define DISPID_ISCPPASSWORDCREDENTIALS_PASSWORD                                				 2
-#define DISPID_ISCPCREDENTIALPROVIDER_GETCREDENTIALS                           				 1
-#define DISPID_ISCPCREDENTIALPROVIDER_PROMPTCREDENTIALS                        				 2
-#define DISPID_ISCPCREDENTIALPROVIDER_ACCEPTHOST                               				 3
-#define DISPID_ISCPCREDENTIALPROVIDER_REMBERSESSIONCREDENTIALS                 				 4
-#define DISPID_ISCPCREDENTIALPROVIDER_REMOVESESSIONCREDENTIALS                 				 5
 #define DISPID_ISCPLIST_CREDENTIALPROVIDER                                     				 1
 #define DISPID_ISCPLIST_LOCATION                                               				 2
 #define DISPID_ISCPLIST_HASFOCUS                                               				 3

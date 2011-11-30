@@ -111,6 +111,47 @@ public:
 	{
 		mol::App().unlock();
 	}
+
+};
+
+template<class COM>
+class com_singleton : public COM
+{
+public:
+    com_singleton()
+    {
+		molrefcount_ = 0;
+    }
+
+    virtual ~com_singleton() 
+	{
+	}
+
+    ULONG   virtual __stdcall AddRef()
+    {
+		mol::App().lock();
+		::InterlockedIncrement((volatile long*)&molrefcount_);
+		ODBGS1("AddRef",molrefcount_);
+		return molrefcount_;
+    }
+
+    ULONG   virtual __stdcall Release()
+    {		
+		::InterlockedDecrement((volatile long*)&molrefcount_);
+		ODBGS1("AddRef",molrefcount_);
+		mol::App().unlock();
+        return 1;
+    }
+
+
+	HRESULT virtual __stdcall QueryInterface(REFIID iid , LPVOID* ppv)
+	{
+		HRESULT hr = COM::QueryInterfaceImpl(iid,ppv);
+		return hr;
+	}
+
+protected:
+    volatile DWORD molrefcount_;
 };
 
 // helper class for Aggregagation

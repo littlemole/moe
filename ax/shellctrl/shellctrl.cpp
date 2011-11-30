@@ -8,6 +8,7 @@
 #include "HexCtrl.h"
 
 #include "ShellCtrl_i.c"
+#include "../ssh/ssh_i.c"
 
 class shellCtrlDll : 
 	public Dll,
@@ -15,8 +16,6 @@ class shellCtrlDll :
 	public exports_aggregable< shellCtrlDll, ShellListCtrl >,
 	public exports_aggregable< shellCtrlDll, ColorDlg >,
 	public exports_aggregable< shellCtrlDll, HexCtrl >,
-	public exports_aggregable< shellCtrlDll, ScpPasswordCredentials >,
-	public exports_aggregable< shellCtrlDll, ScpCredentialProvider >,
 	public exports_aggregable< shellCtrlDll, ScpListCtrl >
 {};
 

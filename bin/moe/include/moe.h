@@ -52,7 +52,7 @@ public:
 	mol::punk<IMoeView>    moeView;
 	mol::punk<IMoeConfig>  moeConfig;
 
-	mol::punk<IScpCredentialProvider> credentialProvider;
+
 
 	/////////////////////////////////////////////////////////////////////
 	// std windows msgs - Creation / Activation / Destruction
@@ -145,6 +145,8 @@ public:
     virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER *pCbSize);
     virtual HRESULT __stdcall InitNew();
 
+	//virtual HRESULT __stdcall get_CredentialProvider(IScpCredentialProvider** provider);
+
 	// Persistence Dirtyness support
 
 	BOOL isDirty()			{ return true; } // bDirty_; }
@@ -200,6 +202,7 @@ public:
 	// ssh credentials
 	/////////////////////////////////////////////////////////////////////
 
+	 /*
 	class Credentials : public mol::ssh::CredentialCallback
 	{
 		public: 
@@ -212,6 +215,9 @@ public:
 		virtual bool deleteHostCredentials(const std::string& host, int port);
 
 	} credentials;
+
+	mol::ssh::Session& connect(const mol::Uri& uri);
+	*/
 
 private:
 
@@ -251,6 +257,9 @@ private:
 	// cookie into IRunningObjectTable for our running OLE server
 	DWORD							activeObj_;
 
+	//mol::ssh::Session				ssh_;
+
+	//mol::punk<IScpCredentialProvider> credentialProvider;
 };
 
 #endif
