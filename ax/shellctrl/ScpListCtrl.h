@@ -13,161 +13,7 @@
 #include "win/msg_macro.h"
 #include "win/dlg.h"
 #include "ssh/sftp.h"
-
-class EncryptedMemory
-{
-public:
-
-	EncryptedMemory();
-	~EncryptedMemory();
-	void dispose();
-
-	size_t encrypt( void* data, size_t size, DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
-	std::string decrypt( DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
-
-	void* data();
-	size_t size();
-
-private:
-
-	void* encrypted_;
-	size_t size_;
-};
-
-class EncryptedMap
-{
-public:
-
-	typedef std::map<std::wstring,std::wstring> MapType;
-
-	EncryptedMap();
-
-	void encrypt(const MapType& map);
-	MapType decrypt();
-
-private:
-
-	EncryptedMemory secure_;
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
-class ScpPasswordCredentials : 
-	public mol::com_registerobj<ScpPasswordCredentials,CLSID_ScpPasswordCredentials>,
-	public mol::Dispatch<IScpPasswordCredentials>,
-	public mol::interfaces< ScpPasswordCredentials, mol::implements< IDispatch, IScpPasswordCredentials> >
-{
-public:
-		HRESULT virtual __stdcall put_Username( BSTR user);
-		HRESULT virtual __stdcall get_Username( BSTR* user);
-		HRESULT virtual __stdcall put_Password( BSTR pwd);
-		HRESULT virtual __stdcall get_Password( BSTR* pwd);
-private:
-
-	EncryptedMap secure_;
-
-	//mol::bstr user_;
-	//mol::bstr pwd_;
-};
-
-///////////////////////////////////////////////////////////////////////////////
-/*
-struct Credentials
-{
-	Credentials( const mol::string& h, int p, const mol::string& u, const mol::string& pass)
-		: host(h),port(p),user(u),pwd(pass)
-	{}
-	mol::string host;
-	int port;
-	mol::string user;
-	mol::string pwd;
-};
-*/
-
-struct SecureCredentials
-{
-	SecureCredentials( const mol::string& h, int p, const mol::string& u, const mol::string& pass);
-	~SecureCredentials();
-
-	mol::string host;
-	int port;
-
-	void decrypt( mol::string& u, mol::string& pass );
-
-private:
-	EncryptedMap secure_;
-
-};
-
-class ScpCredentialProvider : 
-	public mol::com_registerobj<ScpCredentialProvider,CLSID_DefaultScpCredentialProvider>,
-	public mol::Dispatch<IScpCredentialProvider>,
-	public mol::interfaces< ScpCredentialProvider, mol::implements< IDispatch, IScpCredentialProvider> >
-{
-public:
-
-	void dispose()
-	{
-		for ( std::map<mol::string,SecureCredentials*>::iterator it = credentials_.begin(); it!=credentials_.end();it++)
-		{
-			delete (*it).second;
-		}
-		credentials_.clear();
-	}
-
-	HRESULT virtual __stdcall getCredentials( BSTR host, long port, IScpPasswordCredentials** credentials);
-
-	HRESULT virtual __stdcall promptCredentials( BSTR prompt,BSTR description,VARIANT_BOOL echo, VARIANT* value)
-	{
-		if (!value)
-			return E_INVALIDARG;
-
-		value->vt = VT_EMPTY;
-		return S_OK;
-	}
-
-	HRESULT virtual __stdcall acceptHost( BSTR host, long port, BSTR hash, VARIANT_BOOL* accept);
-
-	HRESULT virtual __stdcall remberSessionCredentials( BSTR host, long port, IScpPasswordCredentials* credentials)
-	{
-		if (credentials == 0 )
-			return E_INVALIDARG;
-
-		mol::bstr user;
-		credentials->get_Username(&user);
-
-		mol::bstr pwd;
-		credentials->get_Password(&pwd);
-
-		SecureCredentials* creds = new SecureCredentials( mol::toString(host), port, mol::toString(user), mol::toString(pwd) );
-		credentials_.insert( std::make_pair( mol::toString(host), creds) );
-		return S_OK;
-	}
-
-
-	HRESULT virtual __stdcall removeSessionCredentials( BSTR host, long port)
-	{
-		bool go = true;
-		while(go)
-		{
-			go = false;
-			for ( std::map<mol::string,SecureCredentials*>::iterator it = credentials_.begin(); it!=credentials_.end();it++)
-			{
-				if ( (*it).first == mol::toString(host) && (*it).second->port == port )
-				{
-					delete (*it).second;
-					credentials_.erase(it);
-					go = true;
-					break;
-				}
-			}
-		}
-		return S_OK;
-	}
-
-private:
-	std::map<mol::string,SecureCredentials*> credentials_;
-};
+#include "tcp/sockets.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -175,18 +21,23 @@ class ScpListCtrl;
 
 struct ScpListEntry
 {
-	ScpListEntry(const mol::string& fn, mol::sftp::RemoteFile rf, int index )
+	ScpListEntry(const mol::string& fn, const mol::sftp::RemoteFile& rf, int index )
 		: filename(fn), fileinfo(rf), iconindex(index), isParsed(false) 
     {}
 	
 	mol::string				filename;
-	mol::sftp::RemoteFile	fileinfo;
     int						iconindex;
     bool					isParsed;
+	mol::sftp::RemoteFile	fileinfo;
 
 	bool isDir()
 	{
 		return fileinfo.isDir();
+	}
+
+	mol::string getName()
+	{
+		return fileinfo.getName();
 	}
 };
 
@@ -277,8 +128,8 @@ public:
 
 	// COM properties
 
-	HRESULT virtual __stdcall get_CredentialProvider	( IScpCredentialProvider** provider );
-	HRESULT virtual __stdcall put_CredentialProvider	( IScpCredentialProvider* provider );
+	HRESULT virtual __stdcall get_CredentialProvider	( IDispatch** provider );
+	HRESULT virtual __stdcall put_CredentialProvider	( IDispatch* provider );
 
 	HRESULT virtual __stdcall get_Location		( BSTR* dirname );
 	HRESULT virtual __stdcall put_Location		( BSTR dirname );
@@ -384,7 +235,8 @@ protected:
 
 	bool  doHitTest();
 
-
+	/*mol::ssh::Session&*/ //bool connect( const mol::Uri& uri);
+	/*mol::sftp::Session&*/ //bool open(const mol::Uri& uri);
 
 //    virtual int compare(LPARAM lParam1, LPARAM lParam2);
 //    static int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
@@ -428,15 +280,36 @@ protected:
 	mol::punk<ShellListCtrl_Drop> Drop;
 	mol::punk<IScpCredentialProvider> provider_;
 
-
+	mol::Uri				uri_;
     mol::string				path_;
-	RECT					clientRect_;
+
+	mol::punk<ISSH> ssh_;
+	//mol::punk<ISSHConnection>			ssh_;
+	//mol::ssh::Session		ssh_;
+	//mol::sftp::Session		sftp_;
 
 	OLE_COLOR				bgCol_;
 	OLE_COLOR				foreCol_;
 	mol::Menu				listMenu_;
+	RECT					clientRect_;
 
-	mol::ThreadQueue<ScpDirQueueAction>			queue_;
+	class ThreadStartPolicy 
+	{
+	public:
+		void operator()(){ ::CoInitialize(0); };
+	};
+
+	class ThreadShutdownPolicy 
+	{
+	public:
+		void operator()(){ ::CoUninitialize(); };
+	};
+	mol::ThreadQueue<ScpDirQueueAction,true,ThreadStartPolicy,ThreadShutdownPolicy>			queue_;
+
+	DWORD gitCookie_;
+	DWORD gitSSHCookie_;
+
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////

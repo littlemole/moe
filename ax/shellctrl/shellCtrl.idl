@@ -1,10 +1,16 @@
 //#include "olectl.h"
 import "oaidl.idl";
 import "ocidl.idl";
+//import "..\ssh\ssh.idl";
+//include "..\ssh\ssh_h.h"
+cpp_quote("#include \"..\ssh\ssh_h.h\" ")
+//importlib("..\ssh\ssh\x64\uni_debug\ssh.tlb");
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // ShellCtrl Library
 ////////////////////////////////////////////////////////////////////////////////////////
+
+interface IScpCredentialProvider;
 
 [
   uuid(74618F47-2F2A-4b0f-BDCA-344BE3208ECE),
@@ -318,67 +324,6 @@ library ShellCtrls
 
     };
 
-	////////////////////////////////////////////////////////////////////////////////////
-	// ISCPList
-	////////////////////////////////////////////////////////////////////////////////////
-
-	////////////////////////////////////////////////////////////////////////////////////
-
-	[
-      uuid(BD96818E-5DAB-4305-B283-527D632C68D2),
-      helpstring("IScpPasswordCredentials Interface"),
-      object,oleautomation, dual
-    ]
-	interface IScpPasswordCredentials : IDispatch
-    {
-		[ 
-		  propput,bindable,displaybind, requestedit,id(1), 
-		  helpstring("Get/Set Username")
-		] 
-		HRESULT Username([in] BSTR user);
-
-		[ 
-		  propget,bindable,displaybind, requestedit,id(1)
-		] 
-		HRESULT Username([out,retval] BSTR* user);
-
-		[ 
-		  propput,bindable,displaybind, requestedit,id(2), 
-		  helpstring("Get/Set Password")
-		] 
-		HRESULT Password([in] BSTR pwd);
-
-		[ 
-		  propget,bindable,displaybind, requestedit,id(2)
-		] 
-		HRESULT Password([out,retval] BSTR* pwd);
-	};
-
-	////////////////////////////////////////////////////////////////////////////////////
-
-	[
-      uuid(6A66D47E-519D-4CA8-9B39-892E9CC7D3AF),
-      helpstring("IScpCredentialProvider Interface"),
-      object,oleautomation, dual
-    ]
-	interface IScpCredentialProvider : IDispatch
-    {
-		[id(1), helpstring("get password credentials")] 
-		HRESULT getCredentials( [in] BSTR host, [in] long port, [out,retval] IScpPasswordCredentials** credentials);
-
-		[id(2), helpstring("prompt for keyboard-interactive")] 
-		HRESULT promptCredentials( [in] BSTR prompt, [in] BSTR description, [in] VARIANT_BOOL echo, [out,retval] VARIANT* value);
-
-		[id(3), helpstring("accept an unknown host")] 
-		HRESULT acceptHost( [in] BSTR host, [in] long port, [in] BSTR hash, [out,retval] VARIANT_BOOL* accept);
-
-		[id(4), helpstring("remember credentials for session")] 
-		HRESULT remberSessionCredentials( [in] BSTR host, [in] long port, [in] IScpPasswordCredentials* credentials);
-
-		[id(5), helpstring("remove credentials for session")] 
-		HRESULT removeSessionCredentials( [in] BSTR host, [in] long port);
-
-	};
 
 	////////////////////////////////////////////////////////////////////////////////////
 
@@ -394,12 +339,12 @@ library ShellCtrls
 		  propput,id(1), 
 		  helpstring("Get/Set CredentialProvider")
 		] 
-		HRESULT CredentialProvider([in] IScpCredentialProvider* provider);
+		HRESULT CredentialProvider([in] IDispatch* provider);
 
 		[ 
 		  propget,id(1)
 		] 
-		HRESULT CredentialProvider([out,retval] IScpCredentialProvider** provider);
+		HRESULT CredentialProvider([out,retval] IDispatch** provider);
 
 		[ 
 		  propput,defaultbind,bindable,displaybind, requestedit,id(2), 
@@ -720,24 +665,6 @@ library ShellCtrls
 	////////////////////////////////////////////////////////////////////////////////////
 	// SSH support - IScpList
 	////////////////////////////////////////////////////////////////////////////////////
-
-	[
-		uuid(46861300-31F7-44F9-B4F6-449D66F3AC77),
-		aggregatable
-	]
-	coclass ScpPasswordCredentials
-	{
-		[default]         interface     IScpPasswordCredentials;
-	}
-
-	[
-		uuid(CF5BF8BD-DC91-43CA-AB1A-FF04CCACEFB6),
-		aggregatable
-	]
-	coclass DefaultScpCredentialProvider
-	{
-		[default]         interface     IScpCredentialProvider;
-	}
 
 	[
 		uuid(CD199DC9-8BA4-4F7A-BCFA-4C3473C06F03),

@@ -31,27 +31,26 @@ void Session::dispose()
 	scp_ = 0;
 }
 
-bool Session::open( ssh_session_struct* session, int mode, const std::wstring& path )
+void Session::open( ssh_session_struct* session, int mode, const std::wstring& path )
 {
 	dispose();
 	scp_ = ssh_scp_new(session, mode, mol::toUTF8(path).c_str() );
 	if (scp_ == NULL)
 	{
-		throw mol::ssh::Ex("open scp session failed");
+		throw mol::ssh::Ex(0,"open scp session failed");
 	}
 
 	int rc = ssh_scp_init(scp_);
 	if (rc != SSH_OK)
 	{
 		ssh_scp_free(scp_);
-		throw mol::ssh::Ex("init scp session failed");
+		throw mol::ssh::Ex(0,"init scp session failed");
 	}
-	return true;
 }
 
-bool Session::open( int mode, const std::wstring& path )
+void Session::open( int mode, const std::wstring& path )
 {
-	return open( ssh_, mode, path);
+	open( ssh_, mode, path);
 }
 
 bool Session::enter_dir(  const std::wstring& dir, int mode )
@@ -60,7 +59,7 @@ bool Session::enter_dir(  const std::wstring& dir, int mode )
 	if (rc != SSH_OK)
 	{
 		dispose();
-		throw mol::ssh::Ex("creater emote dir failed");
+		return false;
 	}
 	return true;
 }
@@ -71,7 +70,7 @@ bool Session::leave_dir()
 	if (rc != SSH_OK)
 	{
 		dispose();
-		throw mol::ssh::Ex("error leaving directory");
+		return false;
 	}
 	return true;
 }
@@ -113,14 +112,14 @@ bool Session::push_file( const std::wstring& file, const std::string& content, i
 	if (rc != SSH_OK)
 	{
 		dispose();
-		throw mol::ssh::Ex("error pushing file");
+		return false;
 	}
 
 	rc = ssh_scp_write(scp_, content.c_str(), content.size() );
 	if (rc != SSH_OK)
 	{
 		dispose();
-		throw mol::ssh::Ex("error writing file");
+		return false;
 	}		
 	return true;
 }
@@ -131,7 +130,7 @@ bool Session::push_file( const std::wstring& path, int mode )
 
 	mol::filestream fs;
 	if (!fs.open(mol::tostring(path)))
-		throw mol::ssh::Ex("could not open file for sending");
+		return false;
 
 	std::string s = fs.readAll();
 	fs.close();
@@ -140,14 +139,14 @@ bool Session::push_file( const std::wstring& path, int mode )
 	if (rc != SSH_OK)
 	{
 		dispose();
-		throw mol::ssh::Ex("error pushing file");
+		return false;
 	}
 
 	rc = ssh_scp_write(scp_, s.c_str(), s.size() );
 	if (rc != SSH_OK)
 	{
 		dispose();
-		throw mol::ssh::Ex("error writing file");
+		return false;
 	}		
 	return true;
 }
@@ -157,19 +156,17 @@ bool Session::pull_file( const std::wstring& localdir)
 	int rc = ssh_scp_pull_request(scp_);
 	if (rc != SSH_SCP_REQUEST_NEWFILE)
 	{
-		throw mol::ssh::Ex("no file received");
+		return false;
 	}
 
 	size_t size = ssh_scp_request_get_size(scp_);
-	const char* filename = ssh_scp_request_get_filename(scp_);//strdup(ssh_scp_request_get_filename(scp));
+	const char* filename = ssh_scp_request_get_filename(scp_);
 	int mode = ssh_scp_request_get_permissions(scp_);
-	//printf("Receiving file %s, size %d, permisssions 0%o\n", filename, size, mode);
-	//free(filename);
 
 	char* buffer = (char*)malloc(size);
 	if (buffer == NULL)
 	{
-		throw mol::ssh::Ex("out of memory");
+		throw mol::ssh::Ex(0,"out of memory");
 	}
 
 	ssh_scp_accept_request(scp_);
@@ -177,7 +174,7 @@ bool Session::pull_file( const std::wstring& localdir)
 	if (rc == SSH_ERROR)
 	{
 		free(buffer);
-		throw mol::ssh::Ex("error reading file");
+		return false;
 	}
 
 	std::wstring localpath = mol::Path::addBackSlash(localdir) + mol::fromUTF8(filename);
@@ -195,7 +192,7 @@ bool Session::pull_file( const std::wstring& localdir)
 	rc = ssh_scp_pull_request(scp_);
 	if (rc != SSH_SCP_REQUEST_EOF)
 	{
-		throw mol::ssh::Ex("error expecting eof");
+		throw mol::ssh::Ex(0,"error expecting eof");
 			
 	}
 	return true;
@@ -208,19 +205,17 @@ bool Session::read_file(  std::string& content)
 	int rc = ssh_scp_pull_request(scp_);
 	if (rc != SSH_SCP_REQUEST_NEWFILE)
 	{
-		throw mol::ssh::Ex("no file received");
+		return false;
 	}
 
 	size_t size = ssh_scp_request_get_size(scp_);
-	const char* filename = ssh_scp_request_get_filename(scp_);//strdup(ssh_scp_request_get_filename(scp));
+	const char* filename = ssh_scp_request_get_filename(scp_);
 	int mode = ssh_scp_request_get_permissions(scp_);
-	//printf("Receiving file %s, size %d, permisssions 0%o\n", filename, size, mode);
-	//free(filename);
 
 	char* buffer = (char*)malloc(size);
 	if (buffer == NULL)
 	{
-		throw mol::ssh::Ex("out of memory");
+		throw mol::ssh::Ex(0,"out of memory");
 	}
 
 	ssh_scp_accept_request(scp_);
@@ -228,7 +223,7 @@ bool Session::read_file(  std::string& content)
 	if (rc == SSH_ERROR)
 	{
 		free(buffer);
-		throw mol::ssh::Ex("error reading file");
+		return false;
 	}
 		
 	content = std::string(buffer,size);
@@ -238,7 +233,7 @@ bool Session::read_file(  std::string& content)
 	rc = ssh_scp_pull_request(scp_);
 	if (rc != SSH_SCP_REQUEST_EOF)
 	{
-		throw mol::ssh::Ex("error expecting eof");
+		throw mol::ssh::Ex(0,"error expecting eof");
 			
 	}
 	return true;
@@ -263,7 +258,7 @@ bool Session::pull_dir( const std::wstring& localdir)
 				char* buffer = (char*)malloc(size);
 				if (buffer == NULL)
 				{
-					throw mol::ssh::Ex("out of memory");
+					throw mol::ssh::Ex(0,"out of memory");
 				}
 
 				ssh_scp_accept_request(scp_);
@@ -271,7 +266,7 @@ bool Session::pull_dir( const std::wstring& localdir)
 				if (rc == SSH_ERROR)
 				{
 					free(buffer);
-					throw mol::ssh::Ex("error reading file");
+					return false;
 				}
 
 				std::wstring localpath = mol::Path::addBackSlash(local) + mol::fromUTF8(filename);
@@ -306,7 +301,7 @@ bool Session::pull_dir( const std::wstring& localdir)
 
 				if ( mol::Path::exists(localpath) && !mol::Path::isDir(localpath) )
 				{
-					throw mol::ssh::Ex("file already exists");
+					return false;
 				}
 
 				if ( !mol::Path::exists(localpath) && !mol::Path::isDir(localpath) )
@@ -329,7 +324,7 @@ bool Session::pull_dir( const std::wstring& localdir)
 			}
 			case SSH_ERROR :
 			{
-				throw mol::ssh::Ex("SSH_ERROR reading recursively");
+				throw mol::ssh::Ex(0,"SSH_ERROR reading recursively");
 				break;
 			}
 			default :
@@ -342,22 +337,6 @@ bool Session::pull_dir( const std::wstring& localdir)
 	return true;
 }
 
-/*
-std::string permission(int mode)
-{
-	char* c = ::ssh_scp_string_mode(mode);
-	std::string ret(c);
-	free(c);
-	return ret;
-}
-
-
-int permission(const std::string& mode)
-{
-	int c = ::ssh_scp_integer_mode(mode.c_str());
-	return c;
-}
-*/
 
 } // end namespace scp
 } // end namespace mol

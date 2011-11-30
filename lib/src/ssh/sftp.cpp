@@ -11,6 +11,18 @@ namespace sftp {
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
+RemoteFile::RemoteFile(	const mol::string& name, uint8_t type, 
+			uint32_t perms, uint32_t uid, uint32_t gid, 
+			uint32_t mtime, unsigned long long size, 
+			const mol::string& owner, const mol::string& group )
+
+			: name_(name), type_(type), 
+			  permissions_(perms), uid_(uid), gid_(gid),
+			  mtime_(mtime), size_(size), 
+			  owner_(owner),group_(group)
+{
+}
+
 RemoteFile::RemoteFile(sftp_attributes_struct* att)
 	: size_(0),type_(2),mtime_(0),gid_(0),uid_(0),permissions_(0)
 {
@@ -132,10 +144,7 @@ Session::Session()
 Session::Session(ssh_session_struct* session)
 	:sftp_(0)
 {
-	if (!open(session))
-	{
-		throw mol::ssh::Ex("failed to open remote file");
-	}
+	open(session);
 }
 
 
@@ -167,22 +176,21 @@ RemoteFile Session::lstat( const std::wstring& file )
 	return rf;
 }
 
-bool Session::open(ssh_session_struct* session)
+void Session::open(ssh_session_struct* session)
 {
 	dispose();
 	sftp_ = sftp_new(session);
 	if (sftp_ == NULL)
 	{
-		throw mol::ssh::Ex("error allocating new sftp session");
+		throw mol::ssh::Ex(0,"error allocating new sftp session");
 	}
 
 	int rc = sftp_init(sftp_);
 	if (rc != SSH_OK)
 	{
 		dispose();
-		throw mol::ssh::Ex("error initializing sftp session");
+		throw mol::ssh::Ex(0,"error initializing sftp session");
 	}
-	return true;
 }
 
 bool Session::mkdir(const std::wstring& dir,int mode)
@@ -262,13 +270,13 @@ std::vector<std::wstring> Session::files( const std::wstring& dir )
 
 	if (!sftp_dir_eof(remote_dir))
 	{
-		throw mol::ssh::Ex("can't list dir");
+		throw mol::ssh::Ex(0,"can't list dir");
 	}
 
 	int rc = sftp_closedir(remote_dir);
 	if (rc != SSH_OK)
 	{
-		throw mol::ssh::Ex("can't close directory");
+		throw mol::ssh::Ex(0,"can't close directory");
 	}
 	return v;
 }
@@ -290,13 +298,13 @@ std::vector<RemoteFile> Session::list( const std::wstring& dir )
 
 	if (!sftp_dir_eof(remote_dir))
 	{
-		throw mol::ssh::Ex("can't list dir");
+		throw mol::ssh::Ex(0,"can't list dir");
 	}
 
 	int rc = sftp_closedir(remote_dir);
 	if (rc != SSH_OK)
 	{
-		throw mol::ssh::Ex("can't close directory");
+		throw mol::ssh::Ex(0,"can't close directory");
 	}
 	return v;
 }
@@ -406,7 +414,7 @@ std::ios::pos_type filestream_buf::seekoff( off_type off, std::ios_base::seekdir
 		this->seek( (int)(seek() + off) );
 	if ( way == std::ios_base::end )
 	{
-		throw mol::ssh::Ex("not implemented");
+		throw mol::ssh::Ex(0,"not implemented");
 	}
 	return off;
 }

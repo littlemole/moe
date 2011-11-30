@@ -198,6 +198,8 @@ void Editor::OnDestroy()
 	sci.release();
 	if ( ts_)
 	{
+		// as we offer scripting, break any references to out of process clients
+		::CoDisconnectObject(((IActiveScriptSite*)(ts_)),0);
 		((IActiveScriptSite*)(ts_))->Release();
 		ts_ = 0;
 	}
@@ -416,6 +418,11 @@ void Editor::OnReload()
 	}
 	mol::bstr filename;
 	if ( S_OK != get_FilePath(&filename) )
+	{
+		return ;
+	}
+
+	if ( mol::toString(filename).substr(0,6) == _T("ssh://") || mol::toString(filename).substr(0,6) == _T("moe-ssh://") )
 	{
 		return ;
 	}
@@ -1012,7 +1019,7 @@ void Editor::OnSave()
 		int port = uri.getPort();
 		std::string p = uri.getPath();
 
-		size_t pos = p.find_last_of("/");
+/*		size_t pos = p.find_last_of("/");
 		std::string parentdir(p);
 		std::string file(p);
 		if ( pos != std::string::npos )
@@ -1020,36 +1027,60 @@ void Editor::OnSave()
 			parentdir = p.substr(0,pos);
 			file = p.substr(pos+1);
 		}
-
+		*/
 		if ( !host.empty() && !path.empty() )
 		{
 			try {
 
+				mol::punk<ISSH> ssh;
+				HRESULT hr = ssh.createObject(CLSID_SSH,CLSCTX_ALL);
+				if (hr!=S_OK)
+					throw mol::ssh::Ex(0,"SSH substem not available!");
+
+				mol::punk<ISSHConnection> conn;
+				hr = ssh->Connect( mol::bstr(host), port, &conn);
+				if (hr!=S_OK)
+					throw mol::ssh::Ex(0,"failed to connect");
+
+				mol::punk<ISCP> scp;
+				hr = conn->get_SCP(&scp);
+				if (hr!=S_OK)
+					throw mol::ssh::Ex(0,"failed to open scp connection");
+
 				mol::ostringstream oss;
-				oss << _T("connecting: ") << mol::fromUTF8(host) << _T(":") << port;
+				oss << _T("writing: ") << mol::fromUTF8(host) << _T(":") << port;
 				statusBar()->status(oss.str());
 
-				mol::ssh::Session ssh;
-				if ( ssh.open( host,&(moe()->credentials),port) )
+				mol::ArrayBound ab((long)raw_bytes.size());
+				mol::SafeArray<VT_I1> sa(ab);
 				{
-					mol::ostringstream oss;
-					oss << _T("writing: ") << mol::fromUTF8(host) << _T(":") << port;
-					statusBar()->status(oss.str());
-
-					mol::scp::Session scp(ssh);
-					if (scp.open( mol::SSH_SCP_WRITE, mol::fromUTF8(parentdir)) )
-					{
-						if (scp.push_file( mol::fromUTF8(file), raw_bytes, 0 ))
-						{
-							sci->SavePoint();
-							return;
-						}
-					}
+					mol::SFAccess<BYTE> sf(sa);					
+					memcpy( sf(), raw_bytes.data(), raw_bytes.size() );
 				}
+				hr = scp->PutFile( sa, mol::bstr(mol::fromUTF8(p)));
+
+				//mol::scp::Session scp(ssh);
+				//scp.open( mol::SSH_SCP_WRITE, mol::fromUTF8(parentdir));
+				//if (scp.push_file( mol::fromUTF8(file), raw_bytes, 0 ))
+
+				if ( hr == S_OK )
+				{
+					sci->SavePoint();
+					return;
+				}
+			}
+			catch(mol::ssh::Ex& ex)
+			{
+				std::wstringstream oss;
+				oss << L"failed to save " << mol::towstring(path) << L" " << mol::towstring(ex.msg());
+				statusBar()->status(oss.str());
 			}
 			catch(...)
 			{
 			}
+			std::wstringstream oss;
+			oss << L"failed to save " << mol::towstring(path);
+			statusBar()->status(oss.str());
 			return;
 		}
 	}

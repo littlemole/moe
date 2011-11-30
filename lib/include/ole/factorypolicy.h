@@ -89,24 +89,19 @@ public:
 		if ( pIUOuter != 0 )
 			return CLASS_E_NOAGGREGATION;
 
-		if ( !singleton_ ) 
-		{
-			singleton_ = new mol::com_instance<T>;
-		}
-
-		singleton_->AddRef();
-		HRESULT hr = singleton_->QueryInterface(riid,ppVoid);
-		singleton_->Release();
+		singleton_.AddRef();
+		HRESULT hr = singleton_.QueryInterface(riid,ppVoid);
+		singleton_.Release();
 		return hr;
 	}
 
 protected:
 
-	static com_instance<T>*	  singleton_;
+	com_singleton<T>	  singleton_;
 };
 
-template<class T>
-com_instance<T>*	  ComSingletonPolicy<T>::singleton_ = 0;
+//template<class T>
+//com_singleton<T>	  ComSingletonPolicy<T>::singleton_;
 
 } // end namespace ole
 } // end namespace mole

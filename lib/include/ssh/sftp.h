@@ -24,6 +24,12 @@ class RemoteFile
 {
 public:
 
+	RemoteFile() {};
+	RemoteFile(	const mol::string& name, uint8_t type, 
+				uint32_t perms, uint32_t uid, uint32_t gid, 
+				uint32_t mtime, unsigned long long size, 
+				const mol::string& owner, const mol::string& group ); 
+
 	RemoteFile(sftp_attributes_struct* att);
 
 	mol::string getName();
@@ -44,15 +50,15 @@ public:
 
 private:
 
-	unsigned long long size_;
-	mol::string group_;
-	mol::string owner_;
 	mol::string name_;
-	uint32_t permissions_;
-	uint32_t gid_;
-	uint32_t uid_;
 	uint8_t type_;
+	uint32_t permissions_;
+	uint32_t uid_;
+	uint32_t gid_;
 	uint32_t mtime_;
+	unsigned long long size_;
+	mol::string owner_;
+	mol::string group_;
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -67,7 +73,7 @@ public:
 	~Session();
 	void dispose();
 
-	bool open(ssh_session_struct* session);
+	void open(ssh_session_struct* session);
 
 	bool mkdir(const std::wstring& dir,int mode);
 	bool rmdir(const std::wstring& dir);

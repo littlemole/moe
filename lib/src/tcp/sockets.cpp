@@ -255,6 +255,24 @@ const std::string Uri::getFullPath() const
   return oss.str();
 }
 
+const std::string  Uri::getParentDir() const
+{
+	const std::string& p = getPath();
+	std::string parentdir(p);
+
+	if ( !parentdir.empty() && parentdir[parentdir.size()-1] == '/' )
+	{
+		parentdir = parentdir.substr(0,parentdir.size()-1);
+	}
+
+	size_t pos = parentdir.find_last_of("/");
+	if ( pos != std::string::npos && pos != 0)
+	{
+		parentdir = parentdir.substr(0,pos);
+	}
+	return parentdir;
+}
+
 void Uri::setFullPath(const std::string& p )
 {   
 	size_t pos = p.find("#");
