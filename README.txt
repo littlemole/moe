@@ -60,7 +60,7 @@ e) build moe
 
 f) building moe extension (jre and net)
 
-	* moe must be installed in the version (win32/x64) matching the
+	* (should be obsolete requirement:) moe must be installed in the version (win32/x64) matching the
 	  build environment
         * ant must be in the path (for java)
 

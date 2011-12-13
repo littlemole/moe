@@ -84,8 +84,8 @@ unsigned long Init::thread_id_impl()
 Ex::Ex()
 {}
 
-Ex::Ex(const std::string& msg)
-	: msg_(msg)
+Ex::Ex(int c,const std::string& msg)
+	: code(c),msg_(msg)
 {}
 
 std::string Ex::msg()
@@ -160,13 +160,13 @@ bool PasswordCredentials::deleteHostCredentials(const std::string& host, int por
 //////////////////////////////////////////////////////////////////////////////
 
 Session::Session()
-	: port_(22),hostname_("localhost"),connected_(false), session_(0), cb_(0)
+	: port_(22),hostname_("localhost"),session_(0), cb_(0)
 {
 		
 }
 
 Session::Session(CredentialCallback* cb)
-	: port_(22),hostname_("localhost"),connected_(false), session_(0), cb_(cb)
+	: port_(22),hostname_("localhost"),session_(0), cb_(cb)
 {
 		
 }
@@ -178,10 +178,9 @@ Session::~Session()
 
 void Session::dispose()
 {
-	if ( connected_)
+	if ( is_connected())
 	{
 		ssh_disconnect(session_);
-		connected_ = false;
 	}
 	if ( session_)
 	{
@@ -215,12 +214,12 @@ void Session::hostname(const std::string& hostname)
 	hostname_ = hostname;
 }
 
-bool Session::open()
+void Session::open()
 {
-	return open(hostname_, cb_, port_);
+	open(hostname_, cb_, port_);
 }
 
-bool Session::open(const std::string& host, CredentialCallback* cb , int port )
+void Session::open(const std::string& host, CredentialCallback* cb , int port )
 { 
 		dispose();
 		session_ = ssh_new();
@@ -241,31 +240,31 @@ bool Session::open(const std::string& host, CredentialCallback* cb , int port )
 		int rc = ssh_connect(session_);
 		if (rc != SSH_OK)
 		{
-			return false;
+			throw Ex(rc,"connect failed");
 		}
 
-		if (!verify_knownhost())
+		try 
 		{
-			if(!cb_)
-				return false;
+			verify_knownhost();
+		}
+		catch(Ex& ex)
+		{
+			if ( ex.code == SSH_SERVER_NOT_KNOWN )
+			{			
+				if(!cb_)
+					throw Ex(SSH_SERVER_NOT_KNOWN,"server verification failed");
 
-			bool b = cb_->acceptHost(hostname_,port_,server_hash());
-			if ( !b)
-			{
-				dispose();
-				return false;
+				bool b = cb_->acceptHost(hostname_,port_,server_hash());
+				if ( !b)
+				{
+					dispose();
+					throw Ex(SSH_SERVER_NOT_KNOWN,"accept host failed");
+				}
+				rememberKnownHost();
 			}
-
-			rememberKnownHost();
 		}
 
-		if (!auth())
-		{
-			return false;
-		}
-
-		connected_ = true;
-		return true;
+		auth();
 }
 
 std::vector<int> Session::auth_methods()
@@ -293,11 +292,11 @@ std::vector<int> Session::auth_methods()
 	return v;
 }
 
-bool Session::auth()
+void Session::auth()
 {
 	bool b = auth_none();
 	if ( b )
-		return true;
+		return;
 
 	std::vector<int> v = auth_methods();
 	for ( size_t i = 0; i < v.size(); i++)
@@ -312,27 +311,27 @@ bool Session::auth()
 			{
 				b = auth_password();
 				if(b)
-					return true;
+					return;
 				break;
 			}
 			case SSH_AUTH_METHOD_PUBLICKEY :
 			{
 				b = auth_pubkey();
 				if(b)
-					return true;
+					return;
 				break;
 			}
 			case SSH_AUTH_METHOD_INTERACTIVE :
 			{
 				b = auth_kbdint();
 				if(b)
-					return true;
+					return;
 				break;
 			}
 
 		}
 	}
-	return false;
+	throw Ex(SSH_AUTH_DENIED,"authentication failed");
 }
 
 bool Session::auth_none()
@@ -347,7 +346,7 @@ bool Session::auth_none()
 		case SSH_AUTH_ERROR:
 		{
 			dispose();
-			throw Ex("SSH_AUTH_ERROR");
+			throw Ex(SSH_AUTH_ERROR,"SSH_AUTH_ERROR");
 		}
 		case SSH_AUTH_DENIED:
 		{
@@ -355,7 +354,7 @@ bool Session::auth_none()
 		}
 		case SSH_AUTH_PARTIAL:
 		{
-			throw Ex("SSH_AUTH_PARTIAL");
+			throw Ex(SSH_AUTH_PARTIAL,"SSH_AUTH_PARTIAL");
 		}
 	}
 	return false;
@@ -374,7 +373,7 @@ bool Session::auth_pubkey()
 		case SSH_AUTH_ERROR:
 		{
 			dispose();
-			throw Ex("SSH_AUTH_ERROR");
+			throw Ex(SSH_AUTH_ERROR,"SSH_AUTH_ERROR");
 		}
 		case SSH_AUTH_DENIED:
 		{
@@ -382,7 +381,7 @@ bool Session::auth_pubkey()
 		}
 		case SSH_AUTH_PARTIAL:
 		{
-			throw Ex("SSH_AUTH_PARTIAL");
+			throw Ex(SSH_AUTH_PARTIAL,"SSH_AUTH_PARTIAL");
 		}
 	}
 	dispose();
@@ -420,7 +419,7 @@ bool Session::auth_password()
 		{
 			cb_->deleteHostCredentials(hostname_,port_);
 			dispose();
-			throw Ex("SSH_AUTH_ERROR");
+			throw Ex(SSH_AUTH_ERROR,"SSH_AUTH_ERROR");
 		}
 		case SSH_AUTH_DENIED:
 		{
@@ -429,7 +428,7 @@ bool Session::auth_password()
 		}
 		case SSH_AUTH_PARTIAL:
 		{
-			throw Ex("SSH_AUTH_PARTIAL");
+			throw Ex(SSH_AUTH_PARTIAL,"SSH_AUTH_PARTIAL");
 		}
 	}
 	dispose();
@@ -453,7 +452,7 @@ bool Session::auth_password(const char* user, const char* pwd)
 			if ( cb_)
 				cb_->deleteHostCredentials(hostname_,port_);
 			dispose();
-			throw Ex("SSH_AUTH_ERROR");
+			throw Ex(SSH_AUTH_ERROR,"SSH_AUTH_ERROR");
 		}
 		case SSH_AUTH_DENIED:
 		{
@@ -464,7 +463,7 @@ bool Session::auth_password(const char* user, const char* pwd)
 		}
 		case SSH_AUTH_PARTIAL:
 		{
-			throw Ex("SSH_AUTH_PARTIAL");
+			throw Ex(SSH_AUTH_PARTIAL,"SSH_AUTH_PARTIAL");
 		}
 	}
 	dispose();
@@ -500,7 +499,7 @@ bool Session::auth_kbdint()
 				{
 					if ( value )
 						free(value);
-					throw Ex("SSH_AUTH_ERROR");
+					throw Ex(SSH_AUTH_ERROR,"SSH_AUTH_ERROR");
 				}
 				if ( value )
 					free(value);
@@ -511,20 +510,47 @@ bool Session::auth_kbdint()
 	return rc == 0;
 }
 
+bool Session::is_connected()
+{
+	if ( is_error() )
+		return false;
+
+	return ssh_is_connected(session_) == 1;
+}
+
+bool Session::is_error()
+{
+	if ( !session_ )
+		return true;
+
+	int err = ssh_get_error_code(session_);
+	if ( err != 0 )
+	{
+		ODBGS1(L"SSH ERR:",err);
+	}
+	return err != SSH_NO_ERROR;
+}
 
 std::string Session::exec_remote(const std::string& cmd)
 {
 	ssh_channel channel;			
 
+	if ( !is_connected() ) {
+		open();
+		if (!is_connected() ) {
+			return "";
+		}
+	}
+
 	channel = ssh_channel_new(session_);
 	if (channel == NULL)
-		throw Ex("SSH_ERROR new channel");
+		throw Ex(0,"SSH_ERROR new channel");
 
 	int rc = ssh_channel_open_session(channel);
 	if (rc != SSH_OK)
 	{
 		ssh_channel_free(channel);
-		throw Ex("SSH_ERROR open channel");
+		throw Ex(0,"SSH_ERROR open channel");
 	}
 
 	rc = ssh_channel_request_exec( channel, cmd.c_str() );
@@ -532,7 +558,7 @@ std::string Session::exec_remote(const std::string& cmd)
 	{
 		ssh_channel_close(channel);
 		ssh_channel_free(channel);
-		throw Ex("SSH_ERROR exec channel");
+		throw Ex(0,"SSH_ERROR exec channel");
 	}
 
 	std::ostringstream oss;
@@ -548,7 +574,7 @@ std::string Session::exec_remote(const std::string& cmd)
 	{
 		ssh_channel_close(channel);
 		ssh_channel_free(channel);
-		throw Ex("SSH_ERROR read channel");
+		throw Ex(nbytes,"SSH_ERROR read channel");
 	}
 
 	ssh_channel_send_eof(channel);
@@ -560,11 +586,18 @@ std::string Session::exec_remote(const std::string& cmd)
 
 void Session::send_data(const std::string& cmd, const std::string& data) 
 {
+	if ( !is_connected() ) {
+		open();
+		if (!is_connected() ) {
+			return;
+		}
+	}
+
 	ssh_channel channel = ssh_channel_new(session_);;
   	if (channel == NULL) 
 	{
 		dispose();
-		return;
+		throw Ex(0,"SSH_ERROR new channel");
 	}
 
 	int rc = ssh_channel_open_session(channel);
@@ -572,7 +605,7 @@ void Session::send_data(const std::string& cmd, const std::string& data)
 	{
 		ssh_channel_close(channel);
 		dispose();
- 		return;
+ 		throw Ex(0,"SSH_ERROR open channel");
 	}
 
 	rc = ssh_channel_request_exec(channel, cmd.c_str() );
@@ -580,7 +613,7 @@ void Session::send_data(const std::string& cmd, const std::string& data)
 	{			 
 		ssh_channel_close(channel);
 		dispose();
-		return;
+		throw Ex(rc,"SSH_ERROR exec remote");
 	}
 
 	rc = ssh_channel_write( channel, data.c_str(), (uint32_t)data.size() );
@@ -588,20 +621,20 @@ void Session::send_data(const std::string& cmd, const std::string& data)
 	{
   		ssh_channel_close(channel);
 		dispose();
-		throw Ex("error writing channel");
+		throw Ex(rc,"error writing channel");
    	}
 
 	ssh_channel_send_eof(channel);
 }
 
-bool Session::verify_knownhost()
+void Session::verify_knownhost()
 {
 	unsigned char *hash = NULL;
 	char *hexa;
 
 	int hlen = ssh_get_pubkey_hash(session_, &hash);
 	if (hlen < 0)
-		throw Ex("unable to get pubkey hash");
+		throw Ex(SSH_AUTH_ERROR,"unable to get pubkey hash");
 
 	hexa = ssh_get_hexa(hash, hlen);
 
@@ -613,45 +646,45 @@ bool Session::verify_knownhost()
 	int state = ssh_is_server_known(session_);
 	switch (state)
 	{
-	case SSH_SERVER_KNOWN_OK:
-	{
-		return true;
-	}
-	case SSH_SERVER_KNOWN_CHANGED:
-	{
-		dispose();
-		throw Ex("Host key for server changed:");
-	}
-	case SSH_SERVER_FOUND_OTHER:
-	{
-		dispose();
-		throw Ex("The host key for this server was not found but an other ype of key exists");
-	}
-	case SSH_SERVER_FILE_NOT_FOUND:
-	{
-	}
-	case SSH_SERVER_NOT_KNOWN:
-	{
-		return false;
-	}
+		case SSH_SERVER_KNOWN_OK:
+		{
+			break;
+		}
+		case SSH_SERVER_KNOWN_CHANGED:
+		{
+			dispose();
+			throw Ex(SSH_SERVER_KNOWN_CHANGED,"Host key for server changed:");
+		}
+		case SSH_SERVER_FOUND_OTHER:
+		{
+			dispose();
+			throw Ex(SSH_SERVER_FOUND_OTHER,"The host key for this server was not found but an other ype of key exists");
+		}
+		case SSH_SERVER_FILE_NOT_FOUND:
+		{
+			dispose();
+			throw Ex(SSH_SERVER_FILE_NOT_FOUND,"file not found");
+		}
+		case SSH_SERVER_NOT_KNOWN:
+		{
+			throw Ex(SSH_SERVER_NOT_KNOWN,"file not found");
+		}
 
-	case SSH_SERVER_ERROR:
-	{
-		std::stringstream oss;
-		oss << "Error " << ssh_get_error(session_) << std::endl;
-		dispose();
-		throw Ex(oss.str());
-	}
-	}
-	  
-	return false;
+		case SSH_SERVER_ERROR:
+		{
+			std::stringstream oss;
+			oss << "Error " << ssh_get_error(session_) << std::endl;
+			dispose();
+			throw Ex(SSH_SERVER_ERROR,oss.str());
+		}
+	}	  
 }
 
 void Session::rememberKnownHost()
 {
 		if (ssh_write_knownhost(session_) < 0)
 		{
-			throw Ex("error writing to known hosts file");
+			throw Ex(0,"error writing to known hosts file");
 		}
 }
 

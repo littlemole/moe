@@ -57,10 +57,10 @@ class Ex
 public:
 
 	Ex();
-	Ex(const std::string& msg);
+	Ex(int code,const std::string& msg);
 
 	std::string msg();
-
+	int code;
 private:
 	std::string msg_;
 };
@@ -121,12 +121,12 @@ public:
 	std::string hostname();
 	void hostname(const std::string& hostname);
 
-	bool open();
-	bool open(const std::string& host, CredentialCallback* cb = 0, int port = 0);
+	void open();
+	void open(const std::string& host, CredentialCallback* cb = 0, int port = 0);
 
 	std::vector<int> auth_methods();
 
-	bool auth();
+	void auth();
 	bool auth_none();
 	bool auth_pubkey();
 	bool auth_password();
@@ -135,8 +135,10 @@ public:
 
 	std::string exec_remote(const std::string& cmd);
 	void send_data(const std::string& cmd, const std::string& data);
+	bool is_connected();
+	bool is_error();
 
-	bool verify_knownhost();
+	void verify_knownhost();
 	void rememberKnownHost();
 
 	std::string getServerBanner();
@@ -160,7 +162,6 @@ private:
 
 	int port_;
 	std::string hostname_;
-	bool connected_;
 	ssh_session_struct* session_;
 	std::string pubkey_hash_;
 	CredentialCallback* cb_;

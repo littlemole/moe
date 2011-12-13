@@ -181,9 +181,7 @@ HRESULT __stdcall MoeChildView::Hide()
 
 HRESULT __stdcall MoeChildView::Close()
 {
-	//wnd_->postMessage(WM_CLOSE,0,0);
 	LRESULT r = wnd_->sendMessage(WM_CLOSE,0,0);
-
 	return r == 0 ? S_OK : S_FALSE;
 }
 

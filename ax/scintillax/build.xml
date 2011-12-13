@@ -19,10 +19,10 @@
 	  <AdditionalIncludeDirectories>..\..\ax;..\..\3dParty;.;..;.\src;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 	</ClCompile>
     <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">..\..\3dParty\scintilla\bin\static\debug\SciLexer.lib;..\..\\3dParty\scintilla\bin\static\debug\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
-	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">..\..\3dParty\scintilla\bin\static\SciLexer.lib;..\..\\3dParty\scintilla\bin\static\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
-	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\3dParty\scintilla\bin\static64\debug\SciLexer.lib;..\..\\3dParty\scintilla\bin\static64\debug\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
-	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">..\..\3dParty\scintilla\bin\static64\SciLexer.lib;..\..\\3dParty\scintilla\bin\static64\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">..\..\lib\src\ssh\uni_debug\ssh.lib;..\..\lib\src\tcp\uni_debug\tcp.lib;Crypt32.lib;Ws2_32.lib;..\..\3dParty\scintilla\bin\static\debug\SciLexer.lib;..\..\\3dParty\scintilla\bin\static\debug\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">..\..\lib\src\ssh\uni_release\ssh.lib;..\..\lib\src\tcp\uni_release\tcp.lib;Crypt32.lib;Ws2_32.lib;..\..\3dParty\scintilla\bin\static\SciLexer.lib;..\..\\3dParty\scintilla\bin\static\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\lib\src\ssh\x64\uni_debug\ssh.lib;..\..\lib\src\tcp\x64\uni_debug\tcp.lib;Crypt32.lib;Ws2_32.lib;..\..\3dParty\scintilla\bin\static64\debug\SciLexer.lib;..\..\\3dParty\scintilla\bin\static64\debug\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">..\..\lib\src\ssh\x64\uni_release\ssh.lib;..\..\lib\src\tcp\x64\uni_release\tcp.lib;Crypt32.lib;Ws2_32.lib;..\..\3dParty\scintilla\bin\static64\SciLexer.lib;..\..\\3dParty\scintilla\bin\static64\Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <PreprocessorDefinitions>STATIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>  
     </Link>
   </ItemDefinitionGroup>

@@ -17,6 +17,13 @@
 #include "Annotation.h"
 #include "Line.h"
 
+#include "tcp/sockets.h"
+#include "ssh/ssh.h"
+#include "ssh/scp.h"
+#include "ssh/sftp.h"
+
+#include "../ssh/ssh_h.h"
+
 #include "ScintillAx_dispid.h"
 
 void init_ribbon_ui(mol::win::WndProc*)
@@ -455,9 +462,10 @@ HRESULT __stdcall ScintillAx::Load( BSTR file )
 		return S_FALSE;
 
 	mol::string p(mol::toString(file));
-	if ( mol::Path::exists(p) )
+	bool isSSH = p.substr(0,6) == _T("ssh://") || p.substr(0,10) == _T("moe-ssh://");
+	if ( mol::Path::exists(p) || isSSH )
 	{
-		if ( !mol::Path::isDir(p) )
+		if ( !mol::Path::isDir(p) || isSSH )
 		{
 			mol::string ext = mol::Path::ext(p);
 			if ( ext.size() > 0 )
@@ -496,9 +504,10 @@ HRESULT __stdcall ScintillAx::LoadEncoding( BSTR file, long enc )
 	if (file)
 	{
 		mol::string p(mol::toString(file));
-		if ( mol::Path::exists(p) )
+		bool isSSH = p.substr(0,6) == _T("ssh://") || p.substr(0,10) == _T("moe-ssh://");
+		if ( mol::Path::exists(p) || isSSH )
 		{
-			if ( !mol::Path::isDir(p) )
+			if ( !mol::Path::isDir(p) || isSSH )
 			{
 				mol::string ext = mol::Path::ext(p);
 				if ( ext.size() > 0 )
@@ -512,7 +521,7 @@ HRESULT __stdcall ScintillAx::LoadEncoding( BSTR file, long enc )
 				{
 					if ( load(p, ext, enc ) )
 					{
-						props_->put_Encoding(enc);
+						//props_->put_Encoding(enc); //dont!
 						props_->put_Filename(file);
 						this->SavePoint();
 						return S_OK; 
@@ -906,10 +915,111 @@ bool ScintillAx::saveAdminCOM(const mol::string& location)
 //
 //////////////////////////////////////////////////////////////////////////////
 
+bool ScintillAx::saveSSH(const mol::string& location)
+{
+	mol::Uri uri(mol::toUTF8(location));
+	std::string host = uri.getHost();
+	int port = uri.getPort();
+	std::string p = uri.getPath();
+
+	long e;
+	props_->get_Encoding(&e);
+
+	long eol;
+	props_->get_SysType(&eol);
+
+	VARIANT_BOOL vb;
+	props_->get_WriteBOM(&vb);
+
+	std::ostringstream of;
+	switch ( e )
+	{
+		case SCINTILLA_ENCODING_UTF16 :
+		{
+			std::string u;
+			u = edit()->get_Text();
+
+			std::wstring ws = mol::fromUTF8(u);	
+			if ( vb == VARIANT_TRUE )
+				of.write((const char*)mol::FileEncoding::UTF16LE_BOM,2);
+
+			of.write( (char*)(ws.c_str()), ws.size()*2 );
+			break;
+		}
+		case SCINTILLA_ENCODING_UTF8 :
+		{
+			std::string u;
+			u = edit()->get_Text();
+
+			if ( eol == SCINTILLA_SYSTYPE_UNIX )
+				u = mol::dos2unix(u);
+
+			if ( vb == VARIANT_TRUE )
+				of.write((const char*)mol::FileEncoding::UTF8_BOM,3);
+
+			of.write( (char*)(u.c_str()), u.size() );
+			break;
+		}
+		default :
+		{
+			std::string u;
+			u = edit()->get_Text();
+			if ( eol == SCINTILLA_SYSTYPE_UNIX )
+				u = mol::dos2unix(u);
+
+			std::string s = mol::tostring(mol::fromUTF8(u,e),e);				
+			of.write( (char*)(s.c_str()), s.size() );
+			break;
+		}
+	}
+
+	std::string content = of.str();
+
+	if ( !host.empty() && !location.empty() )
+	{
+
+			mol::punk<ISSH> ssh;
+			HRESULT hr = ssh.createObject(CLSID_SSH);
+			if (hr!=S_OK)
+				return false;
+
+			::CoAllowSetForegroundWindow(ssh,0);
+
+			mol::punk<ISSHConnection> conn;
+			hr = ssh->Connect( mol::bstr(mol::fromUTF8(uri.getHost())),uri.getPort(),&conn);
+			if (hr!=S_OK)
+				return false;
+
+			mol::punk<ISCP> scp;
+			hr = conn->get_SCP(&scp);
+			if (hr!=S_OK)
+				return false;
+
+			mol::ArrayBound ab((long)content.size());
+			mol::SafeArray<VT_I1> sa(ab);
+			{
+				mol::SFAccess<BYTE> sf(sa);
+				memcpy(sf(),content.data(),content.size());
+			}
+			hr = scp->PutFile(sa,mol::bstr(p));
+			if (hr!=S_OK)
+				return false;
+
+			return true;
+	}
+    return false;
+}
+
+
+
 bool ScintillAx::save(const mol::string& location)
 {
-	if ( location.size() > 0 )
+	if ( !location.empty() )
 	{
+		if ( location.substr(0,6) == _T("ssh://") || location.substr(0,10) == _T("moe-ssh://") ) 
+		{
+			return saveSSH(location);
+		}
 		std::ofstream of;
 		of.open(location.c_str(),std::ios::binary);
 		if ( !of.good() )
@@ -1210,9 +1320,103 @@ bool ScintillAx::loadAdminCOM(const mol::string& p, const mol::string& ext,  lon
 //
 //////////////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////////////
+
+bool ScintillAx::openSSH(const mol::string& path,const mol::string& ext, long enc)
+{
+	mol::Uri uri(mol::toUTF8(path));
+	std::string host = uri.getHost();
+	int port = uri.getPort();
+	std::string p = uri.getPath();
+
+	if ( !host.empty() && !path.empty() )
+	{
+
+			mol::punk<ISSH> ssh;
+			HRESULT hr = ssh.createObject(CLSID_SSH);
+			if (hr!=S_OK)
+				return 0;
+
+			::CoAllowSetForegroundWindow(ssh,0);
+
+			mol::punk<ISSHConnection> conn;
+			hr = ssh->Connect( mol::bstr(mol::fromUTF8(uri.getHost())),uri.getPort(),&conn);
+			if (hr!=S_OK)
+				return 0;
+
+			mol::punk<ISFTP> sftp;
+			hr = conn->get_SFTP(&sftp);
+			if (hr!=S_OK)
+				return 0;
+
+
+			mol::punk<IRemoteFile> rf;
+			hr = sftp->Stat( mol::bstr(mol::fromUTF8(p)), &rf);
+			if (hr!=S_OK)
+				return 0;
+
+			VARIANT_BOOL vb;
+			hr = rf->get_IsDir(&vb);
+			if (hr!=S_OK)
+				return 0;
+
+			if ( vb == VARIANT_TRUE )
+			{
+				return 0;
+			}
+
+			mol::punk<ISCP> scp;
+			hr = conn->get_SCP(&scp);
+			if (hr!=S_OK)
+				return 0;
+
+			SAFEARRAY* sa;
+
+			hr = scp->GetFile( mol::bstr(mol::fromUTF8(p)),&sa);
+			if (hr!=S_OK)
+				return 0;
+
+			std::string content;
+			{
+				mol::SFAccess<BYTE> sf(sa);
+				content = std::string ((char*)sf(),sf.size());
+			}
+			::SafeArrayDestroy(sa);
+
+			mol::FileEncoding fe;
+			int e = fe.investigate(content);
+
+			std::string utf8_bytes = fe.convertToUTF8( content, e );
+
+			if ( fe.isBinary() )
+			{
+				if ( IDCANCEL == ::MessageBox(*this,_T("this looks like a BINARY\r\nopen anyway?"),mol::toString(p).c_str(),MB_OKCANCEL|MB_ICONQUESTION ) )
+					return false;
+			}
+
+			props_->put_SysType(  fe.eolMode() );
+			props_->put_Encoding( fe.codePage() );
+			props_->put_WriteBOM( fe.hasBOM() ? VARIANT_TRUE : VARIANT_FALSE );
+
+			edit()->setText(utf8_bytes);
+			edit()->mode(path,ext);
+			edit()->setSavePoint();
+			setDirty(FALSE);
+			return true;			
+	}
+	return false;
+}
+
+
+
 bool ScintillAx::load(const mol::string& p, const mol::string& ext,  long enc)
 {
 	edit()->clearAnnotations();
+
+	if ( p.substr(0,6) == _T("ssh://") || p.substr(0,10) == _T("moe-ssh://") ) 
+	{
+		return openSSH(p,ext,enc);
+	}
 
 	std::stringstream is;
 	
@@ -1267,7 +1471,7 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  long enc)
 	props_->put_Encoding( fe.codePage() );
 	props_->put_WriteBOM( fe.hasBOM() ? VARIANT_TRUE : VARIANT_FALSE );
 
-	edit()->setText(utf8_bytes);
+	edit()->setText(mol::unix2dos(utf8_bytes));
 	edit()->mode(p,ext);
 	edit()->setSavePoint();
 	setDirty(FALSE);

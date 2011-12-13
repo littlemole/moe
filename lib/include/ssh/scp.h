@@ -18,8 +18,8 @@ public:
 	~Session();
 	void dispose();
 
-	bool open( int mode, const std::wstring& path );
-	bool open( ssh_session_struct* session, int mode, const std::wstring& path );
+	void open( int mode, const std::wstring& path );
+	void open( ssh_session_struct* session, int mode, const std::wstring& path );
 	bool enter_dir(  const std::wstring& dir, int mode );
 	bool leave_dir();
 

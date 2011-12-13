@@ -1,0 +1,7 @@
+LIBRARY	"ssh"
+EXPORTS
+	DllCanUnloadNow		PRIVATE
+	DllGetClassObject	PRIVATE
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer	PRIVATE
+	DllMain				PRIVATE

@@ -69,11 +69,12 @@ class Session
 public:
 
 	Session();
-	Session(ssh_session_struct* session);
+	Session(mol::ssh::Session& session);
 	~Session();
 	void dispose();
 
-	void open(ssh_session_struct* session);
+	void open(mol::ssh::Session& session);
+	void open();
 
 	bool mkdir(const std::wstring& dir,int mode);
 	bool rmdir(const std::wstring& dir);
@@ -95,7 +96,12 @@ public:
 	}
 
 private:
+
+	bool is_connected();
+	bool connect();
+
 	sftp_session_struct* sftp_;
+	mol::ssh::Session* ssh_;
 };
 
 /////////////////////////////////////////////////////////////////////////

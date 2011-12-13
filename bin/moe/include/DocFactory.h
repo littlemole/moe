@@ -7,6 +7,31 @@
 // the document collection automation impl
 /////////////////////////////////////////////////////////////////////////////////////////////
 
+class IMoeDocumentFactory
+{
+public:
+
+	IMoeDocumentFactory() {}
+	virtual ~IMoeDocumentFactory()
+	{}
+
+	virtual mol::MdiChild* openDocument( const mol::string& dir) = 0;
+
+private:
+
+};
+
+
+class MoeDocumentFactory
+{
+public:
+
+	static IMoeDocumentFactory* getOpenDocumentFactory( const mol::string& dir, MOE_DOCTYPE type, long enc, bool readOnly);
+};
+
+
+
+
 class DocFactory 
 {
 public:

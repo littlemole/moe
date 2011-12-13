@@ -63,6 +63,18 @@ public:
 };
 
 
+class ScpDirQueueRenameAction : public ScpDirQueueAction
+{
+public:
+	ScpDirQueueRenameAction( const mol::string& oldp, const mol::string& newp,ScpListCtrl* dl );
+
+	virtual void operator()();
+
+	mol::string		    oldpath;
+	mol::string		    newpath;
+	ScpListCtrl*		scpList;
+};
+
 class ScpCreateDirQueueAction : public ScpDirQueueAction
 {
 public:
@@ -85,6 +97,19 @@ public:
 	ScpListCtrl*		scpList;
 };
 
+
+
+class ScpPushFileQueueAction : public ScpDirQueueAction
+{
+public:
+	ScpPushFileQueueAction( const mol::string& p, const std::vector<mol::string>& v, ScpListCtrl* dl );
+
+	virtual void operator()();
+
+	mol::string		    path;
+	std::vector<mol::string> v;
+	ScpListCtrl*		scpList;
+};
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -235,8 +260,8 @@ protected:
 
 	bool  doHitTest();
 
-	/*mol::ssh::Session&*/ //bool connect( const mol::Uri& uri);
-	/*mol::sftp::Session&*/ //bool open(const mol::Uri& uri);
+	//bool connect();
+
 
 //    virtual int compare(LPARAM lParam1, LPARAM lParam2);
 //    static int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
@@ -252,6 +277,7 @@ protected:
 
 	} list_;
 
+	
 	class Credentials : public mol::ssh::CredentialCallback
 	{
 		public: 
@@ -264,6 +290,7 @@ protected:
 		virtual bool deleteHostCredentials(const std::string& host, int port);
 
 	} credentials_;
+	
 
     class ShellListCtrl_Drop : public mol::DropTarget
     {
@@ -277,21 +304,19 @@ protected:
 			ScpListCtrl* list_;
     };
 	
-	mol::punk<ShellListCtrl_Drop> Drop;
-	mol::punk<IScpCredentialProvider> provider_;
+	mol::punk<ShellListCtrl_Drop>		Drop;
+	mol::punk<IScpCredentialProvider>	provider_;
 
-	mol::Uri				uri_;
-    mol::string				path_;
+	mol::Uri							uri_;
+    mol::string							path_;
 
-	mol::punk<ISSH> ssh_;
-	//mol::punk<ISSHConnection>			ssh_;
-	//mol::ssh::Session		ssh_;
-	//mol::sftp::Session		sftp_;
+	mol::punk<ISSH>						ssh_;
+	//mol::punk<ISSHConnection>			conn_;
 
-	OLE_COLOR				bgCol_;
-	OLE_COLOR				foreCol_;
-	mol::Menu				listMenu_;
-	RECT					clientRect_;
+	OLE_COLOR							bgCol_;
+	OLE_COLOR							foreCol_;
+	mol::Menu							listMenu_;
+	RECT								clientRect_;
 
 	class ThreadStartPolicy 
 	{
@@ -304,12 +329,19 @@ protected:
 	public:
 		void operator()(){ ::CoUninitialize(); };
 	};
-	mol::ThreadQueue<ScpDirQueueAction,true,ThreadStartPolicy,ThreadShutdownPolicy>			queue_;
 
 	DWORD gitCookie_;
 	DWORD gitSSHCookie_;
+	//DWORD gitConnectionCookie_;
 
+	mol::ThreadQueue<
+			ScpDirQueueAction,
+			true,
+			ThreadStartPolicy,
+			ThreadShutdownPolicy>			
+	queue_;
 
+	bool ScpListCtrl::connect(DWORD cookie, ISSHConnection** con );
 };
 
 ///////////////////////////////////////////////////////////////////////////////

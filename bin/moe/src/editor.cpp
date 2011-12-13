@@ -8,16 +8,11 @@
 #include "ribbonres.h"
 #include "ThreadScript.h"
 #include "ActivDbg.h"
-#include "tcp/sockets.h"
-#include "ssh/ssh.h"
-#include "ssh/scp.h"
-#include "ssh/sftp.h"
 
 using namespace mol::win;
 using namespace mol::ole;
 using namespace mol::io;
 
-//mol::TCHAR OutFilesFilter[]   = _T("ANSI\0*.*\0UTF-8\0*.*\0UTF-16 (LE)\0*.*\0\0");
 mol::TCHAR OutFilesFilter[]   = _T("all files (*.*)\0*.*\0\0");
 
 //////////////////////////////////////////////////////////////////////////////
@@ -34,8 +29,6 @@ Editor::Editor()
 	wndClass().setIcon(moe()->icon); 
 	wndClass().hIconSm(moe()->icon); 
 	saving_ = false;
-
-	//monitor_.events += mol::events::event_handler( &Editor::OnFileChangeNotify, this );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -53,7 +46,9 @@ Editor::Instance* Editor::CreateInstance(const mol::string& file, long enc, bool
 
 	mol::string p(file);
 	if ( mol::Path::exists(p) && mol::Path::isDir(p) )
+	{
 		return 0;
+	}
 
 	statusBar()->status(50);
 
@@ -100,7 +95,7 @@ bool Editor::initialize(const mol::string& p, long enc, bool readOnly)
 	moe()->moeConfig->InitializeEditorFromPreferences( (IMoeDocument*)this );
 
 	// if file exists, load
-	if ( mol::Path::exists(p) )
+	if ( mol::Path::exists(p) || (p.substr(0,6) == _T("ssh://") || p.substr(0,10) == _T("moe-ssh://")) )
 	{
 		if ( enc != -1 )
 		{
@@ -231,8 +226,7 @@ void Editor::OnMDIActivate(WPARAM unused, HWND activated)
 
 		tab()->select( *this );
 		updateUI();
-		this->sci->SetFocus();
-		//setFocus();
+		sci->SetFocus();
 
 		checkModifiedOnDisk();
 	}
@@ -422,13 +416,6 @@ void Editor::OnReload()
 		return ;
 	}
 
-	if ( mol::toString(filename).substr(0,6) == _T("ssh://") || mol::toString(filename).substr(0,6) == _T("moe-ssh://") )
-	{
-		return ;
-	}
-
-	lastWriteTime_ = getLastWriteTime(filename.toString());
-
 	if ( S_OK != props_->get_ReadOnly(&vb) )
 	{
 		return ;
@@ -438,12 +425,37 @@ void Editor::OnReload()
 	{
 		return ;
 	}
+
+	if ( mol::toString(filename).substr(0,6) == _T("ssh://") || mol::toString(filename).substr(0,6) == _T("moe-ssh://") )
+	{
+		sci->LoadEncoding(filename,CP_UTF8);
+		props_->put_ReadOnly(vb);
+		statusBar()->status(filename.toString());
+
+		LONG len = 0;
+		text_->get_Length(&len);
+
+		position_->put_Anchor((long)len);
+		position_->put_Caret((long)len);
+		position_->ScrollIntoView();
+		return ;
+	}
+
+	lastWriteTime_ = getLastWriteTime(filename.toString());
+
 	if ( t == SCINTILLA_ENCODING_UTF8 )
 	{
 
 		sci->LoadEncoding(filename,CP_UTF8);
 		props_->put_ReadOnly(vb);
 		statusBar()->status(filename.toString());
+
+		LONG len = 0;
+		text_->get_Length(&len);
+
+		position_->put_Anchor((long)len);
+		position_->put_Caret((long)len);
+		position_->ScrollIntoView();
 		return ;
 	}
 	sci->Load(filename);
@@ -595,53 +607,6 @@ void Editor::OnUserForm(int code, int id, HWND ctrl)
 		case 1 : file = v[0];
 		default : ;
 	}
-
-	/*
-	size_t p = path.find( _T(","));
-	if ( p != mol::string::npos )
-	{
-		file = path.substr(0,p);
-		size_t pos = 0;
-		if ( (pos = path.find(_T(","),p+1)) != mol::string::npos )
-		{
-			l = l + atoi( mol::tostring( path.substr(p+1,pos-p-1) ).c_str() );
-			p = pos;
-			if ( (pos = path.find(_T(","),p+1)) != mol::string::npos )
-			{
-				t = t + atoi( mol::tostring( path.substr(p+1,pos-p-1) ).c_str() );
-				p = pos;
-				if ( (pos = path.find(_T(","),p+1)) != mol::string::npos )
-				{
-					if ( pos-p-1 > 0)
-						w = atoi( mol::tostring( path.substr(p+1,pos-p-1) ).c_str() );
-					p = pos;
-					if ( (pos = path.find(_T(","),p+1)) != mol::string::npos )
-					{
-						if ( pos-p-1 > 0)
-							h = atoi( mol::tostring( path.substr(p+1,pos-p-1) ).c_str() );
-						o = atoi( mol::tostring( path.substr(pos+1) ).c_str() );
-					}
-					else
-					{
-						h = h + atoi( mol::tostring( path.substr(p+1) ).c_str() );
-					}
-				}
-				else
-				{
-					w = w + atoi( mol::tostring( path.substr(p+1) ).c_str() );
-				}
-			}
-			else
-			{
-				t = t + atoi( mol::tostring( path.substr(p+1) ).c_str() );
-			}
-		}
-		else
-		{
-			l = l + atoi( mol::tostring( path.substr(p+1) ).c_str() );
-		}
-	}
-	*/
 
 	moe()->moeScript->ShowHtmlForm( mol::bstr(file), l, t, w, h, o );
 }
@@ -805,9 +770,6 @@ void Editor::OnSettings()
 	mol::punk<IUnknown> unk(oleObject);
 	if ( !unk )
 		return;
-
-	//sci->ShowProperties();
-
 	
 	CAUUID pages;
 	mol::punk<ISpecifyPropertyPages> spp(unk);
@@ -965,138 +927,18 @@ void Editor::OnSave()
 
 	mol::string path = mol::toString(filename);
 
-	if ( path.substr(0,6) == _T("ssh://") || path.substr(0,6) == _T("moe-ssh://") )
-	{
-		mol::bstr txt;
-		text_->GetText(&txt);
-
-		std::wstring content = mol::towstring(txt);
-		std::string raw_bytes;
-
-		long encoding = CP_UTF8;
-		props_->get_Encoding(&encoding);
-		long eol = 0;
-		props_->get_SysType(&eol);
-		VARIANT_BOOL vbBOM;
-		props_->get_WriteBOM(&vbBOM);
-
-		if ( eol == SCINTILLA_SYSTYPE_WIN32 )
-		{
-			content = mol::unix2dos(content);
-		}
-		else
-		{
-			content = mol::dos2unix(content);
-		}
-
-		if ( encoding == CP_WINUNICODE )
-		{
-			raw_bytes = std::string( (char*)(content.c_str()), content.size()*sizeof(wchar_t));
-
-			if ( vbBOM == VARIANT_TRUE )
-			{
-				raw_bytes = std::string( (char*)mol::FileEncoding::UTF16LE_BOM,2) + raw_bytes;
-			}
-		}
-		else
-		if ( encoding == CP_WINUNICODE )
-		{
-			raw_bytes = std::string( mol::toUTF8(content) );
-			if ( vbBOM == VARIANT_TRUE )
-			{
-				raw_bytes = std::string( (char*)mol::FileEncoding::UTF8_BOM,3) + raw_bytes;
-			}
-		}
-		else
-		{
-			raw_bytes = mol::tostring( content, encoding );
-		}
-
-		mol::Uri uri( mol::toUTF8(path) );
-		std::string user = uri.getUser();
-		std::string pwd= uri.getPwd();
-		std::string host = uri.getHost();
-		int port = uri.getPort();
-		std::string p = uri.getPath();
-
-/*		size_t pos = p.find_last_of("/");
-		std::string parentdir(p);
-		std::string file(p);
-		if ( pos != std::string::npos )
-		{
-			parentdir = p.substr(0,pos);
-			file = p.substr(pos+1);
-		}
-		*/
-		if ( !host.empty() && !path.empty() )
-		{
-			try {
-
-				mol::punk<ISSH> ssh;
-				HRESULT hr = ssh.createObject(CLSID_SSH,CLSCTX_ALL);
-				if (hr!=S_OK)
-					throw mol::ssh::Ex(0,"SSH substem not available!");
-
-				mol::punk<ISSHConnection> conn;
-				hr = ssh->Connect( mol::bstr(host), port, &conn);
-				if (hr!=S_OK)
-					throw mol::ssh::Ex(0,"failed to connect");
-
-				mol::punk<ISCP> scp;
-				hr = conn->get_SCP(&scp);
-				if (hr!=S_OK)
-					throw mol::ssh::Ex(0,"failed to open scp connection");
-
-				mol::ostringstream oss;
-				oss << _T("writing: ") << mol::fromUTF8(host) << _T(":") << port;
-				statusBar()->status(oss.str());
-
-				mol::ArrayBound ab((long)raw_bytes.size());
-				mol::SafeArray<VT_I1> sa(ab);
-				{
-					mol::SFAccess<BYTE> sf(sa);					
-					memcpy( sf(), raw_bytes.data(), raw_bytes.size() );
-				}
-				hr = scp->PutFile( sa, mol::bstr(mol::fromUTF8(p)));
-
-				//mol::scp::Session scp(ssh);
-				//scp.open( mol::SSH_SCP_WRITE, mol::fromUTF8(parentdir));
-				//if (scp.push_file( mol::fromUTF8(file), raw_bytes, 0 ))
-
-				if ( hr == S_OK )
-				{
-					sci->SavePoint();
-					return;
-				}
-			}
-			catch(mol::ssh::Ex& ex)
-			{
-				std::wstringstream oss;
-				oss << L"failed to save " << mol::towstring(path) << L" " << mol::towstring(ex.msg());
-				statusBar()->status(oss.str());
-			}
-			catch(...)
-			{
-			}
-			std::wstringstream oss;
-			oss << L"failed to save " << mol::towstring(path);
-			statusBar()->status(oss.str());
-			return;
-		}
-	}
-
+	saving_ = true;
 	mol::ostringstream oss;
 
-	saving_ = true;
 	HRESULT hr = sci->Save();
 	if ( hr == S_OK )
 	{
-		lastWriteTime_ = getLastWriteTime( filename.toString() );
-		oss << _T("saved file ") << filename.toString() ;
+		lastWriteTime_ = getLastWriteTime( path );
+		oss << _T("saved file ") << path ;
 	}
 	else
 	{
-		oss << _T("failed to saved file ") << filename.toString() ;
+		oss << _T("failed to saved file ") << path ;
 	}
 
 	statusBar()->status(oss.str());
@@ -1119,31 +961,6 @@ void Editor::OnExecForm()
 
 	mol::punk<IMoeDocument> doc;
 	docs()->OpenHtmlFrame(filename,&doc);
-	if (doc)
-	{
-		/*
-		mol::punk<IMoeDocumentView> view;
-		doc->get_View(&view);
-		if ( view )
-		{
-			view->Activate();
-		}
-		*/
-	}
-
-	/*
-	RECT r;
-	moe()->getWindowRect(r);
-
-	moe()->moeScript->ShowHtmlForm(
-			filename, 
-			r.left+50,
-			r.top+50,
-			r.right-r.left-100,
-			r.bottom-r.top-100,
-			1
-	);
-	*/
 }
 
 void Editor::OnShowLineNumbers()
@@ -1519,7 +1336,6 @@ HRESULT __stdcall Editor::get_FilePath( BSTR *fname)
 
 HRESULT __stdcall  Editor::Sintilla_Events::OnFileNameChanged( BSTR filename, BSTR path)
 {
-	mol::MdiFrame* mf = mol::wndFromHWND<mol::MdiFrame>( This()->mdiParent() );
 	This()->updateUI();
 	return S_OK;
 }
@@ -1611,7 +1427,7 @@ HRESULT __stdcall Editor::Sintilla_Events::OnMarker( long line)
 	return S_OK; 
 }
 
-
+/*
 int indexFromCodePage(int cp)
 {
 	for ( size_t i = 0; i < moe()->codePages().size(); i++)
@@ -1621,7 +1437,7 @@ int indexFromCodePage(int cp)
 	}
 	return -1;
 }
-
+*/
 //////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1678,7 +1494,7 @@ void Editor::updateUI()
 		}
 		if ( mol::Ribbon::ribbon()->enabled())
 		{
-			mol::Ribbon::handler(RibbonEncoding)->select(indexFromCodePage(encoding));
+			mol::Ribbon::handler(RibbonEncoding)->select(moe()->codePageIndex((int)encoding));
 		}
 	}
 	

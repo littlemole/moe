@@ -6,7 +6,7 @@
 
 /////////////////////////////////////////////////////////////////////
 //
-// common m di child window
+// common mdi child window
 //
 /////////////////////////////////////////////////////////////////////
 
@@ -107,14 +107,7 @@ protected:
 		// get client rectangle
 		mol::Rect r;
 
-		//moe()->getLayout()->availClientRect(r);
-
 		::GetClientRect( moe()->mdiClient(),&r);
-
-		//ODBGS1("initializeMoeChild1 r: ",r.right);
-		//ODBGS1("initializeMoeChild2 b: ",r.bottom);
-
-		//::GetClientRect(*this,&r);
 
 		ODBGS1("initializeMoeChild2 r: ",r.right);
 		ODBGS1("initializeMoeChild2 b: ",r.bottom);
@@ -127,7 +120,6 @@ protected:
 		// create
 		moe()->setRedraw(false);
 		create(p,(HMENU)m,r,*moe());
-		//setRedraw(false);
 		show(SW_SHOW);	
 		statusBar()->status(50);
 
@@ -136,7 +128,6 @@ protected:
 
 		// maximize
 		maximize();
-		//setRedraw(true);
 		moe()->setRedraw(true);
 		redraw();
 	}

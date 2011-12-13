@@ -31,7 +31,9 @@
     <Property Id='REGSVR32'>regsvr32.exe</Property>
 
     <CustomAction Id="MOEEXE" Property='MOEEXE' Value='[INSTALLLOCATION]\moe\moe.exe' />
+<!--
     <CustomAction Id="MOESSH" Property='MOESSH' Value='[INSTALLLOCATION]\moe\ssh.exe' />
+-->
 
     <!-- register/unregister moe's dlls -->
     <CustomAction Id="DLLREG_io" Property="REGSVR32" ExeCommand='/s "[INSTALLLOCATION]\moe\io.dll"' Execute="deferred" Impersonate="no" />
@@ -58,12 +60,17 @@
     <CustomAction Id="DLLREG_moeShell" Property="REGSVR32" ExeCommand='/s "[INSTALLLOCATION]\moe\moeShell.dll"' Execute="deferred" Impersonate="no" />
     <CustomAction Id="DLLUNREG_moeShell" Property="REGSVR32" ExeCommand='/s /u "[INSTALLLOCATION]\moe\moeShell.dll"' Execute="deferred" Impersonate="no" Return="ignore"/>
 
+    <CustomAction Id="DLLREG_moeSSH" Property="REGSVR32" ExeCommand='/s "[INSTALLLOCATION]\moe\ssh.dll"' Execute="deferred" Impersonate="no" />
+    <CustomAction Id="DLLUNREG_moeSSH" Property="REGSVR32" ExeCommand='/s /u "[INSTALLLOCATION]\moe\ssh.dll"' Execute="deferred" Impersonate="no" Return="ignore"/>
+
     <!-- register/unregister moe executable -->
     <CustomAction Id="EXEREG_moe"  Property="MOEEXE" ExeCommand="/REGSERVER" Execute="deferred" Impersonate="no"  />
     <CustomAction Id="EXEUNREG_moe" Property="MOEEXE" ExeCommand="/UNREGSERVER" Execute="deferred" Impersonate="no" Return="ignore"/>
 
+<!--
     <CustomAction Id="EXEREG_ssh"  Property="MOESSH" ExeCommand="/REGSERVER" Execute="deferred" Impersonate="no"  />
     <CustomAction Id="EXEUNREG_ssh" Property="MOESSH" ExeCommand="/UNREGSERVER" Execute="deferred" Impersonate="no" Return="ignore"/>
+-->
 
     <!-- make an extra copy of the installed fx file folder to a user folder for the user to modify -->
     <CustomAction Id="CopyFx" Script="vbscript">
@@ -150,7 +157,9 @@
 
       <!-- set path to moe.exe -->
       <Custom Action='MOEEXE' Before='InstallFiles' />
+<!--
       <Custom Action='MOESSH' Before='InstallFiles' />
+-->
 
 
       <!-- register COM objects  -->
@@ -162,9 +171,11 @@
       <Custom Action='DLLREG_shellCtrl' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLREG_shellFolder' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLREG_setting' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
-	  <Custom Action='DLLREG_moeShell' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
-	  <Custom Action='EXEREG_ssh' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
-
+      <Custom Action='DLLREG_moeShell' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLREG_moeSSH' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
+<!--
+      <Custom Action='EXEREG_ssh' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
+-->
 
       <!-- unregister COM objects  -->
       <Custom Action='EXEUNREG_moe' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
@@ -175,8 +186,11 @@
       <Custom Action='DLLUNREG_shellCtrl' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLUNREG_shellFolder' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLUNREG_setting' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
-	  <Custom Action='DLLUNREG_moeShell' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
-	  <Custom Action='EXEUNREG_ssh' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLUNREG_moeShell' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='DLLUNREG_moeSSH' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+<!--
+      <Custom Action='EXEUNREG_ssh' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+-->
 
       <Custom Action="CopyFx" After="InstallFinalize">Not Installed</Custom>
 

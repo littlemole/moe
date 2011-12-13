@@ -11,7 +11,7 @@ namespace scp {
 
 
 scpStream::scpStream(  )
-	: connected_(false),size_(0),cb_(0)
+	: connected_(false),size_(0),cb_(0),nread_(0)
 {}
 
 scpStream::~scpStream()
@@ -58,6 +58,7 @@ void scpStream::disconnect()
 {
 	ODBGS("Stream disconnect");
 	scp_.dispose();
+	ssh_.dispose();
 	connected_ = false;
 }
 
@@ -66,18 +67,19 @@ HRESULT __stdcall scpStream::Read( void *pv, ULONG cb, ULONG *pcbRead)
 	ODBGS("scpStream read");
 	if ( cb )
 	{
-		if (!connect())
-			return E_FAIL;
-
 		if ( pcbRead )
 		{
 			*pcbRead = 0;
 		}
 
-		if ( nread_ >= size_ )
+		if ( size_ && nread_ >= size_ )
 		{
+			disconnect();
 			return 0 == cb ? S_OK : S_FALSE;
 		}
+
+		if (!connect())
+			return E_FAIL;
 
 		char* buffer = new char[cb];
 
@@ -115,9 +117,14 @@ HRESULT __stdcall scpStream::Read( void *pv, ULONG cb, ULONG *pcbRead)
 					delete[] buffer;
 					return E_FAIL;			
 				}
+				//disconnect();
 				delete[] buffer;
 				return nread == cb ? S_OK : S_FALSE;
 			}
+		}
+		if ( nread == cb  )
+		{
+			disconnect();
 		}
 		delete[] buffer;
 		return nread == cb ? S_OK : S_FALSE;
