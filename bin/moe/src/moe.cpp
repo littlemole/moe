@@ -209,7 +209,6 @@ void MoeWnd::OnDestroy()
 	::CoDisconnectObject(treeWnd()->oleObject,0);
 	scriptlet()->close();
 	::RevokeDragDrop(*this);
-	//credentialProvider.release();
 
 	if ( activeObj_ )
 		::RevokeActiveObject(activeObj_,0);
@@ -223,26 +222,6 @@ void MoeWnd::OnNcDestroy()
 	((IMoe*)this)->Release();
 }
 
-/*
-HRESULT __stdcall MoeWnd::get_CredentialProvider(IScpCredentialProvider** provider)
-{
-	if(!provider)
-		return E_INVALIDARG;
-
-	if(!credentialProvider)
-	{
-		// prepare ssh credentials
-		credentialProvider.createObject(CLSID_DefaultScpCredentialProvider,CLSCTX_ALL);
-		::CoAllowSetForegroundWindow(credentialProvider,0);
-	}
-	if(!credentialProvider)
-	{
-		return E_NOTIMPL;
-	}
-
-	return credentialProvider.queryInterface(provider);
-}
-*/
 //////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -1251,121 +1230,3 @@ HRESULT __stdcall MoeWnd::InitNew()
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-
-/*
-bool MoeWnd::Credentials::getCredentials(const std::string& host, int port, char** user, char** pwd)
-{
-	mol::punk<IScpCredentialProvider> provider;
-	HRESULT hr = This()->get_CredentialProvider(&provider);
-	if(hr!=S_OK)
-		return false;
-
-	if(!user || !pwd)
-		return false;
-
-	mol::punk<IScpPasswordCredentials> creds;
-	hr = provider->getCredentials( mol::bstr(host), port, &creds );
-	if ( hr != S_OK )
-		return false;
-
-	mol::bstr bu;
-	creds->get_Username(&bu);
-
-	mol::bstr bp;
-	creds->get_Password(&bp);
-
-	std::string u = mol::toUTF8(bu.towstring());
-	std::string p = mol::toUTF8(bp.towstring());
-
-	*user = (char*)malloc(u.size()+1);
-	*pwd  = (char*)malloc(p.size()+1);
-
-	memcpy(*user,u.data(),u.size()+1);
-	memcpy(*pwd, p.data(),p.size()+1);
-
-	return true;
-}
-
-bool MoeWnd::Credentials::promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo)
-{
-	
-	return false;
-}
-
-bool MoeWnd::Credentials::acceptHost(const std::string& host, int port, const std::string& hash)
-{
-	mol::punk<IScpCredentialProvider> provider;
-	HRESULT hr = This()->get_CredentialProvider(&provider);
-	if(hr!=S_OK)
-		return false;
-
-	VARIANT_BOOL vb;
-	hr = provider->acceptHost( mol::bstr(host), port, mol::bstr(hash), &vb );
-	if ( hr != S_OK )
-		return false;
-
-	if ( vb == VARIANT_TRUE )
-		return true;
-
-	return true;
-}
-
-bool MoeWnd::Credentials::rememberHostCredentials(const std::string& host, int port, const char* user, const char* pwd)
-{
-	mol::punk<IScpCredentialProvider> provider;
-	HRESULT hr = This()->get_CredentialProvider(&provider);
-	if(hr!=S_OK)
-		return false;
-
-	mol::punk<IScpPasswordCredentials> creds;
-	hr = creds.createObject(CLSID_ScpPasswordCredentials);
-	if ( hr != S_OK )
-		return false;
-
-	creds->put_Username( mol::bstr(user) );
-	creds->put_Password( mol::bstr(pwd) );
-	
-	hr = provider->remberSessionCredentials( mol::bstr(host), port, creds );
-	if ( hr != S_OK )
-		return false;
-
-	return true;
-}
-
-bool MoeWnd::Credentials::deleteHostCredentials(const std::string& host, int port)
-{
-	mol::punk<IScpCredentialProvider> provider;
-	HRESULT hr = This()->get_CredentialProvider(&provider);
-	if(hr!=S_OK)
-		return false;
-
-	hr = provider->removeSessionCredentials(mol::bstr(host), port);
-	if ( hr != S_OK )
-		return false;
-
-	return true;
-}
-
-
-mol::ssh::Session& MoeWnd::connect(const mol::Uri& uri)
-{
-	if ( ssh_.is_connected())
-	{
-		if ( ssh_.hostname() == uri.getHost() &&
-			 ssh_.port() == uri.getPort() )
-		{
-			return ssh_;
-		}
-	}
-	ssh_.dispose();
-	ssh_.open( uri.getHost(), &credentials, uri.getPort() );
-	return ssh_;
-}
-
-*/
-
-
-
-
-
-

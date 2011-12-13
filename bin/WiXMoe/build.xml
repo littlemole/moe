@@ -119,7 +119,7 @@
         />
 
         <Copy
-            SourceFiles="..\..\ax\ssh\$(confPath)\ssh.exe"
+            SourceFiles="..\..\ax\ssh\$(confPath)\ssh.dll"
             DestinationFolder=".\moe"
         />
 
@@ -180,8 +180,11 @@
 
 		<Exec Command='mt.exe -manifest .\$(regfree)\moe.exe.isolated.manifest -outputresource:".\$(regfree)\moe\moe.exe;#1" -hashupdate -validate_manifest -verbose' WorkingDirectory="." Condition=" '$(Platform)' == 'Win32'" />
 		<Exec Command='mt.exe -manifest .\$(regfree)\moe.exe.isolated64.manifest -outputresource:".\$(regfree)\moe\moe.exe;#1" -hashupdate -validate_manifest -verbose' WorkingDirectory="." Condition=" '$(Platform)' == 'x64'" />
+
+<!--
 		<Exec Command='mt.exe -manifest .\$(regfree)\ssh.exe.isolated.manifest -outputresource:".\$(regfree)\moe\ssh.exe;#1"  -validate_manifest -verbose' WorkingDirectory="." Condition=" '$(Platform)' == 'Win32'" />
 		<Exec Command='mt.exe -manifest .\$(regfree)\ssh.exe.isolated64.manifest -outputresource:".\$(regfree)\moe\ssh.exe;#1"  -validate_manifest -verbose' WorkingDirectory="." Condition=" '$(Platform)' == 'x64'" />
+-->
 
 		<Exec Command='mt.exe -manifest .\$(regfree)\io.dll.isolated.manifest -outputresource:".\$(regfree)\moe\io.dll;#2" -verbose' WorkingDirectory="."/>
 		<Exec Command='mt.exe -manifest .\$(regfree)\comtypes.dll.isolated.manifest -outputresource:".\$(regfree)\moe\comtypes.dll;#2" -verbose' WorkingDirectory="."/>
@@ -190,6 +193,7 @@
 		<Exec Command='mt.exe -manifest .\$(regfree)\shellctrl.dll.isolated.manifest -outputresource:".\$(regfree)\moe\shellctrl.dll;#2" -verbose' WorkingDirectory="."/>
 		<Exec Command='mt.exe -manifest .\$(regfree)\scintillax.dll.isolated.manifest -outputresource:".\$(regfree)\moe\scintillax.dll;#2" -verbose' WorkingDirectory="."/>
 		<Exec Command='mt.exe -manifest .\$(regfree)\shellfolder.dll.isolated.manifest -outputresource:".\$(regfree)\moe\shellfolder.dll;#2" -verbose' WorkingDirectory="."/>
+		<Exec Command='mt.exe -manifest .\$(regfree)\ssh.dll.isolated.manifest -outputresource:".\$(regfree)\moe\ssh.dll;#2" -verbose' WorkingDirectory="."/>
 
 		<Exec Command='cscript "..\..\cg\bin\zip.vbs" "$(regfreeTargetPath)\moe.zip" "$(regfree)\moe"' WorkingDirectory="."/>
 

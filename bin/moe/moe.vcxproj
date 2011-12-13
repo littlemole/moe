@@ -380,6 +380,7 @@
     <ClInclude Include="include\app.h" />
     <ClInclude Include="include\commons.h" />
     <ClInclude Include="include\dir3.h" />
+    <ClInclude Include="include\DocFactory.h" />
     <ClInclude Include="include\Docs.h" />
     <ClInclude Include="include\editor.h" />
     <ClInclude Include="include\form.h" />

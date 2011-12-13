@@ -145,8 +145,6 @@ public:
     virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER *pCbSize);
     virtual HRESULT __stdcall InitNew();
 
-	//virtual HRESULT __stdcall get_CredentialProvider(IScpCredentialProvider** provider);
-
 	// Persistence Dirtyness support
 
 	BOOL isDirty()			{ return true; } // bDirty_; }
@@ -198,27 +196,6 @@ public:
 		 return -1;
 	 }
 
-	/////////////////////////////////////////////////////////////////////
-	// ssh credentials
-	/////////////////////////////////////////////////////////////////////
-
-	 /*
-	class Credentials : public mol::ssh::CredentialCallback
-	{
-		public: 
-		outer_this(MoeWnd,credentials);
-
-		virtual bool getCredentials(const std::string& host, int port, char** user, char** pwd);
-		virtual bool promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo);
-		virtual bool acceptHost(const std::string& host, int port, const std::string& hash);
-		virtual bool rememberHostCredentials(const std::string& host, int port, const char* user, const char* pwd);
-		virtual bool deleteHostCredentials(const std::string& host, int port);
-
-	} credentials;
-
-	mol::ssh::Session& connect(const mol::Uri& uri);
-	*/
-
 private:
 
 	std::vector<CodePage> codePages_;
@@ -257,9 +234,6 @@ private:
 	// cookie into IRunningObjectTable for our running OLE server
 	DWORD							activeObj_;
 
-	//mol::ssh::Session				ssh_;
-
-	//mol::punk<IScpCredentialProvider> credentialProvider;
 };
 
 #endif

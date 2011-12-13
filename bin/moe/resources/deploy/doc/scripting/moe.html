@@ -1,0 +1,303 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+
+
+<html>
+ <head>
+  <title>hey moe hey!</title>
+ <!--
+	<link rel="stylesheet" href="..\..\js\development-bundle\themes\base\jquery.ui.all.css">
+    <script language="javascript" src="..\..\js\js\jquery-1.6.2.min.js"></script>
+	<script src="..\..\js\development-bundle\ui\jquery-ui-1.8.16.custom.js"></script>
+-->
+
+	<link rel="stylesheet" href="..\..\js\css\custom-theme\jquery-ui-1.8.16.custom.css">
+    <script language="javascript" src="..\..\js\js\jquery-1.6.2.min.js"></script>
+	<script src="..\..\js\js\jquery-ui-1.8.16.custom.min.js"></script>
+
+<style type="text/css">
+
+* { 
+	font-family:Verdana;
+}
+
+li a{
+ font-size:12px;
+}
+
+td {
+  padding:10px;
+}
+table {
+  border: 1px solid #DDD;
+}
+</style>
+
+ </head>
+ <body>
+<div class="demo">
+
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Moe</a></li>
+		<li><a href="#tabs-2">ScintillAx</a></li>
+		<li><a href="#tabs-3">ShellCtrl</a></li>
+		<li><a href="#tabs-4">ShellFolder</a></li>
+		<li><a href="#tabs-5">Setting</a></li>
+		<li><a href="#tabs-6">SSH</a></li>
+		<li><a href="#tabs-7">IO</a></li>
+		<li><a href="#tabs-8">comtypes</a></li>
+	</ul>
+	<div id="tabs-1">
+
+		<table border="0" width="100%">
+			<tr>
+				<td colspan="3" width="100%">
+					<div id="typelibdetail"></div>
+				</td>
+			</tr>
+			<tr>
+				<td rowspan="1" style="vertical-align:top;" width="25%">
+					<div id="typelib"></div>
+				</td>
+				<td style="vertical-align:top;"  width="25%">
+					<div style="border:1px dashed black;background-color:#CCC;padding:10px;min-height:400px;">
+						<div id="properties"></div>
+						<div id="methods"></div>
+					</div>
+				</td>
+				<td rowspan="2" style="vertical-align:top;padding:10px;"  width="50%">
+					<div id="detail" style="font-size:12px;border:1px dashed black;background-color:#EEE;padding:10px;min-height:400px;"></div>
+				</td>
+			</tr>
+
+		</table>
+		
+		
+	</div>
+ 
+</div>
+</div>
+
+		<br>
+		<p>or choose typelib</p>
+		<form name="theForm" action="" method="post" onSubmit="return OnChooseTypelib(this);">
+		  <input name="upload" type="file" size="" maxlength="" accept="text/*" value="C:\Program Files\mol\moe\moe.exe">
+          <input name="submit" type="submit" value="GO">
+		</form>
+
+ </body>
+<script language="javascript">
+
+var typelibs = [
+	'C:\\Program Files\\mol\\moe\\moe.exe',
+	'C:\\Program Files\\mol\\moe\\scintillax.dll',
+	'C:\\Program Files\\mol\\moe\\shellctrl.dll',
+	'C:\\Program Files\\mol\\moe\\shellfolder.dll',
+	'C:\\Program Files\\mol\\moe\\setting.dll',
+	'C:\\Program Files\\mol\\moe\\ssh.dll',
+	'C:\\Program Files\\mol\\moe\\io.dll',
+	'C:\\Program Files\\mol\\moe\\comtypes.dll'
+];
+
+var $tabs;
+var $doc;
+$(document).ready( function() {
+
+	$tabs = $( "#tabs" ).tabs({
+		select: function(event, ui) {
+			
+			OnSelectTypelib(typelibs[ui.index]);
+			return false;
+		}});
+
+	OnSelectTypelib(typelibs[0]);
+});
+
+function xmlDoc(xml)
+{
+    var doc = new ActiveXObject("Msxml2.FreeThreadedDOMDocument.3.0");
+	doc.async = false;
+	doc.loadXML(xml);
+  
+	if (doc.parseError.errorCode != 0) 
+	{
+	  var myErr = doc.parseError;
+	  moe.Dialogs.MsgBox("error: " + myErr.reason,"error",0);
+	}
+	return doc;
+}
+function getXml( typelib )
+{
+	var type2Xml = new ActiveXObject("TypeToXml.TypeLibToXml");
+	var b = type2Xml.load(typelib);
+//	var s = type2Xml.transform(xsl);
+    var xml = type2Xml.XML;
+    return xml;
+    moe.Dialogs.MsgBox(xml,"xml",0);
+	var file  = new ActiveXObject("IO.File");
+    file.Open("C:\\Users\\mike\\Desktop\\moe\\moe.xml");
+    file.WriteText(xml);
+    file.Close();
+}
+function showMethod(iface,name) 
+{
+	//$tabs.tabs('select', 3);
+	var iface = $doc.selectSingleNode("//interface[@name='" + iface + "']/method[@name='" + name + "']");	
+	//document.theXMLForm.textarea.value = iface.xml;
+	var type = iface.getAttribute("type");
+	var desc = iface.getAttribute("desc");
+	var html = "<div>";
+	html += type + " " + name + "(";
+	for ( var i  = 0; i < iface.childNodes.length; i++)
+	{
+		var node = iface.childNodes[i];
+		var n = node.getAttribute("name");
+		var t = node.getAttribute("type");
+		if ( i > 0 )
+			html += ", "
+		html += "<i>" + t + "</i> " + n;  
+	}
+	html +=")<br><br><small><i>" + desc + "</i></small></div>";	
+	var t = $("#detail");  
+	t.html(html);
+	return false;
+}
+function showProperty(iface,name) 
+{
+	//$tabs.tabs('select', 3);
+	var iface = $doc.selectSingleNode("//interface[@name='" + iface + "']/property[@name='" + name + "']");	
+	//document.theXMLForm.textarea.value = iface.xml;
+	var type = iface.getAttribute("type");
+	var desc = iface.getAttribute("desc");
+	var html = "<div>";
+	html += type + " " + name + "()<br><br>(";
+	
+	for ( var i  = 0; i < iface.childNodes.length; i++)
+	{
+		var node = iface.childNodes[i];
+		var n = node.nodeName;
+		if ( i > 0 )
+			html += ", ";
+		html += n;  
+	}
+	html +=")<br><br><small><i>" + desc + "</i></small></div>";	
+	var t = $("#detail");  
+	t.html(html);
+	return false;
+}
+function showDetail(name) 
+{
+//	$tabs.tabs('select', 2);
+	var methods = $doc.selectNodes("//interface[@name='" + name + "']/method");	
+	var html = "<h4>methods</h4><ul>";
+	for ( var i  = 0; i < methods.length; i++)
+	{
+		var m = methods[i].getAttribute("name");
+		html += "<li><a href='#' onclick='showMethod(\"" + name + "\",\"" + m + "\");'>" + m + "</a></li>";  
+	}
+	html +="</ul>";
+	var t = $("#methods");  
+	t.html(html);
+	var properties = $doc.selectNodes("//interface[@name='" + name + "']/property");	
+	var html = "<h3>" + name + "</h3><h4>properties</h4><ul>";
+	for ( var i  = 0; i < properties.length; i++)
+	{
+		var m = properties[i].getAttribute("name");
+		html += "<li><a href='#' onclick='showProperty(\"" + name + "\",\"" + m + "\");'>" + m + "</a></li>";  
+	}
+	html +="</ul>";
+	var t = $("#properties");  
+	t.html(html);
+//	document.theXMLForm.textarea.value = iface.xml;
+	return false;
+}
+
+function showIfaceDetail(name) 
+{
+	var iface = $doc.selectSingleNode("//interface[@name='" + name + "']");	
+
+	var desc = iface.getAttribute("desc");
+	var iid = iface.getAttribute("iid");
+	var base = iface.getAttribute("base");
+
+	var html = "<h4>" + name + " : " + base + "</h4><ul>";
+	html += "<i>" + desc + "</i><br><br>";
+	html += "<small>" + iid + "</small><br>";
+	var t = $("#ifacedetail");  
+	t.html(html);
+
+	return false;
+}
+
+function OnChooseTypelib(form)
+{
+  var xml = getXml(document.theForm.upload.value);
+  $tabs.tabs('select', 1);
+ // document.theXMLForm.textarea.value = xml;
+//external.moe.Dialogs.MsgBox(xml,"xml",0);
+  $doc = xmlDoc(xml);
+
+  var desc = $doc.documentElement.getAttribute("desc");
+  var tln = $doc.documentElement.getAttribute("name");
+  var guid = $doc.documentElement.getAttribute("guid");
+  var file = $doc.documentElement.getAttribute("file");
+
+  var ifs = $doc.selectNodes("//interface");
+  var html = "<ul>";
+  for ( var i  = 0; i < ifs.length; i++)
+  {
+	//external.moe.Dialogs.MsgBox(doc.xml,"xml",0);
+	var name = ifs[i].getAttribute("name");
+    html += "<li><a href='#' onclick='showDetail(\"" + name + "\");'>" + name + "</a></li>";  
+  }
+  html +="</ul>";
+  var t = $("#typelib");  
+  t.html(html);
+
+  html = "";
+  html += "<h3 style='margin:3px;padding:3px'>" + tln + " <small>" + guid + "<i> " + desc + "</i></small></h3>";
+  var t = $("#typelibdetail");  
+  t.html(html);
+
+  return false;
+}
+function OnSelectTypelib(typelib)
+{
+  var xml = getXml(typelib);
+  $tabs.tabs('select', 0);
+  $doc = xmlDoc(xml);
+
+  var desc = $doc.documentElement.getAttribute("desc");
+  var tln = $doc.documentElement.getAttribute("name");
+  var guid = $doc.documentElement.getAttribute("guid");
+  var file = $doc.documentElement.getAttribute("file");
+
+  var ifs = $doc.selectNodes("//interface");
+  var html = "<h4>interfaces</h4><ul>";
+  for ( var i  = 0; i < ifs.length; i++)
+  {
+	var name = ifs[i].getAttribute("name");
+    html += "<li><a href='#' onclick='showDetail(\"" + name + "\");'>" + name + "</a></li>";  
+  }
+  html +="</ul>";
+
+  var t = $("#typelib");  
+  t.html(html);
+
+  html = "";
+  html += "<h3 style='margin:3px;padding:3px'>" + tln + " <small>" + guid + "<i> " + desc + "</i></small></h3>";
+  var t = $("#typelibdetail");  
+  t.html(html);
+
+  var t = $("#properties");  
+  t.html("");
+  var t = $("#methods");  
+  t.html("");
+  var t = $("#detail");  
+  t.html("");
+
+  return false;
+}
+</script>
+</html>

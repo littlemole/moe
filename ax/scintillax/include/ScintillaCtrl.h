@@ -174,7 +174,9 @@ protected:
 	std::string loadAdmin(const mol::string& p);
 	bool saveAdmin(const mol::string& p);
 	bool load(const mol::string& p, const mol::string& ext,  long enc);
+	bool openSSH(const mol::string& path,const mol::string& ext,long enc);
 	bool save(const mol::string& location);
+	bool saveSSH(const mol::string& location);
 };
 
 ///////////////////////////////////////////////////////////////////////////////

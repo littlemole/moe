@@ -144,6 +144,7 @@
     <ClInclude Include="include\ScpDir.h">
       <Filter>mdi</Filter>
     </ClInclude>
+    <ClInclude Include="include\DocFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="src\moe.idl" />

@@ -162,6 +162,15 @@ public:
 	{
 		std::ostringstream oss;
 
+		char buf[1024];
+		while(!eof())
+		{
+			read(buf,1024);
+			size_t len = gcount();
+			oss.write(buf,len);
+		}
+
+		/*
 		bool firstline = true;
 		while(!eof())
 		{
@@ -177,6 +186,7 @@ public:
 					oss << std::endl << s;
 			}
 		}
+		*/
 		return oss.str();
 	}
 

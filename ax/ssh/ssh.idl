@@ -1,0 +1,410 @@
+import "oaidl.idl";
+
+////////////////////////////////////////////////////////////////////////////////////////
+// mol SSH COM Lib
+////////////////////////////////////////////////////////////////////////////////////////
+
+[
+  uuid(B9AA71CC-ED9E-47AB-90B9-4B84EAA3F4B2),
+  version(1.0),
+  helpstring("SSH - COM typelib for SSH support")
+]
+library moeSSH
+{
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Interfaces
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+    // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
+	////////////////////////////////////////////////////////////////////////////////////
+	importlib("stdole32.tlb");
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IScpPasswordCredentials
+	////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+      uuid(BD96818E-5DAB-4305-B283-527D632C68D2),
+      helpstring("IScpPasswordCredentials Interface"),
+      object,oleautomation, dual
+    ]
+	interface IScpPasswordCredentials : IDispatch
+    {
+		[ 
+		  propput,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get/Set Username")
+		] 
+		HRESULT Username([in] BSTR user);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1)
+		] 
+		HRESULT Username([out,retval] BSTR* user);
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get/Set Password")
+		] 
+		HRESULT Password([in] BSTR pwd);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2)
+		] 
+		HRESULT Password([out,retval] BSTR* pwd);
+	};
+
+	////////////////////////////////////////////////////////////////////////////////////
+	//IScpCredentialProvider
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(6A66D47E-519D-4CA8-9B39-892E9CC7D3AF),
+      helpstring("IScpCredentialProvider Interface"),
+      object,oleautomation, dual
+    ]
+	interface IScpCredentialProvider : IDispatch
+    {
+		[id(1), helpstring("get password credentials")] 
+		HRESULT getCredentials( [in] BSTR host, [in] long port, [out,retval] IScpPasswordCredentials** credentials);
+
+		[id(2), helpstring("prompt for keyboard-interactive")] 
+		HRESULT promptCredentials( [in] BSTR prompt, [in] BSTR description, [in] VARIANT_BOOL echo, [out,retval] VARIANT* value);
+
+		[id(3), helpstring("accept an unknown host")] 
+		HRESULT acceptHost( [in] BSTR host, [in] long port, [in] BSTR hash, [out,retval] VARIANT_BOOL* accept);
+
+		[id(4), helpstring("remember credentials for session")] 
+		HRESULT remberSessionCredentials( [in] BSTR host, [in] long port, [in] IScpPasswordCredentials* credentials);
+
+		[id(5), helpstring("remove credentials for session")] 
+		HRESULT removeSessionCredentials( [in] BSTR host, [in] long port);
+
+	};
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IRemotefile
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(0CAF3661-4063-416D-8548-D42144C652D3),
+      helpstring("IRemoteFile - Remote File Info Object"),
+      object,oleautomation, dual
+    ]
+	interface IRemoteFile : IDispatch
+    {
+
+		// properties
+		[ 
+		  propget,id(1), 
+		  helpstring("determine whether remote path is a directory")
+		] 
+		HRESULT IsDir([out,retval] VARIANT_BOOL* vb);
+
+		[ 
+		  propget,id(2), 
+		  helpstring("get remote file name")
+		] 
+		HRESULT Filename([out,retval] BSTR* name);
+
+		[ 
+		  propget,id(3), 
+		  helpstring("get remote file type")
+		] 
+		HRESULT Filetype([out,retval] long* type);
+
+		[ 
+		  propget,id(4), 
+		  helpstring("get remote file permission")
+		] 
+		HRESULT Permission([out,retval] long* perms);
+
+		[ 
+		  propget,id(5), 
+		  helpstring("get remote file owner's user id")
+		] 
+		HRESULT UID([out,retval] long* id);
+
+		[ 
+		  propget,id(6), 
+		  helpstring("get remote file owner's group id")
+		] 
+		HRESULT GID([out,retval] long* id);
+
+
+		[ 
+		  propget,id(7), 
+		  helpstring("get remote file owner's mtime")
+		] 
+		HRESULT Mtime([out,retval] long* timestamp);
+
+		[ 
+		  propget,id(8), 
+		  helpstring("get remote file owner")
+		] 
+		HRESULT Owner([out,retval] BSTR* username);
+
+
+		[ 
+		  propget,id(9), 
+		  helpstring("get remote file group")
+		] 
+		HRESULT Group([out,retval] BSTR* groupname);
+
+		[ 
+		  propget,id(10), 
+		  helpstring("get remote file size")
+		] 
+		HRESULT Size([out,retval] long* len);
+
+		[ 
+		  propget,id(11), 
+		  helpstring("get remote file size")
+		] 
+		HRESULT FormattedSize([out,retval] BSTR* len);
+
+		[ 
+		  propget,id(12), 
+		  helpstring("get remote file permissions")
+		] 
+		HRESULT FormattedPermissions([out,retval] BSTR* len);
+	};
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// ISFTP
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(277DC7E4-6329-4D3B-9EE3-2B198A6C8A07),
+      helpstring("ISFT - SFTP Session Object"),
+      object,oleautomation, dual
+    ]
+	interface ISFTP : IDispatch
+    {
+
+		[ id(1), helpstring("make remote directory")	] 
+		HRESULT Mkdir([in] BSTR path, [in] long mode);
+
+		[ id(2), helpstring("remove empty remote directory")	] 
+		HRESULT Rmdir([in] BSTR path);
+
+		[ id(3), helpstring("Rename remote file or directory")	] 
+		HRESULT Rename([in] BSTR oldpath,[in] BSTR newpath);
+
+		[ id(4), helpstring("unlink (delete) remote file")	] 
+		HRESULT Unlink([in] BSTR path);
+
+		[ id(5), helpstring("Change owner of remote file or directory")	] 
+		HRESULT Chown([in] BSTR path, [in] long owner, [in] long group);
+
+		[ id(6), helpstring("stat of remote file or directory")	] 
+		HRESULT Stat([in] BSTR path, [out,retval] IRemoteFile** remotefile);
+
+		[ id(7), helpstring("lstat of remote file or directory")	] 
+		HRESULT Lstat([in] BSTR path, [out,retval] IRemoteFile** remotefile);
+
+		[ id(8), helpstring("list files of remote directory")	] 
+		HRESULT Files([in] BSTR path, [out,retval] SAFEARRAY(VARIANT)* remotefiles);
+
+		[ id(9), helpstring("list files of remote directory")	] 
+		HRESULT List([in] BSTR path, [out,retval] SAFEARRAY(VARIANT)* remotefiles);
+	};
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// ISCP
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(873F0BE6-8E22-472A-B071-AC1EA3854278),
+      helpstring("ISCP - SCP Session Object"),
+      object,oleautomation, dual
+    ]
+	interface ISCP : IDispatch
+    {
+
+		[id(1), helpstring("push a directory to remote server")] 
+		HRESULT PushDirectory([in] BSTR path,[in] BSTR remotedir);
+
+		[id(2), helpstring("push a file to remote server")] 
+		HRESULT PushFile([in] BSTR path,[in] BSTR remotedir);
+
+		[id(3), helpstring("write a file to remote server with content as specified")] 
+		HRESULT WriteFile([in] BSTR content, [in] BSTR remotedir);
+
+		[id(4), helpstring("write a file to remote server with content as specified")] 
+		HRESULT PutFile([in] SAFEARRAY(BYTE) content, [in] BSTR remotedir);
+
+		[id(5), helpstring("pull a directory from remote server")] 
+		HRESULT PullDirectory([in] BSTR remotedir,[in] BSTR localdir);
+
+		[id(6), helpstring("pull a file from remote server")] 
+		HRESULT PullFile([in] BSTR remotefile,[in] BSTR localdir);
+
+		[id(7), helpstring("write a file to remote server with content as specified")] 
+		HRESULT ReadFile([in] BSTR remotefile,[out,retval] BSTR* content);
+
+		[id(8), helpstring("write a file to remote server with content as specified")] 
+		HRESULT GetFile([in] BSTR remotefile,[out,retval] SAFEARRAY(BYTE)* content);
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// ISSHConnection
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(5DDB7A6C-4283-4A1D-A15D-FB761DD1340B),
+      helpstring("ISSHConnection - SSH Connection Object"),
+      object,oleautomation, dual
+    ]
+	interface ISSHConnection : IDispatch
+    {
+		// properties
+		[ 
+		  propget,id(1), 
+		  helpstring("Get host")
+		] 
+		HRESULT Hostname([out,retval] BSTR* host);
+
+		[ 
+		  propget,id(2), 
+		  helpstring("Get Port")
+		] 
+		HRESULT Portnumber([out,retval] long* port);
+
+		[ 
+		  propget,id(3), 
+		  helpstring("verify we are connected")
+		] 
+		HRESULT IsConnected([out,retval] VARIANT_BOOL* connected);
+
+		[ 
+		  propget,id(4), 
+		  helpstring("get Server Banner")
+		] 
+		HRESULT ServerBanner([out,retval] BSTR* banner);
+
+
+		[ 
+		  propget,id(5), 
+		  helpstring("get Banner")
+		] 
+		HRESULT Banner([out,retval] BSTR* banner);
+
+
+		[ 
+		  propget,id(6), 
+		  helpstring("get server hash")
+		] 
+		HRESULT ServerHash([out,retval] BSTR* hash);
+
+		[ 
+		  propget,id(7), 
+		  helpstring("get last error")
+		] 
+		HRESULT Error([out,retval] BSTR* err);
+
+		[ 
+		  propget,id(8), 
+		  helpstring("Get an SCP Connection Object")
+		] 
+		HRESULT SCP( [out,retval] ISCP** conn);
+
+
+		[ 
+		  propget,id(9), 
+		  helpstring("Get an SFTP Connection Object")
+		] 
+		HRESULT SFTP( [out,retval] ISFTP** conn);
+
+		// methods
+
+		[id(10), helpstring("exec remote")] 
+		HRESULT Execute([in] BSTR cmd, [out,retval] BSTR* result);
+
+		[id(11), helpstring("send data")] 
+		HRESULT Send([in] BSTR cmd, [in] BSTR data,[out,retval] BSTR* result);
+
+		[id(12), helpstring("userid to username")] 
+		HRESULT UsernameFromUID([in] long uid,[out,retval] BSTR* result);
+
+		[id(13), helpstring("groupid to groupname")] 
+		HRESULT GroupnameFromGID([in] long gid,[out,retval] BSTR* result);
+
+		[id(14), helpstring("username to userid")] 
+		HRESULT UIDfromUsername([in] BSTR name,[out,retval] long* result);
+
+		[id(15), helpstring("groupname to groupid")] 
+		HRESULT GIDfromGroupname([in] BSTR name,[out,retval] long* result);
+
+		[id(16), helpstring("open/reconnect an SSH Connection")] 
+		HRESULT Connect();
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// ISSH
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(A03D1837-B2B1-486B-9A42-24D14571FCF6),
+      helpstring("ISSH - SSH Connection Manager Object"),
+      object,oleautomation, dual
+    ]
+	interface ISSH : IDispatch
+    {
+
+		// properties
+		[ 
+		  propget,id(1), 
+		  helpstring("Get/set CredentialManager")
+		] 
+		HRESULT Credentials([out,retval] IScpCredentialProvider** credentials);
+
+		[ 
+		  propput,id(1)
+		] 
+		HRESULT Credentials([in] IScpCredentialProvider* credentials);
+
+		// methods
+
+		[id(2), helpstring("open an SSH Connection")] 
+		HRESULT Connect([in] BSTR hostname, [in] long port, [out,retval] ISSHConnection** conn);
+
+	}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Co Classes ( class factories )
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// SSH
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(001C9766-9D66-4554-AC40-15F3B051DE29),
+		helpstring("SSH - SSH Connection Manager COM Object")
+	]
+	coclass SSH
+	{
+		[default]         interface     ISSH;
+	}
+
+	[
+		uuid(46861300-31F7-44F9-B4F6-449D66F3AC77),
+		aggregatable
+	]
+	coclass ScpPasswordCredentials
+	{
+		[default]         interface     IScpPasswordCredentials;
+	}
+
+	[
+		uuid(CF5BF8BD-DC91-43CA-AB1A-FF04CCACEFB6),
+		aggregatable
+	]
+	coclass DefaultScpCredentialProvider
+	{
+		[default]         interface     IScpCredentialProvider;
+	}
+}

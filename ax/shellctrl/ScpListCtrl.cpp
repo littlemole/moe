@@ -12,219 +12,6 @@
 #include "Resource.h"
 #include <Wincrypt.h>
 
-/*
-EncryptedMemory::EncryptedMemory()
-	:encrypted_(0),size_(0)
-{
-
-}
-
-EncryptedMemory::~EncryptedMemory()
-{
-	dispose();
-}
-
-void EncryptedMemory::dispose()
-{
-	if ( encrypted_ )
-	{
-		::LocalFree(encrypted_);
-		encrypted_ = 0;
-		size_ = 0;
-	}
-}
-
-size_t EncryptedMemory::encrypt( void* data, size_t size, DWORD flags )
-{
-	static std::string padding('X',CRYPTPROTECTMEMORY_BLOCK_SIZE);
-
-	dispose();
-
-	size_ = size;
-
-	DWORD mod = size % CRYPTPROTECTMEMORY_BLOCK_SIZE;
-	if ( mod )
-	{
-		size_ = size_ + (CRYPTPROTECTMEMORY_BLOCK_SIZE-mod);
-	}
-
-	encrypted_ = ::LocalAlloc(LPTR,size_);
-	ZeroMemory(encrypted_,size_);
-	memcpy( encrypted_, data, size);
-
-	if (!::CryptProtectMemory( encrypted_, (DWORD)size_,flags))
-	{
-		throw mol::X("CryptProtectMemory failed!");
-	}
-	return size;
-}
-
-std::string EncryptedMemory::decrypt( DWORD flags )
-{
-	void* v = malloc(size_);
-	if(!v)
-		return "";
-
-	memcpy(v,encrypted_,size_);
-
-	if (::CryptUnprotectMemory(v,(DWORD)size_,flags))
-	{
-		std::string s( (char*)v, size_ );
-		return s;
-	}
-	free(v);
-	return "";
-}
-
-void* EncryptedMemory::data()
-{
-	return encrypted_;
-}
-
-size_t EncryptedMemory::size()
-{
-	return size_;
-}
-
-EncryptedMap::EncryptedMap()
-{
-}
-
-void EncryptedMap::encrypt(const EncryptedMap::MapType& map)
-{
-	std::wostringstream oss;
-	for ( MapType::const_iterator it = map.begin(); it!=map.end(); it++)
-	{
-		oss << (*it).first << L'\0' << (*it).second << L'\0';
-	}
-
-	std::wstring tmp(oss.str());
-
-	secure_.encrypt( (void*)tmp.data(), tmp.size()*sizeof(wchar_t) );
-}
-
-EncryptedMap::MapType EncryptedMap::decrypt()
-{
-	MapType map;
-	std::string tmp = secure_.decrypt();
-	// but it is really a wstr
-	std::wstring plain( (wchar_t*)(tmp.data()), tmp.size()/sizeof(wchar_t));
-	size_t pos = 0;
-	size_t p   = 0;
-
-	while( pos != std::wstring::npos && p < plain.size() )
-	{
-		pos = plain.find(L'\0',p);
-		if ( pos == std::wstring::npos || pos == p)
-			break;
-
-		std::wstring key = plain.substr(p,pos-p);
-		if(key.empty())
-			break;
-
-		p = plain.find(L'\0',pos+1);
-		if ( p == std::wstring::npos || p == pos+1)
-			break;
-
-		std::wstring val = plain.substr(pos+1,p-pos);
-		if(val.empty())
-			break;
-
-		map.insert( std::make_pair(key,val) );
-
-		p = p + 1;
-	}
-	return map;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-
-SecureCredentials::SecureCredentials( const mol::string& h, int p, const mol::string& u, const mol::string& pass)
-		: host(h),port(p)
-{
-
-	EncryptedMap::MapType map;
-	map.insert( std::make_pair(std::wstring(L"user"),std::wstring(mol::towstring(u))));
-	map.insert( std::make_pair(std::wstring(L"pwd"), std::wstring(mol::towstring(pass))));
-
-	secure_.encrypt(map);
-}
-
-SecureCredentials::~SecureCredentials()
-{
-}
-
-
-void SecureCredentials::decrypt( mol::string& u, mol::string& pass )
-{
-	EncryptedMap::MapType map = secure_.decrypt();
-
-	if ( map.count(L"user") > 0 )
-		u = map[L"user"];
-
-	if ( map.count(L"pwd") > 0 )
-		pass = map[L"pwd"];
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-
-
-HRESULT __stdcall ScpPasswordCredentials::put_Username( BSTR user)
-{
-	if ( user )
-	{
-		EncryptedMap::MapType map = secure_.decrypt();
-		map.insert( std::make_pair(L"user", mol::towstring(user)) );
-		secure_.encrypt(map);
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall ScpPasswordCredentials::get_Username( BSTR* user)
-{
-	if ( !user )
-		return E_INVALIDARG;
-	*user = 0;
-
-	EncryptedMap::MapType map = secure_.decrypt();
-	if ( map.count(L"user") > 0 )
-	{
-		*user = ::SysAllocString( map[L"user"].c_str() );			
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall ScpPasswordCredentials::put_Password( BSTR pwd)
-{
-	if ( pwd )
-	{
-		EncryptedMap::MapType map = secure_.decrypt();
-		map.insert( std::make_pair(L"pwd", mol::towstring(pwd)) );
-		secure_.encrypt(map);
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall ScpPasswordCredentials::get_Password( BSTR* pwd)
-{
-	if ( !pwd )
-		return E_INVALIDARG;
-
-	*pwd = 0;
-
-	EncryptedMap::MapType map = secure_.decrypt();
-	if ( map.count(L"pwd") > 0 )
-	{
-		*pwd = ::SysAllocString( map[L"pwd"].c_str() );			
-	}
-
-	return S_OK;
-}
-
-*/
-
 
 
 class PermissionDlg  : public mol::win::Dialog
@@ -400,6 +187,15 @@ void ScpDirQueueLoadAction::operator()()
 }
 
 
+
+ScpDirQueueRenameAction::ScpDirQueueRenameAction( const mol::string& oldp, const mol::string& newp, ScpListCtrl* dl )
+	: oldpath(oldp), newpath(newp),scpList(dl)
+{}
+
+void ScpDirQueueRenameAction::operator()()
+{
+	scpList->EndRename(oldpath,newpath);
+}
 ///////////////////////////////////////////////////////////////////////////////
 
 ScpCreateDirQueueAction::ScpCreateDirQueueAction( ScpListCtrl* dl )
@@ -423,23 +219,53 @@ void ScpUnlinkQueueAction::operator()()
 	scpList->unlink(v);
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+
+ScpPushFileQueueAction::ScpPushFileQueueAction( const mol::string& p, const std::vector<mol::string>& vec, ScpListCtrl* dl )
+	: path(p),v(vec), scpList(dl)
+{}
+
+void ScpPushFileQueueAction::operator()()
+{
+	scpList->put(v,path);
+}
 ///////////////////////////////////////////////////////////////////////////////
 
 ScpListCtrl::ScpListCtrl(void)	
 {
+
 //	sortDir_ = 1;
 //    bCancel_ = FALSE;
 //	displayFiles_ = true;
+
 	sharedMenu_ = 0;
 	eraseBackground_ = 1;
 	gitCookie_ = 0;
+	gitSSHCookie_ = 0;
+//	gitConnectionCookie_ = 0;
+
+	mol::GIT git;
+
+	if ( !ssh_ )
+	{
+		if ( gitSSHCookie_ )
+		{
+			git.revokeInterface(gitSSHCookie_);
+			gitSSHCookie_ = 0;
+		}
+		HRESULT hr = ssh_.createObject(CLSID_SSH,CLSCTX_ALL);
+		if( hr != S_OK )
+			return;
+
+		git.registerInterface(*ssh_, &gitSSHCookie_);
+	}
 
 	sizel.cx = 300;
 	sizel.cy = 200;
 	bgCol_    = RGB(255,255,255);
 	foreCol_  = RGB(0,0,0);
 	mol::ole::PixeltoHIMETRIC(&sizel);
-
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -448,102 +274,19 @@ ScpListCtrl::~ScpListCtrl()
 {
 }
 
-//mol::ssh::Session&
-/*
-bool ScpListCtrl::connect( const mol::Uri& uri)
-{
-	if ( ssh_ )
-	{
-		VARIANT_BOOL vb;
-		HRESULT hr = ssh_->get_IsConnected(&vb);
-		if(hr == S_OK)
-		{
-			if ( vb == VARIANT_TRUE )
-			{
-				mol::bstr host;
-				long port;
-				hr = ssh_->get_Hostname(&host);
-				if ( hr == S_OK )
-				{
-					hr = ssh_->get_Portnumber(&port);
-					if ( hr == S_OK )
-					{
-						if ( uri.getHost() == mol::toUTF8(host.bstr_) &&
-							 uri.getPort() == port )
-						{
-							return true;
-						}
-					}
-				}
-			}
-		}
-		ssh_->Release();
-	}
-
-	mol::punk<ISSH> factory;
-	HRESULT hr = factory.createObject(CLSID_SSH);
-	if ( hr!=S_OK)
-		return false;
-
-	hr = factory->Connect( mol::bstr(mol::fromUTF8(uri.getHost())), uri.getPort(), &ssh_ );
-	if ( hr!=S_OK)
-		return false;
-
-	return true;
-
-	if ( ssh_.is_connected() )
-	{
-		if ( ssh_.hostname() == uri.getHost() &&
-			 ssh_.port() == uri.getPort() )
-		{
-			return ssh_;
-		}
-	}
-
-	ssh_.dispose();
-
-	mol::punk<IOleInPlaceFrame> oip; 
-	mol::GIT git;
-	HRESULT hr = git.getInterface(gitCookie_,&oip);
-	if ( hr != S_OK )
-		return ssh_;
-
-	std::string host = uri.getHost();
-	int port = uri.getPort();
-	std::string p = uri.getPath();
-
-	std::wstringstream oss;
-	oss << L"connecting to " << mol::fromUTF8(host) << L":" << port;
-	oip->SetStatusText(oss.str().c_str());
-
-	ssh_.open( mol::toUTF8(host),&credentials_,port);
-
-	std::wstringstream oss2;
-	oss2 << L"connected to " << mol::fromUTF8(host) << L":" << port;
-	oip->SetStatusText(oss2.str().c_str());
-
-	return ssh_;
-}
-
-mol::sftp::Session& ScpListCtrl::open(const mol::Uri& uri)
-{
-	mol::ssh::Session& ssh = connect(uri);
-
-	mol::punk<IOleInPlaceFrame> oip; 
-	mol::GIT git;
-	HRESULT hr = git.getInterface(gitCookie_,&oip);
-	if ( hr != S_OK )
-		return sftp_;
-
-	oip->SetStatusText(L"establishing sftp connection");
-
-	sftp_.dispose();
-	sftp_.open(ssh);
-	return sftp_;
-}
-*/
 void ScpListCtrl::load( const mol::string& url )
 {
+	mol::string path = url;
+	if ( path[path.size()-1] != _T('/') )
+	{
+		path = path + _T("/");
+	}
+
+	uri_.set(mol::toUTF8(path));
+
+
+
+	//connect();
 	queue_.push( new ScpDirQueueLoadAction(url,this) );
 }
 
@@ -588,6 +331,25 @@ mol::sftp::RemoteFile remoteFileFromIRemoteFile(IRemoteFile* rf)
 			);
 }
 
+bool ScpListCtrl::connect(DWORD cookie, ISSHConnection** con )
+{
+	mol::GIT git;
+	mol::punk<ISSH> ssh; 
+	HRESULT hr = git.getInterface(cookie,&ssh);
+	if ( hr != S_OK )
+		return false;
+
+	hr = ssh->Connect( 
+				mol::bstr(mol::fromUTF8(uri_.getHost())), 
+				uri_.getPort(),
+				con);
+
+	if ( hr != S_OK )
+		return false;
+
+	return true;
+}
+
 void ScpListCtrl::load_async( const mol::string& url )
 {
 	clear();
@@ -598,14 +360,9 @@ void ScpListCtrl::load_async( const mol::string& url )
 	HRESULT hr = git.getInterface(gitCookie_,&oip);
 	if ( hr != S_OK )
 		return;
-
-	mol::punk<IUnknown> unk; 
-	hr = git.getInterface(gitSSHCookie_,&unk);
-	if ( hr != S_OK )
-		return;
-
-	mol::punk<ISSH> ssh(unk);
-	if(!unk)
+	
+	mol::punk<ISSHConnection> conn;
+	if (!connect(gitSSHCookie_,&conn))
 		return;
 
 	mol::string path = url;
@@ -626,10 +383,11 @@ void ScpListCtrl::load_async( const mol::string& url )
 	{
 		//mol::sftp::Session& sftp = open(uri_);
 
-		mol::punk<ISSHConnection> conn;
-		hr = ssh->Connect( mol::bstr(mol::fromUTF8(uri_.getHost())), uri_.getPort(), &conn);
-		if( hr != S_OK )
-			return;
+//		mol::punk<ISSHConnection> conn;
+	//	hr = ssh->Connect( mol::bstr(mol::fromUTF8(uri_.getHost())), uri_.getPort(), &conn);
+//		hr = conn->Connect();
+	//	if( hr != S_OK )
+		//	return;
 
 		mol::punk<ISFTP> sftp;
 		hr = conn->get_SFTP(&sftp);
@@ -799,11 +557,13 @@ void ScpListCtrl::load_async( const mol::string& url )
 LRESULT ScpListCtrl::OnDestroy(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	queue_.cancel();
-	provider_.release();
+//	provider_.release();
 	clear();
 	mol::GIT git;
 	git.revokeInterface(gitCookie_);
 	git.revokeInterface(gitSSHCookie_);
+//	git.revokeInterface(gitConnectionCookie_);
+//	conn_.release();
 	ssh_.release();
 	::RevokeDragDrop(*this);
     return 0;
@@ -841,18 +601,67 @@ LRESULT ScpListCtrl::OnCreate(UINT msg, WPARAM wParam, LPARAM lParam)
 	mol::GIT git;
 	git.registerInterface( *frame_, &gitCookie_);
 
-	provider_.createObject(CLSID_DefaultScpCredentialProvider,CLSCTX_ALL);
-	::CoAllowSetForegroundWindow(provider_,0);
+	//provider_.createObject(CLSID_DefaultScpCredentialProvider,CLSCTX_ALL);
+	//::CoAllowSetForegroundWindow(provider_,0);
 
 
 	//mol::punk<ISSH> ssh;
-	HRESULT hr = ssh_.createObject(CLSID_SSH,CLSCTX_ALL);
-	if( hr != S_OK )
-		return 0;
+	//HRESULT hr = ssh_.createObject(CLSID_SSH,CLSCTX_ALL);
+	//if( hr != S_OK )
+	//	return 0;
 
-	git.registerInterface( *ssh_, &gitSSHCookie_);
+	//connect();
+
 	return 0;
 }
+
+/*
+bool ScpListCtrl::connect()
+{
+	mol::GIT git;
+
+	if ( !ssh_ )
+	{
+		if ( gitSSHCookie_ )
+		{
+			git.revokeInterface(gitSSHCookie_);
+			gitSSHCookie_ = 0;
+		}
+		HRESULT hr = ssh_.createObject(CLSID_SSH,CLSCTX_ALL);
+		if( hr != S_OK )
+			return false;
+
+		git.registerInterface(*ssh_, &gitSSHCookie_);
+	}
+/*
+	if ( conn_ )
+	{
+		VARIANT_BOOL vb;
+		HRESULT hr = conn_->get_IsConnected(&vb);
+		if ( hr != S_OK )
+			return false;
+
+		if ( vb == VARIANT_TRUE )
+		{
+			return true;
+		}
+	}
+
+	if ( gitConnectionCookie_ )
+	{
+		git.revokeInterface(gitConnectionCookie_);
+		gitConnectionCookie_ = 0;
+	}
+	HRESULT hr = ssh_->Connect( mol::bstr(mol::fromUTF8(uri_.getHost())), uri_.getPort(), &conn_);
+	if( hr != S_OK )
+		return false;
+
+	git.registerInterface(*conn_, &gitConnectionCookie_);
+	*/
+	//return true;
+//}
+
+
 
 LRESULT ScpListCtrl::OnSize(UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -971,10 +780,9 @@ void ScpListCtrl::EndRename(const mol::string& oldpath, const mol::string& newpa
 	if ( hr != S_OK )
 		return;
 
-	//mol::Uri uri( mol::toUTF8(path_) );
-	//std::string host = uri.getHost();
-	//int port = uri.getPort();
-	//std::string p = uri.getPath();
+	mol::punk<ISSHConnection> conn;
+	if (!connect(gitSSHCookie_,&conn))
+		return;
 
 	mol::string pFrom( mol::fromUTF8(uri_.getPath()) ); 
 	pFrom += oldpath;
@@ -987,10 +795,7 @@ void ScpListCtrl::EndRename(const mol::string& oldpath, const mol::string& newpa
 	mol::string pTo(tmp);
 	pTo += mol::string(newpath);
 
-	try 
-	{
-		//mol::sftp::Session& sftp = open(uri_);
-
+	/*
 		mol::punk<ISSH> ssh;
 		HRESULT hr = ssh.createObject(CLSID_SSH);
 		if( hr != S_OK )
@@ -1000,7 +805,7 @@ void ScpListCtrl::EndRename(const mol::string& oldpath, const mol::string& newpa
 		hr = ssh->Connect( mol::bstr(mol::fromUTF8(uri_.getHost())), uri_.getPort(), &conn);
 		if( hr != S_OK )
 			return;
-
+			*/
 		mol::punk<ISFTP> sftp;
 		hr = conn->get_SFTP(&sftp);
 		if( hr != S_OK )
@@ -1017,19 +822,7 @@ void ScpListCtrl::EndRename(const mol::string& oldpath, const mol::string& newpa
 			oss << L"failed to rename " << mol::towstring(pFrom);
 			oip->SetStatusText(oss.str().c_str());
 		}
-	}
-	catch(mol::ssh::Ex& ex)
-	{
-		std::wstringstream oss;
-		oss << L"failed to rename " << mol::towstring(pFrom) << L" " << mol::towstring(ex.msg());
-		oip->SetStatusText(oss.str().c_str());
-	}
-	catch(...)
-	{
-		std::wstringstream oss;
-		oss << L"failed to rename " << mol::towstring(pFrom);
-		oip->SetStatusText(oss.str().c_str());
-	}
+	
 }
 
 LRESULT ScpListCtrl::OnEndRename(UINT msg, WPARAM wParam, LPARAM lParam)
@@ -1040,6 +833,8 @@ LRESULT ScpListCtrl::OnEndRename(UINT msg, WPARAM wParam, LPARAM lParam)
 		mol::string displayname = message.listviewDispInfo()->item.pszText;
 
 		mol::string path= getItemEntry(message.listviewDispInfo()->item.iItem)->fileinfo.getName();
+		//connect();
+		queue_.push(new ScpDirQueueRenameAction(path,displayname,this));
 		EndRename(path,displayname);
 	}
 	return 0;
@@ -1273,6 +1068,7 @@ HRESULT __stdcall ScpListCtrl::Update()
 //////////////////////////////////////////////////////////////////////////////
 HRESULT __stdcall ScpListCtrl::CreateDir()
 {
+	//connect();
 	queue_.push(new ScpCreateDirQueueAction(this));
 	return S_OK;
 }
@@ -1285,6 +1081,17 @@ void ScpListCtrl::mkdir()
 	if ( hr != S_OK )
 		return;
 
+	/*
+	mol::punk<ISSHConnection> conn; 
+	hr = git.getInterface(gitConnectionCookie_,&conn);
+	if ( hr != S_OK )
+		return;
+		*/
+
+	mol::punk<ISSHConnection> conn;
+	if (!connect(gitSSHCookie_,&conn))
+		return;
+
 	//mol::Uri uri( mol::toUTF8(path_) );
 	//std::string host = uri.getHost();
 	//int port = uri.getPort();
@@ -1293,10 +1100,10 @@ void ScpListCtrl::mkdir()
 	if ( p[p.size()-1] != '/' )
 		p += "/";
 
-	try
-	{
+	//try
+	//{
 		//mol::sftp::Session& sftp = open(uri_);
-
+	/*
 		mol::punk<ISSH> ssh;
 		HRESULT hr = ssh.createObject(CLSID_SSH,CLSCTX_ALL);
 		if( hr != S_OK )
@@ -1306,7 +1113,7 @@ void ScpListCtrl::mkdir()
 		hr = ssh->Connect( mol::bstr(mol::fromUTF8(uri_.getHost())), uri_.getPort(), &conn);
 		if( hr != S_OK )
 			return;
-
+			*/
 		mol::punk<ISFTP> sftp;
 		hr = conn->get_SFTP(&sftp);
 		if( hr != S_OK )
@@ -1359,6 +1166,7 @@ void ScpListCtrl::mkdir()
 			load(path_);
 			return;
 		}
+		/*
 	}
 	catch(mol::ssh::Ex& ex)
 	{
@@ -1370,6 +1178,7 @@ void ScpListCtrl::mkdir()
 	{
 		oip->SetStatusText(L"failed to create new dir");
 	}
+	*/
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1404,6 +1213,7 @@ HRESULT __stdcall ScpListCtrl::Delete()
 		tmp.push_back(v[i]->filename);
 	}
 
+	//connect();
 	queue_.push( new ScpUnlinkQueueAction(tmp,this) );
 
 	return S_OK;
@@ -1420,10 +1230,20 @@ void ScpListCtrl::unlink( const std::vector<mol::string>& v )
 	if ( hr != S_OK )
 		return;
 
-	try 
-	{
+	/*
+	mol::punk<ISSHConnection> conn; 
+	hr = git.getInterface(gitConnectionCookie_,&conn);
+	if ( hr != S_OK )
+		return;
+		*/
+
+	mol::punk<ISSHConnection> conn;
+	if (!connect(gitSSHCookie_,&conn))
+		return;
+
 		//mol::sftp::Session& sftp = open(uri_);
 
+		/*
 		mol::punk<ISSH> ssh;
 		HRESULT hr = ssh.createObject(CLSID_SSH,CLSCTX_ALL);
 		if( hr != S_OK )
@@ -1433,7 +1253,7 @@ void ScpListCtrl::unlink( const std::vector<mol::string>& v )
 		hr = ssh->Connect( mol::bstr(mol::fromUTF8(uri_.getHost())), uri_.getPort(), &conn);
 		if( hr != S_OK )
 			return;
-
+		*/
 		mol::punk<ISFTP> sftp;
 		hr = conn->get_SFTP(&sftp);
 		if( hr != S_OK )
@@ -1476,14 +1296,7 @@ void ScpListCtrl::unlink( const std::vector<mol::string>& v )
 				}
 			}
 		}
-	}
-	catch(...)
-	{
-		std::wstringstream oss;
-		oss << L"failure while deleting remote files ";
-		oip->SetStatusText(oss.str().c_str());
-		return;
-	}
+
 	load(path_);
 	return;
 }
@@ -1505,6 +1318,7 @@ HRESULT __stdcall ScpListCtrl::Properties()
 
 			//mol::sftp::Session& sftp = open(uri_);
 
+			/*
 			mol::punk<ISSH> ssh;
 			HRESULT hr = ssh.createObject(CLSID_SSH,CLSCTX_ALL);
 			if( hr != S_OK )
@@ -1514,9 +1328,14 @@ HRESULT __stdcall ScpListCtrl::Properties()
 			hr = ssh->Connect( mol::bstr(mol::fromUTF8(uri_.getHost())), uri_.getPort(), &conn);
 			if( hr != S_OK )
 				return hr;
+				*/
+
+			mol::punk<ISSHConnection> conn;
+			if (!connect(gitSSHCookie_,&conn))
+				return S_FALSE;
 
 			mol::punk<ISFTP> sftp;
-			hr = conn->get_SFTP(&sftp);
+			HRESULT hr = conn->get_SFTP(&sftp);
 			if( hr != S_OK )
 				return hr;
 
@@ -1698,7 +1517,8 @@ HRESULT __stdcall ScpListCtrl::Paste ()
 	{
 		try {
 
-			this->put(v,path);
+			queue_.push(new ScpPushFileQueueAction(path,v,this));
+			//this->put(v,path);
 
 			/*
 			std::wstringstream oss;
@@ -1992,7 +1812,8 @@ HRESULT __stdcall ScpListCtrl::ShellListCtrl_Drop::Drop( IDataObject* pDataObjec
 	{
 		try {
 
-			list_->put(v,path);
+			list_->queue_.push(new ScpPushFileQueueAction(path,v,list_));
+			//list_->put(v,path);
 
 			/*
 			std::wstringstream oss;
@@ -2060,6 +1881,7 @@ void ScpListCtrl::put( std::vector<mol::string>& v, const mol::string& path)
 
 		//mol::ssh::Session& ssh = connect(uri_);
 
+		/*
 		mol::punk<ISSH> ssh;
 		HRESULT hr = ssh.createObject(CLSID_SSH,CLSCTX_ALL);
 		if( hr != S_OK )
@@ -2069,9 +1891,31 @@ void ScpListCtrl::put( std::vector<mol::string>& v, const mol::string& path)
 		hr = ssh->Connect( mol::bstr(mol::fromUTF8(uri_.getHost())), uri_.getPort(), &conn);
 		if( hr != S_OK )
 			return;
+			*/
+
+		/*
+		mol::GIT git;
+		mol::punk<IUnknown> unk;
+		HRESULT hr = git.getInterface(gitConnectionCookie_,&unk);
+		if( hr != S_OK )
+			return;
+
+		mol::punk<ISSHConnection> conn(unk);
+		if(!conn)
+			return;
+			*/
+
+		mol::punk<ISSHConnection> conn;
+		if (!connect(gitSSHCookie_,&conn))
+			return;
+
+		/*hr = conn->Connect();
+		if( hr != S_OK )
+			return;
+			*/
 
 		mol::punk<ISCP> scp;
-		hr = conn->get_SCP(&scp);
+		HRESULT hr = conn->get_SCP(&scp);
 		if( hr != S_OK )
 			return;
 
@@ -2205,7 +2049,12 @@ HRESULT __stdcall ScpListCtrl::get_CredentialProvider	( IDispatch** provider )
 {
 	if ( provider )
 	{
-		return provider_.queryInterface(provider);
+		mol::punk<IScpCredentialProvider> creds;
+		HRESULT hr = ssh_->get_Credentials(&creds);
+		if ( hr == S_OK )
+		{
+			return creds->QueryInterface(IID_IDispatch,(void**)provider);
+		}
 	}
 	return S_FALSE;
 }
@@ -2214,7 +2063,11 @@ HRESULT __stdcall ScpListCtrl::put_CredentialProvider	( IDispatch* provider  )
 {
 	if ( provider )
 	{
-		return provider->QueryInterface(IID_IScpCredentialProvider,(void**)&provider_);
+		mol::punk<IScpCredentialProvider> creds(provider);
+		if ( creds )
+		{
+			return ssh_->put_Credentials(creds);
+		}
 	}
 	return S_OK;
 }
