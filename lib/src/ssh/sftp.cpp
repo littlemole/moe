@@ -149,7 +149,9 @@ Session::Session(mol::ssh::Session& session)
 
 
 Session::~Session()
-{}
+{
+	dispose();
+}
 
 void Session::dispose()
 {

@@ -230,14 +230,14 @@ bool Session::read_file(  std::string& content)
 		
 	free(buffer);
 
-	/*
+	
 	rc = ssh_scp_pull_request(scp_);
 	if (rc != SSH_SCP_REQUEST_EOF)
 	{
 		throw mol::ssh::Ex(0,"error expecting eof");
 			
 	}
-	*/
+	
 	return true;
 }
 
