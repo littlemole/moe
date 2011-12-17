@@ -52,8 +52,15 @@ public:
 
 private:
 
+	size_t encryptVista( void* data, size_t size, DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
+	std::string decryptVista( DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
+	size_t encryptLegacy( void* data, size_t size, DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
+	std::string decryptLegacy( DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
+
+
 	void* encrypted_;
 	size_t size_;
+	size_t size_encrypted_;
 };
 
 class EncryptedMap

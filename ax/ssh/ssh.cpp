@@ -4,10 +4,26 @@
 #include "ssh/scp.h"
 #include "tcp/sockets.h"
 #include "ole/dll.h"
-#include <Wincrypt.h>
-
+//#include <Wincrypt.h>
+//#include "Ntsecapi.h"
 #include "ssh_i.c"
 #include "resource.h"
+
+#define RTL_ENCRYPT_MEMORY_SIZE					8
+#define CRYPTPROTECTMEMORY_BLOCK_SIZE           16
+
+typedef long RtlEncryptMemoryPtr ( PVOID mem, ULONG size, ULONG flags );
+typedef long RtlDecryptMemoryPtr ( PVOID mem, ULONG size, ULONG flags );
+
+RtlEncryptMemoryPtr* RtlEncryptMemory = (RtlEncryptMemoryPtr*)mol::dllFunc( _T("Advapi32.dll"), _T("SystemFunction040") );
+RtlDecryptMemoryPtr* RtlDecryptMemory = (RtlDecryptMemoryPtr*)mol::dllFunc( _T("Advapi32.dll"), _T("SystemFunction041") );
+
+typedef BOOL __stdcall CryptProtectMemoryPtr( LPVOID pDataIn, DWORD cbDataIn, DWORD dwFlags);
+typedef BOOL __stdcall CryptUnprotectMemoryPtr( LPVOID pDataIn, DWORD cbDataIn, DWORD dwFlags);
+
+CryptProtectMemoryPtr* MolCryptProtectMemory = (CryptProtectMemoryPtr*)mol::dllFunc( _T("Crypt32.dll"), _T("CryptProtectMemory") );
+CryptUnprotectMemoryPtr* MolCryptUnprotectMemory = (CryptUnprotectMemoryPtr*)mol::dllFunc( _T("Crypt32.dll"), _T("CryptUnprotectMemory") );
+
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -20,7 +36,7 @@ ScpCredentialManager& credentialManager()
 
 
 EncryptedMemory::EncryptedMemory()
-	:encrypted_(0),size_(0)
+	:encrypted_(0),size_(0),size_encrypted_(0)
 {
 
 }
@@ -37,45 +53,110 @@ void EncryptedMemory::dispose()
 		::LocalFree(encrypted_);
 		encrypted_ = 0;
 		size_ = 0;
+		size_encrypted_ = 0;
 	}
 }
 
 size_t EncryptedMemory::encrypt( void* data, size_t size, DWORD flags )
+{
+	if ( MolCryptProtectMemory )
+	{
+		return encryptVista(data,size,flags);
+	}
+	return encryptLegacy(data,size,flags);
+}
+
+size_t EncryptedMemory::encryptLegacy( void* data, size_t size, DWORD flags )
+{
+	static std::string padding('X',RTL_ENCRYPT_MEMORY_SIZE);
+
+	dispose();
+
+	size_ = size;
+	size_encrypted_ = size;
+
+	DWORD mod = size_ % RTL_ENCRYPT_MEMORY_SIZE;
+	if ( mod )
+	{
+		size_encrypted_ = size_ + (RTL_ENCRYPT_MEMORY_SIZE-mod);
+	}
+
+	encrypted_ = ::LocalAlloc(LPTR,size_encrypted_);
+	ZeroMemory(encrypted_,size_encrypted_);
+	memcpy( encrypted_, data, size_);
+
+	if (!::RtlEncryptMemory( encrypted_, (ULONG)size_encrypted_,flags))
+	{
+		throw mol::X("CryptProtectMemory failed!");
+	}
+	return size_;
+}
+
+std::string EncryptedMemory::decryptLegacy( DWORD flags )
+{
+	void* v = malloc(size_encrypted_);
+	if(!v)
+		return "";
+
+	memcpy(v,encrypted_,size_encrypted_);
+
+	if (::RtlDecryptMemory(v,(ULONG)size_encrypted_,flags))
+	{
+		std::string s( (char*)v, size_ );
+		free(v);
+		return s;
+	}
+	free(v);
+	return "";
+}
+
+std::string EncryptedMemory::decrypt( DWORD flags )
+{
+	if ( MolCryptUnprotectMemory )
+	{
+		return decryptVista(flags);
+	}
+	return decryptLegacy(flags);
+}
+
+size_t EncryptedMemory::encryptVista( void* data, size_t size, DWORD flags )
 {
 	static std::string padding('X',CRYPTPROTECTMEMORY_BLOCK_SIZE);
 
 	dispose();
 
 	size_ = size;
+	size_encrypted_ = size;
 
-	DWORD mod = size % CRYPTPROTECTMEMORY_BLOCK_SIZE;
+	DWORD mod = size_ % CRYPTPROTECTMEMORY_BLOCK_SIZE;
 	if ( mod )
 	{
-		size_ = size_ + (CRYPTPROTECTMEMORY_BLOCK_SIZE-mod);
+		size_encrypted_ = size_ + (CRYPTPROTECTMEMORY_BLOCK_SIZE-mod);
 	}
 
-	encrypted_ = ::LocalAlloc(LPTR,size_);
-	ZeroMemory(encrypted_,size_);
-	memcpy( encrypted_, data, size);
+	encrypted_ = ::LocalAlloc(LPTR,size_encrypted_);
+	ZeroMemory(encrypted_,size_encrypted_);
+	memcpy( encrypted_, data, size_);
 
-	if (!::CryptProtectMemory( encrypted_, (DWORD)size_,flags))
+	if (!MolCryptProtectMemory( encrypted_, (DWORD)size_encrypted_,flags))
 	{
 		throw mol::X("CryptProtectMemory failed!");
 	}
-	return size;
+	return size_;
 }
 
-std::string EncryptedMemory::decrypt( DWORD flags )
+std::string EncryptedMemory::decryptVista( DWORD flags )
 {
-	void* v = malloc(size_);
+	void* v = malloc(size_encrypted_);
 	if(!v)
 		return "";
 
-	memcpy(v,encrypted_,size_);
+	memcpy(v,encrypted_,size_encrypted_);
 
-	if (::CryptUnprotectMemory(v,(DWORD)size_,flags))
+	if (MolCryptUnprotectMemory(v,(DWORD)size_encrypted_,flags))
 	{
 		std::string s( (char*)v, size_ );
+		free(v);
 		return s;
 	}
 	free(v);
