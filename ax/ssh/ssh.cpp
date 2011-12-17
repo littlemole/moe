@@ -9,6 +9,8 @@
 #include "ssh_i.c"
 #include "resource.h"
 
+
+#define 		STATUS_SUCCESS					0
 #define RTL_ENCRYPT_MEMORY_SIZE					8
 #define CRYPTPROTECTMEMORY_BLOCK_SIZE           16
 
@@ -85,8 +87,10 @@ size_t EncryptedMemory::encryptLegacy( void* data, size_t size, DWORD flags )
 	ZeroMemory(encrypted_,size_encrypted_);
 	memcpy( encrypted_, data, size_);
 
-	if (!::RtlEncryptMemory( encrypted_, (ULONG)size_encrypted_,flags))
+	long ntstat = ::RtlEncryptMemory( encrypted_, (ULONG)size_encrypted_,flags);
+	if (ntstat!=STATUS_SUCCESS)
 	{
+		cry();
 		throw mol::X("CryptProtectMemory failed!");
 	}
 	return size_;
@@ -100,7 +104,7 @@ std::string EncryptedMemory::decryptLegacy( DWORD flags )
 
 	memcpy(v,encrypted_,size_encrypted_);
 
-	if (::RtlDecryptMemory(v,(ULONG)size_encrypted_,flags))
+	if (::RtlDecryptMemory(v,(ULONG)size_encrypted_,flags) == STATUS_SUCCESS)
 	{
 		std::string s( (char*)v, size_ );
 		free(v);
@@ -1427,6 +1431,11 @@ HRESULT __stdcall ScpCredentialProvider::acceptHost( BSTR host, long port, BSTR 
 	if (!accept)
 		return E_INVALIDARG;
 
+	bool b = credentialManager().credentials.acceptHost( mol::toUTF8(host),port, mol::toUTF8(hash) );
+
+	*accept = b == true ? VARIANT_TRUE : VARIANT_FALSE;
+
+	/*
 	AccepHostDlg dlg( mol::toString(host), port, mol::toString(hash) );
 
 	LRESULT r = dlg.doModal( IDD_DIALOG_SSH_ACCEPT_HOST, ::GetDesktopWindow() );
@@ -1435,7 +1444,7 @@ HRESULT __stdcall ScpCredentialProvider::acceptHost( BSTR host, long port, BSTR 
 		*accept = VARIANT_TRUE;
 	else
 		*accept = VARIANT_FALSE;
-
+		*/
 	return S_OK;
 }
 
@@ -1476,7 +1485,13 @@ HRESULT  __stdcall ScpCredentialProvider::removeSessionCredentials( BSTR host, l
 
 bool ScpCredentialManager::acceptHost( mol::string host, long port, mol::string hash )
 {
-	return credentialManager().credentials.acceptHost( mol::toUTF8(host),port, mol::toUTF8(hash) );
+	//return credentialManager().credentials.acceptHost( mol::toUTF8(host),port, mol::toUTF8(hash) );
+
+	AccepHostDlg dlg( mol::toString(host), port, mol::toString(hash) );
+
+	LRESULT r = dlg.doModal( IDD_DIALOG_SSH_ACCEPT_HOST, ::GetDesktopWindow() );
+
+	return r == IDOK;
 }
 
 
