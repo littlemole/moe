@@ -99,15 +99,19 @@ std::string Ex::msg()
 PasswordCredentials::PasswordCredentials()
 {}
 
-PasswordCredentials::PasswordCredentials(const std::string& host, int port, const std::string& user, const std::string& pwd)
+PasswordCredentials::PasswordCredentials(const std::string& host, int port, const ssh::string& user, const ssh::string& pwd)
 	: host_(host),port_(port),user_(user),pwd_(pwd)
 {}
 
-bool PasswordCredentials::getCredentials(const std::string& host, int port,char** user, char** pwd)
+bool PasswordCredentials::getCredentials(const std::string& host, int port,ssh::string& user, ssh::string& pwd)
 {
-	if (!user || !pwd)
+	if (!user.size() || !pwd.size())
 		return false;
 
+	user = user_;
+	pwd = pwd_;
+
+	/*
 	size_t size = (user_.size()+1);
 	*user = (char*)malloc( size );
 	memcpy(*user, user_.data(), size );
@@ -115,7 +119,7 @@ bool PasswordCredentials::getCredentials(const std::string& host, int port,char*
 	size = (pwd_.size()+1);
 	*pwd = (char*)malloc( size );
 	memcpy(*pwd, pwd_.data(), size );
-
+	*/
 	return true;
 }
 
@@ -147,7 +151,7 @@ bool PasswordCredentials::acceptHost(const std::string& host, int port,const std
 		return false;
 }
 
-bool PasswordCredentials::rememberHostCredentials(const std::string& host, int port, const char* user, const char* pwd)
+bool PasswordCredentials::rememberHostCredentials(const std::string& host, int port, const ssh::string& user, const ssh::string& pwd)
 {
 	return true;
 }
@@ -393,21 +397,19 @@ bool Session::auth_password()
 	if (!cb_)
 		return false;
 
-	char* user = 0;
-	char* pwd = 0;
-	if(!cb_->getCredentials(hostname_,port_,&user,&pwd))
+	ssh::string user;
+	ssh::string pwd;
+	if(!cb_->getCredentials(hostname_,port_,user,pwd))
 		return false;
 
-	int rc = ssh_userauth_password(session_, user, pwd );
+	int rc = ssh_userauth_password(session_, user.data(), pwd.data() );
 	if ( rc == SSH_AUTH_SUCCESS )
 	{
 		cb_->rememberHostCredentials(hostname_,port_,user,pwd);
 	}
 
-	if ( user )
-		free(user);
-	if ( pwd )
-		free(pwd);
+	user.clear();
+	pwd.clear();
 
 	switch(rc)
 	{
@@ -435,10 +437,10 @@ bool Session::auth_password()
 	return false;
 }
 
-bool Session::auth_password(const char* user, const char* pwd)
+bool Session::auth_password(const ssh::string& user, const ssh::string& pwd)
 {
 
-	int rc = ssh_userauth_password(session_, user, pwd );
+	int rc = ssh_userauth_password(session_, user.data(), pwd.data() );
 	switch(rc)
 	{
 		case SSH_AUTH_SUCCESS:

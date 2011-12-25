@@ -96,7 +96,7 @@ size_t EncryptedMemory::encryptLegacy( void* data, size_t size, DWORD flags )
 	return size_;
 }
 
-std::string EncryptedMemory::decryptLegacy( DWORD flags )
+mol::ssh::string EncryptedMemory::decryptLegacy( DWORD flags )
 {
 	void* v = malloc(size_encrypted_);
 	if(!v)
@@ -106,7 +106,7 @@ std::string EncryptedMemory::decryptLegacy( DWORD flags )
 
 	if (::RtlDecryptMemory(v,(ULONG)size_encrypted_,flags) == STATUS_SUCCESS)
 	{
-		std::string s( (char*)v, size_ );
+		mol::ssh::string s( (char*)v, size_ );
 		free(v);
 		return s;
 	}
@@ -114,7 +114,7 @@ std::string EncryptedMemory::decryptLegacy( DWORD flags )
 	return "";
 }
 
-std::string EncryptedMemory::decrypt( DWORD flags )
+mol::ssh::string EncryptedMemory::decrypt( DWORD flags )
 {
 	if ( MolCryptUnprotectMemory )
 	{
@@ -149,7 +149,7 @@ size_t EncryptedMemory::encryptVista( void* data, size_t size, DWORD flags )
 	return size_;
 }
 
-std::string EncryptedMemory::decryptVista( DWORD flags )
+mol::ssh::string EncryptedMemory::decryptVista( DWORD flags )
 {
 	void* v = malloc(size_encrypted_);
 	if(!v)
@@ -159,7 +159,7 @@ std::string EncryptedMemory::decryptVista( DWORD flags )
 
 	if (MolCryptUnprotectMemory(v,(DWORD)size_encrypted_,flags))
 	{
-		std::string s( (char*)v, size_ );
+		mol::ssh::string s( (char*)v, size_ );
 		free(v);
 		return s;
 	}
@@ -186,41 +186,78 @@ EncryptedMap::EncryptedMap()
 
 void EncryptedMap::encrypt(const EncryptedMap::MapType& map)
 {
-	std::wostringstream oss;
+	/*
+	std::ostringstream oss;
 	for ( MapType::const_iterator it = map.begin(); it!=map.end(); it++)
 	{
 		oss << (*it).first << L'\0' << (*it).second << L'\0';
 	}
 
-	std::wstring tmp(oss.str());
+	std::string tmp(oss.str());
+	*/
 
-	secure_.encrypt( (void*)tmp.data(), tmp.size()*sizeof(wchar_t) );
+	mol::ssh::stringBuffer buffer;
+	for ( MapType::const_iterator it = map.begin(); it!=map.end(); it++)
+	{
+		buffer.append( (*it).first.data(), (*it).first.size() );
+		buffer.append( '\0' );
+		buffer.append( (*it).second.data(), (*it).first.size() );
+		buffer.append( '\0' );
+	}
+
+	secure_.encrypt( (void*)buffer.data(), buffer.size() );
 }
 
 EncryptedMap::MapType EncryptedMap::decrypt()
 {
 	MapType map;
-	std::string tmp = secure_.decrypt();
+	mol::ssh::string plain = secure_.decrypt();
 	// but it is really a wstr
-	std::wstring plain( (wchar_t*)(tmp.data()), tmp.size()/sizeof(wchar_t));
+	//std::wstring plain( (wchar_t*)(tmp.data()), tmp.size()/sizeof(wchar_t));
 	size_t pos = 0;
 	size_t p   = 0;
 
-	while( pos != std::wstring::npos && p < plain.size() )
+	char* data = (char*)plain.data();
+	char* pdata = (char*)data;
+
+	while(pdata < plain.data()+plain.size() )
 	{
-		pos = plain.find(L'\0',p);
+		while( *pdata )
+		{
+			pdata++;
+		}
+
+		mol::ssh::string key( data, pdata-data );
+		pdata++;
+		data = pdata;
+
+		while( *pdata )
+		{
+			pdata++;
+		}
+		mol::ssh::string val( data, pdata-data );
+		pdata++;
+
+		map.insert( std::make_pair(key,val) );
+
+	}	
+
+	/*
+	while( pos != std::string::npos && p < plain.size() )
+	{
+		pos = plain.find('\0',p);
 		if ( pos == std::wstring::npos || pos == p)
 			break;
 
-		std::wstring key = plain.substr(p,pos-p);
+		std::string key = plain.substr(p,pos-p);
 		if(key.empty())
 			break;
 
-		p = plain.find(L'\0',pos+1);
-		if ( p == std::wstring::npos || p == pos+1)
+		p = plain.find('\0',pos+1);
+		if ( p == std::string::npos || p == pos+1)
 			break;
 
-		std::wstring val = plain.substr(pos+1,p-pos);
+		std::string val = plain.substr(pos+1,p-pos);
 		if(val.empty())
 			break;
 
@@ -228,19 +265,20 @@ EncryptedMap::MapType EncryptedMap::decrypt()
 
 		p = p + 1;
 	}
+	*/
 	return map;
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
-SecureCredentials::SecureCredentials( const mol::string& h, int p, const mol::string& u, const mol::string& pass)
+SecureCredentials::SecureCredentials( const mol::string& h, int p, const mol::ssh::string& u, const mol::ssh::string& pass)
 		: host(h),port(p)
 {
 
 	EncryptedMap::MapType map;
-	map.insert( std::make_pair(std::wstring(L"user"),std::wstring(mol::towstring(u))));
-	map.insert( std::make_pair(std::wstring(L"pwd"), std::wstring(mol::towstring(pass))));
+	map.insert( std::make_pair(mol::ssh::string("user"),u));
+	map.insert( std::make_pair(mol::ssh::string("pwd"), pass));
 
 	secure_.encrypt(map);
 }
@@ -250,15 +288,15 @@ SecureCredentials::~SecureCredentials()
 }
 
 
-void SecureCredentials::decrypt( mol::string& u, mol::string& pass )
+void SecureCredentials::decrypt( mol::ssh::string& u, mol::ssh::string& pass )
 {
 	EncryptedMap::MapType map = secure_.decrypt();
 
-	if ( map.count(L"user") > 0 )
-		u = map[L"user"];
+	if ( map.count("user") > 0 )
+		u = map["user"];
 
-	if ( map.count(L"pwd") > 0 )
-		pass = map[L"pwd"];
+	if ( map.count("pwd") > 0 )
+		pass = map["pwd"];
 }
 
 
@@ -270,7 +308,7 @@ HRESULT __stdcall ScpPasswordCredentials::put_Username( BSTR user)
 	if ( user )
 	{
 		EncryptedMap::MapType map = secure_.decrypt();
-		map.insert( std::make_pair(L"user", mol::towstring(user)) );
+		map.insert( std::make_pair( mol::ssh::string("user"), mol::ssh::wstring2utf8(user,::SysStringLen(user))) );
 		secure_.encrypt(map);
 	}
 	return S_OK;
@@ -283,9 +321,9 @@ HRESULT __stdcall ScpPasswordCredentials::get_Username( BSTR* user)
 	*user = 0;
 
 	EncryptedMap::MapType map = secure_.decrypt();
-	if ( map.count(L"user") > 0 )
+	if ( map.count("user") > 0 )
 	{
-		*user = ::SysAllocString( map[L"user"].c_str() );			
+		*user = ::SysAllocString( mol::ssh::utf82wstring( map["user"].data(), map["user"].size()).data() );			
 	}
 	return S_OK;
 }
@@ -295,7 +333,7 @@ HRESULT __stdcall ScpPasswordCredentials::put_Password( BSTR pwd)
 	if ( pwd )
 	{
 		EncryptedMap::MapType map = secure_.decrypt();
-		map.insert( std::make_pair(L"pwd", mol::towstring(pwd)) );
+		map.insert( std::make_pair( mol::ssh::string("pwd"), mol::ssh::wstring2utf8(pwd,::SysStringLen(pwd))) );
 		secure_.encrypt(map);
 	}
 	return S_OK;
@@ -309,9 +347,9 @@ HRESULT __stdcall ScpPasswordCredentials::get_Password( BSTR* pwd)
 	*pwd = 0;
 
 	EncryptedMap::MapType map = secure_.decrypt();
-	if ( map.count(L"pwd") > 0 )
+	if ( map.count("pwd") > 0 )
 	{
-		*pwd = ::SysAllocString( map[L"pwd"].c_str() );			
+		*pwd = ::SysAllocString( mol::ssh::utf82wstring( map["pwd"].data(), map["pwd"].size()).data() );		
 	}
 
 	return S_OK;
@@ -369,9 +407,9 @@ bool ScpCredentialManager::Credentials::acceptHost(const std::string& host, int 
 	return This()->acceptHost( mol::fromUTF8(host),port, mol::fromUTF8(hash));
 }
 
-bool ScpCredentialManager::Credentials::rememberHostCredentials(const std::string& host, int port, const char* user, const char* pwd)
+bool ScpCredentialManager::Credentials::rememberHostCredentials(const std::string& host, int port, const mol::ssh::string& user, const mol::ssh::string& pwd)
 {
-	SecureCredentials* sc = new SecureCredentials( mol::fromUTF8(host),port,mol::fromUTF8(user),mol::fromUTF8(pwd));
+	SecureCredentials* sc = new SecureCredentials( mol::fromUTF8(host),port,user,pwd);
 	This()->remberSessionCredentials( mol::fromUTF8(host),port,sc);
 	return true;
 }
@@ -1307,8 +1345,8 @@ public:
 		: host_(host), port_(port)
 	{}
 
-	mol::string user;
-	mol::string pwd;
+	mol::ssh::wstring user;
+	mol::ssh::wstring pwd;
 
 	virtual LRESULT wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	{
@@ -1327,8 +1365,12 @@ public:
 			{
 				if (LOWORD(wParam) == IDOK )
 				{
-					getDlgItemText(IDC_EDIT_USER,user);
-					getDlgItemText(IDC_EDIT_PWD,pwd);
+					mol::string u;
+					mol::string p;
+					getDlgItemText(IDC_EDIT_USER,u);
+					getDlgItemText(IDC_EDIT_PWD,p);
+					user = mol::ssh::wstring( u.c_str() );
+					pwd  = mol::ssh::wstring( p.c_str() );
 					endDlg(LOWORD(wParam));
 					return FALSE;
 				}
@@ -1406,18 +1448,16 @@ HRESULT __stdcall ScpCredentialProvider::getCredentials( BSTR host, long port, I
 
 	mol::string h = mol::toString(host);
 
-	char* u = 0;
-	char* p = 0;
-	if ( credentialManager().credentials.getCredentials( mol::toUTF8(host), port, &u, &p ) )
+	mol::ssh::string u;
+	mol::ssh::string p;
+	if ( credentialManager().credentials.getCredentials( mol::toUTF8(host), port, u, p ) )
 	{
 		mol::punk<IScpPasswordCredentials> c;
 		HRESULT hr = c.createObject(CLSID_ScpPasswordCredentials);
 		if ( hr == S_OK )
 		{
-			c->put_Username( mol::bstr(u) );
-			c->put_Password( mol::bstr(p) );
-			free(u);
-			free(p);
+			c->put_Username( mol::bstr(u.data()) );
+			c->put_Password( mol::bstr(p.data()) );
 			return c.queryInterface(credentials);
 		}
 	}
@@ -1496,18 +1536,22 @@ bool ScpCredentialManager::acceptHost( mol::string host, long port, mol::string 
 
 
 
-bool ScpCredentialManager::Credentials::getCredentials(const std::string& host, int port,char** user, char** pwd)
+bool ScpCredentialManager::Credentials::getCredentials(const std::string& host, int port,mol::ssh::string& user, mol::ssh::string& pwd)
 {
 	SecureCredentials* sc = 0;
-	if (!user ||!pwd)
+	if (!user.data() ||!pwd.data())
 		return false;
 
 	if ( This()->getCredentials( mol::fromUTF8(host), port, &sc ) )
 	{
-		mol::string login;
-		mol::string pass;
+		mol::ssh::string login;
+		mol::ssh::string pass;
 		sc->decrypt(login,pass);
 
+		user = login;
+		pwd = pass;
+
+		/*
 		std::string u = mol::toUTF8(login);
 		std::string p = mol::toUTF8(pass);
 
@@ -1516,6 +1560,7 @@ bool ScpCredentialManager::Credentials::getCredentials(const std::string& host, 
 
 		memcpy( *user, u.c_str(), u.size() +1);
 		memcpy( *pwd , p.c_str(), p.size() +1);
+		*/
 		return true;
 	}
 
@@ -1527,6 +1572,10 @@ bool ScpCredentialManager::Credentials::getCredentials(const std::string& host, 
 		return false;
 	}
 
+	user = mol::ssh::wstring2utf8(dlg.user.data(),dlg.user.size());
+	pwd = mol::ssh::wstring2utf8(dlg.pwd.data(),dlg.pwd.size());
+
+	/*
 	std::string u = mol::toUTF8(dlg.user);
 	std::string p = mol::toUTF8(dlg.pwd);
 
@@ -1535,6 +1584,7 @@ bool ScpCredentialManager::Credentials::getCredentials(const std::string& host, 
 
 	memcpy( *user, u.c_str(), u.size() +1);
 	memcpy( *pwd , p.c_str(), p.size() +1);
+	*/
 
 	return true;
 }

@@ -11,7 +11,7 @@
 
 namespace mol  {
 
-
+	     //class DECLSPEC_UUID("8856F961-340A-11D0-A96B-00C04FD705A2")
 DEFINE_GUID(CGID_IWebBrowser, 0xED016940L,0xBD5B, 0x11cf, 0xBA, 0x4E, 0x00,0xC0,0x4f,0xD7,0x08,0x16);
 
 namespace ie {

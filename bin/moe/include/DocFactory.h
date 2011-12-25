@@ -44,8 +44,6 @@ public:
 
 private:
 
-	mol::MdiChild* documentFactory( const mol::string& dir, MOE_DOCTYPE type, long enc, bool readOnly);
-
 	template<class E>
 	HRESULT createFile(const mol::string& p, IMoeDocument** doc)
 	{
@@ -61,8 +59,6 @@ private:
 			return edit->QueryInterface(IID_IMoeDocument,(void**)doc);
 		return S_OK;
 	}
-
-	mol::MdiChild* openSSH(const mol::string& p,MOE_DOCTYPE type, long enc, bool readOnly);
 
 	void updateUI(const mol::string& p, mol::MdiChild* c);
 }; 
