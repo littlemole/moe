@@ -29,6 +29,182 @@ enum {
 
 namespace ssh {
 
+// secure strings - use as short as possible.
+// secure strings will overwrite the occupied character data memory with zeros
+// before releasing the memory
+class string 
+{
+public:
+	string() : data_(0), size_(0) {}
+	string( const string& s) : size_(s.size()) { data_ = new char[size_+1]; clear(); memcpy((void*)data_,(void*)s.data(),size_); }
+	string( const char* s) : data_(s),size_(strlen(s)) {}
+	string( const char* s, size_t size) : data_(s),size_(size) {}
+	~string() { clear(); delete data_; }
+
+	const char* data() const { return data_; }
+	const size_t size() const { return size_; };
+
+	void clear()
+	{
+		::ZeroMemory((void*)data_,size_+1);
+	}
+
+	string& operator=( const string& rhs )
+	{
+		if ( this == &rhs )
+		{
+			return *this;
+		}
+
+		clear();
+		delete data_;
+		size_ = rhs.size();
+		data_ = new char[size_+1];
+		clear();
+		memcpy((void*)data_,(void*)rhs.data(),size_);
+
+		return *this;
+	}
+
+	bool operator<(const string& compare)
+	{
+		return strcmp(data_,compare.data());
+	}
+
+
+
+private:
+	const char* data_;
+	size_t      size_;
+};
+
+
+bool operator<(const string& src, const string& compare)
+{
+	return strcmp(src.data(),compare.data());
+}
+
+class wstring 
+{
+public:
+	wstring() : data_(0), size_(0) {}
+	wstring( const wstring& s) : size_(s.size()) { data_ = new wchar_t[size_+1]; clear(); memcpy((void*)data_,(void*)s.data(),size_*sizeof(wchar_t)); }
+	wstring( const wchar_t* s) : data_(s),size_(wcslen(s)) {}
+	wstring( const wchar_t* s, size_t size) : data_(s),size_(size) {}
+	~wstring() { clear(); delete data_; }
+
+	const wchar_t* data() const { return data_; }
+	const size_t size() const { return size_; };
+
+	void clear()
+	{
+		::ZeroMemory((void*)data_,size_+1);
+	}
+
+	wstring& operator=( const wstring& rhs )
+	{
+		if ( this == &rhs )
+		{
+			return *this;
+		}
+
+		clear();
+		delete data_;
+		size_ = rhs.size();
+		data_ = new wchar_t[size_+1];
+		clear();
+		memcpy((void*)data_,(void*)rhs.data(),size_*sizeof(wchar_t));
+
+		return *this;
+	}
+
+private:
+	const wchar_t* data_;
+	size_t      size_;
+};
+
+ssh::wstring utf82wstring( const char* in, const size_t size )
+{
+	int len = ::MultiByteToWideChar( CP_UTF8, 0, in, (int)size, 0, 0 );
+	wchar_t* buf = new wchar_t[len];
+	int r = ::MultiByteToWideChar( CP_UTF8, 0, in, (int)in, buf, len );
+	ssh::wstring out(buf,len);
+	::ZeroMemory((void*)buf,len*sizeof(wchar_t));
+	delete[] buf;
+	return out;
+}
+
+
+ssh::string wstring2utf8( const wchar_t* in, const size_t size)
+{
+	int len = ::WideCharToMultiByte( CP_UTF8, 0, in, (int)size, 0, 0,0,0 );
+	char* buf = new char[len];
+	int r = ::WideCharToMultiByte( CP_UTF8, 0, in,(int)size, buf, len,0,0 );
+	ssh::string out(buf,len);
+	::ZeroMemory((void*)buf,len);
+	delete[] buf;
+	return out;
+}
+
+class stringBuffer
+{
+public:
+	stringBuffer()
+		:data_(0),size_(512),used_(size_)
+	{
+		data_ = new char[size_+1];
+		clear();
+	}
+
+	~stringBuffer()
+	{
+		clear();
+	}
+
+	void clear()
+	{
+		::ZeroMemory((void*)data_,size_+1);
+	}
+
+	const char* data()  const { return data_; }
+	const size_t size() const { return used_; };
+
+	void append(char* data)
+	{
+		size_t s = strlen(data);
+		append(data,s);
+	}
+
+	void append(const char* data, size_t s)
+	{
+		if ( used_ + s > size_ )
+		{
+			size_t newsize = ((used_ + s ) / 512) +512;
+			char* tmp = new char[newsize+1];
+			::ZeroMemory((void*)tmp,newsize+1);
+			memcpy(tmp,data_,used_);
+			memcpy(tmp+used_,data,s);
+			clear();
+			data_ = tmp;
+			size_ = newsize;
+			used_ = used_ + s;
+		}
+	}
+private:
+
+	stringBuffer(const stringBuffer& ) 
+	{
+	}
+
+	stringBuffer& operator=(const stringBuffer& )
+	{
+		return *this;
+	}
+
+	char* data_;
+	size_t size_;
+	size_t used_;
+};
 //////////////////////////////////////////////////////////////////////////////
 
 class Init 
@@ -72,10 +248,10 @@ class CredentialCallback
 {
 public:
 
-	virtual bool getCredentials(const std::string& host, int port,char** user, char** pwd) = 0;
+	virtual bool getCredentials(const std::string& host, int port, ssh::string& user, ssh::string& pwd) = 0;
 	virtual bool promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo) = 0;
 	virtual bool acceptHost(const std::string& host, int port, const std::string& hash) = 0;
-	virtual bool rememberHostCredentials(const std::string& host, int port, const char* user, const char* pwd) = 0;
+	virtual bool rememberHostCredentials(const std::string& host, int port, const ssh::string& user, const ssh::string& pwd) = 0;
 	virtual bool deleteHostCredentials(const std::string& host, int port) = 0;
 };
 
@@ -87,19 +263,19 @@ class PasswordCredentials : public CredentialCallback
 public:
 
 	PasswordCredentials();	
-	PasswordCredentials(const std::string& host, int port,const std::string& user, const std::string& pwd);
+	PasswordCredentials(const std::string& host, int port,const ssh::string& user, const ssh::string& pwd);
 
-	virtual bool getCredentials(const std::string& host, int port,char** user, char** pwd);
+	virtual bool getCredentials(const std::string& host, int port,ssh::string& user, ssh::string& pwd);
 	virtual bool promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo);
 	virtual bool acceptHost(const std::string& host, int port, const std::string& hash);
-	virtual bool rememberHostCredentials(const std::string& host, int port, const char* user, const char* pwd);
+	virtual bool rememberHostCredentials(const std::string& host, int port, const ssh::string& user, const ssh::string& pwd);
 	virtual bool deleteHostCredentials(const std::string& host, int port);
 
 private:
 	std::string host_;
 	int port_;
-	std::string user_;
-	std::string pwd_;
+	ssh::string user_;
+	ssh::string pwd_;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -130,7 +306,7 @@ public:
 	bool auth_none();
 	bool auth_pubkey();
 	bool auth_password();
-	bool auth_password(const char* user, const char* pwd);
+	bool auth_password(const ssh::string& user, const ssh::string& pwd);
 	bool auth_kbdint();
 
 	std::string exec_remote(const std::string& cmd);

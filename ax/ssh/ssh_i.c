@@ -6,7 +6,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Wed Dec 14 22:01:13 2011
+/* at Thu Dec 22 21:04:49 2011
  */
 /* Compiler settings for ssh.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 

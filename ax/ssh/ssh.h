@@ -45,7 +45,7 @@ public:
 	void dispose();
 
 	size_t encrypt( void* data, size_t size, DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
-	std::string decrypt( DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
+	mol::ssh::string decrypt( DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
 
 	void* data();
 	size_t size();
@@ -53,9 +53,9 @@ public:
 private:
 
 	size_t encryptVista( void* data, size_t size, DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
-	std::string decryptVista( DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
+	mol::ssh::string decryptVista( DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
 	size_t encryptLegacy( void* data, size_t size, DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
-	std::string decryptLegacy( DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
+	mol::ssh::string decryptLegacy( DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
 
 
 	void* encrypted_;
@@ -67,7 +67,7 @@ class EncryptedMap
 {
 public:
 
-	typedef std::map<std::wstring,std::wstring> MapType;
+	typedef std::map<mol::ssh::string,mol::ssh::string> MapType;
 
 	EncryptedMap();
 
@@ -100,13 +100,13 @@ private:
 
 struct SecureCredentials
 {
-	SecureCredentials( const mol::string& h, int p, const mol::string& u, const mol::string& pass);
+	SecureCredentials( const mol::string& h, int p, const mol::ssh::string& u, const mol::ssh::string& pass);
 	~SecureCredentials();
 
 	mol::string host;
 	int port;
 
-	void decrypt( mol::string& u, mol::string& pass );
+	void decrypt( mol::ssh::string& u, mol::ssh::string& pass );
 
 private:
 	EncryptedMap secure_;
@@ -136,10 +136,10 @@ public:
 		public: 
 		outer_this(ScpCredentialManager,credentials);
 
-		virtual bool getCredentials(const std::string& host, int port,char** user, char** pwd);
+		virtual bool getCredentials(const std::string& host, int port,mol::ssh::string& user, mol::ssh::string& pwd);
 		virtual bool promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo);
 		virtual bool acceptHost(const std::string& host, int port, const std::string& hash);
-		virtual bool rememberHostCredentials(const std::string& host, int port, const char* user, const char* pwd);
+		virtual bool rememberHostCredentials(const std::string& host, int port, const mol::ssh::string& user, const mol::ssh::string& pwd);
 		virtual bool deleteHostCredentials(const std::string& host, int port);
 
 	} credentials;

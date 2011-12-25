@@ -184,6 +184,10 @@ void unlockInternetExplorer();
 typedef HRESULT __stdcall IsAppThemedPtr();
 extern IsAppThemedPtr* IsAppThemed;
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+
 } // end namespace v7
 } // end namespace mol
 

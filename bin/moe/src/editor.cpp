@@ -1494,7 +1494,7 @@ void Editor::updateUI()
 		}
 		if ( mol::Ribbon::ribbon()->enabled())
 		{
-			mol::Ribbon::handler(RibbonEncoding)->select(moe()->codePageIndex((int)encoding));
+			mol::Ribbon::handler(RibbonEncoding)->select((int)moe()->codePageIndex((int)encoding));
 		}
 	}
 	
