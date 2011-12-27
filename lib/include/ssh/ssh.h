@@ -35,18 +35,50 @@ namespace ssh {
 class string 
 {
 public:
-	string() : data_(0), size_(0) {}
-	string( const string& s) : size_(s.size()) { data_ = new char[size_+1]; clear(); memcpy((void*)data_,(void*)s.data(),size_); }
-	string( const char* s) : data_(s),size_(strlen(s)) {}
-	string( const char* s, size_t size) : data_(s),size_(size) {}
-	~string() { clear(); delete data_; }
+	string() 
+		: data_(0), size_(0)
+	{}
+
+	string( const string& s) 
+		: data_(0),size_(0) 
+	{ 
+		alloc(s.data(),s.size());
+	}
+
+	string( const char* s) 
+		: data_(0),size_(0) 
+	{
+		alloc(s,strlen(s));
+	}
+
+	string( const char* s, size_t size) 
+		: data_(0),size_(size) 
+	{
+		alloc(s,size);
+	}
+
+	~string() 
+	{ 
+		dispose();
+	}
 
 	const char* data() const { return data_; }
 	const size_t size() const { return size_; };
 
 	void clear()
 	{
-		::ZeroMemory((void*)data_,size_+1);
+		if ( data_ && size_ )
+		{
+			::ZeroMemory((void*)data_,size_+1);
+		}
+	}
+
+	void dispose()
+	{
+		clear();
+		delete[] data_;
+		data_ = 0;
+		size_ = 0;
 	}
 
 	string& operator=( const string& rhs )
@@ -56,12 +88,10 @@ public:
 			return *this;
 		}
 
-		clear();
-		delete data_;
+		dispose();
+
 		size_ = rhs.size();
-		data_ = new char[size_+1];
-		clear();
-		memcpy((void*)data_,(void*)rhs.data(),size_);
+		alloc(rhs.data(),rhs.size());
 
 		return *this;
 	}
@@ -71,34 +101,73 @@ public:
 		return strcmp(data_,compare.data());
 	}
 
-
-
 private:
+
+	void alloc( const char* data, size_t s )
+	{
+		size_ = s;
+		if ( data && size_ )
+		{
+			data_ = new char[size_+1];
+			clear();
+			memcpy((void*)data_,(void*)data,size_);
+		}
+	}
+
 	const char* data_;
 	size_t      size_;
 };
 
 
-bool operator<(const string& src, const string& compare)
-{
-	return strcmp(src.data(),compare.data());
-}
+bool operator<(const string& src, const string& compare);
 
 class wstring 
 {
 public:
-	wstring() : data_(0), size_(0) {}
-	wstring( const wstring& s) : size_(s.size()) { data_ = new wchar_t[size_+1]; clear(); memcpy((void*)data_,(void*)s.data(),size_*sizeof(wchar_t)); }
-	wstring( const wchar_t* s) : data_(s),size_(wcslen(s)) {}
-	wstring( const wchar_t* s, size_t size) : data_(s),size_(size) {}
-	~wstring() { clear(); delete data_; }
+	wstring() 
+		: data_(0), size_(0) 
+	{}
+
+	wstring( const wstring& s) 
+		: data_(0), size_(0) 
+	{ 
+		alloc(s.data(),s.size());
+	}
+
+	wstring( const wchar_t* s) 
+		: data_(0),size_(0) 
+	{
+		alloc(s,wcslen(s));
+	}
+
+	wstring( const wchar_t* s, size_t size) 
+		: data_(0),size_(0) 
+	{
+		alloc(s,size);
+	}
+
+	~wstring() 
+	{ 
+		dispose();
+	}
 
 	const wchar_t* data() const { return data_; }
 	const size_t size() const { return size_; };
 
 	void clear()
 	{
-		::ZeroMemory((void*)data_,size_+1);
+		if ( data_ && size_ )
+		{
+			::ZeroMemory((void*)data_,size_+1);
+		}
+	}
+
+	void dispose()
+	{
+		clear();
+		delete[] data_;
+		data_ = 0;
+		size_ = 0;
 	}
 
 	wstring& operator=( const wstring& rhs )
@@ -108,49 +177,39 @@ public:
 			return *this;
 		}
 
-		clear();
-		delete data_;
+		dispose();
+
 		size_ = rhs.size();
-		data_ = new wchar_t[size_+1];
-		clear();
-		memcpy((void*)data_,(void*)rhs.data(),size_*sizeof(wchar_t));
+		alloc(rhs.data(),rhs.size());
 
 		return *this;
 	}
 
 private:
+
+	void alloc( const wchar_t* data, size_t s )
+	{
+		size_ = s;
+		if ( data && size_ )
+		{
+			data_ = new wchar_t[size_+1];
+			clear();
+			memcpy((void*)data_,(void*)data,size_*sizeof(wchar_t));
+		}
+	}
+
 	const wchar_t* data_;
 	size_t      size_;
 };
 
-ssh::wstring utf82wstring( const char* in, const size_t size )
-{
-	int len = ::MultiByteToWideChar( CP_UTF8, 0, in, (int)size, 0, 0 );
-	wchar_t* buf = new wchar_t[len];
-	int r = ::MultiByteToWideChar( CP_UTF8, 0, in, (int)in, buf, len );
-	ssh::wstring out(buf,len);
-	::ZeroMemory((void*)buf,len*sizeof(wchar_t));
-	delete[] buf;
-	return out;
-}
-
-
-ssh::string wstring2utf8( const wchar_t* in, const size_t size)
-{
-	int len = ::WideCharToMultiByte( CP_UTF8, 0, in, (int)size, 0, 0,0,0 );
-	char* buf = new char[len];
-	int r = ::WideCharToMultiByte( CP_UTF8, 0, in,(int)size, buf, len,0,0 );
-	ssh::string out(buf,len);
-	::ZeroMemory((void*)buf,len);
-	delete[] buf;
-	return out;
-}
+ssh::wstring utf82wstring( const char* in, const size_t size );
+ssh::string wstring2utf8( const wchar_t* in, const size_t size);
 
 class stringBuffer
 {
 public:
 	stringBuffer()
-		:data_(0),size_(512),used_(size_)
+		:data_(0),size_(512),used_(0)
 	{
 		data_ = new char[size_+1];
 		clear();
@@ -159,6 +218,7 @@ public:
 	~stringBuffer()
 	{
 		clear();
+		delete[] data_;
 	}
 
 	void clear()
@@ -182,11 +242,17 @@ public:
 			size_t newsize = ((used_ + s ) / 512) +512;
 			char* tmp = new char[newsize+1];
 			::ZeroMemory((void*)tmp,newsize+1);
-			memcpy(tmp,data_,used_);
+			memcpy(tmp,data_,used_);		
 			memcpy(tmp+used_,data,s);
 			clear();
+			delete[] data_;
 			data_ = tmp;
 			size_ = newsize;
+			used_ = used_ + s;
+		}
+		else
+		{
+			memcpy(data_+used_,data,s);
 			used_ = used_ + s;
 		}
 	}

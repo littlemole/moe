@@ -200,9 +200,9 @@ void EncryptedMap::encrypt(const EncryptedMap::MapType& map)
 	for ( MapType::const_iterator it = map.begin(); it!=map.end(); it++)
 	{
 		buffer.append( (*it).first.data(), (*it).first.size() );
-		buffer.append( '\0' );
-		buffer.append( (*it).second.data(), (*it).first.size() );
-		buffer.append( '\0' );
+		buffer.append( "\0", 1 );
+		buffer.append( (*it).second.data(), (*it).second.size() );
+		buffer.append( "\0", 1 );
 	}
 
 	secure_.encrypt( (void*)buffer.data(), buffer.size() );
@@ -1539,8 +1539,6 @@ bool ScpCredentialManager::acceptHost( mol::string host, long port, mol::string 
 bool ScpCredentialManager::Credentials::getCredentials(const std::string& host, int port,mol::ssh::string& user, mol::ssh::string& pwd)
 {
 	SecureCredentials* sc = 0;
-	if (!user.data() ||!pwd.data())
-		return false;
 
 	if ( This()->getCredentials( mol::fromUTF8(host), port, &sc ) )
 	{
