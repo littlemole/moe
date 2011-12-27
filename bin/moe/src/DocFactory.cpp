@@ -399,7 +399,7 @@ IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const mol::stri
 	{
 		if ( path.substr(0,6) == _T("ssh://") || path.substr(0,10) == _T("moe-ssh://") )
 		{
-			return new MoeSShEditorDocumentFactory;
+			return openSSHfactory(path);
 		}
 		return 0;
 	}

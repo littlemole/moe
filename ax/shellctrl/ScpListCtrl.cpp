@@ -2120,12 +2120,12 @@ HRESULT __stdcall ScpListCtrl::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOO
 }
 
 
-bool ScpListCtrl::Credentials::getCredentials(const std::string& host, int port, char** user, char** pwd)
+bool ScpListCtrl::Credentials::getCredentials(const std::string& host, int port, mol::ssh::string& user, mol::ssh::string& pwd)
 {
 	//if ( !This()->provider_ )
 //		return false;
 
-	if(!user||!pwd)
+	if(!user.data()||!pwd.data())
 		return false;
 
 	mol::punk<IScpCredentialProvider> provider;
@@ -2144,15 +2144,8 @@ bool ScpListCtrl::Credentials::getCredentials(const std::string& host, int port,
 	creds->get_Password(&bp);
 
 	//TODO: wipe bstrs ???
-
-	std::string u = mol::toUTF8(bu.bstr_);
-	std::string p = mol::toUTF8(bp.bstr_);
-
-	*user = (char*)malloc(u.size()+1);
-	*pwd  = (char*)malloc(p.size()+1);
-
-	memcpy( *user, u.data(), u.size()+1);
-	memcpy( *pwd,  p.data(), p.size()+1);
+	user = mol::ssh::string(mol::toUTF8(bu.bstr_).c_str());
+	pwd  = mol::ssh::string(mol::toUTF8(bp.bstr_).c_str());
 
 	return true;
 }
@@ -2183,7 +2176,7 @@ bool ScpListCtrl::Credentials::acceptHost(const std::string& host, int port, con
 	return true;
 }
 
-bool ScpListCtrl::Credentials::rememberHostCredentials(const std::string& host, int port, const char* user, const char* pwd)
+bool ScpListCtrl::Credentials::rememberHostCredentials(const std::string& host, int port, const mol::ssh::string& user, const mol::ssh::string& pwd)
 {
 	//if ( !This()->provider_ )
 		//return false;
@@ -2198,8 +2191,8 @@ bool ScpListCtrl::Credentials::rememberHostCredentials(const std::string& host, 
 	if ( hr != S_OK )
 		return false;
 
-	creds->put_Username( mol::bstr(mol::fromUTF8(user)) );
-	creds->put_Password( mol::bstr(mol::fromUTF8(pwd)) );
+	creds->put_Username( mol::bstr(mol::fromUTF8(user.data())) );
+	creds->put_Password( mol::bstr(mol::fromUTF8(pwd.data())) );
 	
 	hr = provider->remberSessionCredentials( mol::bstr(mol::fromUTF8(host)), port, creds );
 	if ( hr != S_OK )

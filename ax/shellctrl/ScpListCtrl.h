@@ -283,10 +283,10 @@ protected:
 		public: 
 		outer_this(ScpListCtrl,credentials_);
 
-		virtual bool getCredentials(const std::string& host, int port,char** user, char** pwd);
+		virtual bool getCredentials(const std::string& host, int port,mol::ssh::string& user, mol::ssh::string& pwd);
 		virtual bool promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo);
 		virtual bool acceptHost(const std::string& host, int port, const std::string& hash);
-		virtual bool rememberHostCredentials(const std::string& host, int port, const char* user, const char* pwd);
+		virtual bool rememberHostCredentials(const std::string& host, int port, const mol::ssh::string& user, const mol::ssh::string& pwd);
 		virtual bool deleteHostCredentials(const std::string& host, int port);
 
 	} credentials_;
