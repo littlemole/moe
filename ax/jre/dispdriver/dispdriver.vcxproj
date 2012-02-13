@@ -77,7 +77,7 @@
     <OutDir>$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
-    <IncludePath>E:\java\jdk\include\win32;E:\java\jdk\include;D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath>D:\java\jdk\include\win32;D:\java\jdk\include;D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <OutDir>$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug2|Win32'">
@@ -153,7 +153,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>E:\molib\lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\molib\lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>

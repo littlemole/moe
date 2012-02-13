@@ -146,16 +146,6 @@ HMODULE JRE::loadJVM()
 	}
 	catch(...)
 	{
-		mol::TCHAR buf[MAX_PATH];
-		if (::GetEnvironmentVariable( _T("JAVA_HOME"), buf, MAX_PATH ))
-		{
-			mol::string jh(buf);
-			if ( !jh.empty() )
-			{
-				path = jh + _T("\\jre\\bin\\client\\jvm.dll");
-			}
-		}
-		else
 			return 0;
 	}
 
@@ -177,6 +167,22 @@ HMODULE JRE::loadJVM()
 
 mol::string JRE::getJREpathOnce()
 {
+	mol::TCHAR buf[MAX_PATH];
+	if (::GetEnvironmentVariable( _T("JAVA_HOME"), buf, MAX_PATH ))
+	{
+		mol::string jh(buf);
+		if ( !jh.empty() )
+		{
+			mol::string path = jh + _T("\\jre\\bin\\client\\jvm.dll");
+			if ( mol::Path::exists(path) )
+				return path;
+
+			path = jh + _T("\\jre\\bin\\server\\jvm.dll");
+			if ( mol::Path::exists(path) )
+				return path;
+		}
+	}
+
 	mol::RegKey key(HKEY_LOCAL_MACHINE, KEY_READ);
 	mol::RegKey soft = key.open(_T("SOFTWARE"),KEY_READ);
 	mol::RegKey java;
@@ -188,9 +194,16 @@ mol::string JRE::getJREpathOnce()
 		mol::RegKey wow = soft.open(_T("Wow6432Node"),KEY_READ);
 		java = wow.open(_T("JavaSoft"),KEY_READ);
 	}
-	mol::RegKey jre  = java.open(_T("Java Runtime Environment"),KEY_READ);
-	mol::RegKey ver  = jre.open(_T("1.6"),KEY_READ);
 
+	mol::RegKey jre  = java.open(_T("Java Runtime Environment"),KEY_READ);
+	mol::RegKey ver;
+	try {
+		ver  = jre.open(_T("1.7"),KEY_READ);
+	}
+	catch(...)
+	{
+		ver  = jre.open(_T("1.6"),KEY_READ);
+	}
 	mol::string path = ver.get(_T("RuntimeLib"));
 	return path;
 }

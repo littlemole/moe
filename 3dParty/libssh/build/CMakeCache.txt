@@ -26,8 +26,11 @@ CMAKE_BUILD_TYPE:STRING=RelWithDebInfo
 // else will be ignored.
 CMAKE_CONFIGURATION_TYPES:STRING=Debug;Release;MinSizeRel;RelWithDebInfo
 
-//C++ compiler
-CMAKE_CXX_COMPILER:FILEPATH=cl
+//CXX compiler
+CMAKE_CXX_COMPILER:STRING=C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/bin/cl.exe
+
+//Path to a program.
+CMAKE_CXX_COMPILER_WITH_PATH:FILEPATH=C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/bin/cl.exe
 
 //Flags used by the compiler during all build types.
 CMAKE_CXX_FLAGS:STRING= /DWIN32 /D_WINDOWS /W3 /Zm1000 /EHsc /GR
@@ -50,7 +53,10 @@ CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=/MD /Zi /O2 /Ob1 /D NDEBUG
 CMAKE_CXX_STANDARD_LIBRARIES:STRING='kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib '
 
 //C compiler
-CMAKE_C_COMPILER:FILEPATH=cl
+CMAKE_C_COMPILER:STRING=C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/bin/cl.exe
+
+//Path to a program.
+CMAKE_C_COMPILER_WITH_PATH:FILEPATH=C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/bin/cl.exe
 
 //Flags used by the compiler during all build types.
 CMAKE_C_FLAGS:STRING= /DWIN32 /D_WINDOWS /W3 /Zm1000
@@ -91,7 +97,7 @@ CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING='/debug '
 CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/libssh
 
 //Path to a program.
-CMAKE_LINKER:FILEPATH=CMAKE_LINKER-NOTFOUND
+CMAKE_LINKER:FILEPATH=C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/bin/link.exe
 
 //Path to a program.
 CMAKE_MAKE_PROGRAM:FILEPATH=C:/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe
@@ -320,6 +326,8 @@ CMAKE_CPACK_COMMAND:INTERNAL=C:/Program Files (x86)/CMake 2.8/bin/cpack.exe
 CMAKE_CTEST_COMMAND:INTERNAL=C:/Program Files (x86)/CMake 2.8/bin/ctest.exe
 //ADVANCED property for variable: CMAKE_CXX_COMPILER
 CMAKE_CXX_COMPILER-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_CXX_COMPILER_WITH_PATH
+CMAKE_CXX_COMPILER_WITH_PATH-ADVANCED:INTERNAL=1
 CMAKE_CXX_COMPILER_WORKS:INTERNAL=1
 //ADVANCED property for variable: CMAKE_CXX_FLAGS
 CMAKE_CXX_FLAGS-ADVANCED:INTERNAL=1
@@ -335,6 +343,8 @@ CMAKE_CXX_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 CMAKE_CXX_STANDARD_LIBRARIES-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_COMPILER
 CMAKE_C_COMPILER-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CMAKE_C_COMPILER_WITH_PATH
+CMAKE_C_COMPILER_WITH_PATH-ADVANCED:INTERNAL=1
 CMAKE_C_COMPILER_WORKS:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_FLAGS
 CMAKE_C_FLAGS-ADVANCED:INTERNAL=1

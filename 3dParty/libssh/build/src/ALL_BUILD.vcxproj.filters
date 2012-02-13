@@ -15,4 +15,7 @@
       <UniqueIdentifier>{1FFDADF1-0B5A-4EA0-B393-D7F40986DADF}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="CMakeFiles\ALL_BUILD" />
+  </ItemGroup>
 </Project>
