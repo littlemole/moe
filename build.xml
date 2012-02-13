@@ -48,7 +48,7 @@
 		<MSBuild Projects=".\lib\src\java\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
 		<MSBuild Projects=".\ax\jre\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
 		<MSBuild Projects=".\ax\jre\dispdriver\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
-		<Exec Command='ant' WorkingDirectory=".\bin\moe\java\dispdriver"  />
+		<Exec Command='$(ANT_HOME)\bin\ant' WorkingDirectory=".\bin\moe\java\dispdriver"  />
 		<MSBuild Projects=".\bin\WixJre\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
  </Target>
 
@@ -57,7 +57,7 @@
 		<MSBuild Projects=".\lib\src\java\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean"/>
 		<MSBuild Projects=".\ax\jre\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 		<MSBuild Projects=".\ax\jre\dispdriver\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean"/>
-		<Exec Command='ant clean' WorkingDirectory=".\bin\moe\java\dispdriver"/>
+		<Exec Command='$(ANT_HOME)\bin\ant clean' WorkingDirectory=".\bin\moe\java\dispdriver"/>
 		<MSBuild Projects=".\bin\WixJre\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean"/>
  </Target>
 
