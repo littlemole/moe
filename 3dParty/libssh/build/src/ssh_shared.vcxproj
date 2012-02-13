@@ -1,21 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="MinSizeRel|Win32">
-      <Configuration>MinSizeRel</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
       <Configuration>Release</Configuration>
@@ -24,10 +11,6 @@
     <ProjectConfiguration Include="MinSizeRel|x64">
       <Configuration>MinSizeRel</Configuration>
       <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="RelWithDebInfo|Win32">
-      <Configuration>RelWithDebInfo</Configuration>
-      <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="RelWithDebInfo|x64">
       <Configuration>RelWithDebInfo</Configuration>
@@ -47,17 +30,7 @@
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
@@ -67,17 +40,7 @@
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
@@ -86,92 +49,32 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup>
-    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\molib\3dParty\libssh\build\src\Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\molib\3dParty\libssh\build\src\Debug\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ssh_shared.dir\Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ssh_shared.dir\Debug\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ssh</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ssh</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.dll</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.dll</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\molib\3dParty\libssh\build\src\Release\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\molib\3dParty\libssh\build\src\Release\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ssh_shared.dir\Release\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ssh_shared.dir\Release\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ssh</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ssh</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.dll</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.dll</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\molib\3dParty\libssh\build\src\MinSizeRel\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\molib\3dParty\libssh\build\src\MinSizeRel\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">ssh_shared.dir\MinSizeRel\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">ssh_shared.dir\MinSizeRel\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">ssh</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">ssh</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.dll</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.dll</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\molib\3dParty\libssh\build\src\RelWithDebInfo\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\molib\3dParty\libssh\build\src\RelWithDebInfo\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">ssh_shared.dir\RelWithDebInfo\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">ssh_shared.dir\RelWithDebInfo\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">ssh</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">ssh</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.dll</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.dll</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</LinkIncremental>
-  </PropertyGroup>
+    <PropertyGroup>
+      <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\molib\3dParty\libssh\build\src\Debug\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ssh_shared.dir\Debug\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ssh</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.dll</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\molib\3dParty\libssh\build\src\Release\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ssh_shared.dir\Release\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ssh</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.dll</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\molib\3dParty\libssh\build\src\MinSizeRel\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">ssh_shared.dir\MinSizeRel\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">ssh</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.dll</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\molib\3dParty\libssh\build\src\RelWithDebInfo\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">ssh_shared.dir\RelWithDebInfo\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">ssh</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.dll</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <AdditionalOptions> /Zm1000 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>D:/molib/3dParty/libssh/build/src;D:/molib/3dParty/libssh/src;D:/molib/3dParty/libssh/include;D:/molib/3dParty/libssh/build;D:/molib/3dParty/openssl/inc64;D:/molib/3dParty/zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <CompileAs>CompileAsC</CompileAs>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <ExceptionHandling>
-      </ExceptionHandling>
-      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
-      <Optimization>Disabled</Optimization>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES=1;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT=1;_CRT_NONSTDC_NO_WARNINGS=1;_CRT_SECURE_NO_WARNINGS=1;_DEBUG;CMAKE_INTDIR="Debug";LIBSSH_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AssemblerListingLocation>Debug</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>D:/molib/3dParty/libssh/build/src/Debug/ssh.pdb</ProgramDataBaseFileName>
-    </ClCompile>
-    <ResourceCompile>
-      <AdditionalIncludeDirectories>D:/molib/3dParty/libssh/build/src;D:/molib/3dParty/libssh/src;D:/molib/3dParty/libssh/include;D:/molib/3dParty/libssh/build;D:/molib/3dParty/openssl/inc64;D:/molib/3dParty/zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Midl>
-      <AdditionalIncludeDirectories>D:/molib/3dParty/libssh/build/src;D:/molib/3dParty/libssh/src;D:/molib/3dParty/libssh/include;D:/molib/3dParty/libssh/build;D:/molib/3dParty/openssl/inc64;D:/molib/3dParty/zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </Midl>
-    <Link>
-      <AdditionalOptions> /machine:x64 /debug %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;D:/molib/3dParty/zlib/x64/debug/zlib.lib;ws2_32.lib;D:/molib/3dParty/openssl/out64D/ssleay32.lib;D:/molib/3dParty/openssl/out64D/libeay32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ImportLibrary>D:/molib/3dParty/libssh/build/src/Debug/ssh.lib</ImportLibrary>
-      <ProgramDataBaseFileName>D:/molib/3dParty/libssh/build/src/Debug/ssh.pdb</ProgramDataBaseFileName>
-      <StackReserveSize>10000000</StackReserveSize>
-      <SubSystem>Console</SubSystem>
-      <Version>0.0</Version>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <AdditionalOptions> /Zm1000 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>D:/molib/3dParty/libssh/build/src;D:/molib/3dParty/libssh/src;D:/molib/3dParty/libssh/include;D:/molib/3dParty/libssh/build;D:/molib/3dParty/openssl/inc64;D:/molib/3dParty/zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -247,81 +150,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <AdditionalOptions> /Zm1000 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>D:/molib/3dParty/libssh/build/src;D:/molib/3dParty/libssh/src;D:/molib/3dParty/libssh/include;D:/molib/3dParty/libssh/build;D:/molib/3dParty/openssl/inc64;D:/molib/3dParty/zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <CompileAs>CompileAsC</CompileAs>
-      <ExceptionHandling>
-      </ExceptionHandling>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <Optimization>MaxSpeed</Optimization>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES=1;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT=1;_CRT_NONSTDC_NO_WARNINGS=1;_CRT_SECURE_NO_WARNINGS=1;NDEBUG;CMAKE_INTDIR="Release";LIBSSH_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AssemblerListingLocation>Release</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>D:/molib/3dParty/libssh/build/src/Release/ssh.pdb</ProgramDataBaseFileName>
-    </ClCompile>
-    <ResourceCompile>
-      <AdditionalIncludeDirectories>D:/molib/3dParty/libssh/build/src;D:/molib/3dParty/libssh/src;D:/molib/3dParty/libssh/include;D:/molib/3dParty/libssh/build;D:/molib/3dParty/openssl/inc64;D:/molib/3dParty/zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Midl>
-      <AdditionalIncludeDirectories>D:/molib/3dParty/libssh/build/src;D:/molib/3dParty/libssh/src;D:/molib/3dParty/libssh/include;D:/molib/3dParty/libssh/build;D:/molib/3dParty/openssl/inc64;D:/molib/3dParty/zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </Midl>
-    <Link>
-      <AdditionalOptions> /machine:x64 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;D:/molib/3dParty/zlib/x64/debug/zlib.lib;ws2_32.lib;D:/molib/3dParty/openssl/out64/ssleay32.lib;D:/molib/3dParty/openssl/out64/libeay32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-      <ImportLibrary>D:/molib/3dParty/libssh/build/src/Release/ssh.lib</ImportLibrary>
-      <ProgramDataBaseFileName>D:/molib/3dParty/libssh/build/src/Release/ssh.pdb</ProgramDataBaseFileName>
-      <StackReserveSize>10000000</StackReserveSize>
-      <SubSystem>Console</SubSystem>
-      <Version>0.0</Version>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
-    <ClCompile>
-      <AdditionalOptions> /Zm1000 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>D:/molib/3dParty/libssh/build/src;D:/molib/3dParty/libssh/src;D:/molib/3dParty/libssh/include;D:/molib/3dParty/libssh/build;D:/molib/3dParty/openssl/inc64;D:/molib/3dParty/zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <CompileAs>CompileAsC</CompileAs>
-      <ExceptionHandling>
-      </ExceptionHandling>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <Optimization>MinSpace</Optimization>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES=1;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT=1;_CRT_NONSTDC_NO_WARNINGS=1;_CRT_SECURE_NO_WARNINGS=1;NDEBUG;CMAKE_INTDIR="MinSizeRel";LIBSSH_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AssemblerListingLocation>MinSizeRel</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>D:/molib/3dParty/libssh/build/src/MinSizeRel/ssh.pdb</ProgramDataBaseFileName>
-    </ClCompile>
-    <ResourceCompile>
-      <AdditionalIncludeDirectories>D:/molib/3dParty/libssh/build/src;D:/molib/3dParty/libssh/src;D:/molib/3dParty/libssh/include;D:/molib/3dParty/libssh/build;D:/molib/3dParty/openssl/inc64;D:/molib/3dParty/zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Midl>
-      <AdditionalIncludeDirectories>D:/molib/3dParty/libssh/build/src;D:/molib/3dParty/libssh/src;D:/molib/3dParty/libssh/include;D:/molib/3dParty/libssh/build;D:/molib/3dParty/openssl/inc64;D:/molib/3dParty/zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </Midl>
-    <Link>
-      <AdditionalOptions> /machine:x64 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;D:/molib/3dParty/zlib/x64/debug/zlib.lib;ws2_32.lib;D:/molib/3dParty/openssl/out64/ssleay32.lib;D:/molib/3dParty/openssl/out64/libeay32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-      <ImportLibrary>D:/molib/3dParty/libssh/build/src/MinSizeRel/ssh.lib</ImportLibrary>
-      <ProgramDataBaseFileName>D:/molib/3dParty/libssh/build/src/MinSizeRel/ssh.pdb</ProgramDataBaseFileName>
-      <StackReserveSize>10000000</StackReserveSize>
-      <SubSystem>Console</SubSystem>
-      <Version>0.0</Version>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
     <ClCompile>
       <AdditionalOptions> /Zm1000 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>D:/molib/3dParty/libssh/build/src;D:/molib/3dParty/libssh/src;D:/molib/3dParty/libssh/include;D:/molib/3dParty/libssh/build;D:/molib/3dParty/openssl/inc64;D:/molib/3dParty/zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -396,78 +225,24 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
-    <ClCompile>
-      <AdditionalOptions> /Zm1000 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>D:/molib/3dParty/libssh/build/src;D:/molib/3dParty/libssh/src;D:/molib/3dParty/libssh/include;D:/molib/3dParty/libssh/build;D:/molib/3dParty/openssl/inc64;D:/molib/3dParty/zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <CompileAs>CompileAsC</CompileAs>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <ExceptionHandling>
-      </ExceptionHandling>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <Optimization>MaxSpeed</Optimization>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES=1;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT=1;_CRT_NONSTDC_NO_WARNINGS=1;_CRT_SECURE_NO_WARNINGS=1;NDEBUG;CMAKE_INTDIR="RelWithDebInfo";LIBSSH_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AssemblerListingLocation>RelWithDebInfo</AssemblerListingLocation>
-      <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>D:/molib/3dParty/libssh/build/src/RelWithDebInfo/ssh.pdb</ProgramDataBaseFileName>
-    </ClCompile>
-    <ResourceCompile>
-      <AdditionalIncludeDirectories>D:/molib/3dParty/libssh/build/src;D:/molib/3dParty/libssh/src;D:/molib/3dParty/libssh/include;D:/molib/3dParty/libssh/build;D:/molib/3dParty/openssl/inc64;D:/molib/3dParty/zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Midl>
-      <AdditionalIncludeDirectories>D:/molib/3dParty/libssh/build/src;D:/molib/3dParty/libssh/src;D:/molib/3dParty/libssh/include;D:/molib/3dParty/libssh/build;D:/molib/3dParty/openssl/inc64;D:/molib/3dParty/zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </Midl>
-    <Link>
-      <AdditionalOptions> /machine:x64 /debug %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;D:/molib/3dParty/zlib/x64/debug/zlib.lib;ws2_32.lib;D:/molib/3dParty/openssl/out64/ssleay32.lib;D:/molib/3dParty/openssl/out64/libeay32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ImportLibrary>D:/molib/3dParty/libssh/build/src/RelWithDebInfo/ssh.lib</ImportLibrary>
-      <ProgramDataBaseFileName>D:/molib/3dParty/libssh/build/src/RelWithDebInfo/ssh.pdb</ProgramDataBaseFileName>
-      <StackReserveSize>10000000</StackReserveSize>
-      <SubSystem>Console</SubSystem>
-      <Version>0.0</Version>
-    </Link>
-    <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-    </ProjectReference>
-  </ItemDefinitionGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\CMakeLists.txt">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule D:/molib/3dParty/libssh/src/CMakeLists.txt</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/molib/3dParty/libssh/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HD:/molib/3dParty/libssh -BD:/molib/3dParty/libssh/build --check-stamp-file CMakeFiles/generate.stamp</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HD:/molib/3dParty/libssh -BD:/molib/3dParty/libssh/build --check-stamp-file CMakeFiles/generate.stamp</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:/molib/3dParty/libssh/src/CMakeLists.txt;D:\molib\3dParty\libssh\src\CMakeLists.txt;D:\molib\3dParty\libssh\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/molib/3dParty/libssh/src/CMakeLists.txt;D:\molib\3dParty\libssh\src\CMakeLists.txt;D:\molib\3dParty\libssh\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CMakeFiles\generate.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CMakeFiles\generate.stamp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule D:/molib/3dParty/libssh/src/CMakeLists.txt</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/molib/3dParty/libssh/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HD:/molib/3dParty/libssh -BD:/molib/3dParty/libssh/build --check-stamp-file CMakeFiles/generate.stamp</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HD:/molib/3dParty/libssh -BD:/molib/3dParty/libssh/build --check-stamp-file CMakeFiles/generate.stamp</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:/molib/3dParty/libssh/src/CMakeLists.txt;D:\molib\3dParty\libssh\src\CMakeLists.txt;D:\molib\3dParty\libssh\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/molib/3dParty/libssh/src/CMakeLists.txt;D:\molib\3dParty\libssh\src\CMakeLists.txt;D:\molib\3dParty\libssh\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CMakeFiles\generate.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CMakeFiles\generate.stamp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule D:/molib/3dParty/libssh/src/CMakeLists.txt</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/molib/3dParty/libssh/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HD:/molib/3dParty/libssh -BD:/molib/3dParty/libssh/build --check-stamp-file CMakeFiles/generate.stamp</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HD:/molib/3dParty/libssh -BD:/molib/3dParty/libssh/build --check-stamp-file CMakeFiles/generate.stamp</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:/molib/3dParty/libssh/src/CMakeLists.txt;D:\molib\3dParty\libssh\src\CMakeLists.txt;D:\molib\3dParty\libssh\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/molib/3dParty/libssh/src/CMakeLists.txt;D:\molib\3dParty\libssh\src\CMakeLists.txt;D:\molib\3dParty\libssh\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">CMakeFiles\generate.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">CMakeFiles\generate.stamp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule D:/molib/3dParty/libssh/src/CMakeLists.txt</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/molib/3dParty/libssh/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HD:/molib/3dParty/libssh -BD:/molib/3dParty/libssh/build --check-stamp-file CMakeFiles/generate.stamp</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -HD:/molib/3dParty/libssh -BD:/molib/3dParty/libssh/build --check-stamp-file CMakeFiles/generate.stamp</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:/molib/3dParty/libssh/src/CMakeLists.txt;D:\molib\3dParty\libssh\src\CMakeLists.txt;D:\molib\3dParty\libssh\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/molib/3dParty/libssh/src/CMakeLists.txt;D:\molib\3dParty\libssh\src\CMakeLists.txt;D:\molib\3dParty\libssh\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">CMakeFiles\generate.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">CMakeFiles\generate.stamp;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
