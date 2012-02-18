@@ -2,22 +2,22 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <ComponentGroup Id="NetRegProtoCompGroup">
-            <Component Id="cmpF14EC352643C629431040CB982AC0459" Directory="TARGETDIR" Guid="{81B3913B-6DF6-45BF-A1F3-4BFC7E2BD1C4}" KeyPath="yes">
+            <Component Id="cmpF14EC352643C629431040CB982AC0459" Directory="TARGETDIR" Guid="{241F342D-0D30-4246-91DA-10D16A3C4061}" KeyPath="yes">
                 <RegistryKey Key="org.oha7.dotnet.Net" Root="HKCR">
                     <RegistryValue Value="org.oha7.dotnet.Net" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmpF186671B5CFF371E83FDC5583FE411FA" Directory="TARGETDIR" Guid="{6C635338-BB27-44BE-AE85-478CC6C88ED1}" KeyPath="yes">
+            <Component Id="cmpF186671B5CFF371E83FDC5583FE411FA" Directory="TARGETDIR" Guid="{B97EC1B5-999B-48B9-97B6-005947F0FD43}" KeyPath="yes">
                 <RegistryKey Key="org.oha7.dotnet.Net\CLSID" Root="HKCR">
                     <RegistryValue Value="{F751B363-9E23-4DA7-B18C-B835AE59DF5B}" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmpA85EB112F7B9E1583A7FA3B62B201658" Directory="TARGETDIR" Guid="{532F4137-0EF9-49F5-A1A2-31BEF1C242D7}" KeyPath="yes">
+            <Component Id="cmpA85EB112F7B9E1583A7FA3B62B201658" Directory="TARGETDIR" Guid="{F5D44E6B-BADF-48F0-AEF1-E28AA199E75A}" KeyPath="yes">
                 <RegistryKey Key="CLSID\{F751B363-9E23-4DA7-B18C-B835AE59DF5B}" Root="HKCR">
                     <RegistryValue Value="org.oha7.dotnet.Net" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp86E1A2576E5BF4A9E790D950D5186FC8" Directory="TARGETDIR" Guid="{F79FF16F-5282-4552-BDC6-29A56CD8B4EF}" KeyPath="yes">
+            <Component Id="cmp86E1A2576E5BF4A9E790D950D5186FC8" Directory="TARGETDIR" Guid="{D8879708-DEC1-46D6-B50A-8E2641DB7DAF}" KeyPath="yes">
                 <RegistryKey Key="CLSID\{F751B363-9E23-4DA7-B18C-B835AE59DF5B}\InprocServer32" Root="HKCR">
                     <RegistryValue Value="mscoree.dll" Type="string" />
                     <RegistryValue Name="ThreadingModel" Value="Both" Type="string" />
@@ -26,19 +26,19 @@
                     <RegistryValue Name="RuntimeVersion" Value="v4.0.30319" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp3AE22ED79965C1F4F5939E236624662A" Directory="TARGETDIR" Guid="{D5314B37-6B48-4FAE-BC52-8E65AA87728D}" KeyPath="yes">
+            <Component Id="cmp3AE22ED79965C1F4F5939E236624662A" Directory="TARGETDIR" Guid="{02743546-DAFB-4997-B1C8-8192573FF9CC}" KeyPath="yes">
                 <RegistryKey Key="CLSID\{F751B363-9E23-4DA7-B18C-B835AE59DF5B}\InprocServer32\1.0.0.0" Root="HKCR">
                     <RegistryValue Name="Class" Value="org.oha7.dotnet.Net" Type="string" />
                     <RegistryValue Name="Assembly" Value="net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" />
                     <RegistryValue Name="RuntimeVersion" Value="v4.0.30319" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp8F61F3CF8D9BA92342842C5DBCE48A47" Directory="TARGETDIR" Guid="{454D9773-EC54-458B-B826-A30ECB4FBFD3}" KeyPath="yes">
+            <Component Id="cmp8F61F3CF8D9BA92342842C5DBCE48A47" Directory="TARGETDIR" Guid="{3DE0035F-6D58-4573-8EA3-E602D9F0765F}" KeyPath="yes">
                 <RegistryKey Key="CLSID\{F751B363-9E23-4DA7-B18C-B835AE59DF5B}\ProgId" Root="HKCR">
                     <RegistryValue Value="org.oha7.dotnet.Net" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp070E8287691AEE666456C1970E1289F9" Directory="TARGETDIR" Guid="{0F832738-4F4E-4D29-968C-2CC049989EE9}" KeyPath="yes">
+            <Component Id="cmp070E8287691AEE666456C1970E1289F9" Directory="TARGETDIR" Guid="{2E0F3FEF-1782-4CB6-BA22-50F84AA4744A}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="CLSID\{F751B363-9E23-4DA7-B18C-B835AE59DF5B}\Implemented Categories\{62C8FE65-4EBB-45E7-B440-6E39B2CDBF29}" Root="HKCR" />
             </Component>
         </ComponentGroup>

@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Mon Feb 13 16:34:30 2012
+/* at Sat Feb 18 20:11:41 2012
  */
 /* Compiler settings for moeShell.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 

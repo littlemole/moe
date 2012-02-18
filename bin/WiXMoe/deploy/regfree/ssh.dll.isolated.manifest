@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+<assemblyIdentity
+      type="win32"
+      name="comtypes"
+      version="1.0.0.0" />
+
+
+<file name="ssh.dll" hashalg="SHA1">
+<comClass 
+	clsid="{001C9766-9D66-4554-AC40-15F3B051DE29}" 
+	tlbid="{B9AA71CC-ED9E-47AB-90B9-4B84EAA3F4B2}" 
+    progid="moeSSH.SSH"
+	description="SSH Session Manager COM Object">
+</comClass>
+<typelib 
+	tlbid="{B9AA71CC-ED9E-47AB-90B9-4B84EAA3F4B2}" version="1.0" helpdir="" flags="HASDISKIMAGE">
+</typelib>
+</file>
+<comInterfaceExternalProxyStub 
+	name="ISSH" 
+	iid="{A03D1837-B2B1-486B-9A42-24D14571FCF6}" 
+	tlbid="{B9AA71CC-ED9E-47AB-90B9-4B84EAA3F4B2}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+<comInterfaceExternalProxyStub 
+	name="ISSHConnection" 
+	iid="{5DDB7A6C-4283-4A1D-A15D-FB761DD1340B}" 
+	tlbid="{B9AA71CC-ED9E-47AB-90B9-4B84EAA3F4B2}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+</assembly>
