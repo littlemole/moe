@@ -127,6 +127,10 @@
 
 		<!-- regfree -->
 
+ <ItemGroup>
+  <moeFiles Include=".\moe\**\*.*" Exclude=".\moe\**\.svn\**\*.*;.\moe\**\.svn\**\*" />
+ </ItemGroup>
+
         <Copy
             SourceFiles="@(moeFiles)"
             DestinationFiles="@(moeFiles->'.\$(regfree)\moe\%(RecursiveDir)%(Filename)%(Extension)')"
