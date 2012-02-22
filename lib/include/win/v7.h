@@ -4,8 +4,50 @@
 #include "win/wnd.h"
 #include <shobjidl.h>
 
+// MOL_RM_SESSION_KEY_LEN - size in bytes of binary session key
+#define MOL_RM_SESSION_KEY_LEN  sizeof(GUID)
+// MOL_CCH_RM_SESSION_KEY - character count of text-encoded session key
+#define MOL_CCH_RM_SESSION_KEY  MOL_RM_SESSION_KEY_LEN*2
+// MOL_CCH_RM_MAX_APP_NAME - maximum character count of application friendly name
+#define MOL_CCH_RM_MAX_APP_NAME 255
+// MOL_CCH_RM_MAX_SVC_NAME - maximum character count of service short name
+#define MOL_CCH_RM_MAX_SVC_NAME 63 
+
 namespace mol {
 namespace v7  {
+
+
+
+typedef struct _RM_UNIQUE_PROCESS {
+    DWORD dwProcessId;              // PID
+    FILETIME ProcessStartTime;      // Process creation time
+} RM_UNIQUE_PROCESS, *PRM_UNIQUE_PROCESS;
+
+typedef enum _RM_APP_TYPE {
+    RmUnknownApp = 0,   // Application type cannot be classified in
+                        // known categories
+    RmMainWindow = 1,   // Application is a windows application that
+                        // displays a top-level window
+    RmOtherWindow = 2,  // Application is a windows app but does not
+                        // display a top-level window
+    RmService = 3,      // Application is an NT service
+    RmExplorer = 4,     // Application is Explorer
+    RmConsole = 5,      // Application is Console application
+    RmCritical = 1000   // Application is critical system process
+                        // where a reboot is required to restart
+} RM_APP_TYPE;
+
+typedef struct _RM_PROCESS_INFO{
+    RM_UNIQUE_PROCESS Process;      // Unique process identification
+    WCHAR strAppName[MOL_CCH_RM_MAX_APP_NAME+1];    // Application friendly name
+    WCHAR strServiceShortName[MOL_CCH_RM_MAX_SVC_NAME+1];   // Service short name,
+                                                        // if applicable
+    RM_APP_TYPE ApplicationType;    // Application type
+    ULONG AppStatus;                // Bit mask of application status
+    DWORD TSSessionId;              // Terminal Service session ID of 
+                                    // process (-1 if n/a)
+    BOOL bRestartable;              // Is application restartable?
+} RM_PROCESS_INFO, *PRM_PROCESS_INFO;
 
 enum _TASKDIALOG_COMMON_BUTTON_FLAGS
 {
@@ -162,6 +204,23 @@ extern SHCreateItemFromParsingNamePtr* SHCreateItemFromParsingName;
 
 typedef HRESULT __stdcall SHCreateItemInKnownFolderPtr( REFKNOWNFOLDERID kfid, DWORD dwKFFlags, PCWSTR pszItem, REFIID riid, void **ppv );
 extern SHCreateItemInKnownFolderPtr* SHCreateItemInKnownFolder;
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+typedef DWORD __stdcall RmStartSessionPtr( DWORD *pSessionHandle, DWORD dwSessionFlags, WCHAR strSessionKey[ ] );
+extern RmStartSessionPtr* RmStartSession;
+
+typedef DWORD __stdcall RmRegisterResourcesPtr( DWORD dwSessionHandle, UINT nFiles, LPCWSTR rgsFilenames[ ], UINT nApplications, RM_UNIQUE_PROCESS rgApplications[ ], UINT nServices, LPCWSTR rgsServiceNames[ ] );
+extern RmRegisterResourcesPtr* RmRegisterResources;
+
+typedef DWORD __stdcall RmGetListPtr( DWORD dwSessionHandle, UINT *pnProcInfoNeeded, UINT *pnProcInfo, RM_PROCESS_INFO rgAffectedApps[ ], LPDWORD lpdwRebootReasons );
+extern RmGetListPtr* RmGetList;
+
+typedef DWORD __stdcall RmEndSessionPtr( DWORD dwSessionHandle );
+extern RmEndSessionPtr* RmEndSession;
+
+typedef DWORD __stdcall QueryFullProcessImageNamePtr( HANDLE hProcess, DWORD dwFlags, LPTSTR lpExeName, PDWORD lpdwSize );
+extern QueryFullProcessImageNamePtr* QueryFullProcessImageName;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

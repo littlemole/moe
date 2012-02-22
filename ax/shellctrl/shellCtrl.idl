@@ -444,6 +444,29 @@ library ShellCtrls
 		HRESULT Show([out,retval] VARIANT_BOOL* ok);
 	};
 
+	////////////////////////////////////////////////////////////////////////////////////
+	// IKillRoy
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+      uuid(6CE312C4-CCD1-4F28-B06D-4137F486FCB4),
+      helpstring("IKillRoy - find process using files and terminate"),
+      object,oleautomation, dual
+    ]
+	interface IKillRoy : IDispatch
+    {
+		//methods
+		[ 
+		  id(1), helpstring("find pid for file")
+		] 
+		HRESULT FindPIDforFile([in] BSTR filename, [out,retval] LONG* pid);
+
+		[ 
+		  id(2), helpstring("kill pid")
+		] 
+		HRESULT TerminateProcess([in] LONG pid, [out,retval] VARIANT_BOOL* ok);
+	};
+
 ////////////////////////////////////////////////////////////////////////////////////////
 // Event Disp Interfaces
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -674,5 +697,15 @@ library ShellCtrls
 	{
 		[default]         interface     IScpList;
 		[default, source] dispinterface _IShellListEvents;
+	}
+
+
+	[
+		uuid(733EA4E5-CDA0-4900-9255-DFC136AA3401),
+		aggregatable
+	]
+	coclass KillRoy
+	{
+		[default]         interface     IKillRoy;
 	}
 }

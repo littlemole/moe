@@ -53,7 +53,13 @@
 	<Exec Command="nmake -f ms\ntd.mak" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' "  />
 	<Exec Command="nmake -f ms\nt64.mak" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' "  />
 	<Exec Command="nmake -f ms\ntd64.mak" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' "  />
-
+	
+	<ItemGroup>
+	 <TmpFiles Include=".\openssl\tmp32\.gitignore;.\openssl\tmp64\.gitignore;.\openssl\tmp64D\.gitignore;.\openssl\out32\.gitignore;.\openssl\out32D\.gitignore;.\openssl\out64\.gitignore;.\openssl\out64D\.gitignore;" />
+	</ItemGroup>
+    
+    <Touch Files="@(TmpFiles)" AlwaysCreate="true"/>
+                               
     <MSBuild Projects="libssh/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 
  </Target>

@@ -65,6 +65,8 @@
 #define DISPID_ICOLORPICKER_COLOR                                              				 1
 #define DISPID_ICOLORPICKER_HEXCOLOR                                           				 2
 #define DISPID_ICOLORPICKER_SHOW                                               				 3
+#define DISPID_IKILLROY_FINDPIDFORFILE                                         				 1
+#define DISPID_IKILLROY_TERMINATEPROCESS                                       				 2
 #define DISPID__ISHELLTREEEVENTS_ONTREESELECTION                               				 1
 #define DISPID__ISHELLTREEEVENTS_ONTREEDBLCLICK                                				 2
 #define DISPID__ISHELLTREEEVENTS_ONTREEOPEN                                    				 3

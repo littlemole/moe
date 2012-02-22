@@ -9,6 +9,13 @@ namespace v7  {
 SHCreateItemFromParsingNamePtr* SHCreateItemFromParsingName = (SHCreateItemFromParsingNamePtr*)mol::dllFunc( _T("Shell32.dll"), _T("SHCreateItemFromParsingName") );
 SHCreateItemInKnownFolderPtr*  SHCreateItemInKnownFolder = (SHCreateItemInKnownFolderPtr*)mol::dllFunc( _T("Shell32.dll"), _T("SHCreateItemInKnownFolder") );
 
+RmStartSessionPtr* RmStartSession = (RmStartSessionPtr*)mol::dllFunc( _T("Rstrtmgr.dll"), _T("RmStartSession") );
+RmRegisterResourcesPtr* RmRegisterResources = (RmRegisterResourcesPtr*)mol::dllFunc( _T("Rstrtmgr.dll"), _T("RmRegisterResources") );
+RmGetListPtr* RmGetList = (RmGetListPtr*)mol::dllFunc( _T("Rstrtmgr.dll"), _T("RmGetList") );
+RmEndSessionPtr* RmEndSession = (RmEndSessionPtr*)mol::dllFunc( _T("Rstrtmgr.dll"), _T("RmEndSession") );
+
+QueryFullProcessImageNamePtr* QueryFullProcessImageName = (QueryFullProcessImageNamePtr*)mol::dllFunc( _T("Kernel32.dll"), _T("QueryFullProcessImageName") );
+
 void unlockInternetExplorer()
 {
 	// call this only if avail (naked IE6 on win2k will not have this)

@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sat Feb 18 20:08:19 2012
+/* at Tue Feb 21 21:32:09 2012
  */
 /* Compiler settings for shellCtrl.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -32,8 +32,8 @@
 #endif // __RPCNDR_H_VERSION__
 
 
-#ifndef __shellctrl_h_h__
-#define __shellctrl_h_h__
+#ifndef __shellCtrl_h_h__
+#define __shellCtrl_h_h__
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 #pragma once
@@ -69,6 +69,12 @@ typedef interface IScpList IScpList;
 #define __IColorPicker_FWD_DEFINED__
 typedef interface IColorPicker IColorPicker;
 #endif 	/* __IColorPicker_FWD_DEFINED__ */
+
+
+#ifndef __IKillRoy_FWD_DEFINED__
+#define __IKillRoy_FWD_DEFINED__
+typedef interface IKillRoy IKillRoy;
+#endif 	/* __IKillRoy_FWD_DEFINED__ */
 
 
 #ifndef ___IShellTreeEvents_FWD_DEFINED__
@@ -165,6 +171,18 @@ typedef struct ScpList ScpList;
 #endif /* __cplusplus */
 
 #endif 	/* __ScpList_FWD_DEFINED__ */
+
+
+#ifndef __KillRoy_FWD_DEFINED__
+#define __KillRoy_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class KillRoy KillRoy;
+#else
+typedef struct KillRoy KillRoy;
+#endif /* __cplusplus */
+
+#endif 	/* __KillRoy_FWD_DEFINED__ */
 
 
 /* header files for imported files */
@@ -1497,6 +1515,141 @@ EXTERN_C const IID IID_IColorPicker;
 #endif 	/* __IColorPicker_INTERFACE_DEFINED__ */
 
 
+#ifndef __IKillRoy_INTERFACE_DEFINED__
+#define __IKillRoy_INTERFACE_DEFINED__
+
+/* interface IKillRoy */
+/* [dual][oleautomation][object][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IKillRoy;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("6CE312C4-CCD1-4F28-B06D-4137F486FCB4")
+    IKillRoy : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FindPIDforFile( 
+            /* [in] */ BSTR filename,
+            /* [retval][out] */ LONG *pid) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE TerminateProcess( 
+            /* [in] */ LONG pid,
+            /* [retval][out] */ VARIANT_BOOL *ok) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IKillRoyVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IKillRoy * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IKillRoy * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IKillRoy * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IKillRoy * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IKillRoy * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IKillRoy * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IKillRoy * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *FindPIDforFile )( 
+            IKillRoy * This,
+            /* [in] */ BSTR filename,
+            /* [retval][out] */ LONG *pid);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *TerminateProcess )( 
+            IKillRoy * This,
+            /* [in] */ LONG pid,
+            /* [retval][out] */ VARIANT_BOOL *ok);
+        
+        END_INTERFACE
+    } IKillRoyVtbl;
+
+    interface IKillRoy
+    {
+        CONST_VTBL struct IKillRoyVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IKillRoy_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IKillRoy_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IKillRoy_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IKillRoy_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IKillRoy_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IKillRoy_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IKillRoy_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IKillRoy_FindPIDforFile(This,filename,pid)	\
+    ( (This)->lpVtbl -> FindPIDforFile(This,filename,pid) ) 
+
+#define IKillRoy_TerminateProcess(This,pid,ok)	\
+    ( (This)->lpVtbl -> TerminateProcess(This,pid,ok) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IKillRoy_INTERFACE_DEFINED__ */
+
+
 #ifndef ___IShellTreeEvents_DISPINTERFACE_DEFINED__
 #define ___IShellTreeEvents_DISPINTERFACE_DEFINED__
 
@@ -2305,6 +2458,14 @@ EXTERN_C const CLSID CLSID_ScpList;
 
 class DECLSPEC_UUID("CD199DC9-8BA4-4F7A-BCFA-4C3473C06F03")
 ScpList;
+#endif
+
+EXTERN_C const CLSID CLSID_KillRoy;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("733EA4E5-CDA0-4900-9255-DFC136AA3401")
+KillRoy;
 #endif
 #endif /* __ShellCtrls_LIBRARY_DEFINED__ */
 

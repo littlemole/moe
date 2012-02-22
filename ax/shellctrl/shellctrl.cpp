@@ -6,6 +6,7 @@
 #include "ShellListCtrl.h"
 #include "ScpListCtrl.h"
 #include "HexCtrl.h"
+#include "Killroy.h"
 
 #include "ShellCtrl_i.c"
 #include "../ssh/ssh_i.c"
@@ -16,7 +17,8 @@ class shellCtrlDll :
 	public exports_aggregable< shellCtrlDll, ShellListCtrl >,
 	public exports_aggregable< shellCtrlDll, ColorDlg >,
 	public exports_aggregable< shellCtrlDll, HexCtrl >,
-	public exports_aggregable< shellCtrlDll, ScpListCtrl >
+	public exports_aggregable< shellCtrlDll, ScpListCtrl >,
+	public exports_aggregable< shellCtrlDll, KillRoy >
 {};
 
 DLL_COCLASS_EXPORTS(shellCtrlDll);
