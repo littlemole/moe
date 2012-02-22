@@ -17,7 +17,7 @@ public:
 
 	long getPidForFilename( const std::wstring& filename )
 	{
-		if (!mol::v7::RmStartSession())
+		if (!mol::v7::RmStartSession)
 		{
 			return -1;
 		}
