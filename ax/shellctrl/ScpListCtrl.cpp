@@ -234,16 +234,10 @@ void ScpPushFileQueueAction::operator()()
 
 ScpListCtrl::ScpListCtrl(void)	
 {
-
-//	sortDir_ = 1;
-//    bCancel_ = FALSE;
-//	displayFiles_ = true;
-
 	sharedMenu_ = 0;
 	eraseBackground_ = 1;
 	gitCookie_ = 0;
 	gitSSHCookie_ = 0;
-//	gitConnectionCookie_ = 0;
 
 	mol::GIT git;
 
@@ -283,10 +277,6 @@ void ScpListCtrl::load( const mol::string& url )
 	}
 
 	uri_.set(mol::toUTF8(path));
-
-
-
-	//connect();
 	queue_.push( new ScpDirQueueLoadAction(url,this) );
 }
 
@@ -381,14 +371,6 @@ void ScpListCtrl::load_async( const mol::string& url )
 
 	try
 	{
-		//mol::sftp::Session& sftp = open(uri_);
-
-//		mol::punk<ISSHConnection> conn;
-	//	hr = ssh->Connect( mol::bstr(mol::fromUTF8(uri_.getHost())), uri_.getPort(), &conn);
-//		hr = conn->Connect();
-	//	if( hr != S_OK )
-		//	return;
-
 		mol::punk<ISFTP> sftp;
 		hr = conn->get_SFTP(&sftp);
 		if( hr != S_OK )
@@ -510,8 +492,6 @@ void ScpListCtrl::load_async( const mol::string& url )
 		entries.push_back( entry->fileinfo.getOwner() );
 		entries.push_back( entry->fileinfo.getGroup() );
 
-//		uint32_t t = entry->fileinfo.getMtime();
-	//	char* ct = ctime((time_t*)&t);
 		entries.push_back(mol::toString(""));
 
         list_.insertItem(entries,index,0,entry->iconindex,(LPARAM)entry);
@@ -544,8 +524,6 @@ void ScpListCtrl::load_async( const mol::string& url )
 	list_.redraw();
 	fire(DISPID_ISHELLLISTEVENTS_ONDIRCHANGED,mol::bstr(path_));
 	
-	//sortDir_ = 1;
-	//sortCol_ = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -557,13 +535,10 @@ void ScpListCtrl::load_async( const mol::string& url )
 LRESULT ScpListCtrl::OnDestroy(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	queue_.cancel();
-//	provider_.release();
 	clear();
 	mol::GIT git;
 	git.revokeInterface(gitCookie_);
 	git.revokeInterface(gitSSHCookie_);
-//	git.revokeInterface(gitConnectionCookie_);
-//	conn_.release();
 	ssh_.release();
 	::RevokeDragDrop(*this);
     return 0;
@@ -600,66 +575,8 @@ LRESULT ScpListCtrl::OnCreate(UINT msg, WPARAM wParam, LPARAM lParam)
 
 	mol::GIT git;
 	git.registerInterface( *frame_, &gitCookie_);
-
-	//provider_.createObject(CLSID_DefaultScpCredentialProvider,CLSCTX_ALL);
-	//::CoAllowSetForegroundWindow(provider_,0);
-
-
-	//mol::punk<ISSH> ssh;
-	//HRESULT hr = ssh_.createObject(CLSID_SSH,CLSCTX_ALL);
-	//if( hr != S_OK )
-	//	return 0;
-
-	//connect();
-
 	return 0;
 }
-
-/*
-bool ScpListCtrl::connect()
-{
-	mol::GIT git;
-
-	if ( !ssh_ )
-	{
-		if ( gitSSHCookie_ )
-		{
-			git.revokeInterface(gitSSHCookie_);
-			gitSSHCookie_ = 0;
-		}
-		HRESULT hr = ssh_.createObject(CLSID_SSH,CLSCTX_ALL);
-		if( hr != S_OK )
-			return false;
-
-		git.registerInterface(*ssh_, &gitSSHCookie_);
-	}
-/*
-	if ( conn_ )
-	{
-		VARIANT_BOOL vb;
-		HRESULT hr = conn_->get_IsConnected(&vb);
-		if ( hr != S_OK )
-			return false;
-
-		if ( vb == VARIANT_TRUE )
-		{
-			return true;
-		}
-	}
-
-	if ( gitConnectionCookie_ )
-	{
-		git.revokeInterface(gitConnectionCookie_);
-		gitConnectionCookie_ = 0;
-	}
-	HRESULT hr = ssh_->Connect( mol::bstr(mol::fromUTF8(uri_.getHost())), uri_.getPort(), &conn_);
-	if( hr != S_OK )
-		return false;
-
-	git.registerInterface(*conn_, &gitConnectionCookie_);
-	*/
-	//return true;
-//}
 
 
 
@@ -684,7 +601,6 @@ LRESULT ScpListCtrl::OnSize(UINT msg, WPARAM wParam, LPARAM lParam)
 LRESULT ScpListCtrl::OnColumn(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	mol::Crack message(msg,wParam,lParam);
-	//sort(message.listview()->iSubItem);
 	return 0;
 }
 
@@ -795,26 +711,13 @@ void ScpListCtrl::EndRename(const mol::string& oldpath, const mol::string& newpa
 	mol::string pTo(tmp);
 	pTo += mol::string(newpath);
 
-	/*
-		mol::punk<ISSH> ssh;
-		HRESULT hr = ssh.createObject(CLSID_SSH);
-		if( hr != S_OK )
-			return;
+	mol::punk<ISFTP> sftp;
+	hr = conn->get_SFTP(&sftp);
+	if( hr != S_OK )
+		return;
 
-		mol::punk<ISSHConnection> conn;
-		hr = ssh->Connect( mol::bstr(mol::fromUTF8(uri_.getHost())), uri_.getPort(), &conn);
-		if( hr != S_OK )
-			return;
-			*/
-		mol::punk<ISFTP> sftp;
-		hr = conn->get_SFTP(&sftp);
-		if( hr != S_OK )
-			return;
-
-
-		sftp->Rename( mol::bstr(pFrom), mol::bstr(pTo) );
-		load(path_);
-	
+	sftp->Rename( mol::bstr(pFrom), mol::bstr(pTo) );
+	load(path_);	
 }
 
 LRESULT ScpListCtrl::OnEndRename(UINT msg, WPARAM wParam, LPARAM lParam)
@@ -823,11 +726,8 @@ LRESULT ScpListCtrl::OnEndRename(UINT msg, WPARAM wParam, LPARAM lParam)
 	if ( message.listviewDispInfo()->item.pszText)
 	{
 		mol::string displayname = message.listviewDispInfo()->item.pszText;
-
 		mol::string path= getItemEntry(message.listviewDispInfo()->item.iItem)->fileinfo.getName();
-		//connect();
 		queue_.push(new ScpDirQueueRenameAction(path,displayname,this));
-		//EndRename(path,displayname);
 	}
 	return 0;
 }
@@ -859,12 +759,6 @@ LRESULT ScpListCtrl::OnBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 
 	ScpListEntry* e = getItemEntry(vi[0]);
-
-	//mol::Uri uri( mol::toUTF8(path_) );
-	//std::string host = uri.getHost();
-	//int port = uri.getPort();
-	//std::string p = uri.getPath();
-
 	mol::ImageList::beginDrag(*this,hi);
 
 	mol::punk<mol::com_obj<mol::scp::DelayedDataTransferObj> > ido  = 
@@ -1060,7 +954,6 @@ HRESULT __stdcall ScpListCtrl::Update()
 //////////////////////////////////////////////////////////////////////////////
 HRESULT __stdcall ScpListCtrl::CreateDir()
 {
-	//connect();
 	queue_.push(new ScpCreateDirQueueAction(this));
 	return S_OK;
 }
@@ -1073,105 +966,69 @@ void ScpListCtrl::mkdir()
 	if ( hr != S_OK )
 		return;
 
-	/*
-	mol::punk<ISSHConnection> conn; 
-	hr = git.getInterface(gitConnectionCookie_,&conn);
-	if ( hr != S_OK )
-		return;
-		*/
-
 	mol::punk<ISSHConnection> conn;
 	if (!connect(gitSSHCookie_,&conn))
 		return;
 
-	//mol::Uri uri( mol::toUTF8(path_) );
-	//std::string host = uri.getHost();
-	//int port = uri.getPort();
 	std::string p = uri_.getPath();
 
 	if ( p[p.size()-1] != '/' )
 		p += "/";
 
-	//try
-	//{
-		//mol::sftp::Session& sftp = open(uri_);
-	/*
-		mol::punk<ISSH> ssh;
-		HRESULT hr = ssh.createObject(CLSID_SSH,CLSCTX_ALL);
-		if( hr != S_OK )
-			return;
 
-		mol::punk<ISSHConnection> conn;
-		hr = ssh->Connect( mol::bstr(mol::fromUTF8(uri_.getHost())), uri_.getPort(), &conn);
-		if( hr != S_OK )
-			return;
-			*/
-		mol::punk<ISFTP> sftp;
-		hr = conn->get_SFTP(&sftp);
-		if( hr != S_OK )
-			return;
+	mol::punk<ISFTP> sftp;
+	hr = conn->get_SFTP(&sftp);
+	if( hr != S_OK )
+		return;
 
-		SAFEARRAY* sa;
+	SAFEARRAY* sa;
 
-		hr = sftp->Files( mol::bstr(mol::fromUTF8(p)),&sa);
-		if( hr != S_OK )
-			return;
+	hr = sftp->Files( mol::bstr(mol::fromUTF8(p)),&sa);
+	if( hr != S_OK )
+		return;
 
-		mol::SafeArray<VT_VARIANT> safeArray;
-		safeArray.Attach(sa);
+	mol::SafeArray<VT_VARIANT> safeArray;
+	safeArray.Attach(sa);
 
-		mol::string tmp = _T("newDir_");	
-		int i = 0;
-		while(true)
+	mol::string tmp = _T("newDir_");	
+	int i = 0;
+	while(true)
+	{
+		mol::stringstream oss;
+		oss << tmp << i;
+		mol::string newDir = oss.str();
+
+		bool exists = false;
+		mol::SFAccess<VARIANT> sf(sa);
+		for ( size_t c = 0; c <sf.size(); c++)
 		{
-			mol::stringstream oss;
-			oss << tmp << i;
-			mol::string newDir = oss.str();
-
-			bool exists = false;
-			mol::SFAccess<VARIANT> sf(sa);
-			for ( size_t c = 0; c <sf.size(); c++)
+			mol::bstr b(sf[c].bstrVal);
+			mol::string name = b.toString();
+			if ( newDir == name )
 			{
-				mol::bstr b(sf[c].bstrVal);
-				mol::string name = b.toString();
-				if ( newDir == name )
-				{
-					exists = true;
-					break;
-				}
+				exists = true;
+				break;
 			}
+		}
 
-			if (exists)
-			{
-				i++;
-				continue;
-			}
+		if (exists)
+		{
+			i++;
+			continue;
+		}
 
-			hr = sftp->Mkdir( mol::bstr(mol::fromUTF8(p) + newDir),0700 );
-			if( hr != S_OK )
-			{
-				std::wstringstream oss;
-				oss << L"failed to create new dir " << newDir;
-				oip->SetStatusText(oss.str().c_str());				
-				return;
-			}
-
-			load(path_);
+		hr = sftp->Mkdir( mol::bstr(mol::fromUTF8(p) + newDir),0700 );
+		if( hr != S_OK )
+		{
+			std::wstringstream oss;
+			oss << L"failed to create new dir " << newDir;
+			oip->SetStatusText(oss.str().c_str());				
 			return;
 		}
-		/*
+
+		load(path_);
+		return;
 	}
-	catch(mol::ssh::Ex& ex)
-	{
-		std::wstringstream oss;
-		oss << L"failed to create new dir " << mol::towstring(ex.msg());
-		oip->SetStatusText(oss.str().c_str());
-	}
-	catch(...)
-	{
-		oip->SetStatusText(L"failed to create new dir");
-	}
-	*/
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1206,9 +1063,7 @@ HRESULT __stdcall ScpListCtrl::Delete()
 		tmp.push_back(v[i]->filename);
 	}
 
-	//connect();
 	queue_.push( new ScpUnlinkQueueAction(tmp,this) );
-
 	return S_OK;
 }
 
@@ -1223,72 +1078,50 @@ void ScpListCtrl::unlink( const std::vector<mol::string>& v )
 	if ( hr != S_OK )
 		return;
 
-	/*
-	mol::punk<ISSHConnection> conn; 
-	hr = git.getInterface(gitConnectionCookie_,&conn);
-	if ( hr != S_OK )
-		return;
-		*/
-
 	mol::punk<ISSHConnection> conn;
 	if (!connect(gitSSHCookie_,&conn))
 		return;
 
-		//mol::sftp::Session& sftp = open(uri_);
+	mol::punk<ISFTP> sftp;
+	hr = conn->get_SFTP(&sftp);
+	if( hr != S_OK )
+		return;
 
-		/*
-		mol::punk<ISSH> ssh;
-		HRESULT hr = ssh.createObject(CLSID_SSH,CLSCTX_ALL);
+
+	for ( size_t i = 0; i < v.size(); i++)
+	{
+		std::wstring path(v[i]);
+
+		mol::Uri uri( mol::toUTF8(path) );
+		std::string p = uri.getPath();
+
+		mol::punk<IRemoteFile> rf;
+		hr = sftp->Stat( mol::bstr(mol::fromUTF8(p)),&rf );
 		if( hr != S_OK )
 			return;
 
-		mol::punk<ISSHConnection> conn;
-		hr = ssh->Connect( mol::bstr(mol::fromUTF8(uri_.getHost())), uri_.getPort(), &conn);
-		if( hr != S_OK )
-			return;
-		*/
-		mol::punk<ISFTP> sftp;
-		hr = conn->get_SFTP(&sftp);
+		VARIANT_BOOL vb;
+		hr = rf->get_IsDir(&vb);
 		if( hr != S_OK )
 			return;
 
-
-		for ( size_t i = 0; i < v.size(); i++)
+		if ( vb == VARIANT_TRUE )
 		{
-			std::wstring path(v[i]);
-
-			mol::Uri uri( mol::toUTF8(path) );
-			std::string p = uri.getPath();
-
-			mol::punk<IRemoteFile> rf;
-			hr = sftp->Stat( mol::bstr(mol::fromUTF8(p)),&rf );
+			hr = sftp->Rmdir( mol::bstr(mol::fromUTF8(p)));
 			if( hr != S_OK )
-				return;
-
-			VARIANT_BOOL vb;
-			hr = rf->get_IsDir(&vb);
-			if( hr != S_OK )
-				return;
-
-//			mol::sftp::RemoteFile rf = sftp.stat(mol::fromUTF8(p));
-
-			if ( vb == VARIANT_TRUE )
 			{
-				hr = sftp->Rmdir( mol::bstr(mol::fromUTF8(p)));
-				if( hr != S_OK )
-				{
-					continue;
-				}
-			}
-			else
-			{
-				hr = sftp->Unlink(mol::bstr(mol::fromUTF8(p)));
-				if( hr != S_OK )
-				{
-					continue;
-				}
+				continue;
 			}
 		}
+		else
+		{
+			hr = sftp->Unlink(mol::bstr(mol::fromUTF8(p)));
+			if( hr != S_OK )
+			{
+				continue;
+			}
+		}
+	}
 
 	load(path_);
 	return;
@@ -1309,20 +1142,6 @@ HRESULT __stdcall ScpListCtrl::Properties()
 			int port = uri.getPort();
 			std::string p = uri.getPath();
 
-			//mol::sftp::Session& sftp = open(uri_);
-
-			/*
-			mol::punk<ISSH> ssh;
-			HRESULT hr = ssh.createObject(CLSID_SSH,CLSCTX_ALL);
-			if( hr != S_OK )
-				return hr;
-
-			mol::punk<ISSHConnection> conn;
-			hr = ssh->Connect( mol::bstr(mol::fromUTF8(uri_.getHost())), uri_.getPort(), &conn);
-			if( hr != S_OK )
-				return hr;
-				*/
-
 			mol::punk<ISSHConnection> conn;
 			if (!connect(gitSSHCookie_,&conn))
 				return S_FALSE;
@@ -1333,8 +1152,6 @@ HRESULT __stdcall ScpListCtrl::Properties()
 				return hr;
 
 			frame_->SetStatusText(path.c_str());
-
-			//mol::sftp::RemoteFile rf = sftp.stat(mol::fromUTF8(p));
 
 			mol::punk<IRemoteFile> rf;
 			hr = sftp->Stat( mol::bstr(mol::fromUTF8(p)),&rf );
@@ -1366,15 +1183,12 @@ HRESULT __stdcall ScpListCtrl::Properties()
 				long gr = dlg.group();
 				if ( perm != pm )
 				{
-					//sftp->CHM
-					//sftp.chmod(mol::fromUTF8(p),perm);
 				}
 				if ( owner != ow|| group != gr )
 				{
 					hr = sftp->Chown( mol::bstr(mol::fromUTF8(p)), ow, gr );
 					if( hr != S_OK )
 						return hr;
-					//sftp.chown(mol::fromUTF8(p),owner,group);
 				}
 				load(path_);
 			}
@@ -1511,43 +1325,6 @@ HRESULT __stdcall ScpListCtrl::Paste ()
 		try {
 
 			queue_.push(new ScpPushFileQueueAction(path,v,this));
-			//this->put(v,path);
-
-			/*
-			std::wstringstream oss;
-			oss << L"connecting to " << mol::fromUTF8(host) << L":" << port;
-			this->frame_->SetStatusText(oss.str().c_str());
-
-			mol::ssh::Session ssh;
-			if (!ssh.open(host,&credentials_,port))
-				return S_OK;
-
-			mol::scp::Session scp(ssh);
-			if(!scp.open(mol::SSH_SCP_WRITE|mol::SSH_SCP_RECURSIVE,path) )
-			{
-				return S_OK;
-			}
-
-			for( size_t i = 0; i < v.size(); i++)
-			{
-
-				std::wstringstream oss;
-				oss << L"^writing " << mol::towstring(v[i]);
-				this->frame_->SetStatusText(oss.str().c_str());
-
-				if ( mol::Path::isDir(v[i]) )
-				{
-					if (!scp.push_dir(v[i], 0700))
-						break;
-				}
-				else
-				{
-					if (!scp.push_file( v[i], 0600))
-						break;
-				}
-			}
-			this->Update();
-			*/
 		}
 		catch(...)
 		{
@@ -1699,74 +1476,6 @@ mol::string ScpListCtrl::getPath()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-
-/*
-BOOL ShellListCtrl::sort(int c)
-{
-	sortDir_ *= -1;
-    sortCol_  = c;
-    return ListView_SortItems( list_, CompareFunc, (LPARAM)this );
-}
-*/
-//////////////////////////////////////////////////////////////////////////////
-
-/*
-int CALLBACK ShellListCtrl::CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
-{
-    ShellListCtrl* pThis = (ShellListCtrl*)lParamSort;
-    if ( pThis )
-        return pThis->compare(lParam1, lParam2);
-    return 0;
-}
-//////////////////////////////////////////////////////////////////////////////
-
-int ShellListCtrl::compare(LPARAM lParam1, LPARAM lParam2)
-{
-    DirListEntry* de1 = (DirListEntry*)lParam1;
-    DirListEntry* de2 = (DirListEntry*)lParam2;
-    if ( !de1 || !de2)
-        return -1*sortDir_;
-
-    if (de1->isDir() && !de2->isDir() )
-        return -1;
-
-    if (!de1->isDir() && de2->isDir() )
-        return 1;
-
-    if ( sortCol_ == 0 )
-    {
-		std::string s1(mol::tostring(de1->filename) );
-		std::string s2(mol::tostring(de2->filename) );
-        return _stricmp( s1.c_str(), s2.c_str() )*sortDir_;
-        // p1 before p2
-    }
-    else if ( sortCol_ == 1 )
-    {
-        if ( de1->fileinfo.fileSizeHigh() < de2->fileinfo.fileSizeHigh() )
-            return -1*sortDir_;
-        if ( de1->fileinfo.fileSizeHigh() > de2->fileinfo.fileSizeHigh() )
-            return 1*sortDir_;
-        if ( de1->fileinfo.fileSizeLow() < de2->fileinfo.fileSizeLow() )
-            return -1*sortDir_;
-        if ( de1->fileinfo.fileSizeLow() > de2->fileinfo.fileSizeLow() )
-            return 1*sortDir_;
-        return 0;
-    }
-    else if ( sortCol_ == 2 )
-    {
-        if ( de1->fileinfo.lastWriteTime().dwHighDateTime  < de2->fileinfo.lastWriteTime().dwHighDateTime  )
-            return -1*sortDir_;
-        if ( de1->fileinfo.lastWriteTime().dwHighDateTime  > de2->fileinfo.lastWriteTime().dwHighDateTime  )
-            return 1*sortDir_;
-        if ( de1->fileinfo.lastWriteTime().dwLowDateTime  < de2->fileinfo.lastWriteTime().dwLowDateTime  )
-            return -1*sortDir_;
-        if ( de1->fileinfo.lastWriteTime().dwLowDateTime  > de2->fileinfo.lastWriteTime().dwLowDateTime  )
-            return 1*sortDir_;
-        return 0;
-    }
-    return -1*sortDir_;
-}
-*/
 //////////////////////////////////////////////////////////////////////////////
 //
 // User drops - 
@@ -1782,11 +1491,6 @@ HRESULT __stdcall ScpListCtrl::ShellListCtrl_Drop::Drop( IDataObject* pDataObjec
 	int i = list_->list_.hitTest();
 	if ( i != -1 )
 		e = list_->getItemEntry(i);
-
-	//mol::Uri uri( mol::toUTF8(list_->path_) );
-	//std::string host = uri.getHost();
-	//int port = uri.getPort();
-	//std::string p = uri.getPath();
 
 	mol::string path = mol::toString(list_->uri_.getPath());
 	if ( e && (!e->isDir()) )
@@ -1806,44 +1510,6 @@ HRESULT __stdcall ScpListCtrl::ShellListCtrl_Drop::Drop( IDataObject* pDataObjec
 		try {
 
 			list_->queue_.push(new ScpPushFileQueueAction(path,v,list_));
-			//list_->put(v,path);
-
-			/*
-			std::wstringstream oss;
-			oss << L"connecting to " << mol::fromUTF8(host) << L":" << port;
-			list_->frame_->SetStatusText(oss.str().c_str());
-
-			mol::ssh::Session ssh;
-			if (!ssh.open( host, &(list_->credentials_), port))
-			{
-				return S_OK;
-			}
-
-			mol::scp::Session scp(ssh);
-			if(!scp.open(mol::SSH_SCP_WRITE|mol::SSH_SCP_RECURSIVE,path) )
-			{
-				return S_OK;
-			}
-
-			for( size_t i = 0; i < v.size(); i++)
-			{
-				std::wstringstream oss;
-				oss << L"writing " << mol::towstring(v[i]);
-				list_->frame_->SetStatusText(oss.str().c_str());
-
-				if ( mol::Path::isDir(v[i]) )
-				{
-					if (!scp.push_dir( v[i],0700))
-						break;
-				}
-				else
-				{
-					if (!scp.push_file( v[i],0600))
-						break;
-				}
-			}
-			list_->Update();
-			*/
 		}
 		catch(...)
 		{
@@ -1867,54 +1533,15 @@ void ScpListCtrl::put( std::vector<mol::string>& v, const mol::string& path)
 {
 	try
 	{
-		//mol::Uri uri( mol::toUTF8(path_) );
-		//std::string host = uri.getHost();
-		//int port = uri.getPort();
-		//std::string p = uri.getPath();
-
-		//mol::ssh::Session& ssh = connect(uri_);
-
-		/*
-		mol::punk<ISSH> ssh;
-		HRESULT hr = ssh.createObject(CLSID_SSH,CLSCTX_ALL);
-		if( hr != S_OK )
-			return;
-
-		mol::punk<ISSHConnection> conn;
-		hr = ssh->Connect( mol::bstr(mol::fromUTF8(uri_.getHost())), uri_.getPort(), &conn);
-		if( hr != S_OK )
-			return;
-			*/
-
-		/*
-		mol::GIT git;
-		mol::punk<IUnknown> unk;
-		HRESULT hr = git.getInterface(gitConnectionCookie_,&unk);
-		if( hr != S_OK )
-			return;
-
-		mol::punk<ISSHConnection> conn(unk);
-		if(!conn)
-			return;
-			*/
-
 		mol::punk<ISSHConnection> conn;
 		if (!connect(gitSSHCookie_,&conn))
 			return;
-
-		/*hr = conn->Connect();
-		if( hr != S_OK )
-			return;
-			*/
 
 		mol::punk<ISCP> scp;
 		HRESULT hr = conn->get_SCP(&scp);
 		if( hr != S_OK )
 			return;
 
-
-		//mol::scp::Session scp(ssh);
-		//scp.open(mol::SSH_SCP_WRITE|mol::SSH_SCP_RECURSIVE,mol::towstring(path));
 		for( size_t i = 0; i < v.size(); i++)
 		{
 			std::wstringstream oss;
@@ -1926,17 +1553,12 @@ void ScpListCtrl::put( std::vector<mol::string>& v, const mol::string& path)
 				hr = scp->PushDirectory( mol::bstr( v[i]), mol::bstr(path) );
 				if( hr != S_OK )
 					return;
-				//if (!scp.push_dir( v[i],0700))
-					//break;
 			}
 			else
 			{
 				hr = scp->PushFile( mol::bstr( v[i]), mol::bstr(path) );
 				if( hr != S_OK )
 					return;
-
-				//if (!scp.push_file( v[i],0600))
-					//break;
 			}
 		}
 		load(path_);
@@ -1953,11 +1575,7 @@ void ScpListCtrl::put( std::vector<mol::string>& v, const mol::string& path)
 
 HRESULT  __stdcall ScpListCtrl::ShellListCtrl_Drop::DragEnter( IDataObject* , DWORD key , POINTL , DWORD* pEffect )
 {
-	//(*pEffect) &= (DROPEFFECT_COPY|DROPEFFECT_MOVE);
-	//if ( key & MK_CONTROL )
-	//	*pEffect = DROPEFFECT_MOVE;
-	//else
-		*pEffect = DROPEFFECT_COPY;
+	*pEffect = DROPEFFECT_COPY;
 	mol::ImageList::enterDrag(*list_);
     return S_OK;
 }
@@ -1978,11 +1596,7 @@ HRESULT __stdcall ScpListCtrl::ShellListCtrl_Drop::DragOver( DWORD key, POINTL, 
 		list_->update();
 		mol::ImageList::enterDrag(*list_);			
 	}
-	//(*pEffect) &= (DROPEFFECT_COPY|DROPEFFECT_MOVE);
-	//if ( key & MK_CONTROL )
-	//	*pEffect = DROPEFFECT_MOVE;
-	//else
-		*pEffect = DROPEFFECT_COPY;
+	*pEffect = DROPEFFECT_COPY;
     return S_OK;
 }
 
@@ -2145,9 +1759,6 @@ bool ScpListCtrl::Credentials::promptCredentials(const std::string& host, int po
 
 bool ScpListCtrl::Credentials::acceptHost(const std::string& host, int port, const std::string& hash)
 {
-	//if ( !This()->provider_ )
-		//return false;
-
 	mol::punk<IScpCredentialProvider> provider;
 	provider.createObject(CLSID_DefaultScpCredentialProvider,CLSCTX_ALL);
 	::CoAllowSetForegroundWindow(provider,0);
@@ -2165,9 +1776,6 @@ bool ScpListCtrl::Credentials::acceptHost(const std::string& host, int port, con
 
 bool ScpListCtrl::Credentials::rememberHostCredentials(const std::string& host, int port, const mol::ssh::string& user, const mol::ssh::string& pwd)
 {
-	//if ( !This()->provider_ )
-		//return false;
-
 	mol::punk<IScpCredentialProvider> provider;
 	provider.createObject(CLSID_DefaultScpCredentialProvider,CLSCTX_ALL);
 	::CoAllowSetForegroundWindow(provider,0);
@@ -2190,9 +1798,6 @@ bool ScpListCtrl::Credentials::rememberHostCredentials(const std::string& host, 
 
 bool ScpListCtrl::Credentials::deleteHostCredentials(const std::string& host, int port)
 {
-//	if ( !This()->provider_ )
-	//	return false;
-
 	mol::punk<IScpCredentialProvider> provider;
 	provider.createObject(CLSID_DefaultScpCredentialProvider,CLSCTX_ALL);
 	::CoAllowSetForegroundWindow(provider,0);

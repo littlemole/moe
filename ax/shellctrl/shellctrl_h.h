@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Thu Feb 23 19:32:01 2012
+/* at Thu Feb 23 23:31:41 2012
  */
 /* Compiler settings for shellCtrl.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -69,6 +69,12 @@ typedef interface IScpList IScpList;
 #define __IColorPicker_FWD_DEFINED__
 typedef interface IColorPicker IColorPicker;
 #endif 	/* __IColorPicker_FWD_DEFINED__ */
+
+
+#ifndef __IPID_FWD_DEFINED__
+#define __IPID_FWD_DEFINED__
+typedef interface IPID IPID;
+#endif 	/* __IPID_FWD_DEFINED__ */
 
 
 #ifndef __IKillRoy_FWD_DEFINED__
@@ -1515,6 +1521,147 @@ EXTERN_C const IID IID_IColorPicker;
 #endif 	/* __IColorPicker_INTERFACE_DEFINED__ */
 
 
+#ifndef __IPID_INTERFACE_DEFINED__
+#define __IPID_INTERFACE_DEFINED__
+
+/* interface IPID */
+/* [dual][oleautomation][object][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IPID;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("6AAA0600-70F4-4B2A-BFAA-D808EBD2D174")
+    IPID : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PID( 
+            /* [retval][out] */ LONG *pid) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
+            /* [retval][out] */ BSTR *processname) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE TerminateProcess( 
+            /* [retval][out] */ VARIANT_BOOL *ok) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IPIDVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPID * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPID * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPID * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IPID * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IPID * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IPID * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IPID * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PID )( 
+            IPID * This,
+            /* [retval][out] */ LONG *pid);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IPID * This,
+            /* [retval][out] */ BSTR *processname);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *TerminateProcess )( 
+            IPID * This,
+            /* [retval][out] */ VARIANT_BOOL *ok);
+        
+        END_INTERFACE
+    } IPIDVtbl;
+
+    interface IPID
+    {
+        CONST_VTBL struct IPIDVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IPID_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IPID_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IPID_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IPID_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IPID_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IPID_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IPID_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IPID_get_PID(This,pid)	\
+    ( (This)->lpVtbl -> get_PID(This,pid) ) 
+
+#define IPID_get_Name(This,processname)	\
+    ( (This)->lpVtbl -> get_Name(This,processname) ) 
+
+#define IPID_TerminateProcess(This,ok)	\
+    ( (This)->lpVtbl -> TerminateProcess(This,ok) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IPID_INTERFACE_DEFINED__ */
+
+
 #ifndef __IKillRoy_INTERFACE_DEFINED__
 #define __IKillRoy_INTERFACE_DEFINED__
 
@@ -1532,11 +1679,7 @@ EXTERN_C const IID IID_IKillRoy;
     public:
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FindPIDforFile( 
             /* [in] */ BSTR filename,
-            /* [retval][out] */ LONG *pid) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE TerminateProcess( 
-            /* [in] */ LONG pid,
-            /* [retval][out] */ VARIANT_BOOL *ok) = 0;
+            /* [retval][out] */ IPID **pid) = 0;
         
     };
     
@@ -1590,12 +1733,7 @@ EXTERN_C const IID IID_IKillRoy;
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *FindPIDforFile )( 
             IKillRoy * This,
             /* [in] */ BSTR filename,
-            /* [retval][out] */ LONG *pid);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *TerminateProcess )( 
-            IKillRoy * This,
-            /* [in] */ LONG pid,
-            /* [retval][out] */ VARIANT_BOOL *ok);
+            /* [retval][out] */ IPID **pid);
         
         END_INTERFACE
     } IKillRoyVtbl;
@@ -1635,9 +1773,6 @@ EXTERN_C const IID IID_IKillRoy;
 
 #define IKillRoy_FindPIDforFile(This,filename,pid)	\
     ( (This)->lpVtbl -> FindPIDforFile(This,filename,pid) ) 
-
-#define IKillRoy_TerminateProcess(This,pid,ok)	\
-    ( (This)->lpVtbl -> TerminateProcess(This,pid,ok) ) 
 
 #endif /* COBJMACROS */
 

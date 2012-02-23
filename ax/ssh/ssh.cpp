@@ -186,16 +186,6 @@ EncryptedMap::EncryptedMap()
 
 void EncryptedMap::encrypt(const EncryptedMap::MapType& map)
 {
-	/*
-	std::ostringstream oss;
-	for ( MapType::const_iterator it = map.begin(); it!=map.end(); it++)
-	{
-		oss << (*it).first << L'\0' << (*it).second << L'\0';
-	}
-
-	std::string tmp(oss.str());
-	*/
-
 	mol::ssh::stringBuffer buffer;
 	for ( MapType::const_iterator it = map.begin(); it!=map.end(); it++)
 	{
@@ -212,8 +202,6 @@ EncryptedMap::MapType EncryptedMap::decrypt()
 {
 	MapType map;
 	mol::ssh::string plain = secure_.decrypt();
-	// but it is really a wstr
-	//std::wstring plain( (wchar_t*)(tmp.data()), tmp.size()/sizeof(wchar_t));
 	size_t pos = 0;
 	size_t p   = 0;
 
@@ -240,33 +228,8 @@ EncryptedMap::MapType EncryptedMap::decrypt()
 		data = pdata;
 
 		map.insert( std::make_pair(key,val) );
-
 	}	
 
-	/*
-	while( pos != std::string::npos && p < plain.size() )
-	{
-		pos = plain.find('\0',p);
-		if ( pos == std::wstring::npos || pos == p)
-			break;
-
-		std::string key = plain.substr(p,pos-p);
-		if(key.empty())
-			break;
-
-		p = plain.find('\0',pos+1);
-		if ( p == std::string::npos || p == pos+1)
-			break;
-
-		std::string val = plain.substr(pos+1,p-pos);
-		if(val.empty())
-			break;
-
-		map.insert( std::make_pair(key,val) );
-
-		p = p + 1;
-	}
-	*/
 	return map;
 }
 
@@ -1486,16 +1449,6 @@ HRESULT __stdcall ScpCredentialProvider::acceptHost( BSTR host, long port, BSTR 
 
 	*accept = b == true ? VARIANT_TRUE : VARIANT_FALSE;
 
-	/*
-	AccepHostDlg dlg( mol::toString(host), port, mol::toString(hash) );
-
-	LRESULT r = dlg.doModal( IDD_DIALOG_SSH_ACCEPT_HOST, ::GetDesktopWindow() );
-
-	if ( r == IDOK )
-		*accept = VARIANT_TRUE;
-	else
-		*accept = VARIANT_FALSE;
-		*/
 	return S_OK;
 }
 
@@ -1536,8 +1489,6 @@ HRESULT  __stdcall ScpCredentialProvider::removeSessionCredentials( BSTR host, l
 
 bool ScpCredentialManager::acceptHost( mol::string host, long port, mol::string hash )
 {
-	//return credentialManager().credentials.acceptHost( mol::toUTF8(host),port, mol::toUTF8(hash) );
-
 	AccepHostDlg dlg( mol::toString(host), port, mol::toString(hash) );
 
 	LRESULT r = dlg.doModal( IDD_DIALOG_SSH_ACCEPT_HOST, ::GetDesktopWindow() );
@@ -1560,16 +1511,6 @@ bool ScpCredentialManager::Credentials::getCredentials(const std::string& host, 
 		user = login;
 		pwd = pass;
 
-		/*
-		std::string u = mol::toUTF8(login);
-		std::string p = mol::toUTF8(pass);
-
-		*user = (char*)malloc(u.size()+1);
-		*pwd  = (char*)malloc(p.size()+1);
-
-		memcpy( *user, u.c_str(), u.size() +1);
-		memcpy( *pwd , p.c_str(), p.size() +1);
-		*/
 		return true;
 	}
 
@@ -1583,17 +1524,6 @@ bool ScpCredentialManager::Credentials::getCredentials(const std::string& host, 
 
 	user = mol::ssh::wstring2utf8(dlg.user.data(),dlg.user.size());
 	pwd = mol::ssh::wstring2utf8(dlg.pwd.data(),dlg.pwd.size());
-
-	/*
-	std::string u = mol::toUTF8(dlg.user);
-	std::string p = mol::toUTF8(dlg.pwd);
-
-	*user = (char*)malloc(u.size()+1);
-	*pwd  = (char*)malloc(p.size()+1);
-
-	memcpy( *user, u.c_str(), u.size() +1);
-	memcpy( *pwd , p.c_str(), p.size() +1);
-	*/
 
 	return true;
 }
@@ -1611,52 +1541,3 @@ class sshDll :
 DLL_COCLASS_EXPORTS(sshDll)
 
 ////////////////////////////////////////////////////////////////////////
-
-/*
-class SSHApp : 
-
-	public mol::local_server<mol::win::Loop>,	
-	public mol::exports_singleton<SSHApp,SSH >,
-	public mol::exports_aggregable< SSHApp, ScpPasswordCredentials >,
-	public mol::exports_singleton< SSHApp, ScpCredentialProvider >	
-{
-public:
-
-	SSHApp ()
-	{}
-
-	~SSHApp()
-	{}
-
-};
-
-int APIENTRY _tWinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPTSTR    lpCmdLine,
-                     int       nCmdShow)
-{
-	ODBGS("JRE startup");
-	ODBGS(lpCmdLine);
-
-//	::DebugBreak();
-//	::MessageBoxA(0,"reg","ssh",0);
-
-    try
-    {
-		//::CoInitializeEx(0,COINIT_MULTITHREADED);
-		::CoInitialize(0);
-		mol::run<SSHApp>(lpCmdLine);	
-
-    }
-    catch (mol::X& x)
-    {
-        ::MessageBoxA(0,x.what(),"error",0);
-        return 1;
-    }
-    return 0;
-}
-*/
-
-
-
-

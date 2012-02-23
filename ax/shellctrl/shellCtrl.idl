@@ -445,6 +445,34 @@ library ShellCtrls
 	};
 
 	////////////////////////////////////////////////////////////////////////////////////
+	// IPID
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+      uuid(6AAA0600-70F4-4B2A-BFAA-D808EBD2D174),
+      helpstring("IPID - unique process id"),
+      object,oleautomation, dual
+    ]
+	interface IPID : IDispatch
+    {
+		//methods
+		[ 
+		  propget,id(DISPID_VALUE), helpstring("pid (process id)")
+		] 
+		HRESULT PID([out,retval] LONG* pid);
+
+		[ 
+		  propget,id(1), helpstring("process path")
+		] 
+		HRESULT Name([out,retval] BSTR* processname);
+
+		[ 
+		  id(2), helpstring("kill process")
+		] 
+		HRESULT TerminateProcess( [out,retval] VARIANT_BOOL* ok);
+	};
+
+	////////////////////////////////////////////////////////////////////////////////////
 	// IKillRoy
 	////////////////////////////////////////////////////////////////////////////////////
 
@@ -459,13 +487,13 @@ library ShellCtrls
 		[ 
 		  id(1), helpstring("find pid for file")
 		] 
-		HRESULT FindPIDforFile([in] BSTR filename, [out,retval] LONG* pid);
+		HRESULT FindPIDforFile([in] BSTR filename, [out,retval] IPID** pid);
 
-		[ 
-		  id(2), helpstring("kill pid")
-		] 
-		HRESULT TerminateProcess([in] LONG pid, [out,retval] VARIANT_BOOL* ok);
 	};
+
+
+
+	
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Event Disp Interfaces

@@ -332,7 +332,6 @@ protected:
 
 	DWORD gitCookie_;
 	DWORD gitSSHCookie_;
-	//DWORD gitConnectionCookie_;
 
 	mol::ThreadQueue<
 			ScpDirQueueAction,

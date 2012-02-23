@@ -15,7 +15,7 @@ public:
 		::ZeroMemory(szSessionKey_,MOL_CCH_RM_SESSION_KEY+1);		
 	}
 
-	long getPidForFilename( const std::wstring& filename )
+	long getPidForFilename( const std::wstring& filename, IPID** pid )
 	{
 		if (!mol::v7::RmStartSession)
 		{
@@ -53,6 +53,9 @@ public:
 				::CompareFileTime(&rgpi.Process.ProcessStartTime,&ftCreate) == 0) 
 			{
 				::CloseHandle(hProcess);
+
+				Pid::Instance* p = Pid::CreateInstance(rgpi.Process.dwProcessId,ftCreate);
+				p->QueryInterface(IID_IPID,(void**)pid);
 				return rgpi.Process.dwProcessId;
 			}
 			::CloseHandle(hProcess);
@@ -76,15 +79,15 @@ private:
 };
 
 
-HRESULT __stdcall KillRoy::FindPIDforFile( BSTR filename, LONG *pid)
+HRESULT __stdcall KillRoy::FindPIDforFile( BSTR filename, IPID** pid)
 {
 	if ( pid == 0 )
 		return E_INVALIDARG;
 
 	std::wstring fn = mol::towstring(filename);
 
-	RmSession rms;
-	*pid = rms.getPidForFilename(fn);
+	RmSession rms;	
+	rms.getPidForFilename(fn,pid);
 
 	return S_OK;
 }

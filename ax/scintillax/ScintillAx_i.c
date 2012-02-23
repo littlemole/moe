@@ -6,7 +6,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Wed Feb 22 23:06:16 2012
+/* at Thu Feb 23 23:02:04 2012
  */
 /* Compiler settings for ScintillAX.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 

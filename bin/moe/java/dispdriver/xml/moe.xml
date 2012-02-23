@@ -1,6 +1,6 @@
 <typelib name='Moe' 
 desc='moe type library' 
-typeinfocount='18' 
+typeinfocount='19' 
 guid='{E5769EB9-ADD9-41E5-8D3D-D925C7FC0C29}' 
 major='1' 
 minor='0' 
@@ -522,6 +522,13 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
  <get />
 </property>
  <method name='Close' type='void' dispid='2' vtindex='36' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Close current frame' >
+ </method>
+</interface>
+
+
+<interface name='IMoeImport' type='Dual' iid='{4447A58A-26E6-43E0-851E-0823C1E79CF8}' base='IDispatch' members='1' desc='' >
+ <method name='Import' type='void' dispid='1' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='import source code' >
+  <param type='BSTR' name='filename' />
  </method>
 </interface>
 

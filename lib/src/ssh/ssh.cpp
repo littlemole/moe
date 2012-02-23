@@ -139,15 +139,6 @@ bool PasswordCredentials::getCredentials(const std::string& host, int port,ssh::
 	user = user_;
 	pwd = pwd_;
 
-	/*
-	size_t size = (user_.size()+1);
-	*user = (char*)malloc( size );
-	memcpy(*user, user_.data(), size );
-
-	size = (pwd_.size()+1);
-	*pwd = (char*)malloc( size );
-	memcpy(*pwd, pwd_.data(), size );
-	*/
 	return true;
 }
 
