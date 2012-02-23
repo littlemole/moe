@@ -329,5 +329,25 @@ private:
 
 MOE_DOCTYPE index2type(int index);
 
+class MoeImport : 
+ 	public mol::Dispatch<IMoeImport>,
+ 	public mol::interfaces< MoeImport, 
+ 				mol::implements< IDispatch, IMoeImport> >
+{
+public:
+ 
+ 	typedef mol::com_obj<MoeImport> Instance;
+ 	typedef mol::com_obj<mol::ScriptHost> Host;
+ 
+ 	void dispose();
+ 
+ 	static Instance* CreateInstance(Host* host);
+ 
+ 	virtual HRESULT __stdcall  Import(BSTR filename);
+ 
+private:
+ 	mol::punk<Host> host_;
+};
+
 
 #endif

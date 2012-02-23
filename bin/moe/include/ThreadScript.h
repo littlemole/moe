@@ -126,7 +126,8 @@ protected:
 	void close();
 
 	std::set<int>						breakpoints_;
-	std::map<mol::string,DWORD>			objectMap_;
+	typedef std::pair<DWORD,DWORD>      ObjectMapItem;
+ 	std::map<mol::string,ObjectMapItem>	objectMap_;
 
 	mol::punk<IProcessDebugManager>		pdm_;
 	mol::punk<IDebugApplication>		debugApp_;
@@ -148,7 +149,23 @@ protected:
 	HRESULT getScriptEngine(const mol::string& engine, IActiveScript **ppas);
 };
 
-
+class MoeDebugImport : 
+ 	public mol::Dispatch<IMoeImport>,
+ 	public mol::interfaces< MoeDebugImport, 
+ 				mol::implements< IDispatch, IMoeImport> >
+{
+public:
+ 	typedef mol::com_obj<MoeDebugImport> Instance;
+ 
+ 	void dispose();
+ 
+ 	static Instance* CreateInstance(IActiveScript* host);
+ 
+ 	virtual HRESULT __stdcall  Import(BSTR filename);
+ 
+private:
+ 	mol::punk<IActiveScript> host_;
+};
 
 
 #endif

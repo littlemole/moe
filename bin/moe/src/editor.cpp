@@ -1427,17 +1427,7 @@ HRESULT __stdcall Editor::Sintilla_Events::OnMarker( long line)
 	return S_OK; 
 }
 
-/*
-int indexFromCodePage(int cp)
-{
-	for ( size_t i = 0; i < moe()->codePages().size(); i++)
-	{
-		if ( moe()->codePages()[i].first == cp )
-			return (int)i;
-	}
-	return -1;
-}
-*/
+
 //////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 

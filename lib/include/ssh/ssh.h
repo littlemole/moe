@@ -98,7 +98,7 @@ public:
 
 	bool operator<(const string& compare)
 	{
-		return strcmp(data_,compare.data());
+		return strcmp(data_,compare.data()) != 0;
 	}
 
 private:

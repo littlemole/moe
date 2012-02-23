@@ -17,6 +17,38 @@ mol::string engineFromPath(const std::string& path)
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
+mol::string findFile(const mol::string& f);
+ 
+void MoeDebugImport::dispose() {}
+ 
+MoeDebugImport::Instance* MoeDebugImport::CreateInstance(IActiveScript* host)
+{
+ 	Instance* i = new Instance();
+ 	i->host_ = host;
+ 	return i;
+}
+ 
+HRESULT __stdcall  MoeDebugImport::Import(BSTR filename)
+{
+ 	mol::punk<IActiveScriptParse> asp;
+ 	HRESULT hr = host_->QueryInterface(IID_IActiveScriptParse,(void**)&asp);
+ 	if ( hr != S_OK )
+ 		return E_FAIL;
+ 
+ 	mol::string file = findFile( mol::toString(filename) );
+ 
+ 	mol::filestream fs;
+ 	fs.open(mol::tostring(file),GENERIC_READ);
+ 	std::string s = fs.readAll();
+ 	fs.close();
+ 
+ 	mol::variant varResult;
+ 	EXCEPINFO ei;
+ 	::ZeroMemory(&ei,sizeof(ei));
+ 	hr = asp->ParseScriptText( mol::bstr(s), NULL,0,0,0,0,SCRIPTTEXT_ISPERSISTENT|SCRIPTTEXT_ISVISIBLE , &varResult,&ei);
+ 	return hr;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -31,10 +63,10 @@ ThreadScript::~ThreadScript()
 
 void ThreadScript::close()
 {
-	mol::GIT git;
-	for ( std::map<mol::string,DWORD>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
+	mol::GIT git;	
+	for ( std::map<mol::string,ObjectMapItem>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
 	{
-		git.revokeInterface((*it).second);
+		git.revokeInterface((*it).second.first);
 	}
 	objectMap_.clear();
 
@@ -92,6 +124,9 @@ void ThreadScript::init(const mol::string& engine)
 	if ( hr != S_OK )
 		return;
 
+	mol::punk<IMoeImport> import;
+ 	import = MoeDebugImport::CreateInstance(activeScript_);
+ 	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 }
 
 HRESULT ThreadScript::getScriptEngine(const mol::string& engine, IActiveScript **ppas)
@@ -116,10 +151,10 @@ HRESULT ThreadScript::addNamedObject( IUnknown* punk, const mol::string& obj, in
 	if ( objectMap_.count(obj) > 0 ) 
 	{
 		mol::punk<IUnknown> unk;
-		hr = git.getInterface( objectMap_[obj], &unk );
+		hr = git.getInterface( objectMap_[obj].first, &unk );
 		if ( hr == S_OK ) 
 		{
-			git.revokeInterface(objectMap_[obj]);
+			git.revokeInterface(objectMap_[obj].first);
 		}
 	}
 
@@ -127,7 +162,7 @@ HRESULT ThreadScript::addNamedObject( IUnknown* punk, const mol::string& obj, in
 	hr = git.registerInterface( punk, &cookie );
 	if ( hr == S_OK )
 	{
-		objectMap_[obj] = cookie;
+		objectMap_[obj] = std::make_pair(cookie,state);
 		return S_OK;
 	}
 
@@ -137,13 +172,13 @@ HRESULT ThreadScript::addNamedObject( IUnknown* punk, const mol::string& obj, in
 HRESULT ThreadScript::removeNamedObject( const mol::string& obj )
 {
 	mol::GIT git;
-	if ( objectMap_[obj] > 0 )
+	if ( objectMap_[obj].first > 0 )
 	{
 		mol::punk<IUnknown> unk;
-		HRESULT hr = git.getInterface( objectMap_[obj], &unk );
+		HRESULT hr = git.getInterface( objectMap_[obj].first, &unk );
 		if ( hr == S_OK ) 
 		{
-			git.revokeInterface(objectMap_[obj]);
+			git.revokeInterface(objectMap_[obj].first);
 		}
 		objectMap_.erase(obj);
 	}
@@ -236,9 +271,9 @@ void ThreadScript::execute_thread( )
 	init(engine_);
 
 	ODBGS("engine initialized");
-	for ( std::map<mol::string,DWORD>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++) 
+	for ( std::map<mol::string,ObjectMapItem>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++) 
 	{
-		 hr = activeScript_->AddNamedItem(mol::towstring( (*it).first).c_str(),SCRIPTITEM_ISVISIBLE| SCRIPTITEM_ISSOURCE);
+		 hr = activeScript_->AddNamedItem(mol::towstring( (*it).first).c_str(),(*it).second.second);
 	}
 	ODBGS("names added");
 
@@ -289,13 +324,13 @@ HRESULT  __stdcall ThreadScript::GetItemInfo( LPCOLESTR pstrName,DWORD dwReturnM
 	mol::GIT git;
 	if ( SCRIPTINFO_IUNKNOWN & dwReturnMask )
 	{
-		for ( std::map<mol::string,DWORD>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
+		for ( std::map<mol::string,ObjectMapItem>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
 		{
 			mol::string tmp = (*it).first;
 			if ( _wcsicmp(mol::towstring(tmp).c_str(),pstrName) == 0 )
 			{
 				mol::punk<IUnknown> unk;
-				HRESULT hr = git.getInterface( (*it).second, &unk );
+				HRESULT hr = git.getInterface( (*it).second.first, &unk );
 				if ( hr == S_OK )
 				{
 					
@@ -306,13 +341,13 @@ HRESULT  __stdcall ThreadScript::GetItemInfo( LPCOLESTR pstrName,DWORD dwReturnM
 	}
 	if ( SCRIPTINFO_ITYPEINFO & dwReturnMask )
 	{
-		for ( std::map<mol::string,DWORD>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
+		for ( std::map<mol::string,ObjectMapItem>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
 		{
 			mol::string tmp = (*it).first;
 			if ( _wcsicmp(mol::towstring(tmp).c_str(),pstrName) == 0 )
 			{
 				mol::punk<IUnknown> unk;
-				HRESULT hr = git.getInterface( (*it).second, &unk );
+				HRESULT hr = git.getInterface( (*it).second.first, &unk );
 				if ( hr == S_OK )
 				{
 					mol::punk<IProvideClassInfo> pci(unk);

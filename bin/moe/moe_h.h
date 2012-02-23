@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Thu Feb 23 19:32:53 2012
+/* at Thu Feb 23 21:56:33 2012
  */
 /* Compiler settings for src\moe.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -123,6 +123,12 @@ typedef interface IMoeUserForm IMoeUserForm;
 #define __IExternalMoe_FWD_DEFINED__
 typedef interface IExternalMoe IExternalMoe;
 #endif 	/* __IExternalMoe_FWD_DEFINED__ */
+
+
+#ifndef __IMoeImport_FWD_DEFINED__
+#define __IMoeImport_FWD_DEFINED__
+typedef interface IMoeImport IMoeImport;
+#endif 	/* __IMoeImport_FWD_DEFINED__ */
 
 
 #ifndef __Application_FWD_DEFINED__
@@ -3902,6 +3908,127 @@ EXTERN_C const IID IID_IExternalMoe;
 
 
 #endif 	/* __IExternalMoe_INTERFACE_DEFINED__ */
+
+
+#ifndef __IMoeImport_INTERFACE_DEFINED__
+#define __IMoeImport_INTERFACE_DEFINED__
+
+/* interface IMoeImport */
+/* [dual][oleautomation][object][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IMoeImport;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("4447A58A-26E6-43E0-851E-0823C1E79CF8")
+    IMoeImport : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Import( 
+            BSTR filename) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMoeImportVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMoeImport * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMoeImport * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMoeImport * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMoeImport * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMoeImport * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMoeImport * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMoeImport * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Import )( 
+            IMoeImport * This,
+            BSTR filename);
+        
+        END_INTERFACE
+    } IMoeImportVtbl;
+
+    interface IMoeImport
+    {
+        CONST_VTBL struct IMoeImportVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMoeImport_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IMoeImport_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IMoeImport_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IMoeImport_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IMoeImport_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IMoeImport_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IMoeImport_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IMoeImport_Import(This,filename)	\
+    ( (This)->lpVtbl -> Import(This,filename) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IMoeImport_INTERFACE_DEFINED__ */
 
 
 EXTERN_C const CLSID CLSID_Application;

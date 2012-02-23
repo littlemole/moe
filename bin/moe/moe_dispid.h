@@ -151,5 +151,6 @@
 #define DISPID_IEXTERNALMOE_MOE                                                				 0
 #define DISPID_IEXTERNALMOE_FRAME                                              				 1
 #define DISPID_IEXTERNALMOE_CLOSE                                              				 2
+#define DISPID_IMOEIMPORT_IMPORT                                               				 1
 #endif
 

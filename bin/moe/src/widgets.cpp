@@ -13,6 +13,28 @@
 mol::TCHAR  InFilesFilter[]   = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
 
 
+void MoeImport::dispose() {}
+ 
+MoeImport::Instance* MoeImport::CreateInstance(Host* host)
+{
+ 	Instance* i = new Instance();
+ 	i->host_ = host;
+ 	return i;
+}
+ 
+HRESULT __stdcall  MoeImport::Import(BSTR filename)
+{
+ 	mol::string file = findFile( mol::toString(filename) );
+ 
+ 	mol::filestream fs;
+ 	fs.open(mol::tostring(file),GENERIC_READ);
+ 	std::string s = fs.readAll();
+ 	fs.close();
+ 
+ 	host_->runScript( mol::toString(s) );
+ 	return S_OK;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 CLIControl::CLIControl()
@@ -73,8 +95,13 @@ void Script::eval(  const mol::string& engine, const mol::string& script, IScint
 		return;
 	}
 	ODBGS("engine initialized");
-	addNamedObject((IMoe*)(moe()),_T("moe"));
+	addNamedObject((IMoe*)(moe()),_T("moe"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 	ODBGS("moe object added");
+	 
+	mol::punk<IMoeImport> import;
+ 	import = MoeImport::CreateInstance(this);
+ 	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+
 	runScript(script);
 	//close();
 	this->Release();
@@ -93,7 +120,11 @@ void Script::debug(  const mol::string& engine, const mol::string& script, IScin
 	ODBGS("Script::eval()\r\n");
 	this->AddRef();
 	init(engine);
-	addNamedObject((IMoe*)(moe()),_T("moe"));
+	addNamedObject((IMoe*)(moe()),_T("moe"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+	mol::punk<IMoeImport> import;
+ 	import = MoeImport::CreateInstance(this);
+ 	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+
 	debugScript(script);
 	//close();
 	this->Release();
@@ -102,7 +133,11 @@ void Script::call(  const mol::string& engine, const mol::string& func, const mo
 {
 	this->AddRef();
 	init(engine);
-	addNamedObject((IMoe*)moe(),_T("moe"));
+	addNamedObject((IMoe*)(moe()),_T("moe"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+	mol::punk<IMoeImport> import;
+ 	import = MoeImport::CreateInstance(this);
+ 	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+
 	runScript(script);
 	ScriptHost::call(func);
 	close();
@@ -117,6 +152,10 @@ void Script::formscript( const mol::string& engine, const mol::string& s, IDispa
 	addNamedObject((IDispatch*)(moe()),_T("moe"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);//|SCRIPTITEM_CODEONLY );
 	addNamedObject(form,_T("form"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);//|SCRIPTITEM_CODEONLY );
 
+	mol::punk<IMoeImport> import;
+ 	import = MoeImport::CreateInstance(this);
+ 	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+
 	runScript(s,SCRIPTTEXT_ISVISIBLE|SCRIPTTEXT_ISPERSISTENT);//|SCRIPTTEXT_DELAYEXECUTION);	
 	
 	this->setState(SCRIPTSTATE_STARTED);
@@ -128,6 +167,10 @@ void Script::formdebug( const mol::string& engine, const mol::string& s, IDispat
 
 	addNamedObject((IDispatch*)(moe()),_T("moe"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);//|SCRIPTITEM_CODEONLY );
 	addNamedObject(form,_T("form"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);//|SCRIPTITEM_CODEONLY );
+
+	mol::punk<IMoeImport> import;
+ 	import = MoeImport::CreateInstance(this);
+ 	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 
 	debugScript(s,SCRIPTTEXT_ISVISIBLE|SCRIPTTEXT_ISPERSISTENT);//|SCRIPTTEXT_DELAYEXECUTION);	
 	
