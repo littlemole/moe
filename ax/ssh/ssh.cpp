@@ -237,6 +237,7 @@ EncryptedMap::MapType EncryptedMap::decrypt()
 		}
 		mol::ssh::string val( data, pdata-data );
 		pdata++;
+		data = pdata;
 
 		map.insert( std::make_pair(key,val) );
 
@@ -323,7 +324,12 @@ HRESULT __stdcall ScpPasswordCredentials::get_Username( BSTR* user)
 	EncryptedMap::MapType map = secure_.decrypt();
 	if ( map.count("user") > 0 )
 	{
-		*user = ::SysAllocString( mol::ssh::utf82wstring( map["user"].data(), map["user"].size()).data() );			
+		mol::ssh::string u;
+		u = map["user"];
+
+		mol::ssh::wstring wu;
+		wu = mol::ssh::utf82wstring(  u.data(), u.size() );
+		*user = ::SysAllocStringLen( wu.data(), wu.size() );			
 	}
 	return S_OK;
 }
@@ -349,7 +355,12 @@ HRESULT __stdcall ScpPasswordCredentials::get_Password( BSTR* pwd)
 	EncryptedMap::MapType map = secure_.decrypt();
 	if ( map.count("pwd") > 0 )
 	{
-		*pwd = ::SysAllocString( mol::ssh::utf82wstring( map["pwd"].data(), map["pwd"].size()).data() );		
+		mol::ssh::string p;
+		p = map["pwd"];
+
+		mol::ssh::wstring wp;
+		wp = mol::ssh::utf82wstring(  p.data(), p.size() );
+		*pwd = ::SysAllocStringLen( wp.data(), wp.size() );			
 	}
 
 	return S_OK;

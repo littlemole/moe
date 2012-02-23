@@ -812,16 +812,8 @@ void ScpListCtrl::EndRename(const mol::string& oldpath, const mol::string& newpa
 			return;
 
 
-		if(sftp->Rename( mol::bstr(pFrom), mol::bstr(pTo) ))
-		{
-			load(path_);
-		}
-		else
-		{
-			std::wstringstream oss;
-			oss << L"failed to rename " << mol::towstring(pFrom);
-			oip->SetStatusText(oss.str().c_str());
-		}
+		sftp->Rename( mol::bstr(pFrom), mol::bstr(pTo) );
+		load(path_);
 	
 }
 
@@ -835,7 +827,7 @@ LRESULT ScpListCtrl::OnEndRename(UINT msg, WPARAM wParam, LPARAM lParam)
 		mol::string path= getItemEntry(message.listviewDispInfo()->item.iItem)->fileinfo.getName();
 		//connect();
 		queue_.push(new ScpDirQueueRenameAction(path,displayname,this));
-		EndRename(path,displayname);
+		//EndRename(path,displayname);
 	}
 	return 0;
 }
@@ -1125,7 +1117,7 @@ void ScpListCtrl::mkdir()
 		if( hr != S_OK )
 			return;
 
-		mol::SafeArray<VT_BSTR> safeArray;
+		mol::SafeArray<VT_VARIANT> safeArray;
 		safeArray.Attach(sa);
 
 		mol::string tmp = _T("newDir_");	
@@ -1137,10 +1129,11 @@ void ScpListCtrl::mkdir()
 			mol::string newDir = oss.str();
 
 			bool exists = false;
-			mol::SFAccess<BSTR> sf(sa);
+			mol::SFAccess<VARIANT> sf(sa);
 			for ( size_t c = 0; c <sf.size(); c++)
 			{
-				mol::string name = mol::toString(sf[c]);
+				mol::bstr b(sf[c].bstrVal);
+				mol::string name = b.toString();
 				if ( newDir == name )
 				{
 					exists = true;
@@ -2122,12 +2115,6 @@ HRESULT __stdcall ScpListCtrl::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOO
 
 bool ScpListCtrl::Credentials::getCredentials(const std::string& host, int port, mol::ssh::string& user, mol::ssh::string& pwd)
 {
-	//if ( !This()->provider_ )
-//		return false;
-
-	if(!user.data()||!pwd.data())
-		return false;
-
 	mol::punk<IScpCredentialProvider> provider;
 	provider.createObject(CLSID_DefaultScpCredentialProvider,CLSCTX_ALL);
 	::CoAllowSetForegroundWindow(provider,0);
