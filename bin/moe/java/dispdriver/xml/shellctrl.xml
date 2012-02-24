@@ -1,6 +1,6 @@
 <typelib name='ShellCtrls' 
 desc='ShellCtrls' 
-typeinfocount='18' 
+typeinfocount='19' 
 guid='{74618F47-2F2A-4B0F-BDCA-344BE3208ECE}' 
 major='1' 
 minor='0' 
@@ -205,12 +205,21 @@ file='..\..\..\..\ax\shellctrl\x64/uni_release\shellctrl.tlb'>
 </interface>
 
 
-<interface name='IKillRoy' type='Dual' iid='{6CE312C4-CCD1-4F28-B06D-4137F486FCB4}' base='IDispatch' members='2' desc='' >
- <method name='FindPIDforFile' type='long*' dispid='1' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='find pid for file' >
-  <param type='BSTR' dir='IN' name='Filename' />
+<interface name='IPID' type='Dual' iid='{6AAA0600-70F4-4B2A-BFAA-D808EBD2D174}' base='IDispatch' members='3' desc='' >
+ <property name='PID' type='long*' dispid='0' vtindex='28' ctype='HRESULT' param='PID' desc='pid (process id)'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='Name' type='BSTR*' dispid='1' vtindex='32' ctype='HRESULT' param='processname' desc='process path'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <method name='TerminateProcess' type='VARIANT_BOOL*' dispid='2' vtindex='36' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='kill process' >
  </method>
- <method name='TerminateProcess' type='VARIANT_BOOL*' dispid='2' vtindex='32' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='kill pid' >
-  <param type='long' dir='IN' name='pid' />
+</interface>
+
+
+<interface name='IKillRoy' type='Dual' iid='{6CE312C4-CCD1-4F28-B06D-4137F486FCB4}' base='IDispatch' members='1' desc='' >
+ <method name='FindPIDforFile' type='IPID**' dispid='1' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='find pid for file' >
+  <param type='BSTR' dir='IN' name='Filename' />
  </method>
 </interface>
 
