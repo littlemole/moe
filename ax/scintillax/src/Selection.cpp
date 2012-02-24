@@ -68,7 +68,7 @@ HRESULT __stdcall SciAxSelection::get_Text	( BSTR* text )
 	{
 		std::string txt = "";
 		txt = sci_->edit()->getSelText();
-		*text = mol::ansi2BSTR(txt);
+		*text = ::SysAllocString(mol::fromUTF8(txt).c_str());
 	}
 	return S_OK;
 }

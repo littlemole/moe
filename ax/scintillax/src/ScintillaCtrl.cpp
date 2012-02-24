@@ -1005,6 +1005,8 @@ bool ScintillAx::saveSSH(const mol::string& location)
 			if (hr!=S_OK)
 				return false;
 
+			edit()->setSavePoint();
+			setDirty(FALSE);
 			return true;
 	}
     return false;
