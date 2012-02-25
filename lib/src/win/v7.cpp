@@ -14,7 +14,7 @@ RmRegisterResourcesPtr* RmRegisterResources = (RmRegisterResourcesPtr*)mol::dllF
 RmGetListPtr* RmGetList = (RmGetListPtr*)mol::dllFunc( _T("Rstrtmgr.dll"), _T("RmGetList") );
 RmEndSessionPtr* RmEndSession = (RmEndSessionPtr*)mol::dllFunc( _T("Rstrtmgr.dll"), _T("RmEndSession") );
 
-QueryFullProcessImageNamePtr* QueryFullProcessImageName = (QueryFullProcessImageNamePtr*)mol::dllFunc( _T("Kernel32.dll"), _T("QueryFullProcessImageName") );
+QueryFullProcessImageNamePtr* QueryFullProcessImageName = (QueryFullProcessImageNamePtr*)mol::dllFunc( _T("Kernel32.dll"), _T("QueryFullProcessImageNameW") );
 
 void unlockInternetExplorer()
 {
