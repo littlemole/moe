@@ -15,7 +15,7 @@ set day=%date:~0,2%
 if "%day:~0,1%" == " " set day=0%day:~1,1%
 rem echo day=%day%
 
-set TODAY=%year%%month%%day%
+set TODAY=%year%-%month%-%day%
 echo %TODAY%
 
 rem SET TODAY=%date:~-4%-%date:~-7,-5%-%date:~0,2%
