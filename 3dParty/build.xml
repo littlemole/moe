@@ -12,6 +12,7 @@
         <MSBuild Projects="expat\Source\lib\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
         <MSBuild Projects="pcre/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		
+
 	<Exec Command="nmake -f win32\Makefile.msc clean" WorkingDirectory=".\zlib" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' " />
 	<Exec Command="nmake -f win32\Makefile.mscd clean" WorkingDirectory=".\zlib" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' "  />
 	<Exec Command="nmake -f win32\Makefile.msc64 clean" WorkingDirectory=".\zlib" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' "  />
@@ -23,6 +24,7 @@
 	<Exec Command="nmake -f win32\Makefile.mscd64" WorkingDirectory=".\zlib" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' "  />
 
 	<Delete Files="@(objFiles)" />
+
 
 	<Exec Command="nmake -f scintilla-static.mak clean" WorkingDirectory=".\scintilla\win32" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' "  />
 	<Exec Command="nmake -f scintilla-static.mak clean DEBUG=1" WorkingDirectory=".\scintilla\win32" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' "  />
@@ -43,11 +45,12 @@
 	<Exec Command="call ms\do_win64a" WorkingDirectory=".\openssl"  Condition=" '$(Platform)' == 'x64' "/>
 
 
-
 	<Exec Command="nmake -f ms\ntmoe.mak clean" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' "  />
 	<Exec Command="nmake -f ms\ntd.mak clean" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' "  />
 	<Exec Command="nmake -f ms\nt64.mak clean" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' "  />
 	<Exec Command="nmake -f ms\ntd64.mak clean" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' "  />
+
+
 	
 	<Exec Command="nmake -f ms\ntmoe.mak" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' "  />
 	<Exec Command="nmake -f ms\ntd.mak" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' "  />
