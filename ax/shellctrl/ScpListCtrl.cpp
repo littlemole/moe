@@ -94,8 +94,8 @@ class RemoteExecDlg  : public mol::win::Dialog
 {
 public:
 
-	RemoteExecDlg(const mol::string& host, int port, mol::ssh::CredentialCallback* cb)
-		: host_(host), port_(port), cb_(cb)
+	RemoteExecDlg(const mol::string& host, int port, DWORD cookie)
+		: host_(host), port_(port), cookie_(cookie)
 	{}
 
 	virtual LRESULT wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
@@ -151,25 +151,35 @@ private:
 
 	mol::string exec_cmd( const mol::string& cmd)
 	{
-
-		try
-		{
-			mol::ssh::Session ssh;
-			ssh.open( mol::toUTF8(host_),cb_,port_);
-			return mol::fromUTF8( ssh.exec_remote(mol::toUTF8(cmd)) );			
-		}
-		catch(...)
-		{
+		mol::GIT git;
+		mol::punk<ISSH> ssh; 
+		HRESULT hr = git.getInterface(cookie_,&ssh);
+		if ( hr != S_OK )
 			return _T("");
-		}
+
+		mol::punk<ISSHConnection> con;
+		hr = ssh->Connect( 
+			mol::bstr(host_), 
+			port_,
+			&con);
+
+		if ( hr != S_OK )
+			return _T("");
+
+		mol::bstr result;
+		hr = con->Execute( mol::bstr(cli_), &result);
+		if ( hr != S_OK )
+			return _T("");
+
+		return result.toString();
 	}
 
 	mol::string cli_;
 	mol::string out_;
 	mol::string host_;
 	int port_;
-
-	mol::ssh::CredentialCallback* cb_;
+	DWORD cookie_;
+	
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -369,107 +379,90 @@ void ScpListCtrl::load_async( const mol::string& url )
     std::map<mol::string, ScpListEntry*> filesMap;
 	std::map<mol::string, ScpListEntry*> dirsMap;
 
-	try
+	mol::punk<ISFTP> sftp;
+	hr = conn->get_SFTP(&sftp);
+	if( hr != S_OK )
+		return;
+
+	mol::string grr(path);
+	if ( grr[grr.size()-1] == _T('/') )
+		grr = grr.substr(0,grr.size()-1);
+
+	mol::punk<IRemoteFile> rf;
+	hr = sftp->Stat( mol::bstr( mol::fromUTF8(uri_.getPath())),&rf );
+	if( hr != S_OK )
+		return;
+
+	VARIANT_BOOL vb;
+	hr = rf->get_IsDir(&vb);
+	if( hr != S_OK )
+		return;
+
+	if ( vb == VARIANT_FALSE )
 	{
-		mol::punk<ISFTP> sftp;
-		hr = conn->get_SFTP(&sftp);
-		if( hr != S_OK )
-			return;
+		uri_.set(mol::toUTF8(path_));
+		return;
+	}
 
-		mol::string grr(path);
-		if ( grr[grr.size()-1] == _T('/') )
-			grr = grr.substr(0,grr.size()-1);
+	mol::TCHAR buf[MAX_PATH];
+	::GetTempPath(MAX_PATH,buf);
+	int dirIcon = mol::io::ShellInfo::Icon(buf);
 
-		mol::punk<IRemoteFile> rf;
-		hr = sftp->Stat( mol::bstr( mol::fromUTF8(uri_.getPath())),&rf );
+	SAFEARRAY* sa;
+	hr = sftp->List( mol::bstr( mol::fromUTF8(uri_.getPath())), &sa);
+	if( hr != S_OK )
+		return;
+
+	mol::SafeArray<VT_DISPATCH> safeArray;
+	safeArray.Attach(sa);
+
+
+	mol::SFAccess<VARIANT> sf(sa);
+
+	ListView_SetItemCount(list_,sf.size());
+
+	for ( size_t i = 0; i < sf.size(); i++)
+	{
+		mol::punk<IRemoteFile> rf(sf[i].pdispVal);
+
+		mol::bstr n;
+		hr = rf->get_Filename(&n);
 		if( hr != S_OK )
+		{
 			return;
+		}
+
+		mol::string name = mol::toString(n.bstr_);
+
+		if ( name == _T(".") )
+			continue;
 
 		VARIANT_BOOL vb;
 		hr = rf->get_IsDir(&vb);
 		if( hr != S_OK )
 			return;
 
-		if ( vb == VARIANT_FALSE )
+		if ( vb == VARIANT_TRUE )
 		{
-			uri_.set(mol::toUTF8(path_));
-			return;
-		}
-
-		mol::TCHAR buf[MAX_PATH];
-		::GetTempPath(MAX_PATH,buf);
-		int dirIcon = mol::io::ShellInfo::Icon(buf);
-
-		SAFEARRAY* sa;
-		hr = sftp->List( mol::bstr( mol::fromUTF8(uri_.getPath())), &sa);
-		if( hr != S_OK )
-			return;
-
-		mol::SafeArray<VT_DISPATCH> safeArray;
-		safeArray.Attach(sa);
-
+			ScpListEntry* entry = new ScpListEntry(path + name,remoteFileFromIRemoteFile(rf),dirIcon);
+			dirs.push_back(name);
+			dirsMap.insert( std::make_pair(name,entry) );
+		}			
+		else
 		{
-			mol::SFAccess<VARIANT> sf(sa);
+			mol::string tmp(buf);
+			tmp += name;
 
-			ListView_SetItemCount(list_,sf.size());
+			SHFILEINFO  shInfo;
+			DWORD att = FILE_ATTRIBUTE_NORMAL;
+			::SHGetFileInfo( tmp.c_str(),att,&shInfo,sizeof(shInfo),SHGFI_ICON|SHGFI_SMALLICON|SHGFI_USEFILEATTRIBUTES |SHGFI_TYPENAME);
+			::DestroyIcon(shInfo.hIcon);
+			int icon = shInfo.iIcon;
 
-			for ( size_t i = 0; i < sf.size(); i++)
-			{
-				mol::punk<IRemoteFile> rf(sf[i].pdispVal);
-
-				mol::bstr n;
-				hr = rf->get_Filename(&n);
-				if( hr != S_OK )
-				{
-					return;
-				}
-
-				mol::string name = mol::toString(n.bstr_);
-
-				if ( name == _T(".") )
-					continue;
-
-				VARIANT_BOOL vb;
-				hr = rf->get_IsDir(&vb);
-				if( hr != S_OK )
-					return;
-
-				if ( vb == VARIANT_TRUE )
-				{
-					ScpListEntry* entry = new ScpListEntry(path + name,remoteFileFromIRemoteFile(rf),dirIcon);
-					dirs.push_back(name);
-					dirsMap.insert( std::make_pair(name,entry) );
-				}			
-				else
-				{
-					mol::string tmp(buf);
-					tmp += name;
-
-					SHFILEINFO  shInfo;
-					DWORD att = FILE_ATTRIBUTE_NORMAL;
-					::SHGetFileInfo( tmp.c_str(),att,&shInfo,sizeof(shInfo),SHGFI_ICON|SHGFI_SMALLICON|SHGFI_USEFILEATTRIBUTES |SHGFI_TYPENAME);
-					::DestroyIcon(shInfo.hIcon);
-					int icon = shInfo.iIcon;
-
-					ScpListEntry* entry = new ScpListEntry(path + name,remoteFileFromIRemoteFile(rf),icon);
-					files.push_back(name);
-					filesMap.insert( std::make_pair(name,entry) );
-				}
-			}
+			ScpListEntry* entry = new ScpListEntry(path + name,remoteFileFromIRemoteFile(rf),icon);
+			files.push_back(name);
+			filesMap.insert( std::make_pair(name,entry) );
 		}
-	}
-	catch(mol::ssh::Ex& ex)
-	{
-		std::wstringstream oss;
-		oss << L"failed to open " << mol::towstring(path) << L" " << mol::towstring(ex.msg());
-		oip->SetStatusText(oss.str().c_str());
-
-		uri_.set(mol::toUTF8(path_));
-	}
-	catch(...)
-	{
-		uri_.set(mol::toUTF8(path_));
-		return;
 	}
 
 	path_ = path;
@@ -758,24 +751,37 @@ LRESULT ScpListCtrl::OnBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 		hi = hh;
 	}
 
-	ScpListEntry* e = getItemEntry(vi[0]);
 	mol::ImageList::beginDrag(*this,hi);
 
-	mol::punk<mol::com_obj<mol::scp::DelayedDataTransferObj> > ido  = 
-		new mol::com_obj<mol::scp::DelayedDataTransferObj>;
+	mol::punk<IScpDataTransferObjectFactory> idoFactory;
+	HRESULT hr = idoFactory.createObject(CLSID_ScpDataTransferObjectFactory);
+	if ( hr != S_OK )
+		return 0;
 
-	ido->init( mol::fromUTF8(uri_.getHost()), uri_.getPort(), &credentials_);
-	unsigned long long s = e->fileinfo.getSize();
-	ido->add( mol::fromUTF8(uri_.getPath()) + e->getName(),s,e->isDir() );
+	std::wstring wh = mol::fromUTF8(uri_.getHost());
+	mol::bstr host(wh);
+	hr = idoFactory->Init( host, uri_.getPort() );
+	if ( hr != S_OK )
+		return 0;
 
-	for ( size_t i = 1; i < vi.size(); i++ )
+	for ( size_t i = 0; i < vi.size(); i++ )
 	{
-		e = getItemEntry(vi[i]);
-		ido->add( mol::fromUTF8(uri_.getPath()) + e->getName(),e->fileinfo.getSize(),e->isDir() );
+		ScpListEntry* e = getItemEntry(vi[i]);
+
+		std::wstring wp = mol::fromUTF8(uri_.getPath()) + e->getName();
+		mol::bstr path(wh);
+		hr = idoFactory->Add( path,e->fileinfo.getSize(),e->isDir() );
+		if ( hr != S_OK )
+			return 0;
 	}
 
 	DWORD effect;
 	mol::punk<IDropSource> drop = new mol::DropSrc;
+	mol::punk<IDataObject> ido;
+	hr = idoFactory->ToDataObject(&ido);
+	if ( hr != S_OK )
+		return 0;
+
 	HRESULT r = ::DoDragDrop(ido,drop,DROPEFFECT_COPY,&effect);
 	if ( r != S_OK )
 	{
@@ -1135,71 +1141,61 @@ HRESULT __stdcall ScpListCtrl::Properties()
 	{
 		mol::string path = v[0];
 
-		try 
-		{
-			mol::Uri uri( mol::toUTF8(path) );
-			std::string host = uri.getHost();
-			int port = uri.getPort();
-			std::string p = uri.getPath();
+		mol::Uri uri( mol::toUTF8(path) );
+		std::string host = uri.getHost();
+		int port = uri.getPort();
+		std::string p = uri.getPath();
 
-			mol::punk<ISSHConnection> conn;
-			if (!connect(gitSSHCookie_,&conn))
-				return S_FALSE;
-
-			mol::punk<ISFTP> sftp;
-			HRESULT hr = conn->get_SFTP(&sftp);
-			if( hr != S_OK )
-				return hr;
-
-			frame_->SetStatusText(path.c_str());
-
-			mol::punk<IRemoteFile> rf;
-			hr = sftp->Stat( mol::bstr(mol::fromUTF8(p)),&rf );
-			if( hr != S_OK )
-				return hr;
-			
-			long perm;
-			long owner;
-			long group;
-			
-			hr = rf->get_Permission(&perm);
-			if( hr != S_OK )
-				return hr;
-
-			hr = rf->get_UID(&owner);
-			if( hr != S_OK )
-				return hr;
-
-			hr = rf->get_GID(&group);
-			if( hr != S_OK )
-				return hr;
-
-			PermissionDlg dlg(path,perm,owner,group);
-			LRESULT r = dlg.doModal(IDD_DIALOG_SCP_PROPERTIES,*this);
-			if ( r == IDOK )
-			{
-				long pm = dlg.permission();
-				long ow = dlg.owner();
-				long gr = dlg.group();
-				if ( perm != pm )
-				{
-				}
-				if ( owner != ow|| group != gr )
-				{
-					hr = sftp->Chown( mol::bstr(mol::fromUTF8(p)), ow, gr );
-					if( hr != S_OK )
-						return hr;
-				}
-				load(path_);
-			}
-		}
-		catch(...)
-		{
-			std::wstringstream oss;
-			oss << L"failure showing properties ";
-			this->frame_->SetStatusText(oss.str().c_str());
+		mol::punk<ISSHConnection> conn;
+		if (!connect(gitSSHCookie_,&conn))
 			return S_FALSE;
-		}		
+
+		mol::punk<ISFTP> sftp;
+		HRESULT hr = conn->get_SFTP(&sftp);
+		if( hr != S_OK )
+			return hr;
+
+		frame_->SetStatusText(path.c_str());
+
+		mol::punk<IRemoteFile> rf;
+		hr = sftp->Stat( mol::bstr(mol::fromUTF8(p)),&rf );
+		if( hr != S_OK )
+			return hr;
+			
+		long perm;
+		long owner;
+		long group;
+			
+		hr = rf->get_Permission(&perm);
+		if( hr != S_OK )
+			return hr;
+
+		hr = rf->get_UID(&owner);
+		if( hr != S_OK )
+			return hr;
+
+		hr = rf->get_GID(&group);
+		if( hr != S_OK )
+			return hr;
+
+		PermissionDlg dlg(path,perm,owner,group);
+		LRESULT r = dlg.doModal(IDD_DIALOG_SCP_PROPERTIES,*this);
+		if ( r == IDOK )
+		{
+			long pm = dlg.permission();
+			long ow = dlg.owner();
+			long gr = dlg.group();
+			if ( perm != pm )
+			{
+			}
+			if ( owner != ow|| group != gr )
+			{
+				hr = sftp->Chown( mol::bstr(mol::fromUTF8(p)), ow, gr );
+				if( hr != S_OK )
+					return hr;
+			}
+			load(path_);
+		}
 	}
 	
 	return S_OK;
@@ -1211,7 +1207,7 @@ HRESULT __stdcall ScpListCtrl::Execute()
 	std::string host = uri.getHost();
 	int port = uri.getPort();
 
-	RemoteExecDlg dlg(mol::fromUTF8(host),port,&credentials_);
+	RemoteExecDlg dlg(mol::fromUTF8(host),port,gitCookie_);
 	dlg.doModal(IDD_DIALOG_SSH_EXEC,*this);
 	
 	return S_OK;
@@ -1243,24 +1239,33 @@ HRESULT __stdcall ScpListCtrl::Copy ()
 	ScpListEntry* e = getItemEntry(vi[0]);
 
 	mol::Uri uri( mol::toUTF8(path_) );
-	std::string host = uri.getHost();
 	int port = uri.getPort();
 	std::string p = uri.getPath();
 
-	mol::punk<IDropSource> drop = new mol::DropSrc;
-	mol::punk<mol::com_obj<mol::scp::DelayedDataTransferObj> >ido  = 
-		new mol::com_obj<mol::scp::DelayedDataTransferObj>;
+	mol::punk<IScpDataTransferObjectFactory> idoFactory;
+	HRESULT hr = idoFactory.createObject(CLSID_ScpDataTransferObjectFactory);
+	if ( hr != S_OK )
+		return 0;
 
-	ido->init( mol::fromUTF8(host), port, &credentials_);
+	std::wstring wh = mol::fromUTF8(uri_.getHost());
+	mol::bstr host(wh);
+	hr = idoFactory->Init( host, uri_.getPort() );
+	if ( hr != S_OK )
+		return 0;
 
 	for ( size_t i = 0; i < vi.size(); i++ )
 	{
-		e = getItemEntry(vi[i]);
-		unsigned long long s = e->fileinfo.getSize();
-		ido->add(mol::fromUTF8(p)+e->getName(),s,e->isDir() );
+		ScpListEntry* e = getItemEntry(vi[i]);
+
+		std::wstring wp = mol::fromUTF8(uri_.getPath()) + e->getName();
+		mol::bstr path(wh);
+		hr = idoFactory->Add( path,e->fileinfo.getSize(),e->isDir() );
+		if ( hr != S_OK )
+			return 0;
 	}
 
-	HRESULT r = ::OleSetClipboard(ido);		
+	idoFactory->ToClipboard();
+
 	return S_OK;
 }
 
@@ -1322,14 +1327,7 @@ HRESULT __stdcall ScpListCtrl::Paste ()
 	
 	if (*d & DROPEFFECT_COPY )
 	{
-		try {
-
-			queue_.push(new ScpPushFileQueueAction(path,v,this));
-		}
-		catch(...)
-		{
-			return S_OK;
-		}
+		queue_.push(new ScpPushFileQueueAction(path,v,this));
 	}
 	else if (*d & DROPEFFECT_MOVE )
 	{
@@ -1648,37 +1646,6 @@ HRESULT __stdcall ScpListCtrl::put_Location		( BSTR  dirname )
 	return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////
-// displayfiles
-///////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall ScpListCtrl::get_CredentialProvider	( IDispatch** provider )
-{
-	if ( provider )
-	{
-		mol::punk<IScpCredentialProvider> creds;
-		HRESULT hr = ssh_->get_Credentials(&creds);
-		if ( hr == S_OK )
-		{
-			return creds->QueryInterface(IID_IDispatch,(void**)provider);
-		}
-	}
-	return S_FALSE;
-}
-
-HRESULT __stdcall ScpListCtrl::put_CredentialProvider	( IDispatch* provider  )
-{
-	if ( provider )
-	{
-		mol::punk<IScpCredentialProvider> creds(provider);
-		if ( creds )
-		{
-			return ssh_->put_Credentials(creds);
-		}
-	}
-	return S_OK;
-}
-
 HRESULT __stdcall ScpListCtrl::get_HasFocus( VARIANT_BOOL* vbHasFocus)
 {
 	if ( vbHasFocus )
@@ -1727,86 +1694,4 @@ HRESULT __stdcall ScpListCtrl::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOO
 }
 
 
-bool ScpListCtrl::Credentials::getCredentials(const std::string& host, int port, mol::ssh::string& user, mol::ssh::string& pwd)
-{
-	mol::punk<IScpCredentialProvider> provider;
-	provider.createObject(CLSID_DefaultScpCredentialProvider,CLSCTX_ALL);
-	::CoAllowSetForegroundWindow(provider,0);
-
-	mol::punk<IScpPasswordCredentials> creds;
-	HRESULT hr = provider->getCredentials( mol::bstr(host), port, &creds );
-	if ( hr != S_OK )
-		return false;
-
-	mol::bstr bu;
-	creds->get_Username(&bu);
-
-	mol::bstr bp;
-	creds->get_Password(&bp);
-
-	//TODO: wipe bstrs ???
-	user = mol::ssh::string(mol::toUTF8(bu.bstr_).c_str());
-	pwd  = mol::ssh::string(mol::toUTF8(bp.bstr_).c_str());
-
-	return true;
-}
-
-bool ScpListCtrl::Credentials::promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo)
-{
-	
-	return false;
-}
-
-bool ScpListCtrl::Credentials::acceptHost(const std::string& host, int port, const std::string& hash)
-{
-	mol::punk<IScpCredentialProvider> provider;
-	provider.createObject(CLSID_DefaultScpCredentialProvider,CLSCTX_ALL);
-	::CoAllowSetForegroundWindow(provider,0);
-
-	VARIANT_BOOL vb;
-	HRESULT hr = provider->acceptHost( mol::bstr(mol::fromUTF8(host)), port, mol::bstr(mol::fromUTF8(hash)), &vb );
-	if ( hr != S_OK )
-		return false;
-
-	if ( vb == VARIANT_TRUE )
-		return true;
-
-	return true;
-}
-
-bool ScpListCtrl::Credentials::rememberHostCredentials(const std::string& host, int port, const mol::ssh::string& user, const mol::ssh::string& pwd)
-{
-	mol::punk<IScpCredentialProvider> provider;
-	provider.createObject(CLSID_DefaultScpCredentialProvider,CLSCTX_ALL);
-	::CoAllowSetForegroundWindow(provider,0);
-
-
-	mol::punk<IScpPasswordCredentials> creds;
-	HRESULT hr = creds.createObject(CLSID_ScpPasswordCredentials);
-	if ( hr != S_OK )
-		return false;
-
-	creds->put_Username( mol::bstr(mol::fromUTF8(user.data())) );
-	creds->put_Password( mol::bstr(mol::fromUTF8(pwd.data())) );
-	
-	hr = provider->remberSessionCredentials( mol::bstr(mol::fromUTF8(host)), port, creds );
-	if ( hr != S_OK )
-		return false;
-
-	return true;
-}
-
-bool ScpListCtrl::Credentials::deleteHostCredentials(const std::string& host, int port)
-{
-	mol::punk<IScpCredentialProvider> provider;
-	provider.createObject(CLSID_DefaultScpCredentialProvider,CLSCTX_ALL);
-	::CoAllowSetForegroundWindow(provider,0);
-
-
-	HRESULT hr = provider->removeSessionCredentials(mol::bstr(mol::fromUTF8(host)), port);
-	if ( hr != S_OK )
-		return false;
-
-	return true;
-}
 

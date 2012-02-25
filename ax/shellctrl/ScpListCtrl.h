@@ -153,14 +153,9 @@ public:
 
 	// COM properties
 
-	HRESULT virtual __stdcall get_CredentialProvider	( IDispatch** provider );
-	HRESULT virtual __stdcall put_CredentialProvider	( IDispatch* provider );
-
 	HRESULT virtual __stdcall get_Location		( BSTR* dirname );
 	HRESULT virtual __stdcall put_Location		( BSTR dirname );
-
 	HRESULT virtual __stdcall get_Selection		( BSTR* dirname );
-
 	HRESULT virtual __stdcall get_HasFocus		( VARIANT_BOOL* vbHasFocus);
 
 	// COM methods
@@ -243,9 +238,6 @@ protected:
     notify_code_handler( LVN_BEGINDRAG, OnBeginDrag )
 		LRESULT virtual OnBeginDrag( UINT, WPARAM, LPARAM );
 
-	void clear();
-	mol::string getPath();
-    void setPath(const mol::string& path);
 
 	virtual int listStyle()   { return WS_CHILD|LVS_REPORT|LVS_SHAREIMAGELISTS|LVS_EDITLABELS|WS_VSCROLL ; }
 	virtual int listExStyle() { return WS_EX_RIGHTSCROLLBAR; }
@@ -258,13 +250,11 @@ protected:
 	mol::string getItemPath(int i);
     int getItemByPath(const mol::string& path);
 
-	bool  doHitTest();
-
-	//bool connect();
-
-
-//    virtual int compare(LPARAM lParam1, LPARAM lParam2);
-//    static int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
+	bool doHitTest();
+	void clear();
+	mol::string getPath();
+    void setPath(const mol::string& path);
+	bool connect(DWORD cookie, ISSHConnection** con );
 
 	class ShellList : 
 		public mol::ListCtrl
@@ -277,22 +267,8 @@ protected:
 
 	} list_;
 
-	
-	class Credentials : public mol::ssh::CredentialCallback
-	{
-		public: 
-		outer_this(ScpListCtrl,credentials_);
 
-		virtual bool getCredentials(const std::string& host, int port,mol::ssh::string& user, mol::ssh::string& pwd);
-		virtual bool promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo);
-		virtual bool acceptHost(const std::string& host, int port, const std::string& hash);
-		virtual bool rememberHostCredentials(const std::string& host, int port, const mol::ssh::string& user, const mol::ssh::string& pwd);
-		virtual bool deleteHostCredentials(const std::string& host, int port);
-
-	} credentials_;
-	
-
-    class ShellListCtrl_Drop : public mol::DropTarget
+	class ShellListCtrl_Drop : public mol::DropTarget
     {
     public : 
 		ShellListCtrl_Drop(ScpListCtrl* l) : list_(l) {}
@@ -305,14 +281,9 @@ protected:
     };
 	
 	mol::punk<ShellListCtrl_Drop>		Drop;
-	mol::punk<IScpCredentialProvider>	provider_;
-
 	mol::Uri							uri_;
     mol::string							path_;
-
 	mol::punk<ISSH>						ssh_;
-	//mol::punk<ISSHConnection>			conn_;
-
 	OLE_COLOR							bgCol_;
 	OLE_COLOR							foreCol_;
 	mol::Menu							listMenu_;
@@ -339,8 +310,6 @@ protected:
 			ThreadStartPolicy,
 			ThreadShutdownPolicy>			
 	queue_;
-
-	bool ScpListCtrl::connect(DWORD cookie, ISSHConnection** con );
 };
 
 ///////////////////////////////////////////////////////////////////////////////

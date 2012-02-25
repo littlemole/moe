@@ -335,71 +335,61 @@ library ShellCtrls
 	interface IScpList : IDispatch
     {
 		// properties
-		[ 
-		  propput,id(1), 
-		  helpstring("Get/Set CredentialProvider")
-		] 
-		HRESULT CredentialProvider([in] IDispatch* provider);
 
 		[ 
-		  propget,id(1)
-		] 
-		HRESULT CredentialProvider([out,retval] IDispatch** provider);
-
-		[ 
-		  propput,defaultbind,bindable,displaybind, requestedit,id(2), 
+		  propput,defaultbind,bindable,displaybind, requestedit,id(1), 
 		  helpstring("Get/Set current directory")
 		] 
 		HRESULT Location([in] BSTR dir);
 
 		[ 
-		  propget,defaultbind,bindable,displaybind, requestedit,id(2)
+		  propget,defaultbind,bindable,displaybind, requestedit,id(1)
 		] 
 		HRESULT Location([out,retval] BSTR* dir);
 
 		[ 
-		  propget,id(3), 
+		  propget,id(2), 
 		  helpstring("returns true when Listview has the focus")
 		] 
 		HRESULT HasFocus([out,retval] VARIANT_BOOL* vbHasFocus);
 
 		[ 
-		  propget,id(4)
+		  propget,id(3)
 		] 
 		HRESULT Selection([out,retval] BSTR* path);
 
 		// methods
-		[id(5), helpstring("Update Listview")] 
+		[id(4), helpstring("Update Listview")] 
 		HRESULT Update();
 
-		[id(6), helpstring("Cut current selection")] 
+		[id(5), helpstring("Cut current selection")] 
 		HRESULT Cut();
 
-		[id(7), helpstring("Copy current selection")] 
+		[id(6), helpstring("Copy current selection")] 
 		HRESULT Copy();
 
-		[id(8), helpstring("Paste current selection")] 
+		[id(7), helpstring("Paste current selection")] 
 		HRESULT Paste();
 
-		[id(9), helpstring("Rename current selection")] 
+		[id(8), helpstring("Rename current selection")] 
 		HRESULT Rename();
 
-		[id(10), helpstring("Delete current selection")] 
+		[id(9), helpstring("Delete current selection")] 
 		HRESULT Delete();
 
-		[id(11), helpstring("Properties for current selection")] 
+		[id(10), helpstring("Properties for current selection")] 
 		HRESULT Properties();
 
-		[id(12), helpstring("Create new directory")] 
+		[id(11), helpstring("Create new directory")] 
 		HRESULT CreateDir();
 
-		[id(13), helpstring("Up to parent directory")] 
+		[id(12), helpstring("Up to parent directory")] 
 		HRESULT UpDir();
 
-		[id(14), helpstring("Copy current selection to local directory")] 
+		[id(13), helpstring("Copy current selection to local directory")] 
 		HRESULT CopyTo([in] BSTR dir);
 
-		[id(15), helpstring("Execute remote cmd")] 
+		[id(14), helpstring("Execute remote cmd")] 
 		HRESULT Execute();
     };
 

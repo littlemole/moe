@@ -266,71 +266,6 @@ void SecureCredentials::decrypt( mol::ssh::string& u, mol::ssh::string& pass )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-
-HRESULT __stdcall ScpPasswordCredentials::put_Username( BSTR user)
-{
-	if ( user )
-	{
-		EncryptedMap::MapType map = secure_.decrypt();
-		map.insert( std::make_pair( mol::ssh::string("user"), mol::ssh::wstring2utf8(user,::SysStringLen(user))) );
-		secure_.encrypt(map);
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall ScpPasswordCredentials::get_Username( BSTR* user)
-{
-	if ( !user )
-		return E_INVALIDARG;
-	*user = 0;
-
-	EncryptedMap::MapType map = secure_.decrypt();
-	if ( map.count("user") > 0 )
-	{
-		mol::ssh::string u;
-		u = map["user"];
-
-		mol::ssh::wstring wu;
-		wu = mol::ssh::utf82wstring(  u.data(), u.size() );
-		*user = ::SysAllocStringLen( wu.data(), wu.size() );			
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall ScpPasswordCredentials::put_Password( BSTR pwd)
-{
-	if ( pwd )
-	{
-		EncryptedMap::MapType map = secure_.decrypt();
-		map.insert( std::make_pair( mol::ssh::string("pwd"), mol::ssh::wstring2utf8(pwd,::SysStringLen(pwd))) );
-		secure_.encrypt(map);
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall ScpPasswordCredentials::get_Password( BSTR* pwd)
-{
-	if ( !pwd )
-		return E_INVALIDARG;
-
-	*pwd = 0;
-
-	EncryptedMap::MapType map = secure_.decrypt();
-	if ( map.count("pwd") > 0 )
-	{
-		mol::ssh::string p;
-		p = map["pwd"];
-
-		mol::ssh::wstring wp;
-		wp = mol::ssh::utf82wstring(  p.data(), p.size() );
-		*pwd = ::SysAllocStringLen( wp.data(), wp.size() );			
-	}
-
-	return S_OK;
-}
-
-////////////////////////////////////////////////////////////////////////
-
 bool ScpCredentialManager::getCredentials( mol::string host, long port, SecureCredentials** credentials)
 {
 	if(!credentials)
@@ -838,29 +773,6 @@ HRESULT __stdcall SSHConnection::Connect()
 
 
 ////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall SSH::get_Credentials( IScpCredentialProvider **credentials)
-{
-	if (!credentials)
-		return E_INVALIDARG;
-
-	mol::punk<IScpCredentialProvider> provider_;
-	HRESULT hr = provider_.createObject(CLSID_DefaultScpCredentialProvider);	
-	if(hr!=S_OK)
-		return hr;
-	return provider_.queryInterface(credentials);
-}
-
-HRESULT __stdcall SSH::put_Credentials( IScpCredentialProvider *credentials)
-{
-	if (!credentials)
-		return E_INVALIDARG;
-
-	//provider_ = credentials;
-	return S_OK;
-}
-
-
 
 HRESULT __stdcall SSH:: Connect( BSTR hostname, long port, ISSHConnection **conn)
 {
@@ -1415,77 +1327,6 @@ private:
 
 ////////////////////////////////////////////////////////////////
 
-HRESULT __stdcall ScpCredentialProvider::getCredentials( BSTR host, long port, IScpPasswordCredentials** credentials)
-{
-	if (!credentials)
-		return E_INVALIDARG;
-
-	mol::string h = mol::toString(host);
-
-	mol::ssh::string u;
-	mol::ssh::string p;
-	if ( credentialManager().credentials.getCredentials( mol::toUTF8(host), port, u, p ) )
-	{
-		mol::punk<IScpPasswordCredentials> c;
-		HRESULT hr = c.createObject(CLSID_ScpPasswordCredentials);
-		if ( hr == S_OK )
-		{
-			c->put_Username( mol::bstr(u.data()) );
-			c->put_Password( mol::bstr(p.data()) );
-			return c.queryInterface(credentials);
-		}
-	}
-
-	*credentials = 0;
-	return S_FALSE;
-}
-
-HRESULT __stdcall ScpCredentialProvider::acceptHost( BSTR host, long port, BSTR hash, VARIANT_BOOL* accept)
-{
-	if (!accept)
-		return E_INVALIDARG;
-
-	bool b = credentialManager().credentials.acceptHost( mol::toUTF8(host),port, mol::toUTF8(hash) );
-
-	*accept = b == true ? VARIANT_TRUE : VARIANT_FALSE;
-
-	return S_OK;
-}
-
-HRESULT  __stdcall ScpCredentialProvider::promptCredentials( BSTR prompt,BSTR description,VARIANT_BOOL echo, VARIANT* value)
-{
-	if (!value)
-		return E_INVALIDARG;
-
-	value->vt = VT_EMPTY;
-	return S_OK;
-}
-
-HRESULT  __stdcall ScpCredentialProvider::remberSessionCredentials( BSTR host, long port, IScpPasswordCredentials* credentials)
-{
-	if (credentials == 0 )
-		return E_INVALIDARG;
-
-	mol::bstr user;
-	credentials->get_Username(&user);
-
-	mol::bstr pwd;
-	credentials->get_Password(&pwd);
-
-	credentialManager().credentials.rememberHostCredentials( mol::toUTF8(host),port, mol::toUTF8(user.bstr_).c_str(), mol::toUTF8(pwd.bstr_).c_str() );
-
-	return S_OK;
-}
-
-HRESULT  __stdcall ScpCredentialProvider::removeSessionCredentials( BSTR host, long port)
-{
-	credentialManager().credentials.deleteHostCredentials( mol::toUTF8(host),port );
-	return S_OK;
-}
-
-
-////////////////////////////////////////////////////////////////
-
 
 bool ScpCredentialManager::acceptHost( mol::string host, long port, mol::string hash )
 {
@@ -1534,8 +1375,7 @@ bool ScpCredentialManager::Credentials::getCredentials(const std::string& host, 
 class sshDll : 
 	public mol::Dll,
 	public mol::exports_aggregable< sshDll, SSH >,
-	public mol::exports_aggregable< sshDll, ScpPasswordCredentials >,
-	public mol::exports_aggregable< sshDll, ScpCredentialProvider >
+	public mol::exports_aggregable< sshDll, ScpDataTransferObjectFactory >
 {};
 
 DLL_COCLASS_EXPORTS(sshDll)

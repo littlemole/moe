@@ -29,7 +29,7 @@
 #include "ole/cp.h"
 #include "ole/DragDrop.h"
 #include "ole/Ctrl.h"
-
+#include "ssh/scpDataTransferObj.h"
 #include "ssh_h.h"
 
 #define BOOST_BIND_ENABLE_STDCALL 
@@ -81,23 +81,6 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class ScpPasswordCredentials : 
-	public mol::com_registerobj<ScpPasswordCredentials,CLSID_ScpPasswordCredentials>,
-	public mol::Dispatch<IScpPasswordCredentials>,
-	public mol::interfaces< ScpPasswordCredentials, mol::implements< IDispatch, IScpPasswordCredentials> >
-{
-public:
-		HRESULT virtual __stdcall put_Username( BSTR user);
-		HRESULT virtual __stdcall get_Username( BSTR* user);
-		HRESULT virtual __stdcall put_Password( BSTR pwd);
-		HRESULT virtual __stdcall get_Password( BSTR* pwd);
-private:
-
-	EncryptedMap secure_;
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
 struct SecureCredentials
 {
 	SecureCredentials( const mol::string& h, int p, const mol::ssh::string& u, const mol::ssh::string& pass);
@@ -112,6 +95,8 @@ private:
 	EncryptedMap secure_;
 
 };
+
+///////////////////////////////////////////////////////////////////////////////
 
 class ScpCredentialManager
 {
@@ -157,11 +142,12 @@ private:
 
 ScpCredentialManager& credentialManager();
 
+///////////////////////////////////////////////////////////////////////////////
 
-class ScpCredentialProvider : 
-	public mol::com_registerobj<ScpCredentialProvider,CLSID_DefaultScpCredentialProvider>,
-	public mol::Dispatch<IScpCredentialProvider>,
-	public mol::interfaces< ScpCredentialProvider, mol::implements< IDispatch, IScpCredentialProvider> >
+class ScpDataTransferObjectFactory : 
+	public mol::com_registerobj<ScpDataTransferObjectFactory,CLSID_ScpDataTransferObjectFactory>,
+	public mol::Dispatch<IScpDataTransferObjectFactory>,
+	public mol::interfaces< ScpDataTransferObjectFactory, mol::implements< IDispatch, IScpDataTransferObjectFactory> >
 {
 public:
 
@@ -169,14 +155,71 @@ public:
 	{
 	}
 
-	HRESULT virtual __stdcall getCredentials( BSTR host, long port, IScpPasswordCredentials** credentials);
-	HRESULT virtual __stdcall promptCredentials( BSTR prompt,BSTR description,VARIANT_BOOL echo, VARIANT* value);
-	HRESULT virtual __stdcall acceptHost( BSTR host, long port, BSTR hash, VARIANT_BOOL* accept);
-	HRESULT virtual __stdcall remberSessionCredentials( BSTR host, long port, IScpPasswordCredentials* credentials);
-	HRESULT virtual __stdcall removeSessionCredentials( BSTR host, long port);
+	HRESULT virtual __stdcall  Init( BSTR host,long port)
+	{
+		if (!host)
+			return E_INVALIDARG;
+
+		host_ = mol::towstring(host);
+		port_ = port;
+		return S_OK;
+	}
+
+	HRESULT virtual __stdcall  Add(BSTR remotefile, long size, VARIANT_BOOL vbIsDirectory)
+	{
+		files_.push_back(FileDesc( remotefile, size, vbIsDirectory ==VARIANT_TRUE) );
+		return S_OK;
+	}
+
+	HRESULT virtual __stdcall  ToDataObject( IDataObject** dataObj)
+	{
+		mol::punk<IDropSource> drop = new mol::DropSrc;
+		mol::punk<mol::com_obj<mol::scp::DelayedDataTransferObj> >ido  = 
+			new mol::com_obj<mol::scp::DelayedDataTransferObj>;
+
+		ido->init( host_, port_, &credentialManager().credentials);
+
+		for ( size_t i = 0; i < files_.size(); i++ )
+		{
+			ido->add(files_[i].file,files_[i].size,files_[i].isDir );
+		}
+
+		return S_OK;
+	}
+
+	HRESULT virtual __stdcall  ToClipboard()
+	{
+		mol::punk<IDataObject> dataObj;
+		HRESULT hr = ToDataObject(&dataObj);
+		if ( hr != S_OK )
+			return hr;
+
+		return ::OleSetClipboard(dataObj);		
+	}
+
+	HRESULT virtual __stdcall  Reset()
+	{
+		files_.clear();
+		return S_OK;
+	}
 
 private:
 
+	struct FileDesc
+	{
+		FileDesc( const std::wstring& f, long s, bool b) 
+			:file(f), size(s), isDir(b)
+		{}
+
+		std::wstring file;
+		long size;
+		bool isDir;
+	};
+
+	std::wstring host_;
+	long port_;
+
+	std::vector<FileDesc> files_;
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -353,8 +396,6 @@ public:
 	{
 	}
 
-    virtual HRESULT __stdcall get_Credentials( IScpCredentialProvider **credentials);
-    virtual HRESULT __stdcall put_Credentials( IScpCredentialProvider *credentials);
     virtual HRESULT __stdcall Connect( BSTR hostname, long port, ISSHConnection **conn);
 
 };

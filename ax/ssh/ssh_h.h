@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Fri Feb 24 19:26:40 2012
+/* at Sat Feb 25 00:22:27 2012
  */
 /* Compiler settings for ssh.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -41,16 +41,10 @@
 
 /* Forward Declarations */ 
 
-#ifndef __IScpPasswordCredentials_FWD_DEFINED__
-#define __IScpPasswordCredentials_FWD_DEFINED__
-typedef interface IScpPasswordCredentials IScpPasswordCredentials;
-#endif 	/* __IScpPasswordCredentials_FWD_DEFINED__ */
-
-
-#ifndef __IScpCredentialProvider_FWD_DEFINED__
-#define __IScpCredentialProvider_FWD_DEFINED__
-typedef interface IScpCredentialProvider IScpCredentialProvider;
-#endif 	/* __IScpCredentialProvider_FWD_DEFINED__ */
+#ifndef __IScpDataTransferObjectFactory_FWD_DEFINED__
+#define __IScpDataTransferObjectFactory_FWD_DEFINED__
+typedef interface IScpDataTransferObjectFactory IScpDataTransferObjectFactory;
+#endif 	/* __IScpDataTransferObjectFactory_FWD_DEFINED__ */
 
 
 #ifndef __IRemoteFile_FWD_DEFINED__
@@ -95,28 +89,16 @@ typedef struct SSH SSH;
 #endif 	/* __SSH_FWD_DEFINED__ */
 
 
-#ifndef __ScpPasswordCredentials_FWD_DEFINED__
-#define __ScpPasswordCredentials_FWD_DEFINED__
+#ifndef __ScpDataTransferObjectFactory_FWD_DEFINED__
+#define __ScpDataTransferObjectFactory_FWD_DEFINED__
 
 #ifdef __cplusplus
-typedef class ScpPasswordCredentials ScpPasswordCredentials;
+typedef class ScpDataTransferObjectFactory ScpDataTransferObjectFactory;
 #else
-typedef struct ScpPasswordCredentials ScpPasswordCredentials;
+typedef struct ScpDataTransferObjectFactory ScpDataTransferObjectFactory;
 #endif /* __cplusplus */
 
-#endif 	/* __ScpPasswordCredentials_FWD_DEFINED__ */
-
-
-#ifndef __DefaultScpCredentialProvider_FWD_DEFINED__
-#define __DefaultScpCredentialProvider_FWD_DEFINED__
-
-#ifdef __cplusplus
-typedef class DefaultScpCredentialProvider DefaultScpCredentialProvider;
-#else
-typedef struct DefaultScpCredentialProvider DefaultScpCredentialProvider;
-#endif /* __cplusplus */
-
-#endif 	/* __DefaultScpCredentialProvider_FWD_DEFINED__ */
+#endif 	/* __ScpDataTransferObjectFactory_FWD_DEFINED__ */
 
 
 /* header files for imported files */
@@ -137,230 +119,69 @@ extern "C"{
 
 EXTERN_C const IID LIBID_moeSSH;
 
-#ifndef __IScpPasswordCredentials_INTERFACE_DEFINED__
-#define __IScpPasswordCredentials_INTERFACE_DEFINED__
+#ifndef __IScpDataTransferObjectFactory_INTERFACE_DEFINED__
+#define __IScpDataTransferObjectFactory_INTERFACE_DEFINED__
 
-/* interface IScpPasswordCredentials */
+/* interface IScpDataTransferObjectFactory */
 /* [dual][oleautomation][object][helpstring][uuid] */ 
 
 
-EXTERN_C const IID IID_IScpPasswordCredentials;
+EXTERN_C const IID IID_IScpDataTransferObjectFactory;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    MIDL_INTERFACE("BD96818E-5DAB-4305-B283-527D632C68D2")
-    IScpPasswordCredentials : public IDispatch
+    MIDL_INTERFACE("BC65ED29-6378-4C70-8EED-CFCED28156EF")
+    IScpDataTransferObjectFactory : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT STDMETHODCALLTYPE put_Username( 
-            /* [in] */ BSTR user) = 0;
-        
-        virtual /* [id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_Username( 
-            /* [retval][out] */ BSTR *user) = 0;
-        
-        virtual /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT STDMETHODCALLTYPE put_Password( 
-            /* [in] */ BSTR pwd) = 0;
-        
-        virtual /* [id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_Password( 
-            /* [retval][out] */ BSTR *pwd) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IScpPasswordCredentialsVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IScpPasswordCredentials * This,
-            /* [in] */ REFIID riid,
-            /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IScpPasswordCredentials * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IScpPasswordCredentials * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IScpPasswordCredentials * This,
-            /* [out] */ UINT *pctinfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IScpPasswordCredentials * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IScpPasswordCredentials * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [range][in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
-        
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IScpPasswordCredentials * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
-        
-        /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Username )( 
-            IScpPasswordCredentials * This,
-            /* [in] */ BSTR user);
-        
-        /* [id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Username )( 
-            IScpPasswordCredentials * This,
-            /* [retval][out] */ BSTR *user);
-        
-        /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Password )( 
-            IScpPasswordCredentials * This,
-            /* [in] */ BSTR pwd);
-        
-        /* [id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Password )( 
-            IScpPasswordCredentials * This,
-            /* [retval][out] */ BSTR *pwd);
-        
-        END_INTERFACE
-    } IScpPasswordCredentialsVtbl;
-
-    interface IScpPasswordCredentials
-    {
-        CONST_VTBL struct IScpPasswordCredentialsVtbl *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IScpPasswordCredentials_QueryInterface(This,riid,ppvObject)	\
-    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
-
-#define IScpPasswordCredentials_AddRef(This)	\
-    ( (This)->lpVtbl -> AddRef(This) ) 
-
-#define IScpPasswordCredentials_Release(This)	\
-    ( (This)->lpVtbl -> Release(This) ) 
-
-
-#define IScpPasswordCredentials_GetTypeInfoCount(This,pctinfo)	\
-    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
-
-#define IScpPasswordCredentials_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
-    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
-
-#define IScpPasswordCredentials_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
-    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
-
-#define IScpPasswordCredentials_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
-    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
-
-
-#define IScpPasswordCredentials_put_Username(This,user)	\
-    ( (This)->lpVtbl -> put_Username(This,user) ) 
-
-#define IScpPasswordCredentials_get_Username(This,user)	\
-    ( (This)->lpVtbl -> get_Username(This,user) ) 
-
-#define IScpPasswordCredentials_put_Password(This,pwd)	\
-    ( (This)->lpVtbl -> put_Password(This,pwd) ) 
-
-#define IScpPasswordCredentials_get_Password(This,pwd)	\
-    ( (This)->lpVtbl -> get_Password(This,pwd) ) 
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-
-#endif 	/* __IScpPasswordCredentials_INTERFACE_DEFINED__ */
-
-
-#ifndef __IScpCredentialProvider_INTERFACE_DEFINED__
-#define __IScpCredentialProvider_INTERFACE_DEFINED__
-
-/* interface IScpCredentialProvider */
-/* [dual][oleautomation][object][helpstring][uuid] */ 
-
-
-EXTERN_C const IID IID_IScpCredentialProvider;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("6A66D47E-519D-4CA8-9B39-892E9CC7D3AF")
-    IScpCredentialProvider : public IDispatch
-    {
-    public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getCredentials( 
-            /* [in] */ BSTR host,
-            /* [in] */ long port,
-            /* [retval][out] */ IScpPasswordCredentials **credentials) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE promptCredentials( 
-            /* [in] */ BSTR prompt,
-            /* [in] */ BSTR description,
-            /* [in] */ VARIANT_BOOL echo,
-            /* [retval][out] */ VARIANT *value) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE acceptHost( 
-            /* [in] */ BSTR host,
-            /* [in] */ long port,
-            /* [in] */ BSTR hash,
-            /* [retval][out] */ VARIANT_BOOL *accept) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE remberSessionCredentials( 
-            /* [in] */ BSTR host,
-            /* [in] */ long port,
-            /* [in] */ IScpPasswordCredentials *credentials) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeSessionCredentials( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Init( 
             /* [in] */ BSTR host,
             /* [in] */ long port) = 0;
         
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( 
+            /* [in] */ BSTR remotefile,
+            /* [in] */ long size,
+            /* [in] */ VARIANT_BOOL vbIsDirectory) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ToDataObject( 
+            /* [retval][out] */ IDataObject **dataObj) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ToClipboard( void) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        
     };
     
 #else 	/* C style interface */
 
-    typedef struct IScpCredentialProviderVtbl
+    typedef struct IScpDataTransferObjectFactoryVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IScpCredentialProvider * This,
+            IScpDataTransferObjectFactory * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IScpCredentialProvider * This);
+            IScpDataTransferObjectFactory * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IScpCredentialProvider * This);
+            IScpDataTransferObjectFactory * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IScpCredentialProvider * This,
+            IScpDataTransferObjectFactory * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IScpCredentialProvider * This,
+            IScpDataTransferObjectFactory * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IScpCredentialProvider * This,
+            IScpDataTransferObjectFactory * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -368,7 +189,7 @@ EXTERN_C const IID IID_IScpCredentialProvider;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IScpCredentialProvider * This,
+            IScpDataTransferObjectFactory * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
@@ -378,43 +199,33 @@ EXTERN_C const IID IID_IScpCredentialProvider;
             /* [out] */ EXCEPINFO *pExcepInfo,
             /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getCredentials )( 
-            IScpCredentialProvider * This,
-            /* [in] */ BSTR host,
-            /* [in] */ long port,
-            /* [retval][out] */ IScpPasswordCredentials **credentials);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *promptCredentials )( 
-            IScpCredentialProvider * This,
-            /* [in] */ BSTR prompt,
-            /* [in] */ BSTR description,
-            /* [in] */ VARIANT_BOOL echo,
-            /* [retval][out] */ VARIANT *value);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *acceptHost )( 
-            IScpCredentialProvider * This,
-            /* [in] */ BSTR host,
-            /* [in] */ long port,
-            /* [in] */ BSTR hash,
-            /* [retval][out] */ VARIANT_BOOL *accept);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *remberSessionCredentials )( 
-            IScpCredentialProvider * This,
-            /* [in] */ BSTR host,
-            /* [in] */ long port,
-            /* [in] */ IScpPasswordCredentials *credentials);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeSessionCredentials )( 
-            IScpCredentialProvider * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Init )( 
+            IScpDataTransferObjectFactory * This,
             /* [in] */ BSTR host,
             /* [in] */ long port);
         
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+            IScpDataTransferObjectFactory * This,
+            /* [in] */ BSTR remotefile,
+            /* [in] */ long size,
+            /* [in] */ VARIANT_BOOL vbIsDirectory);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ToDataObject )( 
+            IScpDataTransferObjectFactory * This,
+            /* [retval][out] */ IDataObject **dataObj);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ToClipboard )( 
+            IScpDataTransferObjectFactory * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IScpDataTransferObjectFactory * This);
+        
         END_INTERFACE
-    } IScpCredentialProviderVtbl;
+    } IScpDataTransferObjectFactoryVtbl;
 
-    interface IScpCredentialProvider
+    interface IScpDataTransferObjectFactory
     {
-        CONST_VTBL struct IScpCredentialProviderVtbl *lpVtbl;
+        CONST_VTBL struct IScpDataTransferObjectFactoryVtbl *lpVtbl;
     };
 
     
@@ -422,43 +233,43 @@ EXTERN_C const IID IID_IScpCredentialProvider;
 #ifdef COBJMACROS
 
 
-#define IScpCredentialProvider_QueryInterface(This,riid,ppvObject)	\
+#define IScpDataTransferObjectFactory_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IScpCredentialProvider_AddRef(This)	\
+#define IScpDataTransferObjectFactory_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IScpCredentialProvider_Release(This)	\
+#define IScpDataTransferObjectFactory_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IScpCredentialProvider_GetTypeInfoCount(This,pctinfo)	\
+#define IScpDataTransferObjectFactory_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IScpCredentialProvider_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define IScpDataTransferObjectFactory_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IScpCredentialProvider_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define IScpDataTransferObjectFactory_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IScpCredentialProvider_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define IScpDataTransferObjectFactory_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IScpCredentialProvider_getCredentials(This,host,port,credentials)	\
-    ( (This)->lpVtbl -> getCredentials(This,host,port,credentials) ) 
+#define IScpDataTransferObjectFactory_Init(This,host,port)	\
+    ( (This)->lpVtbl -> Init(This,host,port) ) 
 
-#define IScpCredentialProvider_promptCredentials(This,prompt,description,echo,value)	\
-    ( (This)->lpVtbl -> promptCredentials(This,prompt,description,echo,value) ) 
+#define IScpDataTransferObjectFactory_Add(This,remotefile,size,vbIsDirectory)	\
+    ( (This)->lpVtbl -> Add(This,remotefile,size,vbIsDirectory) ) 
 
-#define IScpCredentialProvider_acceptHost(This,host,port,hash,accept)	\
-    ( (This)->lpVtbl -> acceptHost(This,host,port,hash,accept) ) 
+#define IScpDataTransferObjectFactory_ToDataObject(This,dataObj)	\
+    ( (This)->lpVtbl -> ToDataObject(This,dataObj) ) 
 
-#define IScpCredentialProvider_remberSessionCredentials(This,host,port,credentials)	\
-    ( (This)->lpVtbl -> remberSessionCredentials(This,host,port,credentials) ) 
+#define IScpDataTransferObjectFactory_ToClipboard(This)	\
+    ( (This)->lpVtbl -> ToClipboard(This) ) 
 
-#define IScpCredentialProvider_removeSessionCredentials(This,host,port)	\
-    ( (This)->lpVtbl -> removeSessionCredentials(This,host,port) ) 
+#define IScpDataTransferObjectFactory_Reset(This)	\
+    ( (This)->lpVtbl -> Reset(This) ) 
 
 #endif /* COBJMACROS */
 
@@ -468,7 +279,7 @@ EXTERN_C const IID IID_IScpCredentialProvider;
 
 
 
-#endif 	/* __IScpCredentialProvider_INTERFACE_DEFINED__ */
+#endif 	/* __IScpDataTransferObjectFactory_INTERFACE_DEFINED__ */
 
 
 #ifndef __IRemoteFile_INTERFACE_DEFINED__
@@ -1424,12 +1235,6 @@ EXTERN_C const IID IID_ISSH;
     ISSH : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Credentials( 
-            /* [retval][out] */ IScpCredentialProvider **credentials) = 0;
-        
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Credentials( 
-            /* [in] */ IScpCredentialProvider *credentials) = 0;
-        
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Connect( 
             /* [in] */ BSTR hostname,
             /* [in] */ long port,
@@ -1484,14 +1289,6 @@ EXTERN_C const IID IID_ISSH;
             /* [out] */ EXCEPINFO *pExcepInfo,
             /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Credentials )( 
-            ISSH * This,
-            /* [retval][out] */ IScpCredentialProvider **credentials);
-        
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Credentials )( 
-            ISSH * This,
-            /* [in] */ IScpCredentialProvider *credentials);
-        
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Connect )( 
             ISSH * This,
             /* [in] */ BSTR hostname,
@@ -1534,12 +1331,6 @@ EXTERN_C const IID IID_ISSH;
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define ISSH_get_Credentials(This,credentials)	\
-    ( (This)->lpVtbl -> get_Credentials(This,credentials) ) 
-
-#define ISSH_put_Credentials(This,credentials)	\
-    ( (This)->lpVtbl -> put_Credentials(This,credentials) ) 
-
 #define ISSH_Connect(This,hostname,port,conn)	\
     ( (This)->lpVtbl -> Connect(This,hostname,port,conn) ) 
 
@@ -1562,20 +1353,12 @@ class DECLSPEC_UUID("001C9766-9D66-4554-AC40-15F3B051DE29")
 SSH;
 #endif
 
-EXTERN_C const CLSID CLSID_ScpPasswordCredentials;
+EXTERN_C const CLSID CLSID_ScpDataTransferObjectFactory;
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("46861300-31F7-44F9-B4F6-449D66F3AC77")
-ScpPasswordCredentials;
-#endif
-
-EXTERN_C const CLSID CLSID_DefaultScpCredentialProvider;
-
-#ifdef __cplusplus
-
-class DECLSPEC_UUID("CF5BF8BD-DC91-43CA-AB1A-FF04CCACEFB6")
-DefaultScpCredentialProvider;
+class DECLSPEC_UUID("359A4EC7-7D01-4764-AD51-606AF6AC2943")
+ScpDataTransferObjectFactory;
 #endif
 #endif /* __moeSSH_LIBRARY_DEFINED__ */
 

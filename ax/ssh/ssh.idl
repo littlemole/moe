@@ -22,67 +22,31 @@ library moeSSH
 	importlib("stdole32.tlb");
 
 	////////////////////////////////////////////////////////////////////////////////////
-	// IScpPasswordCredentials
-	////////////////////////////////////////////////////////////////////////////////////
-
-	////////////////////////////////////////////////////////////////////////////////////
-
-	[
-      uuid(BD96818E-5DAB-4305-B283-527D632C68D2),
-      helpstring("IScpPasswordCredentials Interface"),
-      object,oleautomation, dual
-    ]
-	interface IScpPasswordCredentials : IDispatch
-    {
-		[ 
-		  propput,bindable,displaybind, requestedit,id(1), 
-		  helpstring("Get/Set Username")
-		] 
-		HRESULT Username([in] BSTR user);
-
-		[ 
-		  propget,bindable,displaybind, requestedit,id(1)
-		] 
-		HRESULT Username([out,retval] BSTR* user);
-
-		[ 
-		  propput,bindable,displaybind, requestedit,id(2), 
-		  helpstring("Get/Set Password")
-		] 
-		HRESULT Password([in] BSTR pwd);
-
-		[ 
-		  propget,bindable,displaybind, requestedit,id(2)
-		] 
-		HRESULT Password([out,retval] BSTR* pwd);
-	};
-
-	////////////////////////////////////////////////////////////////////////////////////
-	//IScpCredentialProvider
+	// IScpDataTransferObjectFactory
 	////////////////////////////////////////////////////////////////////////////////////
 	[
-      uuid(6A66D47E-519D-4CA8-9B39-892E9CC7D3AF),
-      helpstring("IScpCredentialProvider Interface"),
+	  uuid(BC65ED29-6378-4C70-8EED-CFCED28156EF),
+      helpstring("IScpDataTransferObjectFactory"),
       object,oleautomation, dual
     ]
-	interface IScpCredentialProvider : IDispatch
+	interface IScpDataTransferObjectFactory : IDispatch
     {
-		[id(1), helpstring("get password credentials")] 
-		HRESULT getCredentials( [in] BSTR host, [in] long port, [out,retval] IScpPasswordCredentials** credentials);
 
-		[id(2), helpstring("prompt for keyboard-interactive")] 
-		HRESULT promptCredentials( [in] BSTR prompt, [in] BSTR description, [in] VARIANT_BOOL echo, [out,retval] VARIANT* value);
+		[id(1), helpstring("set data transfer object server and port")] 
+		HRESULT Init( [in] BSTR host, [in] long port);
 
-		[id(3), helpstring("accept an unknown host")] 
-		HRESULT acceptHost( [in] BSTR host, [in] long port, [in] BSTR hash, [out,retval] VARIANT_BOOL* accept);
+		[id(2), helpstring("add a remote file or directory")] 
+		HRESULT Add([in] BSTR remotefile, [in] long size, [in] VARIANT_BOOL vbIsDirectory);
 
-		[id(4), helpstring("remember credentials for session")] 
-		HRESULT remberSessionCredentials( [in] BSTR host, [in] long port, [in] IScpPasswordCredentials* credentials);
+		[id(3), helpstring("get IDataObject")] 
+		HRESULT ToDataObject([out,retval] IDataObject** dataObj);
 
-		[id(5), helpstring("remove credentials for session")] 
-		HRESULT removeSessionCredentials( [in] BSTR host, [in] long port);
+		[id(4), helpstring("put to Clipboard")] 
+		HRESULT ToClipboard();
 
-	};
+		[id(5), helpstring("Clear list of remote files")] 
+		HRESULT Reset();
+	}
 
 
 	////////////////////////////////////////////////////////////////////////////////////
@@ -351,21 +315,9 @@ library moeSSH
 	interface ISSH : IDispatch
     {
 
-		// properties
-		[ 
-		  propget,id(1), 
-		  helpstring("Get/set CredentialManager")
-		] 
-		HRESULT Credentials([out,retval] IScpCredentialProvider** credentials);
-
-		[ 
-		  propput,id(1)
-		] 
-		HRESULT Credentials([in] IScpCredentialProvider* credentials);
-
 		// methods
 
-		[id(2), helpstring("open an SSH Connection")] 
+		[id(1), helpstring("open an SSH Connection")] 
 		HRESULT Connect([in] BSTR hostname, [in] long port, [out,retval] ISSHConnection** conn);
 
 	}
@@ -390,21 +342,13 @@ library moeSSH
 		[default]         interface     ISSH;
 	}
 
-	[
-		uuid(46861300-31F7-44F9-B4F6-449D66F3AC77),
-		aggregatable
-	]
-	coclass ScpPasswordCredentials
-	{
-		[default]         interface     IScpPasswordCredentials;
-	}
 
 	[
-		uuid(CF5BF8BD-DC91-43CA-AB1A-FF04CCACEFB6),
+		uuid(359A4EC7-7D01-4764-AD51-606AF6AC2943),
 		aggregatable
 	]
-	coclass DefaultScpCredentialProvider
+	coclass ScpDataTransferObjectFactory
 	{
-		[default]         interface     IScpCredentialProvider;
+		[default]         interface     IScpDataTransferObjectFactory;
 	}
 }

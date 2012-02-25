@@ -150,43 +150,39 @@ file='..\..\..\..\ax\shellctrl\x64/uni_release\shellctrl.tlb'>
 </interface>
 
 
-<interface name='IScpList' type='Dual' iid='{D30F5C7F-CFAB-4D26-8FF3-0C7F67A0269D}' base='IDispatch' members='15' desc='' >
- <property name='CredentialProvider' type='IDispatch*' dispid='1' vtindex='28' ctype='HRESULT' param='provider' desc='Get/Set CredentialProvider'  funkind='virtual'  calltype='__stdcall' >
+<interface name='IScpList' type='Dual' iid='{D30F5C7F-CFAB-4D26-8FF3-0C7F67A0269D}' base='IDispatch' members='14' desc='' >
+ <property name='Location' type='BSTR' dispid='1' vtindex='28' ctype='HRESULT' param='dir' desc='Get/Set current directory'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='Location' type='BSTR' dispid='2' vtindex='36' ctype='HRESULT' param='dir' desc='Get/Set current directory'  funkind='virtual'  calltype='__stdcall' >
- <get />
- <put />
-</property>
- <property name='HasFocus' type='VARIANT_BOOL*' dispid='3' vtindex='44' ctype='HRESULT' param='vbHasFocus' desc='returns true when Listview has the focus'  funkind='virtual'  calltype='__stdcall' >
+ <property name='HasFocus' type='VARIANT_BOOL*' dispid='2' vtindex='36' ctype='HRESULT' param='vbHasFocus' desc='returns true when Listview has the focus'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <property name='Selection' type='BSTR*' dispid='4' vtindex='48' ctype='HRESULT' param='path' desc=''  funkind='virtual'  calltype='__stdcall' >
+ <property name='Selection' type='BSTR*' dispid='3' vtindex='40' ctype='HRESULT' param='path' desc=''  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <method name='Update' type='void' dispid='5' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Update Listview' >
+ <method name='Update' type='void' dispid='4' vtindex='44' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Update Listview' >
  </method>
- <method name='Cut' type='void' dispid='6' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Cut current selection' >
+ <method name='Cut' type='void' dispid='5' vtindex='48' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Cut current selection' >
  </method>
- <method name='Copy' type='void' dispid='7' vtindex='60' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Copy current selection' >
+ <method name='Copy' type='void' dispid='6' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Copy current selection' >
  </method>
- <method name='Paste' type='void' dispid='8' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Paste current selection' >
+ <method name='Paste' type='void' dispid='7' vtindex='56' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Paste current selection' >
  </method>
- <method name='Rename' type='void' dispid='9' vtindex='68' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Rename current selection' >
+ <method name='Rename' type='void' dispid='8' vtindex='60' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Rename current selection' >
  </method>
- <method name='Delete' type='void' dispid='10' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Delete current selection' >
+ <method name='Delete' type='void' dispid='9' vtindex='64' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Delete current selection' >
  </method>
- <method name='Properties' type='void' dispid='11' vtindex='76' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Properties for current selection' >
+ <method name='Properties' type='void' dispid='10' vtindex='68' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Properties for current selection' >
  </method>
- <method name='CreateDir' type='void' dispid='12' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Create new directory' >
+ <method name='CreateDir' type='void' dispid='11' vtindex='72' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Create new directory' >
  </method>
- <method name='UpDir' type='void' dispid='13' vtindex='84' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Up to parent directory' >
+ <method name='UpDir' type='void' dispid='12' vtindex='76' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Up to parent directory' >
  </method>
- <method name='CopyTo' type='void' dispid='14' vtindex='88' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Copy current selection to local directory' >
+ <method name='CopyTo' type='void' dispid='13' vtindex='80' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Copy current selection to local directory' >
   <param type='BSTR' dir='IN' name='dir' />
  </method>
- <method name='Execute' type='void' dispid='15' vtindex='92' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Execute remote cmd' >
+ <method name='Execute' type='void' dispid='14' vtindex='84' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Execute remote cmd' >
  </method>
 </interface>
 

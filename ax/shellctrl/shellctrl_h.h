@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Fri Feb 24 19:26:49 2012
+/* at Sat Feb 25 00:22:35 2012
  */
 /* Compiler settings for shellCtrl.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -1114,12 +1114,6 @@ EXTERN_C const IID IID_IScpList;
     IScpList : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CredentialProvider( 
-            /* [in] */ IDispatch *provider) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CredentialProvider( 
-            /* [retval][out] */ IDispatch **provider) = 0;
-        
         virtual /* [helpstring][id][requestedit][displaybind][bindable][defaultbind][propput] */ HRESULT STDMETHODCALLTYPE put_Location( 
             /* [in] */ BSTR dir) = 0;
         
@@ -1203,14 +1197,6 @@ EXTERN_C const IID IID_IScpList;
             /* [out] */ VARIANT *pVarResult,
             /* [out] */ EXCEPINFO *pExcepInfo,
             /* [out] */ UINT *puArgErr);
-        
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CredentialProvider )( 
-            IScpList * This,
-            /* [in] */ IDispatch *provider);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CredentialProvider )( 
-            IScpList * This,
-            /* [retval][out] */ IDispatch **provider);
         
         /* [helpstring][id][requestedit][displaybind][bindable][defaultbind][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Location )( 
             IScpList * This,
@@ -1297,12 +1283,6 @@ EXTERN_C const IID IID_IScpList;
 #define IScpList_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
-
-#define IScpList_put_CredentialProvider(This,provider)	\
-    ( (This)->lpVtbl -> put_CredentialProvider(This,provider) ) 
-
-#define IScpList_get_CredentialProvider(This,provider)	\
-    ( (This)->lpVtbl -> get_CredentialProvider(This,provider) ) 
 
 #define IScpList_put_Location(This,dir)	\
     ( (This)->lpVtbl -> put_Location(This,dir) ) 
