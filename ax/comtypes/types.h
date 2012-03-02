@@ -429,12 +429,12 @@ private:
 		}		
 
 		punk<IXSLTemplate> xslTemplate;
-		if (S_OK != xslTemplate.createObject(CLSID_XSLTemplate40) )
+		if (S_OK != xslTemplate.createObject(CLSID_XSLTemplate30) )
 			if (S_OK != xslTemplate.createObject(CLSID_XSLTemplate) )
 				return S_OK;
 
 		punk<IXMLDOMDocument2> xsl;
-		if (S_OK != xsl.createObject(CLSID_FreeThreadedDOMDocument40) )
+		if (S_OK != xsl.createObject(CLSID_FreeThreadedDOMDocument30) )
 			if (S_OK != xsl.createObject(CLSID_FreeThreadedDOMDocument) )
 				return S_OK;
 

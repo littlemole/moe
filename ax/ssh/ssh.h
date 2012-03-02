@@ -183,8 +183,7 @@ public:
 		{
 			ido->add(files_[i].file,files_[i].size,files_[i].isDir );
 		}
-
-		return S_OK;
+		return ido.queryInterface(dataObj);
 	}
 
 	HRESULT virtual __stdcall  ToClipboard()

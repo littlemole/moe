@@ -769,7 +769,7 @@ LRESULT ScpListCtrl::OnBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 		ScpListEntry* e = getItemEntry(vi[i]);
 
 		std::wstring wp = mol::fromUTF8(uri_.getPath()) + e->getName();
-		mol::bstr path(wh);
+		mol::bstr path(wp);
 		hr = idoFactory->Add( path,e->fileinfo.getSize(),e->isDir() );
 		if ( hr != S_OK )
 			return 0;
@@ -1258,8 +1258,8 @@ HRESULT __stdcall ScpListCtrl::Copy ()
 		ScpListEntry* e = getItemEntry(vi[i]);
 
 		std::wstring wp = mol::fromUTF8(uri_.getPath()) + e->getName();
-		mol::bstr path(wh);
-		hr = idoFactory->Add( path,e->fileinfo.getSize(),e->isDir() );
+		mol::bstr path(wp);
+		hr = idoFactory->Add( path,e->fileinfo.getSize(),e->isDir() ? VARIANT_TRUE : VARIANT_FALSE );
 		if ( hr != S_OK )
 			return 0;
 	}

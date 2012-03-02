@@ -34,7 +34,7 @@ moeShell::moeShell()
 {
 	bmp_.load(IDB_MOE);
 	bmp2_.load(IDB_MOE2);
-
+	//::DebugBreak();
 };
 
 moeShell::~moeShell() 
@@ -178,7 +178,7 @@ HRESULT __stdcall moeShell::GetCommandString( UINT_PTR idCmd, UINT uFlags, UINT 
 HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 {
 	if ( HIWORD(pici->lpVerb) != 0 )
-		return S_OK;
+		return E_FAIL;
 
 	UINT cmd = (UINT)(pici->lpVerb);
 	cmd = cmd_indexes_[cmd];
@@ -190,7 +190,7 @@ HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 HRESULT __stdcall moeShellMenuItem::InvokeCommand(const mol::string& filepath, LPCMINVOKECOMMANDINFO pici)
 {
 	if ( HIWORD(pici->lpVerb) != 0 )
-		return S_OK;
+		return E_FAIL;
 
 	UINT cmd = (UINT)(pici->lpVerb);
 
