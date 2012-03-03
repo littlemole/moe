@@ -94,6 +94,60 @@ library Moe
 
 		[id(8), helpstring("Print")] 
 		HRESULT Print(  );	
+
+		[id(9),propget, helpstring("get SEARCH_DOWN constant")] 
+		HRESULT SEARCH_DOWN([out,retval] long* d);
+
+		[id(10),propget, helpstring("get SEARCH_WHOLEWORD constant")] 
+		HRESULT SEARCH_WHOLEWORD([out,retval] long* d);
+
+		[id(11),propget, helpstring("get SEARCH_MATCHCASE constant")] 
+		HRESULT SEARCH_MATCHCASE([out,retval] long* d);
+
+		[id(12),propget, helpstring("get SEARCH_FINDNEXT constant")] 
+		HRESULT SEARCH_FINDNEXT([out,retval] long* d);
+
+		[id(13),propget, helpstring("get SEARCH_REPLACE constant")] 
+		HRESULT SEARCH_REPLACE([out,retval] long* d);
+
+		[id(14),propget, helpstring("get SEARCH_REPLACEALL constant")] 
+		HRESULT SEARCH_REPLACEALL([out,retval] long* d);
+
+		[id(15),propget, helpstring("get SEARCH_DIALOGTERM constant")] 
+		HRESULT SEARCH_DIALOGTERM([out,retval] long* d);
+
+		[id(16),propget, helpstring("OK constant")] 
+		HRESULT OK( [out,retval] long* d);
+
+		[id(17),propget, helpstring("OKCANCEL constant")] 
+		HRESULT OKCANCEL( [out,retval] long* d);
+
+		[id(18),propget, helpstring("ABORTRETRYIGNORE constant")] 
+		HRESULT ABORTRETRYIGNORE( [out,retval] long* d);
+
+		[id(19),propget, helpstring("YESNOCANCEL constant")] 
+		HRESULT YESNOCANCEL( [out,retval] long* d);
+
+		[id(20),propget, helpstring("YESNO constant")] 
+		HRESULT YESNO( [out,retval] long* d);
+
+		[id(21),propget, helpstring("RETRYCANCEL constant")] 
+		HRESULT RETRYCANCEL( [out,retval] long* d);
+
+		[id(22),propget, helpstring("CANCELTRYCONTINUE constant")] 
+		HRESULT CANCELTRYCONTINUE( [out,retval] long* d);
+
+		[id(23),propget, helpstring("ICONERROR constant")] 
+		HRESULT ICONERROR( [out,retval] long* d);
+
+		[id(24),propget, helpstring("ICONQUESTION constant")] 
+		HRESULT ICONQUESTION( [out,retval] long* d);
+
+		[id(25),propget, helpstring("ICONINFORMATION constant")] 
+		HRESULT ICONINFORMATION( [out,retval] long* d);
+
+		[id(26),propget, helpstring("ICONWARNING constant")] 
+		HRESULT ICONWARNING( [out,retval] long* d);
 	}
 	////////////////////////////////////////////////////////////////////////////////////
 	// IMoeDocumentCollection
@@ -161,9 +215,6 @@ library Moe
 
 		[id(14), helpstring("Remove and close document at index / with given path")] 
 		HRESULT Remove( [in] VARIANT index);
-
-		//[id(15), helpstring("Rename object at index/path to new path")] 
-		//HRESULT Rename( [in] VARIANT index, [in]  VARIANT newIndex);
 		 
 		[id(15), helpstring("Move object from index/path to new index")] 
 		HRESULT Move( [in] VARIANT what, [in] VARIANT to);
@@ -177,6 +228,40 @@ library Moe
 		[id(18), helpstring("Open RTF document")] 
 		HRESULT OpenRTFDocument( [in] BSTR fPath, [out,retval] IMoeDocument** d);
 
+
+
+		[id(19), propget, helpstring("Get DOCTYPE_NONE constant")]
+		HRESULT DOCTYPE_NONE( [out,retval] long* d );
+
+		[id(20), propget, helpstring("Get DOCTYPE_EDITOR constant")]
+		HRESULT DOCTYPE_EDITOR( [out,retval] long* d );
+
+		[id(21), propget, helpstring("Get DOCTYPE_DIR constant")]
+		HRESULT DOCTYPE_DIR( [out,retval] long* d );
+
+		[id(22), propget, helpstring("Get DOCTYPE_PIC constant")]
+		HRESULT DOCTYPE_PIC( [out,retval] long* d );
+
+		[id(23), propget, helpstring("Get DOCTYPE_HEX constant")]
+		HRESULT DOCTYPE_HEX( [out,retval] long* d );
+
+		[id(24), propget, helpstring("Get DOCTYPE_HTML constant")]
+		HRESULT DOCTYPE_HTML( [out,retval] long* d );
+
+		[id(25), propget, helpstring("Get DOCTYPE_OLE constant")]
+		HRESULT DOCTYPE_OLE( [out,retval] long* d );
+
+		[id(26), propget, helpstring("Get DOCTYPE_FORM constant")]
+		HRESULT DOCTYPE_FORM( [out,retval] long* d );
+
+		[id(27), propget, helpstring("Get DOCTYPE_RTF constant")]
+		HRESULT DOCTYPE_RTF( [out,retval] long* d );
+
+		[id(28), propget, helpstring("Get DOCTYPE_TAIL constant")]
+		HRESULT DOCTYPE_TAIL( [out,retval] long* d );
+
+		[id(29), propget, helpstring("Get DOCTYPE_SFTP constant")]
+		HRESULT DOCTYPE_SFTP( [out,retval] long* d );
 
 	}
 
@@ -837,6 +922,19 @@ library Moe
 
 		[id(9), helpstring("Get a IPictureDispatch for image on disk")]
 		HRESULT Picture( [in] BSTR f, [out,retval] IDispatch** disp );
+
+		[id(10), propget, helpstring("Get FORM_DEFAULT constant")]
+		HRESULT FORM_DEFAULT( [out,retval] long* d );
+
+		[id(11), propget, helpstring("Get FORM_TITLE constant")]
+		HRESULT FORM_TITLE( [out,retval] long* d );
+
+		[id(12), propget, helpstring("Get FORM_NOSCROLL constant")]
+		HRESULT FORM_NOSCROLL( [out,retval] long* d );
+
+		[id(13), propget, helpstring("Get FORM_DIALOG constant")]
+		HRESULT FORM_DIALOG( [out,retval] long* d );
+
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////
@@ -893,9 +991,46 @@ library Moe
 		]
 		HRESULT Dialogs( [out,retval] IMoeDialogs** d);
 
+
+		[id(7),propget, helpstring("IDOK constant")] 
+		HRESULT IDOK( [out,retval] long* d);
+
+		[id(8),propget, helpstring("IDCANCEL constant")] 
+		HRESULT IDCANCEL( [out,retval] long* d);
+
+		[id(9),propget, helpstring("IDABORT constant")] 
+		HRESULT IDABORT( [out,retval] long* d);
+
+		[id(10),propget, helpstring("IDRETRY constant")] 
+		HRESULT IDRETRY( [out,retval] long* d);
+
+		[id(11),propget, helpstring("IDIGNORE constant")] 
+		HRESULT IDIGNORE( [out,retval] long* d);
+
+		[id(12),propget, helpstring("IDYES constant")] 
+		HRESULT IDYES( [out,retval] long* d);
+
+		[id(13),propget, helpstring("IDNO constant")] 
+		HRESULT IDNO( [out,retval] long* d);
+
+		[id(14),propget, helpstring("IDTRYAGAIN constant")] 
+		HRESULT IDTRYAGAIN( [out,retval] long* d);
+
+		[id(15),propget, helpstring("IDCONTINUE constant")] 
+		HRESULT IDCONTINUE( [out,retval] long* d);
+
+		[id(16),propget, helpstring("ANSI encoding (cp 1252) constant")] 
+		HRESULT ANSI( [out,retval] long* d);
+
+		[id(17),propget, helpstring("UNICODE encoding constant")] 
+		HRESULT UNICODE( [out,retval] long* d);
+
+		[id(18),propget, helpstring("UTF8 encoding constant")] 
+		HRESULT UTF8( [out,retval] long* d);
+
 		/////////////////////////////////////////////////////////////////////
  		[ 
-		  id(7), 
+		  id(19), 
 		  helpstring("Exit Moe Editor and close the App")
 		]
 		HRESULT Exit();

@@ -3,6 +3,7 @@
 
   <PropertyGroup Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
+<!--    <PlatformToolset>v110</PlatformToolset> -->
     <CharacterSet>Unicode</CharacterSet>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>

@@ -101,14 +101,14 @@ void UserForm::OnMembers()
 // initialization
 //////////////////////////////////////////////////////////////////////////////
 
-UserForm::Instance* UserForm::CreateInstance( const mol::string& dir, bool designMode, bool Debug )
+UserForm::Instance* UserForm::CreateInstance( const mol::string& f, bool designMode, bool Debug )
 {
 	Instance* doc = 0;
 
-	if ( dir.size() < 1 )
+	if ( f.size() < 1 )
 		return doc;
 
-	mol::string p(dir);
+	mol::string p = findFile(f);
 
 	if ( mol::Path::isDir(p) )
 		return doc;
@@ -539,15 +539,7 @@ HRESULT __stdcall UserForm::InitNew(IStorage *pStg)
 
 HRESULT __stdcall  UserForm::Close()
 {
-//	mol::invoke<UserForm,BOOL>( *this, &UserForm::destroy );
 	mol::invoke( boost::bind( &UserForm::destroy, this ) );
-	/*
-	run_on_gui_thread({
-
-		this->destroy();
-
-	});
-	*/
 	return S_OK;
 }
 
@@ -600,8 +592,6 @@ void UserForm::adviseControls(  )
 		if ( S_OK != controls->Item(mol::variant(i),&disp) )
 			continue;
 
-		
-
 		mol::punk<MSForms::IControl> c(disp);
 		if ( !c )
 			continue;
@@ -610,33 +600,7 @@ void UserForm::adviseControls(  )
 		if ( (S_OK == c->get_Name(&name)) && name )
 		{
 			adviseControl(name,disp);
-			/*
-			IID iid;
-			if ( S_OK == findSourceOnCP(disp,&iid) )
-			{
-				DWORD cookie;
-				mol::com_obj<FormScriptEventHandler>* handler = new mol::com_obj<FormScriptEventHandler>;
-				handler->AddRef();
-
-				//TODO: assure only to advis IF script handler present
-				// use static factory func pattern
-				handler->init(script,iid,name.toString());
-
-				mol::punk<IConnectionPointContainer>	icPc(disp);
-				mol::punk<IConnectionPoint>			icP;
-				HRESULT hr = icPc->FindConnectionPoint( iid, &icP);
-				if( S_OK == hr )
-				{
-					hr = icP->Advise( handler,&cookie);
-				}
-				sinks[cookie] = handler;
-				disp->AddRef();
-				ctrls[cookie] = disp;
-				iids[cookie] = iid;
-			}
-			*/
-		}
-		
+		}		
 	}	
 }
 
@@ -940,6 +904,15 @@ void EventDlg::copySelectionToClipboard()
 	if (!handler)
 		return;
 
+	mol::win::ClipBoard cb;
+	cb.clear();
+
+	cb.setAnsiText( mol::tostring(handler) );
+	cb.setUnicodeText( mol::towstring(handler) );
+
+	::PostMessage(moe()->getActive(),WM_COMMAND,IDM_EDIT_PASTE,0);
+
+	/*
 	if ( ::OpenClipboard( *this )	)
 	{
 		::EmptyClipboard();
@@ -957,6 +930,7 @@ void EventDlg::copySelectionToClipboard()
 		::CloseClipboard();
 		::PostMessage(moe()->getActive(),WM_COMMAND,IDM_EDIT_PASTE,0);
 	}
+	*/
 }
 
 LRESULT EventDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
@@ -1352,6 +1326,15 @@ void FuncDlg::copySelectionToClipboard()
 	if (!handler)
 		return;
 
+	mol::win::ClipBoard cb;
+	cb.clear();
+
+	cb.setAnsiText( mol::tostring(handler) );
+	cb.setUnicodeText( mol::towstring(handler) );
+
+	::PostMessage(moe()->getActive(),WM_COMMAND,IDM_EDIT_PASTE,0);
+
+	/*
 	if ( ::OpenClipboard( *this )	)
 	{
 		::EmptyClipboard();
@@ -1369,6 +1352,7 @@ void FuncDlg::copySelectionToClipboard()
 		::CloseClipboard();
 		::PostMessage(moe()->getActive(),WM_COMMAND,IDM_EDIT_PASTE,0);
 	}
+	*/
 }
 
 LRESULT FuncDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)

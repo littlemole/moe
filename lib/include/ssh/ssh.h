@@ -45,6 +45,13 @@ public:
 		alloc(s.data(),s.size());
 	}
 
+	string( string&& rhs) 
+		: data_(rhs.data_),size_(rhs.size_) 
+	{ 
+		rhs.data_ = 0;
+		rhs.size_ = 0;
+	}
+
 	string( const char* s) 
 		: data_(0),size_(0) 
 	{
@@ -76,7 +83,10 @@ public:
 	void dispose()
 	{
 		clear();
-		delete[] data_;
+		if(data_)
+		{
+			delete[] data_;
+		}
 		data_ = 0;
 		size_ = 0;
 	}
@@ -93,6 +103,24 @@ public:
 		size_ = rhs.size();
 		alloc(rhs.data(),rhs.size());
 
+		return *this;
+	}
+
+
+	string& operator=( string&& rhs )
+	{
+		if ( this == &rhs )
+		{
+			return *this;
+		}
+
+		dispose();
+
+		size_ = rhs.size_;
+		data_ = rhs.data_;
+
+		rhs.size_ = 0;
+		rhs.data_ = 0;
 		return *this;
 	}
 
@@ -132,6 +160,14 @@ public:
 		: data_(0), size_(0) 
 	{ 
 		alloc(s.data(),s.size());
+	}
+
+
+	wstring( wstring&& rhs) 
+		: data_(rhs.data_), size_(rhs.size_) 
+	{ 
+		rhs.data_ = 0;
+		rhs.size_ = 0;
 	}
 
 	wstring( const wchar_t* s) 
@@ -182,6 +218,24 @@ public:
 		size_ = rhs.size();
 		alloc(rhs.data(),rhs.size());
 
+		return *this;
+	}
+
+
+	wstring& operator=( wstring&& rhs )
+	{
+		if ( this == &rhs )
+		{
+			return *this;
+		}
+
+		dispose();
+
+		size_ = rhs.size_;
+		data_ = rhs.data_;
+
+		rhs.size_ = 0;
+		rhs.data_ = 0;
 		return *this;
 	}
 

@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sat Feb 25 21:06:39 2012
+/* at Sat Mar 03 12:14:58 2012
  */
 /* Compiler settings for shellfolder.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 

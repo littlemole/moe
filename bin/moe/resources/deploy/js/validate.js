@@ -1,13 +1,9 @@
-var shell = new ActiveXObject("WScript.Shell");
-var doc = moe.ActiveDoc;
 
-if ( doc && doc.Object )
+if ( ActiveDoc && ActiveDoc.Object )
 {
-  var xml = doc.Object.Text;
-  var doc = new ActiveXObject("Msxml2.DOMDocument.3.0");
-  
+  var xml = ActiveDoc.Object.Text;
+  var doc = new ActiveXObject("Msxml2.DOMDocument.3.0");  
   doc.async = false;
-
   doc.loadXML(xml);
   
   if (doc.parseError.errorCode != 0) 
@@ -16,11 +12,19 @@ if ( doc && doc.Object )
 	err += doc.parseError.reason + "\r\n";
 	err += doc.parseError.srcText + "\r\n";
 
-	shell.Popup("error line " + err);
+	Dialogs.MsgBox(
+		"error line " + err, 
+		"XML parsing error",
+		Dialogs.ICONERROR
+	);
   }
   else
   {
-	shell.Popup("msxml says: this xml document is well-formed");
+	Dialogs.MsgBox(
+		"this xml document is well-formed",
+		"msxml says:",
+		Dialogs.ICONINFORMATION
+	);
   }
   
 }

@@ -31,6 +31,7 @@
 #include "ole/Ctrl.h"
 #include "ssh/scpDataTransferObj.h"
 #include "ssh_h.h"
+#include <memory>
 
 #define BOOST_BIND_ENABLE_STDCALL 
 #include "boost/bind.hpp"
@@ -41,15 +42,19 @@ class EncryptedMemory
 public:
 
 	EncryptedMemory();
+	EncryptedMemory(const EncryptedMemory& rhs);
+	EncryptedMemory(EncryptedMemory&& rhs);
 	~EncryptedMemory();
 	void dispose();
 
 	size_t encrypt( void* data, size_t size, DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
-	mol::ssh::string decrypt( DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
+	mol::ssh::string decrypt( DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);	
 
 	void* data();
 	size_t size();
 
+	EncryptedMemory& operator=(const EncryptedMemory& rhs);
+	EncryptedMemory& operator=(EncryptedMemory&& rhs);
 private:
 
 	size_t encryptVista( void* data, size_t size, DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
@@ -70,9 +75,14 @@ public:
 	typedef std::map<mol::ssh::string,mol::ssh::string> MapType;
 
 	EncryptedMap();
+	EncryptedMap(const EncryptedMap& rhs);
+	EncryptedMap(EncryptedMap&& rhs);
 
 	void encrypt(const MapType& map);
 	MapType decrypt();
+
+	EncryptedMap& operator=(const EncryptedMap& rhs);
+	EncryptedMap& operator=(EncryptedMap&& rhs);
 
 private:
 
@@ -84,12 +94,17 @@ private:
 struct SecureCredentials
 {
 	SecureCredentials( const mol::string& h, int p, const mol::ssh::string& u, const mol::ssh::string& pass);
+	SecureCredentials( const SecureCredentials& rhs );
+	SecureCredentials( SecureCredentials&& rhs );
 	~SecureCredentials();
 
 	mol::string host;
 	int port;
 
 	void decrypt( mol::ssh::string& u, mol::ssh::string& pass );
+
+	SecureCredentials& operator=( const SecureCredentials& rhs );
+	SecureCredentials& operator=( SecureCredentials&& rhs );
 
 private:
 	EncryptedMap secure_;

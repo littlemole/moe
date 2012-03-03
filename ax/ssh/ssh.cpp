@@ -43,6 +43,21 @@ EncryptedMemory::EncryptedMemory()
 
 }
 
+EncryptedMemory::EncryptedMemory( const EncryptedMemory& rhs)
+	:encrypted_(0),size_(rhs.size_),size_encrypted_(rhs.size_encrypted_)
+{
+	encrypted_ = ::LocalAlloc(LPTR,size_encrypted_);
+	::memcpy(encrypted_,rhs.encrypted_,size_encrypted_);
+}
+
+EncryptedMemory::EncryptedMemory( EncryptedMemory&& rhs)
+	:encrypted_(rhs.encrypted_),size_(rhs.size_),size_encrypted_(rhs.size_encrypted_)
+{
+	rhs.encrypted_ = 0;
+	rhs.size_ = 0;
+	rhs.size_encrypted_ = 0;
+}
+
 EncryptedMemory::~EncryptedMemory()
 {
 	dispose();
@@ -57,6 +72,41 @@ void EncryptedMemory::dispose()
 		size_ = 0;
 		size_encrypted_ = 0;
 	}
+}
+
+EncryptedMemory& EncryptedMemory::operator=(const EncryptedMemory& rhs)
+{
+	if (this == &rhs)
+	{
+		return *this;
+	}
+
+	size_ = rhs.size_;
+	size_encrypted_ = rhs.size_encrypted_;
+	encrypted_ = ::LocalAlloc(LPTR,size_encrypted_);
+	::memcpy(encrypted_,rhs.encrypted_,size_encrypted_);
+	return *this;
+}
+
+
+EncryptedMemory& EncryptedMemory::operator=(EncryptedMemory&& rhs)
+{
+	if (this == &rhs)
+	{
+		return *this;
+	}
+
+	dispose();
+
+	size_ = rhs.size_;
+	size_encrypted_ = rhs.size_encrypted_;
+	encrypted_ = rhs.encrypted_;
+
+	rhs.encrypted_ = 0;
+	rhs.size_ = 0;
+	rhs.size_encrypted_ = 0;
+
+	return *this;
 }
 
 size_t EncryptedMemory::encrypt( void* data, size_t size, DWORD flags )
@@ -84,8 +134,7 @@ size_t EncryptedMemory::encryptLegacy( void* data, size_t size, DWORD flags )
 	}
 
 	encrypted_ = ::LocalAlloc(LPTR,size_encrypted_);
-	ZeroMemory(encrypted_,size_encrypted_);
-	memcpy( encrypted_, data, size_);
+	::memcpy( encrypted_, data, size_);
 
 	long ntstat = ::RtlEncryptMemory( encrypted_, (ULONG)size_encrypted_,flags);
 	if (ntstat!=STATUS_SUCCESS)
@@ -102,7 +151,7 @@ mol::ssh::string EncryptedMemory::decryptLegacy( DWORD flags )
 	if(!v)
 		return "";
 
-	memcpy(v,encrypted_,size_encrypted_);
+	::memcpy(v,encrypted_,size_encrypted_);
 
 	if (::RtlDecryptMemory(v,(ULONG)size_encrypted_,flags) == STATUS_SUCCESS)
 	{
@@ -139,8 +188,7 @@ size_t EncryptedMemory::encryptVista( void* data, size_t size, DWORD flags )
 	}
 
 	encrypted_ = ::LocalAlloc(LPTR,size_encrypted_);
-	ZeroMemory(encrypted_,size_encrypted_);
-	memcpy( encrypted_, data, size_);
+	::memcpy( encrypted_, data, size_);
 
 	if (!MolCryptProtectMemory( encrypted_, (DWORD)size_encrypted_,flags))
 	{
@@ -155,7 +203,7 @@ mol::ssh::string EncryptedMemory::decryptVista( DWORD flags )
 	if(!v)
 		return "";
 
-	memcpy(v,encrypted_,size_encrypted_);
+	::memcpy(v,encrypted_,size_encrypted_);
 
 	if (MolCryptUnprotectMemory(v,(DWORD)size_encrypted_,flags))
 	{
@@ -181,6 +229,16 @@ size_t EncryptedMemory::size()
 
 
 EncryptedMap::EncryptedMap()
+{
+}
+
+EncryptedMap::EncryptedMap(const EncryptedMap& rhs)
+	: secure_(rhs.secure_)
+{
+}
+
+EncryptedMap::EncryptedMap(EncryptedMap&& rhs)
+	: secure_(rhs.secure_)
 {
 }
 
@@ -233,6 +291,27 @@ EncryptedMap::MapType EncryptedMap::decrypt()
 	return map;
 }
 
+EncryptedMap& EncryptedMap::operator=(const EncryptedMap& rhs)
+{
+	if ( this == &rhs )
+	{
+		return *this;
+	}
+
+	secure_ = rhs.secure_;
+	return *this;
+}
+
+EncryptedMap& EncryptedMap::operator=(EncryptedMap&& rhs)
+{
+	if ( this == &rhs )
+	{
+		return *this;
+	}
+
+	secure_ = rhs.secure_;
+	return *this;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -246,6 +325,15 @@ SecureCredentials::SecureCredentials( const mol::string& h, int p, const mol::ss
 
 	secure_.encrypt(map);
 }
+
+SecureCredentials::SecureCredentials( const SecureCredentials& rhs )
+	: host(rhs.host), port(rhs.port), secure_(rhs.secure_)
+{}
+
+SecureCredentials::SecureCredentials( SecureCredentials&& rhs )
+	: host(rhs.host), port(rhs.port), secure_(rhs.secure_)
+{}
+
 
 SecureCredentials::~SecureCredentials()
 {
@@ -261,6 +349,33 @@ void SecureCredentials::decrypt( mol::ssh::string& u, mol::ssh::string& pass )
 
 	if ( map.count("pwd") > 0 )
 		pass = map["pwd"];
+}
+
+SecureCredentials& SecureCredentials::operator=( const SecureCredentials& rhs )
+{
+	if ( this == &rhs )
+	{
+		return *this;
+	}
+
+	host = rhs.host;
+	port = rhs.port;
+	secure_ = rhs.secure_;
+	return *this;
+}
+
+
+SecureCredentials& SecureCredentials::operator=( SecureCredentials&& rhs )
+{
+	if ( this == &rhs )
+	{
+		return *this;
+	}
+
+	host = rhs.host;
+	port = rhs.port;
+	secure_ = rhs.secure_;
+	return *this;
 }
 
 

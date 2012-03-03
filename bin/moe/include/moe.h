@@ -134,6 +134,20 @@ public:
     virtual HRESULT __stdcall Exit();
 
 
+	virtual HRESULT __stdcall get_IDOK(long* d)			{ if(d) *d = IDOK; return S_OK; }
+	virtual HRESULT __stdcall get_IDCANCEL(long* d)		{ if(d) *d =  IDCANCEL; return S_OK; }
+	virtual HRESULT __stdcall get_IDABORT(long* d)		{ if(d) *d =  IDABORT; return S_OK; }
+	virtual HRESULT __stdcall get_IDRETRY(long* d)		{ if(d) *d =  IDRETRY; return S_OK; }
+	virtual HRESULT __stdcall get_IDIGNORE(long* d)		{ if(d) *d =  IDIGNORE; return S_OK; }
+	virtual HRESULT __stdcall get_IDYES(long* d)		{ if(d) *d =  IDYES; return S_OK; }
+	virtual HRESULT __stdcall get_IDNO(long* d)			{ if(d) *d =  IDNO; return S_OK; }
+	virtual HRESULT __stdcall get_IDTRYAGAIN(long* d)	{ if(d) *d =  IDTRYAGAIN; return S_OK; }
+	virtual HRESULT __stdcall get_IDCONTINUE(long* d)	{ if(d) *d =  IDCONTINUE; return S_OK; }
+
+	virtual HRESULT __stdcall get_ANSI(long* d)			{ if(d) *d =  CP_ACP; return S_OK; }
+	virtual HRESULT __stdcall get_UNICODE(long* d)		{ if(d) *d =  CP_WINUNICODE; return S_OK; }
+	virtual HRESULT __stdcall get_UTF8(long* d)			{ if(d) *d =  CP_UTF8; return S_OK; }
+
 	/////////////////////////////////////////////////////////////////////
 	// persistence
 	/////////////////////////////////////////////////////////////////////

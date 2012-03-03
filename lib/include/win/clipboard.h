@@ -28,6 +28,8 @@ public:
 	ClipBoard( HWND hWnd = 0);
 	~ClipBoard();
 
+	void clear();
+
 	const std::vector<Entry>& formats();
 	UINT format( const std::wstring& key );
 
@@ -38,6 +40,11 @@ public:
 	std::string getHTMLfragment();
 	std::string getHTML();
 
+	void setData( UINT format, HANDLE data );
+	void setAnsiText( const std::string& txt );
+	void setUnicodeText( const std::wstring& txt );
+	void setLocale( LCID id );
+	void setHTML(const std::string& txt );
 
 	static const wchar_t* BITMAP;
 	static const wchar_t* DIB;

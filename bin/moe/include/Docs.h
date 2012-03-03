@@ -50,19 +50,20 @@ public:
 	virtual HRESULT __stdcall SaveAll();
 	virtual HRESULT __stdcall CloseAll();
 
+	virtual HRESULT __stdcall get_DOCTYPE_NONE(  long* d )		{ if(d) *d =  MOE_DOCTYPE_NULL; return S_OK; }
+	virtual HRESULT __stdcall get_DOCTYPE_EDITOR(  long* d )	{ if(d) *d =  MOE_DOCTYPE_DOC; return S_OK; }
+	virtual HRESULT __stdcall get_DOCTYPE_DIR(long* d )			{ if(d) *d =  MOE_DOCTYPE_DIR; return S_OK; }
+	virtual HRESULT __stdcall get_DOCTYPE_PIC( long* d )		{ if(d) *d =  MOE_DOCTYPE_PIC; return S_OK; }
+	virtual HRESULT __stdcall get_DOCTYPE_HEX(  long* d )		{ if(d) *d =  MOE_DOCTYPE_HEX; return S_OK; }
+
+	virtual HRESULT __stdcall get_DOCTYPE_HTML(  long* d )		{ if(d) *d =  MOE_DOCTYPE_HTML; return S_OK; }
+	virtual HRESULT __stdcall get_DOCTYPE_OLE(  long* d )		{ if(d) *d =  MOE_DOCTYPE_OLE; return S_OK; }
+	virtual HRESULT __stdcall get_DOCTYPE_FORM( long* d )		{ if(d) *d =  MOE_DOCTYPE_FORM; return S_OK; }
+	virtual HRESULT __stdcall get_DOCTYPE_RTF(  long* d )		{ if(d) *d =  MOE_DOCTYPE_RTF; return S_OK; }
+	virtual HRESULT __stdcall get_DOCTYPE_TAIL(  long* d )		{ if(d) *d =  MOE_DOCTYPE_TAIL; return S_OK; }
+	virtual HRESULT __stdcall get_DOCTYPE_SFTP(  long* d )		{ if(d) *d =  MOE_DOCTYPE_SFTP; return S_OK; }
+
 	// helpers
-	
-	/*
-	enum InFiles {
-	  PREF_TXT,
-	  PREF_UTF8,
-	  PREF_HTML,
-	  PREF_HEX,
-	  PREF_FORM,
-	  PREF_RTF,
-	  PREF_TAIL
-	};
-	*/
 
 	bool open( const mol::string& dir, MOE_DOCTYPE type, long enc, bool readOnly, IMoeDocument** doc  );
 	void remove( mol::MdiChild* mdi );

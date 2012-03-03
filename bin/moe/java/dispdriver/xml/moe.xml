@@ -122,7 +122,7 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
 </interface>
 
 
-<interface name='IMoe' type='Dual' iid='{8C2C5817-4747-4DA4-B588-75612B7608A2}' base='IDispatch' members='7' desc='' >
+<interface name='IMoe' type='Dual' iid='{8C2C5817-4747-4DA4-B588-75612B7608A2}' base='IDispatch' members='19' desc='' >
  <property name='Documents' type='IMoeDocumentCollection**' dispid='1' vtindex='28' ctype='HRESULT' param='d' desc='Get MDI Child Documents Collection'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
@@ -141,12 +141,48 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
  <property name='Dialogs' type='IMoeDialogs**' dispid='6' vtindex='48' ctype='HRESULT' param='d' desc='Get Moe Dialogs Interface'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <method name='Exit' type='void' dispid='7' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Exit Moe Editor and close the App' >
+ <property name='IDOK' type='long*' dispid='7' vtindex='52' ctype='HRESULT' param='d' desc='IDOK constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='IDCANCEL' type='long*' dispid='8' vtindex='56' ctype='HRESULT' param='d' desc='IDCANCEL constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='IDABORT' type='long*' dispid='9' vtindex='60' ctype='HRESULT' param='d' desc='IDABORT constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='IDRETRY' type='long*' dispid='10' vtindex='64' ctype='HRESULT' param='d' desc='IDRETRY constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='IDIGNORE' type='long*' dispid='11' vtindex='68' ctype='HRESULT' param='d' desc='IDIGNORE constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='IDYES' type='long*' dispid='12' vtindex='72' ctype='HRESULT' param='d' desc='IDYES constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='IDNO' type='long*' dispid='13' vtindex='76' ctype='HRESULT' param='d' desc='IDNO constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='IDTRYAGAIN' type='long*' dispid='14' vtindex='80' ctype='HRESULT' param='d' desc='IDTRYAGAIN constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='IDCONTINUE' type='long*' dispid='15' vtindex='84' ctype='HRESULT' param='d' desc='IDCONTINUE constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='ANSI' type='long*' dispid='16' vtindex='88' ctype='HRESULT' param='d' desc='ANSI encoding (cp 1252) constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='UNICODE' type='long*' dispid='17' vtindex='92' ctype='HRESULT' param='d' desc='UNICODE encoding constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='UTF8' type='long*' dispid='18' vtindex='96' ctype='HRESULT' param='d' desc='UTF8 encoding constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <method name='Exit' type='void' dispid='19' vtindex='100' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Exit Moe Editor and close the App' >
  </method>
 </interface>
 
 
-<interface name='IMoeDocumentCollection' type='Dual' iid='{B2FC978E-28F5-49E0-B363-8C78DE7FC50F}' base='IDispatch' members='20' desc='' >
+<interface name='IMoeDocumentCollection' type='Dual' iid='{B2FC978E-28F5-49E0-B363-8C78DE7FC50F}' base='IDispatch' members='31' desc='' >
  <method name='_NewEnum' type='IEnumVARIANT**' dispid='-4' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='New Enum - enable iteration from script' >
  </method>
  <method name='Item' type='IMoeDocument**' dispid='0' vtindex='32' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Item - retrieve child document by numeric or string (full document path) index' >
@@ -204,6 +240,39 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
  <method name='OpenRTFDocument' type='IMoeDocument**' dispid='18' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Open RTF document' >
   <param type='BSTR' dir='IN' name='fPath' />
  </method>
+ <property name='DOCTYPE_NONE' type='long*' dispid='19' vtindex='108' ctype='HRESULT' param='d' desc='Get DOCTYPE_NONE constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='DOCTYPE_EDITOR' type='long*' dispid='20' vtindex='112' ctype='HRESULT' param='d' desc='Get DOCTYPE_EDITOR constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='DOCTYPE_DIR' type='long*' dispid='21' vtindex='116' ctype='HRESULT' param='d' desc='Get DOCTYPE_DIR constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='DOCTYPE_PIC' type='long*' dispid='22' vtindex='120' ctype='HRESULT' param='d' desc='Get DOCTYPE_PIC constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='DOCTYPE_HEX' type='long*' dispid='23' vtindex='124' ctype='HRESULT' param='d' desc='Get DOCTYPE_HEX constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='DOCTYPE_HTML' type='long*' dispid='24' vtindex='128' ctype='HRESULT' param='d' desc='Get DOCTYPE_HTML constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='DOCTYPE_OLE' type='long*' dispid='25' vtindex='132' ctype='HRESULT' param='d' desc='Get DOCTYPE_OLE constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='DOCTYPE_FORM' type='long*' dispid='26' vtindex='136' ctype='HRESULT' param='d' desc='Get DOCTYPE_FORM constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='DOCTYPE_RTF' type='long*' dispid='27' vtindex='140' ctype='HRESULT' param='d' desc='Get DOCTYPE_RTF constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='DOCTYPE_TAIL' type='long*' dispid='28' vtindex='144' ctype='HRESULT' param='d' desc='Get DOCTYPE_TAIL constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='DOCTYPE_SFTP' type='long*' dispid='29' vtindex='148' ctype='HRESULT' param='d' desc='Get DOCTYPE_SFTP constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
 </interface>
 
 
@@ -361,7 +430,7 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
 </interface>
 
 
-<interface name='IMoeScript' type='Dual' iid='{809CE6F6-C2DE-4D8B-A7F2-C2FFD581E49C}' base='IDispatch' members='9' desc='' >
+<interface name='IMoeScript' type='Dual' iid='{809CE6F6-C2DE-4D8B-A7F2-C2FFD581E49C}' base='IDispatch' members='13' desc='' >
  <method name='Run' type='void' dispid='1' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Run a Script from disk inside moe context' >
   <param type='BSTR' dir='IN' name='f' />
   <param type='BSTR' dir='IN' name='engine' />
@@ -397,6 +466,18 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
  <method name='Picture' type='IDispatch**' dispid='9' vtindex='60' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Get a IPictureDispatch for image on disk' >
   <param type='BSTR' dir='IN' name='f' />
  </method>
+ <property name='FORM_DEFAULT' type='long*' dispid='10' vtindex='64' ctype='HRESULT' param='d' desc='Get FORM_DEFAULT constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='FORM_TITLE' type='long*' dispid='11' vtindex='68' ctype='HRESULT' param='d' desc='Get FORM_TITLE constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='FORM_NOSCROLL' type='long*' dispid='12' vtindex='72' ctype='HRESULT' param='d' desc='Get FORM_NOSCROLL constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='FORM_DIALOG' type='long*' dispid='13' vtindex='76' ctype='HRESULT' param='d' desc='Get FORM_DIALOG constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
 </interface>
 
 
@@ -452,7 +533,7 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
 </interface>
 
 
-<interface name='IMoeDialogs' type='Dual' iid='{C82F0BDB-5835-44B4-B708-5C077C2D3CF7}' base='IDispatch' members='7' desc='' >
+<interface name='IMoeDialogs' type='Dual' iid='{C82F0BDB-5835-44B4-B708-5C077C2D3CF7}' base='IDispatch' members='25' desc='' >
  <method name='MsgBox' type='long*' dispid='1' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='MsgBox' >
   <param type='BSTR' dir='IN' name='Text' />
   <param type='BSTR' dir='IN' name='Title' />
@@ -471,6 +552,60 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
  </method>
  <method name='Print' type='void' dispid='8' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Print' >
  </method>
+ <property name='SEARCH_DOWN' type='long*' dispid='9' vtindex='56' ctype='HRESULT' param='d' desc='get SEARCH_DOWN constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='SEARCH_WHOLEWORD' type='long*' dispid='10' vtindex='60' ctype='HRESULT' param='d' desc='get SEARCH_WHOLEWORD constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='SEARCH_MATCHCASE' type='long*' dispid='11' vtindex='64' ctype='HRESULT' param='d' desc='get SEARCH_MATCHCASE constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='SEARCH_FINDNEXT' type='long*' dispid='12' vtindex='68' ctype='HRESULT' param='d' desc='get SEARCH_FINDNEXT constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='SEARCH_REPLACE' type='long*' dispid='13' vtindex='72' ctype='HRESULT' param='d' desc='get SEARCH_REPLACE constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='SEARCH_REPLACEALL' type='long*' dispid='14' vtindex='76' ctype='HRESULT' param='d' desc='get SEARCH_REPLACEALL constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='SEARCH_DIALOGTERM' type='long*' dispid='15' vtindex='80' ctype='HRESULT' param='d' desc='get SEARCH_DIALOGTERM constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='OK' type='long*' dispid='16' vtindex='84' ctype='HRESULT' param='d' desc='OK constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='OKCANCEL' type='long*' dispid='17' vtindex='88' ctype='HRESULT' param='d' desc='OKCANCEL constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='ABORTRETRYIGNORE' type='long*' dispid='18' vtindex='92' ctype='HRESULT' param='d' desc='ABORTRETRYIGNORE constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='YESNOCANCEL' type='long*' dispid='19' vtindex='96' ctype='HRESULT' param='d' desc='YESNOCANCEL constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='YESNO' type='long*' dispid='20' vtindex='100' ctype='HRESULT' param='d' desc='YESNO constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='RETRYCANCEL' type='long*' dispid='21' vtindex='104' ctype='HRESULT' param='d' desc='RETRYCANCEL constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='CANCELTRYCONTINUE' type='long*' dispid='22' vtindex='108' ctype='HRESULT' param='d' desc='CANCELTRYCONTINUE constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='ICONERROR' type='long*' dispid='23' vtindex='112' ctype='HRESULT' param='d' desc='ICONERROR constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='ICONQUESTION' type='long*' dispid='24' vtindex='116' ctype='HRESULT' param='d' desc='ICONQUESTION constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='ICONINFORMATION' type='long*' dispid='25' vtindex='120' ctype='HRESULT' param='d' desc='ICONINFORMATION constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='ICONWARNING' type='long*' dispid='26' vtindex='124' ctype='HRESULT' param='d' desc='ICONWARNING constant'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
 </interface>
 
 

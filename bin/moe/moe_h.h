@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sat Feb 25 21:07:43 2012
+/* at Sat Mar 03 12:16:01 2012
  */
 /* Compiler settings for src\moe.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -1106,6 +1106,42 @@ EXTERN_C const IID IID_IMoe;
         virtual /* [helpstring][id][requestedit][nonbrowsable][propget] */ HRESULT STDMETHODCALLTYPE get_Dialogs( 
             /* [retval][out] */ IMoeDialogs **d) = 0;
         
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_IDOK( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_IDCANCEL( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_IDABORT( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_IDRETRY( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_IDIGNORE( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_IDYES( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_IDNO( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_IDTRYAGAIN( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_IDCONTINUE( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ANSI( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_UNICODE( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_UTF8( 
+            /* [retval][out] */ long *d) = 0;
+        
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Exit( void) = 0;
         
     };
@@ -1181,6 +1217,54 @@ EXTERN_C const IID IID_IMoe;
             IMoe * This,
             /* [retval][out] */ IMoeDialogs **d);
         
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_IDOK )( 
+            IMoe * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_IDCANCEL )( 
+            IMoe * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_IDABORT )( 
+            IMoe * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_IDRETRY )( 
+            IMoe * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_IDIGNORE )( 
+            IMoe * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_IDYES )( 
+            IMoe * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_IDNO )( 
+            IMoe * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_IDTRYAGAIN )( 
+            IMoe * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_IDCONTINUE )( 
+            IMoe * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ANSI )( 
+            IMoe * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_UNICODE )( 
+            IMoe * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_UTF8 )( 
+            IMoe * This,
+            /* [retval][out] */ long *d);
+        
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Exit )( 
             IMoe * This);
         
@@ -1237,6 +1321,42 @@ EXTERN_C const IID IID_IMoe;
 
 #define IMoe_get_Dialogs(This,d)	\
     ( (This)->lpVtbl -> get_Dialogs(This,d) ) 
+
+#define IMoe_get_IDOK(This,d)	\
+    ( (This)->lpVtbl -> get_IDOK(This,d) ) 
+
+#define IMoe_get_IDCANCEL(This,d)	\
+    ( (This)->lpVtbl -> get_IDCANCEL(This,d) ) 
+
+#define IMoe_get_IDABORT(This,d)	\
+    ( (This)->lpVtbl -> get_IDABORT(This,d) ) 
+
+#define IMoe_get_IDRETRY(This,d)	\
+    ( (This)->lpVtbl -> get_IDRETRY(This,d) ) 
+
+#define IMoe_get_IDIGNORE(This,d)	\
+    ( (This)->lpVtbl -> get_IDIGNORE(This,d) ) 
+
+#define IMoe_get_IDYES(This,d)	\
+    ( (This)->lpVtbl -> get_IDYES(This,d) ) 
+
+#define IMoe_get_IDNO(This,d)	\
+    ( (This)->lpVtbl -> get_IDNO(This,d) ) 
+
+#define IMoe_get_IDTRYAGAIN(This,d)	\
+    ( (This)->lpVtbl -> get_IDTRYAGAIN(This,d) ) 
+
+#define IMoe_get_IDCONTINUE(This,d)	\
+    ( (This)->lpVtbl -> get_IDCONTINUE(This,d) ) 
+
+#define IMoe_get_ANSI(This,d)	\
+    ( (This)->lpVtbl -> get_ANSI(This,d) ) 
+
+#define IMoe_get_UNICODE(This,d)	\
+    ( (This)->lpVtbl -> get_UNICODE(This,d) ) 
+
+#define IMoe_get_UTF8(This,d)	\
+    ( (This)->lpVtbl -> get_UTF8(This,d) ) 
 
 #define IMoe_Exit(This)	\
     ( (This)->lpVtbl -> Exit(This) ) 
@@ -1603,6 +1723,18 @@ EXTERN_C const IID IID_IMoeScript;
             /* [in] */ BSTR f,
             /* [retval][out] */ IDispatch **disp) = 0;
         
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_FORM_DEFAULT( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_FORM_TITLE( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_FORM_NOSCROLL( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_FORM_DIALOG( 
+            /* [retval][out] */ long *d) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -1700,6 +1832,22 @@ EXTERN_C const IID IID_IMoeScript;
             /* [in] */ BSTR f,
             /* [retval][out] */ IDispatch **disp);
         
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_FORM_DEFAULT )( 
+            IMoeScript * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_FORM_TITLE )( 
+            IMoeScript * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_FORM_NOSCROLL )( 
+            IMoeScript * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_FORM_DIALOG )( 
+            IMoeScript * This,
+            /* [retval][out] */ long *d);
+        
         END_INTERFACE
     } IMoeScriptVtbl;
 
@@ -1762,6 +1910,18 @@ EXTERN_C const IID IID_IMoeScript;
 
 #define IMoeScript_Picture(This,f,disp)	\
     ( (This)->lpVtbl -> Picture(This,f,disp) ) 
+
+#define IMoeScript_get_FORM_DEFAULT(This,d)	\
+    ( (This)->lpVtbl -> get_FORM_DEFAULT(This,d) ) 
+
+#define IMoeScript_get_FORM_TITLE(This,d)	\
+    ( (This)->lpVtbl -> get_FORM_TITLE(This,d) ) 
+
+#define IMoeScript_get_FORM_NOSCROLL(This,d)	\
+    ( (This)->lpVtbl -> get_FORM_NOSCROLL(This,d) ) 
+
+#define IMoeScript_get_FORM_DIALOG(This,d)	\
+    ( (This)->lpVtbl -> get_FORM_DIALOG(This,d) ) 
 
 #endif /* COBJMACROS */
 
@@ -2139,6 +2299,60 @@ EXTERN_C const IID IID_IMoeDialogs;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Print( void) = 0;
         
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SEARCH_DOWN( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SEARCH_WHOLEWORD( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SEARCH_MATCHCASE( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SEARCH_FINDNEXT( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SEARCH_REPLACE( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SEARCH_REPLACEALL( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SEARCH_DIALOGTERM( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_OK( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_OKCANCEL( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ABORTRETRYIGNORE( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_YESNOCANCEL( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_YESNO( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_RETRYCANCEL( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_CANCELTRYCONTINUE( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ICONERROR( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ICONQUESTION( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ICONINFORMATION( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ICONWARNING( 
+            /* [retval][out] */ long *d) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -2218,6 +2432,78 @@ EXTERN_C const IID IID_IMoeDialogs;
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Print )( 
             IMoeDialogs * This);
         
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_SEARCH_DOWN )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_SEARCH_WHOLEWORD )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_SEARCH_MATCHCASE )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_SEARCH_FINDNEXT )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_SEARCH_REPLACE )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_SEARCH_REPLACEALL )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_SEARCH_DIALOGTERM )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_OK )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_OKCANCEL )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ABORTRETRYIGNORE )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_YESNOCANCEL )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_YESNO )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_RETRYCANCEL )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_CANCELTRYCONTINUE )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ICONERROR )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ICONQUESTION )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ICONINFORMATION )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ICONWARNING )( 
+            IMoeDialogs * This,
+            /* [retval][out] */ long *d);
+        
         END_INTERFACE
     } IMoeDialogsVtbl;
 
@@ -2274,6 +2560,60 @@ EXTERN_C const IID IID_IMoeDialogs;
 
 #define IMoeDialogs_Print(This)	\
     ( (This)->lpVtbl -> Print(This) ) 
+
+#define IMoeDialogs_get_SEARCH_DOWN(This,d)	\
+    ( (This)->lpVtbl -> get_SEARCH_DOWN(This,d) ) 
+
+#define IMoeDialogs_get_SEARCH_WHOLEWORD(This,d)	\
+    ( (This)->lpVtbl -> get_SEARCH_WHOLEWORD(This,d) ) 
+
+#define IMoeDialogs_get_SEARCH_MATCHCASE(This,d)	\
+    ( (This)->lpVtbl -> get_SEARCH_MATCHCASE(This,d) ) 
+
+#define IMoeDialogs_get_SEARCH_FINDNEXT(This,d)	\
+    ( (This)->lpVtbl -> get_SEARCH_FINDNEXT(This,d) ) 
+
+#define IMoeDialogs_get_SEARCH_REPLACE(This,d)	\
+    ( (This)->lpVtbl -> get_SEARCH_REPLACE(This,d) ) 
+
+#define IMoeDialogs_get_SEARCH_REPLACEALL(This,d)	\
+    ( (This)->lpVtbl -> get_SEARCH_REPLACEALL(This,d) ) 
+
+#define IMoeDialogs_get_SEARCH_DIALOGTERM(This,d)	\
+    ( (This)->lpVtbl -> get_SEARCH_DIALOGTERM(This,d) ) 
+
+#define IMoeDialogs_get_OK(This,d)	\
+    ( (This)->lpVtbl -> get_OK(This,d) ) 
+
+#define IMoeDialogs_get_OKCANCEL(This,d)	\
+    ( (This)->lpVtbl -> get_OKCANCEL(This,d) ) 
+
+#define IMoeDialogs_get_ABORTRETRYIGNORE(This,d)	\
+    ( (This)->lpVtbl -> get_ABORTRETRYIGNORE(This,d) ) 
+
+#define IMoeDialogs_get_YESNOCANCEL(This,d)	\
+    ( (This)->lpVtbl -> get_YESNOCANCEL(This,d) ) 
+
+#define IMoeDialogs_get_YESNO(This,d)	\
+    ( (This)->lpVtbl -> get_YESNO(This,d) ) 
+
+#define IMoeDialogs_get_RETRYCANCEL(This,d)	\
+    ( (This)->lpVtbl -> get_RETRYCANCEL(This,d) ) 
+
+#define IMoeDialogs_get_CANCELTRYCONTINUE(This,d)	\
+    ( (This)->lpVtbl -> get_CANCELTRYCONTINUE(This,d) ) 
+
+#define IMoeDialogs_get_ICONERROR(This,d)	\
+    ( (This)->lpVtbl -> get_ICONERROR(This,d) ) 
+
+#define IMoeDialogs_get_ICONQUESTION(This,d)	\
+    ( (This)->lpVtbl -> get_ICONQUESTION(This,d) ) 
+
+#define IMoeDialogs_get_ICONINFORMATION(This,d)	\
+    ( (This)->lpVtbl -> get_ICONINFORMATION(This,d) ) 
+
+#define IMoeDialogs_get_ICONWARNING(This,d)	\
+    ( (This)->lpVtbl -> get_ICONWARNING(This,d) ) 
 
 #endif /* COBJMACROS */
 
@@ -2370,6 +2710,39 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenRTFDocument( 
             /* [in] */ BSTR fPath,
             /* [retval][out] */ IMoeDocument **d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DOCTYPE_NONE( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DOCTYPE_EDITOR( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DOCTYPE_DIR( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DOCTYPE_PIC( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DOCTYPE_HEX( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DOCTYPE_HTML( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DOCTYPE_OLE( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DOCTYPE_FORM( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DOCTYPE_RTF( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DOCTYPE_TAIL( 
+            /* [retval][out] */ long *d) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_DOCTYPE_SFTP( 
+            /* [retval][out] */ long *d) = 0;
         
     };
     
@@ -2510,6 +2883,50 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
             /* [in] */ BSTR fPath,
             /* [retval][out] */ IMoeDocument **d);
         
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DOCTYPE_NONE )( 
+            IMoeDocumentCollection * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DOCTYPE_EDITOR )( 
+            IMoeDocumentCollection * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DOCTYPE_DIR )( 
+            IMoeDocumentCollection * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DOCTYPE_PIC )( 
+            IMoeDocumentCollection * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DOCTYPE_HEX )( 
+            IMoeDocumentCollection * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DOCTYPE_HTML )( 
+            IMoeDocumentCollection * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DOCTYPE_OLE )( 
+            IMoeDocumentCollection * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DOCTYPE_FORM )( 
+            IMoeDocumentCollection * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DOCTYPE_RTF )( 
+            IMoeDocumentCollection * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DOCTYPE_TAIL )( 
+            IMoeDocumentCollection * This,
+            /* [retval][out] */ long *d);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DOCTYPE_SFTP )( 
+            IMoeDocumentCollection * This,
+            /* [retval][out] */ long *d);
+        
         END_INTERFACE
     } IMoeDocumentCollectionVtbl;
 
@@ -2605,6 +3022,39 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
 
 #define IMoeDocumentCollection_OpenRTFDocument(This,fPath,d)	\
     ( (This)->lpVtbl -> OpenRTFDocument(This,fPath,d) ) 
+
+#define IMoeDocumentCollection_get_DOCTYPE_NONE(This,d)	\
+    ( (This)->lpVtbl -> get_DOCTYPE_NONE(This,d) ) 
+
+#define IMoeDocumentCollection_get_DOCTYPE_EDITOR(This,d)	\
+    ( (This)->lpVtbl -> get_DOCTYPE_EDITOR(This,d) ) 
+
+#define IMoeDocumentCollection_get_DOCTYPE_DIR(This,d)	\
+    ( (This)->lpVtbl -> get_DOCTYPE_DIR(This,d) ) 
+
+#define IMoeDocumentCollection_get_DOCTYPE_PIC(This,d)	\
+    ( (This)->lpVtbl -> get_DOCTYPE_PIC(This,d) ) 
+
+#define IMoeDocumentCollection_get_DOCTYPE_HEX(This,d)	\
+    ( (This)->lpVtbl -> get_DOCTYPE_HEX(This,d) ) 
+
+#define IMoeDocumentCollection_get_DOCTYPE_HTML(This,d)	\
+    ( (This)->lpVtbl -> get_DOCTYPE_HTML(This,d) ) 
+
+#define IMoeDocumentCollection_get_DOCTYPE_OLE(This,d)	\
+    ( (This)->lpVtbl -> get_DOCTYPE_OLE(This,d) ) 
+
+#define IMoeDocumentCollection_get_DOCTYPE_FORM(This,d)	\
+    ( (This)->lpVtbl -> get_DOCTYPE_FORM(This,d) ) 
+
+#define IMoeDocumentCollection_get_DOCTYPE_RTF(This,d)	\
+    ( (This)->lpVtbl -> get_DOCTYPE_RTF(This,d) ) 
+
+#define IMoeDocumentCollection_get_DOCTYPE_TAIL(This,d)	\
+    ( (This)->lpVtbl -> get_DOCTYPE_TAIL(This,d) ) 
+
+#define IMoeDocumentCollection_get_DOCTYPE_SFTP(This,d)	\
+    ( (This)->lpVtbl -> get_DOCTYPE_SFTP(This,d) ) 
 
 #endif /* COBJMACROS */
 

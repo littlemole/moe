@@ -32,6 +32,7 @@ enum cmds {
 
 moeShell::moeShell() 
 {
+	ODBGS("moeShell::moeShell() ");
 	bmp_.load(IDB_MOE);
 	bmp2_.load(IDB_MOE2);
 	//::DebugBreak();
@@ -39,10 +40,7 @@ moeShell::moeShell()
 
 moeShell::~moeShell() 
 {
-	for ( MenuCmdMap::iterator it = menu_cmds_.begin(); it != menu_cmds_.end(); it++)
-	{
-		delete (*it).second;
-	}
+	ODBGS("moeShell::~moeShell() ");
 }
 
 void  moeShell::registerMenuItem( UINT& iCmd, const mol::string& proto, const mol::string& desc )
@@ -55,6 +53,8 @@ void  moeShell::registerMenuItem( UINT& iCmd, const mol::string& proto, const mo
 
 HRESULT __stdcall moeShell::Initialize( LPCITEMIDLIST pidlFolder, IDataObject *pdtobj, HKEY hkeyProgID )
 {
+	ODBGS("moeShell::Initialize() ");
+
 	if ( pdtobj == NULL )
 		return E_INVALIDARG;
 
@@ -66,17 +66,12 @@ HRESULT __stdcall moeShell::Initialize( LPCITEMIDLIST pidlFolder, IDataObject *p
 	{
 		return E_INVALIDARG;
 	}
+
 	mol::TCHAR filename[MAX_PATH];
 	::DragQueryFile( (HDROP)(medium.hGlobal), 0, filename,MAX_PATH );
 	filepath_ = mol::string(filename);
 
 	::ReleaseStgMedium(&medium);
-
-/*	if ( GetThemePartSize )
-	{
-		vistaMetrics_ = new VistaMenuMetrics(::GetDesktopWindow());
-	}
-	*/
 	return hr;
 }
 
@@ -262,159 +257,6 @@ HRESULT __stdcall moeShellMenuItem::InvokeCommand(const mol::string& filepath, L
 }
 
 
-
-
-/*
-HRESULT __stdcall moeShell::HandleMenuMsg(UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	LRESULT dummy = 0;
-	return HandleMenuMsgImpl(msg,wParam,lParam,&dummy);
-}
-
-HRESULT __stdcall moeShell::HandleMenuMsg2(UINT msg, WPARAM wParam, LPARAM lParam, LRESULT* plResult)
-{
-	LRESULT dummy = 0;
-	if ( !plResult )
-		return HandleMenuMsgImpl(msg,wParam,lParam,&dummy);
-
-	return HandleMenuMsgImpl(msg,wParam,lParam,plResult);
-}
-
-HRESULT __stdcall moeShell::HandleMenuMsgImpl(UINT uMsg,  WPARAM wParam,  LPARAM lParam,  LRESULT *plResult)
-{
-	switch ( uMsg )
-	{
-		case WM_MEASUREITEM:
-		{
-			return OnMeasureItem ( (MEASUREITEMSTRUCT*) lParam, plResult );
-		}
-		case WM_DRAWITEM:
-		{
-			return OnDrawItem ( (DRAWITEMSTRUCT*) lParam, plResult );
-		}
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall moeShell::OnMeasureItem ( MEASUREITEMSTRUCT* mis, LRESULT* pResult )
-{
-	if ( (mis->itemID != open_cmd_id) && (mis->itemID != open_as_cmd_id) )
-		return S_OK;
-
-	mol::string tmp = cmd_labels_[mis->itemID].second;
-
-	mol::DC dc(::GetDesktopWindow());
-
-	if ( vistaMetrics_ )
-	{
-		RECT rx;
-		GetThemeTextExtent( vistaMetrics_->hTheme,dc,MENU_POPUPITEM,0,tmp.c_str(),tmp.size(),DT_LEFT | DT_SINGLELINE,0,&rx);
-	}
-
-	SIZE s = {0,0};
-	::GetTextExtentPoint32(dc,tmp.c_str(), tmp.size(),&s);
-    mis->itemWidth = s.cx+40; 
-    mis->itemHeight = s.cy+4;//+10; 
-
-	*pResult = TRUE;  // we handled the message
-	return S_OK;
-}
-
-HRESULT __stdcall moeShell::OnDrawItem ( DRAWITEMSTRUCT* dis, LRESULT* pResult )
-{
-	if ( (dis->itemID != open_cmd_id) && (dis->itemID != open_as_cmd_id) )
-		return S_OK;
-
-
-	if ( vistaMetrics_ )
-	{
-		mol::string tmp = cmd_labels_[dis->itemID].second;
-
-		POPUPITEMSTATES iStateId = MPI_NORMAL;
-		if ( dis->itemState & ODS_SELECTED )
-			iStateId = MPI_HOT;
-
-		if (IsThemeBackgroundPartiallyTransparent(vistaMetrics_->hTheme, MENU_POPUPITEM, iStateId))
-	    {
-		    DrawThemeBackground(vistaMetrics_->hTheme, dis->hDC, MENU_POPUPBACKGROUND, 0, &dis->rcItem, NULL);
-		}
-
-
-		//DrawThemeBackground( vistaMetrics_->hTheme, dis->hDC,MENU_POPUPGUTTER,0,&dim.rcGutter,NULL);             
-
-        // Item selection
-        DrawThemeBackground(vistaMetrics_->hTheme, dis->hDC, MENU_POPUPITEM, iStateId, &dis->rcItem, NULL);
-
-        // Draw the text.
-        //ULONG uAccel = ((dis->itemState & ODS_NOACCEL) ? DT_HIDEPREFIX : 0);
-
-		RECT rb;
-		RECT rx = dis->rcItem;
-		GetThemeTextExtent( vistaMetrics_->hTheme,dis->hDC,MENU_POPUPITEM,0,tmp.c_str(),tmp.size(),DT_LEFT | DT_SINGLELINE,0,&rx);
-
-		RECT r = dis->rcItem;
-		r.left = dis->rcItem.left + vistaMetrics_->sizePopupCheck.cx;
-		r.top = dis->rcItem.top;
-        DrawThemeText(vistaMetrics_->hTheme,dis->hDC, MENU_POPUPITEM, iStateId, tmp.c_str(), tmp.size(), DT_SINGLELINE | DT_LEFT , 0, &r);
-
-		*pResult = TRUE;
-		return S_OK;
-	}
-
-	mol::string tmp = cmd_labels_[dis->itemID].second;
-
-	int wCheckX = ::GetSystemMetrics(SM_CXMENUCHECK); 
-    int nTextX = /*wCheckX +* / dis->rcItem.left; 
-	int nTextY = dis->rcItem.top; 
-	int h = dis->rcItem.bottom -dis->rcItem.top;
-
-	COLORREF crBkgnd,crTxt;
-	crBkgnd,crTxt = 0;
-
-    if (dis->itemState & ODS_SELECTED) 
-    { 
-        crBkgnd = ::SetBkColor(dis->hDC, ::GetSysColor(COLOR_HIGHLIGHT)); 
-		crTxt = ::SetTextColor(dis->hDC, ::GetSysColor(COLOR_HIGHLIGHTTEXT)); 
-    } 
-	else
-	{
-		crBkgnd = ::SetBkColor(dis->hDC, ::GetSysColor(COLOR_MENU)); 
-		//crTxt = ::SetTextColor(dis->hDC, ::GetSysColor(COLOR_MENU)); 
-	}
-
-	// white bkg
-	HBRUSH brush = ::GetSysColorBrush(crBkgnd);
-	mol::Rect r2(dis->rcItem);
-	r2.left=r2.left+24;
-	::FillRect(dis->hDC,&r2,brush);
-
-	// text
-	::ExtTextOut(dis->hDC, nTextX + 20, nTextY+2,  ETO_OPAQUE, 
-			&dis->rcItem, tmp.c_str(), tmp.size(), NULL); 
-
-
-//	mol::Rect r(dis->rcItem);
-//	r.right = r2.left;
-//	::FillRect(dis->hDC,&r,::GetSysColorBrush(COLOR_BTNFACE));
-
-//	if ( dis->itemState & ODS_SELECTED )
-		//::FrameRect(dis->hDC,&dis->rcItem,(HBRUSH)::GetStockObject(GRAY_BRUSH));
-
-
-	mol::DC mem = ::CreateCompatibleDC(dis->hDC);
-	HGDIOBJ def = mem.select( (HGDIOBJ)(HBITMAP)bmp_);
-	COLORREF c = ::GetPixel(mem,0,0);
-	::TransparentBlt(dis->hDC,2,nTextY+2,16,16,mem,0,0,64,64,c);
-	mem.select(def);
-	
-    SetBkColor(dis->hDC, crBkgnd); 
-	if ( crTxt)
-		SetTextColor(dis->hDC, crTxt); 
-
-	*pResult = TRUE;
-	return S_OK;
-}
-*/
 
 HRESULT __stdcall moeShell::About()
 {

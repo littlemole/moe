@@ -48,6 +48,45 @@ ClipBoard::~ClipBoard()
 	::CloseClipboard();
 }
 
+void ClipBoard::clear()
+{
+	::EmptyClipboard();
+	formats_.clear();
+	map_.clear();
+}
+
+void ClipBoard::setData( UINT format, HANDLE data )
+{
+	::SetClipboardData(format,data);
+}
+
+
+void ClipBoard::setAnsiText( const std::string& txt )
+{
+	mol::global glob(txt,GMEM_MOVEABLE);
+	setData( CF_TEXT, glob );
+}
+
+void ClipBoard::setUnicodeText( const std::wstring& txt )
+{
+	mol::global glob(txt,GMEM_MOVEABLE);
+	setData( CF_UNICODETEXT, glob );
+}
+
+void ClipBoard::setLocale( LCID id )
+{
+	mol::global glob((void*)&id,sizeof(LCID));
+	setData( CF_LOCALE, glob );
+}
+
+void ClipBoard::setHTML(const std::string& txt )
+{
+	UINT format = ::RegisterClipboardFormat(ClipBoard::HTML);
+	mol::global glob(txt,GMEM_MOVEABLE);
+	setData( format, glob );
+}
+
+
 const std::vector<ClipBoard::Entry>& ClipBoard::formats()
 {
 	return formats_;
@@ -158,6 +197,7 @@ void ClipBoard::enumClipboard()
 {
 	UINT format = 0;
 	formats_.clear();
+	map_.clear();
 
 	format = ::EnumClipboardFormats(format);
 	while( format ) 

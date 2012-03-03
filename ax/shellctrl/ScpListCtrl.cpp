@@ -770,7 +770,7 @@ LRESULT ScpListCtrl::OnBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 
 		std::wstring wp = mol::fromUTF8(uri_.getPath()) + e->getName();
 		mol::bstr path(wp);
-		hr = idoFactory->Add( path,e->fileinfo.getSize(),e->isDir() );
+		hr = idoFactory->Add( path,e->fileinfo.getSize(),e->isDir() ? VARIANT_TRUE : VARIANT_FALSE );
 		if ( hr != S_OK )
 			return 0;
 	}

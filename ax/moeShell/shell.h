@@ -6,7 +6,7 @@
 #include "ole/bstr.h"
 #include "ole/dll.h"
 #include "win/shell.h"
-
+#include <memory>
 #include "moeShell_h.h"
 
 #include "resource.h"
@@ -75,7 +75,8 @@ protected:
 	typedef std::vector<UINT> IndexVector;
 	IndexVector cmd_indexes_;
 
-	typedef std::map<UINT,moeShellMenuItem*> MenuCmdMap;
+	typedef std::map<UINT,std::shared_ptr<moeShellMenuItem>> MenuCmdMap;
+
 	MenuCmdMap menu_cmds_;
 
 };

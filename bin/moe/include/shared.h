@@ -94,6 +94,12 @@ public:
 	virtual HRESULT __stdcall System( BSTR f);
 	virtual HRESULT __stdcall Picture( BSTR f, IDispatch** disp );
 
+
+	virtual HRESULT __stdcall  get_FORM_DEFAULT( long* d )		{ if(d) *d =  MOE_FORMFLAG_NONE; return S_OK; }
+	virtual HRESULT __stdcall  get_FORM_TITLE( long* d )		{ if(d) *d =  MOE_FORMFLAG_TITLE; return S_OK; }
+	virtual HRESULT __stdcall  get_FORM_NOSCROLL( long* d )		{ if(d) *d =  MOE_FORMFLAG_NOSCROLL; return S_OK; }
+	virtual HRESULT __stdcall  get_FORM_DIALOG(  long* d )		{ if(d) *d =  MOE_FORMFLAG_DIALOG; return S_OK; }
+
 };
 
 /////////////////////////////////////////////////////////////////////
@@ -271,6 +277,30 @@ public:
 	virtual HRESULT __stdcall ChooseDir( BSTR* d );
 	virtual HRESULT __stdcall Help();
 	virtual HRESULT __stdcall Print();
+
+
+	virtual HRESULT __stdcall get_OK(long* d)				{ if(d) *d =  MB_OK; return S_OK; }
+	virtual HRESULT __stdcall get_OKCANCEL(long* d)			{ if(d) *d =  MB_OKCANCEL; return S_OK; }
+	virtual HRESULT __stdcall get_ABORTRETRYIGNORE(long* d)	{ if(d) *d =  MB_ABORTRETRYIGNORE; return S_OK; }
+	virtual HRESULT __stdcall get_YESNOCANCEL(long* d)		{ if(d) *d =  MB_YESNOCANCEL; return S_OK; }
+	virtual HRESULT __stdcall get_YESNO(long* d)			{ if(d) *d =  MB_YESNO; return S_OK; }
+	virtual HRESULT __stdcall get_RETRYCANCEL(long* d)		{ if(d) *d =  MB_RETRYCANCEL; return S_OK; }
+	virtual HRESULT __stdcall get_CANCELTRYCONTINUE(long* d){ if(d) *d =  MB_CANCELTRYCONTINUE; return S_OK; }
+
+	virtual HRESULT __stdcall get_ICONERROR(long* d)		{ if(d) *d =  MB_ICONERROR; return S_OK; }
+	virtual HRESULT __stdcall get_ICONQUESTION(long* d)		{ if(d) *d =  MB_ICONQUESTION; return S_OK; }
+	virtual HRESULT __stdcall get_ICONINFORMATION(long* d)	{ if(d) *d =  MB_ICONINFORMATION; return S_OK; }
+	virtual HRESULT __stdcall get_ICONWARNING(long* d)		{ if(d) *d =  MB_ICONWARNING; return S_OK; }
+
+
+	virtual HRESULT __stdcall get_SEARCH_DOWN( long* d)			{ if(d) *d =  MOE_SEARCHFLAG_DOWN; return S_OK; }
+	virtual HRESULT __stdcall get_SEARCH_WHOLEWORD( long* d)	{ if(d) *d =  MOE_SEARCHFLAG_WHOLEWORD; return S_OK; }
+	virtual HRESULT __stdcall get_SEARCH_MATCHCASE( long* d)	{ if(d) *d =  MOE_SEARCHFLAG_MATCHCASE; return S_OK; }
+	virtual HRESULT __stdcall get_SEARCH_FINDNEXT( long* d)		{ if(d) *d =  MOE_SEARCHFLAG_FINDNEXT; return S_OK; }
+	virtual HRESULT __stdcall get_SEARCH_REPLACE( long* d)		{ if(d) *d =  MOE_SEARCHFLAG_REPLACE; return S_OK; }
+	virtual HRESULT __stdcall get_SEARCH_REPLACEALL( long* d)	{ if(d) *d =  MOE_SEARCHFLAG_REPLACEALL; return S_OK; }
+	virtual HRESULT __stdcall get_SEARCH_DIALOGTERM(long* d)	{ if(d) *d =  MOE_SEARCHFLAG_DIALOGTERM; return S_OK; }
+
 };
 
 

@@ -103,14 +103,14 @@ var typelibs = [
 var $tabs;
 var $doc;
 $(document).ready( function() {
-
+/*
 	$tabs = $( "#tabs" ).tabs({
 		select: function(event, ui) {
 			
 			OnSelectTypelib(typelibs[ui.index]);
 			return false;
 		}});
-
+*/
 	OnSelectTypelib(typelibs[0]);
 });
 
@@ -148,7 +148,7 @@ function showMethod(iface,name)
 	var type = iface.getAttribute("type");
 	var desc = iface.getAttribute("desc");
 	var html = "<div>";
-	html += type + " " + name + "(";
+	html += type.replace(/\**$/,'') + " <b>" + name + "(</b>";
 	for ( var i  = 0; i < iface.childNodes.length; i++)
 	{
 		var node = iface.childNodes[i];
@@ -158,7 +158,7 @@ function showMethod(iface,name)
 			html += ", "
 		html += "<i>" + t + "</i> " + n;  
 	}
-	html +=")<br><br><small><i>" + desc + "</i></small></div>";	
+	html +="<b>)</b><br><br><small><i>" + desc + "</i></small></div>";	
 	var t = $("#detail");  
 	t.html(html);
 	return false;
@@ -171,7 +171,7 @@ function showProperty(iface,name)
 	var type = iface.getAttribute("type");
 	var desc = iface.getAttribute("desc");
 	var html = "<div>";
-	html += type + " " + name + "()<br><br>(";
+	html += type.replace(/\**$/,'') + " <b>" + name + "</b><br><br>(";
 	
 	for ( var i  = 0; i < iface.childNodes.length; i++)
 	{
