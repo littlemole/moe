@@ -4,7 +4,7 @@
 #include "ole/enum.h"
 #include "ole/Img.h"
 #include "util/str.h"
-
+#include "shellfolder_dispid.h"
 #include <sstream>
 
 
@@ -37,14 +37,14 @@ void ShellFolderCtrl::Folder::OnUserSelect(std::vector<mol::string>& v)
 {
 	for ( size_t i = 0; i < v.size(); i++ )
 	{
-		This()->fire(3,mol::bstr(v[i]));
+		This()->fire(DISPID_ISHELLPANEEVENTS_ONLISTOPEN,mol::bstr(v[i]));
 	}
 }
 
 
 void ShellFolderCtrl::Folder::OnPathChanged( const mol::string& p)
 {
-	This()->fire(4,mol::bstr(p));
+	This()->fire(DISPID_ISHELLPANEEVENTS_ONDIRCHANGED,mol::bstr(p));
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -122,7 +122,7 @@ LRESULT ShellFolderCtrl::OnSize(UINT msg, WPARAM wParam, LPARAM lParam)
 HRESULT __stdcall ShellFolderCtrl::UpDir()
 {
 	wnd_.updir();	
-	fire(4,mol::bstr(wnd_.path()));
+	fire(DISPID_ISHELLPANEEVENTS_ONDIRCHANGED,mol::bstr(wnd_.path()));
 	return S_OK;
 }
 
@@ -216,8 +216,8 @@ void ShellFolderCtrl::setPath(const mol::string& p)
 { 
 	setText(p); 
 	wnd_.path(p);
-	this->fire(1,p);
-	this->fire(4,p);
+	this->fire(DISPID_ISHELLPANEEVENTS_ONLISTSELECTION,p);
+	this->fire(DISPID_ISHELLPANEEVENTS_ONDIRCHANGED,p);
 	this->OnChanged(2);
 }
 

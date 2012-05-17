@@ -4,7 +4,7 @@
 #include "ole/enum.h"
 #include "ole/Img.h"
 #include "util/str.h"
-
+#include "shellctrl_dispid.h"
 #include <sstream>
 
 
@@ -226,13 +226,14 @@ LRESULT ShellListCtrl::OnDblClick(UINT msg, WPARAM wParam, LPARAM lParam)
 	if ( entry )
 	{
 		mol::string p(entry->filename);
-		if ( mol::Path::isDir(p) )
+		if ( entry->isDir() )
 		{
 			setPath(p);
 		}        
 		else
 		{
-			this->fire(2,mol::bstr(p));
+			mol::variant vb(entry->isDir());
+			this->fire(DISPID_ISHELLLISTEVENTS_ONLISTDBLCLICK,mol::bstr(p),vb);
 		}
 	}
 	return 0;
@@ -404,7 +405,8 @@ LRESULT ShellListCtrl::OnContext(UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		case IDM_LIST_OPEN :
 		{
-			this->fire(3,variant(p)); 
+			mol::variant vb(getItemEntry(hit)->isDir());
+			this->fire(DISPID_ISHELLLISTEVENTS_ONLISTOPEN,variant(p),vb); 
 			break;
 		}
 		case IDM_LIST_UPDATE :
@@ -900,8 +902,7 @@ void ShellListCtrl::setPath(const mol::string& p)
 //    pathEvent.fire((LPARAM)p.c_str());    
 	dirMon_.watch(p); 
 	queue_.push(new DirQueueAction(p,this));
-	this->fire(1,p);
-	this->fire(4,p);
+	this->fire(DISPID_ISHELLLISTEVENTS_ONDIRCHANGED,p);
 }
 
 //////////////////////////////////////////////////////////////////////////////

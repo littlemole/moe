@@ -4,449 +4,16 @@
 #include "ssh/scp.h"
 #include "tcp/sockets.h"
 #include "ole/dll.h"
-//#include <Wincrypt.h>
-//#include "Ntsecapi.h"
 #include "ssh_i.c"
 #include "resource.h"
 
 
-#define 		STATUS_SUCCESS					0
-#define RTL_ENCRYPT_MEMORY_SIZE					8
-#define CRYPTPROTECTMEMORY_BLOCK_SIZE           16
-
-typedef long RtlEncryptMemoryPtr ( PVOID mem, ULONG size, ULONG flags );
-typedef long RtlDecryptMemoryPtr ( PVOID mem, ULONG size, ULONG flags );
-
-RtlEncryptMemoryPtr* RtlEncryptMemory = (RtlEncryptMemoryPtr*)mol::dllFunc( _T("Advapi32.dll"), _T("SystemFunction040") );
-RtlDecryptMemoryPtr* RtlDecryptMemory = (RtlDecryptMemoryPtr*)mol::dllFunc( _T("Advapi32.dll"), _T("SystemFunction041") );
-
-typedef BOOL __stdcall CryptProtectMemoryPtr( LPVOID pDataIn, DWORD cbDataIn, DWORD dwFlags);
-typedef BOOL __stdcall CryptUnprotectMemoryPtr( LPVOID pDataIn, DWORD cbDataIn, DWORD dwFlags);
-
-CryptProtectMemoryPtr* MolCryptProtectMemory = (CryptProtectMemoryPtr*)mol::dllFunc( _T("Crypt32.dll"), _T("CryptProtectMemory") );
-CryptUnprotectMemoryPtr* MolCryptUnprotectMemory = (CryptUnprotectMemoryPtr*)mol::dllFunc( _T("Crypt32.dll"), _T("CryptUnprotectMemory") );
-
-
-////////////////////////////////////////////////////////////////////////
-
-ScpCredentialManager& credentialManager()
+CredentialManager& credentialManager()
 {
-	return mol::singleton<ScpCredentialManager>();
+	return mol::singleton<CredentialManager>();
 }
 
 ////////////////////////////////////////////////////////////////////////
-
-
-EncryptedMemory::EncryptedMemory()
-	:encrypted_(0),size_(0),size_encrypted_(0)
-{
-
-}
-
-EncryptedMemory::EncryptedMemory( const EncryptedMemory& rhs)
-	:encrypted_(0),size_(rhs.size_),size_encrypted_(rhs.size_encrypted_)
-{
-	encrypted_ = ::LocalAlloc(LPTR,size_encrypted_);
-	::memcpy(encrypted_,rhs.encrypted_,size_encrypted_);
-}
-
-EncryptedMemory::EncryptedMemory( EncryptedMemory&& rhs)
-	:encrypted_(rhs.encrypted_),size_(rhs.size_),size_encrypted_(rhs.size_encrypted_)
-{
-	rhs.encrypted_ = 0;
-	rhs.size_ = 0;
-	rhs.size_encrypted_ = 0;
-}
-
-EncryptedMemory::~EncryptedMemory()
-{
-	dispose();
-}
-
-void EncryptedMemory::dispose()
-{
-	if ( encrypted_ )
-	{
-		::LocalFree(encrypted_);
-		encrypted_ = 0;
-		size_ = 0;
-		size_encrypted_ = 0;
-	}
-}
-
-EncryptedMemory& EncryptedMemory::operator=(const EncryptedMemory& rhs)
-{
-	if (this == &rhs)
-	{
-		return *this;
-	}
-
-	size_ = rhs.size_;
-	size_encrypted_ = rhs.size_encrypted_;
-	encrypted_ = ::LocalAlloc(LPTR,size_encrypted_);
-	::memcpy(encrypted_,rhs.encrypted_,size_encrypted_);
-	return *this;
-}
-
-
-EncryptedMemory& EncryptedMemory::operator=(EncryptedMemory&& rhs)
-{
-	if (this == &rhs)
-	{
-		return *this;
-	}
-
-	dispose();
-
-	size_ = rhs.size_;
-	size_encrypted_ = rhs.size_encrypted_;
-	encrypted_ = rhs.encrypted_;
-
-	rhs.encrypted_ = 0;
-	rhs.size_ = 0;
-	rhs.size_encrypted_ = 0;
-
-	return *this;
-}
-
-size_t EncryptedMemory::encrypt( void* data, size_t size, DWORD flags )
-{
-	if ( MolCryptProtectMemory )
-	{
-		return encryptVista(data,size,flags);
-	}
-	return encryptLegacy(data,size,flags);
-}
-
-size_t EncryptedMemory::encryptLegacy( void* data, size_t size, DWORD flags )
-{
-	static std::string padding('X',RTL_ENCRYPT_MEMORY_SIZE);
-
-	dispose();
-
-	size_ = size;
-	size_encrypted_ = size;
-
-	DWORD mod = size_ % RTL_ENCRYPT_MEMORY_SIZE;
-	if ( mod )
-	{
-		size_encrypted_ = size_ + (RTL_ENCRYPT_MEMORY_SIZE-mod);
-	}
-
-	encrypted_ = ::LocalAlloc(LPTR,size_encrypted_);
-	::memcpy( encrypted_, data, size_);
-
-	long ntstat = ::RtlEncryptMemory( encrypted_, (ULONG)size_encrypted_,flags);
-	if (ntstat!=STATUS_SUCCESS)
-	{
-		cry();
-		throw mol::X("CryptProtectMemory failed!");
-	}
-	return size_;
-}
-
-mol::ssh::string EncryptedMemory::decryptLegacy( DWORD flags )
-{
-	void* v = malloc(size_encrypted_);
-	if(!v)
-		return "";
-
-	::memcpy(v,encrypted_,size_encrypted_);
-
-	if (::RtlDecryptMemory(v,(ULONG)size_encrypted_,flags) == STATUS_SUCCESS)
-	{
-		mol::ssh::string s( (char*)v, size_ );
-		free(v);
-		return s;
-	}
-	free(v);
-	return "";
-}
-
-mol::ssh::string EncryptedMemory::decrypt( DWORD flags )
-{
-	if ( MolCryptUnprotectMemory )
-	{
-		return decryptVista(flags);
-	}
-	return decryptLegacy(flags);
-}
-
-size_t EncryptedMemory::encryptVista( void* data, size_t size, DWORD flags )
-{
-	static std::string padding('X',CRYPTPROTECTMEMORY_BLOCK_SIZE);
-
-	dispose();
-
-	size_ = size;
-	size_encrypted_ = size;
-
-	DWORD mod = size_ % CRYPTPROTECTMEMORY_BLOCK_SIZE;
-	if ( mod )
-	{
-		size_encrypted_ = size_ + (CRYPTPROTECTMEMORY_BLOCK_SIZE-mod);
-	}
-
-	encrypted_ = ::LocalAlloc(LPTR,size_encrypted_);
-	::memcpy( encrypted_, data, size_);
-
-	if (!MolCryptProtectMemory( encrypted_, (DWORD)size_encrypted_,flags))
-	{
-		throw mol::X("CryptProtectMemory failed!");
-	}
-	return size_;
-}
-
-mol::ssh::string EncryptedMemory::decryptVista( DWORD flags )
-{
-	void* v = malloc(size_encrypted_);
-	if(!v)
-		return "";
-
-	::memcpy(v,encrypted_,size_encrypted_);
-
-	if (MolCryptUnprotectMemory(v,(DWORD)size_encrypted_,flags))
-	{
-		mol::ssh::string s( (char*)v, size_ );
-		free(v);
-		return s;
-	}
-	free(v);
-	return "";
-}
-
-void* EncryptedMemory::data()
-{
-	return encrypted_;
-}
-
-size_t EncryptedMemory::size()
-{
-	return size_;
-}
-
-////////////////////////////////////////////////////////////////////////
-
-
-EncryptedMap::EncryptedMap()
-{
-}
-
-EncryptedMap::EncryptedMap(const EncryptedMap& rhs)
-	: secure_(rhs.secure_)
-{
-}
-
-EncryptedMap::EncryptedMap(EncryptedMap&& rhs)
-	: secure_(rhs.secure_)
-{
-}
-
-void EncryptedMap::encrypt(const EncryptedMap::MapType& map)
-{
-	mol::ssh::stringBuffer buffer;
-	for ( MapType::const_iterator it = map.begin(); it!=map.end(); it++)
-	{
-		buffer.append( (*it).first.data(), (*it).first.size() );
-		buffer.append( "\0", 1 );
-		buffer.append( (*it).second.data(), (*it).second.size() );
-		buffer.append( "\0", 1 );
-	}
-
-	secure_.encrypt( (void*)buffer.data(), buffer.size() );
-}
-
-EncryptedMap::MapType EncryptedMap::decrypt()
-{
-	MapType map;
-	mol::ssh::string plain = secure_.decrypt();
-	size_t pos = 0;
-	size_t p   = 0;
-
-	char* data = (char*)plain.data();
-	char* pdata = (char*)data;
-
-	while(pdata < plain.data()+plain.size() )
-	{
-		while( *pdata )
-		{
-			pdata++;
-		}
-
-		mol::ssh::string key( data, pdata-data );
-		pdata++;
-		data = pdata;
-
-		while( *pdata )
-		{
-			pdata++;
-		}
-		mol::ssh::string val( data, pdata-data );
-		pdata++;
-		data = pdata;
-
-		map.insert( std::make_pair(key,val) );
-	}	
-
-	return map;
-}
-
-EncryptedMap& EncryptedMap::operator=(const EncryptedMap& rhs)
-{
-	if ( this == &rhs )
-	{
-		return *this;
-	}
-
-	secure_ = rhs.secure_;
-	return *this;
-}
-
-EncryptedMap& EncryptedMap::operator=(EncryptedMap&& rhs)
-{
-	if ( this == &rhs )
-	{
-		return *this;
-	}
-
-	secure_ = rhs.secure_;
-	return *this;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-SecureCredentials::SecureCredentials( const mol::string& h, int p, const mol::ssh::string& u, const mol::ssh::string& pass)
-		: host(h),port(p)
-{
-
-	EncryptedMap::MapType map;
-	map.insert( std::make_pair(mol::ssh::string("user"),u));
-	map.insert( std::make_pair(mol::ssh::string("pwd"), pass));
-
-	secure_.encrypt(map);
-}
-
-SecureCredentials::SecureCredentials( const SecureCredentials& rhs )
-	: host(rhs.host), port(rhs.port), secure_(rhs.secure_)
-{}
-
-SecureCredentials::SecureCredentials( SecureCredentials&& rhs )
-	: host(rhs.host), port(rhs.port), secure_(rhs.secure_)
-{}
-
-
-SecureCredentials::~SecureCredentials()
-{
-}
-
-
-void SecureCredentials::decrypt( mol::ssh::string& u, mol::ssh::string& pass )
-{
-	EncryptedMap::MapType map = secure_.decrypt();
-
-	if ( map.count("user") > 0 )
-		u = map["user"];
-
-	if ( map.count("pwd") > 0 )
-		pass = map["pwd"];
-}
-
-SecureCredentials& SecureCredentials::operator=( const SecureCredentials& rhs )
-{
-	if ( this == &rhs )
-	{
-		return *this;
-	}
-
-	host = rhs.host;
-	port = rhs.port;
-	secure_ = rhs.secure_;
-	return *this;
-}
-
-
-SecureCredentials& SecureCredentials::operator=( SecureCredentials&& rhs )
-{
-	if ( this == &rhs )
-	{
-		return *this;
-	}
-
-	host = rhs.host;
-	port = rhs.port;
-	secure_ = rhs.secure_;
-	return *this;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-
-bool ScpCredentialManager::getCredentials( mol::string host, long port, SecureCredentials** credentials)
-{
-	if(!credentials)
-		return false;
-
-	*credentials = 0;
-
-	if ( credentialsMap_.count(host) > 0 )
-	{
-		SecureCredentials* sc = credentialsMap_[host];
-		if ( sc->port == port )
-		{
-			*credentials = sc;
-			return true;
-		}
-	}
-	return false;
-}
-
-
-void ScpCredentialManager::remberSessionCredentials( mol::string host, long port, SecureCredentials* credentials)
-{
-	if ( credentialsMap_.count(host) > 0 )
-	{
-		SecureCredentials* sc = credentialsMap_[host];
-		delete sc;
-	}
-	credentialsMap_[host] = credentials;
-}
-
-void ScpCredentialManager::removeSessionCredentials( mol::string host, long port)
-{
-	if ( credentialsMap_.count(host) > 0 )
-	{
-		SecureCredentials* sc = credentialsMap_[host];
-		delete sc;
-	}
-}
-
-
-bool ScpCredentialManager::Credentials::promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo)
-{
-	return false;
-}
-
-bool ScpCredentialManager::Credentials::acceptHost(const std::string& host, int port, const std::string& hash)
-{
-	return This()->acceptHost( mol::fromUTF8(host),port, mol::fromUTF8(hash));
-}
-
-bool ScpCredentialManager::Credentials::rememberHostCredentials(const std::string& host, int port, const mol::ssh::string& user, const mol::ssh::string& pwd)
-{
-	SecureCredentials* sc = new SecureCredentials( mol::fromUTF8(host),port,user,pwd);
-	This()->remberSessionCredentials( mol::fromUTF8(host),port,sc);
-	return true;
-}
-
-bool ScpCredentialManager::Credentials::deleteHostCredentials(const std::string& host, int port)
-{
-	This()->removeSessionCredentials( mol::fromUTF8(host),port);
-	return true;
-}
-
-
-////////////////////////////////////////////////////////////////////////
-
 
 
 SSHRemoteFile::Instance* SSHRemoteFile::createInstance( const mol::sftp::RemoteFile& rf)
@@ -1443,7 +1010,7 @@ private:
 ////////////////////////////////////////////////////////////////
 
 
-bool ScpCredentialManager::acceptHost( mol::string host, long port, mol::string hash )
+bool CredentialManager::acceptHost( mol::string host, long port, mol::string hash )
 {
 	AccepHostDlg dlg( mol::toString(host), port, mol::toString(hash) );
 
@@ -1452,38 +1019,27 @@ bool ScpCredentialManager::acceptHost( mol::string host, long port, mol::string 
 	return r == IDOK;
 }
 
-
-
-bool ScpCredentialManager::Credentials::getCredentials(const std::string& host, int port,mol::ssh::string& user, mol::ssh::string& pwd)
+bool CredentialManager::getCredentials( mol::string host, long port, mol::ssh::SecureCredentials** credentials)
 {
-	SecureCredentials* sc = 0;
+	if(!credentials)
+		return false;
 
-	if ( This()->getCredentials( mol::fromUTF8(host), port, &sc ) )
-	{
-		mol::ssh::string login;
-		mol::ssh::string pass;
-		sc->decrypt(login,pass);
+	*credentials = 0;
 
-		user = login;
-		pwd = pass;
-
-		return true;
-	}
-
-
-	PwdDlg dlg( mol::fromUTF8(host), port );
+	PwdDlg dlg( host, port );
 	LRESULT r = dlg.doModal( IDD_SCP_PWD_DIALOG, ::GetDesktopWindow() );
 	if ( r != IDOK )
 	{
 		return false;
 	}
+	
+	mol::ssh::string user = mol::ssh::wstring2utf8(dlg.user.data(),dlg.user.size());
+	mol::ssh::string pwd = mol::ssh::wstring2utf8(dlg.pwd.data(),dlg.pwd.size());
 
-	user = mol::ssh::wstring2utf8(dlg.user.data(),dlg.user.size());
-	pwd = mol::ssh::wstring2utf8(dlg.pwd.data(),dlg.pwd.size());
+	*credentials = new mol::ssh::SecureCredentials(host,port,user,pwd);
 
 	return true;
 }
-
 ////////////////////////////////////////////////////////////////////////
 
 

@@ -204,6 +204,7 @@ public:
 	HRESULT virtual __stdcall AddFolder			(BSTR folder);
 	HRESULT virtual __stdcall RemoveFolder		(BSTR folder);
 	HRESULT virtual __stdcall CreateDir     	();
+	HRESULT virtual __stdcall IsDir	     		(BSTR path,VARIANT_BOOL* vb);
 
 	HRESULT virtual __stdcall Load( LPSTREAM pStm);
 	HRESULT virtual __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);

@@ -27,17 +27,17 @@ public:
 		return S_OK;
 	}
 
-	HRESULT virtual __stdcall OnTreeDblClick(BSTR filename)
+	HRESULT virtual __stdcall OnTreeDblClick(BSTR filename, VARIANT_BOOL vb)
 	{
 		return S_OK;
 	}
 
-	HRESULT virtual __stdcall OnTreeOpen(BSTR filename)
+	HRESULT virtual __stdcall OnTreeOpen(BSTR filename, VARIANT_BOOL vb)
 	{
 		return S_OK;
 	}
 	
-	HRESULT virtual __stdcall OnContextMenu(BSTR filename)
+	HRESULT virtual __stdcall OnContextMenu(BSTR filename, VARIANT_BOOL vb)
 	{
 		return S_OK;
 	}

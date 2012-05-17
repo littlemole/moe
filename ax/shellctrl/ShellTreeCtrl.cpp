@@ -312,8 +312,9 @@ LRESULT ShellTree::OnTreeContext(UINT msg, WPARAM wParam, LPARAM lParam)
 
 	if ( !useContext_ )
 	{
-		mol::variant v(p);
-		fire(DISPID_ISHELLTREEEVENTS_ONCONTEXTMENU,v);
+		mol::variant v1(p);
+		mol::variant v2(getItemEntry(hit)->isDir());
+		fire(DISPID_ISHELLTREEEVENTS_ONCONTEXTMENU, v1, v2);
 		return 0;
 	}
 
@@ -353,6 +354,7 @@ LRESULT ShellTree::OnTreeContext(UINT msg, WPARAM wParam, LPARAM lParam)
 		m.disableItem(IDM_TREE_DELETE);
 		m.disableItem(IDM_TREE_RENAME);
 		m.disableItem(IDM_TREE_REMOVE);			
+		m.disableItem(IDM_TREE_UPDATE);			
 	}
 	// disable hide option if path is not mounted UNC share
 	if ( mol::Path::isRoot(p) && ( mol::Path::isUNC(p)) )
@@ -365,7 +367,8 @@ LRESULT ShellTree::OnTreeContext(UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		case IDM_TREE_OPEN :
 		{
-			this->fire(3,variant(p)); 
+			mol::variant v2(getItemEntry(hit)->isDir());
+			this->fire(DISPID_ISHELLTREEEVENTS_ONTREEOPEN,variant(p),v2); 
 			break;
 		}
 		case IDM_TREE_UPDATE :
@@ -458,7 +461,8 @@ LRESULT ShellTree::OnTreeDblClick(UINT msg, WPARAM wParam, LPARAM lParam)
 			return 1;
 
 		mol::string p = this->getPath();
-		this->fire(2,variant(p));
+		mol::variant v2(getItemEntry(hit)->isDir());
+		this->fire(DISPID_ISHELLTREEEVENTS_ONTREEDBLCLICK,variant(p),v2);
 	}
 	return 0;
 }
@@ -478,7 +482,8 @@ LRESULT ShellTree::OnTreeClick(UINT msg, WPARAM wParam, LPARAM lParam)
 
 LRESULT ShellTree::OnTreeSelection(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	this->fire( 1, variant(getPath()) );
+	mol::string path = getPath();
+	this->fire( DISPID_ISHELLTREEEVENTS_ONTREESELECTION, variant(path));
 	return 0;
 }
 
@@ -798,7 +803,7 @@ BOOL ShellTree::expandFolder( HTREEITEM item, bool force, int flags )
 			while( Shit it = folder.next() )
 			{
 				mol::string name = folder.getDisplayNameOf(*it);
-				if ( it->isDir() && mol::Path::isDir(name) )
+				if ( it->isDir() )// && mol::Path::isDir(name) )
 				{
 					//if ( it->isPartOfFileSystem() )
 					{
@@ -806,18 +811,19 @@ BOOL ShellTree::expandFolder( HTREEITEM item, bool force, int flags )
 						dirsMap[name] = it;
 					}
 				}
-				else
-				if (displayFiles_ && mol::Path::exists(name) )
-				{
-					mol::string name = folder.getDisplayNameOf(*it);
-					files.push_back(name);
-					filesMap[name] = it;
-				}
 				else if ( mol::Path::isUNC(name) ) 
 				{
 						dirs.push_back(name);
 						dirsMap[name] = it;
 				}
+				else
+				if (displayFiles_ )//&& mol::Path::exists(name) )
+				{
+					mol::string name = folder.getDisplayNameOf(*it);
+					files.push_back(name);
+					filesMap[name] = it;
+				}
+
 			}
 		}
 		
@@ -1297,6 +1303,13 @@ HRESULT ShellTree::CreateDir()
 		this->Update();
 		return 0;
 	}
+	return S_OK;
+}
+
+HRESULT __stdcall ShellTree::IsDir(BSTR path,VARIANT_BOOL* vb)
+{
+	HTREEITEM hit = findItemByPath( mol::toString(path) );
+	*vb = getItemEntry(hit)->isDir() ? VARIANT_TRUE: VARIANT_FALSE;
 	return S_OK;
 }
 

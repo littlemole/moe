@@ -17,6 +17,7 @@
 #define DISPID_ISHELLTREE_REMOVEFOLDER                                         				 13
 #define DISPID_ISHELLTREE_CREATEDIR                                            				 14
 #define DISPID_ISHELLTREE_USECONTEXT                                           				 15
+#define DISPID_ISHELLTREE_ISDIR                                                				 16
 #define DISPID_IHEXCTRL_READONLY                                               				 1
 #define DISPID_IHEXCTRL_DISPLAYCOLUMNS                                         				 2
 #define DISPID_IHEXCTRL_FILENAME                                               				 3

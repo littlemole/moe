@@ -27,17 +27,17 @@ public:
 		return S_OK;
 	}
 
-	HRESULT virtual __stdcall OnListDblClick(BSTR filename)
+	HRESULT virtual __stdcall OnListDblClick(BSTR filename, VARIANT_BOOL vb)
 	{
 		return S_OK;
 	}
 
-	HRESULT virtual __stdcall OnListOpen(BSTR filename)
+	HRESULT virtual __stdcall OnListOpen(BSTR filename, VARIANT_BOOL vb)
 	{
 		return S_OK;
 	}
 
-	HRESULT virtual __stdcall OnDirChanged(BSTR dir)
+	HRESULT virtual __stdcall OnDirChanged(BSTR dir, VARIANT_BOOL vb)
 	{
 		return S_OK;
 	}

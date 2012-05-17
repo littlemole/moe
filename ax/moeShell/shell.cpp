@@ -32,7 +32,7 @@ enum cmds {
 
 moeShell::moeShell() 
 {
-	ODBGS("moeShell::moeShell() ");
+	//ODBGS("moeShell::moeShell() ");
 	bmp_.load(IDB_MOE);
 	bmp2_.load(IDB_MOE2);
 	//::DebugBreak();
@@ -40,7 +40,7 @@ moeShell::moeShell()
 
 moeShell::~moeShell() 
 {
-	ODBGS("moeShell::~moeShell() ");
+	//ODBGS("moeShell::~moeShell() ");
 }
 
 void  moeShell::registerMenuItem( UINT& iCmd, const mol::string& proto, const mol::string& desc )
@@ -53,7 +53,7 @@ void  moeShell::registerMenuItem( UINT& iCmd, const mol::string& proto, const mo
 
 HRESULT __stdcall moeShell::Initialize( LPCITEMIDLIST pidlFolder, IDataObject *pdtobj, HKEY hkeyProgID )
 {
-	ODBGS("moeShell::Initialize() ");
+	//ODBGS("moeShell::Initialize() ");
 
 	if ( pdtobj == NULL )
 		return E_INVALIDARG;

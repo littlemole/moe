@@ -11,6 +11,7 @@
 #include "tcp/sockets.h"
 #include "ssh/ssh.h"
 #include "ssh/sftp.h"
+#include "ssh/credmgr.h"
 #include "win/path.h"
 #include "win/file.h"
 #include "win/CoCtrl.h"
@@ -36,126 +37,15 @@
 #define BOOST_BIND_ENABLE_STDCALL 
 #include "boost/bind.hpp"
 
-
-class EncryptedMemory
+class CredentialManager : public mol::ssh::ScpCredentialManager
 {
-public:
+protected:
 
-	EncryptedMemory();
-	EncryptedMemory(const EncryptedMemory& rhs);
-	EncryptedMemory(EncryptedMemory&& rhs);
-	~EncryptedMemory();
-	void dispose();
-
-	size_t encrypt( void* data, size_t size, DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
-	mol::ssh::string decrypt( DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);	
-
-	void* data();
-	size_t size();
-
-	EncryptedMemory& operator=(const EncryptedMemory& rhs);
-	EncryptedMemory& operator=(EncryptedMemory&& rhs);
-private:
-
-	size_t encryptVista( void* data, size_t size, DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
-	mol::ssh::string decryptVista( DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
-	size_t encryptLegacy( void* data, size_t size, DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
-	mol::ssh::string decryptLegacy( DWORD flags = CRYPTPROTECTMEMORY_SAME_LOGON);
-
-
-	void* encrypted_;
-	size_t size_;
-	size_t size_encrypted_;
-};
-
-class EncryptedMap
-{
-public:
-
-	typedef std::map<mol::ssh::string,mol::ssh::string> MapType;
-
-	EncryptedMap();
-	EncryptedMap(const EncryptedMap& rhs);
-	EncryptedMap(EncryptedMap&& rhs);
-
-	void encrypt(const MapType& map);
-	MapType decrypt();
-
-	EncryptedMap& operator=(const EncryptedMap& rhs);
-	EncryptedMap& operator=(EncryptedMap&& rhs);
-
-private:
-
-	EncryptedMemory secure_;
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
-struct SecureCredentials
-{
-	SecureCredentials( const mol::string& h, int p, const mol::ssh::string& u, const mol::ssh::string& pass);
-	SecureCredentials( const SecureCredentials& rhs );
-	SecureCredentials( SecureCredentials&& rhs );
-	~SecureCredentials();
-
-	mol::string host;
-	int port;
-
-	void decrypt( mol::ssh::string& u, mol::ssh::string& pass );
-
-	SecureCredentials& operator=( const SecureCredentials& rhs );
-	SecureCredentials& operator=( SecureCredentials&& rhs );
-
-private:
-	EncryptedMap secure_;
-
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
-class ScpCredentialManager
-{
-public:
-
-	~ScpCredentialManager()
-	{
-		dispose();
-	}
-
-	void dispose()
-	{
-		for ( std::map<mol::string,SecureCredentials*>::iterator it = credentialsMap_.begin(); it!=credentialsMap_.end();it++)
-		{
-			delete (*it).second;
-		}
-		credentialsMap_.clear();
-	}
-
-	class Credentials : public mol::ssh::CredentialCallback
-	{
-		public: 
-		outer_this(ScpCredentialManager,credentials);
-
-		virtual bool getCredentials(const std::string& host, int port,mol::ssh::string& user, mol::ssh::string& pwd);
-		virtual bool promptCredentials(const std::string& host, int port,const std::string& prompt, const std::string& desc,char** value,bool echo);
-		virtual bool acceptHost(const std::string& host, int port, const std::string& hash);
-		virtual bool rememberHostCredentials(const std::string& host, int port, const mol::ssh::string& user, const mol::ssh::string& pwd);
-		virtual bool deleteHostCredentials(const std::string& host, int port);
-
-	} credentials;
-
-
-private:
-
-	bool getCredentials( mol::string host, long port, SecureCredentials** credentials);
+	bool getCredentials( mol::string host, long port, mol::ssh::SecureCredentials** credentials);
 	bool acceptHost( mol::string host, long port, mol::string hash );
-	void remberSessionCredentials( mol::string host, long port, SecureCredentials* credentials);
-	void removeSessionCredentials( mol::string host, long port);
-
-	std::map<mol::string,SecureCredentials*> credentialsMap_;
 };
 
-ScpCredentialManager& credentialManager();
+CredentialManager& credentialManager();
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -307,7 +197,7 @@ public:
     virtual HRESULT __stdcall  Chown( BSTR path, long owner, long group);        
     virtual HRESULT __stdcall  Stat(  BSTR path, IRemoteFile **remotefile);        
     virtual HRESULT __stdcall  Lstat( BSTR path, IRemoteFile **remotefile);        
-    virtual HRESULT __stdcall  Files(  BSTR path, SAFEARRAY * *remotefiles);        
+    virtual HRESULT __stdcall  Files( BSTR path, SAFEARRAY * *remotefiles);        
     virtual HRESULT __stdcall  List(  BSTR path, SAFEARRAY * *remotefiles);
 
 private:

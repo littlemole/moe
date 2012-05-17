@@ -628,7 +628,7 @@ LRESULT ScpListCtrl::OnDblClick(UINT msg, WPARAM wParam, LPARAM lParam)
 		}        
 		else
 		{
-			this->fire(DISPID_ISHELLLISTEVENTS_ONLISTDBLCLICK,mol::bstr(entry->filename));
+			this->fire(DISPID_ISHELLLISTEVENTS_ONLISTDBLCLICK,mol::bstr(entry->filename),mol::variant(entry->isDir()));
 		}
 	}
 	
@@ -844,7 +844,7 @@ LRESULT ScpListCtrl::OnContext(UINT msg, WPARAM wParam, LPARAM lParam)
 			else
 			{
 				mol::string tmp(entry->filename);
-				this->fire(DISPID_ISHELLLISTEVENTS_ONLISTOPEN,mol::bstr(tmp));
+				this->fire(DISPID_ISHELLLISTEVENTS_ONLISTOPEN,mol::bstr(tmp),mol::variant(entry->isDir()));
 			}
 			break;
 		}

@@ -102,7 +102,6 @@ library ShellCtrls
 		[id(14), helpstring("Create a new directory at current selection")] 
 		HRESULT CreateDir();
 
-
 		[ 
 		  propput,id(15), 
 		  helpstring("Get/Set embedded context menu usage")
@@ -113,6 +112,10 @@ library ShellCtrls
 		  propget,id(15)
 		] 
 		HRESULT UseContext([out,retval] VARIANT_BOOL* vb);
+
+		[id(16), helpstring("is path a folder")] 
+		HRESULT IsDir([in] BSTR path, [out,retval] VARIANT_BOOL* vb);
+
     };
 
 
@@ -506,13 +509,13 @@ library ShellCtrls
 		void OnTreeSelection([in] BSTR fname);
 
 		[id(2), helpstring("Tree Item DblClick")]  
-		void OnTreeDblClick([in] BSTR fname);
+		void OnTreeDblClick([in] BSTR fname,[in] VARIANT_BOOL vbIsDir);
 
 		[id(3), helpstring("Tree Item Open")]  
-		void OnTreeOpen([in] BSTR fname);
+		void OnTreeOpen([in] BSTR fname,[in] VARIANT_BOOL vbIsDir);
 
 		[id(4), helpstring("On Context Menu")]  
-		void OnContextMenu([in] BSTR fname);
+		void OnContextMenu([in] BSTR fname,[in] VARIANT_BOOL vbIsDir);
 	};
 
 	////////////////////////////////////////////////////////////////////////////////////
@@ -553,13 +556,13 @@ library ShellCtrls
 		methods:
 
 		[id(1), helpstring("List Selection changed")]  
-		void OnListSelection([in] BSTR fname);
+		void OnListSelection([in] BSTR fname,[in] VARIANT_BOOL vbIsDir);
 
 		[id(2), helpstring("List Item DblClick")]  
-		void OnListDblClick([in] BSTR fname);
+		void OnListDblClick([in] BSTR fname,[in] VARIANT_BOOL vbIsDir);
 
 		[id(3), helpstring("List Item Open")]  
-		void OnListOpen([in] BSTR fname);
+		void OnListOpen([in] BSTR fname,[in] VARIANT_BOOL vbIsDir);
 
 		[id(4), helpstring("Active Directory changed")]  
 		void OnDirChanged([in] BSTR dir);
@@ -584,13 +587,13 @@ library ShellCtrls
 		HRESULT OnTreeSelection([in] BSTR fname);
 
 		[id(2), helpstring("Tree Item DblClick")]  
-		HRESULT OnTreeDblClick([in] BSTR fname);
+		HRESULT OnTreeDblClick([in] BSTR fname,[in] VARIANT_BOOL vbIsDir);
 
 		[id(3), helpstring("Tree Item Open")]  
-		HRESULT OnTreeOpen([in] BSTR fname);
+		HRESULT OnTreeOpen([in] BSTR fname,[in] VARIANT_BOOL vbIsDir);
 
 		[id(4), helpstring("On Context Menu")]  
-		HRESULT OnContextMenu([in] BSTR fname);
+		HRESULT OnContextMenu([in] BSTR fname,[in] VARIANT_BOOL vbIsDir);
 
 	};
 
@@ -607,13 +610,13 @@ library ShellCtrls
     interface IShellListEvents : IDispatch
     {
 		[id(1), helpstring("List Selection changed")]  
-		HRESULT OnListSelection([in] BSTR fname);
+		HRESULT OnListSelection([in] BSTR fname,[in] VARIANT_BOOL vbIsDir);
 
 		[id(2), helpstring("List Item DblClick")]  
-		HRESULT OnListDblClick([in] BSTR fname);
+		HRESULT OnListDblClick([in] BSTR fname,[in] VARIANT_BOOL vbIsDir);
 
 		[id(3), helpstring("List Item Open")]  
-		HRESULT OnListOpen([in] BSTR fname);
+		HRESULT OnListOpen([in] BSTR fname,[in] VARIANT_BOOL vbIsDir);
 
 
 		[id(4), helpstring("Active Directory changed")]  

@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sat Mar 03 12:14:13 2012
+/* at Thu May 17 14:14:54 2012
  */
 /* Compiler settings for shellCtrl.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -280,6 +280,10 @@ EXTERN_C const IID IID_IShellTree;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UseContext( 
             /* [retval][out] */ VARIANT_BOOL *vb) = 0;
         
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsDir( 
+            /* [in] */ BSTR path,
+            /* [retval][out] */ VARIANT_BOOL *vb) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -392,6 +396,11 @@ EXTERN_C const IID IID_IShellTree;
             IShellTree * This,
             /* [retval][out] */ VARIANT_BOOL *vb);
         
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsDir )( 
+            IShellTree * This,
+            /* [in] */ BSTR path,
+            /* [retval][out] */ VARIANT_BOOL *vb);
+        
         END_INTERFACE
     } IShellTreeVtbl;
 
@@ -481,6 +490,9 @@ EXTERN_C const IID IID_IShellTree;
 
 #define IShellTree_get_UseContext(This,vb)	\
     ( (This)->lpVtbl -> get_UseContext(This,vb) ) 
+
+#define IShellTree_IsDir(This,path,vb)	\
+    ( (This)->lpVtbl -> IsDir(This,path,vb) ) 
 
 #endif /* COBJMACROS */
 
@@ -2105,13 +2117,16 @@ EXTERN_C const IID IID_IShellTreeEvents;
             /* [in] */ BSTR fname) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnTreeDblClick( 
-            /* [in] */ BSTR fname) = 0;
+            /* [in] */ BSTR fname,
+            /* [in] */ VARIANT_BOOL vbIsDir) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnTreeOpen( 
-            /* [in] */ BSTR fname) = 0;
+            /* [in] */ BSTR fname,
+            /* [in] */ VARIANT_BOOL vbIsDir) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnContextMenu( 
-            /* [in] */ BSTR fname) = 0;
+            /* [in] */ BSTR fname,
+            /* [in] */ VARIANT_BOOL vbIsDir) = 0;
         
     };
     
@@ -2168,15 +2183,18 @@ EXTERN_C const IID IID_IShellTreeEvents;
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnTreeDblClick )( 
             IShellTreeEvents * This,
-            /* [in] */ BSTR fname);
+            /* [in] */ BSTR fname,
+            /* [in] */ VARIANT_BOOL vbIsDir);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnTreeOpen )( 
             IShellTreeEvents * This,
-            /* [in] */ BSTR fname);
+            /* [in] */ BSTR fname,
+            /* [in] */ VARIANT_BOOL vbIsDir);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnContextMenu )( 
             IShellTreeEvents * This,
-            /* [in] */ BSTR fname);
+            /* [in] */ BSTR fname,
+            /* [in] */ VARIANT_BOOL vbIsDir);
         
         END_INTERFACE
     } IShellTreeEventsVtbl;
@@ -2217,14 +2235,14 @@ EXTERN_C const IID IID_IShellTreeEvents;
 #define IShellTreeEvents_OnTreeSelection(This,fname)	\
     ( (This)->lpVtbl -> OnTreeSelection(This,fname) ) 
 
-#define IShellTreeEvents_OnTreeDblClick(This,fname)	\
-    ( (This)->lpVtbl -> OnTreeDblClick(This,fname) ) 
+#define IShellTreeEvents_OnTreeDblClick(This,fname,vbIsDir)	\
+    ( (This)->lpVtbl -> OnTreeDblClick(This,fname,vbIsDir) ) 
 
-#define IShellTreeEvents_OnTreeOpen(This,fname)	\
-    ( (This)->lpVtbl -> OnTreeOpen(This,fname) ) 
+#define IShellTreeEvents_OnTreeOpen(This,fname,vbIsDir)	\
+    ( (This)->lpVtbl -> OnTreeOpen(This,fname,vbIsDir) ) 
 
-#define IShellTreeEvents_OnContextMenu(This,fname)	\
-    ( (This)->lpVtbl -> OnContextMenu(This,fname) ) 
+#define IShellTreeEvents_OnContextMenu(This,fname,vbIsDir)	\
+    ( (This)->lpVtbl -> OnContextMenu(This,fname,vbIsDir) ) 
 
 #endif /* COBJMACROS */
 
@@ -2253,13 +2271,16 @@ EXTERN_C const IID IID_IShellListEvents;
     {
     public:
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnListSelection( 
-            /* [in] */ BSTR fname) = 0;
+            /* [in] */ BSTR fname,
+            /* [in] */ VARIANT_BOOL vbIsDir) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnListDblClick( 
-            /* [in] */ BSTR fname) = 0;
+            /* [in] */ BSTR fname,
+            /* [in] */ VARIANT_BOOL vbIsDir) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnListOpen( 
-            /* [in] */ BSTR fname) = 0;
+            /* [in] */ BSTR fname,
+            /* [in] */ VARIANT_BOOL vbIsDir) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnDirChanged( 
             /* [in] */ BSTR dir) = 0;
@@ -2315,15 +2336,18 @@ EXTERN_C const IID IID_IShellListEvents;
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnListSelection )( 
             IShellListEvents * This,
-            /* [in] */ BSTR fname);
+            /* [in] */ BSTR fname,
+            /* [in] */ VARIANT_BOOL vbIsDir);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnListDblClick )( 
             IShellListEvents * This,
-            /* [in] */ BSTR fname);
+            /* [in] */ BSTR fname,
+            /* [in] */ VARIANT_BOOL vbIsDir);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnListOpen )( 
             IShellListEvents * This,
-            /* [in] */ BSTR fname);
+            /* [in] */ BSTR fname,
+            /* [in] */ VARIANT_BOOL vbIsDir);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnDirChanged )( 
             IShellListEvents * This,
@@ -2365,14 +2389,14 @@ EXTERN_C const IID IID_IShellListEvents;
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IShellListEvents_OnListSelection(This,fname)	\
-    ( (This)->lpVtbl -> OnListSelection(This,fname) ) 
+#define IShellListEvents_OnListSelection(This,fname,vbIsDir)	\
+    ( (This)->lpVtbl -> OnListSelection(This,fname,vbIsDir) ) 
 
-#define IShellListEvents_OnListDblClick(This,fname)	\
-    ( (This)->lpVtbl -> OnListDblClick(This,fname) ) 
+#define IShellListEvents_OnListDblClick(This,fname,vbIsDir)	\
+    ( (This)->lpVtbl -> OnListDblClick(This,fname,vbIsDir) ) 
 
-#define IShellListEvents_OnListOpen(This,fname)	\
-    ( (This)->lpVtbl -> OnListOpen(This,fname) ) 
+#define IShellListEvents_OnListOpen(This,fname,vbIsDir)	\
+    ( (This)->lpVtbl -> OnListOpen(This,fname,vbIsDir) ) 
 
 #define IShellListEvents_OnDirChanged(This,dir)	\
     ( (This)->lpVtbl -> OnDirChanged(This,dir) ) 
