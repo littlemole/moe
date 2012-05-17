@@ -131,14 +131,12 @@ public:
     {
 		mol::App().lock();
 		::InterlockedIncrement((volatile long*)&molrefcount_);
-		ODBGS1("AddRef",molrefcount_);
 		return molrefcount_;
     }
 
     ULONG   virtual __stdcall Release()
     {		
 		::InterlockedDecrement((volatile long*)&molrefcount_);
-		ODBGS1("AddRef",molrefcount_);
 		mol::App().unlock();
         return 1;
     }

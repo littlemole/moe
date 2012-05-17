@@ -41,14 +41,14 @@ BOOL __stdcall  Dll::Main( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserv
 {
 	if ( fdwReason == DLL_PROCESS_ATTACH )
 	{
-		ODBGS( "ATTACH DLL" );	
+		//ODBGS( "ATTACH DLL" );	
 		hInstance_ = hinstDLL;
 
 	}
 #ifdef _DEBUG
 	if ( fdwReason == DLL_PROCESS_DETACH )
 	{
-		ODBGS( "DETACH DLL" );	
+		//ODBGS( "DETACH DLL" );	
 	}
 #endif
 	return TRUE;
@@ -70,7 +70,7 @@ HRESULT __stdcall  Dll::CanUnloadNow()
 {
 	if ( locked() )
 		return S_FALSE;
-	ODBGS( "UNLOAD DLL" );	
+	//ODBGS( "UNLOAD DLL" );	
 	return S_OK;
 }
 

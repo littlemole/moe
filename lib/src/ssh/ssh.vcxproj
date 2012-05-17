@@ -19,6 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="credmgr.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="creds.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="mem.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="scp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">NotUsing</PrecompiledHeader>
@@ -34,12 +43,19 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="str.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\ssh\credmgr.h" />
+    <ClInclude Include="..\..\include\ssh\creds.h" />
+    <ClInclude Include="..\..\include\ssh\mem.h" />
     <ClInclude Include="..\..\include\ssh\scp.h" />
     <ClInclude Include="..\..\include\ssh\scpDataTransferObj.h" />
     <ClInclude Include="..\..\include\ssh\sftp.h" />
     <ClInclude Include="..\..\include\ssh\ssh.h" />
+    <ClInclude Include="..\..\include\ssh\str.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3D119E49-04E7-4653-ACFC-08CEBF8CEDC1}</ProjectGuid>

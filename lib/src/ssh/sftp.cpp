@@ -326,7 +326,7 @@ std::vector<std::wstring> Session::files( const std::wstring& dir )
 	sftp_attributes attributes;
 	sftp_dir remote_dir = sftp_opendir(sftp_,mol::toUTF8(dir).c_str());
 	if ( !remote_dir)
-		return v;
+		throw mol::ssh::Ex(0,"directory not found");
 
 	while ((attributes = sftp_readdir(sftp_, remote_dir)) != NULL)
 	{
@@ -358,7 +358,7 @@ std::vector<RemoteFile> Session::list( const std::wstring& dir )
 	sftp_attributes attributes;
 	sftp_dir remote_dir = sftp_opendir(sftp_,mol::toUTF8(dir).c_str());
 	if ( !remote_dir)
-		return v;
+		throw mol::ssh::Ex(0,"directory not found");
 
 	while ((attributes = sftp_readdir(sftp_, remote_dir)) != NULL)
 	{

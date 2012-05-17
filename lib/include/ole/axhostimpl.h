@@ -37,7 +37,7 @@ public:
 
     ~AxFrameImpl()
 	{
-		ODBGS("AxFrameImpl::~AxFrameImpl()");
+		//ODBGS("AxFrameImpl::~AxFrameImpl()");
 	}
 
 	virtual void dispose() {}
@@ -143,12 +143,12 @@ public:
 	void init(C* wnd)
 	{
 		wnd_  = wnd;
-		ODBGS("AxClientSiteImpl::AxClientSiteImpl");
+		//ODBGS("AxClientSiteImpl::AxClientSiteImpl");
 	}
 
     virtual ~AxClientSiteImpl()
 	{
-		ODBGS("AxClientSiteImpl::~AxClientSiteImpl()");
+		//ODBGS("AxClientSiteImpl::~AxClientSiteImpl()");
 	}
 
 	virtual void dispose() {}

@@ -16,7 +16,8 @@ class DropTargetBase  :
 	public interfaces< DropTargetBase, implements<IDropTarget> >
 {
 public:
-    virtual ~DropTargetBase() { ODBGS("~DropTargetImpl"); }
+    virtual ~DropTargetBase() 
+	{  }
 
 	virtual void dispose() {}
 
@@ -40,7 +41,7 @@ class DropSrcBase :
 	public interfaces< DropSrcBase, implements< IDropSource> >
 {
 public:
-    virtual ~DropSrcBase() { ODBGS("~DropSourceImpl"); }
+    virtual ~DropSrcBase() {  }
 	
 	virtual void dispose() {}
 

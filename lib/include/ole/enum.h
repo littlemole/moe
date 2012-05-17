@@ -48,7 +48,7 @@ enum_XXX<I,T>::enum_XXX()
 template<class I, class T>
 enum_XXX<I,T>::~enum_XXX()
 {
-	ODBGS("EnumXXX destroyed");
+	//ODBGS("EnumXXX destroyed");
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -56,7 +56,7 @@ enum_XXX<I,T>::~enum_XXX()
 template<class I, class T>
 void enum_XXX<I,T>::add(T& fe)
 {
-	ODBGS("EnumXXX::add");
+	//ODBGS("EnumXXX::add");
 	LOCK(mutex_);
 	fe_.push_back(fe);
 	it_ = fe_.begin();
@@ -67,7 +67,7 @@ void enum_XXX<I,T>::add(T& fe)
 template<class I, class T>
 HRESULT __stdcall enum_XXX<I,T>::Next( ULONG celt, T* rgelt, ULONG * pceltFetched )
 {
-	ODBGS("EnumXXX::Next");
+	//ODBGS("EnumXXX::Next");
 	LOCK(mutex_);
 	if ( it_ == fe_.end() )
 	{
@@ -116,7 +116,7 @@ HRESULT __stdcall enum_XXX<I,T>::Next( ULONG celt, T* rgelt, ULONG * pceltFetche
 template<class I, class T>
 HRESULT __stdcall enum_XXX<I,T>::Skip( ULONG celt )
 {
-	ODBGS("EnumXXX::Skip");
+	//ODBGS("EnumXXX::Skip");
 	LOCK(mutex_);
 	ULONG u = 0;
 	for ( u; u < celt; u++ )
@@ -134,7 +134,7 @@ template<class I, class T>
 HRESULT __stdcall enum_XXX<I,T>::Reset(void)
 {
 	LOCK(mutex_);
-	ODBGS("EnumXXX::Reset");
+	//ODBGS("EnumXXX::Reset");
 	it_ = fe_.begin();
 	return S_OK;
 }
@@ -144,7 +144,7 @@ HRESULT __stdcall enum_XXX<I,T>::Reset(void)
 template<class I, class T>
 HRESULT __stdcall enum_XXX<I,T>::Clone( I ** ppenum )
 {
-	ODBGS("EnumXXX::Clone");
+	//ODBGS("EnumXXX::Clone");
 	LOCK(mutex_);
 	punk<com_obj<enum_XXX<I,T> > > i = new com_obj<enum_XXX<I,T> >;
 	for ( unsigned int x = 0; x < fe_.size(); x++ )
@@ -201,7 +201,7 @@ unknown_enum<I,T>::~unknown_enum()
 	{
 		interfaces_[x]->Release();
 	}
-	ODBGS("UnknownEnum destroyed");
+	//ODBGS("UnknownEnum destroyed");
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -209,7 +209,7 @@ unknown_enum<I,T>::~unknown_enum()
 template<class I, class T>
 void unknown_enum<I,T>::add(T* t)
 {
-	ODBGS("UnknownEnum::add");
+	//ODBGS("UnknownEnum::add");
 	LOCK(mutex_);
 	t->AddRef();
 	interfaces_.push_back(t);
@@ -221,7 +221,7 @@ void unknown_enum<I,T>::add(T* t)
 template<class I, class T>
 HRESULT __stdcall unknown_enum<I,T>::Next( ULONG celt, T** rgelt, ULONG * pceltFetched )
 {
-	ODBGS("EnumXXX::Next");
+	//ODBGS("EnumXXX::Next");
 	LOCK(mutex_);
 	if ( it_ == interfaces_.end() )
 	{
@@ -272,7 +272,7 @@ HRESULT __stdcall unknown_enum<I,T>::Next( ULONG celt, T** rgelt, ULONG * pceltF
 template<class I, class T>
 HRESULT __stdcall unknown_enum<I,T>::Skip( ULONG celt )
 {
-	ODBGS("EnumXXX::Skip");
+	//ODBGS("EnumXXX::Skip");
 	LOCK(mutex_);
 	ULONG u = 0;
 	for ( u; u < celt; u++ )
@@ -290,7 +290,7 @@ template<class I, class T>
 HRESULT __stdcall unknown_enum<I,T>::Reset(void)
 {
 	LOCK(mutex_);
-	ODBGS("EnumXXX::Reset");
+	//ODBGS("EnumXXX::Reset");
 	it_ = interfaces_.begin();
 	return S_OK;
 }
@@ -300,7 +300,7 @@ HRESULT __stdcall unknown_enum<I,T>::Reset(void)
 template<class I, class T>
 HRESULT __stdcall unknown_enum<I,T>::Clone( I ** ppenum )
 {
-	ODBGS("EnumXXX::Clone");
+	//ODBGS("EnumXXX::Clone");
 	LOCK(mutex_);
 	punk<com_obj<unknown_enum<I,T> > > i = new com_obj<unknown_enum<I,T> >;
 	for ( unsigned int x = 0; x < interfaces_.size(); x++ )

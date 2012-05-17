@@ -42,7 +42,7 @@ HRESULT SimpleFolderBrowser(HWND hwnd, mol::string& directory)
 	if ( hr != S_OK )
 		return hr;
 
-	hr = fd->SetOptions(dwOptions | mol::v7::FOS_FORCEFILESYSTEM | mol::v7::FOS_PICKFOLDERS |  mol::v7::FOS_ALLOWMULTISELECT);
+	hr = fd->SetOptions(dwOptions | mol::v7::FOS_ALLNONSTORAGEITEMS |mol::v7::FOS_NOVALIDATE /*| mol::v7::FOS_FORCEFILESYSTEM*/ | mol::v7::FOS_PICKFOLDERS |  mol::v7::FOS_ALLOWMULTISELECT);
 	if ( hr != S_OK )
 		return hr;
 

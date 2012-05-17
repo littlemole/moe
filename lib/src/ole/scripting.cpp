@@ -9,7 +9,6 @@ namespace ole {
 
 HRESULT ActiveScript::init(const mol::string& engine)
 {
-	ODBGS("init ActiveScript");
 	ODBGS(engine);
 
 	engine_ = engine;
@@ -21,7 +20,6 @@ HRESULT ActiveScript::init(const mol::string& engine)
 	hr = getScriptEngine( engine_,&activeScript );
 	if ( hr != S_OK || !activeScript )
 	{
-		ODBGS("getEngine failed!");
 		return hr;
 	}
 
@@ -29,7 +27,6 @@ HRESULT ActiveScript::init(const mol::string& engine)
 	hr = activeScript.queryInterface(&asp_);
 	if ( hr != S_OK )
 	{
-		ODBGS("ActiveScriptParse failed!");
 		return hr;
 	}
 
@@ -73,15 +70,12 @@ HRESULT ActiveScript::addNamedObject(const mol::string& obj, int state)
 
 HRESULT ActiveScript::runScript(const mol::string& script, int flag)
 {
-	ODBGS("run script");
-
 	::VariantClear(&varResult_);
 	::ZeroMemory(&ei_, sizeof(ei_));
 
 	HRESULT hr;
 	if ( asp_ )
 	{
-		ODBGS("parse script");
 		hr = asp_->ParseScriptText( mol::towstring(script).c_str(),
 									  NULL,0,0,0,0,flag,//SCRIPTTEXT_ISEXPRESSION|SCRIPTTEXT_ISVISIBLE ,
 									  &varResult_,&ei_);
@@ -91,8 +85,6 @@ HRESULT ActiveScript::runScript(const mol::string& script, int flag)
 			return hr;
 		}
 	}
-	ODBGS("parse script failed");
-
 	return E_FAIL;
 }
 
@@ -149,24 +141,20 @@ EXCEPINFO& ActiveScript::errorInfo()
    *ppas = 0;
    CLSID clsid;
 
-   ODBGS("getScriptEngine");
    ODBGS(engine);
    
    HRESULT hr = CLSIDFromProgID(mol::towstring(engine).c_str(), &clsid);
    if (hr != S_OK || ::IsEqualGUID(clsid,CLSID_NULL) )
    {
-	   ODBGS("CLSIDFromProgID for engine failed ");
 	   return hr;
    }
 
    mol::string s = mol::stringFromCLSID(clsid);
    ODBGS(s);
    
-   ODBGS("create engine");
    hr = CoCreateInstance(clsid, 0, CLSCTX_ALL,IID_IActiveScript,(void**)ppas);
    if ( hr != S_OK )
    {
-		ODBGS("CoCreateInstance for engine failed ");
    }
    
    return hr;
@@ -212,7 +200,6 @@ ScriptHost::~ScriptHost()
 		debugApp_->DisconnectDebugger();
 
 	close();
-	ODBGS("ScriptHost died");
 }
 
 HRESULT ScriptHost::close()
@@ -232,21 +219,18 @@ HRESULT ScriptHost::init(const mol::string& engine)
 	hr = activeScript_.init(engine);
 	if ( hr != S_OK )
 	{
-		ODBGS("init activescript failed");
 		return hr;
 	}
 
 	hr = activeScript_.setHost((IActiveScriptSite*)this);
 	if ( hr != S_OK )
 	{
-		ODBGS("set host failed");
 		return hr;
 	}
 
 	hr = activeScript_.setState(SCRIPTSTATE_INITIALIZED);//SCRIPTSTATE_STARTED);//SCRIPTSTATE_INITIALIZED);
 	if ( hr != S_OK )
 	{
-		ODBGS("setstate failed");
 		return hr;
 	}
 
@@ -266,7 +250,6 @@ HRESULT ScriptHost::exec()
 
 HRESULT ScriptHost::addNamedObject( IUnknown* punk, const mol::string& obj, int state )
 {
-	ODBGS("addNamedObject");
 	punk->AddRef();
 	if ( objectMap_.count(obj) > 0 ) 
 	{
@@ -277,10 +260,8 @@ HRESULT ScriptHost::addNamedObject( IUnknown* punk, const mol::string& obj, int 
 	HRESULT hr = activeScript_.addNamedObject(obj,state);
 	if ( hr == S_OK )
 	{
-		ODBGS("addNamedObject success");
 		return S_OK;
 	}
-	ODBGS("addNamedObject failed");
 	objectMap_.erase(obj);
 	punk->Release();
 	return hr;
@@ -309,20 +290,17 @@ HRESULT ScriptHost::addScriptlet( mol::string& name,
 
 HRESULT ScriptHost::runScript(const mol::string& script, int flag)
 {
-	ODBGS("runScript");
 	debug_ = false;
 	HRESULT hr;
 
 	if ( pdm_ )
 	{
-		ODBGS("got PDM");
 		hr = pdm_->CreateDebugDocumentHelper(NULL, &debugDocHelper_);
 		if ( hr == S_OK && pdm_)
 		{
 			hr = debugDocHelper_->Init(debugApp_, L"script", L"moe script", TEXT_DOC_ATTR_READONLY);
 			if ( hr == S_OK &&debugDocHelper_ )
 			{
-				ODBGS("got debugdochelper");
 				hr = debugDocHelper_->Attach(NULL);	
 				if ( hr == S_OK )
 				{
@@ -331,7 +309,6 @@ HRESULT ScriptHost::runScript(const mol::string& script, int flag)
 #else
 					hr = debugDocHelper_->AddDBCSText(script.c_str());
 #endif
-					ODBGS("debugdochelper attached");
 					if ( hr == S_OK )
 					{
 
@@ -508,7 +485,6 @@ HRESULT  __stdcall ScriptHost::OnScriptError( IActiveScriptError *pscripterror)
 
 HRESULT  __stdcall ScriptHost::OnEnterScript( void)
 {
-	ODBGS("enter script");
 	((IActiveScriptSite*)this)->AddRef();
 
 	if ( debug_  && debugApp_)
@@ -519,7 +495,6 @@ HRESULT  __stdcall ScriptHost::OnEnterScript( void)
 
 HRESULT  __stdcall ScriptHost::OnLeaveScript( void)
 {
-	ODBGS("leave script");
 	if ( debugDocHelper_ )
 		debugDocHelper_->Detach();
 

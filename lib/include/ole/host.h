@@ -254,7 +254,7 @@ public:
 
     ~AxClientWnd()
 	{
-		ODBGS("AxClientWnd died :o");
+		//ODBGS("AxClientWnd died :o");
 		delete dummyFrame_;
 	}
 
@@ -329,7 +329,7 @@ protected:
 
 	LRESULT OnLayout( UINT message, WPARAM wParam, LPARAM lParam)
 	{
-		ODBGS("AxClient OnLayout");
+		//ODBGS("AxClient OnLayout");
 		getClientRect(clientRect_);
 		doLayout();
 		return 0;

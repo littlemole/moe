@@ -9,6 +9,8 @@
 #include "ole/enum.h"
 #include "ole/Stream.h"
 #include "tcp/sockets.h"
+#include "thread/events.h"
+
 #include <ShlObj.h>
 
 struct ssh_session_struct;
@@ -18,6 +20,159 @@ struct ssh_scp_struct;
 
 namespace mol {
 namespace scp {
+
+
+UINT cfstr_filecontents();
+UINT cfstr_filedescriptor();
+UINT cfstr_isSShData();
+
+struct FileDescriptor : public FILEDESCRIPTOR
+{
+	void set(const mol::string& fn, UINT attr, UINT sizeLow , UINT sizeHigh = 0, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
+	{
+		::ZeroMemory((FILEDESCRIPTOR*)this,sizeof(FILEDESCRIPTOR));
+		wcsncpy(cFileName,fn.c_str(), fn.size()+1);
+		dwFlags = flags;
+		dwFileAttributes = attr;
+
+		nFileSizeHigh = sizeHigh;
+		nFileSizeLow = sizeLow;
+	}
+
+	void set(const mol::string& fn, UINT attr, int size = 0, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
+	{
+		set( fn, attr, size, 0, flags );
+	}
+
+	void setDirectory(const mol::string& fn, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
+	{
+		set(fn,FILE_ATTRIBUTE_DIRECTORY,0,flags);
+	}
+
+	void setFile(const mol::string& fn, int sizeLow, int sizeHigh, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
+	{
+		set(fn,FILE_ATTRIBUTE_NORMAL,sizeLow,sizeHigh,flags); 
+	}
+
+	void setFile(const mol::string& fn, int size, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
+	{
+		set(fn,FILE_ATTRIBUTE_NORMAL,size,flags); 
+	}
+
+	FileDescriptor& operator=(const FileDescriptor& rhs )
+	{
+		if ( this == &rhs )
+		{
+			return *this;
+		}
+		::ZeroMemory((FILEDESCRIPTOR*)this,sizeof(FILEDESCRIPTOR));
+		wcscpy(this->cFileName,rhs.cFileName);
+		this->dwFileAttributes = rhs.dwFileAttributes;
+		this->dwFlags = rhs.dwFlags;
+		this->nFileSizeHigh = rhs.nFileSizeHigh;
+		this->nFileSizeLow = rhs.nFileSizeLow;
+		return *this;
+	}
+};
+
+
+struct FileGroupDescriptor : public FILEGROUPDESCRIPTOR
+{
+	UINT size()
+	{
+		return cItems;
+	}
+
+	FILEDESCRIPTOR* item(size_t index)
+	{
+		if ( (UINT)index > cItems-1 )
+			return 0;
+
+		return (FILEDESCRIPTOR*)(&(this->fgd[index]));
+	}
+
+	FILEDESCRIPTOR* operator[](size_t index)
+	{
+		return item(index);
+	}
+
+	static size_t size(size_t n) 
+	{
+		size_t s = sizeof(FILEGROUPDESCRIPTOR)+sizeof(FILEDESCRIPTOR)*(n-1);
+		return s;
+	}
+
+	static FileGroupDescriptor* alloc(size_t n)
+	{
+		size_t size = FileGroupDescriptor::size(n);
+		FILEGROUPDESCRIPTOR* fgd = (FILEGROUPDESCRIPTOR*)malloc(size);
+		fgd->cItems = (UINT)n;
+		return (FileGroupDescriptor*)fgd;
+	}
+
+	static FileGroupDescriptor* fromMedium(STGMEDIUM * pmedium)
+	{
+		if ( pmedium->tymed != TYMED_HGLOBAL)
+			return 0;
+
+		mol::global glob;
+		glob.attach(pmedium->hGlobal);
+
+		FileGroupDescriptor* src = (FileGroupDescriptor*)glob.lock();
+
+		size_t size = src->size();
+
+		FileGroupDescriptor* dest = 0;
+		if ( size )
+		{
+			dest = FileGroupDescriptor::alloc(size);
+			memcpy(dest,src,size);
+		}
+		glob.unLock();		
+		glob.detach();
+
+		return dest;
+	}
+};
+
+class FGD
+{
+public:
+	FGD(size_t n)
+		: fgd_(FileGroupDescriptor::alloc(n))
+	{}
+
+	~FGD()
+	{
+		free(fgd_);
+	}
+
+	FileGroupDescriptor* operator->()
+	{
+		return fgd_;
+	}
+
+
+	FileGroupDescriptor* operator*()
+	{
+		return fgd_;
+	}
+
+	void toMedium(STGMEDIUM * pmedium)
+	{
+		pmedium->tymed = TYMED_HGLOBAL;
+
+		mol::global glob( (void*)fgd_, fgd_->size(),GMEM_MOVEABLE );
+		pmedium->hGlobal = (HGLOBAL)glob;
+		glob.detach();
+	}
+
+private:
+
+	FileGroupDescriptor* fgd_;
+};
+
+
 
 
 class scpStream : 
@@ -81,8 +236,15 @@ public:
 	DelayedDataTransferObj();	
     virtual ~DelayedDataTransferObj();
 
-	bool init (const mol::string& host, int port, mol::ssh::CredentialCallback* cb, BOOL cancel = false);
+	bool init (const mol::string& host, int port, mol::ssh::CredentialCallback* cb, BOOL cut = false);
 	bool add (const mol::string& remotefile,unsigned long long size,bool isdir);
+
+	template<class E>
+	void connect( E* e, IUnknown* unk )
+	{
+		holder_ = unk;
+		dropEffectEvent_ += e;
+	}
 
 	HRESULT virtual __stdcall GetData( FORMATETC * pFormatetc, STGMEDIUM * pmedium );
 	HRESULT virtual __stdcall QueryGetData( FORMATETC * pFormatetc );
@@ -115,19 +277,26 @@ protected:
 
 	mol::ssh::CredentialCallback* cb_;
 
-	UINT cf_filecontents_;
-	UINT cf_filedescriptor_;
+	//UINT cf_filecontents_;
+	//UINT cf_filedescriptor_;
 
 	mol::format_etc_dropeffect	feDe_;
+	mol::format_etc_pref_dropeffect		fepDe_;
 
-	std::vector<FILEDESCRIPTOR*> fds_;
+	std::vector<FileDescriptor*> fds_;
+	std::vector<std::wstring> files_;
+	//std::vector<FILEDESCRIPTOR*> fds_;
 
 	mol::ssh::Session ssh_;
 	mol::sftp::Session sftp_;
 
 	BOOL asyncSupported_;
 	BOOL asyncInProgress_;
-	BOOL cancel_;
+	BOOL cut_;
+
+	mol::events::Event<IDataObject*>			dropEffectEvent_;
+
+	mol::punk<IUnknown> holder_;
 };
 
 

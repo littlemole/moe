@@ -44,11 +44,11 @@ HRESULT __stdcall AxFrameBase::IOleInPlaceFrame_SetActiveObject( IOleInPlaceActi
 	activeObject = pActiveObject;
 	if ( activeObject )
 	{
-		ODBGS1("IOleInPlaceFrame_SetActiveObject",(int)pActiveObject);
+		//ODBGS1("IOleInPlaceFrame_SetActiveObject",(int)pActiveObject);
 	}
 	else
 	{
-		ODBGS1("IOleInPlaceFrame_SetActiveObject",(int)pActiveObject);
+		//ODBGS1("IOleInPlaceFrame_SetActiveObject",(int)pActiveObject);
 		//borderwidths_ = mol::Rect(0,0,0,0);
 	}
 	return S_OK;
@@ -123,7 +123,7 @@ OleContainerBase::OleContainerBase()
 
 OleContainerBase::~OleContainerBase()
 {
-	ODBGS("OleContainerBase died ;)");
+	//ODBGS("OleContainerBase died ;)");
 }
 
 	//////////////////////////////////////////////////////////
@@ -209,7 +209,7 @@ HRESULT __stdcall OleContainerBase::handleSetBorderSpace( LPCBORDERWIDTHS pborde
 	RECT& borderwidths = this->getBorderWidths();
     if (pborderwidths )
 	{			
-		ODBGS1(" SetBorderSpace - new top: ",pborderwidths->top);
+		//ODBGS1(" SetBorderSpace - new top: ",pborderwidths->top);
 		if ( borderwidths.left == pborderwidths->left && borderwidths.top == pborderwidths->top &&
 			borderwidths.right == pborderwidths->right && borderwidths.bottom == pborderwidths->bottom )
 		return S_OK;
@@ -218,21 +218,21 @@ HRESULT __stdcall OleContainerBase::handleSetBorderSpace( LPCBORDERWIDTHS pborde
 		if ( borderwidths.left == 0 && borderwidths.top == 0 &&
 			borderwidths.right == 0 && borderwidths.bottom == 0 )
 		{
-			ODBGS("IOleInPlaceFrame_SetBorderSpace ZERO");
+			//ODBGS("IOleInPlaceFrame_SetBorderSpace ZERO");
 		}
 		else
 		{
-			ODBGS("IOleInPlaceFrame_SetBorderSpace");
+			//ODBGS("IOleInPlaceFrame_SetBorderSpace");
 		}
 
     }
 	else
 	{
-		ODBGS("IOleInPlaceFrame_SetBorderSpace ZERO");
+		//ODBGS("IOleInPlaceFrame_SetBorderSpace ZERO");
 		borderwidths = mol::Rect(0,0,0,0);
 	}
 	
-	ODBGS("<------IOleInPlaceFrame_SetBorderSpace END");
+	//ODBGS("<------IOleInPlaceFrame_SetBorderSpace END");
 	this->redrawOleContainer();
 
 	return S_OK;
@@ -433,7 +433,7 @@ LRESULT OleContainerBase::OleContainerWndProc( HWND hWnd, UINT message, WPARAM w
 		{
 			// end of sizing action
 			// re-negotiate toolspace and repaint everything
-			ODBGS("OleContainer::WM_EXITSIZEMOVE");
+			//ODBGS("OleContainer::WM_EXITSIZEMOVE");
 			mol::Rect clientRect = this->prepareClientRect();
 			if (activeObject)
 			{				
@@ -454,12 +454,12 @@ LRESULT OleContainerBase::OleContainerWndProc( HWND hWnd, UINT message, WPARAM w
 			//deactivation
 			if ( activeObject && !wParam)
 			{
-				ODBGS("OleContainer::WM_ACTIVATEAPP FALSE");					
+				//ODBGS("OleContainer::WM_ACTIVATEAPP FALSE");					
 				return 0;
 			}
 			if ( activeObject && wParam)
 			{
-				ODBGS("OleContainer::WM_ACTIVATEAPP TRUE");
+				//ODBGS("OleContainer::WM_ACTIVATEAPP TRUE");
 				return 0;
 			}
 			return 0;
@@ -481,7 +481,7 @@ LRESULT OleContainerBase::OleContainerWndProc( HWND hWnd, UINT message, WPARAM w
 
 LRESULT OleContainerBase::handleOnLayout( UINT message, WPARAM wParam, LPARAM lParam)
 {
-	ODBGS("OleContainer::OnLayout");
+	//ODBGS("OleContainer::OnLayout");
 
 	mol::LayoutMgr* layout = this->getLayoutMgr();
 	IUnknown* axFrameSite = this->getAxFrameSiteUnknown();
@@ -502,7 +502,7 @@ LRESULT OleContainerBase::handleOnLayout( UINT message, WPARAM wParam, LPARAM lP
 
 
 	handleDoLayout( clientRect );
-	ODBGS("<-------OleContainer::OnLayout END");
+	//ODBGS("<-------OleContainer::OnLayout END");
 	return 0;
 }
 
@@ -527,7 +527,7 @@ LRESULT OleContainerBase::handleDoLayout( mol::Rect r )
 	if ( layout )
 		layout->layout(r);
 
-	ODBGS("<------OleContainer::doLayout END");
+	//ODBGS("<------OleContainer::doLayout END");
 	return 0;
 }
 

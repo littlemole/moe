@@ -31,6 +31,10 @@
     <ClCompile Include="ssh.cpp" />
     <ClCompile Include="scp.cpp" />
     <ClCompile Include="sftp.cpp" />
+	<ClCompile Include="str.cpp" />
+	<ClCompile Include="mem.cpp" />
+	<ClCompile Include="creds.cpp" />
+	<ClCompile Include="credmgr.cpp" />
 	<ClCompile Include="scpDataTransferObj.cpp" />
   </ItemGroup>
 

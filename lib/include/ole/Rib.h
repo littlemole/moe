@@ -148,7 +148,6 @@ protected:
 
 	~Handler()
 	{
-		ODBGS("~Handler()");
 	}
 	
 	Handler(const Handler&)
@@ -156,7 +155,6 @@ protected:
 
 	void dispose() 
 	{
-		ODBGS("dispose Handler");
 	}
 
 private:
@@ -209,7 +207,6 @@ private:
 
 	~HandlerRegistry()
 	{
-		ODBGS("~HandlerRegistry()");
 	}
 
 	HandlerRegistry(const HandlerRegistry&)

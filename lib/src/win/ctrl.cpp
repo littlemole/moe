@@ -14,7 +14,7 @@ const mol::TCHAR static_class[]			= _T("Static");
 
 Ctrl::~Ctrl()
 {
-	ODBGS("~Ctrl");
+	//ODBGS("~Ctrl");
 }
 
 const mol::string& Ctrl::wndClassName() 

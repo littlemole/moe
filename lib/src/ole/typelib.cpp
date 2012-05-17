@@ -42,13 +42,13 @@ bool TypeLib::load(REFGUID libid,int major,int minor)
 {
 	release();  
 //	HRESULT hr;
-	ODBGS("try loading typelib via ::LoadRegTypeLib");
+	//ODBGS("try loading typelib via ::LoadRegTypeLib");
     HRESULT hr = ::LoadRegTypeLib(libid,major,minor,LOCALE_SYSTEM_DEFAULT,&interface_);
     if ( hr != S_OK )
     {
         //cry();
 
-		ODBGS("try loading typelib via HKCU");
+		//ODBGS("try loading typelib via HKCU");
 		mol::string lp;
 		try 
 		{
@@ -154,7 +154,6 @@ bool TypeLib::registerTypelib()
 			}
 			typeLibKey = typeLibsKey.create(typelib_guid);
 
-			ODBGS("created regkey");
 			mol::ostringstream oss;
 	//		oss << tl.getName() << _T(".") << coClassName;
 	//		version_independent_progid = oss.str();
@@ -168,8 +167,6 @@ bool TypeLib::registerTypelib()
 			mol::RegKey helpDir = tlbKey.create(_T("HELPDIR"));
 			mol::RegKey win32  = tlbKey.create(_T("win32"));
 			win32.set( mol::toString(ws) );
-
-			ODBGS("created subkeys");
 
 			mol::RegKey interfaces;
 			try
@@ -189,7 +186,6 @@ bool TypeLib::registerTypelib()
 				if ( ti.getAttr()->typekind != TKIND_INTERFACE && ti.getAttr()->typekind != TKIND_DISPATCH )
 					continue;
 
-				ODBGS("created interface");
 				ODBGS(stringFromCLSID(ti.getAttr()->guid).c_str());
 
 				mol::RegKey iface = interfaces.create(stringFromCLSID(ti.getAttr()->guid));
@@ -198,7 +194,6 @@ bool TypeLib::registerTypelib()
 				tl.set(typelib_guid);
 				mol::RegKey proxystub = iface.create(_T("ProxyStubClsid32"));
 				proxystub.set(_T("{00020424-0000-0000-C0000-000000000046}"));
-				ODBGS("subkeys set");
 			}
 		}
 		catch(...)

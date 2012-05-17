@@ -258,7 +258,7 @@ public:
 
 	virtual SimpleAxHost::~SimpleAxHost() 
 	{
-		ODBGS("~SimpleAxHost dies");
+		//ODBGS("~SimpleAxHost dies");
 	};
 
 	virtual void dispose() 

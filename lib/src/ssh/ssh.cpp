@@ -26,35 +26,6 @@ struct ssh_session_struct_helper {
 namespace mol {
 namespace ssh {
 
-bool operator<(const string& src, const string& compare)
-{
-	return strcmp(src.data(),compare.data()) < 0;
-}
-
-ssh::wstring utf82wstring( const char* in, const size_t size )
-{
-	int len = ::MultiByteToWideChar( CP_UTF8, 0, in, (int)size, 0, 0 );
-	wchar_t* buf = new wchar_t[len];
-	int r = ::MultiByteToWideChar( CP_UTF8, 0, in, (int)in, buf, len );
-	ssh::wstring out(buf,len);
-	::ZeroMemory((void*)buf,len*sizeof(wchar_t));
-	delete[] buf;
-	return out;
-}
-
-
-ssh::string wstring2utf8( const wchar_t* in, const size_t size)
-{
-	int len = ::WideCharToMultiByte( CP_UTF8, 0, in, (int)size, 0, 0,0,0 );
-	char* buf = new char[len];
-	int r = ::WideCharToMultiByte( CP_UTF8, 0, in,(int)size, buf, len,0,0 );
-	ssh::string out(buf,len);
-	::ZeroMemory((void*)buf,len);
-	delete[] buf;
-	return out;
-}
-
-
 Init::Init()
 {
 	cb_ = new ssh_threads_callbacks_struct;
@@ -533,8 +504,8 @@ bool Session::auth_kbdint()
 
 bool Session::is_connected()
 {
-	if ( is_error() )
-		return false;
+//	if ( is_error() )
+	//	return false;
 
 	return ssh_is_connected(session_) == 1;
 }

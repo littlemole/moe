@@ -12,7 +12,6 @@ ShellFolderWnd::ShellFolderWnd(void)
 
 ShellFolderWnd::~ShellFolderWnd(void)
 {
-	ODBGS("~ShellFolderWnd");
 }
 
 void ShellFolderWnd::dispose()
@@ -25,7 +24,7 @@ void ShellFolderWnd::dispose()
 		HRESULT hr = sv_->DestroyViewWindow();
 		sv_.release();
 	}
-	ODBGS("ShellFolderWnd::dispose()");
+	
 }
 
 LRESULT ShellFolderWnd::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -47,9 +46,6 @@ LRESULT ShellFolderWnd::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 		// get new width and height
 		clientRect_.right  = LOWORD (lParam) ;
 		clientRect_.bottom = HIWORD (lParam) ;
-
-		ODBGS1("sfw right:",clientRect_.right);
-		ODBGS1("sfw bottom:",clientRect_.bottom);
 
 		//::MoveWindow( viewWnd_,clientRect_.left, clientRect_.top, clientRect_.right, clientRect_.bottom, TRUE);	
 		::SetWindowPos( viewWnd_, NULL, 0,0, clientRect_.right, clientRect_.bottom,SWP_NOZORDER|SWP_DRAWFRAME|SWP_FRAMECHANGED|SWP_NOACTIVATE|SWP_NOOWNERZORDER|SWP_NOMOVE|SWP_NOCOPYBITS);
@@ -397,8 +393,7 @@ HRESULT __stdcall ShellFolderWnd::TranslateAcceleratorSB( MSG *pmsg,WORD wID)
 
 HRESULT __stdcall ShellFolderWnd::BrowseObject( PCUIDLIST_RELATIVE pidl,UINT wFlags)
 {
-	mol::string s =	mol::io::desktop().getDisplayNameOf((LPITEMIDLIST)pidl);
-	ODBGS(s);
+	//mol::string s =	mol::io::desktop().getDisplayNameOf((LPITEMIDLIST)pidl);
 
 	return S_OK;
 }
@@ -448,7 +443,7 @@ HRESULT  ShellFolderWnd::QueryService( REFGUID guidService, REFIID riid, void **
 	}
 	if ( ::IsEqualIID( riid, IID_IContextMenuSite ) )
 	{
-		ODBGS("ASKED FOR IID_IContextMenuSite");
+		//ODBGS("ASKED FOR IID_IContextMenuSite");
 	}
 	
 	return E_NOINTERFACE;
@@ -475,7 +470,7 @@ HRESULT __stdcall ShellFolderWnd::OnDefaultCommand( IShellView *ppshv)
 		std::vector<mol::string> v = mol::vectorFromDataObject(dao);
 		for ( size_t i = 0; i < v.size(); i++)
 		{
-			ODBGS(v[i].c_str());
+			//ODBGS(v[i].c_str());
 		}
 		if ( !v.empty() )
 		{

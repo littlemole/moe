@@ -616,7 +616,6 @@ PropertySet::PropertySet()
 
 PropertySet::~PropertySet()
 {
-	ODBGS("~PropertySet()");
 }
 
 void PropertySet::InitializeCommandProperties(int categoryId, int commandId, UI_COMMANDTYPE commandType)
@@ -707,7 +706,6 @@ HandlerBase::HandlerBase()
 
 HandlerBase::~HandlerBase()
 {
-	ODBGS("~HandlerBase()");
 }
 
 void HandlerBase::callback(int id)
@@ -1130,7 +1128,6 @@ void HandlerRegistry::dispose()
 		(*it).second->Release();
 	}
 	registry_.clear();
-	ODBGS("HandlerRegistry::dispose()");
 }
 
 /////////////////////////////////////////////////////
@@ -1194,7 +1191,6 @@ Ribbon::Ribbon()
 
 Ribbon::~Ribbon() 
 {
-	ODBGS("~Ribbon()");
 }
 
 
@@ -1233,13 +1229,11 @@ HRESULT __stdcall   Ribbon::OnDestroyUICommand(UINT32 commandId, UI_COMMANDTYPE 
 
 void Ribbon::dispose()
 {
-	ODBGS("dispose Ribbon");
 }
 
 
 bool Ribbon::tearDown()
 {
-	ODBGS("Ribbon::tearDown()");
 
 	if ( !ribbon )
 		return false;
@@ -1396,7 +1390,6 @@ bool Ribbon::show(HWND hwnd)
 	if ( ribbon )
 		return false;
 
-	ODBGS("try initialize Ribbon");
 	wnd_ = hwnd;
 
     HRESULT hr = E_FAIL;

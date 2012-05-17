@@ -30,7 +30,7 @@ void PropPage::create( mol::PropSheet* ps, const mol::string& tab, int id, int f
 
 PropPage::~PropPage()
 {
-	ODBGS("~PropPage");
+	//ODBGS("~PropPage");
 }
 
 void PropPage::init()

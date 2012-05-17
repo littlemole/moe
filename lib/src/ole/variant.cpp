@@ -625,7 +625,7 @@ enum_variant::~enum_variant()
 
 void enum_variant::add(VARIANT& var)
 {
-	ODBGS("Enumvar::add");
+	//ODBGS("Enumvar::add");
 	LOCK(mutex_);
 	VARIANT v;
 	::VariantInit(&v);
@@ -638,7 +638,7 @@ void enum_variant::add(VARIANT& var)
 
 HRESULT __stdcall enum_variant::Next( ULONG celt, VARIANT* rgelt, ULONG * pceltFetched )
 {
-	ODBGS("EnumVar::Next");
+	//ODBGS("EnumVar::Next");
 	LOCK(mutex_);
 	if ( it_ == variants_.end() )
 	{
@@ -690,7 +690,7 @@ HRESULT __stdcall enum_variant::Next( ULONG celt, VARIANT* rgelt, ULONG * pceltF
 
 HRESULT __stdcall enum_variant::Skip( ULONG celt )
 {
-	ODBGS("EnumVariant::Skip");
+	//ODBGS("EnumVariant::Skip");
 	LOCK(mutex_);
 	ULONG u = 0;
 	for ( u; u < celt; u++ )
@@ -707,7 +707,7 @@ HRESULT __stdcall enum_variant::Skip( ULONG celt )
 HRESULT __stdcall enum_variant::Reset(void)
 {
 	LOCK(mutex_);
-	ODBGS("EnumVariant::Reset");
+	//ODBGS("EnumVariant::Reset");
 	it_ = variants_.begin();
 	return S_OK;
 }
@@ -716,7 +716,7 @@ HRESULT __stdcall enum_variant::Reset(void)
 
 HRESULT __stdcall enum_variant::Clone( IEnumVARIANT ** ppenum )
 {
-	ODBGS("EnumVariant::Clone");
+	//ODBGS("EnumVariant::Clone");
 	LOCK(mutex_);
 	punk<com_obj<enum_variant> > i = new com_obj<enum_variant>;
 	for ( unsigned int x = 0; x < variants_.size(); x++ )

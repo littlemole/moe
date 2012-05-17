@@ -47,35 +47,26 @@ protected:
 #define DLL_COCLASS_EXPORTS(Dll)																		\
 EXTERN_C BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)					\
 {																										\
-	ODBGS( #Dll );																						\
 	return mol::singleton<Dll>().Main(hinstDLL,fdwReason,lpvReserved );									\
 }																										\
 																										\
 EXTERN_C HRESULT STDAPICALLTYPE DllGetClassObject( const CLSID & rclsid, const IID & riid, void ** ppv) \
 {																										\
-	ODBGS( #Dll );																						\
-	ODBGS( "DllGetClassObject" );																		\
 	return mol::singleton<Dll>().GetClassObject(rclsid,riid,ppv);										\
 }																										\
 																										\
 EXTERN_C HRESULT __stdcall DllRegisterServer(void)														\
 {																										\
-	ODBGS( #Dll );																						\
-	ODBGS( "DllRegisterServer" );																		\
 	return mol::singleton<Dll>().RegisterServer();														\
 }																										\
 																										\
 EXTERN_C HRESULT __stdcall DllUnregisterServer(void)													\
 {																										\
-	ODBGS( #Dll );																						\
-	ODBGS( "DllUnregisterServer" );																		\
 	return mol::singleton<Dll>().UnregisterServer();													\
 }																										\
 																										\
 EXTERN_C HRESULT __stdcall DllCanUnloadNow(void)														\
 {																										\
-	ODBGS( #Dll );																						\
-	ODBGS( "DllCanUnloadNow" );																			\
 	return mol::singleton<Dll>().CanUnloadNow();														\
 }																										\
 

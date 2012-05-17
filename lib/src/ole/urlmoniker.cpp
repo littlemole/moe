@@ -143,7 +143,7 @@ HttpUrl::HttpUrl(const mol::string& loc, const mol::string& p, const mol::string
 
 HttpUrl::~HttpUrl()
 {
-    ODBGS("exitus");
+    //ODBGS("exitus");
 }
 
 HRESULT __stdcall  HttpUrl::OnDataAvailable( DWORD grfBSCF,DWORD dwSize, FORMATETC *pformatetc,STGMEDIUM *pstgmed)

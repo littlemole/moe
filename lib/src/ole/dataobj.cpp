@@ -96,7 +96,7 @@ DataTransferObj::DataTransferObj(  HWND hwnd, int cmd ,bool cut)
 
 DataTransferObj::~DataTransferObj()
 {
-	ODBGS("destroyed DataTransferObj::~DataTransferObj");
+	//ODBGS("destroyed DataTransferObj::~DataTransferObj");
 	for ( std::map<CLIPFORMAT,HGLOBAL>::iterator it = v_.begin(); it != v_.end(); it++)
 	{
 		mol::global glob( (*it).second );
@@ -122,7 +122,7 @@ void DataTransferObj::addData( CLIPFORMAT format, void* v, size_t size, int inde
 
 HRESULT __stdcall DataTransferObj::GetData( FORMATETC * pFormatetc, STGMEDIUM * pmedium )
 {
-	ODBGS("DataTransferObj::GetData");
+	//ODBGS("DataTransferObj::GetData");
 	if ( !pFormatetc || !pmedium || ! pFormatetc->tymed == TYMED_HGLOBAL)
 		return E_INVALIDARG;
 
@@ -152,7 +152,7 @@ HRESULT __stdcall DataTransferObj::GetData( FORMATETC * pFormatetc, STGMEDIUM * 
 
 HRESULT __stdcall DataTransferObj::QueryGetData( FORMATETC * pFormatetc )
 {
-	ODBGS("DataTransferObj::QueryGetData");
+	//ODBGS("DataTransferObj::QueryGetData");
 
 	if ( !pFormatetc || !(pFormatetc->tymed == TYMED_HGLOBAL))
 		return E_INVALIDARG;
@@ -170,7 +170,7 @@ HRESULT __stdcall DataTransferObj::QueryGetData( FORMATETC * pFormatetc )
 
 HRESULT __stdcall DataTransferObj::EnumFormatEtc(  DWORD dwDirection,  IEnumFORMATETC ** ppenumFormatetc )
 {
-	ODBGS("DataTransferObj::EnumFormatEtc");
+	//ODBGS("DataTransferObj::EnumFormatEtc");
 
 	com_obj<enum_format>* efi = new com_obj<enum_format>;
 
@@ -188,7 +188,7 @@ HRESULT __stdcall DataTransferObj::EnumFormatEtc(  DWORD dwDirection,  IEnumFORM
 
 HRESULT __stdcall DataTransferObj::SetData(  FORMATETC * pFormatetc,  STGMEDIUM * pmedium,  BOOL fRelease )
 {
-	ODBGS("DataTransferObj::SetData");
+	//ODBGS("DataTransferObj::SetData");
 
 	if ( pFormatetc->cfFormat  == feDe_.format() )
 	{
@@ -261,20 +261,20 @@ ShellDataObj::ShellDataObj(  HWND hwnd, int cmd, std::vector<mol::string>& v ,bo
 
 ShellDataObj::~ShellDataObj()
 {
-	ODBGS("destroyed ShellDataObject::~DataObject");
+	//ODBGS("destroyed ShellDataObject::~DataObject");
 }
 
 //////////////////////////////////////////////////////////////////////////////////
 
 HRESULT __stdcall ShellDataObj::GetData( FORMATETC * pFormatetc, STGMEDIUM * pmedium )
 {
-	ODBGS("ShellDataObject::GetData");
+	//ODBGS("ShellDataObject::GetData");
 	if ( !pFormatetc || !pmedium )
 		return E_INVALIDARG;
 
 	if ( pFormatetc->cfFormat == fepDe_.format() )
 	{
-		ODBGS("ShellDataObject::GetData FormatEtcPrefDropEffect");
+		//ODBGS("ShellDataObject::GetData FormatEtcPrefDropEffect");
 
 		mol::global glob;
 		glob.alloc(sizeof(DWORD*),GHND | GMEM_SHARE);
@@ -293,7 +293,7 @@ HRESULT __stdcall ShellDataObj::GetData( FORMATETC * pFormatetc, STGMEDIUM * pme
 
 	if ( pFormatetc->cfFormat == CF_TEXT )
 	{
-		ODBGS("ShellDataObject::GetData CF_TEXT");
+		//ODBGS("ShellDataObject::GetData CF_TEXT");
 
 		std::string s;
 		for ( unsigned int i = 0; i < v_.size(); i++ )
@@ -317,7 +317,7 @@ HRESULT __stdcall ShellDataObj::GetData( FORMATETC * pFormatetc, STGMEDIUM * pme
 
 	if ( pFormatetc->cfFormat == CF_UNICODETEXT )
 	{
-		ODBGS("ShellDataObject::GetData CF_UNICODETEXT");
+		//ODBGS("ShellDataObject::GetData CF_UNICODETEXT");
 
 		std::wstring s;
 		for ( unsigned int i = 0; i < v_.size(); i++ )
@@ -340,7 +340,7 @@ HRESULT __stdcall ShellDataObj::GetData( FORMATETC * pFormatetc, STGMEDIUM * pme
 	}
 	if ( pFormatetc->cfFormat == CF_HDROP )
 	{
-		ODBGS("ShellDataObject::GetData CF_HDROP");
+		//ODBGS("ShellDataObject::GetData CF_HDROP");
 
 		std::string s;
 		int c = 0;
@@ -373,7 +373,7 @@ HRESULT __stdcall ShellDataObj::GetData( FORMATETC * pFormatetc, STGMEDIUM * pme
 
 HRESULT __stdcall ShellDataObj::QueryGetData( FORMATETC * pFormatetc )
 {
-	ODBGS("ShellDataObject::QueryGetData");
+	//ODBGS("ShellDataObject::QueryGetData");
 
 	if ( !pFormatetc )
 		return E_INVALIDARG;
@@ -396,7 +396,7 @@ HRESULT __stdcall ShellDataObj::QueryGetData( FORMATETC * pFormatetc )
 
 HRESULT __stdcall ShellDataObj::EnumFormatEtc(  DWORD dwDirection,  IEnumFORMATETC ** ppenumFormatetc )
 {
-	ODBGS("ShellDataObject::EnumFormatEtc");
+	//ODBGS("ShellDataObject::EnumFormatEtc");
 
 	com_obj<enum_format>* efi = new com_obj<enum_format>;
 
@@ -414,7 +414,7 @@ HRESULT __stdcall ShellDataObj::EnumFormatEtc(  DWORD dwDirection,  IEnumFORMATE
 
 HRESULT __stdcall ShellDataObj::SetData(  FORMATETC * pFormatetc,  STGMEDIUM * pmedium,  BOOL fRelease )
 {
-	ODBGS("ShellDataObject::SetData");
+	//ODBGS("ShellDataObject::SetData");
 
 	if ( pFormatetc->cfFormat  == feDe_.format() )
 	{

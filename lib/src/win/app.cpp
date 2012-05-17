@@ -50,20 +50,20 @@ void AppBase::Lock()
 {
 	LOCK(mutex_);
 	lockCount_++;
-	ODBGS1("app LOCK: ",lockCount_);
+	//ODBGS1("app LOCK: ",lockCount_);
 }
 
 void AppBase::UnLock()
 {
 	LOCK(mutex_);
 	lockCount_--;	
-	ODBGS1("app UNLOCK: ",lockCount_);
+	//ODBGS1("app UNLOCK: ",lockCount_);
 }
 
 bool AppBase::Locked()
 {
 	LOCK(mutex_);
-	ODBGS1("app count: ",lockCount_);
+	//ODBGS1("app count: ",lockCount_);
 	return lockCount_ > 0;
 }
 

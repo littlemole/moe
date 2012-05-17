@@ -25,7 +25,7 @@ struct format_etc_shellpidl : public format_etc
 
 std::vector<mol::string> vectorFromDataObject(IDataObject* ido)
 {
-	ODBGS("vectorFromDataObject");
+	//ODBGS("vectorFromDataObject");
 
 	format_etc_dropfile			fe;
 	STGMEDIUM					sm;
@@ -66,6 +66,9 @@ std::vector<mol::string> vectorFromDataObject(IDataObject* ido)
 				v.push_back(s3);
 			}
 		}
+		glob.unLock();
+		glob.detach();
+		::ReleaseStgMedium(&sm);
 		return v;
 	}
 
@@ -104,7 +107,7 @@ namespace ole {
 
 HRESULT  __stdcall DropTargetBase::DragEnter( IDataObject* , DWORD , POINTL , DWORD* pEffect )
 {
-    ODBGS("DropTargetImpl::DragEnter");
+    //ODBGS("DropTargetImpl::DragEnter");
     *pEffect = DROPEFFECT_COPY;
     return S_OK;
 }
@@ -122,7 +125,7 @@ HRESULT __stdcall DropTargetBase::DragOver( DWORD, POINTL, DWORD* pEffect )
 
 HRESULT  __stdcall DropTargetBase::DragLeave()
 {
-    ODBGS("DropTargetImpl::DragLeave");
+    //ODBGS("DropTargetImpl::DragLeave");
     return S_OK;
 }
 
@@ -130,7 +133,7 @@ HRESULT  __stdcall DropTargetBase::DragLeave()
 
 HRESULT __stdcall DropTargetBase::Drop( IDataObject* , DWORD , POINTL  , DWORD* )
 {
-	ODBGS("DropTargetImpl::Drop - empty base stub called ?");
+	//ODBGS("DropTargetImpl::Drop - empty base stub called ?");
     return S_OK;
 }
 

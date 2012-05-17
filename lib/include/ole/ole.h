@@ -32,7 +32,6 @@ public:
     ole_init () 
 	{ 
 		::OleInitialize(0);  
-		ODBGS("::OleInitialize(); ");
 	}
 
 
@@ -43,7 +42,6 @@ public:
 			(*it)->Release();
 		}
 		::OleUninitialize(); 
-		ODBGS("::OleUninitialize(); ");
 	}
 
 	static void addRef( IUnknown* p )

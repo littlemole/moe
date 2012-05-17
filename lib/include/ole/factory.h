@@ -100,7 +100,8 @@ template< class T,
 		  class P = ComCreatePolicy<
 						T,
 						AggregationPolicyNonAggregable<T> >, 
-		  const REGCLS cls = REGCLS_SINGLEUSE >
+		  const REGCLS cls = REGCLS_SINGLEUSE,
+		  class F = ClassFactory<T,P> >
 
 class CreatableObjectHolder 
 	: public CreatableObjectHolderBase
@@ -122,7 +123,7 @@ public:
 	{
 		if ( ::IsEqualIID(riid,IID_IClassFactory) || ::IsEqualIID(riid,IID_IUnknown)  )
 		{
-			typedef com_instance< ClassFactory<T,P> >  Factory;
+			typedef com_instance< F >  Factory;
 
 			punk<Factory> factory = new Factory;
 			return factory.queryInterface(riid,ppv);
@@ -135,7 +136,7 @@ public:
 	{
 		if ( ::IsEqualIID(riid,IID_IClassFactory) || ::IsEqualIID(riid,IID_IUnknown)  )
 		{
-			typedef com_obj< ClassFactory<T,P> >  Factory;
+			typedef com_obj< F >  Factory;
 
 			punk<Factory> factory = new Factory;
 			return factory.queryInterface(riid,ppv);
@@ -146,7 +147,7 @@ public:
 
 	virtual HRESULT __stdcall  RegisterClassObject( const IID & riid, void ** ppv)
 	{
-		typedef com_obj< ClassFactory<T,P> >  Factory;
+		typedef com_obj< F >  Factory;
 
 		punk<Factory> factory = new Factory;
 		return factory.queryInterface(riid,ppv);
@@ -381,7 +382,7 @@ public:
 	{
 		LOCK(mutex_);
 		lockCount_--;
-		ODBGS1("local_server::UnLock()",lockCount_);
+		//ODBGS1("local_server::UnLock()",lockCount_);
 		if ( lockCount_ == 0 )
 			::PostThreadMessage( guithread_, WM_QUIT, 0, 0 );
 //			::PostQuitMessage(0);
@@ -412,7 +413,7 @@ protected:
 	}
 };
 
-template<class T,class O,class P = mol::ole::ComCreatePolicy<O> >
+template<class T,class O,class P = mol::ole::ComCreatePolicy<O>, class F = mol::ole::ClassFactory<O,P> >
 class exports
 {
 public:
@@ -421,7 +422,8 @@ public:
 	 ((T*)this)->objects_.push_back(
 		 new mol::ole::CreatableObjectHolder< O,
 								        P,
-										O::RegCls
+										O::RegCls,
+										F
 			                          >				
 									  );
  }

@@ -240,7 +240,7 @@ public:
 
 	~OleContainer()
 	{
-		ODBGS("OleContainer died ;)");
+		//ODBGS("OleContainer died ;)");
 	}
 
 	//////////////////////////////////////////////////////////
@@ -329,12 +329,12 @@ public:
 
 	LRESULT OnSize( UINT msg, WPARAM wParam, LPARAM lParam)
 	{
-		ODBGS("OleContainer::OnSize");
+		//ODBGS("OleContainer::OnSize");
 
 		// track zero size (EXCEL!) - assume we are deactivating
 		if ( LOWORD (lParam) == 0 && HIWORD (lParam) == 0 )
 		{
-			ODBGS("<-------OleContainer::OnSize END");
+			//ODBGS("<-------OleContainer::OnSize END");
 			return 0;
 		}
 
@@ -342,8 +342,8 @@ public:
 		clientRect_ = mol::Rect(0,0,0,0);
 		clientRect_.right  = LOWORD (lParam) ;
 		clientRect_.bottom = HIWORD (lParam) ;		
-		ODBGS1("new width :",clientRect_.right);
-		ODBGS1("new height:",clientRect_.bottom);
+		//ODBGS1("new width :",clientRect_.right);
+		//ODBGS1("new height:",clientRect_.bottom);
 
 		return this->handleOnLayout( msg, wParam, lParam );
 	}
@@ -378,7 +378,7 @@ protected:
 	
 	LRESULT doLayout()
 	{
-		ODBGS1("OleContainer::doLayout ",(int)(activeObject.interface_));
+		//ODBGS1("OleContainer::doLayout ",(int)(activeObject.interface_));
 
 		RECT r = prepareClientRect();
 		return this->handleDoLayout( r );

@@ -812,7 +812,7 @@ void MdiFrame::redraw()
 	//::RedrawWindow( mdiClient(),NULL,NULL,RDW_FRAME|RDW_INVALIDATE|RDW_UPDATENOW|RDW_ALLCHILDREN|RDW_INTERNALPAINT);
 	::InvalidateRect(mdiClient(),0,TRUE);
 
-	ODBGS("MdiFrame::redraw()");
+	//ODBGS("MdiFrame::redraw()");
 	for ( int i = 0; i < count(); i++ )
 	{
 		::RedrawWindow(childAt(i),0,0,RDW_FRAME|RDW_INVALIDATE);			

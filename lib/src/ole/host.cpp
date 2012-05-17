@@ -27,7 +27,7 @@ AxClientWndBase::AxClientWndBase()
 
 AxClientWndBase::~AxClientWndBase()
 {
-	ODBGS("AxClientWnd died :o");
+	//ODBGS("AxClientWnd died :o");
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -375,7 +375,7 @@ HRESULT  __stdcall AxClientWndBase::IOleInPlaceUIWindow_SetBorderSpace( LPCBORDE
 }
 HRESULT  __stdcall AxClientWndBase::IOleInPlaceUIWindow_SetActiveObject( IOleInPlaceActiveObject *pActiveObject, LPCOLESTR pszObjName)
 {
-	ODBGS("IOleInPlaceUIWindow_SetActiveObject");
+	//ODBGS("IOleInPlaceUIWindow_SetActiveObject");
 	activeObject = pActiveObject;
 	return S_OK;
 }
@@ -534,7 +534,7 @@ HRESULT  __stdcall AxClientWndBase::IOleInPlaceSite_OnInPlaceActivate()
 }
 HRESULT  __stdcall AxClientWndBase::IOleInPlaceSite_OnUIActivate()
 {
-	ODBGS("IOleInPlaceSite_OnUIActivate");
+	//ODBGS("IOleInPlaceSite_OnUIActivate");
 	isUIActive = true;
 	return 	S_OK ;
 }
@@ -771,7 +771,7 @@ void AxClientWndBase::updateObject()
 			{
 				::InvalidateRect(w,0,TRUE);
 				::UpdateWindow(w);
-				ODBGS("U.P.D.A.T.E O.L.E. W.I.N.D.O.W");
+				//ODBGS("U.P.D.A.T.E O.L.E. W.I.N.D.O.W");
 			}
 		}
 		else
@@ -785,7 +785,7 @@ void AxClientWndBase::updateObject()
 				{
 					::InvalidateRect(w,0,TRUE);
 					::UpdateWindow(w);
-					ODBGS("U.P.D.A.T.E O.L.E. W.I.N.D.O.W");
+					//ODBGS("U.P.D.A.T.E O.L.E. W.I.N.D.O.W");
 				}
 			}
 		}
@@ -823,7 +823,7 @@ HRESULT AxClientWndBase::copyStorageTemp(IStorage* src, IStorage** copy)
 // inplaceactivate obj
 bool AxClientWndBase::inplaceDeActivate(bool full)
 {
-	ODBGS1("inplaceDeActivate ",full);
+	//ODBGS1("inplaceDeActivate ",full);
 	// check if to go inactive (true) or UI-inactive only (false)
 	if ( !full )
 	{
@@ -881,7 +881,7 @@ bool AxClientWndBase::inplaceDeActivate(bool full)
 // then do a re-layout
 LRESULT AxClientWndBase::handleOnSize( UINT message, WPARAM wParam, LPARAM lParam, mol::LayoutMgr* layout )
 {
-	ODBGS("AxClient OnSize");
+	//ODBGS("AxClient OnSize");
 	if ( wParam == SIZE_MINIMIZED )
 		return 0;
 
@@ -902,8 +902,8 @@ LRESULT AxClientWndBase::handleOnSize( UINT message, WPARAM wParam, LPARAM lPara
 	clientRect_.right  = LOWORD (lParam) ;
 	clientRect_.bottom = HIWORD (lParam) ;
 
-	ODBGS1("AxClient OnSize r: ",clientRect_.right);
-	ODBGS1("AxClient OnSize b: ",clientRect_.bottom);
+	//ODBGS1("AxClient OnSize r: ",clientRect_.right);
+	//ODBGS1("AxClient OnSize b: ",clientRect_.bottom);
 
 	handleDoLayout( clientRect_, layout );
 	return 0;
@@ -912,14 +912,14 @@ LRESULT AxClientWndBase::handleOnSize( UINT message, WPARAM wParam, LPARAM lPara
 // layout helper, resizes the embedded ax obj
 mol::Rect AxClientWndBase:: handleDoLayout(mol::Rect r, mol::LayoutMgr* layout)
 {
-	ODBGS("AxClientWndBase doLayout");
+	//ODBGS("AxClientWndBase doLayout");
 
 	// determine avail rect
 	if ( layout )
 		r = layout->availClientRect(r);
 
-	ODBGS1("doLayout r: ",r.right);
-	ODBGS1("doLayout b: ",r.bottom);
+	//ODBGS1("doLayout r: ",r.right);
+	//ODBGS1("doLayout b: ",r.bottom);
 
 	// if we have an embedded obj
 	this->SetObjectSize(r);
@@ -929,14 +929,14 @@ mol::Rect AxClientWndBase:: handleDoLayout(mol::Rect r, mol::LayoutMgr* layout)
 	if ( layout )
 		layout->layout(r);
 
-	ODBGS("<------AxClientWndBase doLayout END");
+	//ODBGS("<------AxClientWndBase doLayout END");
 	return r;
 }
 
 bool AxClientWndBase::inplaceActivate(bool withUI )
 {
 	// activate it in-place!
-	ODBGS1("inplaceActivate ",withUI);
+	//ODBGS1("inplaceActivate ",withUI);
 
 	if ( this->documentView )
 		if ( S_OK == this->documentView->UIActivate(TRUE))
@@ -1083,12 +1083,12 @@ LRESULT AxClientWndBase::wndProcAxImpl( HWND hWnd, UINT message, WPARAM wParam, 
 			activateLater(wParam,lParam);
 			this->callAxDefWndProc( hWnd, message,wParam,lParam);
 
-			ODBGS("<----WM_MDIACTIVATE END");
+			//ODBGS("<----WM_MDIACTIVATE END");
 			return 0;
 		}
 		case WM_MOVE:
 		{
-			ODBGS("WM_MOVE");
+			//ODBGS("WM_MOVE");
 			return this->callAxDefWndProc( hWnd, message,wParam,lParam);
 		}
 		
@@ -1109,7 +1109,7 @@ LRESULT AxClientWndBase::wndProcAxImpl( HWND hWnd, UINT message, WPARAM wParam, 
 
 			if ( oleObject )
 			{	
-				ODBGS("WM_CLOSE");
+				//ODBGS("WM_CLOSE");
 
 				// shutdown oleobj
 				HRESULT hr = oleObject->Unadvise(cookie_);
@@ -1119,7 +1119,7 @@ LRESULT AxClientWndBase::wndProcAxImpl( HWND hWnd, UINT message, WPARAM wParam, 
 			}
 			if ( oleObject )
 			{	
-				ODBGS("WM_DESTROY");
+				//ODBGS("WM_DESTROY");
 
 				// release active obj ref
 				activeObject.release();

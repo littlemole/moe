@@ -55,7 +55,7 @@ namespace win {
 void TaskbarWnd::timer_callback()
 {
 	this->cacheIconicRepresentation();
-	ODBGS("refreshIcon");
+	//ODBGS("refreshIcon");
 	this->timer_.kill();
 }
 

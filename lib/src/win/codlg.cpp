@@ -190,8 +190,8 @@ BOOL FilenameDlg::dlgOpen( int flags)
 				if ( c-b > 0 && *b)
 				{
 					mol::string f(b,int(c-b));
-					ODBGS("OPEN FILE DIALOG:");
-					ODBGS(f.c_str());
+					//ODBGS("OPEN FILE DIALOG:");
+					//ODBGS(f.c_str());
 					s.append(f);
 					filenames_.push_back( s );
 				}

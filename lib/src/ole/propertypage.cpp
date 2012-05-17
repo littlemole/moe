@@ -151,7 +151,6 @@ void OlePropPage::reset()
 	prop_->Deactivate();
 	prop_->SetObjects(0,0);
 	prop_.release();
-	ODBGS(_T("OlePropPage::reset()"));
 }
 
 

@@ -306,7 +306,34 @@ int ShellFolder::getIconIndex( mol::io::Shit& it, DWORD flag )
 		attributes = FILE_ATTRIBUTE_NORMAL;
     }
 	else
-	if( path.substr(0,2) == _T("::") )
+	if (path.size()>4 && path.substr(0,5) == L"ssh:/" )
+	{
+		if (path == L"ssh:/" || path == L"ssh://" )
+		{
+			mol::io::Shit net = mol::io::desktop().getSpecialFolder(CSIDL_NETWORK);
+			DWORD_PTR ret = ::SHGetFileInfo( (LPCWSTR)(LPITEMIDLIST)(*net),0,&shInfo,sizeof(shInfo), SHGFI_SYSICONINDEX|SHGFI_TYPENAME|SHGFI_PIDL );
+			::DestroyIcon(shInfo.hIcon);
+			return shInfo.iIcon;
+		}
+		size_t pos = path.find(L"/",6);
+		if ( pos == mol::string::npos || pos == path.size()-1 )
+		{
+			mol::io::Shit net = mol::io::desktop().getSpecialFolder(CSIDL_DRIVES);
+			DWORD_PTR ret = ::SHGetFileInfo( (LPCWSTR)(LPITEMIDLIST)(*net),0,&shInfo,sizeof(shInfo), SHGFI_SYSICONINDEX|SHGFI_TYPENAME|SHGFI_PIDL );
+			::DestroyIcon(shInfo.hIcon);
+			return shInfo.iIcon;
+		}
+		if( it->isDir() ) 
+		{
+			if ( flag & SHGFI_OPENICON )
+                return iopenfolder;
+			return ifolder;
+		}
+
+		attributes = FILE_ATTRIBUTE_NORMAL;
+	}
+	else
+	if( path.size()>1 && path.substr(0,2) == _T("::") )
 	{
 		attributes = FILE_ATTRIBUTE_NORMAL;
 	}
