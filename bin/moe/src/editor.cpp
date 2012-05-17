@@ -79,7 +79,7 @@ bool Editor::initialize(const mol::string& p, long enc, bool readOnly)
 {
 	initializeMoeChild(p);
 
-	monitor_.events += mol::events::event_handler( &Editor::OnFileChangeNotify, this );
+	//monitor_.events += mol::events::event_handler( &Editor::OnFileChangeNotify, this );
 
 	// init last write timestamp for p
 	lastWriteTime_ = getLastWriteTime(p);
@@ -107,10 +107,13 @@ bool Editor::initialize(const mol::string& p, long enc, bool readOnly)
 			if ( S_OK != sci->Load(mol::bstr(p)) )
 				return false;
 		}
+		timer_.set( 5 * 60 * 1000, boost::bind(&Editor::checkModifiedOnDisk,this) );
+		/*
 		monitor_.watch( 
 			mol::Path::parentDir(p), 
 		    FILE_NOTIFY_CHANGE_LAST_WRITE,
 			false);
+			*/
 	}
 	else
 	{
@@ -199,7 +202,7 @@ void Editor::OnDestroy()
 		ts_ = 0;
 	}
 	remote_.release();
-	monitor_.cancel();
+//	monitor_.cancel();
 }
 
 void Editor::OnNcDestroy()
@@ -232,6 +235,7 @@ void Editor::OnMDIActivate(WPARAM unused, HWND activated)
 	}
 }
 
+/*
 void Editor::OnFileChangeNotify(mol::io::DirMon* dirmon)
 {
 	//::Sleep(1000); uh-oh!
@@ -240,9 +244,13 @@ void Editor::OnFileChangeNotify(mol::io::DirMon* dirmon)
 
 	mol::invoke( boost::bind( &Editor::checkModifiedOnDisk, this) );
 }
+*/
 
 void Editor::checkModifiedOnDisk()
 {
+	if ( saving_)
+		return;
+
 	mol::bstr path;
 	props_->get_Filename(&path);
 

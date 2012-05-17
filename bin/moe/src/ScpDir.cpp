@@ -195,20 +195,20 @@ HRESULT __stdcall  ScpDirChild::Activate()
 // dirlist events sink
 //////////////////////////////////////////////////////////////////////////////
 
-HRESULT __stdcall ScpDirChild::DirChild_sink::OnListDblClick(BSTR filename)
+HRESULT __stdcall ScpDirChild::DirChild_sink::OnListDblClick(BSTR filename,VARIANT_BOOL vb)
 {
 	docs()->open( mol::toString(filename),MOE_DOCTYPE_SFTP,CP_ACP,false,0);
 	return S_OK;
 }
 
 
-HRESULT __stdcall ScpDirChild::DirChild_sink::OnListSelection(BSTR filename)
+HRESULT __stdcall ScpDirChild::DirChild_sink::OnListSelection(BSTR filename,VARIANT_BOOL vb)
 {
 	statusBar()->status(filename);
 	return S_OK;
 }
 
-HRESULT __stdcall ScpDirChild::DirChild_sink::OnListOpen(BSTR filename)
+HRESULT __stdcall ScpDirChild::DirChild_sink::OnListOpen(BSTR filename,VARIANT_BOOL vb)
 {
 	docs()->open( mol::toString(filename),MOE_DOCTYPE_SFTP,CP_ACP,false,0);
 	return S_OK;

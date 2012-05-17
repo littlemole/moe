@@ -26,7 +26,9 @@ void MoeTreeWnd::OnTreeOpen()
 	mol::bstr p;
 	mol::punk<IShellTree> tree(oleObject);
 	tree->get_Selection(&p);
-	treeWndSink()->OnTreeOpen(p);
+	VARIANT_BOOL vb;
+	tree->IsDir(p,&vb);
+	treeWndSink()->OnTreeOpen(p,vb);
 }
 
 void MoeTreeWnd::OnTreeUpdate()
@@ -89,12 +91,12 @@ HRESULT __stdcall TreeWndSink::OnTreeSelection(BSTR filename)
 	return moe()->IOleInPlaceFrame_SetStatusText(filename);
 }
 
-HRESULT __stdcall TreeWndSink::OnTreeDblClick(BSTR filename)
+HRESULT __stdcall TreeWndSink::OnTreeDblClick(BSTR filename,VARIANT_BOOL vb)
 {
 	mol::string p(mol::toString(filename));
 	if ( !mol::Path::exists(p) && !mol::Path::isUNC(p) )
 	{
-		if ( p.substr(0,2) != _T("::") )
+		if ( p.size()>4 && p.substr(0,2) != _T("::") && p.substr(0,5) != _T("ssh:/") )
 			return S_OK;
 	}
 	mol::punk<IShellTree> tree(treeWnd()->oleObject);
@@ -142,12 +144,12 @@ MOE_DOCTYPE index2DocType(int i)
 	}
 }
 
-HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename)
+HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename,VARIANT_BOOL vb)
 {
 	mol::string p(mol::toString(filename));
 	if ( !mol::Path::exists(p) && !mol::Path::isUNC(p) )
 	{
-		if ( p.substr(0,2) != _T("::") )
+		if ( p.size()>4 && p.substr(0,2) != _T("::") && p.substr(0,5) != _T("ssh:/") )
 			return S_OK;
 	}
 
@@ -165,6 +167,23 @@ HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename)
 				return S_OK;
 			}
 			return S_OK;
+		}
+		if ( p.substr(0,5) == _T("ssh:/") )
+		{
+			statusBar()->status(p);
+			bool result = false;
+
+			if ( vb == VARIANT_TRUE )
+			{
+				result = ::docs()->open(p,MOE_DOCTYPE_SFTP,-1,false,0);
+	
+				if (!result)
+				{
+					statusBar()->status( mol::string(_T("failed to load ")) + p);
+					return S_OK;
+				}
+				return S_OK;
+			}
 		}
 
 		mol::punk<IMoeDialogs> dialogs;
@@ -202,7 +221,7 @@ HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename)
 	return S_OK;
 }
 
-HRESULT __stdcall TreeWndSink::OnContextMenu(BSTR fname)
+HRESULT __stdcall TreeWndSink::OnContextMenu(BSTR fname,VARIANT_BOOL vb)
 {
 	mol::punk<IShellTree> tree(treeWnd()->oleObject);
 	if ( !tree )

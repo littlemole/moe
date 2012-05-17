@@ -541,7 +541,7 @@ HRESULT __stdcall MoeDialogs::OpenDir( IMoeDocument** d)
 		mol::string s = dir.toString();
 		if ( s != _T("") )
 		{
-			if ( mol::Path::exists(s) )
+			//if ( mol::Path::exists(s) )
 				docs()->open( s, MOE_DOCTYPE_DIR,-1, false, d);
 		}
 

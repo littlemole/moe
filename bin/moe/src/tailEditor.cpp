@@ -117,7 +117,6 @@ bool TailEditor::initialize(const mol::string& p)
 		FILE_NOTIFY_CHANGE_SIZE,
 		false
 	);
-
 	return true;
 }
 

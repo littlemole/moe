@@ -49,9 +49,9 @@ private:
     class DirChild_sink : public mol::stack_obj<ShellListEvents>
     {
         public : outer_this(ScpDirChild,sink); 
-		virtual HRESULT __stdcall OnListSelection(BSTR filename);
-		virtual HRESULT __stdcall OnListDblClick(BSTR filename);
-		virtual HRESULT __stdcall OnListOpen(BSTR filename);
+		virtual HRESULT __stdcall OnListSelection(BSTR filename,VARIANT_BOOL vb);
+		virtual HRESULT __stdcall OnListDblClick(BSTR filename,VARIANT_BOOL vb);
+		virtual HRESULT __stdcall OnListOpen(BSTR filename,VARIANT_BOOL vb);
 		virtual HRESULT __stdcall OnDirChanged(BSTR filename);
     } sink;
 

@@ -66,9 +66,9 @@ friend mol::Singleton<TreeWndSink>;
 friend mol::stack_obj<TreeWndSink>;
 public :
 	HRESULT virtual __stdcall OnTreeSelection(BSTR filename);
-	HRESULT virtual __stdcall OnTreeDblClick(BSTR filename);
-	HRESULT virtual __stdcall OnTreeOpen(BSTR filename); 
-	HRESULT virtual __stdcall OnContextMenu(BSTR filename); 
+	HRESULT virtual __stdcall OnTreeDblClick(BSTR filename,VARIANT_BOOL vb);
+	HRESULT virtual __stdcall OnTreeOpen(BSTR filename,VARIANT_BOOL vb); 
+	HRESULT virtual __stdcall OnContextMenu(BSTR filename,VARIANT_BOOL vb); 
 private:
 	TreeWndSink() {}
 	~TreeWndSink() {}

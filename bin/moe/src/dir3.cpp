@@ -144,7 +144,7 @@ void DirChild::OnMDIActivate( HWND activated )
 // dirlist events sink
 //////////////////////////////////////////////////////////////////////////////
 
-HRESULT __stdcall DirChild::DirChild_Events::OnListDblClick(BSTR filename)
+HRESULT __stdcall DirChild::DirChild_Events::OnListDblClick(BSTR filename,VARIANT_BOOL vb)
 {
 	mol::punk<IShellList> list(This()->oleObject);
 	if ( list )
@@ -173,13 +173,13 @@ HRESULT __stdcall DirChild::DirChild_Events::OnListDblClick(BSTR filename)
 }
 
 
-HRESULT __stdcall DirChild::DirChild_Events::OnListSelection(BSTR filename)
+HRESULT __stdcall DirChild::DirChild_Events::OnListSelection(BSTR filename,VARIANT_BOOL vb)
 {
 	statusBar()->status(mol::bstr(filename).toString());
 	return S_OK;
 }
 
-HRESULT __stdcall DirChild::DirChild_Events::OnListOpen(BSTR filename)
+HRESULT __stdcall DirChild::DirChild_Events::OnListOpen(BSTR filename,VARIANT_BOOL vb)
 {
 	mol::string p(mol::toString(filename));
 	bool result = docs()->open(p,MOE_DOCTYPE_DOC,-1,false,0);

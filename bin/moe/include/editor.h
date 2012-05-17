@@ -113,7 +113,7 @@ protected:
 	void populateMenuFromConf( HMENU submenu, ISetting* set, std::map<int,ISetting*>& confMap, int& id);
 	void prepareInterfaces();
 
-	virtual void OnFileChangeNotify(mol::io::DirMon*);
+//	virtual void OnFileChangeNotify(mol::io::DirMon*);
 	virtual void checkModifiedOnDisk();
 protected:
 
@@ -138,7 +138,8 @@ protected:
 	std::map<int,ISetting*>		batchMap;
 	std::map<int,ISetting*>		formMap;
 
-	mol::io::DirMon monitor_;
+	//mol::io::DirMon monitor_;
+	mol::Timer timer_;
 
 	mol::punk<IRemoteDebugApplicationThread> remote_;
 	ThreadScript* ts_;

@@ -38,6 +38,8 @@ protected:
 	bool initialize(const mol::string& p);
 
 	unsigned long long size_;
+
+	mol::io::DirMon monitor_;
 };
 
 //////////////////////////////////////////////////////////////////////////////////
