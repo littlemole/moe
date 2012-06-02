@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{052AF731-8B2F-46BF-A0C4-D2844BA25B1D}</ProjectGuid>
+    <RootNamespace>moe.sshShell</RootNamespace>
+	<TargetName>sshShell</TargetName>
+  </PropertyGroup>
+
+  <Import Project="..\..\master.props" />
+  <Import Project="..\build.props" />
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+	  <AdditionalIncludeDirectories>..\..\bin\moe;..\..\ax\shellctrl;..\..\ax\scintillax;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+	</ClCompile>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <Midl Include="sshShell.idl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="sshShell.cpp" />
+    <ClCompile Include="shell.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+
+</Project>

@@ -67,6 +67,8 @@
     <ClCompile Include="src\ScpDir.cpp">
       <Filter>mdi</Filter>
     </ClCompile>
+    <ClCompile Include="EditorMenu.cpp" />
+    <ClCompile Include="EditorScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\app.h" />
@@ -145,6 +147,8 @@
       <Filter>mdi</Filter>
     </ClInclude>
     <ClInclude Include="include\DocFactory.h" />
+    <ClInclude Include="EditorMenu.h" />
+    <ClInclude Include="EditorScript.h" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="src\moe.idl" />

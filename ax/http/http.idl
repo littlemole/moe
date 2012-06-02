@@ -1,0 +1,244 @@
+import "oaidl.idl";
+
+////////////////////////////////////////////////////////////////////////////////////////
+// mol HTTP COM Lib
+////////////////////////////////////////////////////////////////////////////////////////
+
+[
+  uuid(CDCBD74D-E200-41E1-BDA5-9537127F6F37),
+  version(1.0),
+  helpstring("mol HTTP lib - http library for Scripting clients")
+]
+library HTTP
+{
+	/*
+	enum IO_SYSTYPE {
+		IO_SYSTYPE_UNIX  = 0,
+		IO_SYSTYPE_WIN32 = 1
+	};
+	*/
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Interfaces
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+    // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
+	////////////////////////////////////////////////////////////////////////////////////
+	importlib("stdole32.tlb");
+
+	interface IHttp;
+	interface IHttpHeaders;
+	interface IHttpRequest;
+	interface IHttpResponse;
+	interface IHttpBody;
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IHttp
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(65ECE645-63A0-422B-9551-30BABE5C0D46),
+      helpstring("IHttp - interface for HTTP communication"),
+      object,oleautomation, dual
+    ]
+	interface IHttp : IDispatch
+    {
+		[id(DISPID_VALUE), helpstring("Get shortcut")] 
+		HRESULT Get([in] BSTR url, [out,retval] IHttpResponse* response);
+
+		[id(1), helpstring("Create Request")] 
+		HRESULT Request([in] BSTR cmd, [out,retval] IHttpRequest* request);
+
+		[ id(1), helpstring("returns file Extension") ] 
+		HRESULT Execute([in] IHttpRequest* request, [out,retval] IHttpResponse* response);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IRequest
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(C50E5518-3D85-45EA-9CCC-5FDE3104EBA9),
+      helpstring("IRequest - request obj"),
+      object,oleautomation, dual
+    ]
+	interface IRequest : IDispatch
+    {
+		[ id(1), helpstring("returns file Extension") ] 
+		HRESULT Execute([in] BSTR f, [out,retval] BSTR* ret);
+
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IFile
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(5AF00596-158A-4ddd-BC20-83BC8D5E432F),
+      helpstring("IFile - simple Scripting File Access interface"),
+      object,oleautomation, dual
+    ]
+	interface IFile : IDispatch
+    {
+		// properties
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get Filename")
+		]
+		HRESULT Filename( [out,retval] BSTR* f);
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Set EOL mode")
+		]
+		HRESULT EoL( [in] long t);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(2), 
+		  helpstring("Get EOL mode")
+		]
+		HRESULT EoL( [out,retval] long* t);
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(3), 
+		  helpstring("Set Encoding")
+		]
+		HRESULT Encoding( [in] long cp);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(3), 
+		  helpstring("Get Encoding")
+		]
+		HRESULT Encoding( [out,retval] long* cp);
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(4), 
+		  helpstring("Set BOM Usage")
+		]
+		HRESULT UseBOM( [in] VARIANT_BOOL vb);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(4), 
+		  helpstring("Get BOM Usage")
+		]
+		HRESULT UseBOM( [out,retval] VARIANT_BOOL* vb);
+
+
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(5), 
+		  helpstring("Get End of File - indicates whether end of file reached")
+		]
+		HRESULT EoF( [out,retval] VARIANT_BOOL* vb);
+
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(6), 
+		  helpstring("Get File Size")
+		]
+		HRESULT Size( [out,retval] long* s);
+
+		// Methods
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  id(7), 
+		  helpstring("Open File")
+		] 
+		HRESULT Open([in] BSTR file, [out,retval] VARIANT_BOOL* vb );
+
+		[ 
+		  id(8), 
+		  helpstring("Open File Read Only")
+		] 
+		HRESULT OpenReadOnly([in] BSTR file, [out,retval] VARIANT_BOOL* vb );
+
+		[ 
+		  id(9), 
+		  helpstring("Open File for Append")
+		] 
+		HRESULT OpenAppend([in] BSTR file, [out,retval] VARIANT_BOOL* vb );
+
+		[ 
+		  id(10), 
+		  helpstring("Close File")
+		] 
+		HRESULT Close();
+
+		[ 
+		  id(11), 
+		  helpstring("Read up to a specific count from file")
+		] 
+		HRESULT Read( [in] long cnt, [out,retval] BSTR* file);
+
+		[ 
+		  id(12), 
+		  helpstring("Read complete File as one Text String")
+		] 
+		HRESULT ReadText( [out,retval] BSTR* file);
+
+		[ 
+		  id(13), 
+		  helpstring("Seek a specific file position before reading/writing")
+		] 
+		HRESULT Seek( [in] long pos);
+
+		[ 
+		  id(14), 
+		  helpstring("Write a string to a file")
+		] 
+		HRESULT Write( [in] BSTR file, [in] long len, [out,retval] long* s );
+
+		[ 
+		  id(15), 
+		  helpstring("WriteText writes a String to a text file in one batch")
+		] 
+		HRESULT WriteText( [in] BSTR txt, [out,retval] long* s  );
+
+		[ 
+		  id(16), 
+		  helpstring("create a new file")
+		] 
+		HRESULT Create( [in] BSTR txt, [out,retval] VARIANT_BOOL* vb  );
+    };
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Co Classes ( class factories )
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// Path
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(44DC1E37-CB3D-4328-B154-E50250F07A8F)
+	]
+	coclass Path
+	{
+		[default]         interface     IPath;
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// File
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(C4E08E9A-0B46-4fd4-BB8D-588ABC27F52E)
+	]
+	coclass File
+	{
+		[default]         interface     IFile;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// Dir
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(302B0FE6-EE9A-4303-92B9-E6B69B573318),noncreatable
+	]
+	coclass Dir
+	{
+		[default]         interface     IDir;
+	}
+}

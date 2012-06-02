@@ -13,8 +13,8 @@
 #define RTL_ENCRYPT_MEMORY_SIZE					8
 #define CRYPTPROTECTMEMORY_BLOCK_SIZE           16
 
-typedef long RtlEncryptMemoryPtr ( PVOID mem, ULONG size, ULONG flags );
-typedef long RtlDecryptMemoryPtr ( PVOID mem, ULONG size, ULONG flags );
+typedef long __stdcall RtlEncryptMemoryPtr ( PVOID mem, ULONG size, ULONG flags );
+typedef long __stdcall RtlDecryptMemoryPtr ( PVOID mem, ULONG size, ULONG flags );
 
 RtlEncryptMemoryPtr* RtlEncryptMemory = (RtlEncryptMemoryPtr*)mol::dllFunc( _T("Advapi32.dll"), _T("SystemFunction040") );
 RtlDecryptMemoryPtr* RtlDecryptMemory = (RtlDecryptMemoryPtr*)mol::dllFunc( _T("Advapi32.dll"), _T("SystemFunction041") );

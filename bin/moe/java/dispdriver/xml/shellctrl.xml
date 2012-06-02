@@ -4,7 +4,7 @@ typeinfocount='19'
 guid='{74618F47-2F2A-4B0F-BDCA-344BE3208ECE}' 
 major='1' 
 minor='0' 
-file='..\..\..\..\ax\shellctrl\x64/uni_release\shellctrl.tlb'>
+file='..\..\..\..\ax\shellctrl\x64/uni_debug\shellctrl.tlb'>
 
 <interface name='IShellTree' type='Dual' iid='{67282F00-10CA-4540-92B1-37DF10A3CD7B}' base='IDispatch' members='16' desc='' >
  <property name='DisplayFiles' type='VARIANT_BOOL' dispid='1' vtindex='28' ctype='HRESULT' param='vb' desc='Get/Set Display of files'  funkind='virtual'  calltype='__stdcall' >

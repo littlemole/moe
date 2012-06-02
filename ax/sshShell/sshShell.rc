@@ -1,0 +1,191 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Deutsch (Deutschland) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
+#ifdef _WIN32
+LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ROOT				ICON    DISCARDABLE     "root.ico"
+IDI_SHELLCTRL           ICON                    "sshShell.ico"
+IDB_MOE					BITMAP                  "moe.bmp"
+IDB_MOE2				BITMAP                  "moe2.bmp"
+
+IDI_BINARY              ICON    DISCARDABLE     "server.ico"
+IDI_FOLDER              ICON    DISCARDABLE     "dir.ico"
+IDI_FOLDEROPEN          ICON    DISCARDABLE     "opendir.ico"
+IDI_STRING              ICON    DISCARDABLE     "doc.ico"
+
+//IDI_BINARY              ICON    DISCARDABLE     "binary.ico"
+//IDI_FOLDER              ICON    DISCARDABLE     "folder.ico"
+//IDI_FOLDEROPEN          ICON    DISCARDABLE     "folderop.ico"
+//IDI_STRING              ICON    DISCARDABLE     "string.ico"
+
+IDD_SCP_SERVER_DIALOG DIALOGEX 0, 0, 290, 74
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Connect to Host"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Login",IDOK,224,52,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,16,52,50,14
+    LTEXT           "Provide ssh server to connect to:",IDC_STATIC,17,14,150,10
+    EDITTEXT        IDC_EDIT_HOST,16,27,189,14,ES_AUTOHSCROLL
+    LTEXT           "Port:",IDC_STATIC,215,29,18,14
+    EDITTEXT        IDC_EDIT_PORT,239,27,33,15,ES_AUTOHSCROLL
+END
+
+IDD_SCP_PWD_DIALOG DIALOGEX 0, 0, 290, 110
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "SSH Credentials"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Login",IDOK,224,89,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,15,89,50,14
+    LTEXT           "Provide SSH Credentials to connect to host:",IDC_STATIC,17,14,150,10
+    EDITTEXT        IDC_EDIT_HOST,16,27,189,14,ES_AUTOHSCROLL
+    LTEXT           "Port:",IDC_STATIC,215,29,18,14
+    EDITTEXT        IDC_EDIT_PORT,239,27,33,15,ES_AUTOHSCROLL
+    LTEXT           "Username:",IDC_STATIC,17,48,40,9
+    LTEXT           "Password:",IDC_STATIC,161,48,40,10
+    EDITTEXT        IDC_EDIT_USER,15,62,116,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_PWD,157,62,116,15,ES_PASSWORD | ES_AUTOHSCROLL
+END
+
+IDD_DIALOG_SSH_ACCEPT_HOST DIALOGEX 0, 0, 316, 159
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Accept unknown host?"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,205,138,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,259,138,50,14
+    LTEXT           "If you trust that host, click OK to accept. Otherwise click Cancel.",IDC_STATIC,23,123,264,12
+    EDITTEXT        IDC_EDIT_HOST_HASH,23,66,267,48,ES_MULTILINE | ES_AUTOHSCROLL
+    LTEXT           "Static\r\nnewline\r\nyanl",IDC_STATIC_UNKNOWN_HOST_MSG,17,23,278,26
+    LTEXT           "The host key footprint hash is:",IDC_STATIC,25,55,124,9
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Deutsch (Deutschland) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Englisch (USA) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// TYPELIB
+//
+
+//1                       TYPELIB                 TLB
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_PROP_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 193
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 107
+    END
+
+    IDD_DIALOG_VALUE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 281
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 88
+    END
+
+    IDD_DIALOG_KEY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 40
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+
+#endif    // Englisch (USA) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

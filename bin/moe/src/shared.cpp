@@ -6,7 +6,7 @@
 #include "app.h"
 #include "form.h"
 #include "xmlui.h"
-
+#include "moe_dispid.h"
 
 /////////////////////////////////////////////////////////////////////
 //
@@ -327,12 +327,10 @@ HRESULT __stdcall MoeView::put_ShowTreeView( VARIANT_BOOL vb )
 	{
 		treeWnd()->show(SW_SHOW);
 		::InvalidateRect(moe()->mdiClient(),0,TRUE);
-		statusBar()->status(_T("Tree view visible"));
 	}
 	if ( vb == VARIANT_FALSE )
 	{
 		treeWnd()->show(SW_HIDE);
-		statusBar()->status(_T("Tree view hidden"));
 	}
 
 	moe()->OnLayout(0,0,0);
@@ -635,8 +633,6 @@ HRESULT __stdcall MoeScript::Eval( BSTR scrpt, BSTR scrptLanguage)
 	if ( !scrpt || !scrptLanguage )
 		return E_INVALIDARG;
 
-	statusBar()->status( mol::string( _T("evaluating ")) + mol::bstr(scrptLanguage).toString() );
-
 	mol::string e = mol::bstr(scrptLanguage).toString();
 	if ( e == _T("cs") )
 	{
@@ -651,8 +647,6 @@ HRESULT __stdcall MoeScript::Debug( BSTR scrpt, BSTR scrptLanguage)
 {
 	if ( !scrpt || !scrptLanguage )
 		return E_INVALIDARG;
-
-	statusBar()->status( mol::string( _T("evaluating ")) + mol::bstr(scrptLanguage).toString() );
 
 	mol::string e = mol::bstr(scrptLanguage).toString();
 	if ( e == _T("cs") )
@@ -811,11 +805,6 @@ HRESULT __stdcall MoeConfig::get_ModulePath(  BSTR* fPath)
 HRESULT __stdcall MoeConfig::put_SysType( long typ)
 {
 	systype_ = typ;
-
-	if ( typ == 0 )
-		statusBar()->status(_T("new sysmode: UNIX"));	
-	else
-		statusBar()->status(_T("new sysmode: Windows"));
 	return S_OK;
 }
 
@@ -829,24 +818,6 @@ HRESULT __stdcall MoeConfig::get_SysType( long* typ)
 HRESULT __stdcall MoeConfig::put_Encoding( long enc)
 {
 	encoding_ = enc;
-	switch ( enc )
-	{
-		case SCINTILLA_ENCODING_ANSI :
-		{
-			statusBar()->status(_T("new encoding: ANSI"));	
-			break;
-		}
-		case SCINTILLA_ENCODING_UTF8 :
-		{
-			statusBar()->status(_T("new encoding: UTF8"));	
-			break;
-		}
-		case SCINTILLA_ENCODING_UTF16 :
-		{
-			statusBar()->status(_T("new encoding: UTF16"));	
-			break;
-		}
-	}
 	return S_OK;
 }
 
@@ -860,10 +831,6 @@ HRESULT __stdcall MoeConfig::get_Encoding( long* enc)
 HRESULT __stdcall MoeConfig::put_TabUsage( VARIANT_BOOL vbTabUsage)
 {
 	tabUsage_ = vbTabUsage;
-	if ( vbTabUsage == VARIANT_TRUE )
-		statusBar()->status(_T("use tabs"));	
-	else
-		statusBar()->status(_T("convert tabs to spaces"));
 	return S_OK;
 }
 
@@ -877,10 +844,6 @@ HRESULT __stdcall MoeConfig::get_TabUsage( VARIANT_BOOL* vbTabUsage)
 HRESULT __stdcall MoeConfig::put_TabIndents( VARIANT_BOOL vbTabIndents)
 {
 	tabIndents_ = vbTabIndents;
-	if ( vbTabIndents == VARIANT_TRUE )
-		statusBar()->status(_T("tab indents"));	
-	else
-		statusBar()->status(_T("tab doesn't indent"));
 	return S_OK;
 }
 
@@ -894,10 +857,6 @@ HRESULT __stdcall MoeConfig::get_TabIndents( VARIANT_BOOL* vbTabIndents)
 HRESULT __stdcall MoeConfig::put_BackSpaceUnindents( VARIANT_BOOL vbBackSpaceIndents)
 {
 	backSpaceUnIndents_ = vbBackSpaceIndents;
-	if ( vbBackSpaceIndents == VARIANT_TRUE )
-		statusBar()->status(_T("backspace unindents"));	
-	else
-		statusBar()->status(_T("backspace doesn't unindent"));
 	return S_OK;
 }
 
@@ -970,8 +929,6 @@ HRESULT __stdcall MoeConfig::EditPreferences( )
 
 HRESULT __stdcall MoeConfig::EditSettings( )
 {
-	statusBar()->status(_T("edit user settings"));
-
 	LPUNKNOWN punks[] = { config() };
 	CLSID pages[]     = { CLSID_SettingProperties };
 	::OleCreatePropertyFrame(*moe(),100,100,L"Moe",1,punks,1,pages,0,0,0);
@@ -985,7 +942,6 @@ HRESULT __stdcall MoeConfig::ExportSettings( BSTR f )
 	if ( f )
 	{
 		config()->Save(f);
-		statusBar()->status(_T("exported custom user settings"));
 	}	
 	return S_OK;
 }
@@ -995,7 +951,6 @@ HRESULT __stdcall MoeConfig::ImportSettings( BSTR f )
 	if ( f )
 	{
 		config()->Load(f);
-		statusBar()->status(_T("imported custom user settings"));
 	}	
 	return S_OK;
 }
@@ -1084,26 +1039,26 @@ bool MoeConfig::isDirty()
 
 HRESULT __stdcall MoeConfig::Load( LPSTREAM pStm)
 {
-	pStm >> mol::property( mol::DispId(this,DISPID_MOECONF_SYSTYPE, VT_I4) )
-		 >> mol::property( mol::DispId(this,DISPID_MOECONF_ENCODING, VT_I4) )
-		 >> mol::property( mol::DispId(this,DISPID_MOECONF_TABUSAGE,VT_BOOL) )
-		 >> mol::property( mol::DispId(this,DISPID_MOECONF_TABINDENTS,VT_BOOL) )
-		 >> mol::property( mol::DispId(this,DISPID_MOECONF_BACKSPACEUNINDENTS,VT_BOOL) )
-		 >> mol::property( mol::DispId(this,DISPID_MOECONF_TABWIDTH, VT_I4) )
-		 >> mol::property( mol::DispId(this,DISPID_MOECONF_LINENUMBERS,VT_BOOL) );
+	pStm >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_SYSTYPE, VT_I4) )
+		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_ENCODING, VT_I4) )
+		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_TABUSAGE,VT_BOOL) )
+		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_TABINDENTS,VT_BOOL) )
+		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_BACKSPACEUNINDENTS,VT_BOOL) )
+		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_TABWIDTH, VT_I4) )
+		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_SHOWLINENUMBERS,VT_BOOL) );
 
 	return S_OK;
 }
 
 HRESULT __stdcall MoeConfig::Save( LPSTREAM pStm,BOOL fClearDirty)
 {
-	pStm << mol::property( mol::DispId(this,DISPID_MOECONF_SYSTYPE, VT_I4) )
-		 << mol::property( mol::DispId(this,DISPID_MOECONF_ENCODING, VT_I4) )
-		 << mol::property( mol::DispId(this,DISPID_MOECONF_TABUSAGE,VT_BOOL) )
-		 << mol::property( mol::DispId(this,DISPID_MOECONF_TABINDENTS,VT_BOOL) )
-		 << mol::property( mol::DispId(this,DISPID_MOECONF_BACKSPACEUNINDENTS,VT_BOOL) )
-		 << mol::property( mol::DispId(this,DISPID_MOECONF_TABWIDTH, VT_I4) )
-		 << mol::property( mol::DispId(this,DISPID_MOECONF_LINENUMBERS,VT_BOOL) );
+	pStm << mol::property( mol::DispId(this,DISPID_IMOECONFIG_SYSTYPE, VT_I4) )
+		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_ENCODING, VT_I4) )
+		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_TABUSAGE,VT_BOOL) )
+		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_TABINDENTS,VT_BOOL) )
+		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_BACKSPACEUNINDENTS,VT_BOOL) )
+		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_TABWIDTH, VT_I4) )
+		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_SHOWLINENUMBERS,VT_BOOL) );
 
 
 	return S_OK;

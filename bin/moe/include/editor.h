@@ -23,6 +23,8 @@ class Editor
 				IDM_MOE
 			>
 {
+friend class EditorMenu;
+friend class EditorScript;
 public:
 
 	mol::punk<IScintillAx> sci;
@@ -105,15 +107,9 @@ protected:
 
 	bool initialize(const mol::string& p, long enc, bool readOnly);
 	void updateUI();		
-	void createMenuFromConf(HMENU m,HMENU popup);
-	void walkConf(HMENU parent, ISetting* set, std::map<int,ISetting*>& confMap, int& id);
-	void updateModeMenu( mol::Menu& mode );
-	void updateToolMenu( HMENU tools );
-	void updateDebugMenu( HMENU debug );
-	void populateMenuFromConf( HMENU submenu, ISetting* set, std::map<int,ISetting*>& confMap, int& id);
 	void prepareInterfaces();
+	void scrollDown();
 
-//	virtual void OnFileChangeNotify(mol::io::DirMon*);
 	virtual void checkModifiedOnDisk();
 protected:
 
@@ -138,7 +134,6 @@ protected:
 	std::map<int,ISetting*>		batchMap;
 	std::map<int,ISetting*>		formMap;
 
-	//mol::io::DirMon monitor_;
 	mol::Timer timer_;
 
 	mol::punk<IRemoteDebugApplicationThread> remote_;

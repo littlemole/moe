@@ -8,6 +8,8 @@
 #include "ribbonres.h"
 #include "ThreadScript.h"
 #include "ActivDbg.h"
+#include "EditorMenu.h"
+#include "EditorScript.h"
 
 using namespace mol::win;
 using namespace mol::ole;
@@ -107,13 +109,7 @@ bool Editor::initialize(const mol::string& p, long enc, bool readOnly)
 			if ( S_OK != sci->Load(mol::bstr(p)) )
 				return false;
 		}
-		timer_.set( 5 * 60 * 1000, boost::bind(&Editor::checkModifiedOnDisk,this) );
-		/*
-		monitor_.watch( 
-			mol::Path::parentDir(p), 
-		    FILE_NOTIFY_CHANGE_LAST_WRITE,
-			false);
-			*/
+		//timer_.set( 5 * 60 * 1000, boost::bind(&Editor::checkModifiedOnDisk,this) );
 	}
 	else
 	{
@@ -135,6 +131,71 @@ bool Editor::initialize(const mol::string& p, long enc, bool readOnly)
 
 	return true;
 }
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// OnDestroy - over and out
+//
+//////////////////////////////////////////////////////////////////////////////
+
+void Editor::OnDestroy()
+{
+	scriptlet()->close();
+	ODBGS("Editor::OnDestroy()");
+	
+	docs()->remove(this);
+	
+ 	events.UnAdvise(oleObject);
+
+	props_.release();
+	position_.release();
+	selection_.release();
+	line_.release();
+	annotation_.release();
+	markers_.release();
+	text_.release();
+	sci.release();
+	if ( ts_)
+	{
+		// as we offer scripting, break any references to out of process clients
+		::CoDisconnectObject(((IActiveScriptSite*)(ts_)),0);
+		((IActiveScriptSite*)(ts_))->Release();
+		ts_ = 0;
+	}
+	remote_.release();
+}
+
+void Editor::OnNcDestroy()
+{
+	ODBGS("Editor::OnNcDestroy()");
+	
+	IMoeDocument*e = (IMoeDocument*)this;
+	::CoDisconnectObject(((IMoeDocument*)this),0);
+	((IMoeDocument*)this)->Release();
+	
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void Editor::OnMDIActivate(WPARAM unused, HWND activated)
+{
+	ODBGS("Editor::OnMDIActivate");
+
+	if ( activated == hWnd_ )
+	{
+		mol::bstr path;
+		props_->get_Filename(&path);
+
+		tab()->select( *this );
+		updateUI();
+		sci->SetFocus();
+
+		checkModifiedOnDisk();
+	}
+}
+
+
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -167,111 +228,6 @@ LRESULT Editor::OnClose()
 	this->destroy();
 	return 0;
 }
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// OnDestroy - over and out
-//
-//////////////////////////////////////////////////////////////////////////////
-
-void Editor::OnDestroy()
-{
-	scriptlet()->close();
-	ODBGS("Editor::OnDestroy()");
-	
-	mol::bstr path;
-	props_->get_Filename(&path);
-
-	docs()->remove(this);
-	
- 	events.UnAdvise(oleObject);
-
-	props_.release();
-	position_.release();
-	selection_.release();
-	line_.release();
-	annotation_.release();
-	markers_.release();
-	text_.release();
-	sci.release();
-	if ( ts_)
-	{
-		// as we offer scripting, break any references to out of process clients
-		::CoDisconnectObject(((IActiveScriptSite*)(ts_)),0);
-		((IActiveScriptSite*)(ts_))->Release();
-		ts_ = 0;
-	}
-	remote_.release();
-//	monitor_.cancel();
-}
-
-void Editor::OnNcDestroy()
-{
-
-	ODBGS("Editor::OnNcDestroy()");
-	
-	IMoeDocument*e = (IMoeDocument*)this;
-	::CoDisconnectObject(((IMoeDocument*)this),0);
-	((IMoeDocument*)this)->Release();
-	
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-void Editor::OnMDIActivate(WPARAM unused, HWND activated)
-{
-	ODBGS("Editor::OnMDIActivate");
-
-	if ( activated == hWnd_ )
-	{
-		mol::bstr path;
-		props_->get_Filename(&path);
-
-		tab()->select( *this );
-		updateUI();
-		sci->SetFocus();
-
-		checkModifiedOnDisk();
-	}
-}
-
-/*
-void Editor::OnFileChangeNotify(mol::io::DirMon* dirmon)
-{
-	//::Sleep(1000); uh-oh!
-	if ( saving_)
-		return;
-
-	mol::invoke( boost::bind( &Editor::checkModifiedOnDisk, this) );
-}
-*/
-
-void Editor::checkModifiedOnDisk()
-{
-	if ( saving_)
-		return;
-
-	mol::bstr path;
-	props_->get_Filename(&path);
-
-	if ( moe()->getActive() != (HWND)*this || saving_ )
-	{
-		return;
-	}
-
-	FILETIME ft = getLastWriteTime( path.toString() );
-
-
-	if ( (ft.dwHighDateTime != lastWriteTime_.dwHighDateTime) || (ft.dwLowDateTime != lastWriteTime_.dwLowDateTime) )
-	{
-		lastWriteTime_ = ft;
-		if ( IDYES == mol::v7::msgbox( *moe(),_T("reload file?"),_T("file is modified!"),_T("file has been modified on disk, reload?"),IDI_MOE) )
-		{
-			OnReload();
-		}
-	}
-}
-
 
 void Editor::OnCliReturn()
 {
@@ -398,102 +354,6 @@ void Editor::OnWriteBOM()
 	props_->put_WriteBOM(vb);
 }
 
-
-//////////////////////////////////////////////////////////////////////////////
-
-void Editor::OnReload()
-{
-	if ( !sci )
-		return;
-
-	VARIANT_BOOL vb;
-	if ( S_OK != text_->get_Modified(&vb) )
-		return ;
-
-	if ( vb == VARIANT_TRUE )
-	{
-		mol::bstr path;
-		props_->get_Filename(&path);
-		LRESULT r = mol::v7::msgbox(*moe(), _T("you have unsaved changes."), _T("document modified!"),_T("discard all changes and proceed."),IDI_MOE );
-		if ( r != IDYES )
-			return ;
-	}
-	mol::bstr filename;
-	if ( S_OK != get_FilePath(&filename) )
-	{
-		return ;
-	}
-
-	if ( S_OK != props_->get_ReadOnly(&vb) )
-	{
-		return ;
-	}
-	long t;
-	if ( S_OK != props_->get_Encoding(&t) )
-	{
-		return ;
-	}
-
-	if ( mol::toString(filename).substr(0,6) == _T("ssh://") || mol::toString(filename).substr(0,6) == _T("moe-ssh://") )
-	{
-		sci->LoadEncoding(filename,CP_UTF8);
-		props_->put_ReadOnly(vb);
-		statusBar()->status(filename.toString());
-
-		LONG len = 0;
-		text_->get_Length(&len);
-
-		position_->put_Anchor((long)len);
-		position_->put_Caret((long)len);
-		position_->ScrollIntoView();
-		return ;
-	}
-
-	lastWriteTime_ = getLastWriteTime(filename.toString());
-
-	if ( t == SCINTILLA_ENCODING_UTF8 )
-	{
-
-		sci->LoadEncoding(filename,CP_UTF8);
-		props_->put_ReadOnly(vb);
-		statusBar()->status(filename.toString());
-
-		LONG len = 0;
-		text_->get_Length(&len);
-
-		position_->put_Anchor((long)len);
-		position_->put_Caret((long)len);
-		position_->ScrollIntoView();
-		return ;
-	}
-	sci->Load(filename);
-	props_->put_ReadOnly(vb);
-	statusBar()->status(filename.toString());
-
-	LONG len = 0;
-	text_->get_Length(&len);
-
-	position_->put_Anchor((long)len);
-	position_->put_Caret((long)len);
-	position_->ScrollIntoView();
-}
-
-LRESULT Editor::OnToolbarDropDown(NMTOOLBAR* toolbar)
-{
-	mol::Menu m(mol::UI().Menu(IDM_MOE),false);
-	
-	int index = toolbar->iItem;
-	if ( index == IDM_MODE_EOL )
-		createMenuFromConf(m,mol::UI().SubMenu(IDM_MOE,IDM_MODE_EOL));
-	else 
-		createMenuFromConf(m,mol::UI().SubMenu(IDM_MOE,IDM_TOOLS));
-
-	mol::Menu context( mol::UI().SubMenu(IDM_MOE,index) );
-	showContext(context);
-
-	updateUI();
-	return TBDDRET_DEFAULT;
-}
  
 //////////////////////////////////////////////////////////////////////////////
 void Editor::OnSelectAll()
@@ -841,6 +701,71 @@ void Editor::OnLexer(int code, int id, HWND ctrl)
 
 
 //////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+void Editor::OnReload()
+{
+	if ( !sci )
+		return;
+
+	VARIANT_BOOL vb;
+	if ( S_OK != text_->get_Modified(&vb) )
+		return ;
+
+	if ( vb == VARIANT_TRUE )
+	{
+		mol::bstr path;
+		props_->get_Filename(&path);
+		LRESULT r = mol::v7::msgbox(*moe(), _T("you have unsaved changes."), _T("document modified!"),_T("discard all changes and proceed."),IDI_MOE );
+		if ( r != IDYES )
+			return ;
+	}
+	mol::bstr filename;
+	if ( S_OK != get_FilePath(&filename) )
+	{
+		return ;
+	}
+
+	if ( S_OK != props_->get_ReadOnly(&vb) )
+	{
+		return ;
+	}
+	long t;
+	if ( S_OK != props_->get_Encoding(&t) )
+	{
+		return ;
+	}
+
+	if ( mol::toString(filename).substr(0,6) == _T("ssh://") || mol::toString(filename).substr(0,6) == _T("moe-ssh://") )
+	{
+		sci->LoadEncoding(filename,CP_UTF8);
+		props_->put_ReadOnly(vb);
+		statusBar()->status(filename.toString());
+		scrollDown();
+		return ;
+	}
+
+	lastWriteTime_ = getLastWriteTime(filename.toString());
+
+	if ( t == SCINTILLA_ENCODING_UTF8 )
+	{
+
+		sci->LoadEncoding(filename,CP_UTF8);
+		props_->put_ReadOnly(vb);
+		statusBar()->status(filename.toString());
+		scrollDown();
+		return ;
+	}
+	sci->Load(filename);
+	props_->put_ReadOnly(vb);
+	statusBar()->status(filename.toString());
+	scrollDown();
+}
+
+
+
 //////////////////////////////////////////////////////////////////////////////
 
 void Editor::OnSaveAs()
@@ -960,22 +885,6 @@ void Editor::OnSave()
 	saving_ = false;
 }
 
-void Editor::OnExecForm()
-{
-	if ( !sci )
-		return;
-
-	mol::bstr filename;
-	props_->get_Filename(&filename);
-
-	saving_ = true;
-	sci->Save();
-	lastWriteTime_ = getLastWriteTime( filename.toString() );
-	saving_ = false;
-
-	mol::punk<IMoeDocument> doc;
-	docs()->OpenHtmlFrame(filename,&doc);
-}
 
 void Editor::OnShowLineNumbers()
 {
@@ -997,187 +906,80 @@ void Editor::OnShowLineNumbers()
 		mode.unCheckItem( IDM_MODE_SHOW_LINE_NUMBERS );
 }
 
+
+void Editor::OnMenu(HMENU popup, LPARAM unused)
+{
+	EditorMenu em(this);
+	em.onMenu(popup,unused);
+}
+
+LRESULT Editor::OnToolbarDropDown(NMTOOLBAR* toolbar)
+{
+	mol::Menu m(mol::UI().Menu(IDM_MOE),false);
+
+	EditorMenu em(this);
+	
+	int index = toolbar->iItem;
+	if ( index == IDM_MODE_EOL )
+		em.createMenuFromConf(m,mol::UI().SubMenu(IDM_MOE,IDM_MODE_EOL));
+	else 
+		em.createMenuFromConf(m,mol::UI().SubMenu(IDM_MOE,IDM_TOOLS));
+
+	mol::Menu context( mol::UI().SubMenu(IDM_MOE,index) );
+	showContext(context);
+
+	updateUI();
+	return TBDDRET_DEFAULT;
+}
+
+void Editor::OnExecScript()
+{
+	EditorScript es(this);
+	es.execScript();
+}
+
+void Editor::OnExecForm()
+{
+	EditorScript es(this);
+	es.execForm();
+}
+
+
 void Editor::OnDebugScriptGo()
 {
-	if ( !sci )
-		return;
-
-	debugDlg()->show(SW_HIDE);
-
-	line_->Highlite(-1);
-	annotation_->ClearAll();
-
-	if ( remote_ )
-	{		
-		mol::Ribbon::ribbon()->mode(8);
-	
-		mol::punk<IRemoteDebugApplication> app;
-
-		HRESULT hr = remote_->GetApplication(&app);
-		if ( hr == S_OK && app ) 
-		{
-			hr = app->ResumeFromBreakPoint( remote_, BREAKRESUMEACTION_CONTINUE, ERRORRESUMEACTION_AbortCallAndReturnErrorToCaller );
-		}
-
-		remote_.release();
-		return;
-	}
-
-	if ( ts_ )
-	{
-		::MessageBox( *moe(), _T("Script running already!"), _T("warning!"), MB_ICONERROR );
-		return;
-	}
-
-	mol::bstr filename;
-	if ( S_OK != props_->get_Filename(&filename) )
-		return ;
-
-	mol::bstr script;
-	if ( S_OK != text_->GetText(&script) )
-		return ;
-
-	mol::string engine = engineFromPath(filename.tostring());
-	if ( engine == _T("") )
-		return ;
-
-	mol::SafeArray<VT_I4> sf;
-
-
-	std::set<int> s;
-	if ( S_OK == markers_->GetMarkers(&sf) )
-	{
-		mol::SFAccess<long> sfa(sf);
-
-		for ( int i = 0; i < sfa.size(); i++ )
-		{
-			s.insert(sfa[i]);
-		}
-	}
-
-	ts_ = ThreadScript::CreateInstance( *moe(), script.toString(), filename.toString() );
-	ts_->addNamedObject((IMoe*)moe(), _T("moe"));
-	ts_->update_breakpoints(s);
-	ts_->OnScriptThread = mol::events::event_handler(&Editor::OnScriptThread,this);
-	ts_->OnScriptThreadDone = mol::events::event_handler(&Editor::OnScriptThreadDone,this);
-	ts_->execute( SCRIPTTEXT_ISVISIBLE);
-
-	mol::Ribbon::ribbon()->mode(8);
+	EditorScript es(this);
+	es.debugScriptGo();
 }
 
 
 void Editor::OnDebugScriptStepIn()
 {
-	if ( !sci )
-		return;
-
-	line_->Highlite(-1);
-	annotation_->ClearAll();
-
-	if ( !remote_)
-		return;
-
-	mol::punk<IRemoteDebugApplication> app;
-
-	HRESULT hr = remote_->GetApplication(&app);
-	if ( hr == S_OK && app ) 
-	{
-		hr = app->ResumeFromBreakPoint( remote_, BREAKRESUMEACTION_STEP_INTO, ERRORRESUMEACTION_AbortCallAndReturnErrorToCaller );
-	}
-
-	remote_.release();
-
-	mol::Ribbon::ribbon()->mode(9);
+	EditorScript es(this);
+	es.debugScriptStepIn();
 }
 
 void Editor::OnDebugScriptStepOver()
 {
-	if ( !sci )
-		return;
-
-	line_->Highlite(-1);
-	annotation_->ClearAll();
-
-	if ( !remote_)
-		return;
-
-	mol::punk<IRemoteDebugApplication> app;
-
-	HRESULT hr = remote_->GetApplication(&app);
-	if ( hr == S_OK && app ) 
-	{
-		hr = app->ResumeFromBreakPoint( remote_, BREAKRESUMEACTION_STEP_OVER, ERRORRESUMEACTION_AbortCallAndReturnErrorToCaller );
-	}
-
-	remote_.release();
-
-	mol::Ribbon::ribbon()->mode(9);
+	EditorScript es(this);
+	es.debugScriptStepOver();
 }
 
 void Editor::OnDebugScriptStepOut()
 {
-	if ( !sci )
-		return;
-
-	line_->Highlite(-1);
-	annotation_->ClearAll();
-
-	if ( !remote_)
-		return;
-
-	mol::punk<IRemoteDebugApplication> app;
-
-	HRESULT hr = remote_->GetApplication(&app);
-	if ( hr == S_OK && app ) 
-	{
-		hr = app->ResumeFromBreakPoint( remote_, BREAKRESUMEACTION_STEP_OUT, ERRORRESUMEACTION_AbortCallAndReturnErrorToCaller );
-	}
-
-	remote_.release();
-
-	mol::Ribbon::ribbon()->mode(9);
+	EditorScript es(this);
+	es.debugScriptStepOut();
 }
 
 void Editor::OnDebugScriptStop()
 {
-	if ( !sci )
-		return;
-
-	line_->Highlite(-1);
-	annotation_->ClearAll();
-
-	if ( !ts_ )
-		return;
-
-	ts_->cause_break();
-
-	mol::Ribbon::ribbon()->mode(9);
+	EditorScript es(this);
+	es.debugScriptStop();
 }
 
 void Editor::OnDebugScriptQuit()
 {
-	if ( !sci )
-		return;
-
-	debugDlg()->show(SW_HIDE);
-
-	line_->Highlite(-1);
-
-	mol::Ribbon::ribbon()->mode(1);
-
-	if ( !remote_)
-		return;
-
-
-	mol::punk<IRemoteDebugApplication> app;
-
-	HRESULT hr = remote_->GetApplication(&app);
-	if ( hr == S_OK && app ) 
-	{
-		hr = app->ResumeFromBreakPoint( remote_, BREAKRESUMEACTION_ABORT, ERRORRESUMEACTION_AbortCallAndReturnErrorToCaller );
-	}
-
-	remote_.release();
+	EditorScript es(this);
+	es.debugScriptQuit();
 }
 
 void Editor::OnScriptThreadDone()
@@ -1188,126 +990,24 @@ void Editor::OnScriptThreadDone()
 		return;
 	}
 
-	debugDlg()->remote.release();
-	debugDlg()->show(SW_HIDE);
-	ts_ = 0;
-
-	if ( sci)
-		line_->Highlite(-1);
-
-	mol::Ribbon::ribbon()->mode(1);
+	EditorScript es(this);
+	es.scriptThreadDone();
 }
 
 void Editor::OnScriptThread( int line, IRemoteDebugApplicationThread* remote, IActiveScriptError* pError )
 {
 	if ( mol::guithread() != mol::Thread::self() )
 	{
-		lasterror_ = _T("");
-
-		// get stack frame
-		DebugStackFrameDescriptor	desc;
-		::ZeroMemory(&desc,sizeof(DebugStackFrameDescriptor));
-
-		mol::punk<IEnumDebugStackFrames> frames;
-		if ( remote )
-		{
-			HRESULT hr = remote->EnumStackFrames( &frames );
-			if ( S_OK == hr && frames )
-			{
-				// update variable window
-				debugDlg()->update_variables(frames);
-			}
-		}
-		mol::ostringstream oss;
-		if ( pError )
-		{
-			oss << _T("line: ") << (line+1) << _T(" ");
-
-			EXCEPINFO ex;
-			pError->GetExceptionInfo(&ex);
-
-			DWORD context;
-			ULONG line;
-			LONG pos;
-			pError->GetSourcePosition(&context,&line,&pos);
-		
-			mol::punk<IActiveScriptErrorDebug> de(pError);
-			if ( de )
-			{
-				mol::punk<IDebugStackFrame> f;
-				de->GetStackFrame(&f);
-
-				if ( f )
-				{
-					mol::bstr e;
-					f->GetDescriptionString(TRUE,&e);
-
-					if ( e )
-						oss << e.toString() << std::endl;
-				}
-			}
-
-			if ( ex.bstrDescription )
-			{
-				oss << mol::bstr(ex.bstrDescription).toString();
-			}
-			oss << std::endl;
-			lasterror_ = oss.str();
-		}
-
-		if ( remote )
-			remote->Release();
-		if ( pError)
-			pError->Release();
-
-		mol::invoke( boost::bind( &Editor::OnScriptThread, this, line, remote, pError ) );
+		EditorScript es(this);
+		es.scriptThread(line,remote,pError);
 		return;
 	}
 
-	if ( !sci )
-		return;
-
-	ODBGS1("OnScriptThread:",line);
-
-	remote_.release();
-	remote_ = remote;
-
-	debugDlg()->remote = remote;
-	debugDlg()->show( remote ? SW_SHOW : SW_HIDE );
-
-	annotation_->ClearAll();
-	if ( !lasterror_.empty() && line >= 0 )
-	{
-		annotation_->SetText( line, mol::bstr(lasterror_) );
-	}
-
-	line_->Goto(line);
-	line_->Highlite(line);
-
-	mol::Ribbon::ribbon()->mode(9);
-	ODBGS1("Leaving OnScriptThread:",line);
+	EditorScript es(this);
+	es.scriptThread2(line,remote,pError);
 }
 
 
-void Editor::OnExecScript()
-{
-	if ( !sci )
-		return;
-
-	mol::bstr filename;
-	if ( S_OK != props_->get_Filename(&filename) )
-		return ;
-
-	mol::string engine = engineFromPath(filename.tostring());
-	if ( engine == _T("") )
-		return ;
-
-	mol::bstr script;
-	if ( S_OK != text_->GetText(&script) )
-		return ;
-
-	scriptlet()->eval(engine,script.toString(),sci);
-}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -1317,19 +1017,6 @@ void Editor::OnExecScript()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void Editor::OnMenu(HMENU popup, LPARAM unused)
-{
-	HMENU frameMenu = mol::UI().Menu(IDM_MOE);
-
-	if ( popup == mol::UI().SubMenu(IDM_MOE,IDM_MODE_EOL) )
-		createMenuFromConf(frameMenu,popup);
-	else
-	if ( popup == mol::UI().SubMenu(IDM_MOE,IDM_TOOLS) )
-		createMenuFromConf(frameMenu,popup);
-	else
-	if ( popup == mol::UI().SubMenu(IDM_MOE,IDM_EDIT_DEBUG) )
-		createMenuFromConf(frameMenu,popup);
-}
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1447,389 +1134,49 @@ HRESULT __stdcall Editor::Sintilla_Events::OnMarker( long line)
 
 void Editor::updateUI()
 {
-	if ( !sci )
-	{
+	EditorMenu em(this);
+	em.updateUI();
+
+}
+
+
+void Editor::scrollDown()
+{
+	LONG len = 0;
+	text_->get_Length(&len);
+
+	position_->put_Anchor((long)len);
+	position_->put_Caret((long)len);
+	position_->ScrollIntoView();
+}
+
+
+void Editor::checkModifiedOnDisk()
+{
+	if ( saving_)
 		return;
-	}
 
 	mol::bstr path;
-	HRESULT hr = props_->get_Filename(&path);
-	if ( hr != S_OK )
+	props_->get_Filename(&path);
+
+	if ( moe()->getActive() != (HWND)*this || saving_ )
+	{
 		return;
+	}
 
-	mol::string title = path.toString();
+	FILETIME ft = getLastWriteTime( path.toString() );
 
-	long line=0;
-	line_->get_Current(&line);
-	mol::ostringstream oss;
-	oss << line;
 
-	long pos = 0;
-	long linepos = 0;
-	position_->get_Caret(&pos);
-	line_->PosFromLine(line-1,&linepos);
-
-	long col = pos-linepos;
-	mol::ostringstream oss2;
-	oss2 << col << " ";
-
-	statusBar()->setText( path.toString(), oss.str(), oss2.str() );
-
-	long encoding;
-	if ( S_OK == props_->get_Encoding(&encoding) )
+	if ( (ft.dwHighDateTime != lastWriteTime_.dwHighDateTime) || (ft.dwLowDateTime != lastWriteTime_.dwLowDateTime) )
 	{
-		switch ( encoding )
+		lastWriteTime_ = ft;
+		if ( IDYES == mol::v7::msgbox( *moe(),_T("reload file?"),_T("file is modified!"),_T("file has been modified on disk, reload?"),IDI_MOE) )
 		{
-			case SCINTILLA_ENCODING_UTF16 :
-			{
-				title += _T(" - UTF16-LE");
-				break;
-			}
-			case SCINTILLA_ENCODING_UTF8 :
-			{
-				title += _T(" - UTF8");
-				break;
-			}
-			default:
-			{
-				title += _T(" ");
-				break;
-			}
-		}
-		if ( mol::Ribbon::ribbon()->enabled())
-		{
-			mol::Ribbon::handler(RibbonEncoding)->select((int)moe()->codePageIndex((int)encoding));
+			OnReload();
 		}
 	}
-	
-	long systype;
-	if ( S_OK == props_->get_SysType(&systype) )
-	{
-		if ( systype ==  SCINTILLA_SYSTYPE_UNIX )
-		{
-			title += _T(" UNIX");
-			if ( mol::Ribbon::ribbon()->enabled())
-			{
-				mol::Ribbon::handler(RibbonSelectModeUnix)->check(true); 
-				mol::Ribbon::handler(RibbonSelectModeWin32)->check(false); 
-			}
-		}
-		else
-		{
-			title += _T(" WIN32");
-			if ( mol::Ribbon::ribbon()->enabled())
-			{
-				mol::Ribbon::handler(RibbonSelectModeUnix)->check(false); 
-				mol::Ribbon::handler(RibbonSelectModeWin32)->check(true); 
-			}
-		}
-	}
-
-	LONG type = 0;
-	props_->get_Syntax(&type);
-	syntax()->setCurSel(type);
-
-	if ( mol::Ribbon::ribbon()->enabled())
-	{
-		mol::Ribbon::handler(RibbonSelectLanguage)->select(type);
-	}
-
-	VARIANT_BOOL vb;
-	if ( S_OK == props_->get_ReadOnly(&vb) )
-	{
-		if ( vb == VARIANT_TRUE )
-			title += _T(" [ReadOnly]");
-	}
-	setText(title);
-
-
-	if ( mol::Ribbon::ribbon()->enabled())
-	{
-		if ( S_OK == props_->get_TabUsage(&vb) )
-		{
-			mol::Ribbon::handler(RibbonTabUseTabs)->check(vb == VARIANT_TRUE ? true : false );
-		}
-		if ( S_OK == props_->get_TabIndents(&vb) )
-		{
-			mol::Ribbon::handler(RibbonTabIndents)->check(vb == VARIANT_TRUE ? true : false );
-		}
-		if ( S_OK == props_->get_BackSpaceUnindents(&vb) )
-		{
-			mol::Ribbon::handler(RibbonTabBackSpaceUnIndents)->check(vb == VARIANT_TRUE ? true : false );
-		}
-		long w = 0;
-		if ( S_OK == props_->get_TabWidth(&w) )
-		{
-			DECIMAL d;
-			::ZeroMemory(&d,sizeof(d));
-			d.Lo32 = w;
-
-			VARIANT v;
-			::VariantInit(&v);
-			v.vt = VT_DECIMAL;
-			v.decVal = d;
-
-			mol::variant var(v);
-
-			mol::Ribbon::handler(RibbonTabSize)->decimal(var);
-
-			::VariantClear(&v);
-		}
-		if ( S_OK == props_->get_WriteBOM(&vb) )
-		{
-			mol::Ribbon::handler(RibbonWriteBOM)->check(vb == VARIANT_TRUE ? true : false );
-		}
-	}
-
-
-	if ( S_OK != props_->get_ShowLineNumbers(&vb) )
-		return;
-
-	if ( mol::Ribbon::ribbon()->enabled() )
-	{
-		bool  b = vb == VARIANT_TRUE ? true : false;
-		mol::Ribbon::handler(RibbonShowLineNumbers)->check(b);
-	}
-	else
-	{
-		mol::Menu mode(mol::UI().SubMenu(IDM_MOE,IDM_MODE));
-
-		if ( vb == VARIANT_TRUE )
-			mode.checkItem( IDM_MODE_SHOW_LINE_NUMBERS );
-		else
-			mode.unCheckItem( IDM_MODE_SHOW_LINE_NUMBERS );
-	}
-
-	if (!ts_)
-	{		
-		mol::Ribbon::ribbon()->mode(1);		
-	}
-	else
-	{
-		debugDlg()->show(SW_SHOW);
-		mol::Ribbon::ribbon()->mode(10);		
-	}
-	mol::Ribbon::ribbon()->maximize();
 }
-
-
 //////////////////////////////////////////////////////////////////////////////
-void Editor::populateMenuFromConf( HMENU submenu, ISetting* set, std::map<int,ISetting*>& confMap, int& id)
-{
-	long l;
-	if ( S_OK == set->Count(&l) )
-	{
-		for ( long i = 0; i < l; i++ )
-		{
-			mol::punk<ISetting> s;
-			if ( S_OK == set->Item(mol::variant(i),&s) )
-			{
-				walkConf(submenu,s,confMap,id);
-			}
-		}
-	}
-}
-
-void Editor::updateModeMenu( mol::Menu& mode )
-{
-	mode.enableItem(IDM_MODE_UNIX);
-
-	if ( !sci )
-		return;
-
-	long systype;
-	if ( S_OK == props_->get_SysType(&systype) )
-	{
-		if ( systype == SCINTILLA_SYSTYPE_WIN32 )
-		{
-			mode.unCheckItem(IDM_MODE_UNIX);
-			mode.checkItem(IDM_MODE_WIN32);
-		}
-		else
-		{
-			mode.unCheckItem(IDM_MODE_WIN32);
-			mode.checkItem(IDM_MODE_UNIX);
-		}
-	}
-	long encoding;
-	if ( S_OK == props_->get_Encoding(&encoding) )
-	{
-		if ( encoding == SCINTILLA_ENCODING_UTF16 )
-		{
-			mode.disableItem(IDM_MODE_UNIX);
-		}
-	}
-}
-
-void Editor::updateToolMenu( HMENU tools )
-{
-	VARIANT_BOOL vb;
-	static bool runonce = true;
-
-	if ( runonce )
-	{
-		runonce = false;
-	}
-	else
-		if ( (config()->get_IsDirty(&vb) == S_OK) && (vb == VARIANT_FALSE) )
-	{
-		return;
-	}
-
-
-	int startShortCutId_ = ID_FIRST_USER_CMD;
-	int startScriptId_   = ID_FIRST_USER_SCRIPT;
-	int startBatchId_    = ID_FIRST_USER_BATCH;
-	int startFormId_     = ID_FIRST_USER_FORM;
-
-	shortCutMap.clear();
-	scriptMap.clear();
-	batchMap.clear();
-	formMap.clear();
-
-	mol::punk<ISetting> shortCuts;
-	mol::punk<ISetting> scripts;
-	mol::punk<ISetting> batches;
-	mol::punk<ISetting> forms;
-
-	if ( S_OK != config()->Item(mol::variant("shortCuts"),&shortCuts) )
-		return;
-
-	if ( S_OK != config()->Item(mol::variant("scripts"),&scripts) )
-		return;
-
-	if ( S_OK != config()->Item(mol::variant("batches"),&batches) )
-		return;
-
-	if ( S_OK != config()->Item(mol::variant("forms"),&forms) )
-		return;
-
-	int n = ::GetMenuItemCount(tools);
-	for ( int j = 0; j < 4; j++ )
-	{
-		HMENU sub = ::GetSubMenu(tools,n-j-1);
-		mol::Menu subMenu(sub);
-		int nsub = ::GetMenuItemCount(sub);
-		for ( int k = nsub-1; k >= 0; k-- )
-		{
-			subMenu.remove(k,MF_BYPOSITION);
-		}
-	}
-
-	HMENU ms = mol::UI().SubMenu(IDM_MOE,IDM_USER_SCRIPT);
-	populateMenuFromConf( ms, scripts, scriptMap,startScriptId_);
-
-	HMENU mb = mol::UI().SubMenu(IDM_MOE,IDM_USER_BATCH);
-	populateMenuFromConf( mb, batches, batchMap,startBatchId_);			
-
-	HMENU mf = mol::UI().SubMenu(IDM_MOE,IDM_USER_FORM);
-	populateMenuFromConf( mf, forms, formMap,startFormId_);			
-	
-	HMENU msc = mol::UI().SubMenu(IDM_MOE,IDM_USER_SHORTCUT);
-	populateMenuFromConf( msc, shortCuts, shortCutMap,startShortCutId_);			
-
-
-}
-
-void Editor::updateDebugMenu( HMENU debug )
-{
-	mol::Menu menu(debug);
-	//menu.disableItem(IDM_EDIT_DEBUG_GO);
-	menu.disableItem(IDM_EDIT_DEBUG_STEPIN);
-	menu.disableItem(IDM_EDIT_DEBUG_STEPOVER);
-	menu.disableItem(IDM_EDIT_DEBUG_STEPOUT);
-	menu.disableItem(IDM_EDIT_DEBUG_STOP);
-	menu.disableItem(IDM_EDIT_DEBUG_QUIT);
-	
-	if ( remote_ )
-	{
-		menu.enableItem(IDM_EDIT_DEBUG_STEPIN);
-		menu.enableItem(IDM_EDIT_DEBUG_STEPOVER);
-		menu.enableItem(IDM_EDIT_DEBUG_STEPOUT);
-		menu.enableItem(IDM_EDIT_DEBUG_QUIT);
-		return;
-	}
-
-	if ( ts_ )
-	{
-		menu.enableItem(IDM_EDIT_DEBUG_STOP);
-		menu.enableItem(IDM_EDIT_DEBUG_QUIT);
-		return;
-	}
-}
-
-
-void Editor::createMenuFromConf(HMENU menu,HMENU popup)
-{
-
-	HMENU frameMenu = mol::UI().Menu(IDM_MOE);
-
-	HMENU tools =   mol::UI().SubMenu(IDM_MOE,IDM_TOOLS);
-	mol::Menu mode (mol::UI().SubMenu(IDM_MOE,IDM_MODE_EOL));
-	mol::Menu debug(mol::UI().SubMenu(IDM_MOE,IDM_EDIT_DEBUG));
-
-	if ( popup == mode )
-	{
-		updateModeMenu(mode);
-		return;
-	}
-
-	if ( popup == debug )
-	{
-		updateDebugMenu(debug);
-	}
-
-	if ( popup != tools )
-		return;
-
-	updateToolMenu(tools);
-
-	if ( !mol::Ribbon::ribbon()->enabled())
-		::DrawMenuBar(*moe()); 
-	::UpdateWindow(*moe()); 
-}
-
-
-
-void Editor::walkConf(HMENU parent, ISetting* set, std::map<int,ISetting*>& confMap, int& id)
-{
-    if ( !set )
-		return;
-
-    long l;
-	mol::bstr key;
-	if ( S_OK != set->get_Key(&key) )
-		return;
-
-	if ( S_OK != set->Count(&l) )
-		return;
-
-	if ( l <= 0 ) 
-	{
-		mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo(key.toString().c_str(),false,-1,0);
-		::AppendMenu( parent, MF_OWNERDRAW, (UINT_PTR)id, (mol::TCHAR*)inf);
-		confMap[id] = (ISetting*)set;
-		id++;
-		return;
-	}
-
-	HMENU m = ::CreateMenu();
-	mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo(key.toString().c_str(),false,-1,0);
-	::AppendMenu( parent, MF_POPUP|MF_OWNERDRAW, (UINT_PTR)m, (mol::TCHAR*)inf);
-
-	for ( long i = 0; i < l; i++ )
-	{
-		mol::punk<ISetting> s;
-		if ( S_OK != set->Item(mol::variant(i),&s) )
-			continue;
-
-		if ( !s )
-			continue;
-
-		walkConf(m,s,confMap,id);
-	}
-}
-
 //////////////////////////////////////////////////////////////////////////////
 // pretty node helper for formatting HTML
 //////////////////////////////////////////////////////////////////////////////

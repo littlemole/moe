@@ -106,13 +106,6 @@ public:
 // moe config sub object
 /////////////////////////////////////////////////////////////////////
 
-#define DISPID_MOECONF_SYSTYPE 3
-#define DISPID_MOECONF_ENCODING 4
-#define DISPID_MOECONF_TABUSAGE 5
-#define DISPID_MOECONF_TABINDENTS 6
-#define DISPID_MOECONF_BACKSPACEUNINDENTS 7
-#define DISPID_MOECONF_TABWIDTH 8
-#define DISPID_MOECONF_LINENUMBERS 9
 
 class MoeConfig 
 	:

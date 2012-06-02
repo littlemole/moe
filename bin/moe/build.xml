@@ -52,6 +52,8 @@
     <ClCompile Include="src\Docs.cpp" />
     <ClCompile Include="src\DocFactory.cpp" />
     <ClCompile Include="src\editor.cpp" />
+    <ClCompile Include="src\EditorScript.cpp" />
+    <ClCompile Include="src\EditorMenu.cpp" />
     <ClCompile Include="src\form.cpp" />
     <ClCompile Include="src\formEditor.cpp" />
     <ClCompile Include="src\TailEditor.cpp" />

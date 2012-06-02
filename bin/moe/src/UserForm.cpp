@@ -1121,7 +1121,8 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 									tmp += _T("{");
 									tmp += func;
 									tmp += _T("};");
-									func = tmp;
+									list_.addString(func + _T(" (GET)") );
+									func = tmp;									
 								}
 								else if ( funcdesc->invkind & DISPATCH_PROPERTYPUT )
 								{
@@ -1130,10 +1131,12 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 									tmp +=_T("{");
 									tmp += func;
 									tmp +=_T("} = $var;");
-									func = tmp;
+									list_.addString(func + _T(" (PUT)") );
+									func = tmp;									
 								}
 								else if ( funcdesc->invkind == DISPATCH_METHOD )
 								{
+									list_.addString(func);
 									func = name.toString() + _T(".") + func;
 									if ( funcdesc->elemdescFunc.tdesc.vt != VT_VOID)
 									{
@@ -1155,7 +1158,7 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 								{
 									continue;
 								}
-								list_.addString(mol::toString(bstrs[0]));
+								
 
 								int index = list_.index(mol::toString(bstrs[0]));
 								if ( index != -1 )
@@ -1176,6 +1179,7 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 									oss << _T(".");
 									oss << func;
 									oss << _T(";\r\n");
+									list_.addString(func + _T(" (GET)") );
 								}
 								else if ( funcdesc->invkind & DISPATCH_PROPERTYPUT )
 								{
@@ -1184,9 +1188,11 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 									oss << _T(".");
 									oss << func;
 									oss << _T(" = value;\r\n");
+									list_.addString(func + _T(" (PUT)") );
 								}
 								else if ( funcdesc->invkind == DISPATCH_METHOD )
 								{
+									list_.addString(func);
 									if ( funcdesc->elemdescFunc.tdesc.vt != VT_VOID)
 									{
 										oss << _T("\r\nvar retval = ");
@@ -1206,7 +1212,6 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 								{
 									continue;
 								}
-								list_.addString(mol::toString(bstrs[0]));
 
 								int index = list_.index(mol::toString(bstrs[0]));
 								if ( index != -1 )
@@ -1227,6 +1232,7 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 									oss << _T(".");
 									oss << func;
 									oss << _T("\r\n");
+									list_.addString(func + _T(" (GET)") );
 								}
 								else if ( funcdesc->invkind & DISPATCH_PROPERTYPUT )
 								{
@@ -1235,9 +1241,11 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 									oss << _T(".");
 									oss << func;
 									oss << _T(" = value\r\n");
+									list_.addString(func + _T(" (PUT)") );
 								}
 								else if ( funcdesc->invkind == DISPATCH_METHOD )
 								{
+									list_.addString(func);
 									if ( funcdesc->elemdescFunc.tdesc.vt != VT_VOID)
 									{
 										oss << _T("\r\n retval = ");
@@ -1257,7 +1265,6 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 								{
 									continue;
 								}
-								list_.addString(mol::toString(bstrs[0]));
 
 								int index = list_.index(mol::toString(bstrs[0]));
 								if ( index != -1 )
@@ -1334,25 +1341,6 @@ void FuncDlg::copySelectionToClipboard()
 
 	::PostMessage(moe()->getActive(),WM_COMMAND,IDM_EDIT_PASTE,0);
 
-	/*
-	if ( ::OpenClipboard( *this )	)
-	{
-		::EmptyClipboard();
-
-		std::string s = mol::tostring(handler);
-		mol::global glob(s,GMEM_MOVEABLE);
-		::SetClipboardData(CF_TEXT,glob);
-		glob.detach();
-
-		std::wstring ws = mol::towstring(handler);
-		mol::global glob2(ws,GMEM_MOVEABLE);
-		::SetClipboardData(CF_UNICODETEXT,glob2);
-		glob2.detach();
-
-		::CloseClipboard();
-		::PostMessage(moe()->getActive(),WM_COMMAND,IDM_EDIT_PASTE,0);
-	}
-	*/
 }
 
 LRESULT FuncDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)

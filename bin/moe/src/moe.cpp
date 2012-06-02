@@ -13,7 +13,7 @@
 #include "xmlui.h"
 #include "tree.h"
 #include "Ribbonres.h"
-#include "ax/sshShell/sshShell_h.h"
+//#include "ax/sshShell/sshShell_h.h"
 
 using namespace mol::io;
 using namespace mol;

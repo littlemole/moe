@@ -48,18 +48,217 @@ int MoeLoop::operator() ( mol::win::AppBase& app )
 
 }
 
+class moeEditorCliType : public moeCliType
+{
+public:
+
+	virtual bool open(IDispatch* docs, IDispatch* dialogs, std::string p)
+	{
+		if ( p.substr(0,4) == "moe:" ) 
+		{
+			p = p.substr(4);
+			if ( mol::Path::isDir(mol::toString(p)) )
+			{
+				mol::disp_invoke(docs, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR , mol::variant(p) );
+			}
+			else
+			{
+				mol::disp_invoke(docs, DISPID_IMOEDOCUMENTCOLLECTION_OPEN, mol::variant(p) );
+			}
+			return true;
+		}
+		return false;
+	}
+};
+
+class moeDefaultCliType : public moeCliType
+{
+public:
+
+	virtual bool open(IDispatch* docs, IDispatch* dialogs, std::string p)
+	{
+		p = resolvePath(p);
+		if ( p.empty() )
+			return true;
+
+		if ( mol::Path::isDir(mol::toString(p)) )
+		{
+			mol::disp_invoke(docs, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR, mol::variant(p) );
+		}
+		else
+		{
+			mol::disp_invoke(docs, DISPID_IMOEDOCUMENTCOLLECTION_OPEN, mol::variant(p) );
+		}
+		return true;
+	}
+};
+
+class moeOpenCliType : public moeCliType
+{
+public:
+
+	virtual bool open(IDispatch* docs, IDispatch* dialogs, std::string p)
+	{
+		if ( p.substr(0,9) == "moe-open:" ) 
+		{
+			mol::disp_invoke(dialogs, DISPID_IMOEDIALOGS_OPEN, mol::variant(p.substr(9)) );					
+			return true;
+		}
+		return false;
+	}
+};
+
+
+class moeBinCliType : public moeCliType
+{
+public:
+
+	virtual bool open(IDispatch* docs, IDispatch* dialogs, std::string p)
+	{
+		if ( p.substr(0,8) == "moe-bin:" ) 
+		{
+			p = p.substr(8);
+			mol::disp_invoke(docs, DISPID_IMOEDOCUMENTCOLLECTION_OPENHEXEDITOR, mol::variant(p), mol::variant(true) );					
+			return true;
+		}
+		return false;
+	}
+};
+
+
+class moeHtmlCliType : public moeCliType
+{
+public:
+
+	virtual bool open(IDispatch* docs, IDispatch* dialogs, std::string p)
+	{
+		if ( p.substr(0,9) == "moe-html:" ) 
+		{
+			p = p.substr(9);
+			mol::disp_invoke(docs, DISPID_IMOEDOCUMENTCOLLECTION_OPENHTMLFRAME, mol::variant(p) );					
+			return true;
+		}
+		return false;
+	}
+};
+
+
+
+class moeDirCliType : public moeCliType
+{
+public:
+
+	virtual bool open(IDispatch* docs, IDispatch* dialogs, std::string p)
+	{
+		if ( p.substr(0,8) == "moe-dir:" ) 
+		{
+			p = p.substr(8);
+			if ( !mol::Path::isDir(mol::toString(p)) )
+			{
+				p = mol::tostring(mol::Path::parentDir(mol::toString(p)));
+			}
+			mol::disp_invoke(docs, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR, mol::variant(p) );					
+			return true;
+		}
+		return false;
+	}
+};
+
+
+
+class moeTailCliType : public moeCliType
+{
+public:
+
+	virtual bool open(IDispatch* docs, IDispatch* dialogs, std::string p)
+	{
+		if ( p.substr(0,9) == "moe-tail:" ) 
+		{
+			p = p.substr(9);
+			mol::disp_invoke(docs, DISPID_IMOEDOCUMENTCOLLECTION_OPENTAILDOCUMENT, mol::variant(p) );					
+			return true;
+		}
+		return false;
+	}
+};
+
+
+
+class moeHexCliType : public moeCliType
+{
+public:
+
+	virtual bool open(IDispatch* docs, IDispatch* dialogs, std::string p)
+	{
+		if ( p.substr(0,8) == "moe-hex:" ) 
+		{
+			p = p.substr(8);
+			mol::disp_invoke(docs, DISPID_IMOEDOCUMENTCOLLECTION_OPENHEXEDITOR, mol::variant(p), mol::variant(true) );					
+			return true;
+		}
+		return false;
+	}
+};
+
+
+
+class moeRtfCliType : public moeCliType
+{
+public:
+
+	virtual bool open(IDispatch* docs, IDispatch* dialogs, std::string p)
+	{
+		if ( p.substr(0,8) == "moe-rtf:" ) 
+		{
+			p = p.substr(8);
+			mol::disp_invoke(docs, DISPID_IMOEDOCUMENTCOLLECTION_OPENRTFDOCUMENT, mol::variant(p) );					
+			return true;
+		}
+		return false;
+	}
+};
+
+
+
+
+class moeSshCliType : public moeCliType
+{
+public:
+
+	virtual bool open(IDispatch* docs, IDispatch* dialogs, std::string p)
+	{
+		if ( p.substr(0,8) == "moe-ssh:" ) 
+		{
+			p = p.substr(4);
+			mol::disp_invoke(docs, DISPID_IMOEDOCUMENTCOLLECTION_OPEN, mol::variant(p) );					
+			return true;
+		}
+		return false;
+	}
+};
+
 
 MoeApp::MoeApp()
 {
-	// do not enable extensions by default
-	enableExtensions_ = false;
-
 	// unlock embedded IE restrictions
 	mol::v7::unlockInternetExplorer();
+
+	// CLI support
+	moeCliTypes.push_back( new moeEditorCliType );
+	moeCliTypes.push_back( new moeOpenCliType );
+	moeCliTypes.push_back( new moeBinCliType );
+	moeCliTypes.push_back( new moeHtmlCliType );
+	moeCliTypes.push_back( new moeDirCliType );
+	moeCliTypes.push_back( new moeTailCliType );
+	moeCliTypes.push_back( new moeHexCliType );
+	moeCliTypes.push_back( new moeRtfCliType );
+	moeCliTypes.push_back( new moeSshCliType );
+	moeCliTypes.push_back( new moeDefaultCliType );
 }
 
 MoeApp::~MoeApp()
 {
+	mol::purge(moeCliTypes);
 	ODBGS(">>>>>>>>>>>>>>>>>>>>>>> ~MoeApp <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 }
 
@@ -117,27 +316,10 @@ int MoeApp::runStandalone(const mol::string& cmdline)
 }
 
 
-// we override run as we check for extensions before running
-
-int MoeApp::run(const mol::string& cmdline)
-{
-	// enable extension libs loading ?
-	if ( _tcsicmp(cmdline.c_str(), _T("/enable")) == 0 )
-	{
-		ODBGS("enable extensions");
-		enableExtensions_ = true;
-	}
-
-	// load GTK and .NET dlls dynamically
-	init_extensions_if();
-
-	// std local server startup
-	return local_server<MoeLoop>::run(cmdline);
-}
 
 void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 {
-	std::string cl = mol::tostring(cmdline);
+	std::string cl = mol::toUTF8(cmdline);
 
 	mol::variant v;
 	HRESULT hr = mol::get( moe, DISPID_IMOE_DOCUMENTS, &v);
@@ -170,7 +352,10 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 		{
 			s = rgxp.subString( cl, 3 );
 		}
+
+		openMoeDocument(dispDoc,dialogs.pdispVal,s);
 		
+		/*
 		if ( s.substr(0,4) == "moe:" ) 
 		{
 			s = s.substr(4);
@@ -242,13 +427,28 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 				mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPEN, mol::variant(s) );
 			}
 		}
+		*/
 	}
 }
+
+
+void MoeApp::openMoeDocument(IDispatch* docs, IDispatch* dialogs,const std::string& s) 
+{
+	for( size_t i = 0; i < moeCliTypes.size(); i++)
+	{
+		moeCliType* t = moeCliTypes[i];
+		if ( t->open(docs,dialogs,s) )
+		{
+			return;
+		}
+	}
+}
+
 
 /////////////////////////////////////////////////////////////////////////
 // initialize  extensions helper
 /////////////////////////////////////////////////////////////////////////
-
+/*
 void MoeApp::init_extensions_if( )
 {
 
@@ -274,6 +474,7 @@ void MoeApp::init_extensions_if( )
 	}
 
 }
+*/
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////

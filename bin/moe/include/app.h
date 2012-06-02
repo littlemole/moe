@@ -16,6 +16,17 @@ public:
 
 
 /////////////////////////////////////////////////////////////////////////
+
+class moeCliType
+{
+public:
+	virtual ~moeCliType()
+	{}
+
+	virtual bool open(IDispatch* docs, IDispatch* dialogs, std::string p) = 0;
+
+};
+
 /////////////////////////////////////////////////////////////////////////
 
 class MoeApp : 
@@ -25,7 +36,6 @@ class MoeApp :
 friend mol::Singleton<MoeApp>; 
 public:
 
-    virtual int run(const mol::string& cmdline);
 	virtual int runEmbedded(const mol::string& cmdline);
 	virtual int runStandalone(const mol::string& cmdline);
 
@@ -42,10 +52,13 @@ private:
 	mol::ssh::Init      si_;
 	mol::WinSockUser    wsu_;
 
-	void init_extensions_if();
-	bool enableExtensions_;
+//	void init_extensions_if();
+//	bool enableExtensions_;
 
 	void openDocsFromCommandLine( IDispatch* m, mol::string cmdline );
+	void openMoeDocument(IDispatch* docs, IDispatch* dialogs,const std::string& s);
+
+	std::vector<moeCliType*> moeCliTypes;
 };
 
 /////////////////////////////////////////////////////////////////////////
