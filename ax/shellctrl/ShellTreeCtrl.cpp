@@ -851,14 +851,6 @@ BOOL ShellTree::expandFolder( HTREEITEM item, bool force, int flags )
 
 		for ( std::vector<mol::string>::iterator iter = dirs.begin(); iter != dirs.end(); iter++ )
 		{
-            //already there?
-			mol::string p(*iter);
-            HTREEITEM hit = getChildByPath(item,*iter);
-            if ( hit )
-			{
-				tree_.setItemState(hit,0,TVIS_CUT);
-                continue;
-			}
 			Shit& it = dirsMap[*iter];
 			HTREEITEM hItem = addFolderNode( folder, it, item, 0 );
             tree_.addNode(_T(""),hItem);
@@ -866,14 +858,6 @@ BOOL ShellTree::expandFolder( HTREEITEM item, bool force, int flags )
 
 		for ( std::vector<mol::string>::iterator iter = files.begin(); iter != files.end(); iter++ )
 		{
-            //already there?
-            mol::string p(*iter);
-            HTREEITEM hit = getChildByPath(item,*iter);
-            if ( hit )
-			{
-				tree_.setItemState(hit,0,TVIS_CUT);
-                continue;
-			}
 			Shit& it = filesMap[*iter];
 			HTREEITEM hItem = addFolderNode( folder, it, item, 0 );
 		}
