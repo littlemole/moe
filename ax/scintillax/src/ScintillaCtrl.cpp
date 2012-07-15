@@ -1422,13 +1422,13 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  long enc)
 
 	std::stringstream is;
 	
-	mol::filestream in;
-	in.open( mol::tostring(p),GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,0,OPEN_EXISTING);
-
 	edit()->setText("");
 	edit()->setCodePage(SC_CP_UTF8);
 
     std::string s;
+	mol::filestream in;
+	in.open( mol::tostring(p),GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,0,OPEN_EXISTING);
+
     if ( !in.good() )
 	{
 		DWORD error = ::GetLastError();
@@ -1451,7 +1451,6 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  long enc)
 				}
 			}
 		}
-		return false;
 	}
 	else
 	{
@@ -1461,6 +1460,16 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  long enc)
 
 	mol::FileEncoding fe;
 
+	mol::FileEncoding e;
+	DWORD cp = e.investigate(s);
+	if ( cp == CP_WINUNICODE )
+	{
+		enc = CP_WINUNICODE;
+	}
+	if ( cp == CP_UTF8 )
+	{
+		enc = CP_UTF8;
+	}
 	std::string utf8_bytes = fe.convertToUTF8( s, enc );
 
 	if ( fe.isBinary() )
@@ -1470,7 +1479,7 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  long enc)
 	}
 
 	props_->put_SysType(  fe.eolMode() );
-	props_->put_Encoding( fe.codePage() );
+	props_->put_Encoding( enc );
 	props_->put_WriteBOM( fe.hasBOM() ? VARIANT_TRUE : VARIANT_FALSE );
 
 	edit()->setText(mol::unix2dos(utf8_bytes));

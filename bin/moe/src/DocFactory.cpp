@@ -401,6 +401,7 @@ IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const mol::stri
 		{
 			return openSSHfactory(path);
 		}
+		logger(LOGINFO) << "path does not exist : " << mol::tostring(path);
 		return 0;
 	}
 
@@ -471,6 +472,7 @@ IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const mol::stri
     }
 	in.close();
 
+	/*
 	std::string sniff = is.str();
 
 	mol::FileEncoding e;
@@ -488,6 +490,7 @@ IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const mol::stri
 	{
 		return new MoeHexFactory(readOnly);
 	}
+	*/
 
 	// ... so try open in text editor
 	return new MoeEditorDocumentFactory(enc,readOnly);
@@ -552,6 +555,7 @@ HRESULT __stdcall  DocFactory::openDocument( const mol::string& p, MOE_DOCTYPE t
 	mol::MdiChild* mdi = factory->openDocument( path );
 	if (!mdi)
 	{
+		logger(LOGINFO) << "failed to load " << mol::tostring(path);
 		// failed to load
 		if ( moe()->activeObject)
 			moe()->activeObject->OnDocWindowActivate(TRUE);
@@ -566,8 +570,12 @@ HRESULT __stdcall  DocFactory::openDocument( const mol::string& p, MOE_DOCTYPE t
 			hr = ei->GetSource(&src);
 
 			mol::ostringstream oss;
-			oss << _T(" failed to load ") << path << _T(" ") << desc;
-			statusBar()->status( oss.str() );
+			oss << _T(" failed to load ") << mol::toString(path) << _T(" ") << desc.toString();
+
+			mol::string str = oss.str();
+			statusBar()->status( str );
+
+			logger(LOGINFO) << mol::tostring(str);
 		}
 		else
 		{

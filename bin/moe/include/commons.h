@@ -68,8 +68,46 @@
 // resource identifiers defines //BAD BAD BAD
 //#include "resource.h"
 
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 enum LogLevel { LOGERROR, LOGWARN, LOGINFO, LOGDEBUG };
+
+class Appender
+{
+public:
+
+	virtual ~Appender()
+	{}
+
+	virtual void write(const std::string& str) = 0;
+};
+
+class FileAppender : public Appender
+{
+public:
+
+	FileAppender(const std::string& path);
+	virtual ~FileAppender();
+
+	virtual void write(const std::string& str);
+
+private:
+	mol::filestream fs_;
+};
+
+
+class DebugAppender : public Appender
+{
+public:
+
+	DebugAppender() {};
+	virtual ~DebugAppender() {};
+
+	virtual void write(const std::string& str);
+
+private:
+};
 
 class Logger
 {
@@ -82,7 +120,7 @@ public:
    Logger& operator<<( const T& rhs )
    {
 	   oss_ << rhs;
-	   return this;
+	   return *this;
    }
 
 private:
@@ -93,6 +131,8 @@ private:
    LogLevel logLevel_;
    std::ostringstream oss_;
 };
+
+typedef boost::shared_ptr<Appender> appender;
 
 class Log
 {
@@ -107,12 +147,17 @@ public:
 
 	Logger getLogger(LogLevel l);
 
-	void write(const std::string& str);
+	void add( Appender* appender);
 
 private:
 
+	void write(const std::string& str);
+
+
 	mol::filestream fs_;
 	LogLevel logLevel_;
+
+	std::vector< appender > appenders_;
 };
 
 Log& log();

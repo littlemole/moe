@@ -1074,28 +1074,32 @@ std::string now()
   time ( &rawtime );
   timeinfo = localtime ( &rawtime );
 
-  strftime (buffer,80,"%Y-%m-%d-%H-%M-%S",timeinfo);
+  strftime (buffer,80,"%Y-%m-%d %H:%M:%S",timeinfo);
   return std::string(buffer);
 }
 
+
+///////////////////////////////////////////////////////////////
 
 
 Log::Log()
 {
 	logLevel_ = LOGINFO;
-	mol::string path = appPath() + _T("\\moe.log");
-	fs_.open( mol::tostring(path), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS );
+//	mol::string path = appPath() + _T("\\moe.log");
+//	fs_.open( mol::tostring(path), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS );
 }
 
 Log::~Log()
 {
-	fs_.close();
+	
 }
 
 void Log::write(const std::string& str)
 {
-	fs_ << str << std::endl;
-	fs_.flush();
+	for ( auto it = appenders_.begin(); it != appenders_.end(); it++)
+	{
+		(*it)->write(str);
+	}
 }
 
 void Log::level( LogLevel l)
@@ -1106,6 +1110,11 @@ void Log::level( LogLevel l)
 LogLevel Log::level()
 {
 	return logLevel_;
+}
+
+void Log::add( Appender* a)
+{
+	appenders_.push_back( appender(a) );
 }
 
 Logger Log::getLogger(LogLevel level)
@@ -1123,13 +1132,12 @@ Log& log()
 Logger::Logger(LogLevel level)
 	: logLevel_(level)
 {
-   oss_ << "- " << now();
-   oss_ << " " << level << " : ";
+   oss_ << now() << " [" << level << "] : ";
 }
 
 Logger::~Logger()
 {
-	if (logLevel_ >= log().level())
+   if (logLevel_ >= log().level())
    {
 	   log().write(oss_.str());
    }
@@ -1138,4 +1146,32 @@ Logger::~Logger()
 Logger logger(LogLevel level)
 {
 	return log().getLogger(level);
+}
+
+
+//	mol::string path = appPath() + _T("\\moe.log");
+
+///////////////////////////////////////////////////////////////
+
+FileAppender::FileAppender(const std::string& path)
+{
+	fs_.open( mol::tostring(path), GENERIC_WRITE, FILE_SHARE_WRITE|FILE_SHARE_READ, NULL, CREATE_ALWAYS );
+}
+
+FileAppender::~FileAppender()
+{
+	fs_.close();
+}
+
+void FileAppender::write(const std::string& str)
+{
+	fs_ << str << std::endl;
+	fs_.flush();
+}
+
+
+
+void DebugAppender::write(const std::string& str)
+{
+	ODBGS(str);
 }

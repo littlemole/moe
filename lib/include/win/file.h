@@ -125,24 +125,44 @@ public:
 	// open file
 	bool open( const std::string& fn, DWORD access, DWORD share = 0,  LPSECURITY_ATTRIBUTES sec = 0, DWORD create = OPEN_ALWAYS, DWORD flags = FILE_ATTRIBUTE_NORMAL )
 	{
-		return buf_->open(fn,access,share,sec,create,flags);
+		bool result = buf_->open(fn,access,share,sec,create,flags);
+		if ( !result ) 
+		{
+			setstate( std::ios_base::badbit | std::ios_base::failbit | std::ios_base::eofbit );
+		}
+		return result;
 	}
 
 	bool open( const std::string& fn )
 	{
 		clear();
-		return buf_->open(fn,true);
+		bool result =  buf_->open(fn,true);
+		if ( !result ) 
+		{
+			setstate( std::ios_base::badbit | std::ios_base::failbit | std::ios_base::eofbit );
+		}
+		return result;
 	}
 
 	bool openReadOnly(const std::string& fn)
 	{
 		clear();
-		return buf_->openReadOnly(fn);
+		bool result =   buf_->openReadOnly(fn);
+		if ( !result ) 
+		{
+			setstate( std::ios_base::badbit | std::ios_base::failbit | std::ios_base::eofbit );
+		}
+		return result;
 	}
 	bool append(const std::string& fn)
 	{
 		clear();
-		return buf_->append(fn,true);
+		bool result =   buf_->append(fn,true);
+		if ( !result ) 
+		{
+			setstate( std::ios_base::badbit | std::ios_base::failbit | std::ios_base::eofbit );
+		}
+		return result;
 	}
 
 	void close()

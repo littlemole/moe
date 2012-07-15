@@ -254,6 +254,11 @@ MoeApp::MoeApp()
 	moeCliTypes.push_back( new moeRtfCliType );
 	moeCliTypes.push_back( new moeSshCliType );
 	moeCliTypes.push_back( new moeDefaultCliType );
+
+	log().level(LOGINFO);
+
+	mol::string path = appPath() + _T("\\moe.log");
+	log().add( new FileAppender(mol::tostring(path)) );
 }
 
 MoeApp::~MoeApp()

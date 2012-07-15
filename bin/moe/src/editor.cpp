@@ -49,6 +49,7 @@ Editor::Instance* Editor::CreateInstance(const mol::string& file, long enc, bool
 	mol::string p(file);
 	if ( mol::Path::exists(p) && mol::Path::isDir(p) )
 	{
+		logger(LOGINFO) << "path is directory " << mol::tostring(p);
 		return 0;
 	}
 
@@ -102,12 +103,16 @@ bool Editor::initialize(const mol::string& p, long enc, bool readOnly)
 		if ( enc != -1 )
 		{
 			if ( S_OK != sci->LoadEncoding(mol::bstr(p),enc) )
+			{
 				return false;
+			}
 		}
 		else
 		{
 			if ( S_OK != sci->Load(mol::bstr(p)) )
+			{
 				return false;
+			}
 		}
 		//timer_.set( 5 * 60 * 1000, boost::bind(&Editor::checkModifiedOnDisk,this) );
 	}
