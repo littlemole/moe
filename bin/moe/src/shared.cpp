@@ -1063,3 +1063,79 @@ HRESULT __stdcall MoeConfig::Save( LPSTREAM pStm,BOOL fClearDirty)
 
 	return S_OK;
 }
+
+
+std::string now()
+{
+  time_t rawtime;
+  struct tm * timeinfo;
+  char buffer [80];
+
+  time ( &rawtime );
+  timeinfo = localtime ( &rawtime );
+
+  strftime (buffer,80,"%Y-%m-%d-%H-%M-%S",timeinfo);
+  return std::string(buffer);
+}
+
+
+
+Log::Log()
+{
+	logLevel_ = LOGINFO;
+	mol::string path = appPath() + _T("\\moe.log");
+	fs_.open( mol::tostring(path), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS );
+}
+
+Log::~Log()
+{
+	fs_.close();
+}
+
+void Log::write(const std::string& str)
+{
+	fs_ << str << std::endl;
+	fs_.flush();
+}
+
+void Log::level( LogLevel l)
+{
+	logLevel_ = l;
+}
+
+LogLevel Log::level()
+{
+	return logLevel_;
+}
+
+Logger Log::getLogger(LogLevel level)
+{
+	return Logger(level);
+}
+
+Log& log()
+{
+	return mol::singleton<Log>();
+}
+
+///////////////////////////////////////////////////////////////
+
+Logger::Logger(LogLevel level)
+	: logLevel_(level)
+{
+   oss_ << "- " << now();
+   oss_ << " " << level << " : ";
+}
+
+Logger::~Logger()
+{
+	if (logLevel_ >= log().level())
+   {
+	   log().write(oss_.str());
+   }
+}
+
+Logger logger(LogLevel level)
+{
+	return log().getLogger(level);
+}

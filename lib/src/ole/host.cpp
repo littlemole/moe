@@ -1204,6 +1204,8 @@ LRESULT AxClientWndBase::OnMDIActivateLater(WPARAM unused, HWND activated)
 		if ( t ) 
 			t->refreshIcon(true);
 
+
+
 	}
 	else // deactivate
 	{
@@ -1224,7 +1226,6 @@ LRESULT AxClientWndBase::OnMDIActivateLater(WPARAM unused, HWND activated)
 
 	// redraw oleframe
 	this->redrawOleFrameLater();
-
 	return 0;
 }
 

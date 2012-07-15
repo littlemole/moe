@@ -68,5 +68,59 @@
 // resource identifiers defines //BAD BAD BAD
 //#include "resource.h"
 
+
+enum LogLevel { LOGERROR, LOGWARN, LOGINFO, LOGDEBUG };
+
+class Logger
+{
+friend class Log;
+public:
+
+   virtual ~Logger();
+
+   template<class T>
+   Logger& operator<<( const T& rhs )
+   {
+	   oss_ << rhs;
+	   return this;
+   }
+
+private:
+   Logger(LogLevel level);
+   Logger(const Log&);
+   Logger& operator =(const Log&);
+
+   LogLevel logLevel_;
+   std::ostringstream oss_;
+};
+
+class Log
+{
+friend class Logger;
+public:
+
+	Log();
+	~Log();
+
+	void level( LogLevel l);
+	LogLevel level();
+
+	Logger getLogger(LogLevel l);
+
+	void write(const std::string& str);
+
+private:
+
+	mol::filestream fs_;
+	LogLevel logLevel_;
+};
+
+Log& log();
+
+Logger logger(LogLevel level);
+
+
+
+
 #endif
 

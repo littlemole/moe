@@ -1423,7 +1423,7 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  long enc)
 	std::stringstream is;
 	
 	mol::filestream in;
-	in.open( mol::tostring(p),GENERIC_READ,FILE_SHARE_READ,0,OPEN_EXISTING);
+	in.open( mol::tostring(p),GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,0,OPEN_EXISTING);
 
 	edit()->setText("");
 	edit()->setCodePage(SC_CP_UTF8);

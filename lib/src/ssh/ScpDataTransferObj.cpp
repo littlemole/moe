@@ -659,7 +659,7 @@ HRESULT __stdcall DelayedDataTransferObj::SetData(  FORMATETC * pFormatetc,  STG
 			DWORD cut = 0;
 			mol::global::get<DWORD>(glob,cut);
 
-			if ( (cut == DROPEFFECT_MOVE) && (this->cut_ == true))
+			if ( (cut == DROPEFFECT_MOVE) && (this->cut_ == TRUE))
 			{
 				dropEffectEvent_.fire(this);
 			}

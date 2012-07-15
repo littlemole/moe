@@ -250,7 +250,7 @@ template<class B>
 void invoke( B bound )
 {
 	mol::fun::task* task = mol::fun::make_task( bound );
-	::PostThreadMessage( mol::guithread(), WM_COMMAND,0, (LPARAM)task );
+	::PostThreadMessage( mol::guithread(), WM_INVOKE,0, (LPARAM)task );
 }
 
 
@@ -262,35 +262,35 @@ template<class T,class R>
 void dispatch( T& t, R (T::*f)()  )
 {
 	mol::fun::task* task = mol::fun::make_task( boost::bind(f,&t) );
-	t.postMessage(WM_COMMAND,0,(LPARAM)task);
+	t.postMessage(WM_INVOKE,0,(LPARAM)task);
 }
 
 template<class T, class R, class P1>
 void dispatch( T& t, R (T::*f)(P1), P1 p1 )
 {
 	mol::fun::task* task = mol::fun::make_task( boost::bind(f,&t,p1) );	
-	t.postMessage(WM_COMMAND,0,(LPARAM)task);
+	t.postMessage(WM_INVOKE,0,(LPARAM)task);
 }
 
 template<class T, class R, class P1, class P2>
 void dispatch( T& t, R (T::*f)(P1,P2), P1 p1, P2 p2  )
 {
 	mol::fun::task* task = mol::fun::make_task( boost::bind(f,&t,p1,p2) );
-	t.postMessage(WM_COMMAND,0,(LPARAM)task);
+	t.postMessage(WM_INVOKE,0,(LPARAM)task);
 }
 
 template<class T, class R, class P1, class P2, class P3>
 void dispatch( T& t, R (T::*f)(P1,P2,P3), P1 p1, P2 p2, P3 p3 )
 {
 	mol::fun::task* task = mol::fun::make_task( boost::bind(f,&t,p1,p2,p3) );
-	t.postMessage(WM_COMMAND,0,(LPARAM)task);
+	t.postMessage(WM_INVOKE,0,(LPARAM)task);
 }
 
 template<class T, class R, class P1, class P2, class P3, class P4>
 void dispatch( T& t, R (T::*f)(P1,P2,P3,P4), P1 p1, P2 p2, P3 p3, P4 p4  )
 {
 	mol::fun::task* task = mol::fun::make_task( boost::bind(f,&t,p1,p2,p3,p4) );
-	t.postMessage(WM_COMMAND,0,(LPARAM)task);
+	t.postMessage(WM_INVOKE,0,(LPARAM)task);
 }
 
 

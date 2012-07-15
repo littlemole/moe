@@ -16,7 +16,7 @@ mol::string WndClassGenerator::createClass()
 	WndClass wc;
 	wc.setClassName(buf);
 	classNameMap_.insert(std::pair <mol::string,WndClass> (s,wc));
-	return mol::string(buf);
+	return s;
 }
 
 WndClass& WndClassGenerator::getClass(const mol::string& name)
@@ -32,6 +32,38 @@ mol::CriticalSection WndClassGenerator::cs_;
 WndClass::WndClass()
 {
 	setDefault();
+}
+
+
+WndClass::~WndClass()
+{
+	if ( wcex_.lpszClassName )
+	{
+		delete wcex_.lpszClassName;
+		wcex_.lpszClassName = 0;
+	}
+}
+
+WndClass::WndClass(const WndClass& wc)
+{
+	this->wcex_ = wc.wcex_;
+	int len = _tcslen(wc.wcex_.lpszClassName)+1;
+	this->wcex_.lpszClassName = new mol::TCHAR[len];
+	memcpy((void*)(this->wcex_.lpszClassName), wc.wcex_.lpszClassName, len*sizeof(mol::TCHAR));
+}
+
+WndClass& WndClass::operator=(const WndClass& wc)
+{
+	if ( this == &wc )
+	{
+		return *this;
+	}
+
+	this->wcex_ = wc.wcex_;
+	int len = _tcslen(wc.wcex_.lpszClassName)+1;
+	this->wcex_.lpszClassName = new mol::TCHAR[len];
+	memcpy((void*)(this->wcex_.lpszClassName), wc.wcex_.lpszClassName, len*sizeof(mol::TCHAR));
+	return *this;
 }
 
 void WndClass::setDefault()

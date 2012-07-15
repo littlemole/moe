@@ -461,7 +461,7 @@ IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const mol::stri
 	// assuming text so far - sniff encoding, try to detect binaries ...
 	std::stringstream is;
 	mol::filestream in;
-	in.open( mol::tostring(p),GENERIC_READ,FILE_SHARE_READ,0,OPEN_EXISTING);
+	in.open( mol::tostring(p),GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,0,OPEN_EXISTING);
 
     char buf[1024];
     if ( !in.eof() )

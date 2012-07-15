@@ -166,7 +166,7 @@ public:
 		while(!eof())
 		{
 			read(buf,1024);
-			size_t len = gcount();
+			std::streamsize len = gcount();
 			oss.write(buf,len);
 		}
 

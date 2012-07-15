@@ -421,7 +421,11 @@ private:
 	// delay the ax mdi activation handling until base mdi processing is done
 	virtual void activateLater( WPARAM wParam, LPARAM lParam)
 	{
-		mol::dispatch<AxClientWnd<C,W> >( *((AxClientWnd<C,W>*)this), &AxClientWnd<C,W>::OnMDIActivateLater, wParam, (HWND)lParam );
+		//if ( this->getHostingWindow() == (HWND)lParam )
+		{
+			mol::dispatch<AxClientWnd<C,W> >( *((AxClientWnd<C,W>*)this), &AxClientWnd<C,W>::OnMDIActivateLater, wParam, (HWND)lParam );
+			//mol::invoke( boost::bind( &AxClientWnd<C,W>::OnMDIActivateLater,  ((AxClientWnd<C,W>*)this), wParam, (HWND)lParam) );
+		}
 		//OnMDIActivateLater(wParam,(HWND)lParam);
 	}
 
@@ -456,6 +460,7 @@ protected:
 	virtual void redrawOleFrameLater()
 	{
 		mol::dispatch<AxClientWnd<C,W> >( *((AxClientWnd<C,W>*)this), &AxClientWnd<C,W>::redrawOleFrame );
+		//mol::invoke( boost::bind( &AxClientWnd<C,W>::redrawOleFrame,  ((AxClientWnd<C,W>*)this)) );
 	}
 
 

@@ -16,6 +16,9 @@ class WndClass
 {
 public:
     WndClass();
+	~WndClass();
+	WndClass(const WndClass& wc);
+
     void setDefault();
     void setHinstance( HINSTANCE h);
     void setWndProc( WNDPROC p);
@@ -32,6 +35,7 @@ public:
     bool registerClass();
     HWND getRunning();
 
+	WndClass& operator=(const WndClass& wc);
 private:
     WNDCLASSEX	wcex_;
 };

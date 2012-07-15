@@ -154,7 +154,7 @@ void LoopBase::doMsg(MSG& msg, AppBase& app)
 	
 	if ( msg.hwnd == NULL )
 	{
-		if ( (msg.message == WM_COMMAND) && (msg.wParam == 0) )
+		if ( (msg.message == WM_INVOKE) && (msg.wParam == 0) )
 		{
 			boost::shared_ptr<mol::fun::task> task( (mol::fun::task*) (msg.lParam) );
 			(*task)();

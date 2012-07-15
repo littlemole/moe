@@ -45,12 +45,6 @@ LRESULT Ctrl::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch ( message )
 	{
-		case WM_COMMAND:
-		{
-			if ( wParam == 0 )
-				return OnInvoke(message,wParam,lParam);
-			break;
-		}
 		case WM_NOTIFY:
 		{
 			Crack msg(message, wParam, lParam);
@@ -58,7 +52,12 @@ LRESULT Ctrl::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 					return 0;
 		}
 	}
-	
+
+	if ( message == WM_INVOKE  )
+	{
+		if ( wParam == 0 )
+			return OnInvoke(message,wParam,lParam);
+	}	
     return ::CallWindowProc( oldProc, hwnd, message, wParam, lParam );
 }
 

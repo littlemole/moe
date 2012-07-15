@@ -9,7 +9,15 @@
 
 namespace mol {
 namespace win {
+
 /////////////////////////////////////////////////////////////////
+
+UINT invoke_msg()
+{
+	static UINT msg = ::RegisterWindowMessage(_T("WM_MOL_INVOKE_ASYNC"));
+	return msg;
+}
+
 /////////////////////////////////////////////////////////////////
 
 Wnd::Wnd()
@@ -294,6 +302,7 @@ LRESULT WndProc::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	if (!::IsWindow(hwnd))
 		return 0;
+
 	switch ( message )
 	{
 		case WM_PAINT :
@@ -331,12 +340,13 @@ LRESULT WndProc::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			break;
 		}
-		case WM_COMMAND:
-		{
-			if ( wParam == 0 )
-				return OnInvoke(message,wParam,lParam);
-			break;
-		}
+
+	}
+
+	if ( message == WM_INVOKE  )
+	{
+		if ( wParam == 0 )
+			return OnInvoke(message,wParam,lParam);
 	}
 	return ::DefWindowProc(hwnd,message,wParam,lParam);
 }

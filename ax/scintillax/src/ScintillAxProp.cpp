@@ -280,7 +280,7 @@ LRESULT ScintillAxSettings::OnInitDialog(UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				if ( codePages_[i].first == encoding_ )
 				{
-					combo_.setCurSel(i);
+					combo_.setCurSel((int)i);
 				}
 			}
 
@@ -319,8 +319,6 @@ HRESULT ScintillAxSettings::Apply( void)
 		systype_ = SCINTILLA_SYSTYPE_WIN32;
 
 	encoding_ = codePages_[combo_.getCurSel()].first;
-
-	int w;
 
 	if ( BST_CHECKED == this->sendDlgItemMsg( IDC_CHECK_WRITEBOM,BM_GETCHECK,0,0) )
 		vbWriteBOM_ = VARIANT_TRUE;

@@ -341,13 +341,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EditorMenu.cpp" />
-    <ClCompile Include="EditorScript.cpp" />
     <ClCompile Include="src\app.cpp" />
     <ClCompile Include="src\dir3.cpp" />
     <ClCompile Include="src\DocFactory.cpp" />
     <ClCompile Include="src\Docs.cpp" />
     <ClCompile Include="src\editor.cpp" />
+    <ClCompile Include="src\EditorMenu.cpp" />
+    <ClCompile Include="src\EditorScript.cpp" />
     <ClCompile Include="src\form.cpp" />
     <ClCompile Include="src\formEditor.cpp" />
     <ClCompile Include="src\hex.cpp" />
@@ -379,14 +379,14 @@
     </Midl>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EditorMenu.h" />
-    <ClInclude Include="EditorScript.h" />
     <ClInclude Include="include\app.h" />
     <ClInclude Include="include\commons.h" />
     <ClInclude Include="include\dir3.h" />
     <ClInclude Include="include\DocFactory.h" />
     <ClInclude Include="include\Docs.h" />
     <ClInclude Include="include\editor.h" />
+    <ClInclude Include="include\EditorMenu.h" />
+    <ClInclude Include="include\EditorScript.h" />
     <ClInclude Include="include\form.h" />
     <ClInclude Include="include\formEditor.h" />
     <ClInclude Include="include\hex.h" />

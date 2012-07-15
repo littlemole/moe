@@ -234,12 +234,6 @@ LRESULT MdiChild::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			break;
 		}
-		case WM_COMMAND:
-		{
-			if ( wParam == 0 )
-				return OnInvoke(message,wParam,lParam);
-			break;
-		}
 		case WM_MEASUREITEM:
 		{
 			if ( wParam != 0 )
@@ -263,6 +257,11 @@ LRESULT MdiChild::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				return item->OnDrawItem(message,wParam,lParam);
 			return 0;
 		}		
+	}
+	if ( message == WM_INVOKE  )
+	{
+		if ( wParam == 0 )
+			return OnInvoke(message,wParam,lParam);
 	}
 	return ::DefMDIChildProc(hwnd,message,wParam,lParam);
 }
@@ -624,12 +623,6 @@ LRESULT MdiFrame::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			break;
 		}
-		case WM_COMMAND:
-		{
-			if ( wParam == 0 )
-				return OnInvoke(message,wParam,lParam);
-			break;
-		}
 		case WM_MEASUREITEM:
 		{
 			if ( wParam != 0 )
@@ -659,6 +652,11 @@ LRESULT MdiFrame::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			return 0;
 		}		
+	}
+	if ( message == WM_INVOKE  )
+	{
+		if ( wParam == 0 )
+			return OnInvoke(message,wParam,lParam);
 	}
     if ( ::IsWindow(client_))
 		return ::DefFrameProc(hwnd,client_,message,wParam,lParam);
