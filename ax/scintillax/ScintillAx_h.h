@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sun Jul 15 22:36:10 2012
+/* at Mon Jul 16 20:25:34 2012
  */
 /* Compiler settings for ScintillAX.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -36,8 +36,8 @@
 #include "ole2.h"
 #endif /*COM_NO_WINDOWS_H*/
 
-#ifndef __ScintillAX_h_h__
-#define __ScintillAX_h_h__
+#ifndef __ScintillAx_h_h__
+#define __ScintillAx_h_h__
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 #pragma once

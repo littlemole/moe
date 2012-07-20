@@ -39,9 +39,9 @@ private:
 		public mol::stack_obj<ShellFolderEvents>
     {
         public : outer_this(DirChild,events); 
-		virtual HRESULT __stdcall OnListSelection(BSTR filename,VARIANT_BOOL vb);
-		virtual HRESULT __stdcall OnListDblClick(BSTR filename,VARIANT_BOOL vb);
-		virtual HRESULT __stdcall OnListOpen(BSTR filename,VARIANT_BOOL vb);
+		virtual HRESULT __stdcall OnListSelection(BSTR filename);
+		virtual HRESULT __stdcall OnListDblClick(BSTR filename);
+		virtual HRESULT __stdcall OnListOpen(BSTR filename);
 		virtual HRESULT __stdcall OnDirChanged(BSTR filename);
     } events;
 

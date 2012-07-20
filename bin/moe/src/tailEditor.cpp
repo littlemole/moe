@@ -137,7 +137,11 @@ void TailEditor::OnReload()
 	}
 
 	mol::string fp(mol::toString(filename));
-	size_ = mol::File::size(fp);
+
+	LONG len = 0;
+	text_->get_Length(&len);
+	size_ = len;
+	//size_ = mol::File::size(fp);
 
 	sci->Load(filename);
 
@@ -158,7 +162,26 @@ void TailEditor::append(const mol::string& path,unsigned long long size)
 	if (!fs.open(mol::tostring(path),GENERIC_READ,FILE_SHARE_READ,0,OPEN_EXISTING) )
 		return;
 
-	fs.seek((int)size_);
+	int s = (int)size_;
+
+	VARIANT_BOOL vb;
+	HRESULT hr = props_->get_WriteBOM(&vb);
+	if ( hr == S_OK && vb == VARIANT_TRUE )
+	{
+		long e;
+		hr = props_->get_Encoding(&e);
+		if ( hr == S_OK )
+		{
+			if ( e = CP_WINUNICODE ) {
+				s += 3;
+			}
+			if ( e = CP_UTF8 ) {
+				s += 2;
+			}
+		}
+	}
+
+	fs.seek(s);
 
 	std::string buf = fs.readAll();
 	fs.close();

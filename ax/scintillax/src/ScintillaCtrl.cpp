@@ -1459,9 +1459,7 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  long enc)
 	in.close();
 
 	mol::FileEncoding fe;
-
-	mol::FileEncoding e;
-	DWORD cp = e.investigate(s);
+	DWORD cp = fe.investigate(s);
 	if ( cp == CP_WINUNICODE )
 	{
 		enc = CP_WINUNICODE;
