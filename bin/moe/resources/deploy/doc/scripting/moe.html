@@ -11,9 +11,9 @@
 	<script src="..\..\js\development-bundle\ui\jquery-ui-1.8.16.custom.js"></script>
 -->
 
-	<link rel="stylesheet" href="..\..\js\css\custom-theme\jquery-ui-1.8.16.custom.css">
-    <script language="javascript" src="..\..\js\js\jquery-1.6.2.min.js"></script>
-	<script src="..\..\js\js\jquery-ui-1.8.16.custom.min.js"></script>
+	<link rel="stylesheet" href="../../js/css/custom-theme/jquery-ui-1.8.16.custom.css">
+    <script language="javascript" src="../../js/js/jquery-1.6.2.min.js"></script>
+	<script src="../../js/js/jquery-ui-1.8.16.custom.min.js"></script>
 
 <style type="text/css">
 
@@ -86,7 +86,7 @@ table {
           <input name="submit" type="submit" value="GO">
 		</form>
 
- </body>
+
 <script language="javascript">
 
 var typelibs = [
@@ -103,20 +103,21 @@ var typelibs = [
 var $tabs;
 var $doc;
 $(document).ready( function() {
-/*
+
+
 	$tabs = $( "#tabs" ).tabs({
 		select: function(event, ui) {
 			
 			OnSelectTypelib(typelibs[ui.index]);
 			return false;
 		}});
-*/
+
 	OnSelectTypelib(typelibs[0]);
 });
 
 function xmlDoc(xml)
 {
-    var doc = new ActiveXObject("Msxml2.FreeThreadedDOMDocument.3.0");
+    var doc = new ActiveXObject("Msxml2.FreeThreadedDOMDocument");
 	doc.async = false;
 	doc.loadXML(xml);
   
@@ -133,6 +134,8 @@ function getXml( typelib )
 	var b = type2Xml.load(typelib);
 //	var s = type2Xml.transform(xsl);
     var xml = type2Xml.XML;
+
+
     return xml;
     moe.Dialogs.MsgBox(xml,"xml",0);
 	var file  = new ActiveXObject("IO.File");
@@ -267,7 +270,6 @@ function OnSelectTypelib(typelib)
   var xml = getXml(typelib);
   $tabs.tabs('select', 0);
   $doc = xmlDoc(xml);
-
   var desc = $doc.documentElement.getAttribute("desc");
   var tln = $doc.documentElement.getAttribute("name");
   var guid = $doc.documentElement.getAttribute("guid");
@@ -300,4 +302,5 @@ function OnSelectTypelib(typelib)
   return false;
 }
 </script>
+ </body>
 </html>

@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Fri Jul 20 19:48:02 2012
+/* at Fri Jul 27 22:44:44 2012
  */
 /* Compiler settings for shellCtrl.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
@@ -32,8 +32,8 @@
 #endif // __RPCNDR_H_VERSION__
 
 
-#ifndef __shellctrl_h_h__
-#define __shellctrl_h_h__
+#ifndef __shellCtrl_h_h__
+#define __shellCtrl_h_h__
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 #pragma once

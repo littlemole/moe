@@ -1,4 +1,4 @@
-var Net = new ActiveXObject("Net.DotNet");
+﻿var Net = new ActiveXObject("Net.DotNet");
 
 Net.Import("System.Net");
 Net.Import("System");
@@ -10,7 +10,7 @@ var uri = Net("System.Uri").New("http://www.heise.de/");
 var result = webClient.DownloadString(uri);
 
 var doc = moe.Documents.New();
-doc.Object.Properties.Encoding = 1; // UTF-8
+doc.Object.Properties.Encoding = moe.UTF8; // UTF-8
 doc.Object.Text = result;
 
 Net.Exit();

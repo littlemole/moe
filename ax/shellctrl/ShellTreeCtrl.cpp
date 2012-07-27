@@ -830,19 +830,12 @@ BOOL ShellTree::expandFolder( HTREEITEM item, bool force, int flags )
 		tree_.setRedraw(false);
 
         // deletions
+
         HTREEITEM it = tree_.getChildItem(item);
         while (it)
         {
-            TreeEntry* entry = getItemEntry(it);
-            //path p(entry->filename);
-            if ( filesMap.count(entry->filename) == 0 &&
-                 dirsMap.count(entry->filename) == 0 )
-            {
-                release(it);        
-                it = tree_.getChildItem(item);
-                continue;
-            }
-            it = tree_.getNextItem(it);
+             release(it);        
+			 it = tree_.getChildItem(item);
         }
 
 		std::sort( files.begin(), files.end() );
