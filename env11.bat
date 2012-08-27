@@ -15,7 +15,15 @@ set CONFIG=/Debug
 
 
 :psdk
-call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" %PLAT%
+echo "###"
+call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\Tools\VsDevCmd.bat"
+echo "###"
+pushd "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC"
+rem call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" %PLAT%
+echo "###"
+call vcvarsall.bat amd64
+echo "###"
+popd
 
 set Configuration=%CONF%
 

@@ -46,7 +46,7 @@ moeShell::~moeShell()
 void  moeShell::registerMenuItem( UINT& iCmd, const mol::string& proto, const mol::string& desc )
 {
 	moeShellMenuItem* cmd = new moeShellMenuItem(iCmd,proto,desc);
-	menu_cmds_.insert( std::make_pair(iCmd, cmd) );
+	menu_cmds_.insert( std::make_pair(iCmd, std::shared_ptr<moeShellMenuItem>(cmd) ) );
 	cmd_indexes_.push_back(iCmd);
 	iCmd++;
 }

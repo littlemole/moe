@@ -3,11 +3,11 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 7.00.0555 */
-/* at Fri Jul 20 19:49:50 2012
+ /* File created by MIDL compiler version 8.00.0595 */
+/* at Mon Aug 27 15:26:21 2012
  */
 /* Compiler settings for src\moe.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -44,90 +44,105 @@
 #ifndef __IWebBrowserEvents_FWD_DEFINED__
 #define __IWebBrowserEvents_FWD_DEFINED__
 typedef interface IWebBrowserEvents IWebBrowserEvents;
+
 #endif 	/* __IWebBrowserEvents_FWD_DEFINED__ */
 
 
 #ifndef __IMoe_FWD_DEFINED__
 #define __IMoe_FWD_DEFINED__
 typedef interface IMoe IMoe;
+
 #endif 	/* __IMoe_FWD_DEFINED__ */
 
 
 #ifndef __IMoeView_FWD_DEFINED__
 #define __IMoeView_FWD_DEFINED__
 typedef interface IMoeView IMoeView;
+
 #endif 	/* __IMoeView_FWD_DEFINED__ */
 
 
 #ifndef __IMoeScript_FWD_DEFINED__
 #define __IMoeScript_FWD_DEFINED__
 typedef interface IMoeScript IMoeScript;
+
 #endif 	/* __IMoeScript_FWD_DEFINED__ */
 
 
 #ifndef __IMoeConfig_FWD_DEFINED__
 #define __IMoeConfig_FWD_DEFINED__
 typedef interface IMoeConfig IMoeConfig;
+
 #endif 	/* __IMoeConfig_FWD_DEFINED__ */
 
 
 #ifndef __IMoeDialogs_FWD_DEFINED__
 #define __IMoeDialogs_FWD_DEFINED__
 typedef interface IMoeDialogs IMoeDialogs;
+
 #endif 	/* __IMoeDialogs_FWD_DEFINED__ */
 
 
 #ifndef __IMoeDocumentCollection_FWD_DEFINED__
 #define __IMoeDocumentCollection_FWD_DEFINED__
 typedef interface IMoeDocumentCollection IMoeDocumentCollection;
+
 #endif 	/* __IMoeDocumentCollection_FWD_DEFINED__ */
 
 
 #ifndef __IMoeDocument_FWD_DEFINED__
 #define __IMoeDocument_FWD_DEFINED__
 typedef interface IMoeDocument IMoeDocument;
+
 #endif 	/* __IMoeDocument_FWD_DEFINED__ */
 
 
 #ifndef __IMoeDocumentView_FWD_DEFINED__
 #define __IMoeDocumentView_FWD_DEFINED__
 typedef interface IMoeDocumentView IMoeDocumentView;
+
 #endif 	/* __IMoeDocumentView_FWD_DEFINED__ */
 
 
 #ifndef __IMoeHtmlFrame_FWD_DEFINED__
 #define __IMoeHtmlFrame_FWD_DEFINED__
 typedef interface IMoeHtmlFrame IMoeHtmlFrame;
+
 #endif 	/* __IMoeHtmlFrame_FWD_DEFINED__ */
 
 
 #ifndef __IMoeDialogView_FWD_DEFINED__
 #define __IMoeDialogView_FWD_DEFINED__
 typedef interface IMoeDialogView IMoeDialogView;
+
 #endif 	/* __IMoeDialogView_FWD_DEFINED__ */
 
 
 #ifndef __IMoeRichText_FWD_DEFINED__
 #define __IMoeRichText_FWD_DEFINED__
 typedef interface IMoeRichText IMoeRichText;
+
 #endif 	/* __IMoeRichText_FWD_DEFINED__ */
 
 
 #ifndef __IMoeUserForm_FWD_DEFINED__
 #define __IMoeUserForm_FWD_DEFINED__
 typedef interface IMoeUserForm IMoeUserForm;
+
 #endif 	/* __IMoeUserForm_FWD_DEFINED__ */
 
 
 #ifndef __IExternalMoe_FWD_DEFINED__
 #define __IExternalMoe_FWD_DEFINED__
 typedef interface IExternalMoe IExternalMoe;
+
 #endif 	/* __IExternalMoe_FWD_DEFINED__ */
 
 
 #ifndef __IMoeImport_FWD_DEFINED__
 #define __IMoeImport_FWD_DEFINED__
 typedef interface IMoeImport IMoeImport;
+
 #endif 	/* __IMoeImport_FWD_DEFINED__ */
 
 
@@ -174,37 +189,40 @@ extern "C"{
 
 typedef 
 enum MOE_DOCTYPE
-    {	MOE_DOCTYPE_NULL	= 0,
-	MOE_DOCTYPE_DOC	= 1,
-	MOE_DOCTYPE_DIR	= 2,
-	MOE_DOCTYPE_PIC	= 3,
-	MOE_DOCTYPE_HEX	= 4,
-	MOE_DOCTYPE_HTML	= 5,
-	MOE_DOCTYPE_OLE	= 6,
-	MOE_DOCTYPE_FORM	= 7,
-	MOE_DOCTYPE_RTF	= 8,
-	MOE_DOCTYPE_TAIL	= 9,
-	MOE_DOCTYPE_SFTP	= 10
+    {
+        MOE_DOCTYPE_NULL	= 0,
+        MOE_DOCTYPE_DOC	= 1,
+        MOE_DOCTYPE_DIR	= 2,
+        MOE_DOCTYPE_PIC	= 3,
+        MOE_DOCTYPE_HEX	= 4,
+        MOE_DOCTYPE_HTML	= 5,
+        MOE_DOCTYPE_OLE	= 6,
+        MOE_DOCTYPE_FORM	= 7,
+        MOE_DOCTYPE_RTF	= 8,
+        MOE_DOCTYPE_TAIL	= 9,
+        MOE_DOCTYPE_SFTP	= 10
     } 	MOE_DOCTYPE;
 
 typedef 
 enum MOE_SEARCHFLAG
-    {	MOE_SEARCHFLAG_DOWN	= 0x1,
-	MOE_SEARCHFLAG_WHOLEWORD	= 0x2,
-	MOE_SEARCHFLAG_MATCHCASE	= 0x4,
-	MOE_SEARCHFLAG_FINDNEXT	= 0x8,
-	MOE_SEARCHFLAG_REPLACE	= 0x10,
-	MOE_SEARCHFLAG_REPLACEALL	= 0x20,
-	MOE_SEARCHFLAG_DIALOGTERM	= 0x40
+    {
+        MOE_SEARCHFLAG_DOWN	= 0x1,
+        MOE_SEARCHFLAG_WHOLEWORD	= 0x2,
+        MOE_SEARCHFLAG_MATCHCASE	= 0x4,
+        MOE_SEARCHFLAG_FINDNEXT	= 0x8,
+        MOE_SEARCHFLAG_REPLACE	= 0x10,
+        MOE_SEARCHFLAG_REPLACEALL	= 0x20,
+        MOE_SEARCHFLAG_DIALOGTERM	= 0x40
     } 	MOE_SEARCHFLAG;
 
 typedef 
 enum MOE_FORMFLAG
-    {	MOE_FORMFLAG_NONE	= 0,
-	MOE_FORMFLAG_TITLE	= 1,
-	MOE_FORMFLAG_NOSCROLL	= 2,
-	MOE_FORMFLAG_DIALOG	= 4,
-	MOE_FORMFLAG_STANDALONE	= 8
+    {
+        MOE_FORMFLAG_NONE	= 0,
+        MOE_FORMFLAG_TITLE	= 1,
+        MOE_FORMFLAG_NOSCROLL	= 2,
+        MOE_FORMFLAG_DIALOG	= 4,
+        MOE_FORMFLAG_STANDALONE	= 8
     } 	MOE_FORMFLAG;
 
 
@@ -339,6 +357,7 @@ EXTERN_C const IID IID_IWebBrowserEvents;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IWebBrowserEventsVtbl
@@ -349,7 +368,7 @@ EXTERN_C const IID IID_IWebBrowserEvents;
             IWebBrowserEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWebBrowserEvents * This);
@@ -377,14 +396,22 @@ EXTERN_C const IID IID_IWebBrowserEvents;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWebBrowserEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StatusTextChange )( 
             IWebBrowserEvents * This,
@@ -1146,6 +1173,7 @@ EXTERN_C const IID IID_IMoe;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IMoeVtbl
@@ -1156,7 +1184,7 @@ EXTERN_C const IID IID_IMoe;
             IMoe * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMoe * This);
@@ -1184,14 +1212,22 @@ EXTERN_C const IID IID_IMoe;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMoe * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][nonbrowsable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Documents )( 
             IMoe * This,
@@ -1442,6 +1478,7 @@ EXTERN_C const IID IID_IMoeView;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IMoeViewVtbl
@@ -1452,7 +1489,7 @@ EXTERN_C const IID IID_IMoeView;
             IMoeView * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMoeView * This);
@@ -1480,14 +1517,22 @@ EXTERN_C const IID IID_IMoeView;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMoeView * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Top )( 
             IMoeView * This,
@@ -1737,6 +1782,7 @@ EXTERN_C const IID IID_IMoeScript;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IMoeScriptVtbl
@@ -1747,7 +1793,7 @@ EXTERN_C const IID IID_IMoeScript;
             IMoeScript * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMoeScript * This);
@@ -1775,14 +1821,22 @@ EXTERN_C const IID IID_IMoeScript;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMoeScript * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Run )( 
             IMoeScript * This,
@@ -2015,6 +2069,7 @@ EXTERN_C const IID IID_IMoeConfig;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IMoeConfigVtbl
@@ -2025,7 +2080,7 @@ EXTERN_C const IID IID_IMoeConfig;
             IMoeConfig * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMoeConfig * This);
@@ -2053,14 +2108,22 @@ EXTERN_C const IID IID_IMoeConfig;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMoeConfig * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConfigPath )( 
             IMoeConfig * This,
@@ -2355,6 +2418,7 @@ EXTERN_C const IID IID_IMoeDialogs;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IMoeDialogsVtbl
@@ -2365,7 +2429,7 @@ EXTERN_C const IID IID_IMoeDialogs;
             IMoeDialogs * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMoeDialogs * This);
@@ -2393,14 +2457,22 @@ EXTERN_C const IID IID_IMoeDialogs;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMoeDialogs * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MsgBox )( 
             IMoeDialogs * This,
@@ -2746,6 +2818,7 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IMoeDocumentCollectionVtbl
@@ -2756,7 +2829,7 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
             IMoeDocumentCollection * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMoeDocumentCollection * This);
@@ -2784,14 +2857,22 @@ EXTERN_C const IID IID_IMoeDocumentCollection;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMoeDocumentCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             IMoeDocumentCollection * This,
@@ -3101,6 +3182,7 @@ EXTERN_C const IID IID_IMoeDocument;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IMoeDocumentVtbl
@@ -3111,7 +3193,7 @@ EXTERN_C const IID IID_IMoeDocument;
             IMoeDocument * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMoeDocument * This);
@@ -3139,14 +3221,22 @@ EXTERN_C const IID IID_IMoeDocument;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMoeDocument * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Object )( 
             IMoeDocument * This,
@@ -3291,6 +3381,7 @@ EXTERN_C const IID IID_IMoeDocumentView;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IMoeDocumentViewVtbl
@@ -3301,7 +3392,7 @@ EXTERN_C const IID IID_IMoeDocumentView;
             IMoeDocumentView * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMoeDocumentView * This);
@@ -3329,14 +3420,22 @@ EXTERN_C const IID IID_IMoeDocumentView;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMoeDocumentView * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Top )( 
             IMoeDocumentView * This,
@@ -3519,6 +3618,7 @@ EXTERN_C const IID IID_IMoeHtmlFrame;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IMoeHtmlFrameVtbl
@@ -3529,7 +3629,7 @@ EXTERN_C const IID IID_IMoeHtmlFrame;
             IMoeHtmlFrame * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMoeHtmlFrame * This);
@@ -3557,14 +3657,22 @@ EXTERN_C const IID IID_IMoeHtmlFrame;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMoeHtmlFrame * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Object )( 
             IMoeHtmlFrame * This,
@@ -3709,6 +3817,7 @@ EXTERN_C const IID IID_IMoeDialogView;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IMoeDialogViewVtbl
@@ -3719,7 +3828,7 @@ EXTERN_C const IID IID_IMoeDialogView;
             IMoeDialogView * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMoeDialogView * This);
@@ -3747,14 +3856,22 @@ EXTERN_C const IID IID_IMoeDialogView;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMoeDialogView * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Top )( 
             IMoeDialogView * This,
@@ -3922,6 +4039,7 @@ EXTERN_C const IID IID_IMoeRichText;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IMoeRichTextVtbl
@@ -3932,7 +4050,7 @@ EXTERN_C const IID IID_IMoeRichText;
             IMoeRichText * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMoeRichText * This);
@@ -3960,14 +4078,22 @@ EXTERN_C const IID IID_IMoeRichText;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMoeRichText * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Text )( 
             IMoeRichText * This,
@@ -4081,6 +4207,7 @@ EXTERN_C const IID IID_IMoeUserForm;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IMoeUserFormVtbl
@@ -4091,7 +4218,7 @@ EXTERN_C const IID IID_IMoeUserForm;
             IMoeUserForm * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMoeUserForm * This);
@@ -4119,14 +4246,22 @@ EXTERN_C const IID IID_IMoeUserForm;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMoeUserForm * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Object )( 
             IMoeUserForm * This,
@@ -4246,6 +4381,7 @@ EXTERN_C const IID IID_IExternalMoe;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IExternalMoeVtbl
@@ -4256,7 +4392,7 @@ EXTERN_C const IID IID_IExternalMoe;
             IExternalMoe * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IExternalMoe * This);
@@ -4284,14 +4420,22 @@ EXTERN_C const IID IID_IExternalMoe;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IExternalMoe * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Moe )( 
             IExternalMoe * This,
@@ -4380,6 +4524,7 @@ EXTERN_C const IID IID_IMoeImport;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IMoeImportVtbl
@@ -4390,7 +4535,7 @@ EXTERN_C const IID IID_IMoeImport;
             IMoeImport * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMoeImport * This);
@@ -4418,14 +4563,22 @@ EXTERN_C const IID IID_IMoeImport;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMoeImport * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Import )( 
             IMoeImport * This,

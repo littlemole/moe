@@ -3,11 +3,11 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 7.00.0555 */
-/* at Fri Jul 20 19:47:30 2012
+ /* File created by MIDL compiler version 8.00.0595 */
+/* at Mon Aug 27 15:23:36 2012
  */
 /* Compiler settings for io.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -44,18 +44,21 @@
 #ifndef __IFile_FWD_DEFINED__
 #define __IFile_FWD_DEFINED__
 typedef interface IFile IFile;
+
 #endif 	/* __IFile_FWD_DEFINED__ */
 
 
 #ifndef __IDir_FWD_DEFINED__
 #define __IDir_FWD_DEFINED__
 typedef interface IDir IDir;
+
 #endif 	/* __IDir_FWD_DEFINED__ */
 
 
 #ifndef __IPath_FWD_DEFINED__
 #define __IPath_FWD_DEFINED__
 typedef interface IPath IPath;
+
 #endif 	/* __IPath_FWD_DEFINED__ */
 
 
@@ -112,8 +115,9 @@ extern "C"{
 
 
 enum IO_SYSTYPE
-    {	IO_SYSTYPE_UNIX	= 0,
-	IO_SYSTYPE_WIN32	= 1
+    {
+        IO_SYSTYPE_UNIX	= 0,
+        IO_SYSTYPE_WIN32	= 1
     } ;
 
 
@@ -200,6 +204,7 @@ EXTERN_C const IID IID_IFile;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IFileVtbl
@@ -210,7 +215,7 @@ EXTERN_C const IID IID_IFile;
             IFile * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFile * This);
@@ -238,14 +243,22 @@ EXTERN_C const IID IID_IFile;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IFile * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Filename )( 
             IFile * This,
@@ -461,6 +474,7 @@ EXTERN_C const IID IID_IDir;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IDirVtbl
@@ -471,7 +485,7 @@ EXTERN_C const IID IID_IDir;
             IDir * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDir * This);
@@ -499,14 +513,22 @@ EXTERN_C const IID IID_IDir;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDir * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             IDir * This,
@@ -673,6 +695,7 @@ EXTERN_C const IID IID_IPath;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IPathVtbl
@@ -683,7 +706,7 @@ EXTERN_C const IID IID_IPath;
             IPath * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPath * This);
@@ -711,14 +734,22 @@ EXTERN_C const IID IID_IPath;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPath * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Extension )( 
             IPath * This,

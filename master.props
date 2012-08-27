@@ -21,9 +21,9 @@
   </ItemGroup>
 
   <PropertyGroup Label="Configuration">
-
-	<boost Condition=" '$(boost)' == '' ">D:\boost\boost_1_44_0\</boost>
-	<java  Condition=" '$(java)' == '' ">D:\java\jdk\include\win32;D:\java\jdk\include;</java>
+    <PlatformToolset>v110</PlatformToolset>
+	<boost Condition=" '$(boost)' == '' ">G:\boost\boost_1_44_0\</boost>
+	<java  Condition=" '$(java)' == '' ">C:\glassfish3\jdk\include\win32;C:\glassfish3\jdk\include;</java>
 
 	<Configuration Condition=" '$(Configuration)' == '' ">uni_debug</Configuration>
 	<Platform Condition=" '$(Platform)' == '' ">Win32</Platform>

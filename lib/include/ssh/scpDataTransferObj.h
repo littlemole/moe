@@ -227,9 +227,9 @@ private:
 
 class DelayedDataTransferObj
 	: public mol::ole::DataObjBase,
-	  public IAsyncOperation,
+	  public IDataObjectAsyncCapability,
 	  public mol::interfaces< DelayedDataTransferObj, 
-			       mol::implements<IDataObject,IAsyncOperation> >
+			       mol::implements<IDataObject,IDataObjectAsyncCapability> >
 {
 public:
 

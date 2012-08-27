@@ -3,11 +3,11 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 7.00.0555 */
-/* at Fri Jul 20 19:48:58 2012
+ /* File created by MIDL compiler version 8.00.0595 */
+/* at Mon Aug 27 15:25:10 2012
  */
 /* Compiler settings for ScintillAX.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -48,66 +48,77 @@
 #ifndef __IScintillAxDispose_FWD_DEFINED__
 #define __IScintillAxDispose_FWD_DEFINED__
 typedef interface IScintillAxDispose IScintillAxDispose;
+
 #endif 	/* __IScintillAxDispose_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAxProperties_FWD_DEFINED__
 #define __IScintillAxProperties_FWD_DEFINED__
 typedef interface IScintillAxProperties IScintillAxProperties;
+
 #endif 	/* __IScintillAxProperties_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAxText_FWD_DEFINED__
 #define __IScintillAxText_FWD_DEFINED__
 typedef interface IScintillAxText IScintillAxText;
+
 #endif 	/* __IScintillAxText_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAxPosition_FWD_DEFINED__
 #define __IScintillAxPosition_FWD_DEFINED__
 typedef interface IScintillAxPosition IScintillAxPosition;
+
 #endif 	/* __IScintillAxPosition_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAxSelection_FWD_DEFINED__
 #define __IScintillAxSelection_FWD_DEFINED__
 typedef interface IScintillAxSelection IScintillAxSelection;
+
 #endif 	/* __IScintillAxSelection_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAxLine_FWD_DEFINED__
 #define __IScintillAxLine_FWD_DEFINED__
 typedef interface IScintillAxLine IScintillAxLine;
+
 #endif 	/* __IScintillAxLine_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAxAnnotation_FWD_DEFINED__
 #define __IScintillAxAnnotation_FWD_DEFINED__
 typedef interface IScintillAxAnnotation IScintillAxAnnotation;
+
 #endif 	/* __IScintillAxAnnotation_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAxMarkers_FWD_DEFINED__
 #define __IScintillAxMarkers_FWD_DEFINED__
 typedef interface IScintillAxMarkers IScintillAxMarkers;
+
 #endif 	/* __IScintillAxMarkers_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAx_FWD_DEFINED__
 #define __IScintillAx_FWD_DEFINED__
 typedef interface IScintillAx IScintillAx;
+
 #endif 	/* __IScintillAx_FWD_DEFINED__ */
 
 
 #ifndef ___IScintillAxEvents_FWD_DEFINED__
 #define ___IScintillAxEvents_FWD_DEFINED__
 typedef interface _IScintillAxEvents _IScintillAxEvents;
+
 #endif 	/* ___IScintillAxEvents_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAxEvents_FWD_DEFINED__
 #define __IScintillAxEvents_FWD_DEFINED__
 typedef interface IScintillAxEvents IScintillAxEvents;
+
 #endif 	/* __IScintillAxEvents_FWD_DEFINED__ */
 
 
@@ -175,6 +186,7 @@ EXTERN_C const IID IID_IScintillAxDispose;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IScintillAxDisposeVtbl
@@ -185,7 +197,7 @@ EXTERN_C const IID IID_IScintillAxDispose;
             IScintillAxDispose * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxDispose * This);
@@ -242,28 +254,31 @@ EXTERN_C const IID IID_IScintillAxDispose;
 
 
 enum SCINTILLA_SYSTYPE
-    {	SCINTILLA_SYSTYPE_UNIX	= 0,
-	SCINTILLA_SYSTYPE_WIN32	= 1
+    {
+        SCINTILLA_SYSTYPE_UNIX	= 0,
+        SCINTILLA_SYSTYPE_WIN32	= 1
     } ;
 
 enum SCINTILLA_ENCODING
-    {	SCINTILLA_ENCODING_ANSI	= 0,
-	SCINTILLA_ENCODING_UTF8	= 65001,
-	SCINTILLA_ENCODING_UTF16	= 1200
+    {
+        SCINTILLA_ENCODING_ANSI	= 0,
+        SCINTILLA_ENCODING_UTF8	= 65001,
+        SCINTILLA_ENCODING_UTF16	= 1200
     } ;
 
 enum SCINTILLA_SYNTAX
-    {	SCINTILLA_SYNTAX_PLAIN	= 0,
-	SCINTILLA_SYNTAX_HTML	= 1,
-	SCINTILLA_SYNTAX_CSS	= 2,
-	SCINTILLA_SYNTAX_VB	= 3,
-	SCINTILLA_SYNTAX_JS	= 4,
-	SCINTILLA_SYNTAX_SQL	= 5,
-	SCINTILLA_SYNTAX_SHELL	= 6,
-	SCINTILLA_SYNTAX_PERL	= 7,
-	SCINTILLA_SYNTAX_CPP	= 8,
-	SCINTILLA_SYNTAX_JAVA	= 9,
-	SCINTILLA_SYNTAX_CSHARP	= 10
+    {
+        SCINTILLA_SYNTAX_PLAIN	= 0,
+        SCINTILLA_SYNTAX_HTML	= 1,
+        SCINTILLA_SYNTAX_CSS	= 2,
+        SCINTILLA_SYNTAX_VB	= 3,
+        SCINTILLA_SYNTAX_JS	= 4,
+        SCINTILLA_SYNTAX_SQL	= 5,
+        SCINTILLA_SYNTAX_SHELL	= 6,
+        SCINTILLA_SYNTAX_PERL	= 7,
+        SCINTILLA_SYNTAX_CPP	= 8,
+        SCINTILLA_SYNTAX_JAVA	= 9,
+        SCINTILLA_SYNTAX_CSHARP	= 10
     } ;
 
 
@@ -392,6 +407,7 @@ EXTERN_C const IID IID_IScintillAxProperties;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IScintillAxPropertiesVtbl
@@ -402,7 +418,7 @@ EXTERN_C const IID IID_IScintillAxProperties;
             IScintillAxProperties * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxProperties * This);
@@ -430,14 +446,22 @@ EXTERN_C const IID IID_IScintillAxProperties;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAxProperties * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][bindable][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_Font )( 
             IScintillAxProperties * This,
@@ -775,6 +799,7 @@ EXTERN_C const IID IID_IScintillAxText;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IScintillAxTextVtbl
@@ -785,7 +810,7 @@ EXTERN_C const IID IID_IScintillAxText;
             IScintillAxText * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxText * This);
@@ -813,14 +838,22 @@ EXTERN_C const IID IID_IScintillAxText;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAxText * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][defaultbind][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Value )( 
             IScintillAxText * This,
@@ -999,6 +1032,7 @@ EXTERN_C const IID IID_IScintillAxPosition;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IScintillAxPositionVtbl
@@ -1009,7 +1043,7 @@ EXTERN_C const IID IID_IScintillAxPosition;
             IScintillAxPosition * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxPosition * This);
@@ -1037,14 +1071,22 @@ EXTERN_C const IID IID_IScintillAxPosition;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAxPosition * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][defaultbind][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Caret )( 
             IScintillAxPosition * This,
@@ -1206,6 +1248,7 @@ EXTERN_C const IID IID_IScintillAxSelection;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IScintillAxSelectionVtbl
@@ -1216,7 +1259,7 @@ EXTERN_C const IID IID_IScintillAxSelection;
             IScintillAxSelection * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxSelection * This);
@@ -1244,14 +1287,22 @@ EXTERN_C const IID IID_IScintillAxSelection;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAxSelection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][defaultbind][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Start )( 
             IScintillAxSelection * This,
@@ -1435,6 +1486,7 @@ EXTERN_C const IID IID_IScintillAxLine;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IScintillAxLineVtbl
@@ -1445,7 +1497,7 @@ EXTERN_C const IID IID_IScintillAxLine;
             IScintillAxLine * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxLine * This);
@@ -1473,14 +1525,22 @@ EXTERN_C const IID IID_IScintillAxLine;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAxLine * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Current )( 
             IScintillAxLine * This,
@@ -1649,6 +1709,7 @@ EXTERN_C const IID IID_IScintillAxAnnotation;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IScintillAxAnnotationVtbl
@@ -1659,7 +1720,7 @@ EXTERN_C const IID IID_IScintillAxAnnotation;
             IScintillAxAnnotation * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxAnnotation * This);
@@ -1687,14 +1748,22 @@ EXTERN_C const IID IID_IScintillAxAnnotation;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAxAnnotation * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetText )( 
             IScintillAxAnnotation * This,
@@ -1812,6 +1881,7 @@ EXTERN_C const IID IID_IScintillAxMarkers;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IScintillAxMarkersVtbl
@@ -1822,7 +1892,7 @@ EXTERN_C const IID IID_IScintillAxMarkers;
             IScintillAxMarkers * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxMarkers * This);
@@ -1850,14 +1920,22 @@ EXTERN_C const IID IID_IScintillAxMarkers;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAxMarkers * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UseMarkers )( 
             IScintillAxMarkers * This,
@@ -2029,6 +2107,7 @@ EXTERN_C const IID IID_IScintillAx;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IScintillAxVtbl
@@ -2039,7 +2118,7 @@ EXTERN_C const IID IID_IScintillAx;
             IScintillAx * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAx * This);
@@ -2067,14 +2146,22 @@ EXTERN_C const IID IID_IScintillAx;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAx * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IScintillAx * This,
@@ -2280,7 +2367,7 @@ EXTERN_C const IID DIID__IScintillAxEvents;
             _IScintillAxEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _IScintillAxEvents * This);
@@ -2308,14 +2395,22 @@ EXTERN_C const IID DIID__IScintillAxEvents;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _IScintillAxEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         END_INTERFACE
     } _IScintillAxEventsVtbl;
@@ -2403,6 +2498,7 @@ EXTERN_C const IID IID_IScintillAxEvents;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IScintillAxEventsVtbl
@@ -2413,7 +2509,7 @@ EXTERN_C const IID IID_IScintillAxEvents;
             IScintillAxEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxEvents * This);
@@ -2441,14 +2537,22 @@ EXTERN_C const IID IID_IScintillAxEvents;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAxEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnFileNameChanged )( 
             IScintillAxEvents * This,
