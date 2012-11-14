@@ -17,7 +17,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;PCRE_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HAVE_NTOHLL;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;PCRE_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader />
       <BrowseInformation>false</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>

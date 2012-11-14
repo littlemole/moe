@@ -4,7 +4,7 @@ typeinfocount='4'
 guid='{9E61E3FC-FC64-4164-A9AC-BDEDC3116BA7}' 
 major='1' 
 minor='0' 
-file='..\..\..\..\ax\process\x64/uni_release\pipedprocess.tlb'>
+file='..\..\..\..\ax\process\uni_debug\pipedprocess.tlb'>
 
 <interface name='IPipedProcess' type='Dual' iid='{263ABFD3-6D9F-4C0B-861A-4D22E0AA9529}' base='IDispatch' members='12' desc='' >
  <property name='Async' type='VARIANT_BOOL*' dispid='1' vtindex='28' ctype='HRESULT' param='vb' desc='set async mode'  funkind='virtual'  calltype='__stdcall' >

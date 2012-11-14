@@ -20,7 +20,6 @@
       <AdditionalIncludeDirectories>$(boost);..\..\..\3dParty\expat\Source\lib;..\..\include;..\..\..\3dParty\pcre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;PCRE_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader />
-      <BrowseInformation>false</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat></DebugInformationFormat>
       <WholeProgramOptimization>false</WholeProgramOptimization>

@@ -780,7 +780,7 @@ HRESULT __stdcall COMCollection::Add( VARIANT var)
 	if (var.vt == VT_EMPTY )
 		return S_FALSE;
 
-	variants_.push_back( std::make_pair( "", var) );
+	variants_.push_back( std::make_pair( mol::variant(""), mol::variant(var)) );
 
 	return S_OK;
 }
@@ -794,7 +794,7 @@ HRESULT __stdcall COMCollection::Insert( VARIANT index, VARIANT var)
 	if ( it != variants_.end() )
 		variants_.erase(it);
 
-	variants_.push_back( std::make_pair( index, var) );
+	variants_.push_back( std::make_pair( mol::variant(index), mol::variant(var)) );
 	return S_OK;
 }
 
@@ -811,7 +811,7 @@ HRESULT __stdcall COMCollection::InsertAt( VARIANT pos, VARIANT index, VARIANT v
 	if ( it == variants_.end() )
 		return S_FALSE;
 
-	variants_.insert(it,std::make_pair( index, var) );
+	variants_.insert(it,std::make_pair( mol::variant(index), mol::variant(var)) );
 	return S_OK;
 }
 

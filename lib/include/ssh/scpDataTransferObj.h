@@ -224,12 +224,17 @@ private:
 	mol::ssh::CredentialCallback* cb_;
 };
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1200)
+#define MOL_IDataObjectAsyncCapability IDataObjectAsyncCapability
+#else
+#define MOL_IDataObjectAsyncCapability IAsyncOperation
+#endif
 
 class DelayedDataTransferObj
 	: public mol::ole::DataObjBase,
-	  public IAsyncOperation,
+	  public MOL_IDataObjectAsyncCapability, //IAsyncOperation,
 	  public mol::interfaces< DelayedDataTransferObj, 
-			       mol::implements<IDataObject,IAsyncOperation> >
+			       mol::implements<IDataObject,MOL_IDataObjectAsyncCapability /*IAsyncOperation*/> >
 {
 public:
 

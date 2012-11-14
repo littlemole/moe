@@ -3,11 +3,11 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 7.00.0555 */
-/* at Fri Jul 27 22:44:44 2012
+ /* File created by MIDL compiler version 8.00.0595 */
+/* at Mon Oct 29 21:02:54 2012
  */
 /* Compiler settings for shellCtrl.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
+    Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0595 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -32,8 +32,8 @@
 #endif // __RPCNDR_H_VERSION__
 
 
-#ifndef __shellCtrl_h_h__
-#define __shellCtrl_h_h__
+#ifndef __shellctrl_h_h__
+#define __shellctrl_h_h__
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 #pragma once
@@ -44,78 +44,91 @@
 #ifndef __IShellTree_FWD_DEFINED__
 #define __IShellTree_FWD_DEFINED__
 typedef interface IShellTree IShellTree;
+
 #endif 	/* __IShellTree_FWD_DEFINED__ */
 
 
 #ifndef __IHexCtrl_FWD_DEFINED__
 #define __IHexCtrl_FWD_DEFINED__
 typedef interface IHexCtrl IHexCtrl;
+
 #endif 	/* __IHexCtrl_FWD_DEFINED__ */
 
 
 #ifndef __IShellList_FWD_DEFINED__
 #define __IShellList_FWD_DEFINED__
 typedef interface IShellList IShellList;
+
 #endif 	/* __IShellList_FWD_DEFINED__ */
 
 
 #ifndef __IScpList_FWD_DEFINED__
 #define __IScpList_FWD_DEFINED__
 typedef interface IScpList IScpList;
+
 #endif 	/* __IScpList_FWD_DEFINED__ */
 
 
 #ifndef __IColorPicker_FWD_DEFINED__
 #define __IColorPicker_FWD_DEFINED__
 typedef interface IColorPicker IColorPicker;
+
 #endif 	/* __IColorPicker_FWD_DEFINED__ */
 
 
 #ifndef __IPID_FWD_DEFINED__
 #define __IPID_FWD_DEFINED__
 typedef interface IPID IPID;
+
 #endif 	/* __IPID_FWD_DEFINED__ */
 
 
 #ifndef __IKillRoy_FWD_DEFINED__
 #define __IKillRoy_FWD_DEFINED__
 typedef interface IKillRoy IKillRoy;
+
 #endif 	/* __IKillRoy_FWD_DEFINED__ */
 
 
 #ifndef ___IShellTreeEvents_FWD_DEFINED__
 #define ___IShellTreeEvents_FWD_DEFINED__
 typedef interface _IShellTreeEvents _IShellTreeEvents;
+
 #endif 	/* ___IShellTreeEvents_FWD_DEFINED__ */
 
 
 #ifndef ___IHexCtrlEvents_FWD_DEFINED__
 #define ___IHexCtrlEvents_FWD_DEFINED__
 typedef interface _IHexCtrlEvents _IHexCtrlEvents;
+
 #endif 	/* ___IHexCtrlEvents_FWD_DEFINED__ */
 
 
 #ifndef ___IShellListEvents_FWD_DEFINED__
 #define ___IShellListEvents_FWD_DEFINED__
 typedef interface _IShellListEvents _IShellListEvents;
+
 #endif 	/* ___IShellListEvents_FWD_DEFINED__ */
 
 
 #ifndef __IShellTreeEvents_FWD_DEFINED__
 #define __IShellTreeEvents_FWD_DEFINED__
 typedef interface IShellTreeEvents IShellTreeEvents;
+
 #endif 	/* __IShellTreeEvents_FWD_DEFINED__ */
 
 
 #ifndef __IShellListEvents_FWD_DEFINED__
 #define __IShellListEvents_FWD_DEFINED__
 typedef interface IShellListEvents IShellListEvents;
+
 #endif 	/* __IShellListEvents_FWD_DEFINED__ */
 
 
 #ifndef __IHexCtrlEvents_FWD_DEFINED__
 #define __IHexCtrlEvents_FWD_DEFINED__
 typedef interface IHexCtrlEvents IHexCtrlEvents;
+
 #endif 	/* __IHexCtrlEvents_FWD_DEFINED__ */
 
 
@@ -286,6 +299,7 @@ EXTERN_C const IID IID_IShellTree;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IShellTreeVtbl
@@ -296,7 +310,7 @@ EXTERN_C const IID IID_IShellTree;
             IShellTree * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellTree * This);
@@ -324,14 +338,22 @@ EXTERN_C const IID IID_IShellTree;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellTree * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DisplayFiles )( 
             IShellTree * This,
@@ -601,6 +623,7 @@ EXTERN_C const IID IID_IHexCtrl;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IHexCtrlVtbl
@@ -611,7 +634,7 @@ EXTERN_C const IID IID_IHexCtrl;
             IHexCtrl * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHexCtrl * This);
@@ -639,14 +662,22 @@ EXTERN_C const IID IID_IHexCtrl;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IHexCtrl * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReadOnly )( 
             IHexCtrl * This,
@@ -922,6 +953,7 @@ EXTERN_C const IID IID_IShellList;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IShellListVtbl
@@ -932,7 +964,7 @@ EXTERN_C const IID IID_IShellList;
             IShellList * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellList * This);
@@ -960,14 +992,22 @@ EXTERN_C const IID IID_IShellList;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellList * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DisplayFiles )( 
             IShellList * This,
@@ -1163,6 +1203,7 @@ EXTERN_C const IID IID_IScpList;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IScpListVtbl
@@ -1173,7 +1214,7 @@ EXTERN_C const IID IID_IScpList;
             IScpList * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScpList * This);
@@ -1201,14 +1242,22 @@ EXTERN_C const IID IID_IScpList;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScpList * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][defaultbind][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Location )( 
             IScpList * This,
@@ -1384,6 +1433,7 @@ EXTERN_C const IID IID_IColorPicker;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IColorPickerVtbl
@@ -1394,7 +1444,7 @@ EXTERN_C const IID IID_IColorPicker;
             IColorPicker * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IColorPicker * This);
@@ -1422,14 +1472,22 @@ EXTERN_C const IID IID_IColorPicker;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IColorPicker * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Color )( 
             IColorPicker * This,
@@ -1539,6 +1597,7 @@ EXTERN_C const IID IID_IPID;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IPIDVtbl
@@ -1549,7 +1608,7 @@ EXTERN_C const IID IID_IPID;
             IPID * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPID * This);
@@ -1577,14 +1636,22 @@ EXTERN_C const IID IID_IPID;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPID * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PID )( 
             IPID * This,
@@ -1675,6 +1742,7 @@ EXTERN_C const IID IID_IKillRoy;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IKillRoyVtbl
@@ -1685,7 +1753,7 @@ EXTERN_C const IID IID_IKillRoy;
             IKillRoy * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IKillRoy * This);
@@ -1713,14 +1781,22 @@ EXTERN_C const IID IID_IKillRoy;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IKillRoy * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *FindPIDforFile )( 
             IKillRoy * This,
@@ -1803,7 +1879,7 @@ EXTERN_C const IID DIID__IShellTreeEvents;
             _IShellTreeEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _IShellTreeEvents * This);
@@ -1831,14 +1907,22 @@ EXTERN_C const IID DIID__IShellTreeEvents;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _IShellTreeEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         END_INTERFACE
     } _IShellTreeEventsVtbl;
@@ -1910,7 +1994,7 @@ EXTERN_C const IID DIID__IHexCtrlEvents;
             _IHexCtrlEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _IHexCtrlEvents * This);
@@ -1938,14 +2022,22 @@ EXTERN_C const IID DIID__IHexCtrlEvents;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _IHexCtrlEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         END_INTERFACE
     } _IHexCtrlEventsVtbl;
@@ -2017,7 +2109,7 @@ EXTERN_C const IID DIID__IShellListEvents;
             _IShellListEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _IShellListEvents * This);
@@ -2045,14 +2137,22 @@ EXTERN_C const IID DIID__IShellListEvents;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _IShellListEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         END_INTERFACE
     } _IShellListEventsVtbl;
@@ -2130,6 +2230,7 @@ EXTERN_C const IID IID_IShellTreeEvents;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IShellTreeEventsVtbl
@@ -2140,7 +2241,7 @@ EXTERN_C const IID IID_IShellTreeEvents;
             IShellTreeEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellTreeEvents * This);
@@ -2168,14 +2269,22 @@ EXTERN_C const IID IID_IShellTreeEvents;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellTreeEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnTreeSelection )( 
             IShellTreeEvents * This,
@@ -2287,6 +2396,7 @@ EXTERN_C const IID IID_IShellListEvents;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IShellListEventsVtbl
@@ -2297,7 +2407,7 @@ EXTERN_C const IID IID_IShellListEvents;
             IShellListEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellListEvents * This);
@@ -2325,14 +2435,22 @@ EXTERN_C const IID IID_IShellListEvents;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellListEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnListSelection )( 
             IShellListEvents * This,
@@ -2441,6 +2559,7 @@ EXTERN_C const IID IID_IHexCtrlEvents;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IHexCtrlEventsVtbl
@@ -2451,7 +2570,7 @@ EXTERN_C const IID IID_IHexCtrlEvents;
             IHexCtrlEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHexCtrlEvents * This);
@@ -2479,14 +2598,22 @@ EXTERN_C const IID IID_IHexCtrlEvents;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IHexCtrlEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnNewFile )( 
             IHexCtrlEvents * This,

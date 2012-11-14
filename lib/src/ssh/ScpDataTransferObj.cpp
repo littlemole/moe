@@ -673,7 +673,7 @@ HRESULT __stdcall DelayedDataTransferObj::SetData(  FORMATETC * pFormatetc,  STG
 
 
 //////////////////////////////////////////////////////////////////////////////////
-// IAsyncOperation
+// IAsyncOperation / IDataObjectAsyncCapability
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -694,7 +694,7 @@ HRESULT __stdcall  DelayedDataTransferObj::GetAsyncMode( BOOL *pfIsOpAsync)
 
 HRESULT __stdcall  DelayedDataTransferObj::StartOperation( IBindCtx *pbcReserved)
 {
-	((IAsyncOperation*)this)->AddRef();
+	((MOL_IDataObjectAsyncCapability*)this)->AddRef();
 	asyncInProgress_ = true;
 	return S_OK;
 }
@@ -711,7 +711,7 @@ HRESULT __stdcall  DelayedDataTransferObj::InOperation( BOOL *pfInAsyncOp)
 HRESULT __stdcall  DelayedDataTransferObj::EndOperation(  HRESULT hResult,IBindCtx *pbcReserved, DWORD dwEffects)
 {
 	asyncInProgress_   = false;
-	((IAsyncOperation*)this)->Release();
+	((MOL_IDataObjectAsyncCapability*)this)->Release();
 	return S_OK;
 }
 

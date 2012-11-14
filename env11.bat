@@ -15,11 +15,11 @@ set CONFIG=/Debug
 
 
 :psdk
-call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" %PLAT%
+call "C:\Program Files\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" %PLAT%
 
 set Configuration=%CONF%
 
-if "%PLAT%"=="/x86" goto x86
+if "%PLAT%"=="x86" goto x86
 set Platform=x64
 goto end
 

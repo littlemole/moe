@@ -3,11 +3,11 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 7.00.0555 */
-/* at Fri Jul 20 19:47:38 2012
+ /* File created by MIDL compiler version 8.00.0595 */
+/* at Mon Oct 29 21:02:02 2012
  */
 /* Compiler settings for process.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
+    Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0595 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -44,18 +44,21 @@
 #ifndef __IPipedProcess_FWD_DEFINED__
 #define __IPipedProcess_FWD_DEFINED__
 typedef interface IPipedProcess IPipedProcess;
+
 #endif 	/* __IPipedProcess_FWD_DEFINED__ */
 
 
 #ifndef ___IPipedProcessComplete_FWD_DEFINED__
 #define ___IPipedProcessComplete_FWD_DEFINED__
 typedef interface _IPipedProcessComplete _IPipedProcessComplete;
+
 #endif 	/* ___IPipedProcessComplete_FWD_DEFINED__ */
 
 
 #ifndef __IPipedProcessCompleteDual_FWD_DEFINED__
 #define __IPipedProcessCompleteDual_FWD_DEFINED__
 typedef interface IPipedProcessCompleteDual IPipedProcessCompleteDual;
+
 #endif 	/* __IPipedProcessCompleteDual_FWD_DEFINED__ */
 
 
@@ -144,6 +147,7 @@ EXTERN_C const IID IID_IPipedProcess;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IPipedProcessVtbl
@@ -154,7 +158,7 @@ EXTERN_C const IID IID_IPipedProcess;
             IPipedProcess * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPipedProcess * This);
@@ -182,14 +186,22 @@ EXTERN_C const IID IID_IPipedProcess;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPipedProcess * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Async )( 
             IPipedProcess * This,
@@ -354,7 +366,7 @@ EXTERN_C const IID DIID__IPipedProcessComplete;
             _IPipedProcessComplete * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _IPipedProcessComplete * This);
@@ -382,14 +394,22 @@ EXTERN_C const IID DIID__IPipedProcessComplete;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _IPipedProcessComplete * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         END_INTERFACE
     } _IPipedProcessCompleteVtbl;
@@ -454,6 +474,7 @@ EXTERN_C const IID IID_IPipedProcessCompleteDual;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IPipedProcessCompleteDualVtbl
@@ -464,7 +485,7 @@ EXTERN_C const IID IID_IPipedProcessCompleteDual;
             IPipedProcessCompleteDual * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPipedProcessCompleteDual * This);
@@ -492,14 +513,22 @@ EXTERN_C const IID IID_IPipedProcessCompleteDual;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPipedProcessCompleteDual * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnComplete )( 
             IPipedProcessCompleteDual * This);

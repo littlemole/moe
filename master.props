@@ -22,11 +22,15 @@
 
   <PropertyGroup Label="Configuration">
 
-	<boost Condition=" '$(boost)' == '' ">D:\boost\boost_1_44_0\</boost>
-	<java  Condition=" '$(java)' == '' ">D:\java\jdk\include\win32;D:\java\jdk\include;</java>
+	<boost Condition=" '$(boost)' == '' ">C:\boost\boost_1_44_0\</boost>
+	<java  Condition=" '$(java)' == '' ">C:\Java\glassfish\jdk7\include;C:\Java\glassfish\jdk7\include\win32</java>
+	<UICC>C:\\Program Files\\Windows Kits\\8.0\\bin\\x86\\uicc.exe</UICC>
 
 	<Configuration Condition=" '$(Configuration)' == '' ">uni_debug</Configuration>
 	<Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
+
+	<PlatformToolset>v110</PlatformToolset>
+
   </PropertyGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -41,5 +45,22 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">$(Platform)\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
+
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='uni_debug'">
+    <ClCompile>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='uni_release'">
+    <ClCompile>
+      <BrowseInformation>false</BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+    </ClCompile>
+  </ItemDefinitionGroup>
 
 </Project>

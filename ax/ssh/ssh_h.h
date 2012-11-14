@@ -3,11 +3,11 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 7.00.0555 */
-/* at Fri Jul 20 19:47:53 2012
+ /* File created by MIDL compiler version 8.00.0595 */
+/* at Mon Oct 29 21:02:37 2012
  */
 /* Compiler settings for ssh.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
+    Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0595 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -44,36 +44,42 @@
 #ifndef __IScpDataTransferObjectFactory_FWD_DEFINED__
 #define __IScpDataTransferObjectFactory_FWD_DEFINED__
 typedef interface IScpDataTransferObjectFactory IScpDataTransferObjectFactory;
+
 #endif 	/* __IScpDataTransferObjectFactory_FWD_DEFINED__ */
 
 
 #ifndef __IRemoteFile_FWD_DEFINED__
 #define __IRemoteFile_FWD_DEFINED__
 typedef interface IRemoteFile IRemoteFile;
+
 #endif 	/* __IRemoteFile_FWD_DEFINED__ */
 
 
 #ifndef __ISFTP_FWD_DEFINED__
 #define __ISFTP_FWD_DEFINED__
 typedef interface ISFTP ISFTP;
+
 #endif 	/* __ISFTP_FWD_DEFINED__ */
 
 
 #ifndef __ISCP_FWD_DEFINED__
 #define __ISCP_FWD_DEFINED__
 typedef interface ISCP ISCP;
+
 #endif 	/* __ISCP_FWD_DEFINED__ */
 
 
 #ifndef __ISSHConnection_FWD_DEFINED__
 #define __ISSHConnection_FWD_DEFINED__
 typedef interface ISSHConnection ISSHConnection;
+
 #endif 	/* __ISSHConnection_FWD_DEFINED__ */
 
 
 #ifndef __ISSH_FWD_DEFINED__
 #define __ISSH_FWD_DEFINED__
 typedef interface ISSH ISSH;
+
 #endif 	/* __ISSH_FWD_DEFINED__ */
 
 
@@ -152,6 +158,7 @@ EXTERN_C const IID IID_IScpDataTransferObjectFactory;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IScpDataTransferObjectFactoryVtbl
@@ -162,7 +169,7 @@ EXTERN_C const IID IID_IScpDataTransferObjectFactory;
             IScpDataTransferObjectFactory * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScpDataTransferObjectFactory * This);
@@ -190,14 +197,22 @@ EXTERN_C const IID IID_IScpDataTransferObjectFactory;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScpDataTransferObjectFactory * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Init )( 
             IScpDataTransferObjectFactory * This,
@@ -335,6 +350,7 @@ EXTERN_C const IID IID_IRemoteFile;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct IRemoteFileVtbl
@@ -345,7 +361,7 @@ EXTERN_C const IID IID_IRemoteFile;
             IRemoteFile * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRemoteFile * This);
@@ -373,14 +389,22 @@ EXTERN_C const IID IID_IRemoteFile;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IRemoteFile * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsDir )( 
             IRemoteFile * This,
@@ -565,6 +589,7 @@ EXTERN_C const IID IID_ISFTP;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct ISFTPVtbl
@@ -575,7 +600,7 @@ EXTERN_C const IID IID_ISFTP;
             ISFTP * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISFTP * This);
@@ -603,14 +628,22 @@ EXTERN_C const IID IID_ISFTP;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISFTP * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Mkdir )( 
             ISFTP * This,
@@ -779,6 +812,7 @@ EXTERN_C const IID IID_ISCP;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct ISCPVtbl
@@ -789,7 +823,7 @@ EXTERN_C const IID IID_ISCP;
             ISCP * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISCP * This);
@@ -817,14 +851,22 @@ EXTERN_C const IID IID_ISCP;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISCP * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PushDirectory )( 
             ISCP * This,
@@ -1008,6 +1050,7 @@ EXTERN_C const IID IID_ISSHConnection;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct ISSHConnectionVtbl
@@ -1018,7 +1061,7 @@ EXTERN_C const IID IID_ISSHConnection;
             ISSHConnection * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISSHConnection * This);
@@ -1046,14 +1089,22 @@ EXTERN_C const IID IID_ISSHConnection;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISSHConnection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hostname )( 
             ISSHConnection * This,
@@ -1242,6 +1293,7 @@ EXTERN_C const IID IID_ISSH;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct ISSHVtbl
@@ -1252,7 +1304,7 @@ EXTERN_C const IID IID_ISSH;
             ISSH * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISSH * This);
@@ -1280,14 +1332,22 @@ EXTERN_C const IID IID_ISSH;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISSH * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Connect )( 
             ISSH * This,

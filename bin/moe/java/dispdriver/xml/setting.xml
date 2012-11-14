@@ -4,7 +4,7 @@ typeinfocount='5'
 guid='{225F997F-E7F5-422C-9D41-DFC95A59B60A}' 
 major='1' 
 minor='0' 
-file='..\..\..\..\ax\setting\x64/uni_release\setting.tlb'>
+file='..\..\..\..\ax\setting\uni_debug\setting.tlb'>
 
 <interface name='ISetting' type='Dual' iid='{2DD18900-95F3-46A8-98B8-03F3843DE635}' base='IDispatch' members='20' desc='' >
  <property name='Key' type='BSTR' dispid='1' vtindex='28' ctype='HRESULT' param='k' desc='Get/Set Key Name'  funkind='virtual'  calltype='__stdcall' >
