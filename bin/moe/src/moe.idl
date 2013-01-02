@@ -884,6 +884,20 @@ library Moe
 		  helpstring("Get the settings disp interface")
 		]		
 		HRESULT Settings( [out,retval] IDispatch** settings);
+
+		/////////////////////////////////////////////////////////////////////
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(16), 
+		  helpstring("Get StyleSet obj")
+		]
+		HRESULT StyleSets([out,retval] IDispatch** styles);
+		
+		[ 
+		  id(17), 
+		  helpstring("Reset styles")
+		]
+		HRESULT ResetStyles();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////
@@ -1031,6 +1045,13 @@ library Moe
 		/////////////////////////////////////////////////////////////////////
  		[ 
 		  id(19), 
+		  helpstring("Exit Moe Editor and close the App")
+		]
+		HRESULT Print([in] BSTR txt);
+
+		/////////////////////////////////////////////////////////////////////
+ 		[ 
+		  id(20), 
 		  helpstring("Exit Moe Editor and close the App")
 		]
 		HRESULT Exit();

@@ -44,11 +44,13 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -59,26 +61,30 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DLL|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DLL|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -159,7 +165,7 @@
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">D:\boost\boost_1_52_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
   </PropertyGroup>
@@ -404,6 +410,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="..\..\cg\disph.exe">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">generate dispids from typelib</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">$(TargetName)_dispid.h</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">$(IntDir)$(TargetName).tlb</AdditionalInputs>
+    </CustomBuild>
     <None Include="shellfolder.def" />
     <None Include="shellfolder.ico" />
   </ItemGroup>

@@ -3,11 +3,11 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 8.00.0595 */
-/* at Mon Aug 27 15:24:58 2012
+ /* File created by MIDL compiler version 7.00.0555 */
+/* at Wed Jan 02 21:59:52 2013
  */
 /* Compiler settings for shellfolder.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -44,21 +44,18 @@
 #ifndef __IShellPane_FWD_DEFINED__
 #define __IShellPane_FWD_DEFINED__
 typedef interface IShellPane IShellPane;
-
 #endif 	/* __IShellPane_FWD_DEFINED__ */
 
 
 #ifndef ___IShellPaneEvents_FWD_DEFINED__
 #define ___IShellPaneEvents_FWD_DEFINED__
 typedef interface _IShellPaneEvents _IShellPaneEvents;
-
 #endif 	/* ___IShellPaneEvents_FWD_DEFINED__ */
 
 
 #ifndef __IShellPaneEvents_FWD_DEFINED__
 #define __IShellPaneEvents_FWD_DEFINED__
 typedef interface IShellPaneEvents IShellPaneEvents;
-
 #endif 	/* __IShellPaneEvents_FWD_DEFINED__ */
 
 
@@ -145,7 +142,6 @@ EXTERN_C const IID IID_IShellPane;
         
     };
     
-    
 #else 	/* C style interface */
 
     typedef struct IShellPaneVtbl
@@ -156,7 +152,7 @@ EXTERN_C const IID IID_IShellPane;
             IShellPane * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellPane * This);
@@ -184,22 +180,14 @@ EXTERN_C const IID IID_IShellPane;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellPane * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DisplayFiles )( 
             IShellPane * This,
@@ -369,7 +357,7 @@ EXTERN_C const IID DIID__IShellPaneEvents;
             _IShellPaneEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _IShellPaneEvents * This);
@@ -397,22 +385,14 @@ EXTERN_C const IID DIID__IShellPaneEvents;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _IShellPaneEvents * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
     } _IShellPaneEventsVtbl;
@@ -487,7 +467,6 @@ EXTERN_C const IID IID_IShellPaneEvents;
         
     };
     
-    
 #else 	/* C style interface */
 
     typedef struct IShellPaneEventsVtbl
@@ -498,7 +477,7 @@ EXTERN_C const IID IID_IShellPaneEvents;
             IShellPaneEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellPaneEvents * This);
@@ -526,22 +505,14 @@ EXTERN_C const IID IID_IShellPaneEvents;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IShellPaneEvents * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnListSelection )( 
             IShellPaneEvents * This,

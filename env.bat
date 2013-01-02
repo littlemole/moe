@@ -6,6 +6,8 @@ if %2!==! set PLAT=/x86
 
 if "%CONF%"=="uni_debug" goto debug
 
+set PlatformToolset=v100
+
 set CONFIG=/Release
 goto psdk
 

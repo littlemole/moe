@@ -81,7 +81,11 @@
 #cmakedefine HAVE_CLOCK_GETTIME 1
 
 /* Define to 1 if you have the `ntohll' function. */
+#if (_MSC_VER < 1700 )
+#cmakedefine HAVE_NTOHLL 0
+#else
 #cmakedefine HAVE_NTOHLL 1
+#endif
 
 /*************************** LIBRARIES ***************************/
 

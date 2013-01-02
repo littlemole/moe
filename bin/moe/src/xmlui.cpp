@@ -330,6 +330,10 @@ ISetting* config()
 {
   return mol::comSingleton<ISetting,&CLSID_Setting>();
 }
+IScintillAxStyleSets* styles()
+{
+  return mol::comSingleton<IScintillAxStyleSets,&CLSID_ScintillAxStyleSets>();
+}
 Script* scriptlet()
   {
   return mol::nonCreatableCOMSingleton<Script,IActiveScriptSite>();

@@ -36,11 +36,13 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -52,17 +54,19 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -126,7 +130,7 @@
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">Midl</CustomBuildAfterTargets>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">D:\boost\boost_1_52_0;$(IncludePath)</IncludePath>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">Midl</CustomBuildAfterTargets>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
@@ -236,7 +240,7 @@
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;..\..\3dParty\scintilla\bin\static64\debug\SciLexer.lib;..\..\\3dParty\scintilla\bin\static\Scintilla.lib;..\..\3dParty\pcre\x64\uni_debug\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Imm32.lib;Msimg32.lib;Ws2_32.lib;Crypt32.lib;..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\x64\uni_debug\libexpatMT.lib;..\..\lib\src\tcp\x64\uni_debug\tcp.lib;..\..\lib\src\ssh\x64\uni_debug\ssh.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;..\..\3dParty\scintilla\bin\static64\debug\SciLexer.lib;..\..\\3dParty\scintilla\bin\static64\debug\Scintilla.lib;..\..\3dParty\pcre\x64\uni_debug\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Imm32.lib;Msimg32.lib;Ws2_32.lib;Crypt32.lib;..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\x64\uni_debug\libexpatMT.lib;..\..\lib\src\tcp\x64\uni_debug\tcp.lib;..\..\lib\src\ssh\x64\uni_debug\ssh.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>ScintillAx.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -393,6 +397,7 @@
     <ClInclude Include="include\ScintillaCtrl.h" />
     <ClInclude Include="include\ScintillAxEvents.h" />
     <ClInclude Include="include\ScintillAxProp.h" />
+    <ClInclude Include="include\SciStyle.h" />
     <ClInclude Include="include\sciwnd.h" />
     <ClInclude Include="include\Selection.h" />
     <ClInclude Include="include\Text.h" />
@@ -412,6 +417,7 @@
     <ClCompile Include="src\ScintillaCtrl.cpp" />
     <ClCompile Include="src\ScintillAX.cpp" />
     <ClCompile Include="src\ScintillAxProp.cpp" />
+    <ClCompile Include="src\SciStyle.cpp" />
     <ClCompile Include="src\Selection.cpp" />
     <ClCompile Include="src\Text.cpp" />
     <ClCompile Include="src\xmlrc.cpp" />

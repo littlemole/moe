@@ -4,15 +4,15 @@
  <Import Project="..\master.props" />
 
  <Target Name="Build">
-        <MSBuild Projects=".\src\util\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
-		<MSBuild Projects=".\src\xml\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
-		<MSBuild Projects=".\src\thread\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
-		<MSBuild Projects=".\src\tcp\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
-		<MSBuild Projects=".\src\ssl\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
-		<MSBuild Projects=".\src\http\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
-		<MSBuild Projects=".\src\ssh\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
-		<MSBuild Projects=".\src\win\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
-		<MSBuild Projects=".\src\ole\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+        <MSBuild BuildInParallel="$(BuildInParallel)" Projects=".\src\util\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild BuildInParallel="$(BuildInParallel)" Projects=".\src\xml\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild BuildInParallel="$(BuildInParallel)" Projects=".\src\thread\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild BuildInParallel="$(BuildInParallel)" Projects=".\src\tcp\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild BuildInParallel="$(BuildInParallel)" Projects=".\src\ssl\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild BuildInParallel="$(BuildInParallel)" Projects=".\src\http\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild BuildInParallel="$(BuildInParallel)" Projects=".\src\ssh\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild BuildInParallel="$(BuildInParallel)" Projects=".\src\win\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+		<MSBuild BuildInParallel="$(BuildInParallel)" Projects=".\src\ole\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
  </Target>
 
  <Target Name="Clean">

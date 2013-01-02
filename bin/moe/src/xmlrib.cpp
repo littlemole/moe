@@ -112,6 +112,8 @@ void init_ribbon_ui(  mol::win::WndProc* wnd )
   
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonFilePreferences, IDM_MODE_PREFERENCES );
   
+    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonFileUserStyles, IDM_MODE_USERSTYLES );
+  
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonShowLineNumbers, IDM_MODE_SHOW_LINE_NUMBERS );
   
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonToolExecForm, IDM_MODE_EXECUTEFORM );

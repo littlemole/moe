@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////
 #ifdef _WIN32
 #pragma warning( disable : 4355) // this pointer used in c'tor init list
+#pragma warning( disable : 4250) // 
 #endif
 
 #ifdef _WIN32

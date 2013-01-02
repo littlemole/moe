@@ -124,6 +124,9 @@ DebugDlg* debugDlg();
 struct ISetting;
 ISetting* config();
 
+struct IScintillAxStyleSets;
+IScintillAxStyleSets* styles();
+
 class Script;    
 Script* scriptlet();
 

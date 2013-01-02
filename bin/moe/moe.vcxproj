@@ -36,11 +36,13 @@
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -52,17 +54,19 @@
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -126,7 +130,7 @@
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">Midl</CustomBuildAfterTargets>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">D:\boost\boost_1_52_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">Midl</CustomBuildAfterTargets>
@@ -251,9 +255,10 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BrowseInformation>true</BrowseInformation>
+      <DisableSpecificWarnings>4244</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalOptions>/SUBSYSTEM:WINDOWS,4.00 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;..\..\lib\src\ssh\x64\uni_debug\ssh.lib;..\..\lib\src\tcp\x64\uni_debug\tcp.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Mpr.lib;urlmon.lib;Ws2_32.lib;..\..\3dParty\pcre\x64\uni_debug\pcre.lib;..\..\3dParty\openssl\out64D\libeay32.lib;..\..\3dParty\openssl\out64D\ssleay32.lib;Msimg32.lib;..\..\3dParty\expat\Source\lib\x64\uni_debug\libexpatMT.lib;..\..\3dParty\zlib\x64\debug\zlib.lib;gdiplus.lib;Propsys.lib;..\..\3dParty\libssh\build\x64\uni_debug\libssh.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)moe.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -267,7 +272,6 @@
       <Profile>true</Profile>
       <MinimumRequiredVersion>
       </MinimumRequiredVersion>
-      <Version>502</Version>
     </Link>
     <ResourceCompile>
       <PreprocessorDefinitions>TLB=x64\uni_debug\moe.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>

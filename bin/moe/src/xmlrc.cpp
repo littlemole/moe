@@ -111,6 +111,7 @@ extern "C" void load_codegen_metadata()
   UI().addCmd(IDM_MODE_UNIX,_T("UNIX"));  
   UI().addCmd(IDM_MODE_WIN32,_T("WIN32"));  
   UI().addCmd(IDM_MODE_PREFERENCES,_T("Preferences"));  
+  UI().addCmd(IDM_MODE_USERSTYLES,_T("Scintilla Styles"));  
   UI().addCmd(IDM_MODE_USETABS,_T("Use Tabs"));  
   UI().addCmd(IDM_MODE_DONT_USE_TABS,_T("Don't use Tabs"));  
   UI().addCmd(IDM_MODE_TABWIDTH,_T("tabwidth"));  
@@ -291,6 +292,7 @@ extern "C" void load_codegen_metadata()
     UI().addMenuSeparator(IDM_MOE,IDM_FILE);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_PRINT, IDB_TOOLBAR, IDM_FILE_PRINT, false, true);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_MODE_USERSTYLES, IDB_TOOLBAR, IDM_MODE_USERSTYLES, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_FILE);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW_RTF, IDB_TOOLBAR, IDM_FILE_NEW_RTF, false, true);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, IDM_FILE_NEW_UFS, false, true);
@@ -764,6 +766,8 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_REPLACE, make_handler(&MoeWnd::OnR
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_EDITSETTINGS, make_handler(&MoeWnd::OnEditSettings) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_PREFERENCES, make_handler(&MoeWnd::OnEditPrefs) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_USERSTYLES, make_handler(&MoeWnd::OnEditUserStyles) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_HELP_ABOUT, make_handler(&MoeWnd::OnHelpAbout) );
 

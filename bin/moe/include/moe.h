@@ -95,6 +95,7 @@ public:
 
 	 void OnEditSettings();
 	 void OnEditPrefs();
+	 void OnEditUserStyles();
      void OnHelpAbout();
 	 void OnFileExit ( );
 
@@ -131,6 +132,7 @@ public:
     virtual HRESULT __stdcall get_Config( IMoeConfig **d);    
     virtual HRESULT __stdcall get_Script( IMoeScript **d);    
     virtual HRESULT __stdcall get_Dialogs( IMoeDialogs **d);    
+	virtual HRESULT __stdcall Print(BSTR txt);
     virtual HRESULT __stdcall Exit();
 
 
@@ -147,6 +149,7 @@ public:
 	virtual HRESULT __stdcall get_ANSI(long* d)			{ if(d) *d =  CP_ACP; return S_OK; }
 	virtual HRESULT __stdcall get_UNICODE(long* d)		{ if(d) *d =  CP_WINUNICODE; return S_OK; }
 	virtual HRESULT __stdcall get_UTF8(long* d)			{ if(d) *d =  CP_UTF8; return S_OK; }
+
 
 	/////////////////////////////////////////////////////////////////////
 	// persistence
@@ -210,6 +213,22 @@ public:
 		 return -1;
 	 }
 
+	 HRESULT stdOut(BSTR* ret) 
+	 {
+		 if ( ret == 0 )
+			 return E_INVALIDARG;
+
+		 if ( !vttyOut_ )
+		 {
+			*ret = 0;
+			return S_OK;
+		 }
+
+		 *ret = ::SysAllocString(vttyOut_.bstr_);
+		 vttyOut_ = 0;
+		 return S_OK;
+	 }
+
 private:
 
 	std::vector<CodePage> codePages_;
@@ -248,6 +267,7 @@ private:
 	// cookie into IRunningObjectTable for our running OLE server
 	DWORD							activeObj_;
 
+	mol::bstr						vttyOut_;
 };
 
 #endif

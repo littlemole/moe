@@ -20,7 +20,6 @@
 		    <persist property="DISPID_ISCINTILLAXPROPERTIES_TABWIDTH" vtype="VT_I4"/>	    
 		    <persist property="DISPID_ISCINTILLAXPROPERTIES_OVERTYPE" vtype="VT_BOOL" />	    
 		    <persist property="DISPID_ISCINTILLAXPROPERTIES_USECONTEXT" vtype="VT_BOOL"  />	    
-		    <persist property="DISPID_ISCINTILLAXPROPERTIES_FONT" vtype="VT_FONT" />	    
 	     
       </class>
      

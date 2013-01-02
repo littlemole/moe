@@ -147,7 +147,7 @@ void MoeWnd::OnCreate()
     // update ribbon's recent documents
 	mol::Ribbon::ribbon()->updateRecentDocs(RibbonMRUItems);
 
-	
+
 
 }
 
@@ -541,6 +541,15 @@ void MoeWnd::OnEditPrefs()
 	moeConfig->EditPreferences();
 }
 
+void MoeWnd::OnEditUserStyles()
+{
+	bool result = docs()->open( _T("forms\\styles.html"), MOE_DOCTYPE_HTML, -1, true, 0 );
+	if (!result)
+	{
+		::MessageBox(*this,_T("err"),_T("failed to load"),MB_ICONERROR);
+	}
+	statusBar()->status(urlDlg()->url);
+}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -970,6 +979,20 @@ HRESULT __stdcall MoeWnd::Exit()
 	return S_OK;
 }
 
+HRESULT __stdcall MoeWnd::Print(BSTR txt)
+{
+	if ( !txt )
+		return S_OK;
+
+	std::wostringstream woss;
+	if ( vttyOut_ )
+		woss << vttyOut_.towstring();
+	woss << txt;
+	vttyOut_ = woss.str();
+
+	return S_OK;
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 // Persistence
@@ -1007,6 +1030,16 @@ HRESULT __stdcall MoeWnd::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
 
 	// save Ribbon UI state (if applicable)
 	mol::Ribbon::ribbon()->save(pStgSave);
+
+	// save moe style settings
+	if ( S_OK == pStgSave->CreateStream( L"STYLES", STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,0,&stream) )
+	{
+		mol::punk<IPersistStream> ps(styles());
+		if ( ps )
+		{
+			ps->Save(stream,TRUE);
+		}
+	}
 	return S_OK;
 }
 
@@ -1015,6 +1048,7 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 {
 	static LPCOLESTR con = OLESTR("UI");
 	static LPCOLESTR def = OLESTR("DEFAULTS");
+	
 
 	// open defaults stream
 	punk<IStream> stream;
@@ -1097,6 +1131,36 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 
 	// show the ribbon if avail and load persistent ribbon settings from store
 	initRibbon(pStgLoad);
+
+	/* -- reset styles to default 
+	mol::punk<IPersistStreamInit> psi(styles());
+	if(psi)
+	{
+		HRESULT hr = psi->InitNew();
+	}
+
+	
+	return S_OK;
+	*/
+	
+
+
+	// open Style stream
+	hr = pStgLoad->OpenStream( L"STYLES", NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
+	if ( !stream || (hr != S_OK) )
+		return S_OK;
+
+	// load UI config
+	punk<IPersistStream> psc(styles());
+	if ( !psc )
+		return S_OK;
+
+	hr = psc->Load(stream);
+	if ( hr != S_OK )
+		return S_OK;
+	
+	stream.release();
+
 	return S_OK;
 }
 

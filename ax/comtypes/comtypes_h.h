@@ -3,11 +3,11 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 8.00.0595 */
-/* at Mon Aug 27 15:23:29 2012
+ /* File created by MIDL compiler version 7.00.0555 */
+/* at Wed Jan 02 21:58:23 2013
  */
 /* Compiler settings for comtypes.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -44,14 +44,12 @@
 #ifndef __ITypeLibToXml_FWD_DEFINED__
 #define __ITypeLibToXml_FWD_DEFINED__
 typedef interface ITypeLibToXml ITypeLibToXml;
-
 #endif 	/* __ITypeLibToXml_FWD_DEFINED__ */
 
 
 #ifndef ___IAsyncDocumentationComplete_FWD_DEFINED__
 #define ___IAsyncDocumentationComplete_FWD_DEFINED__
 typedef interface _IAsyncDocumentationComplete _IAsyncDocumentationComplete;
-
 #endif 	/* ___IAsyncDocumentationComplete_FWD_DEFINED__ */
 
 
@@ -136,7 +134,6 @@ EXTERN_C const IID IID_ITypeLibToXml;
         
     };
     
-    
 #else 	/* C style interface */
 
     typedef struct ITypeLibToXmlVtbl
@@ -147,7 +144,7 @@ EXTERN_C const IID IID_ITypeLibToXml;
             ITypeLibToXml * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITypeLibToXml * This);
@@ -175,22 +172,14 @@ EXTERN_C const IID IID_ITypeLibToXml;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITypeLibToXml * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Load )( 
             ITypeLibToXml * This,
@@ -339,7 +328,7 @@ EXTERN_C const IID DIID__IAsyncDocumentationComplete;
             _IAsyncDocumentationComplete * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _IAsyncDocumentationComplete * This);
@@ -367,22 +356,14 @@ EXTERN_C const IID DIID__IAsyncDocumentationComplete;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _IAsyncDocumentationComplete * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
     } _IAsyncDocumentationCompleteVtbl;

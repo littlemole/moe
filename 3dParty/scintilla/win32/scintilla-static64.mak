@@ -40,13 +40,13 @@ CC=cl
 RC=rc
 LD=lib
 
-CXXFLAGS=-Zi -TP -W4 -EHsc -Zc:forScope -Zc:wchar_t -D_CRT_SECURE_NO_DEPRECATE=1 -DSTATIC_BUILD 
+CXXFLAGS=-Zi -TP -wd4267 -W4 -EHsc -Zc:forScope -Zc:wchar_t -D_CRT_SECURE_NO_DEPRECATE=1 -DSTATIC_BUILD /nologo
 # For something scary:-Wp64
 CXXDEBUG=-Od -MTd -DDEBUG
 CXXNDEBUG=-O1 -MT -DNDEBUG 
 #-GL
 NAME=-Fo
-LDFLAGS=-OPT:REF -LTCG -DEBUG /Machine:X64
+LDFLAGS=-LTCG /Machine:X64 /ignore:4044 /ignore:4006
 LDDEBUG=
 LIBS=KERNEL32.lib USER32.lib GDI32.lib IMM32.lib OLE32.LIB
 NOLOGO=-nologo

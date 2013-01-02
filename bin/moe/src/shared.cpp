@@ -984,6 +984,8 @@ HRESULT __stdcall MoeConfig::InitializeEditorFromPreferences( IMoeDocument* d )
 	mol::punk<IScintillAxProperties> props;
 	sci->get_Properties(&props);
 
+	props->put_StyleSets(styles());
+
 	hr = props->put_SysType(systype_);
 	if ( hr != S_OK )
 		return hr;
@@ -1020,6 +1022,26 @@ HRESULT __stdcall MoeConfig::InitializeEditorFromPreferences( IMoeDocument* d )
 			return hr;
 	}
 
+	props->put_Syntax(SCINTILLA_SYNTAX_PLAIN);
+
+	return S_OK;
+}
+
+
+HRESULT  __stdcall MoeConfig::get_StyleSets( IDispatch** s)
+{
+	if (!s)
+		return E_INVALIDARG;
+
+	return styles()->QueryInterface(IID_IDispatch,(void**)s);
+}
+
+
+HRESULT  __stdcall MoeConfig::ResetStyles()
+{
+	mol::punk<IPersistStreamInit> psi(styles());
+	if(psi)
+		psi->InitNew();
 	return S_OK;
 }
 

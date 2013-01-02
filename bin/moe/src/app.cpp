@@ -6,6 +6,7 @@
 #include "thread/sync.h"
 #include "xmlui.h"
 #include "moe_dispid.h"
+//#include "console.h"
 
 #include "moe_i.c"
 #include "ax/scintillax/scintillax_i.c"
@@ -259,10 +260,13 @@ MoeApp::MoeApp()
 
 	mol::string path = appPath() + _T("\\moe.log");
 	log().add( new FileAppender(mol::tostring(path)) );
+
+	//MoeConsole& con = moeConsole();
 }
 
 MoeApp::~MoeApp()
 {
+	//moeConsole().shutdown();
 	mol::purge(moeCliTypes);
 	ODBGS(">>>>>>>>>>>>>>>>>>>>>>> ~MoeApp <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 }
@@ -360,79 +364,6 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
 
 		openMoeDocument(dispDoc,dialogs.pdispVal,s);
 		
-		/*
-		if ( s.substr(0,4) == "moe:" ) 
-		{
-			s = s.substr(4);
-			if ( mol::Path::isDir(mol::toString(s)) )
-			{
-				mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR , mol::variant(s) );
-			}
-			else
-			{
-				mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPEN, mol::variant(s) );
-			}
-		}
-		else if ( s.substr(0,9) == "moe-open:" ) 
-		{
-			s = s.substr(9);
-			mol::disp_invoke(dialogs.pdispVal, DISPID_IMOEDIALOGS_OPEN, mol::variant(s) );					
-		}
-		else if ( s.substr(0,8) == "moe-bin:" ) 
-		{
-			s = s.substr(8);
-			mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENHEXEDITOR, mol::variant(s), mol::variant(true) );					
-		}
-		else if ( s.substr(0,9) == "moe-html:" ) 
-		{
-			s = s.substr(9);
-			mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENHTMLFRAME, mol::variant(s) );					
-		}
-		else if ( s.substr(0,8) == "moe-dir:" ) 
-		{
-			s = s.substr(8);
-			if ( !mol::Path::isDir(mol::toString(s)) )
-			{
-				s = mol::tostring(mol::Path::parentDir(mol::toString(s)));
-			}
-			mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR, mol::variant(s) );					
-		}
-		else if ( s.substr(0,9) == "moe-tail:" ) 
-		{
-			s = s.substr(9);
-			mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENTAILDOCUMENT, mol::variant(s) );					
-		}
-		else if ( s.substr(0,8) == "moe-hex:" ) 
-		{
-			s = s.substr(8);
-			mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENHEXEDITOR, mol::variant(s), mol::variant(true) );					
-		}
-		else if ( s.substr(0,8) == "moe-rtf:" ) 
-		{
-			s = s.substr(8);
-			mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENRTFDOCUMENT, mol::variant(s) );					
-		}
-		else if ( s.substr(0,8) == "moe-ssh:" ) 
-		{
-			s = s.substr(4);
-			mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPEN, mol::variant(s) );					
-		}
-		else
-		{
-			s = resolvePath(s);
-			if ( s.empty() )
-				continue;
-
-			if ( mol::Path::isDir(mol::toString(s)) )
-			{
-				mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR, mol::variant(s) );
-			}
-			else
-			{
-				mol::disp_invoke(dispDoc, DISPID_IMOEDOCUMENTCOLLECTION_OPEN, mol::variant(s) );
-			}
-		}
-		*/
 	}
 }
 

@@ -3,11 +3,11 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 8.00.0595 */
-/* at Mon Aug 27 15:27:47 2012
+ /* File created by MIDL compiler version 7.00.0555 */
+/* at Wed Jan 02 22:02:40 2013
  */
 /* Compiler settings for net.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -44,28 +44,24 @@
 #ifndef __INetObject_FWD_DEFINED__
 #define __INetObject_FWD_DEFINED__
 typedef interface INetObject INetObject;
-
 #endif 	/* __INetObject_FWD_DEFINED__ */
 
 
 #ifndef __INetType_FWD_DEFINED__
 #define __INetType_FWD_DEFINED__
 typedef interface INetType INetType;
-
 #endif 	/* __INetType_FWD_DEFINED__ */
 
 
 #ifndef __INetAssembly_FWD_DEFINED__
 #define __INetAssembly_FWD_DEFINED__
 typedef interface INetAssembly INetAssembly;
-
 #endif 	/* __INetAssembly_FWD_DEFINED__ */
 
 
 #ifndef __INet_FWD_DEFINED__
 #define __INet_FWD_DEFINED__
 typedef interface INet INet;
-
 #endif 	/* __INet_FWD_DEFINED__ */
 
 
@@ -159,7 +155,6 @@ EXTERN_C const IID IID_INetObject;
         
     };
     
-    
 #else 	/* C style interface */
 
     typedef struct INetObjectVtbl
@@ -170,7 +165,7 @@ EXTERN_C const IID IID_INetObject;
             INetObject * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetObject * This);
@@ -198,22 +193,14 @@ EXTERN_C const IID IID_INetObject;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             INetObject * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             INetObject * This,
@@ -299,7 +286,6 @@ EXTERN_C const IID IID_INetType;
         
     };
     
-    
 #else 	/* C style interface */
 
     typedef struct INetTypeVtbl
@@ -310,7 +296,7 @@ EXTERN_C const IID IID_INetType;
             INetType * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetType * This);
@@ -338,22 +324,14 @@ EXTERN_C const IID IID_INetType;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             INetType * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             INetType * This,
@@ -448,7 +426,6 @@ EXTERN_C const IID IID_INetAssembly;
         
     };
     
-    
 #else 	/* C style interface */
 
     typedef struct INetAssemblyVtbl
@@ -459,7 +436,7 @@ EXTERN_C const IID IID_INetAssembly;
             INetAssembly * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetAssembly * This);
@@ -487,22 +464,14 @@ EXTERN_C const IID IID_INetAssembly;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             INetAssembly * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Type )( 
             INetAssembly * This,
@@ -614,7 +583,6 @@ EXTERN_C const IID IID_INet;
         
     };
     
-    
 #else 	/* C style interface */
 
     typedef struct INetVtbl
@@ -625,7 +593,7 @@ EXTERN_C const IID IID_INet;
             INet * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INet * This);
@@ -653,22 +621,14 @@ EXTERN_C const IID IID_INet;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             INet * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Type )( 
             INet * This,

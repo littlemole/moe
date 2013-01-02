@@ -56,7 +56,7 @@ library Scintilla
 	interface IScintillAxLine;
 	interface IScintillAxAnnotation;
 	interface IScintillAxMarkers;
-
+	interface IScintillAx;
 ////////////////////////////////////////////////////////////////////////////////////////
 // Interfaces
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -66,6 +66,112 @@ library Scintilla
 	////////////////////////////////////////////////////////////////////////////////////
 	importlib("stdole32.tlb");
 
+	////////////////////////////////////////////////////////////////////////////////////
+	// IScintillAxStyle
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(F2988C3B-4F96-4DA9-ABFB-3F063CA65540),
+      helpstring("IScintillAxStyle Interface - a single style rule"),
+      object,oleautomation, dual
+    ]
+	interface IScintillAxStyle : IDispatch
+    {
+		[id(1),propget, helpstring("style id")] 
+		HRESULT Id([out,retval] long* id);
+
+		[id(2),propget, helpstring("style description")] 
+		HRESULT Description([out,retval] BSTR* desc);
+
+		[id(3),propget, helpstring("bold")] 
+		HRESULT Bold([out,retval] VARIANT_BOOL* vb);
+		[id(3),propput, helpstring("bold")] 
+		HRESULT Bold([in] VARIANT_BOOL vb);
+
+		[id(4),propget, helpstring("italic")] 
+		HRESULT Italic([out,retval] VARIANT_BOOL* vb);
+		[id(4),propput, helpstring("bold")] 
+		HRESULT Italic([in] VARIANT_BOOL vb);
+
+		[id(5),propget, helpstring("eol")] 
+		HRESULT Eol([out,retval] VARIANT_BOOL* vb);
+		[id(5),propput, helpstring("bold")] 
+		HRESULT Eol([in] VARIANT_BOOL vb);
+
+		[id(6),propget, helpstring("font name")] 
+		HRESULT Fontname([out,retval] BSTR* desc);
+		[id(6),propput, helpstring("font name")] 
+		HRESULT Fontname([in] BSTR desc);
+
+		[id(7),propget, helpstring("font size")] 
+		HRESULT Fontsize([out,retval] long* id);
+		[id(7),propput, helpstring("font size")] 
+		HRESULT Fontsize([in] long id);
+
+		[id(8),propget, helpstring("foreground color")] 
+		HRESULT Forecolor([out,retval] BSTR* col);
+		[id(8),propput, helpstring("foreground color")] 
+		HRESULT Forecolor([in] BSTR col);
+
+		[id(9),propget, helpstring("background color")] 
+		HRESULT Backcolor([out,retval] BSTR* col);
+		[id(9),propput, helpstring("background color")] 
+		HRESULT Backcolor([in] BSTR col);
+
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IScintillAxStyleSet
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(EA642C7F-91FA-43F0-8A17-108FEA21321B),
+      helpstring("IScintillAxStyleSet Interface - Collection of styles"),
+      object,oleautomation, dual
+    ]
+	interface IScintillAxStyleSet : IDispatch
+    {
+		[id(DISPID_NEWENUM), helpstring("New Enum - enable iteration from script")] 
+		HRESULT _NewEnum([out,retval] IEnumVARIANT** newEnum);
+
+		[id(DISPID_VALUE), helpstring("Item - retrieve StyleSet by id")] 
+		HRESULT Item([in] VARIANT i, [out,retval] IScintillAxStyle** docItem);
+
+		[id(1),propget, helpstring("Count number of styles")] 
+		HRESULT Count([out,retval] long* cnt);
+
+		[id(2),propget, helpstring("styleset id")] 
+		HRESULT Id([out,retval] long* id);
+
+		[id(3), helpstring("Add Keywords")] 
+		HRESULT AddKeyWords([in] BSTR words);
+
+		[id(4), helpstring("Count Keywords")] 
+		HRESULT CountKeyWords([out,retval] long* cnt);
+
+		[id(5), helpstring("Get Keyword")] 
+		HRESULT GetKeyWord([in] long index, [out,retval] BSTR* words);
+
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IScintillAxStyleSets
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(5143947F-7A44-4EA7-904C-E7163F50A02C),
+      helpstring("IScintillAxStyleSets Interface - Collection of stylesets"),
+      object,oleautomation, dual
+    ]
+	interface IScintillAxStyleSets : IDispatch
+    {
+		[id(DISPID_NEWENUM), helpstring("New Enum - enable iteration from script")] 
+		HRESULT _NewEnum([out,retval] IEnumVARIANT** newEnum);
+
+		[id(DISPID_VALUE), helpstring("Item - retrieve StyleSet by id")] 
+		HRESULT Item([in] VARIANT i, [out,retval] IScintillAxStyleSet** docItem);
+
+		[id(1),propget, helpstring("Count number of stylesets")] 
+		HRESULT Count([out,retval] long* cnt);
+
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////
 	// IScintillAxProperties
@@ -78,21 +184,6 @@ library Scintilla
 	interface IScintillAxProperties : IDispatch
     {
 		//properties:
-
-		[ 
-		  propputref,bindable, requestedit,id(DISPID_FONT), 
-		  helpstring("Get/Set Font")
-		]
-		HRESULT Font( [in] IFontDisp* fnt);
-		[ 
-		  propput,bindable, requestedit,id(DISPID_FONT)
-		]
-		HRESULT Font( [in] IFontDisp* fnt);
-
-		[ 
-		  propget,bindable, requestedit,id(DISPID_FONT)
-		]
-		HRESULT Font( [out,retval] IFontDisp** fnt);
 
 		[ 
 		  propput,bindable,displaybind,defaultbind,requestedit,id(1), 
@@ -258,8 +349,16 @@ library Scintilla
 
 		/////////////////////////////////////////////////////////////////////
 
+		[ 
+		  propput,bindable,displaybind, requestedit,id(18), 
+		  helpstring("Get/Set StyleSet obj")
+		]
+		HRESULT StyleSets([in] IScintillAxStyleSets* styles);
 
-
+		[ 
+		  propget,bindable,displaybind, requestedit,id(18)
+		]
+		HRESULT StyleSets([out,retval] IScintillAxStyleSets** styles);
 	};
 
 
@@ -714,7 +813,6 @@ library Scintilla
 		[id(20), helpstring("Show the Insert Color Dialog"),local]
 		HRESULT InsertColorDialog( );
 
-
     };
 
 
@@ -836,5 +934,15 @@ library Scintilla
 	coclass ScintillAxSettings
 	{
 		[default] interface IUnknown;
+	};
+
+
+	[
+		uuid(01C47486-7B0D-43E0-B66A-386EBB6A038F),
+		helpstring("IScintillAxStyleSets Style Sets")
+	]
+	coclass ScintillAxStyleSets
+	{
+		[default] interface IScintillAxStyleSets;
 	};
 }

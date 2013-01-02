@@ -87,6 +87,7 @@
     <cmd id="IDM_MODE_UNIX" title="UNIX" ribbon="RibbonSelectModeUnix"/>
     <cmd id="IDM_MODE_WIN32" title="WIN32" ribbon="RibbonSelectModeWin32" />
     <cmd id="IDM_MODE_PREFERENCES" title="Preferences" ribbon="RibbonFilePreferences"/>
+    <cmd id="IDM_MODE_USERSTYLES" title="Scintilla Styles" ribbon="RibbonFileUserStyles" />
     <cmd id="IDM_MODE_USETABS" title="Use Tabs" />
     <cmd id="IDM_MODE_DONT_USE_TABS" title="Don't use Tabs" />
     <cmd id="IDM_MODE_TABWIDTH" title="tabwidth" />

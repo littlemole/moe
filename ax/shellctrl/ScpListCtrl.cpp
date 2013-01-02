@@ -323,7 +323,7 @@ mol::sftp::RemoteFile remoteFileFromIRemoteFile(IRemoteFile* rf)
 
 	return mol::sftp::RemoteFile( 
 					mol::toString(name), 
-					type, perms, 
+					(uint8_t)type, perms, 
 					uid, gid, 
 					mtime, size, 
 					owner.bstr_ ? mol::toString(owner) : _T("") , 
@@ -423,7 +423,7 @@ void ScpListCtrl::load_async( const mol::string& url )
 
 	for ( size_t i = 0; i < sf.size(); i++)
 	{
-		mol::punk<IRemoteFile> rf(sf[i].pdispVal);
+		mol::punk<IRemoteFile> rf(sf[(int)i].pdispVal);
 
 		mol::bstr n;
 		hr = rf->get_Filename(&n);
@@ -770,7 +770,7 @@ LRESULT ScpListCtrl::OnBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 
 		std::wstring wp = mol::fromUTF8(uri_.getPath()) + e->getName();
 		mol::bstr path(wp);
-		hr = idoFactory->Add( path,e->fileinfo.getSize(),e->isDir() ? VARIANT_TRUE : VARIANT_FALSE );
+		hr = idoFactory->Add( path,(long)(e->fileinfo.getSize()),e->isDir() ? VARIANT_TRUE : VARIANT_FALSE );
 		if ( hr != S_OK )
 			return 0;
 	}
@@ -1008,7 +1008,7 @@ void ScpListCtrl::mkdir()
 		mol::SFAccess<VARIANT> sf(sa);
 		for ( size_t c = 0; c <sf.size(); c++)
 		{
-			mol::bstr b(sf[c].bstrVal);
+			mol::bstr b(sf[(int)c].bstrVal);
 			mol::string name = b.toString();
 			if ( newDir == name )
 			{
@@ -1259,7 +1259,7 @@ HRESULT __stdcall ScpListCtrl::Copy ()
 
 		std::wstring wp = mol::fromUTF8(uri_.getPath()) + e->getName();
 		mol::bstr path(wp);
-		hr = idoFactory->Add( path,e->fileinfo.getSize(),e->isDir() ? VARIANT_TRUE : VARIANT_FALSE );
+		hr = idoFactory->Add( path,(long)(e->fileinfo.getSize()),e->isDir() ? VARIANT_TRUE : VARIANT_FALSE );
 		if ( hr != S_OK )
 			return 0;
 	}

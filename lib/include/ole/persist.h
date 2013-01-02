@@ -415,6 +415,11 @@ inline mol::persist::Property<mol::DispId> property( mol::DispId t)
 	return mol::persist::Property<mol::DispId>(t);
 }
 
+inline mol::persist::Property<mol::bstr> property( mol::bstr& t)
+{
+	return mol::persist::Property<mol::bstr>(t);
+}
+
 namespace ole {
 
 /////////////////////////////////////////////////////////////////////

@@ -3,11 +3,11 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 8.00.0595 */
-/* at Mon Aug 27 15:25:10 2012
+ /* File created by MIDL compiler version 7.00.0555 */
+/* at Wed Jan 02 22:00:04 2013
  */
 /* Compiler settings for ScintillAX.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -48,77 +48,84 @@
 #ifndef __IScintillAxDispose_FWD_DEFINED__
 #define __IScintillAxDispose_FWD_DEFINED__
 typedef interface IScintillAxDispose IScintillAxDispose;
-
 #endif 	/* __IScintillAxDispose_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAxProperties_FWD_DEFINED__
 #define __IScintillAxProperties_FWD_DEFINED__
 typedef interface IScintillAxProperties IScintillAxProperties;
-
 #endif 	/* __IScintillAxProperties_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAxText_FWD_DEFINED__
 #define __IScintillAxText_FWD_DEFINED__
 typedef interface IScintillAxText IScintillAxText;
-
 #endif 	/* __IScintillAxText_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAxPosition_FWD_DEFINED__
 #define __IScintillAxPosition_FWD_DEFINED__
 typedef interface IScintillAxPosition IScintillAxPosition;
-
 #endif 	/* __IScintillAxPosition_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAxSelection_FWD_DEFINED__
 #define __IScintillAxSelection_FWD_DEFINED__
 typedef interface IScintillAxSelection IScintillAxSelection;
-
 #endif 	/* __IScintillAxSelection_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAxLine_FWD_DEFINED__
 #define __IScintillAxLine_FWD_DEFINED__
 typedef interface IScintillAxLine IScintillAxLine;
-
 #endif 	/* __IScintillAxLine_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAxAnnotation_FWD_DEFINED__
 #define __IScintillAxAnnotation_FWD_DEFINED__
 typedef interface IScintillAxAnnotation IScintillAxAnnotation;
-
 #endif 	/* __IScintillAxAnnotation_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAxMarkers_FWD_DEFINED__
 #define __IScintillAxMarkers_FWD_DEFINED__
 typedef interface IScintillAxMarkers IScintillAxMarkers;
-
 #endif 	/* __IScintillAxMarkers_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAx_FWD_DEFINED__
 #define __IScintillAx_FWD_DEFINED__
 typedef interface IScintillAx IScintillAx;
-
 #endif 	/* __IScintillAx_FWD_DEFINED__ */
+
+
+#ifndef __IScintillAxStyle_FWD_DEFINED__
+#define __IScintillAxStyle_FWD_DEFINED__
+typedef interface IScintillAxStyle IScintillAxStyle;
+#endif 	/* __IScintillAxStyle_FWD_DEFINED__ */
+
+
+#ifndef __IScintillAxStyleSet_FWD_DEFINED__
+#define __IScintillAxStyleSet_FWD_DEFINED__
+typedef interface IScintillAxStyleSet IScintillAxStyleSet;
+#endif 	/* __IScintillAxStyleSet_FWD_DEFINED__ */
+
+
+#ifndef __IScintillAxStyleSets_FWD_DEFINED__
+#define __IScintillAxStyleSets_FWD_DEFINED__
+typedef interface IScintillAxStyleSets IScintillAxStyleSets;
+#endif 	/* __IScintillAxStyleSets_FWD_DEFINED__ */
 
 
 #ifndef ___IScintillAxEvents_FWD_DEFINED__
 #define ___IScintillAxEvents_FWD_DEFINED__
 typedef interface _IScintillAxEvents _IScintillAxEvents;
-
 #endif 	/* ___IScintillAxEvents_FWD_DEFINED__ */
 
 
 #ifndef __IScintillAxEvents_FWD_DEFINED__
 #define __IScintillAxEvents_FWD_DEFINED__
 typedef interface IScintillAxEvents IScintillAxEvents;
-
 #endif 	/* __IScintillAxEvents_FWD_DEFINED__ */
 
 
@@ -158,6 +165,18 @@ typedef struct ScintillAxSettings ScintillAxSettings;
 #endif 	/* __ScintillAxSettings_FWD_DEFINED__ */
 
 
+#ifndef __ScintillAxStyleSets_FWD_DEFINED__
+#define __ScintillAxStyleSets_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class ScintillAxStyleSets ScintillAxStyleSets;
+#else
+typedef struct ScintillAxStyleSets ScintillAxStyleSets;
+#endif /* __cplusplus */
+
+#endif 	/* __ScintillAxStyleSets_FWD_DEFINED__ */
+
+
 /* header files for imported files */
 #include "oaidl.h"
 #include "ocidl.h"
@@ -186,7 +205,6 @@ EXTERN_C const IID IID_IScintillAxDispose;
         
     };
     
-    
 #else 	/* C style interface */
 
     typedef struct IScintillAxDisposeVtbl
@@ -197,7 +215,7 @@ EXTERN_C const IID IID_IScintillAxDispose;
             IScintillAxDispose * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxDispose * This);
@@ -254,32 +272,30 @@ EXTERN_C const IID IID_IScintillAxDispose;
 
 
 enum SCINTILLA_SYSTYPE
-    {
-        SCINTILLA_SYSTYPE_UNIX	= 0,
-        SCINTILLA_SYSTYPE_WIN32	= 1
+    {	SCINTILLA_SYSTYPE_UNIX	= 0,
+	SCINTILLA_SYSTYPE_WIN32	= 1
     } ;
 
 enum SCINTILLA_ENCODING
-    {
-        SCINTILLA_ENCODING_ANSI	= 0,
-        SCINTILLA_ENCODING_UTF8	= 65001,
-        SCINTILLA_ENCODING_UTF16	= 1200
+    {	SCINTILLA_ENCODING_ANSI	= 0,
+	SCINTILLA_ENCODING_UTF8	= 65001,
+	SCINTILLA_ENCODING_UTF16	= 1200
     } ;
 
 enum SCINTILLA_SYNTAX
-    {
-        SCINTILLA_SYNTAX_PLAIN	= 0,
-        SCINTILLA_SYNTAX_HTML	= 1,
-        SCINTILLA_SYNTAX_CSS	= 2,
-        SCINTILLA_SYNTAX_VB	= 3,
-        SCINTILLA_SYNTAX_JS	= 4,
-        SCINTILLA_SYNTAX_SQL	= 5,
-        SCINTILLA_SYNTAX_SHELL	= 6,
-        SCINTILLA_SYNTAX_PERL	= 7,
-        SCINTILLA_SYNTAX_CPP	= 8,
-        SCINTILLA_SYNTAX_JAVA	= 9,
-        SCINTILLA_SYNTAX_CSHARP	= 10
+    {	SCINTILLA_SYNTAX_PLAIN	= 0,
+	SCINTILLA_SYNTAX_HTML	= 1,
+	SCINTILLA_SYNTAX_CSS	= 2,
+	SCINTILLA_SYNTAX_VB	= 3,
+	SCINTILLA_SYNTAX_JS	= 4,
+	SCINTILLA_SYNTAX_SQL	= 5,
+	SCINTILLA_SYNTAX_SHELL	= 6,
+	SCINTILLA_SYNTAX_PERL	= 7,
+	SCINTILLA_SYNTAX_CPP	= 8,
+	SCINTILLA_SYNTAX_JAVA	= 9,
+	SCINTILLA_SYNTAX_CSHARP	= 10
     } ;
+
 
 
 
@@ -306,15 +322,6 @@ EXTERN_C const IID IID_IScintillAxProperties;
     IScintillAxProperties : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][requestedit][bindable][propputref] */ HRESULT STDMETHODCALLTYPE putref_Font( 
-            /* [in] */ IFontDisp *fnt) = 0;
-        
-        virtual /* [id][requestedit][bindable][propput] */ HRESULT STDMETHODCALLTYPE put_Font( 
-            /* [in] */ IFontDisp *fnt) = 0;
-        
-        virtual /* [id][requestedit][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_Font( 
-            /* [retval][out] */ IFontDisp **fnt) = 0;
-        
         virtual /* [helpstring][id][requestedit][defaultbind][displaybind][bindable][propput] */ HRESULT STDMETHODCALLTYPE put_Filename( 
             /* [in] */ BSTR fname) = 0;
         
@@ -405,8 +412,13 @@ EXTERN_C const IID IID_IScintillAxProperties;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ConvertTabs( void) = 0;
         
+        virtual /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT STDMETHODCALLTYPE put_StyleSets( 
+            /* [in] */ IScintillAxStyleSets *styles) = 0;
+        
+        virtual /* [id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_StyleSets( 
+            /* [retval][out] */ IScintillAxStyleSets **styles) = 0;
+        
     };
-    
     
 #else 	/* C style interface */
 
@@ -418,7 +430,7 @@ EXTERN_C const IID IID_IScintillAxProperties;
             IScintillAxProperties * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxProperties * This);
@@ -446,34 +458,14 @@ EXTERN_C const IID IID_IScintillAxProperties;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAxProperties * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
-        
-        /* [helpstring][id][requestedit][bindable][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_Font )( 
-            IScintillAxProperties * This,
-            /* [in] */ IFontDisp *fnt);
-        
-        /* [id][requestedit][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Font )( 
-            IScintillAxProperties * This,
-            /* [in] */ IFontDisp *fnt);
-        
-        /* [id][requestedit][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Font )( 
-            IScintillAxProperties * This,
-            /* [retval][out] */ IFontDisp **fnt);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id][requestedit][defaultbind][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Filename )( 
             IScintillAxProperties * This,
@@ -595,6 +587,14 @@ EXTERN_C const IID IID_IScintillAxProperties;
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ConvertTabs )( 
             IScintillAxProperties * This);
         
+        /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StyleSets )( 
+            IScintillAxProperties * This,
+            /* [in] */ IScintillAxStyleSets *styles);
+        
+        /* [id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StyleSets )( 
+            IScintillAxProperties * This,
+            /* [retval][out] */ IScintillAxStyleSets **styles);
+        
         END_INTERFACE
     } IScintillAxPropertiesVtbl;
 
@@ -630,15 +630,6 @@ EXTERN_C const IID IID_IScintillAxProperties;
 #define IScintillAxProperties_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
-
-#define IScintillAxProperties_putref_Font(This,fnt)	\
-    ( (This)->lpVtbl -> putref_Font(This,fnt) ) 
-
-#define IScintillAxProperties_put_Font(This,fnt)	\
-    ( (This)->lpVtbl -> put_Font(This,fnt) ) 
-
-#define IScintillAxProperties_get_Font(This,fnt)	\
-    ( (This)->lpVtbl -> get_Font(This,fnt) ) 
 
 #define IScintillAxProperties_put_Filename(This,fname)	\
     ( (This)->lpVtbl -> put_Filename(This,fname) ) 
@@ -730,6 +721,12 @@ EXTERN_C const IID IID_IScintillAxProperties;
 #define IScintillAxProperties_ConvertTabs(This)	\
     ( (This)->lpVtbl -> ConvertTabs(This) ) 
 
+#define IScintillAxProperties_put_StyleSets(This,styles)	\
+    ( (This)->lpVtbl -> put_StyleSets(This,styles) ) 
+
+#define IScintillAxProperties_get_StyleSets(This,styles)	\
+    ( (This)->lpVtbl -> get_StyleSets(This,styles) ) 
+
 #endif /* COBJMACROS */
 
 
@@ -799,7 +796,6 @@ EXTERN_C const IID IID_IScintillAxText;
         
     };
     
-    
 #else 	/* C style interface */
 
     typedef struct IScintillAxTextVtbl
@@ -810,7 +806,7 @@ EXTERN_C const IID IID_IScintillAxText;
             IScintillAxText * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxText * This);
@@ -838,22 +834,14 @@ EXTERN_C const IID IID_IScintillAxText;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAxText * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id][requestedit][defaultbind][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Value )( 
             IScintillAxText * This,
@@ -1032,7 +1020,6 @@ EXTERN_C const IID IID_IScintillAxPosition;
         
     };
     
-    
 #else 	/* C style interface */
 
     typedef struct IScintillAxPositionVtbl
@@ -1043,7 +1030,7 @@ EXTERN_C const IID IID_IScintillAxPosition;
             IScintillAxPosition * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxPosition * This);
@@ -1071,22 +1058,14 @@ EXTERN_C const IID IID_IScintillAxPosition;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAxPosition * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id][requestedit][defaultbind][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Caret )( 
             IScintillAxPosition * This,
@@ -1248,7 +1227,6 @@ EXTERN_C const IID IID_IScintillAxSelection;
         
     };
     
-    
 #else 	/* C style interface */
 
     typedef struct IScintillAxSelectionVtbl
@@ -1259,7 +1237,7 @@ EXTERN_C const IID IID_IScintillAxSelection;
             IScintillAxSelection * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxSelection * This);
@@ -1287,22 +1265,14 @@ EXTERN_C const IID IID_IScintillAxSelection;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAxSelection * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id][requestedit][defaultbind][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Start )( 
             IScintillAxSelection * This,
@@ -1486,7 +1456,6 @@ EXTERN_C const IID IID_IScintillAxLine;
         
     };
     
-    
 #else 	/* C style interface */
 
     typedef struct IScintillAxLineVtbl
@@ -1497,7 +1466,7 @@ EXTERN_C const IID IID_IScintillAxLine;
             IScintillAxLine * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxLine * This);
@@ -1525,22 +1494,14 @@ EXTERN_C const IID IID_IScintillAxLine;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAxLine * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Current )( 
             IScintillAxLine * This,
@@ -1709,7 +1670,6 @@ EXTERN_C const IID IID_IScintillAxAnnotation;
         
     };
     
-    
 #else 	/* C style interface */
 
     typedef struct IScintillAxAnnotationVtbl
@@ -1720,7 +1680,7 @@ EXTERN_C const IID IID_IScintillAxAnnotation;
             IScintillAxAnnotation * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxAnnotation * This);
@@ -1748,22 +1708,14 @@ EXTERN_C const IID IID_IScintillAxAnnotation;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAxAnnotation * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetText )( 
             IScintillAxAnnotation * This,
@@ -1881,7 +1833,6 @@ EXTERN_C const IID IID_IScintillAxMarkers;
         
     };
     
-    
 #else 	/* C style interface */
 
     typedef struct IScintillAxMarkersVtbl
@@ -1892,7 +1843,7 @@ EXTERN_C const IID IID_IScintillAxMarkers;
             IScintillAxMarkers * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxMarkers * This);
@@ -1920,22 +1871,14 @@ EXTERN_C const IID IID_IScintillAxMarkers;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAxMarkers * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UseMarkers )( 
             IScintillAxMarkers * This,
@@ -2107,7 +2050,6 @@ EXTERN_C const IID IID_IScintillAx;
         
     };
     
-    
 #else 	/* C style interface */
 
     typedef struct IScintillAxVtbl
@@ -2118,7 +2060,7 @@ EXTERN_C const IID IID_IScintillAx;
             IScintillAx * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAx * This);
@@ -2146,22 +2088,14 @@ EXTERN_C const IID IID_IScintillAx;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAx * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IScintillAx * This,
@@ -2341,6 +2275,605 @@ EXTERN_C const IID IID_IScintillAx;
 #endif 	/* __IScintillAx_INTERFACE_DEFINED__ */
 
 
+#ifndef __IScintillAxStyle_INTERFACE_DEFINED__
+#define __IScintillAxStyle_INTERFACE_DEFINED__
+
+/* interface IScintillAxStyle */
+/* [dual][oleautomation][object][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IScintillAxStyle;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("F2988C3B-4F96-4DA9-ABFB-3F063CA65540")
+    IScintillAxStyle : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Id( 
+            /* [retval][out] */ long *id) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Description( 
+            /* [retval][out] */ BSTR *desc) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Bold( 
+            /* [retval][out] */ VARIANT_BOOL *vb) = 0;
+        
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Bold( 
+            /* [in] */ VARIANT_BOOL vb) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Italic( 
+            /* [retval][out] */ VARIANT_BOOL *vb) = 0;
+        
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Italic( 
+            /* [in] */ VARIANT_BOOL vb) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Eol( 
+            /* [retval][out] */ VARIANT_BOOL *vb) = 0;
+        
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Eol( 
+            /* [in] */ VARIANT_BOOL vb) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Fontname( 
+            /* [retval][out] */ BSTR *desc) = 0;
+        
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Fontname( 
+            /* [in] */ BSTR desc) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Fontsize( 
+            /* [retval][out] */ long *id) = 0;
+        
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Fontsize( 
+            /* [in] */ long id) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Forecolor( 
+            /* [retval][out] */ BSTR *col) = 0;
+        
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Forecolor( 
+            /* [in] */ BSTR col) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Backcolor( 
+            /* [retval][out] */ BSTR *col) = 0;
+        
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Backcolor( 
+            /* [in] */ BSTR col) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IScintillAxStyleVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IScintillAxStyle * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IScintillAxStyle * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IScintillAxStyle * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IScintillAxStyle * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IScintillAxStyle * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IScintillAxStyle * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IScintillAxStyle * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+            IScintillAxStyle * This,
+            /* [retval][out] */ long *id);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IScintillAxStyle * This,
+            /* [retval][out] */ BSTR *desc);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Bold )( 
+            IScintillAxStyle * This,
+            /* [retval][out] */ VARIANT_BOOL *vb);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Bold )( 
+            IScintillAxStyle * This,
+            /* [in] */ VARIANT_BOOL vb);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Italic )( 
+            IScintillAxStyle * This,
+            /* [retval][out] */ VARIANT_BOOL *vb);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Italic )( 
+            IScintillAxStyle * This,
+            /* [in] */ VARIANT_BOOL vb);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Eol )( 
+            IScintillAxStyle * This,
+            /* [retval][out] */ VARIANT_BOOL *vb);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Eol )( 
+            IScintillAxStyle * This,
+            /* [in] */ VARIANT_BOOL vb);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Fontname )( 
+            IScintillAxStyle * This,
+            /* [retval][out] */ BSTR *desc);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Fontname )( 
+            IScintillAxStyle * This,
+            /* [in] */ BSTR desc);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Fontsize )( 
+            IScintillAxStyle * This,
+            /* [retval][out] */ long *id);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Fontsize )( 
+            IScintillAxStyle * This,
+            /* [in] */ long id);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Forecolor )( 
+            IScintillAxStyle * This,
+            /* [retval][out] */ BSTR *col);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Forecolor )( 
+            IScintillAxStyle * This,
+            /* [in] */ BSTR col);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Backcolor )( 
+            IScintillAxStyle * This,
+            /* [retval][out] */ BSTR *col);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Backcolor )( 
+            IScintillAxStyle * This,
+            /* [in] */ BSTR col);
+        
+        END_INTERFACE
+    } IScintillAxStyleVtbl;
+
+    interface IScintillAxStyle
+    {
+        CONST_VTBL struct IScintillAxStyleVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IScintillAxStyle_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IScintillAxStyle_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IScintillAxStyle_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IScintillAxStyle_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IScintillAxStyle_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IScintillAxStyle_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IScintillAxStyle_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IScintillAxStyle_get_Id(This,id)	\
+    ( (This)->lpVtbl -> get_Id(This,id) ) 
+
+#define IScintillAxStyle_get_Description(This,desc)	\
+    ( (This)->lpVtbl -> get_Description(This,desc) ) 
+
+#define IScintillAxStyle_get_Bold(This,vb)	\
+    ( (This)->lpVtbl -> get_Bold(This,vb) ) 
+
+#define IScintillAxStyle_put_Bold(This,vb)	\
+    ( (This)->lpVtbl -> put_Bold(This,vb) ) 
+
+#define IScintillAxStyle_get_Italic(This,vb)	\
+    ( (This)->lpVtbl -> get_Italic(This,vb) ) 
+
+#define IScintillAxStyle_put_Italic(This,vb)	\
+    ( (This)->lpVtbl -> put_Italic(This,vb) ) 
+
+#define IScintillAxStyle_get_Eol(This,vb)	\
+    ( (This)->lpVtbl -> get_Eol(This,vb) ) 
+
+#define IScintillAxStyle_put_Eol(This,vb)	\
+    ( (This)->lpVtbl -> put_Eol(This,vb) ) 
+
+#define IScintillAxStyle_get_Fontname(This,desc)	\
+    ( (This)->lpVtbl -> get_Fontname(This,desc) ) 
+
+#define IScintillAxStyle_put_Fontname(This,desc)	\
+    ( (This)->lpVtbl -> put_Fontname(This,desc) ) 
+
+#define IScintillAxStyle_get_Fontsize(This,id)	\
+    ( (This)->lpVtbl -> get_Fontsize(This,id) ) 
+
+#define IScintillAxStyle_put_Fontsize(This,id)	\
+    ( (This)->lpVtbl -> put_Fontsize(This,id) ) 
+
+#define IScintillAxStyle_get_Forecolor(This,col)	\
+    ( (This)->lpVtbl -> get_Forecolor(This,col) ) 
+
+#define IScintillAxStyle_put_Forecolor(This,col)	\
+    ( (This)->lpVtbl -> put_Forecolor(This,col) ) 
+
+#define IScintillAxStyle_get_Backcolor(This,col)	\
+    ( (This)->lpVtbl -> get_Backcolor(This,col) ) 
+
+#define IScintillAxStyle_put_Backcolor(This,col)	\
+    ( (This)->lpVtbl -> put_Backcolor(This,col) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IScintillAxStyle_INTERFACE_DEFINED__ */
+
+
+#ifndef __IScintillAxStyleSet_INTERFACE_DEFINED__
+#define __IScintillAxStyleSet_INTERFACE_DEFINED__
+
+/* interface IScintillAxStyleSet */
+/* [dual][oleautomation][object][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IScintillAxStyleSet;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("EA642C7F-91FA-43F0-8A17-108FEA21321B")
+    IScintillAxStyleSet : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
+            /* [retval][out] */ IEnumVARIANT **newEnum) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
+            /* [in] */ VARIANT i,
+            /* [retval][out] */ IScintillAxStyle **docItem) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Count( 
+            /* [retval][out] */ long *cnt) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Id( 
+            /* [retval][out] */ long *id) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddKeyWords( 
+            /* [in] */ BSTR words) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CountKeyWords( 
+            /* [retval][out] */ long *cnt) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetKeyWord( 
+            /* [in] */ long index,
+            /* [retval][out] */ BSTR *words) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IScintillAxStyleSetVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IScintillAxStyleSet * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IScintillAxStyleSet * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IScintillAxStyleSet * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IScintillAxStyleSet * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IScintillAxStyleSet * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IScintillAxStyleSet * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IScintillAxStyleSet * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+            IScintillAxStyleSet * This,
+            /* [retval][out] */ IEnumVARIANT **newEnum);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+            IScintillAxStyleSet * This,
+            /* [in] */ VARIANT i,
+            /* [retval][out] */ IScintillAxStyle **docItem);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            IScintillAxStyleSet * This,
+            /* [retval][out] */ long *cnt);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+            IScintillAxStyleSet * This,
+            /* [retval][out] */ long *id);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddKeyWords )( 
+            IScintillAxStyleSet * This,
+            /* [in] */ BSTR words);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CountKeyWords )( 
+            IScintillAxStyleSet * This,
+            /* [retval][out] */ long *cnt);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetKeyWord )( 
+            IScintillAxStyleSet * This,
+            /* [in] */ long index,
+            /* [retval][out] */ BSTR *words);
+        
+        END_INTERFACE
+    } IScintillAxStyleSetVtbl;
+
+    interface IScintillAxStyleSet
+    {
+        CONST_VTBL struct IScintillAxStyleSetVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IScintillAxStyleSet_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IScintillAxStyleSet_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IScintillAxStyleSet_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IScintillAxStyleSet_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IScintillAxStyleSet_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IScintillAxStyleSet_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IScintillAxStyleSet_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IScintillAxStyleSet__NewEnum(This,newEnum)	\
+    ( (This)->lpVtbl -> _NewEnum(This,newEnum) ) 
+
+#define IScintillAxStyleSet_Item(This,i,docItem)	\
+    ( (This)->lpVtbl -> Item(This,i,docItem) ) 
+
+#define IScintillAxStyleSet_get_Count(This,cnt)	\
+    ( (This)->lpVtbl -> get_Count(This,cnt) ) 
+
+#define IScintillAxStyleSet_get_Id(This,id)	\
+    ( (This)->lpVtbl -> get_Id(This,id) ) 
+
+#define IScintillAxStyleSet_AddKeyWords(This,words)	\
+    ( (This)->lpVtbl -> AddKeyWords(This,words) ) 
+
+#define IScintillAxStyleSet_CountKeyWords(This,cnt)	\
+    ( (This)->lpVtbl -> CountKeyWords(This,cnt) ) 
+
+#define IScintillAxStyleSet_GetKeyWord(This,index,words)	\
+    ( (This)->lpVtbl -> GetKeyWord(This,index,words) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IScintillAxStyleSet_INTERFACE_DEFINED__ */
+
+
+#ifndef __IScintillAxStyleSets_INTERFACE_DEFINED__
+#define __IScintillAxStyleSets_INTERFACE_DEFINED__
+
+/* interface IScintillAxStyleSets */
+/* [dual][oleautomation][object][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IScintillAxStyleSets;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("5143947F-7A44-4EA7-904C-E7163F50A02C")
+    IScintillAxStyleSets : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
+            /* [retval][out] */ IEnumVARIANT **newEnum) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
+            /* [in] */ VARIANT i,
+            /* [retval][out] */ IScintillAxStyleSet **docItem) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Count( 
+            /* [retval][out] */ long *cnt) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IScintillAxStyleSetsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IScintillAxStyleSets * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IScintillAxStyleSets * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IScintillAxStyleSets * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IScintillAxStyleSets * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IScintillAxStyleSets * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IScintillAxStyleSets * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IScintillAxStyleSets * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+            IScintillAxStyleSets * This,
+            /* [retval][out] */ IEnumVARIANT **newEnum);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+            IScintillAxStyleSets * This,
+            /* [in] */ VARIANT i,
+            /* [retval][out] */ IScintillAxStyleSet **docItem);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            IScintillAxStyleSets * This,
+            /* [retval][out] */ long *cnt);
+        
+        END_INTERFACE
+    } IScintillAxStyleSetsVtbl;
+
+    interface IScintillAxStyleSets
+    {
+        CONST_VTBL struct IScintillAxStyleSetsVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IScintillAxStyleSets_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IScintillAxStyleSets_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IScintillAxStyleSets_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IScintillAxStyleSets_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IScintillAxStyleSets_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IScintillAxStyleSets_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IScintillAxStyleSets_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IScintillAxStyleSets__NewEnum(This,newEnum)	\
+    ( (This)->lpVtbl -> _NewEnum(This,newEnum) ) 
+
+#define IScintillAxStyleSets_Item(This,i,docItem)	\
+    ( (This)->lpVtbl -> Item(This,i,docItem) ) 
+
+#define IScintillAxStyleSets_get_Count(This,cnt)	\
+    ( (This)->lpVtbl -> get_Count(This,cnt) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IScintillAxStyleSets_INTERFACE_DEFINED__ */
+
+
 #ifndef ___IScintillAxEvents_DISPINTERFACE_DEFINED__
 #define ___IScintillAxEvents_DISPINTERFACE_DEFINED__
 
@@ -2367,7 +2900,7 @@ EXTERN_C const IID DIID__IScintillAxEvents;
             _IScintillAxEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _IScintillAxEvents * This);
@@ -2395,22 +2928,14 @@ EXTERN_C const IID DIID__IScintillAxEvents;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _IScintillAxEvents * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
     } _IScintillAxEventsVtbl;
@@ -2498,7 +3023,6 @@ EXTERN_C const IID IID_IScintillAxEvents;
         
     };
     
-    
 #else 	/* C style interface */
 
     typedef struct IScintillAxEventsVtbl
@@ -2509,7 +3033,7 @@ EXTERN_C const IID IID_IScintillAxEvents;
             IScintillAxEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
+            __RPC__deref_out  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScintillAxEvents * This);
@@ -2537,22 +3061,14 @@ EXTERN_C const IID IID_IScintillAxEvents;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IScintillAxEvents * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnFileNameChanged )( 
             IScintillAxEvents * This,
@@ -2680,6 +3196,14 @@ EXTERN_C const CLSID CLSID_ScintillAxSettings;
 
 class DECLSPEC_UUID("3039CC18-067B-450F-952D-7CE2ADD79F88")
 ScintillAxSettings;
+#endif
+
+EXTERN_C const CLSID CLSID_ScintillAxStyleSets;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("01C47486-7B0D-43E0-B66A-386EBB6A038F")
+ScintillAxStyleSets;
 #endif
 #endif /* __Scintilla_LIBRARY_DEFINED__ */
 

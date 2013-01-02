@@ -365,11 +365,20 @@
       <Command.TooltipTitle>User Preferences</Command.TooltipTitle>
       <Command.TooltipDescription>Edit User Preferences</Command.TooltipDescription>
       <Command.LargeImages>
-        <Image Source="ribbon\Preferences.bmp"/>
+        <Image Source="ribbon\Settings.bmp"/>
       </Command.LargeImages>
     </Command>
 
 
+
+    <Command Name="RibbonFileUserStyles" LabelTitle="Customize">
+      <Command.TooltipTitle>Scintilla Editor Styles</Command.TooltipTitle>
+      <Command.TooltipDescription>Edit User Scintilla Editor Syntax Higlighting Styles</Command.TooltipDescription>
+      <Command.LargeImages>
+        <Image Source="ribbon\Preferences.bmp"/>
+      </Command.LargeImages>
+    </Command>
+    
     <Command Name="RibbonFileExit" LabelTitle="Exit">
       <Command.TooltipTitle>Exit</Command.TooltipTitle>
       <Command.TooltipDescription>Exit Application</Command.TooltipDescription>
@@ -1379,6 +1388,7 @@
           <MenuGroup>
             <Button CommandName="RibbonFilePrint" />
             <Button CommandName="RibbonFilePreferences" />
+            <Button CommandName="RibbonFileUserStyles" />
           </MenuGroup>
           <MenuGroup>
             <Button CommandName="RibbonFileExit" />

@@ -63,6 +63,8 @@ ThreadScript::~ThreadScript()
 
 void ThreadScript::close()
 {
+	//activeScript_->Close(); //crashes IE9 JS in debug mode
+
 	mol::GIT git;	
 	for ( std::map<mol::string,ObjectMapItem>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
 	{
@@ -70,7 +72,7 @@ void ThreadScript::close()
 	}
 	objectMap_.clear();
 
-	activeScript_->Close();
+	
 }
 
 void ThreadScript::init(const mol::string& engine)
@@ -129,12 +131,26 @@ void ThreadScript::init(const mol::string& engine)
  	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 }
 
+//Guid("{16d51579-a30b-4c8b-a276-0ff4dc41e755}");
+
+DEFINE_GUID( GUID_JSCRIPT9, 0x16d51579L, 0xa30b, 0x4c8b, 
+    0xa2, 0x76, 0x0f,0xf4, 0xdc, 0x41, 0xe7, 0x55 );
+
 HRESULT ThreadScript::getScriptEngine(const mol::string& engine, IActiveScript **ppas)
 {
 	*ppas = 0;
 	CLSID clsid;
+	HRESULT hr;
+
+	if ( engine == _T("JScript") ) {
+		// try loading JScript 9 dll
+		clsid = GUID_JSCRIPT9;
+		hr = CoCreateInstance(clsid, 0, CLSCTX_ALL,IID_IActiveScript,(void**)ppas);
+		if (hr == S_OK)
+			return hr;
+	}
    
-	HRESULT hr = CLSIDFromProgID(mol::towstring(engine).c_str(), &clsid);
+	hr = CLSIDFromProgID(mol::towstring(engine).c_str(), &clsid);
 	if (hr == S_OK)
 		hr = CoCreateInstance(clsid, 0, CLSCTX_ALL,IID_IActiveScript,(void**)ppas);
 	return hr;

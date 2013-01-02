@@ -856,7 +856,23 @@ BEGIN
     RibbonFilePreferences_TooltipDescription_RESID L"Edit User Preferences" /* TooltipDescription RibbonFilePreferences_TooltipDescription_RESID: (null) */
 END
 
-RibbonFilePreferences_LargeImages_RESID    BITMAP    "ribbon\Preferences.bmp" /* LargeImages RibbonFilePreferences_LargeImages_RESID: (null) */
+RibbonFilePreferences_LargeImages_RESID    BITMAP    "ribbon\Settings.bmp" /* LargeImages RibbonFilePreferences_LargeImages_RESID: (null) */
+STRINGTABLE 
+BEGIN
+    RibbonFileUserStyles_LabelTitle_RESID L"Customize" /* LabelTitle RibbonFileUserStyles_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileUserStyles_TooltipTitle_RESID L"Scintilla Editor Styles" /* TooltipTitle RibbonFileUserStyles_TooltipTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    RibbonFileUserStyles_TooltipDescription_RESID L"Edit User Scintilla Editor Syntax Higlighting Styles" /* TooltipDescription RibbonFileUserStyles_TooltipDescription_RESID: (null) */
+END
+
+RibbonFileUserStyles_LargeImages_RESID    BITMAP    "ribbon\Preferences.bmp" /* LargeImages RibbonFileUserStyles_LargeImages_RESID: (null) */
 STRINGTABLE 
 BEGIN
     RibbonFileExit_LabelTitle_RESID L"Exit" /* LabelTitle RibbonFileExit_LabelTitle_RESID: (null) */

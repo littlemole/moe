@@ -19,13 +19,15 @@ class SciAxProperties :
 	public mol::Dispatch<IScintillAxProperties>,
 	public mol::ProvideClassInfo<SciAxProperties>,
 	public IScintillAxDispose,
-	public IPersistStream,
+	public IPersistStreamInit,
 	public mol::interfaces< SciAxProperties, 
 			mol::implements< 
 				IDispatch, 
 				IScintillAxProperties, 
 				IScintillAxDispose,
-				IPersistStream,
+				mol::interface_ex<IPersist,IPersistStreamInit>,
+				mol::interface_ex<IPersistStream,IPersistStreamInit>,
+				IPersistStreamInit,
 				IProvideClassInfo> >
 {
 public:
@@ -41,11 +43,6 @@ public:
 
 	static REFGUID getCoClassID();
 	
-
-    virtual  HRESULT __stdcall putref_Font( IFontDisp *fnt);      
-    virtual  HRESULT __stdcall put_Font( IFontDisp *fnt);
-    virtual  HRESULT __stdcall get_Font( IFontDisp **fnt);      
-
     virtual  HRESULT __stdcall put_Filename( BSTR fname);      
     virtual  HRESULT __stdcall get_Filename( BSTR *fname);    
 
@@ -96,11 +93,16 @@ public:
 	HRESULT virtual __stdcall GetClassID( CLSID *pClassID) ;
 	HRESULT virtual __stdcall IsDirty( );
 	HRESULT virtual __stdcall GetSizeMax( ULARGE_INTEGER* ui ) ;
+	HRESULT virtual __stdcall InitNew();
 
 	HRESULT virtual __stdcall Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog);
 	HRESULT virtual __stdcall Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties);
 
 	HRESULT virtual __stdcall Dispose();
+
+	HRESULT virtual __stdcall put_StyleSets( IScintillAxStyleSets* styles);
+	HRESULT virtual __stdcall get_StyleSets( IScintillAxStyleSets** styles);
+
 
 private:
 
@@ -121,8 +123,7 @@ private:
 	long					enc_;
 	SCINTILLA_SYNTAX        syntax_;
 
-	mol::punk<IFontDisp>	font_;
-
+	mol::punk<IScintillAxStyleSets> styleSets_;
 	ScintillAx* sci_;
 };
 

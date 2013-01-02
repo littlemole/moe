@@ -52,7 +52,8 @@
 #define DISPID_IMOE_ANSI                                                       				 16
 #define DISPID_IMOE_UNICODE                                                    				 17
 #define DISPID_IMOE_UTF8                                                       				 18
-#define DISPID_IMOE_EXIT                                                       				 19
+#define DISPID_IMOE_PRINT                                                      				 19
+#define DISPID_IMOE_EXIT                                                       				 20
 #define DISPID_IMOEDOCUMENTCOLLECTION__NEWENUM                                 				 -4
 #define DISPID_IMOEDOCUMENTCOLLECTION_ITEM                                     				 0
 #define DISPID_IMOEDOCUMENTCOLLECTION_COUNT                                    				 1
@@ -130,6 +131,8 @@
 #define DISPID_IMOECONFIG_IMPORTSETTINGS                                       				 13
 #define DISPID_IMOECONFIG_INITIALIZEEDITORFROMPREFERENCES                      				 14
 #define DISPID_IMOECONFIG_SETTINGS                                             				 15
+#define DISPID_IMOECONFIG_STYLESETS                                            				 16
+#define DISPID_IMOECONFIG_RESETSTYLES                                          				 17
 #define DISPID_IMOESCRIPT_RUN                                                  				 1
 #define DISPID_IMOESCRIPT_EVAL                                                 				 2
 #define DISPID_IMOESCRIPT_DEBUG                                                				 3

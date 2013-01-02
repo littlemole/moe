@@ -2,7 +2,6 @@
 #define DISPID_DEF_GUARD_DEFINE_SCINTILLAX_TLB_DEF_GUARD
 
 
-#define DISPID_ISCINTILLAXPROPERTIES_FONT                                      				 -512
 #define DISPID_ISCINTILLAXPROPERTIES_FILENAME                                  				 1
 #define DISPID_ISCINTILLAXPROPERTIES_READONLY                                  				 2
 #define DISPID_ISCINTILLAXPROPERTIES_SYNTAX                                    				 3
@@ -20,6 +19,26 @@
 #define DISPID_ISCINTILLAXPROPERTIES_GETSYNTAXDISPLAYNAME                      				 15
 #define DISPID_ISCINTILLAXPROPERTIES_SETINDENT                                 				 16
 #define DISPID_ISCINTILLAXPROPERTIES_CONVERTTABS                               				 17
+#define DISPID_ISCINTILLAXPROPERTIES_STYLESETS                                 				 18
+#define DISPID_ISCINTILLAXSTYLESETS__NEWENUM                                   				 -4
+#define DISPID_ISCINTILLAXSTYLESETS_ITEM                                       				 0
+#define DISPID_ISCINTILLAXSTYLESETS_COUNT                                      				 1
+#define DISPID_ISCINTILLAXSTYLESET__NEWENUM                                    				 -4
+#define DISPID_ISCINTILLAXSTYLESET_ITEM                                        				 0
+#define DISPID_ISCINTILLAXSTYLESET_COUNT                                       				 1
+#define DISPID_ISCINTILLAXSTYLESET_ID                                          				 2
+#define DISPID_ISCINTILLAXSTYLESET_ADDKEYWORDS                                 				 3
+#define DISPID_ISCINTILLAXSTYLESET_COUNTKEYWORDS                               				 4
+#define DISPID_ISCINTILLAXSTYLESET_GETKEYWORD                                  				 5
+#define DISPID_ISCINTILLAXSTYLE_ID                                             				 1
+#define DISPID_ISCINTILLAXSTYLE_DESCRIPTION                                    				 2
+#define DISPID_ISCINTILLAXSTYLE_BOLD                                           				 3
+#define DISPID_ISCINTILLAXSTYLE_ITALIC                                         				 4
+#define DISPID_ISCINTILLAXSTYLE_EOL                                            				 5
+#define DISPID_ISCINTILLAXSTYLE_FONTNAME                                       				 6
+#define DISPID_ISCINTILLAXSTYLE_FONTSIZE                                       				 7
+#define DISPID_ISCINTILLAXSTYLE_FORECOLOR                                      				 8
+#define DISPID_ISCINTILLAXSTYLE_BACKCOLOR                                      				 9
 #define DISPID_ISCINTILLAXTEXT_VALUE                                           				 0
 #define DISPID_ISCINTILLAXTEXT_MODIFIED                                        				 1
 #define DISPID_ISCINTILLAXTEXT_LENGTH                                          				 2

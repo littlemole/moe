@@ -180,6 +180,11 @@ public:
 	virtual HRESULT __stdcall Load( LPSTREAM pStm);
 	virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
 
+	HRESULT virtual __stdcall get_StyleSets( IDispatch** styles);
+
+	HRESULT virtual __stdcall ResetStyles();
+
+
 	void setDirty(bool b);
 	bool isDirty();
 };

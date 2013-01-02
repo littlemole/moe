@@ -5,6 +5,7 @@
     <ProjectGuid>{B1005B21-986D-4AB0-BFF8-82106EB3D225}</ProjectGuid>
     <RootNamespace>expat_static</RootNamespace>
 	<TargetName>libexpatMT</TargetName>
+	
   </PropertyGroup>
 
 
@@ -12,8 +13,9 @@
   <Import Project="..\..\..\build.props" />
 
   <ItemDefinitionGroup>
-    <ClCompile>
+    <ClCompile>	  
       <PreprocessorDefinitions>COMPILED_FROM_DSP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+	  <DisableSpecificWarnings>4244</DisableSpecificWarnings>
 	</ClCompile>
   </ItemDefinitionGroup>
     

@@ -5,11 +5,11 @@
 /* link this file in with the server and any clients */
 
 
- /* File created by MIDL compiler version 8.00.0595 */
-/* at Mon Aug 27 15:28:07 2012
+ /* File created by MIDL compiler version 7.00.0555 */
+/* at Wed Jan 02 22:02:57 2013
  */
 /* Compiler settings for java.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 

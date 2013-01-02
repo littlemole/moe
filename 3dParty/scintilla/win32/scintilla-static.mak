@@ -40,7 +40,7 @@ CC=cl
 RC=rc
 LD=lib
 
-CXXFLAGS=-Zi -TP -W4 -EHsc -Zc:forScope -Zc:wchar_t -D_CRT_SECURE_NO_DEPRECATE=1 -DSTATIC_BUILD
+CXXFLAGS=-Zi -TP -wd4267 -W4 -EHsc -Zc:forScope -Zc:wchar_t -D_CRT_SECURE_NO_DEPRECATE=1 -DSTATIC_BUILD /nologo
 # For something scary:-Wp64
 CXXDEBUG=-Od -MTd -DDEBUG
 CXXNDEBUG=-O1 -MT -DNDEBUG 

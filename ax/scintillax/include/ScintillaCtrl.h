@@ -137,6 +137,8 @@ public:
 		HRESULT virtual __stdcall Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog);
 		HRESULT virtual __stdcall Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties);
 
+		HRESULT virtual __stdcall Apply(IScintillAxStyleSet * style);
+
 		// window messages
 
 		LRESULT virtual OnCreate(  UINT, WPARAM, LPARAM );

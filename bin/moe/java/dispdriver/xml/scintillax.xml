@@ -1,79 +1,151 @@
 <typelib name='Scintilla' 
 desc='ScintillAx' 
-typeinfocount='16' 
+typeinfocount='20' 
 guid='{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}' 
 major='1' 
 minor='0' 
 file='..\..\..\..\ax\scintillax\x64/uni_release\scintillax.tlb'>
 
 <interface name='IScintillAxProperties' type='Dual' iid='{65BC59C3-3E46-4F80-8B4A-13AADF1A58EB}' base='IDispatch' members='18' desc='' >
- <property name='Font' type='IFontDisp*' dispid='-512' vtindex='28' ctype='HRESULT' param='fnt' desc='Get/Set Font'  funkind='virtual'  calltype='__stdcall' >
- <get />
- <put />
- <putref />
-</property>
- <property name='Filename' type='BSTR' dispid='1' vtindex='40' ctype='HRESULT' param='fname' desc='Get/Set Filename'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Filename' type='BSTR' dispid='1' vtindex='28' ctype='HRESULT' param='fname' desc='Get/Set Filename'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='ReadOnly' type='VARIANT_BOOL' dispid='2' vtindex='48' ctype='HRESULT' param='vbReadOnly' desc='Set/Get ReadOnly Mode'  funkind='virtual'  calltype='__stdcall' >
+ <property name='ReadOnly' type='VARIANT_BOOL' dispid='2' vtindex='36' ctype='HRESULT' param='vbReadOnly' desc='Set/Get ReadOnly Mode'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='Syntax' type='long' dispid='3' vtindex='56' ctype='HRESULT' param='typ' desc='Get/Set Coloring Syntax'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Syntax' type='long' dispid='3' vtindex='44' ctype='HRESULT' param='typ' desc='Get/Set Coloring Syntax'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='SysType' type='long' dispid='4' vtindex='64' ctype='HRESULT' param='typ' desc='get/Set SysTypec (UNIX/Win32)'  funkind='virtual'  calltype='__stdcall' >
+ <property name='SysType' type='long' dispid='4' vtindex='52' ctype='HRESULT' param='typ' desc='get/Set SysTypec (UNIX/Win32)'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='Encoding' type='long' dispid='5' vtindex='72' ctype='HRESULT' param='typ' desc='Set/Get Encoding (UTF-8,Ansi,...)'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Encoding' type='long' dispid='5' vtindex='60' ctype='HRESULT' param='typ' desc='Set/Get Encoding (UTF-8,Ansi,...)'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='TabUsage' type='VARIANT_BOOL' dispid='6' vtindex='80' ctype='HRESULT' param='vbTabUsage' desc='Set/Get Usage of Tabulator chars, setting to false converts tabs to spaces'  funkind='virtual'  calltype='__stdcall' >
+ <property name='TabUsage' type='VARIANT_BOOL' dispid='6' vtindex='68' ctype='HRESULT' param='vbTabUsage' desc='Set/Get Usage of Tabulator chars, setting to false converts tabs to spaces'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='TabIndents' type='VARIANT_BOOL' dispid='7' vtindex='88' ctype='HRESULT' param='vbTabIndents' desc='Set/Get whether Tabulator indents'  funkind='virtual'  calltype='__stdcall' >
+ <property name='TabIndents' type='VARIANT_BOOL' dispid='7' vtindex='76' ctype='HRESULT' param='vbTabIndents' desc='Set/Get whether Tabulator indents'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='BackSpaceUnindents' type='VARIANT_BOOL' dispid='8' vtindex='96' ctype='HRESULT' param='vbBackSpaceIndents' desc='Get/Set whether BackSpace unindents'  funkind='virtual'  calltype='__stdcall' >
+ <property name='BackSpaceUnindents' type='VARIANT_BOOL' dispid='8' vtindex='84' ctype='HRESULT' param='vbBackSpaceIndents' desc='Get/Set whether BackSpace unindents'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='TabWidth' type='long' dispid='9' vtindex='104' ctype='HRESULT' param='w' desc='get/Set Tabulator width'  funkind='virtual'  calltype='__stdcall' >
+ <property name='TabWidth' type='long' dispid='9' vtindex='92' ctype='HRESULT' param='w' desc='get/Set Tabulator width'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='Overtype' type='VARIANT_BOOL' dispid='10' vtindex='112' ctype='HRESULT' param='over_type' desc='GetSet Overtype mode'  funkind='virtual'  calltype='__stdcall' >
+ <property name='Overtype' type='VARIANT_BOOL' dispid='10' vtindex='100' ctype='HRESULT' param='over_type' desc='GetSet Overtype mode'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='UseContext' type='VARIANT_BOOL' dispid='11' vtindex='120' ctype='HRESULT' param='useMenu' desc='Get/Set Use Context Menue'  funkind='virtual'  calltype='__stdcall' >
+ <property name='UseContext' type='VARIANT_BOOL' dispid='11' vtindex='108' ctype='HRESULT' param='useMenu' desc='Get/Set Use Context Menue'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='WriteBOM' type='VARIANT_BOOL' dispid='12' vtindex='128' ctype='HRESULT' param='vb' desc='Set WriteBOM'  funkind='virtual'  calltype='__stdcall' >
+ <property name='WriteBOM' type='VARIANT_BOOL' dispid='12' vtindex='116' ctype='HRESULT' param='vb' desc='Set WriteBOM'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <property name='ShowLineNumbers' type='VARIANT_BOOL' dispid='13' vtindex='136' ctype='HRESULT' param='useLineNums' desc='Get/Set Show LineNumbers'  funkind='virtual'  calltype='__stdcall' >
+ <property name='ShowLineNumbers' type='VARIANT_BOOL' dispid='13' vtindex='124' ctype='HRESULT' param='useLineNums' desc='Get/Set Show LineNumbers'  funkind='virtual'  calltype='__stdcall' >
  <get />
  <put />
 </property>
- <method name='SyntaxDisplayName' type='BSTR*' dispid='14' vtindex='144' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Syntax' >
+ <method name='SyntaxDisplayName' type='BSTR*' dispid='14' vtindex='132' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Syntax' >
  </method>
- <method name='GetSyntaxDisplayName' type='BSTR*' dispid='15' vtindex='148' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='SyntaxDisplayName' >
+ <method name='GetSyntaxDisplayName' type='BSTR*' dispid='15' vtindex='136' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='SyntaxDisplayName' >
   <param type='long' dir='IN' name='type' />
  </method>
- <method name='SetIndent' type='void' dispid='16' vtindex='152' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set Indent' >
+ <method name='SetIndent' type='void' dispid='16' vtindex='140' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Set Indent' >
   <param type='long' dir='IN' name='i' />
  </method>
- <method name='ConvertTabs' type='void' dispid='17' vtindex='156' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Convert Tabs' >
+ <method name='ConvertTabs' type='void' dispid='17' vtindex='144' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Convert Tabs' >
  </method>
+ <property name='StyleSets' type='IScintillAxStyleSets*' dispid='18' vtindex='148' ctype='HRESULT' param='styles' desc='Get/Set StyleSet obj'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+</interface>
+
+
+<interface name='IScintillAxStyleSets' type='Dual' iid='{5143947F-7A44-4EA7-904C-E7163F50A02C}' base='IDispatch' members='3' desc='' >
+ <method name='_NewEnum' type='IEnumVARIANT**' dispid='-4' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='New Enum - enable iteration from script' >
+ </method>
+ <method name='Item' type='IScintillAxStyleSet**' dispid='0' vtindex='32' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Item - retrieve StyleSet by id' >
+  <param type='VARIANT' dir='IN' name='i' />
+ </method>
+ <property name='Count' type='long*' dispid='1' vtindex='36' ctype='HRESULT' param='cnt' desc='Count number of stylesets'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+</interface>
+
+
+<interface name='IScintillAxStyleSet' type='Dual' iid='{EA642C7F-91FA-43F0-8A17-108FEA21321B}' base='IDispatch' members='7' desc='' >
+ <method name='_NewEnum' type='IEnumVARIANT**' dispid='-4' vtindex='28' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='New Enum - enable iteration from script' >
+ </method>
+ <method name='Item' type='IScintillAxStyle**' dispid='0' vtindex='32' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Item - retrieve StyleSet by id' >
+  <param type='VARIANT' dir='IN' name='i' />
+ </method>
+ <property name='Count' type='long*' dispid='1' vtindex='36' ctype='HRESULT' param='cnt' desc='Count number of styles'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='Id' type='long*' dispid='2' vtindex='40' ctype='HRESULT' param='Id' desc='styleset id'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <method name='AddKeyWords' type='void' dispid='3' vtindex='44' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Add Keywords' >
+  <param type='BSTR' dir='IN' name='words' />
+ </method>
+ <method name='CountKeyWords' type='long*' dispid='4' vtindex='48' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Count Keywords' >
+ </method>
+ <method name='GetKeyWord' type='BSTR*' dispid='5' vtindex='52' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Get Keyword' >
+  <param type='long' dir='IN' name='index' />
+ </method>
+</interface>
+
+
+<interface name='IScintillAxStyle' type='Dual' iid='{F2988C3B-4F96-4DA9-ABFB-3F063CA65540}' base='IDispatch' members='9' desc='' >
+ <property name='Id' type='long*' dispid='1' vtindex='28' ctype='HRESULT' param='Id' desc='style id'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='Description' type='BSTR*' dispid='2' vtindex='32' ctype='HRESULT' param='desc' desc='style description'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <property name='Bold' type='VARIANT_BOOL*' dispid='3' vtindex='36' ctype='HRESULT' param='vb' desc='bold'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Italic' type='VARIANT_BOOL*' dispid='4' vtindex='44' ctype='HRESULT' param='vb' desc='italic'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Eol' type='VARIANT_BOOL*' dispid='5' vtindex='52' ctype='HRESULT' param='vb' desc='eol'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Fontname' type='BSTR*' dispid='6' vtindex='60' ctype='HRESULT' param='desc' desc='font name'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Fontsize' type='long*' dispid='7' vtindex='68' ctype='HRESULT' param='Id' desc='font size'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Forecolor' type='BSTR*' dispid='8' vtindex='76' ctype='HRESULT' param='col' desc='foreground color'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
+ <property name='Backcolor' type='BSTR*' dispid='9' vtindex='84' ctype='HRESULT' param='col' desc='background color'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+ <put />
+</property>
 </interface>
 
 
@@ -375,6 +447,9 @@ file='..\..\..\..\ax\scintillax\x64/uni_release\scintillax.tlb'>
 </object>
 <object name='ScintillAxSettings' guid='{3039CC18-067B-450F-952D-7CE2ADD79F88}' major='1' minor='0' progId='Scintilla.ScintillAxSettings' desc='ScintillAx' >
 <implements type='IUnknown' guid='{3039CC18-067B-450F-952D-7CE2ADD79F88}' default='true'  />
+</object>
+<object name='ScintillAxStyleSets' guid='{01C47486-7B0D-43E0-B66A-386EBB6A038F}' major='1' minor='0' progId='Scintilla.ScintillAxStyleSets' desc='ScintillAx' >
+<implements type='IScintillAxStyleSets' guid='{01C47486-7B0D-43E0-B66A-386EBB6A038F}' default='true'  />
 </object>
 
 <enum type='SCINTILLA_SYSTYPE' desc='' >

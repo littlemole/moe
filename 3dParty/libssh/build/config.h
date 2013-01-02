@@ -83,6 +83,12 @@
 /* Define to 1 if you have the `ntohll' function. */
 /* #undef HAVE_NTOHLL */
 
+#if (_MSC_VER < 1700 )
+#undef HAVE_NTOHLL 
+#else
+#define HAVE_NTOHLL 1
+#endif
+
 /*************************** LIBRARIES ***************************/
 
 /* Define to 1 if you have the `crypto' library (-lcrypto). */

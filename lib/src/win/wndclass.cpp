@@ -47,7 +47,7 @@ WndClass::~WndClass()
 WndClass::WndClass(const WndClass& wc)
 {
 	this->wcex_ = wc.wcex_;
-	int len = _tcslen(wc.wcex_.lpszClassName)+1;
+	size_t len = _tcslen(wc.wcex_.lpszClassName)+1;
 	this->wcex_.lpszClassName = new mol::TCHAR[len];
 	memcpy((void*)(this->wcex_.lpszClassName), wc.wcex_.lpszClassName, len*sizeof(mol::TCHAR));
 }
@@ -60,7 +60,7 @@ WndClass& WndClass::operator=(const WndClass& wc)
 	}
 
 	this->wcex_ = wc.wcex_;
-	int len = _tcslen(wc.wcex_.lpszClassName)+1;
+	size_t len = _tcslen(wc.wcex_.lpszClassName)+1;
 	this->wcex_.lpszClassName = new mol::TCHAR[len];
 	memcpy((void*)(this->wcex_.lpszClassName), wc.wcex_.lpszClassName, len*sizeof(mol::TCHAR));
 	return *this;

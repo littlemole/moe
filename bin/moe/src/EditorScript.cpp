@@ -42,6 +42,13 @@ void EditorScript::execScript()
 		return ;
 
 	scriptlet()->eval(engine,script.toString(),editor_->sci);
+
+	mol::bstr stdOut;
+	moe()->stdOut(&stdOut);
+	long lines = 0;
+	editor_->line_->get_Count(&lines);
+	lines = lines == 0 ? 0 : lines -1;
+	editor_->annotation_->SetText(lines,stdOut);
 }
 
 

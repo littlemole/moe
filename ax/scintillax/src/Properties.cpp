@@ -10,7 +10,6 @@ SciAxProperties::SciAxProperties()
 	fd.cbSizeofstruct = sizeof(fd);
 	fd.cySize.int64 = 10 * 10000;
 	fd.lpstrName = L"Courier New";
-	::OleCreateFontIndirect(&fd,IID_IFontDisp,(void**)&font_);	
 
 	enc_  = SCINTILLA_ENCODING_ANSI;
 	eol_  = SCINTILLA_SYSTYPE_UNIX;
@@ -40,6 +39,13 @@ SciAxProperties::Instance* SciAxProperties::CreateInstance( ScintillAx* sci)
 {
 	Instance* instance = new Instance;
 	instance->sci_ = sci;
+/*	instance->styleSets_.createObject(CLSID_ScintillAxStyleSets);
+	mol::punk<IPersistStreamInit> psi(instance->styleSets_);
+	if(psi)
+	{
+		psi->InitNew();
+	}
+	*/
 	return instance;
 }
 
@@ -143,19 +149,23 @@ HRESULT __stdcall SciAxProperties::put_Syntax( long type)
 	if (!sci_)
 		return E_FAIL;
 
-	syntax_ = (SCINTILLA_SYNTAX)type;
-	if ( sci_->edit() ) 
-	{
-		mol::punk<IFont> font(font_);
-		mol::bstr fname;
-		font->get_Name(&fname);
-		CY cy;
-		font->get_Size(&cy);
+	sci_->edit()->mode((SCINTILLA_SYNTAX)type,10,_T("Courier New"));
 
-		long l = 1.0f * (cy.Hi) + cy.Lo/ULONG_MAX;
-		sci_->edit()->mode( syntax_,l,fname.toString());		
-		sci_->edit()->invalidateRect(0,TRUE);
-		sci_->edit()->update();
+	if (!styleSets_) 
+	{
+		styleSets_.createObject(CLSID_ScintillAxStyleSets);
+		mol::punk<IPersistStreamInit> psi(styleSets_);
+		if ( psi )
+		{
+			psi->InitNew();
+		}
+	}
+
+	mol::punk<IScintillAxStyleSet> set;
+	styleSets_->Item( mol::variant(type), &set);
+	if ( set )
+	{
+		sci_->Apply(set);
 	}
 
 	sci_->fire(DISPID_ISCINTILLAXEVENTS_ONSYNTAX,type);
@@ -485,82 +495,6 @@ HRESULT __stdcall SciAxProperties::get_UseContext(VARIANT_BOOL* vbContext)
 	return S_OK; 
 }
 
-HRESULT __stdcall SciAxProperties::putref_Font( IFontDisp* font)
-{
-	if ( !font )
-		return S_FALSE;
-
-	if (!sci_)
-		return E_FAIL;
-
-	font_ = font;
-
-	if ( !sci_->edit() )
-	{
-		return S_OK; 
-	}
-
-	mol::punk<IFont> f(font_);
-	if ( f )
-	{
-		mol::bstr fname;
-		CY cy;
-		if ( S_OK == f->get_Name(&fname) )
-			if ( S_OK == f->get_Size(&cy) )
-			{
-				sci_->edit()->mode(sci_->edit()->mode(),cy.int64/10000,fname.toString());				
-				sci_->edit()->invalidateRect(0,TRUE);
-				sci_->edit()->colorize(0);				
-				sci_->setDirty(TRUE);
-			}
-	}
-	return S_OK; 
-}
-
-HRESULT __stdcall SciAxProperties::put_Font( IFontDisp* font)
-{
-	if ( !font )
-		return S_FALSE;
-
-	if (!sci_)
-		return E_FAIL;
-
-	mol::punk<IFont> f(font);	
-	if ( f )
-	{
-		font_.release();
-		mol::punk<IFont> clone;
-		f->Clone(&clone);
-		clone.queryInterface(IID_IFontDisp,(void**)&font_);
-
-		if ( !sci_->edit() )
-		{
-			return S_OK; 
-		}
-
-		mol::bstr fname;
-		CY cy;
-		if ( S_OK == f->get_Name(&fname) )
-			if ( S_OK == f->get_Size(&cy) )
-			{
-				sci_->edit()->mode(sci_->edit()->mode(),cy.int64/10000,fname.toString());				
-				sci_->edit()->invalidateRect(0,TRUE);
-				sci_->edit()->colorize(0);
-				sci_->setDirty(TRUE);				
-			}
-	}
-	return S_OK; 
-}
-
-HRESULT __stdcall SciAxProperties::get_Font( IFontDisp** font)
-{
-	if ( font && font_ )
-	{
-		return font_.queryInterface( IID_IFontDisp,(void**)font);
-	}
-	return S_OK;
-}
-
 
 HRESULT __stdcall SciAxProperties::put_WriteBOM( VARIANT_BOOL vb)
 {
@@ -687,5 +621,32 @@ HRESULT __stdcall SciAxProperties::GetSizeMax( ULARGE_INTEGER* ui )
 HRESULT __stdcall SciAxProperties::Dispose()
 {
 	dispose();
+	return S_OK;
+}
+
+HRESULT  __stdcall SciAxProperties::put_StyleSets( IScintillAxStyleSets* styles)
+{
+	if (!styles)
+		return E_INVALIDARG;
+
+	styleSets_ = styles;
+	return S_OK;
+}
+
+HRESULT  __stdcall SciAxProperties::get_StyleSets( IScintillAxStyleSets** styles)
+{
+	if (!styles)
+		return E_INVALIDARG;
+
+	return styleSets_.queryInterface(styles);
+}
+
+HRESULT __stdcall  SciAxProperties::InitNew()
+{
+	mol::punk<IPersistStreamInit> psi(styleSets_);
+	if ( psi)
+	{
+		return psi->InitNew();
+	}
 	return S_OK;
 }

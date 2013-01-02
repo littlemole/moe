@@ -42,7 +42,7 @@
     <ClCompile Include="src\Text.cpp" />
     <ClCompile Include="src\Annotation.cpp" />
     <ClCompile Include="src\Markers.cpp" />
-
+    <ClCompile Include="src\SciStyle.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

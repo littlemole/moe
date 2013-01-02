@@ -3,11 +3,11 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 7.00.0555 */
-/* at Sun May 06 00:17:11 2012
+ /* File created by MIDL compiler version 8.00.0595 */
+/* at Sat Nov 17 22:27:07 2012
  */
 /* Compiler settings for treectrl.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -44,24 +44,28 @@
 #ifndef __ITreeElement_FWD_DEFINED__
 #define __ITreeElement_FWD_DEFINED__
 typedef interface ITreeElement ITreeElement;
+
 #endif 	/* __ITreeElement_FWD_DEFINED__ */
 
 
 #ifndef __ITreeCtrl_FWD_DEFINED__
 #define __ITreeCtrl_FWD_DEFINED__
 typedef interface ITreeCtrl ITreeCtrl;
+
 #endif 	/* __ITreeCtrl_FWD_DEFINED__ */
 
 
 #ifndef ___ITreeCtrlEvents_FWD_DEFINED__
 #define ___ITreeCtrlEvents_FWD_DEFINED__
 typedef interface _ITreeCtrlEvents _ITreeCtrlEvents;
+
 #endif 	/* ___ITreeCtrlEvents_FWD_DEFINED__ */
 
 
 #ifndef __ITreeCtrlEvents_FWD_DEFINED__
 #define __ITreeCtrlEvents_FWD_DEFINED__
 typedef interface ITreeCtrlEvents ITreeCtrlEvents;
+
 #endif 	/* __ITreeCtrlEvents_FWD_DEFINED__ */
 
 
@@ -152,6 +156,7 @@ EXTERN_C const IID IID_ITreeElement;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct ITreeElementVtbl
@@ -162,7 +167,7 @@ EXTERN_C const IID IID_ITreeElement;
             ITreeElement * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITreeElement * This);
@@ -190,14 +195,22 @@ EXTERN_C const IID IID_ITreeElement;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITreeElement * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Label )( 
             ITreeElement * This,
@@ -340,6 +353,7 @@ EXTERN_C const IID IID_ITreeCtrl;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct ITreeCtrlVtbl
@@ -350,7 +364,7 @@ EXTERN_C const IID IID_ITreeCtrl;
             ITreeCtrl * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITreeCtrl * This);
@@ -378,14 +392,22 @@ EXTERN_C const IID IID_ITreeCtrl;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITreeCtrl * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Root )( 
             ITreeCtrl * This,
@@ -490,7 +512,7 @@ EXTERN_C const IID DIID__ITreeCtrlEvents;
             _ITreeCtrlEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _ITreeCtrlEvents * This);
@@ -518,14 +540,22 @@ EXTERN_C const IID DIID__ITreeCtrlEvents;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _ITreeCtrlEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         END_INTERFACE
     } _ITreeCtrlEventsVtbl;
@@ -597,6 +627,7 @@ EXTERN_C const IID IID_ITreeCtrlEvents;
         
     };
     
+    
 #else 	/* C style interface */
 
     typedef struct ITreeCtrlEventsVtbl
@@ -607,7 +638,7 @@ EXTERN_C const IID IID_ITreeCtrlEvents;
             ITreeCtrlEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITreeCtrlEvents * This);
@@ -635,14 +666,22 @@ EXTERN_C const IID IID_ITreeCtrlEvents;
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITreeCtrlEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnTreeClick )( 
             ITreeCtrlEvents * This,

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="UTF-8" />
+  <title></title>
+<style type="text/css">
+
+.result {
+	border:1px solid #E0E0E0;
+	background-color:#FAfAFA;
+}
+
+.result th {
+	border:1px solid #E0E0E0;
+	background-color:#EdEdEd;
+}
+
+.result td {
+	border:1px solid #E0E0E0;
+	background-color:#EdEdEd;
+	padding:4px;
+}
+
+.choose {
+	border:1px solid #E0E0E0;
+	background-color:#f2f2f2;
+	padding:0px;
+}
+
+table,form,select,input {
+ padding:0px;
+}
+
+</style>
+
+ </head>
+ 
+ <body>
+<table class="choose" align="left"  cellpadding="3" cellspacing="3" border="0" >
+ <tr>
+  <td>styleset: </td>
+  <td>
+   <select id="styleSet" name="select" size="1" onchange="onSelectStyleSet()" >
+	<option id="plain" value="0" >plain</option>
+	<option id="html" value="1" >html</option>
+	<option id="perl" value="2" >css</option>
+	<option id="perl" value="3" >vb</option>
+	<option id="perl" value="4" >js</option>
+	<option id="perl" value="5" >sql</option>
+	<option id="perl" value="6" >shell</option>
+	<option id="perl" value="7" >perl</option>
+	<option id="perl" value="8" >cpp</option>
+	<option id="perl" value="9" >java</option>
+	<option id="perl" value="10" >c#</option>
+   </select>
+  </td>
+ </tr>
+</table>
+
+<br style="clear:all" />
+
+
+<div id="table"></div>
+
+
+<script language="javascript">
+
+function boolForm(id,name,value)
+{
+	var html = "";
+	html += "<td><input id='" + name + "_" + id + "' ";
+	html += "type='checkbox' onclick='return onChange(";
+	html += id + ")' ";
+	if ( value )
+		html += " checked='checked'";
+	html += " /></td>";
+	return html;
+}
+
+function textForm(id,name,value,size,isCol)
+{
+	var html = "";
+	html += "<td><input size='"+size+"' type='text' ";
+	html += "id='" + name + "_" + id + "' ";
+	html += "value='" + value + "' ";
+	if(isCol)
+	{
+		html += " onfocus='selectColor(this)'";
+	}
+	html += "onkeyup='onChange(" + id + ")' onchange='onChange(" + id + ")' /></td>";
+	return html;
+}
+
+function getStyle(item)
+{
+	var css = "";
+	if (item.Bold)
+		css += "font-weight:bold;";
+	if (item.Italic)
+		css += "font-style:italic;";
+
+	css += "font-family:" + item.Fontname+";";
+	css += "font-size:" + item.Fontsize+"pt;";
+	css += "color:" + item.Forecolor+";";
+	css += "background-color:" + item.Backcolor+";";
+
+	return css;
+}
+
+function selectColor(e)
+{
+	var ax = new ActiveXObject("ShellCtrls.ColorDialog");
+	ax.HexColor = e.value;
+	var r = ax.Show();
+		
+	if(r)
+	{
+		var col = ax.HexColor;
+		e.value=col;
+		e.onchange();
+		document.body.focus();
+	}
+}
+
+
+function checked(s)
+{
+	if (s)
+		return " checked='checked'";
+	return "";
+}
+
+function onSelectStyleSet()
+{
+	var e = document.getElementById("styleSet");
+	var syntax = e.options[e.selectedIndex].value;
+
+	var styleSet = external.moe.Config.StyleSets.Item(syntax);
+
+	var html = "<table class='result'>";
+
+	var c = styleSet.Count;
+
+	html +="<tr><th>style</th><th>bold</th><th>italic</th><th>eol</th><th>fore</th><th>back</th><th>font</th><th>size</th></tr>";
+	for ( var i = 0; i < c; i++)
+	{
+		var item = styleSet.Item(i);
+		html +="<tr>";
+		html += "<td id='desc_" + item.Id + "' style='" + getStyle(item) + "'>" + item.Description + "</td>";
+		html += boolForm( item.Id, "bold", item.Bold );
+		html += boolForm( item.Id, "italic", item.Italic );
+		html += boolForm( item.Id, "eol", item.Eol );
+		html += textForm( item.Id, "fore", item.ForeColor,5 ,true);
+		html += textForm( item.Id, "back", item.BackColor,5, true);
+		html += textForm( item.Id, "font", item.Fontname ,10);
+		html += textForm( item.Id, "size", item.Fontsize,1 );
+		html +="<tr>";
+	}
+
+	html += "</table>";
+	document.getElementById("table").innerHTML = html;
+}
+
+function el(id)
+{
+	return document.getElementById(id);
+}
+
+function applyStyles()
+{
+	var n = external.moe.Documents.Count;
+	for ( var i = 0; i < n; i++ )
+	{
+		var item = external.moe.Documents.Item(i);
+		if ( item.Type != external.moe.Documents.DOCTYPE_EDITOR )
+			continue;
+
+		var s = item.Object.Properties.Syntax;
+		item.Object.Properties.Syntax = s;
+	}
+}
+
+function onChange(id)
+{
+	var e = document.getElementById("styleSet");
+	var syntax = e.options[e.selectedIndex].value;
+
+	var styleSet = external.moe.Config.StyleSets.Item(syntax);
+
+	var item = styleSet.Item(""+id);
+	item.Bold = el("bold_"+id).checked;
+	item.Italic = el("italic_"+id).checked;
+	item.Eol = el("eol_"+id).checked;
+
+	item.Forecolor = el("fore_"+id).value;
+	item.Backcolor = el("back_"+id).value;
+	item.Fontname = el("font_"+id).value;
+	item.Fontsize = el("size_"+id).value;
+
+	var s = getStyle(item);
+	el("desc_"+id).style.cssText=s;
+	applyStyles();
+	return true;
+}
+
+document.body.focus();
+onSelectStyleSet();
+</script>
+
+ </body>
+ 
+</html>

@@ -35,6 +35,7 @@
       
         <msg  handler="OnEditSettings" cmd="IDM_MODE_EDITSETTINGS" />
         <msg  handler="OnEditPrefs" cmd="IDM_MODE_PREFERENCES" />
+        <msg  handler="OnEditUserStyles" cmd="IDM_MODE_USERSTYLES" />
         <msg  handler="OnHelpAbout" cmd="IDM_HELP_ABOUT" />
   <!--      <msg  handler="OnShowDirView" cmd="IDM_VIEW_DIRVIEW" /> -->
         <msg  handler="OnEditCut" cmd="IDM_EDIT_CUT" />

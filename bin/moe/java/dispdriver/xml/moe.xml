@@ -122,7 +122,7 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
 </interface>
 
 
-<interface name='IMoe' type='Dual' iid='{8C2C5817-4747-4DA4-B588-75612B7608A2}' base='IDispatch' members='19' desc='' >
+<interface name='IMoe' type='Dual' iid='{8C2C5817-4747-4DA4-B588-75612B7608A2}' base='IDispatch' members='20' desc='' >
  <property name='Documents' type='IMoeDocumentCollection**' dispid='1' vtindex='28' ctype='HRESULT' param='d' desc='Get MDI Child Documents Collection'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
@@ -177,7 +177,10 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
  <property name='UTF8' type='long*' dispid='18' vtindex='96' ctype='HRESULT' param='d' desc='UTF8 encoding constant'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
- <method name='Exit' type='void' dispid='19' vtindex='100' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Exit Moe Editor and close the App' >
+ <method name='Print' type='void' dispid='19' vtindex='100' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Exit Moe Editor and close the App' >
+  <param type='BSTR' dir='IN' name='txt' />
+ </method>
+ <method name='Exit' type='void' dispid='20' vtindex='104' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Exit Moe Editor and close the App' >
  </method>
 </interface>
 
@@ -376,7 +379,7 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
 </interface>
 
 
-<interface name='IMoeConfig' type='Dual' iid='{4DE6729C-2F79-471F-82CB-51137A02E490}' base='IDispatch' members='15' desc='' >
+<interface name='IMoeConfig' type='Dual' iid='{4DE6729C-2F79-471F-82CB-51137A02E490}' base='IDispatch' members='17' desc='' >
  <property name='ConfigPath' type='BSTR*' dispid='1' vtindex='28' ctype='HRESULT' param='fPath' desc='Get Configuration Files Path on local system'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
@@ -427,6 +430,11 @@ file='..\..\..\..\bin\moe\x64/uni_release\moe.tlb'>
  <property name='Settings' type='IDispatch**' dispid='15' vtindex='112' ctype='HRESULT' param='Settings' desc='Get the settings disp interface'  funkind='virtual'  calltype='__stdcall' >
  <get />
 </property>
+ <property name='StyleSets' type='IDispatch**' dispid='16' vtindex='116' ctype='HRESULT' param='styles' desc='Get StyleSet obj'  funkind='virtual'  calltype='__stdcall' >
+ <get />
+</property>
+ <method name='ResetStyles' type='void' dispid='17' vtindex='120' ctype='HRESULT'  funkind='virtual'  calltype='__stdcall' desc='Reset styles' >
+ </method>
 </interface>
 
 

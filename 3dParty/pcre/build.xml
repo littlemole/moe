@@ -12,6 +12,7 @@
 
   <ItemDefinitionGroup>
     <ClCompile>
+	  <DisableSpecificWarnings>4244</DisableSpecificWarnings>
       <PreprocessorDefinitions>SUPPORT_UTF8;STATIC;POSIX_MALLOC_THRESHOLD=10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>

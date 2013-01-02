@@ -49,7 +49,7 @@ library HTTP
 		[id(1), helpstring("Create Request")] 
 		HRESULT Request([in] BSTR cmd, [out,retval] IHttpRequest* request);
 
-		[ id(1), helpstring("returns file Extension") ] 
+		[ id(2), helpstring("returns file Extension") ] 
 		HRESULT Execute([in] IHttpRequest* request, [out,retval] IHttpResponse* response);
 	}
 

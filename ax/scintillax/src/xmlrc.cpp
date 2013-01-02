@@ -116,8 +116,6 @@ HRESULT __stdcall SciAxProperties::Load( LPSTREAM pStm)
   << mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_OVERTYPE,VT_BOOL) )
 
   << mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_USECONTEXT,VT_BOOL) )
-
-  << mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_FONT,VT_FONT) )
 ;
   return S_OK;
   }
@@ -146,8 +144,6 @@ HRESULT __stdcall SciAxProperties::Save( LPSTREAM pStm,BOOL fClearDirty )
   >> mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_OVERTYPE,VT_BOOL) )
 
   >> mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_USECONTEXT,VT_BOOL) )
-
-  >> mol::property( mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_FONT,VT_FONT) )
 ;
   return S_OK;
   }
@@ -177,8 +173,6 @@ HRESULT __stdcall SciAxProperties::Load( IPropertyBag *pPropBag,IErrorLog *pErro
   << mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_OVERTYPE"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_OVERTYPE,VT_BOOL) )
 
   << mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_USECONTEXT"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_USECONTEXT,VT_BOOL) )
-
-  << mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_FONT"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_FONT,VT_FONT) )
 ;
 return S_OK;
 }
@@ -207,8 +201,6 @@ HRESULT __stdcall SciAxProperties::Save( IPropertyBag *pPropBag,BOOL fClearDirty
   >> mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_OVERTYPE"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_OVERTYPE,VT_BOOL) )
 
   >> mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_USECONTEXT"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_USECONTEXT,VT_BOOL) )
-
-  >> mol::property( _T("DISPID_ISCINTILLAXPROPERTIES_FONT"), mol::DispId(this,DISPID_ISCINTILLAXPROPERTIES_FONT,VT_FONT) )
 ;
 return S_OK;
 }

@@ -9,8 +9,8 @@
 
  <Target Name="Build">
 
-        <MSBuild Projects="expat\Source\lib\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
-        <MSBuild Projects="pcre/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+        <MSBuild BuildInParallel="$(BuildInParallel)" Projects="expat\Source\lib\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+        <MSBuild BuildInParallel="$(BuildInParallel)" Projects="pcre/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		
 
 	<Exec Command="nmake -f win32\Makefile.msc clean" WorkingDirectory=".\zlib" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' " />

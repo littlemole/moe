@@ -1322,6 +1322,76 @@ bool ScintillAx::loadAdminCOM(const mol::string& p, const mol::string& ext,  lon
 //
 //////////////////////////////////////////////////////////////////////////////
 
+SCINTILLA_SYNTAX guess ( const mol::string& p, const mol::string& ext )
+{
+	//mol::ci_string cis(ext.c_str());
+	mol::string p2(mol::toString(p));
+
+	if ( mol::icmp( ext, _T("htm")) == 0 ||
+		 mol::icmp( ext, _T("html")) == 0 ||
+		 mol::icmp( ext, _T("jsp")) == 0 ||
+		 mol::icmp( ext, _T("php")) == 0 ||
+		 mol::icmp( ext, _T("shtml")) == 0 ||
+		 mol::icmp( ext, _T("mhtml")) == 0 ||
+		 mol::icmp( ext, _T("mc")) == 0 ||
+		 mol::icmp( ext, _T("htm")) == 0 ||
+		 mol::icmp( mol::Path::filename(p2), _T("autohandler")) == 0 ||
+		 mol::icmp( mol::Path::filename(p2), _T("dhandler"))  == 0
+		)
+	{
+		return SCINTILLA_SYNTAX_HTML;
+	}
+	if ( mol::icmp( ext, _T("h"))  == 0||
+		 mol::icmp( ext, _T("hpp"))  == 0||
+		 mol::icmp( ext, _T("c"))  == 0||
+		 mol::icmp( ext, _T("cpp"))  == 0||
+		 mol::icmp( ext, _T("cxx")) == 0 
+	    )
+	{
+		return SCINTILLA_SYNTAX_CPP;
+	}
+	if ( mol::icmp( ext, _T("java") ) == 0 )
+	{
+		return SCINTILLA_SYNTAX_JAVA;
+	}
+	if ( mol::icmp( ext, _T("cs")  ) == 0 )
+	{
+		return SCINTILLA_SYNTAX_CSHARP;
+	}
+	if ( mol::icmp( ext, _T("pl")) == 0 ||
+		 mol::icmp( ext, _T("pm")) == 0 ||
+		 mol::icmp( ext, _T("cgi")) == 0 ||
+		 mol::icmp( ext, _T("pls")) == 0 
+		)
+	{
+		return SCINTILLA_SYNTAX_PERL;
+	}
+	if ( mol::icmp( ext, _T("js") ) == 0 )
+	{
+		return SCINTILLA_SYNTAX_JS;
+	}
+	if ( mol::icmp( ext, _T("css") ) == 0 )
+	{
+		return SCINTILLA_SYNTAX_CSS;
+	}
+
+	if ( mol::icmp( ext, _T("bas"))  == 0||
+		 mol::icmp( ext, _T("vbs"))  == 0
+		 )
+	{
+		return SCINTILLA_SYNTAX_VB;
+	}
+    if ( mol::icmp( ext, _T("sh") )  == 0)
+    {
+        return SCINTILLA_SYNTAX_SHELL;
+    }
+    if ( mol::icmp( ext, _T("sql") ) == 0 )
+    {
+        return SCINTILLA_SYNTAX_SQL;
+    }
+	return SCINTILLA_SYNTAX_PLAIN;
+}
+
 /////////////////////////////////////////////////////////////////////
 
 bool ScintillAx::openSSH(const mol::string& path,const mol::string& ext, long enc)
@@ -1401,7 +1471,7 @@ bool ScintillAx::openSSH(const mol::string& path,const mol::string& ext, long en
 			props_->put_WriteBOM( fe.hasBOM() ? VARIANT_TRUE : VARIANT_FALSE );
 
 			edit()->setText(utf8_bytes);
-			edit()->mode(path,ext);
+			props_->put_Syntax(guess(mol::toString(p),ext));
 			edit()->setSavePoint();
 			setDirty(FALSE);
 			return true;			
@@ -1481,7 +1551,8 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  long enc)
 	props_->put_WriteBOM( fe.hasBOM() ? VARIANT_TRUE : VARIANT_FALSE );
 
 	edit()->setText(mol::unix2dos(utf8_bytes));
-	edit()->mode(p,ext);
+	props_->put_Syntax(guess(p,ext));
+
 	edit()->setSavePoint();
 	setDirty(FALSE);
 	return true;
@@ -1535,3 +1606,161 @@ HRESULT __stdcall ScintillAx::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL
 	}
 	return E_FAIL;
 }
+
+
+
+
+
+COLORREF hex2rgb( const char* hex )
+{
+    char buf[3];
+    buf[2]=0;
+
+    int r,g,b;
+    r = g = b = 0;
+
+    buf[0] = hex[1];
+    buf[1] = hex[2];
+    sscanf( buf, "%x", &r );
+
+    buf[0] = hex[3];
+    buf[1] = hex[4];
+    sscanf( buf, "%x", &g );
+
+    buf[0] = hex[5];
+    buf[1] = hex[6];
+    sscanf( buf, "%x", &b );
+
+    return RGB(r,g,b);
+}
+
+
+
+
+HRESULT  __stdcall ScintillAx::Apply(IScintillAxStyleSet * styleSet)
+{
+	if(!styleSet)
+		return E_INVALIDARG;
+
+	long lexer = SCLEX_NULL;
+
+	HRESULT hr = styleSet->get_Id(&lexer);
+	if ( hr !=S_OK)
+	{
+		edit()->setLexer(SCLEX_NULL);
+		edit()->colorize(0);
+		return S_OK;
+	}
+
+	edit()->setLexer(lexer);
+	edit()->setStyleBits(7);
+	/*
+	edit()->setStyle(STYLE_DEFAULT,RGB(0,0,0),RGB(0xFF,0xFF,0xFF),10, "Courier New");
+	edit()->styleSetBold(STYLE_DEFAULT,false);
+	edit()->styleSetItalic(STYLE_DEFAULT,false);
+	edit()->styleSetEolFilled(STYLE_DEFAULT,false);
+	*/
+
+	//edit()->styleClearAll();
+
+	long cnt = 0;
+
+	hr = styleSet->CountKeyWords(&cnt);
+	if ( hr != S_OK  )
+	{
+		edit()->colorize(0);
+		return hr;
+	}
+
+	for ( long i = 0; i < cnt; i++)
+	{
+		mol::bstr keywords;
+		hr = styleSet->GetKeyWord(i,&keywords);
+		if(hr==S_OK)
+		{
+			edit()->setKeywords(i,keywords.tostring());
+		}
+	}
+
+	hr = styleSet->get_Count(&cnt);
+	if ( hr !=S_OK)
+	{
+		edit()->colorize(0);
+		return S_OK;
+	}
+
+	for( long i = 0; i < cnt; i++)
+	{
+		mol::punk<IScintillAxStyle> style;
+		hr = styleSet->Item(mol::variant(i),&style);
+		if(hr==S_OK)
+		{
+			long id = STYLE_DEFAULT;
+
+			hr = style->get_Id(&id);
+			if(hr !=S_OK)
+			{
+				continue;
+			}
+
+			VARIANT_BOOL vb = VARIANT_FALSE;
+
+			hr = style->get_Bold(&vb);
+			if(hr ==S_OK )
+			{
+				edit()->styleSetBold(id,vb == VARIANT_TRUE);
+			}
+			hr = style->get_Italic(&vb);
+			if(hr ==S_OK )
+			{
+				edit()->styleSetItalic(id,vb == VARIANT_TRUE);
+			}
+			hr = style->get_Eol(&vb);
+			if(hr ==S_OK )
+			{
+				edit()->styleSetEolFilled(id,vb == VARIANT_TRUE);
+			}
+			mol::bstr font;
+			hr = style->get_Fontname(&font);
+			if(hr ==S_OK && font.bstr_)
+			{
+				edit()->styleSetFont(id,font.tostring());
+			}
+			else
+			{
+				edit()->styleSetFont(id,"Courier New");
+			}
+
+			long size;
+			hr = style->get_Fontsize(&size);
+			if(hr ==S_OK && size)
+			{
+				edit()->styleSetSize(id,size);
+			}
+			mol::bstr back;
+			hr = style->get_Backcolor(&back);
+			if(hr ==S_OK && back.bstr_)
+			{
+				edit()->styleSetBack(id,hex2rgb(back.tostring().c_str()));
+			}
+			mol::bstr fore;
+			hr = style->get_Forecolor(&fore);
+			if(hr ==S_OK && fore.bstr_)
+			{
+				edit()->styleSetFore(id,hex2rgb(fore.tostring().c_str()));
+			}
+
+			if(i==0)
+			{
+				edit()->styleClearAll();
+			}
+		}
+	}
+
+	edit()->setStyle(SCI_ANNO_ERRORSTYLE,RGB(0xFF, 0, 0),RGB(0xE2, 0xE2, 0xE2));
+	edit()->showAnnotations(2);
+	edit()->colorize(0);
+
+	return S_OK;
+}
+

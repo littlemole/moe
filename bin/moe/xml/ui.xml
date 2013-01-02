@@ -228,6 +228,9 @@
 
     <!-- COM singleton: user settings -->
     <singleton name="config" class="ISetting" clsid="CLSID_Setting" />
+
+    <!-- COM singleton: user styles -->
+    <singleton name="styles" class="IScintillAxStyleSets" clsid="CLSID_ScintillAxStyleSets" />    
     
     <!-- noncreatable COM singleton: scripting support -->
     <singleton name="scriptlet" class="Script" interface="IActiveScriptSite" />
