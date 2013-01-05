@@ -23,7 +23,6 @@
         <menu separator="true"  />
         <menu cmd="IDM_FILE_PRINT" />
         <menu cmd="IDM_MODE_PREFERENCES" />
-        <menu cmd="IDM_MODE_USERSTYLES" />
         <menu separator="true"  />
         <menu cmd="IDM_FILE_NEW_RTF" />
         <menu cmd="IDM_FILE_NEW_UFS" />
@@ -86,6 +85,9 @@
           <menu cmd="IDM_LEXER_CSHARP" />
         </menu>
         <menu cmd="IDM_MODE_SETTINGS" />
+        <menu separator="true"  />
+        <menu cmd="IDM_MODE_USERSTYLES" />
+
       </menu>
       <menu cmd="IDM_VIEW">
         <menu cmd="IDM_VIEW_MAXIMIZE" />

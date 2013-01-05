@@ -1126,11 +1126,9 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 		}
 	}
 
-	if ( !showRibbon ) 
-		return S_OK;
-
 	// show the ribbon if avail and load persistent ribbon settings from store
-	initRibbon(pStgLoad);
+	if ( showRibbon ) 
+		initRibbon(pStgLoad);
 
 	/* -- reset styles to default 
 	mol::punk<IPersistStreamInit> psi(styles());
