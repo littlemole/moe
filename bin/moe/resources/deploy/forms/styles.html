@@ -146,14 +146,14 @@ function onSelectStyleSet()
 	{
 		var item = styleSet.Item(i);
 		html +="<tr>";
-		html += "<td id='desc_" + item.Id + "' style='" + getStyle(item) + "'>" + item.Description + "</td>";
-		html += boolForm( item.Id, "bold", item.Bold );
-		html += boolForm( item.Id, "italic", item.Italic );
-		html += boolForm( item.Id, "eol", item.Eol );
-		html += textForm( item.Id, "fore", item.ForeColor,5 ,true);
-		html += textForm( item.Id, "back", item.BackColor,5, true);
-		html += textForm( item.Id, "font", item.Fontname ,10);
-		html += textForm( item.Id, "size", item.Fontsize,1 );
+		html += "<td id='desc_" + i + "' style='" + getStyle(item) + "'>" + item.Description + "</td>";
+		html += boolForm( i, "bold", item.Bold );
+		html += boolForm( i, "italic", item.Italic );
+		html += boolForm( i, "eol", item.Eol );
+		html += textForm( i, "fore", item.ForeColor,5 ,true);
+		html += textForm( i, "back", item.BackColor,5, true);
+		html += textForm( i, "font", item.Fontname ,10);
+		html += textForm( i, "size", item.Fontsize,1 );
 		html +="<tr>";
 	}
 
@@ -187,7 +187,7 @@ function onChange(id)
 
 	var styleSet = external.moe.Config.StyleSets.Item(syntax);
 
-	var item = styleSet.Item(""+id);
+	var item = styleSet.Item(id);
 	item.Bold = el("bold_"+id).checked;
 	item.Italic = el("italic_"+id).checked;
 	item.Eol = el("eol_"+id).checked;

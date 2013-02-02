@@ -219,11 +219,13 @@ const std::string csharpKeywords =
 	{ style, bold, italic, eol, font.c_str(), size, fore, back, #style }
 
 static Style plainStyles[] = { 
-	STYLE(STYLE_DEFAULT, 0, 0, 0, font, 10, black, white)
+	STYLE(STYLE_DEFAULT, 0, 0, 0, font, 10, black, white),
+	STYLE(STYLE_LINENUMBER, 0, 0, 0, font, 10, black, white)
 };
 
 static Style htmlStyles[] = { 
 	STYLE(STYLE_DEFAULT, 0, 0, 0, font, 10, black, white),
+	STYLE(STYLE_LINENUMBER, 0, 0, 0, font, 10, black, white),
 	STYLE(STYLE_BRACELIGHT, 1, 0, 0, font, 10, black, white),
 	STYLE(SCE_H_DEFAULT, 0, 0, 0, font, 10, darkblue, white),
 	STYLE(SCE_H_TAG, 1, 0, 0, font, 10, darkblue, white),
@@ -290,6 +292,7 @@ static Style htmlStyles[] = {
 
 static Style perlStyles[] = { 
 	STYLE(STYLE_DEFAULT, 0, 0, 0, font, 10, black, white),
+	STYLE(STYLE_LINENUMBER, 0, 0, 0, font, 10, black, white),
 	STYLE(STYLE_BRACELIGHT, 1, 0, 0, font, 10, black, white),
 	STYLE(SCE_PL_DEFAULT, 0, 0, 0, font, 10, black, white),
 	STYLE(SCE_PL_ERROR, 0, 0, 0, font, 10, red, white),
@@ -330,6 +333,7 @@ static Style perlStyles[] = {
 
 static Style cppStyles[] = { 
 	STYLE(STYLE_DEFAULT, 0, 0, 0, font, 10, black, white),
+	STYLE(STYLE_LINENUMBER, 0, 0, 0, font, 10, black, white),
 	STYLE(STYLE_BRACELIGHT, 1, 0, 0, font, 10, black, white),
 	STYLE(SCE_C_DEFAULT,0,0,0,font,10,black,white),
 	STYLE(SCE_C_COMMENT, 0, 0, 0, font, 10, grey, white),
@@ -356,6 +360,7 @@ static Style cppStyles[] = {
 
 static Style vbStyles[] = { 
 	STYLE(STYLE_DEFAULT, 0, 0, 0, font, 10, black, white),
+	STYLE(STYLE_LINENUMBER, 0, 0, 0, font, 10, black, white),
 	STYLE(SCE_B_OPERATOR, 1, 0, 0, font, 10, darkblue, white),
 	STYLE(SCE_B_COMMENT, 0, 0, 0, font, 10, blue, white),
 	STYLE(SCE_B_KEYWORD, 1, 0, 0, font, 10, black, white),
@@ -365,6 +370,7 @@ static Style vbStyles[] = {
 
 static Style jsStyles[] = { 
 	STYLE(STYLE_DEFAULT, 0, 0, 0, font, 10, black, white),
+	STYLE(STYLE_LINENUMBER, 0, 0, 0, font, 10, black, white),
 	STYLE(STYLE_BRACELIGHT, 1, 0, 0, font, 10, black, white),
 	STYLE(SCE_C_OPERATOR, 0, 0, 0, font, 10, black, white),
 	STYLE(SCE_C_DEFAULT, 0, 0, 0, font, 10, black, white),
@@ -392,6 +398,7 @@ static Style jsStyles[] = {
  
 static Style cssStyles[] = { 
 	STYLE(STYLE_DEFAULT, 0, 0, 0, font, 10, black, white),
+	STYLE(STYLE_LINENUMBER, 0, 0, 0, font, 10, black, white),
 	STYLE(STYLE_BRACELIGHT, 1, 0, 0, font, 10, black, white),
 	STYLE(SCE_CSS_TAG, 1, 0, 0, font, 10, black, white),
 	STYLE(SCE_CSS_CLASS, 1, 0, 0, font, 10, darkblue, white),
@@ -402,13 +409,8 @@ static Style cssStyles[] = {
 	STYLE(SCE_CSS_IDENTIFIER, 1, 0, 0, font, 10, lightblue, white),
 	STYLE(SCE_CSS_DIRECTIVE, 0, 0, 0, font, 10, brown, white),
 	STYLE(SCE_CSS_DOUBLESTRING, 0, 0, 0, font, 10, green, white),
-	STYLE(SCE_CSS_SINGLESTRING, 0, 0, 0, font, 10, lightGreen, white),
-	STYLE(STYLE_DEFAULT, 0, 0, 0, font, 10, black, white),
-	STYLE(STYLE_DEFAULT, 0, 0, 0, font, 10, black, white),
-	STYLE(STYLE_DEFAULT, 0, 0, 0, font, 10, black, white),
-	STYLE(STYLE_DEFAULT, 0, 0, 0, font, 10, black, white)
+	STYLE(SCE_CSS_SINGLESTRING, 0, 0, 0, font, 10, lightGreen, white)
 };
-
 
 AxStyleSets::Instance* AxStyleSets::CreateInstance()
 {
@@ -420,20 +422,20 @@ AxStyleSets::Instance* AxStyleSets::CreateInstance()
 
 HRESULT __stdcall  AxStyleSets::_NewEnum(IEnumVARIANT** newEnum)
 {
-	return collection_._NewEnum(newEnum);
+	mol::punk<mol::com_obj<mol::enum_variant> > ev = new mol::com_obj<mol::enum_variant>;
+	for ( std::vector<mol::variant>::iterator it = collection_.begin(); it != collection_.end(); it++)
+	{
+		ev->add((*it));
+	}
+	return ev->QueryInterface(IID_IEnumVARIANT,(void**)newEnum);
 }
 
 HRESULT __stdcall  AxStyleSets::get_Count( long* cnt)
 {
-	mol::variant v;
-	HRESULT hr = collection_.Count(&v);
-	if ( hr != S_OK )
-		return hr;
-
 	if (!cnt)
 		return E_INVALIDARG;
 
-	*cnt = v.lVal;
+	*cnt = collection_.size();
 	return S_OK;
 }
 
@@ -444,12 +446,18 @@ HRESULT __stdcall  AxStyleSets::Item( VARIANT index, IScintillAxStyleSet** item)
 		return E_INVALIDARG;
 
 	*item = 0;
-	mol::variant v;
-	HRESULT hr = collection_.Item(index,&v);
-	if ( hr != S_OK || v.vt != VT_DISPATCH )
-		return hr;
+	mol::variant v(index);
+	v.changeType(VT_I4);
 
-	return v.pdispVal->QueryInterface(IID_IScintillAxStyleSet, (void**)item);
+	long i = v.lVal;
+	if ( i < 0 || i >= collection_.size() ) {
+		return E_INVALIDARG;
+	}
+
+	if ( collection_[i].vt != VT_DISPATCH || !collection_[i].pdispVal )
+		return E_FAIL;
+
+	return collection_[i].pdispVal->QueryInterface(IID_IScintillAxStyleSet, (void**)item);
 }
 
 
@@ -466,7 +474,7 @@ HRESULT __stdcall AxStyleSets::Load( LPSTREAM pStm)
 		for ( long i = 0; i < cnt; i++)
 		{
 			long id = 0;
-			pStm >> mol::property(&id);
+//			pStm >> mol::property(&id);
 
 			mol::punk<IScintillAxStyleSet> styleSet = AxStyleSet::CreateInstance(id);
 			mol::punk<IPersistStream> ps(styleSet);
@@ -474,7 +482,7 @@ HRESULT __stdcall AxStyleSets::Load( LPSTREAM pStm)
 			{
 				ps->Load(pStm);
 			}
-			collection_.Insert(mol::variant(i),mol::variant(styleSet));
+			collection_.push_back(mol::variant(styleSet));
 		}
 	}
 
@@ -483,31 +491,25 @@ HRESULT __stdcall AxStyleSets::Load( LPSTREAM pStm)
 
 HRESULT __stdcall AxStyleSets::Save( LPSTREAM pStm,BOOL fClearDirty)
 {
-	mol::variant v;
-	HRESULT hr = collection_.Count(&v);
-	if(hr != S_OK)
-		return hr;
-
-	long cnt = v.lVal;
+	long cnt = collection_.size();
 	pStm << mol::property(&cnt);
 
 	for ( long i = 0; i < cnt; i++)
 	{
-		mol::variant item;
-		hr = collection_.Item(mol::variant(i),&item);
-		if(hr ==S_OK && item.vt == VT_DISPATCH)
+		mol::variant item(collection_[i]);
+		if(item.vt == VT_DISPATCH)
 		{
 			mol::punk<IScintillAxStyleSet> styleSet(item.pdispVal);
 			if(styleSet)
 			{
-				long id = 0;
-				hr = styleSet->get_Id(&id);
-				if (hr == S_OK )
+//				long id = 0;
+	//			hr = styleSet->get_Id(&id);
+		//		if (hr == S_OK )
 				{
 					mol::punk<IPersistStream> ps(styleSet);
 					if(ps)
 					{
-						pStm << mol::property(&id);
+						//pStm << mol::property(&id);
 						ps->Save(pStm,fClearDirty);
 					}
 				}
@@ -580,7 +582,8 @@ HRESULT make_set( long id, Style* styles, int nStyles, AxStyleSet** result)
 	{
 		AxStyle* style = 0;
 		make_style(styles[i],&style);
-		(*result)->collection_.Insert( mol::variant((LONG)styles[i].style_), mol::variant((IScintillAxStyle*)style) );
+		//(*result)->collection_.Insert( mol::variant((LONG)styles[i].style_), mol::variant((IScintillAxStyle*)style) );
+		(*result)->collection_.push_back( mol::variant((IScintillAxStyle*)style) );
 		((IScintillAxStyle*)style)->Release();
 	}
 	return S_OK;
@@ -590,7 +593,7 @@ HRESULT make_set( long id, Style* styles, int nStyles, AxStyleSet** result)
 	AxStyleSet* set = 0;																	\
 	make_set(lex,styles,sizeof(styles)/sizeof(*(styles)),&set);								\
 	set->AddKeyWords( mol::bstr(##keywords) );												\
-	collection_.Insert( mol::variant(mode), mol::variant((IScintillAxStyleSet*)set) );		\
+	collection_.push_back( mol::variant((IScintillAxStyleSet*)set) );						\
 	((IScintillAxStyleSet*)set)->Release();													\
 
 
@@ -601,18 +604,11 @@ HRESULT __stdcall AxStyleSets::InitNew()
 
 	mol::variant v;
 	mol::variant v0(0);
-	while(true)
-	{
-		collection_.Count(&v);
-		if ( v.lVal == 0)
-			break;
-
-		collection_.Remove(v0);
-	}
+	collection_.clear();
 
 	AxStyleSet* plainSet = 0;
 	make_set(SCLEX_NULL,plainStyles,sizeof(plainStyles)/sizeof(*(plainStyles)),&plainSet);
-	collection_.Insert( mol::variant(SCINTILLA_SYNTAX_PLAIN), mol::variant((IScintillAxStyleSet*)plainSet) );
+	collection_.push_back(  mol::variant((IScintillAxStyleSet*)plainSet) );
 	((IScintillAxStyleSet*)plainSet)->Release();
 	// HTML
 
@@ -622,7 +618,7 @@ HRESULT __stdcall AxStyleSets::InitNew()
 	htmlSet->AddKeyWords( mol::bstr(jsKeyWords) );
 	htmlSet->AddKeyWords( mol::bstr(vbsKeyWords) );
 	htmlSet->AddKeyWords( mol::bstr(phpKeyWords) );
-	collection_.Insert( mol::variant(SCINTILLA_SYNTAX_HTML), mol::variant((IScintillAxStyleSet*)htmlSet) );
+	collection_.push_back(  mol::variant((IScintillAxStyleSet*)htmlSet) );
 	((IScintillAxStyleSet*)htmlSet)->Release();
 
 	// SCLEX_CSS
@@ -631,7 +627,7 @@ HRESULT __stdcall AxStyleSets::InitNew()
 	make_set(SCLEX_CSS,cssStyles,sizeof(cssStyles)/sizeof(*(cssStyles)),&cssSet);
 	cssSet->AddKeyWords( mol::bstr(css1Keywords) );
 	cssSet->AddKeyWords( mol::bstr(css2Keywords) );
-	collection_.Insert( mol::variant(SCINTILLA_SYNTAX_CSS), mol::variant((IScintillAxStyleSet*)cssSet) );
+	collection_.push_back(  mol::variant((IScintillAxStyleSet*)cssSet) );
 	((IScintillAxStyleSet*)cssSet)->Release();
 
 
@@ -660,20 +656,17 @@ AxStyleSet::Instance* AxStyleSet::CreateInstance(long id)
 
 HRESULT __stdcall  AxStyleSet::_NewEnum(IEnumVARIANT** newEnum)
 {
-	return collection_._NewEnum(newEnum);
+	mol::punk<mol::com_obj<mol::enum_variant> > ev = new mol::com_obj<mol::enum_variant>;
+	for ( std::vector<mol::variant>::iterator it = collection_.begin(); it != collection_.end(); it++)
+	{
+		ev->add((*it));
+	}
+	return ev->QueryInterface(IID_IEnumVARIANT,(void**)newEnum);
 }
 
 HRESULT __stdcall  AxStyleSet::get_Count( long* cnt)
 {
-	mol::variant v;
-	HRESULT hr = collection_.Count(&v);
-	if ( hr != S_OK )
-		return hr;
-
-	if (!cnt)
-		return E_INVALIDARG;
-
-	*cnt = v.lVal;
+	*cnt = collection_.size();
 	return S_OK;
 }
 
@@ -684,12 +677,18 @@ HRESULT __stdcall  AxStyleSet::Item( VARIANT index, IScintillAxStyle** item)
 		return E_INVALIDARG;
 
 	*item = 0;
-	mol::variant v;
-	HRESULT hr = collection_.Item(index,&v);
-	if ( hr != S_OK || v.vt != VT_DISPATCH )
-		return hr;
+	mol::variant v(index);
+	v.changeType(VT_I4);
 
-	return v.pdispVal->QueryInterface(IID_IScintillAxStyle, (void**)item);
+	long i = v.lVal;
+	if ( i < 0 || i >= collection_.size() ) {
+		return E_INVALIDARG;
+	}
+
+	if ( collection_[i].vt != VT_DISPATCH || !collection_[i].pdispVal )
+		return E_FAIL;
+
+	return collection_[i].pdispVal->QueryInterface(IID_IScintillAxStyle, (void**)item);
 }
 
 
@@ -707,14 +706,7 @@ HRESULT __stdcall AxStyleSet::CountKeyWords(long* cnt)
 	if (!cnt)
 		return E_INVALIDARG;
 
-	*cnt = 0;
-
-	mol::variant v;
-	HRESULT hr = keyWords_.Count(&v);
-	if (hr != S_OK )
-		return hr;
-
-	*cnt = v.lVal;
+	*cnt = keyWords_.size();
 	return S_OK;
 }
 
@@ -725,19 +717,19 @@ HRESULT __stdcall AxStyleSet::GetKeyWord(long index, BSTR* words)
 
 	*words = 0;
 
-	mol::variant v;
-	HRESULT hr = keyWords_.Item(mol::variant(index),&v);
-	if (hr != S_OK )
-		return hr;
+	if (index <0 || index >= keyWords_.size())
+	{
+		return E_INVALIDARG;
+	}
 
-	*words = ::SysAllocString(v.bstrVal);
+	*words = ::SysAllocString(keyWords_[index].bstrVal);
 	return S_OK;
 }
 
 
 HRESULT __stdcall AxStyleSet::AddKeyWords( BSTR words)
 {
-	keyWords_.Add(mol::variant(words));
+	keyWords_.push_back(mol::variant(words));
 	return S_OK;
 }
 
@@ -758,7 +750,7 @@ HRESULT __stdcall AxStyleSet::Load( LPSTREAM pStm)
 			}
 			long id = 0;
 			style->get_Id(&id);
-			collection_.Insert(mol::variant(id),mol::variant(style));
+			collection_.push_back(mol::variant(style));
 		}
 	}
 
@@ -772,7 +764,7 @@ HRESULT __stdcall AxStyleSet::Load( LPSTREAM pStm)
 			pStm >> mol::property(keywords);
 			if ( keywords.bstr_ )
 			{
-				keyWords_.Add(mol::variant(keywords));
+				keyWords_.push_back(mol::variant(keywords));
 			}
 		}
 	}
@@ -781,21 +773,16 @@ HRESULT __stdcall AxStyleSet::Load( LPSTREAM pStm)
 
 HRESULT __stdcall AxStyleSet::Save( LPSTREAM pStm,BOOL fClearDirty)
 {
-	mol::variant v;
-	HRESULT hr = collection_.Count(&v);
-	if(hr != S_OK)
-		return hr;
-
-	long cnt = v.lVal;
+	long cnt = collection_.size();
 	pStm << mol::property(&cnt);
 
 	for ( long i = 0; i < cnt; i++)
 	{
-		mol::variant item;
-		hr = collection_.Item(mol::variant(i),&item);
-		if(hr ==S_OK && item.vt == VT_DISPATCH)
+		mol::variant item(collection_[i]);
+		//hr = collection_.Item(mol::variant(i),&item);
+		if( collection_[i].vt == VT_DISPATCH)
 		{
-			mol::punk<IPersistStream> ps(item.pdispVal);
+			mol::punk<IPersistStream> ps(collection_[i].pdispVal);
 			if(ps)
 			{
 				ps->Save(pStm,fClearDirty);
@@ -803,19 +790,19 @@ HRESULT __stdcall AxStyleSet::Save( LPSTREAM pStm,BOOL fClearDirty)
 		}
 	}
 
-	hr = keyWords_.Count(&v);
-	if(hr != S_OK)
-		return hr;
+	//hr = keyWords_.Count(&v);
+	//if(hr != S_OK)
+	//	return hr;
 
-	cnt = v.lVal;
+	cnt = keyWords_.size();
 	pStm << mol::property(&cnt);
 	for ( long i = 0; i < cnt; i++)
 	{
-		mol::variant item;
-		hr = keyWords_.Item(mol::variant(i),&item);
-		if(hr ==S_OK && item.vt == VT_BSTR)
+//		mol::variant item(keyWords_[i]);
+		//hr = keyWords_.Item(mol::variant(i),&item);
+		if( keyWords_[i].vt == VT_BSTR)
 		{
-			pStm << mol::property(mol::bstr(item.bstrVal));
+			pStm << mol::property(mol::bstr(keyWords_[i].bstrVal));
 		}
 	}
 	return S_OK;

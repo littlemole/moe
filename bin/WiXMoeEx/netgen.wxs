@@ -7,7 +7,7 @@
     </Fragment>
     <Fragment>
         <ComponentGroup Id="NetCompGroup">
-            <Component Id="cmp489923D95EA706FD6366AA088F63CA3C" Directory="MOEPATH" Guid="{AF6A2CFC-58E2-4B22-90B3-5F01C5A7702D}">
+            <Component Id="cmp489923D95EA706FD6366AA088F63CA3C" Directory="MOEPATH" Guid="{B2DF7205-90BD-4070-B91F-8890EE8E23C5}">
                 <Class Id="{F751B363-9E23-4DA7-B18C-B835AE59DF5B}" Context="InprocServer32" Description="org.oha7.dotnet.Net" ThreadingModel="both" ForeignServer="mscoree.dll">
                     <ProgId Id="org.oha7.dotnet.Net" Description="org.oha7.dotnet.Net" />
                 </Class>
@@ -22,25 +22,25 @@
                 <RegistryValue Root="HKCR" Key="CLSID\{F751B363-9E23-4DA7-B18C-B835AE59DF5B}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
                 <RegistryValue Root="HKCR" Key="CLSID\{F751B363-9E23-4DA7-B18C-B835AE59DF5B}\InprocServer32" Name="CodeBase" Value="file:///[#filA3CB1D1FD5A1969529631BABB1A4862D]" Type="string" Action="write" />
             </Component>
-            <Component Id="cmpD42D2D4D7B0B7634460040662BE4ABC6" Directory="MOEPATH" Guid="{E4BCDA42-711C-48EE-918A-B729ED8806F3}">
+            <Component Id="cmpD42D2D4D7B0B7634460040662BE4ABC6" Directory="MOEPATH" Guid="{88262838-129A-4EE4-955A-F9143346C316}">
                 <File Id="fil62EDD547325C1C8F072DEEF6A74DD096" KeyPath="yes" Source="$(var.SourceDir)\net.exe" />
             </Component>
-            <Component Id="cmpAF3A901EF433B4E22F95D8D2BB545BE7" Directory="MOEPATH" Guid="{FDAF8338-A08C-4BB1-A425-3468806485C3}">
+            <Component Id="cmpAF3A901EF433B4E22F95D8D2BB545BE7" Directory="MOEPATH" Guid="{9A447A62-822F-4B44-8C3B-1E9EB30C72B4}">
                 <File Id="fil2EFEC0363883F570FA24757F7475563C" KeyPath="yes" Source="$(var.SourceDir)\net.reg" />
             </Component>
-            <Component Id="cmpFFCD8C3A9E51AAA5236F445AFE7031CF" Directory="dirC18B968BB933C4A2481E6C1C05D34DC3" Guid="{B7F97AA3-7751-41E0-A07F-51C3B7CE89DA}">
+            <Component Id="cmpFFCD8C3A9E51AAA5236F445AFE7031CF" Directory="dirC18B968BB933C4A2481E6C1C05D34DC3" Guid="{92B04D45-60DA-4D2A-9A3A-19E7A783430A}">
                 <File Id="filE92B758A34859C0C6A4C68CB69A9808A" KeyPath="yes" Source="$(var.SourceDir)\js\net\testNet.js" />
             </Component>
-            <Component Id="cmp780DB883ABCA4BC8E06E037DC0302929" Directory="dirC18B968BB933C4A2481E6C1C05D34DC3" Guid="{F50A831B-4E53-4296-993E-7738233208D8}">
+            <Component Id="cmp780DB883ABCA4BC8E06E037DC0302929" Directory="dirC18B968BB933C4A2481E6C1C05D34DC3" Guid="{FC16934D-3F0E-440F-AF1B-4F10EB95FADA}">
                 <File Id="fil9D846B829756209C453F227A374543B5" KeyPath="yes" Source="$(var.SourceDir)\js\net\testNet2.js" />
             </Component>
-            <Component Id="cmp7E94D99239E06CECD1AE7BEB5CF85CDA" Directory="dirC18B968BB933C4A2481E6C1C05D34DC3" Guid="{DB8B7E85-51B1-4145-9ACE-BB43F52BC39F}">
+            <Component Id="cmp7E94D99239E06CECD1AE7BEB5CF85CDA" Directory="dirC18B968BB933C4A2481E6C1C05D34DC3" Guid="{69C2BAA3-AE3C-4D6C-9078-5FB52CB77813}">
                 <File Id="fil41812533FFDA5B426C24F3E3847B130A" KeyPath="yes" Source="$(var.SourceDir)\js\net\testNet3.js" />
             </Component>
-            <Component Id="cmpEBDA003C95CC0CE00647727601AB5AA1" Directory="dirC18B968BB933C4A2481E6C1C05D34DC3" Guid="{E8743918-2EFB-478F-8685-3D9F9960B9CE}">
+            <Component Id="cmpEBDA003C95CC0CE00647727601AB5AA1" Directory="dirC18B968BB933C4A2481E6C1C05D34DC3" Guid="{5DE5CD93-4A28-4035-B19A-6CB85B3F60EA}">
                 <File Id="fil67D27691E115A6207E27262CA3178952" KeyPath="yes" Source="$(var.SourceDir)\js\net\testNet4.js" />
             </Component>
-            <Component Id="cmp0E258149A117E012865A3C93F18ACC5D" Directory="dirC18B968BB933C4A2481E6C1C05D34DC3" Guid="{A4DEA496-3F40-4141-8786-A876FDD251F8}">
+            <Component Id="cmp0E258149A117E012865A3C93F18ACC5D" Directory="dirC18B968BB933C4A2481E6C1C05D34DC3" Guid="{A7B61E2C-6367-4F64-BF5F-9917CFF62939}">
                 <File Id="fil83B16DB669C4AB2EEF1D36D2D6052E98" KeyPath="yes" Source="$(var.SourceDir)\js\net\testNet5.js" />
             </Component>
         </ComponentGroup>

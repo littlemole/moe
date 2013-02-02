@@ -1130,7 +1130,8 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 	if ( showRibbon ) 
 		initRibbon(pStgLoad);
 
-	/* -- reset styles to default 
+	// -- reset styles to default 
+	/*
 	mol::punk<IPersistStreamInit> psi(styles());
 	if(psi)
 	{

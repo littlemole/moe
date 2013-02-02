@@ -2,195 +2,195 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <ComponentGroup Id="MoeRegProtoCompGroup">
-            <Component Id="cmpBFED035AF1566A071128B7D40CF1F357" Directory="TARGETDIR" Guid="{648C3F54-DCA8-4171-8968-B16ECB11B45B}" KeyPath="yes">
+            <Component Id="cmpBFED035AF1566A071128B7D40CF1F357" Directory="TARGETDIR" Guid="{B3EBF40E-1DC5-4AAD-B7FB-8317190DB0A6}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe" Root="HKLM">
                     <RegistryValue Value="URL: Moe Protocol" Type="string" />
                     <RegistryValue Name="URL Protocol" Value="" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp000B186FCC28BDBC9D5939CF36E09963" Directory="TARGETDIR" Guid="{EDA9DCB0-0E40-46CA-8D8A-3B9F370BE090}" KeyPath="yes">
+            <Component Id="cmp000B186FCC28BDBC9D5939CF36E09963" Directory="TARGETDIR" Guid="{57A1ED31-943F-40E9-8824-C05FCD0C48C7}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe\shell" Root="HKLM" />
             </Component>
-            <Component Id="cmp0E1B2D6DEE33F03E554FC50EE6AFDE0B" Directory="TARGETDIR" Guid="{0B855E38-7FAB-4F7D-8175-AF15FCF1EA26}" KeyPath="yes">
+            <Component Id="cmp0E1B2D6DEE33F03E554FC50EE6AFDE0B" Directory="TARGETDIR" Guid="{7D13E6DD-5E40-4857-B4DC-8956AD411DD0}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe\shell\open" Root="HKLM" />
             </Component>
-            <Component Id="cmp91D55EA17FF7C5DDC024ADE13696B313" Directory="TARGETDIR" Guid="{FA897C68-7C3F-47F9-8BD4-4D9D2DFCD56D}" KeyPath="yes">
+            <Component Id="cmp91D55EA17FF7C5DDC024ADE13696B313" Directory="TARGETDIR" Guid="{E88F2270-CA20-4FAB-88D3-D76C90E025FB}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe\shell\open\command" Root="HKLM">
                     <RegistryValue Value="&quot;C:\Program Files\mol\moe\moe.exe&quot; &quot;%1&quot;" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp9A181B46ED34A85AD4901D3055EF5D00" Directory="TARGETDIR" Guid="{37410AC1-47A9-4AA3-B391-E40487080035}" KeyPath="yes">
+            <Component Id="cmp9A181B46ED34A85AD4901D3055EF5D00" Directory="TARGETDIR" Guid="{9DD075E6-BFCE-4B4C-8F00-68A215685BE3}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-bin" Root="HKLM">
                     <RegistryValue Value="URL: Moe Binary Protocol" Type="string" />
                     <RegistryValue Name="URL Protocol" Value="" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp2EB1A265B01EA5F990DBE24E81984D7C" Directory="TARGETDIR" Guid="{15D84B40-34FF-4EBF-8378-9E46EE2D051B}" KeyPath="yes">
+            <Component Id="cmp2EB1A265B01EA5F990DBE24E81984D7C" Directory="TARGETDIR" Guid="{61232757-664D-4359-B6C8-219339AD09AC}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-bin\DefaultIcon" Root="HKLM">
                     <RegistryValue Value="moe.exe" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp8E7D7191F8137CD6944082D270EC5274" Directory="TARGETDIR" Guid="{B181DC1F-64F8-41B9-8AF5-8EA7C3E94DE8}" KeyPath="yes">
+            <Component Id="cmp8E7D7191F8137CD6944082D270EC5274" Directory="TARGETDIR" Guid="{7CAEB347-6A78-4D85-B847-82BAC113E46E}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe-bin\shell" Root="HKLM" />
             </Component>
-            <Component Id="cmp2006F3EF6927980655A5EDB88F3A1441" Directory="TARGETDIR" Guid="{93C9BB68-2707-44C6-A561-4E4CB87DA534}" KeyPath="yes">
+            <Component Id="cmp2006F3EF6927980655A5EDB88F3A1441" Directory="TARGETDIR" Guid="{625625F8-71B7-43D2-905E-FAA9F8ABE1D6}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe-bin\shell\open" Root="HKLM" />
             </Component>
-            <Component Id="cmpD73A1C7BC2BBD6FCD602F42CB08836E3" Directory="TARGETDIR" Guid="{2563AF16-47BA-4247-8AA0-5D0905C84211}" KeyPath="yes">
+            <Component Id="cmpD73A1C7BC2BBD6FCD602F42CB08836E3" Directory="TARGETDIR" Guid="{0D56FAD6-6669-4097-84C0-D805DC7B0283}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-bin\shell\open\command" Root="HKLM">
                     <RegistryValue Value="&quot;C:\Program Files\mol\moe\moe.exe&quot; &quot;%1&quot;" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmpBC92254810B9398CA0B1C0198BA9ED46" Directory="TARGETDIR" Guid="{89C40938-E180-4F98-A8F3-776B053A50B6}" KeyPath="yes">
+            <Component Id="cmpBC92254810B9398CA0B1C0198BA9ED46" Directory="TARGETDIR" Guid="{BAF0AB43-2984-4BE5-8770-0611FD44A539}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-html" Root="HKLM">
                     <RegistryValue Value="URL: Moe HTML Protocol" Type="string" />
                     <RegistryValue Name="URL Protocol" Value="" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp14570A8827851DEEFD54B773E3DB38F3" Directory="TARGETDIR" Guid="{425321FE-6F6B-4F9F-B9EE-D0DF2F40D9ED}" KeyPath="yes">
+            <Component Id="cmp14570A8827851DEEFD54B773E3DB38F3" Directory="TARGETDIR" Guid="{D419BD31-2666-4FB2-B3D0-5CCEFF29FC5C}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-html\DefaultIcon" Root="HKLM">
                     <RegistryValue Value="moe.exe" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmpABA324BE394E244CA48D86A0ADD28E42" Directory="TARGETDIR" Guid="{48D4F51D-C604-4663-80CA-D80D1817700D}" KeyPath="yes">
+            <Component Id="cmpABA324BE394E244CA48D86A0ADD28E42" Directory="TARGETDIR" Guid="{45591B78-B539-47CA-907D-3DC079394414}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe-html\shell" Root="HKLM" />
             </Component>
-            <Component Id="cmpC59132B623894BC9F01A4B052781FCA0" Directory="TARGETDIR" Guid="{C079925F-1D4F-418F-ADF6-7BDE8623BED1}" KeyPath="yes">
+            <Component Id="cmpC59132B623894BC9F01A4B052781FCA0" Directory="TARGETDIR" Guid="{8A09B655-302F-4F06-8DE1-F11E97286B12}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe-html\shell\open" Root="HKLM" />
             </Component>
-            <Component Id="cmpDA34EE534C0126890B32A24A2893383A" Directory="TARGETDIR" Guid="{C0CCDA93-E12A-459F-8A9F-68ED78251E9D}" KeyPath="yes">
+            <Component Id="cmpDA34EE534C0126890B32A24A2893383A" Directory="TARGETDIR" Guid="{901CB301-F430-41C6-9E1C-9159AF9A5F94}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-html\shell\open\command" Root="HKLM">
                     <RegistryValue Value="&quot;C:\Program Files\mol\moe\moe.exe&quot; &quot;%1&quot;" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmpB37BF7C773D658A2BDC5D42F4E5387DB" Directory="TARGETDIR" Guid="{6B084A58-EA4C-4FFC-97C9-8252887A97D3}" KeyPath="yes">
+            <Component Id="cmpB37BF7C773D658A2BDC5D42F4E5387DB" Directory="TARGETDIR" Guid="{941D0092-6480-44FC-B3FC-1ECC47585AED}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-dir" Root="HKLM">
                     <RegistryValue Value="URL: Moe Dirview Protocol" Type="string" />
                     <RegistryValue Name="URL Protocol" Value="" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp0E9999668D1D0FFE99501B239E7146E0" Directory="TARGETDIR" Guid="{F4DD8410-C9CE-48D0-8734-CB59CA5DC6AE}" KeyPath="yes">
+            <Component Id="cmp0E9999668D1D0FFE99501B239E7146E0" Directory="TARGETDIR" Guid="{D49E6876-C0B7-43A2-8418-57CA71639B6D}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-dir\DefaultIcon" Root="HKLM">
                     <RegistryValue Value="moe.exe" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmpBC078BBE9EBA28E07DC64361BFA14D06" Directory="TARGETDIR" Guid="{70B06255-C788-48CC-9A2F-E116666A6C7B}" KeyPath="yes">
+            <Component Id="cmpBC078BBE9EBA28E07DC64361BFA14D06" Directory="TARGETDIR" Guid="{5E0D7C59-DD5E-479A-BC50-8727840FA996}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe-dir\shell" Root="HKLM" />
             </Component>
-            <Component Id="cmpA65B8341A7071BC986040A801B5F18EA" Directory="TARGETDIR" Guid="{03BB8BB6-CC34-4B9D-9814-C8C5D9A02D13}" KeyPath="yes">
+            <Component Id="cmpA65B8341A7071BC986040A801B5F18EA" Directory="TARGETDIR" Guid="{C17949CD-360C-4268-B267-CDEA366954B5}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe-dir\shell\open" Root="HKLM" />
             </Component>
-            <Component Id="cmpF06F32BBF444301A6598E813A3D8977A" Directory="TARGETDIR" Guid="{5476AD89-9D78-4391-9508-34F4749B2388}" KeyPath="yes">
+            <Component Id="cmpF06F32BBF444301A6598E813A3D8977A" Directory="TARGETDIR" Guid="{C17EB05D-0094-4577-9581-6E1F8C8D42CA}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-dir\shell\open\command" Root="HKLM">
                     <RegistryValue Value="&quot;C:\Program Files\mol\moe\moe.exe&quot; &quot;%1&quot;" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp5F548CA3D3E06DCBCA60A19A041ABC32" Directory="TARGETDIR" Guid="{EACDC96A-BAD7-4CF3-9D93-E91373C5EFEC}" KeyPath="yes">
+            <Component Id="cmp5F548CA3D3E06DCBCA60A19A041ABC32" Directory="TARGETDIR" Guid="{6CFEC574-2D0C-4F87-9EC0-60E30DAD1CAA}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-hex" Root="HKLM">
                     <RegistryValue Value="URL: Moe Hexview Protocol" Type="string" />
                     <RegistryValue Name="URL Protocol" Value="" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp0B1CFDD01DF2888048D3EAFDC7DA3807" Directory="TARGETDIR" Guid="{564DACE5-DAE4-41C3-8DD7-E6BCC391FB05}" KeyPath="yes">
+            <Component Id="cmp0B1CFDD01DF2888048D3EAFDC7DA3807" Directory="TARGETDIR" Guid="{5BA207E9-F3A1-44AB-BA7D-21EA56BC1225}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-hex\DefaultIcon" Root="HKLM">
                     <RegistryValue Value="moe.exe" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp4ED5277E9873863ECE5E9762EA09BF7A" Directory="TARGETDIR" Guid="{B0BD6818-CB04-4500-8906-B8EFA8AEC055}" KeyPath="yes">
+            <Component Id="cmp4ED5277E9873863ECE5E9762EA09BF7A" Directory="TARGETDIR" Guid="{20B6EC71-210A-446D-8675-EB853472E7F7}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe-hex\shell" Root="HKLM" />
             </Component>
-            <Component Id="cmpD3B2BC80FED7B51D33B27C2E4BB04D00" Directory="TARGETDIR" Guid="{B9030553-E9B5-4AFF-AE9D-BCB00A212444}" KeyPath="yes">
+            <Component Id="cmpD3B2BC80FED7B51D33B27C2E4BB04D00" Directory="TARGETDIR" Guid="{810668EC-EE3D-465F-89A8-875FB461A31E}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe-hex\shell\open" Root="HKLM" />
             </Component>
-            <Component Id="cmpDF20792EBC0AF1490137280E3A2EDDCD" Directory="TARGETDIR" Guid="{BD4B61EF-C196-4E2A-9E7E-65E3A12229E6}" KeyPath="yes">
+            <Component Id="cmpDF20792EBC0AF1490137280E3A2EDDCD" Directory="TARGETDIR" Guid="{93C459FB-7E6C-4A81-A842-B5A3F433EBD7}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-hex\shell\open\command" Root="HKLM">
                     <RegistryValue Value="&quot;C:\Program Files\mol\moe\moe.exe&quot; &quot;%1&quot;" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp3D7F3C661940C71582F789C8CF3A093B" Directory="TARGETDIR" Guid="{D6BFE888-7FA9-4FBD-A364-91E69BCF6B52}" KeyPath="yes">
+            <Component Id="cmp3D7F3C661940C71582F789C8CF3A093B" Directory="TARGETDIR" Guid="{2DCCE847-FBE8-4BCA-AD4E-C5265BB76E32}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-open" Root="HKLM">
                     <RegistryValue Value="URL: Moe utf8 Protocol" Type="string" />
                     <RegistryValue Name="URL Protocol" Value="" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmpCE7459BCBB8BFA36D51528A84F66080F" Directory="TARGETDIR" Guid="{C703EFC8-8483-4ED8-A252-5D3B962FC328}" KeyPath="yes">
+            <Component Id="cmpCE7459BCBB8BFA36D51528A84F66080F" Directory="TARGETDIR" Guid="{70218BBB-B9A6-4DAE-918D-0AAD19FEDD48}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-open\DefaultIcon" Root="HKLM">
                     <RegistryValue Value="moe.exe" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp2DEC192D1E7CDC0A59DDF88921FE87B9" Directory="TARGETDIR" Guid="{A5A5715D-8473-4D16-9E3B-FA88E314CA2D}" KeyPath="yes">
+            <Component Id="cmp2DEC192D1E7CDC0A59DDF88921FE87B9" Directory="TARGETDIR" Guid="{298ACE62-AE36-41ED-AAC9-57C325941515}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe-open\shell" Root="HKLM" />
             </Component>
-            <Component Id="cmpA2E3DF2ED5C06077B428D3D45DFE1046" Directory="TARGETDIR" Guid="{790B4FB2-5F05-4BF6-B313-98D0A619B751}" KeyPath="yes">
+            <Component Id="cmpA2E3DF2ED5C06077B428D3D45DFE1046" Directory="TARGETDIR" Guid="{B7F057A0-B24B-48EE-B153-4B49016BD4BD}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe-open\shell\open" Root="HKLM" />
             </Component>
-            <Component Id="cmpE11E94AE1FF5356E50FF6A956FE99E27" Directory="TARGETDIR" Guid="{A132A010-1824-4614-A755-839FAE190280}" KeyPath="yes">
+            <Component Id="cmpE11E94AE1FF5356E50FF6A956FE99E27" Directory="TARGETDIR" Guid="{7040DB02-4C54-4BE8-8759-D2B667778723}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-open\shell\open\command" Root="HKLM">
                     <RegistryValue Value="&quot;C:\Program Files\mol\moe\moe.exe&quot; &quot;%1&quot;" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmpB71175730433875934C2D1883A18D965" Directory="TARGETDIR" Guid="{55D96F28-4E6D-4136-ACAC-F032C1164055}" KeyPath="yes">
+            <Component Id="cmpB71175730433875934C2D1883A18D965" Directory="TARGETDIR" Guid="{D2C742BF-DF48-46AD-AD06-049F76EDC686}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-rtf" Root="HKLM">
                     <RegistryValue Value="URL: Moe rtf Protocol" Type="string" />
                     <RegistryValue Name="URL Protocol" Value="" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp92903B185085E4A44AE5F9A4E03DDA4A" Directory="TARGETDIR" Guid="{887B15B6-8621-4F23-972C-825D9F0D1CA2}" KeyPath="yes">
+            <Component Id="cmp92903B185085E4A44AE5F9A4E03DDA4A" Directory="TARGETDIR" Guid="{2B9B331B-D557-4798-AC48-FD104A647222}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-rtf\DefaultIcon" Root="HKLM">
                     <RegistryValue Value="moe.exe" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp6C81DA51C97D218589EA4102CE6FE2C1" Directory="TARGETDIR" Guid="{2B287B28-5B05-4C27-BC99-C9B1B78FAB16}" KeyPath="yes">
+            <Component Id="cmp6C81DA51C97D218589EA4102CE6FE2C1" Directory="TARGETDIR" Guid="{A32EC877-1635-4F9E-BC48-14C12109B504}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe-rtf\shell" Root="HKLM" />
             </Component>
-            <Component Id="cmp2A7995A1309FDA145667A011E63DA6EE" Directory="TARGETDIR" Guid="{DB91A6B7-5E5D-414F-9BD5-3BDFACE2DDBC}" KeyPath="yes">
+            <Component Id="cmp2A7995A1309FDA145667A011E63DA6EE" Directory="TARGETDIR" Guid="{5D48B4BE-1F14-460A-9275-B6474322426C}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe-rtf\shell\open" Root="HKLM" />
             </Component>
-            <Component Id="cmpB09361564513CA6E4F26610CA0C7D2A2" Directory="TARGETDIR" Guid="{52116557-FDAC-4FC4-BD27-240AAB822EE8}" KeyPath="yes">
+            <Component Id="cmpB09361564513CA6E4F26610CA0C7D2A2" Directory="TARGETDIR" Guid="{EC0463A9-CF41-4651-BD76-6325906BA879}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-rtf\shell\open\command" Root="HKLM">
                     <RegistryValue Value="&quot;C:\Program Files\mol\moe\moe.exe&quot; &quot;%1&quot;" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp06D6F1DA1E2875ADFD5F66C421EBB9E3" Directory="TARGETDIR" Guid="{55D1A3BB-0A9D-4170-A7A2-E6160DF5EB12}" KeyPath="yes">
+            <Component Id="cmp06D6F1DA1E2875ADFD5F66C421EBB9E3" Directory="TARGETDIR" Guid="{1DDA45B6-EF5C-4F70-AA8A-0650894FF3A1}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-tail" Root="HKLM">
                     <RegistryValue Value="URL: Moe tail -f Protocol" Type="string" />
                     <RegistryValue Name="URL Protocol" Value="" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmpFB83E3D5905C0A85ED5BE2959168B907" Directory="TARGETDIR" Guid="{FAC50078-F6C0-42D7-A6E7-568850F57271}" KeyPath="yes">
+            <Component Id="cmpFB83E3D5905C0A85ED5BE2959168B907" Directory="TARGETDIR" Guid="{9CFE03CC-3D78-4585-AF8C-082739B7AFBF}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-tail\DefaultIcon" Root="HKLM">
                     <RegistryValue Value="moe.exe" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmp7100C4A62F168D5DD8524E0E9CDA3C0F" Directory="TARGETDIR" Guid="{120B4F59-5F38-4968-8D35-B8AFDB88120A}" KeyPath="yes">
+            <Component Id="cmp7100C4A62F168D5DD8524E0E9CDA3C0F" Directory="TARGETDIR" Guid="{AD5C4B1C-25EB-488E-A1FC-1DBF509732B6}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe-tail\shell" Root="HKLM" />
             </Component>
-            <Component Id="cmpABBDCCED5BE53DF28B2EC81EA4ECE6F1" Directory="TARGETDIR" Guid="{A932C7E9-DBF3-4306-B0D7-BA146FC85A26}" KeyPath="yes">
+            <Component Id="cmpABBDCCED5BE53DF28B2EC81EA4ECE6F1" Directory="TARGETDIR" Guid="{714388EF-4D54-4694-A3A4-DF234AAB6A53}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe-tail\shell\open" Root="HKLM" />
             </Component>
-            <Component Id="cmp8242CCDD7E9A4FFF7C3A14F63756CE1C" Directory="TARGETDIR" Guid="{91A29609-7484-4A37-AD0D-D0DE4B90102E}" KeyPath="yes">
+            <Component Id="cmp8242CCDD7E9A4FFF7C3A14F63756CE1C" Directory="TARGETDIR" Guid="{71623A9E-FFAF-43E5-8E5E-34E23D8D78C0}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-tail\shell\open\command" Root="HKLM">
                     <RegistryValue Value="&quot;C:\Program Files\mol\moe\moe.exe&quot; &quot;%1&quot;" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmpB597B7C31CAAF8D2CCC82C95062409CF" Directory="TARGETDIR" Guid="{43651E70-6C4C-4DD2-8284-D2E1ECC85E34}" KeyPath="yes">
+            <Component Id="cmpB597B7C31CAAF8D2CCC82C95062409CF" Directory="TARGETDIR" Guid="{22AB62FD-DF79-46E1-A4E6-4CB80D5606B9}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-ssh" Root="HKLM">
                     <RegistryValue Value="URL: Moe ssh Protocol" Type="string" />
                     <RegistryValue Name="URL Protocol" Value="" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmpCC641BC2CB210F8ABA37351B37838136" Directory="TARGETDIR" Guid="{71AD310B-7A3C-42EB-86C2-091EC8F9EC51}" KeyPath="yes">
+            <Component Id="cmpCC641BC2CB210F8ABA37351B37838136" Directory="TARGETDIR" Guid="{F9543C45-7FE6-4ABC-A9B2-BFE5364BD21F}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-ssh\DefaultIcon" Root="HKLM">
                     <RegistryValue Value="moe.exe" Type="string" />
                 </RegistryKey>
             </Component>
-            <Component Id="cmpEAE1EC20E7B20FD09F99D7DD794BEA7A" Directory="TARGETDIR" Guid="{7B0B7772-4650-4B52-AD29-33B053830E91}" KeyPath="yes">
+            <Component Id="cmpEAE1EC20E7B20FD09F99D7DD794BEA7A" Directory="TARGETDIR" Guid="{7AAF020F-A8E4-49C4-9C56-DD9DDB70FADA}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe-ssh\shell" Root="HKLM" />
             </Component>
-            <Component Id="cmp271AD5F9C0D5FDD543F6056623EEEE25" Directory="TARGETDIR" Guid="{840F034D-F7F9-4DF4-9346-CCD46F4648F7}" KeyPath="yes">
+            <Component Id="cmp271AD5F9C0D5FDD543F6056623EEEE25" Directory="TARGETDIR" Guid="{6D93D400-026C-4EE6-84E7-7858F9BDEF67}" KeyPath="yes">
                 <RegistryKey Action="createAndRemoveOnUninstall" Key="Software\Classes\moe-ssh\shell\open" Root="HKLM" />
             </Component>
-            <Component Id="cmpB942DC0C45D416E3E66117CB84000DCB" Directory="TARGETDIR" Guid="{304B0604-3593-418A-8E35-054A049D62A1}" KeyPath="yes">
+            <Component Id="cmpB942DC0C45D416E3E66117CB84000DCB" Directory="TARGETDIR" Guid="{571D8F9C-0DE8-405C-B595-2A03E1193C4C}" KeyPath="yes">
                 <RegistryKey Key="Software\Classes\moe-ssh\shell\open\command" Root="HKLM">
                     <RegistryValue Value="&quot;C:\Program Files\mol\moe\moe.exe&quot; &quot;%1&quot;" Type="string" />
                 </RegistryKey>

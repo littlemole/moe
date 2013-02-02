@@ -53,7 +53,8 @@ public:
 	virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER* ui ) ;
 	virtual HRESULT __stdcall InitNew();
 
-	mol::COMCollection collection_;
+	//mol::COMCollection collection_;
+	std::vector<mol::variant> collection_;
 };
 
 
@@ -91,8 +92,11 @@ public:
 	virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER* ui ) ;
 	virtual HRESULT __stdcall InitNew();
 
-	mol::COMCollection collection_;
-	mol::COMCollection keyWords_;
+//	mol::COMCollection collection_;
+	std::vector<mol::variant> collection_;
+	std::vector<mol::variant> keyWords_;
+
+	//mol::COMCollection keyWords_;
 	long id_;
 };
 
