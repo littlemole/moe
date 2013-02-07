@@ -1083,6 +1083,7 @@ public:
 
 /////////////////////////////////////////////////////////////////////
 
+
 template<class T>
 class PersistFile : public IPersistFile
 {

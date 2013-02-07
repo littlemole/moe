@@ -952,6 +952,16 @@ private:
 	mol::Mutex									mutex_;
 };
 
+template<class T>
+HRESULT make_enumVariant( std::vector<T>& v, IEnumVARIANT** newEnum)
+{
+	mol::punk<mol::com_obj<mol::enum_variant> > ev = new mol::com_obj<mol::enum_variant>;
+	for ( std::vector<T>::iterator it = v.begin(); it != v.end(); it++)
+	{
+		ev->add(mol::variant(*it));
+	}
+	return ev.queryInterface(newEnum);
+}
 
 class COMCollection
 {

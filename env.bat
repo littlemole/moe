@@ -31,5 +31,6 @@ set Platform=Win32
 
 echo Configuration: %Configuration%
 echo Platform: %Platform%
+echo Toolset: %PlatformToolset%
 echo %PLAT%
 exit /B

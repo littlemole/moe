@@ -15,6 +15,19 @@
     <Midl Include="setting.idl" />
   </ItemGroup>
 
+  <ItemDefinitionGroup>
+    <ClCompile>
+	  <AdditionalIncludeDirectories>..\..\3dParty\expat\Source\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+	</ClCompile>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">;%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">;%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">;%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">;%(AdditionalDependencies)</AdditionalDependencies>
+      <PreprocessorDefinitions>STATIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>  
+    </Link>
+  </ItemDefinitionGroup>
+
   <ItemGroup>
     <ClCompile Include="set.cpp" />
     <ClCompile Include="setting.cpp" />

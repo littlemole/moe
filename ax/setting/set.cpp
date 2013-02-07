@@ -5,8 +5,8 @@
 #include "ole/typelib.h"
 #include "util/str.h"
 #include <sstream>
-
-
+#include <xml/xml.h>
+#include "win/file.h"
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -266,6 +266,10 @@ HRESULT __stdcall Setting::KeyName(BSTR* keyname)
 	if (!keyname)
 		return E_POINTER;
 
+	*keyname = ::SysAllocString(key_);
+	return S_OK;
+
+	/*
 	if (!parent_)
 	{
 		std::wostringstream woss;
@@ -291,6 +295,7 @@ HRESULT __stdcall Setting::KeyName(BSTR* keyname)
 		woss << L"[" << key_.bstr_ << L"]";
 	*keyname = ::SysAllocString(woss.str().c_str());
 	return S_OK;
+	*/
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -409,14 +414,75 @@ HRESULT __stdcall Setting::Clear()
 
 //////////////////////////////////////////////////////////////////////////////
 
+void readWalker(mol::Element* element, ISetting* parent)
+{
+	mol::NodeList* nodes = element->childNodes();
+	for ( int i = 0; i < nodes->length(); i++) 
+	{
+		mol::Node* node = nodes->item(i);
+		int type = node->nodeType() ;
+
+		if ( type == mol::Node::CDATA || type == mol::Node::TEXT ) {
+			std::string v = node->nodeValue();
+			parent->put_Value(mol::bstr(v));
+			continue;
+		}
+
+		if ( node->nodeType() != mol::Node::ELEMENT )
+			continue;
+
+		mol::Element* e = (mol::Element*)node;
+		std::string key = e->attr("key");
+
+		mol::punk<ISetting> set;
+
+		if ( e->hasChildNodes() )
+		{
+			HRESULT hr = parent->New( mol::bstr(key),mol::bstr(""),&set);
+			if ( hr == S_OK )
+			{
+				readWalker(e,set);
+			}
+		}
+	}
+}
+
 HRESULT __stdcall Setting::Load( BSTR filename)
 {
+	mol::filestream fs;
+	if (!fs.open(BSTR2ansi(filename))) 
+	{
+		return E_INVALIDARG;
+	}
+
+	std::string content = fs.readAll();
+	fs.close();
+
+	mol::XMLDocument xmlDoc;
+	if(!xmlDoc.parse(content)) 
+	{
+		return E_INVALIDARG;
+	}
+
+
+	if (!xmlDoc.documentElement()->hasChildNodes())
+	{
+		return S_OK;
+	}
+
+	this->setDirty(FALSE);
 	this->Clear();
+
+	mol::Element* root = (mol::Element*)xmlDoc.documentElement()->firstChild();
+	readWalker(root,this);
+	return S_OK;
+
 
 	std::string file = BSTR2ansi(filename);
     std::ifstream in(file.c_str());
     if (in)
     {
+		
         char bufKey[1024];
         while( in.getline(bufKey,1024) )
         {
@@ -461,7 +527,13 @@ HRESULT __stdcall Setting::Save( BSTR filename)
     std::ofstream ofs(file.c_str());
     if (ofs)
     {
-		saveWalker(this,ofs);
+		ofs << "<settings>\r\n";
+		for ( std::list<ISetting*>::iterator it = entries_.begin(); it != entries_.end(); it++)
+		{
+			
+			saveWalker((*it),ofs);
+		}
+		ofs << "</settings>\r\n";
 	}
 	this->setDirty(FALSE);
 	return S_OK;
@@ -723,13 +795,16 @@ void Setting::saveWalker(ISetting* set, std::ofstream& ofs )
 	long l;
 
 	hr = set->KeyName(&key);
-	ofs << key.tostring() << std::endl;
+	ofs << "<setting key='" << key.tostring() << "'>";
 
 	hr = set->Count(&l);
 	if ( l == 0 )
 	{
 		hr = set->get_Value(&val);
-		ofs << val.tostring() << std::endl;
+		ofs << "<![CDATA[";
+		ofs << val.tostring();
+		ofs << "]]>";
+		ofs << "</setting>" << std::endl;
 		return;
 	}
 	ofs << std::endl;
@@ -742,6 +817,7 @@ void Setting::saveWalker(ISetting* set, std::ofstream& ofs )
 				saveWalker(s,ofs);
 		}
 	}
+	ofs << "</setting>" << std::endl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -474,7 +474,7 @@ HRESULT __stdcall AxStyleSets::Load( LPSTREAM pStm)
 		for ( long i = 0; i < cnt; i++)
 		{
 			long id = 0;
-//			pStm >> mol::property(&id);
+			pStm >> mol::property(&id);
 
 			mol::punk<IScintillAxStyleSet> styleSet = AxStyleSet::CreateInstance(id);
 			mol::punk<IPersistStream> ps(styleSet);
@@ -502,14 +502,14 @@ HRESULT __stdcall AxStyleSets::Save( LPSTREAM pStm,BOOL fClearDirty)
 			mol::punk<IScintillAxStyleSet> styleSet(item.pdispVal);
 			if(styleSet)
 			{
-//				long id = 0;
-	//			hr = styleSet->get_Id(&id);
-		//		if (hr == S_OK )
+				long id = 0;
+				HRESULT hr = styleSet->get_Id(&id);
+				if (hr == S_OK )
 				{
 					mol::punk<IPersistStream> ps(styleSet);
 					if(ps)
 					{
-						//pStm << mol::property(&id);
+						pStm << mol::property(&id);
 						ps->Save(pStm,fClearDirty);
 					}
 				}
