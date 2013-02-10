@@ -1,4 +1,8 @@
 @echo off
+
+set PlatformTools=v110
+set UICC="C:\Program Files (x86)\Windows Kits\8.0\bin\x86\uicc.exe"
+
 set CONF=%1
 if %1!==! SET CONF=uni_debug
 
@@ -15,15 +19,11 @@ set CONFIG=/Debug
 
 
 :psdk
-call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\Tools\VsDevCmd.bat"
-pushd "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC"
-rem call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" %PLAT%
-call vcvarsall.bat amd64
-popd
+call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" %PLAT%
 
 set Configuration=%CONF%
 
-if "%PLAT%"=="/x86" goto x86
+if "%PLAT%"=="x86" goto x86
 set Platform=x64
 goto end
 
@@ -35,4 +35,5 @@ set Platform=Win32
 echo Configuration: %Configuration%
 echo Platform: %Platform%
 echo %PLAT%
+echo %PlatformTools%
 exit /B

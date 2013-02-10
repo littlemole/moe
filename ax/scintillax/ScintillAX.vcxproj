@@ -48,7 +48,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -128,7 +128,7 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">C:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">Midl</CustomBuildAfterTargets>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">D:\boost\boost_1_52_0;$(IncludePath)</IncludePath>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">Midl</CustomBuildAfterTargets>
@@ -174,7 +174,7 @@
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\uni_debug\win.lib;..\..\lib\src\ole\uni_debug\ole.lib;..\..\lib\src\util\uni_debug\util.lib;..\..\lib\src\thread\uni_debug\thread.lib;..\..\3dParty\pcre\uni_debug\pcre.lib;..\..\3dParty\scintilla\bin\static\debug\SciLexer.lib;..\..\\3dParty\scintilla\bin\static\debug\Scintilla.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Imm32.lib;Msimg32.lib;..\..\lib\src\xml\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\uni_debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\uni_debug\win.lib;..\..\lib\src\ole\uni_debug\ole.lib;..\..\lib\src\util\uni_debug\util.lib;..\..\lib\src\thread\uni_debug\thread.lib;..\..\3dParty\pcre\uni_debug\pcre.lib;..\..\3dParty\scintilla\bin\static\debug\SciLexer.lib;..\..\\3dParty\scintilla\bin\static\debug\Scintilla.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Imm32.lib;Msimg32.lib;Ws2_32.lib;Crypt32.lib;..\..\lib\src\xml\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\uni_debug\libexpatMT.lib;..\..\lib\src\tcp\uni_debug\tcp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>ScintillAx.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>

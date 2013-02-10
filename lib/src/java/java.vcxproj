@@ -31,7 +31,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -87,7 +87,7 @@
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">E:\java\jdk\include\win32;E:\java\jdk\include;D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">D:\java\jdk\include\win32;D:\java\jdk\include;$(IncludePath)</IncludePath>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">jre</TargetName>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">E:\java\jdk\include\win32;E:\java\jdk\include;$(IncludePath);$(VCInstallDir)atlmfc\include</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">C:\Java\glassfish\jdk7\include\win32;C:\Java\glassfish\jdk7\include;$(IncludePath);$(VCInstallDir)atlmfc\include</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">E:\java\jdk\include\win32;E:\java\jdk\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
@@ -198,6 +198,7 @@
   <ItemGroup>
     <Midl Include="java.idl">
       <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\include\java\%(Filename).h</HeaderFileName>
+      <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">..\..\include\java\%(Filename).h</HeaderFileName>
     </Midl>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

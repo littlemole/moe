@@ -780,8 +780,7 @@ HRESULT __stdcall COMCollection::Add( VARIANT var)
 	if (var.vt == VT_EMPTY )
 		return S_FALSE;
 
-	mol::variant v("");
-	variants_.push_back( std::make_pair( v, mol::variant(var) ) );
+	variants_.push_back( std::make_pair( mol::variant(""), mol::variant(var)) );
 
 	return S_OK;
 }

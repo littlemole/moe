@@ -150,8 +150,8 @@ clean:
 	-del $(IMPLIB)
 	-del *.obj
 	-del *.res
-	-del *.exp
+	-del debug\*.exp
 	-del *.exe
-	-del *.pdb
+	-del debug\*.pdb
 	-del *.manifest
 	-del foo.gz

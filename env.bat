@@ -7,6 +7,8 @@ if %2!==! set PLAT=/x86
 if "%CONF%"=="uni_debug" goto debug
 
 set PlatformToolset=v100
+set UICC="C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\UICC.exe"
+
 
 set CONFIG=/Release
 goto psdk
