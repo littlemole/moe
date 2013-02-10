@@ -32,6 +32,8 @@
    <echo>${env.Plat}</echo> 
    <echo>${confPath}</echo> 
 
+  <mkdir dir="xml"/>
+
   <exec executable="cscript.exe">
     <arg value="jcg.js"/>
     <arg value="..\..\..\..\bin\moe\${confPath}\moe.tlb"/>
