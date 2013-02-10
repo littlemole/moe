@@ -1,3 +1,10 @@
+gen.wxs
+jre.wxs
+netgen.wxs
+netreg.wxs
+reg.context.wxs
+reg.proto.wxs
 java/
-net/
 moe/
+net/
+

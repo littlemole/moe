@@ -1,2 +1,5 @@
 deploy/regfree/moe/
 moe/
+WiXMoe/gen.wxs
+WiXMoe/reg.context.wx
+WiXMoe/reg.proto.wxs

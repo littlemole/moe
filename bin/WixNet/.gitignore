@@ -3,3 +3,5 @@ deploy/regfree/moe/net.exe
 deploy/regfree/moe/net.ico
 deploy/regfree/moe/net.reg
 moe/
+gen.wxs
+reg.wxs
