@@ -2,4 +2,4 @@
 *.lib
 *.dll
 *.res
-zlib/zdll.exp
+zdll.exp
