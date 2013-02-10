@@ -1,2 +1,5 @@
 *.opensdf
 java/dispdriver/src/org/oha7/mol/
+java/dispdriver/dispdriver.jar
+moe_h.h
+moe_i.c
