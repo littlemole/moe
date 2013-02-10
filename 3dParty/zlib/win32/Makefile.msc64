@@ -151,7 +151,9 @@ clean:
 	-del *.obj
 	-del *.res
 	-del x64\release\*.exp
+	-del *.exp
 	-del *.exe
 	-del x64\release\*.pdb
+	-del *.pdb
 	-del *.manifest
 	-del foo.gz
