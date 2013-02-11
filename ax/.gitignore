@@ -18,3 +18,5 @@ shellfolder/shellfolder_h.h
 shellfolder/shellfolder_i.c
 ssh/ssh_h.h
 ssh/ssh_i.c
+moeShell/moeShell_h.h
+cmoeShell/moeShell_i.c

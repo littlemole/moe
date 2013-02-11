@@ -33,6 +33,7 @@
    <echo>${confPath}</echo> 
 
   <mkdir dir="xml"/>
+  <mkdir dir="bin"/>
 
   <exec executable="cscript.exe">
     <arg value="jcg.js"/>
