@@ -39,7 +39,7 @@
 	<Exec Command="nmake -f scintilla-static64.mak DEBUG=1" WorkingDirectory=".\scintilla\win32" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' "  />
 
     <PropertyGroup>
-        <OsslDirs>tmp32;tmp32D;tmp64;tmp64D;</OsslDirs>
+        <OsslDirs>.\openssl\tmp32;.\openssl\tmp32D;.\openssl\tmp64;.\openssl\tmp64D;</OsslDirs>
     </PropertyGroup>
 	<MakeDir
             Directories="$(OsslDirs)"/>
@@ -63,11 +63,7 @@
 	<Exec Command="nmake -f ms\nt64.mak" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' "  />
 	<Exec Command="nmake -f ms\ntd64.mak" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' "  />
 	
-    <PropertyGroup>
-        <OsslDirs>.\openssl\tmp32;.\openssl\tmp32D;.\openssl\tmp64;.\openssl\tmp64D;</OsslDirs>
-    </PropertyGroup>
-	<MakeDir
-            Directories="$(OsslDirs)"/>
+
 
 	<ItemGroup>
 	 <TmpFiles Include=".\openssl\tmp32\.gitignore;.\openssl\tmp64\.gitignore;.\openssl\tmp64D\.gitignore;.\openssl\out32\.gitignore;.\openssl\out32D\.gitignore;.\openssl\out64\.gitignore;.\openssl\out64D\.gitignore;" />
