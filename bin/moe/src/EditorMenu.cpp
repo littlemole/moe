@@ -54,18 +54,15 @@ void EditorMenu::updateUI()
 	oss2 << col << " ";
 
 	mol::string dirty(_T(""));
-	mol::punk<IPersistStream> ps(editor_->sci);
-	if(ps)
+	VARIANT_BOOL vb = VARIANT_FALSE;
+	hr = editor_->text_->get_Modified(&vb);
+	if ( vb == VARIANT_TRUE )
 	{
-		HRESULT hr = ps->IsDirty();
-		if ( hr == S_OK )
-		{
-			dirty = _T("modified");
-		}
-		else
-		{
-			dirty = _T("not modified");
-		}
+		dirty = _T("modified");
+	}
+	else
+	{
+		dirty = _T("not modified");
 	}
 
 	statusBar()->setText( path.toString(), dirty, oss.str(), oss2.str() );
@@ -129,7 +126,6 @@ void EditorMenu::updateUI()
 		mol::Ribbon::handler(RibbonSelectLanguage)->select(type);
 	}
 
-	VARIANT_BOOL vb;
 	if ( S_OK == editor_->props_->get_ReadOnly(&vb) )
 	{
 		if ( vb == VARIANT_TRUE )

@@ -1079,18 +1079,15 @@ HRESULT __stdcall  Editor::Sintilla_Events::OnPosChange( long line )
 	This()->props_->get_Filename(&path);
 
 	mol::string dirty(_T(""));
-	mol::punk<IPersistStream> ps(This()->sci);
-	if(ps)
+	VARIANT_BOOL vb = VARIANT_FALSE;
+	HRESULT hr = This()->text_->get_Modified(&vb);
+	if ( vb == VARIANT_TRUE )
 	{
-		HRESULT hr = ps->IsDirty();
-		if ( hr == S_OK )
-		{
-			dirty = _T("modified");
-		}
-		else
-		{
-			dirty = _T("not modified");
-		}
+		dirty = _T("modified");
+	}
+	else
+	{
+		dirty = _T("not modified");
 	}
 
 	statusBar()->setText( path.toString(), dirty, oss.str(), oss2.str());
