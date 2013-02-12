@@ -1078,7 +1078,22 @@ HRESULT __stdcall  Editor::Sintilla_Events::OnPosChange( long line )
 	mol::bstr path;
 	This()->props_->get_Filename(&path);
 
-	statusBar()->setText( path.toString(), oss.str(), oss2.str());
+	mol::string dirty(_T(""));
+	mol::punk<IPersistStream> ps(This()->sci);
+	if(ps)
+	{
+		HRESULT hr = ps->IsDirty();
+		if ( hr == S_OK )
+		{
+			dirty = _T("modified");
+		}
+		else
+		{
+			dirty = _T("not modified");
+		}
+	}
+
+	statusBar()->setText( path.toString(), dirty, oss.str(), oss2.str());
 	return S_OK;
 }
 
@@ -1162,6 +1177,9 @@ void Editor::checkModifiedOnDisk()
 		return;
 
 	mol::bstr path;
+	if(!props_)
+		return;
+
 	props_->get_Filename(&path);
 
 	if ( moe()->getActive() != (HWND)*this || saving_ )

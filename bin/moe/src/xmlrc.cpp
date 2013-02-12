@@ -292,6 +292,7 @@ extern "C" void load_codegen_metadata()
     UI().addMenuSeparator(IDM_MOE,IDM_FILE);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_PRINT, IDB_TOOLBAR, IDM_FILE_PRINT, false, true);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_MODE_USERSTYLES, IDB_TOOLBAR, IDM_MODE_USERSTYLES, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_FILE);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW_RTF, IDB_TOOLBAR, IDM_FILE_NEW_RTF, false, true);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, IDM_FILE_NEW_UFS, false, true);
@@ -391,6 +392,7 @@ extern "C" void load_codegen_metadata()
         UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, IDM_FILE_OPEN_FOLDER, false, true);
     UI().addMenuSeparator(IDM_MOE_DIR,IDM_FILE);
         UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
+        UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_MODE_USERSTYLES, IDB_TOOLBAR, IDM_MODE_USERSTYLES, false, true);
     UI().addMenuSeparator(IDM_MOE_DIR,IDM_FILE);
         UI().addMenuItem(IDM_MOE_DIR, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, IDM_FILE_EXIT, false, true);
 
@@ -436,6 +438,7 @@ extern "C" void load_codegen_metadata()
         UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, IDM_FILE_OPEN_FOLDER, false, true);
     UI().addMenuSeparator(IDM_MOE_IMG,IDM_FILE);
         UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
+        UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_MODE_USERSTYLES, IDB_TOOLBAR, IDM_MODE_USERSTYLES, false, true);
     UI().addMenuSeparator(IDM_MOE_IMG,IDM_FILE);
         UI().addMenuItem(IDM_MOE_IMG, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, IDM_FILE_EXIT, false, true);
 
@@ -481,6 +484,7 @@ extern "C" void load_codegen_metadata()
         UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, IDM_FILE_OPEN_FOLDER, false, true);
     UI().addMenuSeparator(IDM_SMALL_MENU,IDM_FILE);
         UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
+        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_MODE_USERSTYLES, IDB_TOOLBAR, IDM_MODE_USERSTYLES, false, true);
     UI().addMenuSeparator(IDM_SMALL_MENU,IDM_FILE);
         UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, IDM_FILE_NEW_UFS, false, true);
     UI().addMenuSeparator(IDM_SMALL_MENU,IDM_FILE);
@@ -528,6 +532,7 @@ extern "C" void load_codegen_metadata()
         UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_OPEN_FOLDER, IDB_TOOLBAR, IDM_FILE_OPEN_FOLDER, false, true);
     UI().addMenuSeparator(IDM_MOE_HEX,IDM_FILE);
         UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
+        UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_MODE_USERSTYLES, IDB_TOOLBAR, IDM_MODE_USERSTYLES, false, true);
     UI().addMenuSeparator(IDM_MOE_HEX,IDM_FILE);
         UI().addMenuItem(IDM_MOE_HEX, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, IDM_FILE_EXIT, false, true);
 
@@ -580,6 +585,7 @@ extern "C" void load_codegen_metadata()
     UI().addMenuSeparator(IDM_MOE_HTML,IDM_FILE);
         UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_PRINT, IDB_TOOLBAR, IDM_FILE_PRINT, false, true);
         UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
+        UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_MODE_USERSTYLES, IDB_TOOLBAR, IDM_MODE_USERSTYLES, false, true);
     UI().addMenuSeparator(IDM_MOE_HTML,IDM_FILE);
         UI().addMenuItem(IDM_MOE_HTML, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, IDM_FILE_EXIT, false, true);
 
@@ -682,6 +688,7 @@ extern "C" void load_codegen_metadata()
     UI().addMenuSeparator(IDM_MOE_RTF,IDM_FILE);
         UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_FILE_PRINT, IDB_TOOLBAR, IDM_FILE_PRINT, false, true);
         UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
+        UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_MODE_USERSTYLES, IDB_TOOLBAR, IDM_MODE_USERSTYLES, false, true);
     UI().addMenuSeparator(IDM_MOE_RTF,IDM_FILE);
         UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_FILE_NEW_RTF, IDB_TOOLBAR, IDM_FILE_NEW_RTF, false, true);
         UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, IDM_FILE_NEW_UFS, false, true);

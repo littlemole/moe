@@ -53,7 +53,22 @@ void EditorMenu::updateUI()
 	mol::ostringstream oss2;
 	oss2 << col << " ";
 
-	statusBar()->setText( path.toString(), oss.str(), oss2.str() );
+	mol::string dirty(_T(""));
+	mol::punk<IPersistStream> ps(editor_->sci);
+	if(ps)
+	{
+		HRESULT hr = ps->IsDirty();
+		if ( hr == S_OK )
+		{
+			dirty = _T("modified");
+		}
+		else
+		{
+			dirty = _T("not modified");
+		}
+	}
+
+	statusBar()->setText( path.toString(), dirty, oss.str(), oss2.str() );
 
 	long encoding;
 	if ( S_OK == editor_->props_->get_Encoding(&encoding) )
