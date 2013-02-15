@@ -542,7 +542,9 @@ std::string Session::exec_remote(const std::string& cmd)
 	if (rc != SSH_OK)
 	{
 		ssh_channel_free(channel);
-		throw Ex(0,"SSH_ERROR open channel");
+		std::ostringstream oss;
+		oss << "SSH_ERROR open channel: " << is_connected();
+		throw Ex(0,oss.str());
 	}
 
 	rc = ssh_channel_request_exec( channel, cmd.c_str() );
