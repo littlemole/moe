@@ -5,6 +5,7 @@
 #include "ole/factory.h"
 #include "ole/bstr.h"
 #include "ole/dll.h"
+#include "ole/dataobj.h"
 #include "win/shell.h"
 #include <memory>
 #include "moeShell_h.h"
@@ -13,6 +14,16 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+
+enum cmds {
+	open_cmd = 0,
+	open_open_cmd,
+	open_html_cmd,
+	open_rtf_cmd,
+	open_hex_cmd,
+	open_tail_cmd,
+	open_as_cmd
+};
 
 template <> 
 class mol::uuid_info<IContextMenu>
@@ -36,6 +47,8 @@ public:
 	mol::string description;
 
 	HRESULT __stdcall InvokeCommand(const mol::string& filepath, LPCMINVOKECOMMANDINFO pici);
+	HRESULT __stdcall openMoeCom(IUnknown* punk,const mol::string& filepath,cmds cmd);
+	HRESULT __stdcall openMoeCmdline( std::vector<mol::string>& filepath);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -67,7 +80,8 @@ protected:
 
 	void registerMenuItem( UINT& iCmd, const mol::string& proto, const mol::string& desc );
 
-	mol::string filepath_;
+	//mol::string filepath_;
+	std::vector<mol::string> filepaths_;
 
 	mol::Bmp bmp_;
 	mol::Bmp bmp2_;
