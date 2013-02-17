@@ -24,10 +24,8 @@ REFIID mol::uuid_info<IContextMenu>::uuidof = IID_IContextMenu;
 
 moeShell::moeShell() 
 {
-	//ODBGS("moeShell::moeShell() ");
 	bmp_.load(IDB_MOE);
 	bmp2_.load(IDB_MOE2);
-	//::DebugBreak();
 };
 
 moeShell::~moeShell() 
@@ -53,23 +51,6 @@ HRESULT __stdcall moeShell::Initialize( LPCITEMIDLIST pidlFolder, IDataObject *p
 	filepaths_ = mol::vectorFromDataObject(pdtobj);
 
 	return S_OK;
-	/*
-	STGMEDIUM medium;
-	FORMATETC fe = { CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
-	
-	HRESULT hr = pdtobj->GetData( &fe,&medium );
-	if ( FAILED(hr) )
-	{
-		return E_INVALIDARG;
-	}
-
-	mol::TCHAR filename[MAX_PATH];
-	::DragQueryFile( (HDROP)(medium.hGlobal), 0, filename,MAX_PATH );
-	filepath_ = mol::string(filename);
-
-	::ReleaseStgMedium(&medium);
-	return hr;
-	*/
 }
 
 HRESULT __stdcall moeShell::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
@@ -194,9 +175,7 @@ HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 	for ( it; it != filepaths_.end(); it++)
 	{
 		menu_cmds_[cmd]->openMoeCom(punk,*it,(cmds)c);
-		//menu_cmds_[cmd]->InvokeCommand(*it,pici);
 	}
-	//return menu_cmds_[cmd]->InvokeCommand(filepath_,pici);
 	return S_OK;
 }
 
@@ -271,83 +250,6 @@ HRESULT __stdcall moeShellMenuItem::openMoeCom(IUnknown* punk,const mol::string&
 	
 	return S_OK;
 }
-
-
-HRESULT __stdcall moeShellMenuItem::InvokeCommand(const mol::string& filepath, LPCMINVOKECOMMANDINFO pici)
-{
-	if ( HIWORD(pici->lpVerb) != 0 )
-		return E_FAIL;
-
-	UINT cmd = (UINT)(pici->lpVerb);
-
-	//check if moe is running
-	mol::punk<IUnknown> punk;
-	HRESULT hr = ::GetActiveObject( CLSID_Application,0,&punk );
-	if ( (hr == S_OK) )
-	{
-		mol::punk<IMoe> moe(punk);
-		if (moe)
-		{
-			// found running moe instance
-			// open doc in moe
-			::CoAllowSetForegroundWindow(punk,0);
-
-			mol::punk<IMoeDocumentCollection> pdocs;
-			moe->get_Documents(&pdocs);
-
-			mol::punk<IMoeDialogs> pddialogs;
-			moe->get_Dialogs(&pddialogs);
-
-			mol::punk<IMoeDocument> pdoc;
-
-			if ( cmd == open_tail_cmd )
-			{
-				pdocs->OpenTailDocument(mol::bstr(filepath), &pdoc);
-			}
-			else if ( cmd == open_html_cmd )
-			{
-				pdocs->OpenHtmlFrame(mol::bstr(filepath), &pdoc );
-			}
-			else if ( cmd == open_open_cmd )
-			{
-				pddialogs->Open(mol::bstr(filepath),&pdoc );
-			}
-			else if ( cmd == open_cmd )
-			{
-				pdocs->Open(mol::bstr(filepath), &pdoc );
-			}
-			else if ( cmd == open_hex_cmd )
-			{
-				pdocs->OpenHexEditor(mol::bstr(filepath),VARIANT_TRUE, &pdoc );
-			}
-			else if ( cmd == open_rtf_cmd )
-			{
-				pdocs->OpenRTFDocument(mol::bstr(filepath),&pdoc );
-			}
-			mol::punk<IMoeView> view;
-			moe->get_View(&view);
-			view->Show();
-			return S_OK;
-		}
-	}
-
-	//else call new moe via cmdline
-	mol::string p = mol::singleton<moeShellDll>().getModulePath();
-
-	mol::stringstream oss;
-	oss << _T("\"")
-		<< mol::Path::pathname(p) 
-		<< _T("\\")
-		<< _T("moe.exe")
-		<< _T("\" \"")
-		<< proto 
-		<< filepath << _T("\"");
-
-	mol::io::exec_cmdline( oss.str() );
-	return S_OK;
-}
-
-
 
 
 HRESULT __stdcall moeShell::About()

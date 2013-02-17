@@ -6,10 +6,7 @@ DirObj::Instance* DirObj::CreateInstance(std::vector<mol::string>& v)
 	Instance* i = new Instance;
 	i->AddRef();
 
-	for ( unsigned int c = 0; c < v.size(); c++ )
-	{
-		i->collection.Add( variant(bstr(v[c])) );
-	}
+	i->entries = v;
 	return i;
 }
 
@@ -18,7 +15,7 @@ void DirObj::dispose()
 
 HRESULT __stdcall DirObj::_NewEnum(IEnumVARIANT** newEnum)
 {
-	return collection._NewEnum(newEnum);
+	return mol::make_enumVariant(entries,newEnum);
 }
 
 HRESULT __stdcall DirObj::Item( long i, BSTR* direntry)
@@ -27,28 +24,18 @@ HRESULT __stdcall DirObj::Item( long i, BSTR* direntry)
 		return E_INVALIDARG;
 
 	*direntry = 0;
-	variant v(i);
-	variant ret;
-	if ( S_OK == collection.Item(v,&ret) )
-	{
-		if ( ret.vt == VT_BSTR )
-		{
-			*direntry = ::SysAllocString(ret.bstrVal);
-			return S_OK;
-		}
-	}
-	return S_FALSE;
+	if ( i < 0 || i >= (long)entries.size() )
+		return E_INVALIDARG;
+
+	*direntry = ::SysAllocString( mol::towstring(entries[i]).c_str() );
+	return S_OK;
 }
 
 HRESULT __stdcall DirObj::Count( long* cnt)
 {
 	if (!cnt )
 		return E_INVALIDARG;
-	*cnt = 0;
-	variant v;
-	if ( S_OK == collection.Count(&v))
-	{
-		*cnt = v.lVal;
-	}
+
+	*cnt = (long) entries.size();
 	return S_OK;
 }

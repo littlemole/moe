@@ -107,7 +107,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath>D:\boost\boost_1_52_0;$(IncludePath)</IncludePath>
     <OutDir>$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">

@@ -39,7 +39,7 @@ public:
 	HRESULT __stdcall Item( long i,  BSTR* direntry);
 	HRESULT __stdcall Count( long* cnt);
 
-	mol::COMCollection collection;
+	std::vector<mol::string> entries;
 };
 
 #endif

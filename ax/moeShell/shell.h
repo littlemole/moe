@@ -46,7 +46,6 @@ public:
 	mol::string proto;
 	mol::string description;
 
-	HRESULT __stdcall InvokeCommand(const mol::string& filepath, LPCMINVOKECOMMANDINFO pici);
 	HRESULT __stdcall openMoeCom(IUnknown* punk,const mol::string& filepath,cmds cmd);
 	HRESULT __stdcall openMoeCmdline( std::vector<mol::string>& filepath);
 };
@@ -80,7 +79,6 @@ protected:
 
 	void registerMenuItem( UINT& iCmd, const mol::string& proto, const mol::string& desc );
 
-	//mol::string filepath_;
 	std::vector<mol::string> filepaths_;
 
 	mol::Bmp bmp_;
@@ -90,9 +88,7 @@ protected:
 	IndexVector cmd_indexes_;
 
 	typedef std::map<UINT,std::shared_ptr<moeShellMenuItem>> MenuCmdMap;
-
 	MenuCmdMap menu_cmds_;
-
 };
 
 ///////////////////////////////////////////////////////////////////////////////

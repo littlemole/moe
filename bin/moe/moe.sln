@@ -1,5 +1,5 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{5BCE91B6-0B68-4CEE-9AB0-96236F6AF4FA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ax", "ax", "{EB2E915A-66AA-4396-B57E-653E4303F14D}"
@@ -1652,8 +1652,8 @@ Global
 		{4B158FC4-D728-4295-B87A-1F0500C90E20}.uni_debug|Any CPU.ActiveCfg = Release|Win32
 		{4B158FC4-D728-4295-B87A-1F0500C90E20}.uni_debug|Mixed Platforms.ActiveCfg = Release|Win32
 		{4B158FC4-D728-4295-B87A-1F0500C90E20}.uni_debug|Mixed Platforms.Build.0 = Release|Win32
-		{4B158FC4-D728-4295-B87A-1F0500C90E20}.uni_debug|Win32.ActiveCfg = Debug|Win32
-		{4B158FC4-D728-4295-B87A-1F0500C90E20}.uni_debug|Win32.Build.0 = Debug|Win32
+		{4B158FC4-D728-4295-B87A-1F0500C90E20}.uni_debug|Win32.ActiveCfg = uni_debug|Win32
+		{4B158FC4-D728-4295-B87A-1F0500C90E20}.uni_debug|Win32.Build.0 = uni_debug|Win32
 		{4B158FC4-D728-4295-B87A-1F0500C90E20}.uni_debug|x64.ActiveCfg = uni_debug|x64
 		{4B158FC4-D728-4295-B87A-1F0500C90E20}.uni_debug|x86.ActiveCfg = Release|Win32
 		{4B158FC4-D728-4295-B87A-1F0500C90E20}.uni_debug2|Any CPU.ActiveCfg = Release|Win32

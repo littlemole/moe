@@ -190,7 +190,6 @@ HRESULT __stdcall FileObj::Read( long cnt, BSTR* file)
 
 	mol::FileEncoding fe;
 	fe.investigate( std::string(buf,(unsigned int)(stream_.gcount())) );
-	//std::string s(bud,stream_.gcount());
 
 	if ( this->codePage_ == CP_UTF8 )
 	{

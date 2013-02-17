@@ -128,7 +128,7 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">C:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">D:\boost\boost_1_52_0;$(IncludePath)</IncludePath>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">Midl</CustomBuildAfterTargets>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">D:\boost\boost_1_52_0;$(IncludePath)</IncludePath>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">Midl</CustomBuildAfterTargets>

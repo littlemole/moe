@@ -27,8 +27,6 @@ public:
 
 	FileObj();
 
-//	virtual void dispose() { this->Close(); }
-
 	HRESULT __stdcall get_Filename( BSTR* f);
 
 	HRESULT __stdcall put_EoL( long t);

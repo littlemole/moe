@@ -200,8 +200,8 @@
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\boost\boost_1_52_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">D:\boost\boost_1_52_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">D:\boost\boost_1_52_0;$(IncludePath)</IncludePath>
   </PropertyGroup>
@@ -243,7 +243,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\uni_debug\win.lib;..\..\lib\src\ole\uni_debug\ole.lib;..\..\lib\src\util\uni_debug\util.lib;..\..\3dParty\pcre\uni_debug\pcre.lib;..\..\lib\src\thread\uni_debug\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\uni_debug\win.lib;..\..\lib\src\ole\uni_debug\ole.lib;..\..\lib\src\util\uni_debug\util.lib;..\..\3dParty\pcre\uni_debug\pcre.lib;..\..\lib\src\thread\uni_debug\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
       <ModuleDefinitionFile>moeShell.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
