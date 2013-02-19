@@ -206,12 +206,9 @@ public:
 	{
 		std::string txt;
 		int len = getLength();
-		char*  buf = new char[len+1];
-		int lr = sendMessage( SCI_GETTEXT, (WPARAM)len+1 , (LPARAM)buf );		
-		buf[lr]=0;
-		txt = buf;
-		delete[] buf;
-		return txt;
+		mol::cbuff buf(len+1);
+		int lr = sendMessage( SCI_GETTEXT, (WPARAM)len+1 , (LPARAM)(char*)buf );	
+		return buf.toString(lr);
 	}
 
 	int getSelTextLen()
@@ -223,25 +220,19 @@ public:
 	{
 		std::string txt;
 		int len = getSelTextLen();
-		char* buf = new char[len+1];
-		int lr = sendMessage( SCI_GETSELTEXT, (WPARAM)len , (LPARAM)buf );		
-		buf[len] = 0;
-		txt = buf;
-		delete[] buf;
-		return txt;
+
+		mol::cbuff buf(len+1);
+		int lr = sendMessage( SCI_GETSELTEXT, (WPARAM)len , (LPARAM)(char*)buf );	
+		return buf.toString(lr);
 	}
 
 	std::string getLine(int line)
 	{
 		std::string txt;
 		int len = sendMessage( SCI_GETLINE, (WPARAM)0 , (LPARAM)0 );	
-		char* buf = new char[len+1];
-		//buf[0]=0;
-		int lr = sendMessage( SCI_GETLINE, (WPARAM)len , (LPARAM)buf );		
-		buf[len]=0;
-		txt = buf;
-		delete[] buf;
-		return txt;
+		mol::cbuff buf(len+1);
+		int lr = sendMessage( SCI_GETLINE, (WPARAM)len , (LPARAM)(char*)buf );		
+		return buf.toString(lr);
 	}
 
 	int insertText(const std::string& txt, int p = -1)

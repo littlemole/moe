@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <vector>
 
 #ifdef WIN32
 #include <tchar.h>
@@ -122,6 +123,63 @@ mol::string  toString( const wchar_t* wstr, long cp = CP_ACP);
 
 #endif
 
+template<class T>
+class Buffer
+{
+public:
+	Buffer(size_t n)
+		: buf(n,0)
+	{}
+
+	Buffer(size_t n, int value)
+		: buf(n,0)
+	{
+		::memset(&buf[0],value,n*sizeof(T));
+	}
+
+	Buffer(const Buffer& rhs)
+		: buf(rhs)
+	{}
+
+	Buffer& operator=(const Buffer& rhs)
+	{
+		if ( &rhs == this )
+			return *this;
+		buf = rhs;
+		return *this;
+	}
+
+	operator T* ()
+	{
+		return &buf[0];
+	}
+
+/*	T* operator[](size_t i)
+	{
+		return &buf[i];
+	}
+*/
+	size_t size()
+	{
+		return buf.size();
+	}
+
+	std::basic_string<T> toString(size_t len = std::basic_string<T>::npos)
+	{
+		if ( len != std::basic_string<T>::npos)
+		{
+			return std::basic_string<T>(&buf[0],len);
+		}
+		return std::basic_string<T>(&buf[0]);
+	}
+
+private:
+	std::vector<T> buf;
+};
+
+typedef mol::Buffer<char> cbuff;
+typedef mol::Buffer<wchar_t> wbuff;
+typedef mol::Buffer<mol::TCHAR> tbuff;
 
 
 

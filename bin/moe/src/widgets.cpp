@@ -440,15 +440,13 @@ HRESULT __stdcall UrlBox::Load( LPSTREAM pStm)
 		if ( hr != S_OK )
 			return hr;
 
-		char* sz = new char[s];
+		mol::cbuff sz(s);
 
 		hr = pStm->Read( (void*)sz, s, &len );
 		if ( hr != S_OK )
 			return hr;
 
-		history_.push_back( std::string( sz, len ) );
-
-		delete[] sz;
+		history_.push_back( sz.toString(len));
 	}
 	return S_OK;
 }

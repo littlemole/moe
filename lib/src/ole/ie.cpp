@@ -178,8 +178,8 @@ void HtmlWndBase::getSourceImpl(std::string& src)
 				if ( S_OK == stream->Stat(&stats,STATFLAG_NONAME ))
 				{
 					size = (ULONG)(stats.cbSize.QuadPart);
+					mol::cbuff buf(size+1);
 					//prepare a text (char) buffer big enough on the heap, but init to ""
-					buf = new char[size+1];
 					buf[0]=0;
 					// reset seek-position to beginning of stream
 					if ( S_OK == stream->Seek(lint,  STREAM_SEEK_SET ,0))
@@ -190,10 +190,9 @@ void HtmlWndBase::getSourceImpl(std::string& src)
 							// add c-style zero, create a string object
 							// and finalle return after cleanup
 							buf[len]=0;
-							src = std::string(buf,len);
+							src = buf.toString(len);// std::string(buf,len);
 						}
 					}//endif seek
-					delete[] buf;
 				} // endif stats
 			} //endif save
 		}//endif create stream HGLOBAL

@@ -53,7 +53,6 @@ LRESULT CALLBACK DlgBase::windowProcedure(HWND hwnd, UINT message, WPARAM wParam
     {
 		if (message == WM_DESTROY)
 		{
-			//mol::App().OnEndDlg(hwnd);
 			dialogs().unregisterDialog(hwnd);
 		}
 		DlgBase* pThis = wndFromHWND<DlgBase>(hwnd);
@@ -86,7 +85,6 @@ LRESULT CALLBACK Dialog::dialogProcedure (HWND hwnd, UINT message, WPARAM wParam
         {
 			Dialog* pThis = (Dialog*)lParam;
 			pThis->subClass(hwnd);
-            //AppBase::app<AppBase>().OnCreateDlg(hwnd);
 			dialogs().registerDialog(hwnd);
             return (BOOL)(pThis->wndProc( hwnd, message,wParam,lParam));
         }
@@ -99,7 +97,6 @@ BOOL CALLBACK Dialog::dialogProcedure (HWND hwnd, UINT message, WPARAM wParam, L
         {
 			Dialog* pThis = (Dialog*)lParam;
 			pThis->subClass(hwnd);
-            //AppBase::app<AppBase>().OnCreateDlg(hwnd);
 			dialogs().registerDialog(hwnd);
             return (BOOL)(pThis->wndProc( hwnd, message,wParam,lParam));
         }
@@ -259,7 +256,6 @@ BOOL CALLBACK MainDialog::dialogProcedure (HWND hwnd, UINT message, WPARAM wPara
                 MainDialog* pThis = (MainDialog*)lParam;
                 ::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)(pThis));
 				pThis->attach(hwnd);
-                //AppBase::app<AppBase>().OnCreateDlg(hwnd);
 				dialogs().registerDialog(hwnd);
                 return (BOOL)(pThis->wndProc( hwnd, message,wParam,lParam));
         }

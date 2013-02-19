@@ -174,12 +174,11 @@ public:
 		HRESULT hr = stream->Read( &len, sizeof(len), &read );
 		if ( len > 0 )
 		{
-			char* buf = new char[len+2];
+			mol::cbuff buf(len+2);
 			hr = stream->Read( buf, len, &read );
 			buf[len]   = 0;
 			buf[len+1] = 0;
-			bstr_ = ::SysAllocString( (OLECHAR*)buf );
-			delete[] buf;
+			bstr_ = ::SysAllocString( (OLECHAR*)(char*)buf );
 		}
 	}
 
@@ -234,11 +233,10 @@ public:
 		HRESULT hr = stream->Read( &len, sizeof(len), &read );
 		if ( len > 0 )
 		{
-			char* buf = new char[len+1];
+			mol::cbuff buf(len+1);
 			hr = stream->Read( buf, len, &read );
 			buf[len]   = 0;
-			str_ = std::string( buf, len );
-			delete[] buf;
+			str_ = buf.toString(len);
 		}
 	}
 
@@ -293,11 +291,10 @@ public:
 		HRESULT hr = stream->Read( &len, sizeof(len), &read );
 		if ( len > 0 )
 		{
-			wchar_t* buf = new wchar_t[len+1];
+			mol::wbuff buf(len+1);
 			hr = stream->Read( (void*)buf, len* sizeof(wchar_t), &read );
 			buf[len]   = 0;
-			str_ = std::wstring( buf, len );
-			delete[] buf;
+			str_ = buf.toString(len);
 		}
 	}
 private:

@@ -39,7 +39,7 @@ library moeSSH
 		HRESULT Add([in] BSTR remotefile, [in] long size, [in] VARIANT_BOOL vbIsDirectory);
 
 		[id(3), helpstring("get IDataObject")] 
-		HRESULT ToDataObject([out,retval] IDataObject** dataObj);
+		HRESULT ToDataObject([out,retval] IUnknown** dataObj);
 
 		[id(4), helpstring("put to Clipboard")] 
 		HRESULT ToClipboard();

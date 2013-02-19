@@ -777,9 +777,13 @@ LRESULT ScpListCtrl::OnBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 
 	DWORD effect;
 	mol::punk<IDropSource> drop = new mol::DropSrc;
-	mol::punk<IDataObject> ido;
-	hr = idoFactory->ToDataObject(&ido);
+	mol::punk<IUnknown> unk;
+	hr = idoFactory->ToDataObject(&unk);
 	if ( hr != S_OK )
+		return 0;
+
+	mol::punk<IDataObject> ido(unk);
+	if(!ido)
 		return 0;
 
 	HRESULT r = ::DoDragDrop(ido,drop,DROPEFFECT_COPY,&effect);

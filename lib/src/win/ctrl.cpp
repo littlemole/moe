@@ -77,8 +77,8 @@ HWND Ctrl::createWindow( const mol::string& windowName, HMENU hMenu, const Rect&
 
 	static HFONT font_ = ::CreateFontIndirect(&fl);
 
-    //setFont( (HFONT)::GetStockObject(ANSI_VAR_FONT));
 	setFont( font_);
+    //setFont( (HFONT)::GetStockObject(ANSI_VAR_FONT));
 
     this->OnCtrlCreated();
     return hWnd_;
@@ -168,6 +168,12 @@ void ComboBox::setCurSel(const mol::string& txt)
 }
 mol::string ComboBox::getString(int id )
 {
+	mol::tbuff buf(2048,32);
+    if ( CB_ERR == sendMessage( CB_GETLBTEXT,id,(LPARAM)(mol::TCHAR*)buf))
+       throw X( _T("getString failed"));
+	buf[2047] = 0;
+    return buf.toString();
+	/*
 	mol::TCHAR buf[1024];
 	::memset(buf,32,1024*sizeof(mol::TCHAR));
     buf[1023] = 0;
@@ -176,6 +182,7 @@ mol::string ComboBox::getString(int id )
        throw X( _T("getString failed"));
 
     return buf;
+	*/
 }
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
@@ -193,19 +200,18 @@ int ListBox::getCurSel()
 
 mol::string ListBox::getString(int index)
 {
-	mol::TCHAR* buf = 0;
+	//mol::TCHAR* buf = 0;
     int   len = 0;
 
     len = (int)sendMessage(LB_GETTEXTLEN, (WPARAM)index,(LPARAM)0);
     if ( len == -1)
             return _T("");
 
-	buf = new mol::TCHAR[len+1];
+	mol::tbuff buf(len);
+
+    sendMessage( LB_GETTEXT,(WPARAM)index,(LPARAM)(mol::TCHAR*)buf);
     buf[len] = 0;
-    sendMessage( LB_GETTEXT,(WPARAM)index,(LPARAM)buf);
-    mol::string ret(buf);
-    delete[] buf;
-    return ret;
+	return buf.toString();
 }
 
 void ListBox::resetContent() 

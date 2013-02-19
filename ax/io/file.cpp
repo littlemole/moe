@@ -184,7 +184,7 @@ HRESULT __stdcall FileObj::Read( long cnt, BSTR* file)
 
 	size_t sg = (size_t)stream_.tellg();
 
-	char* buf = new char[cnt+1];
+	mol::cbuff buf(cnt+1);
 	stream_.read(buf,cnt);
 	buf[stream_.gcount()] = 0;
 
@@ -193,7 +193,7 @@ HRESULT __stdcall FileObj::Read( long cnt, BSTR* file)
 
 	if ( this->codePage_ == CP_UTF8 )
 	{
-		std::wstring ws = mol::fromUTF8( buf );
+		std::wstring ws = mol::fromUTF8( buf.toString() );
 
 		if ( sg == 0 && fe.hasBOM() )
 		{
@@ -202,7 +202,7 @@ HRESULT __stdcall FileObj::Read( long cnt, BSTR* file)
 			this->eol_ = (IO_SYSTYPE)fe.eolMode();
 		}
 		else
-			ws = mol::fromUTF8( buf );
+			ws = mol::fromUTF8( buf.toString() );
 
 		if ( this->eol_ == IO_SYSTYPE_UNIX )
 			ws = mol::unix2dos(ws);
@@ -212,16 +212,16 @@ HRESULT __stdcall FileObj::Read( long cnt, BSTR* file)
 	else
 	if ( this->codePage_ == CP_WINUNICODE )
 	{
-		std::wstring ws = std::wstring( (wchar_t*)buf, (unsigned int)(stream_.gcount()/sizeof(wchar_t)) );
+		std::wstring ws = std::wstring( (wchar_t*)(char*)buf, (unsigned int)(stream_.gcount()/sizeof(wchar_t)) );
 
-		if ( sg == 0 && mol::FileEncoding::hasUTF16_BOM(buf) )
+		if ( sg == 0 && mol::FileEncoding::hasUTF16_BOM(buf.toString()) )
 		{
 			ws = std::wstring( (wchar_t*)(buf+2), (unsigned int)((stream_.gcount()/sizeof(wchar_t))-1) );
 			this->useBOM_ = VARIANT_TRUE;
 			this->eol_ = (IO_SYSTYPE)fe.eolMode();
 		}
 		else
-			ws = std::wstring( (wchar_t*)buf, (unsigned int)(stream_.gcount()/sizeof(wchar_t)) );
+			ws = std::wstring( (wchar_t*)(char*)buf, (unsigned int)(stream_.gcount()/sizeof(wchar_t)) );
 
 		if ( this->eol_ == IO_SYSTYPE_UNIX )
 			ws = mol::unix2dos(ws);
@@ -233,14 +233,12 @@ HRESULT __stdcall FileObj::Read( long cnt, BSTR* file)
 		if ( sg == 0 )
 			this->eol_ = (IO_SYSTYPE)fe.eolMode();
 
-		std::wstring ws = mol::towstring( buf );
+		std::wstring ws = mol::towstring( buf.toString() );
 		if ( this->eol_ == IO_SYSTYPE_UNIX )
 			ws = mol::unix2dos(ws);
 
 		*file = ::SysAllocString( ws.c_str() );
 	}
-
-	delete[] buf;
 	return S_OK;
 }
 

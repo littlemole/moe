@@ -149,7 +149,8 @@ LRESULT StatusBarEx::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		int h = HIWORD(lParam);
 		int w = LOWORD(lParam) - 20;
 
-		int * widths = new int[ parts_.size() ];
+		mol::Buffer<int> widths(parts_.size());
+
 		widths[parts_.size()-1] = -1;
 		mol::DC dc(hWnd_);
 
@@ -161,8 +162,7 @@ LRESULT StatusBarEx::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 			widths[i] = w;
 			w = w - ( s.cx + 10 ); 
 		}
-		sendMessage( SB_SETPARTS, parts_.size(), (LPARAM)widths );
-		delete[] widths;
+		sendMessage( SB_SETPARTS, parts_.size(), (LPARAM)(int*)widths );
 	}
 	return StatusBar::wndProc( hwnd, message, wParam, lParam );
 }
@@ -172,7 +172,7 @@ void StatusBarEx::resizeStatusbar()
 	if ( parts_.empty() )
 		return;
 
-	int * widths = new int[ parts_.size() ];
+	mol::Buffer<int> widths(parts_.size());
 	widths[parts_.size()-1] = -1;
 
 	RECT tmp;
@@ -190,8 +190,7 @@ void StatusBarEx::resizeStatusbar()
 		widths[i] = w;
 		w = w - ( s.cx + 10 ); 
 	}
-	sendMessage( SB_SETPARTS, parts_.size(), (LPARAM)widths );
-	delete[] widths;
+	sendMessage( SB_SETPARTS, parts_.size(), (LPARAM)(int*)widths );
 }
 ////////////////////////////////////////////////////////////////////////////
 // Toolbar
@@ -994,8 +993,6 @@ void ReBar::loadReBarState( int cmd, int pos, LPSTREAM pStm )
 TabCtrl::~TabCtrl()
 {
 	mol::win::tabToolTips().unregisterTab( this->hToolTip() );
-//	mol::win::AppBase& a = mol::app<mol::win::AppBase>();
-//	a.OnEndTab(this->hToolTip());
 
 	for ( int i = 0; i < count(); i++ )
 	{
@@ -1256,7 +1253,13 @@ void ComboCoxEx::setCurSel(const mol::string& txt)
 
 mol::string ComboCoxEx::getString(int id )
 {
-	mol::TCHAR  buf[1024];
+	mol::tbuff buf(2048);
+	if ( CB_ERR == sendMessage( CB_GETLBTEXT,id,(LPARAM)(mol::TCHAR*)buf))
+            throw X(_T("getString failed"));
+
+    return buf.toString();
+
+/*	mol::TCHAR  buf[1024];
     ::memset(buf,32,1024);
     buf[1023] = 0;
 
@@ -1264,6 +1267,7 @@ mol::string ComboCoxEx::getString(int id )
             throw X(_T("getString failed"));
 
     return buf;
+	*/
 }
 
 //////////////////////////////////////////////////////////////////////

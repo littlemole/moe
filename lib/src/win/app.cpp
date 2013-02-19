@@ -134,18 +134,18 @@ mol::string AppBase::UnpackAppFile(const mol::string& file, int id, bool createI
 
 mol::string AppBase::getModulePath()
 {
-	mol::TCHAR path[2048];
-	::GetModuleFileName( mol::hinstance(), path, 2047 );
-	path[2047] = 0;
-	return path;
+	mol::tbuff buf(2048);
+	::GetModuleFileName( mol::hinstance(), buf, 2047 );
+	buf[2047] = 0;
+	return buf.toString();
 }
 
 mol::string AppBase::getAppPath()
 {
-	mol::TCHAR path[2048];
-	::GetModuleFileName( 0, path, 2047 );
-	path[2047] = 0;
-	return path;
+	mol::tbuff buf(2048);
+	::GetModuleFileName( 0, buf, 2047 );
+	buf[2047] = 0;
+	return buf.toString();
 }
 
 //! basic windows msg handling

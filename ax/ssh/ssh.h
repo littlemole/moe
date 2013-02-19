@@ -76,7 +76,7 @@ public:
 		return S_OK;
 	}
 
-	HRESULT virtual __stdcall  ToDataObject( IDataObject** dataObj)
+	HRESULT virtual __stdcall  ToDataObject( IUnknown** dataObj)
 	{
 		mol::punk<IDropSource> drop = new mol::DropSrc;
 		mol::punk<mol::com_obj<mol::scp::DelayedDataTransferObj> >ido  = 
@@ -93,11 +93,13 @@ public:
 
 	HRESULT virtual __stdcall  ToClipboard()
 	{
-		mol::punk<IDataObject> dataObj;
-		HRESULT hr = ToDataObject(&dataObj);
+		mol::punk<IUnknown> unk;
+		HRESULT hr = ToDataObject(&unk);
 		if ( hr != S_OK )
 			return hr;
-
+		mol::punk<IDataObject> dataObj(unk);
+		if ( !dataObj )
+			return E_NOINTERFACE;
 		return ::OleSetClipboard(dataObj);		
 	}
 

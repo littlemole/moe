@@ -28,72 +28,6 @@
 using namespace Scintilla;
 #endif
 
-
-#define MASON_PERL_LINE 68
- 
- // mason uses ASP
- 
- // mason script <%init> <%perl> <%args> <%flags> %cleanup> <%once> <%shared> <%attR> <%filter> <%text> <%doc>
- // mason tags   <method> <def>
- 
- static char* masonScriptTags[11] = { "init", "perl", "args", "flags", "cleanup", "once", "shared", "attr", "filter", "text", "doc" } ;
- static char* masonMethodTags[2]  = { "method", "def" } ;
- 
- /*
- static bool isMasonScript( unsigned int i, int length,  Accessor &styler, char* masonBuf) {
- 	for ( int x = 0; x < 11; x++ ) {
- 		char* c = masonScriptTags[x];
- 		int   l = strlen(c);
- 		int y = 0;
- 		for ( y; y < l; y++) {
- 			char s = styler.SafeGetCharAt(i+y);
- 			if ( c[y] != s )
- 				break;
- 		}
- 		if ( y == l )
- 		{
- 			strcpy(masonBuf,c);
- 			return true;
- 		}
- 	}
- 	masonBuf[0] = 0;
- 	return false;
- }
- */
- 
- static bool isMasonScriptEnd( unsigned int i, Accessor &styler, char* masonBuf) {
- 	int l = strlen(masonBuf);
- 	for ( int x = 0; x < l; x++ ) {
- 		if ( masonBuf[x] != styler.SafeGetCharAt(i+x) ) {
- 			return false;
- 		}
- 	}
- 	
- 	masonBuf[0] = 0;
- 	return true;
- }
- 
- static bool isMasonTag( unsigned int i,  Accessor &styler, char* masonBuf) {
- 	for ( int x = 0; x < 2; x++ ) {
- 		char* c = masonMethodTags[x];
- 		int   l = strlen(c);
- 		int y = 0;
- 		for ( y; y < l; y++) {
- 			char s = styler.SafeGetCharAt(i+y);
- 			if ( c[y] != s )
- 				break;
- 		}
- 		if ( y == l )
- 		{
- 			strcpy(masonBuf,c);
- 			return true;
- 		}
- 	}
- 	masonBuf[0] = 0;
- 	return false;
- }
- 
-
 #define SCE_HA_JS (SCE_HJA_START - SCE_HJ_START)
 #define SCE_HA_VBS (SCE_HBA_START - SCE_HB_START)
 #define SCE_HA_PYTHON (SCE_HPA_START - SCE_HP_START)
@@ -645,8 +579,6 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 	WordList &keywords5 = *keywordlists[4];
 	WordList &keywords6 = *keywordlists[5]; // SGML (DTD) keywords
 
-	char masonBuf[20] = "";
-
 	// Lexer for HTML requires more lexical states (8 bits worth) than most lexers
 	styler.StartAt(startPos, static_cast<char>(STYLE_MAX));
 	char prevWord[200];
@@ -935,16 +867,13 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 
 		/////////////////////////////////////
 		// handle the start of PHP pre-processor = Non-HTML
-
 		else if ((state != SCE_H_ASPAT) &&
 		         !isPHPStringState(state) &&
 		         (state != SCE_HPHP_COMMENT) &&
 		         (state != SCE_HPHP_COMMENTLINE) &&
 		         (ch == '<') &&
-		         ( (chNext == '?') || (chNext == '%') || (chNext == '&') ) &&
-				 !IsScriptCommentState(state) &&
- 				 (!isMasonTag( i+2, styler, masonBuf )) ) 
-		{
+		         (chNext == '?') &&
+				 !IsScriptCommentState(state) ) {
 			scriptLanguage = segIsScriptingIndicator(styler, i + 2, i + 6, eScriptPHP);
 			if (scriptLanguage != eScriptPHP && isStringState(state)) continue;
 			styler.ColourTo(i - 1, StateToPrint);
@@ -1168,8 +1097,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 		// handle the end of a pre-processor = Non-HTML
 		else if ((!isMako && !isDjango && ((inScriptType == eNonHtmlPreProc) || (inScriptType == eNonHtmlScriptPreProc)) &&
 				  (((scriptLanguage != eScriptNone) && stateAllowsTermination(state))) &&
-				  (((ch == '%') || (ch == '?') || (ch == '&') ) &&
-				  ( (chNext == '>') || ( (chPrev == '/') && isMasonScriptEnd(i+1,styler,masonBuf)) ))) ||
+				  (((ch == '%') || (ch == '?')) && (chNext == '>'))) ||
 		         ((scriptLanguage == eScriptSGML) && (ch == '>') && (state != SCE_H_SGML_COMMENT))) {
 			if (state == SCE_H_ASPAT) {
 				aspScript = segIsScriptingIndicator(styler,
@@ -1200,7 +1128,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 				i++;
 				visibleChars++;
 			}
-			if (ch == '%' || ch == '&')
+			if (ch == '%')
 				styler.ColourTo(i, SCE_H_ASP);
 			else if (scriptLanguage == eScriptXML)
 				styler.ColourTo(i, SCE_H_XMLEND);
@@ -1223,15 +1151,6 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 		/////////////////////////////////////
 
 		switch (state) {
-		case MASON_PERL_LINE:
-		{
-			if (  (ch=='\n' /*&& chNext!='%'*/ ) || ((int)startPos==i && ch!='%' ) )
-			{
-				styler.ColourTo(i-1, SCE_H_ASP);
-				state = SCE_H_DEFAULT;
-			}
-			break;
-		}
 		case SCE_H_DEFAULT:
 			if (ch == '<') {
 				// in HTML, fold on tag open and unfold on tag close
@@ -1243,11 +1162,6 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 			} else if (ch == '&') {
 				styler.ColourTo(i - 1, SCE_H_DEFAULT);
 				state = SCE_H_ENTITY;
-			}
-			else if ( (ch=='%') && ( (chPrev=='\n') || ((int)startPos==i)) ) {
-				styler.ColourTo(i - 1, SCE_H_DEFAULT);
-				//masonBuf[0]='%';
-				state = MASON_PERL_LINE;
 			}
 			break;
 		case SCE_H_SGML_DEFAULT:

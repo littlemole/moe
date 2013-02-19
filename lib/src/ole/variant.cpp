@@ -126,15 +126,14 @@ void Variant_fromStream( VARIANT& var, IStream* stream )
 			stream->Read( (void*)&cnt,sizeof(cnt),&len);
 			if ( cnt )
 			{
-				char* buf = new char[cnt+2];
+				mol::cbuff buf(cnt+2);
 				stream->Read( (void*)buf, cnt, &len );
 				buf[len]   = 0;
 				buf[len+1] = 0;
 
 				if ( var.bstrVal )
 					::SysFreeString(var.bstrVal);
-				var.bstrVal = ::SysAllocString( (OLECHAR*)buf );
-				delete[] buf;
+				var.bstrVal = ::SysAllocString( (OLECHAR*)(char*)buf );
 			}
 			else
 				var.bstrVal = 0;
@@ -460,13 +459,12 @@ void variant::fromStream( IStream* stream )
 					stream->Read((void*)&cnt,sizeof(cnt),&len);
 					if ( cnt )
 					{
-						char* buf = new char[cnt+2];
+						mol::cbuff buf(cnt+2);
 						stream->Read( (void*)buf, cnt, &len );
 						buf[len]   = 0;
 						buf[len+1] = 0;
 
-						sfa[i] = ::SysAllocString( (OLECHAR*)buf );
-						delete[] buf;
+						sfa[i] = ::SysAllocString( (OLECHAR*)(char*)buf );
 					}
 				}
 				parray = sa;

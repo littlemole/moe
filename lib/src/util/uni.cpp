@@ -22,31 +22,25 @@ std::ostream&  cerr  = std::cerr;
 std::string wstring2ansi(const std::wstring& in, long cp)
 {
     int len = ::WideCharToMultiByte(cp,0,in.c_str(),(int)in.size(),0,0,0,0);
-    char* buf = new char[len];
+	mol::cbuff buf(len);
     int n = ::WideCharToMultiByte(cp,0,in.c_str(),(int)in.size(),buf,len,0,0);
-    std::string ret(buf,len);
-    delete[] buf;
-    return ret;
+    return buf.toString(len);
 }
 
 std::wstring ansi2wstring( const std::string& in, long cp )
 {
 	int len = ::MultiByteToWideChar( cp, 0, in.c_str(), (int)in.size(), 0, 0 );
-	wchar_t* buf = new wchar_t[len];
+	mol::wbuff buf(len);
 	::MultiByteToWideChar( cp, 0, in.c_str(), (int)in.size(), buf, len );
-	std::wstring out(buf,len);
-	delete[] buf;
-	return out;
+	return buf.toString(len);
 }
 
 std::string wstring2utf8( const std::wstring& in, long cp )
 {
 	int len = ::WideCharToMultiByte( CP_UTF8, 0, in.c_str(), (int)in.size(), 0, 0,0,0 );
-	char* buf = new char[len];
+	mol::cbuff buf(len);
 	int r = ::WideCharToMultiByte( CP_UTF8, 0, in.c_str(),(int)in.size(), buf, len,0,0 );
-	std::string out(buf,len);
-	delete[] buf;
-	return out;
+	return buf.toString(len);
 }
 
 std::string ansi2utf8( const std::string& in, long cp )
@@ -58,11 +52,9 @@ std::string ansi2utf8( const std::string& in, long cp )
 std::wstring utf82wstring( const std::string& in, long cp )
 {
 	int len = ::MultiByteToWideChar( CP_UTF8, 0, in.c_str(), (int)in.size(), 0, 0 );
-	wchar_t* buf = new wchar_t[len];
+	mol::wbuff buf(len);
 	int r = ::MultiByteToWideChar( CP_UTF8, 0, in.c_str(), (int)in.size(), buf, len );
-	std::wstring out(buf,len);
-	delete[] buf;
-	return out;
+	return buf.toString(len);
 }
 
 std::string utf82ansi( const std::string& in, long cp )
@@ -70,7 +62,6 @@ std::string utf82ansi( const std::string& in, long cp )
 	std::wstring ws = utf82wstring(in,cp);
 	return wstring2ansi(ws,cp);
 }
-
 
 
 std::string toUTF8( const std::string& in, long cp)
@@ -87,11 +78,9 @@ std::string toUTF8( const std::wstring& str, long cp)
 std::wstring fromUTF8(const std::string& in, long cp)
 {
 	int len = ::MultiByteToWideChar( CP_UTF8, 0, in.c_str(), (int)in.size(), 0, 0 );
-	wchar_t* buf = new wchar_t[len];
+	mol::wbuff buf(len);
 	int r = ::MultiByteToWideChar( CP_UTF8, 0, in.c_str(), (int)in.size(), buf, len );
-	std::wstring out(buf,len);
-	delete[] buf;
-	return out;
+	return buf.toString(len);
 }
 
 

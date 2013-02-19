@@ -38,15 +38,13 @@ DWORD CALLBACK RichEditStreamCallBack::outStreamCallback( DWORD_PTR dwCookie, LP
 
     *pcb = cb;
 
-    char* buf = new char[cb+1];
+	mol::cbuff buf(cb+1);
 
     memcpy(buf,pbBuff,cb);
 
     buf[cb]=0;
 
-	pThis->ioBuf_ += (const char*)(buf);
-
-    delete buf;
+	pThis->ioBuf_ += (const char*)(char*)(buf);
 
     return 0;
 }

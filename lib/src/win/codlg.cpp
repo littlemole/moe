@@ -23,7 +23,6 @@ SearchDlg::SearchDlg()
 LRESULT SearchDlg::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     if ( message == WM_DESTROY )
-		//mol::win::AppBase::app<mol::win::AppBase>().OnEndDlg(hWnd_);
 		mol::win::dialogs().unregisterDialog(hwnd);
 
     return ::CallWindowProc( oldProc, hwnd, message, wParam, lParam );
@@ -47,7 +46,6 @@ HWND SearchDlg::findText(HWND parent, DWORD flags,const mol::TCHAR* what )
     }
     hWnd_ = ::FindText(&frp_);
     subClass(hWnd_);
-	//mol::App().OnCreateDlg(hWnd_);
 	mol::win::dialogs().registerDialog(hWnd_);
     return hWnd_;
 }
@@ -68,7 +66,6 @@ HWND SearchDlg::replaceText( HWND parent, DWORD flags, const mol::TCHAR* what , 
     }
 	hWnd_ = ::ReplaceText(&frp_);
     subClass(hWnd_);
-	//mol::App().OnCreateDlg(hWnd_);
 	mol::win::dialogs().registerDialog(hWnd_);
     return hWnd_;
 }
@@ -177,7 +174,6 @@ BOOL FilenameDlg::dlgOpen( int flags)
 		mol::TCHAR* b = c;
 		if ( *(c-1) != 0 )
 		{
-			//::MessageBox(0,buf + of_.nFileOffset,0,0);
 			filenames_.push_back( p + _T("\\") + mol::string(buf + of_.nFileOffset) );
 		}
 		else
@@ -190,8 +186,6 @@ BOOL FilenameDlg::dlgOpen( int flags)
 				if ( c-b > 0 && *b)
 				{
 					mol::string f(b,int(c-b));
-					//ODBGS("OPEN FILE DIALOG:");
-					//ODBGS(f.c_str());
 					s.append(f);
 					filenames_.push_back( s );
 				}

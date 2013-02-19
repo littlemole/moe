@@ -104,12 +104,10 @@ std::string BSTR2ansi( BSTR bstr )
 {
     if (!bstr) return "";
     int len = ::SysStringLen(bstr);
-    char*	buf = new char[len+1];
+	mol::cbuff buf(len+1);
     ::WideCharToMultiByte(CP_ACP,0,bstr,len,buf,len ,0,0);
-    buf[len]=0;
     std::string ret(buf);
-    delete[] buf;
-    return ret;
+    return buf.toString(len);
 }
 
 //////////////////////////////////////////////////////////////////////////

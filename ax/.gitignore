@@ -10,6 +10,7 @@ process/pipedprocess_h.h
 process/pipedprocess_i.c
 scintillax/ScintillAx_h.h
 scintillax/ScintillAx_i.c
+scintillax/ScintillAX_p.c
 setting/setting_h.h
 setting/setting_i.c
 shellctrl/shellctrl_h.h
@@ -20,3 +21,4 @@ ssh/ssh_h.h
 ssh/ssh_i.c
 moeShell/moeShell_h.h
 moeShell/moeShell_i.c
+moeShell/moeShell_dispid.h

@@ -57,11 +57,8 @@ std::vector<mol::string> vectorFromDataObject(IDataObject* ido)
 			for ( int i = 0; i < n; i++ )
 			{
 				LPCITEMIDLIST item = molGetPIDLItem(cida,i);
-				mol::string s = mol::io::desktop().getDisplayNameOf((LPITEMIDLIST)item,SHGDN_FORPARSING);
-				//mol::io::ShellFolder  f = sf.subFolder((LPITEMIDLIST)item);
-				//mol::io::ShellFolder f((LPITEMIDLIST)item);
-				
-				mol::string s2 = sf.getDisplayNameOf((LPITEMIDLIST)item,SHGDN_INFOLDER);
+				//mol::string s = mol::io::desktop().getDisplayNameOf((LPITEMIDLIST)item,SHGDN_FORPARSING);				
+				//mol::string s2 = sf.getDisplayNameOf((LPITEMIDLIST)item,SHGDN_INFOLDER);
 				mol::string s3 = sf.getDisplayNameOf((LPITEMIDLIST)item,SHGDN_FORPARSING);
 				v.push_back(s3);
 			}
@@ -86,10 +83,10 @@ std::vector<mol::string> vectorFromDataObject(IDataObject* ido)
 			len = ::DragQueryFile( hDrop, i, 0, 0 );
 			if (!len )
 				break;
-			fname = new mol::TCHAR[len+1];
-			::DragQueryFile( hDrop, i, fname, len+1 );
-			v.push_back(fname);
-			delete[] fname;
+
+			mol::tbuff buf(len+1);
+			::DragQueryFile( hDrop, i, buf, len+1 );
+			v.push_back(buf.toString());
 			i++;
 		}
 		glob.unLock();

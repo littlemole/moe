@@ -174,12 +174,11 @@ mol::string Path::serviceName(const mol::string& path)
 		::WNetGetConnection(p.c_str(), 0, &len);
 		if ( len )
 		{
-			mol::TCHAR* buf = new mol::TCHAR[len];
+			mol::tbuff buf(len);
 			if (::WNetGetConnection(p.c_str(), buf, &len) )
 			{
-				remotename = mol::string( buf, len );
+				remotename = buf.toString(len);
 			}
-			delete[] buf;
 		}
 	}
 	return remotename;

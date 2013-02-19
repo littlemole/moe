@@ -190,12 +190,9 @@ mol::string Wnd::getText( )
 	if ( !(n > 0) )
 		return _T("");
 
-	mol::TCHAR* buf = new mol::TCHAR[n+1];
+	mol::tbuff buf(n+1);
     n = ::GetWindowText(hWnd_, buf,n+1);
-	buf[n]=0;
-	mol::string s(buf);
-	delete[] buf;
-    return s;
+	return buf.toString(n);
 }
 
 HBITMAP Wnd::snapshot( RECT* r )

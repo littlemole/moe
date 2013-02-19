@@ -300,11 +300,7 @@ std::wstring nl2rtf( const std::wstring& in )
 {
     std::wostringstream out;
 
-    //if ( in[0] == _T('\n') )
-      //      out << _T("\\par");
-    //out << in[0];
-
-    size_t p = 0;
+	size_t p = 0;
     size_t len = in.size();
     while( ( p < len ) )
     {
@@ -321,10 +317,6 @@ std::wstring nl2rtf( const std::wstring& in )
 std::string nl2rtf( const std::string& in )
 {
     std::ostringstream out;
-
-    //if ( in[0] == _T('\n') )
-      //      out << _T("\\par");
-    //out << in[0];
 
     size_t p = 0;
     size_t len = in.size();
@@ -461,38 +453,33 @@ std::string URLencode(const std::string& in)
     const size_t nLen = in.size() + 1;
 
     unsigned char* pInBuf  =(unsigned char*)in.data();
-    unsigned char* pOutBuf = NULL;
     unsigned char* pOutTmp = NULL;
     unsigned char* pInTmp  = NULL;
 
-    pOutBuf = new unsigned char[nLen  * 3 - 2];
+	mol::cbuff buf(nLen  * 3 - 2);
 
-    if(pOutBuf)
+    pInTmp  = pInBuf;
+    pOutTmp = (unsigned char*)(char*)buf;
+    while (*pInTmp)
     {
-        pInTmp  = pInBuf;
-        pOutTmp = pOutBuf;
-        while (*pInTmp)
+        unsigned char c = *((unsigned char*)pInTmp);
+        int i = 0;
+        i += c;
+        if( (isalnum(i)))
+        *pOutTmp++ = *pInTmp;
+        else
+        if( isspace(i) && ((i!='\n') && (i!='\r')) )
+			*pOutTmp++ = '+';
+        else
         {
-            unsigned char c = *((unsigned char*)pInTmp);
-            int i = 0;
-            i += c;
-            if( (isalnum(i)))
-            *pOutTmp++ = *pInTmp;
-            else
-            if( isspace(i) && ((i!='\n') && (i!='\r')) )
-				*pOutTmp++ = '+';
-            else
-            {
-                *pOutTmp++ = '%';
-                *pOutTmp++ = c2x(*pInTmp>>4);
-                *pOutTmp++ = c2x(*pInTmp%16);
-            }
-            pInTmp++;
+            *pOutTmp++ = '%';
+            *pOutTmp++ = c2x(*pInTmp>>4);
+            *pOutTmp++ = c2x(*pInTmp%16);
         }
-        *pOutTmp = '\0';
-        out =(char*) pOutBuf;
-        delete[] pOutBuf;
+        pInTmp++;
     }
+    *pOutTmp = '\0';
+	out = buf.toString();
     return out;
 }
 
@@ -500,8 +487,9 @@ std::string URLdecode( const std::string& in )
 {
 	size_t len = in.size();
 	unsigned char* inBuff = (unsigned char*)(in.c_str());
-	unsigned char* out = new unsigned char[len+1];
-	unsigned char* outBuff = out;
+
+	mol::cbuff buf(len+1);
+	unsigned char* outBuff = (unsigned char*)(char*)buf;
 
     while( *inBuff )
     {
@@ -519,9 +507,7 @@ std::string URLdecode( const std::string& in )
         inBuff++;
     }
     *outBuff =0;
-    std::string ret ((char*)out);
-    delete[] out;
-    return ret;
+	return buf.toString();
 }
 
 static const std::string base64_chars = 

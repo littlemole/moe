@@ -4,10 +4,10 @@
 
 
  /* File created by MIDL compiler version 8.00.0595 */
-/* at Sat Nov 17 22:27:07 2012
+/* at Mon Feb 18 00:47:00 2013
  */
 /* Compiler settings for treectrl.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
+    Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0595 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 

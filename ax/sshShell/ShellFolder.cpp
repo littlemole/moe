@@ -52,10 +52,10 @@ std::vector<std::wstring> vectorFromSshDataObj(IDataObject* dataObj)
 			int len = ::DragQueryFile( hDrop, i, 0, 0 );
 			if (!len )
 				break;
-			mol::TCHAR* fname = new mol::TCHAR[len+1];
+
+			mol::tbuff fname(len+1);
 			::DragQueryFile( hDrop, i, fname, len+1 );
-			v.push_back(fname);
-			delete[] fname;
+			v.push_back(fname.toString());
 			i++;
 		}
 		glob.unLock();

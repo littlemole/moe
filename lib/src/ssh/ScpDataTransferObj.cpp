@@ -102,7 +102,7 @@ HRESULT __stdcall scpStream::Read( void *pv, ULONG cb, ULONG *pcbRead)
 		if (!connect())
 			return E_FAIL;
 
-		char* buffer = new char[cb];
+		mol::cbuff buffer(cb);
 
 		ssh_scp_accept_request(scp_);
 
@@ -114,7 +114,6 @@ HRESULT __stdcall scpStream::Read( void *pv, ULONG cb, ULONG *pcbRead)
 			{
 				disconnect();
 				nread_ = 0;
-				delete[] buffer;
 				return E_FAIL;
 			}
 
@@ -135,11 +134,9 @@ HRESULT __stdcall scpStream::Read( void *pv, ULONG cb, ULONG *pcbRead)
 				{
 					disconnect();
 					nread_ = 0;
-					delete[] buffer;
 					return E_FAIL;			
 				}
 				//disconnect();
-				delete[] buffer;
 				return nread == cb ? S_OK : S_FALSE;
 			}
 		}
@@ -147,7 +144,6 @@ HRESULT __stdcall scpStream::Read( void *pv, ULONG cb, ULONG *pcbRead)
 		{
 			disconnect();
 		}
-		delete[] buffer;
 		return nread == cb ? S_OK : S_FALSE;
 	}
 

@@ -452,8 +452,8 @@ int  ShellFileOp::op(UINT  op, HWND hwnd, const mol::string& from, const mol::st
 {
     ::ZeroMemory(&sfos_,sizeof(sfos_));
 
-	mol::TCHAR* f = new mol::TCHAR[from.size()+2];
-    mol::TCHAR* t = new mol::TCHAR[to.size()+2];
+	mol::tbuff f(from.size()+2);
+	mol::tbuff t(to.size()+2);
 
 	memcpy(f,from.c_str(),(from.size()+1)*sizeof(mol::TCHAR));
     memcpy(t,to.c_str()  ,(to.size()+1)*sizeof(mol::TCHAR));
@@ -469,8 +469,6 @@ int  ShellFileOp::op(UINT  op, HWND hwnd, const mol::string& from, const mol::st
 	sfos_.lpszProgressTitle = _T("huhu?");
 
     int  ret = SHFileOperation(&sfos_);
-    delete[] f;
-    delete[] t;
     return ret;
 }
 
@@ -484,8 +482,8 @@ int  ShellFileOp::multiOp(UINT  op, HWND hwnd, const std::vector<mol::string>& f
 		s += from[i].size()+1;
 	}
 
-    mol::TCHAR* f = new mol::TCHAR[s+1];
-    mol::TCHAR* t = new mol::TCHAR[to.size()+2];
+	mol::tbuff f(s+1);
+	mol::tbuff t(to.size()+2);
 
 	size_t c = 0;
 	for ( size_t i = 0; i < from.size(); i++ )
@@ -506,8 +504,6 @@ int  ShellFileOp::multiOp(UINT  op, HWND hwnd, const std::vector<mol::string>& f
 	sfos_.lpszProgressTitle = 0;
 
     int  ret = SHFileOperation(&sfos_);
-    delete[] f;
-    delete[] t;
     return ret;
 }
 

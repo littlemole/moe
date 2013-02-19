@@ -420,14 +420,13 @@ void RTFEditor::OnLink(ENLINK* link)
 	int start = link->chrg.cpMin;
 	int end   = link->chrg.cpMax;
 
-	wchar_t* buf = new wchar_t[end-start+2];
+	mol::wbuff buf(end-start+2);
 	buf[0] = 0;
 	TEXTRANGE tr;
 	tr.chrg = link->chrg;
 	tr.lpstrText = buf;
 	rtf_.sendMessage(EM_GETTEXTRANGE,0,(LPARAM)&tr);
-	std::wstring tmp(buf);
-	delete[] buf;
+	std::wstring tmp(buf.toString());
 
 	statusBar()->status(mol::toString(tmp));
 	

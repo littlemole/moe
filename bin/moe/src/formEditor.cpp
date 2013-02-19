@@ -230,11 +230,10 @@ void FormEditor::OnReload()
 
 			if ( hr == S_OK )
 			{
-				wchar_t* buf = new wchar_t[size];
+				mol::wbuff buf(size);
 
 				hr = stream->Read( buf, size*sizeof(wchar_t), &nread);
-				std::wstring ws = std::wstring( buf, size );
-				delete[] buf;
+				std::wstring ws = buf.toString(size);
 
 				mol::punk<IScintillAxText> txt;
 				sci->get_Text(&txt);

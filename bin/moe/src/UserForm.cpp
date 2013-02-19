@@ -221,15 +221,14 @@ bool UserForm::initialize(const mol::string& p, bool designMode, bool Debug)
 				hr = stream->Read( &size, sizeof(DWORD), &nread);
 				if ( S_OK == hr )
 				{
-					wchar_t* buf = new wchar_t[size];
+					mol::wbuff buf(size);
 					ULONG cb = size*sizeof(wchar_t);
 					hr = stream->Read( buf, cb, &nread);
 					if ( S_OK == hr )
 					{
-						std::wstring ws = std::wstring( buf, nread/sizeof(wchar_t) );
+						std::wstring ws = buf.toString(nread/sizeof(wchar_t));// std::wstring( buf, nread/sizeof(wchar_t) );
 						scriptEngine_ = mol::toString(ws);
 					}
-					delete[] buf;
 				}
 			}
 
@@ -244,12 +243,11 @@ bool UserForm::initialize(const mol::string& p, bool designMode, bool Debug)
 					hr = stream->Read( &size, sizeof(DWORD), &nread);
 					if ( hr == S_OK )
 					{
-						wchar_t* buf = new wchar_t[size+1];
+						mol::wbuff buf(size+1);
 
 						ULONG cb = size*sizeof(wchar_t);
 						hr = stream->Read( buf, cb, &nread);
-						std::wstring ws = std::wstring( buf, nread/sizeof(wchar_t) );
-						delete[] buf;
+						std::wstring ws = buf.toString(nread/sizeof(wchar_t));
 
 						stream.release();
 
