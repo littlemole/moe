@@ -177,7 +177,6 @@ extern "C" void load_codegen_metadata()
   UI().addCmd(IDM_TAB_RELOADTAB,_T("Reload"));  
   UI().addCmd(IDM_TAB_SAVETAB,_T("Save"));  
   UI().addCmd(IDM_TAB_DIRTAB,_T("Directory"));  
-  UI().addCmd(IDM_TAB_JUMPTAB,_T("Jump"));  
   UI().addCmd(IDM_WIZARD,_T("Wizard"));  
   UI().addCmd(IDM_FILE_MEMBERS,_T("Members"));  
   UI().addCmd(IDM_FILE_EVENTS,_T("Events"));  
@@ -262,7 +261,7 @@ extern "C" void load_codegen_metadata()
   UI().addBmpCmd( IDB_TOOLBAR, IDM_VIEW_CLOSEALL );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_FILE_OPEN_HTML );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_VIEW_TOOLBARS );
-  UI().addBmpCmd( IDB_TOOLBAR, IDM_TAB_JUMPTAB );
+  UI().addBmpCmd( IDB_TOOLBAR, -1 );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_FILE_NEW_UFS );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_EDIT_DEBUG );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_EDIT_DEBUG_QUIT );
@@ -641,7 +640,6 @@ extern "C" void load_codegen_metadata()
         UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_FILE_SAVE, IDB_TOOLBAR, IDM_FILE_SAVE, false, true);
     UI().addMenuSeparator(IDM_MENU_TAB,IDM_TAB);
         UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_TAB_DIRTAB, IDB_TOOLBAR, IDM_TAB_DIRTAB, false, true);
-        UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_TAB_JUMPTAB, IDB_TOOLBAR, IDM_TAB_JUMPTAB, false, true);
   
   // a main menu
   UI().addMenu(IDM_MENU_DESIGNFORM);    

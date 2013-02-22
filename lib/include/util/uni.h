@@ -128,13 +128,16 @@ class Buffer
 {
 public:
 	Buffer(size_t n)
-		: buf(n,0)
-	{}
+		: buf(n+1,0)
+	{
+		buf[n]=0;
+	}
 
 	Buffer(size_t n, int value)
-		: buf(n,0)
+		: buf(n+1,0)
 	{
-		::memset(&buf[0],value,n*sizeof(T));
+		::memset(&buf[0],value,(n)*sizeof(T));
+		buf[n]=0;
 	}
 
 	Buffer(const Buffer& rhs)
@@ -154,14 +157,9 @@ public:
 		return &buf[0];
 	}
 
-/*	T* operator[](size_t i)
-	{
-		return &buf[i];
-	}
-*/
 	size_t size()
 	{
-		return buf.size();
+		return buf.size()-1;
 	}
 
 	std::basic_string<T> toString(size_t len = std::basic_string<T>::npos)

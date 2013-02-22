@@ -112,7 +112,7 @@ HRESULT __stdcall TreeWndSink::OnTreeDblClick(BSTR filename,VARIANT_BOOL vb)
 	}
 	return S_OK;
 }
-
+/*
 MOE_DOCTYPE index2DocType(int i)
 {
 	switch(i)
@@ -143,7 +143,7 @@ MOE_DOCTYPE index2DocType(int i)
 		}
 	}
 }
-
+*/
 HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename,VARIANT_BOOL vb)
 {
 	mol::string p(mol::toString(filename));
@@ -192,31 +192,6 @@ HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename,VARIANT_BOOL vb)
 		{
 			dialogs->Open(filename,0);
 		}
-
-		/*
-		mol::FilenameDlg dlg(*moe());
-		dlg.setFilter( InFilesFilter );	
-		dlg.fileName(p);
-		if ( !dlg.dlgOpen(OFN_ALLOWMULTISELECT | OFN_EXPLORER) )
-			return S_OK;
-
-		int s = dlg.selections();
-		int c = dlg.index();
-		for ( int i = 0; i < s; i++ )
-		{
-			mol::string f = dlg.fileName(i);
-			statusBar()->status(f);
-
-
-			bool result = ::docs()->open(f,index2DocType(c),-1,false,0);
-
-			if (!result)
-			{
-				statusBar()->status( mol::string(_T("failed to load ")) + f);
-				return S_OK;
-			}
-		}
-		*/
 	}
 	return S_OK;
 }
@@ -241,61 +216,5 @@ HRESULT __stdcall TreeWndSink::OnContextMenu(BSTR fname,VARIANT_BOOL vb)
 	moe()->showContext(sub);
 
 	return S_OK;
-/*
-	int id = sub.returnTrackPopup(*moe(),pt.x-10,pt.y-10);
-	switch ( id )
-	{
-		case IDM_TREE_OPEN:
-		{
-			OnTreeOpen(fname);
-			break;
-		}
-		case IDM_TREE_UPDATE:
-		{
-			tree->Update();
-			break;
-		}
-		case IDM_TREE_RENAME:
-		{
-			tree->Rename();
-			break;
-		}
-		case IDM_TREE_DELETE:
-		{
-			tree->Delete();
-			break;
-		}
-		case IDM_EDIT_CUT:
-		{
-			tree->Cut();
-			break;
-		}
-		case IDM_EDIT_COPY:
-		{
-			tree->Copy();
-			break;
-		}
-		case IDM_EDIT_PASTE:
-		{
-			tree->Paste();
-			break;
-		}
-		case IDM_TREE_PROPERTIES:
-		{
-			tree->Properties();
-			break;
-		}
-		case IDM_TREE_EXECUTE:
-		{
-			tree->Execute();
-			break;
-		}
-		case IDM_TREE_NEWDIR:
-		{
-			tree->CreateDir();
-			break;
-		}
-	}
-	return S_OK;
-	*/
+
 }

@@ -193,7 +193,7 @@
         <index cmd="IDM_VIEW_CLOSEALL" />
         <index cmd="IDM_FILE_OPEN_HTML" />
         <index cmd="IDM_VIEW_TOOLBARS" />
-        <index cmd="IDM_TAB_JUMPTAB" />
+        <index cmd="" />
         <index cmd="IDM_FILE_NEW_UFS" />
         <index cmd="IDM_EDIT_DEBUG" />
         <index cmd="IDM_EDIT_DEBUG_QUIT" />

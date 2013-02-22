@@ -413,15 +413,6 @@
     </Command>
 
 
-    <Command Name="RibbonJumpDirectory" LabelTitle="Jump">
-      <Command.TooltipTitle>Jump to Parent Directory</Command.TooltipTitle>
-      <Command.TooltipDescription>Show the current Document's Parent Directory in Tree View</Command.TooltipDescription>
-      <Command.LargeImages>
-        <Image Source="ribbon\Jump.bmp"/>
-      </Command.LargeImages>
-    </Command>
-
-
     <Command Name="RibbonToolDebug" LabelTitle="Debug Script">
       <Command.TooltipTitle>Debug Script</Command.TooltipTitle>
       <Command.TooltipDescription>Run the current Document as Script in Debug Mode</Command.TooltipDescription>
@@ -946,7 +937,6 @@
           </MenuGroup>
           <MenuGroup>
             <Button CommandName="RibbonParentDirectory" />
-            <Button CommandName="RibbonJumpDirectory" />
           </MenuGroup>
         </ContextMenu>
         <ContextMenu Name="RibbonTreeViewContextMenu">

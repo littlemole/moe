@@ -128,8 +128,8 @@
         <msg  handler="OnDispatch" cmd="IDM_MODE_EXECUTEFORM" />
         <msg  handler="OnDispatch" cmd="IDM_MODE_SHOW_LINE_NUMBERS" />
         <msg  handler="OnDispatch" cmd="IDM_RIBBON_FONT_CTRL" />
-      
-        <msg  handler="OnDispatchTree" cmd="IDM_TREE_OPEN" />
+
+      <msg  handler="OnDispatchTree" cmd="IDM_TREE_OPEN" />
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_UPDATE" />
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_RENAME" />
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_DELETE" />
@@ -139,7 +139,7 @@
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_PROPERTIES" />
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_EXECUTE" />
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_NEWDIR" />
-
+      
 
       <msgrange type="cmd" from="ID_FIRST_USER_CMD" to="ID_LAST_USER_CMD" handler="OnDispatch" />
         <msgrange type="cmd" from="ID_FIRST_USER_SCRIPT" to="ID_LAST_USER_SCRIPT" handler="OnDispatch" />
@@ -202,7 +202,6 @@
         <msg  handler="OnDestroy" msg="WM_DESTROY" />
         <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
         <msg  handler="OnClose" msg="WM_CLOSE" />
-        
       
         <!-- menu commans -->
         <msg  handler="OnSearch" msg="WM_SEARCH_MSG" />
@@ -215,8 +214,9 @@
         <msg  handler="OnReload" cmd="IDM_EDIT_UPDATE" />
         <msg  handler="OnSelectAll" cmd="IDM_EDIT_SELECT" />
         <msg  handler="OnInsertColorDialog" cmd="IDM_EDIT_COLOR" />
-      
-        <!-- ribbon extended commands -->
+
+
+      <!-- ribbon extended commands -->
         <msg  handler="OnConvertTabs" cmd="IDM_RIBBON_TABCONVERT"/>
         <msg  handler="OnEncoding" cmd="IDM_RIBBON_ENCODING"  />
         <msg  handler="OnLanguage" cmd="IDM_RIBBON_LANGUAGE"  />
@@ -295,7 +295,7 @@
       <msg  handler="OnFind" cmd="IDM_EDIT_FIND" />
       <msg  handler="OnSearch" msg="WM_SEARCH_MSG" />
       <msg  handler="OnBytesShown" cmd="IDM_RIBBON_BYTES_SHOWN"  />
-     
+
       <msgrange type="cmd" from="IDM_EDIT_16BYTES" to="IDM_EDIT_32BYTES" handler="OnHexRange" />
       
     </class>
@@ -316,6 +316,7 @@
       <msg  handler="reload" cmd="IDM_EDIT_UPDATE" />
       <msg  handler="options" cmd="IDM_MODE_SETTINGS" />
 
+
       <!-- call the oleStdTargetExec handler with given params for these msgs -->
       <msg  handler="oleStdTargetExec" params="OLECMDID_COPY" cmd="IDM_EDIT_COPY" />
       <msg  handler="oleStdTargetExec" params="OLECMDID_CUT" cmd="IDM_EDIT_CUT" />
@@ -332,6 +333,7 @@
       <msg  handler="OnDestroy" msg="WM_DESTROY" />
       <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
       <msg  handler="OnPaint" msg="WM_PAINT" />
+
     </class>
      
     <class type="OleChild">
@@ -340,7 +342,7 @@
       <msg  handler="OnDestroy" msg="WM_DESTROY" />
       <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
       <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
-      
+
       <!-- interaction with embedded ole client -->
       <msg  handler="IOleClientSite_SaveObject" cmd="IDM_FILE_SAVE" />
       <msg  handler="oleTargetExec" params="OLECMDID_SAVECOPYAS,OLECMDEXECOPT_PROMPTUSER" cmd="IDM_FILE_SAVE_AS" />
@@ -374,7 +376,6 @@
       <msg  handler="OnEditCut" cmd="IDM_EDIT_CUT" />
       <msg  handler="OnEditCopy" cmd="IDM_EDIT_COPY" />
       <msg  handler="OnEditPaste" cmd="IDM_EDIT_PASTE" />
-      
     </class>
 
     <class type="TailEditor" >

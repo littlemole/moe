@@ -155,7 +155,6 @@
     <cmd id="IDM_TAB_RELOADTAB" title="Reload" />
     <cmd id="IDM_TAB_SAVETAB" title="Save" />
     <cmd id="IDM_TAB_DIRTAB" title="Directory" ribbon="RibbonParentDirectory"/>
-    <cmd id="IDM_TAB_JUMPTAB" title="Jump" ribbon="RibbonJumpDirectory"/>
 
     <cmd id="IDM_WIZARD" title="Wizard" />
     <cmd id="IDM_FILE_MEMBERS" title="Members"/>

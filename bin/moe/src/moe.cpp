@@ -368,7 +368,9 @@ void MoeWnd::OnFileOpenHex()
 		bool result = docs()->open( dlg.fileName(), MOE_DOCTYPE_HEX,-1, dlg.readOnly(), 0 );
 		if (!result)
 		{
-			::MessageBox(*this,dlg.fileName().c_str(),_T("failed to load"),MB_ICONERROR);
+			mol::ostringstream oss;
+			oss << _T("failed to load: ") << dlg.fileName();
+			statusBar()->status(oss.str());
 		}
 		statusBar()->status(dlg.fileName());
 	}
@@ -389,61 +391,15 @@ void MoeWnd::OnFileOpenHtml()
 			bool result = docs()->open( urlDlg()->url, MOE_DOCTYPE_HTML, -1, true, 0 );
 			if (!result)
 			{
-				::MessageBox(*this,urlDlg()->url.c_str(),_T("failed to load"),MB_ICONERROR);
+				mol::ostringstream oss;
+				oss << _T("failed to load: ") << urlDlg()->url;
+				statusBar()->status(oss.str());
 			}
 			statusBar()->status(urlDlg()->url);
 		}
 	}
 }
 
-/*
-void MoeWnd::OnTreeOpen()
-{
-	mol::punk<IShellTree> tree(treeWnd()->oleObject);
-	if ( tree )
-	{
-		mol::bstr path;
-		tree->get_Selection(&path);
-		mol::string fn = path.toString();
-		if ( mol::Path::isDir( fn) || fn.substr(0,2) == _T("::") )
-		{
-			statusBar()->status(fn);
-			bool result = ::docs()->open(0,fn,Docs::PREF_TXT,false,0);
-
-			if (!result)
-			{
-				statusBar()->status( mol::string(_T("failed to load ")) + fn);
-				return;
-			}
-			return;
-		}
-		mol::FilenameDlg dlg(*moe());
-		dlg.setFilter( InFilesFilter );	
-		dlg.fileName(fn);
-		if ( IDOK != dlg.dlgOpen(OFN_ALLOWMULTISELECT | OFN_EXPLORER) )
-			return;
-
-		int s = dlg.selections();
-		int p = dlg.index();
-		for ( int i = 0; i < s; i++ )
-		{
-			mol::string f = dlg.fileName(i);
-			statusBar()->status(f);
-
-
-			bool result = ::docs()->open(0,f,(Docs::InFiles)(p-1 >=0 ? p-1 :0),false,0);
-
-			if (!result)
-			{
-				statusBar()->status( mol::string(_T("failed to load ")) + f);
-				return;
-			}
-		}
-	}
-	return;
-
-}
-*/
 //////////////////////////////////////////////////////////////////////////////
 //
 // User selected Exit from main Menu - kill app
@@ -790,16 +746,8 @@ void MoeWnd::OnTabCtrl(NMHDR* notify )
 			}
 			case IDM_TAB_DIRTAB:
 			{
+				//::PostMessage( h, WM_COMMAND, IDM_TAB_DIRTAB, 0 );
 				docs()->OpenDir( mol::bstr(dirPathFromChildHWND(h)), 0 );
-				break;
-			}
-			case IDM_TAB_JUMPTAB:
-			{
-				mol::punk<IShellTree> tree(treeWnd()->oleObject);
-				if ( tree )
-				{
-					tree->put_Selection( mol::bstr(dirPathFromChildHWND(h)) );
-				}
 				break;
 			}
 		}

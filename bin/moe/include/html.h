@@ -44,7 +44,6 @@ public:
 
 	void OnMDIActivate( HWND activated );
 
-
 	// htmlwnd base class overrides - customize IE impl
 	DWORD UIflags();
 	HRESULT hideContextMenu();

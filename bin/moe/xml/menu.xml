@@ -396,7 +396,6 @@
         <menu cmd="IDM_FILE_SAVE" />
         <menu separator="true"  />
         <menu cmd="IDM_TAB_DIRTAB"/>
-        <menu cmd="IDM_TAB_JUMPTAB" />
 
       </menu>
     </menu>
