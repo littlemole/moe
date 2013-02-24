@@ -50,11 +50,27 @@ POINT  PtFromAngle(double angle,double sat,POINT center);
 
 ColorPickerDlg::ColorPickerDlg( )
 {
+	bInMouse   = FALSE;
+	bInitOver  = FALSE;
+	bInDrawAll = FALSE;
+	rgbBitmap  = 0;
+	hsbBitmap  = 0;
+	isCaptured = FALSE;
+	oldCursor  = ::LoadCursor(0, IDC_ARROW );
+
 	init(RGB(255,135,80));
 }
 
 ColorPickerDlg::ColorPickerDlg(COLORREF c  )
 {
+	bInMouse   = FALSE;
+	bInitOver  = FALSE;
+	bInDrawAll = FALSE;
+	rgbBitmap  = 0;
+	hsbBitmap  = 0;
+	isCaptured = FALSE;
+	oldCursor  = ::LoadCursor(0, IDC_ARROW );
+
 	init(c);
 }
 
@@ -80,13 +96,7 @@ void ColorPickerDlg::init(COLORREF c)
 
 	oldColor   = color;
 	hsvColor   = color.toHSV();
-	bInMouse   = FALSE;
-	bInitOver  = FALSE;
-	bInDrawAll = FALSE;
-	rgbBitmap  = 0;
-	hsbBitmap  = 0;
-	isCaptured = FALSE;
-	oldCursor  = ::LoadCursor(0, IDC_ARROW );
+
 }
 
 ColorPickerDlg::~ColorPickerDlg()

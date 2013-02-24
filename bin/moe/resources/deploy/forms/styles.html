@@ -86,11 +86,12 @@ function textForm(id,name,value,size,isCol)
 	html += "<td><input size='"+size+"' type='text' ";
 	html += "id='" + name + "_" + id + "' ";
 	html += "value='" + value + "' ";
+	html += "onkeyup='onChange(" + id + ")' onchange='onChange(" + id + ")' />"; 
 	if(isCol)
 	{
-		//html += " onfocus='selectColor(this)'";
+		html += "<a href='#' onclick='selectColor(\""+name+"_"+id+"\")'>col</a>";
 	}
-	html += "onkeyup='onChange(" + id + ")' onchange='onChange(" + id + ")' /></td>";
+	html += "</td>";
 	return html;
 }
 
@@ -110,8 +111,9 @@ function getStyle(item)
 	return css;
 }
 
-function selectColor(e)
+function selectColor(id)
 {
+	var e = document.getElementById(id);
 	var ax = new ActiveXObject("ShellCtrls.ColorDialog");
 	ax.HexColor = e.value;
 	var r = ax.Show();

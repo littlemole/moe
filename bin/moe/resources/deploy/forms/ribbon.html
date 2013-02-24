@@ -9,19 +9,19 @@
  <tr>
   <td>Forecolor</td>
   <td>
-	<input id="forecolor" type="text">
+	<input id="forecolor" type="text"><a href="#" onclick="changeColor('forecolor')">col</a>
   </td>
  </tr>
  <tr>
   <td>Backcolor</td>
   <td>
-	<input id="backcolor" type="text">
+	<input id="backcolor" type="text"><a href="#" onclick="changeColor('backcolor')">col</a>
   </td>
  </tr>
  <tr>
   <td>Textcolor</td>
   <td>
-	<input id="textcolor" type="text">
+	<input id="textcolor" type="text"><a href="#" onclick="changeColor('textcolor')">col</a>
   </td>
  </tr>
 </table>
@@ -46,6 +46,21 @@ function setColors()
 	window.external.moe.Config.RibbonTextColor = textColor.value;
 }
 
+function changeColor(id)
+{
+	var e = document.getElementById(id);
+	var ax = new ActiveXObject("ShellCtrls.ColorDialog");
+	ax.HexColor = e.value;
+	var r = ax.Show();
+		
+	if(r)
+	{
+		var col = ax.HexColor;
+		e.value=col;
+		e.onchange();
+		document.body.focus();
+	}
+}
 </script>
 
  </body>
