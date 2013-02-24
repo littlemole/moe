@@ -33,12 +33,18 @@ NamespaceTree::NamespaceTree()
 	mol::ole::PixeltoHIMETRIC(&sizel);
 	eraseBackground_ = 1;
 	useContext_ = true;
+
+	foreCol_ = ::GetSysColor(COLOR_MENUTEXT);
+	bgCol_ = ::GetSysColor(COLOR_WINDOW);
+
+	bgBrush_ = ::CreateSolidBrush(bgCol_);
 }
 
 ///////////////////////////////////////////////////////////////////////
 
 NamespaceTree::~NamespaceTree()	
 {
+	::DeleteObject(bgBrush_);
 	// free tree items + and associated data
 	ODBGS("~ShellTree");
 }
@@ -441,6 +447,39 @@ HRESULT __stdcall NamespaceTree::IsDir(BSTR path,VARIANT_BOOL* vb)
 		return E_INVALIDARG;
 
 	*vb = mol::Path::isDir(mol::bstr(path).toString()) ? VARIANT_TRUE : VARIANT_FALSE;
+	return S_OK;
+}
+
+HRESULT __stdcall NamespaceTree::put_ForeColor( BSTR fPath)
+{
+	foreCol_ = mol::hex2rgb(mol::bstr(fPath).toString());
+	return S_OK;
+}
+
+HRESULT __stdcall NamespaceTree::get_ForeColor(  BSTR* fPath)
+{
+	if(!fPath)
+		return E_INVALIDARG;
+
+	*fPath = ::SysAllocString(mol::rgb2hex(foreCol_).c_str());
+	return S_OK;
+}
+
+HRESULT __stdcall NamespaceTree::put_BackColor( BSTR fPath)
+{
+	bgCol_ = mol::hex2rgb(mol::bstr(fPath).toString());
+	if ( bgBrush_)
+		::DeleteObject(bgBrush_);
+	bgBrush_ = ::CreateSolidBrush(bgCol_);
+	return S_OK;
+}
+
+HRESULT __stdcall NamespaceTree::get_BackColor(  BSTR* fPath)
+{
+	if(!fPath)
+		return E_INVALIDARG;
+
+	*fPath = ::SysAllocString(mol::rgb2hex(bgCol_).c_str());
 	return S_OK;
 }
 

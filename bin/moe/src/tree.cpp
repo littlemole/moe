@@ -100,6 +100,7 @@ void MoeTreeWnd::OnEditPaste()
 }
 
 
+
 HWND MoeTreeWnd::createWindow( const mol::string& windowName, HMENU id, const mol::Rect& r, HWND parent )
 {
 	mol::AxClientWnd<MoeTreeWnd,RTree>::createWindow( windowName, id, r, parent );

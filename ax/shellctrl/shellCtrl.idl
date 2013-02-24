@@ -115,6 +115,27 @@ library ShellCtrls
 		[id(16), helpstring("is path a folder")] 
 		HRESULT IsDir([in] BSTR path, [out,retval] VARIANT_BOOL* vb);
 
+		[ 
+		  propput,bindable,displaybind, requestedit,id(17), 
+		  helpstring("Get/Set Forecolor")
+		]
+		HRESULT ForeColor( [in] BSTR c);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(17), 
+		]
+		HRESULT ForeColor( [out,retval] BSTR* c);
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(18), 
+		  helpstring("Get/Set Backcolor")
+		]
+		HRESULT BackColor( [in] BSTR c);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(18), 
+		]
+		HRESULT BackColor( [out,retval] BSTR* c);
+
     };
 
 
@@ -250,6 +271,8 @@ library ShellCtrls
 
 		[id(17), helpstring("Get Value at specific offset")] 
 		HRESULT Value( [in] long off, [out,retval] BSTR* value);
+
+
 
     };
 

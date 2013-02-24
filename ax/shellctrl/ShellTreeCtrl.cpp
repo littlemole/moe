@@ -1347,6 +1347,36 @@ HRESULT __stdcall ShellTree::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL 
 }
 
 
+HRESULT __stdcall ShellTree::put_ForeColor( BSTR fPath)
+{
+	foreCol_ = mol::hex2rgb(mol::bstr(fPath).toString());
+	return S_OK;
+}
+
+HRESULT __stdcall ShellTree::get_ForeColor(  BSTR* fPath)
+{
+	if(!fPath)
+		return E_INVALIDARG;
+
+	*fPath = ::SysAllocString(mol::rgb2hex(foreCol_).c_str());
+	return S_OK;
+}
+
+HRESULT __stdcall ShellTree::put_BackColor( BSTR fPath)
+{
+	bgCol_ = mol::hex2rgb(mol::bstr(fPath).toString());
+	return S_OK;
+}
+
+HRESULT __stdcall ShellTree::get_BackColor(  BSTR* fPath)
+{
+	if(!fPath)
+		return E_INVALIDARG;
+
+	*fPath = ::SysAllocString(mol::rgb2hex(bgCol_).c_str());
+	return S_OK;
+}
+
 
 ///////////////////////////////////////////////////////////////////////
 // Drag Drop Implementation

@@ -212,6 +212,11 @@ public:
 	HRESULT virtual __stdcall Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog);
 	HRESULT virtual __stdcall Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties);
 
+	HRESULT virtual __stdcall put_ForeColor( BSTR fPath);
+	HRESULT virtual __stdcall get_ForeColor(  BSTR* fPath);
+	HRESULT virtual __stdcall put_BackColor( BSTR fPath);
+	HRESULT virtual __stdcall get_BackColor(  BSTR* fPath);
+
 	virtual void initAmbientProperties( IDispatch* disp)
 	{
 		HIMAGELIST himl = TreeView_GetImageList(tree_,TVSIL_NORMAL);

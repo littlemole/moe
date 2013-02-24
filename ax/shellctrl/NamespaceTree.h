@@ -34,6 +34,7 @@ class NamespaceTree:
 	public ctrl_events<NamespaceTree,_IShellTreeEvents>,
 	public ProvideClassInfo2<NamespaceTree,DIID__IShellTreeEvents>,
 	public INameSpaceTreeControlEvents,
+	public INameSpaceTreeControlCustomDraw,
 	public IServiceProvider,
 	public interfaces< NamespaceTree, 
 			 implements<
@@ -56,6 +57,7 @@ class NamespaceTree:
 				IProvideClassInfo,
 				IProvideClassInfo2,
 				IServiceProvider,
+				INameSpaceTreeControlCustomDraw,
 				INameSpaceTreeControlEvents>
 		>
 {
@@ -105,8 +107,18 @@ public:
 	HRESULT virtual __stdcall Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog);
 	HRESULT virtual __stdcall Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties);
 
-    HRESULT virtual __stdcall QueryService(REFGUID /*guidService*/, REFIID /*riid*/, void **ppv)
+	HRESULT virtual __stdcall put_ForeColor( BSTR fPath);
+	HRESULT virtual __stdcall get_ForeColor(  BSTR* fPath);
+	HRESULT virtual __stdcall put_BackColor( BSTR fPath);
+	HRESULT virtual __stdcall get_BackColor(  BSTR* fPath);
+
+    HRESULT virtual __stdcall QueryService(REFGUID /*guidService*/, REFIID riid, void **ppv)
     {
+		if ( riid == IID_INameSpaceTreeControlCustomDraw )
+		{
+			return this->QueryInterfaceImpl(riid,ppv);
+		}
+
         HRESULT hr = E_NOINTERFACE;
         *ppv = NULL;
         return hr;
@@ -184,6 +196,31 @@ public:
     HRESULT virtual __stdcall  OnBeforeStateImageChange(IShellItem * /*psi*/) { return S_OK; }
     HRESULT virtual __stdcall  OnGetDefaultIconIndex(IShellItem * /*psi*/, int * /*piDefaultIcon*/, int * /*piOpenIcon*/) { return E_NOTIMPL; }
 
+	 HRESULT virtual __stdcall  PrePaint( HDC hdc, RECT *prc, LRESULT *plres)
+	 {
+		 ::FillRect(hdc,prc,bgBrush_);
+		 *plres = CDRF_DOERASE | CDRF_NOTIFYITEMDRAW;
+		 return S_OK;
+	 }
+
+	 HRESULT virtual __stdcall PostPaint( HDC hdc, RECT *prc) 
+	 {
+		 return S_OK;
+	 }
+        
+     HRESULT virtual __stdcall  ItemPrePaint( HDC hdc, RECT *prc, NSTCCUSTOMDRAW *pnstccdItem, COLORREF *pclrText, COLORREF *pclrTextBk, LRESULT *plres)
+	 {
+		 *plres = CDRF_DODEFAULT;
+		 *pclrText = foreCol_;
+		 *pclrTextBk = bgCol_;
+		 return S_OK;
+	 }
+        
+     HRESULT virtual __stdcall ItemPostPaint( HDC hdc, RECT *prc, NSTCCUSTOMDRAW *pnstccdItem) 
+	 {
+		 return S_OK;
+	 }
+
 
 	virtual void initAmbientProperties( IDispatch* disp)
 	{
@@ -203,6 +240,10 @@ protected:
 	RECT										clientRect_;
 	mol::Menu									treeMenu_;
 	DWORD										adviseCookie_;
+
+	OLE_COLOR									bgCol_;
+	OLE_COLOR									foreCol_;
+	HBRUSH										bgBrush_;
 };
 
 
