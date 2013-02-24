@@ -321,6 +321,7 @@
     <ClCompile Include="ColorPickerDlg.cpp" />
     <ClCompile Include="HexCtrl.cpp" />
     <ClCompile Include="Killroy.cpp" />
+    <ClCompile Include="NamespaceTree.cpp" />
     <ClCompile Include="ScpListCtrl.cpp" />
     <ClCompile Include="shellCtrl.cpp" />
     <ClCompile Include="ShellListCtrl.cpp" />
@@ -368,6 +369,7 @@
     <ClInclude Include="HexCtrl.h" />
     <ClInclude Include="HexCtrlEvents.h" />
     <ClInclude Include="Killroy.h" />
+    <ClInclude Include="NamespaceTree.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ScpListCtrl.h" />
     <ClInclude Include="shellctrl_dispid.h" />

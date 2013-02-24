@@ -41,8 +41,8 @@ struct LineDesc
 	double slope;
 	double c;
 };
-COLORREF hex2rgb( const char* hex );
-const char* rgb2hex( COLORREF col );
+//COLORREF hex2rgb( const char* hex );
+//const char* rgb2hex( COLORREF col );
 
 
 
@@ -58,7 +58,7 @@ public:
 	~ColorPickerDlg();
 
 	COLORREF getColor()			{ return color.color();};
-	std::string getHexColor()	{ return rgb2hex(color.color()); };
+	std::string getHexColor()	{ return mol::tostring(mol::rgb2hex(color.color())); };
 
 	LRESULT doModal      ( HWND hWndParent, COLORREF col );
 	LRESULT doModeless   ( HWND hWndParent, COLORREF col );
@@ -205,14 +205,14 @@ public:
 		HRESULT virtual __stdcall put_HexColor( BSTR col)
 		{
 			bstr b(col);
-			col_ = hex2rgb(b.tostring().c_str());
+			col_ = mol::hex2rgb(b.toString());
 			return S_OK;
 		}
 		HRESULT virtual __stdcall get_HexColor( BSTR* col)
 		{
 			if ( col )
 			{
-				*col = ansi2BSTR(rgb2hex(col_));
+				*col = ::SysAllocString(mol::rgb2hex(col_).c_str());
 			}
 			return S_OK;
 		}

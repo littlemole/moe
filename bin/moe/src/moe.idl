@@ -898,6 +898,37 @@ library Moe
 		  helpstring("Reset styles")
 		]
 		HRESULT ResetStyles();
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(18), 
+		  helpstring("Get/Set Ribbon Forecolor")
+		]
+		HRESULT RibbonForeColor( [in] BSTR c);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(18), 
+		]
+		HRESULT RibbonForeColor( [out,retval] BSTR* c);
+
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(19), 
+		  helpstring("Get/Set Ribbon Backcolor")
+		]
+		HRESULT RibbonBackColor( [in] BSTR c);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(19), 
+		]
+		HRESULT RibbonBackColor( [out,retval] BSTR* c);
+
+		[ 
+		  propput,bindable,displaybind, requestedit,id(20), 
+		  helpstring("Get/Set Ribbon TextColor")
+		]
+		HRESULT RibbonTextColor( [in] BSTR c);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(20), 
+		]
+		HRESULT RibbonTextColor( [out,retval] BSTR* c);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////

@@ -768,6 +768,10 @@ MoeConfig::MoeConfig()
 	tabIndents_			= VARIANT_TRUE;
 	backSpaceUnIndents_	= VARIANT_FALSE;
 	fullScreen_			= VARIANT_FALSE;
+
+	foreColor_			= ::GetSysColor(COLOR_MENUTEXT);
+	backColor_			= ::GetSysColor(COLOR_MENU);
+	textColor_			= ::GetSysColor(COLOR_HIGHLIGHT);
 }
 
 MoeConfig::~MoeConfig()
@@ -1045,6 +1049,56 @@ HRESULT  __stdcall MoeConfig::ResetStyles()
 	return S_OK;
 }
 
+HRESULT __stdcall MoeConfig::put_RibbonForeColor( BSTR fPath)
+{
+	foreColor_ = mol::hex2rgb(mol::bstr(fPath).toString());
+	mol::Ribbon::ribbon()->setColor(foreColor_,backColor_,textColor_);
+	return S_OK;
+}
+
+HRESULT __stdcall MoeConfig::get_RibbonForeColor(  BSTR* fPath)
+{
+	if(!fPath)
+		return E_INVALIDARG;
+
+	*fPath = ::SysAllocString(mol::rgb2hex(foreColor_).c_str());
+	return S_OK;
+}
+
+HRESULT __stdcall MoeConfig::put_RibbonBackColor( BSTR fPath)
+{
+	backColor_ = mol::hex2rgb(mol::bstr(fPath).toString());
+	mol::Ribbon::ribbon()->setColor(foreColor_,backColor_,textColor_);
+
+	return S_OK;
+}
+
+HRESULT __stdcall MoeConfig::get_RibbonBackColor(  BSTR* fPath)
+{
+	if(!fPath)
+		return E_INVALIDARG;
+
+	*fPath = ::SysAllocString(mol::rgb2hex(backColor_).c_str());
+	return S_OK;
+}
+
+HRESULT __stdcall MoeConfig::put_RibbonTextColor( BSTR fPath)
+{
+	textColor_ = mol::hex2rgb(mol::bstr(fPath).toString());
+	mol::Ribbon::ribbon()->setColor(foreColor_,backColor_,textColor_);
+
+	return S_OK;
+}
+
+HRESULT __stdcall MoeConfig::get_RibbonTextColor(  BSTR* fPath)
+{
+	if(!fPath)
+		return E_INVALIDARG;
+
+	*fPath = ::SysAllocString(mol::rgb2hex(textColor_).c_str());
+	return S_OK;
+}
+
 void MoeConfig::setDirty(bool b)
 {
 
@@ -1067,7 +1121,10 @@ HRESULT __stdcall MoeConfig::Load( LPSTREAM pStm)
 		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_TABINDENTS,VT_BOOL) )
 		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_BACKSPACEUNINDENTS,VT_BOOL) )
 		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_TABWIDTH, VT_I4) )
-		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_SHOWLINENUMBERS,VT_BOOL) );
+		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_SHOWLINENUMBERS,VT_BOOL) )
+		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONBACKCOLOR,VT_BSTR) )
+		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONFORECOLOR,VT_BSTR) )
+		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONTEXTCOLOR,VT_BSTR) );
 
 	return S_OK;
 }
@@ -1080,7 +1137,10 @@ HRESULT __stdcall MoeConfig::Save( LPSTREAM pStm,BOOL fClearDirty)
 		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_TABINDENTS,VT_BOOL) )
 		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_BACKSPACEUNINDENTS,VT_BOOL) )
 		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_TABWIDTH, VT_I4) )
-		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_SHOWLINENUMBERS,VT_BOOL) );
+		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_SHOWLINENUMBERS,VT_BOOL) )
+		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONBACKCOLOR,VT_BSTR) )
+		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONFORECOLOR,VT_BSTR) )
+		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONTEXTCOLOR,VT_BSTR) );
 
 
 	return S_OK;

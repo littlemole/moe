@@ -52,6 +52,9 @@ BEGIN
 	VK_F10,             IDM_F10,            VIRTKEY,NOINVERT //
 	VK_F11,             IDM_F11,            VIRTKEY,NOINVERT //
 	VK_F12,             IDM_F12,            VIRTKEY,NOINVERT //
+	"X",                  IDM_EDIT_CUT,       VIRTKEY,CONTROL,NOINVERT //
+	"C",                  IDM_EDIT_COPY,      VIRTKEY,CONTROL,NOINVERT //
+	"V",                  IDM_EDIT_PASTE,     VIRTKEY,CONTROL,NOINVERT //
 END
 
 

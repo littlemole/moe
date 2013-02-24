@@ -42,23 +42,22 @@ library ShellCtrls
 		// properties
 		[ 
 		  propput,bindable,displaybind, requestedit,id(1), 
-		  helpstring("Get/Set Display of files")
+		  helpstring("Get Display of files")
 		] 
 		HRESULT DisplayFiles([in] VARIANT_BOOL vb);
 
 		[ 
-		  propget,bindable,displaybind, requestedit,id(1)
+		  propget,bindable,displaybind, requestedit,id(1),
+		  helpstring("Get Display of files")
+
 		] 
 		HRESULT DisplayFiles([out,retval] VARIANT_BOOL* vb);
 
-		[ 
-		  propput,id(2), 
-		  helpstring("Get/Set the current selection path")
-		] 
-		HRESULT Selection([in] BSTR fname);
+
 
 		[ 
-		  propget,id(2)
+		  propget,id(2),
+		  helpstring("Get/Set the current selection path")
 		] 
 		HRESULT Selection([out,retval] BSTR* fname);
 
@@ -658,6 +657,20 @@ library ShellCtrls
 		aggregatable
 	]
 	coclass ShellTree
+	{
+		[default]         interface     IShellTree;
+		[default, source] dispinterface _IShellTreeEvents;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// ShellTree
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(3709C0E3-1CED-4B80-BBE1-D80D539C5FEE),
+		aggregatable
+	]
+	coclass NamespaceTree
 	{
 		[default]         interface     IShellTree;
 		[default, source] dispinterface _IShellTreeEvents;

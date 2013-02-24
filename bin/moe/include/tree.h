@@ -25,10 +25,11 @@ RTree;
 class MoeTreeWnd : 
 	public mol::Frame< 
 					MoeTreeWnd,
-						mol::AxWnd<
+						mol::AxClientWnd<
 								MoeTreeWnd,
-								RTree,
-								&CLSID_ShellTree> , 
+								RTree>, //,
+								//&CLSID_ShellTree> , 
+								//&CLSID_NamespaceTree> , 
 					    WS_CHILD|WS_VISIBLE|WS_CLIPSIBLINGS|
 					    WS_CLIPCHILDREN|WS_THICKFRAME,
 					    WS_EX_STATICEDGE >
@@ -36,9 +37,6 @@ class MoeTreeWnd :
 public:
 
 	~MoeTreeWnd();
-
-	//msg_handler(WM_CREATE,OnCreate)
-	//LRESULT OnCreate();
 
 	void OnTreeOpen();
 	void OnTreeUpdate();
@@ -53,6 +51,10 @@ public:
 	void OnEditCut();
 	void OnEditCopy();
 	void OnEditPaste();
+
+	HWND createWindow( const mol::string& windowName, HMENU id, const mol::Rect& r, HWND parent );
+
+	bool hasFocus()  ;
 };
 
 /////////////////////////////////////////////////////////////////////

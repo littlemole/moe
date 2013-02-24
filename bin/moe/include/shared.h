@@ -133,7 +133,9 @@ private:
 	VARIANT_BOOL					fullScreen_;
 	VARIANT_BOOL					backSpaceUnIndents_;
 	VARIANT_BOOL					showLineNumbers_;
-
+	COLORREF						foreColor_;
+	COLORREF						backColor_;
+	COLORREF						textColor_;
 public:
 
 	MoeConfig();
@@ -180,10 +182,16 @@ public:
 	virtual HRESULT __stdcall Load( LPSTREAM pStm);
 	virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
 
-	HRESULT virtual __stdcall get_StyleSets( IDispatch** styles);
+	virtual HRESULT __stdcall get_StyleSets( IDispatch** styles);
 
-	HRESULT virtual __stdcall ResetStyles();
+	virtual HRESULT __stdcall ResetStyles();
 
+	virtual HRESULT __stdcall put_RibbonForeColor( BSTR fPath);
+	virtual HRESULT __stdcall get_RibbonForeColor(  BSTR* fPath);
+	virtual HRESULT __stdcall put_RibbonBackColor( BSTR fPath);
+	virtual HRESULT __stdcall get_RibbonBackColor(  BSTR* fPath);
+	virtual HRESULT __stdcall put_RibbonTextColor( BSTR fPath);
+	virtual HRESULT __stdcall get_RibbonTextColor(  BSTR* fPath);
 
 	void setDirty(bool b);
 	bool isDirty();

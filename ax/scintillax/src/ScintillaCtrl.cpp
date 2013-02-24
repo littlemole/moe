@@ -1609,7 +1609,7 @@ HRESULT __stdcall ScintillAx::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL
 
 
 
-
+/*
 
 COLORREF hex2rgb( const char* hex )
 {
@@ -1633,7 +1633,7 @@ COLORREF hex2rgb( const char* hex )
 
     return RGB(r,g,b);
 }
-
+*/
 
 
 
@@ -1741,13 +1741,13 @@ HRESULT  __stdcall ScintillAx::Apply(IScintillAxStyleSet * styleSet)
 			hr = style->get_Backcolor(&back);
 			if(hr ==S_OK && back.bstr_)
 			{
-				edit()->styleSetBack(id,hex2rgb(back.tostring().c_str()));
+				edit()->styleSetBack(id,mol::hex2rgb(back.toString()));
 			}
 			mol::bstr fore;
 			hr = style->get_Forecolor(&fore);
 			if(hr ==S_OK && fore.bstr_)
 			{
-				edit()->styleSetFore(id,hex2rgb(fore.tostring().c_str()));
+				edit()->styleSetFore(id,mol::hex2rgb(fore.toString()));
 			}
 
 			if(i==0)

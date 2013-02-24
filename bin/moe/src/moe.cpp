@@ -1174,6 +1174,19 @@ void  MoeWnd::initRibbon(IStorage* store)
 	reBar()->show(SW_HIDE);
 	// default Ribbon mode
 	Ribbon::ribbon()->mode(0);
+
+	mol::bstr foreCol;
+	mol::bstr backCol;
+	mol::bstr textCol;
+
+	moeConfig->get_RibbonForeColor(&foreCol);
+	moeConfig->get_RibbonBackColor(&backCol);
+	moeConfig->get_RibbonTextColor(&textCol);
+
+	moeConfig->put_RibbonForeColor(foreCol);
+	moeConfig->put_RibbonBackColor(backCol);
+	moeConfig->put_RibbonTextColor(textCol);
+
 	Ribbon::ribbon()->flush();
 }
 

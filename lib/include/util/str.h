@@ -43,6 +43,8 @@ std::string URLdecode( const std::string& in );
 std::string base64_encode(unsigned char const* , unsigned int len);
 std::string base64_decode(mol::string const& s);
 
+COLORREF hex2rgb( const mol::string& hex );
+mol::string rgb2hex( COLORREF col );
 
 } // end namespace mol
 

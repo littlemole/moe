@@ -1298,20 +1298,40 @@ double min,max,delta,temp;
 	return hsv;
 }
 
-void Ribbon::setColor( UI_HSBCOLOR foreGround, UI_HSBCOLOR backGround)
+void Ribbon::setColor( COLORREF fore, COLORREF back, COLORREF text)
 {
+	HSVType hsv = toHSV( GetRValue(back),GetGValue(back),GetBValue(back) ); 
+	UI_HSBCOLOR BackgroundColor = UI_HSB(hsv.h, hsv.s, hsv.v);
+
+	hsv = toHSV( GetRValue(fore),GetGValue(fore),GetBValue(fore) );
+	UI_HSBCOLOR ForegroundColor = UI_HSB(hsv.h, hsv.s, hsv.v);
+
+	hsv = toHSV( GetRValue(text),GetGValue(text),GetBValue(text) );
+	UI_HSBCOLOR textColor = UI_HSB(hsv.h, hsv.s, hsv.v);
+
+	setColorHSV(ForegroundColor,BackgroundColor,textColor);
+}
+
+void Ribbon::setColorHSV( UI_HSBCOLOR foreGround, UI_HSBCOLOR backGround, UI_HSBCOLOR text)
+{
+	if(!ribbon)
+		return;
+
 	mol::punk<IPropertyStore> spPropertyStore;
 
     if (S_OK != ribbon->QueryInterface(&spPropertyStore) )
 		return;
 
+	PROPVARIANT propvarHighlight;
     PROPVARIANT propvarBackground;
     PROPVARIANT propvarText;
  
     InitPropVariantFromUInt32(backGround, &propvarBackground);
-    InitPropVariantFromUInt32(foreGround, &propvarText);
+    InitPropVariantFromUInt32(text, &propvarText);
+	InitPropVariantFromUInt32(foreGround, &propvarHighlight);
  
     spPropertyStore->SetValue(UI_PKEY_GlobalBackgroundColor, propvarBackground);
+	spPropertyStore->SetValue(UI_PKEY_GlobalHighlightColor, propvarHighlight);
     spPropertyStore->SetValue(UI_PKEY_GlobalTextColor, propvarText);
  
     spPropertyStore->Commit();
@@ -1322,16 +1342,18 @@ void Ribbon::setDefaultColor()
 
     DWORD col = GetSysColor(COLOR_MENU);
 	HSVType hsv = toHSV( GetRValue(col),GetGValue(col),GetBValue(col) );
- 
 	UI_HSBCOLOR BackgroundColor = UI_HSB(hsv.h, hsv.s, hsv.v);
 
 
 	col = GetSysColor(COLOR_MENUTEXT);
 	hsv = toHSV( GetRValue(col),GetGValue(col),GetBValue(col) );
-
 	UI_HSBCOLOR ForegroundColor = UI_HSB(hsv.h, hsv.s, hsv.v);
 
-	setColor(ForegroundColor,BackgroundColor);
+	col = GetSysColor(COLOR_WINDOW);
+	hsv = toHSV( GetRValue(col),GetGValue(col),GetBValue(col) );
+	UI_HSBCOLOR HighlightColor = UI_HSB(hsv.h, hsv.s, hsv.v);
+
+	setColorHSV(HighlightColor,BackgroundColor,ForegroundColor);
 }
 
 

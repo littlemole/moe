@@ -37,8 +37,8 @@ POINT  Intersection(LineDesc desc1,LineDesc desc2);
 double AngleFromPoint(POINT pt,POINT center);
 POINT  PtFromAngle(double angle,double sat,POINT center);
 
-COLORREF hex2rgb( const char* hex );
-const char* rgb2hex( COLORREF col );
+//COLORREF hex2rgb( const char* hex );
+//const char* rgb2hex( COLORREF col );
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ ColorPickerDlg::ColorPickerDlg(COLORREF c  )
 
 ColorPickerDlg::ColorPickerDlg(const std::string& c )
 {
-	COLORREF col = hex2rgb(c.c_str());
+	COLORREF col = mol::hex2rgb(mol::toString(c));
 	init(col);
 }
 
@@ -579,7 +579,7 @@ LRESULT ColorPickerDlg::OnChangeEditHex( UINT msg, WPARAM wParam, LPARAM lParam 
 	}
 	else if ( hex.size() > 6 )
 	{
-		COLORREF col = hex2rgb(mol::tostring(hex).c_str());
+		COLORREF col = hex2rgb(hex);
 		if( color.color() != col && bInitOver)
 		{
 			color.r = GetRValue(col);
@@ -957,7 +957,7 @@ void ColorPickerDlg::setEditVals()
 	sendDlgItemMsg(IDC_SPIN_GREEN,  UDM_SETPOS32,0,color.g);
 	sendDlgItemMsg(IDC_SPIN_BLUE,   UDM_SETPOS32,0,color.b);
 
-	mol::string col = mol::toString(rgb2hex(color.color()));
+	mol::string col = mol::rgb2hex(color.color());
 	setDlgItemText(IDC_EDIT_HEX,col);
 
 	sendDlgItemMsg(IDC_SPIN_HUE,    UDM_SETPOS32,0,hsvColor.h);
@@ -1330,7 +1330,7 @@ double min,max,delta,temp;
 }
 
 ///////////////////////////////////////////////////////////////////
-
+/*
 const char* rgb2hex( COLORREF col )
 {
     static char ret[12];
@@ -1372,4 +1372,4 @@ COLORREF hex2rgb( const char* hex )
     return RGB(r,g,b);
 }
 
-
+*/

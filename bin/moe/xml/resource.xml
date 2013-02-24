@@ -47,7 +47,9 @@
         <accelerator cmd="IDM_F10" key="VK_F10" flags="VIRTKEY,NOINVERT" />
         <accelerator cmd="IDM_F11" key="VK_F11" flags="VIRTKEY,NOINVERT" />
         <accelerator cmd="IDM_F12" key="VK_F12" flags="VIRTKEY,NOINVERT" />
-
+        <accelerator cmd="IDM_EDIT_CUT" ch="X" flags="VIRTKEY,CONTROL,NOINVERT" />
+        <accelerator cmd="IDM_EDIT_COPY" ch="C" flags="VIRTKEY,CONTROL,NOINVERT" />
+        <accelerator cmd="IDM_EDIT_PASTE" ch="V" flags="VIRTKEY,CONTROL,NOINVERT" />
       </acceltable>
     </accelerators>    
  

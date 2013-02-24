@@ -322,7 +322,8 @@ public:
 
 	bool tearDown();
 
-	void setColor( UI_HSBCOLOR foreGround, UI_HSBCOLOR backGround);
+	void setColorHSV( UI_HSBCOLOR foreGround, UI_HSBCOLOR backGround, UI_HSBCOLOR text);
+	void setColor( COLORREF fore, COLORREF back, COLORREF text);
 	void setDefaultColor();
 
 private :

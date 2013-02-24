@@ -21,6 +21,20 @@ void MoeTreeWnd::OnCreate()
 }
 */
 
+bool MoeTreeWnd::hasFocus()      
+{ 
+	mol::punk<IShellTree> tree(oleObject);
+	if(!tree)
+		return false;
+
+	VARIANT_BOOL vb;
+    HRESULT hr = tree->get_HasFocus(&vb);
+	if( hr != S_OK || vb == VARIANT_FALSE)
+		return false;
+
+	return true;
+}
+
 void MoeTreeWnd::OnTreeOpen()
 {
 	mol::bstr p;
@@ -85,6 +99,21 @@ void MoeTreeWnd::OnEditPaste()
 	tree->Paste();
 }
 
+
+HWND MoeTreeWnd::createWindow( const mol::string& windowName, HMENU id, const mol::Rect& r, HWND parent )
+{
+	mol::AxClientWnd<MoeTreeWnd,RTree>::createWindow( windowName, id, r, parent );
+	show(SW_SHOW);
+	getClientRect(clientRect_);
+	const GUID* clsid = &CLSID_ShellTree;
+	if ( mol::OS::has_uac() )
+	//if ( mol::Ribbon::ribbon()->enabled())
+	{
+		clsid = &CLSID_NamespaceTree;
+	}
+	loadObject(*clsid);
+    return hWnd_;
+}
 
 HRESULT __stdcall TreeWndSink::OnTreeSelection(BSTR filename)
 {

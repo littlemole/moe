@@ -1,0 +1,53 @@
+<html>
+ <head>
+  <title></title>
+ </head>
+ 
+ <body>
+<h3>Ribbon Colors</h3>
+<table class="" align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
+ <tr>
+  <td>Forecolor</td>
+  <td>
+	<input id="forecolor" type="text">
+  </td>
+ </tr>
+ <tr>
+  <td>Backcolor</td>
+  <td>
+	<input id="backcolor" type="text">
+  </td>
+ </tr>
+ <tr>
+  <td>Textcolor</td>
+  <td>
+	<input id="textcolor" type="text">
+  </td>
+ </tr>
+</table>
+
+<input type="button" onclick="setColors()" value="set">
+
+<script language="javascript">
+var foreColor = document.getElementById("forecolor");
+var backColor = document.getElementById("backcolor");
+var textColor = document.getElementById("textcolor");
+
+foreColor.value = window.external.moe.Config.RibbonForeColor;
+backColor.value = window.external.moe.Config.RibbonBackColor;
+textColor.value = window.external.moe.Config.RibbonTextColor;
+
+
+function setColors()
+{
+
+	window.external.moe.Config.RibbonForeColor = foreColor.value;
+	window.external.moe.Config.RibbonBackColor = backColor.value;
+	window.external.moe.Config.RibbonTextColor = textColor.value;
+}
+
+</script>
+
+ </body>
+ 
+</html>
