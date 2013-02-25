@@ -1241,8 +1241,6 @@ mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_EDIT_COPY, make_handler(&MoeTreeWnd
 
 mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_EDIT_PASTE, make_handler(&MoeTreeWnd::OnEditPaste) );
 
-mol::msgMap<MoeTreeWnd>().addMsgHandler( WM_NCPAINT, make_handler(&MoeTreeWnd::OnNcPaint) );
-
 mol::msgMap<TailEditor>().addMsgHandler( WM_CLOSE, make_handler(&TailEditor::OnClose) );
 
 mol::msgMap<TailEditor>().addCmdHandler( IDM_EDIT_UPDATE, make_handler(&TailEditor::OnReload) );
