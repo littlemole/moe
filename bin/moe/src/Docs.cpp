@@ -209,26 +209,6 @@ HRESULT __stdcall Docs::Activate( VARIANT i)
 	(*it)->activate();
 
 	return S_OK;
-
-	/*
-	mol::punk<IMoeDocument> d;
-	HRESULT hr = Item(i,&d);
-	if ( hr != S_OK )
-		return hr;
-
-	if (!d)
-		return E_FAIL;
-
-	mol::punk<IMoeDocumentView> view;
-	hr = d->get_View(&view);
-	if ( hr != S_OK )
-		return hr;
-
-	if (!view)
-		return E_FAIL;
-
-	return view->Activate();
-	*/
 }
 
 HRESULT __stdcall Docs::New(IMoeDocument** d)
@@ -293,13 +273,6 @@ HRESULT __stdcall Docs::OpenUserForm(  BSTR pathname, IMoeDocument** d )
 HRESULT __stdcall Docs::SaveAll()
 {
 	statusBar()->status(_T("saving all open documents ..."));
-
-	/*
-	long cnt = 0;
-	HRESULT hr = docs()->get_Count(&cnt);
-	if (hr != S_OK )
-		return hr;
-		*/
 
 	for ( int i = 0; i < size(); i++ )
 	{

@@ -118,7 +118,6 @@ mol::Rect LayoutMgr::availBorderRect(mol::Rect& r)
 	if ( statusbar_ && statusbar_->isVisible() )
 	{
 		clientRect_.bottom        -= statusbar_->getHeight();              //shrink for statusbar
-		//statusbar_->sendMessage(WM_SIZE,0,MAKELPARAM(r.right,r.bottom));
 	}
 
 	return clientRect_;
@@ -145,17 +144,17 @@ LRESULT LayoutMgr::OnSize( UINT msg, WPARAM wParam, LPARAM lParam)
 
 void LayoutMgr::resize(WPARAM wParam, LPARAM lParam)
 {
-	if ( rebar_ )//&& rebar_->isVisible() )
+	if ( rebar_ )
 	{
 		rebar_->postMessage(WM_SIZE,wParam,lParam);	
 	}
 
-	if ( toolbar_ )//&& toolbar_->isVisible() )
+	if ( toolbar_ )
 	{
 		toolbar_->sendMessage(WM_SIZE,wParam,lParam);
 	}
 
-	if ( statusbar_ )//&& statusbar_->isVisible() )
+	if ( statusbar_ )
 	{
 		statusbar_->sendMessage(WM_SIZE,wParam,lParam);
 	}
@@ -259,7 +258,6 @@ void BorderLayout::BorderLayoutWidget::layout( mol::Rect& r )
 	}
 	::MoveWindow(wnd,destRect.left,destRect.top,destRect.right,destRect.bottom,TRUE);
 	::InvalidateRect(wnd,0,TRUE);
-	//::UpdateWindow(wnd);
 }
 
 void BorderLayout::add( HWND w, BORDER b, mol::Rect padding )
@@ -322,7 +320,6 @@ void RowLayout::RowLayoutWidget::layout( mol::Rect& r )
 		::MoveWindow(wnd,destRect.left,destRect.top,destRect.right,destRect.bottom,TRUE);
 	}
 	::InvalidateRect(wnd,0,TRUE);
-	//::UpdateWindow(wnd);
 }
 
 void RowLayout::add( HWND w, STYLE s, mol::Rect padding  )
@@ -405,7 +402,6 @@ void FillLayout::FillLayoutWidget::layout( mol::Rect& r )
 
 	::MoveWindow(wnd,destRect.left,destRect.top,destRect.right,destRect.bottom,TRUE);
 	::InvalidateRect(wnd,0,TRUE);
-	//::UpdateWindow(wnd);
 }
 
 void FillLayout::layout( mol::Rect& r )

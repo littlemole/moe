@@ -38,15 +38,10 @@
         <msg  handler="OnEditUserStyles" cmd="IDM_MODE_USERSTYLES" />
         <msg  handler="OnHelpAbout" cmd="IDM_HELP_ABOUT" />
   <!--      <msg  handler="OnShowDirView" cmd="IDM_VIEW_DIRVIEW" /> -->
-        <msg  handler="OnEditCut" cmd="IDM_EDIT_CUT" />
-        <msg  handler="OnEditCopy" cmd="IDM_EDIT_COPY" />
-        <msg  handler="OnEditPaste" cmd="IDM_EDIT_PASTE" />
         <msg  handler="OnFreezeToolBar" cmd="IDM_TOOLBARS_FREEZE" />
         <msg  handler="OnSyntax" cmd="IDW_SYNTAX_BOX" />
 
 
-        <msg  handler="OnDispatch" cmd="IDM_CLI_RETURN" />
-      
         <!-- ribbon -->
         <msg  handler="OnRecentItems" cmd="IDM_RIBBON_RECENTITEMS"  />
 
@@ -62,6 +57,9 @@
         <notify handler="OnToolbarRightClick" code="NM_RCLICK" />
 
         <!-- dispatched to active mdi child window -->
+        <msg  handler="OnDispatch" cmd="IDM_EDIT_CUT" />
+        <msg  handler="OnDispatch" cmd="IDM_EDIT_COPY" />
+        <msg  handler="OnDispatch" cmd="IDM_EDIT_PASTE" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_PASTEAS" />
         <msg  handler="OnDispatch" cmd="IDM_FILE_PRINT" />
         <msg  handler="OnDispatch" msg="WM_SEARCH_MSG" />

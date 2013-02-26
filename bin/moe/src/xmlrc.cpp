@@ -777,19 +777,17 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_USERSTYLES, make_handler(&MoeWnd::
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_HELP_ABOUT, make_handler(&MoeWnd::OnHelpAbout) );
 
-mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_CUT, make_handler(&MoeWnd::OnEditCut) );
-
-mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_COPY, make_handler(&MoeWnd::OnEditCopy) );
-
-mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_PASTE, make_handler(&MoeWnd::OnEditPaste) );
-
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_TOOLBARS_FREEZE, make_handler(&MoeWnd::OnFreezeToolBar) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDW_SYNTAX_BOX, make_handler(&MoeWnd::OnSyntax) );
 
-mol::msgMap<MoeWnd>().addCmdHandler( IDM_CLI_RETURN, make_handler(&MoeWnd::OnDispatch) );
-
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_RIBBON_RECENTITEMS, make_handler(&MoeWnd::OnRecentItems) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_CUT, make_handler(&MoeWnd::OnDispatch) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_COPY, make_handler(&MoeWnd::OnDispatch) );
+
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_PASTE, make_handler(&MoeWnd::OnDispatch) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_PASTEAS, make_handler(&MoeWnd::OnDispatch) );
 

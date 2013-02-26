@@ -72,7 +72,7 @@ class MoeComboBox : public mol::Control< mol::ComboBox,
 					  0 > 
 {};
 
- 
+ /*
 class CLIControl : public mol::Control<mol::ReditBox<IDM_CLI_RETURN>,WS_CHILD|WS_VISIBLE|WS_CLIPCHILDREN|WS_BORDER,WS_EX_CLIENTEDGE>
 {
 public:
@@ -89,7 +89,7 @@ class  MoeTaskbarControl : public mol::ChildFrame<MoeTaskbarControl,mol::Window>
 public:
 	
 };
-
+*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,13 +123,14 @@ public:
 
 };
 
+/*
 class MoeCLIBar : public mol::Control< 
 						mol::ReBar,
-						/*WS_BORDER|*/WS_CHILD|WS_VISIBLE|
+						/*WS_BORDER|* /WS_CHILD|WS_VISIBLE|
 						WS_CLIPCHILDREN|WS_CLIPSIBLINGS|CCS_NODIVIDER|
-						RBS_BANDBORDERS|/*RBS_VARHEIGHT|CCS_NOPARENTALIGN|*/
+						RBS_BANDBORDERS|/*RBS_VARHEIGHT|CCS_NOPARENTALIGN|* /
 						RBS_REGISTERDROP,
-						WS_EX_TOOLWINDOW/*|WS_EX_CLIENTEDGE*/ >
+						WS_EX_TOOLWINDOW/*|WS_EX_CLIENTEDGE* / >
 {
 friend class MoeWnd;
 public:
@@ -144,6 +145,7 @@ public:
 	LRESULT wndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 };
+*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 

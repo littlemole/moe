@@ -13,7 +13,6 @@
 #include "xmlui.h"
 #include "tree.h"
 #include "Ribbonres.h"
-//#include "ax/sshShell/sshShell_h.h"
 
 using namespace mol::io;
 using namespace mol;
@@ -131,8 +130,14 @@ void MoeWnd::OnCreate()
 	tree->put_UseContext(VARIANT_FALSE);
 	treeWndSink()->Advise(treeWnd()->oleObject);
 
+	// load UI state
+	loadPersistUIstate();
+
 	// update the menu
 	::DrawMenuBar(*this);
+
+    // update ribbon's recent documents
+	mol::Ribbon::ribbon()->updateRecentDocs(RibbonMRUItems);
 
 	// pre-init the debug dialog (hidden)
 	debugDlg()->doModeless( IDD_DIALOG_DEBUG, *this );
@@ -140,15 +145,6 @@ void MoeWnd::OnCreate()
 
 	// initialize win7 taskbar
 	mol::taskbar()->init(*this);
-
-	// load UI state
-	loadPersistUIstate();
-
-    // update ribbon's recent documents
-	mol::Ribbon::ribbon()->updateRecentDocs(RibbonMRUItems);
-
-
-
 }
 
 void MoeWnd::loadPersistUIstate()
@@ -417,6 +413,7 @@ void MoeWnd::OnFileExit()
 //
 //////////////////////////////////////////////////////////////////////////////
 
+/*
 LRESULT MoeWnd::OnEditCut(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if ( treeWnd()->hasFocus() )
@@ -465,7 +462,7 @@ LRESULT MoeWnd::OnEditPaste(UINT msg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-
+*/
 //////////////////////////////////////////////////////////////////////////////
 
 void MoeWnd::OnFind()

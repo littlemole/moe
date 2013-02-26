@@ -75,11 +75,6 @@ public:
 	LRESULT OnDispatch(UINT, WPARAM, LPARAM );
 	LRESULT OnDispatchTree(UINT, WPARAM, LPARAM );
 
-	// dispatch to tree if active, else  to active child
-	LRESULT OnEditCut(UINT, WPARAM, LPARAM );
-	LRESULT OnEditCopy(UINT, WPARAM, LPARAM  );
-	LRESULT OnEditPaste(UINT, WPARAM, LPARAM );
-
 
 	/////////////////////////////////////////////////////////////////////
 	// Menu command handlers
