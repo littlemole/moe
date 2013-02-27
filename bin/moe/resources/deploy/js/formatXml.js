@@ -1,3 +1,4 @@
+﻿
 if ( ActiveDoc && ActiveDoc.Object )
 {
   var text = ActiveDoc.Object.Text; // Documents(2).Object.Text;//
@@ -6,7 +7,6 @@ if ( ActiveDoc && ActiveDoc.Object )
   var doc = new ActiveXObject("Msxml2.DOMDocument");  
   doc.async = false;
   doc.loadXML(xml);
-  
   if (doc.parseError.errorCode != 0) 
   {
 	var err = doc.parseError.line + "\r\n";
@@ -21,8 +21,9 @@ if ( ActiveDoc && ActiveDoc.Object )
   }
   else
   {
-	  var saxReader = new ActiveXObject("Msxml2.SAXXMLReader") ;
-	  var xmlWriter = new ActiveXObject("Msxml2.MXXMLWriter") ;
+
+	  var saxReader = new ActiveXObject("Msxml2.SAXXMLReader.6.0") ;
+	  var xmlWriter = new ActiveXObject("Msxml2.MXXMLWriter.6.0") ;
 
 	  xmlWriter.indent = true;
 	  xmlWriter.standalone = true;
@@ -37,6 +38,10 @@ if ( ActiveDoc && ActiveDoc.Object )
 	  saxReader.putProperty("http://xml.org/sax/properties/declaration-handler", xmlWriter);
 	  saxReader.putProperty("http://xml.org/sax/properties/lexical-handler", xmlWriter);
 	  saxReader.parse(doc);
+
+	  xmlWriter.flush();
+	  saxReader = null;
+	  xmlWrite = null;
 
 	  text.Value = newDoc.xml;
   }
