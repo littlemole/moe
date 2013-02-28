@@ -101,6 +101,8 @@ int OCSP_request_set1_name(OCSP_REQUEST *req, X509_NAME *nm)
 	{
 	GENERAL_NAME *gen;
 	gen = GENERAL_NAME_new();
+	if (gen == NULL)
+		return 0;
 	if (!X509_NAME_set(&gen->d.directoryName, nm))
 		{
 		GENERAL_NAME_free(gen);
@@ -153,7 +155,6 @@ int OCSP_request_sign(OCSP_REQUEST   *req,
 			goto err;
 
 	if (!(req->optionalSignature = sig = OCSP_SIGNATURE_new())) goto err;
-	if (!dgst) dgst = EVP_sha1();
 	if (key)
 		{
 		if (!X509_check_private_key(signer, key))

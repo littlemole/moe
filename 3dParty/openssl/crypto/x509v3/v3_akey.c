@@ -1,5 +1,5 @@
 /* v3_akey.c */
-/* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
+/* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 1999.
  */
 /* ====================================================================
@@ -68,7 +68,7 @@ static STACK_OF(CONF_VALUE) *i2v_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
 static AUTHORITY_KEYID *v2i_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
 			X509V3_CTX *ctx, STACK_OF(CONF_VALUE) *values);
 
-X509V3_EXT_METHOD v3_akey_id =
+const X509V3_EXT_METHOD v3_akey_id =
 	{
 	NID_authority_key_identifier,
 	X509V3_EXT_MULTILINE, ASN1_ITEM_ref(AUTHORITY_KEYID),

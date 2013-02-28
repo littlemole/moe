@@ -36,7 +36,9 @@ may differ on your machine.
 
 
 As long as Apple doesn't fix the problem with ld, this problem building
-OpenSSL will remain as is.
+OpenSSL will remain as is. Well, the problem was addressed in 0.9.8f by
+passing -Wl,-search_paths_first, but it's unknown if the flag was
+supported from the initial MacOS X release.
 
 
 * Parallell make leads to errors
@@ -180,3 +182,32 @@ target. Drop optimization level to +O2 when compiling 64-bit bf_skey.o.
 Unfortunately, the 'no-engines' configuration option currently doesn't
 work properly.  Use 'no-hw' and you'll will at least get no hardware
 support.  We'll see how we fix that on OpenSSL versions past 0.9.8.
+
+* 'make test' fails in BN_sqr [commonly with "error 139" denoting SIGSEGV]
+  if elder GNU binutils were deployed to link shared libcrypto.so.
+
+As subject suggests the failure is caused by a bug in elder binutils,
+either as or ld, and was observed on FreeBSD and Linux. There are two
+options. First is naturally to upgrade binutils, the second one - to
+reconfigure with additional no-sse2 [or 386] option passed to ./config.
+
+* If configured with ./config no-dso, toolkit still gets linked with -ldl,
+  which most notably poses a problem when linking with dietlibc.
+
+We don't have framework to associate -ldl with no-dso, therefore the only
+way is to edit Makefile right after ./config no-dso and remove -ldl from
+EX_LIBS line.
+
+* hpux-parisc2-cc no-asm build fails with SEGV in ECDSA/DH.
+
+Compiler bug, presumably at particular patch level. Remaining
+hpux*-parisc*-cc configurations can be affected too. Drop optimization
+level to +O2 when compiling bn_nist.o.
+
+* solaris64-sparcv9-cc link failure
+
+Solaris 8 ar can fail to maintain symbol table in .a, which results in
+link failures. Apply 109147-09 or later or modify Makefile generated
+by ./Configure solaris64-sparcv9-cc and replace RANLIB assignment with
+
+	RANLIB= /usr/ccs/bin/ar rs

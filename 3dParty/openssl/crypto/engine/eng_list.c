@@ -336,6 +336,7 @@ static void engine_cpy(ENGINE *dest, const ENGINE *src)
 	dest->store_meth = src->store_meth;
 	dest->ciphers = src->ciphers;
 	dest->digests = src->digests;
+	dest->pkey_meths = src->pkey_meths;
 	dest->destroy = src->destroy;
 	dest->init = src->init;
 	dest->finish = src->finish;
@@ -394,20 +395,25 @@ ENGINE *ENGINE_by_id(const char *id)
 #else
 	/* EEK! Experimental code starts */
 	if(iterator) return iterator;
+	/* Prevent infinite recusrion if we're looking for the dynamic engine. */
+	if (strcmp(id, "dynamic"))
+		{
 #ifdef OPENSSL_SYS_VMS
-	if((load_dir = getenv("OPENSSL_ENGINES")) == 0) load_dir = "SSLROOT:[ENGINES]";
+		if((load_dir = getenv("OPENSSL_ENGINES")) == 0) load_dir = "SSLROOT:[ENGINES]";
 #else
-	if((load_dir = getenv("OPENSSL_ENGINES")) == 0) load_dir = ENGINESDIR;
+		if((load_dir = getenv("OPENSSL_ENGINES")) == 0) load_dir = ENGINESDIR;
 #endif
-	iterator = ENGINE_by_id("dynamic");
-	if(!iterator || !ENGINE_ctrl_cmd_string(iterator, "ID", id, 0) ||
-			!ENGINE_ctrl_cmd_string(iterator, "DIR_LOAD", "2", 0) ||
-			!ENGINE_ctrl_cmd_string(iterator, "DIR_ADD",
-				load_dir, 0) ||
-			!ENGINE_ctrl_cmd_string(iterator, "LOAD", NULL, 0))
-		goto notfound;
-	return iterator;
+		iterator = ENGINE_by_id("dynamic");
+		if(!iterator || !ENGINE_ctrl_cmd_string(iterator, "ID", id, 0) ||
+				!ENGINE_ctrl_cmd_string(iterator, "DIR_LOAD", "2", 0) ||
+				!ENGINE_ctrl_cmd_string(iterator, "DIR_ADD",
+					load_dir, 0) ||
+				!ENGINE_ctrl_cmd_string(iterator, "LOAD", NULL, 0))
+				goto notfound;
+		return iterator;
+		}
 notfound:
+	ENGINE_free(iterator);
 	ENGINEerr(ENGINE_F_ENGINE_BY_ID,ENGINE_R_NO_SUCH_ENGINE);
 	ERR_add_error_data(2, "id=", id);
 	return NULL;

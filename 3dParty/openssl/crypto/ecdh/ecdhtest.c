@@ -73,10 +73,10 @@
 
 #include "../e_os.h"
 
+#include <openssl/opensslconf.h>	/* for OPENSSL_NO_ECDH */
 #include <openssl/crypto.h>
 #include <openssl/bio.h>
 #include <openssl/bn.h>
-#include <openssl/ec.h>
 #include <openssl/objects.h>
 #include <openssl/rand.h>
 #include <openssl/sha.h>
@@ -89,6 +89,7 @@ int main(int argc, char *argv[])
     return(0);
 }
 #else
+#include <openssl/ec.h>
 #include <openssl/ecdh.h>
 
 #ifdef OPENSSL_SYS_WIN16
@@ -147,7 +148,7 @@ static int test_ecdh_curve(int nid, const char *text, BN_CTX *ctx, BIO *out)
 #ifdef NOISY
 	BIO_puts(out,"\n");
 #else
-	BIO_flush(out);
+	(void)BIO_flush(out);
 #endif
 
 	if (!EC_KEY_generate_key(a)) goto err;
@@ -157,11 +158,13 @@ static int test_ecdh_curve(int nid, const char *text, BN_CTX *ctx, BIO *out)
 		if (!EC_POINT_get_affine_coordinates_GFp(group,
 			EC_KEY_get0_public_key(a), x_a, y_a, ctx)) goto err;
 		}
+#ifndef OPENSSL_NO_EC2M
 	else
 		{
 		if (!EC_POINT_get_affine_coordinates_GF2m(group,
 			EC_KEY_get0_public_key(a), x_a, y_a, ctx)) goto err;
 		}
+#endif
 #ifdef NOISY
 	BIO_puts(out,"  pri 1=");
 	BN_print(out,a->priv_key);
@@ -172,7 +175,7 @@ static int test_ecdh_curve(int nid, const char *text, BN_CTX *ctx, BIO *out)
 	BIO_puts(out,"\n");
 #else
 	BIO_printf(out," .");
-	BIO_flush(out);
+	(void)BIO_flush(out);
 #endif
 
 	if (!EC_KEY_generate_key(b)) goto err;
@@ -182,11 +185,13 @@ static int test_ecdh_curve(int nid, const char *text, BN_CTX *ctx, BIO *out)
 		if (!EC_POINT_get_affine_coordinates_GFp(group, 
 			EC_KEY_get0_public_key(b), x_b, y_b, ctx)) goto err;
 		}
+#ifndef OPENSSL_NO_EC2M
 	else
 		{
 		if (!EC_POINT_get_affine_coordinates_GF2m(group, 
 			EC_KEY_get0_public_key(b), x_b, y_b, ctx)) goto err;
 		}
+#endif
 
 #ifdef NOISY
 	BIO_puts(out,"  pri 2=");
@@ -198,7 +203,7 @@ static int test_ecdh_curve(int nid, const char *text, BN_CTX *ctx, BIO *out)
 	BIO_puts(out,"\n");
 #else
 	BIO_printf(out,".");
-	BIO_flush(out);
+	(void)BIO_flush(out);
 #endif
 
 	alen=KDF1_SHA1_len;
@@ -215,7 +220,7 @@ static int test_ecdh_curve(int nid, const char *text, BN_CTX *ctx, BIO *out)
 	BIO_puts(out,"\n");
 #else
 	BIO_printf(out,".");
-	BIO_flush(out);
+	(void)BIO_flush(out);
 #endif
 
 	blen=KDF1_SHA1_len;
@@ -232,7 +237,7 @@ static int test_ecdh_curve(int nid, const char *text, BN_CTX *ctx, BIO *out)
 	BIO_puts(out,"\n");
 #else
 	BIO_printf(out,".");
-	BIO_flush(out);
+	(void)BIO_flush(out);
 #endif
 
 	if ((aout < 4) || (bout != aout) || (memcmp(abuf,bbuf,aout) != 0))
@@ -323,6 +328,7 @@ int main(int argc, char *argv[])
 	if (!test_ecdh_curve(NID_X9_62_prime256v1, "NIST Prime-Curve P-256", ctx, out)) goto err;
 	if (!test_ecdh_curve(NID_secp384r1, "NIST Prime-Curve P-384", ctx, out)) goto err;
 	if (!test_ecdh_curve(NID_secp521r1, "NIST Prime-Curve P-521", ctx, out)) goto err;
+#ifndef OPENSSL_NO_EC2M
 	/* NIST BINARY CURVES TESTS */
 	if (!test_ecdh_curve(NID_sect163k1, "NIST Binary-Curve K-163", ctx, out)) goto err;
 	if (!test_ecdh_curve(NID_sect163r2, "NIST Binary-Curve B-163", ctx, out)) goto err;
@@ -334,6 +340,7 @@ int main(int argc, char *argv[])
 	if (!test_ecdh_curve(NID_sect409r1, "NIST Binary-Curve B-409", ctx, out)) goto err;
 	if (!test_ecdh_curve(NID_sect571k1, "NIST Binary-Curve K-571", ctx, out)) goto err;
 	if (!test_ecdh_curve(NID_sect571r1, "NIST Binary-Curve B-571", ctx, out)) goto err;
+#endif
 
 	ret = 0;
 
@@ -342,7 +349,7 @@ err:
 	if (ctx) BN_CTX_free(ctx);
 	BIO_free(out);
 	CRYPTO_cleanup_all_ex_data();
-	ERR_remove_state(0);
+	ERR_remove_thread_state(NULL);
 	CRYPTO_mem_leaks_fp(stderr);
 	EXIT(ret);
 	return(ret);

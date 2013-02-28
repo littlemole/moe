@@ -56,7 +56,7 @@
  * [including the GNU Public Licence.]
  */
 /* ====================================================================
- * Copyright (c) 1999 The OpenSSL Project.  All rights reserved.
+ * Copyright (c) 1998-2007 The OpenSSL Project.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -73,12 +73,12 @@
  * 3. All advertising materials mentioning features or use of this
  *    software must display the following acknowledgment:
  *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit. (http://www.OpenSSL.org/)"
+ *    for use in the OpenSSL Toolkit. (http://www.openssl.org/)"
  *
  * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
  *    endorse or promote products derived from this software without
  *    prior written permission. For written permission, please contact
- *    openssl-core@OpenSSL.org.
+ *    openssl-core@openssl.org.
  *
  * 5. Products derived from this software may not be called "OpenSSL"
  *    nor may "OpenSSL" appear in their names without prior written
@@ -87,7 +87,7 @@
  * 6. Redistributions of any form whatsoever must retain the following
  *    acknowledgment:
  *    "This product includes software developed by the OpenSSL Project
- *    for use in the OpenSSL Toolkit (http://www.OpenSSL.org/)"
+ *    for use in the OpenSSL Toolkit (http://www.openssl.org/)"
  *
  * THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
  * EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -102,6 +102,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  * ====================================================================
+ *
+ * This product includes cryptographic software written by Eric Young
+ * (eay@cryptsoft.com).  This product includes software written by Tim
+ * Hudson (tjh@cryptsoft.com).
+ *
  */
 /* ====================================================================
  * Copyright 2002 Sun Microsystems, Inc. ALL RIGHTS RESERVED.
@@ -121,29 +126,53 @@
 #include <openssl/bio.h>
 #include <openssl/pem.h>
 #include <openssl/x509v3.h>
+#ifndef OPENSSL_NO_DH
 #include <openssl/dh.h>
+#endif
 #include <openssl/bn.h>
 #include "ssl_locl.h"
 
 int SSL_get_ex_data_X509_STORE_CTX_idx(void)
 	{
 	static volatile int ssl_x509_store_ctx_idx= -1;
+	int got_write_lock = 0;
+
+	CRYPTO_r_lock(CRYPTO_LOCK_SSL_CTX);
 
 	if (ssl_x509_store_ctx_idx < 0)
 		{
-		/* any write lock will do; usually this branch
-		 * will only be taken once anyway */
+		CRYPTO_r_unlock(CRYPTO_LOCK_SSL_CTX);
 		CRYPTO_w_lock(CRYPTO_LOCK_SSL_CTX);
+		got_write_lock = 1;
 		
 		if (ssl_x509_store_ctx_idx < 0)
 			{
 			ssl_x509_store_ctx_idx=X509_STORE_CTX_get_ex_new_index(
 				0,"SSL for verify callback",NULL,NULL,NULL);
 			}
-		
-		CRYPTO_w_unlock(CRYPTO_LOCK_SSL_CTX);
 		}
+
+	if (got_write_lock)
+		CRYPTO_w_unlock(CRYPTO_LOCK_SSL_CTX);
+	else
+		CRYPTO_r_unlock(CRYPTO_LOCK_SSL_CTX);
+	
 	return ssl_x509_store_ctx_idx;
+	}
+
+static void ssl_cert_set_default_md(CERT *cert)
+	{
+	/* Set digest values to defaults */
+#ifndef OPENSSL_NO_DSA
+	cert->pkeys[SSL_PKEY_DSA_SIGN].digest = EVP_sha1();
+#endif
+#ifndef OPENSSL_NO_RSA
+	cert->pkeys[SSL_PKEY_RSA_SIGN].digest = EVP_sha1();
+	cert->pkeys[SSL_PKEY_RSA_ENC].digest = EVP_sha1();
+#endif
+#ifndef OPENSSL_NO_ECDSA
+	cert->pkeys[SSL_PKEY_ECC].digest = EVP_sha1();
+#endif
 	}
 
 CERT *ssl_cert_new(void)
@@ -160,7 +189,7 @@ CERT *ssl_cert_new(void)
 
 	ret->key= &(ret->pkeys[SSL_PKEY_RSA_ENC]);
 	ret->references=1;
-
+	ssl_cert_set_default_md(ret);
 	return(ret);
 	}
 
@@ -183,8 +212,10 @@ CERT *ssl_cert_dup(CERT *cert)
 	 * if you find that more readable */
 
 	ret->valid = cert->valid;
-	ret->mask = cert->mask;
-	ret->export_mask = cert->export_mask;
+	ret->mask_k = cert->mask_k;
+	ret->mask_a = cert->mask_a;
+	ret->export_mask_k = cert->export_mask_k;
+	ret->export_mask_a = cert->export_mask_a;
 
 #ifndef OPENSSL_NO_RSA
 	if (cert->rsa_tmp != NULL)
@@ -198,7 +229,6 @@ CERT *ssl_cert_dup(CERT *cert)
 #ifndef OPENSSL_NO_DH
 	if (cert->dh_tmp != NULL)
 		{
-		/* DH parameters don't have a reference count */
 		ret->dh_tmp = DHparams_dup(cert->dh_tmp);
 		if (ret->dh_tmp == NULL)
 			{
@@ -232,8 +262,12 @@ CERT *ssl_cert_dup(CERT *cert)
 #ifndef OPENSSL_NO_ECDH
 	if (cert->ecdh_tmp)
 		{
-		EC_KEY_up_ref(cert->ecdh_tmp);
-		ret->ecdh_tmp = cert->ecdh_tmp;
+		ret->ecdh_tmp = EC_KEY_dup(cert->ecdh_tmp);
+		if (ret->ecdh_tmp == NULL)
+			{
+			SSLerr(SSL_F_SSL_CERT_DUP, ERR_R_EC_LIB);
+			goto err;
+			}
 		}
 	ret->ecdh_tmp_cb = cert->ecdh_tmp_cb;
 #endif
@@ -288,10 +322,14 @@ CERT *ssl_cert_dup(CERT *cert)
 	 * chain is held inside SSL_CTX */
 
 	ret->references=1;
+	/* Set digests to defaults. NB: we don't copy existing values as they
+	 * will be set during handshake.
+	 */
+	ssl_cert_set_default_md(ret);
 
 	return(ret);
 	
-#ifndef OPENSSL_NO_DH /* avoid 'unreferenced label' warning if OPENSSL_NO_DH is defined */
+#if !defined(OPENSSL_NO_DH) || !defined(OPENSSL_NO_ECDH)
 err:
 #endif
 #ifndef OPENSSL_NO_RSA
@@ -483,9 +521,6 @@ int ssl_verify_cert_chain(SSL *s,STACK_OF(X509) *sk)
 		SSLerr(SSL_F_SSL_VERIFY_CERT_CHAIN,ERR_R_X509_LIB);
 		return(0);
 		}
-	if (s->param)
-		X509_VERIFY_PARAM_inherit(X509_STORE_CTX_get0_param(&ctx),
-						s->param);
 #if 0
 	if (SSL_get_verify_depth(s) >= 0)
 		X509_STORE_CTX_set_depth(&ctx, SSL_get_verify_depth(s));
@@ -499,6 +534,10 @@ int ssl_verify_cert_chain(SSL *s,STACK_OF(X509) *sk)
 
 	X509_STORE_CTX_set_default(&ctx,
 				s->server ? "ssl_client" : "ssl_server");
+	/* Anything non-default in "param" should overwrite anything in the
+	 * ctx.
+	 */
+	X509_VERIFY_PARAM_set1(X509_STORE_CTX_get0_param(&ctx), s->param);
 
 	if (s->verify_callback)
 		X509_STORE_CTX_set_verify_cb(&ctx, s->verify_callback);
@@ -735,6 +774,8 @@ int SSL_add_file_cert_subjects_to_stack(STACK_OF(X509_NAME) *stack,
 			sk_X509_NAME_push(stack,xn);
 		}
 
+	ERR_clear_error();
+
 	if (0)
 		{
 err:
@@ -745,7 +786,7 @@ err:
 	if(x != NULL)
 		X509_free(x);
 	
-	sk_X509_NAME_set_cmp_func(stack,oldcmp);
+	(void)sk_X509_NAME_set_cmp_func(stack,oldcmp);
 
 	return ret;
 	}

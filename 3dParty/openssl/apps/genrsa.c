@@ -56,6 +56,7 @@
  * [including the GNU Public Licence.]
  */
 
+#include <openssl/opensslconf.h>
 /* Until the key-gen callbacks are modified to use newer prototypes, we allow
  * deprecated functions for openssl-internal code */
 #ifdef OPENSSL_NO_DEPRECATED
@@ -77,7 +78,7 @@
 #include <openssl/pem.h>
 #include <openssl/rand.h>
 
-#define DEFBITS	512
+#define DEFBITS	1024
 #undef PROG
 #define PROG genrsa_main
 
@@ -104,9 +105,9 @@ int MAIN(int argc, char **argv)
 	char *inrand=NULL;
 	BIO *out=NULL;
 	BIGNUM *bn = BN_new();
-	RSA *rsa = RSA_new();
+	RSA *rsa = NULL;
 
-	if(!bn || !rsa) goto err;
+	if(!bn) goto err;
 
 	apps_startup();
 	BN_GENCB_set(&cb, genrsa_cb, bio_err);
@@ -159,6 +160,10 @@ int MAIN(int argc, char **argv)
 		else if (strcmp(*argv,"-idea") == 0)
 			enc=EVP_idea_cbc();
 #endif
+#ifndef OPENSSL_NO_SEED
+		else if (strcmp(*argv,"-seed") == 0)
+			enc=EVP_seed_cbc();
+#endif
 #ifndef OPENSSL_NO_AES
 		else if (strcmp(*argv,"-aes128") == 0)
 			enc=EVP_aes_128_cbc();
@@ -166,6 +171,14 @@ int MAIN(int argc, char **argv)
 			enc=EVP_aes_192_cbc();
 		else if (strcmp(*argv,"-aes256") == 0)
 			enc=EVP_aes_256_cbc();
+#endif
+#ifndef OPENSSL_NO_CAMELLIA
+		else if (strcmp(*argv,"-camellia128") == 0)
+			enc=EVP_camellia_128_cbc();
+		else if (strcmp(*argv,"-camellia192") == 0)
+			enc=EVP_camellia_192_cbc();
+		else if (strcmp(*argv,"-camellia256") == 0)
+			enc=EVP_camellia_256_cbc();
 #endif
 		else if (strcmp(*argv,"-passout") == 0)
 			{
@@ -186,9 +199,17 @@ bad:
 #ifndef OPENSSL_NO_IDEA
 		BIO_printf(bio_err," -idea           encrypt the generated key with IDEA in cbc mode\n");
 #endif
+#ifndef OPENSSL_NO_SEED
+		BIO_printf(bio_err," -seed\n");
+		BIO_printf(bio_err,"                 encrypt PEM output with cbc seed\n");
+#endif
 #ifndef OPENSSL_NO_AES
 		BIO_printf(bio_err," -aes128, -aes192, -aes256\n");
 		BIO_printf(bio_err,"                 encrypt PEM output with cbc aes\n");
+#endif
+#ifndef OPENSSL_NO_CAMELLIA
+		BIO_printf(bio_err," -camellia128, -camellia192, -camellia256\n");
+		BIO_printf(bio_err,"                 encrypt PEM output with cbc camellia\n");
 #endif
 		BIO_printf(bio_err," -out file       output the key to 'file\n");
 		BIO_printf(bio_err," -passout arg    output file pass phrase source\n");
@@ -244,6 +265,13 @@ bad:
 
 	BIO_printf(bio_err,"Generating RSA private key, %d bit long modulus\n",
 		num);
+#ifdef OPENSSL_NO_ENGINE
+	rsa = RSA_new();
+#else
+	rsa = RSA_new_method(e);
+#endif
+	if (!rsa)
+		goto err;
 
 	if(!BN_set_word(bn, f4) || !RSA_generate_key_ex(rsa, num, bn, &cb))
 		goto err;

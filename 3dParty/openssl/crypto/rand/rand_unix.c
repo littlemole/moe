@@ -56,7 +56,7 @@
  * [including the GNU Public Licence.]
  */
 /* ====================================================================
- * Copyright (c) 1998-2000 The OpenSSL Project.  All rights reserved.
+ * Copyright (c) 1998-2006 The OpenSSL Project.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -116,7 +116,7 @@
 #include <openssl/rand.h>
 #include "rand_lcl.h"
 
-#if !(defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_WIN32) || defined(OPENSSL_SYS_VMS) || defined(OPENSSL_SYS_OS2) || defined(OPENSSL_SYS_VXWORKS) || defined(OPENSSL_SYS_NETWARE)) 
+#if !(defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_WIN32) || defined(OPENSSL_SYS_VMS) || defined(OPENSSL_SYS_OS2) || defined(OPENSSL_SYS_VXWORKS) || defined(OPENSSL_SYS_NETWARE))
 
 #include <sys/types.h>
 #include <sys/time.h>
@@ -125,8 +125,98 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <time.h>
+#if defined(OPENSSL_SYS_LINUX) /* should actually be available virtually everywhere */
+# include <poll.h>
+#endif
+#include <limits.h>
+#ifndef FD_SETSIZE
+# define FD_SETSIZE (8*sizeof(fd_set))
+#endif
 
-#ifdef __OpenBSD__
+#if defined(OPENSSL_SYS_VOS)
+
+/* The following algorithm repeatedly samples the real-time clock
+   (RTC) to generate a sequence of unpredictable data.  The algorithm
+   relies upon the uneven execution speed of the code (due to factors
+   such as cache misses, interrupts, bus activity, and scheduling) and
+   upon the rather large relative difference between the speed of the
+   clock and the rate at which it can be read.
+
+   If this code is ported to an environment where execution speed is
+   more constant or where the RTC ticks at a much slower rate, or the
+   clock can be read with fewer instructions, it is likely that the
+   results would be far more predictable.
+
+   As a precaution, we generate 4 times the minimum required amount of
+   seed data.  */
+
+int RAND_poll(void)
+{
+	short int code;
+	gid_t curr_gid;
+	pid_t curr_pid;
+	uid_t curr_uid;
+	int i, k;
+	struct timespec ts;
+	unsigned char v;
+
+#ifdef OPENSSL_SYS_VOS_HPPA
+	long duration;
+	extern void s$sleep (long *_duration, short int *_code);
+#else
+#ifdef OPENSSL_SYS_VOS_IA32
+	long long duration;
+	extern void s$sleep2 (long long *_duration, short int *_code);
+#else
+#error "Unsupported Platform."
+#endif /* OPENSSL_SYS_VOS_IA32 */
+#endif /* OPENSSL_SYS_VOS_HPPA */
+
+	/* Seed with the gid, pid, and uid, to ensure *some*
+	   variation between different processes.  */
+
+	curr_gid = getgid();
+	RAND_add (&curr_gid, sizeof curr_gid, 1);
+	curr_gid = 0;
+
+	curr_pid = getpid();
+	RAND_add (&curr_pid, sizeof curr_pid, 1);
+	curr_pid = 0;
+
+	curr_uid = getuid();
+	RAND_add (&curr_uid, sizeof curr_uid, 1);
+	curr_uid = 0;
+
+	for (i=0; i<(ENTROPY_NEEDED*4); i++)
+	{
+		/* burn some cpu; hope for interrupts, cache
+		   collisions, bus interference, etc.  */
+		for (k=0; k<99; k++)
+			ts.tv_nsec = random ();
+
+#ifdef OPENSSL_SYS_VOS_HPPA
+		/* sleep for 1/1024 of a second (976 us).  */
+		duration = 1;
+		s$sleep (&duration, &code);
+#else
+#ifdef OPENSSL_SYS_VOS_IA32
+		/* sleep for 1/65536 of a second (15 us).  */
+		duration = 1;
+		s$sleep2 (&duration, &code);
+#endif /* OPENSSL_SYS_VOS_IA32 */
+#endif /* OPENSSL_SYS_VOS_HPPA */
+
+		/* get wall clock time.  */
+		clock_gettime (CLOCK_REALTIME, &ts);
+
+		/* take 8 bits */
+		v = (unsigned char) (ts.tv_nsec % 256);
+		RAND_add (&v, sizeof v, 1);
+		v = 0;
+	}
+	return 1;
+}
+#elif defined __OpenBSD__
 int RAND_poll(void)
 {
 	u_int32_t rnd = 0, i;
@@ -143,7 +233,7 @@ int RAND_poll(void)
 
 	return 1;
 }
-#else
+#else /* !defined(__OpenBSD__) */
 int RAND_poll(void)
 {
 	unsigned long l;
@@ -155,7 +245,8 @@ int RAND_poll(void)
 #ifdef DEVRANDOM
 	static const char *randomfiles[] = { DEVRANDOM };
 	struct stat randomstats[sizeof(randomfiles)/sizeof(randomfiles[0])];
-	int fd,i;
+	int fd;
+	unsigned int i;
 #endif
 #ifdef DEVRANDOM_EGD
 	static const char *egdsockets[] = { DEVRANDOM_EGD, NULL };
@@ -168,7 +259,8 @@ int RAND_poll(void)
 	 * have this. Use /dev/urandom if you can as /dev/random may block
 	 * if it runs out of random entries.  */
 
-	for (i=0; i<sizeof(randomfiles)/sizeof(randomfiles[0]) && n < ENTROPY_NEEDED; i++)
+	for (i = 0; (i < sizeof(randomfiles)/sizeof(randomfiles[0])) &&
+			(n < ENTROPY_NEEDED); i++)
 		{
 		if ((fd = open(randomfiles[i], O_RDONLY
 #ifdef O_NONBLOCK
@@ -183,10 +275,9 @@ int RAND_poll(void)
 #endif
 			)) >= 0)
 			{
-			struct timeval t = { 0, 10*1000 }; /* Spend 10ms on
-							      each file. */
-			int r,j;
-			fd_set fset;
+			int usec = 10*1000; /* spend 10ms on each file */
+			int r;
+			unsigned int j;
 			struct stat *st=&randomstats[i];
 
 			/* Avoid using same input... Used to be O_NOFOLLOW
@@ -202,35 +293,84 @@ int RAND_poll(void)
 
 			do
 				{
-				FD_ZERO(&fset);
-				FD_SET(fd, &fset);
-				r = -1;
+				int try_read = 0;
 
-				if (select(fd+1,&fset,NULL,NULL,&t) < 0)
-					t.tv_usec=0;
-				else if (FD_ISSET(fd, &fset))
+#if defined(OPENSSL_SYS_BEOS_R5)
+				/* select() is broken in BeOS R5, so we simply
+				 *  try to read something and snooze if we couldn't */
+				try_read = 1;
+
+#elif defined(OPENSSL_SYS_LINUX)
+				/* use poll() */
+				struct pollfd pset;
+				
+				pset.fd = fd;
+				pset.events = POLLIN;
+				pset.revents = 0;
+
+				if (poll(&pset, 1, usec / 1000) < 0)
+					usec = 0;
+				else
+					try_read = (pset.revents & POLLIN) != 0;
+
+#else
+				/* use select() */
+				fd_set fset;
+				struct timeval t;
+				
+				t.tv_sec = 0;
+				t.tv_usec = usec;
+
+				if (FD_SETSIZE > 0 && (unsigned)fd >= FD_SETSIZE)
 					{
-					r=read(fd,(unsigned char *)tmpbuf+n,
-					       ENTROPY_NEEDED-n);
+					/* can't use select, so just try to read once anyway */
+					try_read = 1;
+					}
+				else
+					{
+					FD_ZERO(&fset);
+					FD_SET(fd, &fset);
+					
+					if (select(fd+1,&fset,NULL,NULL,&t) >= 0)
+						{
+						usec = t.tv_usec;
+						if (FD_ISSET(fd, &fset))
+							try_read = 1;
+						}
+					else
+						usec = 0;
+					}
+#endif
+				
+				if (try_read)
+					{
+					r = read(fd,(unsigned char *)tmpbuf+n, ENTROPY_NEEDED-n);
 					if (r > 0)
 						n += r;
+#if defined(OPENSSL_SYS_BEOS_R5)
+					if (r == 0)
+						snooze(t.tv_usec);
+#endif
 					}
-
-				/* Some Unixen will update t, some
-				   won't.  For those who won't, give
-				   up here, otherwise, we will do
+				else
+					r = -1;
+				
+				/* Some Unixen will update t in select(), some
+				   won't.  For those who won't, or if we
+				   didn't use select() in the first place,
+				   give up here, otherwise, we will do
 				   this once again for the remaining
 				   time. */
-				if (t.tv_usec == 10*1000)
-					t.tv_usec=0;
+				if (usec == 10*1000)
+					usec = 0;
 				}
-			while ((r > 0 || (errno == EINTR || errno == EAGAIN))
-				&& t.tv_usec != 0 && n < ENTROPY_NEEDED);
+			while ((r > 0 ||
+			       (errno == EINTR || errno == EAGAIN)) && usec != 0 && n < ENTROPY_NEEDED);
 
 			close(fd);
 			}
 		}
-#endif
+#endif /* defined(DEVRANDOM) */
 
 #ifdef DEVRANDOM_EGD
 	/* Use an EGD socket to read entropy from an EGD or PRNGD entropy
@@ -245,7 +385,7 @@ int RAND_poll(void)
 		if (r > 0)
 			n += r;
 		}
-#endif
+#endif /* defined(DEVRANDOM_EGD) */
 
 #if defined(DEVRANDOM) || defined(DEVRANDOM_EGD)
 	if (n > 0)
@@ -264,6 +404,14 @@ int RAND_poll(void)
 	l=time(NULL);
 	RAND_add(&l,sizeof(l),0.0);
 
+#if defined(OPENSSL_SYS_BEOS)
+	{
+	system_info sysInfo;
+	get_system_info(&sysInfo);
+	RAND_add(&sysInfo,sizeof(sysInfo),0);
+	}
+#endif
+
 #if defined(DEVRANDOM) || defined(DEVRANDOM_EGD)
 	return 1;
 #else
@@ -271,12 +419,13 @@ int RAND_poll(void)
 #endif
 }
 
-#endif
-#endif
+#endif /* defined(__OpenBSD__) */
+#endif /* !(defined(OPENSSL_SYS_WINDOWS) || defined(OPENSSL_SYS_WIN32) || defined(OPENSSL_SYS_VMS) || defined(OPENSSL_SYS_OS2) || defined(OPENSSL_SYS_VXWORKS) || defined(OPENSSL_SYS_NETWARE)) */
+
 
 #if defined(OPENSSL_SYS_VXWORKS)
 int RAND_poll(void)
-{
-    return 0;
-}
+	{
+	return 0;
+	}
 #endif

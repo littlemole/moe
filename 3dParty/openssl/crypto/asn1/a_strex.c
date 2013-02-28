@@ -1,5 +1,5 @@
 /* a_strex.c */
-/* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
+/* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 2000.
  */
 /* ====================================================================
@@ -73,6 +73,11 @@
 
 
 #define CHARTYPE_BS_ESC		(ASN1_STRFLGS_ESC_2253 | CHARTYPE_FIRST_ESC_2253 | CHARTYPE_LAST_ESC_2253)
+
+#define ESC_FLAGS (ASN1_STRFLGS_ESC_2253 | \
+		  ASN1_STRFLGS_ESC_QUOTE | \
+		  ASN1_STRFLGS_ESC_CTRL | \
+		  ASN1_STRFLGS_ESC_MSB)
 
 
 /* Three IO functions for sending data to memory, a BIO and
@@ -148,6 +153,13 @@ static int do_esc_char(unsigned long c, unsigned char flags, char *do_quotes, ch
 		if(!io_ch(arg, tmphex, 3)) return -1;
 		return 3;
 	}
+	/* If we get this far and do any escaping at all must escape 
+	 * the escape character itself: backslash.
+	 */
+	if (chtmp == '\\' && flags & ESC_FLAGS) {
+		if(!io_ch(arg, "\\\\", 2)) return -1;
+		return 2;
+	}
 	if(!io_ch(arg, &chtmp, 1)) return -1;
 	return 1;
 }
@@ -170,7 +182,7 @@ static int do_buf(unsigned char *buf, int buflen,
 	q = buf + buflen;
 	outlen = 0;
 	while(p != q) {
-		if(p == buf) orflags = CHARTYPE_FIRST_ESC_2253;
+		if(p == buf && flags & ASN1_STRFLGS_ESC_2253) orflags = CHARTYPE_FIRST_ESC_2253;
 		else orflags = 0;
 		switch(type & BUF_TYPE_WIDTH_MASK) {
 			case 4:
@@ -194,8 +206,10 @@ static int do_buf(unsigned char *buf, int buflen,
 			if(i < 0) return -1;	/* Invalid UTF8String */
 			p += i;
 			break;
+			default:
+			return -1;	/* invalid width */
 		}
-		if (p == q) orflags = CHARTYPE_LAST_ESC_2253;
+		if (p == q && flags & ASN1_STRFLGS_ESC_2253) orflags = CHARTYPE_LAST_ESC_2253;
 		if(type & BUF_TYPE_CONVUTF8) {
 			unsigned char utfbuf[6];
 			int utflen;
@@ -223,7 +237,7 @@ static int do_buf(unsigned char *buf, int buflen,
 
 static int do_hex_dump(char_io *io_ch, void *arg, unsigned char *buf, int buflen)
 {
-	const static char hexdig[] = "0123456789ABCDEF";
+	static const char hexdig[] = "0123456789ABCDEF";
 	unsigned char *p, *q;
 	char hextmp[2];
 	if(arg) {
@@ -279,7 +293,7 @@ static int do_dump(unsigned long lflags, char_io *io_ch, void *arg, ASN1_STRING 
  * otherwise it is the number of bytes per character
  */
 
-const static signed char tag2nbyte[] = {
+static const signed char tag2nbyte[] = {
 	-1, -1, -1, -1, -1,	/* 0-4 */
 	-1, -1, -1, -1, -1,	/* 5-9 */
 	-1, -1, 0, -1,		/* 10-13 */
@@ -289,11 +303,6 @@ const static signed char tag2nbyte[] = {
 	-1, 1, -1,		/* 25-27 */
 	4, -1, 2		/* 28-30 */
 };
-
-#define ESC_FLAGS (ASN1_STRFLGS_ESC_2253 | \
-		  ASN1_STRFLGS_ESC_QUOTE | \
-		  ASN1_STRFLGS_ESC_CTRL | \
-		  ASN1_STRFLGS_ESC_MSB)
 
 /* This is the main function, print out an
  * ASN1_STRING taking note of various escape
@@ -356,12 +365,13 @@ static int do_print_ex(char_io *io_ch, void *arg, unsigned long lflags, ASN1_STR
 	}
 
 	len = do_buf(str->data, str->length, type, flags, &quotes, io_ch, NULL);
-	if(outlen < 0) return -1;
+	if(len < 0) return -1;
 	outlen += len;
 	if(quotes) outlen += 2;
 	if(!arg) return outlen;
 	if(quotes && !io_ch(arg, "\"", 1)) return -1;
-	do_buf(str->data, str->length, type, flags, NULL, io_ch, arg);
+	if(do_buf(str->data, str->length, type, flags, NULL, io_ch, arg) < 0)
+		return -1;
 	if(quotes && !io_ch(arg, "\"", 1)) return -1;
 	return outlen;
 }
@@ -557,6 +567,7 @@ int ASN1_STRING_to_UTF8(unsigned char **out, ASN1_STRING *in)
 	if(mbflag == -1) return -1;
 	mbflag |= MBSTRING_FLAG;
 	stmp.data = NULL;
+	stmp.length = 0;
 	ret = ASN1_mbstring_copy(&str, in->data, in->length, mbflag, B_ASN1_UTF8STRING);
 	if(ret < 0) return ret;
 	*out = stmp.data;

@@ -8,6 +8,7 @@ ciphers - SSL cipher display and cipher list tool.
 
 B<openssl> B<ciphers>
 [B<-v>]
+[B<-V>]
 [B<-ssl2>]
 [B<-ssl3>]
 [B<-tls1>]
@@ -15,7 +16,7 @@ B<openssl> B<ciphers>
 
 =head1 DESCRIPTION
 
-The B<cipherlist> command converts OpenSSL cipher lists into ordered
+The B<ciphers> command converts textual OpenSSL cipher lists into ordered
 SSL cipher preference lists. It can be used as a test tool to determine
 the appropriate cipherlist.
 
@@ -25,13 +26,17 @@ the appropriate cipherlist.
 
 =item B<-v>
 
-verbose option. List ciphers with a complete description of
+Verbose option. List ciphers with a complete description of
 protocol version (SSLv2 or SSLv3; the latter includes TLS), key exchange,
 authentication, encryption and mac algorithms used along with any key size
 restrictions and whether the algorithm is classed as an "export" cipher.
 Note that without the B<-v> option, ciphers may seem to appear twice
 in a cipher list; this is when similar ciphers are available for
 SSL v2 and for SSL v3/TLS v1.
+
+=item B<-V>
+
+Like B<-V>, but include cipher suite codes in output (hex format).
 
 =item B<-ssl3>
 
@@ -104,8 +109,8 @@ The following is a list of all permitted cipher strings and their meanings.
 
 =item B<DEFAULT>
 
-the default cipher list. This is determined at compile time and is normally
-B<ALL:!ADH:RC4+RSA:+SSLv2:@STRENGTH>. This must be the first cipher string
+the default cipher list. This is determined at compile time and, as of OpenSSL
+1.0.0, is normally B<ALL:!aNULL:!eNULL>. This must be the first cipher string
 specified.
 
 =item B<COMPLEMENTOFDEFAULT>
@@ -116,7 +121,8 @@ not included by B<ALL> (use B<COMPLEMENTOFALL> if necessary).
 
 =item B<ALL>
 
-all ciphers suites except the B<eNULL> ciphers which must be explicitly enabled.
+all cipher suites except the B<eNULL> ciphers which must be explicitly enabled;
+as of OpenSSL, the B<ALL> cipher suites are reasonably ordered by default
 
 =item B<COMPLEMENTOFALL>
 
@@ -125,11 +131,11 @@ the cipher suites not enabled by B<ALL>, currently being B<eNULL>.
 =item B<HIGH>
 
 "high" encryption cipher suites. This currently means those with key lengths larger
-than 128 bits.
+than 128 bits, and some cipher suites with 128-bit keys.
 
 =item B<MEDIUM>
 
-"medium" encryption cipher suites, currently those using 128 bit encryption.
+"medium" encryption cipher suites, currently some of those using 128 bit encryption.
 
 =item B<LOW>
 
@@ -146,7 +152,9 @@ export encryption algorithms. Including 40 and 56 bits algorithms.
 
 =item B<EXPORT56>
 
-56 bit export encryption algorithms.
+56 bit export encryption algorithms. In OpenSSL 0.9.8c and later the set of
+56 bit export ciphers is empty unless OpenSSL has been explicitly configured
+with support for experimental ciphers.
 
 =item B<eNULL>, B<NULL>
 
@@ -207,6 +215,10 @@ anonymous DH cipher suites.
 
 cipher suites using AES.
 
+=item B<CAMELLIA>
+
+cipher suites using Camellia.
+
 =item B<3DES>
 
 cipher suites using triple DES.
@@ -227,6 +239,10 @@ cipher suites using RC2.
 
 cipher suites using IDEA.
 
+=item B<SEED>
+
+cipher suites using SEED.
+
 =item B<MD5>
 
 cipher suites using MD5.
@@ -234,6 +250,33 @@ cipher suites using MD5.
 =item B<SHA1>, B<SHA>
 
 cipher suites using SHA1.
+
+=item B<aGOST> 
+
+cipher suites using GOST R 34.10 (either 2001 or 94) for authenticaction
+(needs an engine supporting GOST algorithms). 
+
+=item B<aGOST01>
+
+cipher suites using GOST R 34.10-2001 authentication.
+
+=item B<aGOST94>
+
+cipher suites using GOST R 34.10-94 authentication (note that R 34.10-94
+standard has been expired so use GOST R 34.10-2001)
+
+=item B<kGOST>
+
+cipher suites, using VKO 34.10 key exchange, specified in the RFC 4357.
+
+=item B<GOST94>
+
+cipher suites, using HMAC based on GOST R 34.11-94.
+
+=item B<GOST89MAC>
+
+cipher suites using GOST 28147-89 MAC B<instead of> HMAC.
+
 
 =back
 
@@ -317,10 +360,10 @@ e.g. DES-CBC3-SHA. In these cases, RSA authentication is used.
  TLS_RSA_WITH_AES_128_CBC_SHA            AES128-SHA
  TLS_RSA_WITH_AES_256_CBC_SHA            AES256-SHA
 
- TLS_DH_DSS_WITH_AES_128_CBC_SHA         DH-DSS-AES128-SHA
- TLS_DH_DSS_WITH_AES_256_CBC_SHA         DH-DSS-AES256-SHA
- TLS_DH_RSA_WITH_AES_128_CBC_SHA         DH-RSA-AES128-SHA
- TLS_DH_RSA_WITH_AES_256_CBC_SHA         DH-RSA-AES256-SHA
+ TLS_DH_DSS_WITH_AES_128_CBC_SHA         Not implemented.
+ TLS_DH_DSS_WITH_AES_256_CBC_SHA         Not implemented.
+ TLS_DH_RSA_WITH_AES_128_CBC_SHA         Not implemented.
+ TLS_DH_RSA_WITH_AES_256_CBC_SHA         Not implemented.
 
  TLS_DHE_DSS_WITH_AES_128_CBC_SHA        DHE-DSS-AES128-SHA
  TLS_DHE_DSS_WITH_AES_256_CBC_SHA        DHE-DSS-AES256-SHA
@@ -329,6 +372,46 @@ e.g. DES-CBC3-SHA. In these cases, RSA authentication is used.
 
  TLS_DH_anon_WITH_AES_128_CBC_SHA        ADH-AES128-SHA
  TLS_DH_anon_WITH_AES_256_CBC_SHA        ADH-AES256-SHA
+
+=head2 Camellia ciphersuites from RFC4132, extending TLS v1.0
+
+ TLS_RSA_WITH_CAMELLIA_128_CBC_SHA      CAMELLIA128-SHA
+ TLS_RSA_WITH_CAMELLIA_256_CBC_SHA      CAMELLIA256-SHA
+
+ TLS_DH_DSS_WITH_CAMELLIA_128_CBC_SHA   Not implemented.
+ TLS_DH_DSS_WITH_CAMELLIA_256_CBC_SHA   Not implemented.
+ TLS_DH_RSA_WITH_CAMELLIA_128_CBC_SHA   Not implemented.
+ TLS_DH_RSA_WITH_CAMELLIA_256_CBC_SHA   Not implemented.
+
+ TLS_DHE_DSS_WITH_CAMELLIA_128_CBC_SHA  DHE-DSS-CAMELLIA128-SHA
+ TLS_DHE_DSS_WITH_CAMELLIA_256_CBC_SHA  DHE-DSS-CAMELLIA256-SHA
+ TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA  DHE-RSA-CAMELLIA128-SHA
+ TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA  DHE-RSA-CAMELLIA256-SHA
+
+ TLS_DH_anon_WITH_CAMELLIA_128_CBC_SHA  ADH-CAMELLIA128-SHA
+ TLS_DH_anon_WITH_CAMELLIA_256_CBC_SHA  ADH-CAMELLIA256-SHA
+
+=head2 SEED ciphersuites from RFC4162, extending TLS v1.0
+
+ TLS_RSA_WITH_SEED_CBC_SHA              SEED-SHA
+
+ TLS_DH_DSS_WITH_SEED_CBC_SHA           Not implemented.
+ TLS_DH_RSA_WITH_SEED_CBC_SHA           Not implemented.
+
+ TLS_DHE_DSS_WITH_SEED_CBC_SHA          DHE-DSS-SEED-SHA
+ TLS_DHE_RSA_WITH_SEED_CBC_SHA          DHE-RSA-SEED-SHA
+
+ TLS_DH_anon_WITH_SEED_CBC_SHA          ADH-SEED-SHA
+
+=head2 GOST ciphersuites from draft-chudov-cryptopro-cptls, extending TLS v1.0
+
+Note: these ciphers require an engine which including GOST cryptographic
+algorithms, such as the B<ccgost> engine, included in the OpenSSL distribution.
+
+ TLS_GOSTR341094_WITH_28147_CNT_IMIT GOST94-GOST89-GOST89
+ TLS_GOSTR341001_WITH_28147_CNT_IMIT GOST2001-GOST89-GOST89
+ TLS_GOSTR341094_WITH_NULL_GOSTR3411 GOST94-NULL-GOST94
+ TLS_GOSTR341001_WITH_NULL_GOSTR3411 GOST2001-NULL-GOST94
 
 =head2 Additional Export 1024 and other cipher suites
 
@@ -388,7 +471,8 @@ L<s_client(1)|s_client(1)>, L<s_server(1)|s_server(1)>, L<ssl(3)|ssl(3)>
 
 =head1 HISTORY
 
-The B<COMPLENTOFALL> and B<COMPLEMENTOFDEFAULT> selection options were
-added in version 0.9.7.
+The B<COMPLENTOFALL> and B<COMPLEMENTOFDEFAULT> selection options
+for cipherlist strings were added in OpenSSL 0.9.7.
+The B<-V> option for the B<ciphers> command was added in OpenSSL 1.0.0.
 
 =cut

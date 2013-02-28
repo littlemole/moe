@@ -1,5 +1,5 @@
 /* tasn_enc.c */
-/* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
+/* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 2000.
  */
 /* ====================================================================
@@ -59,6 +59,7 @@
 
 #include <stddef.h>
 #include <string.h>
+#include "cryptlib.h"
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
 #include <openssl/objects.h>
@@ -157,7 +158,7 @@ int ASN1_item_ex_i2d(ASN1_VALUE **pval, unsigned char **out,
 		return asn1_i2d_ex_primitive(pval, out, it, -1, aclass);
 
 		case ASN1_ITYPE_CHOICE:
-		if (asn1_cb && !asn1_cb(ASN1_OP_I2D_PRE, pval, it))
+		if (asn1_cb && !asn1_cb(ASN1_OP_I2D_PRE, pval, it, NULL))
 				return 0;
 		i = asn1_get_choice_selector(pval, it);
 		if ((i >= 0) && (i < it->tcount))
@@ -170,7 +171,7 @@ int ASN1_item_ex_i2d(ASN1_VALUE **pval, unsigned char **out,
 								-1, aclass);
 			}
 		/* Fixme: error condition if selector out of range */
-		if (asn1_cb && !asn1_cb(ASN1_OP_I2D_POST, pval, it))
+		if (asn1_cb && !asn1_cb(ASN1_OP_I2D_POST, pval, it, NULL))
 				return 0;
 		break;
 
@@ -215,7 +216,7 @@ int ASN1_item_ex_i2d(ASN1_VALUE **pval, unsigned char **out,
 			aclass = (aclass & ~ASN1_TFLG_TAG_CLASS)
 					| V_ASN1_UNIVERSAL;
 			}
-		if (asn1_cb && !asn1_cb(ASN1_OP_I2D_PRE, pval, it))
+		if (asn1_cb && !asn1_cb(ASN1_OP_I2D_PRE, pval, it, NULL))
 				return 0;
 		/* First work out sequence content length */
 		for (i = 0, tt = it->templates; i < it->tcount; tt++, i++)
@@ -249,7 +250,7 @@ int ASN1_item_ex_i2d(ASN1_VALUE **pval, unsigned char **out,
 			}
 		if (ndef == 2)
 			ASN1_put_eoc(out);
-		if (asn1_cb  && !asn1_cb(ASN1_OP_I2D_POST, pval, it))
+		if (asn1_cb && !asn1_cb(ASN1_OP_I2D_POST, pval, it, NULL))
 				return 0;
 		return seqlen;
 
@@ -493,7 +494,7 @@ static int asn1_set_seq_out(STACK_OF(ASN1_VALUE) *sk, unsigned char **out,
 		{
 		for (i = 0, tder = derlst; i < sk_ASN1_VALUE_num(sk);
 							i++, tder++)
-			sk_ASN1_VALUE_set(sk, i, tder->field);
+			(void)sk_ASN1_VALUE_set(sk, i, tder->field);
 		}
 	OPENSSL_free(derlst);
 	OPENSSL_free(tmpdat);
@@ -568,7 +569,8 @@ int asn1_ex_i2c(ASN1_VALUE **pval, unsigned char *cout, int *putype,
 	ASN1_STRING *strtmp;
 	ASN1_OBJECT *otmp;
 	int utype;
-	unsigned char *cont, c;
+	const unsigned char *cont;
+	unsigned char c;
 	int len;
 	const ASN1_PRIMITIVE_FUNCS *pf;
 	pf = it->funcs;
@@ -596,7 +598,7 @@ int asn1_ex_i2c(ASN1_VALUE **pval, unsigned char *cout, int *putype,
 		typ = (ASN1_TYPE *)*pval;
 		utype = typ->type;
 		*putype = utype;
-		pval = (ASN1_VALUE **)&typ->value.ptr;
+		pval = &typ->value.asn1_value;
 		}
 	else utype = *putype;
 
@@ -617,11 +619,14 @@ int asn1_ex_i2c(ASN1_VALUE **pval, unsigned char *cout, int *putype,
 		tbool = (ASN1_BOOLEAN *)pval;
 		if (*tbool == -1)
 			return -1;
-		/* Default handling if value == size field then omit */
-		if (*tbool && (it->size > 0))
-			return -1;
-		if (!*tbool && !it->size)
-			return -1;
+		if (it->utype != V_ASN1_ANY)
+			{
+			/* Default handling if value == size field then omit */
+			if (*tbool && (it->size > 0))
+				return -1;
+			if (!*tbool && !it->size)
+				return -1;
+			}
 		c = (unsigned char)*tbool;
 		cont = &c;
 		len = 1;

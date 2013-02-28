@@ -1,6 +1,6 @@
 /* crypto/bio/bio_err.c */
 /* ====================================================================
- * Copyright (c) 1999-2005 The OpenSSL Project.  All rights reserved.
+ * Copyright (c) 1999-2011 The OpenSSL Project.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -95,6 +95,7 @@ static ERR_STRING_DATA BIO_str_functs[]=
 {ERR_FUNC(BIO_F_BUFFER_CTRL),	"BUFFER_CTRL"},
 {ERR_FUNC(BIO_F_CONN_CTRL),	"CONN_CTRL"},
 {ERR_FUNC(BIO_F_CONN_STATE),	"CONN_STATE"},
+{ERR_FUNC(BIO_F_DGRAM_SCTP_READ),	"DGRAM_SCTP_READ"},
 {ERR_FUNC(BIO_F_FILE_CTRL),	"FILE_CTRL"},
 {ERR_FUNC(BIO_F_FILE_READ),	"FILE_READ"},
 {ERR_FUNC(BIO_F_LINEBUFFER_CTRL),	"LINEBUFFER_CTRL"},
@@ -143,15 +144,12 @@ static ERR_STRING_DATA BIO_str_reasons[]=
 
 void ERR_load_BIO_strings(void)
 	{
-	static int init=1;
-
-	if (init)
-		{
-		init=0;
 #ifndef OPENSSL_NO_ERR
+
+	if (ERR_func_error_string(BIO_str_functs[0].error) == NULL)
+		{
 		ERR_load_strings(0,BIO_str_functs);
 		ERR_load_strings(0,BIO_str_reasons);
-#endif
-
 		}
+#endif
 	}

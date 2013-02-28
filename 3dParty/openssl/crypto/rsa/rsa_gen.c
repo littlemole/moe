@@ -67,6 +67,9 @@
 #include "cryptlib.h"
 #include <openssl/bn.h>
 #include <openssl/rsa.h>
+#ifdef OPENSSL_FIPS
+#include <openssl/fips.h>
+#endif
 
 static int rsa_builtin_keygen(RSA *rsa, int bits, BIGNUM *e_value, BN_GENCB *cb);
 
@@ -77,14 +80,28 @@ static int rsa_builtin_keygen(RSA *rsa, int bits, BIGNUM *e_value, BN_GENCB *cb)
  * now just because key-generation is part of RSA_METHOD. */
 int RSA_generate_key_ex(RSA *rsa, int bits, BIGNUM *e_value, BN_GENCB *cb)
 	{
+#ifdef OPENSSL_FIPS
+	if (FIPS_mode() && !(rsa->meth->flags & RSA_FLAG_FIPS_METHOD)
+			&& !(rsa->flags & RSA_FLAG_NON_FIPS_ALLOW))
+		{
+		RSAerr(RSA_F_RSA_GENERATE_KEY_EX, RSA_R_NON_FIPS_RSA_METHOD);
+		return 0;
+		}
+#endif
 	if(rsa->meth->rsa_keygen)
 		return rsa->meth->rsa_keygen(rsa, bits, e_value, cb);
+#ifdef OPENSSL_FIPS
+	if (FIPS_mode())
+		return FIPS_rsa_generate_key_ex(rsa, bits, e_value, cb);
+#endif
 	return rsa_builtin_keygen(rsa, bits, e_value, cb);
 	}
 
 static int rsa_builtin_keygen(RSA *rsa, int bits, BIGNUM *e_value, BN_GENCB *cb)
 	{
 	BIGNUM *r0=NULL,*r1=NULL,*r2=NULL,*r3=NULL,*tmp;
+	BIGNUM local_r0,local_d,local_p;
+	BIGNUM *pr0,*d,*p;
 	int bitsp,bitsq,ok= -1,n=0;
 	BN_CTX *ctx=NULL;
 
@@ -165,16 +182,39 @@ static int rsa_builtin_keygen(RSA *rsa, int bits, BIGNUM *e_value, BN_GENCB *cb)
 	if (!BN_sub(r1,rsa->p,BN_value_one())) goto err;	/* p-1 */
 	if (!BN_sub(r2,rsa->q,BN_value_one())) goto err;	/* q-1 */
 	if (!BN_mul(r0,r1,r2,ctx)) goto err;	/* (p-1)(q-1) */
-	if (!BN_mod_inverse(rsa->d,rsa->e,r0,ctx)) goto err;	/* d */
+	if (!(rsa->flags & RSA_FLAG_NO_CONSTTIME))
+		{
+		  pr0 = &local_r0;
+		  BN_with_flags(pr0, r0, BN_FLG_CONSTTIME);
+		}
+	else
+	  pr0 = r0;
+	if (!BN_mod_inverse(rsa->d,rsa->e,pr0,ctx)) goto err;	/* d */
+
+	/* set up d for correct BN_FLG_CONSTTIME flag */
+	if (!(rsa->flags & RSA_FLAG_NO_CONSTTIME))
+		{
+		d = &local_d;
+		BN_with_flags(d, rsa->d, BN_FLG_CONSTTIME);
+		}
+	else
+		d = rsa->d;
 
 	/* calculate d mod (p-1) */
-	if (!BN_mod(rsa->dmp1,rsa->d,r1,ctx)) goto err;
+	if (!BN_mod(rsa->dmp1,d,r1,ctx)) goto err;
 
 	/* calculate d mod (q-1) */
-	if (!BN_mod(rsa->dmq1,rsa->d,r2,ctx)) goto err;
+	if (!BN_mod(rsa->dmq1,d,r2,ctx)) goto err;
 
 	/* calculate inverse of q mod p */
-	if (!BN_mod_inverse(rsa->iqmp,rsa->q,rsa->p,ctx)) goto err;
+	if (!(rsa->flags & RSA_FLAG_NO_CONSTTIME))
+		{
+		p = &local_p;
+		BN_with_flags(p, rsa->p, BN_FLG_CONSTTIME);
+		}
+	else
+		p = rsa->p;
+	if (!BN_mod_inverse(rsa->iqmp,rsa->q,p,ctx)) goto err;
 
 	ok=1;
 err:
@@ -183,8 +223,11 @@ err:
 		RSAerr(RSA_F_RSA_BUILTIN_KEYGEN,ERR_LIB_BN);
 		ok=0;
 		}
-	BN_CTX_end(ctx);
-	BN_CTX_free(ctx);
+	if (ctx != NULL)
+		{
+		BN_CTX_end(ctx);
+		BN_CTX_free(ctx);
+		}
 
 	return ok;
 	}

@@ -40,7 +40,8 @@ void OPENSSL_Uplink (volatile void **table, int index)
      * should be sufficient [it prohibits compiler to reorder memory
      * access instructions]. */
     do {
-	len = _stprintf (msg,_T("OPENSSL_Uplink(%p,%02X): "),table,index);
+	len = _sntprintf (msg,sizeof(msg)/sizeof(TCHAR),
+			  _T("OPENSSL_Uplink(%p,%02X): "),table,index);
 	_tcscpy (msg+len,_T("unimplemented function"));
 
 	if ((h=apphandle)==NULL)
@@ -71,6 +72,8 @@ void OPENSSL_Uplink (volatile void **table, int index)
 	    }
 	    applinktable = p;
 	}
+	else
+	    p = applinktable;
 
 	if (index > (int)p[0])
 	    break;

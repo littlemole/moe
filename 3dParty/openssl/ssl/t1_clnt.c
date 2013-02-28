@@ -63,35 +63,30 @@
 #include <openssl/objects.h>
 #include <openssl/evp.h>
 
-static SSL_METHOD *tls1_get_client_method(int ver);
-static SSL_METHOD *tls1_get_client_method(int ver)
+static const SSL_METHOD *tls1_get_client_method(int ver);
+static const SSL_METHOD *tls1_get_client_method(int ver)
 	{
+	if (ver == TLS1_2_VERSION)
+		return TLSv1_2_client_method();
+	if (ver == TLS1_1_VERSION)
+		return TLSv1_1_client_method();
 	if (ver == TLS1_VERSION)
-		return(TLSv1_client_method());
-	else
-		return(NULL);
+		return TLSv1_client_method();
+	return NULL;
 	}
 
-SSL_METHOD *TLSv1_client_method(void)
-	{
-	static int init=1;
-	static SSL_METHOD TLSv1_client_data;
+IMPLEMENT_tls_meth_func(TLS1_2_VERSION, TLSv1_2_client_method,
+			ssl_undefined_function,
+			ssl3_connect,
+			tls1_get_client_method)
 
-	if (init)
-		{
-		CRYPTO_w_lock(CRYPTO_LOCK_SSL_METHOD);
+IMPLEMENT_tls_meth_func(TLS1_1_VERSION, TLSv1_1_client_method,
+			ssl_undefined_function,
+			ssl3_connect,
+			tls1_get_client_method)
 
-		if (init)
-			{
-			memcpy((char *)&TLSv1_client_data,(char *)tlsv1_base_method(),
-				sizeof(SSL_METHOD));
-			TLSv1_client_data.ssl_connect=ssl3_connect;
-			TLSv1_client_data.get_ssl_method=tls1_get_client_method;
-			init=0;
-			}
-		
-		CRYPTO_w_unlock(CRYPTO_LOCK_SSL_METHOD);
-		}
-	return(&TLSv1_client_data);
-	}
+IMPLEMENT_tls_meth_func(TLS1_VERSION, TLSv1_client_method,
+			ssl_undefined_function,
+			ssl3_connect,
+			tls1_get_client_method)
 

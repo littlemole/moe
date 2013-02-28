@@ -155,6 +155,8 @@ extern "C" {
 #define  CERT		char
 #endif
 
+#ifndef OPENSSL_NO_SSL_INTERN
+
 typedef struct ssl2_state_st
 	{
 	int three_byte_header;
@@ -219,6 +221,8 @@ typedef struct ssl2_state_st
 		} tmp;
 	} SSL2_STATE;
 
+#endif
+
 /* SSLv2 */
 /* client */
 #define SSL2_ST_SEND_CLIENT_HELLO_A		(0x10|SSL_ST_CONNECT)
@@ -266,4 +270,3 @@ typedef struct ssl2_state_st
 #endif
 #endif
 
-

@@ -57,6 +57,7 @@
 #ifndef OPENSSL_NO_ENGINE
 #include <openssl/engine.h>
 #endif
+#include <openssl/rand.h>
 
 ECDSA_SIG *ECDSA_do_sign(const unsigned char *dgst, int dlen, EC_KEY *eckey)
 {
@@ -69,7 +70,7 @@ ECDSA_SIG *ECDSA_do_sign_ex(const unsigned char *dgst, int dlen,
 	ECDSA_DATA *ecdsa = ecdsa_check(eckey);
 	if (ecdsa == NULL)
 		return NULL;
-	return ecdsa->meth->ecdsa_do_sign(dgst, dlen, NULL, NULL, eckey);
+	return ecdsa->meth->ecdsa_do_sign(dgst, dlen, kinv, rp, eckey);
 }
 
 int ECDSA_sign(int type, const unsigned char *dgst, int dlen, unsigned char 
@@ -83,6 +84,7 @@ int ECDSA_sign_ex(int type, const unsigned char *dgst, int dlen, unsigned char
 	EC_KEY *eckey)
 {
 	ECDSA_SIG *s;
+	RAND_seed(dgst, dlen);
 	s = ECDSA_do_sign_ex(dgst, dlen, kinv, r, eckey);
 	if (s == NULL)
 	{

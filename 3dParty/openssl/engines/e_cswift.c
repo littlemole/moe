@@ -62,9 +62,15 @@
 #include <openssl/buffer.h>
 #include <openssl/dso.h>
 #include <openssl/engine.h>
+#ifndef OPENSSL_NO_RSA
 #include <openssl/rsa.h>
+#endif
+#ifndef OPENSSL_NO_DSA
 #include <openssl/dsa.h>
+#endif
+#ifndef OPENSSL_NO_DH
 #include <openssl/dh.h>
+#endif
 #include <openssl/rand.h>
 #include <openssl/bn.h>
 
@@ -98,22 +104,26 @@ static int cswift_destroy(ENGINE *e);
 static int cswift_init(ENGINE *e);
 static int cswift_finish(ENGINE *e);
 static int cswift_ctrl(ENGINE *e, int cmd, long i, void *p, void (*f)(void));
+#ifndef OPENSSL_NO_RSA
 static int cswift_bn_32copy(SW_LARGENUMBER * out, const BIGNUM * in);
+#endif
 
 /* BIGNUM stuff */
 static int cswift_mod_exp(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
 		const BIGNUM *m, BN_CTX *ctx);
+#ifndef OPENSSL_NO_RSA
 static int cswift_mod_exp_crt(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
 		const BIGNUM *q, const BIGNUM *dmp1, const BIGNUM *dmq1,
 		const BIGNUM *iqmp, BN_CTX *ctx);
+#endif
 
 #ifndef OPENSSL_NO_RSA
 /* RSA stuff */
 static int cswift_rsa_mod_exp(BIGNUM *r0, const BIGNUM *I, RSA *rsa, BN_CTX *ctx);
-#endif
 /* This function is aliased to mod_exp (with the mont stuff dropped). */
 static int cswift_mod_exp_mont(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
 		const BIGNUM *m, BN_CTX *ctx, BN_MONT_CTX *m_ctx);
+#endif
 
 #ifndef OPENSSL_NO_DSA
 /* DSA stuff */
@@ -570,6 +580,7 @@ err:
 	}
 
 
+#ifndef OPENSSL_NO_RSA
 int cswift_bn_32copy(SW_LARGENUMBER * out, const BIGNUM * in)
 {
 	int mod;
@@ -591,7 +602,9 @@ int cswift_bn_32copy(SW_LARGENUMBER * out, const BIGNUM * in)
 
 	return 1;
 }
+#endif
 
+#ifndef OPENSSL_NO_RSA
 /* Un petit mod_exp chinois */
 static int cswift_mod_exp_crt(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
 			const BIGNUM *q, const BIGNUM *dmp1,
@@ -723,12 +736,19 @@ err:
 		release_context(hac);
 	return to_return;
 	}
+#endif
  
 #ifndef OPENSSL_NO_RSA
 static int cswift_rsa_mod_exp(BIGNUM *r0, const BIGNUM *I, RSA *rsa, BN_CTX *ctx)
 	{
 	int to_return = 0;
 	const RSA_METHOD * def_rsa_method;
+
+	if(!rsa->p || !rsa->q || !rsa->dmp1 || !rsa->dmq1 || !rsa->iqmp)
+		{
+		CSWIFTerr(CSWIFT_F_CSWIFT_RSA_MOD_EXP,CSWIFT_R_MISSING_KEY_COMPONENTS);
+		goto err;
+		}
 
 	/* Try the limits of RSA (2048 bits) */
 	if(BN_num_bytes(rsa->p) > 128 ||
@@ -750,17 +770,11 @@ static int cswift_rsa_mod_exp(BIGNUM *r0, const BIGNUM *I, RSA *rsa, BN_CTX *ctx
 			return def_rsa_method->rsa_mod_exp(r0, I, rsa, ctx);
 	}
 
-	if(!rsa->p || !rsa->q || !rsa->dmp1 || !rsa->dmq1 || !rsa->iqmp)
-		{
-		CSWIFTerr(CSWIFT_F_CSWIFT_RSA_MOD_EXP,CSWIFT_R_MISSING_KEY_COMPONENTS);
-		goto err;
-		}
 	to_return = cswift_mod_exp_crt(r0, I, rsa->p, rsa->q, rsa->dmp1,
 		rsa->dmq1, rsa->iqmp, ctx);
 err:
 	return to_return;
 	}
-#endif
 
 /* This function is aliased to mod_exp (with the mont stuff dropped). */
 static int cswift_mod_exp_mont(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
@@ -788,6 +802,7 @@ static int cswift_mod_exp_mont(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
 
 	return cswift_mod_exp(r, a, p, m, ctx);
 	}
+#endif	/* OPENSSL_NO_RSA */
 
 #ifndef OPENSSL_NO_DSA
 static DSA_SIG *cswift_dsa_sign(const unsigned char *dgst, int dlen, DSA *dsa)
@@ -796,7 +811,6 @@ static DSA_SIG *cswift_dsa_sign(const unsigned char *dgst, int dlen, DSA *dsa)
 	SW_PARAM sw_param;
 	SW_STATUS sw_status;
 	SW_LARGENUMBER arg, res;
-	unsigned char *ptr;
 	BN_CTX *ctx;
 	BIGNUM *dsa_p = NULL;
 	BIGNUM *dsa_q = NULL;
@@ -884,7 +898,6 @@ static DSA_SIG *cswift_dsa_sign(const unsigned char *dgst, int dlen, DSA *dsa)
 		goto err;
 		}
 	/* Convert the response */
-	ptr = (unsigned char *)result->d;
 	if((to_return = DSA_SIG_new()) == NULL)
 		goto err;
 	to_return->r = BN_bin2bn((unsigned char *)result->d, 20, NULL);
@@ -1048,7 +1061,7 @@ static int cswift_rand_bytes(unsigned char *buf, int num)
 	/* limitation of cswift with values not a multiple of 32                */
 	/************************************************************************/
 
-	while(num >= sizeof(buf32))
+	while(num >= (int)sizeof(buf32))
 	{
 		largenum.value = buf;
 		largenum.nbytes = sizeof(buf32);
@@ -1075,7 +1088,7 @@ static int cswift_rand_bytes(unsigned char *buf, int num)
 		if (swrc != SW_OK)
 		{
 			char tmpbuf[20];
-			CSWIFTerr(CSWIFT_F_CSWIFT_CTRL, CSWIFT_R_REQUEST_FAILED);
+			CSWIFTerr(CSWIFT_F_CSWIFT_RAND_BYTES, CSWIFT_R_REQUEST_FAILED);
 			sprintf(tmpbuf, "%ld", swrc);
 			ERR_add_error_data(2, "CryptoSwift error number is ", tmpbuf);
 			goto err;

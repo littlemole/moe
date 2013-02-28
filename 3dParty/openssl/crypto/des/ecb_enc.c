@@ -58,12 +58,11 @@
 
 #include "des_locl.h"
 #include "des_ver.h"
-#include "spr.h"
 #include <openssl/opensslv.h>
 #include <openssl/bio.h>
 
-OPENSSL_GLOBAL const char *libdes_version="libdes" OPENSSL_VERSION_PTEXT;
-OPENSSL_GLOBAL const char *DES_version="DES" OPENSSL_VERSION_PTEXT;
+OPENSSL_GLOBAL const char libdes_version[]="libdes" OPENSSL_VERSION_PTEXT;
+OPENSSL_GLOBAL const char DES_version[]="DES" OPENSSL_VERSION_PTEXT;
 
 const char *DES_options(void)
 	{
@@ -92,7 +91,7 @@ const char *DES_options(void)
 #ifdef DES_UNROLL
 		unroll="16";
 #else
-		unroll="4";
+		unroll="2";
 #endif
 		if (sizeof(DES_LONG) != sizeof(long))
 			size="int";

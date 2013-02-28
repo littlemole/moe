@@ -57,7 +57,7 @@
 #include <string.h>
 
 #include <openssl/e_os2.h>
-#if !defined(OPENSSL_SYS_MSDOS) || defined(__DJGPP__)
+#if !defined(OPENSSL_SYS_MSDOS) || defined(__DJGPP__) || defined(__MINGW32__)
 #include <sys/types.h>
 #include <unistd.h>
 #else
@@ -65,14 +65,26 @@
 typedef int pid_t;
 #endif
 
+#if defined(OPENSSL_SYS_NETWARE) && defined(NETWARE_CLIB)
+#define getpid GetThreadID
+extern int GetThreadID(void);
+#elif defined(_WIN32) && !defined(__WATCOMC__)
+#define getpid _getpid
+#endif
+
 #include <openssl/crypto.h>
 #include <openssl/dso.h>
 #include <openssl/engine.h>
 #include <openssl/buffer.h>
+#ifndef OPENSSL_NO_RSA
 #include <openssl/rsa.h>
+#endif
+#ifndef OPENSSL_NO_DSA
 #include <openssl/dsa.h>
+#endif
+#ifndef OPENSSL_NO_DH
 #include <openssl/dh.h>
-#include <openssl/bn.h>
+#endif
 
 #ifndef OPENSSL_NO_HW
 #ifndef OPENSSL_NO_HW_AEP
@@ -98,12 +110,14 @@ static AEP_RV aep_close_connection(AEP_CONNECTION_HNDL hConnection);
 static AEP_RV aep_close_all_connections(int use_engine_lock, int *in_use);
 
 /* BIGNUM stuff */
+#ifndef OPENSSL_NO_RSA
 static int aep_mod_exp(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
 	const BIGNUM *m, BN_CTX *ctx);
 
 static AEP_RV aep_mod_exp_crt(BIGNUM *r,const  BIGNUM *a, const BIGNUM *p,
 	const BIGNUM *q, const BIGNUM *dmp1,const BIGNUM *dmq1,
 	const BIGNUM *iqmp, BN_CTX *ctx);
+#endif
 
 /* RSA stuff */
 #ifndef OPENSSL_NO_RSA
@@ -111,8 +125,10 @@ static int aep_rsa_mod_exp(BIGNUM *r0, const BIGNUM *I, RSA *rsa, BN_CTX *ctx);
 #endif
 
 /* This function is aliased to mod_exp (with the mont stuff dropped). */
+#ifndef OPENSSL_NO_RSA
 static int aep_mod_exp_mont(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
 	const BIGNUM *m, BN_CTX *ctx, BN_MONT_CTX *m_ctx);
+#endif
 
 /* DSA stuff */
 #ifndef OPENSSL_NO_DSA
@@ -630,6 +646,7 @@ static int aep_mod_exp(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
 	return to_return;
 	}
 	
+#ifndef OPENSSL_NO_RSA
 static AEP_RV aep_mod_exp_crt(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
 	const BIGNUM *q, const BIGNUM *dmp1,
 	const BIGNUM *dmq1,const BIGNUM *iqmp, BN_CTX *ctx)
@@ -666,6 +683,7 @@ static AEP_RV aep_mod_exp_crt(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
  err:
 	return rv;
 	}
+#endif
 	
 
 #ifdef AEPRAND
@@ -821,12 +839,14 @@ static int aep_mod_exp_dsa(DSA *dsa, BIGNUM *r, BIGNUM *a,
 	}
 #endif
 
+#ifndef OPENSSL_NO_RSA
 /* This function is aliased to mod_exp (with the mont stuff dropped). */
 static int aep_mod_exp_mont(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
 	const BIGNUM *m, BN_CTX *ctx, BN_MONT_CTX *m_ctx)
 	{
 	return aep_mod_exp(r, a, p, m, ctx);
 	}
+#endif
 
 #ifndef OPENSSL_NO_DH
 /* This function is aliased to mod_exp (with the dh and mont dropped). */
@@ -848,11 +868,7 @@ static AEP_RV aep_get_connection(AEP_CONNECTION_HNDL_PTR phConnection)
 
 	CRYPTO_w_lock(CRYPTO_LOCK_ENGINE);
 
-#ifndef NETWARE_CLIB
 	curr_pid = getpid();
-#else
-	curr_pid = GetThreadID();
-#endif
 
 	/*Check if this is the first time this is being called from the current
 	  process*/

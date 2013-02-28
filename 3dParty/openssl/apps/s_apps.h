@@ -117,7 +117,7 @@
 #include <conio.h>
 #endif
 
-#ifdef OPENSSL_SYS_MSDOS
+#if defined(OPENSSL_SYS_MSDOS) && !defined(_WIN32)
 #define _kbhit kbhit
 #endif
 
@@ -162,9 +162,15 @@ int extract_port(char *str, short *port_ptr);
 int extract_host_port(char *str,char **host_ptr,unsigned char *ip,short *p);
 
 long MS_CALLBACK bio_dump_callback(BIO *bio, int cmd, const char *argp,
-	int argi, long argl, long ret);
+				   int argi, long argl, long ret);
 
 #ifdef HEADER_SSL_H
 void MS_CALLBACK apps_ssl_info_callback(const SSL *s, int where, int ret);
 void MS_CALLBACK msg_cb(int write_p, int version, int content_type, const void *buf, size_t len, SSL *ssl, void *arg);
+void MS_CALLBACK tlsext_cb(SSL *s, int client_server, int type,
+					unsigned char *data, int len,
+					void *arg);
 #endif
+
+int MS_CALLBACK generate_cookie_callback(SSL *ssl, unsigned char *cookie, unsigned int *cookie_len);
+int MS_CALLBACK verify_cookie_callback(SSL *ssl, unsigned char *cookie, unsigned int cookie_len);

@@ -64,7 +64,10 @@
 #include <openssl/evp.h>
 #include <openssl/objects.h>
 #include <openssl/x509.h>
+#ifndef OPENSSL_NO_RSA
 #include <openssl/rsa.h>
+#endif
+#include "evp_locl.h"
 
 static int init(EVP_MD_CTX *ctx)
 	{ return SHA_Init(ctx->md_data); }

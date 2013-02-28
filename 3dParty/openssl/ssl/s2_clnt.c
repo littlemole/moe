@@ -117,7 +117,7 @@
 #include <openssl/objects.h>
 #include <openssl/evp.h>
 
-static SSL_METHOD *ssl2_get_client_method(int ver);
+static const SSL_METHOD *ssl2_get_client_method(int ver);
 static int get_server_finished(SSL *s);
 static int get_server_verify(SSL *s);
 static int get_server_hello(SSL *s);
@@ -129,7 +129,7 @@ static int ssl_rsa_public_encrypt(SESS_CERT *sc, int len, unsigned char *from,
 	unsigned char *to,int padding);
 #define BREAK	break
 
-static SSL_METHOD *ssl2_get_client_method(int ver)
+static const SSL_METHOD *ssl2_get_client_method(int ver)
 	{
 	if (ver == SSL2_VERSION)
 		return(SSLv2_client_method());
@@ -137,32 +137,14 @@ static SSL_METHOD *ssl2_get_client_method(int ver)
 		return(NULL);
 	}
 
-SSL_METHOD *SSLv2_client_method(void)
-	{
-	static int init=1;
-	static SSL_METHOD SSLv2_client_data;
-
-	if (init)
-		{
-		CRYPTO_w_lock(CRYPTO_LOCK_SSL_METHOD);
-
-		if (init)
-			{
-			memcpy((char *)&SSLv2_client_data,(char *)sslv2_base_method(),
-				sizeof(SSL_METHOD));
-			SSLv2_client_data.ssl_connect=ssl2_connect;
-			SSLv2_client_data.get_ssl_method=ssl2_get_client_method;
-			init=0;
-			}
-
-		CRYPTO_w_unlock(CRYPTO_LOCK_SSL_METHOD);
-		}
-	return(&SSLv2_client_data);
-	}
+IMPLEMENT_ssl2_meth_func(SSLv2_client_method,
+			ssl_undefined_function,
+			ssl2_connect,
+			ssl2_get_client_method)
 
 int ssl2_connect(SSL *s)
 	{
-	unsigned long l=time(NULL);
+	unsigned long l=(unsigned long)time(NULL);
 	BUF_MEM *buf=NULL;
 	int ret= -1;
 	void (*cb)(const SSL *ssl,int type,int val)=NULL;
@@ -377,12 +359,14 @@ static int get_server_hello(SSL *s)
 					SSL_R_PEER_ERROR);
 			return(-1);
 			}
-#ifdef __APPLE_CC__
-		/* The Rhapsody 5.5 (a.k.a. MacOS X) compiler bug
-		 * workaround. <appro@fy.chalmers.se> */
-		s->hit=(i=*(p++))?1:0;
-#else
+#if 0
 		s->hit=(*(p++))?1:0;
+		/* Some [PPC?] compilers fail to increment p in above
+		   statement, e.g. one provided with Rhapsody 5.5, but
+		   most recent example XL C 11.1 for AIX, even without
+		   optimization flag... */
+#else
+		s->hit=(*p)?1:0; p++;
 #endif
 		s->s2->tmp.cert_type= *(p++);
 		n2s(p,i);
@@ -484,11 +468,11 @@ static int get_server_hello(SSL *s)
 			return(-1);
 			}
 
-		sk_SSL_CIPHER_set_cmp_func(sk,ssl_cipher_ptr_id_cmp);
+		(void)sk_SSL_CIPHER_set_cmp_func(sk,ssl_cipher_ptr_id_cmp);
 
 		/* get the array of ciphers we will accept */
 		cl=SSL_get_ciphers(s);
-		sk_SSL_CIPHER_set_cmp_func(cl,ssl_cipher_ptr_id_cmp);
+		(void)sk_SSL_CIPHER_set_cmp_func(cl,ssl_cipher_ptr_id_cmp);
 
 		/*
 		 * If server preference flag set, choose the first
@@ -538,7 +522,8 @@ static int get_server_hello(SSL *s)
 		CRYPTO_add(&s->session->peer->references, 1, CRYPTO_LOCK_X509);
 		}
 
-	if (s->session->peer != s->session->sess_cert->peer_key->x509)
+	if (s->session->sess_cert == NULL 
+      || s->session->peer != s->session->sess_cert->peer_key->x509)
 		/* can't happen */
 		{
 		ssl2_return_error(s, SSL2_PE_UNDEFINED_ERROR);
@@ -638,7 +623,7 @@ static int client_master_key(SSL *s)
 	if (s->state == SSL2_ST_SEND_CLIENT_MASTER_KEY_A)
 		{
 
-		if (!ssl_cipher_get_evp(s->session,&c,&md,NULL))
+		if (!ssl_cipher_get_evp(s->session,&c,&md,NULL,NULL,NULL))
 			{
 			ssl2_return_error(s,SSL2_PE_NO_CIPHER);
 			SSLerr(SSL_F_CLIENT_MASTER_KEY,SSL_R_PROBLEMS_MAPPING_CIPHER_FUNCTIONS);
@@ -880,8 +865,10 @@ static int client_certificate(SSL *s)
 		EVP_SignUpdate(&ctx,s->s2->key_material,
 			       s->s2->key_material_length);
 		EVP_SignUpdate(&ctx,cert_ch,(unsigned int)cert_ch_len);
-		n=i2d_X509(s->session->sess_cert->peer_key->x509,&p);
-		EVP_SignUpdate(&ctx,buf,(unsigned int)n);
+		i=i2d_X509(s->session->sess_cert->peer_key->x509,&p);
+		/* Don't update the signature if it fails - FIXME: probably should handle this better */
+		if(i > 0)
+			EVP_SignUpdate(&ctx,buf,(unsigned int)i);
 
 		p=buf;
 		d=p+6;
@@ -952,7 +939,7 @@ static int get_server_verify(SSL *s)
 		s->msg_callback(0, s->version, 0, p, len, s, s->msg_callback_arg); /* SERVER-VERIFY */
 	p += 1;
 
-	if (memcmp(p,s->s2->challenge,s->s2->challenge_length) != 0)
+	if (CRYPTO_memcmp(p,s->s2->challenge,s->s2->challenge_length) != 0)
 		{
 		ssl2_return_error(s,SSL2_PE_UNDEFINED_ERROR);
 		SSLerr(SSL_F_GET_SERVER_VERIFY,SSL_R_CHALLENGE_IS_DIFFERENT);
@@ -1061,7 +1048,7 @@ int ssl2_set_certificate(SSL *s, int type, int len, const unsigned char *data)
 
 	i=ssl_verify_cert_chain(s,sk);
 		
-	if ((s->verify_mode != SSL_VERIFY_NONE) && (!i))
+	if ((s->verify_mode != SSL_VERIFY_NONE) && (i <= 0))
 		{
 		SSLerr(SSL_F_SSL2_SET_CERTIFICATE,SSL_R_CERTIFICATE_VERIFY_FAILED);
 		goto err;

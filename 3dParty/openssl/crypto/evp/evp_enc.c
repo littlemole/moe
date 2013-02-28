@@ -64,9 +64,19 @@
 #ifndef OPENSSL_NO_ENGINE
 #include <openssl/engine.h>
 #endif
+#ifdef OPENSSL_FIPS
+#include <openssl/fips.h>
+#endif
 #include "evp_locl.h"
 
-const char *EVP_version="EVP" OPENSSL_VERSION_PTEXT;
+#ifdef OPENSSL_FIPS
+#define M_do_cipher(ctx, out, in, inl) FIPS_cipher(ctx, out, in, inl)
+#else
+#define M_do_cipher(ctx, out, in, inl) ctx->cipher->do_cipher(ctx, out, in, inl)
+#endif
+
+
+const char EVP_version[]="EVP" OPENSSL_VERSION_PTEXT;
 
 void EVP_CIPHER_CTX_init(EVP_CIPHER_CTX *ctx)
 	{
@@ -74,6 +84,13 @@ void EVP_CIPHER_CTX_init(EVP_CIPHER_CTX *ctx)
 	/* ctx->cipher=NULL; */
 	}
 
+EVP_CIPHER_CTX *EVP_CIPHER_CTX_new(void)
+	{
+	EVP_CIPHER_CTX *ctx=OPENSSL_malloc(sizeof *ctx);
+	if (ctx)
+		EVP_CIPHER_CTX_init(ctx);
+	return ctx;
+	}
 
 int EVP_CipherInit(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *cipher,
 	     const unsigned char *key, const unsigned char *iv, int enc)
@@ -108,10 +125,14 @@ int EVP_CipherInit_ex(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *cipher, ENGINE *imp
 		/* Ensure a context left lying around from last time is cleared
 		 * (the previous check attempted to avoid this if the same
 		 * ENGINE and EVP_CIPHER could be used). */
-		EVP_CIPHER_CTX_cleanup(ctx);
-
-		/* Restore encrypt field: it is zeroed by cleanup */
-		ctx->encrypt = enc;
+		if (ctx->cipher)
+			{
+			unsigned long flags = ctx->flags;
+			EVP_CIPHER_CTX_cleanup(ctx);
+			/* Restore encrypt and flags */
+			ctx->encrypt = enc;
+			ctx->flags = flags;
+			}
 #ifndef OPENSSL_NO_ENGINE
 		if(impl)
 			{
@@ -148,6 +169,10 @@ int EVP_CipherInit_ex(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *cipher, ENGINE *imp
 			ctx->engine = NULL;
 #endif
 
+#ifdef OPENSSL_FIPS
+		if (FIPS_mode())
+			return FIPS_cipherinit(ctx, cipher, key, iv, enc);
+#endif
 		ctx->cipher=cipher;
 		if (ctx->cipher->ctx_size)
 			{
@@ -181,6 +206,10 @@ int EVP_CipherInit_ex(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *cipher, ENGINE *imp
 #ifndef OPENSSL_NO_ENGINE
 skip_to_init:
 #endif
+#ifdef OPENSSL_FIPS
+	if (FIPS_mode())
+		return FIPS_cipherinit(ctx, cipher, key, iv, enc);
+#endif
 	/* we assume block size is a power of 2 in *cryptUpdate */
 	OPENSSL_assert(ctx->cipher->block_size == 1
 	    || ctx->cipher->block_size == 8
@@ -197,6 +226,7 @@ skip_to_init:
 			case EVP_CIPH_OFB_MODE:
 
 			ctx->num = 0;
+			/* fall-through */
 
 			case EVP_CIPH_CBC_MODE:
 
@@ -204,6 +234,13 @@ skip_to_init:
 					(int)sizeof(ctx->iv));
 			if(iv) memcpy(ctx->oiv, iv, EVP_CIPHER_CTX_iv_length(ctx));
 			memcpy(ctx->iv, ctx->oiv, EVP_CIPHER_CTX_iv_length(ctx));
+			break;
+
+			case EVP_CIPH_CTR_MODE:
+			ctx->num = 0;
+			/* Don't reuse IV for CTR mode */
+			if(iv)
+				memcpy(ctx->iv, iv, EVP_CIPHER_CTX_iv_length(ctx));
 			break;
 
 			default:
@@ -272,10 +309,25 @@ int EVP_EncryptUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl,
 	{
 	int i,j,bl;
 
-	OPENSSL_assert(inl > 0);
+	if (ctx->cipher->flags & EVP_CIPH_FLAG_CUSTOM_CIPHER)
+		{
+		i = M_do_cipher(ctx, out, in, inl);
+		if (i < 0)
+			return 0;
+		else
+			*outl = i;
+		return 1;
+		}
+
+	if (inl <= 0)
+		{
+		*outl = 0;
+		return inl == 0;
+		}
+
 	if(ctx->buf_len == 0 && (inl&(ctx->block_mask)) == 0)
 		{
-		if(ctx->cipher->do_cipher(ctx,out,in,inl))
+		if(M_do_cipher(ctx,out,in,inl))
 			{
 			*outl=inl;
 			return 1;
@@ -302,7 +354,7 @@ int EVP_EncryptUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl,
 			{
 			j=bl-i;
 			memcpy(&(ctx->buf[i]),in,j);
-			if(!ctx->cipher->do_cipher(ctx,out,ctx->buf,bl)) return 0;
+			if(!M_do_cipher(ctx,out,ctx->buf,bl)) return 0;
 			inl-=j;
 			in+=j;
 			out+=bl;
@@ -315,7 +367,7 @@ int EVP_EncryptUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl,
 	inl-=i;
 	if (inl > 0)
 		{
-		if(!ctx->cipher->do_cipher(ctx,out,in,inl)) return 0;
+		if(!M_do_cipher(ctx,out,in,inl)) return 0;
 		*outl+=inl;
 		}
 
@@ -336,6 +388,16 @@ int EVP_EncryptFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl)
 	{
 	int n,ret;
 	unsigned int i, b, bl;
+
+	if (ctx->cipher->flags & EVP_CIPH_FLAG_CUSTOM_CIPHER)
+		{
+		ret = M_do_cipher(ctx, out, NULL, 0);
+		if (ret < 0)
+			return 0;
+		else 
+			*outl = ret;
+		return 1;
+		}
 
 	b=ctx->cipher->block_size;
 	OPENSSL_assert(b <= sizeof ctx->buf);
@@ -359,7 +421,7 @@ int EVP_EncryptFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl)
 	n=b-bl;
 	for (i=bl; i<b; i++)
 		ctx->buf[i]=n;
-	ret=ctx->cipher->do_cipher(ctx,out,ctx->buf,b);
+	ret=M_do_cipher(ctx,out,ctx->buf,b);
 
 
 	if(ret)
@@ -374,10 +436,23 @@ int EVP_DecryptUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl,
 	int fix_len;
 	unsigned int b;
 
-	if (inl == 0)
+	if (ctx->cipher->flags & EVP_CIPH_FLAG_CUSTOM_CIPHER)
 		{
-		*outl=0;
+		fix_len = M_do_cipher(ctx, out, in, inl);
+		if (fix_len < 0)
+			{
+			*outl = 0;
+			return 0;
+			}
+		else
+			*outl = fix_len;
 		return 1;
+		}
+
+	if (inl <= 0)
+		{
+		*outl = 0;
+		return inl == 0;
 		}
 
 	if (ctx->flags & EVP_CIPH_NO_PADDING)
@@ -427,8 +502,18 @@ int EVP_DecryptFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl)
 	{
 	int i,n;
 	unsigned int b;
-
 	*outl=0;
+
+	if (ctx->cipher->flags & EVP_CIPH_FLAG_CUSTOM_CIPHER)
+		{
+		i = M_do_cipher(ctx, out, NULL, 0);
+		if (i < 0)
+			return 0;
+		else
+			*outl = i;
+		return 1;
+		}
+
 	b=ctx->cipher->block_size;
 	if (ctx->flags & EVP_CIPH_NO_PADDING)
 		{
@@ -449,7 +534,7 @@ int EVP_DecryptFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl)
 			}
 		OPENSSL_assert(b <= sizeof ctx->final);
 		n=ctx->final[b-1];
-		if (n > (int)b)
+		if (n == 0 || n > (int)b)
 			{
 			EVPerr(EVP_F_EVP_DECRYPTFINAL_EX,EVP_R_BAD_DECRYPT);
 			return(0);
@@ -472,8 +557,18 @@ int EVP_DecryptFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl)
 	return(1);
 	}
 
+void EVP_CIPHER_CTX_free(EVP_CIPHER_CTX *ctx)
+	{
+	if (ctx)
+		{
+		EVP_CIPHER_CTX_cleanup(ctx);
+		OPENSSL_free(ctx);
+		}
+	}
+
 int EVP_CIPHER_CTX_cleanup(EVP_CIPHER_CTX *c)
 	{
+#ifndef OPENSSL_FIPS
 	if (c->cipher != NULL)
 		{
 		if(c->cipher->cleanup && !c->cipher->cleanup(c))
@@ -484,11 +579,15 @@ int EVP_CIPHER_CTX_cleanup(EVP_CIPHER_CTX *c)
 		}
 	if (c->cipher_data)
 		OPENSSL_free(c->cipher_data);
+#endif
 #ifndef OPENSSL_NO_ENGINE
 	if (c->engine)
 		/* The EVP_CIPHER we used belongs to an ENGINE, release the
 		 * functional reference we held for this reason. */
 		ENGINE_finish(c->engine);
+#endif
+#ifdef OPENSSL_FIPS
+	FIPS_cipher_ctx_cleanup(c);
 #endif
 	memset(c,0,sizeof(EVP_CIPHER_CTX));
 	return 1;
@@ -542,6 +641,41 @@ int EVP_CIPHER_CTX_rand_key(EVP_CIPHER_CTX *ctx, unsigned char *key)
 		return EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_RAND_KEY, 0, key);
 	if (RAND_bytes(key, ctx->key_len) <= 0)
 		return 0;
+	return 1;
+	}
+
+int EVP_CIPHER_CTX_copy(EVP_CIPHER_CTX *out, const EVP_CIPHER_CTX *in)
+	{
+	if ((in == NULL) || (in->cipher == NULL))
+		{
+		EVPerr(EVP_F_EVP_CIPHER_CTX_COPY,EVP_R_INPUT_NOT_INITIALIZED);
+		return 0;
+		}
+#ifndef OPENSSL_NO_ENGINE
+	/* Make sure it's safe to copy a cipher context using an ENGINE */
+	if (in->engine && !ENGINE_init(in->engine))
+		{
+		EVPerr(EVP_F_EVP_CIPHER_CTX_COPY,ERR_R_ENGINE_LIB);
+		return 0;
+		}
+#endif
+
+	EVP_CIPHER_CTX_cleanup(out);
+	memcpy(out,in,sizeof *out);
+
+	if (in->cipher_data && in->cipher->ctx_size)
+		{
+		out->cipher_data=OPENSSL_malloc(in->cipher->ctx_size);
+		if (!out->cipher_data)
+			{
+			EVPerr(EVP_F_EVP_CIPHER_CTX_COPY,ERR_R_MALLOC_FAILURE);
+			return 0;
+			}
+		memcpy(out->cipher_data,in->cipher_data,in->cipher->ctx_size);
+		}
+
+	if (in->cipher->flags & EVP_CIPH_CUSTOM_COPY)
+		return in->cipher->ctrl((EVP_CIPHER_CTX *)in, EVP_CTRL_COPY, 0, out);
 	return 1;
 	}
 

@@ -1,5 +1,5 @@
 #
-# SSLeay/tools/Makefile
+# OpenSSL/tools/Makefile
 #
 
 DIR=	tools
@@ -49,6 +49,7 @@ depend:
 dclean:
 	$(PERL) -pe 'if (/^# DO NOT DELETE THIS LINE/) {print; exit(0);}' $(MAKEFILE) >Makefile.new
 	mv -f Makefile.new $(MAKEFILE)
+	rm -f c_rehash
 
 clean:
 	rm -f *.o *.obj lib tags core .pure .nfs* *.old *.bak fluff

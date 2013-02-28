@@ -1,5 +1,5 @@
 /* v3_cpols.c */
-/* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
+/* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 1999.
  */
 /* ====================================================================
@@ -77,7 +77,7 @@ static POLICYQUALINFO *notice_section(X509V3_CTX *ctx,
 					STACK_OF(CONF_VALUE) *unot, int ia5org);
 static int nref_nos(STACK_OF(ASN1_INTEGER) *nnums, STACK_OF(CONF_VALUE) *nos);
 
-X509V3_EXT_METHOD v3_cpols = {
+const X509V3_EXT_METHOD v3_cpols = {
 NID_certificate_policies, 0,ASN1_ITEM_ref(CERTIFICATEPOLICIES),
 0,0,0,0,
 0,0,
@@ -139,7 +139,15 @@ static STACK_OF(POLICYINFO) *r2i_certpol(X509V3_EXT_METHOD *method,
 	CONF_VALUE *cnf;
 	int i, ia5org;
 	pols = sk_POLICYINFO_new_null();
+	if (pols == NULL) {
+		X509V3err(X509V3_F_R2I_CERTPOL, ERR_R_MALLOC_FAILURE);
+		return NULL;
+	}
 	vals =  X509V3_parse_list(value);
+	if (vals == NULL) {
+		X509V3err(X509V3_F_R2I_CERTPOL, ERR_R_X509V3_LIB);
+		goto err;
+	}
 	ia5org = 0;
 	for(i = 0; i < sk_CONF_VALUE_num(vals); i++) {
 		cnf = sk_CONF_VALUE_value(vals, i);
@@ -173,11 +181,16 @@ static STACK_OF(POLICYINFO) *r2i_certpol(X509V3_EXT_METHOD *method,
 			pol = POLICYINFO_new();
 			pol->policyid = pobj;
 		}
-		sk_POLICYINFO_push(pols, pol);
+		if (!sk_POLICYINFO_push(pols, pol)){
+			POLICYINFO_free(pol);
+			X509V3err(X509V3_F_R2I_CERTPOL, ERR_R_MALLOC_FAILURE);
+			goto err;
+		}
 	}
 	sk_CONF_VALUE_pop_free(vals, X509V3_conf_free);
 	return pols;
 	err:
+	sk_CONF_VALUE_pop_free(vals, X509V3_conf_free);
 	sk_POLICYINFO_pop_free(pols, POLICYINFO_free);
 	return NULL;
 }
@@ -437,4 +450,8 @@ void X509_POLICY_NODE_print(BIO *out, X509_POLICY_NODE *node, int indent)
 	else
 		BIO_printf(out, "%*sNo Qualifiers\n", indent + 2, "");
 	}
-	
+
+
+IMPLEMENT_STACK_OF(X509_POLICY_NODE)
+IMPLEMENT_STACK_OF(X509_POLICY_DATA)
+

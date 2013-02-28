@@ -1,9 +1,9 @@
 /* pkcs12.c */
-/* Written by Dr Stephen N Henson (shenson@bigfoot.com) for the OpenSSL
+/* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project.
  */
 /* ====================================================================
- * Copyright (c) 1999-2002 The OpenSSL Project.  All rights reserved.
+ * Copyright (c) 1999-2006 The OpenSSL Project.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -88,6 +88,7 @@ int print_attribs(BIO *out, STACK_OF(X509_ATTRIBUTE) *attrlst,const char *name);
 void hex_prin(BIO *out, unsigned char *buf, int len);
 int alg_print(BIO *x, X509_ALGOR *alg);
 int cert_load(BIO *in, STACK_OF(X509) *sk);
+static int set_pbe(BIO *err, int *ppbe, const char *str);
 
 int MAIN(int, char **);
 
@@ -100,6 +101,7 @@ int MAIN(int argc, char **argv)
     char **args;
     char *name = NULL;
     char *csp_name = NULL;
+    int add_lmk = 0;
     PKCS12 *p12 = NULL;
     char pass[50], macpass[50];
     int export_cert = 0;
@@ -115,11 +117,12 @@ int MAIN(int argc, char **argv)
     int ret = 1;
     int macver = 1;
     int noprompt = 0;
-    STACK *canames = NULL;
+    STACK_OF(OPENSSL_STRING) *canames = NULL;
     char *cpass = NULL, *mpass = NULL;
     char *passargin = NULL, *passargout = NULL, *passarg = NULL;
     char *passin = NULL, *passout = NULL;
     char *inrand = NULL;
+    char *macalg = NULL;
     char *CApath = NULL, *CAfile = NULL;
 #ifndef OPENSSL_NO_ENGINE
     char *engine=NULL;
@@ -153,14 +156,22 @@ int MAIN(int argc, char **argv)
     			cert_pbe = NID_pbe_WithSHA1And3_Key_TripleDES_CBC;
 		else if (!strcmp (*args, "-export")) export_cert = 1;
 		else if (!strcmp (*args, "-des")) enc=EVP_des_cbc();
+		else if (!strcmp (*args, "-des3")) enc = EVP_des_ede3_cbc();
 #ifndef OPENSSL_NO_IDEA
 		else if (!strcmp (*args, "-idea")) enc=EVP_idea_cbc();
 #endif
-		else if (!strcmp (*args, "-des3")) enc = EVP_des_ede3_cbc();
+#ifndef OPENSSL_NO_SEED
+		else if (!strcmp(*args, "-seed")) enc=EVP_seed_cbc();
+#endif
 #ifndef OPENSSL_NO_AES
 		else if (!strcmp(*args,"-aes128")) enc=EVP_aes_128_cbc();
 		else if (!strcmp(*args,"-aes192")) enc=EVP_aes_192_cbc();
 		else if (!strcmp(*args,"-aes256")) enc=EVP_aes_256_cbc();
+#endif
+#ifndef OPENSSL_NO_CAMELLIA
+		else if (!strcmp(*args,"-camellia128")) enc=EVP_camellia_128_cbc();
+		else if (!strcmp(*args,"-camellia192")) enc=EVP_camellia_192_cbc();
+		else if (!strcmp(*args,"-camellia256")) enc=EVP_camellia_256_cbc();
 #endif
 		else if (!strcmp (*args, "-noiter")) iter = 1;
 		else if (!strcmp (*args, "-maciter"))
@@ -169,32 +180,18 @@ int MAIN(int argc, char **argv)
 					 maciter = 1;
 		else if (!strcmp (*args, "-nomac"))
 					 maciter = -1;
+		else if (!strcmp (*args, "-macalg"))
+		    if (args[1]) {
+			args++;	
+			macalg = *args;
+		    } else badarg = 1;
 		else if (!strcmp (*args, "-nodes")) enc=NULL;
 		else if (!strcmp (*args, "-certpbe")) {
-			if (args[1]) {
-				args++;
-				if (!strcmp(*args, "NONE"))
-					cert_pbe = -1;
-				cert_pbe=OBJ_txt2nid(*args);
-				if(cert_pbe == NID_undef) {
-					BIO_printf(bio_err,
-						 "Unknown PBE algorithm %s\n", *args);
-					badarg = 1;
-				}
-			} else badarg = 1;
+			if (!set_pbe(bio_err, &cert_pbe, *++args))
+				badarg = 1;
 		} else if (!strcmp (*args, "-keypbe")) {
-			if (args[1]) {
-				args++;
-				if (!strcmp(*args, "NONE"))
-					key_pbe = -1;
-				else
-					key_pbe=OBJ_txt2nid(*args);
-				if(key_pbe == NID_undef) {
-					BIO_printf(bio_err,
-						 "Unknown PBE algorithm %s\n", *args);
-					badarg = 1;
-				}
-			} else badarg = 1;
+			if (!set_pbe(bio_err, &key_pbe, *++args))
+				badarg = 1;
 		} else if (!strcmp (*args, "-rand")) {
 		    if (args[1]) {
 			args++;	
@@ -215,7 +212,9 @@ int MAIN(int argc, char **argv)
 			args++;	
 			name = *args;
 		    } else badarg = 1;
-		} else if (!strcmp (*args, "-CSP")) {
+		} else if (!strcmp (*args, "-LMK"))
+			add_lmk = 1;
+		else if (!strcmp (*args, "-CSP")) {
 		    if (args[1]) {
 			args++;	
 			csp_name = *args;
@@ -223,8 +222,8 @@ int MAIN(int argc, char **argv)
 		} else if (!strcmp (*args, "-caname")) {
 		    if (args[1]) {
 			args++;	
-			if (!canames) canames = sk_new_null();
-			sk_push(canames, *args);
+			if (!canames) canames = sk_OPENSSL_STRING_new_null();
+			sk_OPENSSL_STRING_push(canames, *args);
 		    } else badarg = 1;
 		} else if (!strcmp (*args, "-in")) {
 		    if (args[1]) {
@@ -300,17 +299,27 @@ int MAIN(int argc, char **argv)
 #ifndef OPENSSL_NO_IDEA
 	BIO_printf (bio_err, "-idea         encrypt private keys with idea\n");
 #endif
+#ifndef OPENSSL_NO_SEED
+	BIO_printf (bio_err, "-seed         encrypt private keys with seed\n");
+#endif
 #ifndef OPENSSL_NO_AES
 	BIO_printf (bio_err, "-aes128, -aes192, -aes256\n");
 	BIO_printf (bio_err, "              encrypt PEM output with cbc aes\n");
 #endif
+#ifndef OPENSSL_NO_CAMELLIA
+	BIO_printf (bio_err, "-camellia128, -camellia192, -camellia256\n");
+	BIO_printf (bio_err, "              encrypt PEM output with cbc camellia\n");
+#endif
 	BIO_printf (bio_err, "-nodes        don't encrypt private keys\n");
 	BIO_printf (bio_err, "-noiter       don't use encryption iteration\n");
+	BIO_printf (bio_err, "-nomaciter    don't use MAC iteration\n");
 	BIO_printf (bio_err, "-maciter      use MAC iteration\n");
+	BIO_printf (bio_err, "-nomac        don't generate MAC\n");
 	BIO_printf (bio_err, "-twopass      separate MAC, encryption passwords\n");
 	BIO_printf (bio_err, "-descert      encrypt PKCS#12 certificates with triple DES (default RC2-40)\n");
 	BIO_printf (bio_err, "-certpbe alg  specify certificate PBE algorithm (default RC2-40)\n");
 	BIO_printf (bio_err, "-keypbe alg   specify private key PBE algorithm (default 3DES)\n");
+	BIO_printf (bio_err, "-macalg alg   digest algorithm used in MAC (default SHA1)\n");
 	BIO_printf (bio_err, "-keyex        set MS key exchange type\n");
 	BIO_printf (bio_err, "-keysig       set MS key signature type\n");
 	BIO_printf (bio_err, "-password p   set import/export password source\n");
@@ -322,6 +331,8 @@ int MAIN(int argc, char **argv)
 	BIO_printf(bio_err,  "-rand file%cfile%c...\n", LIST_SEPARATOR_CHAR, LIST_SEPARATOR_CHAR);
 	BIO_printf(bio_err,  "              load the file (or the files in the directory) into\n");
 	BIO_printf(bio_err,  "              the random number generator\n");
+	BIO_printf(bio_err,  "-CSP name     Microsoft CSP name\n");
+	BIO_printf(bio_err,  "-LMK          Add local machine keyset attribute to private key\n");
     	goto end;
     }
 
@@ -411,6 +422,7 @@ int MAIN(int argc, char **argv)
 	EVP_PKEY *key = NULL;
 	X509 *ucert = NULL, *x = NULL;
 	STACK_OF(X509) *certs=NULL;
+	const EVP_MD *macmd = NULL;
 	unsigned char *catmp = NULL;
 	int i;
 
@@ -461,7 +473,7 @@ int MAIN(int argc, char **argv)
 					X509_keyid_set1(ucert, NULL, 0);
 					X509_alias_set1(ucert, NULL, 0);
 					/* Remove from list */
-					sk_X509_delete(certs, i);
+					(void)sk_X509_delete(certs, i);
 					break;
 					}
 				}
@@ -526,24 +538,29 @@ int MAIN(int argc, char **argv)
 		    X509_free(sk_X509_value(chain2, 0));
 		    sk_X509_free(chain2);
 		} else {
-			BIO_printf (bio_err, "Error %s getting chain.\n",
+			if (vret >= 0)
+				BIO_printf (bio_err, "Error %s getting chain.\n",
 					X509_verify_cert_error_string(vret));
+			else
+				ERR_print_errors(bio_err);
 			goto export_end;
 		}			
     	}
 
 	/* Add any CA names */
 
-	for (i = 0; i < sk_num(canames); i++)
+	for (i = 0; i < sk_OPENSSL_STRING_num(canames); i++)
 		{
-		catmp = (unsigned char *)sk_value(canames, i);
+		catmp = (unsigned char *)sk_OPENSSL_STRING_value(canames, i);
 		X509_alias_set1(sk_X509_value(certs, i), catmp, -1);
 		}
 
 	if (csp_name && key)
 		EVP_PKEY_add1_attr_by_NID(key, NID_ms_csp_name,
 				MBSTRING_ASC, (unsigned char *)csp_name, -1);
-		
+
+	if (add_lmk && key)
+		EVP_PKEY_add1_attr_by_NID(key, NID_LocalKeySet, 0, NULL, -1);
 
 #ifdef CRYPTO_MDEBUG
 	CRYPTO_pop_info();
@@ -572,8 +589,18 @@ int MAIN(int argc, char **argv)
 		goto export_end;
 		}
 
+	if (macalg)
+		{
+		macmd = EVP_get_digestbyname(macalg);
+		if (!macmd)
+			{
+			BIO_printf(bio_err, "Unknown digest algorithm %s\n", 
+						macalg);
+			}
+		}
+
 	if (maciter != -1)
-		PKCS12_set_mac(p12, mpass, -1, NULL, 0, maciter, NULL);
+		PKCS12_set_mac(p12, mpass, -1, NULL, 0, maciter, macmd);
 
 #ifdef CRYPTO_MDEBUG
 	CRYPTO_pop_info();
@@ -620,7 +647,7 @@ int MAIN(int argc, char **argv)
 
     if (!twopass) BUF_strlcpy(macpass, pass, sizeof macpass);
 
-    if (options & INFO) BIO_printf (bio_err, "MAC Iteration %ld\n", p12->mac->iter ? ASN1_INTEGER_get (p12->mac->iter) : 1);
+    if ((options & INFO) && p12->mac) BIO_printf (bio_err, "MAC Iteration %ld\n", p12->mac->iter ? ASN1_INTEGER_get (p12->mac->iter) : 1);
     if(macver) {
 #ifdef CRYPTO_MDEBUG
     CRYPTO_push_info("verify MAC");
@@ -660,7 +687,7 @@ int MAIN(int argc, char **argv)
 #endif
     BIO_free(in);
     BIO_free_all(out);
-    if (canames) sk_free(canames);
+    if (canames) sk_OPENSSL_STRING_free(canames);
     if(passin) OPENSSL_free(passin);
     if(passout) OPENSSL_free(passout);
     apps_shutdown();
@@ -801,7 +828,7 @@ int get_cert_chain (X509 *cert, X509_STORE *store, STACK_OF(X509) **chain)
 {
 	X509_STORE_CTX store_ctx;
 	STACK_OF(X509) *chn;
-	int i;
+	int i = 0;
 
 	/* FIXME: Should really check the return status of X509_STORE_CTX_init
 	 * for an error, but how that fits into the return value of this
@@ -809,13 +836,17 @@ int get_cert_chain (X509 *cert, X509_STORE *store, STACK_OF(X509) **chain)
 	X509_STORE_CTX_init(&store_ctx, store, cert, NULL);
 	if (X509_verify_cert(&store_ctx) <= 0) {
 		i = X509_STORE_CTX_get_error (&store_ctx);
+		if (i == 0)
+			/* avoid returning 0 if X509_verify_cert() did not
+			 * set an appropriate error value in the context */
+			i = -1;
+		chn = NULL;
 		goto err;
-	}
-	chn =  X509_STORE_CTX_get1_chain(&store_ctx);
-	i = 0;
-	*chain = chn;
+	} else
+		chn = X509_STORE_CTX_get1_chain(&store_ctx);
 err:
 	X509_STORE_CTX_cleanup(&store_ctx);
+	*chain = chn;
 	
 	return i;
 }	
@@ -825,12 +856,14 @@ int alg_print (BIO *x, X509_ALGOR *alg)
 	PBEPARAM *pbe;
 	const unsigned char *p;
 	p = alg->parameter->value.sequence->data;
-	pbe = d2i_PBEPARAM (NULL, &p, alg->parameter->value.sequence->length);
+	pbe = d2i_PBEPARAM(NULL, &p, alg->parameter->value.sequence->length);
+	if (!pbe)
+		return 1;
 	BIO_printf (bio_err, "%s, Iteration %ld\n", 
 		OBJ_nid2ln(OBJ_obj2nid(alg->algorithm)),
 		ASN1_INTEGER_get(pbe->iter));
 	PBEPARAM_free (pbe);
-	return 0;
+	return 1;
 }
 
 /* Load all certificates from a given file */
@@ -890,7 +923,7 @@ int print_attribs (BIO *out, STACK_OF(X509_ATTRIBUTE) *attrlst,const char *name)
 			av = sk_ASN1_TYPE_value(attr->value.set, 0);
 			switch(av->type) {
 				case V_ASN1_BMPSTRING:
-        			value = uni2asc(av->value.bmpstring->data,
+        			value = OPENSSL_uni2asc(av->value.bmpstring->data,
                                 	       av->value.bmpstring->length);
 				BIO_printf(out, "%s\n", value);
 				OPENSSL_free(value);
@@ -923,4 +956,22 @@ void hex_prin(BIO *out, unsigned char *buf, int len)
 	for (i = 0; i < len; i++) BIO_printf (out, "%02X ", buf[i]);
 }
 
+static int set_pbe(BIO *err, int *ppbe, const char *str)
+	{
+	if (!str)
+		return 0;
+	if (!strcmp(str, "NONE"))
+		{
+		*ppbe = -1;
+		return 1;
+		}
+	*ppbe=OBJ_txt2nid(str);
+	if (*ppbe == NID_undef)
+		{
+		BIO_printf(bio_err, "Unknown PBE algorithm %s\n", str);
+		return 0;
+		}
+	return 1;
+	}
+			
 #endif

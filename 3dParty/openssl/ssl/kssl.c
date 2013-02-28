@@ -68,11 +68,6 @@
 
 #include <openssl/opensslconf.h>
 
-#define _XOPEN_SOURCE 500 /* glibc2 needs this to declare strptime() */
-#include <time.h>
-#if 0 /* experimental */
-#undef _XOPEN_SOURCE /* To avoid clashes with anything else... */
-#endif
 #include <string.h>
 
 #define KRB5_PRIVATE	1
@@ -81,6 +76,7 @@
 #include <openssl/evp.h>
 #include <openssl/objects.h>
 #include <openssl/krb5_asn.h>
+#include "kssl_lcl.h"
 
 #ifndef OPENSSL_NO_KRB5
 
@@ -136,7 +132,7 @@
 #define krb5_principal_compare   kssl_krb5_principal_compare
 #define krb5_decrypt_tkt_part    kssl_krb5_decrypt_tkt_part
 #define krb5_timeofday           kssl_krb5_timeofday
-#define krb5_rc_default           kssl_krb5_rc_default
+#define krb5_rc_default          kssl_krb5_rc_default
 
 #ifdef krb5_rc_initialize
 #undef krb5_rc_initialize
@@ -784,6 +780,25 @@ kssl_krb5_kt_get_entry(krb5_context context, krb5_keytab keytab,
         }
 #endif  /* OPENSSL_SYS_WINDOWS || OPENSSL_SYS_WIN32 */
 
+
+/* memory allocation functions for non-temporary storage
+ * (e.g. stuff that gets saved into the kssl context) */
+static void* kssl_calloc(size_t nmemb, size_t size)
+{
+	void* p;
+	
+	p=OPENSSL_malloc(nmemb*size);
+	if (p){
+		memset(p, 0, nmemb*size);
+	}
+	return p;
+}
+
+#define kssl_malloc(size) OPENSSL_malloc((size))
+#define kssl_realloc(ptr, size) OPENSSL_realloc(ptr, size)
+#define kssl_free(ptr) OPENSSL_free((ptr))
+
+
 char
 *kstring(char *string)
         {
@@ -825,7 +840,7 @@ kssl_map_enc(krb5_enctype enctype)
 **	"62 xx 30 yy" (APPLICATION-2, SEQUENCE), where xx-yy =~ 2, and
 **	xx and yy are possibly multi-byte length fields.
 */
-int 	kssl_test_confound(unsigned char *p)
+static int 	kssl_test_confound(unsigned char *p)
 	{
 	int 	len = 2;
 	int 	xx = 0, yy = 0;
@@ -860,7 +875,7 @@ int 	kssl_test_confound(unsigned char *p)
 **      what the highest assigned CKSUMTYPE_ constant is.  As of 1.2.2
 **      it is 0x000c (CKSUMTYPE_HMAC_SHA1_DES3).  So we will use 0x0010.
 */
-size_t  *populate_cksumlens(void)
+static size_t  *populate_cksumlens(void)
 	{
 	int 		i, j, n;
 	static size_t 	*cklens = NULL;
@@ -927,7 +942,7 @@ kssl_err_set(KSSL_ERR *kssl_err, int reason, char *text)
 	if (kssl_err == NULL)  return;
 
 	kssl_err->reason = reason;
-	BIO_snprintf(kssl_err->text, KSSL_ERR_MAX, text);
+	BIO_snprintf(kssl_err->text, KSSL_ERR_MAX, "%s", text);
 	return;
         }
 
@@ -1011,7 +1026,7 @@ print_krb5_keyblock(char *label, krb5_keyblock *keyblk)
 /*	Display contents of krb5_principal_data struct, for debugging
 **	(krb5_principal is typedef'd == krb5_principal_data *)
 */
-void
+static void
 print_krb5_princ(char *label, krb5_principal_data *princ)
         {
 	int i, ui, uj;
@@ -1210,7 +1225,7 @@ kssl_cget_tkt(	/* UPDATE */	KSSL_CTX *kssl_ctx,
 **				code here.  This tkt should alloc/free just
 **				like the real thing.
 */
-krb5_error_code
+static krb5_error_code
 kssl_TKT2tkt(	/* IN     */	krb5_context	krb5context,
 		/* IN     */	KRB5_TKTBODY	*asn1ticket,
 		/* OUT    */	krb5_ticket	**krb5ticket,
@@ -1548,7 +1563,7 @@ kssl_sget_tkt(	/* UPDATE */	KSSL_CTX		*kssl_ctx,
 KSSL_CTX	*
 kssl_ctx_new(void)
         {
-	return ((KSSL_CTX *) calloc(1, sizeof(KSSL_CTX)));
+	return ((KSSL_CTX *) kssl_calloc(1, sizeof(KSSL_CTX)));
         }
 
 
@@ -1562,13 +1577,13 @@ kssl_ctx_free(KSSL_CTX *kssl_ctx)
 
 	if (kssl_ctx->key)  		OPENSSL_cleanse(kssl_ctx->key,
 							      kssl_ctx->length);
-	if (kssl_ctx->key)  		free(kssl_ctx->key);
-	if (kssl_ctx->client_princ) 	free(kssl_ctx->client_princ);
-	if (kssl_ctx->service_host) 	free(kssl_ctx->service_host);
-	if (kssl_ctx->service_name) 	free(kssl_ctx->service_name);
-	if (kssl_ctx->keytab_file) 	free(kssl_ctx->keytab_file);
+	if (kssl_ctx->key)  		kssl_free(kssl_ctx->key);
+	if (kssl_ctx->client_princ) 	kssl_free(kssl_ctx->client_princ);
+	if (kssl_ctx->service_host) 	kssl_free(kssl_ctx->service_host);
+	if (kssl_ctx->service_name) 	kssl_free(kssl_ctx->service_name);
+	if (kssl_ctx->keytab_file) 	kssl_free(kssl_ctx->keytab_file);
 
-	free(kssl_ctx);
+	kssl_free(kssl_ctx);
 	return (KSSL_CTX *) NULL;
         }
 
@@ -1593,7 +1608,7 @@ kssl_ctx_setprinc(KSSL_CTX *kssl_ctx, int which,
         case KSSL_SERVER:	princ = &kssl_ctx->service_host;	break;
         default:		return KSSL_CTX_ERR;			break;
 		}
-	if (*princ)  free(*princ);
+	if (*princ)  kssl_free(*princ);
 
 	/* Add up all the entity->lengths */
 	length = 0;
@@ -1606,7 +1621,7 @@ kssl_ctx_setprinc(KSSL_CTX *kssl_ctx, int which,
 	/* Space for the ('@'+realm+NULL | NULL) */
 	length += ((realm)? realm->length + 2: 1);
 
-	if ((*princ = calloc(1, length)) == NULL)
+	if ((*princ = kssl_calloc(1, length)) == NULL)
 		return KSSL_CTX_ERR;
 	else
 		{
@@ -1649,7 +1664,7 @@ kssl_ctx_setstring(KSSL_CTX *kssl_ctx, int which, char *text)
         case KSSL_KEYTAB:	string = &kssl_ctx->keytab_file;	break;
         default:		return KSSL_CTX_ERR;			break;
 		}
-	if (*string)  free(*string);
+	if (*string)  kssl_free(*string);
 
 	if (!text)
                 {
@@ -1657,7 +1672,7 @@ kssl_ctx_setstring(KSSL_CTX *kssl_ctx, int which, char *text)
 		return KSSL_CTX_OK;
 		}
 
-	if ((*string = calloc(1, strlen(text) + 1)) == NULL)
+	if ((*string = kssl_calloc(1, strlen(text) + 1)) == NULL)
 		return KSSL_CTX_ERR;
 	else
 		strcpy(*string, text);
@@ -1681,7 +1696,7 @@ kssl_ctx_setkey(KSSL_CTX *kssl_ctx, krb5_keyblock *session)
 	if (kssl_ctx->key)
                 {
 		OPENSSL_cleanse(kssl_ctx->key, kssl_ctx->length);
-		free(kssl_ctx->key);
+		kssl_free(kssl_ctx->key);
 		}
 
 	if (session)
@@ -1707,7 +1722,7 @@ kssl_ctx_setkey(KSSL_CTX *kssl_ctx, krb5_keyblock *session)
 		}
 
 	if ((kssl_ctx->key =
-                (krb5_octet FAR *) calloc(1, kssl_ctx->length)) == NULL)
+                (krb5_octet FAR *) kssl_calloc(1, kssl_ctx->length)) == NULL)
                 {
 		kssl_ctx->length  = 0;
 		return KSSL_CTX_ERR;
@@ -1787,6 +1802,9 @@ kssl_ctx_show(KSSL_CTX *kssl_ctx)
     krb5rc = krb5_sname_to_principal(krb5context, NULL, 
                                      kssl_ctx->service_name ? kssl_ctx->service_name: KRB5SVC,
                                      KRB5_NT_SRV_HST, &princ);
+
+    if (krb5rc)
+	goto exit;
 
     krb5rc = krb5_kt_get_entry(krb5context, krb5keytab, 
                                 princ,
@@ -1885,7 +1903,7 @@ void kssl_krb5_free_data_contents(krb5_context context, krb5_data *data)
 **  Return pointer to the (partially) filled in struct tm on success,
 **  return NULL on failure.
 */
-struct tm	*k_gmtime(ASN1_GENERALIZEDTIME *gtime, struct tm *k_tm)
+static struct tm *k_gmtime(ASN1_GENERALIZEDTIME *gtime, struct tm *k_tm)
 	{
 	char 		c, *p;
 
@@ -1911,7 +1929,7 @@ struct tm	*k_gmtime(ASN1_GENERALIZEDTIME *gtime, struct tm *k_tm)
 **  So we try to sneek the clockskew out through the replay cache.
 **	If that fails just return a likely default (300 seconds).
 */
-krb5_deltat	get_rc_clockskew(krb5_context context)
+static krb5_deltat get_rc_clockskew(krb5_context context)
 	{
 	krb5_rcache 	rc;
 	krb5_deltat 	clockskew;
@@ -2075,9 +2093,12 @@ krb5_error_code  kssl_check_authent(
         EVP_CIPHER_CTX_cleanup(&ciph_ctx);
 
 #ifdef KSSL_DEBUG
+	{
+	int padl;
 	printf("kssl_check_authent: decrypted authenticator[%d] =\n", outl);
 	for (padl=0; padl < outl; padl++) printf("%02x ",unenc_authent[padl]);
 	printf("\n");
+	}
 #endif	/* KSSL_DEBUG */
 
 	if ((p = kssl_skip_confound(enctype, unenc_authent)) == NULL)
@@ -2107,7 +2128,7 @@ krb5_error_code  kssl_check_authent(
  		tm_g = gmtime(&now);		tg = mktime(tm_g);
  		tz_offset = tg - tl;
 
-		*atimep = tr - tz_offset;
+		*atimep = (krb5_timestamp)(tr - tz_offset);
  		}
 
 #ifdef KSSL_DEBUG
@@ -2173,11 +2194,27 @@ krb5_error_code  kssl_build_principal_2(
 	return ENOMEM;
 	}
 
+void SSL_set0_kssl_ctx(SSL *s, KSSL_CTX *kctx)
+	{
+	s->kssl_ctx = kctx;
+	} 
+
+KSSL_CTX * SSL_get0_kssl_ctx(SSL *s)
+	{
+	return s->kssl_ctx;
+	}
+
+char *kssl_ctx_get0_client_princ(KSSL_CTX *kctx)
+	{
+	if (kctx)
+		return kctx->client_princ;
+	return NULL;
+	}
 
 #else /* !OPENSSL_NO_KRB5 */
 
 #if defined(PEDANTIC) || defined(OPENSSL_SYS_VMS)
-static int dummy=(int)&dummy;
+static void *dummy=&dummy;
 #endif
 
 #endif	/* !OPENSSL_NO_KRB5	*/

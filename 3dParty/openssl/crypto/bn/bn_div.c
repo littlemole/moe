@@ -102,7 +102,7 @@ int BN_div(BIGNUM *dv, BIGNUM *rem, const BIGNUM *m, const BIGNUM *d,
 	/* The next 2 are needed so we can do a dv->d[0]|=1 later
 	 * since BN_lshift1 will only work once there is a value :-) */
 	BN_zero(dv);
-	bn_wexpand(dv,1);
+	if(bn_wexpand(dv,1) == NULL) goto end;
 	dv->top=1;
 
 	if (!BN_lshift(D,D,nm-nd)) goto end;
@@ -141,6 +141,7 @@ int BN_div(BIGNUM *dv, BIGNUM *rem, const BIGNUM *m, const BIGNUM *d,
     *
     *					<appro@fy.chalmers.se>
     */
+#undef bn_div_words
 #  define bn_div_words(n0,n1,d0)		\
 	({  asm volatile (			\
 		"divl	%4"			\
@@ -155,6 +156,7 @@ int BN_div(BIGNUM *dv, BIGNUM *rem, const BIGNUM *m, const BIGNUM *d,
     * Same story here, but it's 128-bit by 64-bit division. Wow!
     *					<appro@fy.chalmers.se>
     */
+#  undef bn_div_words
 #  define bn_div_words(n0,n1,d0)		\
 	({  asm volatile (			\
 		"divq	%4"			\
@@ -169,8 +171,8 @@ int BN_div(BIGNUM *dv, BIGNUM *rem, const BIGNUM *m, const BIGNUM *d,
 #endif /* OPENSSL_NO_ASM */
 
 
-/* BN_div computes  dv := num / divisor,  rounding towards zero, and sets up
- * rm  such that  dv*divisor + rm = num  holds.
+/* BN_div computes  dv := num / divisor,  rounding towards
+ * zero, and sets up rm  such that  dv*divisor + rm = num  holds.
  * Thus:
  *     dv->neg == num->neg ^ divisor->neg  (unless the result is zero)
  *     rm->neg == num->neg                 (unless the remainder is zero)
@@ -184,12 +186,27 @@ int BN_div(BIGNUM *dv, BIGNUM *rm, const BIGNUM *num, const BIGNUM *divisor,
 	BN_ULONG *resp,*wnump;
 	BN_ULONG d0,d1;
 	int num_n,div_n;
+	int no_branch=0;
 
-	if (dv)
-		bn_check_top(dv);
-	if (rm)
-		bn_check_top(rm);
+	/* Invalid zero-padding would have particularly bad consequences
+	 * in the case of 'num', so don't just rely on bn_check_top() for this one
+	 * (bn_check_top() works only for BN_DEBUG builds) */
+	if (num->top > 0 && num->d[num->top - 1] == 0)
+		{
+		BNerr(BN_F_BN_DIV,BN_R_NOT_INITIALIZED);
+		return 0;
+		}
+
 	bn_check_top(num);
+
+	if ((BN_get_flags(num, BN_FLG_CONSTTIME) != 0) || (BN_get_flags(divisor, BN_FLG_CONSTTIME) != 0))
+		{
+		no_branch=1;
+		}
+
+	bn_check_top(dv);
+	bn_check_top(rm);
+	/* bn_check_top(num); */ /* 'num' has been checked already */
 	bn_check_top(divisor);
 
 	if (BN_is_zero(divisor))
@@ -198,7 +215,7 @@ int BN_div(BIGNUM *dv, BIGNUM *rm, const BIGNUM *num, const BIGNUM *divisor,
 		return(0);
 		}
 
-	if (BN_ucmp(num,divisor) < 0)
+	if (!no_branch && BN_ucmp(num,divisor) < 0)
 		{
 		if (rm != NULL)
 			{ if (BN_copy(rm,num) == NULL) return(0); }
@@ -213,7 +230,8 @@ int BN_div(BIGNUM *dv, BIGNUM *rm, const BIGNUM *num, const BIGNUM *divisor,
 	if (dv == NULL)
 		res=BN_CTX_get(ctx);
 	else	res=dv;
-	if (sdiv == NULL || res == NULL) goto err;
+	if (sdiv == NULL || res == NULL || tmp == NULL || snum == NULL)
+		goto err;
 
 	/* First we normalise the numbers */
 	norm_shift=BN_BITS2-((BN_num_bits(divisor))%BN_BITS2);
@@ -222,6 +240,27 @@ int BN_div(BIGNUM *dv, BIGNUM *rm, const BIGNUM *num, const BIGNUM *divisor,
 	norm_shift+=BN_BITS2;
 	if (!(BN_lshift(snum,num,norm_shift))) goto err;
 	snum->neg=0;
+
+	if (no_branch)
+		{
+		/* Since we don't know whether snum is larger than sdiv,
+		 * we pad snum with enough zeroes without changing its
+		 * value. 
+		 */
+		if (snum->top <= sdiv->top+1) 
+			{
+			if (bn_wexpand(snum, sdiv->top + 2) == NULL) goto err;
+			for (i = snum->top; i < sdiv->top + 2; i++) snum->d[i] = 0;
+			snum->top = sdiv->top + 2;
+			}
+		else
+			{
+			if (bn_wexpand(snum, snum->top + 1) == NULL) goto err;
+			snum->d[snum->top] = 0;
+			snum->top ++;
+			}
+		}
+
 	div_n=sdiv->top;
 	num_n=snum->top;
 	loop=num_n-div_n;
@@ -245,23 +284,27 @@ int BN_div(BIGNUM *dv, BIGNUM *rm, const BIGNUM *num, const BIGNUM *divisor,
 	/* Setup to 'res' */
 	res->neg= (num->neg^divisor->neg);
 	if (!bn_wexpand(res,(loop+1))) goto err;
-	res->top=loop;
+	res->top=loop-no_branch;
 	resp= &(res->d[loop-1]);
 
 	/* space for temp */
 	if (!bn_wexpand(tmp,(div_n+1))) goto err;
 
-	if (BN_ucmp(&wnum,sdiv) >= 0)
+	if (!no_branch)
 		{
-		/* If BN_DEBUG_RAND is defined BN_ucmp changes (via
-		 * bn_pollute) the const bignum arguments =>
-		 * clean the values between top and max again */
-		bn_clear_top2max(&wnum);
-		bn_sub_words(wnum.d, wnum.d, sdiv->d, div_n);
-		*resp=1;
+		if (BN_ucmp(&wnum,sdiv) >= 0)
+			{
+			/* If BN_DEBUG_RAND is defined BN_ucmp changes (via
+			 * bn_pollute) the const bignum arguments =>
+			 * clean the values between top and max again */
+			bn_clear_top2max(&wnum);
+			bn_sub_words(wnum.d, wnum.d, sdiv->d, div_n);
+			*resp=1;
+			}
+		else
+			res->top--;
 		}
-	else
-		res->top--;
+
 	/* if res->top == 0 then clear the neg value otherwise decrease
 	 * the resp pointer */
 	if (res->top == 0)
@@ -320,7 +363,7 @@ X) -> 0x%08X\n",
 				t2 -= d1;
 				}
 #else /* !BN_LLONG */
-			BN_ULONG t2l,t2h,ql,qh;
+			BN_ULONG t2l,t2h;
 
 			q=bn_div_words(n0,n1,d0);
 #ifdef BN_DEBUG_LEVITTE
@@ -338,9 +381,12 @@ X) -> 0x%08X\n",
 			t2l = d1 * q;
 			t2h = BN_UMULT_HIGH(d1,q);
 #else
+			{
+			BN_ULONG ql, qh;
 			t2l=LBITS(d1); t2h=HBITS(d1);
 			ql =LBITS(q);  qh =HBITS(q);
 			mul64(t2l,t2h,ql,qh); /* t2=(BN_ULLONG)d1*q; */
+			}
 #endif
 
 			for (;;)
@@ -391,13 +437,12 @@ X) -> 0x%08X\n",
 			rm->neg = neg;
 		bn_check_top(rm);
 		}
+	if (no_branch)	bn_correct_top(res);
 	BN_CTX_end(ctx);
 	return(1);
 err:
-	if (rm)
-		bn_check_top(rm);
+	bn_check_top(rm);
 	BN_CTX_end(ctx);
 	return(0);
 	}
-
 #endif

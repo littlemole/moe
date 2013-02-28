@@ -73,11 +73,27 @@ static int dh_finish(DH *dh);
 
 int DH_generate_key(DH *dh)
 	{
+#ifdef OPENSSL_FIPS
+	if (FIPS_mode() && !(dh->meth->flags & DH_FLAG_FIPS_METHOD)
+			&& !(dh->flags & DH_FLAG_NON_FIPS_ALLOW))
+		{
+		DHerr(DH_F_DH_GENERATE_KEY, DH_R_NON_FIPS_METHOD);
+		return 0;
+		}
+#endif
 	return dh->meth->generate_key(dh);
 	}
 
 int DH_compute_key(unsigned char *key, const BIGNUM *pub_key, DH *dh)
 	{
+#ifdef OPENSSL_FIPS
+	if (FIPS_mode() && !(dh->meth->flags & DH_FLAG_FIPS_METHOD)
+			&& !(dh->flags & DH_FLAG_NON_FIPS_ALLOW))
+		{
+		DHerr(DH_F_DH_COMPUTE_KEY, DH_R_NON_FIPS_METHOD);
+		return 0;
+		}
+#endif
 	return dh->meth->compute_key(key, pub_key, dh);
 	}
 
@@ -138,8 +154,21 @@ static int generate_key(DH *dh)
 
 	if (generate_new_key)
 		{
-		l = dh->length ? dh->length : BN_num_bits(dh->p)-1; /* secret exponent length */
-		if (!BN_rand(priv_key, l, 0, 0)) goto err;
+		if (dh->q)
+			{
+			do
+				{
+				if (!BN_rand_range(priv_key, dh->q))
+					goto err;
+				}
+			while (BN_is_zero(priv_key) || BN_is_one(priv_key));
+			}
+		else
+			{
+			/* secret exponent length */
+			l = dh->length ? dh->length : BN_num_bits(dh->p)-1;
+			if (!BN_rand(priv_key, l, 0, 0)) goto err;
+			}
 		}
 
 	{
@@ -150,7 +179,7 @@ static int generate_key(DH *dh)
 			{
 			BN_init(&local_prk);
 			prk = &local_prk;
-			BN_with_flags(prk, priv_key, BN_FLG_EXP_CONSTTIME);
+			BN_with_flags(prk, priv_key, BN_FLG_CONSTTIME);
 			}
 		else
 			prk = priv_key;
@@ -173,10 +202,17 @@ err:
 
 static int compute_key(unsigned char *key, const BIGNUM *pub_key, DH *dh)
 	{
-	BN_CTX *ctx;
+	BN_CTX *ctx=NULL;
 	BN_MONT_CTX *mont=NULL;
 	BIGNUM *tmp;
 	int ret= -1;
+        int check_result;
+
+	if (BN_num_bits(dh->p) > OPENSSL_DH_MAX_MODULUS_BITS)
+		{
+		DHerr(DH_F_COMPUTE_KEY,DH_R_MODULUS_TOO_LARGE);
+		goto err;
+		}
 
 	ctx = BN_CTX_new();
 	if (ctx == NULL) goto err;
@@ -196,10 +232,16 @@ static int compute_key(unsigned char *key, const BIGNUM *pub_key, DH *dh)
 		if ((dh->flags & DH_FLAG_NO_EXP_CONSTTIME) == 0)
 			{
 			/* XXX */
-			BN_set_flags(dh->priv_key, BN_FLG_EXP_CONSTTIME);
+			BN_set_flags(dh->priv_key, BN_FLG_CONSTTIME);
 			}
 		if (!mont)
 			goto err;
+		}
+
+        if (!DH_check_pub_key(dh, pub_key, &check_result) || check_result)
+		{
+		DHerr(DH_F_COMPUTE_KEY,DH_R_INVALID_PUBKEY);
+		goto err;
 		}
 
 	if (!dh->meth->bn_mod_exp(dh, tmp, pub_key, dh->priv_key,dh->p,ctx,mont))
@@ -210,8 +252,11 @@ static int compute_key(unsigned char *key, const BIGNUM *pub_key, DH *dh)
 
 	ret=BN_bn2bin(tmp,key);
 err:
-	BN_CTX_end(ctx);
-	BN_CTX_free(ctx);
+	if (ctx != NULL)
+		{
+		BN_CTX_end(ctx);
+		BN_CTX_free(ctx);
+		}
 	return(ret);
 	}
 
