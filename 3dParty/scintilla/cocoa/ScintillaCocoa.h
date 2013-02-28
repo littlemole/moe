@@ -20,6 +20,7 @@
 #include <time.h>
 
 #include <vector>
+#include <map>
 
 #include "ILexer.h"
 
@@ -55,6 +56,8 @@
 extern "C" NSString* ScintillaRecPboardType;
 
 @class ScintillaView;
+
+@class FindHighlightLayer;
 
 /**
  * Helper class to be used as timer target (NSTimer).
@@ -115,15 +118,23 @@ private:
   
   int scrollSpeed;
   int scrollTicks;
+  NSTimer* tickTimer;
+  NSTimer* idleTimer;
+	
+  FindHighlightLayer *layerFindIndicator;
+
 protected:
-  NSView* ContentView();
   PRectangle GetClientRectangle();
   Point ConvertPoint(NSPoint point);
   
   virtual void Initialise();
   virtual void Finalise();
+  virtual CaseFolder *CaseFolderForEncoding();
   virtual std::string CaseMapString(const std::string &s, int caseMapping);
+  virtual void CancelModes();
 public:
+  NSView* ContentView();
+
   ScintillaCocoa(NSView* view);
   virtual ~ScintillaCocoa();
 
@@ -132,14 +143,15 @@ public:
 
   ScintillaView* TopContainer();
 
-  void SyncPaint(void* gc, PRectangle rc);
-  void Draw(NSRect rect, CGContextRef gc);
+  bool SyncPaint(void* gc, PRectangle rc);
+  bool Draw(NSRect rect, CGContextRef gc);
 
   virtual sptr_t DefWndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
   void SetTicking(bool on);
   bool SetIdle(bool on);
   void SetMouseCapture(bool on);
   bool HaveMouseCapture();
+  void ScrollText(int linesToMove);
   void SetVerticalScrollPos();
   void SetHorizontalScrollPos();
   bool ModifyScrollBars(int nMax, int nPage);
@@ -160,6 +172,8 @@ public:
   virtual bool CanPaste();
   virtual void Paste();
   virtual void Paste(bool rectangular);
+  void CTPaint(void* gc, NSRect rc);
+  void CallTipMouseDown(NSPoint pt);
   virtual void CreateCallTipWindow(PRectangle rc);
   virtual void AddToPopUp(const char *label, int cmd = 0, bool enabled = true);
   virtual void ClaimSelection();
@@ -199,10 +213,12 @@ public:
   virtual NSMenu* CreateContextMenu(NSEvent* event);
   void HandleCommand(NSInteger command);
 
-//    virtual OSStatus ActiveStateChanged();
-//
-//    virtual void CallTipClick();
- 
+  virtual void ActiveStateChanged(bool isActive);
+
+  // Find indicator
+  void ShowFindIndicatorForRange(NSRange charRange, BOOL retaining);
+  void MoveFindIndicatorWithBounce(BOOL bounce);
+  void HideFindIndicator();
 };
 
 

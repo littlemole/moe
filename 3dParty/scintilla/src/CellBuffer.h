@@ -98,6 +98,9 @@ class UndoHistory {
 
 	void EnsureUndoRoom();
 
+	// Private so UndoHistory objects can not be copied
+	UndoHistory(const UndoHistory &);
+
 public:
 	UndoHistory();
 	~UndoHistory();
@@ -136,11 +139,18 @@ private:
 	SplitVector<char> substance;
 	SplitVector<char> style;
 	bool readOnly;
+	int utf8LineEnds;
 
 	bool collectingUndo;
 	UndoHistory uh;
 
 	LineVector lv;
+
+	bool UTF8LineEndOverlaps(int position) const;
+	void ResetLineEnds();
+	/// Actions without undo
+	void BasicInsertString(int position, const char *s, int insertLength);
+	void BasicDeleteChars(int position, int deleteLength);
 
 public:
 
@@ -151,10 +161,15 @@ public:
 	char CharAt(int position) const;
 	void GetCharRange(char *buffer, int position, int lengthRetrieve) const;
 	char StyleAt(int position) const;
+	void GetStyleRange(unsigned char *buffer, int position, int lengthRetrieve) const;
 	const char *BufferPointer();
+	const char *RangePointer(int position, int rangeLength);
+	int GapPosition() const;
 
 	int Length() const;
 	void Allocate(int newSize);
+	int GetLineEndTypes() const { return utf8LineEnds; }
+	void SetLineEndTypes(int utf8LineEnds_);
 	void SetPerLine(PerLine *pl);
 	int Lines() const;
 	int LineStart(int line) const;
@@ -177,10 +192,6 @@ public:
 	/// the buffer was saved. Undo and redo can move over the save point.
 	void SetSavePoint();
 	bool IsSavePoint();
-
-	/// Actions without undo
-	void BasicInsertString(int position, const char *s, int insertLength);
-	void BasicDeleteChars(int position, int deleteLength);
 
 	bool SetUndoCollection(bool collectUndo);
 	bool IsCollectingUndo() const;

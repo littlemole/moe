@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import with_statement
+from __future__ import unicode_literals
 
-import ctypes, os, unittest
+import codecs, ctypes, os, sys, unittest
 
 import XiteWin
 
@@ -24,6 +25,13 @@ class TestSimple(unittest.TestCase):
 		self.assertEquals(self.ed.GetStyleAt(0), 0)
 		self.ed.ClearAll()
 		self.assertEquals(self.ed.Length, 0)
+
+	def testDeleteRange(self):
+		self.ed.AddText(5, b"abcde")
+		self.assertEquals(self.ed.Length, 5)
+		self.ed.DeleteRange(1, 2)
+		self.assertEquals(self.ed.Length, 3)
+		self.assertEquals(self.ed.Contents(), b"ade")
 
 	def testAddStyledText(self):
 		self.assertEquals(self.ed.EndStyled, 0)
@@ -210,10 +218,12 @@ class TestSimple(unittest.TestCase):
 				self.assertEquals(self.ed.FindColumn(0, col), 0)
 			elif col == 1:
 				self.assertEquals(self.ed.FindColumn(0, col), 1)
+			elif col == 8:
+				self.assertEquals(self.ed.FindColumn(0, col), 2)
 			elif col == 9:
 				self.assertEquals(self.ed.FindColumn(0, col), 3)
 			else:
-				self.assertEquals(self.ed.FindColumn(0, col), 2)
+				self.assertEquals(self.ed.FindColumn(0, col), 1)
 		self.ed.TabWidth = 4
 		self.assertEquals(self.ed.TabWidth, 4)
 		self.assertEquals(self.ed.GetColumn(0), 0)
@@ -272,6 +282,201 @@ class TestSimple(unittest.TestCase):
 			self.assertEquals(self.ed.Contents(), b"x" + lineEnds[lineEndType] + b"y")
 			self.assertEquals(self.ed.LineLength(0), 1 + len(lineEnds[lineEndType]))
 
+	# Several tests for unicode line ends U+2028 and U+2029
+	
+	def testUnicodeLineEnds(self):
+		# Add two lines separated with U+2028 and ensure it is seen as two lines
+		# Then remove U+2028 and should be just 1 lines
+		self.ed.Lexer = self.ed.SCLEX_CPP
+		self.ed.SetCodePage(65001)
+		self.ed.SetLineEndTypesAllowed(1)
+		self.ed.AddText(5, b"x\xe2\x80\xa8y")
+		self.assertEquals(self.ed.LineCount, 2)
+		self.assertEquals(self.ed.GetLineEndPosition(0), 1)
+		self.assertEquals(self.ed.GetLineEndPosition(1), 5)
+		self.assertEquals(self.ed.LineLength(0), 4)
+		self.assertEquals(self.ed.LineLength(1), 1)
+		self.ed.TargetStart = 1
+		self.ed.TargetEnd = 4
+		self.ed.ReplaceTarget(0, b"")
+		self.assertEquals(self.ed.LineCount, 1)
+		self.assertEquals(self.ed.LineLength(0), 2)
+		self.assertEquals(self.ed.GetLineEndPosition(0), 2)
+
+	def testUnicodeLineEndsWithCodePage0(self):
+		# Try the Unicode line ends when not in Unicode mode -> should remain 1 line
+		self.ed.SetCodePage(0)
+		self.ed.AddText(5, b"x\xe2\x80\xa8y")
+		self.assertEquals(self.ed.LineCount, 1)
+		self.ed.AddText(4, b"x\xc2\x85y")
+		self.assertEquals(self.ed.LineCount, 1)
+
+	def testUnicodeLineEndsSwitchToUnicodeAndBack(self):
+		# Add the Unicode line ends when not in Unicode mode
+		self.ed.SetCodePage(0)
+		self.ed.AddText(5, b"x\xe2\x80\xa8y")
+		self.assertEquals(self.ed.LineCount, 1)
+		# Into UTF-8 mode - should now be interpreting as two lines
+		self.ed.Lexer = self.ed.SCLEX_CPP
+		self.ed.SetCodePage(65001)
+		self.ed.SetLineEndTypesAllowed(1)
+		self.assertEquals(self.ed.LineCount, 2)
+		# Back to code page 0 and 1 line
+		self.ed.SetCodePage(0)
+		self.assertEquals(self.ed.LineCount, 1)
+
+	def testUFragmentedEOLCompletion(self):
+		# Add 2 starting bytes of UTF-8 line end then complete it
+		self.ed.ClearAll()
+		self.ed.AddText(4, b"x\xe2\x80y")
+		self.assertEquals(self.ed.LineCount, 1)
+		self.assertEquals(self.ed.GetLineEndPosition(0), 4)
+		self.ed.SetSel(3,3)
+		self.ed.AddText(1, b"\xa8")
+		self.assertEquals(self.ed.Contents(), b"x\xe2\x80\xa8y")
+		self.assertEquals(self.ed.LineCount, 2)
+
+		# Add 1 starting bytes of UTF-8 line end then complete it
+		self.ed.ClearAll()
+		self.ed.AddText(3, b"x\xe2y")
+		self.assertEquals(self.ed.LineCount, 1)
+		self.assertEquals(self.ed.GetLineEndPosition(0), 3)
+		self.ed.SetSel(2,2)
+		self.ed.AddText(2, b"\x80\xa8")
+		self.assertEquals(self.ed.Contents(), b"x\xe2\x80\xa8y")
+		self.assertEquals(self.ed.LineCount, 2)
+
+	def testUFragmentedEOLStart(self):
+		# Add end of UTF-8 line end then insert start
+		self.ed.Lexer = self.ed.SCLEX_CPP
+		self.ed.SetCodePage(65001)
+		self.ed.SetLineEndTypesAllowed(1)
+		self.assertEquals(self.ed.LineCount, 1)
+		self.ed.AddText(4, b"x\x80\xa8y")
+		self.assertEquals(self.ed.LineCount, 1)
+		self.ed.SetSel(1,1)
+		self.ed.AddText(1, b"\xe2")
+		self.assertEquals(self.ed.LineCount, 2)
+
+	def testUBreakApartEOL(self):
+		# Add two lines separated by U+2029 then remove and add back each byte ensuring
+		# only one line after each removal of any byte in line end and 2 lines after reinsertion
+		self.ed.Lexer = self.ed.SCLEX_CPP
+		self.ed.SetCodePage(65001)
+		self.ed.SetLineEndTypesAllowed(1)
+		text = b"x\xe2\x80\xa9y";
+		self.ed.AddText(5, text)
+		self.assertEquals(self.ed.LineCount, 2)
+		
+		for i in range(len(text)):
+			self.ed.TargetStart = i
+			self.ed.TargetEnd = i + 1
+			self.ed.ReplaceTarget(0, b"")
+			if i in [0, 4]:
+				# Removing text characters does not change number of lines
+				self.assertEquals(self.ed.LineCount, 2)
+			else:
+				# Removing byte from line end, removes 1 line
+				self.assertEquals(self.ed.LineCount, 1)
+				
+			self.ed.TargetEnd = i
+			self.ed.ReplaceTarget(1, text[i:i+1])
+			self.assertEquals(self.ed.LineCount, 2)
+
+	def testURemoveEOLFragment(self):
+		# Add UTF-8 line end then delete each byte causing line end to disappear
+		self.ed.Lexer = self.ed.SCLEX_CPP
+		self.ed.SetCodePage(65001)
+		self.ed.SetLineEndTypesAllowed(1)
+		for i in range(3):
+			self.ed.ClearAll()
+			self.ed.AddText(5, b"x\xe2\x80\xa8y")
+			self.assertEquals(self.ed.LineCount, 2)
+			self.ed.TargetStart = i+1
+			self.ed.TargetEnd = i+2
+			self.ed.ReplaceTarget(0, b"")
+			self.assertEquals(self.ed.LineCount, 1)
+		
+	# Several tests for unicode NEL line ends U+0085
+
+	def testNELLineEnds(self):
+		# Add two lines separated with U+0085 and ensure it is seen as two lines
+		# Then remove U+0085 and should be just 1 lines
+		self.ed.Lexer = self.ed.SCLEX_CPP
+		self.ed.SetCodePage(65001)
+		self.ed.SetLineEndTypesAllowed(1)
+		self.ed.AddText(4, b"x\xc2\x85y")
+		self.assertEquals(self.ed.LineCount, 2)
+		self.assertEquals(self.ed.GetLineEndPosition(0), 1)
+		self.assertEquals(self.ed.GetLineEndPosition(1), 4)
+		self.assertEquals(self.ed.LineLength(0), 3)
+		self.assertEquals(self.ed.LineLength(1), 1)
+		self.ed.TargetStart = 1
+		self.ed.TargetEnd = 3
+		self.ed.ReplaceTarget(0, b"")
+		self.assertEquals(self.ed.LineCount, 1)
+		self.assertEquals(self.ed.LineLength(0), 2)
+		self.assertEquals(self.ed.GetLineEndPosition(0), 2)
+
+	def testNELFragmentedEOLCompletion(self):
+		# Add starting byte of UTF-8 NEL then complete it
+		self.ed.AddText(3, b"x\xc2y")
+		self.assertEquals(self.ed.LineCount, 1)
+		self.assertEquals(self.ed.GetLineEndPosition(0), 3)
+		self.ed.SetSel(2,2)
+		self.ed.AddText(1, b"\x85")
+		self.assertEquals(self.ed.Contents(), b"x\xc2\x85y")
+		self.assertEquals(self.ed.LineCount, 2)
+
+	def testNELFragmentedEOLStart(self):
+		# Add end of UTF-8 NEL then insert start
+		self.ed.Lexer = self.ed.SCLEX_CPP
+		self.ed.SetCodePage(65001)
+		self.ed.SetLineEndTypesAllowed(1)
+		self.assertEquals(self.ed.LineCount, 1)
+		self.ed.AddText(4, b"x\x85y")
+		self.assertEquals(self.ed.LineCount, 1)
+		self.ed.SetSel(1,1)
+		self.ed.AddText(1, b"\xc2")
+		self.assertEquals(self.ed.LineCount, 2)
+
+	def testNELBreakApartEOL(self):
+		# Add two lines separated by U+0085 then remove and add back each byte ensuring
+		# only one line after each removal of any byte in line end and 2 lines after reinsertion
+		self.ed.Lexer = self.ed.SCLEX_CPP
+		self.ed.SetCodePage(65001)
+		self.ed.SetLineEndTypesAllowed(1)
+		text = b"x\xc2\x85y";
+		self.ed.AddText(4, text)
+		self.assertEquals(self.ed.LineCount, 2)
+		
+		for i in range(len(text)):
+			self.ed.TargetStart = i
+			self.ed.TargetEnd = i + 1
+			self.ed.ReplaceTarget(0, b"")
+			if i in [0, 3]:
+				# Removing text characters does not change number of lines
+				self.assertEquals(self.ed.LineCount, 2)
+			else:
+				# Removing byte from line end, removes 1 line
+				self.assertEquals(self.ed.LineCount, 1)
+				
+			self.ed.TargetEnd = i
+			self.ed.ReplaceTarget(1, text[i:i+1])
+			self.assertEquals(self.ed.LineCount, 2)
+
+	def testNELRemoveEOLFragment(self):
+		# Add UTF-8 NEL then delete each byte causing line end to disappear
+		self.ed.SetCodePage(65001)
+		for i in range(2):
+			self.ed.ClearAll()
+			self.ed.AddText(4, b"x\xc2\x85y")
+			self.assertEquals(self.ed.LineCount, 2)
+			self.ed.TargetStart = i+1
+			self.ed.TargetEnd = i+2
+			self.ed.ReplaceTarget(0, b"")
+			self.assertEquals(self.ed.LineCount, 1)
+		
 	def testGoto(self):
 		self.ed.AddText(5, b"a\nb\nc")
 		self.assertEquals(self.ed.CurrentPos, 5)
@@ -361,12 +566,15 @@ class TestSimple(unittest.TestCase):
 
 	def testLinePositions(self):
 		text = b"ab\ncd\nef"
+		nl = b"\n"
+		if sys.version_info[0] == 3:
+			nl = ord(b"\n")
 		self.ed.AddText(len(text), text)
 		self.assertEquals(self.ed.LineFromPosition(-1), 0)
 		line = 0
 		for pos in range(len(text)+1):
 			self.assertEquals(self.ed.LineFromPosition(pos), line)
-			if pos < len(text) and text[pos] == ord("\n"):
+			if pos < len(text) and text[pos] == nl:
 				line += 1
 
 	def testWordPositions(self):
@@ -638,6 +846,16 @@ class TestMarkers(unittest.TestCase):
 		self.ed.MarkerDelete(1,1)
 		self.assertEquals(self.ed.MarkerLineFromHandle(handle), -1)
 
+	def testTwiceAddedDelete(self):
+		handle = self.ed.MarkerAdd(1,1)
+		self.assertEquals(self.ed.MarkerGet(1), 2)
+		handle2 = self.ed.MarkerAdd(1,1)
+		self.assertEquals(self.ed.MarkerGet(1), 2)
+		self.ed.MarkerDelete(1,1)
+		self.assertEquals(self.ed.MarkerGet(1), 2)
+		self.ed.MarkerDelete(1,1)
+		self.assertEquals(self.ed.MarkerGet(1), 0)
+
 	def testMarkerDeleteAll(self):
 		h1 = self.ed.MarkerAdd(0,1)
 		h2 = self.ed.MarkerAdd(1,2)
@@ -670,6 +888,7 @@ class TestMarkers(unittest.TestCase):
 		self.ed.MarkerDeleteAll(-1)
 
 	def testMarkerNext(self):
+		self.assertEquals(self.ed.MarkerNext(0, 2), -1)
 		h1 = self.ed.MarkerAdd(0,1)
 		h2 = self.ed.MarkerAdd(2,1)
 		self.assertEquals(self.ed.MarkerNext(0, 2), 0)
@@ -678,6 +897,9 @@ class TestMarkers(unittest.TestCase):
 		self.assertEquals(self.ed.MarkerPrevious(0, 2), 0)
 		self.assertEquals(self.ed.MarkerPrevious(1, 2), 0)
 		self.assertEquals(self.ed.MarkerPrevious(2, 2), 2)
+
+	def testMarkerNegative(self):
+		self.assertEquals(self.ed.MarkerNext(-1, 2), -1)
 
 	def testLineState(self):
 		self.assertEquals(self.ed.MaxLineState, 0)
@@ -709,6 +931,39 @@ class TestIndicators(unittest.TestCase):
 		self.ed.IndicSetFore(0, 0xff0080)
 		self.assertEquals(self.ed.IndicGetStyle(0), 2)
 		self.assertEquals(self.ed.IndicGetFore(0), 0xff0080)
+
+	def testIndicatorFill(self):
+		self.ed.InsertText(0, b"abc")
+		self.ed.IndicatorCurrent = 3
+		self.ed.IndicatorFillRange(1,1)
+		self.assertEquals(self.ed.IndicatorValueAt(3, 0), 0)
+		self.assertEquals(self.ed.IndicatorValueAt(3, 1), 1)
+		self.assertEquals(self.ed.IndicatorValueAt(3, 2), 0)
+		self.assertEquals(self.ed.IndicatorStart(3, 0), 0)
+		self.assertEquals(self.ed.IndicatorEnd(3, 0), 1)
+		self.assertEquals(self.ed.IndicatorStart(3, 1), 1)
+		self.assertEquals(self.ed.IndicatorEnd(3, 1), 2)
+		self.assertEquals(self.ed.IndicatorStart(3, 2), 2)
+		self.assertEquals(self.ed.IndicatorEnd(3, 2), 3)
+
+	def testIndicatorAtEnd(self):
+		self.ed.InsertText(0, b"ab")
+		self.ed.IndicatorCurrent = 3
+		self.ed.IndicatorFillRange(1,1)
+		self.assertEquals(self.ed.IndicatorValueAt(3, 0), 0)
+		self.assertEquals(self.ed.IndicatorValueAt(3, 1), 1)
+		self.assertEquals(self.ed.IndicatorStart(3, 0), 0)
+		self.assertEquals(self.ed.IndicatorEnd(3, 0), 1)
+		self.assertEquals(self.ed.IndicatorStart(3, 1), 1)
+		self.assertEquals(self.ed.IndicatorEnd(3, 1), 2)
+		self.ed.DeleteRange(1, 1)
+		# Now only one character left and does not have indicator so indicator 3 is null
+		self.assertEquals(self.ed.IndicatorValueAt(3, 0), 0)
+		# Since null, remaining calls return 0
+		self.assertEquals(self.ed.IndicatorStart(3, 0), 0)
+		self.assertEquals(self.ed.IndicatorEnd(3, 0), 0)
+		self.assertEquals(self.ed.IndicatorStart(3, 1), 0)
+		self.assertEquals(self.ed.IndicatorEnd(3, 1), 0)
 
 class TestScrolling(unittest.TestCase):
 
@@ -800,13 +1055,21 @@ class TestSearch(unittest.TestCase):
 	def testPhilippeREFind(self):
 		# Requires 1.,72
 		flags = self.ed.SCFIND_REGEXP
-		self.assertEquals(0, self.ed.FindBytes(0, self.ed.Length, "\w", flags))
-		self.assertEquals(1, self.ed.FindBytes(0, self.ed.Length, "\W", flags))
-		self.assertEquals(-1, self.ed.FindBytes(0, self.ed.Length, "\d", flags))
-		self.assertEquals(0, self.ed.FindBytes(0, self.ed.Length, "\D", flags))
-		self.assertEquals(1, self.ed.FindBytes(0, self.ed.Length, "\s", flags))
-		self.assertEquals(0, self.ed.FindBytes(0, self.ed.Length, "\S", flags))
-		self.assertEquals(2, self.ed.FindBytes(0, self.ed.Length, "\x62", flags))
+		self.assertEquals(0, self.ed.FindBytes(0, self.ed.Length, b"\w", flags))
+		self.assertEquals(1, self.ed.FindBytes(0, self.ed.Length, b"\W", flags))
+		self.assertEquals(-1, self.ed.FindBytes(0, self.ed.Length, b"\d", flags))
+		self.assertEquals(0, self.ed.FindBytes(0, self.ed.Length, b"\D", flags))
+		self.assertEquals(1, self.ed.FindBytes(0, self.ed.Length, b"\s", flags))
+		self.assertEquals(0, self.ed.FindBytes(0, self.ed.Length, b"\S", flags))
+		self.assertEquals(2, self.ed.FindBytes(0, self.ed.Length, b"\x62", flags))
+
+	def testRENonASCII(self):
+		self.ed.InsertText(0, b"\xAD")
+		flags = self.ed.SCFIND_REGEXP
+		self.assertEquals(-1, self.ed.FindBytes(0, self.ed.Length, b"\\x10", flags))
+		self.assertEquals(2, self.ed.FindBytes(0, self.ed.Length, b"\\x09", flags))
+		self.assertEquals(-1, self.ed.FindBytes(0, self.ed.Length, b"\\xAB", flags))
+		self.assertEquals(0, self.ed.FindBytes(0, self.ed.Length, b"\\xAD", flags))
 
 class TestProperties(unittest.TestCase):
 
@@ -917,6 +1180,18 @@ class TestAnnotation(unittest.TestCase):
 		result = result[:length]
 		self.assertEquals(result, styles)
 		self.ed.AnnotationClearAll()
+
+	def testExtendedStyles(self):
+		start0 = self.ed.AllocateExtendedStyles(0)
+		self.assertEquals(start0, 256)
+		start1 = self.ed.AllocateExtendedStyles(10)
+		self.assertEquals(start1, 256)
+		start2 = self.ed.AllocateExtendedStyles(20)
+		self.assertEquals(start2, start1 + 10)
+		# Reset by changing lexer
+		self.ed.ReleaseAllExtendedStyles()
+		start0 = self.ed.AllocateExtendedStyles(0)
+		self.assertEquals(start0, 256)
 
 	def testTextAnnotationStyleOffset(self):
 		self.ed.AnnotationSetStyleOffset(300)
@@ -1221,7 +1496,7 @@ class TestAutoComplete(unittest.TestCase):
 		self.ed = self.xite.ed
 		self.ed.ClearAll()
 		self.ed.EmptyUndoBuffer()
-		# 3 lines of 3 characters
+		# 1 line of 3 characters
 		t = b"xxx\n"
 		self.ed.AddText(len(t), t)
 
@@ -1300,6 +1575,163 @@ class TestAutoComplete(unittest.TestCase):
 
 		self.assertEquals(self.ed.AutoCActive(), 0)
 
+class TestDirectAccess(unittest.TestCase):
+
+	def setUp(self):
+		self.xite = XiteWin.xiteFrame
+		self.ed = self.xite.ed
+		self.ed.ClearAll()
+		self.ed.EmptyUndoBuffer()
+
+	def testGapPosition(self):
+		text = b"abcd"
+		self.ed.SetText(len(text), text)
+		self.assertEquals(self.ed.GapPosition, 4)
+		self.ed.TargetStart = 1
+		self.ed.TargetEnd = 1
+		rep = b"-"
+		self.ed.ReplaceTarget(len(rep), rep)
+		self.assertEquals(self.ed.GapPosition, 2)
+
+	def testCharacterPointerAndRangePointer(self):
+		text = b"abcd"
+		self.ed.SetText(len(text), text)
+		characterPointer = self.ed.CharacterPointer
+		rangePointer = self.ed.GetRangePointer(0,3)
+		self.assertEquals(characterPointer, rangePointer)
+		cpBuffer = ctypes.c_char_p(characterPointer)
+		self.assertEquals(cpBuffer.value, text)
+		# Gap will not be moved as already moved for CharacterPointer call
+		rangePointer = self.ed.GetRangePointer(1,3)
+		cpBuffer = ctypes.c_char_p(rangePointer)
+		self.assertEquals(cpBuffer.value, text[1:])
+
+class TestWordChars(unittest.TestCase):
+	def setUp(self):
+		self.xite = XiteWin.xiteFrame
+		self.ed = self.xite.ed
+		self.ed.ClearAll()
+		self.ed.EmptyUndoBuffer()
+
+	def tearDown(self):
+		self.ed.SetCharsDefault()
+
+	def _setChars(self, charClass, chars):
+		""" Wrapper to call self.ed.Set*Chars with the right type
+		@param charClass {str} the character class, "word", "space", etc.
+		@param chars {iterable of int} characters to set
+		"""
+		if sys.version_info.major == 2:
+			# Python 2, use latin-1 encoded str
+			unichars = (unichr(x) for x in chars if x != 0)
+			# can't use literal u"", that's a syntax error in Py3k
+			# uncode() doesn't exist in Py3k, but we never run it there
+			result = unicode("").join(unichars).encode("latin-1")
+		else:
+			# Python 3, use bytes()
+			result = bytes(x for x in chars if x != 0)
+		meth = getattr(self.ed, "Set%sChars" % (charClass.capitalize()))
+		return meth(None, result)
+
+	def assertCharSetsEqual(self, first, second, *args, **kwargs):
+		""" Assert that the two character sets are equal.
+		If either set are an iterable of numbers, convert them to chars
+		first. """
+		first_set = set()
+		for c in first:
+			first_set.add(chr(c) if isinstance(c, int) else c)
+		second_set = set()
+		for c in second:
+			second_set.add(chr(c) if isinstance(c, int) else c)
+		return self.assertEqual(first_set, second_set, *args, **kwargs)
+
+	def testDefaultWordChars(self):
+		# check that the default word chars are as expected
+		import string
+		dataLen = self.ed.GetWordChars(None, None)
+		data = b"\0" * dataLen
+		self.ed.GetWordChars(None, data)
+		self.assertEquals(dataLen, len(data))
+		expected = set(string.digits + string.ascii_letters + '_') | \
+			set(chr(x) for x in range(0x80, 0x100))
+		self.assertCharSetsEqual(data, expected)
+
+	def testDefaultWhitespaceChars(self):
+		# check that the default whitespace chars are as expected
+		import string
+		dataLen = self.ed.GetWhitespaceChars(None, None)
+		data = b"\0" * dataLen
+		self.ed.GetWhitespaceChars(None, data)
+		self.assertEquals(dataLen, len(data))
+		expected = (set(chr(x) for x in (range(0, 0x20))) | set(' ')) - \
+			set(['\r', '\n'])
+		self.assertCharSetsEqual(data, expected)
+
+	def testDefaultPunctuationChars(self):
+		# check that the default punctuation chars are as expected
+		import string
+		dataLen = self.ed.GetPunctuationChars(None, None)
+		data = b"\0" * dataLen
+		self.ed.GetPunctuationChars(None, data)
+		self.assertEquals(dataLen, len(data))
+		expected = set(chr(x) for x in range(0x20, 0x80)) - \
+			set(string.ascii_letters + string.digits + "\r\n_ ")
+		self.assertCharSetsEqual(data, expected)
+
+	def testCustomWordChars(self):
+		# check that setting things to whitespace chars makes them not words
+		self._setChars("whitespace", range(1, 0x100))
+		dataLen = self.ed.GetWordChars(None, None)
+		data = b"\0" * dataLen
+		self.ed.GetWordChars(None, data)
+		self.assertEquals(dataLen, len(data))
+		expected = set()
+		self.assertCharSetsEqual(data, expected)
+		# and now set something to make sure that works too
+		expected = set(range(1, 0x100, 2))
+		self._setChars("word", expected)
+		dataLen = self.ed.GetWordChars(None, None)
+		data = b"\0" * dataLen
+		self.ed.GetWordChars(None, data)
+		self.assertEquals(dataLen, len(data))
+		self.assertCharSetsEqual(data, expected)
+
+	def testCustomWhitespaceChars(self):
+		# check setting whitespace chars to non-default values
+		self._setChars("word", range(1, 0x100))
+		# we can't change chr(0) from being anything but whitespace
+		expected = set([0])
+		dataLen = self.ed.GetWhitespaceChars(None, None)
+		data = b"\0" * dataLen
+		self.ed.GetWhitespaceChars(None, data)
+		self.assertEquals(dataLen, len(data))
+		self.assertCharSetsEqual(data, expected)
+		# now try to set it to something custom
+		expected = set(range(1, 0x100, 2)) | set([0])
+		self._setChars("whitespace", expected)
+		dataLen = self.ed.GetWhitespaceChars(None, None)
+		data = b"\0" * dataLen
+		self.ed.GetWhitespaceChars(None, data)
+		self.assertEquals(dataLen, len(data))
+		self.assertCharSetsEqual(data, expected)
+
+	def testCustomPunctuationChars(self):
+		# check setting punctuation chars to non-default values
+		self._setChars("word", range(1, 0x100))
+		expected = set()
+		dataLen = self.ed.GetPunctuationChars(None, None)
+		data = b"\0" * dataLen
+		self.ed.GetPunctuationChars(None, data)
+		self.assertEquals(dataLen, len(data))
+		self.assertEquals(set(data), expected)
+		# now try to set it to something custom
+		expected = set(range(1, 0x100, 1))
+		self._setChars("punctuation", expected)
+		dataLen = self.ed.GetPunctuationChars(None, None)
+		data = b"\0" * dataLen
+		self.ed.GetPunctuationChars(None, data)
+		self.assertEquals(dataLen, len(data))
+		self.assertCharSetsEqual(data, expected)
 
 #~ import os
 #~ for x in os.getenv("PATH").split(";"):

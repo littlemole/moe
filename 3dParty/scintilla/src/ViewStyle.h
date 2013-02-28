@@ -20,6 +20,7 @@ public:
 	int width;
 	int mask;
 	bool sensitive;
+	int cursor;
 	MarginStyle();
 };
 
@@ -31,11 +32,27 @@ private:
 	int size;
 	int max;
 
+	// Private so FontNames objects can not be copied
+	FontNames(const FontNames &);
 public:
 	FontNames();
 	~FontNames();
 	void Clear();
 	const char *Save(const char *name);
+};
+
+class FontRealised : public FontSpecification, public FontMeasurements {
+	// Private so FontRealised objects can not be copied
+	FontRealised(const FontRealised &);
+	FontRealised &operator=(const FontRealised &);
+public:
+	Font font;
+	FontRealised *frNext;
+	FontRealised(const FontSpecification &fs);
+	virtual ~FontRealised();
+	void Realise(Surface &surface, int zoomLevel, int technology);
+	FontRealised *Find(const FontSpecification &fs);
+	void FindMaxAscentDescent(unsigned int &maxAscent, unsigned int &maxDescent);
 };
 
 enum IndentView {ivNone, ivReal, ivLookForward, ivLookBoth};
@@ -47,85 +64,95 @@ enum WhiteSpaceVisibility {wsInvisible=0, wsVisibleAlways=1, wsVisibleAfterInden
 class ViewStyle {
 public:
 	FontNames fontNames;
+	FontRealised *frFirst;
 	size_t stylesSize;
 	Style *styles;
+	size_t nextExtendedStyle;
 	LineMarker markers[MARKER_MAX + 1];
+	int largestMarkerHeight;
 	Indicator indicators[INDIC_MAX + 1];
+	int technology;
 	int lineHeight;
 	unsigned int maxAscent;
 	unsigned int maxDescent;
-	unsigned int aveCharWidth;
-	unsigned int spaceWidth;
+	XYPOSITION aveCharWidth;
+	XYPOSITION spaceWidth;
 	bool selforeset;
-	ColourPair selforeground;
-	ColourPair selAdditionalForeground;
+	ColourDesired selforeground;
+	ColourDesired selAdditionalForeground;
 	bool selbackset;
-	ColourPair selbackground;
-	ColourPair selAdditionalBackground;
-	ColourPair selbackground2;
+	ColourDesired selbackground;
+	ColourDesired selAdditionalBackground;
+	ColourDesired selbackground2;
 	int selAlpha;
 	int selAdditionalAlpha;
 	bool selEOLFilled;
 	bool whitespaceForegroundSet;
-	ColourPair whitespaceForeground;
+	ColourDesired whitespaceForeground;
 	bool whitespaceBackgroundSet;
-	ColourPair whitespaceBackground;
-	ColourPair selbar;
-	ColourPair selbarlight;
+	ColourDesired whitespaceBackground;
+	ColourDesired selbar;
+	ColourDesired selbarlight;
 	bool foldmarginColourSet;
-	ColourPair foldmarginColour;
+	ColourDesired foldmarginColour;
 	bool foldmarginHighlightColourSet;
-	ColourPair foldmarginHighlightColour;
+	ColourDesired foldmarginHighlightColour;
 	bool hotspotForegroundSet;
-	ColourPair hotspotForeground;
+	ColourDesired hotspotForeground;
 	bool hotspotBackgroundSet;
-	ColourPair hotspotBackground;
+	ColourDesired hotspotBackground;
 	bool hotspotUnderline;
 	bool hotspotSingleLine;
 	/// Margins are ordered: Line Numbers, Selection Margin, Spacing Margin
-	enum { margins=5 };
 	int leftMarginWidth;	///< Spacing margin on left of text
-	int rightMarginWidth;	///< Spacing margin on left of text
-	bool symbolMargin;
+	int rightMarginWidth;	///< Spacing margin on right of text
 	int maskInLine;	///< Mask for markers to be put into text because there is nowhere for them to go in margin
-	MarginStyle ms[margins];
+	MarginStyle ms[SC_MAX_MARGIN+1];
 	int fixedColumnWidth;
 	int zoomLevel;
 	WhiteSpaceVisibility viewWhitespace;
 	int whitespaceSize;
 	IndentView viewIndentationGuides;
 	bool viewEOL;
-	bool showMarkedLines;
-	ColourPair caretcolour;
-	ColourPair additionalCaretColour;
+	ColourDesired caretcolour;
+	ColourDesired additionalCaretColour;
 	bool showCaretLineBackground;
-	ColourPair caretLineBackground;
+	bool alwaysShowCaretLineBackground;
+	ColourDesired caretLineBackground;
 	int caretLineAlpha;
-	ColourPair edgecolour;
+	ColourDesired edgecolour;
 	int edgeState;
 	int caretStyle;
 	int caretWidth;
 	bool someStylesProtected;
+	bool someStylesForceCase;
 	int extraFontFlag;
 	int extraAscent;
 	int extraDescent;
 	int marginStyleOffset;
 	int annotationVisible;
 	int annotationStyleOffset;
+	bool braceHighlightIndicatorSet;
+	int braceHighlightIndicator;
+	bool braceBadLightIndicatorSet;
+	int braceBadLightIndicator;
 
 	ViewStyle();
 	ViewStyle(const ViewStyle &source);
 	~ViewStyle();
 	void Init(size_t stylesSize_=64);
-	void RefreshColourPalette(Palette &pal, bool want);
+	void CreateFont(const FontSpecification &fs);
 	void Refresh(Surface &surface);
 	void AllocStyles(size_t sizeNew);
+	void ReleaseAllExtendedStyles();
+	int AllocateExtendedStyles(int numberStyles);
 	void EnsureStyle(size_t index);
 	void ResetDefaultStyle();
 	void ClearStyles();
 	void SetStyleFontName(int styleIndex, const char *name);
 	bool ProtectionActive() const;
 	bool ValidStyle(size_t styleIndex) const;
+	void CalcLargestMarkerHeight();
 };
 
 #ifdef SCI_NAMESPACE

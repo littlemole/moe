@@ -16,7 +16,6 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-#include "PropSetSimple.h"
 #include "WordList.h"
 #include "LexAccessor.h"
 #include "Accessor.h"
@@ -170,7 +169,7 @@ static void ColouriseYAMLLine(
 }
 
 static void ColouriseYAMLDoc(unsigned int startPos, int length, int, WordList *keywordLists[], Accessor &styler) {
-	char lineBuffer[1024];
+	char lineBuffer[1024] = "";
 	styler.StartAt(startPos);
 	styler.StartSegment(startPos);
 	unsigned int linePos = 0;
