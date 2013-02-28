@@ -45,8 +45,8 @@
             Directories="$(OsslDirs)"/>
 
 
-	<Exec Command="perl Configure VC-WIN32" WorkingDirectory=".\openssl"  Condition=" '$(Platform)' == 'Win32' "/>
-	<Exec Command="perl Configure VC-WIN64A" WorkingDirectory=".\openssl"  Condition=" '$(Platform)' == 'x64' "/>
+	<Exec Command="perl Configure VC-WIN32 -no-asm" WorkingDirectory=".\openssl"  Condition=" '$(Platform)' == 'Win32' "/>
+	<Exec Command="perl Configure VC-WIN64A -no-asm" WorkingDirectory=".\openssl"  Condition=" '$(Platform)' == 'x64' "/>
 	<Exec Command="call ms\do_ms" WorkingDirectory=".\openssl"  Condition=" '$(Platform)' == 'Win32' "/>
 	<Exec Command="call ms\do_win64a" WorkingDirectory=".\openssl"  Condition=" '$(Platform)' == 'x64' "/>
 

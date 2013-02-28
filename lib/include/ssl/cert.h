@@ -1,6 +1,10 @@
 #ifndef MOL_SSL_CERT_DEF_GUARD_
 #define MOL_SSL_CERT_DEF_GUARD_
 
+#include "util/x.h"
+#include "tcp/sockets.h"
+#include "thread/sync.h"
+
 #include "openssl/ssl.h"
 #include "openssl/bio.h"
 #include "openssl/err.h"
@@ -8,9 +12,7 @@
 #include "openssl/x509v3.h"
 //#include "openssl/ossl_typ.h"
 #include "openssl/pem.h"
-#include "util/x.h"
-#include "tcp/sockets.h"
-#include "thread/sync.h"
+
 
 
 namespace mol {

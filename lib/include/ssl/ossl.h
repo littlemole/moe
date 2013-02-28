@@ -1,15 +1,16 @@
 #ifndef MOL_SSL_DEF_GUARD_
 #define MOL_SSL_DEF_GUARD_
 
+#include "util/x.h"
+#include "tcp/sockets.h"
+#include "thread/sync.h"
+
 #include "openssl/ssl.h"
 #include "openssl/bio.h"
 #include "openssl/err.h"
 #include "openssl/x509.h"
 #include "openssl/x509v3.h"
 #include "openssl/pem.h"
-#include "util/x.h"
-#include "tcp/sockets.h"
-#include "thread/sync.h"
 
 struct CRYPTO_dynlock_value
 {

@@ -150,7 +150,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\uni_Release\win.lib;..\..\lib\src\ole\uni_Release\ole.lib;..\..\lib\src\util\uni_Release\util.lib;..\..\lib\src\tcp\uni_Release\tcp.lib;..\..\lib\src\thread\uni_Release\thread.lib;..\..\3dParty\pcre\uni_Release\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Msimg32.lib;..\..\lib\src\xml\uni_Release\xml.lib;..\..\3dParty\expat\Source\lib\uni_release\libexpatMT.lib;..\..\3dParty\zlib\zlib.lib;..\..\3dParty\openssl\out32\libeay32.lib;..\..\3dParty\openssl\out32\ssleay32.lib;..\..\3dParty\libssh\build\src\static\Win32\release\ssh.lib;..\..\lib\src\ssh\uni_Release\ssh.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\uni_Release\win.lib;..\..\lib\src\ole\uni_Release\ole.lib;..\..\lib\src\util\uni_Release\util.lib;..\..\lib\src\tcp\uni_Release\tcp.lib;..\..\lib\src\thread\uni_Release\thread.lib;..\..\3dParty\pcre\uni_Release\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Msimg32.lib;..\..\lib\src\xml\uni_Release\xml.lib;..\..\3dParty\expat\Source\lib\uni_release\libexpatMT.lib;..\..\3dParty\zlib\zlib.lib;..\..\3dParty\openssl\out32\libeay32.lib;..\..\3dParty\openssl\out32\ssleay32.lib;..\..\3dParty\libssh\build\uni_release\libssh.lib;..\..\lib\src\ssh\uni_Release\ssh.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>shellCtrl.def</ModuleDefinitionFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>

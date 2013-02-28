@@ -1,7 +1,7 @@
 
 if ( ActiveDoc )
 {
-	var xml = new ActiveXObject("MSXML2.DOMDocument.3.0");
+	var xml = new ActiveXObject("MSXML2.DOMDocument.6.0");
 	var name = ActiveDoc.FilePath;
 
 	xml.async = false;

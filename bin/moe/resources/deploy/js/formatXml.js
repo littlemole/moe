@@ -1,4 +1,3 @@
-﻿
 if ( ActiveDoc && ActiveDoc.Object )
 {
   var text = ActiveDoc.Object.Text; // Documents(2).Object.Text;//
