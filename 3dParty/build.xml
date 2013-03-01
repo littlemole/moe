@@ -32,6 +32,12 @@
 	<Exec Command="nmake -f scintilla-static64.mak clean DEBUG=1" WorkingDirectory=".\scintilla\win32" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' "  />
 	
 
+    <PropertyGroup>
+        <SciDirs>.\scintilla\bin\static\;.\scintilla\bin\static\debug;.\scintilla\bin\static64\;.\scintilla\bin\static64\debug;.\scintilla\win32;.\scintilla\win32\obj;.\scintilla\win32\obj\debug;.\scintilla\win32\obj\release;.\scintilla\win32\obj64;.\scintilla\win32\obj64\debug;.\scintilla\win32\obj64\release;</SciDirs>
+    </PropertyGroup>
+	<MakeDir
+            Directories="$(SciDirs)"/>
+
 	<Exec Command="nmake -f deps.mak" WorkingDirectory=".\scintilla\win32" />
 	<Exec Command="nmake -f scintilla-static.mak" WorkingDirectory=".\scintilla\win32" Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' "  />
 	<Exec Command="nmake -f scintilla-static.mak DEBUG=1" WorkingDirectory=".\scintilla\win32" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' "  />
@@ -43,6 +49,7 @@
     </PropertyGroup>
 	<MakeDir
             Directories="$(OsslDirs)"/>
+
 
 
 	<Exec Command="perl Configure VC-WIN32 -no-asm" WorkingDirectory=".\openssl"  Condition=" '$(Platform)' == 'Win32' "/>
