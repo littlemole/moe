@@ -126,7 +126,7 @@ void EditorScript::debugScriptGo()
 	}
 
 	editor_->ts_ = ThreadScript::CreateInstance( *moe(), script.toString(), filename.toString() );
-	editor_->ts_->addNamedObject((IMoe*)moe(), _T("moe"));
+	editor_->ts_->addNamedObject((IMoe*)moe(), _T("moe"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 	editor_->ts_->update_breakpoints(s);
 	editor_->ts_->OnScriptThread = mol::events::event_handler(&Editor::OnScriptThread,editor_);
 	editor_->ts_->OnScriptThreadDone = mol::events::event_handler(&Editor::OnScriptThreadDone,editor_);
