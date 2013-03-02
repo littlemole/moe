@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
+<?if $(var.VERSION) = "" ?>
+<?define VERSION = "1.0.0.0" ?>
+<?endif?>
+
   <!-- the product (moe) to install -->
   <Product Id="59A16F7E-EC77-437b-978F-DDAAF554BE80"
-           Name="moe" Language="1033" Version="1.0.0.0"
+           Name="moe" Language="1033" Version="$(var.VERSION)"
            Manufacturer="mole"
            UpgradeCode="8F05D4B2-5D80-4978-9227-5E7511668B6A">
 
@@ -15,6 +19,8 @@
     <?define PF = ProgramFiles64Folder ?>
     <?define Win64 = "yes" ?>
     <?endif?>
+
+
 
     <!-- msi version and packaging-->
     <Package InstallerVersion="200" Compressed="yes" />

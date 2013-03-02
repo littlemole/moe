@@ -10,6 +10,11 @@
     <tlb Condition="'$(Platform)'=='Win32'">$(Configuration)\$(TargetName).tlb</tlb>
     <tlb Condition="'$(Platform)'=='x64'">.\x64\$(Configuration)\$(TargetName).tlb</tlb>
 
+	<verMajor>$([System.DateTime]::Now.ToString("yy"))</verMajor>
+	<verMinor>$([System.DateTime]::Now.ToString("MM"))</verMinor>
+	<verPatch>$([System.DateTime]::Now.ToString("dd"))</verPatch>
+	<verBuild>$([System.DateTime]::Now.ToString("HH"))</verBuild>
+
     <CustomBuildAfterTargets>Midl</CustomBuildAfterTargets>
   </PropertyGroup>
 
@@ -23,7 +28,7 @@
       <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>VERSION_MAIN=$(verMajor);VERSION_MINOR=$(verMinor);VERSION_PATCH=$(verPatch);VERSION_BUILD=$(verBuild);_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
       <OutputFile>$(OutDir)moe.exe</OutputFile>
@@ -36,8 +41,8 @@
     <Manifest Condition="'$(Platform)'=='x64'">
       <AdditionalManifestFiles>resources/moe64.exe.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
     </Manifest>
-
   </ItemDefinitionGroup>
+
 
   <ItemGroup>
     <Midl Include="src\moe.idl">
@@ -95,6 +100,7 @@
       <Outputs>$(TargetName)_dispid.h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
+
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 

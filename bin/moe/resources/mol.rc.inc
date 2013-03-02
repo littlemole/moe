@@ -126,3 +126,74 @@ BEGIN
    IDC_DISPLAYNAME   "moe"
 END
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version Info
+//
+
+#define VER_FILEVERSION             1,0,0,0
+#define VER_FILEVERSION_STR         "1.0.0.0\0"
+
+#define VER_PRODUCTVERSION          1,0,0,0
+#define VER_PRODUCTVERSION_STR      "1.0\0"
+
+#ifndef VERSION_MAIN
+#define VERSION_MAIN                1
+#endif
+
+#ifndef VERSION_MINOR
+#define VERSION_MINOR                0
+#endif
+
+#ifndef VERSION_PATCH
+#define VERSION_PATCH                0
+#endif
+
+#ifndef VERSION_BUILD
+#define VERSION_BUILD                0
+#endif
+
+#define STR(E) #E
+#define EXPAND(E)  STR(E)
+#define MAKE_VERSION(MAIN,MINOR,PATCH,BUILD) EXPAND(MAIN) "." EXPAND(MINOR) "." EXPAND(PATCH) "." EXPAND(BUILD)
+
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION    	VERSION_MAIN,VERSION_MINOR,VERSION_PATCH,VERSION_BUILD
+PRODUCTVERSION 	VERSION_MAIN,VERSION_MINOR,VERSION_PATCH,VERSION_BUILD
+FILEFLAGSMASK  	VS_FFI_FILEFLAGSMASK
+FILEFLAGS      	0
+FILEOS         	VOS_NT_WINDOWS32
+FILETYPE       	VFT_APP
+FILESUBTYPE    	VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName",      "oha7.org"
+            VALUE "FileDescription",  "moe's own editor"
+            VALUE "FileVersion",      MAKE_VERSION(VERSION_MAIN,VERSION_MINOR,VERSION_PATCH,VERSION_BUILD)
+            VALUE "InternalName",     "moe"
+            VALUE "LegalCopyright",   "(c) 2001-2013"
+            VALUE "OriginalFilename", "moe.exe"
+            VALUE "ProductName",      "moe"
+			VALUE "OLESelfRegister", "\0"
+            VALUE "ProductVersion",   MAKE_VERSION(VERSION_MAIN,VERSION_MINOR,VERSION_PATCH,VERSION_BUILD)
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        /* The following line should only be modified for localized versions.     */
+        /* It consists of any number of WORD,WORD pairs, with each pair           */
+        /* describing a language,codepage combination supported by the file.      */
+        /*                                                                        */
+        /* For example, a file might have values "0x409,1252" indicating that it  */
+        /* supports English language (0x409) in the Windows ANSI codepage (1252). */
+
+        VALUE "Translation", 0x409, 1252
+
+    END
+END
+    

@@ -5,6 +5,8 @@
 
  <PropertyGroup Label="Configuration">
 
+	<version>$([System.DateTime]::Now.ToString("yy.MM.dd.HH"))</version>
+
   <!-- paths -->
   <Configuration Condition=" '$(Configuration)' == '' ">uni_debug</Configuration>
   <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
@@ -70,7 +72,7 @@
 
  <Target Name="Build" DependsOnTargets="Clean">
 
-		<Message Text="building Wix Installer JRE" />
+		<Message Text="building Wix Installer MOE EX" />
 		<Message Text="Project Configuration = $(Configuration)" />
 		<Message Text="Project Platform = $(Platform)" />
 		<Message Text="$(MSBuildProjectDirectory)" />
@@ -220,21 +222,21 @@
 		<RemoveDir Directories="@(SvnFolders)" />
 
         <!-- candle -->
-		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(genObj)" gen.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(genObj)" gen.wxs -dVERSION=$(version) -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
 
-		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(regProtoObj)" reg.proto.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(regProtoObj)" reg.proto.wxs -dVERSION=$(version) -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
 
-		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(regContextObj)" reg.context.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(regContextObj)" reg.context.wxs -dVERSION=$(version) -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
 
-		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(moeObj)" moe.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(moeObj)" moe.wxs -dVERSION=$(version) -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
 
-		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(monObj)" MondoNoLicense.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(monObj)" MondoNoLicense.wxs -dVERSION=$(version) -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
 
-		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(netgenObj)" netgen.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(netgenObj)" netgen.wxs -dVERSION=$(version) -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
 
-		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(regNetObj)" netreg.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(regNetObj)" netreg.wxs -dVERSION=$(version) -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
 
-		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(jreObj)" jre.wxs -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(jreObj)" jre.wxs -dVERSION=$(version) -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
 
 
 

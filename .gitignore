@@ -22,3 +22,4 @@ static64/
 *.class
 *.bml
 ipch/
+*.lib
