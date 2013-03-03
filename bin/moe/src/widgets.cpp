@@ -57,7 +57,66 @@ void MoeStatusBar::status(int i)
 void MoeStatusBar::status( const mol::string& txt )
 {
 	progress()->show(SW_HIDE);
-	setText(txt);
+
+	mol::ostringstream oss;
+	mol::ostringstream oss2;
+
+	mol::string dirty(_T("         "));
+	VARIANT_BOOL vb = VARIANT_FALSE;
+
+	mol::punk<IMoeDocument> doc;
+	docs()->get_ActiveDoc(&doc);
+	if(doc)
+	{
+		mol::punk<IDispatch> disp;
+		doc->get_Object(&disp);
+		if(disp)
+		{
+			mol::punk<IScintillAx> sci(disp);
+			if(sci)
+			{
+				mol::punk<IScintillAxText> txt;
+				sci->get_Text(&txt);
+				if(txt)
+				{
+					txt->get_Modified(&vb);
+				}
+				mol::punk<IScintillAxLine> line;
+				sci->get_Line(&line);
+				if(line)
+				{
+					long l = 0;
+					line->get_Current(&l);
+					oss << (l+1);
+
+					long pos = 0;
+					long linepos = 0;
+
+					mol::punk<IScintillAxPosition> position;
+					sci->get_Position(&position);
+					if(position)
+					{
+						position->get_Caret(&pos);
+						line->PosFromLine(l,&linepos);
+					}
+
+					long col = pos-linepos;
+					oss2 << col << " "; 
+				}
+				if ( vb == VARIANT_TRUE )
+				{
+					dirty = _T("modified");
+				}
+				else
+				{
+					dirty = _T("not modified");
+				}
+			}
+		}
+	}
+
+//	setText(txt);
+	setText( txt, dirty, oss.str(), oss2.str());
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////

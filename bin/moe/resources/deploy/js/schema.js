@@ -1,6 +1,7 @@
 
 if ( ActiveDoc )
 {
+    var anno = ActiveDoc.Object.Annotation;
 	var xml = new ActiveXObject("MSXML2.DOMDocument.6.0");
 	var name = ActiveDoc.FilePath;
 
@@ -12,11 +13,17 @@ if ( ActiveDoc )
 
 	if (xml.parseError.errorCode != 0)
 	{
-		Dialogs.MsgBox( "Validation failed on " + name + 
+		anno.ClearAll();
+		var line = xml.parseError.line;
+		if ( line > 0 ) line--;
+		anno.SetText(line,xml.parseError.reason);
+		ActiveDoc.Object.Line.Goto(line);
+/*		Dialogs.MsgBox( "Validation failed on " + name + 
 		"\nReason: " + xml.parseError.reason + 
 		"\nSource: " + xml.parseError.srcText + 
 		"\nLine: " + xml.parseError.line + "\n",
 		"XML Validation failed",Dialogs.ICONERROR);
+*/
 	}
 	else
 	{

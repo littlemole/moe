@@ -3,7 +3,7 @@
                xmlns:mol="urn:mol-codegen" 
                xmlns:xs="http://www.w3.org/2001/XMLSchema" 
 			   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-			   xsi:schemaLocation='urn:urn:mol-codegen resource.xsd'>
+			   xsi:schemaLocation='urn:mol-codegen ..\..\..\cg\xml\resource.xsd'>
    
  
   <!-- main GUI description -->
