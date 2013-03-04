@@ -227,6 +227,8 @@ LRESULT MdiChild::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				case RBN_GETOBJECT     :
 				case TBN_DROPDOWN	   :
 				case NM_RCLICK		   :
+				case TCN_SELCHANGE	   :
+				case TB_CUSTOMIZE	   :
 				case NM_CLICK		   :
 				{
 					return ::SendMessage(msg.nmhdr()->hwndFrom,message,wParam,lParam );
@@ -617,6 +619,8 @@ LRESULT MdiFrame::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				case TBN_DROPDOWN	   :
 				case NM_RCLICK		   :
 				case NM_CLICK		   :
+				case TCN_SELCHANGE	   :
+				case TB_CUSTOMIZE	   :
 				{
 					return ::SendMessage(msg.nmhdr()->hwndFrom,message,wParam,lParam );
 				}

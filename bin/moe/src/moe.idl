@@ -1076,7 +1076,7 @@ library Moe
 		/////////////////////////////////////////////////////////////////////
  		[ 
 		  id(19), 
-		  helpstring("Exit Moe Editor and close the App")
+		  helpstring("Print to virtual stdout")
 		]
 		HRESULT Print([in] BSTR txt);
 

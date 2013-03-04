@@ -215,7 +215,9 @@
     
     <!-- open document collection -->
     <singleton name="docs" class="Documents" />
-    
+
+    <singleton name="codePages" class="Encodings" />
+
     <!-- events -->
 
     <singleton name="treeWndSink" class="TreeWndSink" />

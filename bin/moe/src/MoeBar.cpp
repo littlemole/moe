@@ -94,13 +94,155 @@ void MoeTabControl::OnCtrlCreated()
 	TabCtrl_SetExtendedStyle(*this,TCS_EX_REGISTERDROP );
 }
 
+void MoeTabControl::OnSelect()
+{
+    int sel = (int)selection();
+	mol::TabCtrl::TabCtrlItem* c = getTabCtrlItem(sel);
+	HWND h = (HWND)(c->lparam);
+	if ( !h ) 
+		return;
+
+	mol::MdiChild* mdi = mol::wndFromHWND<mol::MdiChild>(h);
+	if (!mdi) 
+		return;
+
+	mdi->activate();
+    return ;
+}
+
+mol::string dirPathFromChildHWND(HWND hwnd)
+{
+	// get mdi child from HWND
+	mol::MdiChild* mdi = mol::wndFromHWND<mol::MdiChild>(hwnd);
+	if (!mdi) 
+		return _T("");
+
+	// cast mdi child to IMoeDocument
+	IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mdi);
+	if (!doc)
+		return _T("");
+
+	mol::bstr path;
+	if ( doc->get_FilePath(&path) != S_OK )
+		return _T("");
+	return mol::Path::parentDir(mol::toString(path));
+}
+
+void MoeTabControl::OnRightClick()
+{
+	// check whether right click hit a tab
+	int i = hitTest();
+	if ( i == -1 )
+		return ;
+
+	// get right click tab item and retrieve HWND
+	mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)tab()->getTabCtrlItem(i);
+	HWND h = (HWND)c->lparam;
+	if ( !h ) 
+		return;
+
+	// current mouse pos
+	POINT pt;
+	::GetCursorPos(&pt);
+
+	// display context menut
+	mol::Menu sub = mol::UI().SubMenu(IDM_MENU_TAB,IDM_TAB);
+	int id = sub.returnTrackPopup(*this,pt.x-10,pt.y-10);
+	switch ( id )
+	{
+		case IDM_VIEW_CLOSE:
+		{
+			::PostMessage( h, WM_CLOSE, 0, 0 );
+			break;
+		}
+		case IDM_TAB_CLOSEALLBUTTHIS:
+		{
+			HWND m = h;
+			for ( int i = 0; i < count(); i++ )
+			{
+				if ( moe()->childAt(i) != m )
+					::PostMessage(moe()->childAt(i), WM_CLOSE, 0, 0 );
+			}
+			break;
+		}
+		case IDM_TAB_RELOADTAB:
+		{
+			::PostMessage( h, WM_COMMAND, IDM_EDIT_UPDATE, 0 );
+
+			break;
+		}
+		case IDM_FILE_SAVE:
+		{
+			::PostMessage( h, WM_COMMAND, IDM_FILE_SAVE, 0 );
+			break;
+		}
+		case IDM_TAB_DIRTAB:
+		{
+			//::PostMessage( h, WM_COMMAND, IDM_TAB_DIRTAB, 0 );
+			docs()->OpenDir( mol::bstr(dirPathFromChildHWND(h)), 0 );
+			break;
+		}
+	}
+	return ;
+}
+
+
+
+void MoeTabControl::OnMouseDown()
+{
+	isMouseDown_ = false;
+
+	int i = hitTest();
+	if ( i!= -1 )
+	{
+		// wait a bit might be a drag-drop
+		isMouseDown_ = true;
+		SetTimer( ID_TABDRAGDROPTIMER, 500 );
+	}
+}
+
+void MoeTabControl::OnMouseUp()
+{
+	isMouseDown_ = false;
+}
+
+
+void MoeTabControl::OnTimer(int id,int)
+{
+	if ( id == ID_TABDRAGDROPTIMER && isMouseDown_)
+	{
+		KillTimer(ID_TABDRAGDROPTIMER);
+		isMouseDown_ = false;
+		int i = hitTest();
+		if ( i!= -1 )
+		{
+			// do a simple dragDrop
+			mol::TabCtrl::TabCtrlItem* c = getTabCtrlItem(i);
+			TxtDragDrop::doDragDrop( dragTabFormat_, (HWND)(c->lparam) );
+		}
+	}
+}
+
+void MoeTabControl::OnGetObject(NMOBJECTNOTIFY* notify)
+{
+	// return our drop source for a drag-drop event
+	notify->hResult = E_FAIL;
+	IID iid = *(notify->piid);
+	if ( ::IsEqualIID( IID_IDropTarget, iid) )
+	{
+		notify->pObject = (IUnknown*)&Drop;
+		notify->hResult = S_OK;
+	}
+}
+
+
 // helpers
 
 int MoeTabControl::index( HWND d )
 {
 	for ( int i = 0; i < count(); i++ )
 	{
-		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)getTabCtrlItem(i);
+		mol::TabCtrl::TabCtrlItem* c = getTabCtrlItem(i);
 		HWND mdi = (HWND)(c->lparam);
 		if ( mdi == d )
 		{
@@ -129,7 +271,7 @@ void MoeTabControl::move( HWND what, HWND to )
 	if ( ito == -1 )
 		return;
 
-	mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)getTabCtrlItem(iwhat);
+	mol::TabCtrl::TabCtrlItem* c = getTabCtrlItem(iwhat);
 	mol::TabCtrl::TabCtrlItem* tiwhat = new mol::TabCtrl::TabCtrlItem(c->title,c->tooltip,c->lparam);
 
 	removeItem(iwhat);
@@ -156,78 +298,21 @@ void MoeTabControl::rename( HWND d, const mol::string& newpath, const mol::strin
 	if ( i == -1 )
 		return;
 
-	mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)getTabCtrlItem(i);
+	mol::TabCtrl::TabCtrlItem* c = getTabCtrlItem(i);
 	mol::TabCtrl::TabCtrlItem* nc = new mol::TabCtrl::TabCtrlItem(name,newpath,c->lparam);
 	renameItem( nc, i );
 }
 
+
+
 //////////////////////////////////////////////////////////////////////////////////
-// override windowproc for drag drop support
+// msgmap support for event handling
 //////////////////////////////////////////////////////////////////////////////////
 
 
 LRESULT MoeTabControl::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	switch(message)
-	{	
-		case WM_NOTIFY : 
-		{
-			//break;
-			mol::Crack msg(message,wParam,lParam);
-
-			if ( msg.nmhdr()->code == TCN_GETOBJECT )
-			{
-				// return our drop source for a drag-drop event
-				msg.notifyObject()->hResult = E_FAIL;
-				IID iid = *msg.notifyObject()->piid;
-				if ( ::IsEqualIID( IID_IDropTarget, *msg.notifyObject()->piid) )
-				{
-					msg.notifyObject()->pObject = (IUnknown*)&Drop;
-					msg.notifyObject()->hResult = S_OK;
-				}
-			}
-			break;
-		}
-
-		case WM_LBUTTONDOWN : 
-		{
-			isMouseDown_ = false;
-
-			int i = tab()->hitTest();
-			if ( i!= -1 )
-			{
-				// wait a bit might be a drag-drop
-				isMouseDown_ = true;
-				SetTimer( ID_TABDRAGDROPTIMER, 500 );
-			}
-			break;
-		}
-
-		case WM_TIMER : 
-		{
-			if ( wParam == ID_TABDRAGDROPTIMER && isMouseDown_)
-			{
-				KillTimer(ID_TABDRAGDROPTIMER);
-				isMouseDown_ = false;
-				int i = tab()->hitTest();
-				if ( i!= -1 )
-				{
-					// do a simple dragDrop
-					mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)getTabCtrlItem(i);
-					TxtDragDrop::doDragDrop( dragTabFormat_, (HWND)(c->lparam) );
-				}
-			}
-			break;
-		}
-
-		case WM_LBUTTONUP : 
-		{
-			isMouseDown_ = false;
-			break;
-		}
-	}
-
-	return  mol::TabCtrl::wndProc( hwnd, message, wParam, lParam );
+	return mol::msgMap<MoeTabControl>().call(this,message,wParam,lParam);	
 }
 
 
@@ -291,7 +376,8 @@ HRESULT  __stdcall MoeTabControl::MoeTabControl_Drop::DragEnter( IDataObject* pD
 		*pEffect = DROPEFFECT_NONE;
 		 return S_OK;
 	}
-    return S_OK;
+ 
+	return S_OK;
 }
 
 HRESULT __stdcall MoeTabControl::MoeTabControl_Drop::DragOver( DWORD, POINTL, DWORD* pEffect )
@@ -314,6 +400,22 @@ HRESULT  __stdcall MoeTabControl::MoeTabControl_Drop::DragLeave()
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
+void MoeToolBar::OnRightClick(NMHDR* notify)
+{
+	if ( moe()->toolbarFrozen() )
+		return ;
+
+	switch ( notify ->idFrom )
+	{
+		case IDC_TOOLBARS_FILEBAR    :
+		case IDC_TOOLBARS_EDITBAR    :
+		case IDC_TOOLBARS_TOOLBAR    :
+		case IDC_TOOLBARS_SETTINGBAR :
+		case IDC_TOOLBARS_VIEWBAR    :
+		case IDC_TOOLBARS_USERBAR    :
+			::SendMessage( mol::UI().hWnd((unsigned int)notify->idFrom), TB_CUSTOMIZE, 0,0 );
+	}
+}
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -361,28 +463,3 @@ LRESULT MoeBar::wndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
-/*
-MoeCLIBar::~MoeCLIBar()
-{
-	ODBGS("~MoeCLIBar");
-}
-
-
-LRESULT MoeCLIBar::wndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	switch(msg)
-	{
-		case WM_CREATE :
-		{
-			RECT r;
-			::GetClientRect(*this,&r);
-			postMessage(WM_SIZE,0,MAKELPARAM(r.right,r.bottom));
-			redraw();
-			break;
-		}
-	}
-	return mol::ReBar::wndProc(wnd,msg,wParam,lParam);
-}
-
-
-*/

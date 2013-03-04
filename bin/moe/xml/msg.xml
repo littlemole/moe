@@ -52,10 +52,11 @@
         <msgrange type="cmd" from="IDM_TOOLBARS_FILEBAR" to="IDM_TOOLBARS_DIRVIEW" handler="OnShowToolBar" />
         
         <!-- tab ctrl events-->
-        <notify handler="OnTabCtrl" ctrl="IDW_TAB_CTRL" />
+<!--        <notify handler="OnTabCtrl" ctrl="IDW_TAB_CTRL" />
+-->
         <notify handler="OnDispatch" code="TBN_DROPDOWN" />
-        <notify handler="OnToolbarRightClick" code="NM_RCLICK" />
-
+  <!--       <notify handler="OnToolbarRightClick" code="NM_RCLICK" />
+-->
         <!-- dispatched to active mdi child window -->
         <msg  handler="OnDispatch" cmd="IDM_EDIT_CUT" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_COPY" />
@@ -414,6 +415,22 @@
       
     </class>
 
+    <class type="MoeTabControl" >
+
+      <msg  handler="OnMouseDown" msg="WM_LBUTTONDOWN" />
+      <msg  handler="OnMouseUp" msg="WM_LBUTTONUP" />
+      <msg  handler="OnTimer" msg="WM_TIMER" />
+
+
+      <notify handler="OnGetObject" code="TCN_GETOBJECT" />
+      <notify handler="OnSelect" code="TCN_SELCHANGE" />      
+      <notify handler="OnRightClick" code="NM_RCLICK" />      
+      
+    </class>
+    
+    <class type="MoeToolBar" >
+      <notify handler="OnRightClick" code="NM_RCLICK" />
+    </class>
 
 
   </msgs>

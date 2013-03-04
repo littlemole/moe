@@ -76,8 +76,6 @@ bool DirChild::initialize(const mol::string& p)
 
 	location_ = p;
 
-	//getClientRect(clientRect_);
-	//this->SetObjectSize(clientRect_);
 	OnLayout(0,0,0);
 	return true;
 }

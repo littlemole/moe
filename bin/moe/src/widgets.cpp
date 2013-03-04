@@ -37,12 +37,20 @@ HRESULT __stdcall  MoeImport::Import(BSTR filename)
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-/*CLIControl::CLIControl()
-{}
+Encodings::Encodings()
+{
+	//capture supported codepages. we add three pretty well-known to the list
+	codePages_.push_back( CodePage(std::make_pair(CP_ACP,L"Default CodePage")) );
+	codePages_.push_back( CodePage(std::make_pair(CP_UTF8,L"UTF-8")) );
+	codePages_.push_back( CodePage(std::make_pair(CP_WINUNICODE,L"Unicode (UTF-16)")) );
 
-CLIControl::~CLIControl()
-{}
-*/
+	const mol::CodePages::Entries& cps = mol::CodePages::codePages();
+	for ( mol::CodePages::Iterator it = cps.begin(); it != cps.end(); it++)
+	{
+		codePages_.push_back( CodePage( std::make_pair( (*it).first, (*it).second.second)) );
+	}
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -115,7 +123,6 @@ void MoeStatusBar::status( const mol::string& txt )
 		}
 	}
 
-//	setText(txt);
 	setText( txt, dirty, oss.str(), oss2.str());
 }
 
@@ -1368,9 +1375,9 @@ void MolFileFialog::OnCustomize()
 void MolFileFialog::OnInit()
 {
 	combo_.attach(::GetDlgItem(dlg_,IDC_COMBO_ENC));
-	for ( size_t i = 0; i < moe()->codePages().size(); i++)
+	for ( Encodings::Iterator it = codePages()->begin(); it!= codePages()->end(); it++)
 	{
-		combo_.addString(moe()->codePages()[i].second);
+		combo_.addString((*it).second);
 	}
 
 	if ( index_ != -1 )
@@ -1389,13 +1396,22 @@ int MolFileFialog::codePage()
 	if ( index_ == -1 )
 		return -1;
 
-	return moe()->codePages()[index_].first;
+	return codePages()->item(index_).first;
 }
 
 void MolFileFialog::codePage(int cp)
 {
-	index_ = (int)moe()->codePageIndex(cp);
+	index_ = (int)codePages()->index(cp);
 }
+
+
+
+#define CONTROL_GROUP           2000
+#define CONTROL_COMBOBOX        2001
+
+#define OPENCHOICES					0
+#define OPENCHOICES_OPEN			0
+#define OPENCHOICES_OPEN_READONLY	1
 
 
 MoeVistaFileDialog::MoeVistaFileDialog(HWND parent)
@@ -1513,12 +1529,14 @@ HRESULT MoeVistaFileDialog::save(int options)
 	if (hr != S_OK)
 		return hr;
 
-	for ( size_t i = 0; i < moe()->codePages().size(); i++)
+	DWORD i = 0;
+	for ( Encodings::Iterator it = codePages()->begin(); it!= codePages()->end(); it++)
 	{
-		const mol::CodePages::Entry codePage = moe()->codePages()[i];
-		hr = fdc_->AddControlItem(CONTROL_COMBOBOX, (DWORD)i, codePage.second.c_str() );
+		const mol::CodePages::Entry codePage = *it;
+		hr = fdc_->AddControlItem(CONTROL_COMBOBOX, i, codePage.second.c_str() );
 		if (hr != S_OK)
 			return hr;
+		i++;
 	}
 
 	hr = fdc_->SetSelectedControlItem(CONTROL_COMBOBOX,encoding_);
@@ -1560,12 +1578,12 @@ HRESULT MoeVistaFileDialog::save(int options)
 
 long MoeVistaFileDialog::encoding()
 {
-	return moe()->codePages()[encoding_].first;
+	return codePages()->item(encoding_).first;
 }
 
 void MoeVistaFileDialog::encoding(long enc)
 {
-	encoding_ = (int)moe()->codePageIndex(enc);
+	encoding_ = (int)codePages()->index(enc);
 }
 
 long MoeVistaFileDialog::type()
@@ -1606,12 +1624,14 @@ HRESULT MoeVistaFileDialog::addEncodingComboBox()
 	if (hr != S_OK)
 		return hr;
 
-	for ( size_t i = 0; i < moe()->codePages().size(); i++)
+	DWORD i = 0;
+	for ( Encodings::Iterator it = codePages()->begin(); it!= codePages()->end(); it++)
 	{
-		const mol::CodePages::Entry codePage = moe()->codePages()[i];
-		hr = fdc_->AddControlItem(CONTROL_COMBOBOX, (DWORD)i, codePage.second.c_str() );
+		const mol::CodePages::Entry codePage =*it;
+		hr = fdc_->AddControlItem(CONTROL_COMBOBOX, i, codePage.second.c_str() );
 		if (hr != S_OK)
 			return hr;
+		i++;
 	}
 
 	// End the visual group.

@@ -522,6 +522,8 @@ LRESULT Window::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				case TCN_GETOBJECT	   :
 				case RBN_GETOBJECT     :
 				case TBN_DROPDOWN	   :
+				case TCN_SELCHANGE	   :
+				case TB_CUSTOMIZE	   :
 				case NM_RCLICK		   :
 				case NM_CLICK		   :
 				{

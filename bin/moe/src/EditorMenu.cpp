@@ -90,7 +90,7 @@ void EditorMenu::updateUI()
 		}
 		if ( mol::Ribbon::ribbon()->enabled())
 		{
-			mol::Ribbon::handler(RibbonEncoding)->select((int)moe()->codePageIndex((int)encoding));
+			mol::Ribbon::handler(RibbonEncoding)->select((int)codePages()->index((int)encoding));
 		}
 	}
 	

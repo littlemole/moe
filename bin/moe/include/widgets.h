@@ -88,6 +88,46 @@ private:
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
+class Encodings
+{
+public:
+
+  	 Encodings();
+
+	 typedef std::pair<int,std::wstring> CodePage;
+	 typedef std::vector<CodePage>::iterator Iterator;
+
+	 Iterator begin()
+	 {
+		 return codePages_.begin();
+	 }
+
+	 Iterator end()
+	 {
+		 return codePages_.end();
+	 }
+
+	 CodePage& item (int index)
+	 {
+		 return codePages_[index];
+	 }
+
+	 size_t index( int cp )
+	 {
+		 for ( size_t i = 0; i < codePages_.size(); i++)
+		 {
+			 if ( codePages_[i].first == cp )
+			 {
+				 return i;
+			 }
+		 }
+		 return -1;
+	 }
+
+private:
+	 	std::vector<CodePage> codePages_;
+};
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 // poor info dlg
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -281,12 +321,6 @@ private:
 };
 
 
-#define CONTROL_GROUP           2000
-#define CONTROL_COMBOBOX        2001
-
-#define OPENCHOICES					0
-#define OPENCHOICES_OPEN			0
-#define OPENCHOICES_OPEN_READONLY	1
 
 class MoeVistaFileDialog
 {
@@ -309,6 +343,7 @@ public:
 	const std::wstring& path();
 
 	void path(const std::wstring& path);
+
 private:
 
 	HRESULT addEncodingComboBox();
@@ -317,14 +352,14 @@ private:
 	mol::punk<mol::v7::IFileDialog> fd_;
 	mol::punk<mol::v7::IFileDialogCustomize> fdc_;
 
+	HWND parent_;
 	long encoding_;
 	bool readOnly_;
 	UINT type_;
-	std::vector<std::wstring> paths_;
-	HWND parent_;
-	mol::v7::COMDLG_FILTERSPEC* filter_;
 	UINT nFilters_;
 	std::wstring path_;
+	std::vector<std::wstring> paths_;
+	mol::v7::COMDLG_FILTERSPEC* filter_;
 };
 
 MOE_DOCTYPE index2type(int index);

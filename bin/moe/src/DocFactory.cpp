@@ -472,26 +472,6 @@ IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const mol::stri
     }
 	in.close();
 
-	/*
-	std::string sniff = is.str();
-
-	mol::FileEncoding e;
-	DWORD cp = e.investigate(sniff);
-	if ( cp == CP_WINUNICODE )
-	{
-		enc = CP_WINUNICODE;
-	}
-	if ( cp == CP_UTF8 )
-	{
-		enc = CP_UTF8;
-	}
-
-	if ( e.isBinary() )
-	{
-		return new MoeHexFactory(readOnly);
-	}
-	*/
-
 	// ... so try open in text editor
 	return new MoeEditorDocumentFactory(enc,readOnly);
 }

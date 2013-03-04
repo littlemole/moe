@@ -14,12 +14,7 @@ MoeTreeWnd::~MoeTreeWnd()
 {
 	ODBGS("~MoeTreeWnd");
 }
-/*
-void MoeTreeWnd::OnCreate()
-{
 
-}
-*/
 
 bool MoeTreeWnd::hasFocus()      
 { 
@@ -142,38 +137,7 @@ HRESULT __stdcall TreeWndSink::OnTreeDblClick(BSTR filename,VARIANT_BOOL vb)
 	}
 	return S_OK;
 }
-/*
-MOE_DOCTYPE index2DocType(int i)
-{
-	switch(i)
-	{
-		case 0 :
-		{
-			return MOE_DOCTYPE_DOC;
-		}
-		case 1 :
-		{
-			return MOE_DOCTYPE_HTML;
-		}
-		case 2 :
-		{
-			return MOE_DOCTYPE_RTF;
-		}
-		case 3 :
-		{
-			return MOE_DOCTYPE_HEX;
-		}
-		case 4 :
-		{
-			return MOE_DOCTYPE_TAIL;
-		}
-		default :
-		{
-			return MOE_DOCTYPE_DOC;
-		}
-	}
-}
-*/
+
 HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename,VARIANT_BOOL vb)
 {
 	mol::string p(mol::toString(filename));

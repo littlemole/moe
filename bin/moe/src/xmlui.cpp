@@ -306,6 +306,10 @@ Documents* docs()
 {
   return &mol::singleton<Documents>();
 }
+Encodings* codePages()
+{
+  return &mol::singleton<Encodings>();
+}
 TreeWndSink* treeWndSink()
 {
   return &mol::singleton<TreeWndSink>();

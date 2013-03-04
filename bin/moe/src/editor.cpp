@@ -296,7 +296,7 @@ void Editor::OnEncoding()
 
 	// get chosen encoding index
 	int enc = mol::Ribbon::handler(RibbonEncoding)->index();
-	props_->put_Encoding( moe()->codePages()[enc].first );
+	props_->put_Encoding( codePages()->item(enc).first );
 }
 
 
@@ -826,7 +826,6 @@ void Editor::OnSaveAs()
 		return;
 	}
 
-	//mol::FilenameDlg ofn(*this);
 	MolFileFialog ofn(*this);
 
 	ofn.setFilter( OutFilesFilter );		

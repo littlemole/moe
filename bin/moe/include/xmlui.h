@@ -102,6 +102,9 @@ MoeComboBox* syntax();
 class Documents;    
 Documents* docs();
 
+class Encodings;    
+Encodings* codePages();
+
 class TreeWndSink;    
 TreeWndSink* treeWndSink();
 

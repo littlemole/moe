@@ -25,19 +25,27 @@ public:
 
 	void select( HWND d );
 	
+	// msg handlers
+	void OnSelect();
+	void OnRightClick();
+
+	void OnMouseDown();
+	void OnMouseUp();
+
+	void OnTimer(int id,int unused);
+	void OnGetObject(NMOBJECTNOTIFY* notify);
+
 private:
 
 	virtual void OnCtrlCreated();
+
+	virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	int  index ( HWND d );
 	void remove( HWND d );
 	void move  ( HWND what, HWND to );
 	void rename( HWND d,const mol::string& newpath, const mol::string& name );
 
-	virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-	bool				isMouseDown_;
-	CLIPFORMAT			dragTabFormat_;
 	
 	// Drag&Drop COM Callback
 	class MoeTabControl_Drop : public mol::stack_obj<mol::ole::DropTargetBase>
@@ -48,6 +56,10 @@ private:
 			HRESULT virtual __stdcall DragOver( DWORD, POINTL, DWORD* );
 			HRESULT virtual __stdcall DragLeave();
     } Drop;
+
+
+	bool				isMouseDown_;
+	CLIPFORMAT			dragTabFormat_;
 };
 
 
@@ -60,7 +72,16 @@ class MoeToolBar : public mol::Control< mol::CustomToolBar,
 					  CCS_NODIVIDER|TBSTYLE_FLAT|
 					  WS_CLIPCHILDREN|TBSTYLE_TOOLTIPS|CCS_ADJUSTABLE ,
 					  TBSTYLE_EX_MIXEDBUTTONS  >
-{};
+{
+public:
+	// msg handler
+	void OnRightClick(NMHDR* notify);
+
+    LRESULT virtual wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)		
+    {																					
+            return mol::msgMap<MoeToolBar>().call(this,message,wParam,lParam);							
+    }	
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // the syntax selector cobox control
@@ -71,25 +92,6 @@ class MoeComboBox : public mol::Control< mol::ComboBox,
 					  CBS_DROPDOWNLIST |CBS_HASSTRINGS,
 					  0 > 
 {};
-
- /*
-class CLIControl : public mol::Control<mol::ReditBox<IDM_CLI_RETURN>,WS_CHILD|WS_VISIBLE|WS_CLIPCHILDREN|WS_BORDER,WS_EX_CLIENTEDGE>
-{
-public:
-	CLIControl();
-	~CLIControl();
-
-private:
-
-};
-
-
-class  MoeTaskbarControl : public mol::ChildFrame<MoeTaskbarControl,mol::Window>
-{
-public:
-	
-};
-*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,29 +125,6 @@ public:
 
 };
 
-/*
-class MoeCLIBar : public mol::Control< 
-						mol::ReBar,
-						/*WS_BORDER|* /WS_CHILD|WS_VISIBLE|
-						WS_CLIPCHILDREN|WS_CLIPSIBLINGS|CCS_NODIVIDER|
-						RBS_BANDBORDERS|/*RBS_VARHEIGHT|CCS_NOPARENTALIGN|* /
-						RBS_REGISTERDROP,
-						WS_EX_TOOLWINDOW/*|WS_EX_CLIENTEDGE* / >
-{
-friend class MoeWnd;
-public:
-	MoeCLIBar()
-	{}
-
-	~MoeCLIBar();
-
-//    virtual HRESULT __stdcall Load( LPSTREAM pStm);
-  //  virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
-
-	LRESULT wndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-};
-*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 

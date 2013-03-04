@@ -25,11 +25,7 @@ RTree;
 class MoeTreeWnd : 
 	public mol::Frame< 
 					MoeTreeWnd,
-						mol::AxClientWnd<
-								MoeTreeWnd,
-								RTree>, //,
-								//&CLSID_ShellTree> , 
-								//&CLSID_NamespaceTree> , 
+						mol::AxClientWnd<MoeTreeWnd,RTree>,
 					    WS_CHILD|WS_VISIBLE|WS_CLIPSIBLINGS|
 					    WS_CLIPCHILDREN|WS_THICKFRAME,
 					    WS_EX_STATICEDGE >

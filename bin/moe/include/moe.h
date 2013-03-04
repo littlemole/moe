@@ -98,7 +98,7 @@ public:
 	 void OnShowDirView();
 
 	 // document chooser tab-ctrl events
-	 void OnTabCtrl( NMHDR* notify );
+//	 void OnTabCtrl( NMHDR* notify );
 
 	 // FX Shortcuts (F1 through F12)
 	 void OnFx(int code, int id, HWND ctrl);
@@ -168,6 +168,8 @@ public:
 	// shared small moe icon
 	mol::Icon						icon;
 
+    HRESULT stdOut(BSTR* ret);
+
 	/////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////
 
@@ -182,51 +184,10 @@ public:
 	 // show toolbar switches
 	 void OnShowToolBar(int code, int id, HWND ctrl);
 
-	 // toolbar right click event
- 	 void OnToolbarRightClick(NMHDR* notify );
+	bool toolbarFrozen() { return toolBarFrozen_ == 0; }
 
-	/////////////////////////////////////////////////////////////////////
-	// codepage support
-	/////////////////////////////////////////////////////////////////////
-
-	 typedef std::pair<int,std::wstring> CodePage;
-
-	 const std::vector<CodePage>& codePages()
-	 {
-		 return codePages_;
-	 }
-
-	 size_t codePageIndex( int cp )
-	 {
-		 for ( size_t i = 0; i < codePages_.size(); i++)
-		 {
-			 if ( codePages_[i].first == cp )
-			 {
-				 return i;
-			 }
-		 }
-		 return -1;
-	 }
-
-	 HRESULT stdOut(BSTR* ret) 
-	 {
-		 if ( ret == 0 )
-			 return E_INVALIDARG;
-
-		 if ( !vttyOut_ )
-		 {
-			*ret = 0;
-			return S_OK;
-		 }
-
-		 *ret = ::SysAllocString(vttyOut_.bstr_);
-		 vttyOut_ = 0;
-		 return S_OK;
-	 }
 
 private:
-
-	std::vector<CodePage> codePages_;
 	
 	// load conf
 	void loadPersistUIstate();
@@ -241,16 +202,6 @@ private:
 	/////////////////////////////////////////////////////////////////////
 	// data members
 	/////////////////////////////////////////////////////////////////////
-
-	// document defaults
-	long							systype_;
-	long							encoding_;
-	long							syntax_;
-	long							tabwidth_;
-	VARIANT_BOOL					tabUsage_;
-	VARIANT_BOOL					tabIndents_;
-	VARIANT_BOOL					fullScreen_;
-	VARIANT_BOOL					backSpaceUnIndents_;
 
 	// dirty flag
 	BOOL							bDirty_;

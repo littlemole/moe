@@ -34,16 +34,6 @@ MoeWnd::MoeWnd()
 	// registered active instance
 	activeObj_			= 0;
 
-	// default settings for new editor documents
-	systype_			= SCINTILLA_SYSTYPE_WIN32;
-	encoding_			= SCINTILLA_ENCODING_ANSI;
-	syntax_				= SCINTILLA_SYNTAX_PLAIN;
-	tabwidth_			= 4;
-	tabUsage_			= VARIANT_TRUE;
-	tabIndents_			= VARIANT_TRUE;
-	backSpaceUnIndents_	= VARIANT_FALSE;
-	fullScreen_			= VARIANT_FALSE;
-
 	// don't erase window background, avoid flicker
     eraseBackground_    = 0;
 
@@ -59,19 +49,6 @@ MoeWnd::MoeWnd()
 	moeDialogs = new MoeDialogs::Instance;
 	moeView    = new MoeView::Instance;
 	moeConfig  = new MoeConfig::Instance;
-
-	//capture supported codepages. we add three pretty well-known to the list
-	codePages_.push_back( CodePage(std::make_pair(CP_ACP,L"Default CodePage")) );
-	codePages_.push_back( CodePage(std::make_pair(CP_UTF8,L"UTF-8")) );
-	codePages_.push_back( CodePage(std::make_pair(CP_WINUNICODE,L"Unicode (UTF-16)")) );
-
-	const mol::CodePages::Entries& cps = mol::CodePages::codePages();
-	for ( mol::CodePages::Iterator it = cps.begin(); it != cps.end(); it++)
-	{
-		codePages_.push_back( CodePage( std::make_pair( (*it).first, (*it).second.second)) );
-	}
-
-	
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -409,61 +386,6 @@ void MoeWnd::OnFileExit()
 
 
 //////////////////////////////////////////////////////////////////////////////
-//
-//
-//////////////////////////////////////////////////////////////////////////////
-
-/*
-LRESULT MoeWnd::OnEditCut(UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	if ( treeWnd()->hasFocus() )
-	{
-		punk<IShellTree> tree(treeWnd()->oleObject);
-		if ( tree )
-		{
-			tree->Cut();
-		}
-		return 0;
-	}
-    ::PostMessage(getActive(),msg,wParam,lParam);
-	return 0;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-LRESULT MoeWnd::OnEditCopy(UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	if ( treeWnd()->hasFocus() )
-	{
-		punk<IShellTree> tree(treeWnd()->oleObject);
-		if ( tree )
-		{
-			tree->Copy();
-		}
-		return 0;
-	}
-    ::PostMessage(getActive(),msg,wParam,lParam);
-	return 0;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-LRESULT MoeWnd::OnEditPaste(UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	if ( treeWnd()->hasFocus() )
-	{
-		punk<IShellTree> tree(treeWnd()->oleObject);
-		if ( tree )
-		{
-			tree->Paste();
-		}
-		return 0;
-	}
-    ::PostMessage(getActive(),msg,wParam,lParam);
-	return 0;
-}
-
-*/
-//////////////////////////////////////////////////////////////////////////////
 
 void MoeWnd::OnFind()
 {
@@ -653,131 +575,6 @@ void MoeWnd::OnHelpAbout()
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// TabControl Events
-//
-//////////////////////////////////////////////////////////////////////////////
-
-mol::string dirPathFromChildHWND(HWND hwnd)
-{
-	// get mdi child from HWND
-	mol::MdiChild* mdi = mol::wndFromHWND<mol::MdiChild>(hwnd);
-	if (!mdi) 
-		return _T("");
-
-	// cast mdi child to IMoeDocument
-	IMoeDocument* doc = dynamic_cast<IMoeDocument*>(mdi);
-	if (!doc)
-		return _T("");
-
-	mol::bstr path;
-	if ( doc->get_FilePath(&path) != S_OK )
-		return _T("");
-	return mol::Path::parentDir(mol::toString(path));
-}
-
-void MoeWnd::OnTabCtrl(NMHDR* notify )
-{
-    if ( notify->code  == TCN_SELCHANGE )
-    {
-        int sel = (int)tab()->selection();
-		mol::TabCtrl::TabCtrlItem* c = tab()->getTabCtrlItem(sel);
-		HWND h = (HWND)(c->lparam);
-		if ( !h ) 
-			return;
-
-		mol::MdiChild* mdi = mol::wndFromHWND<mol::MdiChild>(h);
-		if (!mdi) 
-			return;
-
-		mdi->activate();
-        return ;
-    }		
-
-    if ( notify->code  == NM_RCLICK   )
-    {
-		// check whether right click hit a tab
-		int i = tab()->hitTest();
-		if ( i == -1 )
-			return ;
-
-		// get right click tab item and retrieve HWND
-		mol::TabCtrl::TabCtrlItem* c = (mol::TabCtrl::TabCtrlItem*)tab()->getTabCtrlItem(i);
-		HWND h = (HWND)c->lparam;
-		if ( !h ) 
-			return;
-
-		// current mouse pos
-		POINT pt;
-		::GetCursorPos(&pt);
-
-		// display context menut
-		mol::Menu sub = mol::UI().SubMenu(IDM_MENU_TAB,IDM_TAB);
-		int id = sub.returnTrackPopup(*this,pt.x-10,pt.y-10);
-		switch ( id )
-		{
-			case IDM_VIEW_CLOSE:
-			{
-				::PostMessage( h, WM_CLOSE, 0, 0 );
-				break;
-			}
-			case IDM_TAB_CLOSEALLBUTTHIS:
-			{
-				HWND m = h;
-				for ( int i = 0; i < count(); i++ )
-				{
-					if ( childAt(i) != m )
-						::PostMessage( childAt(i), WM_CLOSE, 0, 0 );
-				}
-				break;
-			}
-			case IDM_TAB_RELOADTAB:
-			{
-				::PostMessage( h, WM_COMMAND, IDM_EDIT_UPDATE, 0 );
-
-				break;
-			}
-			case IDM_FILE_SAVE:
-			{
-				::PostMessage( h, WM_COMMAND, IDM_FILE_SAVE, 0 );
-				break;
-			}
-			case IDM_TAB_DIRTAB:
-			{
-				//::PostMessage( h, WM_COMMAND, IDM_TAB_DIRTAB, 0 );
-				docs()->OpenDir( mol::bstr(dirPathFromChildHWND(h)), 0 );
-				break;
-			}
-		}
-		return ;
-	}
-	return ;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// OnToolbarRightClick
-//
-//////////////////////////////////////////////////////////////////////////////
-
-void MoeWnd::OnToolbarRightClick(NMHDR* notify )
-{
-	if ( toolBarFrozen_ )
-		return ;
-
-	switch ( notify ->idFrom )
-	{
-		case IDC_TOOLBARS_FILEBAR    :
-		case IDC_TOOLBARS_EDITBAR    :
-		case IDC_TOOLBARS_TOOLBAR    :
-		case IDC_TOOLBARS_SETTINGBAR :
-		case IDC_TOOLBARS_VIEWBAR    :
-		case IDC_TOOLBARS_USERBAR    :
-			::SendMessage( mol::UI().hWnd((unsigned int)notify->idFrom), TB_CUSTOMIZE, 0,0 );
-	}
-}
-
-//////////////////////////////////////////////////////////////////////////////
-//
 // OnSyntax
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -938,6 +735,21 @@ HRESULT __stdcall MoeWnd::Print(BSTR txt)
 	return S_OK;
 }
 
+HRESULT MoeWnd::stdOut(BSTR* ret) 
+{
+	if ( ret == 0 )
+		return E_INVALIDARG;
+
+	if ( !vttyOut_ )
+	{
+		*ret = 0;
+		return S_OK;
+	}
+
+	*ret = ::SysAllocString(vttyOut_.bstr_);
+	vttyOut_ = 0;
+	return S_OK;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // Persistence
@@ -949,17 +761,38 @@ HRESULT __stdcall MoeWnd::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
 	punk<IStream> stream;
 	if ( S_OK == pStgSave->CreateStream( L"UI", STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,0,&stream) )
 	{
-		this->Save(stream,FALSE);
+		urlDlg()->Save(stream,FALSE);
+	}
+	stream.release();
 
-		punk<IPersistStorage> ps(config());
-		if ( ps )
+	if ( S_OK == pStgSave->CreateStream( L"REBAR", STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,0,&stream) )
+	{
+		if ( mol::Ribbon::ribbon()->enabled() ) 
 		{
-			HRESULT hr = ps->Save(pStgSave,fSameAsLoad);
-			if ( hr != S_OK )
-				return hr;
+			data_.copyTo(stream);
+		}
+		else
+		{
+			reBar()->Save(stream, FALSE);
+			ULONG written = 0;
+			stream->Write( &toolBarFrozen_, sizeof(BYTE),		 &written );
 		}
 	}
 	stream.release();
+
+
+	punk<IPersistStorage> ps(config());
+	if ( ps )
+	{
+		mol::punk<IStorage> store;
+		HRESULT hr = pStgSave->CreateStorage(L"CONF",STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,0,&store);
+		if ( hr != S_OK )
+			return hr;
+
+		hr = ps->Save(store,fSameAsLoad);
+		if ( hr != S_OK )
+			return hr;
+	}
 
 	// save moe default settings
 	if ( S_OK == pStgSave->CreateStream( L"DEFAULTS", STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,0,&stream) )
@@ -972,6 +805,7 @@ HRESULT __stdcall MoeWnd::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
 			ps->Save(stream,TRUE);
 		}
 	}
+
 
 	// save Ribbon UI state (if applicable)
 	mol::Ribbon::ribbon()->save(pStgSave);
@@ -991,9 +825,10 @@ HRESULT __stdcall MoeWnd::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
 
 HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 {
-	static LPCOLESTR con = OLESTR("UI");
+	static LPCOLESTR ui = OLESTR("UI");
 	static LPCOLESTR def = OLESTR("DEFAULTS");
-	
+	static LPCOLESTR con = OLESTR("CONF");
+	static LPCOLESTR reb = OLESTR("REBAR");	
 
 	// open defaults stream
 	punk<IStream> stream;
@@ -1014,31 +849,39 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 	stream.release();
 
 	// open UI stream
-	hr = pStgLoad->OpenStream( con, NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
+	hr = pStgLoad->OpenStream( ui, NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
 	if ( !stream || (hr != S_OK) )
 		return S_OK;
 
-	// load UI config
-	punk<IPersistStreamInit> ipsi(this);
-	if ( !ipsi )
-		return S_OK;
-
+	urlDlg()->Load(stream);
 	setDirty(FALSE);
-	hr = ipsi->Load(stream);
-	if ( hr != S_OK )
-		return S_OK;
 	
 	stream.release();
 
-	// load user settings stream
-	punk<IPersistStorage> ps(config());
-	if ( !ps )
+	hr = pStgLoad->OpenStream( reb, NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
+	if ( !stream || (hr != S_OK) )
 		return S_OK;
 
-	hr = ps->Load(pStgLoad);
-	if ( hr != S_OK )
-		return S_OK;
+	data_.copyFrom(stream);
 
+	reBar()->Load(stream);
+
+	stream.release();
+
+	mol::punk<IStorage> store;
+	hr = pStgLoad->OpenStorage(con,0,STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,0,&store);
+	if ( hr == S_OK && store )
+	{
+
+		// load user settings stream
+		punk<IPersistStorage> ps(config());
+		if ( !ps )
+			return S_OK;
+
+		hr = ps->Load(store);
+		if ( hr != S_OK )
+			return S_OK;
+	}
 	// DEBUG: enable/disable creation of new top level user setting items
 	//config()->put_ChildrenAllowed(VARIANT_FALSE);
 
@@ -1087,8 +930,6 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 	return S_OK;
 	*/
 	
-
-
 	// open Style stream
 	hr = pStgLoad->OpenStream( L"STYLES", NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
 	if ( !stream || (hr != S_OK) )
@@ -1146,9 +987,10 @@ void  MoeWnd::initRibbon(IStorage* store)
 	// encoding dropdown handler
 	std::vector<mol::string> ve;
 
-	for ( size_t i = 0; i < codePages_.size(); i++)
+	//for ( size_t i = 0; i < codePages_.size(); i++)
+	for ( Encodings::Iterator it = codePages()->begin(); it!= codePages()->end(); it++)
 	{
-		ve.push_back(codePages_[i].second );
+		ve.push_back((*it).second );
 	}
 
 	mol::Ribbon::handler(RibbonEncoding)->items(ve);
@@ -1189,15 +1031,6 @@ void  MoeWnd::initRibbon(IStorage* store)
 
 HRESULT __stdcall MoeWnd::Load( LPSTREAM pStm) 
 {
-	data_.copyFrom(pStm);
-
-	urlDlg()->Load(pStm);
-	reBar()->Load(pStm);
-
-	ULONG len = 0;
-	pStm->Read( &toolBarFrozen_, sizeof(BYTE),  &len );
-	reBar()->freeze(toolBarFrozen_!= 0);
-
 	return S_OK;
 }
 
@@ -1205,24 +1038,6 @@ HRESULT __stdcall MoeWnd::Load( LPSTREAM pStm)
 
 HRESULT __stdcall MoeWnd::Save( LPSTREAM pStm,BOOL fClearDirty)
 {
-	if ( mol::Ribbon::ribbon()->enabled() )
-	{
-		// if we have ribbon, write url dlg config to data_
-		data_.reset();
-		urlDlg()->Save(data_,fClearDirty);
-		data_.reset();
-		// and keep all the old school toolbar state as is
-		HRESULT hr = data_.copyTo( pStm );		
-		return S_OK;
-	}
-
-	// no ribbon - save urldlg and toolbar state
-	urlDlg()->Save(pStm,fClearDirty);
-	reBar()->Save(pStm, fClearDirty);
-
-	ULONG written = 0;
-	pStm->Write( &toolBarFrozen_, sizeof(BYTE),		 &written );
-
 	return S_OK;
 }
 

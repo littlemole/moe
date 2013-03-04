@@ -959,11 +959,7 @@ make_command_range_handler( MoeWnd, ID_FIRST_USER_FORM, ID_LAST_USER_FORM, OnDis
 
 make_command_range_handler( MoeWnd, IDM_EDIT_16BYTES, IDM_EDIT_32BYTES, OnDispatch );
 
-mol::msgMap<MoeWnd>().addNotifyIdHandler( IDW_TAB_CTRL, make_handler(&MoeWnd::OnTabCtrl) );
-
 mol::msgMap<MoeWnd>().addNotifyCodeHandler( TBN_DROPDOWN, make_handler(&MoeWnd::OnDispatch) );
-
-mol::msgMap<MoeWnd>().addNotifyCodeHandler( NM_RCLICK, make_handler(&MoeWnd::OnToolbarRightClick) );
 
 mol::msgMap<DirChild>().addMsgHandler( WM_MDIACTIVATE, make_handler(&DirChild::OnMDIActivate) );
 
@@ -1286,6 +1282,20 @@ mol::msgMap<RTFEditor>().addNotifyCodeHandler( EN_MSGFILTER, make_handler(&RTFEd
 mol::msgMap<RTFEditor>().addNotifyCodeHandler( EN_SELCHANGE, make_handler(&RTFEditor::OnSelectionChange) );
 
 mol::msgMap<RTFEditor>().addNotifyCodeHandler( EN_LINK, make_handler(&RTFEditor::OnLink) );
+
+mol::msgMap<MoeTabControl>().addMsgHandler( WM_LBUTTONDOWN, make_handler(&MoeTabControl::OnMouseDown) );
+
+mol::msgMap<MoeTabControl>().addMsgHandler( WM_LBUTTONUP, make_handler(&MoeTabControl::OnMouseUp) );
+
+mol::msgMap<MoeTabControl>().addMsgHandler( WM_TIMER, make_handler(&MoeTabControl::OnTimer) );
+
+mol::msgMap<MoeTabControl>().addNotifyCodeHandler( TCN_GETOBJECT, make_handler(&MoeTabControl::OnGetObject) );
+
+mol::msgMap<MoeTabControl>().addNotifyCodeHandler( TCN_SELCHANGE, make_handler(&MoeTabControl::OnSelect) );
+
+mol::msgMap<MoeTabControl>().addNotifyCodeHandler( NM_RCLICK, make_handler(&MoeTabControl::OnRightClick) );
+
+mol::msgMap<MoeToolBar>().addNotifyCodeHandler( NM_RCLICK, make_handler(&MoeToolBar::OnRightClick) );
 
 
 }
