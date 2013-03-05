@@ -184,7 +184,7 @@ public:
 			if ( tmp == 0 )
 			{
 				tmp = (long)(p.interface_);
-				mol::ole_init::addRef(t_);
+				mol::ole_init::addRef((IUnknown*)t_);
 			}
 		}
 		return (T*)tmp;
