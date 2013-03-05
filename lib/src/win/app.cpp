@@ -26,7 +26,7 @@ unsigned int guithread()
 
 namespace win  {
 
-AppBase*				AppBase::app_			= 0;
+volatile AppBase*				AppBase::app_	= 0;
 unsigned int			AppBase::guithread_     = 0;
 
 void AppBase::lock()
@@ -48,21 +48,23 @@ bool AppBase::locked()
 
 void AppBase::Lock()
 {
-	LOCK(mutex_);
-	lockCount_++;
+	::InterlockedIncrement(&lockCount_);
+	//LOCK(mutex_);
+	//lockCount_++;
 	//ODBGS1("app LOCK: ",lockCount_);
 }
 
 void AppBase::UnLock()
 {
-	LOCK(mutex_);
-	lockCount_--;	
+	::InterlockedDecrement(&lockCount_);
+//	LOCK(mutex_);
+	//lockCount_--;	
 	//ODBGS1("app UNLOCK: ",lockCount_);
 }
 
 bool AppBase::Locked()
 {
-	LOCK(mutex_);
+	//LOCK(mutex_);
 	//ODBGS1("app count: ",lockCount_);
 	return lockCount_ > 0;
 }

@@ -32,13 +32,13 @@ public:
 
 	HRESULT virtual __stdcall CreateInstance( IUnknown* pIUOuter, REFIID riid, void** ppVoid )
 	{
-		LOCK(mutex_);
+		//LOCK(mutex_);
 		return creationPolicy_.CreateInstance( pIUOuter, riid, ppVoid );
 	}
 
 	HRESULT virtual __stdcall LockServer(BOOL fLock)
 	{
-		LOCK(mutex_);
+		//LOCK(mutex_);
 		if ( fLock )
 			mol::App().lock();
 		else
@@ -48,7 +48,7 @@ public:
 
 protected:
 	P						  creationPolicy_;
-	mol::Mutex                mutex_;
+	//mol::Mutex                mutex_;
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -380,8 +380,9 @@ public:
 
 	void virtual UnLock()
 	{
-		LOCK(mutex_);
-		lockCount_--;
+		//LOCK(mutex_);
+		//lockCount_--;
+		::InterlockedDecrement(&lockCount_);
 		//ODBGS1("local_server::UnLock()",lockCount_);
 		if ( lockCount_ == 0 )
 			::PostThreadMessage( guithread_, WM_QUIT, 0, 0 );

@@ -7,8 +7,9 @@ namespace mol {
 
 void Dll::UnLock()
 {
-	LOCK(mutex_);
-	lockCount_--;
+	//LOCK(mutex_);
+	//lockCount_--;
+	::InterlockedDecrement(&lockCount_);
 }
 
 HRESULT __stdcall  Dll::RegisterServer()

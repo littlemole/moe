@@ -8,24 +8,8 @@
 #include <objbase.h>
 #include <ole2.h>
 
-// outer this for embedded class 
-//#define outer_this(Outer,Member) Outer* This() { return (Outer*) (((char*)this)-(size_t)&(((Outer*)0)->Member)); }
-//#define outer_this_ptr(Outer,Member) (Outer*) (((char*)this)-(size_t)&(((Outer*)0)->Member))
-
-// base this pointer for mi IUnknows
-// #define BASE_OFFSET(Cls,Base) (DWORD(((Base*)((Cls*)(0x10000000))))-0x10000000)
-
-
-// thanx to dan box :)
 
 namespace mol {
-
-//template<class C, class Base>
-//DWORD base_offset()
-//{
-//	return (DWORD(((Base*)((C*)(0x10000000))))-0x10000000);
-//}
-
 
 //////////////////////////////////////////////////////////////////////
 
@@ -186,8 +170,8 @@ public:
 
 	static T* instance() 
 	{
-		LOCK(mutex());
-		if (!t_)
+		long tmp = ::InterlockedCompareExchange ((volatile LONG*) &t_, (LONG)0,(LONG)0);
+		if ( tmp == 0 )
 		{
 			punk<T> p;
 			HRESULT hr = ::CoCreateInstance( *clsid, 0, CLSCTX_INPROC_SERVER, *iid, (void**)&p);
@@ -195,22 +179,20 @@ public:
 			{
 				return 0;
 			}
-			t_ = p;
-			mol::ole_init::addRef(t_);
+
+			tmp = ::InterlockedCompareExchange( (volatile LONG*) &t_,(LONG)(p.interface_),(LONG)0);
+			if ( tmp == 0 )
+			{
+				tmp = (long)(p.interface_);
+				mol::ole_init::addRef(t_);
+			}
 		}
-		return t_;
+		return (T*)tmp;
 	}
 
 private:
 
-	static mol::IMutex& mutex()
-	{
-		static mol::CriticalSection cs_;
-		return cs_;
-	}
-
-
-	static T* t_;	
+	static volatile T* t_;	
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -250,24 +232,28 @@ public:
 
 	static T* instance() 
 	{
-		LOCK(mutex());
-		if (!t_)
+		long tmp = ::InterlockedCompareExchange ((volatile LONG*) &t_, (LONG)0,(LONG)0);
+		if ( tmp == 0 )
 		{
-			t_ = new T;
-			mol::ole_init::addRef((I*)t_);
+			T* n = new T;
+			tmp = ::InterlockedCompareExchange( (volatile LONG*) &t_,(LONG)n,(LONG)0);
+			if ( tmp == 0 )
+			{
+				mol::ole_init::addRef((I*)t_);
+				tmp = (long)n;
+			}
+			else
+			{
+				delete n;
+			}
 		}
-		return (T*)t_;
+
+		return (T*)tmp;
 	}
 
 private:
 
-	static mol::IMutex& mutex()
-	{
-		static mol::CriticalSection cs_;
-		return cs_;
-	}
-
-	static T* t_;	
+	static volatile T* t_;	
 };
 
 ///////////////////////////////////////////////////////////////////////////////

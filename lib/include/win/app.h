@@ -94,17 +94,17 @@ public:
 		template<class T>
 		static T& app()
 		{
-			static mol::CriticalSection cs_;
-
-			if (!app_)
+			long tmp = ::InterlockedCompareExchange ((volatile LONG*) &app_, (LONG)0,(LONG)0);
+			if ( tmp == 0 )
 			{
-				LOCK(cs_);
-				if ( !app_ ) {
-					app_ = &mol::singleton<T>();
+				T* n = &mol::singleton<T>();
+				tmp = ::InterlockedCompareExchange( (volatile LONG*) &app_,(LONG)n,(LONG)0);
+				if ( tmp == 0 )
+				{
+					tmp = (long)n;
 				}
 			}
-			return (T&)(*app_);
-
+			return *(T*)tmp;
 		}
 	
 protected:
@@ -120,10 +120,10 @@ protected:
         HINSTANCE hinstance();
 
         HINSTANCE			hInstance_;
-		LONG                lockCount_;
-		mol::Mutex			mutex_;
+		volatile LONG       lockCount_;
+		//mol::Mutex			mutex_;
 
-        static  AppBase*	app_;
+        static  volatile AppBase*	app_;
 		static unsigned int guithread_;
 };
 

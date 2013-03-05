@@ -2,7 +2,6 @@
 #define MOL_THREADQUEUE_DEF_GUARD_H_DEFINE_
 
 #pragma warning( disable: 4355)
-//#include "thread/systhread.h"
 #include "thread/thread.h"
 #include "thread/sync.h"
 #include <list>

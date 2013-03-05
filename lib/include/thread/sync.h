@@ -113,19 +113,28 @@ public:
 
 	static T& instance() 
 	{
-		LOCK(mutex());
-		if (!t_)
+		long tmp = ::InterlockedCompareExchange ((volatile LONG*) &t_, (LONG)0,(LONG)0);
+		if ( tmp == 0 )
 		{
-			t_ = new T;
-			atexit(&Singleton<T>::killSingleton);
+			T* n = new T;
+			tmp = ::InterlockedCompareExchange( (volatile LONG*) &t_,(LONG)n,(LONG)0);
+			if ( tmp == 0 )
+			{
+				atexit(&Singleton<T>::killSingleton);
+				tmp = (long)n;
+			}
+			else
+			{
+				delete n;
+			}
 		}
-		return *t_;
+
+		return *(T*)tmp;
 	}
 private:
 
 	static void killSingleton()
 	{
-		LOCK(mutex());
 		if (t_)
 		{
 			delete t_;
@@ -133,19 +142,14 @@ private:
 		}
 	}
 
-	static mol::IMutex& mutex()
-	{
-		static mol::CriticalSection cs_;
-		return cs_;
-	}
-	static T* t_;	
+	static volatile T* t_;	
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 template<class T>
-T* Singleton<T>::t_ = 0;
+volatile T* Singleton<T>::t_ = 0;
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -157,12 +161,7 @@ T& singleton()
 {
 	return Singleton<T>::instance();
 }
-/*
-#define SINGLETON(T) friend mol::Singleton<T>; 
-#define STACKSINGLETON(T) friend mol::Singleton<T>; friend mol::stack_obj<T>;
-#define COMSINGLETON(T) friend mol::ComSingleton<T>;
-#define NONCREATABLECOMSINGLETON(T) friend mol::NonCreatableCOMSingleton<T>; friend mol::com_obj<T>;
-*/
+
 
 } // end namespace mol
 

@@ -284,7 +284,7 @@ protected:
 
     virtual mol::win::WndClass& wndClass()				
     {																	
-		static mol::string wc = mol::win::WndClassGenerator::createClass();	
+		static mol::string wc = mol::win::WndClassGenerator::createClass<C>();	
 		return mol::win::WndClassGenerator::getClass(wc);					
     }
 

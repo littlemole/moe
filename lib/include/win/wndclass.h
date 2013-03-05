@@ -47,12 +47,28 @@ private:
 class WndClassGenerator
 {
 public:
-    static mol::string createClass();
+	template<class T>
+    static mol::string createClass()
+	{
+		mol::ostringstream oss;
+		oss << _T("MOLWC_");
+		oss << mol::toString(typeid(T).name());
+
+		mol::string cn = oss.str();
+		if ( classNameMap_.count(cn) != 0 ) 
+		{
+			return cn;
+		}
+
+		WndClass wc;
+		wc.setClassName(cn);
+		classNameMap_.insert(std::make_pair(cn,wc));
+		return cn;
+	}
     static WndClass& getClass(const mol::string& name);
 
 private:
     static std::map<mol::string,WndClass>	classNameMap_;
-    static mol::CriticalSection cs_;
 };
 
 template<class T>
@@ -61,7 +77,7 @@ class windowclass : public T
 public:
 	virtual mol::win::WndClass& wndClass()				
 	{																	
-		static mol::string wc = mol::win::WndClassGenerator::createClass();	
+		static mol::string wc = mol::win::WndClassGenerator::createClass<T>();	
 		return mol::win::WndClassGenerator::getClass(wc);					
 	}
 };

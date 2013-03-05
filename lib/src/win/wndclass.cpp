@@ -4,20 +4,6 @@
 namespace mol {
 namespace win {
 
-mol::string WndClassGenerator::createClass()
-{
-	// make this one thread safe
-	LOCK(cs_);
-	size_t n = classNameMap_.size();
-	mol::TCHAR buf[255];
-
-	wsprintf(buf,_T("MOLWndClassGeneratorGeneratedClass%i"),n);
-	mol::string s(buf);
-	WndClass wc;
-	wc.setClassName(buf);
-	classNameMap_.insert(std::pair <mol::string,WndClass> (s,wc));
-	return s;
-}
 
 WndClass& WndClassGenerator::getClass(const mol::string& name)
 {
@@ -26,8 +12,6 @@ WndClass& WndClassGenerator::getClass(const mol::string& name)
 
 
 std::map<mol::string,WndClass>	WndClassGenerator::classNameMap_;
-
-mol::CriticalSection WndClassGenerator::cs_;
 
 WndClass::WndClass()
 {

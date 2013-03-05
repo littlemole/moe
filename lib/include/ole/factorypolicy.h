@@ -100,8 +100,6 @@ protected:
 	com_singleton<T>	  singleton_;
 };
 
-//template<class T>
-//com_singleton<T>	  ComSingletonPolicy<T>::singleton_;
 
 } // end namespace ole
 } // end namespace mole

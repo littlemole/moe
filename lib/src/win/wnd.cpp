@@ -497,8 +497,8 @@ void Window::registerClass( HMENU& hMenu )
 
 mol::win::WndClass& Window::wndClass()				
 {																	
-	static mol::string wc = mol::win::WndClassGenerator::createClass();	
-	return mol::win::WndClassGenerator::getClass(wc);					
+	throw new mol::X("base class mol::Window wndClass() called");
+	return mol::win::WndClassGenerator::getClass(_T(""));					
 }
 
 LRESULT Window::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
