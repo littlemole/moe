@@ -1,4 +1,4 @@
-﻿//var shell = new ActiveXObject("WScript.Shell");
+//var shell = new ActiveXObject("WScript.Shell");
 var xmlHttp = new ActiveXObject("MSXML2.XMLHTTP.3.0");
 
 var doc = moe.ActiveDoc;
