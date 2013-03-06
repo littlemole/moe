@@ -346,12 +346,7 @@ void NamespaceTree::InvokeVerb(const std::string& verb)
 
 HRESULT NamespaceTree::Copy ()
 {
-//	HWND hwndTree;
-//	IUnknown_GetWindow(tree_, &hwndTree);
-//	::PostMessage(hwndTree,WM_COPY,0,0);
-
 	InvokeVerb("copy");
-
 	return S_OK;
 }
 
@@ -490,7 +485,7 @@ HRESULT __stdcall NamespaceTree::get_BackColor(  BSTR* fPath)
 HRESULT __stdcall NamespaceTree::Load( LPSTREAM pStm)
 {
 	pStm >> mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL) )
-		 >> mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_Selection,VT_BSTR) )
+		 >> mol::property( currentPath_ )
 		 >> mol::property( &sizel );
 
 	return S_OK;
@@ -499,7 +494,7 @@ HRESULT __stdcall NamespaceTree::Load( LPSTREAM pStm)
 HRESULT __stdcall NamespaceTree::Save( LPSTREAM pStm,BOOL fClearDirty)
 {
 	pStm << mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL) )
-		 << mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_Selection,VT_BSTR) )
+		<< mol::property( currentPath_ )
 		 << mol::property( &sizel );
 
 	return S_OK;
@@ -509,7 +504,6 @@ HRESULT __stdcall NamespaceTree::Load( IPropertyBag *pPropBag,IErrorLog *pErrorL
 {
 	
 	pPropBag >> mol::property( _T("displayfiles"), mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL) )
-			 >> mol::property( _T("selection"), mol::DispId(this,ShellTreeCtrl_Dispatch_Selection,VT_BSTR) )
 			 >> mol::property( _T("cs"), &sizel );
 
 	return S_OK;
@@ -519,7 +513,6 @@ HRESULT __stdcall NamespaceTree::Save( IPropertyBag *pPropBag,BOOL fClearDirty,B
 {
 	
 	pPropBag << mol::property( _T("displayfiles"), mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL) )
-			 << mol::property( _T("selection"), mol::DispId(this,ShellTreeCtrl_Dispatch_Selection,VT_BSTR) )
 			 << mol::property( _T("cs"), &sizel );
 
 	return S_OK;

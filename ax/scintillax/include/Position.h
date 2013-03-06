@@ -53,6 +53,7 @@ public:
 	HRESULT virtual __stdcall Scroll( long cols, long lines);
 
 	HRESULT virtual __stdcall Dispose();
+
 private:
 
 	ScintillAx* sci_;

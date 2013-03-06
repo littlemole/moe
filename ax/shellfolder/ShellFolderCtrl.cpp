@@ -67,12 +67,6 @@ LRESULT ShellFolderCtrl::OnCreate(UINT msg, WPARAM wParam, LPARAM lParam)
     RECT clientRect;
 	getClientRect(clientRect); //!!!!!
 
-	//clientRect.right = clientRect.right - clientRect.left;
-	//clientRect.bottom = clientRect.bottom - clientRect.top;
-	//clientRect.left = clientRect.top = 0;
-	ODBGS1("right:",clientRect.right);
-	ODBGS1("bottom:",clientRect.bottom);
-
 	wnd_.create(0,clientRect,*this);
 	wnd_.setRedraw(false);
 
@@ -96,7 +90,7 @@ LRESULT ShellFolderCtrl::OnSize(UINT msg, WPARAM wParam, LPARAM lParam)
 	ODBGS1("sfc right:",clientRect_.right);
 	ODBGS1("sfc bottom:",clientRect_.bottom);
 
-	//wnd_.move(clientRect_);
+	//wnd_.move(clientRect_); -- no, have to be more explicit here
 
 	::SetWindowPos( wnd_, NULL, 0,0, clientRect_.right, clientRect_.bottom,SWP_NOZORDER|SWP_DRAWFRAME|SWP_FRAMECHANGED|SWP_NOACTIVATE|SWP_NOOWNERZORDER|SWP_NOMOVE|SWP_NOCOPYBITS);
 	::RedrawWindow( wnd_,NULL,NULL,RDW_FRAME|RDW_INVALIDATE|RDW_UPDATENOW|RDW_ALLCHILDREN|RDW_INTERNALPAINT);

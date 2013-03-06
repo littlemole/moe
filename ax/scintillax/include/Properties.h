@@ -114,7 +114,6 @@ private:
 	VARIANT_BOOL			vbTabUsage_;
 	VARIANT_BOOL			vbTabIndents_;
 	VARIANT_BOOL			vbBackSpaceUnindents_;
-	//VARIANT_BOOL			vbMarkers_;
 	long					tabWidth_;
 
 	VARIANT_BOOL			vbOverType_;

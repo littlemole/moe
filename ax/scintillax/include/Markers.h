@@ -50,6 +50,7 @@ public:
 	HRESULT virtual __stdcall GetMarkers( SAFEARRAY** markers );
 
 	HRESULT virtual __stdcall Dispose();
+
 private:
 	VARIANT_BOOL			vbMarkers_;
 	ScintillAx* sci_;

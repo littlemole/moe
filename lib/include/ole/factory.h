@@ -32,13 +32,11 @@ public:
 
 	HRESULT virtual __stdcall CreateInstance( IUnknown* pIUOuter, REFIID riid, void** ppVoid )
 	{
-		//LOCK(mutex_);
 		return creationPolicy_.CreateInstance( pIUOuter, riid, ppVoid );
 	}
 
 	HRESULT virtual __stdcall LockServer(BOOL fLock)
 	{
-		//LOCK(mutex_);
 		if ( fLock )
 			mol::App().lock();
 		else
@@ -48,7 +46,6 @@ public:
 
 protected:
 	P						  creationPolicy_;
-	//mol::Mutex                mutex_;
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -282,10 +279,9 @@ template<class T>
 class local_server : public mol::Application<T>
 {
 public:
+
 	local_server()
-	{
-		//idThread_ = ::GetCurrentThreadId();
-	}
+	{}
 
 	virtual ~local_server(void)
 	{
@@ -328,7 +324,6 @@ public:
 			 ( _tcsicmp(cmdline.c_str(), _T("-Automation")) == 0 ) )
 		{
 			// create & register Class Object
-			//RegisterClassObjects(CLSCTX_LOCAL_SERVER );
 			return runEmbedded(cmdline);	
 		}
 
@@ -380,20 +375,16 @@ public:
 
 	void virtual UnLock()
 	{
-		//LOCK(mutex_);
-		//lockCount_--;
 		::InterlockedDecrement(&lockCount_);
-		//ODBGS1("local_server::UnLock()",lockCount_);
 		if ( lockCount_ == 0 )
 			::PostThreadMessage( guithread_, WM_QUIT, 0, 0 );
-//			::PostQuitMessage(0);
+			//	::PostQuitMessage(0);
 	}
 
 	std::vector<mol::ole::CreatableObjectHolderBase*>		objects_;
 
 protected:
 	std::list<DWORD>										registeredObjects_;
-	//DWORD idThread_;
 
 	template<class I>
 	I* getActiveInstance( CLSID clsid )

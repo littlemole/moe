@@ -39,13 +39,6 @@ SciAxProperties::Instance* SciAxProperties::CreateInstance( ScintillAx* sci)
 {
 	Instance* instance = new Instance;
 	instance->sci_ = sci;
-/*	instance->styleSets_.createObject(CLSID_ScintillAxStyleSets);
-	mol::punk<IPersistStreamInit> psi(instance->styleSets_);
-	if(psi)
-	{
-		psi->InitNew();
-	}
-	*/
 	return instance;
 }
 

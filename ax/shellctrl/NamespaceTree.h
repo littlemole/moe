@@ -133,7 +133,6 @@ public:
 			
 			PWSTR psz=0;
 			HRESULT hr = psi->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &psz);
-			//SetDlgItemText(_hdlg, IDC_NAME, SUCCEEDED(hr) ? psz : L"");
 			if(hr==S_OK && psz)
 			{
 				std::wstring ws(psz);
@@ -168,7 +167,6 @@ public:
             {
 				PWSTR psz;
 				HRESULT hr = psi->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &psz);
-				//SetDlgItemText(_hdlg, IDC_NAME, SUCCEEDED(hr) ? psz : L"");
 				if(hr==S_OK)
 				{
 					currentPath_ = psz;

@@ -22,7 +22,6 @@ HRESULT copyStorageTemp(IStorage* src, IStorage** copy)
 	if ( S_OK == ::StgCreateDocfile( mol::towstring(file).c_str(), STGM_DELETEONRELEASE|STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE|STGM_TRANSACTED,0,&store) )
 	{
 		HRESULT hr = src->CopyTo(0,0,0,store);
-		//return store->QueryInterface( IID_IStorage, (void**)copy);
 		return store.queryInterface(copy);
 	}
 	return E_FAIL;

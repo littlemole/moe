@@ -1297,26 +1297,15 @@ HRESULT __stdcall ShellTree::IsDir(BSTR path,VARIANT_BOOL* vb)
 HRESULT __stdcall ShellTree::Load( LPSTREAM pStm)
 {
 	pStm >> mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL) )
-		 >> mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_Selection,VT_BSTR) )
 		 >> mol::property( &sizel );
 
-	/*
-	mol::Rect r = this->posRect_;
-	r.right = r.left + sizel.cx;
-	r.bottom = r.top + sizel.cy;
-
-	this->setRects(r,r);
-	*/
 	return S_OK;
 }
 
 HRESULT __stdcall ShellTree::Save( LPSTREAM pStm,BOOL fClearDirty)
 {
 	pStm << mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL) )
-		 << mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_Selection,VT_BSTR) )
 		 << mol::property( &sizel );
-
-	//pStm->Commit(STGC_DEFAULT);
 	return S_OK;
 }
 
@@ -1324,15 +1313,8 @@ HRESULT __stdcall ShellTree::Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog)
 {
 	
 	pPropBag >> mol::property( _T("displayfiles"), mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL) )
-			 >> mol::property( _T("selection"), mol::DispId(this,ShellTreeCtrl_Dispatch_Selection,VT_BSTR) )
 			 >> mol::property( _T("cs"), &sizel );
 
-	/*mol::Rect r = this->posRect_;
-	r.right = r.left + sizel.cx;
-	r.bottom = r.top + sizel.cy;
-
-	this->setRects(r,r);
-	*/
 	return S_OK;
 }
 
@@ -1340,7 +1322,6 @@ HRESULT __stdcall ShellTree::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL 
 {
 	
 	pPropBag << mol::property( _T("displayfiles"), mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL) )
-			 << mol::property( _T("selection"), mol::DispId(this,ShellTreeCtrl_Dispatch_Selection,VT_BSTR) )
 			 << mol::property( _T("cs"), &sizel );
 
 	return S_OK;

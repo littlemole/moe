@@ -1,6 +1,20 @@
 #include "stdafx.h"
 #include "SciStyle.h"
 
+class Style
+{
+public:
+	WPARAM style_;
+	bool bold_;
+	bool italic_;
+	bool eol_;
+	const char* font_;
+	long size_;
+	COLORREF foreColor_;
+	COLORREF backColor_;
+	const char* description_;
+};
+
  const COLORREF black = RGB(0,0,0);
  const COLORREF white = RGB(0xff,0xff,0xff);
  const COLORREF red = RGB(0xFF, 0, 0);

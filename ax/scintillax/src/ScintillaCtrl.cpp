@@ -1609,34 +1609,6 @@ HRESULT __stdcall ScintillAx::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL
 
 
 
-/*
-
-COLORREF hex2rgb( const char* hex )
-{
-    char buf[3];
-    buf[2]=0;
-
-    int r,g,b;
-    r = g = b = 0;
-
-    buf[0] = hex[1];
-    buf[1] = hex[2];
-    sscanf( buf, "%x", &r );
-
-    buf[0] = hex[3];
-    buf[1] = hex[4];
-    sscanf( buf, "%x", &g );
-
-    buf[0] = hex[5];
-    buf[1] = hex[6];
-    sscanf( buf, "%x", &b );
-
-    return RGB(r,g,b);
-}
-*/
-
-
-
 HRESULT  __stdcall ScintillAx::Apply(IScintillAxStyleSet * styleSet)
 {
 	if(!styleSet)
@@ -1654,14 +1626,6 @@ HRESULT  __stdcall ScintillAx::Apply(IScintillAxStyleSet * styleSet)
 
 	edit()->setLexer(lexer);
 	edit()->setStyleBits(7);
-	/*
-	edit()->setStyle(STYLE_DEFAULT,RGB(0,0,0),RGB(0xFF,0xFF,0xFF),10, "Courier New");
-	edit()->styleSetBold(STYLE_DEFAULT,false);
-	edit()->styleSetItalic(STYLE_DEFAULT,false);
-	edit()->styleSetEolFilled(STYLE_DEFAULT,false);
-	*/
-
-	//edit()->styleClearAll();
 
 	long cnt = 0;
 

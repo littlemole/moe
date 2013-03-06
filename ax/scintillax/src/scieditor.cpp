@@ -20,7 +20,6 @@ ScintillaEditor::~ScintillaEditor()
 SCINTILLA_SYNTAX ScintillaEditor::mode() 
 { 
 	return mode_;
-   // return mod_.modes ; 
 }
 
 

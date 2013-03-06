@@ -1,23 +1,5 @@
 #pragma once
 #include "scieditor.h"
-
-class Style
-{
-public:
-	WPARAM style_;
-	bool bold_;
-	bool italic_;
-	bool eol_;
-	const char* font_;
-	long size_;
-	COLORREF foreColor_;
-	COLORREF backColor_;
-	const char* description_;
-
-
-};
-
-
 #include "ole/Ctrl.h"
 #include "ole/Bstr.h"
 #include "ole/Persist.h"
@@ -53,7 +35,6 @@ public:
 	virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER* ui ) ;
 	virtual HRESULT __stdcall InitNew();
 
-	//mol::COMCollection collection_;
 	std::vector<mol::variant> collection_;
 };
 
@@ -92,11 +73,9 @@ public:
 	virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER* ui ) ;
 	virtual HRESULT __stdcall InitNew();
 
-//	mol::COMCollection collection_;
 	std::vector<mol::variant> collection_;
 	std::vector<mol::variant> keyWords_;
 
-	//mol::COMCollection keyWords_;
 	long id_;
 };
 
@@ -142,7 +121,6 @@ public:
 	virtual HRESULT __stdcall IsDirty( );
 	virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER* ui ) ;
 	virtual HRESULT __stdcall InitNew();
-
 
 	long id_;
 	mol::bstr desc_;

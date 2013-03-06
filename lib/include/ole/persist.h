@@ -417,6 +417,11 @@ inline mol::persist::Property<mol::bstr> property( mol::bstr& t)
 	return mol::persist::Property<mol::bstr>(t);
 }
 
+inline mol::persist::Property<mol::bstr> property( const mol::string& name, mol::bstr& t)
+{
+	return mol::persist::Property<mol::bstr>(name,t);
+}
+
 namespace ole {
 
 /////////////////////////////////////////////////////////////////////
