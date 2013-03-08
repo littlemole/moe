@@ -198,7 +198,13 @@ mol::string JRE::getJREpathOnce()
 	mol::RegKey jre  = java.open(_T("Java Runtime Environment"),KEY_READ);
 	mol::RegKey ver;
 	try {
-		ver  = jre.open(_T("1.7"),KEY_READ);
+		try {
+			ver  = jre.open(_T("1.8"),KEY_READ);
+		}
+		catch(...)
+		{
+			ver  = jre.open(_T("1.7"),KEY_READ);
+		}
 	}
 	catch(...)
 	{

@@ -152,22 +152,13 @@ private:
 	mol::string exec_cmd( const mol::string& cmd)
 	{
 		mol::GIT git;
-		mol::punk<ISSH> ssh; 
+		mol::punk<ISSHConnection> ssh; 
 		HRESULT hr = git.getInterface(cookie_,&ssh);
 		if ( hr != S_OK )
 			return _T("");
 
-		mol::punk<ISSHConnection> con;
-		hr = ssh->Connect( 
-			mol::bstr(host_), 
-			port_,
-			&con);
-
-		if ( hr != S_OK )
-			return _T("");
-
 		mol::bstr result;
-		hr = con->Execute( mol::bstr(cli_), &result);
+		hr = ssh->Execute( mol::bstr(cmd), &result);
 		if ( hr != S_OK )
 			return _T("");
 
@@ -242,29 +233,20 @@ void ScpPushFileQueueAction::operator()()
 }
 ///////////////////////////////////////////////////////////////////////////////
 
-ScpListCtrl::ScpListCtrl(void)	
+ScpListCtrl::ScpListCtrl()	
 {
 	sharedMenu_ = 0;
 	eraseBackground_ = 1;
 	gitCookie_ = 0;
 	gitSSHCookie_ = 0;
 
-	mol::GIT git;
-
-	if ( !ssh_ )
+/*	mol::GIT git;
+	HRESULT hr = ssh_.createObject(CLSID_SSH,CLSCTX_ALL);
+	if( hr == S_OK )
 	{
-		if ( gitSSHCookie_ )
-		{
-			git.revokeInterface(gitSSHCookie_);
-			gitSSHCookie_ = 0;
-		}
-		HRESULT hr = ssh_.createObject(CLSID_SSH,CLSCTX_ALL);
-		if( hr != S_OK )
-			return;
-
 		git.registerInterface(*ssh_, &gitSSHCookie_);
 	}
-
+	*/
 	sizel.cx = 300;
 	sizel.cy = 200;
 	bgCol_    = RGB(255,255,255);
@@ -287,6 +269,10 @@ void ScpListCtrl::load( const mol::string& url )
 	}
 
 	uri_.set(mol::toUTF8(path));
+
+	if(!connect(&conn_))
+		return;
+
 	queue_.push( new ScpDirQueueLoadAction(url,this) );
 }
 
@@ -331,8 +317,41 @@ mol::sftp::RemoteFile remoteFileFromIRemoteFile(IRemoteFile* rf)
 			);
 }
 
-bool ScpListCtrl::connect(DWORD cookie, ISSHConnection** con )
+bool ScpListCtrl::connect(ISSHConnection** con )
 {
+	mol::GIT git;
+	if(!gitSSHCookie_)
+	{
+		HRESULT hr = ssh_.createObject(CLSID_SSH,CLSCTX_ALL);
+		if( hr == S_OK )
+		{
+			hr = ssh_->Connect(mol::bstr(this->uri_.getHost()),this->uri_.getPort(),&conn_);
+			if( hr == S_OK )
+			{
+				git.registerInterface(*conn_, &gitSSHCookie_);
+			}
+		}
+	}
+
+	if(!conn_)
+		return false;
+
+	VARIANT_BOOL vb;
+	HRESULT hr = conn_->get_IsConnected(&vb);
+	if ( hr != S_OK )
+		return false;
+
+	if ( vb == VARIANT_TRUE )
+	{
+		return true;
+	}
+
+	hr = conn_->Connect();
+	if ( hr != S_OK )
+		return false;
+
+	return true;
+/*
 	mol::GIT git;
 	mol::punk<ISSH> ssh; 
 	HRESULT hr = git.getInterface(cookie,&ssh);
@@ -348,6 +367,7 @@ bool ScpListCtrl::connect(DWORD cookie, ISSHConnection** con )
 		return false;
 
 	return true;
+	*/
 }
 
 void ScpListCtrl::load_async( const mol::string& url )
@@ -362,7 +382,8 @@ void ScpListCtrl::load_async( const mol::string& url )
 		return;
 	
 	mol::punk<ISSHConnection> conn;
-	if (!connect(gitSSHCookie_,&conn))
+	hr = git.getInterface(gitSSHCookie_,&conn);
+	if ( hr != S_OK )
 		return;
 
 	mol::string path = url;
@@ -533,6 +554,7 @@ LRESULT ScpListCtrl::OnDestroy(UINT msg, WPARAM wParam, LPARAM lParam)
 	git.revokeInterface(gitCookie_);
 	git.revokeInterface(gitSSHCookie_);
 	ssh_.release();
+	conn_.release();
 	::RevokeDragDrop(*this);
     return 0;
 }
@@ -690,7 +712,8 @@ void ScpListCtrl::EndRename(const mol::string& oldpath, const mol::string& newpa
 		return;
 
 	mol::punk<ISSHConnection> conn;
-	if (!connect(gitSSHCookie_,&conn))
+	hr = git.getInterface(gitSSHCookie_,&conn);
+	if ( hr != S_OK )
 		return;
 
 	mol::string pFrom( mol::fromUTF8(uri_.getPath()) ); 
@@ -720,7 +743,11 @@ LRESULT ScpListCtrl::OnEndRename(UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		mol::string displayname = message.listviewDispInfo()->item.pszText;
 		mol::string path= getItemEntry(message.listviewDispInfo()->item.iItem)->fileinfo.getName();
-		queue_.push(new ScpDirQueueRenameAction(path,displayname,this));
+
+		if(connect(&conn_))
+		{
+			queue_.push(new ScpDirQueueRenameAction(path,displayname,this));
+		}
 	}
 	return 0;
 }
@@ -964,7 +991,10 @@ HRESULT __stdcall ScpListCtrl::Update()
 //////////////////////////////////////////////////////////////////////////////
 HRESULT __stdcall ScpListCtrl::CreateDir()
 {
-	queue_.push(new ScpCreateDirQueueAction(this));
+	if(connect(&conn_))
+	{
+		queue_.push(new ScpCreateDirQueueAction(this));
+	}
 	return S_OK;
 }
 
@@ -977,7 +1007,8 @@ void ScpListCtrl::mkdir()
 		return;
 
 	mol::punk<ISSHConnection> conn;
-	if (!connect(gitSSHCookie_,&conn))
+	hr = git.getInterface(gitSSHCookie_,&conn);
+	if ( hr != S_OK )
 		return;
 
 	std::string p = uri_.getPath();
@@ -1073,7 +1104,11 @@ HRESULT __stdcall ScpListCtrl::Delete()
 		tmp.push_back(v[i]->filename);
 	}
 
-	queue_.push( new ScpUnlinkQueueAction(tmp,this) );
+	if(connect(&conn_))
+	{
+		queue_.push( new ScpUnlinkQueueAction(tmp,this) );
+	}
+
 	return S_OK;
 }
 
@@ -1088,8 +1123,10 @@ void ScpListCtrl::unlink( const std::vector<mol::string>& v )
 	if ( hr != S_OK )
 		return;
 
+
 	mol::punk<ISSHConnection> conn;
-	if (!connect(gitSSHCookie_,&conn))
+	hr = git.getInterface(gitSSHCookie_,&conn);
+	if ( hr != S_OK )
 		return;
 
 	mol::punk<ISFTP> sftp;
@@ -1150,12 +1187,12 @@ HRESULT __stdcall ScpListCtrl::Properties()
 		int port = uri.getPort();
 		std::string p = uri.getPath();
 
-		mol::punk<ISSHConnection> conn;
+/*		mol::punk<ISSHConnection> conn;
 		if (!connect(gitSSHCookie_,&conn))
 			return S_FALSE;
-
+*/
 		mol::punk<ISFTP> sftp;
-		HRESULT hr = conn->get_SFTP(&sftp);
+		HRESULT hr = conn_->get_SFTP(&sftp);
 		if( hr != S_OK )
 			return hr;
 
@@ -1211,7 +1248,7 @@ HRESULT __stdcall ScpListCtrl::Execute()
 	std::string host = uri.getHost();
 	int port = uri.getPort();
 
-	RemoteExecDlg dlg(mol::fromUTF8(host),port,gitCookie_);
+	RemoteExecDlg dlg(mol::fromUTF8(host),port,gitSSHCookie_);
 	dlg.doModal(IDD_DIALOG_SSH_EXEC,*this);
 	
 	return S_OK;
@@ -1331,7 +1368,10 @@ HRESULT __stdcall ScpListCtrl::Paste ()
 	
 	if (*d & DROPEFFECT_COPY )
 	{
-		queue_.push(new ScpPushFileQueueAction(path,v,this));
+		if(connect(&conn_))
+		{
+			queue_.push(new ScpPushFileQueueAction(path,v,this));
+		}
 	}
 	else if (*d & DROPEFFECT_MOVE )
 	{
@@ -1510,8 +1550,10 @@ HRESULT __stdcall ScpListCtrl::ShellListCtrl_Drop::Drop( IDataObject* pDataObjec
 	else if ( (*pEffect) & DROPEFFECT_COPY )
 	{
 		try {
-
-			list_->queue_.push(new ScpPushFileQueueAction(path,v,list_));
+			if(list_->connect(&list_->conn_))
+			{
+				list_->queue_.push(new ScpPushFileQueueAction(path,v,list_));
+			}
 		}
 		catch(...)
 		{
@@ -1535,12 +1577,14 @@ void ScpListCtrl::put( std::vector<mol::string>& v, const mol::string& path)
 {
 	try
 	{
+		mol::GIT git;
 		mol::punk<ISSHConnection> conn;
-		if (!connect(gitSSHCookie_,&conn))
+		HRESULT hr = git.getInterface(gitSSHCookie_,&conn);
+		if ( hr != S_OK )
 			return;
 
 		mol::punk<ISCP> scp;
-		HRESULT hr = conn->get_SCP(&scp);
+		hr = conn->get_SCP(&scp);
 		if( hr != S_OK )
 			return;
 
@@ -1650,6 +1694,24 @@ HRESULT __stdcall ScpListCtrl::put_Location		( BSTR  dirname )
 	return S_OK;
 }
 
+HRESULT __stdcall ScpListCtrl::get_Connection		( IDispatch** conn )
+{
+	if ( conn )
+	{
+		return conn_.queryInterface(conn);
+	}
+	return S_OK;
+}
+
+HRESULT __stdcall ScpListCtrl::put_Connection		( IDispatch* conn )
+{
+	if ( conn )
+	{
+		conn_.release();
+		return conn->QueryInterface(IID_ISSHConnection,(void**)&conn_);
+	}
+	return S_OK;
+}
 HRESULT __stdcall ScpListCtrl::get_HasFocus( VARIANT_BOOL* vbHasFocus)
 {
 	if ( vbHasFocus )
@@ -1698,4 +1760,24 @@ HRESULT __stdcall ScpListCtrl::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOO
 }
 
 
+void ScpListCtrl::initAmbientProperties( IDispatch* disp)
+{
+	HIMAGELIST himl = ListView_GetImageList(list_,TVSIL_NORMAL);
+	COLORREF col;
+	mol::variant v(bgCol_);
+	if ( S_OK == get(disp,DISPID_AMBIENT_BACKCOLOR,&v) )
+	{
+		bgCol_ = v.lVal;			
+		::OleTranslateColor(bgCol_,0,&col);
+		ListView_SetBkColor(list_,col);
+		ImageList_SetBkColor(himl,CLR_NONE );
+		ListView_SetTextBkColor(list_,col);
+	}
 
+	if ( S_OK == get(disp,DISPID_AMBIENT_FORECOLOR,&v) )
+	{
+		foreCol_ = v.lVal;
+		::OleTranslateColor(foreCol_,0,&col);
+		ListView_SetTextColor(list_,col);			
+	}
+}

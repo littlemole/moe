@@ -125,6 +125,7 @@ public:
 		Editor::Instance* t = Editor::CreateInstance( path );
 		return dynamic_cast<mol::MdiChild*>(t);
 	}
+
 };
 
 
@@ -162,14 +163,18 @@ class MoeScpDirDocumentFactory : public IMoeDocumentFactory
 {
 public:
 
+	MoeScpDirDocumentFactory(ISSHConnection* conn)
+		:conn_(conn)
+	{}
+
 	virtual mol::MdiChild* openDocument( const mol::string& path)
 	{
-		ScpDirChild::Instance* t = ScpDirChild::CreateInstance( path );
+		ScpDirChild::Instance* t = ScpDirChild::CreateInstance( conn_, path  );
 		return dynamic_cast<mol::MdiChild*>(t);
 	}
 
 private:
-
+	mol::punk<ISSHConnection> conn_;
 };
 
 
@@ -336,7 +341,7 @@ IMoeDocumentFactory* openSSHfactory(const mol::string& path)
 
 			if ( vb == VARIANT_TRUE )
 			{
-				return new MoeScpDirDocumentFactory;
+				return new MoeScpDirDocumentFactory(conn);
 			}
 
 			return new MoeSShEditorDocumentFactory;

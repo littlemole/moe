@@ -22,7 +22,7 @@ public:
 	virtual ~ScpDirChild();
 
 
-	static Instance* CreateInstance( const mol::string& p );
+	static Instance* CreateInstance( ISSHConnection* conn, const mol::string& p );
 
 	void OnMDIActivate(HWND activated);
     void OnClose();

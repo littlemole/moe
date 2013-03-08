@@ -22,40 +22,7 @@ library JRE
     // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
 	////////////////////////////////////////////////////////////////////////////////////
 	importlib("stdole32.tlb");
-	//importlib("moe.tlb");
 
-	/*
-	interface IJavaObject;
-
-	[ 
-	  uuid(EA028093-8B55-4D3B-8B0F-824301504455),
-      helpstring("IJavaClass - Java class"),
-      object,oleautomation, dual
-    ]
-	interface IJavaClass : IDispatch
-    {
-		[id(1), helpstring("initialize java class")] 
-		HRESULT Initialize([in]long* ptr);
-
-		[id(2), helpstring("ret raw java class ptr")] 
-		HRESULT RawPtr([out,retval]long** ptr);
-	}
-
-
-	[
-	  uuid(1900068C-D7A1-4654-9019-4F28DE1DE846),
-      helpstring("IJavaObject - Java Object"),
-      object,oleautomation, dual
-    ]
-	interface IJavaObject : IDispatch
-    {
-		[id(1), helpstring("initialize java obj")] 
-		HRESULT Initialize([in]long* ptr);
-
-		[id(2), helpstring("get raw java obj ptr")] 
-		HRESULT RawPtr([out,retval]long** ptr);
-	}
-	*/
 	////////////////////////////////////////////////////////////////////////////////////
 	// IJVM
 	////////////////////////////////////////////////////////////////////////////////////

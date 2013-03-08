@@ -37,6 +37,8 @@ public:
 	}
 private:
 
+	std::string read();
+
 	 ssh_session_struct* ssh_;
 	 ssh_scp_struct* scp_;
 };

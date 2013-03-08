@@ -157,7 +157,8 @@ public:
 	HRESULT virtual __stdcall put_Location		( BSTR dirname );
 	HRESULT virtual __stdcall get_Selection		( BSTR* dirname );
 	HRESULT virtual __stdcall get_HasFocus		( VARIANT_BOOL* vbHasFocus);
-
+	HRESULT virtual __stdcall get_Connection	( IDispatch** conn );
+	HRESULT virtual __stdcall put_Connection	( IDispatch* conn );
 	// COM methods
 
 	HRESULT virtual __stdcall Update			();
@@ -178,29 +179,7 @@ public:
 	HRESULT virtual __stdcall Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog);
 	HRESULT virtual __stdcall Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties);
   
-	virtual void initAmbientProperties( IDispatch* disp)
-	{
-		HIMAGELIST himl = ListView_GetImageList(list_,TVSIL_NORMAL);
-		COLORREF col;
-		mol::variant v(bgCol_);
-		if ( S_OK == get(disp,DISPID_AMBIENT_BACKCOLOR,&v) )
-		{
-			bgCol_ = v.lVal;			
-			::OleTranslateColor(bgCol_,0,&col);
-			ListView_SetBkColor(list_,col);
-			ImageList_SetBkColor(himl,CLR_NONE );
-			ListView_SetTextBkColor(list_,col);
-		}
-
-		if ( S_OK == get(disp,DISPID_AMBIENT_FORECOLOR,&v) )
-		{
-			foreCol_ = v.lVal;
-			::OleTranslateColor(foreCol_,0,&col);
-			ListView_SetTextColor(list_,col);			
-		}
-	}
-
-
+	virtual void initAmbientProperties( IDispatch* disp);
 
 protected:
 
@@ -254,7 +233,7 @@ protected:
 	void clear();
 	mol::string getPath();
     void setPath(const mol::string& path);
-	bool connect(DWORD cookie, ISSHConnection** con );
+	bool connect(ISSHConnection** con );
 
 	class ShellList : 
 		public mol::ListCtrl
@@ -280,6 +259,7 @@ protected:
 			ScpListCtrl* list_;
     };
 	
+	mol::punk<ISSHConnection>			conn_;
 	mol::punk<ShellListCtrl_Drop>		Drop;
 	mol::Uri							uri_;
     mol::string							path_;

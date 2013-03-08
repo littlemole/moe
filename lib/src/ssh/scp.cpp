@@ -151,50 +151,58 @@ bool Session::push_file( const std::wstring& path, int mode )
 	return true;
 }
 
+std::string Session::read()
+{
+	int cnt = 0;
+	int rc = 0;
+
+	std::ostringstream oss;
+
+	mol::cbuff buf(ssh_scp_request_get_size(scp_));
+	while(true)
+	{
+		ssh_scp_accept_request(scp_);
+		rc = ssh_scp_read(scp_, buf, buf.size() );
+		if (rc == SSH_ERROR)
+			break;
+		cnt += rc;
+		oss << buf.toString(rc);
+		if ( cnt >= buf.size() )
+		{
+			break;
+		}
+	}
+
+	return oss.str();
+}
+
 bool Session::pull_file( const std::wstring& localdir)
 {
+	
 	int rc = ssh_scp_pull_request(scp_);
 	if (rc != SSH_SCP_REQUEST_NEWFILE)
 	{
 		return false;
 	}
 
-	size_t size = ssh_scp_request_get_size(scp_);
+	std::string content = read();
 	const char* filename = ssh_scp_request_get_filename(scp_);
-	int mode = ssh_scp_request_get_permissions(scp_);
-
-	char* buffer = (char*)malloc(size);
-	if (buffer == NULL)
-	{
-		throw mol::ssh::Ex(0,"out of memory");
-	}
-
-	ssh_scp_accept_request(scp_);
-	rc = ssh_scp_read(scp_, buffer, size);
-	if (rc == SSH_ERROR)
-	{
-		free(buffer);
-		return false;
-	}
-
 	std::wstring localpath = mol::Path::addBackSlash(localdir) + mol::fromUTF8(filename);
 		
 
 	mol::filestream fs;
 	if (fs.open( mol::tostring(localpath)))
 	{
-		fs.write(buffer,size);
+		fs.write(content.c_str(),content.size());
 		fs.close();
 	}
-		
-	free(buffer);
 
 	rc = ssh_scp_pull_request(scp_);
 	if (rc != SSH_SCP_REQUEST_EOF)
 	{
-		throw mol::ssh::Ex(0,"error expecting eof");
-			
+		throw mol::ssh::Ex(0,"expected EOF");
 	}
+		
 	return true;
 }
 
@@ -207,37 +215,13 @@ bool Session::read_file(  std::string& content)
 	{
 		return false;
 	}
+	content = read();
 
-	size_t size = ssh_scp_request_get_size(scp_);
-	const char* filename = ssh_scp_request_get_filename(scp_);
-	int mode = ssh_scp_request_get_permissions(scp_);
-
-	char* buffer = (char*)malloc(size);
-	if (buffer == NULL)
-	{
-		throw mol::ssh::Ex(0,"out of memory");
-	}
-
-	ssh_scp_accept_request(scp_);
-	rc = ssh_scp_read(scp_, buffer, size);
-	if (rc == SSH_ERROR)
-	{
-		free(buffer);
-		return false;
-	}
-		
-	content = std::string(buffer,size);
-		
-	free(buffer);
-
-	
 	rc = ssh_scp_pull_request(scp_);
 	if (rc != SSH_SCP_REQUEST_EOF)
 	{
-		throw mol::ssh::Ex(0,"error expecting eof");
-			
+		throw mol::ssh::Ex(0,"expected EOF");
 	}
-	
 	return true;
 }
 
@@ -253,36 +237,17 @@ bool Session::pull_dir( const std::wstring& localdir)
 		{
 			case SSH_SCP_REQUEST_NEWFILE :
 			{
-				size_t size = ssh_scp_request_get_size(scp_);
 				const char* filename = ssh_scp_request_get_filename(scp_);
-				int mode = ssh_scp_request_get_permissions(scp_);
-
-				char* buffer = (char*)malloc(size);
-				if (buffer == NULL)
-				{
-					throw mol::ssh::Ex(0,"out of memory");
-				}
-
-				ssh_scp_accept_request(scp_);
-				rc = ssh_scp_read(scp_, buffer, size);
-				if (rc == SSH_ERROR)
-				{
-					free(buffer);
-					return false;
-				}
-
+				std::string content = read();
 				std::wstring localpath = mol::Path::addBackSlash(local) + mol::fromUTF8(filename);
 		
 
 				mol::filestream fs;
 				if (fs.open( mol::tostring(localpath)))
 				{
-					fs.write(buffer,size);
+					fs.write(content.c_str(),content.size());
 					fs.close();
 				}
-		
-				free(buffer);
-
 				break;
 			}
 			case SSH_SCP_REQUEST_EOF :

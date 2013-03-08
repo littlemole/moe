@@ -31,7 +31,7 @@ ScpDirChild::~ScpDirChild()
 // initialization
 //////////////////////////////////////////////////////////////////////////////
 
-ScpDirChild::Instance* ScpDirChild::CreateInstance( const mol::string& dir )
+ScpDirChild::Instance* ScpDirChild::CreateInstance( ISSHConnection* conn, const mol::string& dir )
 {
 	Instance* doc = 0;
 
@@ -44,6 +44,12 @@ ScpDirChild::Instance* ScpDirChild::CreateInstance( const mol::string& dir )
 		doc->destroy();
 		doc->Release();
 		return 0;
+	}
+	if(conn)
+	{
+		mol::punk<IDispatch> disp(conn);
+		if(disp)
+			doc->list->put_Connection(disp);
 	}
 	return doc;
 }

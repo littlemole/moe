@@ -416,6 +416,18 @@ library ShellCtrls
 
 		[id(14), helpstring("Execute remote cmd")] 
 		HRESULT Execute();
+
+
+		[ 
+		  propput,defaultbind,bindable,displaybind, requestedit,id(15), 
+		  helpstring("Get/Set ssh connection")
+		] 
+		HRESULT Connection([in] IDispatch* conn);
+
+		[ 
+		  propget,defaultbind,bindable,displaybind, requestedit,id(15)
+		] 
+		HRESULT Connection([out,retval] IDispatch** conn);
     };
 
 	////////////////////////////////////////////////////////////////////////////////////
