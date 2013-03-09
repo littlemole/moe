@@ -27,9 +27,13 @@ std::vector<mol::string> vectorFromDataObject(IDataObject* ido)
 {
 	//ODBGS("vectorFromDataObject");
 
+	static UINT fssh = ::RegisterClipboardFormat(L"MOESSHDATATRANSFEROBJ");
+
+	mol::format_etc				fde = mol::format_etc( fssh );
 	format_etc_dropfile			fe;
+
 	STGMEDIUM					sm;
-	mol::TCHAR*					fname  = 0;
+	mol::TCHAR*					fname   = 0;
 	int							len		= 0;
 	int							n		= 0;
 	
@@ -40,33 +44,37 @@ std::vector<mol::string> vectorFromDataObject(IDataObject* ido)
 	
 	if ( S_OK != ido->GetData( &fe, &sm ) )
 	{
-		format_etc_shellpidl spidl;
-		if ( S_OK != ido->GetData( &spidl, &sm ) )
-		  return v;
-
-		CIDA* cida = 0;
-		mol::global glob(sm.hGlobal);
-		cida = (CIDA*)glob.lock();
-
-		LPCITEMIDLIST folder = molGetPIDLFolder(cida);		
-		mol::io::ShellFolder sf( (LPITEMIDLIST)folder);
-		mol::string parent = mol::io::desktop().getDisplayNameOf((LPITEMIDLIST)folder);
-		if ( sf )
+		
+		if ( S_OK != ido->GetData(&fde,&sm) )
 		{
-			int n = cida->cidl;
-			for ( int i = 0; i < n; i++ )
+			format_etc_shellpidl spidl;
+			if ( S_OK != ido->GetData( &spidl, &sm ) )
+			  return v;
+
+			CIDA* cida = 0;
+			mol::global glob(sm.hGlobal);
+			cida = (CIDA*)glob.lock();
+
+			LPCITEMIDLIST folder = molGetPIDLFolder(cida);		
+			mol::io::ShellFolder sf( (LPITEMIDLIST)folder);
+			mol::string parent = mol::io::desktop().getDisplayNameOf((LPITEMIDLIST)folder);
+			if ( sf )
 			{
-				LPCITEMIDLIST item = molGetPIDLItem(cida,i);
-				//mol::string s = mol::io::desktop().getDisplayNameOf((LPITEMIDLIST)item,SHGDN_FORPARSING);				
-				//mol::string s2 = sf.getDisplayNameOf((LPITEMIDLIST)item,SHGDN_INFOLDER);
-				mol::string s3 = sf.getDisplayNameOf((LPITEMIDLIST)item,SHGDN_FORPARSING);
-				v.push_back(s3);
+				int n = cida->cidl;
+				for ( int i = 0; i < n; i++ )
+				{
+					LPCITEMIDLIST item = molGetPIDLItem(cida,i);
+					//mol::string s = mol::io::desktop().getDisplayNameOf((LPITEMIDLIST)item,SHGDN_FORPARSING);				
+					//mol::string s2 = sf.getDisplayNameOf((LPITEMIDLIST)item,SHGDN_INFOLDER);
+					mol::string s3 = sf.getDisplayNameOf((LPITEMIDLIST)item,SHGDN_FORPARSING);
+					v.push_back(s3);
+				}
 			}
+			glob.unLock();
+			glob.detach();
+			::ReleaseStgMedium(&sm);
+			return v;
 		}
-		glob.unLock();
-		glob.detach();
-		::ReleaseStgMedium(&sm);
-		return v;
 	}
 
 	if ( sm.tymed != TYMED_HGLOBAL )

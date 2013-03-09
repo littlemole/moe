@@ -38,9 +38,8 @@ template <class I>
 class uuid_info
 {
  public:
-   //static const GUID& uuidof() { return __uuidof(I); }
-	 static REFIID uuidof;
-   typedef I uuid_type;
+    static REFIID uuidof;
+    typedef I uuid_type;
 };
 
 template <class I> 
@@ -51,9 +50,8 @@ template <>
 class uuid_info<mol::ole::nullInterface>
 {
  public:
-   //static const GUID& uuidof() { return CLSID_NULL; }
 	 static REFIID uuidof;// = CLSID_NULL;
-   typedef mol::ole::nullInterface uuid_type;
+     typedef mol::ole::nullInterface uuid_type;
 };
 
 
@@ -131,6 +129,8 @@ mol::string stringFromFreedBSTR( BSTR bstr );
 ///////////////////////////////////////////////////////////////////////////////
 // COM Singletons - will be released just before ~OleUninitialize()
 ///////////////////////////////////////////////////////////////////////////////
+
+/*
 template<class T>
 class ComShim : public T
 {
@@ -161,7 +161,7 @@ public:
 private:
 	int debug_refcount_;
 };
-
+*/
 
 template<class T, const CLSID* clsid, const CLSID* iid = &mol::uuidof<T>()>
 class COMSingleton

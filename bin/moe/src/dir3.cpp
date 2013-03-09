@@ -36,10 +36,10 @@ DirChild::Instance* DirChild::CreateInstance( const mol::string& dir )
 		return doc;
 
 	mol::string p(dir);
-	if ( !mol::Path::exists(p) && ( (dir.size() > 8) && (dir.substr(0,8) != _T("shell:::") ) ) )
+	if ( !mol::Path::exists(p) && ( (dir.size() > 8) && (dir.substr(0,8) != _T("shell:::") ) && (dir.substr(0,2) != _T("::") ) ) )
         return doc;
 
-	if ( !mol::Path::isDir(p) && (dir.substr(0,8) != _T("shell:::")) )
+	if ( !mol::Path::isDir(p) && (dir.substr(0,8) != _T("shell:::") && (dir.substr(0,2) != _T("::") )) )
 		return doc;
 
 	

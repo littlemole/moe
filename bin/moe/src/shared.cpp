@@ -466,15 +466,20 @@ HRESULT __stdcall MoeDialogs::Open(BSTR path,IMoeDocument** d)
 
 		MOE_DOCTYPE docType = index2type(fd.type());
 		std::vector<std::wstring> paths = fd.paths();
+		mol::punk<IMoeDocument> doc;
 		for ( size_t i = 0; i < paths.size(); i++)
 		{
-			bool result = docs()->open( paths[i], docType,fd.encoding(),fd.readOnly(), d);
+			doc.release(); // do not leak doc if size>1 - only keep the last one
+			bool result = docs()->open( paths[i], docType,fd.encoding(),fd.readOnly(), &doc);
+		}
+		if( d && doc )
+		{
+			doc.queryInterface(d);
 		}
 
 		return S_OK;
 	}
 
-	//mol::FilenameDlg ofn(*moe());
 	MolFileFialog ofn(*moe());
 	ofn.setFilter( InFilesFilter );			
 	if ( path )
@@ -539,7 +544,7 @@ HRESULT __stdcall MoeDialogs::OpenDir( IMoeDocument** d)
 		mol::string s = dir.toString();
 		if ( s != _T("") )
 		{
-			//if ( mol::Path::exists(s) )
+			//if ( mol::Path::exists(s) ) // too restrictive, would filter ssh
 				docs()->open( s, MOE_DOCTYPE_DIR,-1, false, d);
 		}
 
@@ -633,11 +638,6 @@ HRESULT __stdcall MoeScript::Eval( BSTR scrpt, BSTR scrptLanguage)
 	if ( !scrpt || !scrptLanguage )
 		return E_INVALIDARG;
 
-	mol::string e = mol::bstr(scrptLanguage).toString();
-	if ( e == _T("cs") )
-	{
-//		return evalute_csharp(scrpt);
-	}
 
 	scriptlet()->eval( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
 	return S_OK;
@@ -647,12 +647,6 @@ HRESULT __stdcall MoeScript::Debug( BSTR scrpt, BSTR scrptLanguage)
 {
 	if ( !scrpt || !scrptLanguage )
 		return E_INVALIDARG;
-
-	mol::string e = mol::bstr(scrptLanguage).toString();
-	if ( e == _T("cs") )
-	{
-//		return evalute_csharp(scrpt);
-	}
 
 	scriptlet()->debug( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
 	return S_OK;

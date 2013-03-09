@@ -90,7 +90,6 @@ public:
 		punk<AxFrameSite> site = new AxFrameSite;
 		if ( site )
 		{
-			//site->QueryInterface( IID_IUnknown, (void**) &axFrameSite);
 			site.queryInterface(&axFrameSite);
 			site->init( (C*)this );
 		}
