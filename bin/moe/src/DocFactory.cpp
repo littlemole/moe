@@ -464,6 +464,7 @@ IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const mol::stri
 		return new MoeImageFactory;
     }
 
+	/*
 	// assuming text so far - sniff encoding, try to detect binaries ...
 	std::stringstream is;
 	mol::filestream in;
@@ -476,6 +477,7 @@ IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const mol::stri
 		is.write(buf,in.gcount());
     }
 	in.close();
+	*/
 
 	// ... so try open in text editor
 	return new MoeEditorDocumentFactory(enc,readOnly);

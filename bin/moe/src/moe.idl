@@ -566,6 +566,8 @@ library Moe
 		]
 		HRESULT Fullscreen( [out,retval] VARIANT_BOOL* vb);
 
+		[id(15), helpstring("make Screenshot")]
+		HRESULT Screenshot();
 	}
 
 

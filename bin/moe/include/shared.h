@@ -57,6 +57,8 @@ public:
 	virtual HRESULT __stdcall put_Fullscreen( VARIANT_BOOL vb );
 	virtual HRESULT __stdcall get_Fullscreen( VARIANT_BOOL* vb );
 	virtual HRESULT __stdcall get_TreeView( IDispatch** tv);
+	virtual HRESULT __stdcall Screenshot();
+
 };
 
 

@@ -233,6 +233,13 @@ void EditorScript::debugScriptQuit()
 
 	editor_->line_->Highlite(-1);
 
+	mol::bstr out;
+	moe()->stdOut(&out);
+	if(out)
+	{
+		editor_->annotation_->SetText(0,out);
+	}
+
 	mol::Ribbon::ribbon()->mode(1);
 
 	if ( !editor_->remote_)
@@ -249,6 +256,7 @@ void EditorScript::debugScriptQuit()
 
 	editor_->remote_.release();
 }
+
 
 void EditorScript::scriptThread( int line, IRemoteDebugApplicationThread* remote, IActiveScriptError* pError )
 {
@@ -305,11 +313,12 @@ void EditorScript::scriptThread( int line, IRemoteDebugApplicationThread* remote
 		editor_->lasterror_ = oss.str();
 	}
 
+	/* //hu?
 	if ( remote )
 		remote->Release();
 	if ( pError)
 		pError->Release();
-
+		*/
 	mol::invoke( boost::bind( &Editor::OnScriptThread, editor_, line, remote, pError ) );
 	return;
 	
@@ -320,6 +329,7 @@ void EditorScript::scriptThread2( int line, IRemoteDebugApplicationThread* remot
 {
 	if ( !editor_->sci )
 		return;
+
 
 	ODBGS1("OnScriptThread:",line);
 
@@ -352,6 +362,13 @@ void EditorScript::scriptThreadDone()
 
 	if ( editor_->sci)
 		editor_->line_->Highlite(-1);
+
+	mol::bstr out;
+	moe()->stdOut(&out);
+	if(out)
+	{
+		editor_->annotation_->SetText(0,out);
+	}
 
 	mol::Ribbon::ribbon()->mode(1);
 }

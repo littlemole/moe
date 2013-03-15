@@ -1,1 +1,1 @@
-moe.Config.EditPreferences();
+moe.View.Screenshot();

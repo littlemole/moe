@@ -13,6 +13,7 @@
 #include "xmlui.h"
 #include "tree.h"
 #include "Ribbonres.h"
+#include "win/clipboard.h"
 
 using namespace mol::io;
 using namespace mol;
@@ -589,6 +590,43 @@ void MoeWnd::OnSyntax(int code, int id, HWND ctrl)
 }
 
 /////////////////////////////////////////////////////////////////////////
+
+
+void MoeWnd::OnScreenShot()
+{
+	HWND active = getActive();
+	if (active)
+	{
+		mol::Window* win = mol::wndFromHWND<mol::Window>(active);
+		if (win)
+		{
+			HBITMAP bmp = win->snapshot();
+
+			mol::win::ClipBoard cb(*win);
+			cb.clear();
+			cb.setData(CF_BITMAP,bmp);
+
+			/*
+			::OpenClipboard(*win);
+			::EmptyClipboard();
+			if(::SetClipboardData(CF_BITMAP,bmp) == 0)
+			{
+				::MessageBoxA(0,"no copy","clipboard",0);
+	
+			}
+			::CloseClipboard();
+			return;
+
+			//HBITMAP bmp = win->snapshot();
+
+			mol::win::ClipBoard cb(*this);
+			cb.clear();
+			cb.setBitmap(bmp);
+			::DeleteObject(bmp);
+			*/
+		}
+	}
+}
 
 
 //////////////////////////////////////////////////////////////////////////////

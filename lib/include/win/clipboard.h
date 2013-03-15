@@ -46,6 +46,8 @@ public:
 	void setLocale( LCID id );
 	void setHTML(const std::string& txt );
 
+	bool setBitmap(HBITMAP hBMP);
+
 	static const wchar_t* BITMAP;
 	static const wchar_t* DIB;
 	static const wchar_t* DIB5;

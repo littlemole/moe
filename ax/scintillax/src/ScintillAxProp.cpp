@@ -62,22 +62,10 @@ LRESULT ScintillAxProperties::OnInitDialog(UINT msg, WPARAM wParam, LPARAM lPara
 			}
 
 			this->setDlgItemInt(IDC_EDIT_TABWIDTH,tabwidth_);
-
-			if ( vbUseTabs_ == VARIANT_TRUE )
-				this->sendDlgItemMsg( IDC_CHECK_USETABS,BM_SETCHECK ,BST_CHECKED,0);
-			if ( vbTabIndents_ == VARIANT_TRUE )
-				this->sendDlgItemMsg( IDC_CHECK_TABINDENTS,BM_SETCHECK ,BST_CHECKED,0);
-			if ( vbBackSpaceUnindents_ == VARIANT_TRUE )
-				this->sendDlgItemMsg( IDC_CHECK_BACKSPACEUNINDENTS,BM_SETCHECK ,BST_CHECKED,0);			
-
-			if ( vbShowLineNumbers_ == VARIANT_TRUE )
-			{
-				this->sendDlgItemMsg( IDC_CHECK_LINE_NUMBERS, BM_SETCHECK, BST_CHECKED,0);
-			}
-			else
-			{
-				this->sendDlgItemMsg( IDC_CHECK_LINE_NUMBERS, BM_SETCHECK, BST_UNCHECKED,0);
-			}
+			this->sendDlgItemMsg( IDC_CHECK_USETABS,BM_SETCHECK ,vbUseTabs_ == VARIANT_TRUE ? BST_CHECKED : BST_UNCHECKED,0);
+			this->sendDlgItemMsg( IDC_CHECK_TABINDENTS,BM_SETCHECK ,vbTabIndents_ == VARIANT_TRUE ? BST_CHECKED : BST_UNCHECKED,0);
+			this->sendDlgItemMsg( IDC_CHECK_BACKSPACEUNINDENTS,BM_SETCHECK , vbBackSpaceUnindents_ == VARIANT_TRUE ? BST_CHECKED : BST_UNCHECKED ,0);			
+			this->sendDlgItemMsg( IDC_CHECK_LINE_NUMBERS, BM_SETCHECK, vbShowLineNumbers_ == VARIANT_TRUE ? BST_CHECKED : BST_UNCHECKED,0);
 		}
 	}
 	return FALSE; // note: false! look into PSDK!

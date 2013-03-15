@@ -400,6 +400,12 @@ HRESULT __stdcall MoeView::get_TreeView( IDispatch** tv)
 }
 
 
+HRESULT __stdcall MoeView::Screenshot()
+{
+	moe()->OnScreenShot();
+	return S_OK;
+}
+
 /////////////////////////////////////////////////////////////////////
 //
 // moe dialogs sub obj

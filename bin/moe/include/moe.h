@@ -186,7 +186,7 @@ public:
 
 	bool toolbarFrozen() { return toolBarFrozen_ == 0; }
 
-
+	 void OnScreenShot();
 private:
 	
 	// load conf

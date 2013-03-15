@@ -1004,6 +1004,8 @@ void Editor::OnScriptThread( int line, IRemoteDebugApplicationThread* remote, IA
 	{
 		EditorScript es(this);
 		es.scriptThread(line,remote,pError);
+
+		//mol::invoke( boost::bind( &Editor::OnScriptThread, this, line, remote, pError ) );
 		return;
 	}
 

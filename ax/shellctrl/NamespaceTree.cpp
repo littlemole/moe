@@ -95,13 +95,15 @@ LRESULT NamespaceTree::OnCreate(UINT msg, WPARAM wParam, LPARAM lParam)
 	HRESULT hr = tree_.createObject(CLSID_NamespaceTreeControl,CLSCTX_INPROC);
     if (SUCCEEDED(hr))
     {
-        const NSTCSTYLE nsctsFlags = NSTCS_HASEXPANDOS |            // Show expandos
-                                        NSTCS_ROOTHASEXPANDO |         // Root nodes have expandos
-                                        NSTCS_FADEINOUTEXPANDOS |      // Fade-in-out based on focus
-                                        NSTCS_NOINFOTIP |              // Don't show infotips
+        const NSTCSTYLE nsctsFlags = //NSTCS_HASEXPANDOS |            // Show expandos
+                                       // NSTCS_ROOTHASEXPANDO |         // Root nodes have expandos
+                                       // NSTCS_FADEINOUTEXPANDOS |      // Fade-in-out based on focus
+                                       // NSTCS_NOINFOTIP |              // Don't show infotips
                                         //NSTCS_ALLOWJUNCTIONS |         // Show folders such as zip folders and libraries
-                                        NSTCS_SHOWSELECTIONALWAYS; //|    // Show selection when NSC doesn't have focus
-                                        //NSTCS_FULLROWSELECT;           // Select full width of item
+                                        NSTCS_SHOWSELECTIONALWAYS|    // Show selection when NSC doesn't have focus
+										//NSTCS_TABSTOP|
+										NSTCS_SHOWTABSBUTTON|
+                                        NSTCS_FULLROWSELECT;           // Select full width of item
         hr = tree_->Initialize(*this, &rc, nsctsFlags);
         if (SUCCEEDED(hr))
         {

@@ -57,7 +57,7 @@ class NamespaceTree:
 				IProvideClassInfo,
 				IProvideClassInfo2,
 				IServiceProvider,
-				INameSpaceTreeControlCustomDraw,
+				//INameSpaceTreeControlCustomDraw,
 				INameSpaceTreeControlEvents>
 		>
 {
@@ -125,10 +125,10 @@ public:
     }
 
     // INameSpaceTreeControlEvents
-    HRESULT virtual __stdcall  OnItemClick(IShellItem * psi, NSTCEHITTEST /*nstceHitTest*/, NSTCECLICKTYPE nstceClickType) 
+    HRESULT virtual __stdcall  OnItemClick(IShellItem * psi, NSTCEHITTEST nstceHitTest, NSTCECLICKTYPE nstceClickType) 
 	{ 
 		HRESULT ret = S_FALSE;
-		if(NSTCECT_LBUTTON && psi)
+		if( (nstceClickType & NSTCECT_LBUTTON) && psi && ( nstceHitTest & NSTCEHT_ONITEMTABBUTTON ) )
 		{
 			
 			PWSTR psz=0;
@@ -136,7 +136,7 @@ public:
 			if(hr==S_OK && psz)
 			{
 				std::wstring ws(psz);
-				if ( ws == currentPath_.towstring() )
+				if (1)// ws == currentPath_.towstring() )
 				{
 					SFGAOF sfgaof;
 					hr = psi->GetAttributes(SFGAO_FOLDER,&sfgaof);
