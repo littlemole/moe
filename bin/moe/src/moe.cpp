@@ -605,25 +605,6 @@ void MoeWnd::OnScreenShot()
 			mol::win::ClipBoard cb(*win);
 			cb.clear();
 			cb.setData(CF_BITMAP,bmp);
-
-			/*
-			::OpenClipboard(*win);
-			::EmptyClipboard();
-			if(::SetClipboardData(CF_BITMAP,bmp) == 0)
-			{
-				::MessageBoxA(0,"no copy","clipboard",0);
-	
-			}
-			::CloseClipboard();
-			return;
-
-			//HBITMAP bmp = win->snapshot();
-
-			mol::win::ClipBoard cb(*this);
-			cb.clear();
-			cb.setBitmap(bmp);
-			::DeleteObject(bmp);
-			*/
 		}
 	}
 }
