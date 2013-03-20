@@ -11,15 +11,7 @@
 #include <sstream>
 
 ///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////
-// ShellTree
+// NamespaceTree
 ///////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////
@@ -29,6 +21,9 @@ NamespaceTree::NamespaceTree()
 	sizel.cx = 200;
 	sizel.cy = 400;
 	adviseCookie_ = -1;
+	lastClickTime_ = 0;
+
+	doubleClickTimeout_ = ::GetDoubleClickTime()*5;
 
 	mol::ole::PixeltoHIMETRIC(&sizel);
 	eraseBackground_ = 1;
@@ -49,6 +44,7 @@ NamespaceTree::~NamespaceTree()
 	ODBGS("~ShellTree");
 }
 ///////////////////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////////////////
 // Windows Message Handlers
@@ -73,7 +69,7 @@ LRESULT NamespaceTree::OnDestroy(UINT msg, WPARAM wParam, LPARAM lParam)
         IUnknown_SetSite(tree_, NULL);
 		tree_.release();
     }
-	item_.release();
+	currentItem_.release();
     return 0;
 }
 
@@ -102,6 +98,7 @@ LRESULT NamespaceTree::OnCreate(UINT msg, WPARAM wParam, LPARAM lParam)
                                         //NSTCS_ALLOWJUNCTIONS |         // Show folders such as zip folders and libraries
                                         NSTCS_SHOWSELECTIONALWAYS|    // Show selection when NSC doesn't have focus
 										//NSTCS_TABSTOP|
+										//NSTCS_SINGLECLICKEXPAND|
 										NSTCS_SHOWTABSBUTTON|
                                         NSTCS_FULLROWSELECT;           // Select full width of item
         hr = tree_->Initialize(*this, &rc, nsctsFlags);
@@ -163,17 +160,96 @@ LRESULT NamespaceTree::OnSize(UINT msg, WPARAM wParam, LPARAM lParam)
 	SetWindowPos(hwndTree, NULL, rc.left, rc.top,  rc.right,rc.bottom, SWP_NOZORDER );
 	return 0;
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-// Events from Tree View Ctrl
-//
-//////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Key pressed events
-//
-//////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall NamespaceTree::QueryService(REFGUID /*guidService*/, REFIID riid, void **ppv)
+{
+	if ( riid == IID_INameSpaceTreeControlCustomDraw )
+	{
+		return this->QueryInterfaceImpl(riid,ppv);
+	}
+
+    HRESULT hr = E_NOINTERFACE;
+    *ppv = NULL;
+    return hr;
+}
+
+HRESULT __stdcall  NamespaceTree::OnItemClick(IShellItem * psi, NSTCEHITTEST nstceHitTest, NSTCECLICKTYPE nstceClickType) 
+{ 
+	HRESULT ret = S_FALSE;
+	if( (nstceClickType & NSTCECT_LBUTTON) && psi && ( nstceHitTest & NSTCEHT_ONITEMTABBUTTON ) )
+	{
+		mol::CoStrBuf psz;
+		HRESULT hr = psi->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &psz);
+		if(hr==S_OK && psz)
+		{
+			SFGAOF sfgaof;
+			hr = psi->GetAttributes(SFGAO_FOLDER,&sfgaof);
+			if (SUCCEEDED(hr))
+			{
+				VARIANT_BOOL vb = sfgaof & SFGAO_FOLDER ? VARIANT_TRUE : VARIANT_FALSE;
+				fire(DISPID_ISHELLTREEEVENTS_ONTREEDBLCLICK,mol::variant(psz),mol::variant(vb));
+			}
+			ret = S_FALSE;
+		}
+	}
+	if ( (nstceClickType & NSTCECT_LBUTTON) && psi && ( nstceHitTest & NSTCEHT_ONITEM ) )
+	{
+		mol::CoStrBuf psz;
+		HRESULT hr = psi->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &psz);
+		if(hr==S_OK && psz)
+		{
+			DWORD now = ::GetTickCount();
+			std::wstring ws(psz);
+			if ( (ws == currentPath_.towstring()) && (now-lastClickTime_ < doubleClickTimeout_))
+			{
+				SFGAOF sfgaof;
+				hr = psi->GetAttributes(SFGAO_FOLDER,&sfgaof);
+				if (SUCCEEDED(hr))
+				{
+					VARIANT_BOOL vb = sfgaof & SFGAO_FOLDER ? VARIANT_TRUE : VARIANT_FALSE;
+					fire(DISPID_ISHELLTREEEVENTS_ONTREEDBLCLICK,mol::variant(psz),mol::variant(vb));
+				}
+				ret = S_FALSE;
+			}
+			lastClickTime_ = ::GetTickCount();;
+		}
+	}
+	return ret;  
+}
+
+HRESULT __stdcall  NamespaceTree::OnSelectionChanged(IShellItemArray *psiaSelection)
+{
+    IShellItem *psi;
+    HRESULT hr = psiaSelection->GetItemAt(0, &psi);
+    if (SUCCEEDED(hr))
+    {
+        IShellItem2 *psi2;
+        hr = psi->QueryInterface(IID_PPV_ARGS(&psi2));
+        if (SUCCEEDED(hr))
+        {
+			mol::CoStrBuf psz;
+			HRESULT hr = psi->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &psz);
+			if(hr==S_OK)
+			{
+				currentPath_ = psz;
+				currentItem_ = psi;
+				fire(DISPID_ISHELLTREEEVENTS_ONTREESELECTION,mol::variant(currentPath_));
+			}
+			psi2->Release();
+		}
+		psi->Release();
+    }
+    return S_OK;
+}
+
+
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -322,30 +398,6 @@ HRESULT NamespaceTree::Cut ()
 //
 //////////////////////////////////////////////////////////////////////////////
 
-void NamespaceTree::InvokeVerb(const std::string& verb)
-{
-	if(!item_)
-		return;
-
-	mol::punk<IContextMenu> cm;
-    HRESULT hr = item_->BindToHandler(NULL, BHID_SFUIObject, IID_IContextMenu, (void**)&cm);
-    if (!SUCCEEDED(hr)) {
-		return;
-	}
-
-	HMENU hmenu = ::CreatePopupMenu();
-	if (hmenu) {
-		HRESULT hr = cm->QueryContextMenu(hmenu, 0, 1, 0x7FFF, CMF_NORMAL);
-		if(SUCCEEDED(hr)) {
-			CMINVOKECOMMANDINFO info = { 0 };
-			info.cbSize = sizeof(info);
-			info.lpVerb = verb.c_str();
-			cm->InvokeCommand(&info);
-		}
-		::DestroyMenu(hmenu);
-	}
-}
-
 HRESULT NamespaceTree::Copy ()
 {
 	InvokeVerb("copy");
@@ -384,8 +436,9 @@ HRESULT NamespaceTree::Rename()
 
 HRESULT NamespaceTree::Delete()
 {
-	mol::io::ShellFileOp sfo;
-	sfo.remove(*this,currentPath_.toString());
+	InvokeVerb("delete");
+//	mol::io::ShellFileOp sfo;
+//	sfo.remove(*this,currentPath_.toString());
 	return S_OK;
 }
 
@@ -398,7 +451,8 @@ HRESULT NamespaceTree::Delete()
 
 HRESULT NamespaceTree::Properties()
 {
-	mol::io::execute_shell(currentPath_.toString(),_T("properties"),1,SEE_MASK_INVOKEIDLIST);
+	InvokeVerb("properties");
+	//mol::io::execute_shell(currentPath_.toString(),_T("properties"),1,SEE_MASK_INVOKEIDLIST);
 	return S_OK;
 }
 
@@ -411,7 +465,8 @@ HRESULT NamespaceTree::Properties()
 
 HRESULT NamespaceTree::Execute()
 {
-	mol::io::execute_shell(currentPath_.toString());
+	InvokeVerb("open");
+//	mol::io::execute_shell(currentPath_.toString());
 	return S_OK;
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -486,7 +541,7 @@ HRESULT __stdcall NamespaceTree::get_BackColor(  BSTR* fPath)
 
 HRESULT __stdcall NamespaceTree::Load( LPSTREAM pStm)
 {
-	pStm >> mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL) )
+	pStm >> mol::property( mol::DispId(this,DISPID_ISHELLTREE_DISPLAYFILES,VT_BOOL) )
 		 >> mol::property( currentPath_ )
 		 >> mol::property( &sizel );
 
@@ -495,7 +550,7 @@ HRESULT __stdcall NamespaceTree::Load( LPSTREAM pStm)
 
 HRESULT __stdcall NamespaceTree::Save( LPSTREAM pStm,BOOL fClearDirty)
 {
-	pStm << mol::property( mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL) )
+	pStm << mol::property( mol::DispId(this,DISPID_ISHELLTREE_DISPLAYFILES,VT_BOOL) )
 		<< mol::property( currentPath_ )
 		 << mol::property( &sizel );
 
@@ -505,7 +560,7 @@ HRESULT __stdcall NamespaceTree::Save( LPSTREAM pStm,BOOL fClearDirty)
 HRESULT __stdcall NamespaceTree::Load( IPropertyBag *pPropBag,IErrorLog *pErrorLog)
 {
 	
-	pPropBag >> mol::property( _T("displayfiles"), mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL) )
+	pPropBag >> mol::property( _T("displayfiles"), mol::DispId(this,DISPID_ISHELLTREE_DISPLAYFILES,VT_BOOL) )
 			 >> mol::property( _T("cs"), &sizel );
 
 	return S_OK;
@@ -514,14 +569,39 @@ HRESULT __stdcall NamespaceTree::Load( IPropertyBag *pPropBag,IErrorLog *pErrorL
 HRESULT __stdcall NamespaceTree::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL fSaveAllProperties)
 {
 	
-	pPropBag << mol::property( _T("displayfiles"), mol::DispId(this,ShellTreeCtrl_Dispatch_DisplayFiles,VT_BOOL) )
+	pPropBag << mol::property( _T("displayfiles"), mol::DispId(this,DISPID_ISHELLTREE_DISPLAYFILES,VT_BOOL) )
 			 << mol::property( _T("cs"), &sizel );
 
 	return S_OK;
 }
 
 
+///////////////////////////////////////////////////////////////////////
+// helper
+///////////////////////////////////////////////////////////////////////
 
+void NamespaceTree::InvokeVerb(const std::string& verb)
+{
+	if(!currentItem_)
+		return;
+
+	mol::punk<IContextMenu> cm;
+    HRESULT hr = currentItem_->BindToHandler(NULL, BHID_SFUIObject, IID_IContextMenu, (void**)&cm);
+    if (!SUCCEEDED(hr)) 
+		return;
+
+	mol::PopupMenu menu;
+	if (menu) 
+	{
+		HRESULT hr = cm->QueryContextMenu(menu, 0, 1, 0x7FFF, CMF_NORMAL);
+		if(SUCCEEDED(hr)) {
+			CMINVOKECOMMANDINFO info = { 0 };
+			info.cbSize = sizeof(info);
+			info.lpVerb = verb.c_str();
+			cm->InvokeCommand(&info);
+		}
+	}
+}
 
 
 

@@ -56,6 +56,7 @@ void TailEditor::checkModifiedOnDisk( )
 	}
 	else if ( size < size_ )
 	{
+		size_ = 0;
 		OnReload();
 	}
 }
@@ -114,7 +115,7 @@ bool TailEditor::initialize(const mol::string& p)
 	monitor_.events += mol::events::event_handler( &TailEditor::OnFileChangeNotify, this );
 	monitor_.watch( 
 		mol::Path::parentDir(p), 
-		FILE_NOTIFY_CHANGE_SIZE,
+		FILE_NOTIFY_CHANGE_SIZE|FILE_NOTIFY_CHANGE_LAST_WRITE,
 		false
 	);
 	return true;
@@ -137,18 +138,17 @@ void TailEditor::OnReload()
 	}
 
 	mol::string fp(mol::toString(filename));
-
-	LONG len = 0;
-	text_->get_Length(&len);
-	size_ = len;
-	//size_ = mol::File::size(fp);
-
+	props_->put_ReadOnly(VARIANT_FALSE);
 	sci->Load(filename);
+	props_->put_ReadOnly(VARIANT_TRUE);
 
 	position_->put_Anchor((long)size_);
 	position_->put_Caret((long)size_);
 	position_->ScrollIntoView();
 
+	LONG len = 0;
+	text_->get_Length(&len);
+	size_ = len;
 	statusBar()->status(filename.toString());
 	
 }
@@ -188,8 +188,10 @@ void TailEditor::append(const mol::string& path,unsigned long long size)
 
 	ODBGS(buf);
 
+	props_->put_ReadOnly(VARIANT_FALSE);
 	mol::bstr tmp(buf);
 	text_->Append(tmp);
+	props_->put_ReadOnly(VARIANT_TRUE);
 
 	LONG len = 0;
 	text_->get_Length(&len);

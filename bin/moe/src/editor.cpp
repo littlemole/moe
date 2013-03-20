@@ -644,31 +644,31 @@ void Editor::OnWin32()
 	statusBar()->status( _T("set EOL type to WIN32 (\\r\\n)"));
 }
 
+
 void Editor::OnSettings()
 {
 	mol::punk<IUnknown> unk(oleObject);
 	if ( !unk )
 		return;
 	
-	CAUUID pages;
 	mol::punk<ISpecifyPropertyPages> spp(unk);
 	if (!spp)
 		return;
 
+	mol::CoCAUUIDBuf pages;
 	if ( S_OK != spp->GetPages(&pages) )
 		return;
 
-	mol::bstr filename;
-	if ( S_OK == props_->get_Filename(&filename) )
+	mol::bstr path;
+	if ( S_OK == props_->get_Filename(&path) )
 	{
 		LPUNKNOWN unks[2] = { (IUnknown*)unk, (IUnknown*)unk };
-		mol::string p(filename.toString());
-		::OleCreatePropertyFrame( *this, 10, 10,
-								  mol::towstring(mol::Path::filename(p)).c_str(),
-								  1, unks, pages.cElems,
-								  pages.pElems, 0, 0, 0 );
+		mol::string filename(mol::Path::filename(path.toString()));
 
-		::CoTaskMemFree(pages.pElems);
+		::OleCreatePropertyFrame( *this, 10, 10,
+								  filename.c_str(),
+								  1, unks, pages->cElems,
+								  pages->pElems, 0, 0, 0 );
 	}
 	
 }

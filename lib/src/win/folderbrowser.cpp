@@ -62,12 +62,11 @@ HRESULT SimpleFolderBrowser(HWND hwnd, mol::string& directory)
         {
             // Do something with the result.
 
-			wchar_t* buf = 0;
-			hr = siResult->GetDisplayName( SIGDN_DESKTOPABSOLUTEPARSING, (wchar_t**)&buf );
+			mol::CoStrBuf buf;
+			hr = siResult->GetDisplayName( SIGDN_DESKTOPABSOLUTEPARSING, &buf );
 			if ( S_OK == hr )
 			{
 				directory = mol::toString(buf);
-				::CoTaskMemFree(buf);
 			}
         }
     }

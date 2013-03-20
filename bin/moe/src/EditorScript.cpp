@@ -313,12 +313,8 @@ void EditorScript::scriptThread( int line, IRemoteDebugApplicationThread* remote
 		editor_->lasterror_ = oss.str();
 	}
 
-	/* //hu?
-	if ( remote )
-		remote->Release();
-	if ( pError)
-		pError->Release();
-		*/
+
+
 	mol::invoke( boost::bind( &Editor::OnScriptThread, editor_, line, remote, pError ) );
 	return;
 	
@@ -347,6 +343,11 @@ void EditorScript::scriptThread2( int line, IRemoteDebugApplicationThread* remot
 
 	editor_->line_->Goto(line);
 	editor_->line_->Highlite(line);
+
+	if ( remote )
+		remote->Release();
+	if ( pError)
+		pError->Release();
 
 	mol::Ribbon::ribbon()->mode(9);
 	ODBGS1("Leaving OnScriptThread:",line);

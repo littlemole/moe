@@ -76,12 +76,10 @@ void HIMETRICtoPixel(SIZE* sz, HDC hdc )
 
 mol::string stringFromCLSID(REFGUID guid)
 {
-	LPOLESTR clsid;
+	mol::CoStrBuf clsid;
 	::StringFromCLSID(guid,&clsid);
 
 	mol::string classID = mol::toString(clsid);
-
-	::CoTaskMemFree(clsid);
 	return classID;
 }
 //////////////////////////////////////////////////////////////////////////
@@ -129,14 +127,12 @@ HRESULT __stdcall CreateObjectAdmin( HWND hwnd, BSTR progid, IUnknown** unk)
 	if ( !progid )
 		return E_INVALIDARG;
 
-    BIND_OPTS3 bo;
-    LPOLESTR wszCLSID;
-
 	CLSID clsid;
 	HRESULT hr = CLSIDFromProgID( progid, &clsid );
 	if ( hr != S_OK )
 		return hr;
 
+	mol::CoStrBuf wszCLSID;
     hr = StringFromCLSID(clsid, &wszCLSID); 
 	if ( hr != S_OK )
 		return hr;
@@ -144,8 +140,7 @@ HRESULT __stdcall CreateObjectAdmin( HWND hwnd, BSTR progid, IUnknown** unk)
 	std::wstringstream oss;
 	oss << L"Elevation:Administrator!new:" << wszCLSID;
 
-	::CoTaskMemFree(wszCLSID);
-
+    BIND_OPTS3 bo;
     memset(&bo, 0, sizeof(bo));
     bo.cbStruct = sizeof(bo);
     bo.hwnd = hwnd;

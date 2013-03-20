@@ -1387,14 +1387,12 @@ void Ribbon::updateRecentDocs(int id)
 		if ( !shit )
 			continue;
 
-		wchar_t* buf = 0;
+		mol::CoStrBuf buf;
 		hr = shit->GetDisplayName(SIGDN_FILESYSPATH,&buf);
 		if ( hr != S_OK )
 			continue;
 
-		mol::string path(buf);
-		::CoTaskMemFree(buf);
-		mol::Ribbon::ribbon()->addRecentDoc(id,path);
+		mol::Ribbon::ribbon()->addRecentDoc(id,mol::string(buf));
 	}
 }
 

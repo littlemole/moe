@@ -121,7 +121,6 @@ protected:
 
         HINSTANCE			hInstance_;
 		volatile LONG       lockCount_;
-		//mol::Mutex			mutex_;
 
         static  volatile AppBase*	app_;
 		static unsigned int guithread_;

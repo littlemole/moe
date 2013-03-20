@@ -98,7 +98,9 @@ public:
     virtual ~Menu();
 
     HMENU create();
-    void attach( HMENU hMenu, bool atached = true );
+    HMENU createPopup();
+
+	void attach( HMENU hMenu, bool atached = true );
     HMENU load( int id, bool atached = true  );
 
     BOOL  addItem   ( UINT_PTR cmd, const mol::string& snewItem, UINT flags = MF_STRING);
@@ -132,9 +134,18 @@ public:
 
     void detach();
 
-private:
+protected:
     bool	atached_;
     HMENU   hMenu_;
+};
+
+class PopupMenu : public Menu
+{
+public:
+	 PopupMenu()
+	 {
+		 createPopup();
+	 }
 };
 
 //////////////////////////////////////////////////////////////////////

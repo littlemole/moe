@@ -1425,6 +1425,7 @@ void MoeVistaFileDialog::setFilter(mol::v7::COMDLG_FILTERSPEC* filter, int size)
 }
 
 
+
 HRESULT MoeVistaFileDialog::open(int options)
 {
 	HRESULT hr = init(options,CLSID_FileOpenDialog);
@@ -1468,20 +1469,18 @@ HRESULT MoeVistaFileDialog::open(int options)
 		if (hr != S_OK)
 			return hr;
 
-		PWSTR pszFilePath = NULL;
+		mol::CoStrBuf pszFilePath;
 		hr = shit->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
 		if ( hr == S_OK )
 		{
-			paths_.push_back(pszFilePath);
-			::CoTaskMemFree(pszFilePath);
+			paths_.push_back(std::wstring(pszFilePath));
 		}
 		else
 		{
 			hr = shit->GetDisplayName(SIGDN_URL, &pszFilePath);
 			if ( hr == S_OK )
 			{
-				paths_.push_back(pszFilePath);
-				::CoTaskMemFree(pszFilePath);
+				paths_.push_back(std::wstring(pszFilePath));
 			}
 		}
 	}
@@ -1559,10 +1558,9 @@ HRESULT MoeVistaFileDialog::save(int options)
 	if (hr != S_OK)
 		return hr;
 
-	PWSTR pszFilePath = NULL;
+	mol::CoStrBuf pszFilePath;
 	hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
-	paths_.push_back(pszFilePath);
-	::CoTaskMemFree(pszFilePath);
+	paths_.push_back(std::wstring(pszFilePath));
 
 	DWORD enc = 0;
 	hr = fdc_->GetSelectedControlItem(CONTROL_COMBOBOX,&enc);

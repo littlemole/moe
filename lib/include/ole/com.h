@@ -7,7 +7,7 @@
 #include "win/mem.h"
 #include <objbase.h>
 #include <ole2.h>
-
+#include <OCIdl.h>
 
 namespace mol {
 
@@ -265,7 +265,6 @@ volatile T* NonCreatableCOMSingleton<T,I>::t_ = 0;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
 template<class T, class I>
 T* nonCreatableCOMSingleton()
@@ -278,6 +277,136 @@ T* nonCreatableCOMSingleton()
 {
 	return NonCreatableCOMSingleton<T,T>::instance();
 }
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+template<class T>
+class CoTaskMemBuf
+{
+public:
+	CoTaskMemBuf()
+		:buf_(0)
+	{
+
+	}
+
+	~CoTaskMemBuf()
+	{
+		if(buf_)
+		{
+			::CoTaskMemFree(buf_);
+			buf_ = 0;
+		}
+	}
+
+	operator T*()
+	{
+		return buf_;
+	}
+
+	T** operator&()
+	{
+		return &buf_;
+	}
+
+private:
+	T* buf_;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+template<>
+class CoTaskMemBuf<CAUUID>
+{
+public:
+
+	CoTaskMemBuf()
+	{}
+
+	~CoTaskMemBuf()
+	{
+		if(cauuid_.pElems)
+		{
+			::CoTaskMemFree(cauuid_.pElems);
+		}
+	}
+
+	operator CAUUID()
+	{
+		return cauuid_;
+	}
+
+	CAUUID* operator&()
+	{
+		return &cauuid_;
+	}
+
+	CAUUID* operator->()
+	{
+		return &cauuid_;
+	}
+
+private:
+	CAUUID cauuid_;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+template<>
+class CoTaskMemBuf<STATSTG>
+{
+public:
+
+	CoTaskMemBuf()
+	{
+		::ZeroMemory(&statstg_,sizeof(STATSTG));
+	}
+
+	~CoTaskMemBuf()
+	{
+		if(statstg_.pwcsName)
+		{
+			::CoTaskMemFree(statstg_.pwcsName);
+		}
+	}
+
+	void clear()
+	{
+		if(statstg_.pwcsName)
+		{
+			::CoTaskMemFree(statstg_.pwcsName);
+		}
+		::ZeroMemory(&statstg_,sizeof(STATSTG));
+	}
+
+	operator STATSTG()
+	{
+		return statstg_;
+	}
+
+	STATSTG* operator&()
+	{
+		return &statstg_;
+	}
+
+	STATSTG* operator->()
+	{
+		return &statstg_;
+	}
+
+private:
+	STATSTG statstg_;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+typedef CoTaskMemBuf<WCHAR> CoStrBuf;
+typedef CoTaskMemBuf<CAUUID> CoCAUUIDBuf;
+typedef CoTaskMemBuf<STATSTG> CoSTATSTGBuf;
+
+///////////////////////////////////////////////////////////////////////////////
+
 
 } // end namespace mol
 

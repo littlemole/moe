@@ -17,11 +17,10 @@ HRESULT __stdcall moeShellDll::RegisterServer()
 	TCHAR    szSubKey[MAX_PATH];
 	TCHAR    szCLSID[MAX_PATH];
 	TCHAR    szModule[MAX_PATH];
-	LPWSTR   pwsz;
+	mol::CoStrBuf pwsz;
 
 	::StringFromIID(CLSID_sshShell, &pwsz);
 	wcscpy(szCLSID,pwsz);
-	::CoTaskMemFree(pwsz);
 
 	::GetModuleFileName(mol::hinstance(), szModule, ARRAYSIZE(szModule));
 

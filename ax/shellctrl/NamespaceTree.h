@@ -20,12 +20,9 @@ using namespace mol::io;
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-// TreeEntry - stores Data associated with TreeItem
+// NamespaceTree Control Wrapper
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-#define ShellTreeCtrl_Dispatch_DisplayFiles 1
-#define ShellTreeCtrl_Dispatch_Selection 2
     
 
 class NamespaceTree: 
@@ -112,74 +109,14 @@ public:
 	HRESULT virtual __stdcall put_BackColor( BSTR fPath);
 	HRESULT virtual __stdcall get_BackColor(  BSTR* fPath);
 
-    HRESULT virtual __stdcall QueryService(REFGUID /*guidService*/, REFIID riid, void **ppv)
-    {
-		if ( riid == IID_INameSpaceTreeControlCustomDraw )
-		{
-			return this->QueryInterfaceImpl(riid,ppv);
-		}
-
-        HRESULT hr = E_NOINTERFACE;
-        *ppv = NULL;
-        return hr;
-    }
+    HRESULT virtual __stdcall QueryService(REFGUID /*guidService*/, REFIID riid, void **ppv);
 
     // INameSpaceTreeControlEvents
-    HRESULT virtual __stdcall  OnItemClick(IShellItem * psi, NSTCEHITTEST nstceHitTest, NSTCECLICKTYPE nstceClickType) 
-	{ 
-		HRESULT ret = S_FALSE;
-		if( (nstceClickType & NSTCECT_LBUTTON) && psi && ( nstceHitTest & NSTCEHT_ONITEMTABBUTTON ) )
-		{
-			
-			PWSTR psz=0;
-			HRESULT hr = psi->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &psz);
-			if(hr==S_OK && psz)
-			{
-				std::wstring ws(psz);
-				if (1)// ws == currentPath_.towstring() )
-				{
-					SFGAOF sfgaof;
-					hr = psi->GetAttributes(SFGAO_FOLDER,&sfgaof);
-					if (SUCCEEDED(hr))
-					{
-						VARIANT_BOOL vb = sfgaof & SFGAO_FOLDER ? VARIANT_TRUE : VARIANT_FALSE;
-						fire(DISPID_ISHELLTREEEVENTS_ONTREEDBLCLICK,mol::variant(psz),mol::variant(vb));
-					}
-					ret = S_FALSE;
-				}
-			}
-			::CoTaskMemFree(psz);
-		}
-		return ret;  
-	}
+    HRESULT virtual __stdcall  OnItemClick(IShellItem * psi, NSTCEHITTEST nstceHitTest, NSTCECLICKTYPE nstceClickType); 
     HRESULT virtual __stdcall  OnPropertyItemCommit(IShellItem * /*psi*/) { return S_FALSE; }
     HRESULT virtual __stdcall  OnItemStateChanging(IShellItem * /*psi*/, NSTCITEMSTATE /*nstcisMask*/, NSTCITEMSTATE /*nstcisState*/) {  return S_OK;  }
     HRESULT virtual __stdcall  OnItemStateChanged(IShellItem * /*psi*/, NSTCITEMSTATE /*nstcisMask*/, NSTCITEMSTATE /*nstcisState*/) { return S_OK; }
-    HRESULT virtual __stdcall  OnSelectionChanged(IShellItemArray *psiaSelection)
-    {
-        IShellItem *psi;
-        HRESULT hr = psiaSelection->GetItemAt(0, &psi);
-        if (SUCCEEDED(hr))
-        {
-            IShellItem2 *psi2;
-            hr = psi->QueryInterface(IID_PPV_ARGS(&psi2));
-            if (SUCCEEDED(hr))
-            {
-				PWSTR psz;
-				HRESULT hr = psi->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &psz);
-				if(hr==S_OK)
-				{
-					currentPath_ = psz;
-					item_ = psi;
-					fire(DISPID_ISHELLTREEEVENTS_ONTREESELECTION,mol::variant(currentPath_));
-				}
-				::CoTaskMemFree(psz);
-				psi2->Release();
-			}
-			psi->Release();
-        }
-        return S_OK;
-    }
+    HRESULT virtual __stdcall  OnSelectionChanged(IShellItemArray *psiaSelection);
     HRESULT virtual __stdcall  OnKeyboardInput(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/)  { return S_FALSE; }
     HRESULT virtual __stdcall  OnBeforeExpand(IShellItem * /*psi*/) { return S_OK; }
     HRESULT virtual __stdcall  OnAfterExpand(IShellItem * /*psi*/) { return S_OK; }
@@ -230,7 +167,7 @@ protected:
 	void InvokeVerb(const std::string& verb);
 
 	mol::punk<INameSpaceTreeControl>			tree_;
-	mol::punk<IShellItem>						item_;
+	mol::punk<IShellItem>						currentItem_;
 
 	mol::bstr									currentPath_;
     bool										displayFiles_;
@@ -242,6 +179,9 @@ protected:
 	OLE_COLOR									bgCol_;
 	OLE_COLOR									foreCol_;
 	HBRUSH										bgBrush_;
+
+	DWORD										lastClickTime_;
+	DWORD										doubleClickTimeout_;
 };
 
 

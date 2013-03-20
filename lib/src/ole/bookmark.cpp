@@ -141,7 +141,7 @@ mol::string Bookmark::getUrl( const mol::string& uri )
 	mol::punk<IUniformResourceLocator> url;
 	url.createObject(CLSID_InternetShortcut);
 
-	TCHAR* c = 0;
+	mol::CoStrBuf c;
 
 	mol::string ret;
 	if (url)
@@ -158,7 +158,6 @@ mol::string Bookmark::getUrl( const mol::string& uri )
 				if ( hr == S_OK )
 				{
 					ret = mol::toString(c);
-					::CoTaskMemFree(c);
 				}
 			}
 		}

@@ -340,10 +340,17 @@ HMENU Menu::load( int id, bool a )
 HMENU  Menu::create()
 {
     atached_ = true;
-    hMenu_ = CreateMenu();
+    hMenu_ = ::CreateMenu();
     return hMenu_;
 }
 
+
+HMENU  Menu::createPopup()
+{
+    atached_ = true;
+    hMenu_ = ::CreatePopupMenu();
+    return hMenu_;
+}
 /////////////////////////////////////////////////////////////////////
 
 void  Menu::detach()

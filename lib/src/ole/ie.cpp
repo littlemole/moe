@@ -155,7 +155,6 @@ void HtmlWndBase::getSourceImpl(std::string& src)
 	LARGE_INTEGER			lint = { 0, 0 };  //hm... we just say zero
 	ULONG 					size = 0;         //size to read from stream
 	ULONG					len  = 0;         //actual size read from stream
-	char*					buf;              //buffer to retrieve document text through stream
 
 	src = "";
 

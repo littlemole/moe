@@ -803,14 +803,12 @@ mol::string resolveInternetShortcut( const mol::string& link)
 	if ( hr != S_OK )
 		return _T("");	
 
-	wchar_t* purl = 0;
+	mol::CoStrBuf purl;
 	hr = url->GetURL(&purl);
 	if ( hr != S_OK )
 		return _T("");
 
-	mol::string ret(purl);
-	::CoTaskMemFree(purl);
-	return ret;
+	return mol::toString(purl);
 }
 
 } // end namespace mol;

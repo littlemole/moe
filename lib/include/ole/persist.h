@@ -733,20 +733,18 @@ class enum_statstg : public punk<IEnumSTATSTG>
 public:
 	enum_statstg()
 	{
-		::ZeroMemory(&stats,sizeof(stats));
+		//::ZeroMemory(&stats,sizeof(stats));
 	}
 
 	~enum_statstg()
 	{
-		if ( stats.pwcsName )
-			::CoTaskMemFree(stats.pwcsName);
+		//if ( stats->pwcsName )
+			//::CoTaskMemFree(stats.pwcsName);
 	}
 
 	bool next()
-	{				
-		if ( stats.pwcsName )
-			::CoTaskMemFree(stats.pwcsName);
-
+	{		
+		stats.clear();
 		if ( S_OK == interface_->Next(1,&stats,0) )
 		{
 			return true;
@@ -754,7 +752,8 @@ public:
 		return false;
 	}
 
-	STATSTG stats;
+	//STATSTG stats;
+	CoSTATSTGBuf stats;
 };
 
 ///////////////////////////////////////////////////////////
