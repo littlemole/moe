@@ -23,7 +23,7 @@ NamespaceTree::NamespaceTree()
 	adviseCookie_ = -1;
 	lastClickTime_ = 0;
 
-	doubleClickTimeout_ = ::GetDoubleClickTime()*5;
+	doubleClickTimeout_ = ::GetDoubleClickTime()*2;
 
 	mol::ole::PixeltoHIMETRIC(&sizel);
 	eraseBackground_ = 1;
@@ -178,7 +178,8 @@ HRESULT __stdcall NamespaceTree::QueryService(REFGUID /*guidService*/, REFIID ri
 
 HRESULT __stdcall  NamespaceTree::OnItemClick(IShellItem * psi, NSTCEHITTEST nstceHitTest, NSTCECLICKTYPE nstceClickType) 
 { 
-	HRESULT ret = S_FALSE;
+	HRESULT ret = S_OK;
+
 	if( (nstceClickType & NSTCECT_LBUTTON) && psi && ( nstceHitTest & NSTCEHT_ONITEMTABBUTTON ) )
 	{
 		mol::CoStrBuf psz;
@@ -191,8 +192,8 @@ HRESULT __stdcall  NamespaceTree::OnItemClick(IShellItem * psi, NSTCEHITTEST nst
 			{
 				VARIANT_BOOL vb = sfgaof & SFGAO_FOLDER ? VARIANT_TRUE : VARIANT_FALSE;
 				fire(DISPID_ISHELLTREEEVENTS_ONTREEDBLCLICK,mol::variant(psz),mol::variant(vb));
+				ret = S_FALSE;
 			}
-			ret = S_FALSE;
 		}
 	}
 	if ( (nstceClickType & NSTCECT_LBUTTON) && psi && ( nstceHitTest & NSTCEHT_ONITEM ) )
@@ -210,9 +211,13 @@ HRESULT __stdcall  NamespaceTree::OnItemClick(IShellItem * psi, NSTCEHITTEST nst
 				if (SUCCEEDED(hr))
 				{
 					VARIANT_BOOL vb = sfgaof & SFGAO_FOLDER ? VARIANT_TRUE : VARIANT_FALSE;
-					fire(DISPID_ISHELLTREEEVENTS_ONTREEDBLCLICK,mol::variant(psz),mol::variant(vb));
+					if(vb == VARIANT_FALSE)
+					{
+						fire(DISPID_ISHELLTREEEVENTS_ONTREEDBLCLICK,mol::variant(psz),mol::variant(vb));
+						ret = S_FALSE;
+					}
+					ret = S_FALSE;
 				}
-				ret = S_FALSE;
 			}
 			lastClickTime_ = ::GetTickCount();;
 		}
