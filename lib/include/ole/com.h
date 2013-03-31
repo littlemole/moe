@@ -170,8 +170,7 @@ public:
 
 	static T* instance() 
 	{
-		long tmp = ::InterlockedCompareExchange ((volatile LONG*) &t_, (LONG)0,(LONG)0);
-		if ( tmp == 0 )
+		if ( t_ == 0 )
 		{
 			punk<T> p;
 			HRESULT hr = ::CoCreateInstance( *clsid, 0, CLSCTX_INPROC_SERVER, *iid, (void**)&p);
@@ -180,14 +179,13 @@ public:
 				return 0;
 			}
 
-			tmp = ::InterlockedCompareExchange( (volatile LONG*) &t_,(LONG)(p.interface_),(LONG)0);
+			LONG_PTR tmp = locked_comp_ex( &t_,p.interface_,0);
 			if ( tmp == 0 )
 			{
-				tmp = (long)(p.interface_);
 				mol::ole_init::addRef((IUnknown*)t_);
 			}
 		}
-		return (T*)tmp;
+		return (T*)t_;
 	}
 
 private:
@@ -232,15 +230,13 @@ public:
 
 	static T* instance() 
 	{
-		long tmp = ::InterlockedCompareExchange ((volatile LONG*) &t_, (LONG)0,(LONG)0);
-		if ( tmp == 0 )
+		if(t_ == 0 )
 		{
 			T* n = new T;
-			tmp = ::InterlockedCompareExchange( (volatile LONG*) &t_,(LONG)n,(LONG)0);
+			LONG_PTR tmp = locked_comp_ex( &t_,n,0);
 			if ( tmp == 0 )
 			{
 				mol::ole_init::addRef((I*)t_);
-				tmp = (long)n;
 			}
 			else
 			{
@@ -248,7 +244,7 @@ public:
 			}
 		}
 
-		return (T*)tmp;
+		return (T*)t_;
 	}
 
 private:

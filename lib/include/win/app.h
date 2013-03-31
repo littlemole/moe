@@ -94,17 +94,11 @@ public:
 		template<class T>
 		static T& app()
 		{
-			long tmp = ::InterlockedCompareExchange ((volatile LONG*) &app_, (LONG)0,(LONG)0);
-			if ( tmp == 0 )
+			if ( app_ == 0 )
 			{
-				T* n = &mol::singleton<T>();
-				tmp = ::InterlockedCompareExchange( (volatile LONG*) &app_,(LONG)n,(LONG)0);
-				if ( tmp == 0 )
-				{
-					tmp = (long)n;
-				}
+				app_ = &mol::singleton<T>();
 			}
-			return *(T*)tmp;
+			return *(T*)app_;
 		}
 	
 protected:

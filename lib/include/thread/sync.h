@@ -106,11 +106,35 @@ private:
 // Singleton
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifdef _WIN64
+#define locked_comp_ex(target,value,comparand) InterlockedCompareExchange64( (volatile LONGLONG*)(target),(LONGLONG)(value),(LONGLONG)(comparand) ) 
+#else
+#define locked_comp_ex(target,value,comparand) InterlockedCompareExchange( (volatile LONG*)(target),(LONG)(value),(LONG)(comparand) ) 
+#endif
+
 template<class T>
 class Singleton
 {
 public:
 
+	static T& instance() 
+	{
+		if ( t_ == 0 )
+		{
+			T* n = new T;
+			LONG_PTR tmp = locked_comp_ex(&t_,n,0);
+			if ( tmp == 0 )
+			{
+				atexit(&Singleton<T>::killSingleton);
+			}
+			else
+			{
+				delete n;
+			}
+		}
+		return *(T*)t_;
+	}
+	/*
 	static T& instance() 
 	{
 		long tmp = ::InterlockedCompareExchange ((volatile LONG*) &t_, (LONG)0,(LONG)0);
@@ -131,6 +155,7 @@ public:
 
 		return *(T*)tmp;
 	}
+	*/
 private:
 
 	static void killSingleton()

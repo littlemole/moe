@@ -100,19 +100,12 @@ bool Editor::initialize(const mol::string& p, long enc, bool readOnly)
 	// if file exists, load
 	if ( mol::Path::exists(p) || (p.substr(0,6) == _T("ssh://") || p.substr(0,10) == _T("moe-ssh://")) )
 	{
-		if ( enc != -1 )
+		if ( enc == -1 )
+			enc = 0;
+
+		if ( S_OK != sci->LoadAsync(mol::bstr(p),enc) )
 		{
-			if ( S_OK != sci->LoadEncoding(mol::bstr(p),enc) )
-			{
-				return false;
-			}
-		}
-		else
-		{
-			if ( S_OK != sci->Load(mol::bstr(p)) )
-			{
-				return false;
-			}
+			return false;
 		}
 		//timer_.set( 5 * 60 * 1000, boost::bind(&Editor::checkModifiedOnDisk,this) );
 	}
@@ -1004,8 +997,6 @@ void Editor::OnScriptThread( int line, IRemoteDebugApplicationThread* remote, IA
 	{
 		EditorScript es(this);
 		es.scriptThread(line,remote,pError);
-
-		//mol::invoke( boost::bind( &Editor::OnScriptThread, this, line, remote, pError ) );
 		return;
 	}
 

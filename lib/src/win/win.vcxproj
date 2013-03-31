@@ -309,6 +309,7 @@
     <ClInclude Include="..\..\include\win\msgloop.h" />
     <ClInclude Include="..\..\include\win\msgmap.h" />
     <ClInclude Include="..\..\include\win\net.h" />
+    <ClInclude Include="..\..\include\win\overlapped.h" />
     <ClInclude Include="..\..\include\win\path.h" />
     <ClInclude Include="..\..\include\win\pp.h" />
     <ClInclude Include="..\..\include\win\process.h" />

@@ -2,6 +2,7 @@
 #include "ScintillaCtrl.h"
 #include "win/path.h"
 #include "win/shell.h"
+#include "win/overlapped.h"
 #include "win/pp.h"
 #include "util/istr.h"
 #include <sstream>
@@ -532,6 +533,99 @@ HRESULT __stdcall ScintillAx::LoadEncoding( BSTR file, long enc )
 	}
 	return S_FALSE; 
 }
+
+SCINTILLA_SYNTAX guess ( const mol::string& p, const mol::string& ext );
+
+void ScintillAx::OnAsyncLoad(const std::string& s)
+{
+	mol::bstr p;
+	props_->get_Filename(&p);
+
+	edit()->clearAnnotations();
+
+	edit()->setText("");
+	edit()->setCodePage(SC_CP_UTF8);
+
+	mol::FileEncoding fe;
+	DWORD cp = fe.investigate(s);
+	long enc = CP_ACP;
+	if ( cp == CP_WINUNICODE )
+	{
+		enc = CP_WINUNICODE;
+	}
+	if ( cp == CP_UTF8 )
+	{
+		enc = CP_UTF8;
+	}
+	std::string utf8_bytes = fe.convertToUTF8( s, enc );
+
+	if ( fe.isBinary() )
+	{
+		if ( IDCANCEL == ::MessageBox(*this,_T("this looks like a BINARY\r\nopen anyway?"),p.toString().c_str(),MB_OKCANCEL|MB_ICONQUESTION ) )
+		{
+			((IScintillAx*)this)->Release();
+			return;
+		}
+	}
+
+	props_->put_ReadOnly(VARIANT_FALSE);
+	props_->put_SysType(  fe.eolMode() );
+	props_->put_Encoding( enc );
+	props_->put_WriteBOM( fe.hasBOM() ? VARIANT_TRUE : VARIANT_FALSE );
+
+	edit()->setText(mol::unix2dos(utf8_bytes));
+
+	mol::string ext = mol::Path::ext(p.toString());
+	props_->put_Syntax(guess(p.toString(),ext));
+
+	edit()->setSavePoint();
+	setDirty(FALSE);
+
+	((IScintillAx*)this)->Release();
+}
+
+
+HRESULT __stdcall ScintillAx::LoadAsync( BSTR file, long enc )
+{ 
+	if (file)
+	{
+		mol::string p(mol::toString(file));
+		bool isSSH = p.substr(0,6) == _T("ssh://") || p.substr(0,10) == _T("moe-ssh://");
+		if ( isSSH )
+			return LoadEncoding(file,enc);
+
+		if ( mol::Path::exists(p) )
+		{
+			if ( !mol::Path::isDir(p) )
+			{
+				mol::string ext = mol::Path::ext(p);
+				if ( ext.size() > 0 )
+					if ( ext[0] == _T('.') )
+						ext = ext.substr(1);
+
+				if ( mol::icmp( ext, _T("gif")) != 0 &&
+					 mol::icmp( ext, _T("jpg")) != 0 &&
+					 mol::icmp( ext, _T("jpeg")) != 0 &&
+					 mol::icmp( ext, _T("bmp")) != 0 )
+				{
+					props_->put_Filename(file);
+
+					((IScintillAx*)this)->AddRef();
+					props_->put_ReadOnly(VARIANT_TRUE);
+					if (mol::load_async(p).then( &ScintillAx::OnAsyncLoad,this) == ERROR_SUCCESS)
+					{
+						//props_->put_Encoding(enc); //dont!
+						return S_OK; 
+					}
+					((IScintillAx*)this)->Release();
+				}
+			}
+		}
+	}
+
+	return LoadEncoding(file,enc);
+}
+
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 

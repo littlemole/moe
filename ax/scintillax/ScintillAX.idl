@@ -813,6 +813,9 @@ library Scintilla
 		[id(20), helpstring("Show the Insert Color Dialog"),local]
 		HRESULT InsertColorDialog( );
 
+		[id(21), helpstring("Load File from disk - async with specified encoding")] 
+		HRESULT LoadAsync( [in] BSTR fname, [in] long enc);
+
     };
 
 

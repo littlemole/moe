@@ -109,6 +109,7 @@ public:
 
 		HRESULT virtual __stdcall Load( BSTR file );
 		HRESULT virtual __stdcall LoadEncoding( BSTR file, long enc );
+		HRESULT virtual __stdcall LoadAsync( BSTR file, long enc );
 		HRESULT virtual __stdcall Save();
 		HRESULT virtual __stdcall SaveAs( BSTR filename );
 
@@ -154,6 +155,7 @@ public:
 
 		EditWnd* edit();
 
+		void OnAsyncLoad(const std::string& s);
 protected:
 
 
