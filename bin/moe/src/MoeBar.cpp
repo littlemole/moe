@@ -147,7 +147,9 @@ void MoeTabControl::OnRightClick()
 
 	// display context menut
 	mol::Menu sub = mol::UI().SubMenu(IDM_MENU_TAB,IDM_TAB);
-	int id = sub.returnTrackPopup(*this,pt.x-10,pt.y-10);
+
+	// use moe main window as parent for ownerdrawn menus to work on XP
+	int id = sub.returnTrackPopup(*moe(),pt.x-10,pt.y-10);
 	switch ( id )
 	{
 		case IDM_VIEW_CLOSE:
