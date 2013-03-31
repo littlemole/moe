@@ -10,12 +10,12 @@ namespace mol  {
 // Control Wrapper to add styles
 //////////////////////////////////////////////////////////////////////
 
-template<class Ctrl, int Style, int ExStyle>
-class Control: public Ctrl
+template<class C, int Style, int ExStyle>
+class Control: public C
 {
 public:
 
-	typedef Ctrl BaseWindowType;
+	typedef C BaseWindowType;
 
 protected:
 
