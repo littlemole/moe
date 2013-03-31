@@ -13,6 +13,10 @@ namespace mol  {
 template<class Ctrl, int Style, int ExStyle>
 class Control: public Ctrl
 {
+public:
+
+	typedef Ctrl BaseWindowType;
+
 protected:
 
     virtual int style()   

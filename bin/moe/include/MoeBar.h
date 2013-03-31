@@ -20,6 +20,8 @@ class  MoeTabControl : public mol::Control<
 friend class Docs;
 public:
 
+	typedef mol::TabCtrl BaseWindowType;
+
 	MoeTabControl();
 	virtual ~MoeTabControl();
 
@@ -74,6 +76,9 @@ class MoeToolBar : public mol::Control< mol::CustomToolBar,
 					  TBSTYLE_EX_MIXEDBUTTONS  >
 {
 public:
+
+	typedef mol::CustomToolBar BaseWindowType;
+
 	// msg handler
 	void OnRightClick(NMHDR* notify);
 
