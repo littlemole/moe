@@ -541,14 +541,15 @@ void ScintillAx::OnAsyncLoad(const std::string& s)
 	mol::bstr p;
 	props_->get_Filename(&p);
 
-	edit()->clearAnnotations();
+	long enc = CP_ACP;
+	props_->get_Encoding(&enc);
 
+	edit()->clearAnnotations();
 	edit()->setText("");
 	edit()->setCodePage(SC_CP_UTF8);
 
 	mol::FileEncoding fe;
 	DWORD cp = fe.investigate(s);
-	long enc = CP_ACP;
 	if ( cp == CP_WINUNICODE )
 	{
 		enc = CP_WINUNICODE;
@@ -609,12 +610,16 @@ HRESULT __stdcall ScintillAx::LoadAsync( BSTR file, long enc )
 					 mol::icmp( ext, _T("bmp")) != 0 )
 				{
 					props_->put_Filename(file);
+					props_->put_Encoding(enc); 
+					props_->put_ReadOnly(VARIANT_TRUE);
 
 					((IScintillAx*)this)->AddRef();
-					props_->put_ReadOnly(VARIANT_TRUE);
-					if (mol::load_async(p).then( &ScintillAx::OnAsyncLoad,this) == ERROR_SUCCESS)
+					if ( mol::load_async(p)
+							.then( 
+								&ScintillAx::OnAsyncLoad,this
+							) 
+						== ERROR_SUCCESS)
 					{
-						//props_->put_Encoding(enc); //dont!
 						return S_OK; 
 					}
 					((IScintillAx*)this)->Release();
