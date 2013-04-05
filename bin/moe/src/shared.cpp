@@ -645,7 +645,7 @@ HRESULT __stdcall MoeScript::Eval( BSTR scrpt, BSTR scrptLanguage)
 		return E_INVALIDARG;
 
 
-	scriptlet()->eval( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
+	moe()->scriptHost->eval( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
 	return S_OK;
 }
 
@@ -654,7 +654,7 @@ HRESULT __stdcall MoeScript::Debug( BSTR scrpt, BSTR scrptLanguage)
 	if ( !scrpt || !scrptLanguage )
 		return E_INVALIDARG;
 
-	scriptlet()->debug( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
+	moe()->scriptHost->debug( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
 	return S_OK;
 }
 
@@ -772,6 +772,8 @@ MoeConfig::MoeConfig()
 	foreColor_			= ::GetSysColor(COLOR_MENUTEXT);
 	backColor_			= ::GetSysColor(COLOR_MENU);
 	textColor_			= ::GetSysColor(COLOR_HIGHLIGHT);
+
+	settings_.createObject(CLSID_Setting,CLSCTX_INPROC_SERVER);
 }
 
 MoeConfig::~MoeConfig()
@@ -903,7 +905,7 @@ HRESULT __stdcall MoeConfig::get_ShowLineNumbers(  VARIANT_BOOL* vb)
 
 HRESULT __stdcall  MoeConfig::get_Settings( IDispatch** settings)
 {
-	return config()->QueryInterface(IID_IDispatch,(void**)settings);
+	return settings_.queryInterface(settings);
 }
 
 
@@ -933,7 +935,7 @@ HRESULT __stdcall MoeConfig::EditPreferences( )
 
 HRESULT __stdcall MoeConfig::EditSettings( )
 {
-	LPUNKNOWN punks[] = { config() };
+	LPUNKNOWN punks[] = { settings_.interface_ };
 	CLSID pages[]     = { CLSID_SettingProperties };
 	::OleCreatePropertyFrame(*moe(),100,100,L"Moe",1,punks,1,pages,0,0,0);
 
@@ -945,7 +947,7 @@ HRESULT __stdcall MoeConfig::ExportSettings( BSTR f )
 {
 	if ( f )
 	{
-		config()->Save(f);
+		settings_->Save(f);
 	}	
 	return S_OK;
 }
@@ -954,7 +956,7 @@ HRESULT __stdcall MoeConfig::ImportSettings( BSTR f )
 {
 	if ( f )
 	{
-		config()->Load(f);
+		settings_->Load(f);
 	}	
 	return S_OK;
 }
@@ -988,7 +990,7 @@ HRESULT __stdcall MoeConfig::InitializeEditorFromPreferences( IMoeDocument* d )
 	mol::punk<IScintillAxProperties> props;
 	sci->get_Properties(&props);
 
-	props->put_StyleSets(styles());
+	props->put_StyleSets(moe()->moeStyles);
 
 	hr = props->put_SysType(systype_);
 	if ( hr != S_OK )
@@ -1037,13 +1039,13 @@ HRESULT  __stdcall MoeConfig::get_StyleSets( IDispatch** s)
 	if (!s)
 		return E_INVALIDARG;
 
-	return styles()->QueryInterface(IID_IDispatch,(void**)s);
+	return moe()->moeStyles->QueryInterface(IID_IDispatch,(void**)s);
 }
 
 
 HRESULT  __stdcall MoeConfig::ResetStyles()
 {
-	mol::punk<IPersistStreamInit> psi(styles());
+	mol::punk<IPersistStreamInit> psi(moe()->moeStyles);
 	if(psi)
 		psi->InitNew();
 	return S_OK;

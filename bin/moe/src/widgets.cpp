@@ -1066,8 +1066,8 @@ mol::string findFile(const mol::string& f)
 		return f;
 	}
 
-	mol::string modulePath = mol::Path::pathname(binPath());
-	mol::string configPath = mol::Path::pathname(prefPath());
+	mol::string modulePath = mol::Path::pathname(mol::app<mol::win::AppBase>().getModulePath());
+	mol::string configPath = mol::Path::pathname(mol::app<mol::win::AppBase>().CreateAppPath(_T("moe")));
 
 	modulePath = mol::Path::addBackSlash(modulePath);
 	configPath = mol::Path::addBackSlash(configPath);
@@ -1238,8 +1238,10 @@ void ExportPage::command(int c)
 
 void PrefPage::setObjects()
 {
-	IUnknown* unk(config());
-	prop_->SetObjects( 1, &unk );
+	mol::punk<IDispatch> disp;
+	moe()->moeConfig->get_Settings(&disp);
+	mol::punk<IUnknown> unk(disp);
+	prop_->SetObjects( 1, &(unk.interface_) );
 }
 
 //////////////////////////////////////////////////////////////////////////////

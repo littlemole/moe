@@ -268,20 +268,6 @@ void EditorMenu::updateModeMenu( mol::Menu& mode )
 
 void EditorMenu::updateToolMenu( HMENU tools )
 {
-	VARIANT_BOOL vb;
-	static bool runonce = true;
-
-	if ( runonce )
-	{
-		runonce = false;
-	}
-	else
-		if ( (config()->get_IsDirty(&vb) == S_OK) && (vb == VARIANT_FALSE) )
-	{
-		return;
-	}
-
-
 	int startShortCutId_ = ID_FIRST_USER_CMD;
 	int startScriptId_   = ID_FIRST_USER_SCRIPT;
 	int startBatchId_    = ID_FIRST_USER_BATCH;
@@ -297,16 +283,20 @@ void EditorMenu::updateToolMenu( HMENU tools )
 	mol::punk<ISetting> batches;
 	mol::punk<ISetting> forms;
 
-	if ( S_OK != config()->Item(mol::variant("shortCuts"),&shortCuts) )
+	mol::punk<IDispatch> disp;
+	moe()->moeConfig->get_Settings(&disp);	
+	mol::punk<ISetting> config(disp);
+
+	if ( S_OK != config->Item(mol::variant("shortCuts"),&shortCuts) )
 		return;
 
-	if ( S_OK != config()->Item(mol::variant("scripts"),&scripts) )
+	if ( S_OK != config->Item(mol::variant("scripts"),&scripts) )
 		return;
 
-	if ( S_OK != config()->Item(mol::variant("batches"),&batches) )
+	if ( S_OK != config->Item(mol::variant("batches"),&batches) )
 		return;
 
-	if ( S_OK != config()->Item(mol::variant("forms"),&forms) )
+	if ( S_OK != config->Item(mol::variant("forms"),&forms) )
 		return;
 
 	int n = ::GetMenuItemCount(tools);

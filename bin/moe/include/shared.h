@@ -197,6 +197,8 @@ public:
 
 	void setDirty(bool b);
 	bool isDirty();
+
+	mol::punk<ISetting> settings_;
 };
 
 /////////////////////////////////////////////////////////////////////

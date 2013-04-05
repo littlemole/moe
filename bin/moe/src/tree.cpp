@@ -37,7 +37,7 @@ void MoeTreeWnd::OnTreeOpen()
 	tree->get_Selection(&p);
 	VARIANT_BOOL vb;
 	tree->IsDir(p,&vb);
-	treeWndSink()->OnTreeOpen(p,vb);
+	moe()->treeWndSink->OnTreeOpen(p,vb);
 }
 
 void MoeTreeWnd::OnTreeUpdate()

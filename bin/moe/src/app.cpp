@@ -258,8 +258,9 @@ MoeApp::MoeApp()
 
 	log().level(LOGINFO);
 
-	mol::string path = appPath() + _T("\\moe.log");
-	log().add( new FileAppender(mol::tostring(path)) );
+	mol::string appPath = CreateAppPath(_T("moe"));
+	mol::string logPath = appPath + _T("\\moe.log");
+	log().add( new FileAppender(mol::tostring(logPath)) );
 
 	//MoeConsole& con = moeConsole();
 }

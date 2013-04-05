@@ -81,7 +81,6 @@ LRESULT RTFEditor::OnClose()
 LRESULT RTFEditor::OnDestroy()
 {
 	shuttingDown_ = true;
-	scriptlet()->close();
 	return 0;
 }
 

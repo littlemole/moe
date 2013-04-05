@@ -614,9 +614,9 @@ HRESULT __stdcall ScintillAx::LoadAsync( BSTR file, long enc )
 					props_->put_ReadOnly(VARIANT_TRUE);
 
 					((IScintillAx*)this)->AddRef();
-					if ( mol::load_async(p)
-							.then( 
-								&ScintillAx::OnAsyncLoad,this
+
+					if ( mol::load_async(p).then( 
+								this,&ScintillAx::OnAsyncLoad
 							) 
 						== ERROR_SUCCESS)
 					{

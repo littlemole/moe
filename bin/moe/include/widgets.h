@@ -16,19 +16,36 @@ mol::string findFile(const mol::string& f);
 mol::string engineFromPath(const std::string& path);
 std::string resolvePath(const std::string& p);
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-// Status Bar
-/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+// tree events sink
+/////////////////////////////////////////////////////////////////////
 
-
-class MoeStatusBar : public mol::StatusBarEx 
+class TreeWndSink : public ShellTreeEvents
 {
-public:
+public :
 
-	void status(int i);
-	void status( const mol::string& txt );
+	typedef mol::stack_obj<TreeWndSink> Instance;
+
+	HRESULT virtual __stdcall OnTreeSelection(BSTR filename);
+	HRESULT virtual __stdcall OnTreeDblClick(BSTR filename,VARIANT_BOOL vb);
+	HRESULT virtual __stdcall OnTreeOpen(BSTR filename,VARIANT_BOOL vb); 
+	HRESULT virtual __stdcall OnContextMenu(BSTR filename,VARIANT_BOOL vb); 
 };
 
+/////////////////////////////////////////////////////////////////////
+// Drag&Drop COM Callback
+/////////////////////////////////////////////////////////////////////
+
+class MoeDrop : public mol::stack_obj<mol::ole::DropTargetBase>
+{
+public : 
+	HRESULT virtual __stdcall Drop( IDataObject* pDataObject, DWORD keyState, POINTL pt , DWORD* pEffect);
+	HRESULT virtual __stdcall DragEnter( IDataObject*, DWORD, POINTL, DWORD* );
+	HRESULT virtual __stdcall DragOver( DWORD, POINTL, DWORD* );
+	HRESULT virtual __stdcall DragLeave();
+	MoeDrop() {}
+	~MoeDrop() {}
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // the url box
@@ -54,10 +71,8 @@ public:
     virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER *pCbSize);
    
 private:
-	
 				
 	std::list<std::string>  history_;
-
  };
 
 
@@ -65,11 +80,14 @@ private:
 // URL Dialog
 /////////////////////////////////////////////////////////////////////////////////////////////
 
+
 class UrlDlg  : public mol::win::Dialog
 {
-friend mol::Singleton<UrlDlg>; 
-friend mol::stack_obj<UrlDlg>;
 public:
+
+	UrlDlg();
+	~UrlDlg() {};
+
 	virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	mol::string url;
@@ -80,10 +98,24 @@ public:
 
 private:
 	UrlBox urlBox_;
-
-	UrlDlg();
-	~UrlDlg() {};
 };
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+// Status Bar
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+class MoeStatusBar : public mol::StatusBarEx 
+{
+public:
+
+	void status(int i);
+	void status( const mol::string& txt );
+};
+
+
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -178,31 +210,7 @@ private:
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 
-class Script : public mol::com_obj<mol::ScriptHost>
-{
-public:
-
-	Script();
-	~Script();
-
-	void eval ( const mol::string& engine, const mol::string& script, IScintillAx* sci );
-	void debug( const mol::string& engine, const mol::string& script, IScintillAx* sci );
-	void call ( const mol::string& engine, const mol::string& func, const mol::string& script );
-
-	void formscript( const mol::string& engine, const mol::string& script, IDispatch* form );
-	void formdebug( const mol::string& engine, const mol::string& script, IDispatch* form );
-	void formcontrols( IUnknown* form );
-
-    virtual HRESULT  __stdcall OnScriptError( IActiveScriptError *pscripterror);
-	virtual HRESULT  __stdcall GetWindow(HWND *phwnd );
-
-private:
-	 IScintillAx* sci_;
-};
-
-/////////////////////////////////////////////////////////////////////
-
-typedef mol::punk<Script>		ScriptingHost;
+class Script;
 
 /////////////////////////////////////////////////////////////////////
 
@@ -229,23 +237,7 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Drag&Drop COM Callback
-/////////////////////////////////////////////////////////////////////
 
-class MoeDrop : public mol::stack_obj<mol::ole::DropTargetBase>
-{
-friend mol::Singleton<MoeDrop>; 
-friend mol::stack_obj<MoeDrop>;
-public : 
-	HRESULT virtual __stdcall Drop( IDataObject* pDataObject, DWORD keyState, POINTL pt , DWORD* pEffect);
-	HRESULT virtual __stdcall DragEnter( IDataObject*, DWORD, POINTL, DWORD* );
-	HRESULT virtual __stdcall DragOver( DWORD, POINTL, DWORD* );
-	HRESULT virtual __stdcall DragLeave();
-private:
-	MoeDrop() {}
-	~MoeDrop() {}
-};
 
 
 /////////////////////////////////////////////////////////////////////

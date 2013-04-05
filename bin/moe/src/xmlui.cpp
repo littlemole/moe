@@ -228,7 +228,7 @@ void MoeWndGUIBuilder::makeUI()
 
 
     // drag n drop    
-    ::RegisterDragDrop(*moe,moeDropTarget());
+    ::RegisterDragDrop(*moe,moe->moeDrop.get());
     
 
   // keybord shortcuts (accellerators)
@@ -310,53 +310,7 @@ Encodings* codePages()
 {
   return &mol::singleton<Encodings>();
 }
-TreeWndSink* treeWndSink()
-{
-  return &mol::singleton<TreeWndSink>();
-}
-MoeDrop* moeDropTarget()
-{
-  return &mol::singleton<MoeDrop>();
-}
-mol::SearchDlg* searchDlg()
-{
-  return &mol::singleton<mol::SearchDlg>();
-}
-UrlDlg* urlDlg()
-{
-  return &mol::singleton<UrlDlg>();
-}
 DebugDlg* debugDlg()
 {
   return &mol::singleton<DebugDlg>();
-}
-ISetting* config()
-{
-  return mol::comSingleton<ISetting,&CLSID_Setting>();
-}
-IScintillAxStyleSets* styles()
-{
-  return mol::comSingleton<IScintillAxStyleSets,&CLSID_ScintillAxStyleSets>();
-}
-Script* scriptlet()
-  {
-  return mol::nonCreatableCOMSingleton<Script,IActiveScriptSite>();
-}
-
-const mol::string& appPath()
-  {
-  static const mol::string appPath_ = mol::app<AppBase>().CreateAppPath(_T("moe"));
-  return appPath_;
-}
-
-const mol::string& prefPath()
-  {
-  static const mol::string prefPath_ = appPath() + _T("\\xpref.xmo");
-  return prefPath_;
-}
-
-const mol::string& binPath()
-  {
-  static const mol::string binPath_ = mol::app<AppBase>().getModulePath();
-  return binPath_;
 }

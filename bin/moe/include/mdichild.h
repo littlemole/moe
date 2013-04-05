@@ -192,6 +192,33 @@ public:
 };
 
 
+class Script : public mol::com_obj<mol::ScriptHost>
+{
+public:
+
+	Script();
+	~Script();
+
+	void eval ( const mol::string& engine, const mol::string& script, IScintillAx* sci );
+	void debug( const mol::string& engine, const mol::string& script, IScintillAx* sci );
+	void call ( const mol::string& engine, const mol::string& func, const mol::string& script );
+
+	void formscript( const mol::string& engine, const mol::string& script, IDispatch* form );
+	void formdebug( const mol::string& engine, const mol::string& script, IDispatch* form );
+	void formcontrols( IUnknown* form );
+
+    virtual HRESULT  __stdcall OnScriptError( IActiveScriptError *pscripterror);
+	virtual HRESULT  __stdcall GetWindow(HWND *phwnd );
+
+private:
+	 IScintillAx* sci_;
+};
+
+/////////////////////////////////////////////////////////////////////
+
+typedef mol::punk<Script>		ScriptingHost;
+
+
 
 #endif
 

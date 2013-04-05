@@ -41,7 +41,7 @@ void EditorScript::execScript()
 	if ( S_OK != editor_->text_->GetText(&script) )
 		return ;
 
-	scriptlet()->eval(engine,script.toString(),editor_->sci);
+	moe()->scriptHost->eval(engine,script.toString(),editor_->sci);
 	mol::bstr out;
 	moe()->stdOut(&out);
 	if(out)

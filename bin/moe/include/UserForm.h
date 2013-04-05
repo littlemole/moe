@@ -1,7 +1,7 @@
 #ifndef USERFORM_DEF_GUARD_
 #define USERFORM_DEF_GUARD_
 
-#include "widgets.h"
+#include "moe.h"
 #include "ole/SimpleHost.h"
 #include "fm20_tlh.h"
 

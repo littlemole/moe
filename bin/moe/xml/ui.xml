@@ -28,7 +28,7 @@
     -->
     <window name="moe" class="MoeWnd" id="IDW_MOE" menu="IDM_SMALL_MENU"
             layout="BorderLayout" pos="stdRect" mdi="IDM_VIEW_WINDOWS"        
-            dragDrop='moeDropTarget()' show='SW_SHOW' accel='IDA_MOE' accessor='true'>
+            dragDrop='moe->moeDrop.get()' show='SW_SHOW' accel='IDA_MOE' accessor='true'>
       
       <!-- act as an ole container -->
       <!-- we provide these menues for menu merging with ole embedding -->
@@ -219,33 +219,47 @@
     <singleton name="codePages" class="Encodings" />
 
     <!-- events -->
-
+<!--
     <singleton name="treeWndSink" class="TreeWndSink" />
     <singleton name="moeDropTarget" class="MoeDrop" />
-    
+    -->
+
     <!-- dialogs -->
+    <!--
     <singleton name="searchDlg" class="mol::SearchDlg" />
+    
     <singleton name="urlDlg" class="UrlDlg" />
+    -->
     <singleton name="debugDlg" class="DebugDlg" />
 
     <!-- COM singleton: user settings -->
+    <!--
     <singleton name="config" class="ISetting" clsid="CLSID_Setting" />
-
+    -->
+    
     <!-- COM singleton: user styles -->
+    <!--
     <singleton name="styles" class="IScintillAxStyleSets" clsid="CLSID_ScintillAxStyleSets" />    
+    -->
     
     <!-- noncreatable COM singleton: scripting support -->
+    <!--
     <singleton name="scriptlet" class="Script" interface="IActiveScriptSite" />
-
+-->
     <!-- simple app setting singletons -->
     
     <!-- path to moe's user application setting directory -->
+    <!--
     <singleton name="appPath" path='moe' />
+    -->
     <!-- path to moe's user application setting persistent file -->
+    <!--
     <singleton name="prefPath" string='appPath() + _T("\\xpref.xmo")' />
+    -->
     <!-- path to moe executable -->
+    <!--
     <singleton name="binPath" module='moe' />
-    
+    -->
   </ui>
 
 

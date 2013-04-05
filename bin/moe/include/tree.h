@@ -18,6 +18,7 @@ typedef mol::CtrlResizer<
 RTree;
 
 
+
 /////////////////////////////////////////////////////////////////////
 // TreeWnd
 /////////////////////////////////////////////////////////////////////
@@ -51,25 +52,9 @@ public:
 	HWND createWindow( const mol::string& windowName, HMENU id, const mol::Rect& r, HWND parent );
 
 	bool hasFocus()  ;
+
 };
 
-/////////////////////////////////////////////////////////////////////
-// tree events sink
-/////////////////////////////////////////////////////////////////////
-
-class TreeWndSink : public mol::stack_obj<ShellTreeEvents>
-{
-friend mol::Singleton<TreeWndSink>; 
-friend mol::stack_obj<TreeWndSink>;
-public :
-	HRESULT virtual __stdcall OnTreeSelection(BSTR filename);
-	HRESULT virtual __stdcall OnTreeDblClick(BSTR filename,VARIANT_BOOL vb);
-	HRESULT virtual __stdcall OnTreeOpen(BSTR filename,VARIANT_BOOL vb); 
-	HRESULT virtual __stdcall OnContextMenu(BSTR filename,VARIANT_BOOL vb); 
-private:
-	TreeWndSink() {}
-	~TreeWndSink() {}
-};
 
 
 #endif

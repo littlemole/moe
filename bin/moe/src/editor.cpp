@@ -139,7 +139,6 @@ bool Editor::initialize(const mol::string& p, long enc, bool readOnly)
 
 void Editor::OnDestroy()
 {
-	scriptlet()->close();
 	ODBGS("Editor::OnDestroy()");
 	
 	docs()->remove(this);

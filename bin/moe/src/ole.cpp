@@ -88,8 +88,6 @@ void OleChild::OnPaint()
 
 void OleChild::OnNcDestroy()
 {
-	scriptlet()->close();
-
 	// excel specific: don't do this in OnDestroy or garbage layout
 	// when excel doc is last document
 	docs()->remove(this);

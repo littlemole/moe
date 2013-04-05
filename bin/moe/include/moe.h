@@ -4,7 +4,11 @@
 #include "Docs.h"
 #include "resource.h"
 
-class MoeWnd;
+class TreeWndSink;
+class MoeDrop;
+class UrlBox;
+class UrlDlg;
+
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -51,8 +55,14 @@ public:
 	mol::punk<IMoeDialogs> moeDialogs;
 	mol::punk<IMoeView>    moeView;
 	mol::punk<IMoeConfig>  moeConfig;
-
-
+	mol::punk<IScintillAxStyleSets> moeStyles;
+	mol::punk<ShellTreeEvents> treeWndSink;
+	mol::punk<Script> scriptHost;
+	//
+//	boost::scoped_ptr<TreeWndSink> treeWndSink;
+	boost::scoped_ptr<MoeDrop> moeDrop;
+	boost::scoped_ptr<mol::SearchDlg> searchDlg;
+	boost::scoped_ptr<UrlDlg> urlDlg;
 
 	/////////////////////////////////////////////////////////////////////
 	// std windows msgs - Creation / Activation / Destruction
@@ -187,6 +197,8 @@ public:
 	bool toolbarFrozen() { return toolBarFrozen_ == 0; }
 
 	 void OnScreenShot();
+
+
 private:
 	
 	// load conf

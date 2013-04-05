@@ -105,39 +105,8 @@ Documents* docs();
 class Encodings;    
 Encodings* codePages();
 
-class TreeWndSink;    
-TreeWndSink* treeWndSink();
-
-class MoeDrop;    
-MoeDrop* moeDropTarget();
-
-namespace mol {
-
-class SearchDlg;    
-
-}
-mol::SearchDlg* searchDlg();
-
-class UrlDlg;    
-UrlDlg* urlDlg();
-
 class DebugDlg;    
 DebugDlg* debugDlg();
-
-struct ISetting;
-ISetting* config();
-
-struct IScintillAxStyleSets;
-IScintillAxStyleSets* styles();
-
-class Script;    
-Script* scriptlet();
-
-const mol::string& appPath();
-
-const mol::string& prefPath();
-
-const mol::string& binPath();
   
 
 

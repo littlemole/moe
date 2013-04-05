@@ -29,6 +29,10 @@ using namespace mol::win;
 //////////////////////////////////////////////////////////////////////////////
 
 MoeWnd::MoeWnd() 
+	:	//treeWndSink(new TreeWndSink),
+		moeDrop(new MoeDrop),
+		searchDlg(new mol::SearchDlg),
+		urlDlg(new UrlDlg)
 {
 	ODBGS("MoeWnd::MoeWnd()");
 
@@ -45,11 +49,16 @@ MoeWnd::MoeWnd()
 	icon.load(IDI_MOE);
 	wndClass().setIcon(icon);		
 
-	// create sub objects
-	moeScript  = new MoeScript::Instance;
-	moeDialogs = new MoeDialogs::Instance;
-	moeView    = new MoeView::Instance;
-	moeConfig  = new MoeConfig::Instance;
+	// create external and internal COM sub objects
+	moeScript   = new MoeScript::Instance;
+	moeDialogs  = new MoeDialogs::Instance;
+	moeView     = new MoeView::Instance;
+	moeConfig   = new MoeConfig::Instance;
+	treeWndSink = new TreeWndSink::Instance;
+	scriptHost  = new Script;
+	moeStyles.createObject(CLSID_ScintillAxStyleSets,CLSCTX_INPROC_SERVER);
+
+
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -106,7 +115,7 @@ void MoeWnd::OnCreate()
 	// initialize tree child window and hook up tree window COM events
 	mol::punk<IShellTree> tree(treeWnd()->oleObject);
 	tree->put_UseContext(VARIANT_FALSE);
-	treeWndSink()->Advise(treeWnd()->oleObject);
+	treeWndSink->Advise(treeWnd()->oleObject);
 
 	// load UI state
 	loadPersistUIstate();
@@ -128,10 +137,11 @@ void MoeWnd::OnCreate()
 void MoeWnd::loadPersistUIstate()
 {
 	// determine ui.xmo filepath or use fallback
-	mol::string p(appPath() + _T("\\ui.xmo"));
+	mol::string appPath = mol::app<AppBase>().CreateAppPath(_T("moe"));
+	mol::string p(appPath + _T("\\ui.xmo"));
 	if ( !mol::Path::exists(p) )
 	{
-		p = mol::Path::pathname(binPath()) + _T("\\ui.xmo");
+		p = mol::Path::pathname(mol::app<mol::win::AppBase>().getModulePath()) + _T("\\ui.xmo");
 	}
 	if ( !mol::Path::exists(p) )
 		return;
@@ -179,9 +189,9 @@ void MoeWnd::OnDestroy()
 {	
 	Ribbon::ribbon()->tearDown();
 
-	treeWndSink()->UnAdvise(treeWnd()->oleObject);
+	treeWndSink->UnAdvise(treeWnd()->oleObject);
 	::CoDisconnectObject(treeWnd()->oleObject,0);
-	scriptlet()->close();
+	scriptHost->close();
 	::RevokeDragDrop(*this);
 
 	if ( activeObj_ )
@@ -353,23 +363,23 @@ void MoeWnd::OnFileOpenHex()
 
 void MoeWnd::OnFileOpenHtml()
 {	
-	if ( IDOK == urlDlg()->doModal( IDD_DIALOG_URL, *this ) )
+	if ( IDOK == urlDlg->doModal( IDD_DIALOG_URL, *this ) )
 	{
-		if ( !urlDlg()->url.empty() )
+		if ( !urlDlg->url.empty() )
 		{
-			if (  urlDlg()->url.substr(0,6) == _T("ssh://") ||  urlDlg()->url.substr(0,10) == _T("moe-ssh://") )
+			if (  urlDlg->url.substr(0,6) == _T("ssh://") ||  urlDlg->url.substr(0,10) == _T("moe-ssh://") )
 			{
-				bool result = docs()->open( urlDlg()->url, MOE_DOCTYPE_DOC, -1, false, 0 );
+				bool result = docs()->open( urlDlg->url, MOE_DOCTYPE_DOC, -1, false, 0 );
 				return;
 			}
-			bool result = docs()->open( urlDlg()->url, MOE_DOCTYPE_HTML, -1, true, 0 );
+			bool result = docs()->open( urlDlg->url, MOE_DOCTYPE_HTML, -1, true, 0 );
 			if (!result)
 			{
 				mol::ostringstream oss;
-				oss << _T("failed to load: ") << urlDlg()->url;
+				oss << _T("failed to load: ") << urlDlg->url;
 				statusBar()->status(oss.str());
 			}
-			statusBar()->status(urlDlg()->url);
+			statusBar()->status(urlDlg->url);
 		}
 	}
 }
@@ -390,7 +400,7 @@ void MoeWnd::OnFileExit()
 
 void MoeWnd::OnFind()
 {
-    searchDlg()->findText(*this);
+    searchDlg->findText(*this);
 }
 
 
@@ -398,7 +408,7 @@ void MoeWnd::OnFind()
 
 void MoeWnd::OnReplace()
 {
-    searchDlg()->replaceText(*this);
+    searchDlg->replaceText(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -424,7 +434,6 @@ void MoeWnd::OnEditUserStyles()
 	{
 		::MessageBox(*this,_T("err"),_T("failed to load"),MB_ICONERROR);
 	}
-	statusBar()->status(urlDlg()->url);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -721,7 +730,8 @@ HRESULT __stdcall MoeWnd::Exit()
 	}
 
 	// save persistent info
-	mol::string p(appPath() + _T("\\") + _T("ui.xmo"));
+	mol::string appPath = mol::app<AppBase>().CreateAppPath(_T("moe"));
+	mol::string p(appPath + _T("\\ui.xmo"));
 	Storage store;
 	if ( store.create(p) )
 	{
@@ -780,7 +790,7 @@ HRESULT __stdcall MoeWnd::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
 	punk<IStream> stream;
 	if ( S_OK == pStgSave->CreateStream( L"UI", STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,0,&stream) )
 	{
-		urlDlg()->Save(stream,FALSE);
+		urlDlg->Save(stream,FALSE);
 	}
 	stream.release();
 
@@ -799,8 +809,10 @@ HRESULT __stdcall MoeWnd::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
 	}
 	stream.release();
 
-
-	punk<IPersistStorage> ps(config());
+	mol::punk<IDispatch> disp;
+	moeConfig->get_Settings(&disp);
+	mol::punk<ISetting> config(disp);
+	punk<IPersistStorage> ps(config);
 	if ( ps )
 	{
 		mol::punk<IStorage> store;
@@ -832,7 +844,7 @@ HRESULT __stdcall MoeWnd::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
 	// save moe style settings
 	if ( S_OK == pStgSave->CreateStream( L"STYLES", STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,0,&stream) )
 	{
-		mol::punk<IPersistStream> ps(styles());
+		mol::punk<IPersistStream> ps(moeStyles);
 		if ( ps )
 		{
 			ps->Save(stream,TRUE);
@@ -872,7 +884,7 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 	if ( !stream || (hr != S_OK) )
 		return S_OK;
 
-	urlDlg()->Load(stream);
+	urlDlg->Load(stream);
 	setDirty(FALSE);
 	
 	stream.release();
@@ -893,7 +905,10 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 	{
 
 		// load user settings stream
-		punk<IPersistStorage> ps(config());
+		mol::punk<IDispatch> disp;
+		moeConfig->get_Settings(&disp);
+		mol::punk<ISetting> config(disp);
+		punk<IPersistStorage> ps(config);
 		if ( !ps )
 			return S_OK;
 
@@ -910,7 +925,10 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 	freezeConfig(_T("batches"));
 	freezeConfig(_T("forms"));
 
-	config()->put_IsDirty(VARIANT_FALSE);
+	mol::punk<IDispatch> disp;
+	moeConfig->get_Settings(&disp);
+	mol::punk<ISetting> config(disp);
+	config->put_IsDirty(VARIANT_FALSE);
 
 	////////////////////////////////////////////
 
@@ -919,7 +937,7 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 
 	// look at config data for ribbon display
 	mol::punk<ISetting> set;
-	hr = config()->Item( mol::variant("Ribbon"), &set);
+	hr = config->Item( mol::variant("Ribbon"), &set);
 	if ( hr == S_OK )
 	{
 		mol::bstr val;
@@ -955,7 +973,7 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 		return S_OK;
 
 	// load UI config
-	punk<IPersistStream> psc(styles());
+	punk<IPersistStream> psc(moeStyles);
 	if ( !psc )
 		return S_OK;
 
@@ -971,8 +989,12 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 void  MoeWnd::freezeConfig(const mol::string& key)
 {
 	// freeze top level items
+	mol::punk<IDispatch> disp;
+	moeConfig->get_Settings(&disp);
+	mol::punk<ISetting> config(disp);
+
 	punk<ISetting> s;
-	if ( S_OK == config()->Item(variant(key),&s) )
+	if ( S_OK == config->Item(variant(key),&s) )
 	{
 		if ( s )
 		{
@@ -1064,10 +1086,15 @@ HRESULT __stdcall MoeWnd::Save( LPSTREAM pStm,BOOL fClearDirty)
 
 HRESULT __stdcall MoeWnd::GetSizeMax( ULARGE_INTEGER *pCbSize)
 {
-	urlDlg()->GetSizeMax(pCbSize);
+	urlDlg->GetSizeMax(pCbSize);
 	reBar()->GetSizeMax(pCbSize);
 	pCbSize->QuadPart += sizeof(ULONG)*2 + sizeof(BYTE)*3;
-	punk<IPersistStream> ps(config());
+	
+	mol::punk<IDispatch> disp;
+	moe()->moeConfig->get_Settings(&disp);
+	mol::punk<ISetting> config(disp);
+
+	punk<IPersistStream> ps(config);
 	if ( ps )
 	{
 		ULARGE_INTEGER s;
