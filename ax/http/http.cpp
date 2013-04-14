@@ -1,13 +1,11 @@
 #include "stdafx.h"
-//#include "http.h"
-
+#include "httpAx.h"
+#include "ole/dll.h"
 #include "http_i.c"
 
-class ioDll : 
+class httpDll : 
 	public mol::Dll,
-	public mol::exports<ioDll,PathObj>,
-	public mol::exports<ioDll,DirObj>,
-	public mol::exports<ioDll,FileObj>
+	public mol::exports<httpDll,Http>
 
 {
 public:
@@ -15,5 +13,5 @@ public:
 //	DEFINE_ELEVATION_STRING_IDENTIFIER(IDC_DISPLAYNAME);
 };
 
-DLL_COCLASS_EXPORTS(ioDll)
+DLL_COCLASS_EXPORTS(httpDll)
 

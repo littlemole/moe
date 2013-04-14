@@ -3,11 +3,11 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 7.00.0555 */
-/* at Sat May 05 23:50:57 2012
+ /* File created by MIDL compiler version 8.00.0595 */
+/* at Sat Apr 13 17:39:21 2013
  */
 /* Compiler settings for http.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0555 
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -41,58 +41,51 @@
 
 /* Forward Declarations */ 
 
-#ifndef __IFile_FWD_DEFINED__
-#define __IFile_FWD_DEFINED__
-typedef interface IFile IFile;
-#endif 	/* __IFile_FWD_DEFINED__ */
+#ifndef __IHttp_FWD_DEFINED__
+#define __IHttp_FWD_DEFINED__
+typedef interface IHttp IHttp;
+
+#endif 	/* __IHttp_FWD_DEFINED__ */
 
 
-#ifndef __IDir_FWD_DEFINED__
-#define __IDir_FWD_DEFINED__
-typedef interface IDir IDir;
-#endif 	/* __IDir_FWD_DEFINED__ */
+#ifndef __IHttpHeaders_FWD_DEFINED__
+#define __IHttpHeaders_FWD_DEFINED__
+typedef interface IHttpHeaders IHttpHeaders;
+
+#endif 	/* __IHttpHeaders_FWD_DEFINED__ */
 
 
-#ifndef __IPath_FWD_DEFINED__
-#define __IPath_FWD_DEFINED__
-typedef interface IPath IPath;
-#endif 	/* __IPath_FWD_DEFINED__ */
+#ifndef __IHttpRequest_FWD_DEFINED__
+#define __IHttpRequest_FWD_DEFINED__
+typedef interface IHttpRequest IHttpRequest;
+
+#endif 	/* __IHttpRequest_FWD_DEFINED__ */
 
 
-#ifndef __Path_FWD_DEFINED__
-#define __Path_FWD_DEFINED__
+#ifndef __IHttpResponse_FWD_DEFINED__
+#define __IHttpResponse_FWD_DEFINED__
+typedef interface IHttpResponse IHttpResponse;
 
-#ifdef __cplusplus
-typedef class Path Path;
-#else
-typedef struct Path Path;
-#endif /* __cplusplus */
-
-#endif 	/* __Path_FWD_DEFINED__ */
+#endif 	/* __IHttpResponse_FWD_DEFINED__ */
 
 
-#ifndef __File_FWD_DEFINED__
-#define __File_FWD_DEFINED__
+#ifndef __IHttpHeader_FWD_DEFINED__
+#define __IHttpHeader_FWD_DEFINED__
+typedef interface IHttpHeader IHttpHeader;
 
-#ifdef __cplusplus
-typedef class File File;
-#else
-typedef struct File File;
-#endif /* __cplusplus */
-
-#endif 	/* __File_FWD_DEFINED__ */
+#endif 	/* __IHttpHeader_FWD_DEFINED__ */
 
 
-#ifndef __Dir_FWD_DEFINED__
-#define __Dir_FWD_DEFINED__
+#ifndef __HTTP_FWD_DEFINED__
+#define __HTTP_FWD_DEFINED__
 
 #ifdef __cplusplus
-typedef class Dir Dir;
+typedef class HTTP HTTP;
 #else
-typedef struct Dir Dir;
+typedef struct HTTP HTTP;
 #endif /* __cplusplus */
 
-#endif 	/* __Dir_FWD_DEFINED__ */
+#endif 	/* __HTTP_FWD_DEFINED__ */
 
 
 /* header files for imported files */
@@ -112,119 +105,68 @@ extern "C"{
 
 
 
+
+
+
+
 EXTERN_C const IID LIBID_HTTP;
 
-#ifndef __IFile_INTERFACE_DEFINED__
-#define __IFile_INTERFACE_DEFINED__
+#ifndef __IHttp_INTERFACE_DEFINED__
+#define __IHttp_INTERFACE_DEFINED__
 
-/* interface IFile */
+/* interface IHttp */
 /* [dual][oleautomation][object][helpstring][uuid] */ 
 
 
-EXTERN_C const IID IID_IFile;
+EXTERN_C const IID IID_IHttp;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    MIDL_INTERFACE("5AF00596-158A-4ddd-BC20-83BC8D5E432F")
-    IFile : public IDispatch
+    MIDL_INTERFACE("65ECE645-63A0-422B-9551-30BABE5C0D46")
+    IHttp : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_Filename( 
-            /* [retval][out] */ BSTR *f) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Get( 
+            /* [in] */ BSTR url,
+            /* [retval][out] */ IHttpRequest **request) = 0;
         
-        virtual /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT STDMETHODCALLTYPE put_EoL( 
-            /* [in] */ long t) = 0;
-        
-        virtual /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_EoL( 
-            /* [retval][out] */ long *t) = 0;
-        
-        virtual /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT STDMETHODCALLTYPE put_Encoding( 
-            /* [in] */ long cp) = 0;
-        
-        virtual /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_Encoding( 
-            /* [retval][out] */ long *cp) = 0;
-        
-        virtual /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT STDMETHODCALLTYPE put_UseBOM( 
-            /* [in] */ VARIANT_BOOL vb) = 0;
-        
-        virtual /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_UseBOM( 
-            /* [retval][out] */ VARIANT_BOOL *vb) = 0;
-        
-        virtual /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_EoF( 
-            /* [retval][out] */ VARIANT_BOOL *vb) = 0;
-        
-        virtual /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT STDMETHODCALLTYPE get_Size( 
-            /* [retval][out] */ long *s) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ BSTR file,
-            /* [retval][out] */ VARIANT_BOOL *vb) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenReadOnly( 
-            /* [in] */ BSTR file,
-            /* [retval][out] */ VARIANT_BOOL *vb) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenAppend( 
-            /* [in] */ BSTR file,
-            /* [retval][out] */ VARIANT_BOOL *vb) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Close( void) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Read( 
-            /* [in] */ long cnt,
-            /* [retval][out] */ BSTR *file) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ReadText( 
-            /* [retval][out] */ BSTR *file) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Seek( 
-            /* [in] */ long pos) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Write( 
-            /* [in] */ BSTR file,
-            /* [in] */ long len,
-            /* [retval][out] */ long *s) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE WriteText( 
-            /* [in] */ BSTR txt,
-            /* [retval][out] */ long *s) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ BSTR txt,
-            /* [retval][out] */ VARIANT_BOOL *vb) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Request( 
+            /* [in] */ BSTR cmd,
+            /* [retval][out] */ IHttpRequest **request) = 0;
         
     };
     
+    
 #else 	/* C style interface */
 
-    typedef struct IFileVtbl
+    typedef struct IHttpVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IFile * This,
+            IHttp * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IFile * This);
+            IHttp * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IFile * This);
+            IHttp * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IFile * This,
+            IHttp * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IFile * This,
+            IHttp * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IFile * This,
+            IHttp * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -232,105 +174,40 @@ EXTERN_C const IID IID_IFile;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IFile * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            IHttp * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
-        /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Filename )( 
-            IFile * This,
-            /* [retval][out] */ BSTR *f);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IHttp * This,
+            /* [in] */ BSTR url,
+            /* [retval][out] */ IHttpRequest **request);
         
-        /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EoL )( 
-            IFile * This,
-            /* [in] */ long t);
-        
-        /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EoL )( 
-            IFile * This,
-            /* [retval][out] */ long *t);
-        
-        /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Encoding )( 
-            IFile * This,
-            /* [in] */ long cp);
-        
-        /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Encoding )( 
-            IFile * This,
-            /* [retval][out] */ long *cp);
-        
-        /* [helpstring][id][requestedit][displaybind][bindable][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UseBOM )( 
-            IFile * This,
-            /* [in] */ VARIANT_BOOL vb);
-        
-        /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UseBOM )( 
-            IFile * This,
-            /* [retval][out] */ VARIANT_BOOL *vb);
-        
-        /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EoF )( 
-            IFile * This,
-            /* [retval][out] */ VARIANT_BOOL *vb);
-        
-        /* [helpstring][id][requestedit][displaybind][bindable][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Size )( 
-            IFile * This,
-            /* [retval][out] */ long *s);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
-            IFile * This,
-            /* [in] */ BSTR file,
-            /* [retval][out] */ VARIANT_BOOL *vb);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OpenReadOnly )( 
-            IFile * This,
-            /* [in] */ BSTR file,
-            /* [retval][out] */ VARIANT_BOOL *vb);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OpenAppend )( 
-            IFile * This,
-            /* [in] */ BSTR file,
-            /* [retval][out] */ VARIANT_BOOL *vb);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
-            IFile * This);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
-            IFile * This,
-            /* [in] */ long cnt,
-            /* [retval][out] */ BSTR *file);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ReadText )( 
-            IFile * This,
-            /* [retval][out] */ BSTR *file);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Seek )( 
-            IFile * This,
-            /* [in] */ long pos);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Write )( 
-            IFile * This,
-            /* [in] */ BSTR file,
-            /* [in] */ long len,
-            /* [retval][out] */ long *s);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *WriteText )( 
-            IFile * This,
-            /* [in] */ BSTR txt,
-            /* [retval][out] */ long *s);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Create )( 
-            IFile * This,
-            /* [in] */ BSTR txt,
-            /* [retval][out] */ VARIANT_BOOL *vb);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Request )( 
+            IHttp * This,
+            /* [in] */ BSTR cmd,
+            /* [retval][out] */ IHttpRequest **request);
         
         END_INTERFACE
-    } IFileVtbl;
+    } IHttpVtbl;
 
-    interface IFile
+    interface IHttp
     {
-        CONST_VTBL struct IFileVtbl *lpVtbl;
+        CONST_VTBL struct IHttpVtbl *lpVtbl;
     };
 
     
@@ -338,85 +215,34 @@ EXTERN_C const IID IID_IFile;
 #ifdef COBJMACROS
 
 
-#define IFile_QueryInterface(This,riid,ppvObject)	\
+#define IHttp_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IFile_AddRef(This)	\
+#define IHttp_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IFile_Release(This)	\
+#define IHttp_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IFile_GetTypeInfoCount(This,pctinfo)	\
+#define IHttp_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IFile_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define IHttp_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IFile_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define IHttp_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IFile_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define IHttp_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IFile_get_Filename(This,f)	\
-    ( (This)->lpVtbl -> get_Filename(This,f) ) 
+#define IHttp_Get(This,url,request)	\
+    ( (This)->lpVtbl -> Get(This,url,request) ) 
 
-#define IFile_put_EoL(This,t)	\
-    ( (This)->lpVtbl -> put_EoL(This,t) ) 
-
-#define IFile_get_EoL(This,t)	\
-    ( (This)->lpVtbl -> get_EoL(This,t) ) 
-
-#define IFile_put_Encoding(This,cp)	\
-    ( (This)->lpVtbl -> put_Encoding(This,cp) ) 
-
-#define IFile_get_Encoding(This,cp)	\
-    ( (This)->lpVtbl -> get_Encoding(This,cp) ) 
-
-#define IFile_put_UseBOM(This,vb)	\
-    ( (This)->lpVtbl -> put_UseBOM(This,vb) ) 
-
-#define IFile_get_UseBOM(This,vb)	\
-    ( (This)->lpVtbl -> get_UseBOM(This,vb) ) 
-
-#define IFile_get_EoF(This,vb)	\
-    ( (This)->lpVtbl -> get_EoF(This,vb) ) 
-
-#define IFile_get_Size(This,s)	\
-    ( (This)->lpVtbl -> get_Size(This,s) ) 
-
-#define IFile_Open(This,file,vb)	\
-    ( (This)->lpVtbl -> Open(This,file,vb) ) 
-
-#define IFile_OpenReadOnly(This,file,vb)	\
-    ( (This)->lpVtbl -> OpenReadOnly(This,file,vb) ) 
-
-#define IFile_OpenAppend(This,file,vb)	\
-    ( (This)->lpVtbl -> OpenAppend(This,file,vb) ) 
-
-#define IFile_Close(This)	\
-    ( (This)->lpVtbl -> Close(This) ) 
-
-#define IFile_Read(This,cnt,file)	\
-    ( (This)->lpVtbl -> Read(This,cnt,file) ) 
-
-#define IFile_ReadText(This,file)	\
-    ( (This)->lpVtbl -> ReadText(This,file) ) 
-
-#define IFile_Seek(This,pos)	\
-    ( (This)->lpVtbl -> Seek(This,pos) ) 
-
-#define IFile_Write(This,file,len,s)	\
-    ( (This)->lpVtbl -> Write(This,file,len,s) ) 
-
-#define IFile_WriteText(This,txt,s)	\
-    ( (This)->lpVtbl -> WriteText(This,txt,s) ) 
-
-#define IFile_Create(This,txt,vb)	\
-    ( (This)->lpVtbl -> Create(This,txt,vb) ) 
+#define IHttp_Request(This,cmd,request)	\
+    ( (This)->lpVtbl -> Request(This,cmd,request) ) 
 
 #endif /* COBJMACROS */
 
@@ -426,66 +252,71 @@ EXTERN_C const IID IID_IFile;
 
 
 
-#endif 	/* __IFile_INTERFACE_DEFINED__ */
+#endif 	/* __IHttp_INTERFACE_DEFINED__ */
 
 
-#ifndef __IDir_INTERFACE_DEFINED__
-#define __IDir_INTERFACE_DEFINED__
+#ifndef __IHttpHeaders_INTERFACE_DEFINED__
+#define __IHttpHeaders_INTERFACE_DEFINED__
 
-/* interface IDir */
+/* interface IHttpHeaders */
 /* [dual][oleautomation][object][helpstring][uuid] */ 
 
 
-EXTERN_C const IID IID_IDir;
+EXTERN_C const IID IID_IHttpHeaders;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    MIDL_INTERFACE("92AF3107-79EB-480f-A118-6A3FF41E5085")
-    IDir : public IDispatch
+    MIDL_INTERFACE("E4371FB6-0126-41D1-8E37-B71715C07104")
+    IHttpHeaders : public IDispatch
     {
     public:
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
             /* [retval][out] */ IEnumVARIANT **newEnum) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ long i,
-            /* [retval][out] */ BSTR *direntry) = 0;
+            /* [in] */ VARIANT i,
+            /* [retval][out] */ VARIANT *header) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Count( 
             /* [retval][out] */ long *cnt) = 0;
         
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( 
+            /* [in] */ BSTR name,
+            /* [in] */ BSTR value) = 0;
+        
     };
+    
     
 #else 	/* C style interface */
 
-    typedef struct IDirVtbl
+    typedef struct IHttpHeadersVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IDir * This,
+            IHttpHeaders * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IDir * This);
+            IHttpHeaders * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IDir * This);
+            IHttpHeaders * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IDir * This,
+            IHttpHeaders * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IDir * This,
+            IHttpHeaders * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IDir * This,
+            IHttpHeaders * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -493,35 +324,48 @@ EXTERN_C const IID IID_IDir;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IDir * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            IHttpHeaders * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
-            IDir * This,
+            IHttpHeaders * This,
             /* [retval][out] */ IEnumVARIANT **newEnum);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
-            IDir * This,
-            /* [in] */ long i,
-            /* [retval][out] */ BSTR *direntry);
+            IHttpHeaders * This,
+            /* [in] */ VARIANT i,
+            /* [retval][out] */ VARIANT *header);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Count )( 
-            IDir * This,
+            IHttpHeaders * This,
             /* [retval][out] */ long *cnt);
         
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+            IHttpHeaders * This,
+            /* [in] */ BSTR name,
+            /* [in] */ BSTR value);
+        
         END_INTERFACE
-    } IDirVtbl;
+    } IHttpHeadersVtbl;
 
-    interface IDir
+    interface IHttpHeaders
     {
-        CONST_VTBL struct IDirVtbl *lpVtbl;
+        CONST_VTBL struct IHttpHeadersVtbl *lpVtbl;
     };
 
     
@@ -529,37 +373,40 @@ EXTERN_C const IID IID_IDir;
 #ifdef COBJMACROS
 
 
-#define IDir_QueryInterface(This,riid,ppvObject)	\
+#define IHttpHeaders_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IDir_AddRef(This)	\
+#define IHttpHeaders_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IDir_Release(This)	\
+#define IHttpHeaders_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IDir_GetTypeInfoCount(This,pctinfo)	\
+#define IHttpHeaders_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IDir_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define IHttpHeaders_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IDir_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define IHttpHeaders_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IDir_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define IHttpHeaders_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IDir__NewEnum(This,newEnum)	\
+#define IHttpHeaders__NewEnum(This,newEnum)	\
     ( (This)->lpVtbl -> _NewEnum(This,newEnum) ) 
 
-#define IDir_Item(This,i,direntry)	\
-    ( (This)->lpVtbl -> Item(This,i,direntry) ) 
+#define IHttpHeaders_Item(This,i,header)	\
+    ( (This)->lpVtbl -> Item(This,i,header) ) 
 
-#define IDir_Count(This,cnt)	\
+#define IHttpHeaders_Count(This,cnt)	\
     ( (This)->lpVtbl -> Count(This,cnt) ) 
+
+#define IHttpHeaders_Add(This,name,value)	\
+    ( (This)->lpVtbl -> Add(This,name,value) ) 
 
 #endif /* COBJMACROS */
 
@@ -569,135 +416,95 @@ EXTERN_C const IID IID_IDir;
 
 
 
-#endif 	/* __IDir_INTERFACE_DEFINED__ */
+#endif 	/* __IHttpHeaders_INTERFACE_DEFINED__ */
 
 
-#ifndef __IPath_INTERFACE_DEFINED__
-#define __IPath_INTERFACE_DEFINED__
+#ifndef __IHttpRequest_INTERFACE_DEFINED__
+#define __IHttpRequest_INTERFACE_DEFINED__
 
-/* interface IPath */
+/* interface IHttpRequest */
 /* [dual][oleautomation][object][helpstring][uuid] */ 
 
 
-EXTERN_C const IID IID_IPath;
+EXTERN_C const IID IID_IHttpRequest;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    MIDL_INTERFACE("FFEB4898-0ECC-465a-851E-F5F7BB4136A8")
-    IPath : public IDispatch
+    MIDL_INTERFACE("1800C704-0169-4C4A-96BC-EABEB2DD4606")
+    IHttpRequest : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Extension( 
-            /* [in] */ BSTR f,
-            /* [retval][out] */ BSTR *ret) = 0;
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_onResult( 
+            /* [in] */ IDispatch *cb) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Filename( 
-            /* [in] */ BSTR f,
-            /* [retval][out] */ BSTR *ret) = 0;
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_onError( 
+            /* [in] */ IDispatch *cb) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Path( 
-            /* [in] */ BSTR f,
-            /* [retval][out] */ BSTR *ret) = 0;
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Url( 
+            /* [in] */ BSTR m) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StripRoot( 
-            /* [in] */ BSTR f,
-            /* [retval][out] */ BSTR *ret) = 0;
+        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Url( 
+            /* [retval][out] */ BSTR *m) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Root( 
-            /* [in] */ BSTR f,
-            /* [retval][out] */ BSTR *ret) = 0;
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Method( 
+            /* [in] */ BSTR m) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddBackSlash( 
-            /* [in] */ BSTR f,
-            /* [retval][out] */ BSTR *ret) = 0;
+        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Method( 
+            /* [retval][out] */ BSTR *m) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveBackSlash( 
-            /* [in] */ BSTR f,
-            /* [retval][out] */ BSTR *ret) = 0;
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Version( 
+            /* [in] */ BSTR m) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddExtension( 
-            /* [in] */ BSTR f,
-            /* [in] */ BSTR e,
-            /* [retval][out] */ BSTR *ret) = 0;
+        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Version( 
+            /* [retval][out] */ BSTR *m) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsSubPath( 
-            /* [in] */ BSTR p1,
-            /* [in] */ BSTR p2,
-            /* [retval][out] */ VARIANT_BOOL *ret) = 0;
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Headers( 
+            /* [in] */ IHttpHeaders *h) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Exists( 
-            /* [in] */ BSTR f,
-            /* [retval][out] */ VARIANT_BOOL *ret) = 0;
+        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Headers( 
+            /* [retval][out] */ IHttpHeaders **h) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsDir( 
-            /* [in] */ BSTR f,
-            /* [retval][out] */ VARIANT_BOOL *ret) = 0;
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Body( 
+            /* [in] */ BSTR b) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsRoot( 
-            /* [in] */ BSTR f,
-            /* [retval][out] */ VARIANT_BOOL *ret) = 0;
+        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Body( 
+            /* [retval][out] */ BSTR *b) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsUNC( 
-            /* [in] */ BSTR f,
-            /* [retval][out] */ VARIANT_BOOL *ret) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsNetDrive( 
-            /* [in] */ BSTR f,
-            /* [retval][out] */ VARIANT_BOOL *ret) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ParentDir( 
-            /* [in] */ BSTR f,
-            /* [retval][out] */ BSTR *ret) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenDir( 
-            /* [in] */ BSTR f,
-            /* [retval][out] */ IDir **ret) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenFile( 
-            /* [in] */ BSTR f,
-            /* [retval][out] */ IFile **ret) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ChooseDir( 
-            /* [retval][out] */ BSTR *ret) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FileOpenDlg( 
-            /* [retval][out] */ BSTR *ret) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FileSaveDlg( 
-            /* [retval][out] */ BSTR *ret) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Execute( void) = 0;
         
     };
     
+    
 #else 	/* C style interface */
 
-    typedef struct IPathVtbl
+    typedef struct IHttpRequestVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IPath * This,
+            IHttpRequest * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
+            _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IPath * This);
+            IHttpRequest * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IPath * This);
+            IHttpRequest * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IPath * This,
+            IHttpRequest * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IPath * This,
+            IHttpRequest * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IPath * This,
+            IHttpRequest * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -705,121 +512,81 @@ EXTERN_C const IID IID_IPath;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IPath * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+            IHttpRequest * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Extension )( 
-            IPath * This,
-            /* [in] */ BSTR f,
-            /* [retval][out] */ BSTR *ret);
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_onResult )( 
+            IHttpRequest * This,
+            /* [in] */ IDispatch *cb);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Filename )( 
-            IPath * This,
-            /* [in] */ BSTR f,
-            /* [retval][out] */ BSTR *ret);
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_onError )( 
+            IHttpRequest * This,
+            /* [in] */ IDispatch *cb);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Path )( 
-            IPath * This,
-            /* [in] */ BSTR f,
-            /* [retval][out] */ BSTR *ret);
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Url )( 
+            IHttpRequest * This,
+            /* [in] */ BSTR m);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StripRoot )( 
-            IPath * This,
-            /* [in] */ BSTR f,
-            /* [retval][out] */ BSTR *ret);
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Url )( 
+            IHttpRequest * This,
+            /* [retval][out] */ BSTR *m);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Root )( 
-            IPath * This,
-            /* [in] */ BSTR f,
-            /* [retval][out] */ BSTR *ret);
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Method )( 
+            IHttpRequest * This,
+            /* [in] */ BSTR m);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddBackSlash )( 
-            IPath * This,
-            /* [in] */ BSTR f,
-            /* [retval][out] */ BSTR *ret);
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Method )( 
+            IHttpRequest * This,
+            /* [retval][out] */ BSTR *m);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveBackSlash )( 
-            IPath * This,
-            /* [in] */ BSTR f,
-            /* [retval][out] */ BSTR *ret);
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Version )( 
+            IHttpRequest * This,
+            /* [in] */ BSTR m);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddExtension )( 
-            IPath * This,
-            /* [in] */ BSTR f,
-            /* [in] */ BSTR e,
-            /* [retval][out] */ BSTR *ret);
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+            IHttpRequest * This,
+            /* [retval][out] */ BSTR *m);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsSubPath )( 
-            IPath * This,
-            /* [in] */ BSTR p1,
-            /* [in] */ BSTR p2,
-            /* [retval][out] */ VARIANT_BOOL *ret);
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Headers )( 
+            IHttpRequest * This,
+            /* [in] */ IHttpHeaders *h);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Exists )( 
-            IPath * This,
-            /* [in] */ BSTR f,
-            /* [retval][out] */ VARIANT_BOOL *ret);
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Headers )( 
+            IHttpRequest * This,
+            /* [retval][out] */ IHttpHeaders **h);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsDir )( 
-            IPath * This,
-            /* [in] */ BSTR f,
-            /* [retval][out] */ VARIANT_BOOL *ret);
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Body )( 
+            IHttpRequest * This,
+            /* [in] */ BSTR b);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsRoot )( 
-            IPath * This,
-            /* [in] */ BSTR f,
-            /* [retval][out] */ VARIANT_BOOL *ret);
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Body )( 
+            IHttpRequest * This,
+            /* [retval][out] */ BSTR *b);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsUNC )( 
-            IPath * This,
-            /* [in] */ BSTR f,
-            /* [retval][out] */ VARIANT_BOOL *ret);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsNetDrive )( 
-            IPath * This,
-            /* [in] */ BSTR f,
-            /* [retval][out] */ VARIANT_BOOL *ret);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ParentDir )( 
-            IPath * This,
-            /* [in] */ BSTR f,
-            /* [retval][out] */ BSTR *ret);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OpenDir )( 
-            IPath * This,
-            /* [in] */ BSTR f,
-            /* [retval][out] */ IDir **ret);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OpenFile )( 
-            IPath * This,
-            /* [in] */ BSTR f,
-            /* [retval][out] */ IFile **ret);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ChooseDir )( 
-            IPath * This,
-            /* [retval][out] */ BSTR *ret);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *FileOpenDlg )( 
-            IPath * This,
-            /* [retval][out] */ BSTR *ret);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *FileSaveDlg )( 
-            IPath * This,
-            /* [retval][out] */ BSTR *ret);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Execute )( 
+            IHttpRequest * This);
         
         END_INTERFACE
-    } IPathVtbl;
+    } IHttpRequestVtbl;
 
-    interface IPath
+    interface IHttpRequest
     {
-        CONST_VTBL struct IPathVtbl *lpVtbl;
+        CONST_VTBL struct IHttpRequestVtbl *lpVtbl;
     };
 
     
@@ -827,88 +594,67 @@ EXTERN_C const IID IID_IPath;
 #ifdef COBJMACROS
 
 
-#define IPath_QueryInterface(This,riid,ppvObject)	\
+#define IHttpRequest_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IPath_AddRef(This)	\
+#define IHttpRequest_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IPath_Release(This)	\
+#define IHttpRequest_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IPath_GetTypeInfoCount(This,pctinfo)	\
+#define IHttpRequest_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IPath_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define IHttpRequest_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IPath_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define IHttpRequest_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IPath_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define IHttpRequest_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IPath_Extension(This,f,ret)	\
-    ( (This)->lpVtbl -> Extension(This,f,ret) ) 
+#define IHttpRequest_put_onResult(This,cb)	\
+    ( (This)->lpVtbl -> put_onResult(This,cb) ) 
 
-#define IPath_Filename(This,f,ret)	\
-    ( (This)->lpVtbl -> Filename(This,f,ret) ) 
+#define IHttpRequest_put_onError(This,cb)	\
+    ( (This)->lpVtbl -> put_onError(This,cb) ) 
 
-#define IPath_Path(This,f,ret)	\
-    ( (This)->lpVtbl -> Path(This,f,ret) ) 
+#define IHttpRequest_put_Url(This,m)	\
+    ( (This)->lpVtbl -> put_Url(This,m) ) 
 
-#define IPath_StripRoot(This,f,ret)	\
-    ( (This)->lpVtbl -> StripRoot(This,f,ret) ) 
+#define IHttpRequest_get_Url(This,m)	\
+    ( (This)->lpVtbl -> get_Url(This,m) ) 
 
-#define IPath_Root(This,f,ret)	\
-    ( (This)->lpVtbl -> Root(This,f,ret) ) 
+#define IHttpRequest_put_Method(This,m)	\
+    ( (This)->lpVtbl -> put_Method(This,m) ) 
 
-#define IPath_AddBackSlash(This,f,ret)	\
-    ( (This)->lpVtbl -> AddBackSlash(This,f,ret) ) 
+#define IHttpRequest_get_Method(This,m)	\
+    ( (This)->lpVtbl -> get_Method(This,m) ) 
 
-#define IPath_RemoveBackSlash(This,f,ret)	\
-    ( (This)->lpVtbl -> RemoveBackSlash(This,f,ret) ) 
+#define IHttpRequest_put_Version(This,m)	\
+    ( (This)->lpVtbl -> put_Version(This,m) ) 
 
-#define IPath_AddExtension(This,f,e,ret)	\
-    ( (This)->lpVtbl -> AddExtension(This,f,e,ret) ) 
+#define IHttpRequest_get_Version(This,m)	\
+    ( (This)->lpVtbl -> get_Version(This,m) ) 
 
-#define IPath_IsSubPath(This,p1,p2,ret)	\
-    ( (This)->lpVtbl -> IsSubPath(This,p1,p2,ret) ) 
+#define IHttpRequest_put_Headers(This,h)	\
+    ( (This)->lpVtbl -> put_Headers(This,h) ) 
 
-#define IPath_Exists(This,f,ret)	\
-    ( (This)->lpVtbl -> Exists(This,f,ret) ) 
+#define IHttpRequest_get_Headers(This,h)	\
+    ( (This)->lpVtbl -> get_Headers(This,h) ) 
 
-#define IPath_IsDir(This,f,ret)	\
-    ( (This)->lpVtbl -> IsDir(This,f,ret) ) 
+#define IHttpRequest_put_Body(This,b)	\
+    ( (This)->lpVtbl -> put_Body(This,b) ) 
 
-#define IPath_IsRoot(This,f,ret)	\
-    ( (This)->lpVtbl -> IsRoot(This,f,ret) ) 
+#define IHttpRequest_get_Body(This,b)	\
+    ( (This)->lpVtbl -> get_Body(This,b) ) 
 
-#define IPath_IsUNC(This,f,ret)	\
-    ( (This)->lpVtbl -> IsUNC(This,f,ret) ) 
-
-#define IPath_IsNetDrive(This,f,ret)	\
-    ( (This)->lpVtbl -> IsNetDrive(This,f,ret) ) 
-
-#define IPath_ParentDir(This,f,ret)	\
-    ( (This)->lpVtbl -> ParentDir(This,f,ret) ) 
-
-#define IPath_OpenDir(This,f,ret)	\
-    ( (This)->lpVtbl -> OpenDir(This,f,ret) ) 
-
-#define IPath_OpenFile(This,f,ret)	\
-    ( (This)->lpVtbl -> OpenFile(This,f,ret) ) 
-
-#define IPath_ChooseDir(This,ret)	\
-    ( (This)->lpVtbl -> ChooseDir(This,ret) ) 
-
-#define IPath_FileOpenDlg(This,ret)	\
-    ( (This)->lpVtbl -> FileOpenDlg(This,ret) ) 
-
-#define IPath_FileSaveDlg(This,ret)	\
-    ( (This)->lpVtbl -> FileSaveDlg(This,ret) ) 
+#define IHttpRequest_Execute(This)	\
+    ( (This)->lpVtbl -> Execute(This) ) 
 
 #endif /* COBJMACROS */
 
@@ -918,31 +664,375 @@ EXTERN_C const IID IID_IPath;
 
 
 
-#endif 	/* __IPath_INTERFACE_DEFINED__ */
+#endif 	/* __IHttpRequest_INTERFACE_DEFINED__ */
 
 
-EXTERN_C const CLSID CLSID_Path;
+#ifndef __IHttpResponse_INTERFACE_DEFINED__
+#define __IHttpResponse_INTERFACE_DEFINED__
+
+/* interface IHttpResponse */
+/* [dual][oleautomation][object][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IHttpResponse;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("39171BA0-B240-428A-87A6-6C2DC925A2B4")
+    IHttpResponse : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
+            /* [retval][out] */ LONG *s) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Status( 
+            /* [in] */ LONG s) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Body( 
+            /* [retval][out] */ BSTR *s) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Body( 
+            /* [in] */ BSTR b) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Size( 
+            /* [retval][out] */ long *s) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Size( 
+            /* [in] */ long b) = 0;
+        
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Headers( 
+            /* [in] */ IHttpHeaders *h) = 0;
+        
+        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Headers( 
+            /* [retval][out] */ IHttpHeaders **h) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IHttpResponseVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IHttpResponse * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IHttpResponse * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IHttpResponse * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IHttpResponse * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IHttpResponse * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IHttpResponse * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IHttpResponse * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+            IHttpResponse * This,
+            /* [retval][out] */ LONG *s);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Status )( 
+            IHttpResponse * This,
+            /* [in] */ LONG s);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Body )( 
+            IHttpResponse * This,
+            /* [retval][out] */ BSTR *s);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Body )( 
+            IHttpResponse * This,
+            /* [in] */ BSTR b);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Size )( 
+            IHttpResponse * This,
+            /* [retval][out] */ long *s);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Size )( 
+            IHttpResponse * This,
+            /* [in] */ long b);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Headers )( 
+            IHttpResponse * This,
+            /* [in] */ IHttpHeaders *h);
+        
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Headers )( 
+            IHttpResponse * This,
+            /* [retval][out] */ IHttpHeaders **h);
+        
+        END_INTERFACE
+    } IHttpResponseVtbl;
+
+    interface IHttpResponse
+    {
+        CONST_VTBL struct IHttpResponseVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IHttpResponse_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IHttpResponse_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IHttpResponse_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IHttpResponse_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IHttpResponse_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IHttpResponse_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IHttpResponse_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IHttpResponse_get_Status(This,s)	\
+    ( (This)->lpVtbl -> get_Status(This,s) ) 
+
+#define IHttpResponse_put_Status(This,s)	\
+    ( (This)->lpVtbl -> put_Status(This,s) ) 
+
+#define IHttpResponse_get_Body(This,s)	\
+    ( (This)->lpVtbl -> get_Body(This,s) ) 
+
+#define IHttpResponse_put_Body(This,b)	\
+    ( (This)->lpVtbl -> put_Body(This,b) ) 
+
+#define IHttpResponse_get_Size(This,s)	\
+    ( (This)->lpVtbl -> get_Size(This,s) ) 
+
+#define IHttpResponse_put_Size(This,b)	\
+    ( (This)->lpVtbl -> put_Size(This,b) ) 
+
+#define IHttpResponse_put_Headers(This,h)	\
+    ( (This)->lpVtbl -> put_Headers(This,h) ) 
+
+#define IHttpResponse_get_Headers(This,h)	\
+    ( (This)->lpVtbl -> get_Headers(This,h) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IHttpResponse_INTERFACE_DEFINED__ */
+
+
+#ifndef __IHttpHeader_INTERFACE_DEFINED__
+#define __IHttpHeader_INTERFACE_DEFINED__
+
+/* interface IHttpHeader */
+/* [dual][oleautomation][object][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IHttpHeader;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("0770FB34-58D4-4417-B47E-B07D2CA604B9")
+    IHttpHeader : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Name( 
+            /* [in] */ BSTR m) = 0;
+        
+        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
+            /* [retval][out] */ BSTR *m) = 0;
+        
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Value( 
+            /* [in] */ BSTR m) = 0;
+        
+        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Value( 
+            /* [retval][out] */ BSTR *m) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IHttpHeaderVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IHttpHeader * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IHttpHeader * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IHttpHeader * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IHttpHeader * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IHttpHeader * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IHttpHeader * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IHttpHeader * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+            IHttpHeader * This,
+            /* [in] */ BSTR m);
+        
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IHttpHeader * This,
+            /* [retval][out] */ BSTR *m);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Value )( 
+            IHttpHeader * This,
+            /* [in] */ BSTR m);
+        
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Value )( 
+            IHttpHeader * This,
+            /* [retval][out] */ BSTR *m);
+        
+        END_INTERFACE
+    } IHttpHeaderVtbl;
+
+    interface IHttpHeader
+    {
+        CONST_VTBL struct IHttpHeaderVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IHttpHeader_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IHttpHeader_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IHttpHeader_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IHttpHeader_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IHttpHeader_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IHttpHeader_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IHttpHeader_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IHttpHeader_put_Name(This,m)	\
+    ( (This)->lpVtbl -> put_Name(This,m) ) 
+
+#define IHttpHeader_get_Name(This,m)	\
+    ( (This)->lpVtbl -> get_Name(This,m) ) 
+
+#define IHttpHeader_put_Value(This,m)	\
+    ( (This)->lpVtbl -> put_Value(This,m) ) 
+
+#define IHttpHeader_get_Value(This,m)	\
+    ( (This)->lpVtbl -> get_Value(This,m) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IHttpHeader_INTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_HTTP;
 
 #ifdef __cplusplus
 
-class DECLSPEC_UUID("44DC1E37-CB3D-4328-B154-E50250F07A8F")
-Path;
-#endif
-
-EXTERN_C const CLSID CLSID_File;
-
-#ifdef __cplusplus
-
-class DECLSPEC_UUID("C4E08E9A-0B46-4fd4-BB8D-588ABC27F52E")
-File;
-#endif
-
-EXTERN_C const CLSID CLSID_Dir;
-
-#ifdef __cplusplus
-
-class DECLSPEC_UUID("302B0FE6-EE9A-4303-92B9-E6B69B573318")
-Dir;
+class DECLSPEC_UUID("E39732D8-7B64-4DC3-9924-9F216345F07A")
+HTTP;
 #endif
 #endif /* __HTTP_LIBRARY_DEFINED__ */
 

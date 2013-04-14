@@ -42,7 +42,10 @@ public:
 	typedef mol::com_instance<ThreadScript> ScriptInstance;
 	//typedef mol::debug_com_instance<ThreadScript> ScriptInstance;
 
-	virtual void dispose()  {};
+	virtual void dispose()  
+	{
+		ODBGS("TRHEADASCRIPT dead x:");
+	};
 
 	static ThreadScript* CreateInstance( HWND owner, const mol::string& script,  const mol::string& filename );
 
@@ -112,7 +115,7 @@ public:
 	virtual HRESULT  __stdcall  ThreadScript::GetDocument(IDebugDocument **pObj);
 	virtual HRESULT  __stdcall  ThreadScript::EnumCodeContexts(IEnumDebugCodeContexts **pObj);
 
-
+	mol::punk<IMoeImport>				import;
 
 protected:
 
@@ -123,7 +126,7 @@ protected:
 	void init(const mol::string& engine);
 	void execute_thread();
 	void execute_callback();
-	void close();
+
 
 	std::set<int>						breakpoints_;
 	typedef std::pair<DWORD,DWORD>      ObjectMapItem;
@@ -145,7 +148,6 @@ protected:
     EXCEPINFO							ei_; 
 
 	HWND								owner_;
-
 	HRESULT getScriptEngine(const mol::string& engine, IActiveScript **ppas);
 };
 
@@ -162,9 +164,13 @@ public:
  	static Instance* CreateInstance(IActiveScript* host);
  
  	virtual HRESULT __stdcall  Import(BSTR filename);
- 
+  	virtual HRESULT __stdcall  Sleep(long ms);
+ 	virtual HRESULT __stdcall  Wait(long ms,VARIANT_BOOL* vb);
+ 	virtual HRESULT __stdcall  Quit();
+
 private:
- 	mol::punk<IActiveScript> host_;
+	IActiveScript* host_;
+	HANDLE stop_;
 };
 
 

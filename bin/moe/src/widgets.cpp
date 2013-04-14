@@ -6,19 +6,27 @@
 #include "ribbonres.h"
 #include "Shobjidl.h"
 #include "fm20_tlh.h"
-
+#include "win/msgloop.h"
 #include "util/regex.h"
 
 // open file dialog std filte for moe
 mol::TCHAR  InFilesFilter[]   = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
 
 
-void MoeImport::dispose() {}
+void MoeImport::dispose() 
+{
+	if(stop_)
+	{
+		::CloseHandle(stop_);
+		stop_ = 0;
+	}
+}
  
 MoeImport::Instance* MoeImport::CreateInstance(Host* host)
 {
  	Instance* i = new Instance();
  	i->host_ = host;
+	i->stop_ = 0;
  	return i;
 }
  
@@ -35,6 +43,82 @@ HRESULT __stdcall  MoeImport::Import(BSTR filename)
  	return S_OK;
 }
 
+HRESULT __stdcall  MoeImport::Sleep(long ms)
+{
+	::SleepEx(ms,TRUE);
+	return S_OK;
+}
+
+HRESULT __stdcall  MoeImport::Wait(long ms,VARIANT_BOOL* vb)
+{
+	DWORD startTick = ::GetTickCount();
+	DWORD nowTick = startTick;
+
+	if(vb)
+	{
+		*vb = VARIANT_FALSE;
+	}
+
+	if(stop_)
+	{
+		::CloseHandle(stop_);
+	}
+	stop_ = ::CreateEvent(NULL,FALSE,FALSE,NULL);
+
+	MSG msg;
+	while( (ms == 0) || ((nowTick-startTick)<(unsigned long)ms) )
+	{
+		nowTick = ::GetTickCount();
+  	    DWORD r = ::MsgWaitForMultipleObjectsEx(1,&stop_,100,QS_ALLINPUT,MWMO_INPUTAVAILABLE|MWMO_ALERTABLE);
+		if ( r == WAIT_IO_COMPLETION || r == WAIT_TIMEOUT) 
+		{
+			continue;
+		}
+		if ( r == WAIT_OBJECT_0 )
+		{
+			if(vb)
+			{
+				*vb = VARIANT_TRUE;
+			}
+			break;
+		}
+
+		if (!::GetMessage(&msg,0,0,0) || msg.message == WM_QUIT)
+		{
+			if(vb)
+			{
+				*vb = VARIANT_TRUE;
+			}
+			break;
+		}
+	
+		if ( mol::win::dialogs().isDialogMessage(msg) )
+			continue;
+
+		if ( mol::win::accelerators().translate(msg) )
+			continue;
+
+		::TranslateMessage(&msg);
+		::DispatchMessage(&msg);
+	}
+		
+	if(stop_)
+	{
+		::CloseHandle(stop_);
+		stop_ = 0;
+	}
+
+	return S_OK;
+}
+
+HRESULT __stdcall  MoeImport::Quit()
+{
+	if(stop_)
+	{
+		::SetEvent(stop_);
+	}
+	return S_OK;
+}
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 Encodings::Encodings()
@@ -169,7 +253,9 @@ void Script::eval(  const mol::string& engine, const mol::string& script, IScint
  	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 
 	runScript(script);
-	//close();
+	removeNamedObject(L"moe");
+	removeNamedObject(L"MoeImport");
+	close();
 	this->Release();
 }
 
@@ -862,17 +948,21 @@ HRESULT DebugDlg::addPropertyToList(HWND tree, TV_INSERTSTRUCTW *insertStruct, I
 		std::wstring s = oss.str();
 		insertStruct->item.pszText = (LPWSTR)(s.c_str()); 
 
-		insertStruct->hParent = (HTREEITEM)SendMessageW(tree, TVM_INSERTITEM, 0, (LPARAM)insertStruct);
-		if ( insertStruct->hParent )
+		if ( pi.m_pDebugProp)
 		{
-			if ( pi.m_pDebugProp && pi.m_pDebugProp != prop )
+			insertStruct->hParent = (HTREEITEM)SendMessageW(tree, TVM_INSERTITEM, 0, (LPARAM)insertStruct);
+			if ( insertStruct->hParent )
 			{
-				addPropertyToList( tree, insertStruct, pi.m_pDebugProp,level++);
-				pi.m_pDebugProp->Release();
+				if( pi.m_pDebugProp != prop )
+				{
+					addPropertyToList( tree, insertStruct, pi.m_pDebugProp,level+1);
+				}
 			}
+			pi.m_pDebugProp->Release();
 		}
 
 		insertStruct->hParent = parent;
+		
 	}
 
 	return S_OK;

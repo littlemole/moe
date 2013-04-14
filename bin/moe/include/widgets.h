@@ -371,9 +371,13 @@ public:
  	static Instance* CreateInstance(Host* host);
  
  	virtual HRESULT __stdcall  Import(BSTR filename);
+ 	virtual HRESULT __stdcall  Sleep(long ms);
+ 	virtual HRESULT __stdcall  Wait(long ms,VARIANT_BOOL* vb);
+ 	virtual HRESULT __stdcall  Quit();
  
 private:
  	mol::punk<Host> host_;
+	HANDLE stop_;
 };
 
 

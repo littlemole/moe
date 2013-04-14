@@ -44,160 +44,139 @@ library HTTP
 	interface IHttp : IDispatch
     {
 		[id(DISPID_VALUE), helpstring("Get shortcut")] 
-		HRESULT Get([in] BSTR url, [out,retval] IHttpResponse* response);
+		HRESULT Get([in] BSTR url, [out,retval] IHttpRequest** request);
 
 		[id(1), helpstring("Create Request")] 
-		HRESULT Request([in] BSTR cmd, [out,retval] IHttpRequest* request);
-
-		[ id(2), helpstring("returns file Extension") ] 
-		HRESULT Execute([in] IHttpRequest* request, [out,retval] IHttpResponse* response);
+		HRESULT Request([in] BSTR cmd, [out,retval] IHttpRequest** request);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////
-	// IRequest
+	// IHttpHeader
 	////////////////////////////////////////////////////////////////////////////////////
 	[
-	  uuid(C50E5518-3D85-45EA-9CCC-5FDE3104EBA9),
-      helpstring("IRequest - request obj"),
+	  uuid(0770FB34-58D4-4417-B47E-B07D2CA604B9),
+      helpstring("IHttpHeader - header obj"),
       object,oleautomation, dual
     ]
-	interface IRequest : IDispatch
+	interface IHttpHeader : IDispatch
     {
-		[ id(1), helpstring("returns file Extension") ] 
-		HRESULT Execute([in] BSTR f, [out,retval] BSTR* ret);
+		[ id(1), propput, helpstring("HTTP header name") ] 
+		HRESULT Name([in] BSTR m);
+		[ id(1), propget ] 
+		HRESULT Name([out,retval] BSTR* m);
+
+		[ id(DISPID_VALUE), propput, helpstring("HTTP header value") ] 
+		HRESULT Value([in] BSTR m);
+		[ id(DISPID_VALUE), propget ] 
+		HRESULT Value([out,retval] BSTR* m);
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IHttpHeaders
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(E4371FB6-0126-41D1-8E37-B71715C07104),
+      helpstring("IHttpHeaders - headers collection obj"),
+      object,oleautomation, dual
+    ]
+	interface IHttpHeaders : IDispatch
+    {
+
+		[id(DISPID_NEWENUM), helpstring("New Enum - scripting language enumaration support")] 
+		HRESULT _NewEnum([out,retval] IEnumVARIANT** newEnum);
+
+		[id(DISPID_VALUE), helpstring("Item - header for index")] 
+		HRESULT Item([in] VARIANT i, [out,retval] VARIANT* header);
+
+		[id(1), helpstring("Count - returns number of headers")] 
+		HRESULT Count([out,retval] long* cnt);
+
+		[id(2), helpstring("Add header")] 
+		HRESULT Add([in] BSTR name, [in]BSTR value);
+
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IHttpRequest
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(1800C704-0169-4C4A-96BC-EABEB2DD4606),
+      helpstring("IHttpRequest - request obj"),
+      object,oleautomation, dual
+    ]
+	interface IHttpRequest : IDispatch
+    {
+		[ id(1), propput, helpstring("attach result callback") ] 
+		HRESULT onResult([in] IDispatch* cb);
+
+		[ id(2), propput, helpstring("attach error callback") ] 
+		HRESULT onError([in] IDispatch* cb);
+
+		[ id(3), propput, helpstring("the url to connect to") ] 
+		HRESULT Url([in] BSTR m);
+		[ id(3), propget ] 
+		HRESULT Url([out,retval] BSTR* m);
+
+		[ id(4), propput, helpstring("HTTP Method (GET, POST, ...)") ] 
+		HRESULT Method([in] BSTR m);
+		[ id(4), propget ] 
+		HRESULT Method([out,retval] BSTR* m);
+
+		[ id(5), propput, helpstring("HTTP protocol version") ] 
+		HRESULT Version([in] BSTR m);
+		[ id(5), propget ] 
+		HRESULT Version([out,retval] BSTR* m);
+
+		[ id(6), propput, helpstring("HTTP Headers") ] 
+		HRESULT Headers([in] IHttpHeaders* h);
+		[ id(6), propget ] 
+		HRESULT Headers([out,retval] IHttpHeaders** h);
+
+		[ id(7), propput, helpstring("HTTP Body as String") ] 
+		HRESULT Body([in] BSTR b);
+		[ id(7), propget ] 
+		HRESULT Body([out,retval] BSTR* b);
+
+		[ id(8), helpstring("execute request") ] 
+		HRESULT Execute();
 
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////
-	// IFile
+	// IHttpResponse
 	////////////////////////////////////////////////////////////////////////////////////
 	[
-	  uuid(5AF00596-158A-4ddd-BC20-83BC8D5E432F),
-      helpstring("IFile - simple Scripting File Access interface"),
+	  uuid(39171BA0-B240-428A-87A6-6C2DC925A2B4),
+      helpstring("IHttpResponse - HTTP Response interface"),
       object,oleautomation, dual
     ]
-	interface IFile : IDispatch
+	interface IHttpResponse : IDispatch
     {
 		// properties
 
 		/////////////////////////////////////////////////////////////////////
-		[ 
-		  propget,bindable,displaybind, requestedit,id(1), 
-		  helpstring("Get Filename")
-		]
-		HRESULT Filename( [out,retval] BSTR* f);
+		[ propget,id(1),helpstring("HTTP status code") ]
+		HRESULT Status( [out,retval] LONG* s);
+		[ propput,id(1) ]
+		HRESULT Status( [in] LONG s);
 
-		[ 
-		  propput,bindable,displaybind, requestedit,id(2), 
-		  helpstring("Set EOL mode")
-		]
-		HRESULT EoL( [in] long t);
-		[ 
-		  propget,bindable,displaybind, requestedit,id(2), 
-		  helpstring("Get EOL mode")
-		]
-		HRESULT EoL( [out,retval] long* t);
+		[ propget,id(2),helpstring("HTTP body") ]
+		HRESULT Body( [out,retval] BSTR* s);
+		[ propput,id(2) ]
+		HRESULT Body( [in] BSTR b);
 
-
-		[ 
-		  propput,bindable,displaybind, requestedit,id(3), 
-		  helpstring("Set Encoding")
-		]
-		HRESULT Encoding( [in] long cp);
-		[ 
-		  propget,bindable,displaybind, requestedit,id(3), 
-		  helpstring("Get Encoding")
-		]
-		HRESULT Encoding( [out,retval] long* cp);
-
-
-		[ 
-		  propput,bindable,displaybind, requestedit,id(4), 
-		  helpstring("Set BOM Usage")
-		]
-		HRESULT UseBOM( [in] VARIANT_BOOL vb);
-		[ 
-		  propget,bindable,displaybind, requestedit,id(4), 
-		  helpstring("Get BOM Usage")
-		]
-		HRESULT UseBOM( [out,retval] VARIANT_BOOL* vb);
-
-
-
-		[ 
-		  propget,bindable,displaybind, requestedit,id(5), 
-		  helpstring("Get End of File - indicates whether end of file reached")
-		]
-		HRESULT EoF( [out,retval] VARIANT_BOOL* vb);
-
-
-		[ 
-		  propget,bindable,displaybind, requestedit,id(6), 
-		  helpstring("Get File Size")
-		]
+		[ propget,id(3),helpstring("HTTP response size") ]
 		HRESULT Size( [out,retval] long* s);
+		[ propput,id(3) ]
+		HRESULT Size( [in] long b);
 
-		// Methods
-		/////////////////////////////////////////////////////////////////////
-		[ 
-		  id(7), 
-		  helpstring("Open File")
-		] 
-		HRESULT Open([in] BSTR file, [out,retval] VARIANT_BOOL* vb );
+		[ id(4), propput, helpstring("HTTP Headers") ] 
+		HRESULT Headers([in] IHttpHeaders* h);
+		[ id(4), propget ] 
+		HRESULT Headers([out,retval] IHttpHeaders** h);
 
-		[ 
-		  id(8), 
-		  helpstring("Open File Read Only")
-		] 
-		HRESULT OpenReadOnly([in] BSTR file, [out,retval] VARIANT_BOOL* vb );
-
-		[ 
-		  id(9), 
-		  helpstring("Open File for Append")
-		] 
-		HRESULT OpenAppend([in] BSTR file, [out,retval] VARIANT_BOOL* vb );
-
-		[ 
-		  id(10), 
-		  helpstring("Close File")
-		] 
-		HRESULT Close();
-
-		[ 
-		  id(11), 
-		  helpstring("Read up to a specific count from file")
-		] 
-		HRESULT Read( [in] long cnt, [out,retval] BSTR* file);
-
-		[ 
-		  id(12), 
-		  helpstring("Read complete File as one Text String")
-		] 
-		HRESULT ReadText( [out,retval] BSTR* file);
-
-		[ 
-		  id(13), 
-		  helpstring("Seek a specific file position before reading/writing")
-		] 
-		HRESULT Seek( [in] long pos);
-
-		[ 
-		  id(14), 
-		  helpstring("Write a string to a file")
-		] 
-		HRESULT Write( [in] BSTR file, [in] long len, [out,retval] long* s );
-
-		[ 
-		  id(15), 
-		  helpstring("WriteText writes a String to a text file in one batch")
-		] 
-		HRESULT WriteText( [in] BSTR txt, [out,retval] long* s  );
-
-		[ 
-		  id(16), 
-		  helpstring("create a new file")
-		] 
-		HRESULT Create( [in] BSTR txt, [out,retval] VARIANT_BOOL* vb  );
     };
 
 
@@ -206,39 +185,15 @@ library HTTP
 ////////////////////////////////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////////////////////////////////////////////
-	// Path
+	// HTTP
 	////////////////////////////////////////////////////////////////////////////////////
 
 	[
-		uuid(44DC1E37-CB3D-4328-B154-E50250F07A8F)
+		uuid(E39732D8-7B64-4DC3-9924-9F216345F07A)
 	]
-	coclass Path
+	coclass HTTP
 	{
-		[default]         interface     IPath;
+		[default]         interface     IHttp;
 	}
 
-
-	////////////////////////////////////////////////////////////////////////////////////
-	// File
-	////////////////////////////////////////////////////////////////////////////////////
-
-	[
-		uuid(C4E08E9A-0B46-4fd4-BB8D-588ABC27F52E)
-	]
-	coclass File
-	{
-		[default]         interface     IFile;
-	}
-
-	////////////////////////////////////////////////////////////////////////////////////
-	// Dir
-	////////////////////////////////////////////////////////////////////////////////////
-
-	[
-		uuid(302B0FE6-EE9A-4303-92B9-E6B69B573318),noncreatable
-	]
-	coclass Dir
-	{
-		[default]         interface     IDir;
-	}
 }

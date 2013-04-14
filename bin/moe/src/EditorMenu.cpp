@@ -119,7 +119,8 @@ void EditorMenu::updateUI()
 
 	LONG type = 0;
 	editor_->props_->get_Syntax(&type);
-	syntax()->setCurSel(type);
+	mol::UI().Wnd<MoeComboBox>(IDW_SYNTAX_BOX)->setCurSel(type);
+//	syntax()->setCurSel(type);
 
 	if ( mol::Ribbon::ribbon()->enabled())
 	{
@@ -198,7 +199,7 @@ void EditorMenu::updateUI()
 	else
 	{
 		debugDlg()->show(SW_SHOW);
-		mol::Ribbon::ribbon()->mode(10);		
+		mol::Ribbon::ribbon()->mode(9);		
 	}
 	mol::Ribbon::ribbon()->maximize();
 }

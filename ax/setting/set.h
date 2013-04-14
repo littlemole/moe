@@ -33,6 +33,7 @@ using namespace mol;
 class Setting : 
 	public com_registerobj<Setting,CLSID_Setting>,
 	public Dispatch<ISetting>,
+	public ProvideClassInfo<Setting>,
 	public PersistStream<Setting>,
 	public PersistStorage<Setting>,
 	public PersistFile<Setting>,

@@ -269,7 +269,7 @@ HRESULT ScriptHost::addNamedObject( IUnknown* punk, const mol::string& obj, int 
 
 HRESULT ScriptHost::removeNamedObject( const mol::string& obj )
 {
-	if ( objectMap_[obj] > 0 )
+	if ( objectMap_.count(obj) > 0 )
 	{
 		objectMap_[obj]->Release();
 		objectMap_.erase(obj);

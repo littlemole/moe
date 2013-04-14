@@ -212,7 +212,7 @@ class <xsl:value-of select="$class" />;
 //reBar
 class <xsl:value-of select="$class" />;
 <xsl:value-of select="$class" />* <xsl:value-of select="$name" />();
-
+<!--
 <xsl:for-each select="./mol:toolbar">
 <xsl:call-template name="rebarToolBarFunctionMaker">
 <xsl:with-param name="parent">
@@ -231,6 +231,7 @@ class <xsl:value-of select="$class" />;
 </xsl:with-param>
 </xsl:call-template>
 </xsl:for-each>
+-->
 </xsl:template>
 
 

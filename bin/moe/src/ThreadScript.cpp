@@ -19,12 +19,20 @@ mol::string engineFromPath(const std::string& path)
 
 mol::string findFile(const mol::string& f);
  
-void MoeDebugImport::dispose() {}
+void MoeDebugImport::dispose() 
+{
+	if(stop_)
+	{
+		::CloseHandle(stop_);
+		stop_ = 0;
+	}
+}
  
 MoeDebugImport::Instance* MoeDebugImport::CreateInstance(IActiveScript* host)
 {
  	Instance* i = new Instance();
  	i->host_ = host;
+	i->stop_ = 0;
  	return i;
 }
  
@@ -49,6 +57,82 @@ HRESULT __stdcall  MoeDebugImport::Import(BSTR filename)
  	return hr;
 }
 
+HRESULT __stdcall  MoeDebugImport::Sleep(long ms)
+{
+	::SleepEx(ms,TRUE);
+	return S_OK;
+}
+
+HRESULT __stdcall  MoeDebugImport::Wait(long ms,VARIANT_BOOL* vb)
+{
+	DWORD startTick = ::GetTickCount();
+	DWORD nowTick = startTick;
+
+	if(vb)
+	{
+		*vb = VARIANT_FALSE;
+	}
+
+	if(stop_)
+	{
+		::CloseHandle(stop_);
+	}
+	stop_ = ::CreateEvent(NULL,FALSE,FALSE,NULL);
+
+	MSG msg;
+	while( (ms == 0) || ((nowTick-startTick)<(unsigned long)ms) )
+	{
+		nowTick = ::GetTickCount();
+  	    DWORD r = ::MsgWaitForMultipleObjectsEx(1,&stop_,100,QS_ALLINPUT,MWMO_INPUTAVAILABLE|MWMO_ALERTABLE);
+		if ( r == WAIT_IO_COMPLETION || r == WAIT_TIMEOUT) 
+		{
+			continue;
+		}
+
+		if ( r == WAIT_OBJECT_0 )
+		{
+			if(vb)
+			{
+				*vb = VARIANT_TRUE;
+			}
+			break;
+		}
+
+		if(!::GetMessage(&msg,0,0,0) || msg.message == WM_QUIT)
+		{
+			if(vb)
+			{
+				*vb = VARIANT_TRUE;
+			}
+			
+			break;
+		}
+
+		if ( mol::win::dialogs().isDialogMessage(msg) )
+			continue;
+
+		if ( mol::win::accelerators().translate(msg) )
+			continue;
+
+		::TranslateMessage(&msg);
+		::DispatchMessage(&msg);
+	}
+	if(stop_)
+	{
+		::CloseHandle(stop_);
+		stop_ = 0;
+	}
+	return S_OK;
+}
+
+HRESULT __stdcall  MoeDebugImport::Quit()
+{
+	if(stop_)
+	{
+		::SetEvent(stop_);
+	}
+	return S_OK;
+}
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -58,21 +142,7 @@ ThreadScript::ThreadScript()
 
 ThreadScript::~ThreadScript()
 {
-	ODBGS("ThreadScript died");
-}
-
-void ThreadScript::close()
-{
-	//activeScript_->Close(); //crashes IE9 JS in debug mode
-
-	mol::GIT git;	
-	for ( std::map<mol::string,ObjectMapItem>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
-	{
-		git.revokeInterface((*it).second.first);
-	}
-	objectMap_.clear();
-
-	
+	ODBGS("ThreadScript died"); 
 }
 
 void ThreadScript::init(const mol::string& engine)
@@ -126,7 +196,7 @@ void ThreadScript::init(const mol::string& engine)
 	if ( hr != S_OK )
 		return;
 
-	mol::punk<IMoeImport> import;
+
  	import = MoeDebugImport::CreateInstance(activeScript_);
  	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 }
@@ -142,6 +212,7 @@ HRESULT ThreadScript::getScriptEngine(const mol::string& engine, IActiveScript *
 	CLSID clsid;
 	HRESULT hr;
 
+	
 	if ( engine == _T("JScript") ) {
 		// try loading JScript 9 dll
 		clsid = GUID_JSCRIPT9;
@@ -159,8 +230,6 @@ HRESULT ThreadScript::getScriptEngine(const mol::string& engine, IActiveScript *
 
 HRESULT ThreadScript::addNamedObject( IUnknown* punk, const mol::string& obj, int state )
 {
-	punk->AddRef();
-
 	mol::GIT git;
 	HRESULT hr;
 
@@ -194,6 +263,7 @@ HRESULT ThreadScript::removeNamedObject( const mol::string& obj )
 		HRESULT hr = git.getInterface( objectMap_[obj].first, &unk );
 		if ( hr == S_OK ) 
 		{
+			unk->Release();
 			git.revokeInterface(objectMap_[obj].first);
 		}
 		objectMap_.erase(obj);
@@ -281,7 +351,8 @@ void ThreadScript::execute_thread( )
 {
 	ODBGS("ThreadScript::execute()\r\n");
 
-	mol::com_init ci;
+	::CoInitialize(0);
+
 	HRESULT hr;
 
 	init(engine_);
@@ -299,7 +370,7 @@ void ThreadScript::execute_thread( )
 	if ( asp_ )
 	{
 		hr = asp_->ParseScriptText( mol::towstring(script_).c_str(),
-									  NULL,0,0,0,0,SCRIPTTEXT_ISPERSISTENT|SCRIPTTEXT_ISVISIBLE ,
+									  NULL,0,0,0,0,SCRIPTTEXT_ISVISIBLE ,
 									  &varResult_,&ei_);
 		if ( hr != S_OK )
 		{
@@ -316,14 +387,34 @@ void ThreadScript::execute_callback()
 {
 	ODBGS("ThreadScript::callback");
 
+	asp_.release();
+	activeScript_->Close(); 
+	activeScript_.release();
+
+	mol::GIT git;	
+	for ( std::map<mol::string,ObjectMapItem>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
+	{
+		git.revokeInterface((*it).second.first);
+	}
+	objectMap_.clear();
+
+	import->Quit();
+	import.release();
+
+
 	if ( debugApp_ )
 		debugApp_->DisconnectDebugger();
 
-	close();
+	if(pdm_)
+	{
+		pdm_->RemoveApplication(dwAppCookie_);
+	}
 
 	OnScriptThreadDone.fire();
 
 	((IActiveScriptSite*)this)->Release();
+	::CoUninitialize();
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////

@@ -242,19 +242,23 @@ void EditorScript::debugScriptQuit()
 
 	mol::Ribbon::ribbon()->mode(1);
 
-	if ( !editor_->remote_)
-		return;
-
-
-	mol::punk<IRemoteDebugApplication> app;
-
-	HRESULT hr = editor_->remote_->GetApplication(&app);
-	if ( hr == S_OK && app ) 
+	if ( editor_->remote_)
 	{
-		hr = app->ResumeFromBreakPoint( editor_->remote_, BREAKRESUMEACTION_ABORT, ERRORRESUMEACTION_AbortCallAndReturnErrorToCaller );
-	}
+		mol::punk<IRemoteDebugApplication> app;
 
-	editor_->remote_.release();
+		HRESULT hr = editor_->remote_->GetApplication(&app);
+		if ( hr == S_OK && app ) 
+		{
+			hr = app->ResumeFromBreakPoint( editor_->remote_, BREAKRESUMEACTION_ABORT, ERRORRESUMEACTION_AbortCallAndReturnErrorToCaller );
+		}
+
+		editor_->remote_.release();
+	}
+	if(editor_->ts_)
+	{
+		editor_->ts_->import->Quit();
+		editor_->ts_ = 0;
+	}
 }
 
 

@@ -191,7 +191,8 @@ void MoeWnd::OnDestroy()
 
 	treeWndSink->UnAdvise(treeWnd()->oleObject);
 	::CoDisconnectObject(treeWnd()->oleObject,0);
-	scriptHost->close();
+	//scriptHost->close();
+	scriptHost.release();
 	::RevokeDragDrop(*this);
 
 	if ( activeObj_ )
@@ -593,7 +594,7 @@ void MoeWnd::OnSyntax(int code, int id, HWND ctrl)
 {
 	if ( code == CBN_SELCHANGE )
 	{
-		int sel = syntax()->getCurSel();
+		int sel = mol::UI().Wnd<MoeComboBox>(IDW_SYNTAX_BOX)->getCurSel();
 		::PostMessage(getActive(),WM_COMMAND,IDM_LEXER_PLAIN+sel,(LPARAM)ctrl);
 	}
 }
@@ -1019,9 +1020,9 @@ void  MoeWnd::initRibbon(IStorage* store)
 
 	// syntax select dropdown handler - populate from toolbar combobox values 
 	std::vector<mol::string> vs;
-	for ( int i = 0; i < syntax()->getCount(); i++ )
+	for ( int i = 0; i < mol::UI().Wnd<MoeComboBox>(IDW_SYNTAX_BOX)->getCount(); i++ )
 	{
-		vs.push_back( syntax()->getString(i)  );
+		vs.push_back( mol::UI().Wnd<MoeComboBox>(IDW_SYNTAX_BOX)->getString(i)  );
 	}
 	mol::Ribbon::handler(RibbonSelectLanguage)->items(vs);
 

@@ -1,4 +1,4 @@
-LIBRARY	"io"
+LIBRARY	"http"
 
 EXPORTS
 	DllCanUnloadNow		PRIVATE

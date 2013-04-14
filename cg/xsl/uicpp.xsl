@@ -637,7 +637,7 @@ const mol::string&amp; <xsl:value-of select="$name"/>()
 <xsl:variable name="name" select="./@name"/>
 //reBar
 <xsl:value-of select="concat(string('    '),$class)" />* <xsl:value-of select="$name" />() { return mol::UI().Wnd&lt;<xsl:value-of select="$class" />&gt;(<xsl:value-of select="$id" />); }
-
+<!--
 <xsl:for-each select="./mol:toolbar">
 <xsl:call-template name="rebarToolBarFunctionMaker">
 <xsl:with-param name="parent">
@@ -656,6 +656,7 @@ const mol::string&amp; <xsl:value-of select="$name"/>()
 </xsl:with-param>
 </xsl:call-template>
 </xsl:for-each>
+-->
 </xsl:template>
 
 

@@ -143,6 +143,9 @@ void Editor::OnDestroy()
 	
 	docs()->remove(this);
 	
+//	moe()->scriptHost->removeNamedObject(L"moe");
+	//moe()->scriptHost->removeNamedObject(L"MoeImport");
+	//moe()->scriptHost->close();
  	events.UnAdvise(oleObject);
 
 	props_.release();
@@ -155,12 +158,14 @@ void Editor::OnDestroy()
 	sci.release();
 	if ( ts_)
 	{
+		ts_->import->Quit();
 		// as we offer scripting, break any references to out of process clients
-		::CoDisconnectObject(((IActiveScriptSite*)(ts_)),0);
-		((IActiveScriptSite*)(ts_))->Release();
+//		::CoDisconnectObject(((IActiveScriptSite*)(ts_)),0);
+		//((IActiveScriptSite*)(ts_))->Release();
 		ts_ = 0;
 	}
 	remote_.release();
+	debugDlg()->remote.release();
 }
 
 void Editor::OnNcDestroy()
@@ -181,6 +186,7 @@ void Editor::OnMDIActivate(WPARAM unused, HWND activated)
 
 	if ( activated == hWnd_ )
 	{
+		debugDlg()->remote = remote_;
 		mol::bstr path;
 		props_->get_Filename(&path);
 
@@ -203,8 +209,8 @@ LRESULT Editor::OnClose()
 	if (saving_ )
 		return 1;
 
-	if ( ts_ )
-		return 1;
+	//if ( ts_ )
+	//	return 1;
 
 	VARIANT_BOOL vb;
 	text_->get_Modified(&vb);

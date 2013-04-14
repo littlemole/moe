@@ -272,36 +272,6 @@ delete this;
 
 //reBar
     MoeBar* reBar() { return mol::UI().Wnd<MoeBar>(IDW_REBAR); }
-
-
-//toolBar
-    MoeToolBar* fileBar() { return mol::UI().Wnd<MoeToolBar>(IDC_TOOLBARS_FILEBAR); }
-
-
-//toolBar
-    MoeToolBar* editBar() { return mol::UI().Wnd<MoeToolBar>(IDC_TOOLBARS_EDITBAR); }
-
-
-//toolBar
-    MoeToolBar* toolsBar() { return mol::UI().Wnd<MoeToolBar>(IDC_TOOLBARS_TOOLBAR); }
-
-
-//toolBar
-    MoeToolBar* settingsBar() { return mol::UI().Wnd<MoeToolBar>(IDC_TOOLBARS_SETTINGBAR); }
-
-
-//toolBar
-    MoeToolBar* viewBar() { return mol::UI().Wnd<MoeToolBar>(IDC_TOOLBARS_VIEWBAR); }
-
-
-//toolBar
-    MoeToolBar* userBar() { return mol::UI().Wnd<MoeToolBar>(IDC_TOOLBARS_USERBAR); }
-
-
-//bar
-
-//rebar bar
-    MoeComboBox* syntax() { return mol::UI().Wnd<MoeComboBox>(IDW_SYNTAX_BOX); }
 Documents* docs()
 {
   return &mol::singleton<Documents>();

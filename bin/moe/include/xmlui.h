@@ -55,50 +55,6 @@ mol::ProgressbarCtrl* progress();
 class MoeBar;
 MoeBar* reBar();
 
-
-
-//toolBar
-class MoeToolBar;
-MoeToolBar* fileBar();
-
-
-
-//toolBar
-class MoeToolBar;
-MoeToolBar* editBar();
-
-
-
-//toolBar
-class MoeToolBar;
-MoeToolBar* toolsBar();
-
-
-
-//toolBar
-class MoeToolBar;
-MoeToolBar* settingsBar();
-
-
-
-//toolBar
-class MoeToolBar;
-MoeToolBar* viewBar();
-
-
-
-//toolBar
-class MoeToolBar;
-MoeToolBar* userBar();
-
-
-//bar
-
-
-//rebar bar
-class MoeComboBox;
-MoeComboBox* syntax();
-
 class Documents;    
 Documents* docs();
 
