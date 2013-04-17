@@ -278,7 +278,9 @@ void Script::debug(  const mol::string& engine, const mol::string& script, IScin
  	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 
 	debugScript(script);
-	//close();
+	removeNamedObject(L"moe");
+	removeNamedObject(L"MoeImport");
+	close();
 	this->Release();
 }
 void Script::call(  const mol::string& engine, const mol::string& func, const mol::string& script )
@@ -292,6 +294,8 @@ void Script::call(  const mol::string& engine, const mol::string& func, const mo
 
 	runScript(script);
 	ScriptHost::call(func);
+	removeNamedObject(L"moe");
+	removeNamedObject(L"MoeImport");
 	close();
 	this->Release();
 }
@@ -705,11 +709,11 @@ DebugDlg::DebugDlg(  )
 
 DebugDlg::~DebugDlg(  )
 {
-	exp_.release();
+	//exp_.release();
 }
 
 //////////////////////////////////////////////////////////////////////////////
-
+/*
 HRESULT __stdcall  DebugDlg::ExpCallback::onComplete()
 {
 	HRESULT phr;
@@ -722,7 +726,7 @@ HRESULT __stdcall  DebugDlg::ExpCallback::onComplete()
 	This()->exp_.release();
 	return S_OK;
 }
-
+*/
 LRESULT DebugDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
@@ -742,7 +746,9 @@ LRESULT DebugDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         case WM_COMMAND:
 		{
 			if (LOWORD(wParam) == IDOK )
-			{
+			{/*
+				Mmoe()->getActive()
+				mol::string result = 
 				exp_.release();
 
 				mol::string code;
@@ -790,12 +796,14 @@ LRESULT DebugDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 					return FALSE;
 
 				hr = exp_->Start(&expCallback);
+				*/
+				::PostMessage( moe()->getActive(),WM_COMMAND,IDM_EDIT_DEBUG_EVAL_EXPR,0);
 
 				return FALSE;
 			}
 			if (LOWORD(wParam) == IDCANCEL )
 			{
-				exp_.release();
+				//exp_.release();
 				show(SW_HIDE);
 				return FALSE;
 			}

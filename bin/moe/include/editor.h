@@ -4,6 +4,7 @@
 #include "shared.h"
 #include "resource.h"
 #include "MoeBar.h"
+#include "ThreadScript.h"
 #include "win/io.h"
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -11,7 +12,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 class TaskbarWnd;
-class ThreadScript;
 class MoeCLIBar;
 class CLIControl;
 
@@ -73,6 +73,7 @@ public:
 	void OnDebugScriptStepOut();
 	void OnDebugScriptStop();
 	void OnDebugScriptQuit();
+	void OnDebugScriptEval();
 
 	void OnCut();
 	void OnCopy();
@@ -98,7 +99,7 @@ public:
 
 	LRESULT OnToolbarDropDown(NMTOOLBAR* toolbar );
 
-	void OnScriptThread( int line, IRemoteDebugApplicationThread* remote,IActiveScriptError* pError);
+	void OnScriptThread( int line, mol::string error);
 	void OnScriptThreadDone();
 
    virtual HRESULT __stdcall get_FilePath( BSTR *fname);
@@ -136,8 +137,7 @@ protected:
 
 	mol::Timer timer_;
 
-	mol::punk<IRemoteDebugApplicationThread> remote_;
-	ThreadScript* ts_;
+	ScriptDebugger::Instance* debugger_;
 	mol::string	lasterror_;
 	FILETIME lastWriteTime_;
 

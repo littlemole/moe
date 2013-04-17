@@ -192,7 +192,7 @@ void EditorMenu::updateUI()
 			mode.unCheckItem( IDM_MODE_SHOW_LINE_NUMBERS );
 	}
 
-	if (!editor_->ts_)
+	if (!editor_->debugger_)
 	{		
 		mol::Ribbon::ribbon()->mode(1);		
 	}
@@ -337,7 +337,7 @@ void EditorMenu::updateDebugMenu( HMENU debug )
 	menu.disableItem(IDM_EDIT_DEBUG_STOP);
 	menu.disableItem(IDM_EDIT_DEBUG_QUIT);
 	
-	if ( editor_->remote_ )
+	if ( editor_->debugger_ && editor_->debugger_->suspended() )
 	{
 		menu.enableItem(IDM_EDIT_DEBUG_STEPIN);
 		menu.enableItem(IDM_EDIT_DEBUG_STEPOVER);
@@ -346,7 +346,7 @@ void EditorMenu::updateDebugMenu( HMENU debug )
 		return;
 	}
 
-	if ( editor_->ts_ )
+	if ( editor_->debugger_ )
 	{
 		menu.enableItem(IDM_EDIT_DEBUG_STOP);
 		menu.enableItem(IDM_EDIT_DEBUG_QUIT);

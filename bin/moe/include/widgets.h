@@ -183,26 +183,13 @@ public:
 	DebugDlg();
 	~DebugDlg();
 
-	mol::punk<IRemoteDebugApplicationThread> remote;
-
 	virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-	class ExpCallback :
-		public IDebugExpressionCallBack,
-		public mol::interfaces< ExpCallback, mol::implements<IDebugExpressionCallBack> >
-	{
-		public: outer_this(DebugDlg,expCallback); 
-			
-				HRESULT virtual __stdcall onComplete();
-	};
 
 	void update_variables(IEnumDebugStackFrames* frames);
 
 private:
 	HRESULT addPropertyToList(HWND tree, TV_INSERTSTRUCTW *insertStruct, IDebugProperty *debugProperty, int level = 0);
 
-	mol::stack_obj<ExpCallback> expCallback;
-	mol::punk<IDebugExpression> exp_;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////

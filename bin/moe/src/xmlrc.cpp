@@ -94,6 +94,7 @@ extern "C" void load_codegen_metadata()
   UI().addCmd(IDM_EDIT_DEBUG_STEPOUT,_T("Step out"));  
   UI().addCmd(IDM_EDIT_DEBUG_STOP,_T("Stop"));  
   UI().addCmd(IDM_EDIT_DEBUG_QUIT,_T("Quit"));  
+  UI().addCmd(IDM_EDIT_DEBUG_EVAL_EXPR,_T("Eval Expr"));  
   UI().addCmd(IDM_EDIT_INDENTION,_T("Indention"));  
   UI().addCmd(IDM_EDIT_16BYTES,_T("16 Bytes"));  
   UI().addCmd(IDM_EDIT_20BYTES,_T("20 Bytes"));  
@@ -901,6 +902,8 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUG_STOP, make_handler(&MoeWnd::
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUG_QUIT, make_handler(&MoeWnd::OnDispatch) );
 
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_DEBUG_EVAL_EXPR, make_handler(&MoeWnd::OnDispatch) );
+
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_NAVIGATE_NEXT, make_handler(&MoeWnd::OnDispatch) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_NAVIGATE_BACK, make_handler(&MoeWnd::OnDispatch) );
@@ -1067,6 +1070,8 @@ mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_DEBUG_STOP, make_handler(&Editor::
 
 mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_DEBUG_QUIT, make_handler(&Editor::OnDebugScriptQuit) );
 
+mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_DEBUG_EVAL_EXPR, make_handler(&Editor::OnDebugScriptEval) );
+
 mol::msgMap<Editor>().addCmdHandler( IDM_MODE_EXECUTEFORM, make_handler(&Editor::OnExecForm) );
 
 mol::msgMap<Editor>().addCmdHandler( IDM_CLI_RETURN, make_handler(&Editor::OnCliReturn) );
@@ -1110,8 +1115,6 @@ mol::msgMap<FormEditor>().addMsgHandler( WM_MDIACTIVATE, make_handler(&FormEdito
 mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_EXECUTESCRIPT, make_handler(&FormEditor::OnExecScript) );
 
 mol::msgMap<FormEditor>().addCmdHandler( IDM_MODE_EXECUTEFORM, make_handler(&FormEditor::OnExecForm) );
-
-mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_EXECUTESCRIPT, make_handler(&FormEditor::OnExecScript) );
 
 mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_DEBUG_GO, make_handler(&FormEditor::OnDebugScriptGo) );
 

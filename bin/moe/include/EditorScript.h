@@ -4,6 +4,7 @@
 #include "resource.h"
 #include "MoeBar.h"
 #include "win/io.h"
+#include "ThreadScript.h"
 
 class Editor;
 
@@ -23,13 +24,18 @@ public:
 	void debugScriptStepOut();
 	void debugScriptStop();
 	void debugScriptQuit();
+	void debugScriptEval();
 
-	void scriptThread( int line, IRemoteDebugApplicationThread* remote,IActiveScriptError* pError);
-	void scriptThread2( int line, IRemoteDebugApplicationThread* remote,IActiveScriptError* pError);
+	void scriptThread( int line, mol::string error);
+	void scriptThread2( int line, mol::string error);
 
 	void scriptThreadDone();
 
+
 private:
 	Editor* editor_;
+	ScriptDebugger::Instance* debugger_;
+	static void onDebugExpressionEval(mol::string result);
+
 };
 

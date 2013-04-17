@@ -150,7 +150,7 @@ LRESULT FormEditor::OnExecScript()
 }
 
 
-LRESULT FormEditor::OnDebugScript()
+LRESULT FormEditor::OnDebugScriptGo()
 {
 	OnSave();
 

@@ -120,8 +120,9 @@
         <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_STEPOUT" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_STOP" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_QUIT" />
+        <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_EVAL_EXPR" />
 
-        <msg  handler="OnDispatch" cmd="IDM_NAVIGATE_NEXT" />
+      <msg  handler="OnDispatch" cmd="IDM_NAVIGATE_NEXT" />
         <msg  handler="OnDispatch" cmd="IDM_NAVIGATE_BACK" />
      
         <msg  handler="OnDispatch" cmd="IDM_MODE_EXECUTEFORM" />
@@ -233,8 +234,9 @@
         <msg  handler="OnDebugScriptStepOut" cmd="IDM_EDIT_DEBUG_STEPOUT" />
         <msg  handler="OnDebugScriptStop" cmd="IDM_EDIT_DEBUG_STOP" />
         <msg  handler="OnDebugScriptQuit" cmd="IDM_EDIT_DEBUG_QUIT" />
+        <msg  handler="OnDebugScriptEval" cmd="IDM_EDIT_DEBUG_EVAL_EXPR" />
 
-        <msg  handler="OnExecForm" cmd="IDM_MODE_EXECUTEFORM" />
+      <msg  handler="OnExecForm" cmd="IDM_MODE_EXECUTEFORM" />
 
         <msg  handler="OnCliReturn" cmd="IDM_CLI_RETURN" />
       
@@ -272,7 +274,6 @@
       <msg  handler="OnExecScript" cmd="IDM_EDIT_EXECUTESCRIPT" />
       <msg  handler="OnExecForm" cmd="IDM_MODE_EXECUTEFORM" />
 
-      <msg  handler="OnExecScript" cmd="IDM_EDIT_EXECUTESCRIPT" />
       <msg  handler="OnDebugScriptGo" cmd="IDM_EDIT_DEBUG_GO" />
       <msg  handler="OnDebugScriptStepIn" cmd="IDM_EDIT_DEBUG_STEPIN" />
       <msg  handler="OnDebugScriptStepOver" cmd="IDM_EDIT_DEBUG_STEPOVER" />

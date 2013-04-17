@@ -11,7 +11,7 @@
 
 class Editor;
 
-class ThreadScript : 
+class ScriptDebugger : 
 	public IActiveScriptSite,
 	public IActiveScriptSiteWindow,
 	public IActiveScriptSiteDebug,
@@ -20,12 +20,14 @@ class ThreadScript :
 	public IDebugDocumentTextAuthor,
 	public IDebugDocumentProvider,
 	public IDebugDocumentContext,
-	public mol::interfaces< ThreadScript, 
+	public IDebugExpressionCallBack,
+	public mol::interfaces< ScriptDebugger, 
 				mol::implements< IActiveScriptSite, 
 							IActiveScriptSiteWindow,
 							IActiveScriptSiteDebug,
 							IApplicationDebugger,
 							IApplicationDebuggerUI,
+							IDebugExpressionCallBack,
 							mol::interface_ex<IDebugDocument,IDebugDocumentTextAuthor>,
 							mol::interface_ex<IDebugDocumentInfo,IDebugDocumentTextAuthor>,
 							mol::interface_ex<IDebugDocumentText,IDebugDocumentTextAuthor>,
@@ -36,10 +38,11 @@ class ThreadScript :
 {
 public:
 	
-	mol::events::Event<int,IRemoteDebugApplicationThread*,IActiveScriptError*> OnScriptThread;
+	mol::events::Event<int,mol::string> OnScriptThread;
 	mol::events::Event<> OnScriptThreadDone;
+	mol::events::Event<mol::string> OnExpressionEvaluated;
 
-	typedef mol::com_instance<ThreadScript> ScriptInstance;
+	typedef mol::com_instance<ScriptDebugger> Instance;
 	//typedef mol::debug_com_instance<ThreadScript> ScriptInstance;
 
 	virtual void dispose()  
@@ -47,16 +50,24 @@ public:
 		ODBGS("TRHEADASCRIPT dead x:");
 	};
 
-	static ThreadScript* CreateInstance( HWND owner, const mol::string& script,  const mol::string& filename );
+	static Instance* CreateInstance( HWND owner, const mol::string& script,  const mol::string& filename );
 
 	void execute( int flag = SCRIPTTEXT_ISVISIBLE );	
 	void cause_break();
+	void resume(BREAKRESUMEACTION ba = BREAKRESUMEACTION_CONTINUE);
 	void update_breakpoints(std::set<int> br);
+	void eval_expression(const mol::string& expr);
 
+	bool suspended() { return remote_.interface_ != 0; }
+
+	HRESULT frames(IEnumDebugStackFrames** frames);
 
 	// add a named object
 	virtual HRESULT addNamedObject( IUnknown* punk, const mol::string& obj, int state = SCRIPTITEM_ISVISIBLE| SCRIPTITEM_ISSOURCE );
 	virtual HRESULT removeNamedObject( const mol::string& obj );
+
+	// IDebugExpressionCallBack
+	HRESULT virtual __stdcall onComplete();
 
 	// IActiveScriptSiteDebug Implementation
 	virtual HRESULT  STDMETHODCALLTYPE GetDocumentContextFromPosition(
@@ -112,20 +123,23 @@ public:
 	virtual HRESULT  __stdcall  ReplaceText( ULONG, ULONG, OLECHAR *);
 
 
-	virtual HRESULT  __stdcall  ThreadScript::GetDocument(IDebugDocument **pObj);
-	virtual HRESULT  __stdcall  ThreadScript::EnumCodeContexts(IEnumDebugCodeContexts **pObj);
+	virtual HRESULT  __stdcall  GetDocument(IDebugDocument **pObj);
+	virtual HRESULT  __stdcall  EnumCodeContexts(IEnumDebugCodeContexts **pObj);
 
 	mol::punk<IMoeImport>				import;
 
 protected:
 
-	ThreadScript();
-	virtual ~ThreadScript();
+	ScriptDebugger();
+	virtual ~ScriptDebugger();
 
 	// init and cleanup
 	void init(const mol::string& engine);
 	void execute_thread();
 	void execute_callback();
+
+	// helper
+	HRESULT getScriptEngine(const mol::string& engine, IActiveScript **ppas);
 
 
 	std::set<int>						breakpoints_;
@@ -136,6 +150,9 @@ protected:
 	mol::punk<IDebugApplication>		debugApp_;
 	mol::punk<IActiveScript>			activeScript_;
 	mol::punk<IActiveScriptParse>		asp_;
+	mol::punk<IDebugExpression>			exp_;
+
+	mol::punk<IRemoteDebugApplicationThread> remote_;
 
 	DWORD								dwAppCookie_;
 	DWORD								offset_;
@@ -148,7 +165,6 @@ protected:
     EXCEPINFO							ei_; 
 
 	HWND								owner_;
-	HRESULT getScriptEngine(const mol::string& engine, IActiveScript **ppas);
 };
 
 class MoeDebugImport : 

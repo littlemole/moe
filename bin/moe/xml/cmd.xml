@@ -69,6 +69,7 @@
     <cmd id="IDM_EDIT_DEBUG_STEPOUT" title="Step out" ribbon="RibbonDebugStepOut" />
     <cmd id="IDM_EDIT_DEBUG_STOP" title="Stop" ribbon="RibbonDebugPause"  />
     <cmd id="IDM_EDIT_DEBUG_QUIT" title="Quit" ribbon="RibbonDebugQuit" />
+    <cmd id="IDM_EDIT_DEBUG_EVAL_EXPR" title="Eval Expr"  />    
     <cmd id="IDM_EDIT_INDENTION" title="Indention" />
     <cmd id="IDM_EDIT_16BYTES" title="16 Bytes" />
     <cmd id="IDM_EDIT_20BYTES" title="20 Bytes" />

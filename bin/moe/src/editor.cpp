@@ -24,7 +24,7 @@ mol::TCHAR OutFilesFilter[]   = _T("all files (*.*)\0*.*\0\0");
 
 Editor::Editor() 
 {
-	ts_ = 0;
+	debugger_ = 0;
     eraseBackground_ = 1;
 	lastWriteTime_.dwHighDateTime = 0;
 	lastWriteTime_.dwLowDateTime = 0;
@@ -156,16 +156,16 @@ void Editor::OnDestroy()
 	markers_.release();
 	text_.release();
 	sci.release();
-	if ( ts_)
+	if ( debugger_)
 	{
-		ts_->import->Quit();
+		debugger_->import->Quit();
 		// as we offer scripting, break any references to out of process clients
 //		::CoDisconnectObject(((IActiveScriptSite*)(ts_)),0);
 		//((IActiveScriptSite*)(ts_))->Release();
-		ts_ = 0;
+		debugger_ = 0;
 	}
-	remote_.release();
-	debugDlg()->remote.release();
+//	remote_.release();
+//	debugDlg()->remote.release();
 }
 
 void Editor::OnNcDestroy()
@@ -186,7 +186,7 @@ void Editor::OnMDIActivate(WPARAM unused, HWND activated)
 
 	if ( activated == hWnd_ )
 	{
-		debugDlg()->remote = remote_;
+//		debugDlg()->remote = remote_;
 		mol::bstr path;
 		props_->get_Filename(&path);
 
@@ -984,6 +984,12 @@ void Editor::OnDebugScriptQuit()
 	es.debugScriptQuit();
 }
 
+void Editor::OnDebugScriptEval()
+{
+	EditorScript es(this);
+	es.debugScriptEval();
+}
+
 void Editor::OnScriptThreadDone()
 {
 	if ( mol::guithread() != mol::Thread::self() )
@@ -996,17 +1002,17 @@ void Editor::OnScriptThreadDone()
 	es.scriptThreadDone();
 }
 
-void Editor::OnScriptThread( int line, IRemoteDebugApplicationThread* remote, IActiveScriptError* pError )
+void Editor::OnScriptThread( int line, mol::string error )
 {
 	if ( mol::guithread() != mol::Thread::self() )
 	{
 		EditorScript es(this);
-		es.scriptThread(line,remote,pError);
+		es.scriptThread(line,error);
 		return;
 	}
 
 	EditorScript es(this);
-	es.scriptThread2(line,remote,pError);
+	es.scriptThread2(line,error);
 }
 
 
@@ -1122,7 +1128,7 @@ HRESULT __stdcall Editor::Sintilla_Events::OnMarker( long line)
 
 	This()->markers_->ToggleMarker(line);
 
-	if ( This()->ts_ )
+	if ( This()->debugger_ )
 	{
 
 		mol::SafeArray<VT_I4> sf;
@@ -1137,7 +1143,7 @@ HRESULT __stdcall Editor::Sintilla_Events::OnMarker( long line)
 				s.insert(sfa[i]);
 			}
 		}
-		This()->ts_->update_breakpoints(s);
+		This()->debugger_->update_breakpoints(s);
 	}
 	return S_OK; 
 }

@@ -51,8 +51,8 @@ public:
 
 	typedef R ( T::*Function)(P1,P2,P3,P4);
 
-	template<class T>
-	EventHandler( Function f, T* t )
+	template<class C>
+	EventHandler( Function f, C* t )
 		: fun_(f), t_ (t)
 	{}
 
@@ -73,7 +73,6 @@ public:
 
 	typedef R ( *Function)(P1,P2,P3,P4);
 
-	template<class T>
 	EventHandler( Function f)
 		: fun_(f)
 	{}
@@ -93,8 +92,8 @@ public:
 
 	typedef R ( T::*Function)(P1,P2,P3);
 
-	template<class T>
-	EventHandler( Function f, T* t )
+	template<class C>
+	EventHandler( Function f, C* t )
 		: fun_(f), t_ (t)
 	{}
 
@@ -115,7 +114,6 @@ public:
 
 	typedef R ( *Function)(P1,P2,P3);
 
-	template<class T>
 	EventHandler( Function f)
 		: fun_(f)
 	{}
@@ -135,8 +133,8 @@ public:
 
 	typedef R ( T::*Function)(P1,P2);
 
-	template<class T>
-	EventHandler( Function f, T* t )
+	template<class C>
+	EventHandler( Function f, C* t )
 		: fun_(f), t_ (t)
 	{}
 
@@ -156,7 +154,6 @@ public:
 
 	typedef R ( *Function)(P1,P2);
 
-	template<class T>
 	EventHandler( Function f )
 		: fun_(f)
 	{}
@@ -176,8 +173,8 @@ public:
 
 	typedef R ( T::*Function)(P1);
 
-	template<class T>
-	EventHandler( Function f, T* t )
+	template<class C>
+	EventHandler( Function f, C* t )
 		: fun_(f), t_ (t)
 	{}
 
@@ -197,7 +194,6 @@ public:
 
 	typedef R ( *Function)(P1);
 
-	template<class T>
 	EventHandler( Function f )
 		: fun_(f)
 	{}
@@ -208,6 +204,10 @@ public:
 	}
 
 	Function fun_;
+
+private:
+	EventHandler(const EventHandler& rhs)
+	{}
 };
 
 
@@ -218,8 +218,8 @@ public:
 
 	typedef R ( T::*Function)();
 
-	template<class T>
-	EventHandler( Function f, T* t )
+	template<class C>
+	EventHandler( Function f, C* t )
 		: fun_(f), t_ (t)
 	{}
 
@@ -240,7 +240,6 @@ public:
 
 	typedef R ( *Function)();
 
-	template<class T>
 	EventHandler( Function f )
 		: fun_(f)
 	{}

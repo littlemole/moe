@@ -137,20 +137,21 @@ HRESULT __stdcall  MoeDebugImport::Quit()
 /////////////////////////////////////////////////////////////////////////////////////////////
 
  
-ThreadScript::ThreadScript()
+ScriptDebugger::ScriptDebugger()
 {}
 
-ThreadScript::~ThreadScript()
+ScriptDebugger::~ScriptDebugger()
 {
-	ODBGS("ThreadScript died"); 
+	ODBGS("ScriptDebugger died"); 
 }
 
-void ThreadScript::init(const mol::string& engine)
+void ScriptDebugger::init(const mol::string& engine)
 {
 	HRESULT hr;
 
 	engine_ = engine;
 
+	remote_.release();
 	activeScript_.release();
 	asp_.release();
 
@@ -206,7 +207,7 @@ void ThreadScript::init(const mol::string& engine)
 DEFINE_GUID( GUID_JSCRIPT9, 0x16d51579L, 0xa30b, 0x4c8b, 
     0xa2, 0x76, 0x0f,0xf4, 0xdc, 0x41, 0xe7, 0x55 );
 
-HRESULT ThreadScript::getScriptEngine(const mol::string& engine, IActiveScript **ppas)
+HRESULT ScriptDebugger::getScriptEngine(const mol::string& engine, IActiveScript **ppas)
 {
 	*ppas = 0;
 	CLSID clsid;
@@ -228,7 +229,7 @@ HRESULT ThreadScript::getScriptEngine(const mol::string& engine, IActiveScript *
 }
 
 
-HRESULT ThreadScript::addNamedObject( IUnknown* punk, const mol::string& obj, int state )
+HRESULT ScriptDebugger::addNamedObject( IUnknown* punk, const mol::string& obj, int state )
 {
 	mol::GIT git;
 	HRESULT hr;
@@ -254,7 +255,7 @@ HRESULT ThreadScript::addNamedObject( IUnknown* punk, const mol::string& obj, in
 	return E_FAIL;
 }
 
-HRESULT ThreadScript::removeNamedObject( const mol::string& obj )
+HRESULT ScriptDebugger::removeNamedObject( const mol::string& obj )
 {
 	mol::GIT git;
 	if ( objectMap_[obj].first > 0 )
@@ -272,11 +273,11 @@ HRESULT ThreadScript::removeNamedObject( const mol::string& obj )
 }
 
 
-ThreadScript* ThreadScript::CreateInstance( HWND owner, const mol::string& script, const mol::string& filename)
+ScriptDebugger::Instance* ScriptDebugger::CreateInstance( HWND owner, const mol::string& script, const mol::string& filename)
 {
 	ODBGS("ThreadScript::execute()\r\n");
 
-	ScriptInstance* ts = new ScriptInstance;
+	Instance* ts = new Instance;
 	ts->AddRef();
 
 	ts->owner_ = owner;
@@ -287,17 +288,17 @@ ThreadScript* ThreadScript::CreateInstance( HWND owner, const mol::string& scrip
 	return ts;
 }
 
-void ThreadScript::execute( int flag )
+void ScriptDebugger::execute( int flag )
 {
 	scriptFlags_ = flag;
 
 	mol::thread( 
-		boost::bind( &ThreadScript::execute_thread, this ), 
-		boost::bind(&ThreadScript::execute_callback,this) 
+		boost::bind( &ScriptDebugger::execute_thread, this ), 
+		boost::bind(&ScriptDebugger::execute_callback,this) 
 	);	
 }
 
-void ThreadScript::cause_break()
+void ScriptDebugger::cause_break()
 {
 	if ( !debugApp_ )
 		return;
@@ -305,7 +306,38 @@ void ThreadScript::cause_break()
 	debugApp_->CauseBreak();
 }
 
-void  ThreadScript::update_breakpoints(std::set<int> br)
+void ScriptDebugger::resume(BREAKRESUMEACTION ba)
+{
+	if ( !remote_ )
+		return;
+	
+	mol::punk<IRemoteDebugApplication> app;
+
+	HRESULT hr = remote_->GetApplication(&app);
+	if ( hr == S_OK && app ) 
+	{
+		hr = app->ResumeFromBreakPoint( 
+						remote_, 
+						ba, /*default BREAKRESUMEACTION_CONTINUE*/
+						ERRORRESUMEACTION_AbortCallAndReturnErrorToCaller 
+			);
+	}
+
+	remote_.release();
+}
+
+HRESULT ScriptDebugger::frames(IEnumDebugStackFrames** frames)
+{
+	if(!frames)
+		return E_INVALIDARG;
+
+	if(!remote_)
+		return E_UNEXPECTED;
+
+	return remote_->EnumStackFrames( frames );
+}
+
+void  ScriptDebugger::update_breakpoints(std::set<int> br)
 {
 	mol::punk<IActiveScriptDebug> sdebug(activeScript_);
 
@@ -347,9 +379,9 @@ void  ThreadScript::update_breakpoints(std::set<int> br)
 
 }
 
-void ThreadScript::execute_thread( )
+void ScriptDebugger::execute_thread( )
 {
-	ODBGS("ThreadScript::execute()\r\n");
+	ODBGS("ScriptDebugger::execute()\r\n");
 
 	::CoInitialize(0);
 
@@ -383,9 +415,11 @@ void ThreadScript::execute_thread( )
 }
 
 
-void ThreadScript::execute_callback()
+void ScriptDebugger::execute_callback()
 {
 	ODBGS("ThreadScript::callback");
+
+	remote_.release();
 
 	asp_.release();
 	activeScript_->Close(); 
@@ -417,16 +451,82 @@ void ThreadScript::execute_callback()
 
 }
 
+void ScriptDebugger::eval_expression(const mol::string& expr)
+{
+	exp_.release();
+
+	if ( expr.empty() )
+		return;
+
+	if ( !remote_ )
+		return;
+
+	mol::punk<IRemoteDebugApplicationThread> r(remote_);
+	if ( !r )
+		return;
+
+	mol::punk<IEnumDebugStackFrames> frames;
+	HRESULT hr = r->EnumStackFrames(&frames);
+	if ( hr != S_OK)
+		return;
+	if (!frames)
+		return;
+
+	ULONG fetched = 0;							
+	DebugStackFrameDescriptor dsfd;
+	hr = frames->Next(1,&dsfd,&fetched);
+	if ( hr != S_OK)
+		return;
+	if (! fetched )
+		return;
+
+	if ( !dsfd.pdsf )
+		return;
+
+	mol::punk<IDebugStackFrame> frame(dsfd.pdsf);
+	dsfd.pdsf->Release();
+
+	mol::punk<IDebugExpressionContext> ctx(frame);
+	if (!ctx)
+		return;
+
+	hr = ctx->ParseLanguageText( mol::towstring(expr).c_str(), 10, 0, DEBUG_TEXT_ISEXPRESSION|DEBUG_TEXT_RETURNVALUE,&exp_);
+	if ( hr != S_OK)
+		return;
+	if ( !exp_ )
+		return;
+
+	hr = exp_->Start(this);
+
+}
+
+HRESULT __stdcall ScriptDebugger::onComplete()
+{
+	mol::string result;
+	mol::bstr txt;
+
+	HRESULT phr = 0;
+	HRESULT hr =exp_->GetResultAsString(&phr,&txt);
+	if(hr == S_OK && txt)
+	{
+		result = txt.toString();
+		OnExpressionEvaluated.fire(result);
+	}
+
+	exp_.release();
+	return S_OK;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 
-HRESULT __stdcall ThreadScript::GetLCID( LCID *plcid) 
+HRESULT __stdcall ScriptDebugger::GetLCID( LCID *plcid) 
 { 
 	*plcid = LOCALE_USER_DEFAULT;
 	return S_OK; 
 }
 
-HRESULT  __stdcall ThreadScript::GetItemInfo( LPCOLESTR pstrName,DWORD dwReturnMask,IUnknown **ppiunkItem,ITypeInfo **ppti)
+HRESULT  __stdcall ScriptDebugger::GetItemInfo( LPCOLESTR pstrName,DWORD dwReturnMask,IUnknown **ppiunkItem,ITypeInfo **ppti)
 {
 	mol::GIT git;
 	if ( SCRIPTINFO_IUNKNOWN & dwReturnMask )
@@ -469,30 +569,61 @@ HRESULT  __stdcall ThreadScript::GetItemInfo( LPCOLESTR pstrName,DWORD dwReturnM
 	return TYPE_E_ELEMENTNOTFOUND;
 }
 
-HRESULT  __stdcall ThreadScript::GetDocVersionString( BSTR *pbstrVersion)
+HRESULT  __stdcall ScriptDebugger::GetDocVersionString( BSTR *pbstrVersion)
 {
 	*pbstrVersion = SysAllocString(L"");
 	return(S_OK);
 }
 
-HRESULT  __stdcall ThreadScript::OnScriptTerminate( const VARIANT *pvarResult,const EXCEPINFO *pexcepinfo)
+HRESULT  __stdcall ScriptDebugger::OnScriptTerminate( const VARIANT *pvarResult,const EXCEPINFO *pexcepinfo)
 {
 	return S_OK;
 }
 
-HRESULT  __stdcall ThreadScript::OnStateChange( SCRIPTSTATE ssScriptState)
+HRESULT  __stdcall ScriptDebugger::OnStateChange( SCRIPTSTATE ssScriptState)
 {
 	return S_OK;
 }
 
-HRESULT  __stdcall ThreadScript::OnScriptError( IActiveScriptError *pscripterror)
+HRESULT  __stdcall ScriptDebugger::OnScriptError( IActiveScriptError *pscripterror)
 {
-	pscripterror->AddRef();
-	OnScriptThread.fire( -1, (IRemoteDebugApplicationThread*) 0,pscripterror  );
+	remote_.release();
+
+	mol::ostringstream oss;
+	
+	DWORD context;
+	ULONG line;
+	LONG pos;
+	pscripterror->GetSourcePosition(&context,&line,&pos);
+			
+	mol::punk<IActiveScriptErrorDebug> errorDebug(pscripterror);
+	if ( errorDebug )
+	{
+		mol::punk<IDebugStackFrame> f;
+		errorDebug->GetStackFrame(&f);
+
+		if ( f )
+		{
+			mol::bstr e;
+			f->GetDescriptionString(TRUE,&e);
+
+			if ( e )
+				oss << e.toString() << std::endl;
+		}
+	}
+
+	EXCEPINFO ex;
+	pscripterror->GetExceptionInfo(&ex);
+	if ( ex.bstrDescription )
+	{
+		oss << mol::bstr(ex.bstrDescription).toString();
+	}
+
+	OnScriptThread.fire( line, oss.str()  );
 	return S_OK;
 }
 
-HRESULT  __stdcall ThreadScript::OnEnterScript( void)
+HRESULT  __stdcall ScriptDebugger::OnEnterScript( void)
 {
 	((IActiveScriptSite*)this)->AddRef();
 
@@ -521,39 +652,39 @@ HRESULT  __stdcall ThreadScript::OnEnterScript( void)
 	return S_OK;
 }
 
-HRESULT  __stdcall ThreadScript::OnLeaveScript( void)
+HRESULT  __stdcall ScriptDebugger::OnLeaveScript( void)
 {
 
 	((IActiveScriptSite*)this)->Release();
 	return S_OK;
 }
 
-HRESULT  __stdcall ThreadScript::GetWindow(HWND *phwnd )
+HRESULT  __stdcall ScriptDebugger::GetWindow(HWND *phwnd )
 {
 	HWND w = owner_;
 	*phwnd = w;	
 	return S_OK;
 }
 
-HRESULT  __stdcall ThreadScript::EnableModeless(	BOOL fEnable )
+HRESULT  __stdcall ScriptDebugger::EnableModeless(	BOOL fEnable )
 {
 
 	return S_OK;
 }
 
 //IApplicationDebugger
-HRESULT  __stdcall  ThreadScript::QueryAlive()
+HRESULT  __stdcall  ScriptDebugger::QueryAlive()
 {
 		return S_OK;
 }
 
-HRESULT  __stdcall  ThreadScript::CreateInstanceAtDebugger( REFCLSID rclsid, IUnknown * pUnkOuter, DWORD dwClsContext, REFIID riid, IUnknown ** pObj)
+HRESULT  __stdcall  ScriptDebugger::CreateInstanceAtDebugger( REFCLSID rclsid, IUnknown * pUnkOuter, DWORD dwClsContext, REFIID riid, IUnknown ** pObj)
 {
 		return ::CoCreateInstance(rclsid, pUnkOuter, dwClsContext, riid, (void **)pObj);
 }
 
 
-HRESULT  __stdcall  ThreadScript::onDebugOutput(LPCOLESTR pstr)
+HRESULT  __stdcall  ScriptDebugger::onDebugOutput(LPCOLESTR pstr)
 {
 		MessageBoxW(0, pstr, 0, MB_SETFOREGROUND|MB_OK|MB_ICONEXCLAMATION);
 		return S_OK;
@@ -561,7 +692,7 @@ HRESULT  __stdcall  ThreadScript::onDebugOutput(LPCOLESTR pstr)
 
 //extern void enumProps( mol::ostringstream& oss, IDebugProperty* prop, int level = 0 );
 
-HRESULT  __stdcall  ThreadScript::onHandleBreakPoint(IRemoteDebugApplicationThread *remote, BREAKREASON br, IActiveScriptErrorDebug *pError)
+HRESULT  __stdcall  ScriptDebugger::onHandleBreakPoint(IRemoteDebugApplicationThread *rthread, BREAKREASON br, IActiveScriptErrorDebug *pError)
 {
 	ODBGS("onHandleBreakPoint");
 	ULONG						line = (ULONG)-1;
@@ -571,7 +702,7 @@ HRESULT  __stdcall  ThreadScript::onHandleBreakPoint(IRemoteDebugApplicationThre
 	::ZeroMemory(&desc,sizeof(DebugStackFrameDescriptor));
 
 	mol::punk<IEnumDebugStackFrames> frames;
-	HRESULT hr = remote->EnumStackFrames( &frames );
+	HRESULT hr = rthread->EnumStackFrames( &frames );
 	if ( S_OK != hr || !frames )
 		return S_OK;
 
@@ -631,25 +762,50 @@ HRESULT  __stdcall  ThreadScript::onHandleBreakPoint(IRemoteDebugApplicationThre
 	
 	ODBGS1("errorhandler line :",line);
 
-	// pass control to UI thread
+	remote_ = rthread;
 
-	remote->AddRef();
-
+	mol::ostringstream oss;
 	if ( pError )
-		pError->AddRef();
+	{
+		EXCEPINFO ex;
+		pError->GetExceptionInfo(&ex);
 
-	OnScriptThread.fire( (int)line, remote, (IActiveScriptError*)pError );
+		
+		
+		mol::punk<IActiveScriptErrorDebug> errorDebug(pError);
+		if ( errorDebug )
+		{
+			mol::punk<IDebugStackFrame> f;
+			errorDebug->GetStackFrame(&f);
+
+			if ( f )
+			{
+				mol::bstr e;
+				f->GetDescriptionString(TRUE,&e);
+
+				if ( e )
+					oss << e.toString() << std::endl;
+			}
+		}
+
+		if ( ex.bstrDescription )
+		{
+			oss << mol::bstr(ex.bstrDescription).toString();
+		}
+	}
+
+	OnScriptThread.fire( (int)line, oss.str() );
 	return S_OK;	
 }
 
 
-HRESULT  __stdcall  ThreadScript::onClose()
+HRESULT  __stdcall  ScriptDebugger::onClose()
 {
 		return S_OK;
 }
 
 
-HRESULT  __stdcall  ThreadScript::onDebuggerEvent( REFIID, IUnknown *)
+HRESULT  __stdcall  ScriptDebugger::onDebuggerEvent( REFIID, IUnknown *)
 {
 		return E_NOTIMPL;
 }
@@ -658,12 +814,12 @@ HRESULT  __stdcall  ThreadScript::onDebuggerEvent( REFIID, IUnknown *)
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-HRESULT  __stdcall  ThreadScript::BringDocumentToTop(IDebugDocumentText *)
+HRESULT  __stdcall  ScriptDebugger::BringDocumentToTop(IDebugDocumentText *)
 {
 	return S_OK;
 }
 
-HRESULT  __stdcall  ThreadScript::BringDocumentContextToTop( IDebugDocumentContext *)
+HRESULT  __stdcall  ScriptDebugger::BringDocumentContextToTop( IDebugDocumentContext *)
 {
 	return S_OK;
 }
@@ -671,7 +827,7 @@ HRESULT  __stdcall  ThreadScript::BringDocumentContextToTop( IDebugDocumentConte
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 
-HRESULT  __stdcall  ThreadScript::GetName( DOCUMENTNAMETYPE dnt, BSTR * str)
+HRESULT  __stdcall  ScriptDebugger::GetName( DOCUMENTNAMETYPE dnt, BSTR * str)
 {
 	if ( !str ) 
 		return E_INVALIDARG;
@@ -680,7 +836,7 @@ HRESULT  __stdcall  ThreadScript::GetName( DOCUMENTNAMETYPE dnt, BSTR * str)
 	return S_OK;
 }
 
-HRESULT  __stdcall  ThreadScript::GetDocumentClassId(CLSID * clsid)
+HRESULT  __stdcall  ScriptDebugger::GetDocumentClassId(CLSID * clsid)
 {
 	if ( !clsid ) 
 		return E_INVALIDARG;
@@ -689,13 +845,13 @@ HRESULT  __stdcall  ThreadScript::GetDocumentClassId(CLSID * clsid)
 	return S_OK;
 }
 
-HRESULT  __stdcall  ThreadScript::GetDocumentAttributes(TEXT_DOC_ATTR * attr)
+HRESULT  __stdcall  ScriptDebugger::GetDocumentAttributes(TEXT_DOC_ATTR * attr)
 {
 		*attr = TEXT_DOC_ATTR_READONLY;
 		return S_OK;
 }
 
-HRESULT  __stdcall  ThreadScript::GetSize(ULONG *  numLines, ULONG* numChars)
+HRESULT  __stdcall  ScriptDebugger::GetSize(ULONG *  numLines, ULONG* numChars)
 {
 	DWORD	chars;
 	DWORD	lines;
@@ -730,7 +886,7 @@ HRESULT  __stdcall  ThreadScript::GetSize(ULONG *  numLines, ULONG* numChars)
 	return S_OK;
 }
 
-HRESULT  __stdcall  ThreadScript::GetPositionOfLine( ULONG lineNum, ULONG* pos)
+HRESULT  __stdcall  ScriptDebugger::GetPositionOfLine( ULONG lineNum, ULONG* pos)
 {
 	DWORD	lines, offset;
 	WCHAR	*ptr;
@@ -760,7 +916,7 @@ HRESULT  __stdcall  ThreadScript::GetPositionOfLine( ULONG lineNum, ULONG* pos)
 	return S_OK;
 }
 
-HRESULT  __stdcall  ThreadScript::GetLineOfPosition( ULONG position, ULONG * lineNum, ULONG * charOffset)
+HRESULT  __stdcall  ScriptDebugger::GetLineOfPosition( ULONG position, ULONG * lineNum, ULONG * charOffset)
 {
 	DWORD	lines, offset;
 	WCHAR	*ptr;
@@ -796,7 +952,7 @@ HRESULT  __stdcall  ThreadScript::GetLineOfPosition( ULONG position, ULONG * lin
 
 }
 
-HRESULT  __stdcall  ThreadScript::GetText(ULONG position, WCHAR * text, SOURCE_TEXT_ATTR * attr, ULONG * numChars, ULONG max)
+HRESULT  __stdcall  ScriptDebugger::GetText(ULONG position, WCHAR * text, SOURCE_TEXT_ATTR * attr, ULONG * numChars, ULONG max)
 {
 	register DWORD		offset;
 	register WCHAR		*ptr;
@@ -835,41 +991,41 @@ HRESULT  __stdcall  ThreadScript::GetText(ULONG position, WCHAR * text, SOURCE_T
 	return S_OK;
 }
 
-HRESULT  __stdcall  ThreadScript::GetPositionOfContext( IDebugDocumentContext * ctx, ULONG *position, ULONG * numChars)
+HRESULT  __stdcall  ScriptDebugger::GetPositionOfContext( IDebugDocumentContext * ctx, ULONG *position, ULONG * numChars)
 {
 	*numChars = (DWORD)script_.size();
 	*position = 0;
 	return S_OK;
 }
 
-HRESULT  __stdcall  ThreadScript::GetContextOfPosition(ULONG position, ULONG numCHars, IDebugDocumentContext ** cts)
+HRESULT  __stdcall  ScriptDebugger::GetContextOfPosition(ULONG position, ULONG numCHars, IDebugDocumentContext ** cts)
 {
 	return ((IActiveScriptSite*)this)->QueryInterface( IID_IDebugDocumentContext, (void**) cts );
 }
 
-HRESULT  __stdcall  ThreadScript::InsertText( ULONG, ULONG, OLECHAR *)
+HRESULT  __stdcall  ScriptDebugger::InsertText( ULONG, ULONG, OLECHAR *)
 {
 	return E_FAIL;
 }
 
-HRESULT  __stdcall  ThreadScript::RemoveText( ULONG, ULONG)
+HRESULT  __stdcall  ScriptDebugger::RemoveText( ULONG, ULONG)
 {
 	return E_FAIL;
 }
 
-HRESULT  __stdcall  ThreadScript::ReplaceText( ULONG, ULONG, OLECHAR *)
+HRESULT  __stdcall  ScriptDebugger::ReplaceText( ULONG, ULONG, OLECHAR *)
 {
 	return E_FAIL;
 }
 
 
-HRESULT  __stdcall  ThreadScript::GetDocument(IDebugDocument **pObj)
+HRESULT  __stdcall  ScriptDebugger::GetDocument(IDebugDocument **pObj)
 {
 	HRESULT hr = ((IDebugDocument*)this)->QueryInterface(IID_IDebugDocument, (void**)pObj );
 	return hr;
 }
 
-HRESULT  __stdcall  ThreadScript::EnumCodeContexts(IEnumDebugCodeContexts **pObj)
+HRESULT  __stdcall  ScriptDebugger::EnumCodeContexts(IEnumDebugCodeContexts **pObj)
 {
 	HRESULT hr;
 
@@ -886,7 +1042,7 @@ HRESULT  __stdcall  ThreadScript::EnumCodeContexts(IEnumDebugCodeContexts **pObj
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 // IActiveScriptSiteDebug Implementation
-HRESULT  STDMETHODCALLTYPE  ThreadScript::GetDocumentContextFromPosition(
+HRESULT  STDMETHODCALLTYPE  ScriptDebugger::GetDocumentContextFromPosition(
 #ifdef _WIN64
 								  DWORDLONG dwSourceContext,	
 #else
@@ -905,7 +1061,7 @@ HRESULT  STDMETHODCALLTYPE  ThreadScript::GetDocumentContextFromPosition(
 }
 
 
-HRESULT  __stdcall ThreadScript::GetApplication(IDebugApplication **ppda)
+HRESULT  __stdcall ScriptDebugger::GetApplication(IDebugApplication **ppda)
 {
    if (!ppda)
    {
@@ -923,7 +1079,7 @@ HRESULT  __stdcall ThreadScript::GetApplication(IDebugApplication **ppda)
 	return E_FAIL;
 }
 
-HRESULT  __stdcall ThreadScript::GetRootApplicationNode(IDebugApplicationNode **ppdanRoot)
+HRESULT  __stdcall ScriptDebugger::GetRootApplicationNode(IDebugApplicationNode **ppdanRoot)
 {
    if (!ppdanRoot)
    {
@@ -938,7 +1094,7 @@ HRESULT  __stdcall ThreadScript::GetRootApplicationNode(IDebugApplicationNode **
    return E_NOTIMPL;
 }
 
-HRESULT  __stdcall ThreadScript::OnScriptErrorDebug(
+HRESULT  __stdcall ScriptDebugger::OnScriptErrorDebug(
 								  IActiveScriptErrorDebug *pErrorDebug,
 								  BOOL*pfEnterDebugger,
 								  BOOL *pfCallOnScriptErrorWhenContinuing)

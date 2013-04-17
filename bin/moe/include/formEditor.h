@@ -38,7 +38,7 @@ public:
     void OnReload();
 
 	LRESULT OnExecScript();
-	LRESULT OnDebugScript();
+	LRESULT OnDebugScriptGo();
 	LRESULT OnExecForm(  );
 
 protected:
