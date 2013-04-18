@@ -4,12 +4,13 @@
 #include "widgets.h"
 #include "Docs.h"
 #include "moebar.h"
-#include "xmlui.h"
-#include "ribbonres.h"
+
 #include "ThreadScript.h"
-#include "ActivDbg.h"
 #include "EditorMenu.h"
 #include "EditorScript.h"
+
+#include "xmlui.h"
+#include "ribbonres.h"
 
 using namespace mol::win;
 using namespace mol::ole;
@@ -143,9 +144,6 @@ void Editor::OnDestroy()
 	
 	docs()->remove(this);
 	
-//	moe()->scriptHost->removeNamedObject(L"moe");
-	//moe()->scriptHost->removeNamedObject(L"MoeImport");
-	//moe()->scriptHost->close();
  	events.UnAdvise(oleObject);
 
 	props_.release();
@@ -159,13 +157,8 @@ void Editor::OnDestroy()
 	if ( debugger_)
 	{
 		debugger_->import->Quit();
-		// as we offer scripting, break any references to out of process clients
-//		::CoDisconnectObject(((IActiveScriptSite*)(ts_)),0);
-		//((IActiveScriptSite*)(ts_))->Release();
 		debugger_ = 0;
 	}
-//	remote_.release();
-//	debugDlg()->remote.release();
 }
 
 void Editor::OnNcDestroy()
@@ -186,7 +179,6 @@ void Editor::OnMDIActivate(WPARAM unused, HWND activated)
 
 	if ( activated == hWnd_ )
 	{
-//		debugDlg()->remote = remote_;
 		mol::bstr path;
 		props_->get_Filename(&path);
 
@@ -208,9 +200,6 @@ LRESULT Editor::OnClose()
 {
 	if (saving_ )
 		return 1;
-
-	//if ( ts_ )
-	//	return 1;
 
 	VARIANT_BOOL vb;
 	text_->get_Modified(&vb);
@@ -531,8 +520,7 @@ void Editor::OnUserScript(int code, int id, HWND ctrl)
 	std::string script = fs.readAll();
 	fs.close();
 
-	ScriptingHost scriptlet_ = new Script;
-	scriptlet_->call( mol::toString(engine),func,mol::toString(script));
+	Script::CreateInstance()->call( mol::toString(engine),func,mol::toString(script));
 
 }
 

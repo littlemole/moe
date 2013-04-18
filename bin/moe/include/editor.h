@@ -1,7 +1,7 @@
 #ifndef _MOE_DEF_EDITOR_DEFINE_
 #define _MOE_DEF_EDITOR_DEFINE_
 
-#include "shared.h"
+#include "mdichild.h"
 #include "resource.h"
 #include "MoeBar.h"
 #include "ThreadScript.h"

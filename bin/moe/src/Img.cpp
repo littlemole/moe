@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "img.h"
 #include "moe.h"
-#include "xmlui.h"
+#include "Docs.h"
 #include "MoeBar.h"
+#include "xmlui.h"
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -130,7 +131,7 @@ void ImgViewer::updateUI()
 
 	if ( mol::Ribbon::ribbon()->enabled())
 	{
-		Ribbon::ribbon()->mode(3);
+		mol::Ribbon::ribbon()->mode(3);
 		mol::Ribbon::ribbon()->maximize();
 	}
 }

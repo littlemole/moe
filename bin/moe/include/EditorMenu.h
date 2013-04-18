@@ -1,9 +1,6 @@
 #pragma once
 
 #include "shared.h"
-#include "resource.h"
-#include "MoeBar.h"
-#include "win/io.h"
 
 class Editor;
 

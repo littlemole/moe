@@ -2,6 +2,8 @@
 #define OLE_MOE_DEF_GUARD_
 
 #include "shared.h"
+#include "mdichild.h"
+
 
 class MoeWndImpl;
 class TaskbarWnd;

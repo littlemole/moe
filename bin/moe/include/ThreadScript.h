@@ -1,11 +1,8 @@
 #ifndef MOL_MOE_DEFINE_GUARD_THREAD_SCRIPT_DEF_DUARD_DEFINE_
 #define MOL_MOE_DEFINE_GUARD_THREAD_SCRIPT_DEF_DUARD_DEFINE_
 
-#include <map>
-#include "util/uni.h"
-#include "thread/events.h"
-#include "ole/aut.h"
-#include "ole/punk.h"
+
+#include "commons.h"
 #include <ActivScp.h>
 #include <ActivDbg.h>
 

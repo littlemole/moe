@@ -1,11 +1,12 @@
 #ifndef USERFORM_DEF_GUARD_
 #define USERFORM_DEF_GUARD_
 
-#include "moe.h"
-#include "ole/SimpleHost.h"
+/*#include "moe.h"
 #include "fm20_tlh.h"
-
-#include "resource.h"
+*/
+#include "commons.h"
+#include "ole/SimpleHost.h"
+#include "mdichild.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////

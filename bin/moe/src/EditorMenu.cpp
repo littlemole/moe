@@ -2,13 +2,8 @@
 #include "EditorMenu.h"
 #include "editor.h"
 #include "moe.h"
-#include "widgets.h"
-#include "Docs.h"
-#include "moebar.h"
 #include "xmlui.h"
 #include "ribbonres.h"
-#include "ThreadScript.h"
-#include "ActivDbg.h"
 
 EditorMenu::EditorMenu(void)
 {

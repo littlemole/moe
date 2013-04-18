@@ -2,7 +2,8 @@
 #define DIRLIST_DEF_GUARD_
 
 #include "shared.h"
-#include "resource.h"
+#include "mdichild.h"
+//#include "resource.h"
 
 
 

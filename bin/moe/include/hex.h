@@ -2,10 +2,8 @@
 #define _MOE_DEF_HEX_EDITOR_DEFINE_
 
 #include "shared.h"
+#include "mdichild.h"
 
-using namespace mol::win;
-using namespace mol::ole;
-using namespace mol;
 
 //////////////////////////////////////////////////////////////////////////////////
 // Editor Wnd
@@ -44,7 +42,7 @@ protected:
 
 	// hexwnd events sink
     class Hex_sink : 
-		public stack_obj<HexCtrlEvents>
+		public mol::stack_obj<HexCtrlEvents>
     {
         public : outer_this(Hex,sink); 
 

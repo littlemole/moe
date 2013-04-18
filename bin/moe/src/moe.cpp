@@ -1,19 +1,15 @@
 #include "stdafx.h"
-#include "UserForm.h"
+
 #include "app.h"
-#include "Img.h"
-#include "Dir3.h"
-#include "Form.h"
-#include "Editor.h"
-#include "hex.h"
-#include "html.h"
-#include "ole.h"
-#include "MoeBar.h"
+#include "moe.h"
 #include "Docs.h"
-#include "xmlui.h"
+#include "MoeBar.h"
 #include "tree.h"
+
+#include "xmlui.h"
+
+#include "resource.h"
 #include "Ribbonres.h"
-#include "win/clipboard.h"
 
 using namespace mol::io;
 using namespace mol;
@@ -55,7 +51,7 @@ MoeWnd::MoeWnd()
 	moeView     = new MoeView::Instance;
 	moeConfig   = new MoeConfig::Instance;
 	treeWndSink = new TreeWndSink::Instance;
-	scriptHost  = new Script;
+	//scriptHost  = new Script;
 	moeStyles.createObject(CLSID_ScintillAxStyleSets,CLSCTX_INPROC_SERVER);
 
 
@@ -192,7 +188,7 @@ void MoeWnd::OnDestroy()
 	treeWndSink->UnAdvise(treeWnd()->oleObject);
 	::CoDisconnectObject(treeWnd()->oleObject,0);
 	//scriptHost->close();
-	scriptHost.release();
+	//scriptHost.release();
 	::RevokeDragDrop(*this);
 
 	if ( activeObj_ )

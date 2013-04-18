@@ -196,8 +196,14 @@ class Script : public mol::com_obj<mol::ScriptHost>
 {
 public:
 
-	Script();
-	~Script();
+	static Script* CreateInstance()
+	{
+		Script* s = new Script;
+		s->AddRef();
+		return s;
+	}
+
+	HRESULT init(const mol::string& engine);
 
 	void eval ( const mol::string& engine, const mol::string& script, IScintillAx* sci );
 	void debug( const mol::string& engine, const mol::string& script, IScintillAx* sci );
@@ -211,7 +217,10 @@ public:
 	virtual HRESULT  __stdcall GetWindow(HWND *phwnd );
 
 private:
-	 IScintillAx* sci_;
+
+	Script();
+	~Script();
+    IScintillAx* sci_;
 };
 
 /////////////////////////////////////////////////////////////////////

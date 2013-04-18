@@ -7,9 +7,6 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-using namespace mol::win;
-using namespace mol::ole;
-using namespace mol;
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 class MoeWnd;
@@ -19,9 +16,9 @@ class MoeWnd;
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 class MoeFormWnd  : 
-	public mol::ChildFrame<MoeFormWnd,mol::HtmlWnd<MoeFormWnd,Window>>,
+	public mol::ChildFrame<MoeFormWnd,mol::HtmlWnd<MoeFormWnd,mol::Window>>,
 	public mol::Dispatch<IMoeHtmlFrame>,
-	public interfaces< MoeFormWnd, implements< IDispatch, IMoeHtmlFrame> >
+	public mol::interfaces< MoeFormWnd, mol::implements< IDispatch, IMoeHtmlFrame> >
 {
 public:
 
@@ -60,7 +57,7 @@ public:
   private:
 
 	/////////////////////////////////////////////////////////////////////
-	void load( const mol::string& loc, int s, Rect& r );
+	void load( const mol::string& loc, int s, mol::Rect& r );
 	virtual int style();
 
 	/////////////////////////////////////////////////////////////////////
@@ -73,9 +70,9 @@ public:
 	/////////////////////////////////////////////////////////////////////
 
 	class ExternalMoe : 
-		public Dispatch<IExternalMoe>,
-		public interfaces< ExternalMoe, 
-				implements< IDispatch, IExternalMoe> >
+		public mol::Dispatch<IExternalMoe>,
+		public mol::interfaces< ExternalMoe, 
+				mol::implements< IDispatch, IExternalMoe> >
 
 	{
 		public : 
@@ -96,7 +93,7 @@ public:
 
 	};
 
-	stack_obj<ExternalMoe>		external_;
+	mol::stack_obj<ExternalMoe>		external_;
 
 
 	/////////////////////////////////////////////////////////////////////
@@ -104,7 +101,7 @@ public:
 	/////////////////////////////////////////////////////////////////////
 
 	class MoeFormWnd_htmlSink : 
-		public stack_obj<mol::ie::ie_event_sink>
+		public mol::stack_obj<mol::ie::ie_event_sink>
 	{
 		public : 
 			outer_this(MoeFormWnd,htmlSink_); 
@@ -116,4 +113,7 @@ public:
 
 };
 
+
+
 #endif
+

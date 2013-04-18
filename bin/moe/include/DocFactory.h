@@ -1,7 +1,7 @@
 #ifndef MOE_DOCFACTORY_DEF_GUARD_
 #define MOE_DOCFACTORY_DEF_GUARD_
 
-#include "Docs.h"
+#include "commons.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // creates some document

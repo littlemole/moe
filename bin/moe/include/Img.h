@@ -1,10 +1,9 @@
 #ifndef IMG_VIEWER_DEF_GUARD_
 #define IMG_VIEWER_DEF_GUARD_
 
-#include "shared.h"
+#include "mdichild.h"
 #include "resource.h"
 
-using namespace mol;
 
 //////////////////////////////////////////////////////////////////////////////////
 // img viewer
@@ -36,10 +35,10 @@ public:
    virtual HRESULT __stdcall get_Object( IDispatch **d);
 
 	// dummy
-	punk<IUnknown> oleObject;
+	mol::punk<IUnknown> oleObject;
 
 private:
-	Picture							pic_;
+	mol::Picture							pic_;
 
 	bool load(const mol::string& path);
 	void updateUI();

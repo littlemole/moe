@@ -1,9 +1,5 @@
 #include "StdAfx.h"
 #include "ThreadScript.h"
-
-#include "ole/bstr.h"
-#include "ole/cp.h"
-#include <sstream>
 #include "xmlui.h"
 
 

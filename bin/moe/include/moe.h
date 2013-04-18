@@ -1,8 +1,7 @@
 #ifndef _MAINFRAME_WND_X_DEF_
 #define _MAINFRAME_WND_X_DEF_
 
-#include "Docs.h"
-#include "resource.h"
+#include "commons.h"
 
 class TreeWndSink;
 class MoeDrop;
@@ -57,9 +56,8 @@ public:
 	mol::punk<IMoeConfig>  moeConfig;
 	mol::punk<IScintillAxStyleSets> moeStyles;
 	mol::punk<ShellTreeEvents> treeWndSink;
-	mol::punk<Script> scriptHost;
-	//
-//	boost::scoped_ptr<TreeWndSink> treeWndSink;
+	//mol::punk<Script> scriptHost;
+
 	boost::scoped_ptr<MoeDrop> moeDrop;
 	boost::scoped_ptr<mol::SearchDlg> searchDlg;
 	boost::scoped_ptr<UrlDlg> urlDlg;
@@ -106,9 +104,6 @@ public:
 
 	 // toggle dirview
 	 void OnShowDirView();
-
-	 // document chooser tab-ctrl events
-//	 void OnTabCtrl( NMHDR* notify );
 
 	 // FX Shortcuts (F1 through F12)
 	 void OnFx(int code, int id, HWND ctrl);
@@ -169,7 +164,7 @@ public:
 
 	// Persistence Dirtyness support
 
-	BOOL isDirty()			{ return true; } // bDirty_; }
+	BOOL isDirty()			{ return true; } 
 	void setDirty(BOOL d)	{ bDirty_ = d; }
 
 	// OLE status messages override - display OLE status in moe status bar
@@ -194,7 +189,7 @@ public:
 	 // show toolbar switches
 	 void OnShowToolBar(int code, int id, HWND ctrl);
 
-	bool toolbarFrozen() { return toolBarFrozen_ == 0; }
+	 bool toolbarFrozen() { return toolBarFrozen_ == 0; }
 
 	 void OnScreenShot();
 

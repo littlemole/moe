@@ -1,8 +1,6 @@
 #ifndef _MOE_DEF_TAIL_EDITOR_DEFINE_
 #define _MOE_DEF_TAIL_EDITOR_DEFINE_
 
-#include "shared.h"
-#include "resource.h"
 #include "editor.h"
 
 //////////////////////////////////////////////////////////////////////////////////

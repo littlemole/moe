@@ -15,7 +15,7 @@
 #include "xmlui.h"
 #include "ribbonres.h"
 #include "DocFactory.h"
-
+#include "Docs.h"
 #include "tcp/sockets.h"
 #include "ssh/ssh.h"
 #include "ssh/scp.h"

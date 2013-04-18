@@ -1,8 +1,6 @@
 #ifndef _MOE_DEF_FORMEDITOR_DEFINE_
 #define _MOE_DEF_FORMEDITOR_DEFINE_
 
-#include "shared.h"
-#include "resource.h"
 #include "editor.h"
 #include "UserForm.h"
 

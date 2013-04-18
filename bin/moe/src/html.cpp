@@ -3,6 +3,7 @@
 #include "app.h"
 #include "xmlui.h"
 #include "MoeBar.h"
+#include "Docs.h"
 
 MoeHtmlWnd::MoeHtmlWnd( )
 {

@@ -1,7 +1,7 @@
 #ifndef MOE_DOCS_DEF_GUARD_
 #define MOE_DOCS_DEF_GUARD_
 
-#include "mdichild.h"
+#include "commons.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // the document collection automation impl

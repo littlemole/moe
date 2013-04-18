@@ -1,9 +1,12 @@
 #include "stdafx.h"
 #include "widgets.h"
 #include "moe.h"
+#include "Docs.h"
+#include "mdichild.h"
 #include "xmlui.h"
 #include "MoeBar.h"
 #include "ribbonres.h"
+#include "resource.h"
 #include "Shobjidl.h"
 #include "fm20_tlh.h"
 #include "win/msgloop.h"
@@ -220,30 +223,30 @@ Script::Script()
 
 Script::~Script()
 {
+	removeNamedObject(L"moe");
+	removeNamedObject(L"MoeImport");
+
 	close();
 	ODBGS("Script death");
 }
 
-void Script::eval(  const mol::string& engine, const mol::string& script, IScintillAx* sci )
+HRESULT Script::init(const mol::string& engine)
 {
-	sci_ = sci;
-
-	if ( sci )
+	if ( sci_ )
 	{
 		mol::punk<IScintillAxAnnotation> anno;
-		sci->get_Annotation(&anno);
+		sci_->get_Annotation(&anno);
 		anno->ClearAll();
 	}
 
-	ODBGS("Script::eval()\r\n");
-	this->AddRef();
-	HRESULT hr = init(engine);
+	HRESULT hr = mol::ScriptHost::init(engine);
 	if ( hr != S_OK )
 	{
 		ODBGS("failed to init engine");
 		this->Release();
-		return;
+		return hr;
 	}
+
 	ODBGS("engine initialized");
 	addNamedObject((IMoe*)(moe()),_T("moe"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 	ODBGS("moe object added");
@@ -252,9 +255,25 @@ void Script::eval(  const mol::string& engine, const mol::string& script, IScint
  	import = MoeImport::CreateInstance(this);
  	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 
+	return S_OK;
+}
+
+
+void Script::eval(  const mol::string& engine, const mol::string& script, IScintillAx* sci )
+{
+	sci_ = sci;
+
+	ODBGS("Script::eval()\r\n");
+
+	HRESULT hr = init(engine);
+	if ( hr != S_OK )
+	{
+		ODBGS("failed to init engine");
+		this->Release();
+		return;
+	}
+
 	runScript(script);
-	removeNamedObject(L"moe");
-	removeNamedObject(L"MoeImport");
 	close();
 	this->Release();
 }
@@ -262,40 +281,33 @@ void Script::eval(  const mol::string& engine, const mol::string& script, IScint
 void Script::debug(  const mol::string& engine, const mol::string& script, IScintillAx* sci )
 {
 	sci_ = sci;
-	if ( sci )
-	{
-		mol::punk<IScintillAxAnnotation> anno;
-		sci->get_Annotation(&anno);
-		anno->ClearAll();
-	}
 
 	ODBGS("Script::eval()\r\n");
-	this->AddRef();
-	init(engine);
-	addNamedObject((IMoe*)(moe()),_T("moe"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
-	mol::punk<IMoeImport> import;
- 	import = MoeImport::CreateInstance(this);
- 	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+
+	HRESULT hr = init(engine);
+	if ( hr != S_OK )
+	{
+		ODBGS("failed to init engine");
+		this->Release();
+		return;
+	}
 
 	debugScript(script);
-	removeNamedObject(L"moe");
-	removeNamedObject(L"MoeImport");
 	close();
 	this->Release();
 }
 void Script::call(  const mol::string& engine, const mol::string& func, const mol::string& script )
 {
-	this->AddRef();
-	init(engine);
-	addNamedObject((IMoe*)(moe()),_T("moe"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
-	mol::punk<IMoeImport> import;
- 	import = MoeImport::CreateInstance(this);
- 	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+	HRESULT hr = init(engine);
+	if ( hr != S_OK )
+	{
+		ODBGS("failed to init engine");
+		this->Release();
+		return;
+	}
 
 	runScript(script);
 	ScriptHost::call(func);
-	removeNamedObject(L"moe");
-	removeNamedObject(L"MoeImport");
 	close();
 	this->Release();
 }
@@ -303,34 +315,36 @@ void Script::call(  const mol::string& engine, const mol::string& func, const mo
 
 void Script::formscript( const mol::string& engine, const mol::string& s, IDispatch* form )
 {
-	init(engine);
-
-	addNamedObject((IDispatch*)(moe()),_T("moe"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);//|SCRIPTITEM_CODEONLY );
-	addNamedObject(form,_T("form"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);//|SCRIPTITEM_CODEONLY );
-
-	mol::punk<IMoeImport> import;
- 	import = MoeImport::CreateInstance(this);
- 	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+	HRESULT hr = init(engine);
+	if ( hr != S_OK )
+	{
+		ODBGS("failed to init engine");
+		this->Release();
+		return;
+	}
 
 	runScript(s,SCRIPTTEXT_ISVISIBLE|SCRIPTTEXT_ISPERSISTENT);//|SCRIPTTEXT_DELAYEXECUTION);	
 	
 	this->setState(SCRIPTSTATE_STARTED);
+	//close();
+	this->Release();
 }
 
 void Script::formdebug( const mol::string& engine, const mol::string& s, IDispatch* form )
 {
-	init(engine);
-
-	addNamedObject((IDispatch*)(moe()),_T("moe"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);//|SCRIPTITEM_CODEONLY );
-	addNamedObject(form,_T("form"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);//|SCRIPTITEM_CODEONLY );
-
-	mol::punk<IMoeImport> import;
- 	import = MoeImport::CreateInstance(this);
- 	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+	HRESULT hr = init(engine);
+	if ( hr != S_OK )
+	{
+		ODBGS("failed to init engine");
+		this->Release();
+		return;
+	}
 
 	debugScript(s,SCRIPTTEXT_ISVISIBLE|SCRIPTTEXT_ISPERSISTENT);//|SCRIPTTEXT_DELAYEXECUTION);	
 	
 	this->setState(SCRIPTSTATE_STARTED);
+	//close();
+	this->Release();
 }
 
 void Script::formcontrols( IUnknown* f )
@@ -341,9 +355,6 @@ void Script::formcontrols( IUnknown* f )
 
 	if ( !form )
 		return;
-
-//	mol::bstr title("form");
-//	addNamedObject((form),title.toString(),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE );
 
 	mol::punk<MSForms::Controls> controls;
 	if ( S_OK != form->get_Controls(&controls) )

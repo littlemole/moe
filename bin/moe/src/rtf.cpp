@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "rtf.h"
 #include "moe.h"
-#include "xmlui.h"
+#include "docs.h"
 #include "MoeBar.h"
+
+#include "xmlui.h"
 #include "ribbonres.h"
 
 

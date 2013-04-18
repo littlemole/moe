@@ -2,7 +2,6 @@
 #include "formeditor.h"
 #include "moe.h"
 #include "Docs.h"
-#include "moebar.h"
 #include "xmlui.h"
 #include "ribbonres.h"
 

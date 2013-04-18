@@ -1,7 +1,7 @@
 #ifndef MOE_RTF_DEF_GUARD_
 #define MOE_RTF_DEF_GUARD_
 
-#include "shared.h"
+#include "mdichild.h"
 #include "win/RTFedit.h"
 
 

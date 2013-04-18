@@ -3,10 +3,8 @@
 #include "widgets.h"
 #include "util/regex.h"
 #include "win/v7.h"
-#include "thread/sync.h"
 #include "xmlui.h"
 #include "moe_dispid.h"
-//#include "console.h"
 
 #include "moe_i.c"
 #include "ax/scintillax/scintillax_i.c"
@@ -14,6 +12,8 @@
 #include "ax/shellfolder/shellfolder_i.c"
 #include "ax/setting/setting_i.c"
 #include "ax/ssh/ssh_i.c"
+
+
 
 //! Moe specific MDI message loop override
 int MoeLoop::operator() ( mol::win::AppBase& app )

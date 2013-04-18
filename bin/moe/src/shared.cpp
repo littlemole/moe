@@ -5,8 +5,10 @@
 #include "moe.h"
 #include "app.h"
 #include "form.h"
+#include "Docs.h"
 #include "xmlui.h"
 #include "moe_dispid.h"
+#include "resource.h"
 
 /////////////////////////////////////////////////////////////////////
 //
@@ -645,7 +647,8 @@ HRESULT __stdcall MoeScript::Eval( BSTR scrpt, BSTR scrptLanguage)
 		return E_INVALIDARG;
 
 
-	moe()->scriptHost->eval( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
+	//moe()->scriptHost->eval( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
+	Script::CreateInstance()->eval( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
 	return S_OK;
 }
 
@@ -654,7 +657,8 @@ HRESULT __stdcall MoeScript::Debug( BSTR scrpt, BSTR scrptLanguage)
 	if ( !scrpt || !scrptLanguage )
 		return E_INVALIDARG;
 
-	moe()->scriptHost->debug( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
+	//moe()->scriptHost->debug( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
+	Script::CreateInstance()->debug( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
 	return S_OK;
 }
 
@@ -725,8 +729,8 @@ HRESULT __stdcall MoeScript::DebugUserForm(  BSTR pathname, IMoeUserForm** form 
 
 HRESULT __stdcall MoeScript::System( BSTR f)
 {
-	statusBar()->status(bstr(f).toString());
-	mol::string s = findFile(bstr(f).toString());
+	statusBar()->status(mol::bstr(f).toString());
+	mol::string s = findFile(mol::bstr(f).toString());
 	if ( s == _T("") )
 		return E_FAIL;
 
@@ -911,7 +915,7 @@ HRESULT __stdcall  MoeConfig::get_Settings( IDispatch** settings)
 
 HRESULT __stdcall MoeConfig::EditPreferences( )
 {
-	PropSheet ps( *moe(), _T("Moe"));
+	mol::PropSheet ps( *moe(), _T("Moe"));
 
 	ps.addPage<TabPage>		(	_T("new doc prefs"), IDD_DIALOG_TAB );
 	ps.addPage<ExportPage>	(	_T("export/import"), IDD_DIALOG_EXPORT );

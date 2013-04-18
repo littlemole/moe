@@ -3,7 +3,11 @@
 #include "moe.h"
 #include "Docs.h"
 #include "MoeBar.h"
+#include "mdichild.h"
+#include "fm20_tlh.h"
+
 #include "xmlui.h"
+#include "resource.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -66,7 +70,7 @@ UserForm::UserForm( )
 	scriptEngine_ = _T("Javascript");
 	dirty_ = false;
 
-	this->script = new Script;
+	this->script = Script::CreateInstance();
 }
 
 //////////////////////////////////////////////////////////////////////////////

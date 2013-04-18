@@ -2,6 +2,7 @@
 #define MOL_MOE_DEF_GUARD_
 
 #include "moe.h"
+#include "commons.h"
 #include "ssh/ssh.h"
 #include "tcp/sockets.h"
 

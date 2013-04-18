@@ -2,13 +2,9 @@
 #include "EditorScript.h"
 #include "editor.h"
 #include "moe.h"
-#include "widgets.h"
 #include "Docs.h"
-#include "moebar.h"
 #include "xmlui.h"
 #include "ribbonres.h"
-#include "ThreadScript.h"
-#include "ActivDbg.h"
 
 EditorScript::EditorScript(void)
 	:editor_(0),debugger_(0)
@@ -44,7 +40,9 @@ void EditorScript::execScript()
 	if ( S_OK != editor_->text_->GetText(&script) )
 		return ;
 
-	moe()->scriptHost->eval(engine,script.toString(),editor_->sci);
+	//moe()->scriptHost->eval(engine,script.toString(),editor_->sci);
+	Script::CreateInstance()->eval(engine,script.toString(),editor_->sci);
+
 	mol::bstr out;
 	moe()->stdOut(&out);
 	if(out)
