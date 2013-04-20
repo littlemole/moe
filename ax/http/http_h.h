@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 8.00.0595 */
-/* at Sat Apr 13 17:39:21 2013
+/* at Thu Apr 18 23:39:43 2013
  */
 /* Compiler settings for http.idl:
     Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
@@ -76,16 +76,16 @@ typedef interface IHttpHeader IHttpHeader;
 #endif 	/* __IHttpHeader_FWD_DEFINED__ */
 
 
-#ifndef __HTTP_FWD_DEFINED__
-#define __HTTP_FWD_DEFINED__
+#ifndef __Client_FWD_DEFINED__
+#define __Client_FWD_DEFINED__
 
 #ifdef __cplusplus
-typedef class HTTP HTTP;
+typedef class Client Client;
 #else
-typedef struct HTTP HTTP;
+typedef struct Client Client;
 #endif /* __cplusplus */
 
-#endif 	/* __HTTP_FWD_DEFINED__ */
+#endif 	/* __Client_FWD_DEFINED__ */
 
 
 /* header files for imported files */
@@ -1027,12 +1027,12 @@ EXTERN_C const IID IID_IHttpHeader;
 #endif 	/* __IHttpHeader_INTERFACE_DEFINED__ */
 
 
-EXTERN_C const CLSID CLSID_HTTP;
+EXTERN_C const CLSID CLSID_Client;
 
 #ifdef __cplusplus
 
 class DECLSPEC_UUID("E39732D8-7B64-4DC3-9924-9F216345F07A")
-HTTP;
+Client;
 #endif
 #endif /* __HTTP_LIBRARY_DEFINED__ */
 

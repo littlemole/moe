@@ -1,5 +1,4 @@
 
-moe.Dialogs.MsgBox("hu","ha",0);
 
 var Java = new ActiveXObject("JRE.Java");
 if (!Java)
@@ -8,6 +7,7 @@ if (!Java)
 }
 
 var JOptionPane = Java.LoadClass("javax.swing.JOptionPane");
+moe.Dialogs.MsgBox("hu","ha",0);
 JOptionPane.showMessageDialog(null, "Test", "Test Titel", JOptionPane.OK_CANCEL_OPTION);
 
 Java.Exit();

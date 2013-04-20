@@ -132,7 +132,7 @@ private:
 };
 
 class Http : 
-	public mol::com_registerobj<Http,CLSID_HTTP,CLSCTX_INPROC_SERVER,mol::MULTITHREADED, REGCLS_MULTIPLEUSE>,
+	public mol::com_registerobj<Http,CLSID_Client,CLSCTX_INPROC_SERVER,mol::MULTITHREADED, REGCLS_MULTIPLEUSE>,
 	public mol::Dispatch<IHttp>,
 	public mol::interfaces< Http,
 			mol::implements<

@@ -191,7 +191,7 @@ library HTTP
 	[
 		uuid(E39732D8-7B64-4DC3-9924-9F216345F07A)
 	]
-	coclass HTTP
+	coclass Client
 	{
 		[default]         interface     IHttp;
 	}

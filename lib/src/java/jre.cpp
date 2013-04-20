@@ -58,7 +58,7 @@ mol::string JRE::libpath()
 
 JNIEnv* JRE::createJVM(bool debug)
 {
-	int noptions = 6 + (debug ? 1 : 0);
+	int noptions = 7 + (debug ? 1 : 0);
 	options_ = new JavaVMOption[noptions];
 
 	//C:\\Program Files (x86)\\Java\\jre6\\lib\\rt.jar
@@ -88,10 +88,10 @@ JNIEnv* JRE::createJVM(bool debug)
 	options_[3].optionString = "-Xnoagent";
 	options_[4].optionString = "-Djava.compiler=NONE";
 	options_[5].optionString = "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005";
-
+	options_[6].optionString = "-Dsun.java2d.d3d=false";
 
 	if ( debug )
-		options_[6].optionString = "-verbose:jni";
+		options_[7].optionString = "-verbose:jni";
 
 	vm_args_.version             = JNI_VERSION_1_6;
 	vm_args_.nOptions            = noptions;

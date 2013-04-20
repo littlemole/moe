@@ -26,19 +26,20 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	//::DebugBreak();
 	//::MessageBoxA(0,"startup","JRE",0);
+	::CoInitializeEx(0,COINIT_MULTITHREADED);
 
     try
     {
-		::CoInitializeEx(0,COINIT_MULTITHREADED);
-		//::CoInitialize(0);
+		//CoInitialize(0);
 		mol::run<JREApp>(lpCmdLine);	
-
     }
     catch (mol::X& x)
     {
         ::MessageBoxA(0,x.what(),"error",0);
+		::CoUninitialize();
         return 1;
     }
+	::CoUninitialize();
     return 0;
 }
 

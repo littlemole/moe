@@ -1,5 +1,4 @@
 
-moe.Dialogs.MsgBox("hu","ha",0);
 
 var Java = new ActiveXObject("JRE.Java");
 if (!Java)
@@ -8,6 +7,7 @@ if (!Java)
 }
 
 var JFrame = Java.LoadClass("javax.swing.JFrame");
+moe.Dialogs.MsgBox("hu","ha",0);
 var frame = JFrame.New();
 frame.setTitle("Simple example");
 frame.setSize(300, 200);
