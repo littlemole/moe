@@ -82,6 +82,11 @@ jclass JavaClassStore::operator[](const std::string& name )
 	}
 
 	jclass clazz = env_->FindClass(name.c_str());
+	if (mol::java::exceptionOccured(env_))
+	{
+		return 0;
+	}
+
 	if ( clazz == 0 )
 	{
 		return 0;

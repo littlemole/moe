@@ -7,6 +7,131 @@
 #include "ole/aut.h"
 
 
+HRESULT Namespace::CreateInstance(IDispatch** d, const std::string& path)
+{
+	Instance* i = new Instance;
+	i->path_ = path;
+	i->lastId_ = 0;
+	return i->QueryInterface(IID_IDispatch,(void**)d);
+}
+
+HRESULT __stdcall Namespace::GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId )
+{
+	OLECHAR* name = rgszNames[0];
+	std::string n = mol::tostring(name);
+
+	if ( name2id_.count(n) == 0 )
+	{
+		lastId_++;
+		name2id_.insert(std::make_pair(n,lastId_));
+		id2name_.insert(std::make_pair(lastId_,n));
+	}
+
+	rgDispId[0] = name2id_[n];
+	return S_OK;
+}
+
+HRESULT __stdcall Namespace::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i)
+{
+	if( id2name_.count(dispIdMember) == 0 )
+		return E_INVALIDARG;
+
+	std::string name = id2name_[dispIdMember];
+	std::string n = path_;
+	if(!n.empty())
+	{
+		n += ".";
+	}
+	n += name;
+
+	//mol::JRE& env = mol::java::jre();
+	//mol::java::JavaClassStore classes(*env);
+	/*
+	jclass objectClazz = classes[n];
+	if ( objectClazz )
+	{
+		mol::punk<IJavaClass> instance;
+		HRESULT hr = instance.createObject(CLSID_JavaClass,CLSCTX_ALL);
+		if ( hr == S_OK && pReturn )
+		{
+			hr = instance->Initialize( (long*)objectClazz);
+
+			if  (w == DISPATCH_PROPERTYGET)
+			{
+				if ( hr == S_OK && pReturn )
+				{
+					mol::variant v((IDispatch*)(instance.interface_));
+					::VariantCopy( pReturn, &v );		
+				}
+			}
+			else if (w & DISPATCH_METHOD )
+			{
+				DWORD dispid_new = 0;
+				HRESULT hr = instance->Invoke( dispid_new,riid,lcid,DISPATCH_PROPERTYGET,pDisp,pReturn,ex,i);
+				return hr;
+			}
+		}
+		return S_OK;
+	}
+	*/
+
+	mol::punk<_Net> net;
+	HRESULT hr = net.createObject(CLSID_Net);
+	if ( hr != S_OK )
+		return S_FALSE;
+
+	mol::variant empty;
+	mol::variant v;
+	hr = net->LoadClass( empty, mol::bstr(n), &v );
+	if ( hr == S_OK && (v.vt == VT_DISPATCH || v.vt == VT_UNKNOWN) && v.pdispVal )
+	{
+
+		mol::punk<INetType> c;
+		hr = c.createObject(CLSID_DotNetType);
+		if ( hr != S_OK )
+			return S_FALSE;
+
+		hr = c->Initialize(v);
+		if ( hr != S_OK )
+			return S_FALSE;
+
+		::CoAllowSetForegroundWindow( (IUnknown*)c, 0);
+		if(pReturn)
+		{
+			mol::punk<IDispatch> disp(c);
+
+			if  (w == DISPATCH_PROPERTYGET)
+			{
+				if ( hr == S_OK && pReturn )
+				{					
+					mol::variant v(disp);
+					::VariantCopy( pReturn, &v );		
+				}
+				return S_OK;	
+			}
+			else if (w & DISPATCH_METHOD )
+			{
+				DWORD dispid_new = 0;
+				HRESULT hr = disp->Invoke( dispid_new,riid,lcid,DISPATCH_PROPERTYGET,pDisp,pReturn,ex,i);
+				return hr;
+			}
+		}
+	}
+
+	mol::punk<IDispatch> ns;
+	hr = Namespace::CreateInstance(&ns,n);
+	if ( hr != S_OK )
+		return hr;
+
+	if(pReturn)
+	{
+		mol::variant v((IDispatch*)(ns.interface_));
+		::VariantCopy( pReturn, &v );	
+	}
+
+	return S_OK;
+}
+
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -528,6 +653,46 @@ HRESULT __stdcall NetType::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, W
 	return S_OK;
 }
 
+HRESULT __stdcall NetType::GetDispID( BSTR bstrName, DWORD grfdex, DISPID *pid)
+{
+	return GetIDsOfNames(IID_NULL,&bstrName,1,LOCALE_SYSTEM_DEFAULT,pid);
+}
+
+HRESULT __stdcall NetType::InvokeEx( DISPID id,LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pvarRes, EXCEPINFO *pei, IServiceProvider *pspCaller)
+{
+	return Invoke(id,IID_NULL,lcid,wFlags,pdp,pvarRes,pei,0);
+}
+
+HRESULT __stdcall NetType::DeleteMemberByName( BSTR bstrName, DWORD grfdex)
+{
+	return  S_FALSE ;
+}
+
+HRESULT __stdcall NetType::DeleteMemberByDispID( DISPID id)
+{
+	return  S_FALSE ;
+}
+
+HRESULT __stdcall NetType::GetMemberProperties( DISPID id, DWORD grfdexFetch, DWORD *pgrfdex)
+{
+	return S_OK;
+}
+
+HRESULT __stdcall NetType::GetMemberName( DISPID id, BSTR *pbstrName)
+{
+	return E_NOTIMPL;
+}
+
+HRESULT __stdcall NetType::GetNextDispID( DWORD grfdex, DISPID id, DISPID *pid)
+{
+	return E_NOTIMPL;
+}
+
+HRESULT __stdcall NetType::GetNameSpaceParent( IUnknown **ppunk)
+{
+	*ppunk = 0;
+	return E_UNEXPECTED;
+}
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -576,6 +741,11 @@ HRESULT __stdcall  NetServer::Import(BSTR typeName, INetAssembly** a)
 		hr = pa.queryInterface(a);
 	}
 	return hr;
+}
+
+HRESULT __stdcall NetServer::get_Runtime(IDispatch** result)
+{
+	return Namespace::CreateInstance(result,"");
 }
 
 

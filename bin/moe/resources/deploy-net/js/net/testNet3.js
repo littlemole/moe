@@ -10,7 +10,8 @@ if (!form)
 
 var button1_Click = function (e,s) {
 	
-    NET("System.Windows.Forms.Application").Exit();
+   NET("System.Windows.Forms.Application").Exit();
+   //Quit();
 };
 
 

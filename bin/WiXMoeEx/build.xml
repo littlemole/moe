@@ -110,6 +110,11 @@
         />
 
         <Copy
+            SourceFiles="@(moeJavaResourceFiles)"
+            DestinationFiles="@(moeJavaResourceFiles->'.\java\moe\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+
+        <Copy
             SourceFiles="..\moe\resources\moe.ico"
             DestinationFiles=".\moe\moe.ico"
         />

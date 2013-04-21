@@ -7,6 +7,87 @@
 #include "java/dispdriver.h"
 #include "java/jmarshaler.h"
 
+HRESULT Namespace::CreateInstance(IDispatch** d, const std::string& path)
+{
+	Instance* i = new Instance;
+	i->path_ = path;
+	i->lastId_ = 0;
+	return i->QueryInterface(IID_IDispatch,(void**)d);
+}
+
+HRESULT __stdcall Namespace::GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId )
+{
+	OLECHAR* name = rgszNames[0];
+	std::string n = mol::tostring(name);
+
+	if ( name2id_.count(n) == 0 )
+	{
+		lastId_++;
+		name2id_.insert(std::make_pair(n,lastId_));
+		id2name_.insert(std::make_pair(lastId_,n));
+	}
+
+	rgDispId[0] = name2id_[n];
+	return S_OK;
+}
+
+HRESULT __stdcall Namespace::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i)
+{
+	if( id2name_.count(dispIdMember) == 0 )
+		return E_INVALIDARG;
+
+	std::string name = id2name_[dispIdMember];
+	std::string n = path_;
+	if(!n.empty())
+	{
+		n += "/";
+	}
+	n += name;
+
+	mol::JRE& env = mol::java::jre();
+	mol::java::JavaClassStore classes(*env);
+
+	jclass objectClazz = classes[n];
+	if ( objectClazz )
+	{
+		mol::punk<IJavaClass> instance;
+		HRESULT hr = instance.createObject(CLSID_JavaClass,CLSCTX_ALL);
+		if ( hr == S_OK && pReturn )
+		{
+			hr = instance->Initialize( (long*)objectClazz);
+
+			if  (w == DISPATCH_PROPERTYGET)
+			{
+				if ( hr == S_OK && pReturn )
+				{
+					mol::variant v((IDispatch*)(instance.interface_));
+					::VariantCopy( pReturn, &v );		
+				}
+			}
+			else if (w & DISPATCH_METHOD )
+			{
+				DWORD dispid_new = 0;
+				HRESULT hr = instance->Invoke( dispid_new,riid,lcid,DISPATCH_PROPERTYGET,pDisp,pReturn,ex,i);
+				return hr;
+			}
+		}
+		return S_OK;
+	}
+
+	mol::punk<IDispatch> ns;
+	HRESULT hr = Namespace::CreateInstance(&ns,n);
+	if ( hr != S_OK )
+		return hr;
+
+	if(pReturn)
+	{
+		mol::variant v((IDispatch*)(ns.interface_));
+		::VariantCopy( pReturn, &v );	
+	}
+	return S_OK;
+}
+
+
 JREServer::JREServer()
 {
 }
@@ -101,6 +182,11 @@ HRESULT __stdcall JREServer::LoadClass( BSTR clazzName, IJavaClass** clazz)
 		mol::com_throw("class not found",CLSID_Java,"");
 	}
 	return hr;
+}
+
+HRESULT __stdcall JREServer::get_Runtime( IDispatch** ns )
+{
+	return Namespace::CreateInstance(ns,"");
 }
 
 ///////////////////////////////////////////////////////////

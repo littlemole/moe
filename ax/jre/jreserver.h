@@ -29,6 +29,44 @@
 #include "java/jre.h"
 #include "jre_h.h"
 
+class Namespace : 
+	public IDispatch, 
+	public mol::interfaces<
+				Namespace,
+				mol::implements<IDispatch>>
+{
+public:
+
+	typedef mol::com_obj<Namespace> Instance;
+	static HRESULT CreateInstance(IDispatch** d, const std::string& path);
+
+	void virtual dispose() {};
+
+	HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo ) 
+    { 
+        *pctinfo = 0;
+        return S_OK; 
+    }
+
+    HRESULT virtual __stdcall GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo ) 
+    { 
+		*ppTInfo = 0;
+        return E_NOTIMPL; 
+    }
+
+    HRESULT virtual __stdcall GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId );
+
+    HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i);
+
+private:
+
+	DWORD lastId_;
+	std::string path_;
+	std::map<DWORD,std::string> id2name_;
+	std::map<std::string,DWORD> name2id_;
+
+};
+
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -55,6 +93,7 @@ public:
     virtual HRESULT __stdcall put_Libpath( BSTR lp);
 	virtual HRESULT __stdcall get_Libpath( BSTR *lp); 
 	virtual HRESULT __stdcall LoadClass( BSTR clazzName, IJavaClass** clazz);
+	virtual HRESULT __stdcall get_Runtime( IDispatch** ns );
 
 	HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo ) 
     { 

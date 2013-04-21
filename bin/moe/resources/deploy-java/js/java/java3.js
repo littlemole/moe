@@ -6,12 +6,11 @@ if (!Java)
 {
   moe.Dialogs.MsgBox("no jre","ba",0);
 }
-moe.Dialogs.MsgBox("hu","ha",0);
-var JFrame = Java.LoadClass("javax.swing.JFrame");
-var frame = JFrame.New();
+var JFrame = Java.Runtime.javax.swing.JFrame;// Java.LoadClass("javax.swing.JFrame");
+var frame = new JFrame(); //JFrame.New();
 
-var JPanel = Java.LoadClass("javax.swing.JPanel");
-var panel = JPanel.New();
+//var JPanel = Java.Runtime.javax.swing.JPanel;//  Java.LoadClass("javax.swing.JPanel");
+var panel = new Java.Runtime.javax.swing.JPanel(); //JPanel();
 
 var handler = function() 
 {
@@ -22,8 +21,10 @@ var handler = function()
 
 frame.getContentPane().add(panel);
 
-var JButton = Java.LoadClass("javax.swing.JButton");
-var quitButton = JButton.New("Quit");
+//var JButton = Java.LoadClass("javax.swing.JButton");
+moe.Dialogs.MsgBox("hu","ha",0);
+
+var quitButton = new Java.Runtime.javax.swing.JButton("Exit");// JButton.New("Quit");
 quitButton.setBounds(50, 60, 80, 30);
 quitButton.addActionListener(handler);
 

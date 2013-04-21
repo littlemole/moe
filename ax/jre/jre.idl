@@ -44,13 +44,16 @@ library JRE
 		[propget,id(2) ] 
 		HRESULT Libpath( [out,retval] BSTR* lp );
 
+		[propget,id(3) ] 
+		HRESULT Runtime( [out,retval] IDispatch** ns );
+
 		[id(DISPID_VALUE), helpstring("load java class")] 
 		HRESULT LoadClass([in] BSTR clazzName, [out,retval] IJavaClass** clazz);
 
-		[id(3), helpstring("quit jvm")] 
+		[id(4), helpstring("quit jvm")] 
 		HRESULT Exit();
 
-		[id(4), helpstring("cast a java object")] 
+		[id(5), helpstring("cast a java object")] 
 		HRESULT Cast([in] IJavaObject* jObject, [in] BSTR clazz, [out,retval] IJavaObject** );
 
 	}

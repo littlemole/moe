@@ -11,12 +11,51 @@
 #include "ole/aut.h"
 #include "ole/cp.h"
 #include "util/istr.h"
+#include <DispEx.h>
 
 #include "net_h.h"
 ////////////////////////////////////////////////////////////////////////
 
 //#import "net.tlb"  no_namespace, raw_interfaces_only, named_guids 
 #include "net.tlh"
+
+class Namespace : 
+	public IDispatch, 
+	public mol::interfaces<
+				Namespace,
+				mol::implements<IDispatch>>
+{
+public:
+
+	typedef mol::com_obj<Namespace> Instance;
+	static HRESULT CreateInstance(IDispatch** d, const std::string& path);
+
+	void virtual dispose() {};
+
+	HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo ) 
+    { 
+        *pctinfo = 0;
+        return S_OK; 
+    }
+
+    HRESULT virtual __stdcall GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo ) 
+    { 
+		*ppTInfo = 0;
+        return E_NOTIMPL; 
+    }
+
+    HRESULT virtual __stdcall GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId );
+
+    HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i);
+
+private:
+
+	DWORD lastId_;
+	std::string path_;
+	std::map<DWORD,std::string> id2name_;
+	std::map<std::string,DWORD> name2id_;
+
+};
 
 ////////////////////////////////////////////////////////////////////////
 class NetObject : 
@@ -54,11 +93,13 @@ private:
 class NetType : 
 	public mol::com_registerobj<NetType,CLSID_DotNetType,CLSCTX_LOCAL_SERVER,mol::PROGRAMMABLE|mol::MULTITHREADED>,
 	public INetType,  
+	public IDispatchEx,
 	public mol::SupportsErrorInfo<&IID_INetType,&IID_IDispatch>,
 	public mol::interfaces<
 				NetType,
 				mol::implements< 
-					IDispatch,
+					mol::interface_ex<IDispatch,INetType>,
+					IDispatchEx,
 					INetType,
 					ISupportErrorInfo
 					> 
@@ -74,6 +115,16 @@ public:
     HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i) ;
 	HRESULT virtual __stdcall Initialize(VARIANT ptr);
 	HRESULT virtual __stdcall UnWrap(VARIANT* ptr);
+
+
+    HRESULT virtual __stdcall GetDispID( BSTR bstrName, DWORD grfdex, DISPID *pid);
+    HRESULT virtual __stdcall InvokeEx( DISPID id,LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pvarRes, EXCEPINFO *pei, IServiceProvider *pspCaller);
+    HRESULT virtual __stdcall DeleteMemberByName( BSTR bstrName, DWORD grfdex);        
+    HRESULT virtual __stdcall DeleteMemberByDispID( DISPID id);    
+    HRESULT virtual __stdcall GetMemberProperties( DISPID id, DWORD grfdexFetch, DWORD *pgrfdex);       
+    HRESULT virtual __stdcall GetMemberName( DISPID id, BSTR *pbstrName);       
+    HRESULT virtual __stdcall GetNextDispID( DWORD grfdex, DISPID id, DISPID *pid);       
+    HRESULT virtual __stdcall GetNameSpaceParent( IUnknown **ppunk);
 
 private:
 	mol::variant v_;
@@ -141,7 +192,7 @@ public:
 	HRESULT virtual __stdcall Type( BSTR typeName, INetType** type );
 	HRESULT virtual __stdcall Connect(IDispatch* ptr, BSTR eventName, VARIANT target);
 	HRESULT virtual __stdcall Import(BSTR clazzName, INetAssembly** a);
-
+	HRESULT virtual __stdcall get_Runtime(IDispatch** result);
 };
 
 

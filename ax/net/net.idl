@@ -98,6 +98,9 @@ library NET
 
 		[id(3), helpstring("connect .NET event")] 
 		HRESULT Connect([in] IDispatch* ptr, [in] BSTR event,[in] VARIANT target );
+
+		[id(4), propget, helpstring("runtime library")] 
+		HRESULT Runtime([out,retval] IDispatch** d);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////////////

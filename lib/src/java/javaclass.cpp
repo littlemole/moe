@@ -187,5 +187,46 @@ HRESULT __stdcall JavaClass::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
     return S_OK;
 }
 
+HRESULT __stdcall JavaClass::GetDispID( BSTR bstrName, DWORD grfdex, DISPID *pid)
+{
+	return GetIDsOfNames(IID_NULL,&bstrName,1,LOCALE_SYSTEM_DEFAULT,pid);
+}
+
+HRESULT __stdcall JavaClass::InvokeEx( DISPID id,LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pvarRes, EXCEPINFO *pei, IServiceProvider *pspCaller)
+{
+	return Invoke(id,IID_NULL,lcid,wFlags,pdp,pvarRes,pei,0);
+}
+
+HRESULT __stdcall JavaClass::DeleteMemberByName( BSTR bstrName, DWORD grfdex)
+{
+	return  S_FALSE ;
+}
+
+HRESULT __stdcall JavaClass::DeleteMemberByDispID( DISPID id)
+{
+	return  S_FALSE ;
+}
+
+HRESULT __stdcall JavaClass::GetMemberProperties( DISPID id, DWORD grfdexFetch, DWORD *pgrfdex)
+{
+	return S_OK;
+}
+
+HRESULT __stdcall JavaClass::GetMemberName( DISPID id, BSTR *pbstrName)
+{
+	return E_NOTIMPL;
+}
+
+HRESULT __stdcall JavaClass::GetNextDispID( DWORD grfdex, DISPID id, DISPID *pid)
+{
+	return E_NOTIMPL;
+}
+
+HRESULT __stdcall JavaClass::GetNameSpaceParent( IUnknown **ppunk)
+{
+	*ppunk = 0;
+	return E_UNEXPECTED;
+}
+
 } // end namespace java
 } // end namespace mol

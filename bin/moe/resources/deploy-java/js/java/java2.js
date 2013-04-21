@@ -17,3 +17,5 @@ frame.setVisible(true);
 frame.setAlwaysOnTop(true);
 
 //Java.Exit();
+
+Wait(2000);
