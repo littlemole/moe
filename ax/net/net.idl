@@ -25,9 +25,10 @@ library NET
 
 	interface INetObject;
 	interface INetType;
-	interface INetAssembly;
+//	interface INetAssembly;
 	interface INet;
 
+	/*
 	[ 
 	  uuid(E42528B2-547D-4427-A40A-47C46219A626),
       helpstring("INetAssembly - .NET Assembly"),
@@ -47,6 +48,7 @@ library NET
 		[id(3), helpstring("connect .NET event")] 
 		HRESULT Connect([in] IDispatch* ptr, [in] BSTR event,[in] VARIANT target );
 	}
+	*/
 
 	[ 
 	  uuid(A203B3FE-BEF5-4746-AEE9-F198C9F624A8),
@@ -91,7 +93,7 @@ library NET
 		HRESULT Type([in] BSTR typeName, [out,retval] INetType** type);
 
 		[id(1), helpstring("load .NET assembly")] 
-		HRESULT Import([in] BSTR clazzName, [out,retval] INetAssembly** a);
+		HRESULT Import([in] BSTR clazzName, [out,retval] IDispatch** a);
 
 		[id(2), helpstring("quit jvm")] 
 		HRESULT Exit();
@@ -140,6 +142,7 @@ library NET
 		[default]         interface     INetObject;
 	}
 	
+	/*
 	[
 		uuid(331790F2-442D-4CC3-A171-D375D2DFB133),
 		helpstring("NetAssembly - COM Object for .NET VM interaction")
@@ -148,4 +151,5 @@ library NET
 	{
 		[default]         interface     INetAssembly;
 	}
+	*/
 }

@@ -12,7 +12,7 @@ if (!FORMS)
 }
 
 // get type
-var msgBox = FORMS.Type("System.Windows.Forms.MessageBox");
+var msgBox = FORMS.MessageBox;
 if (!msgBox)
 {
   moe.Dialogs.MsgBox("no","msgBox",0);
@@ -24,3 +24,6 @@ msgBox.Show("a .NET string!","Title");
 
 // or simplified with shortcuts as one-liner ;-)
 NET("System.Windows.Forms.MessageBox").Show("another .NET string!","Title");
+
+// syntactic sugar
+NET.Runtime.System.Windows.Forms.MessageBox.Show("yet another .NET string!","Title");

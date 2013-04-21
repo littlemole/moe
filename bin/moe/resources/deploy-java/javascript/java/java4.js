@@ -1,11 +1,7 @@
-
 var Java = new ActiveXObject("JRE.Java");
-if (!Java)
-{
-  moe.Dialogs.MsgBox("no jre","ba",0);
-}
 
 var url = new Java.Runtime.java.net.URL("http://www.google.de/");
+
 var connection = url.openConnection();
 var stream = connection.getInputStream();
 

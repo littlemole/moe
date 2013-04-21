@@ -1,16 +1,16 @@
-var DotNet = new ActiveXObject("Net.DotNet");
+var Net = new ActiveXObject("Net.DotNet");
 
-DotNet.Import("System.Drawing");
-DotNet.Import("System.Windows.Forms")
+var Drawing = Net.Import("System.Drawing");
+var Forms   = Net.Import("System.Windows.Forms")
 
 // types
-var Application   = DotNet("System.Windows.Forms.Application");
-var Form          = DotNet("System.Windows.Forms.Form");
-var Button        = DotNet("System.Windows.Forms.Button");
-var Point         = DotNet("System.Drawing.Point");
-var Size		  = DotNet("System.Drawing.Size");
-var SizeF		  = DotNet("System.Drawing.SizeF");
-var AutoScaleMode = DotNet("System.Windows.Forms.AutoScaleMode");
+var Application   = Forms.Application;
+var Form          = Forms.Form;
+var Button        = Forms.Button;
+var Point         = Drawing.Point;
+var Size		  = Drawing.Size;
+var SizeF		  = Drawing.SizeF;
+var AutoScaleMode = Forms.AutoScaleMode;
 
 // event handler
 var callback = function() {	
@@ -21,24 +21,24 @@ var callback = function() {
 // construct GUI
 
 // main form
-var form   = Form.New();
+var form   = new Form();
 form.SuspendLayout();
 
-form.AutoScaleDimensions = SizeF.New(6.0, 13.0);
+form.AutoScaleDimensions = new SizeF(6.0, 13.0);
 form.AutoScaleMode = AutoScaleMode.Font;
-form.ClientSize = Size.New(284, 262);
+form.ClientSize = new Size(284, 262);
 form.Name = "Form1";
 form.Text = "Form1";
 
 // button
-var button = Button.New();
-button.Location = Point.New(46, 51);
+var button = new Button();
+button.Location = new Point(46, 51);
 button.Name = "button1";
-button.Size = Size.New(180, 104);
+button.Size = new Size(180, 104);
 button.Text = "button1";
 
 // connect event handler
-DotNet.connect(callback,"Click",button);
+Net.connect(callback,"Click",button);
 
 form.Controls.Add(button);
 form.ResumeLayout(false);
@@ -49,4 +49,4 @@ form.SetTopLevel(1);
 Application.Run(form);
 
 // clean up
-DotNet.Exit();
+Net.Exit();

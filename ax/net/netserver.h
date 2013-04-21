@@ -131,6 +131,7 @@ private:
 };
 
 ////////////////////////////////////////////////////////////////////////
+/*
 class NetAssembly : 
 	public mol::com_registerobj<NetAssembly,CLSID_DotNetAssembly,CLSCTX_LOCAL_SERVER,mol::PROGRAMMABLE|mol::MULTITHREADED>,
 	public mol::Dispatch<INetAssembly>,
@@ -161,7 +162,7 @@ public:
 private:
 	mol::variant v_;
 };
-
+*/
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -191,7 +192,7 @@ public:
 	HRESULT virtual __stdcall Exit();
 	HRESULT virtual __stdcall Type( BSTR typeName, INetType** type );
 	HRESULT virtual __stdcall Connect(IDispatch* ptr, BSTR eventName, VARIANT target);
-	HRESULT virtual __stdcall Import(BSTR clazzName, INetAssembly** a);
+	HRESULT virtual __stdcall Import(BSTR clazzName, IDispatch** a);
 	HRESULT virtual __stdcall get_Runtime(IDispatch** result);
 };
 
@@ -224,7 +225,8 @@ class NetApp :
 									mol::ole::AggregationPolicyNonAggregable<
 													NetObject,
 													mol::com_obj<NetObject> 
-												>  > >,
+												>  > >
+												/*,
 	public mol::exports< 
 					NetApp, 
 					NetAssembly, 
@@ -234,6 +236,7 @@ class NetApp :
 													NetAssembly,
 													mol::com_obj<NetAssembly> 
 												>  > >	
+												*/
 {
 public:
 

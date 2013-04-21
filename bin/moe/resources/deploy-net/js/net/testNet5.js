@@ -1,12 +1,12 @@
 ﻿var Net = new ActiveXObject("Net.DotNet");
 
-Net.Import("System.Net");
 Net.Import("System");
+Net.Import("System.Net");
 
-var webClient = Net("System.Net.WebClient").New();
-webClient.Encoding = Net("System.Text.Encoding").UTF8;
+var webClient = new Net.Runtime.System.Net.WebClient();
+webClient.Encoding = Net.Runtime.System.Text.Encoding.UTF8;
 
-var uri = Net("System.Uri").New("http://www.heise.de/");
+var uri = new Net.Runtime.System.Uri("http://www.heise.de/");
 var result = webClient.DownloadString(uri);
 
 var doc = moe.Documents.New();

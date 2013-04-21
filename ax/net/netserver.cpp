@@ -340,7 +340,7 @@ HRESULT  __stdcall NetObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 
-
+/*
 
 void NetAssembly::dispose()
 {
@@ -481,7 +481,7 @@ HRESULT __stdcall NetAssembly::Invoke(DISPID dispIdMember, REFIID riid, LCID lci
 	
 	return mol::Dispatch<INetAssembly>::Invoke(dispIdMember, riid, lcid, w, pDisp, pReturn, ex, i );
 }
-
+*/
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -716,7 +716,7 @@ HRESULT __stdcall NetServer::Exit()
 	return S_OK;
 }
 
-HRESULT __stdcall  NetServer::Import(BSTR typeName, INetAssembly** a)
+HRESULT __stdcall  NetServer::Import(BSTR typeName, IDispatch** a)
 {
 	
 	mol::punk<_Net> net;
@@ -727,20 +727,17 @@ HRESULT __stdcall  NetServer::Import(BSTR typeName, INetAssembly** a)
 	mol::variant v;
 	hr = net->LoadAssembly(typeName,&v);
 
-	mol::punk<INetAssembly> pa;
-	hr = pa.createObject(CLSID_DotNetAssembly);
-	if ( hr != S_OK )
-		return S_FALSE;
-
-	hr = pa->Initialize(v);
-	if ( hr != S_OK )
-		return S_FALSE;
-
 	if (a)
 	{
-		hr = pa.queryInterface(a);
+		*a=0;
 	}
-	return hr;
+
+	if ( hr != S_OK )
+	{
+		return hr;
+	}
+
+	return Namespace::CreateInstance(a,mol::tostring(typeName));
 }
 
 HRESULT __stdcall NetServer::get_Runtime(IDispatch** result)

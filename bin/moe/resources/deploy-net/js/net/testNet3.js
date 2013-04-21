@@ -11,7 +11,6 @@ if (!form)
 var button1_Click = function (e,s) {
 	
    NET("System.Windows.Forms.Application").Exit();
-   //Quit();
 };
 
 
@@ -51,4 +50,5 @@ form.SetTopLevel(1);
 
 form.Show();
 NET("System.Windows.Forms.Application").Run(form);
+
 NET.Exit();

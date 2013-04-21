@@ -1,10 +1,9 @@
 var Net = new ActiveXObject("Net.DotNet");
 
-Net.Import("System.Drawing");
-Net.Import("System.Windows.Forms")
+moe.Dialogs.MsgBox("hu","ha",0);
 
-var Forms = Net.Runtime.System.Windows.Forms;
-var Drawing = Net.Runtime.System.Drawing;
+var Drawing = Net.Import("System.Drawing");
+var Forms   = Net.Import("System.Windows.Forms")
 
 // event handler
 var callback = function() {	
@@ -15,7 +14,6 @@ var callback = function() {
 // construct GUI
 
 // main form
-moe.Dialogs.MsgBox("hu","ha",0);
 
 var form   = new Forms.Form();
 form.SuspendLayout();
