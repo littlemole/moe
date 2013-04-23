@@ -129,6 +129,47 @@ HRESULT __stdcall  MoeDebugImport::Quit()
 	}
 	return S_OK;
 }
+
+
+HRESULT __stdcall  MoeDebugImport::get_NET(IDispatch** disp)
+{
+	if(!disp)
+		return S_OK;
+
+	*disp = 0;
+
+	CLSID clsid;
+	HRESULT hr = ::CLSIDFromProgID(L"Net.DotNet",&clsid);
+	if(hr != S_OK)
+		return hr;
+
+	mol::punk<IDispatch> d;
+	hr = d.createObject(clsid);
+	if(hr != S_OK)
+		return hr;
+
+	return d.queryInterface(disp);
+}
+
+HRESULT __stdcall  MoeDebugImport::get_Java(IDispatch** disp)
+{
+	if(!disp)
+		return S_OK;
+
+	*disp = 0;
+
+	CLSID clsid;
+	HRESULT hr = ::CLSIDFromProgID(L"JRE.Java",&clsid);
+	if(hr != S_OK)
+		return hr;
+
+	mol::punk<IDispatch> d;
+	hr = d.createObject(clsid);
+	if(hr != S_OK)
+		return hr;
+
+	return d.queryInterface(disp);
+}
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 

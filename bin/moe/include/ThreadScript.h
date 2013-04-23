@@ -180,6 +180,8 @@ public:
   	virtual HRESULT __stdcall  Sleep(long ms);
  	virtual HRESULT __stdcall  Wait(long ms,VARIANT_BOOL* vb);
  	virtual HRESULT __stdcall  Quit();
+	virtual HRESULT __stdcall  get_NET(IDispatch** disp);
+	virtual HRESULT __stdcall  get_Java(IDispatch** disp);
 
 private:
 	IActiveScript* host_;

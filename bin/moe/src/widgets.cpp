@@ -16,112 +16,6 @@
 mol::TCHAR  InFilesFilter[]   = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
 
 
-void MoeImport::dispose() 
-{
-	if(stop_)
-	{
-		::CloseHandle(stop_);
-		stop_ = 0;
-	}
-}
- 
-MoeImport::Instance* MoeImport::CreateInstance(Host* host)
-{
- 	Instance* i = new Instance();
- 	i->host_ = host;
-	i->stop_ = 0;
- 	return i;
-}
- 
-HRESULT __stdcall  MoeImport::Import(BSTR filename)
-{
- 	mol::string file = findFile( mol::toString(filename) );
- 
- 	mol::filestream fs;
- 	fs.open(mol::tostring(file),GENERIC_READ);
- 	std::string s = fs.readAll();
- 	fs.close();
- 
- 	host_->runScript( mol::toString(s) );
- 	return S_OK;
-}
-
-HRESULT __stdcall  MoeImport::Sleep(long ms)
-{
-	::SleepEx(ms,TRUE);
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeImport::Wait(long ms,VARIANT_BOOL* vb)
-{
-	DWORD startTick = ::GetTickCount();
-	DWORD nowTick = startTick;
-
-	if(vb)
-	{
-		*vb = VARIANT_FALSE;
-	}
-
-	if(stop_)
-	{
-		::CloseHandle(stop_);
-	}
-	stop_ = ::CreateEvent(NULL,FALSE,FALSE,NULL);
-
-	MSG msg;
-	while( (ms == 0) || ((nowTick-startTick)<(unsigned long)ms) )
-	{
-		nowTick = ::GetTickCount();
-  	    DWORD r = ::MsgWaitForMultipleObjectsEx(1,&stop_,100,QS_ALLINPUT,MWMO_INPUTAVAILABLE|MWMO_ALERTABLE);
-		if ( r == WAIT_IO_COMPLETION || r == WAIT_TIMEOUT) 
-		{
-			continue;
-		}
-		if ( r == WAIT_OBJECT_0 )
-		{
-			if(vb)
-			{
-				*vb = VARIANT_TRUE;
-			}
-			break;
-		}
-
-		if (!::GetMessage(&msg,0,0,0) || msg.message == WM_QUIT)
-		{
-			if(vb)
-			{
-				*vb = VARIANT_TRUE;
-			}
-			break;
-		}
-	
-		if ( mol::win::dialogs().isDialogMessage(msg) )
-			continue;
-
-		if ( mol::win::accelerators().translate(msg) )
-			continue;
-
-		::TranslateMessage(&msg);
-		::DispatchMessage(&msg);
-	}
-		
-	if(stop_)
-	{
-		::CloseHandle(stop_);
-		stop_ = 0;
-	}
-
-	return S_OK;
-}
-
-HRESULT __stdcall  MoeImport::Quit()
-{
-	if(stop_)
-	{
-		::SetEvent(stop_);
-	}
-	return S_OK;
-}
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 Encodings::Encodings()
@@ -1842,3 +1736,155 @@ MOE_DOCTYPE index2type(int index)
 	return MOE_DOCTYPE_DOC;
 }
 
+
+
+
+
+
+
+void MoeImport::dispose() 
+{
+	if(stop_)
+	{
+		::CloseHandle(stop_);
+		stop_ = 0;
+	}
+}
+ 
+MoeImport::Instance* MoeImport::CreateInstance(Host* host)
+{
+ 	Instance* i = new Instance();
+ 	i->host_ = host;
+	i->stop_ = 0;
+ 	return i;
+}
+ 
+HRESULT __stdcall  MoeImport::Import(BSTR filename)
+{
+ 	mol::string file = findFile( mol::toString(filename) );
+ 
+ 	mol::filestream fs;
+ 	fs.open(mol::tostring(file),GENERIC_READ);
+ 	std::string s = fs.readAll();
+ 	fs.close();
+ 
+ 	host_->runScript( mol::toString(s) );
+ 	return S_OK;
+}
+
+HRESULT __stdcall  MoeImport::Sleep(long ms)
+{
+	::SleepEx(ms,TRUE);
+	return S_OK;
+}
+
+HRESULT __stdcall  MoeImport::Wait(long ms,VARIANT_BOOL* vb)
+{
+	DWORD startTick = ::GetTickCount();
+	DWORD nowTick = startTick;
+
+	if(vb)
+	{
+		*vb = VARIANT_FALSE;
+	}
+
+	if(stop_)
+	{
+		::CloseHandle(stop_);
+	}
+	stop_ = ::CreateEvent(NULL,FALSE,FALSE,NULL);
+
+	MSG msg;
+	while( (ms == 0) || ((nowTick-startTick)<(unsigned long)ms) )
+	{
+		nowTick = ::GetTickCount();
+  	    DWORD r = ::MsgWaitForMultipleObjectsEx(1,&stop_,100,QS_ALLINPUT,MWMO_INPUTAVAILABLE|MWMO_ALERTABLE);
+		if ( r == WAIT_IO_COMPLETION || r == WAIT_TIMEOUT) 
+		{
+			continue;
+		}
+		if ( r == WAIT_OBJECT_0 )
+		{
+			if(vb)
+			{
+				*vb = VARIANT_TRUE;
+			}
+			break;
+		}
+
+		if (!::GetMessage(&msg,0,0,0) || msg.message == WM_QUIT)
+		{
+			if(vb)
+			{
+				*vb = VARIANT_TRUE;
+			}
+			break;
+		}
+	
+		if ( mol::win::dialogs().isDialogMessage(msg) )
+			continue;
+
+		if ( mol::win::accelerators().translate(msg) )
+			continue;
+
+		::TranslateMessage(&msg);
+		::DispatchMessage(&msg);
+	}
+		
+	if(stop_)
+	{
+		::CloseHandle(stop_);
+		stop_ = 0;
+	}
+
+	return S_OK;
+}
+
+HRESULT __stdcall  MoeImport::Quit()
+{
+	if(stop_)
+	{
+		::SetEvent(stop_);
+	}
+	return S_OK;
+}
+
+HRESULT __stdcall  MoeImport::get_NET(IDispatch** disp)
+{
+	if(!disp)
+		return S_OK;
+
+	*disp = 0;
+
+	CLSID clsid;
+	HRESULT hr = ::CLSIDFromProgID(L"Net.DotNet",&clsid);
+	if(hr != S_OK)
+		return hr;
+
+	mol::punk<IDispatch> d;
+	hr = d.createObject(clsid);
+	if(hr != S_OK)
+		return hr;
+
+	return d.queryInterface(disp);
+}
+
+HRESULT __stdcall  MoeImport::get_Java(IDispatch** disp)
+{
+	if(!disp)
+		return S_OK;
+
+	*disp = 0;
+
+	CLSID clsid;
+	HRESULT hr = ::CLSIDFromProgID(L"JRE.Java",&clsid);
+	if(hr != S_OK)
+		return hr;
+
+	mol::punk<IDispatch> d;
+	hr = d.createObject(clsid);
+	if(hr != S_OK)
+		return hr;
+
+	return d.queryInterface(disp);
+}
