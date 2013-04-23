@@ -144,9 +144,11 @@ HRESULT __stdcall  MoeDebugImport::get_NET(IDispatch** disp)
 		return hr;
 
 	mol::punk<IDispatch> d;
-	hr = d.createObject(clsid);
+	hr = d.createObject(clsid,CLSCTX_ALL);
 	if(hr != S_OK)
 		return hr;
+
+	::CoAllowSetForegroundWindow(d,0);
 
 	return d.queryInterface(disp);
 }
@@ -164,9 +166,11 @@ HRESULT __stdcall  MoeDebugImport::get_Java(IDispatch** disp)
 		return hr;
 
 	mol::punk<IDispatch> d;
-	hr = d.createObject(clsid);
+	hr = d.createObject(clsid,CLSCTX_ALL);
 	if(hr != S_OK)
 		return hr;
+
+	::CoAllowSetForegroundWindow(d,0);
 
 	return d.queryInterface(disp);
 }
