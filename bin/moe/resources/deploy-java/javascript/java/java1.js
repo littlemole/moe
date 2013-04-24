@@ -1,6 +1,6 @@
-var Java = new ActiveXObject("JRE.Java");
+var java = moe.Script.CreateObject("JRE.Java");
 
-var JOptionPane = Java.Runtime.javax.swing.JOptionPane;
+var JOptionPane = java.Runtime.javax.swing.JOptionPane;
 
 JOptionPane.showMessageDialog(
 				null, 
@@ -9,4 +9,4 @@ JOptionPane.showMessageDialog(
 				JOptionPane.OK_CANCEL_OPTION
 			);
 
-Java.Exit();
+java.Exit();

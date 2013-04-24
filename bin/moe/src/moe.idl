@@ -970,16 +970,19 @@ library Moe
 		[id(9), helpstring("Get a IPictureDispatch for image on disk")]
 		HRESULT Picture( [in] BSTR f, [out,retval] IDispatch** disp );
 
-		[id(10), propget, helpstring("Get FORM_DEFAULT constant")]
+		[id(10), helpstring("Create a dispatchable Object from ProgId")]
+		HRESULT CreateObject( [in] BSTR f, [out,retval] IDispatch** disp );
+
+		[id(11), propget, helpstring("Get FORM_DEFAULT constant")]
 		HRESULT FORM_DEFAULT( [out,retval] long* d );
 
-		[id(11), propget, helpstring("Get FORM_TITLE constant")]
+		[id(12), propget, helpstring("Get FORM_TITLE constant")]
 		HRESULT FORM_TITLE( [out,retval] long* d );
 
-		[id(12), propget, helpstring("Get FORM_NOSCROLL constant")]
+		[id(13), propget, helpstring("Get FORM_NOSCROLL constant")]
 		HRESULT FORM_NOSCROLL( [out,retval] long* d );
 
-		[id(13), propget, helpstring("Get FORM_DIALOG constant")]
+		[id(14), propget, helpstring("Get FORM_DIALOG constant")]
 		HRESULT FORM_DIALOG( [out,retval] long* d );
 
 	}
@@ -1140,11 +1143,6 @@ library Moe
  		[id(4), helpstring("quit the msgloop")] 
  		HRESULT Quit();
 
- 		[id(5), propget, helpstring("access .NET runtime")] 
-		HRESULT NET([out,retval] IDispatch** disp);
-
- 		[id(6), propget, helpstring("access Java runtime")] 
- 		HRESULT Java([out,retval] IDispatch** disp);
 	}
 	////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////

@@ -1,9 +1,9 @@
-var Net = new ActiveXObject("Net.DotNet");
+var net = new NET();
 
-moe.Dialogs.MsgBox("hu","ha",0);
+//moe.Dialogs.MsgBox("hu","ha",0);
 
-var Drawing = Net.Import("System.Drawing");
-var Forms   = Net.Import("System.Windows.Forms")
+var Drawing = net.Import("System.Drawing");
+var Forms   = net.Import("System.Windows.Forms")
 
 // event handler
 var callback = function() {	
@@ -32,15 +32,16 @@ button.Size = new Drawing.Size(180, 104);
 button.Text = "button1";
 
 // connect event handler
-Net.connect(callback,"Click",button);
+net.connect(callback,"Click",button);
 
 form.Controls.Add(button);
 form.ResumeLayout(false);
 form.Show();
-form.SetTopLevel(1);
+form.Activate();
+//form.SetTopLevel(1);
 
 // run application
 Forms.Application.Run(form);
 
 // clean up
-//DotNet.Exit();
+//net.Exit();

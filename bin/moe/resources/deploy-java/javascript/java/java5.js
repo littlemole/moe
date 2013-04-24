@@ -1,20 +1,20 @@
 
-var Java = new ActiveXObject("JRE.Java");
+var java = new Java();
 
-var URL = Java("java.net.URL");
-var URLConnection = Java("java.net.URLConnection");
-var BufferedReader = Java("java.io.BufferedReader");
-var InputStreamReader = Java("java.io.InputStreamReader");
-var InputStream = Java("java.io.InputStream");
-
-//moe.Dialogs.MsgBox("java up and running","ha",0);
+var URL = java.Runtime.java.net.URL;
+var URLConnection = java.Runtime.java.net.URLConnection;
+var BufferedReader = java.Runtime.java.io.BufferedReader;
+var InputStreamReader = java.Runtime.java.io.InputStreamReader;
+var InputStream = java.Runtime.java.io.InputStream;
 
 var url = URL.New("http://www.amazon.de/");
-
 var urlConnection = url.openConnection();
+
 var stream = urlConnection.getInputStream();
-//var reader = InputStreamReader.New( stream );//, "UTF-8");
-var bufferedReader = BufferedReader.New( InputStreamReader.New( stream ) );
+
+var reader = InputStreamReader.New( stream );//, "UTF-8");
+var bufferedReader = BufferedReader.New( reader );
+Dialogs.MsgBox(bufferedReader.toString(),"hm",0);
 
 var buffer = "";
 var inputLine = bufferedReader.readLine();
@@ -31,4 +31,4 @@ var txt = "" + buffer;
 var doc = moe.Documents.New();
 doc.Object.Text = txt;
 
-Java.Exit();
+java.Exit();

@@ -1,6 +1,5 @@
-var Java = new ActiveXObject("JRE.Java");
-
-var JFrame = Java.Runtime.javax.swing.JFrame;
+var java = new Java();
+var JFrame = java.Runtime.javax.swing.JFrame;
 var frame = new JFrame();
 
 frame.setTitle("Simple example");

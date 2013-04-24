@@ -118,6 +118,8 @@ Script::Script()
 Script::~Script()
 {
 	removeNamedObject(L"moe");
+	removeNamedObject(L"Java");
+	removeNamedObject(L"NET");
 	removeNamedObject(L"MoeImport");
 
 	close();
@@ -141,13 +143,19 @@ HRESULT Script::init(const mol::string& engine)
 		return hr;
 	}
 
-	ODBGS("engine initialized");
 	addNamedObject((IMoe*)(moe()),_T("moe"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
-	ODBGS("moe object added");
 	 
 	mol::punk<IMoeImport> import;
  	import = MoeImport::CreateInstance(this);
  	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+
+	mol::punk<IDispatch> java;
+	MoeScriptObject::CreateInstance(&java, L"JRE.Java");
+ 	addNamedObject(java,_T("Java"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+
+	mol::punk<IDispatch> net;
+	MoeScriptObject::CreateInstance(&java, L"Net.DotNet");
+ 	addNamedObject(java,_T("NET"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 
 	return S_OK;
 }
@@ -317,6 +325,87 @@ HRESULT  __stdcall Script::GetWindow(HWND *phwnd )
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
+
+HRESULT  MoeScriptObject::CreateInstance(IDispatch** d, const mol::string& progid)
+{
+	Instance* i = new Instance;
+	i->progId_ = progid;
+	return i->QueryInterface(IID_IDispatch, (void**)d);
+}
+
+HRESULT __stdcall MoeScriptObject::GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId ) 
+{ 
+	rgDispId[0] = 0;
+	return S_OK;
+}
+
+HRESULT  __stdcall MoeScriptObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i) 
+{ 
+	if(!pReturn)
+		return S_OK;
+
+	pReturn->vt = VT_EMPTY;
+	pReturn->pdispVal = 0;
+
+	if(dispIdMember != 0 )
+		return S_OK;
+
+	CLSID clsid;
+	HRESULT hr = ::CLSIDFromProgID(progId_.c_str(),&clsid);
+	if(hr != S_OK)
+		return hr;
+
+	mol::punk<IDispatch> d;
+	hr = d.createObject(clsid,CLSCTX_ALL);
+	if(hr != S_OK)
+		return hr;
+
+	::CoAllowSetForegroundWindow(d,0);
+
+	mol::variant v(d);
+	return ::VariantCopy(pReturn,&v);
+}
+
+HRESULT __stdcall MoeScriptObject::GetDispID( BSTR bstrName, DWORD grfdex, DISPID *pid)
+{
+	return GetIDsOfNames(IID_NULL,&bstrName,1,LOCALE_SYSTEM_DEFAULT,pid);
+}
+
+HRESULT __stdcall MoeScriptObject::InvokeEx( DISPID id,LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pvarRes, EXCEPINFO *pei, IServiceProvider *pspCaller)
+{
+	return Invoke(id,IID_NULL,lcid,wFlags,pdp,pvarRes,pei,0);
+}
+
+HRESULT __stdcall MoeScriptObject::DeleteMemberByName( BSTR bstrName, DWORD grfdex)
+{
+	return  S_FALSE ;
+}
+
+HRESULT __stdcall MoeScriptObject::DeleteMemberByDispID( DISPID id)
+{
+	return  S_FALSE ;
+}
+
+HRESULT __stdcall MoeScriptObject::GetMemberProperties( DISPID id, DWORD grfdexFetch, DWORD *pgrfdex)
+{
+	return S_OK;
+}
+
+HRESULT __stdcall MoeScriptObject::GetMemberName( DISPID id, BSTR *pbstrName)
+{
+	return E_NOTIMPL;
+}
+
+HRESULT __stdcall MoeScriptObject::GetNextDispID( DWORD grfdex, DISPID id, DISPID *pid)
+{
+	return E_NOTIMPL;
+}
+
+HRESULT __stdcall MoeScriptObject::GetNameSpaceParent( IUnknown **ppunk)
+{
+	*ppunk = 0;
+	return E_UNEXPECTED;
+}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -1849,47 +1938,3 @@ HRESULT __stdcall  MoeImport::Quit()
 	return S_OK;
 }
 
-HRESULT __stdcall  MoeImport::get_NET(IDispatch** disp)
-{
-	if(!disp)
-		return S_OK;
-
-	*disp = 0;
-
-	CLSID clsid;
-	HRESULT hr = ::CLSIDFromProgID(L"Net.DotNet",&clsid);
-	if(hr != S_OK)
-		return hr;
-
-	mol::punk<IDispatch> d;
-	hr = d.createObject(clsid,CLSCTX_ALL);
-	if(hr != S_OK)
-		return hr;
-
-	::CoAllowSetForegroundWindow(d,0);
-
-	return d.queryInterface(disp);
-}
-
-HRESULT __stdcall  MoeImport::get_Java(IDispatch** disp)
-{
-	if(!disp)
-		return S_OK;
-
-	*disp = 0;
-
-	CLSID clsid;
-	HRESULT hr = ::CLSIDFromProgID(L"JRE.Java",&clsid);
-	if(hr != S_OK)
-		return hr;
-
-	mol::punk<IDispatch> d;
-	hr = d.createObject(clsid,CLSCTX_ALL);
-	if(hr != S_OK)
-		return hr;
-
-	::CoAllowSetForegroundWindow(d,0);
-
-
-	return d.queryInterface(disp);
-}

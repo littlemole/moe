@@ -343,6 +343,36 @@ private:
 
 MOE_DOCTYPE index2type(int index);
 
+class MoeScriptObject : public IDispatchEx,
+	 	public mol::interfaces< MoeScriptObject, mol::implements< IDispatch, IDispatchEx >>
+{
+public:
+public:
+
+	typedef mol::com_obj<MoeScriptObject> Instance;
+	static HRESULT CreateInstance(IDispatch** d, const mol::string& progid);
+
+	void virtual dispose() {};
+
+	HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo ) { *pctinfo = 0; return S_OK; }
+    HRESULT virtual __stdcall GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo )  { *ppTInfo = 0; return E_NOTIMPL; }
+    HRESULT virtual __stdcall GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId );
+    HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i);
+
+    HRESULT virtual __stdcall GetDispID( BSTR bstrName, DWORD grfdex, DISPID *pid);
+    HRESULT virtual __stdcall InvokeEx( DISPID id,LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pvarRes, EXCEPINFO *pei, IServiceProvider *pspCaller);
+    HRESULT virtual __stdcall DeleteMemberByName( BSTR bstrName, DWORD grfdex);        
+    HRESULT virtual __stdcall DeleteMemberByDispID( DISPID id);    
+    HRESULT virtual __stdcall GetMemberProperties( DISPID id, DWORD grfdexFetch, DWORD *pgrfdex);       
+    HRESULT virtual __stdcall GetMemberName( DISPID id, BSTR *pbstrName);       
+    HRESULT virtual __stdcall GetNextDispID( DWORD grfdex, DISPID id, DISPID *pid);       
+    HRESULT virtual __stdcall GetNameSpaceParent( IUnknown **ppunk);
+
+private:
+
+	mol::string progId_;
+};
+
 class MoeImport : 
  	public mol::Dispatch<IMoeImport>,
  	public mol::interfaces< MoeImport, 
@@ -361,8 +391,6 @@ public:
  	virtual HRESULT __stdcall  Sleep(long ms);
  	virtual HRESULT __stdcall  Wait(long ms,VARIANT_BOOL* vb);
  	virtual HRESULT __stdcall  Quit();
-	virtual HRESULT __stdcall  get_NET(IDispatch** disp);
-	virtual HRESULT __stdcall  get_Java(IDispatch** disp);
 private:
  	mol::punk<Host> host_;
 	HANDLE stop_;

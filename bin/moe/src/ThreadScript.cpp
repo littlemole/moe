@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "ThreadScript.h"
 #include "xmlui.h"
+#include "widgets.h"
 
 
 mol::string engineFromPath(const std::string& path)
@@ -130,50 +131,6 @@ HRESULT __stdcall  MoeDebugImport::Quit()
 	return S_OK;
 }
 
-
-HRESULT __stdcall  MoeDebugImport::get_NET(IDispatch** disp)
-{
-	if(!disp)
-		return S_OK;
-
-	*disp = 0;
-
-	CLSID clsid;
-	HRESULT hr = ::CLSIDFromProgID(L"Net.DotNet",&clsid);
-	if(hr != S_OK)
-		return hr;
-
-	mol::punk<IDispatch> d;
-	hr = d.createObject(clsid,CLSCTX_ALL);
-	if(hr != S_OK)
-		return hr;
-
-	::CoAllowSetForegroundWindow(d,0);
-
-	return d.queryInterface(disp);
-}
-
-HRESULT __stdcall  MoeDebugImport::get_Java(IDispatch** disp)
-{
-	if(!disp)
-		return S_OK;
-
-	*disp = 0;
-
-	CLSID clsid;
-	HRESULT hr = ::CLSIDFromProgID(L"JRE.Java",&clsid);
-	if(hr != S_OK)
-		return hr;
-
-	mol::punk<IDispatch> d;
-	hr = d.createObject(clsid,CLSCTX_ALL);
-	if(hr != S_OK)
-		return hr;
-
-	::CoAllowSetForegroundWindow(d,0);
-
-	return d.queryInterface(disp);
-}
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -241,6 +198,15 @@ void ScriptDebugger::init(const mol::string& engine)
 
  	import = MoeDebugImport::CreateInstance(activeScript_);
  	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+
+	mol::punk<IDispatch> java;
+	MoeScriptObject::CreateInstance(&java, L"JRE.Java");
+ 	addNamedObject(java,_T("Java"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+
+	mol::punk<IDispatch> net;
+	MoeScriptObject::CreateInstance(&java, L"Net.DotNet");
+ 	addNamedObject(java,_T("NET"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+
 }
 
 //Guid("{16d51579-a30b-4c8b-a276-0ff4dc41e755}");

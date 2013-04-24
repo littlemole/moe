@@ -1,11 +1,8 @@
-var NET = new ActiveXObject("Net.DotNet");
-if (!NET)
-{
-  moe.Dialogs.MsgBox("no","NET",0);
-}
+
+var net = new NET();
 
 // import assembly
-var FORMS = NET.Import("System.Windows.Forms");
+var FORMS = net.Import("System.Windows.Forms");
 if (!FORMS)
 {
   moe.Dialogs.MsgBox("no","FORMS",0);
@@ -23,7 +20,5 @@ msgBox.Show("a .NET string!","Title");
 
 
 // or simplified with shortcuts as one-liner ;-)
-NET("System.Windows.Forms.MessageBox").Show("another .NET string!","Title");
+net.Runtime.System.Windows.Forms.MessageBox.Show("another .NET string!","Title");
 
-// syntactic sugar
-NET.Runtime.System.Windows.Forms.MessageBox.Show("yet another .NET string!","Title");

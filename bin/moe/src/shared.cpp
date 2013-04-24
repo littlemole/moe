@@ -757,6 +757,30 @@ HRESULT __stdcall MoeScript::Picture( BSTR f, IDispatch** disp )
 	return p.queryInterface(disp);
 }
 
+HRESULT __stdcall  MoeScript::CreateObject(BSTR progid, IDispatch** disp)
+{
+	if(!progid)
+		return E_INVALIDARG;
+
+	if(!disp)
+		return S_OK;
+
+	*disp = 0;
+
+	CLSID clsid;
+	HRESULT hr = ::CLSIDFromProgID(progid,&clsid);
+	if(hr != S_OK)
+		return hr;
+
+	mol::punk<IDispatch> d;
+	hr = d.createObject(clsid,CLSCTX_ALL);
+	if(hr != S_OK)
+		return hr;
+
+	::CoAllowSetForegroundWindow(d,0);
+
+	return d.queryInterface(disp);
+}
 /////////////////////////////////////////////////////////////////////
 //
 // moe config sub obj
