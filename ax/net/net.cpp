@@ -22,7 +22,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	//::DebugBreak();
 //	::MessageBoxA(0,"startup",".NET",0);
 
-	::CoInitializeEx(0,COINIT_MULTITHREADED);
+	::CoInitialize(0); // STA for Win32 UI technolgies ...
 
     try
     {

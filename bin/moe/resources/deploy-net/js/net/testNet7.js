@@ -1,16 +1,14 @@
 var net = new NET();
 
-var wpf = new net.Runtime.org.oha7.dotnet.WPFLauncher();
+var wpf =  new net.Runtime.org.oha7.dotnet.WPFLauncher();
 wpf.load("test.xaml");
 var butt = wpf.get("button1");
 var edit = wpf.get("textbox");
-var disp = butt.Dispatcher;
-var x = "ba";
+var text = "";
 
 net.connect( 
 	function(e,f) {
-		x = disp.Invoke( edit.Text, null );
-		//Dialogs.MsgBox(,"haha",0);
+		text = edit.Text;
 		wpf.exit();
 	}, 
 	"Click", 
@@ -19,5 +17,4 @@ net.connect(
 
 wpf.run();
 
-Dialogs.MsgBox(y,"haha",0);
-//Wait(0);
+Dialogs.MsgBox(text,"haha",0);

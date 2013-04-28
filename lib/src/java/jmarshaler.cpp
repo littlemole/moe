@@ -120,15 +120,15 @@ jobjectArray JavaMarshaler::dispArgs2JavaArray( JavaClassStore& classes, DISPPAR
 	JNIEnv* env = classes.env();
 	jclass objectClazz = classes["java/lang/Object"];
 
-	jobjectArray jar = env->NewObjectArray( pDisp->cArgs-dec, objectClazz, NULL );
+	jobjectArray jar = env->NewObjectArray( pDisp->cArgs - dec - pDisp->cNamedArgs, objectClazz, NULL );
 	if (java::exceptionOccured(env))
 	{
 		return 0;
 	}
-	for ( UINT i = 0; i < pDisp->cArgs-dec; i++ )
+	for ( UINT i = pDisp->cNamedArgs; i < pDisp->cArgs-dec; i++ )
 	{
 		jobject o = JavaMarshaler::variant2JavaObject(classes, pDisp->rgvarg[i]);
-		env->SetObjectArrayElement( jar, i, o );
+		env->SetObjectArrayElement( jar, i - pDisp->cNamedArgs, o );
 		if (exceptionOccured(env))
 		{
 			return 0;

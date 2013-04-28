@@ -12,15 +12,16 @@ var urlConnection = url.openConnection();
 
 var stream = urlConnection.getInputStream();
 
-var reader = InputStreamReader.New( stream );//, "UTF-8");
+var reader = InputStreamReader.New( stream , "UTF-8");
 var bufferedReader = BufferedReader.New( reader );
-Dialogs.MsgBox(bufferedReader.toString(),"hm",0);
+//Dialogs.MsgBox(bufferedReader.toString(),"hm",0);
 
 var buffer = "";
 var inputLine = bufferedReader.readLine();
 
 while ( inputLine != null )
 {
+	Print(inputLine);
 	buffer += inputLine + "\r\n";
     inputLine = bufferedReader.readLine();
 }

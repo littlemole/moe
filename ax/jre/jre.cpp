@@ -30,7 +30,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
     try
     {
-		//CoInitialize(0);
 		mol::run<JREApp>(lpCmdLine);	
     }
     catch (mol::X& x)

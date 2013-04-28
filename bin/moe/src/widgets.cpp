@@ -151,11 +151,11 @@ HRESULT Script::init(const mol::string& engine)
 
 	mol::punk<IDispatch> java;
 	MoeScriptObject::CreateInstance(&java, L"JRE.Java");
- 	addNamedObject(java,_T("Java"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+ 	addNamedObject(java,_T("Java"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_ISSOURCE);
 
 	mol::punk<IDispatch> net;
-	MoeScriptObject::CreateInstance(&java, L"Net.DotNet");
- 	addNamedObject(java,_T("NET"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+	MoeScriptObject::CreateInstance(&net, L"Net.DotNet");
+ 	addNamedObject(net,_T("NET"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_ISSOURCE);
 
 	return S_OK;
 }

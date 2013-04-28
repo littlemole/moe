@@ -57,9 +57,43 @@ private:
 
 };
 
+class EventHandler : 
+	public IDispatch, 
+	public mol::interfaces<
+				EventHandler,
+				mol::implements<IDispatch>>
+{
+public:
+
+	typedef mol::com_obj<EventHandler> Instance;
+	static HRESULT CreateInstance(IDispatch* handler, IDispatch** d);
+
+	void virtual dispose() {};
+
+	HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo ) 
+    { 
+        *pctinfo = 0;
+        return S_OK; 
+    }
+
+    HRESULT virtual __stdcall GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo ) 
+    { 
+		*ppTInfo = 0;
+        return E_NOTIMPL; 
+    }
+
+    HRESULT virtual __stdcall GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId );
+
+    HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i);
+
+private:
+
+	mol::punk<IDispatch> handler_;
+};
+
 ////////////////////////////////////////////////////////////////////////
 class NetObject : 
-	public mol::com_registerobj<NetObject,CLSID_DotNetObject,CLSCTX_LOCAL_SERVER,mol::PROGRAMMABLE|mol::MULTITHREADED>,//,REGCLS_SINGLEUSE>,
+	public mol::com_registerobj<NetObject,CLSID_DotNetObject,CLSCTX_LOCAL_SERVER,mol::PROGRAMMABLE|mol::APARTMENT>,//,REGCLS_SINGLEUSE>,
 	public INetObject, 
 	public mol::SupportsErrorInfo<&IID_INetObject,&IID_IDispatch>,
 	public mol::interfaces<
@@ -91,7 +125,7 @@ private:
 
 ////////////////////////////////////////////////////////////////////////
 class NetType : 
-	public mol::com_registerobj<NetType,CLSID_DotNetType,CLSCTX_LOCAL_SERVER,mol::PROGRAMMABLE|mol::MULTITHREADED>,
+	public mol::com_registerobj<NetType,CLSID_DotNetType,CLSCTX_LOCAL_SERVER,mol::PROGRAMMABLE|mol::APARTMENT>,
 	public INetType,  
 	public IDispatchEx,
 	public mol::SupportsErrorInfo<&IID_INetType,&IID_IDispatch>,
@@ -131,43 +165,11 @@ private:
 };
 
 ////////////////////////////////////////////////////////////////////////
-/*
-class NetAssembly : 
-	public mol::com_registerobj<NetAssembly,CLSID_DotNetAssembly,CLSCTX_LOCAL_SERVER,mol::PROGRAMMABLE|mol::MULTITHREADED>,
-	public mol::Dispatch<INetAssembly>,
-	public mol::SupportsErrorInfo<&IID_INetAssembly,&IID_IDispatch>,
-	public mol::interfaces<
-				NetAssembly,
-				mol::implements< 
-					IDispatch,
-					INetAssembly,
-					ISupportErrorInfo
-					> 
-				>
-{
-public:
-
-	void virtual dispose();
-
-	HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo );
-    HRESULT virtual __stdcall GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo );
-    HRESULT virtual __stdcall GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId );
-    HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i) ;
-	HRESULT virtual __stdcall Initialize(VARIANT ptr);
-	HRESULT virtual __stdcall UnWrap(VARIANT* ptr);
-
-	HRESULT virtual __stdcall Type( BSTR clazzName, INetType** clazz);
-	HRESULT virtual __stdcall Connect(IDispatch* ptr, BSTR eventName, VARIANT target);
-
-private:
-	mol::variant v_;
-};
-*/
 
 ////////////////////////////////////////////////////////////////////////
 
 class NetServer : 
-	public mol::com_registerobj<NetServer,CLSID_DotNet,CLSCTX_LOCAL_SERVER,mol::PROGRAMMABLE|mol::MULTITHREADED>,
+	public mol::com_registerobj<NetServer,CLSID_DotNet,CLSCTX_LOCAL_SERVER,mol::PROGRAMMABLE|mol::APARTMENT>,
 	public mol::Dispatch<INet>,
 	public mol::SupportsErrorInfo<&IID_INet,&IID_IDispatch>,
 	public mol::interfaces< NetServer,
@@ -226,17 +228,6 @@ class NetApp :
 													NetObject,
 													mol::com_obj<NetObject> 
 												>  > >
-												/*,
-	public mol::exports< 
-					NetApp, 
-					NetAssembly, 
-					mol::ole::ComCreatePolicy<
-									NetApp,
-									mol::ole::AggregationPolicyNonAggregable<
-													NetAssembly,
-													mol::com_obj<NetAssembly> 
-												>  > >	
-												*/
 {
 public:
 

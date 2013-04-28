@@ -1,6 +1,6 @@
 var java = new Java();
 var JFrame = java.Runtime.javax.swing.JFrame;
-var frame = new JFrame();
+var frame =  new JFrame();
 
 frame.setTitle("Simple example");
 frame.setSize(300, 200);

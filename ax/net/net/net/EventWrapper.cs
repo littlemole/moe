@@ -17,8 +17,22 @@ namespace org.oha7.dotnet
 
         public void eventMethod(object sender, EventArgs e)
         {
-            handler.GetType().InvokeMember("", System.Reflection.BindingFlags.InvokeMethod, null, handler , new Object[]{});
+            Object[] args = wrapArgs(new Object[] { sender, e } );
+            handler.GetType().InvokeMember("", System.Reflection.BindingFlags.InvokeMethod, null, handler , args);
         }
 
+        private Object[] wrapArgs(Object[] args)
+        {
+            if (args == null || args.Length == 0)
+                return args;
+
+            int len = args.Length;
+            for (int i = 0; i < len; i++)
+            {
+                
+                args[i] = new RefWrapper(args[i]);
+            }
+            return args;
+        }
     }
 }

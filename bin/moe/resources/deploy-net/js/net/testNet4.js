@@ -50,4 +50,4 @@ form.Activate();
 Application.Run(form);
 
 // clean up
-net.Exit();
+//net.Exit();
