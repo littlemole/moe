@@ -1,9 +1,9 @@
-﻿// Created by Microsoft (R) C/C++ Compiler Version 10.00.30319.01 (378a474a).
+﻿// Created by Microsoft (R) C/C++ Compiler Version 11.00.60315.1 (ca9bd656).
 //
-// e:\molib\ax\net\x64\uni_debug\net.tlh
+// d:\molib\ax\net\x64\uni_debug\net.tlh
 //
 // C++ source equivalent of type library net.tlb
-// compiler-generated file created 03/08/11 at 23:35:34 - DO NOT EDIT!
+// compiler-generated file created 05/02/13 at 22:45:30 - DO NOT EDIT!
 
 //
 // Cross-referenced type libraries:
@@ -23,14 +23,30 @@
 struct __declspec(uuid("cee3fb84-b4a9-4487-8319-026ded0d1e6d"))
 /* LIBID */ __Net;
 struct /* coclass */ Net;
-struct __declspec(uuid("92aee3c7-1795-3007-b502-9d8bb7900951"))
+struct /* coclass */ Property;
+struct /* coclass */ Prototype;
+struct /* coclass */ Binder;
+struct /* coclass */ XAML;
+struct __declspec(uuid("7439b407-4d3a-38c9-aa0e-c8f185b9ae87"))
 /* dual interface */ _Net;
+struct __declspec(uuid("d43a385a-7508-375f-90e0-2e2a811bab6b"))
+/* dual interface */ _Property;
+struct __declspec(uuid("79f0dd5f-83b1-3b59-8ee4-bf32da893b3a"))
+/* dual interface */ _Prototype;
+struct __declspec(uuid("6286017b-034f-3c02-98a0-fb1ee4a87eb4"))
+/* dual interface */ _Binder;
+struct __declspec(uuid("901f20ad-380d-370e-8a0c-2837c4f5a6ca"))
+/* dual interface */ _XAML;
 
 //
 // Smart pointer typedef declarations
 //
 
 _COM_SMARTPTR_TYPEDEF(_Net, __uuidof(_Net));
+_COM_SMARTPTR_TYPEDEF(_Property, __uuidof(_Property));
+_COM_SMARTPTR_TYPEDEF(_Prototype, __uuidof(_Prototype));
+_COM_SMARTPTR_TYPEDEF(_Binder, __uuidof(_Binder));
+_COM_SMARTPTR_TYPEDEF(_XAML, __uuidof(_XAML));
 
 //
 // Type library items
@@ -41,7 +57,27 @@ Net;
     // [ default ] interface _Net
     // interface _Object
 
-struct __declspec(uuid("92aee3c7-1795-3007-b502-9d8bb7900951"))
+struct __declspec(uuid("6eabd5e5-fae8-337a-adff-4c0249966a36"))
+Property;
+    // [ default ] interface _Property
+    // interface _Object
+
+struct __declspec(uuid("dc1aedfb-08aa-346b-9911-e7c4c709f610"))
+Prototype;
+    // [ default ] interface _Prototype
+    // interface _Object
+
+struct __declspec(uuid("ee66a313-7371-3b78-8939-cb6bd12b110d"))
+Binder;
+    // [ default ] interface _Binder
+    // interface _Object
+
+struct __declspec(uuid("be47cede-49b1-30df-b522-7085aa7f15c0"))
+XAML;
+    // [ default ] interface _XAML
+    // interface _Object
+
+struct __declspec(uuid("7439b407-4d3a-38c9-aa0e-c8f185b9ae87"))
 _Net : IDispatch
 {
     //
@@ -69,11 +105,11 @@ _Net : IDispatch
         /*[in]*/ BSTR name,
         /*[out,retval]*/ VARIANT * pRetVal ) = 0;
       virtual HRESULT __stdcall CreateObject (
-        /*[in]*/ VARIANT clazz,
+        /*[in]*/ VARIANT t,
         /*[in]*/ SAFEARRAY * args,
         /*[out,retval]*/ VARIANT * pRetVal ) = 0;
       virtual HRESULT __stdcall InvokeMethod (
-        /*[in]*/ VARIANT clazz,
+        /*[in]*/ VARIANT t,
         /*[in]*/ VARIANT that,
         /*[in]*/ BSTR methodName,
         /*[in]*/ SAFEARRAY * args,
@@ -86,7 +122,32 @@ _Net : IDispatch
         /*[in]*/ VARIANT target,
         /*[in]*/ BSTR name,
         /*[in]*/ VARIANT ptr ) = 0;
+      virtual HRESULT __stdcall Prototype (
+        /*[in]*/ BSTR name,
+        /*[in]*/ SAFEARRAY * properties,
+        /*[in]*/ SAFEARRAY * classes,
+        /*[out,retval]*/ VARIANT * pRetVal ) = 0;
+      virtual HRESULT __stdcall MakeGeneric (
+        /*[in]*/ VARIANT t,
+        /*[in]*/ SAFEARRAY * args,
+        /*[out,retval]*/ VARIANT * pRetVal ) = 0;
 };
+
+struct __declspec(uuid("d43a385a-7508-375f-90e0-2e2a811bab6b"))
+_Property : IDispatch
+{};
+
+struct __declspec(uuid("79f0dd5f-83b1-3b59-8ee4-bf32da893b3a"))
+_Prototype : IDispatch
+{};
+
+struct __declspec(uuid("6286017b-034f-3c02-98a0-fb1ee4a87eb4"))
+_Binder : IDispatch
+{};
+
+struct __declspec(uuid("901f20ad-380d-370e-8a0c-2837c4f5a6ca"))
+_XAML : IDispatch
+{};
 
 //
 // Named GUID constants initializations
@@ -96,7 +157,23 @@ extern "C" const GUID __declspec(selectany) LIBID_Net =
     {0xcee3fb84,0xb4a9,0x4487,{0x83,0x19,0x02,0x6d,0xed,0x0d,0x1e,0x6d}};
 extern "C" const GUID __declspec(selectany) CLSID_Net =
     {0xf751b363,0x9e23,0x4da7,{0xb1,0x8c,0xb8,0x35,0xae,0x59,0xdf,0x5b}};
+extern "C" const GUID __declspec(selectany) CLSID_Property =
+    {0x6eabd5e5,0xfae8,0x337a,{0xad,0xff,0x4c,0x02,0x49,0x96,0x6a,0x36}};
+extern "C" const GUID __declspec(selectany) CLSID_Prototype =
+    {0xdc1aedfb,0x08aa,0x346b,{0x99,0x11,0xe7,0xc4,0xc7,0x09,0xf6,0x10}};
+extern "C" const GUID __declspec(selectany) CLSID_Binder =
+    {0xee66a313,0x7371,0x3b78,{0x89,0x39,0xcb,0x6b,0xd1,0x2b,0x11,0x0d}};
+extern "C" const GUID __declspec(selectany) CLSID_XAML =
+    {0xbe47cede,0x49b1,0x30df,{0xb5,0x22,0x70,0x85,0xaa,0x7f,0x15,0xc0}};
 extern "C" const GUID __declspec(selectany) IID__Net =
-    {0x92aee3c7,0x1795,0x3007,{0xb5,0x02,0x9d,0x8b,0xb7,0x90,0x09,0x51}};
+    {0x7439b407,0x4d3a,0x38c9,{0xaa,0x0e,0xc8,0xf1,0x85,0xb9,0xae,0x87}};
+extern "C" const GUID __declspec(selectany) IID__Property =
+    {0xd43a385a,0x7508,0x375f,{0x90,0xe0,0x2e,0x2a,0x81,0x1b,0xab,0x6b}};
+extern "C" const GUID __declspec(selectany) IID__Prototype =
+    {0x79f0dd5f,0x83b1,0x3b59,{0x8e,0xe4,0xbf,0x32,0xda,0x89,0x3b,0x3a}};
+extern "C" const GUID __declspec(selectany) IID__Binder =
+    {0x6286017b,0x034f,0x3c02,{0x98,0xa0,0xfb,0x1e,0xe4,0xa8,0x7e,0xb4}};
+extern "C" const GUID __declspec(selectany) IID__XAML =
+    {0x901f20ad,0x380d,0x370e,{0x8a,0x0c,0x28,0x37,0xc4,0xf5,0xa6,0xca}};
 
 #pragma pack(pop)

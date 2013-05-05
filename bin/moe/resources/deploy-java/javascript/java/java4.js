@@ -1,6 +1,6 @@
 var java = new Java();
 
-var url = java.Runtime.java.net.URL("http://www.amazon.de/");
+var url = java.Runtime.java.net.URL("http://www.google.de/");
 
 var connection = url.openConnection();
 var stream = connection.getInputStream();
@@ -13,15 +13,14 @@ moe.Dialogs.MsgBox(
 		connection.getContentEncoding(),
 		"ba",0);
 
-var reader = java.Runtime.java.io.InputStreamReader( stream ) ;
-var bufferedReader =  java.Runtime.java.io.BufferedReader( reader );
+var reader = new java.Runtime.java.io.InputStreamReader( stream ) ;
+var bufferedReader = new java.Runtime.java.io.BufferedReader( reader );
 
 var buffer = "";
 var inputLine = bufferedReader.readLine();
 
-while ( typeof(inputLine) != "undefined"  )//!= null )
+while ( inputLine != null )
 {
-Print(inputLine);
 	buffer += inputLine + "\r\n";
     inputLine = bufferedReader.readLine();
 }

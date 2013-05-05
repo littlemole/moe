@@ -12,12 +12,14 @@
 #include "ole/cp.h"
 #include "util/istr.h"
 #include <DispEx.h>
-
 #include "net_h.h"
+
 ////////////////////////////////////////////////////////////////////////
 
 //#import "net.tlb"  no_namespace, raw_interfaces_only, named_guids 
 #include "net.tlh"
+
+////////////////////////////////////////////////////////////////////////
 
 class Namespace : 
 	public IDispatch, 
@@ -57,6 +59,9 @@ private:
 
 };
 
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
 class EventHandler : 
 	public IDispatch, 
 	public mol::interfaces<
@@ -92,6 +97,8 @@ private:
 };
 
 ////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
 class NetObject : 
 	public mol::com_registerobj<NetObject,CLSID_DotNetObject,CLSCTX_LOCAL_SERVER,mol::PROGRAMMABLE|mol::APARTMENT>,//,REGCLS_SINGLEUSE>,
 	public INetObject, 
@@ -115,6 +122,7 @@ public:
     HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i);
 	HRESULT virtual __stdcall Initialize(VARIANT ptr);
 	HRESULT virtual __stdcall UnWrap(VARIANT* ptr);
+	HRESULT virtual __stdcall On(BSTR e, IDispatch* handler);
 
 private:
 
@@ -124,6 +132,9 @@ private:
 
 
 ////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
+
 class NetType : 
 	public mol::com_registerobj<NetType,CLSID_DotNetType,CLSCTX_LOCAL_SERVER,mol::PROGRAMMABLE|mol::APARTMENT>,
 	public INetType,  
@@ -140,6 +151,7 @@ class NetType :
 				>
 {
 public:
+
 
 	void virtual dispose();
 
@@ -186,22 +198,25 @@ public:
 
 	virtual void dispose();
 
+	HRESULT virtual __stdcall Type( BSTR typeName, INetType** type );
+	HRESULT virtual __stdcall Connect(IDispatch* ptr, BSTR eventName, VARIANT target);
+	HRESULT virtual __stdcall Import(BSTR clazzName, IDispatch** a);
+	HRESULT virtual __stdcall get_Runtime(IDispatch** result);
+	HRESULT virtual __stdcall String( BSTR txt, IDispatch** s);
+	HRESULT virtual __stdcall Prototype( BSTR name, VARIANT obj, IDispatch** s);
+	HRESULT virtual __stdcall Exit();
 
 	HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo );
     HRESULT virtual __stdcall GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo );
     HRESULT virtual __stdcall GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId );
     HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i);
-	HRESULT virtual __stdcall Exit();
-	HRESULT virtual __stdcall Type( BSTR typeName, INetType** type );
-	HRESULT virtual __stdcall Connect(IDispatch* ptr, BSTR eventName, VARIANT target);
-	HRESULT virtual __stdcall Import(BSTR clazzName, IDispatch** a);
-	HRESULT virtual __stdcall get_Runtime(IDispatch** result);
+
+
 };
 
 
 ////////////////////////////////////////////////////////////////////////
-
-
+////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 
 class NetApp : 
@@ -235,5 +250,8 @@ public:
 
 	mol::punk<_Net> dotnet;
 };
+
+////////////////////////////////////////////////////////////////////////
+
 
 #endif

@@ -90,12 +90,23 @@ namespace org.oha7.dotnet
         public Object CreateObject(Object t,Object[] args)
         {
             t = RefWrapper.unwrap(t);
+
             Type type = (Type)t;
 
-            ConstructorInfo ci = type.GetConstructor(getArgTypes(args));
+            if ( type.Equals(typeof(System.String)) && 
+                 args.Length == 1 && 
+                 args[0] is System.String)
+            {
+                // note: force RefWrapper using new even for Strings
+                return new RefWrapper(args[0]);
+            }
+            
+            args = unwrapArgs(args);
+
+            ConstructorInfo ci = resolveConstructor(type,args);// type.GetConstructor(getArgTypes(args));
             if (ci != null)
             {
-                return RefWrapper.wrap(ci.Invoke(unwrapArgs(args)));
+                return RefWrapper.wrap(ci.Invoke(args));
             }
             return null;
         }
@@ -182,6 +193,49 @@ namespace org.oha7.dotnet
 
             MethodInfo addHandler = ev.GetAddMethod();
             addHandler.Invoke(target, new Object[]{ d } );
+        }
+
+        [DispId(6)]
+        public Object Prototype(String name, Object[] properties, Object[] classes)
+        {
+            if (properties.Length != classes.Length)
+                return null;
+
+            int len = properties.Length;
+
+            string[] names = new string[len];
+            for (int i = 0; i < len; i++)
+            {
+                names[i] = (string)RefWrapper.unwrap(properties[i]);
+            }
+
+            Type[] types = new Type[len];
+            for (int i = 0; i < len; i++)
+            {
+                types[i] = (Type)RefWrapper.unwrap(classes[i]);
+            }
+
+            return RefWrapper.wrap(org.oha7.dotnet.Prototype.createType(name, names, types));
+        }
+
+
+        [DispId(7)]
+        public Object MakeGeneric(Object t, Object[] args)
+        {
+            Type type = (Type)RefWrapper.unwrap(t);
+            Type[] types = new Type[args.Length];
+            for (int i = 0; i < args.Length; i++)
+            {
+                types[i] = (Type)RefWrapper.unwrap(args[i]);
+            }
+
+            Type result = type.MakeGenericType(types);
+            return result;
+        }
+
+        public static void cacheType(String name, Type type)
+        {
+            netTypeCache.Add(name, type);
         }
 
         // invoke helper
@@ -291,7 +345,8 @@ namespace org.oha7.dotnet
         // resolve method
         private MethodInfo resolveMethod(Type type, String methodName, Object[] args)
         {
-            MethodInfo mi = type.GetMethod(methodName, getArgTypes(args));
+            Type[] types = getArgTypes(args);
+            MethodInfo mi = type.GetMethod(methodName, types);
             if (mi != null)
             {
                 return mi;
@@ -301,12 +356,56 @@ namespace org.oha7.dotnet
             for (int i = 0; i < methods.Length; i++)
             {
                 MethodInfo m = methods[i];
-                if (m.Name.Equals(methodName))
+                if (m.Name.Equals(methodName) || m.Name.Equals("get_" + methodName))
                 {
-                    if (m.GetParameters().Length == args.Length)
+                    ParameterInfo[] pi = m.GetParameters();
+                    if (pi.Length == types.Length)
                     {
-                        return m;
+                        bool match = true;
+                        for (int j = 0; j < types.Length; j++)
+                        {
+                            if (!pi[j].ParameterType.IsAssignableFrom(types[j]))
+                            {
+                                match = false;
+                                break;
+                            }
+                        }
+                        if(match)
+                            return m;
                     }
+                }
+            }
+            return null;
+        }
+    
+        // resolve method
+        private ConstructorInfo resolveConstructor(Type type, Object[] args)
+        {
+            Type[] types = getArgTypes(args);
+            ConstructorInfo ci = type.GetConstructor(types);
+            if (ci != null)
+            {
+                return ci;
+            }
+
+            ConstructorInfo[] constructors = type.GetConstructors();
+            for (int i = 0; i < constructors.Length; i++)
+            {
+                ConstructorInfo c = constructors[i];
+                ParameterInfo[] pi = c.GetParameters();
+                if (pi.Length == types.Length)
+                {
+                    bool match = true;
+                    for (int j = 0; j < types.Length; j++)
+                    {
+                        if (!pi[j].ParameterType.IsAssignableFrom(types[j]))
+                        {
+                            match = false;
+                            break;
+                        }
+                    }
+                    if(match)
+                        return c;
                 }
             }
             return null;

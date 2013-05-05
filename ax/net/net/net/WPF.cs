@@ -6,6 +6,37 @@ using System.IO;
 
 namespace org.oha7.dotnet
 {
+    public class Binder
+    {
+        static public void bind(DependencyObject target, String name, Object model)
+        {
+            var prop = Binder.getField(target.GetType(), name);
+            DependencyProperty dp = (DependencyProperty)prop.GetValue(target);
+
+            var binding = new System.Windows.Data.Binding("Value");
+            binding.Source = model;
+            System.Windows.Data.BindingOperations.SetBinding(
+                target,
+                dp,
+                binding
+            );
+        }
+
+        static public System.Reflection.FieldInfo getField(Type t, String name)
+        {
+            System.Reflection.FieldInfo fi = t.GetField(name);
+            if (fi != null)
+                return fi;
+
+            if (t.BaseType != null)
+            {
+                return getField(t.BaseType, name);
+            }
+
+            return null;
+        }
+    }
+
     public class XAML
     {
         public Application application = new Application();
@@ -57,5 +88,14 @@ namespace org.oha7.dotnet
             return LogicalTreeHelper.FindLogicalNode(rootObject, path);
         }
 
+        public void bind(DependencyObject target, String name, Object model)
+        {
+            Binder.bind(target, name, model);
+        }
+
+        public Property Property()
+        {
+            return new Property();
+        }
     }
 }

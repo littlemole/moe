@@ -571,6 +571,21 @@ T& valueOf( mol::variant& v)
 	return (T&)(*tmp.pintVal);
 }
 
+template<VARENUM V>
+class concreteVariant : public mol::variant 
+{
+public:
+	concreteVariant()
+	{
+		vt = V;
+		pdispVal = 0;
+	}
+};
+
+class vNull  : public concreteVariant<VT_NULL>  {};
+class vEmpty : public concreteVariant<VT_EMPTY> {};
+class vError : public concreteVariant<VT_ERROR> {};
+
 
 mol::string valueOf( mol::variant& v);
 

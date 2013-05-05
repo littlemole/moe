@@ -7,7 +7,7 @@ var BufferedReader = java.Runtime.java.io.BufferedReader;
 var InputStreamReader = java.Runtime.java.io.InputStreamReader;
 var InputStream = java.Runtime.java.io.InputStream;
 
-var url = URL.New("http://www.amazon.de/");
+var url = URL.New("http://www.google.de/");
 var urlConnection = url.openConnection();
 
 var stream = urlConnection.getInputStream();
