@@ -217,7 +217,7 @@ namespace org.oha7.dotnet
             return type;
         }
 
-        public static void init(Object dest, Object src)
+        public static void copyTo(Object src,Object dest)
         {
             Type destType = dest.GetType();
             Type srcType = src.GetType();

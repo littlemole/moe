@@ -4,7 +4,7 @@ var Drawing = net.Import("System.Drawing");
 var Forms   = net.Import("System.Windows.Forms");
 var System  = net.Runtime.System;
 
-net.Prototype( "My.Style", { 
+net.Runtime.My.Style = { 
 	Id : System.Int32,
 	Description : System.String,
 	Bold : System.Boolean,
@@ -14,7 +14,7 @@ net.Prototype( "My.Style", {
 	Fontsize : System.Int32,
 	Forecolor : System.String,
 	Backcolor : System.String
- });
+};
 
 function makeStyleList( styleSet, index) 
 {
@@ -22,7 +22,7 @@ function makeStyleList( styleSet, index)
 	for ( var i = 0; i < styleSet.Count; i++)
 	{
 		var s = new net.Runtime.My.Style();
-		net.Runtime.org.oha7.dotnet.Prototype.init(s,styleSet.Item(i));
+		net.Runtime.org.oha7.dotnet.Prototype.copyTo(styleSet.Item(i),s);
 		list.Add(s);
 	}
 	return list;

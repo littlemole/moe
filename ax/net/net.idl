@@ -90,6 +90,7 @@ library NET
 
 		[id(6), helpstring(".NET prototype")] 
 		HRESULT Prototype( [in] BSTR name, [in] VARIANT obj, [out,retval] IDispatch** s);
+
 	}
 
 ////////////////////////////////////////////////////////////////////////////////////////

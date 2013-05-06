@@ -30,7 +30,7 @@ class Namespace :
 public:
 
 	typedef mol::com_obj<Namespace> Instance;
-	static HRESULT CreateInstance(IDispatch** d, const std::string& path);
+	static HRESULT CreateInstance(IDispatch** d, const std::string& path, INet* inet);
 
 	void virtual dispose() {};
 
@@ -56,7 +56,7 @@ private:
 	std::string path_;
 	std::map<DWORD,std::string> id2name_;
 	std::map<std::string,DWORD> name2id_;
-
+	mol::punk<INet> inet_;
 };
 
 ////////////////////////////////////////////////////////////////////////

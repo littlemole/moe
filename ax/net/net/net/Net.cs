@@ -212,10 +212,24 @@ namespace org.oha7.dotnet
             Type[] types = new Type[len];
             for (int i = 0; i < len; i++)
             {
-                types[i] = (Type)RefWrapper.unwrap(classes[i]);
+                Object o = RefWrapper.unwrap(classes[i]);
+                if ( o is Type )
+                {
+                    types[i] = (Type)o;
+                }
+                else if (o is System.Int32)
+                {
+                    types[i] = typeof(System.Int32);
+                }
+                else if (o is System.String)
+                {
+                    types[i] = typeof(System.String);
+                }
             }
 
-            return RefWrapper.wrap(org.oha7.dotnet.Prototype.createType(name, names, types));
+            object result = org.oha7.dotnet.Prototype.createType(name, names, types);
+            
+            return RefWrapper.wrap(result);
         }
 
 

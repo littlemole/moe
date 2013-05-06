@@ -13,11 +13,11 @@ DWORD DISPID_OF  = 1;
 ////////////////////////////////////////////////////////////////////////
 
 
-
-HRESULT wrapNETType(mol::variant& in, INetType** out)
+template<class T>
+HRESULT wrapNETType(mol::variant& in, T** out)
 {
 	mol::punk<INetType> c;
-	HRESULT hr = c.createObject(CLSID_DotNetType);
+	HRESULT hr = c.createObject(CLSID_DotNetType,CLSCTX_ALL);
 	if ( hr != S_OK )
 		return S_FALSE;
 
@@ -30,7 +30,21 @@ HRESULT wrapNETType(mol::variant& in, INetType** out)
 	return c.queryInterface(out);
 }
 
-HRESULT wrapNETObject(mol::variant& in, VARIANT* out)
+HRESULT wrapNETType(mol::variant& in, VARIANT* out)
+{
+	if(!out)
+		return E_INVALIDARG;
+
+	mol::punk<INetType> c;
+	HRESULT hr = wrapNETType(in,&c);
+	if ( hr != S_OK )
+		return S_FALSE;
+
+	out->vt = VT_DISPATCH;
+	return c.queryInterface(&out->pdispVal);
+}
+
+HRESULT wrapNETObject(VARIANT& in, VARIANT* out)
 {
 	if ( !out )
 		return S_OK;
@@ -43,7 +57,7 @@ HRESULT wrapNETObject(mol::variant& in, VARIANT* out)
 				
 	
 	mol::punk<INetObject> no;
-	HRESULT hr = no.createObject(CLSID_DotNetObject);
+	HRESULT hr = no.createObject(CLSID_DotNetObject,CLSCTX_ALL);
 	if ( hr != S_OK )
 		return hr;
 
@@ -79,7 +93,7 @@ HRESULT unwrapNETObject( VARIANT in, VARIANT* out)
 			return hr;
 		}
 	}
-	out->vt = in.vt;
+	//out->vt = in.vt;
 	return ::VariantCopy( out, &(in) );
 }
 
@@ -125,9 +139,9 @@ public:
 
 	mol::SafeArray<VT_VARIANT> value;
 
-	SafeArrayFromDispParams(DISPPARAMS* params)
+	SafeArrayFromDispParams(DISPPARAMS* params, UINT nArgs = -1)
 	{
-		UINT nArgs = params->cArgs - params->cNamedArgs;
+		nArgs = nArgs == -1 ? params->cArgs - params->cNamedArgs : nArgs;
 
 		if ( nArgs > 0 )
 		{
@@ -137,7 +151,7 @@ public:
 			mol::SFAccess<VARIANT> sfa(value);
 			for ( UINT i = 0; i < nArgs; i++ )
 			{
-				VARIANTARG varg = params->rgvarg[nArgs-1-i];
+				VARIANTARG varg = params->rgvarg[params->cArgs-1-i];
 				HRESULT hr = unwrapNETObject(varg,&(sfa[i]));
 			}
 		}
@@ -145,11 +159,12 @@ public:
 };
 
 
-HRESULT Namespace::CreateInstance(IDispatch** d, const std::string& path)
+HRESULT Namespace::CreateInstance(IDispatch** d, const std::string& path, INet* net)
 {
 	Instance* i = new Instance;
 	i->path_ = path;
 	i->lastId_ = 0;
+	i->inet_ = net;
 	return i->QueryInterface(IID_IDispatch,(void**)d);
 }
 
@@ -200,13 +215,7 @@ HRESULT __stdcall Namespace::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 			hr = net->MakeGeneric(v,sa.value,&r);
 			if ( hr == S_OK && ( r.vt == VT_DISPATCH || r.vt == VT_UNKNOWN) && r.punkVal)
 			{
-				mol::punk<INetType> t;
-				hr = wrapNETType(r,&t);
-				if ( hr == S_OK )
-				{
-					pReturn->vt = VT_DISPATCH;
-					return t.queryInterface(&pReturn->pdispVal);
-				}
+				return wrapNETType(r,pReturn);
 			}
 		}
 		return S_OK;
@@ -218,6 +227,15 @@ HRESULT __stdcall Namespace::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 	}
 	n += name;
 
+	if (w & DISPATCH_PROPERTYPUT)
+	{
+		mol::punk<IDispatch> disp;
+		hr = inet_->Prototype( mol::bstr(n), pDisp->rgvarg[0],&disp);
+		if ( hr != S_OK )
+			return hr;
+
+		return S_OK;
+	}
 
 	// try to load as .NET type
 	mol::variant empty;
@@ -226,20 +244,13 @@ HRESULT __stdcall Namespace::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 	if ( hr == S_OK && (v.vt == VT_DISPATCH || v.vt == VT_UNKNOWN) && v.pdispVal )
 	{
 
-		mol::punk<INetType> c;
-		hr = c.createObject(CLSID_DotNetType);
+		mol::punk<IDispatch> disp;
+		hr = wrapNETType(v,&disp);
 		if ( hr != S_OK )
-			return S_FALSE;
+			return hr;
 
-		hr = c->Initialize(v);
-		if ( hr != S_OK )
-			return S_FALSE;
-
-		::CoAllowSetForegroundWindow( (IUnknown*)c, 0);
 		if(pReturn)
 		{
-			mol::punk<IDispatch> disp(c);
-
 			if  (w == DISPATCH_PROPERTYGET)
 			{
 				if ( hr == S_OK && pReturn )
@@ -260,7 +271,7 @@ HRESULT __stdcall Namespace::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 
 	// no type found, produce another namespace element
 	mol::punk<IDispatch> ns;
-	hr = Namespace::CreateInstance(&ns,n);
+	hr = Namespace::CreateInstance(&ns,n,inet_);
 	if ( hr != S_OK )
 		return hr;
 
@@ -297,20 +308,9 @@ HRESULT __stdcall EventHandler::Invoke(DISPID dispIdMember, REFIID riid, LCID lc
 	HRESULT hr;
 	for ( UINT i = 0; i < pDisp->cArgs; i++)
 	{
-		mol::punk<INetObject> obj;
-		hr = obj.createObject(CLSID_DotNetObject,CLSCTX_ALL);
-		if( hr != S_OK )
-			return hr;
-
-		mol::punk<IDispatch> d(obj);
-		if(!d)
-			return E_FAIL;
-
-		hr = obj->Initialize(pDisp->rgvarg[i]);
-		if( hr != S_OK )
-			return hr;
-
-		params.set(i,d);
+		mol::variant v;
+		hr = wrapNETObject(pDisp->rgvarg[i],&v);
+		params.set(i,v.pdispVal);
 	}
 
 	hr = handler_->Invoke(0,IID_NULL,LOCALE_SYSTEM_DEFAULT,w,&params,pReturn,ex,e);
@@ -324,9 +324,8 @@ HRESULT __stdcall EventHandler::Invoke(DISPID dispIdMember, REFIID riid, LCID lc
 ////////////////////////////////////////////////////////////////////////
 
 NetApp::NetApp()
-{
-	//HRESULT hr = net.createObject(CLSID_Net,CLSCTX_ALL);
-}
+{}
+
 ////////////////////////////////////////////////////////////////////////
 
 
@@ -357,8 +356,9 @@ HRESULT __stdcall NetObject::UnWrap(VARIANT* ptr)
 	if ( !ptr )
 		return E_INVALIDARG;
 
-	::VariantCopy(ptr,&v_);
 	ptr->vt = VT_DISPATCH;
+	ptr->pdispVal = v_.pdispVal;
+	v_.pdispVal->AddRef();
 	return S_OK;
 
 }
@@ -404,10 +404,7 @@ HRESULT  __stdcall NetObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid
 		}
 	}
 
-	VARIANT vnull;
-	::VariantInit(&vnull);
-	vnull.vt = VT_EMPTY;
-	vnull.pdispVal = 0;
+	mol::vEmpty vempty;
 
 	mol::punk<_Net> net;
 	HRESULT hr = net.createObject(CLSID_Net,CLSCTX_ALL);
@@ -419,7 +416,7 @@ HRESULT  __stdcall NetObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid
 	{	
 		if ( pDisp->cArgs == 0 )
 		{
-			hr = net->InvokeMethod( vnull, v_, mol::bstr(name),0, DISPATCH_PROPERTYGET, &vRet );
+			hr = net->InvokeMethod( vempty, v_, mol::bstr(name),0, DISPATCH_PROPERTYGET, &vRet );
 			if ( hr == S_OK )
 			{
 				return wrapNETObject(vRet,pReturn);
@@ -431,27 +428,16 @@ HRESULT  __stdcall NetObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid
 
 	if (  w & DISPATCH_PROPERTYPUT ) 
 	{	
-		mol::ArrayBound ab(pDisp->cArgs);
-		mol::SafeArray<VT_VARIANT> sa(ab);
-
-		mol::SFAccess<VARIANT> sfa(sa);
-		for ( UINT i = 0; i < pDisp->cArgs; i++ )
-		{
-			VARIANTARG varg = pDisp->rgvarg[pDisp->cArgs-1-i];
-			HRESULT hr = unwrapNETObject(varg,&(sfa[i]));
-		}
-
-		hr = net->InvokeMethod( vnull, v_, mol::bstr(name),sa, DISPATCH_PROPERTYPUT, &vRet );
-		if ( hr == S_OK )
-		{
-			return wrapNETObject(vRet,pReturn);
-		}
-		return hr;
+		SafeArrayFromDispParams sa(pDisp,pDisp->cArgs);
+		hr = net->InvokeMethod( vempty, v_, mol::bstr(name),sa.value, DISPATCH_PROPERTYPUT, &vRet );
+		if ( hr != S_OK )
+			return hr;
+		return wrapNETObject(vRet,pReturn);		
 	}
 		
 	if ( pDisp->cArgs == 0 )
 	{
-		hr = net->InvokeMethod( vnull, v_, mol::bstr(name),0, DISPATCH_METHOD, &vRet );
+		hr = net->InvokeMethod( vempty, v_, mol::bstr(name),0, DISPATCH_METHOD, &vRet );
 		if ( hr == S_OK )
 		{
 			return wrapNETObject(vRet,pReturn);
@@ -459,23 +445,11 @@ HRESULT  __stdcall NetObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid
 		return hr;
 	}
 
-	mol::ArrayBound ab(pDisp->cArgs);
-	mol::SafeArray<VT_VARIANT> sa(ab);
-
-	mol::SFAccess<VARIANT> sfa(sa);
-	for ( UINT i = 0; i < pDisp->cArgs; i++ )
-	{
-		VARIANTARG varg = pDisp->rgvarg[pDisp->cArgs-1-i];
-		HRESULT hr = unwrapNETObject(varg,&(sfa[i]));
-	}
-
-	hr = net->InvokeMethod( vnull, v_, mol::bstr(name),sa, DISPATCH_METHOD, &vRet );
-	if ( hr == S_OK )
-	{
-		return wrapNETObject(vRet,pReturn);
-	}
-	return S_OK;
-
+	SafeArrayFromDispParams sa(pDisp);
+	hr = net->InvokeMethod( vempty, v_, mol::bstr(name),sa.value, DISPATCH_METHOD, &vRet );
+	if ( hr != S_OK )
+		return hr;
+	return wrapNETObject(vRet,pReturn);
 }
 
 
@@ -511,7 +485,6 @@ HRESULT __stdcall NetType::UnWrap(VARIANT* ptr)
 	if ( !ptr )
 		return E_INVALIDARG;
 
-	//::VariantCopy(ptr,&v_);
 	ptr->vt = VT_UNKNOWN;
 	ptr->punkVal = v_.punkVal;
 	v_.punkVal->AddRef();
@@ -542,115 +515,53 @@ HRESULT __stdcall NetType::GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszN
 
 HRESULT __stdcall NetType::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i) 
 { 
-		
-	VARIANT vnull;
-	::VariantInit(&vnull);
-	vnull.vt = VT_NULL;
-	vnull.pdispVal = 0;
+	mol::vNull vnull;
 
 	mol::punk<_Net> net;
 	HRESULT hr = net.createObject(CLSID_Net,CLSCTX_ALL);
 	if ( hr != S_OK )
-		return S_FALSE;
+		return hr;
 
 	mol::variant vRet;
 
 	// generic type 
 	if ( dispIdMember == 3 ) 
 	{
-		UINT nArgs = pDisp->cArgs;
-		if ( (pDisp->cArgs >0) && (pDisp->cNamedArgs > 0))// (w  & DISPATCH_CONSTRUCT ) )
-		{
-			nArgs -= pDisp->cNamedArgs;
-		}
+		SafeArrayFromDispParams sa(pDisp);
+		hr = net->MakeGeneric( v_, sa.value, &vRet );
+		if ( hr != S_OK )
+			return hr;
 
-		mol::ArrayBound ab(nArgs);
-		mol::SafeArray<VT_VARIANT> sa(ab);
-		mol::SFAccess<VARIANT> sfa(sa);
-
-		for ( UINT i = 0; i < nArgs; i++ )
-		{
-			VARIANTARG varg = pDisp->rgvarg[pDisp->cArgs-1-i];
-			HRESULT hr = unwrapNETObject( varg, &(sfa[i]) );
-		}
-
-		hr = net->MakeGeneric( v_, sa, &vRet );
-		if ( hr == S_OK )
-		{
-			mol::punk<INetType>t;
-			hr = wrapNETType(vRet,&t);
-			if ( hr != S_OK )
-				return hr;
-
-			pReturn->vt = VT_DISPATCH;
-			return t.queryInterface(&pReturn->pdispVal);
-		}
-		return hr;
+		return wrapNETType(vRet,pReturn);
 	}
+	
 	// create net obj via constructor
 	if ( dispIdMember == 0 ) 
-	{				
-		if ( pDisp->cArgs == 0 || (pDisp->cArgs == 1 && pDisp->cNamedArgs == 1 ))//&& (w  & DISPATCH_CONSTRUCT ) ))
-		{			
-			hr =  net->CreateObject( v_, 0, &vRet );
-			if ( hr == S_OK )
-			{
-				return wrapNETObject(vRet,pReturn);
-			}
+	{		
+		SafeArrayFromDispParams sa(pDisp);
+		hr = net->CreateObject( v_, sa.value, &vRet );
+		if ( hr != S_OK )
 			return hr;
-		}
 
-		UINT nArgs = pDisp->cArgs;
-		if ( (pDisp->cArgs >0) && (pDisp->cNamedArgs > 0))// (w  & DISPATCH_CONSTRUCT ) )
-		{
-			nArgs -= pDisp->cNamedArgs;
-		}
-		mol::ArrayBound ab(nArgs);
-		mol::SafeArray<VT_VARIANT> sa(ab);
-
-		mol::SFAccess<VARIANT> sfa(sa);
-
-		for ( UINT i = 0; i < nArgs; i++ )
-		{
-			VARIANTARG varg = pDisp->rgvarg[pDisp->cArgs-1-i];
-			HRESULT hr = unwrapNETObject( varg, &(sfa[i]) );
-		}
-
-		hr = net->CreateObject( v_, sa, &vRet );
-		if ( hr == S_OK )
-		{
-			return wrapNETObject(vRet,pReturn);
-		}
-		return hr;
+		return wrapNETObject(vRet,pReturn);
 	}
+	
 	
 	// invoke a static class method
 
 	std::string name = mol::singleton<DotNetClassNames>().getName(dispIdMember); //idsOfNames_[dispIdMember];
-	/*
-	if( name == "prototype" )
-	{
-		if (pReturn)
-		{
-			mol::variant v((IDispatch*)(INetType*)this);
-			::VariantCopy(pReturn,&v);
-		}
-		return S_OK;
-	}
-	*/
 
 	if (  w & DISPATCH_PROPERTYGET ) 
 	{	
 		if ( pDisp->cArgs == 0 )
 		{
 			hr = net->InvokeMethod( v_, vnull, mol::bstr(name),0, DISPATCH_PROPERTYGET, &vRet );
-			if ( hr == S_OK )
-			{
-				return wrapNETObject(vRet,pReturn);
-			}
-			return hr;
+			if ( hr != S_OK )
+				return hr;
+
+			return wrapNETObject(vRet,pReturn);
 		}
-		//return E_FAIL; // nada!
+		//return E_FAIL; // nada! -> handle it as a method instead
 	}
 
 	if (  w & DISPATCH_PROPERTYPUT ) 
@@ -660,51 +571,20 @@ HRESULT __stdcall NetType::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, W
 			return E_FAIL;
 		}
 
-		mol::ArrayBound ab(pDisp->cArgs);
-		mol::SafeArray<VT_VARIANT> sa(ab);
+		SafeArrayFromDispParams sa(pDisp,pDisp->cArgs);
+		hr = net->InvokeMethod( v_, vnull, mol::bstr(name),sa.value, DISPATCH_PROPERTYPUT, &vRet );
+		if ( hr != S_OK )
+			return hr;
 
-		mol::SFAccess<VARIANT> sfa(sa);
-		for ( UINT i = 0; i < pDisp->cArgs; i++ )
-		{
-			VARIANTARG varg = pDisp->rgvarg[pDisp->cArgs-1-i];
-			HRESULT hr = unwrapNETObject( varg, &(sfa[i]) );
-		}
-
-		hr = net->InvokeMethod( v_, vnull, mol::bstr(name),sa, DISPATCH_PROPERTYPUT, &vRet );
-		if ( hr == S_OK )
-		{
-			return wrapNETObject(vRet,pReturn);
-		}
-		return S_OK;
-	}
-
-		
-	if ( pDisp->cArgs == 0 )
-	{
-		hr = net->InvokeMethod( v_, vnull, mol::bstr(name),0, DISPATCH_METHOD, &vRet );
-		if ( hr == S_OK )
-		{
-			return wrapNETObject(vRet,pReturn);
-		}
-		return hr;
-	}
-
-	mol::ArrayBound ab(pDisp->cArgs);
-	mol::SafeArray<VT_VARIANT> sa(ab);
-
-	mol::SFAccess<VARIANT> sfa(sa);
-	for ( UINT i = 0; i < pDisp->cArgs; i++ )
-	{
-		VARIANTARG varg = pDisp->rgvarg[pDisp->cArgs-1-i];
-		HRESULT hr = unwrapNETObject( varg, &(sfa[i]) );
-	}
-
-	hr = net->InvokeMethod( v_, vnull, mol::bstr(name),sa, DISPATCH_METHOD, &vRet );
-	if ( hr == S_OK )
-	{
 		return wrapNETObject(vRet,pReturn);
 	}
-	return S_OK;
+
+	SafeArrayFromDispParams sa(pDisp);
+	hr = net->InvokeMethod( v_, vnull, mol::bstr(name),sa.value, DISPATCH_METHOD, &vRet );
+	if ( hr != S_OK )
+		return hr;
+	
+	return wrapNETObject(vRet,pReturn);
 }
 
 HRESULT __stdcall NetType::GetDispID( BSTR bstrName, DWORD grfdex, DISPID *pid)
@@ -791,12 +671,12 @@ HRESULT __stdcall  NetServer::Import(BSTR typeName, IDispatch** a)
 		return hr;
 	}
 
-	return Namespace::CreateInstance(a,mol::tostring(typeName));
+	return Namespace::CreateInstance(a,mol::tostring(typeName),this);
 }
 
 HRESULT __stdcall NetServer::get_Runtime(IDispatch** result)
 {
-	return Namespace::CreateInstance(result,"");
+	return Namespace::CreateInstance(result,"",this);
 }
 
 HRESULT __stdcall NetServer::Prototype( BSTR name, VARIANT obj, IDispatch** s)
@@ -838,12 +718,15 @@ HRESULT __stdcall NetServer::Prototype( BSTR name, VARIANT obj, IDispatch** s)
 		if(hr != S_OK )
 			return hr;
 
+		VARIANT v;
+		::VariantInit(&v);
+		unwrapNETObject(result,&v);
+		values.push_back(v);
+		/*
 		if ( result.vt == VT_DISPATCH )
 		{
 			VARIANT v;
 			unwrapNETObject(result,&v);
-			if ( v.vt == VT_UNKNOWN || v.vt == VT_DISPATCH)
-				v.punkVal->AddRef();
 			values.push_back(v);
 		}
 		else
@@ -854,6 +737,7 @@ HRESULT __stdcall NetServer::Prototype( BSTR name, VARIANT obj, IDispatch** s)
 			v.pdispVal = NULL;
 			values.push_back(v);
 		}
+		*/
 
 		hr = dispEx->GetNextDispID(fdexEnumAll, dispid, &dispid);
 	}
@@ -907,8 +791,6 @@ HRESULT __stdcall NetServer::String( BSTR txt, IDispatch** s)
 	if(hr!=S_OK)
 		return hr;
 
-//	return type.queryInterface(s);
-
 	EXCEPINFO ex;
 	::ZeroMemory(&ex,sizeof(EXCEPINFO));
 	UINT e = 0;
@@ -959,17 +841,7 @@ HRESULT __stdcall NetServer::Type( BSTR typeName, INetType** clazz)
 	if ( hr != S_OK )
 		return S_FALSE;
 
-	mol::punk<INetType> c;
-	hr = c.createObject(CLSID_DotNetType);
-	if ( hr != S_OK )
-		return S_FALSE;
-
-	hr = c->Initialize(v);
-	if ( hr != S_OK )
-		return S_FALSE;
-
-	::CoAllowSetForegroundWindow( (IUnknown*)c, 0);
-	return c.queryInterface( clazz );	
+	return wrapNETType(v,clazz);
 }
 
 HRESULT __stdcall NetServer::Connect(IDispatch* ptr, BSTR eventName, VARIANT target)
