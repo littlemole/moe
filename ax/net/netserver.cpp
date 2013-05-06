@@ -93,7 +93,6 @@ HRESULT unwrapNETObject( VARIANT in, VARIANT* out)
 			return hr;
 		}
 	}
-	//out->vt = in.vt;
 	return ::VariantCopy( out, &(in) );
 }
 
@@ -114,12 +113,7 @@ public:
 	{
 		for ( UINT i = 0; i < cArgs; i++)
 		{
-			if ( rgvarg[i].vt == VT_BSTR )
-				::SysFreeString(rgvarg[i].bstrVal);
-			if ( rgvarg[i].vt == VT_UNKNOWN )
-				rgvarg[i].punkVal->Release();
-			if ( rgvarg[i].vt == VT_DISPATCH )
-				rgvarg[i].punkVal->Release();
+			::VariantClear(&rgvarg[i]);
 		}
 		delete[] rgvarg;
 	}
@@ -139,10 +133,21 @@ public:
 
 	mol::SafeArray<VT_VARIANT> value;
 
-	SafeArrayFromDispParams(DISPPARAMS* params, UINT nArgs = -1)
+	SafeArrayFromDispParams(DISPPARAMS* params)
 	{
-		nArgs = nArgs == -1 ? params->cArgs - params->cNamedArgs : nArgs;
+		UINT nArgs = params->cArgs - params->cNamedArgs;
+		init(params,nArgs);
+	}
 
+	SafeArrayFromDispParams(DISPPARAMS* params, UINT nArgs)
+	{
+		init(params,nArgs);
+	}
+
+private:
+
+	void init(DISPPARAMS* params, UINT nArgs)
+	{
 		if ( nArgs > 0 )
 		{
 			mol::ArrayBound ab(nArgs);
@@ -434,16 +439,6 @@ HRESULT  __stdcall NetObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid
 			return hr;
 		return wrapNETObject(vRet,pReturn);		
 	}
-		
-	if ( pDisp->cArgs == 0 )
-	{
-		hr = net->InvokeMethod( vempty, v_, mol::bstr(name),0, DISPATCH_METHOD, &vRet );
-		if ( hr == S_OK )
-		{
-			return wrapNETObject(vRet,pReturn);
-		}
-		return hr;
-	}
 
 	SafeArrayFromDispParams sa(pDisp);
 	hr = net->InvokeMethod( vempty, v_, mol::bstr(name),sa.value, DISPATCH_METHOD, &vRet );
@@ -722,22 +717,6 @@ HRESULT __stdcall NetServer::Prototype( BSTR name, VARIANT obj, IDispatch** s)
 		::VariantInit(&v);
 		unwrapNETObject(result,&v);
 		values.push_back(v);
-		/*
-		if ( result.vt == VT_DISPATCH )
-		{
-			VARIANT v;
-			unwrapNETObject(result,&v);
-			values.push_back(v);
-		}
-		else
-		{
-			VARIANT v;
-			::VariantInit(&v);
-			v.vt = VT_NULL;
-			v.pdispVal = NULL;
-			values.push_back(v);
-		}
-		*/
 
 		hr = dispEx->GetNextDispID(fdexEnumAll, dispid, &dispid);
 	}

@@ -1,5 +1,7 @@
 var net = new NET();
 
+Dialogs.MsgBox("hi","hu",1);
+
 var Drawing = net.Import("System.Drawing");
 var Forms   = net.Import("System.Windows.Forms");
 var System  = net.Runtime.System;
