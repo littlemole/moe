@@ -23,6 +23,13 @@ HRESULT ActiveScript::init(const mol::string& engine)
 		return hr;
 	}
 
+	mol::punk<IActiveScriptProperty> asprop(activeScript);
+	if (asprop)
+	{
+		mol::variant v(SCRIPTLANGUAGEVERSION_5_8);
+		hr = asprop->SetProperty(SCRIPTPROP_INVOKEVERSIONING,NULL,&v);
+	}
+
 	//hr = activeScript.queryInterface(IID_IActiveScriptParse,(void**)&asp_);
 	hr = activeScript.queryInterface(&asp_);
 	if ( hr != S_OK )

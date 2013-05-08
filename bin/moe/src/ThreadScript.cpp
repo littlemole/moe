@@ -178,6 +178,14 @@ void ScriptDebugger::init(const mol::string& engine)
 	if ( hr != S_OK || !activeScript_ )
 		return;
 
+
+	mol::punk<IActiveScriptProperty> asprop(activeScript_);
+	if (asprop)
+	{
+		mol::variant v(SCRIPTLANGUAGEVERSION_5_8);
+		hr = asprop->SetProperty(SCRIPTPROP_INVOKEVERSIONING,NULL,&v);
+	}
+
 	hr = activeScript_.queryInterface(IID_IActiveScriptParse,(void**)&asp_);
 	if ( hr != S_OK )
 		return;

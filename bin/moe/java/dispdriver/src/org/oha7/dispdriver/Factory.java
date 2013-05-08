@@ -5,7 +5,7 @@ import org.oha7.dispdriver.impl.ComProxy;
 
 /**
  * access registered COM Objects from java
- * @author mike
+ * @author make
  *
  */
 public class Factory {

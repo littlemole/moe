@@ -1421,10 +1421,9 @@ bool ScintillAx::loadAdminCOM(const mol::string& p, const mol::string& ext,  lon
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SCINTILLA_SYNTAX guess ( const mol::string& p, const mol::string& ext )
+SCINTILLA_SYNTAX guess ( const mol::string& p, const mol::string& extension )
 {
-	//mol::ci_string cis(ext.c_str());
-	mol::string p2(mol::toString(p));
+	mol::string ext(extension.empty() ? extension : extension.substr(1));
 
 	if ( mol::icmp( ext, _T("htm")) == 0 ||
 		 mol::icmp( ext, _T("html")) == 0 ||
@@ -1434,8 +1433,8 @@ SCINTILLA_SYNTAX guess ( const mol::string& p, const mol::string& ext )
 		 mol::icmp( ext, _T("mhtml")) == 0 ||
 		 mol::icmp( ext, _T("mc")) == 0 ||
 		 mol::icmp( ext, _T("htm")) == 0 ||
-		 mol::icmp( mol::Path::filename(p2), _T("autohandler")) == 0 ||
-		 mol::icmp( mol::Path::filename(p2), _T("dhandler"))  == 0
+		 mol::icmp( mol::Path::filename(p), _T("autohandler")) == 0 ||
+		 mol::icmp( mol::Path::filename(p), _T("dhandler"))  == 0
 		)
 	{
 		return SCINTILLA_SYNTAX_HTML;
