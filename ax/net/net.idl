@@ -56,7 +56,7 @@ library NET
 		HRESULT UnWrap([out,retval]VARIANT* ptr);
 
 		[id(3), helpstring("connect event")] 
-		HRESULT On([in]BSTR e, [in]IDispatch* handler);
+		HRESULT On([in]BSTR e, [in]VARIANT handler);
 
 	}
 	
@@ -90,6 +90,9 @@ library NET
 
 		[id(6), helpstring(".NET prototype")] 
 		HRESULT Prototype( [in] BSTR name, [in] VARIANT obj, [out,retval] IDispatch** s);
+
+		[id(7), helpstring("Copy properties from src to dest")] 
+		HRESULT copyTo( [in] IDispatch* src, [in] IDispatch* dest);
 
 	}
 

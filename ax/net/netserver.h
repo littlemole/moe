@@ -72,6 +72,7 @@ public:
 
 	typedef mol::com_obj<EventHandler> Instance;
 	static HRESULT CreateInstance(IDispatch* handler, IDispatch** d);
+	static HRESULT CreateInstance(IDispatch* disp, mol::bstr handler, IDispatch** d);
 
 	void virtual dispose() {};
 
@@ -94,6 +95,7 @@ public:
 private:
 
 	mol::punk<IDispatch> handler_;
+	mol::bstr callback_;
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -122,7 +124,7 @@ public:
     HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i);
 	HRESULT virtual __stdcall Initialize(VARIANT ptr);
 	HRESULT virtual __stdcall UnWrap(VARIANT* ptr);
-	HRESULT virtual __stdcall On(BSTR e, IDispatch* handler);
+	HRESULT virtual __stdcall On(BSTR e, VARIANT handler);
 
 private:
 
@@ -204,7 +206,9 @@ public:
 	HRESULT virtual __stdcall get_Runtime(IDispatch** result);
 	HRESULT virtual __stdcall String( BSTR txt, IDispatch** s);
 	HRESULT virtual __stdcall Prototype( BSTR name, VARIANT obj, IDispatch** s);
+	HRESULT virtual __stdcall copyTo( IDispatch* src, IDispatch* dest);
 	HRESULT virtual __stdcall Exit();
+
 
 	HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo );
     HRESULT virtual __stdcall GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo );

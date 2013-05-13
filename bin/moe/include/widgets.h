@@ -391,10 +391,47 @@ public:
  	virtual HRESULT __stdcall  Sleep(long ms);
  	virtual HRESULT __stdcall  Wait(long ms,VARIANT_BOOL* vb);
  	virtual HRESULT __stdcall  Quit();
+	virtual HRESULT __stdcall  get_Dispatch(IDispatch** disp);
+	virtual HRESULT __stdcall  Callback(BSTR name,IDispatch** disp);
+
 private:
  	mol::punk<Host> host_;
 	HANDLE stop_;
 };
 
+class EventWrapper : 
+	public IDispatch, 
+	public mol::interfaces<
+				EventWrapper,
+				mol::implements<IDispatch>>
+{
+public:
+
+	typedef mol::com_obj<EventWrapper> Instance;
+	static HRESULT CreateInstance(IDispatch* disp, BSTR handler, IDispatch** d);
+
+	void virtual dispose() {};
+
+	HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo ) 
+    { 
+        *pctinfo = 0;
+        return S_OK; 
+    }
+
+    HRESULT virtual __stdcall GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo ) 
+    { 
+		*ppTInfo = 0;
+        return E_NOTIMPL; 
+    }
+
+    HRESULT virtual __stdcall GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId );
+
+    HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i);
+
+private:
+
+	IDispatch* handler_;
+	mol::bstr callback_;
+};
 
 #endif

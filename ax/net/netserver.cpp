@@ -93,6 +93,12 @@ HRESULT unwrapNETObject( VARIANT in, VARIANT* out)
 			return hr;
 		}
 	}
+	if ( in.vt == (VT_BYREF|VT_VARIANT) )
+	{
+		mol::variant tmp;
+		::VariantCopy(&tmp,in.pvarVal);
+		return unwrapNETObject(tmp,out);
+	}
 	return ::VariantCopy( out, &(in) );
 }
 
@@ -256,7 +262,7 @@ HRESULT __stdcall Namespace::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 
 		if(pReturn)
 		{
-			if  (w == DISPATCH_PROPERTYGET)
+			if ( (w & DISPATCH_PROPERTYGET) && ( pDisp->cArgs == 0 ) )
 			{
 				if ( hr == S_OK && pReturn )
 				{				
@@ -297,6 +303,16 @@ HRESULT EventHandler::CreateInstance(IDispatch* handler, IDispatch** d)
 	return i->QueryInterface(IID_IDispatch,(void**)d);
 }
 
+
+HRESULT EventHandler::CreateInstance(IDispatch* disp, mol::bstr handler, IDispatch** d)
+{
+	Instance* i = new Instance;
+	i->handler_ = disp;
+	i->callback_ = handler;
+	return i->QueryInterface(IID_IDispatch,(void**)d);
+}
+
+
 HRESULT __stdcall EventHandler::GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId )
 {
 	OLECHAR* name = rgszNames[0];
@@ -318,7 +334,19 @@ HRESULT __stdcall EventHandler::Invoke(DISPID dispIdMember, REFIID riid, LCID lc
 		params.set(i,v.pdispVal);
 	}
 
-	hr = handler_->Invoke(0,IID_NULL,LOCALE_SYSTEM_DEFAULT,w,&params,pReturn,ex,e);
+	if ( handler_ && callback_.bstr_ == 0)
+	{
+		hr = handler_->Invoke(0,IID_NULL,LOCALE_SYSTEM_DEFAULT,w,&params,pReturn,ex,e);
+	}
+	else if ( handler_ )
+	{
+		DISPID id = 0;
+		hr = handler_->GetIDsOfNames(IID_NULL,&callback_.bstr_,1,LOCALE_SYSTEM_DEFAULT,&id);
+		if ( hr == S_OK )
+		{
+			hr = handler_->Invoke(id,IID_NULL,LOCALE_SYSTEM_DEFAULT,DISPATCH_METHOD,&params,pReturn,ex,e);
+		}
+	}
 	return hr;
 }
 
@@ -368,15 +396,20 @@ HRESULT __stdcall NetObject::UnWrap(VARIANT* ptr)
 
 }
 
-HRESULT __stdcall NetObject::On(BSTR eventName, IDispatch* handler)
+HRESULT __stdcall NetObject::On(BSTR eventName, VARIANT handler)
 {
+	if ( handler.vt != VT_DISPATCH )
+	{
+		return E_INVALIDARG;
+	}
+
 	mol::punk<_Net> net;
 	HRESULT hr = net.createObject(CLSID_Net);
 	if ( hr != S_OK )
 		return S_FALSE;
-
+	
 	mol::punk<IDispatch> disp;
-	EventHandler::CreateInstance(handler,&disp);
+	EventHandler::CreateInstance(handler.pdispVal,&disp);
 
 	mol::variant vptr(disp);	
 	hr = net->Event( v_,  eventName, vptr);
@@ -404,7 +437,7 @@ HRESULT  __stdcall NetObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid
 		{
 			return this->On(
 							pDisp->rgvarg[1].bstrVal,
-							pDisp->rgvarg[0].pdispVal
+							pDisp->rgvarg[0]
 						);
 		}
 	}
@@ -426,12 +459,14 @@ HRESULT  __stdcall NetObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid
 			{
 				return wrapNETObject(vRet,pReturn);
 			}
-			return hr;
+			if ( hr != S_OK )
+				return DISP_E_MEMBERNOTFOUND;
+			//	return hr;
 		}
-		return S_FALSE;
+		//return S_FALSE;
 	}
 
-	if (  w & DISPATCH_PROPERTYPUT ) 
+	if (  (w & DISPATCH_PROPERTYPUT) || (w & DISPATCH_PROPERTYPUTREF) ) 
 	{	
 		SafeArrayFromDispParams sa(pDisp,pDisp->cArgs);
 		hr = net->InvokeMethod( vempty, v_, mol::bstr(name),sa.value, DISPATCH_PROPERTYPUT, &vRet );
@@ -546,13 +581,20 @@ HRESULT __stdcall NetType::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, W
 
 	std::string name = mol::singleton<DotNetClassNames>().getName(dispIdMember); //idsOfNames_[dispIdMember];
 
+	if ( name == "prototype" )
+	{
+		mol::vEmpty vEmpty;
+		if(pReturn)
+			::VariantCopy(pReturn,&vEmpty);
+		return S_OK;
+	}
 	if (  w & DISPATCH_PROPERTYGET ) 
 	{	
 		if ( pDisp->cArgs == 0 )
 		{
 			hr = net->InvokeMethod( v_, vnull, mol::bstr(name),0, DISPATCH_PROPERTYGET, &vRet );
 			if ( hr != S_OK )
-				return hr;
+				return DISP_E_MEMBERNOTFOUND;
 
 			return wrapNETObject(vRet,pReturn);
 		}
@@ -761,6 +803,33 @@ HRESULT __stdcall NetServer::Prototype( BSTR name, VARIANT obj, IDispatch** s)
 		return type.queryInterface(s);
 	}
 	return S_OK;
+}
+
+HRESULT __stdcall NetServer::copyTo( IDispatch* src, IDispatch* dest)
+{
+	mol::punk<INetType> type;
+	HRESULT hr = Type( mol::bstr("org.oha7.dotnet.Prototype"),&type);
+	if(hr!=S_OK)
+		return hr;
+
+	EXCEPINFO ex;
+	::ZeroMemory(&ex,sizeof(EXCEPINFO));
+	UINT e = 0;
+
+	DispParamsBuf params(2);
+	params.set(0,dest);
+	params.set(1,src);
+
+	OLECHAR* name = L"copyTo";
+	DISPID dispid;
+	hr = type->GetIDsOfNames(IID_NULL,&name,1,LOCALE_SYSTEM_DEFAULT,&dispid);
+	if ( hr != S_OK)
+		return hr;
+
+	mol::variant result;
+	hr = type->Invoke(dispid,IID_NULL,LOCALE_SYSTEM_DEFAULT,0,&params,&result,&ex,&e);
+	return hr;
+
 }
 
 HRESULT __stdcall NetServer::String( BSTR txt, IDispatch** s)

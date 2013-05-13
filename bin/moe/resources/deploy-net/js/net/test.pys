@@ -1,0 +1,24 @@
+net = NET()
+
+Drawing = net.Import("System.Drawing")
+Forms = net.Import("System.Windows.Forms")
+
+def button1Click(s,e):
+	Forms.MessageBox.Show("a .NET string!","Title")
+	Forms.Application.Exit()
+
+
+button1 = Forms.Button()
+button1.Location = Drawing.Point(46, 51)
+button1.Size = Drawing.Size(180, 104)
+button1.Text = "click me"
+button1.On( "Click", Callback("button1Click") )
+
+form = Forms.Form()
+form.Text = "My little Form"
+form.Controls.Add(button1)
+form.Show()
+form.Activate()
+
+Forms.Application.Run(form)
+

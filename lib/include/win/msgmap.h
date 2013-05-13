@@ -8,6 +8,7 @@
 #include <commdlg.h>
 #include "util/Signature.h"
 #include "thread/fun.h"
+#include <Windowsx.h>
 
 namespace mol {
 
@@ -58,7 +59,7 @@ public:
 
 		POINT lPoint()
 		{
-			return mol::Point( LOWORD(lParam_),HIWORD(lParam_));
+			return mol::Point( GET_X_LPARAM(lParam_),GET_Y_LPARAM(lParam_));
 		}
 
 private:

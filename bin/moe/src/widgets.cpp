@@ -147,7 +147,7 @@ HRESULT Script::init(const mol::string& engine)
 	 
 	mol::punk<IMoeImport> import;
  	import = MoeImport::CreateInstance(this);
- 	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+ 	addNamedObject((IMoeImport*)(import),_T("Importer"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 
 	mol::punk<IDispatch> java;
 	MoeScriptObject::CreateInstance(&java, L"JRE.Java");
@@ -1938,3 +1938,59 @@ HRESULT __stdcall  MoeImport::Quit()
 	return S_OK;
 }
 
+HRESULT __stdcall  MoeImport::get_Dispatch(IDispatch** disp)
+{
+	return host_->getScript(L"",disp);
+}
+
+HRESULT __stdcall  MoeImport::Callback(BSTR name,IDispatch** disp)
+{
+	mol::punk<IDispatch> d;
+	HRESULT hr = host_->getScript(L"",&d);
+	if ( hr == S_OK && d )
+	{
+		return EventWrapper::CreateInstance(d,mol::bstr(name),disp);
+	}
+	return S_OK;
+}
+
+
+
+
+HRESULT EventWrapper::CreateInstance(IDispatch* disp, BSTR handler, IDispatch** d)
+{
+	Instance* i = new Instance;
+	i->handler_ = disp;
+	i->callback_ = handler;
+	return i->QueryInterface(IID_IDispatch,(void**)d);
+}
+
+
+HRESULT __stdcall EventWrapper::GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId )
+{
+	OLECHAR* name = rgszNames[0];
+	rgDispId[0] = 0;
+	return S_OK;
+}
+
+HRESULT __stdcall EventWrapper::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * e)
+{
+	if( dispIdMember != 0 )
+		return E_UNEXPECTED;
+
+	HRESULT hr = S_OK;
+	if ( handler_ && callback_.bstr_ == 0)
+	{
+		hr = handler_->Invoke(0,IID_NULL,LOCALE_SYSTEM_DEFAULT,w,pDisp,pReturn,ex,e);
+	}
+	else if ( handler_ )
+	{
+		DISPID id = 0;
+		hr = handler_->GetIDsOfNames(IID_NULL,&callback_.bstr_,1,LOCALE_SYSTEM_DEFAULT,&id);
+		if ( hr == S_OK )
+		{
+			hr = handler_->Invoke(id,IID_NULL,LOCALE_SYSTEM_DEFAULT,DISPATCH_METHOD,pDisp,pReturn,ex,e);
+		}
+	}
+	return hr;
+}

@@ -131,6 +131,22 @@ HRESULT __stdcall  MoeDebugImport::Quit()
 	return S_OK;
 }
 
+HRESULT __stdcall  MoeDebugImport::get_Dispatch(IDispatch** disp)
+{
+	return host_->GetScriptDispatch(L"",disp);
+}
+
+HRESULT __stdcall  MoeDebugImport::Callback(BSTR name,IDispatch** disp)
+{
+	mol::punk<IDispatch> d;
+	HRESULT hr = host_->GetScriptDispatch(L"",&d);
+	if ( hr == S_OK && d )
+	{
+		return EventWrapper::CreateInstance(d,mol::bstr(name),disp);
+	}
+	return S_OK;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -205,7 +221,7 @@ void ScriptDebugger::init(const mol::string& engine)
 
 
  	import = MoeDebugImport::CreateInstance(activeScript_);
- 	addNamedObject((IMoeImport*)(import),_T("MoeImport"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+ 	addNamedObject((IMoeImport*)(import),_T("Importer"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 
 	mol::punk<IDispatch> java;
 	MoeScriptObject::CreateInstance(&java, L"JRE.Java");

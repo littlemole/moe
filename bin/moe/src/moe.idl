@@ -1143,6 +1143,12 @@ library Moe
  		[id(4), helpstring("quit the msgloop")] 
  		HRESULT Quit();
 
+ 		[id(5), propget, helpstring("Script Dispatch")] 
+ 		HRESULT Dispatch([out,retval] IDispatch** disp);
+
+		[id(6), helpstring("Event callback")] 
+ 		HRESULT Callback([in] BSTR name, [out,retval] IDispatch** disp);
+
 	}
 	////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////

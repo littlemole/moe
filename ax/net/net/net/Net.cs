@@ -262,7 +262,8 @@ namespace org.oha7.dotnet
             {
                 return mi.Invoke(that, args);
             }
-            return null;
+            throw new MissingMemberException();
+//            return null;
         }
 
         // get property helper
