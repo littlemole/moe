@@ -147,6 +147,8 @@ library Settings
 		[id(18), helpstring("Clone settings")] 
 		HRESULT Clone([out,retval] ISetting** sClone);
 
+		[id(19), helpstring("Find")] 
+		HRESULT Find([in] BSTR key, [out,retval] ISetting** s);
     };
 
 

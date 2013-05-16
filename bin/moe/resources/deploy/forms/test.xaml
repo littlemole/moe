@@ -1,12 +1,79 @@
 <Page
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Page1">
-    <Grid>
-		<TextBox Name="textbox" HorizontalAlignment="Left" Height="34" Margin="117,222,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="279"/>
+    Title="Page1" Name="page">
 
-        <Button Margin="0,0,9,38" Name="button1" Height="82" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="132">Buttonn</Button>
+	<Page.Background>
+		<LinearGradientBrush>
+			<GradientStop Color="#FFF" Offset="0.0" />
+			<GradientStop Color="#777" Offset="1.0" />
+		</LinearGradientBrush>
+	</Page.Background>
 
-    <ComboBox Name="combo" HorizontalAlignment="Left" Height="94" Margin="54,67,0,0" VerticalAlignment="Top" Width="358"/>
+    <Grid Name="grid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Width="Auto">
+
+        <Grid.Resources>
+            <Style x:Key="buttonStyle" TargetType="Button">
+                <Setter Property="Button.IsEnabled" Value="True"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=tree , Path=SelectedItem.key}" Value="{x:Null}">
+                        <Setter  Property="Button.IsEnabled" Value="False"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="textboxStyle" TargetType="TextBox">
+                <Setter Property="TextBox.IsEnabled" Value="True"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=tree , Path=SelectedItem.key}" Value="{x:Null}">
+                        <Setter  Property="TextBox.IsEnabled" Value="False"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TreeView Grid.Row="0" Grid.Column="0" ItemsSource="{Binding Path=children}" Name="tree" Margin="10,10,10,10" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Path=children}">
+                    <TextBlock Text="{Binding Path=key}" Margin="2" ></TextBlock>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Content="Edit Key" Height="32" Width="68" HorizontalAlignment="Left" Margin="10,10,0,0"/>
+            <TextBox Grid.Row="1" Name="textKey" Text="{Binding SelectedValue.key, ElementName=tree, Mode=TwoWay}" Style="{StaticResource textboxStyle}" FontFamily="Courier New" Width="Auto" Margin="10,0,10,10" TextWrapping="NoWrap" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
+            <Label Grid.Row="2" Content="Edit Value" Height="32" Width="68" HorizontalAlignment="Left" Margin="10,10,0,0"/>
+            <TextBox Grid.Row="3" Name="textValue" Text="{Binding SelectedValue.value, ElementName=tree, Mode=TwoWay}" Style="{StaticResource textboxStyle}" FontFamily="Courier New" Width="Auto" Height="Auto" Margin="10,0,10,10" TextWrapping="NoWrap" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
+        </Grid>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal"  Height="42" Margin="00" VerticalAlignment="bottom" HorizontalAlignment="Left">
+            <Button Name="buttonNew" Style="{StaticResource buttonStyle}" Content="New"  Margin="10,10,10,10" Height="21" VerticalAlignment="Top" Width="84" />
+            <Button Name="buttonDelete" Style="{StaticResource buttonStyle}"  Content="Delete" Margin="10,10,10,10" Height="21" VerticalAlignment="Top" Width="84"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal"  Height="42" Margin="00" VerticalAlignment="bottom" HorizontalAlignment="Right">
+            <Button Name="buttonClose" Content="Close"  Margin="10,10,10,10" Height="21" VerticalAlignment="Top" Width="84" />
+        </StackPanel>
+
     </Grid>
 </Page> 

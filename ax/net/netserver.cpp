@@ -765,7 +765,7 @@ HRESULT __stdcall NetServer::Prototype( BSTR name, VARIANT obj, IDispatch** s)
 
 	if ( names.size() != values.size() )
 	{
-		throw new std::string("eeek");
+		return E_INVALIDARG;
 	}
 
 	mol::punk<_Net> net;
@@ -788,6 +788,28 @@ HRESULT __stdcall NetServer::Prototype( BSTR name, VARIANT obj, IDispatch** s)
 	mol::SFAccess<VARIANT> sfbValues(saValues);
 	for ( long i = 0; i < sfbValues.size(); i++)
 	{
+		if ( values[i].vt == VT_DISPATCH )
+		{
+			mol::punk<IDispatchEx> dispEx(values[i].pdispVal);
+			if( dispEx)
+			{
+				mol::punk<INetType> nt(dispEx);
+				if(!nt)
+				{
+					mol::punk<IDispatch> ret;
+					std::wostringstream woss;
+					woss << name << "$" << names[i];
+					hr = Prototype(mol::bstr(woss.str()),values[i],&ret);
+					if ( hr == S_OK && ret )
+					{
+						::VariantClear(&values[i]);
+						mol::variant v(ret);
+						hr = unwrapNETObject(v,&values[i]);
+					}
+				}
+			}
+		}
+
 		sfbValues[i] = values[i];
 	}
 

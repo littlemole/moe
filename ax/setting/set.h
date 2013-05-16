@@ -100,6 +100,7 @@ public:
 		HRESULT virtual __stdcall Save				( BSTR filename);
 		HRESULT virtual __stdcall RemoveItem		( VARIANT index);
 		HRESULT virtual __stdcall Clone				( ISetting** clone);
+		HRESULT virtual __stdcall Find				( BSTR key, ISetting** result);
 
         HRESULT virtual __stdcall GetPages			( CAUUID *pPages );
 

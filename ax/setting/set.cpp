@@ -567,6 +567,84 @@ HRESULT __stdcall Setting::Clone( ISetting** clone)
 	return S_OK;
 }
 
+HRESULT __stdcall FindWalker( ISetting* root, BSTR key, ISetting** result)
+{
+	*result = 0;
+
+	mol::string path = mol::toString(key);
+
+	if ( !path.empty() && path[0] == _T('/') ) {
+		path = path.substr(1);
+	}
+
+	if ( path.empty() )
+	{
+		return root->QueryInterface(IID_ISetting,(void**)result);
+	}
+
+	std::vector<mol::string> v = mol::split(path,_T("/"));
+	mol::punk<ISetting> item(root);
+
+	size_t i = 0;
+
+
+	for ( i; i < v.size(); i++)
+	{
+		bool found = false;
+
+		long j = 0;
+		long cnt = 0;
+		HRESULT hr = item->Count(&cnt);
+		if ( hr!=S_OK)
+			return hr;
+
+		mol::punk<ISetting> set;
+		for ( j; j < cnt; j++)
+		{
+			set.release();
+
+			hr = item->Item(mol::variant(j),&set);
+			if ( hr != S_OK )
+				return hr;
+
+			mol::bstr key;
+			hr = set->get_Key(&key);
+			if ( hr != S_OK )
+				return hr;
+
+			if ( v[i] == mol::toString(key) ) 
+			{
+				found = true;
+				break;
+			}
+		}
+		if ( found == false )
+		{
+			return S_OK;
+		}
+
+		item = set;
+	}
+
+	if ( i == v.size() )
+	{
+		return item.queryInterface(result);
+	}
+
+	return S_OK;
+}
+
+
+HRESULT __stdcall Setting::Find( BSTR key, ISetting** result)
+{
+	if (!key )
+		return E_INVALIDARG;
+	if(!result)
+		return E_INVALIDARG;
+
+	return FindWalker( (ISetting*)this, key, result );
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 

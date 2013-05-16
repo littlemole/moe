@@ -12,13 +12,15 @@ namespace org.oha7.dotnet
         private static MethodInfo DelegateCombine = typeof(Delegate).GetMethod("Combine", new Type[] { typeof(Delegate), typeof(Delegate) });
         private static MethodInfo DelegateRemove = typeof(Delegate).GetMethod("Remove", new Type[] { typeof(Delegate), typeof(Delegate) });
         private static MethodInfo InvokeDelegate = typeof(PropertyChangedEventHandler).GetMethod("Invoke");
-        private static ConstructorInfo CreateEventArgs = typeof(PropertyChangingEventArgs).GetConstructor(new Type[] { typeof(String) });
+        private static ConstructorInfo CreateEventArgs = typeof(PropertyChangedEventArgs).GetConstructor(new Type[] { typeof(String) });
         private static MethodAttributes getSetAttr = MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig;
         private static Dictionary<string, Type> typeCache = new Dictionary<string, Type>();
 
+        private static AssemblyBuilder asmBuilder = null;
+
         private static ModuleBuilder getBuilder(String typeName)
         {
-            AssemblyBuilder asmBuilder = null;
+            asmBuilder = null;
             ModuleBuilder modBuilder = null;
 
             AssemblyName assemblyName = new AssemblyName();
@@ -27,12 +29,12 @@ namespace org.oha7.dotnet
             AppDomain thisDomain = Thread.GetDomain();
             asmBuilder = thisDomain.DefineDynamicAssembly(
                             assemblyName,
-                            AssemblyBuilderAccess.Run
+                            AssemblyBuilderAccess.RunAndSave,"D:\\"
                            );
 
             modBuilder = asmBuilder.DefineDynamicModule(
                          asmBuilder.GetName().Name,
-                         false
+                         "test.dll"
                       );
 
             return modBuilder;
@@ -168,7 +170,7 @@ namespace org.oha7.dotnet
 
         private static void make_property(TypeBuilder typeBuilder, String name, Type type, MethodBuilder raisePropertyChanged)
         {
-            FieldBuilder fieldBuilder = make_field(typeBuilder, "_" + name, type);
+            FieldBuilder fieldBuilder = make_field(typeBuilder, /*"_" + */ name, type);
 
             PropertyBuilder propertyBuilder = typeBuilder.DefineProperty(
                 name,
@@ -194,7 +196,7 @@ namespace org.oha7.dotnet
 
             typeBuilder.AddInterfaceImplementation(typeof(INotifyPropertyChanged));
 
-            FieldBuilder eventBack = make_field(typeBuilder, "PropertyChanged", typeof(PropertyChangingEventHandler));
+            FieldBuilder eventBack = make_field(typeBuilder, "PropertyChanged", typeof(PropertyChangedEventHandler));
 
             MethodBuilder addPropertyChanged = make_AddPropertyChanged(typeBuilder, eventBack);
             MethodBuilder removePropertyChanged = make_RemovePropertyChanged(typeBuilder, eventBack);
@@ -214,6 +216,7 @@ namespace org.oha7.dotnet
             Type type = typeBuilder.CreateType();
             typeCache.Add(typeName, type);
             Net.cacheType(typeName, type);
+            asmBuilder.Save("test.dll");
             return type;
         }
 
