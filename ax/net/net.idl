@@ -35,7 +35,7 @@ library NET
 	interface INetType : IDispatch
     {
 		[id(1), helpstring("initialize .NET type")] 
-		HRESULT Initialize([in]VARIANT ptr);
+		HRESULT Initialize([in]VARIANT ptr, [in] IUnknown* clr);
 
 		[id(2), helpstring("ret raw .NET type ptr")] 
 		HRESULT UnWrap([out,retval]VARIANT* ptr);
@@ -50,7 +50,7 @@ library NET
 	interface INetObject : IDispatch
     {
 		[id(1), helpstring("initialize .NET obj")] 
-		HRESULT Initialize([in]VARIANT ptr);
+		HRESULT Initialize([in]VARIANT ptr, [in] IUnknown* clr);
 
 		[id(2), helpstring("ret raw .NET obj ptr")] 
 		HRESULT UnWrap([out,retval]VARIANT* ptr);
@@ -93,6 +93,9 @@ library NET
 
 		[id(7), helpstring("Copy properties from src to dest")] 
 		HRESULT copyTo( [in] IDispatch* src, [in] IDispatch* dest);
+
+		[id(8), propget, helpstring("get managed .NET _Net Interface")] 
+		HRESULT CLR(  [out,retval] IUnknown** unk);
 
 	}
 

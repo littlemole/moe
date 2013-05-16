@@ -32,7 +32,10 @@ public:
 	typedef mol::com_obj<Namespace> Instance;
 	static HRESULT CreateInstance(IDispatch** d, const std::string& path, INet* inet);
 
-	void virtual dispose() {};
+	void virtual dispose() 
+	{
+		clr_.release();
+	};
 
 	HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo ) 
     { 
@@ -57,6 +60,7 @@ private:
 	std::map<DWORD,std::string> id2name_;
 	std::map<std::string,DWORD> name2id_;
 	mol::punk<INet> inet_;
+	mol::punk<_Net> clr_;
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -71,10 +75,13 @@ class EventHandler :
 public:
 
 	typedef mol::com_obj<EventHandler> Instance;
-	static HRESULT CreateInstance(IDispatch* handler, IDispatch** d);
-	static HRESULT CreateInstance(IDispatch* disp, mol::bstr handler, IDispatch** d);
+	static HRESULT CreateInstance(IUnknown* clr, IDispatch* handler, IDispatch** d);
+	static HRESULT CreateInstance(IUnknown* clr, IDispatch* disp, mol::bstr handler, IDispatch** d);
 
-	void virtual dispose() {};
+	void virtual dispose() 
+	{
+		clr_.release();
+	};
 
 	HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo ) 
     { 
@@ -96,6 +103,7 @@ private:
 
 	mol::punk<IDispatch> handler_;
 	mol::bstr callback_;
+	mol::punk<_Net> clr_;
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -122,14 +130,14 @@ public:
     HRESULT virtual __stdcall GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo );
     HRESULT virtual __stdcall GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId );
     HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i);
-	HRESULT virtual __stdcall Initialize(VARIANT ptr);
+	HRESULT virtual __stdcall Initialize(VARIANT ptr,IUnknown* clr);
 	HRESULT virtual __stdcall UnWrap(VARIANT* ptr);
 	HRESULT virtual __stdcall On(BSTR e, VARIANT handler);
 
 private:
 
-	mol::variant v_;
-
+	mol::variant	v_;
+	mol::punk<_Net> clr_;
 };
 
 
@@ -161,7 +169,7 @@ public:
     HRESULT virtual __stdcall GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo );
     HRESULT virtual __stdcall GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId );
     HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i) ;
-	HRESULT virtual __stdcall Initialize(VARIANT ptr);
+	HRESULT virtual __stdcall Initialize(VARIANT ptr,IUnknown* clr);
 	HRESULT virtual __stdcall UnWrap(VARIANT* ptr);
 
 
@@ -175,7 +183,8 @@ public:
     HRESULT virtual __stdcall GetNameSpaceParent( IUnknown **ppunk);
 
 private:
-	mol::variant v_;
+	mol::variant	v_;
+	mol::punk<_Net> clr_;
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -207,7 +216,9 @@ public:
 	HRESULT virtual __stdcall String( BSTR txt, IDispatch** s);
 	HRESULT virtual __stdcall Prototype( BSTR name, VARIANT obj, IDispatch** s);
 	HRESULT virtual __stdcall copyTo( IDispatch* src, IDispatch* dest);
+	HRESULT virtual __stdcall get_CLR( IUnknown** unk);
 	HRESULT virtual __stdcall Exit();
+
 
 
 	HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo );
@@ -215,7 +226,9 @@ public:
     HRESULT virtual __stdcall GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId );
     HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i);
 
+private:
 
+	mol::punk<_Net> clr_;
 };
 
 
@@ -251,8 +264,6 @@ class NetApp :
 public:
 
 	NetApp();
-
-	mol::punk<_Net> dotnet;
 };
 
 ////////////////////////////////////////////////////////////////////////
