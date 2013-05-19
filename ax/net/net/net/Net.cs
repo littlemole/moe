@@ -247,6 +247,48 @@ namespace org.oha7.dotnet
             return result;
         }
 
+        private T[] getClassDefs<T>(Object[] array)
+        {
+            if (array == null)
+                return null;
+
+            T[] a = new T[array.Length];
+            for (int i = 0; i < array.Length; i++)
+            {
+                a[i] = (T)RefWrapper.unwrap(array[i]);
+            }
+            return a;
+        }
+
+        [DispId(8)]
+        public Object DefineClass(String typeName, Object baseType, Object[] interfaces, Object[] attrs, Object[] properties, Object[] handles)
+        {
+            Type[] iTypes = getClassDefs<Type>(interfaces);
+            AttributeDef[] atts = getClassDefs<AttributeDef>(attrs);
+            PropertyDef[] props = getClassDefs<PropertyDef>(properties);
+            MethodHandle[] meths = getClassDefs<MethodHandle>(handles);
+
+            Object result = ClassFactory.makeClass(
+                typeName,
+                (Type)RefWrapper.unwrap(baseType),
+                iTypes,
+                atts,props,meths
+                );
+
+            return RefWrapper.wrap(result);
+        }
+        
+        /*
+        private object[] unwrap(object[] args)
+        {
+            object[] result = new object[args.Length];
+            for (int i = 0; i < args.Length; i++)
+            {
+                result[i] = RefWrapper.unwrap(args[i]);
+            }
+            return result;
+        }
+        */
         public static void cacheType(String name, Type type)
         {
             netTypeCache.Add(name, type);
@@ -260,7 +302,15 @@ namespace org.oha7.dotnet
             MethodInfo mi = resolveMethod(type, methodName, args);
             if (mi != null)
             {
-                return mi.Invoke(that, args);
+                if (!mi.ReturnType.Equals(typeof(void)))
+                {
+                    return mi.Invoke(that, args);
+                }
+                else
+                {
+                    mi.Invoke(that, args);
+                    return null;
+                }
             }
             throw new MissingMemberException();
 //            return null;
@@ -338,7 +388,14 @@ namespace org.oha7.dotnet
 
             for (int i = 0; i < len; i++)
             {
-                argTypes[i] = args[i].GetType();
+                if (args[i] == null)
+                {
+                    argTypes[i] = null;
+                }
+                else
+                {
+                    argTypes[i] = args[i].GetType();
+                }
             }
             return argTypes;
         }
@@ -361,11 +418,16 @@ namespace org.oha7.dotnet
         private MethodInfo resolveMethod(Type type, String methodName, Object[] args)
         {
             Type[] types = getArgTypes(args);
-            MethodInfo mi = type.GetMethod(methodName, types);
-            if (mi != null)
+            try
             {
-                return mi;
+                MethodInfo mi = type.GetMethod(methodName, types);
+                if (mi != null)
+                {
+                    return mi;
+                }
             }
+            catch(Exception)
+            {}
 
             MethodInfo[] methods = type.GetMethods();
             for (int i = 0; i < methods.Length; i++)
@@ -379,8 +441,11 @@ namespace org.oha7.dotnet
                         bool match = true;
                         for (int j = 0; j < types.Length; j++)
                         {
+                            if (types[j] == null)
+                                continue;
+
                             if (!pi[j].ParameterType.IsAssignableFrom(types[j]))
-                            {
+                            {                                
                                 match = false;
                                 break;
                             }

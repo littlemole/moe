@@ -19,7 +19,7 @@ button1.Text = "button1"
 'dot.Connect GetRef("button1_Click"),"Click",button1
 button1.On "Click", GetRef("button1_Click")
 
-x = Dialogs.MsgBox("hu","ha",0)
+'x = Dialogs.MsgBox("hu","ha",0)
 
 set f = Forms.Form()
 f.SuspendLayout()

@@ -97,7 +97,15 @@ library NET
 		[id(8), propget, helpstring("get managed .NET _Net Interface")] 
 		HRESULT CLR(  [out,retval] IUnknown** unk);
 
+		[id(9), helpstring("declare .NET class")] 
+		HRESULT Declare( 
+				[in] BSTR name,   
+				[in] IDispatch* def,
+				[in] IDispatch* handler,
+				[out,retval] IDispatch** unk);
 	}
+	
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Co Classes ( class factories )

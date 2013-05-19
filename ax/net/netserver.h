@@ -16,8 +16,8 @@
 
 ////////////////////////////////////////////////////////////////////////
 
-//#import "net.tlb"  no_namespace, raw_interfaces_only, named_guids 
-#include "net.tlh"
+#import "net.tlb"  no_namespace, raw_interfaces_only, named_guids 
+//#include "net.tlh"
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -218,8 +218,7 @@ public:
 	HRESULT virtual __stdcall copyTo( IDispatch* src, IDispatch* dest);
 	HRESULT virtual __stdcall get_CLR( IUnknown** unk);
 	HRESULT virtual __stdcall Exit();
-
-
+	HRESULT virtual __stdcall Declare( BSTR name, IDispatch* def, IDispatch* handler, IDispatch** unk);
 
 	HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo );
     HRESULT virtual __stdcall GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo );
@@ -227,6 +226,11 @@ public:
     HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i);
 
 private:
+
+	HRESULT getAttributes(IDispatch* disp, mol::SafeArray<VT_VARIANT>& result);
+	HRESULT getProperties(IDispatch* def, mol::SafeArray<VT_VARIANT>& result);
+	HRESULT getMethods(IDispatch* def, mol::SafeArray<VT_VARIANT>& result);
+	HRESULT getInterfaces(IDispatch* def, mol::SafeArray<VT_VARIANT>& result);
 
 	mol::punk<_Net> clr_;
 };

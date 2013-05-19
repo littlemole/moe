@@ -44,7 +44,7 @@ var Setting = function(item,root) {
 	entry.children = new ObservableCollection();
 	entry.parent = root;
 	if ( root ) {
-		entry.path = root.path + "/" + item.Key;
+		entry.path = root.path + "/" + item.Key ;
 	}
 	else {
 		entry.path = "";
@@ -76,11 +76,15 @@ var Model = (function() {
 	// persist ViewModel and update moe COM Config
 	var persist = function(conf,root)
 	{
-		if ( !conf.KeyReadOnly && root.key && root.key != "") {
+		if ( !conf.KeyReadOnly ) { 
 			conf.Key = root.key;
 		}
-		if ( !conf.ValueReadOnly && root.value && root.value != "")
+
+		if ( !conf.ValueReadOnly ) {
 			conf.Value = root.value;
+		}
+
+		root.path = root.parent.path + "/" + root.key;
 
 		for ( var i = 0; i < conf.Count(); i++ ) {			
 			persist( conf(i), root.children.Item(i) );
@@ -148,7 +152,7 @@ var Controller = {
 
 	onNewSetting : function(s,e) {
 
-		var item = Config.Settings.Find(View.tree.SelectedItem.path);
+		var item = Config.Settings.Find(View.tree.SelectedItem.path );
 		if ( !item.ChildrenAllowed )
 			return;
 
@@ -185,7 +189,7 @@ var Controller = {
 
 	onLostFocus : function(s,e) {
 
-		var item = Config.Settings.Find(View.tree.SelectedItem.path);
+		var item = Config.Settings.Find(View.tree.SelectedItem.path );
 		if ( item.KeyReadOnly || item.ValueReadOnly )
 			return;		
 

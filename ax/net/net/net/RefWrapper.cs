@@ -49,5 +49,19 @@ namespace org.oha7.dotnet
             }
             return o;
         }
+
+        // unwrap arguments
+        public static Object[] unwrap(Object[] args)
+        {
+            if (args == null || args.Length == 0)
+                return args;
+
+            int len = args.Length;
+            for (int i = 0; i < len; i++)
+            {
+                args[i] = RefWrapper.unwrap(args[i]);
+            }
+            return args;
+        }
     }
 }

@@ -29,12 +29,11 @@ namespace org.oha7.dotnet
             AppDomain thisDomain = Thread.GetDomain();
             asmBuilder = thisDomain.DefineDynamicAssembly(
                             assemblyName,
-                            AssemblyBuilderAccess.RunAndSave,"D:\\"
+                            AssemblyBuilderAccess.Run //AndSave,"D:\\"
                            );
 
             modBuilder = asmBuilder.DefineDynamicModule(
-                         asmBuilder.GetName().Name,
-                         "test.dll"
+                         asmBuilder.GetName().Name //, "test.dll"
                       );
 
             return modBuilder;
@@ -216,7 +215,8 @@ namespace org.oha7.dotnet
             Type type = typeBuilder.CreateType();
             typeCache.Add(typeName, type);
             Net.cacheType(typeName, type);
-            asmBuilder.Save("test.dll");
+
+            //asmBuilder.Save("test.dll");
             return type;
         }
 
