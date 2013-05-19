@@ -278,17 +278,7 @@ namespace org.oha7.dotnet
             return RefWrapper.wrap(result);
         }
         
-        /*
-        private object[] unwrap(object[] args)
-        {
-            object[] result = new object[args.Length];
-            for (int i = 0; i < args.Length; i++)
-            {
-                result[i] = RefWrapper.unwrap(args[i]);
-            }
-            return result;
-        }
-        */
+
         public static void cacheType(String name, Type type)
         {
             netTypeCache.Add(name, type);

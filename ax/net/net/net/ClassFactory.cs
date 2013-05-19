@@ -202,8 +202,9 @@ namespace org.oha7.dotnet
             propertyBuilder.SetSetMethod(setter);
 
             if(property.attributes!=null)
-            foreach (AttributeDef attr in property.attributes)
+            foreach (Object a in property.attributes)
             {
+                AttributeDef attr = (AttributeDef)RefWrapper.unwrap(a);
                 Type[] ctorParams = typesFromArgs(attr.args);
                 ConstructorInfo classCtorInfo = attr.type.GetConstructor(ctorParams);
 
@@ -361,9 +362,9 @@ namespace org.oha7.dotnet
                 methodIL.Emit(OpCodes.Ldloc_0);
                 methodIL.Emit(OpCodes.Ldc_I4, j + 1);
                 methodIL.Emit(OpCodes.Ldarg, j + 1);
-                if (methodHandle.args[j].GetType().IsValueType)
+                if ( ((Type)(methodHandle.args[j])).IsValueType)
                 {
-                    methodIL.Emit(OpCodes.Box, methodHandle.args[j].GetType());
+                    methodIL.Emit(OpCodes.Box, (Type)(methodHandle.args[j]));
                 }
                 methodIL.Emit(OpCodes.Stelem_Ref);
             }

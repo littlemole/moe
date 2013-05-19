@@ -115,6 +115,14 @@ public:
 		rgdispidNamedArgs = 0;		
 	}
 
+	DispParamsBuf(UINT nArgs,UINT nNamedArgs)
+	{
+		cArgs = nArgs;
+		cNamedArgs = nNamedArgs;
+		rgvarg = new VARIANTARG[cArgs];
+		rgdispidNamedArgs = new DISPID[cNamedArgs];		
+	}
+
 	~DispParamsBuf()
 	{
 		for ( UINT i = 0; i < cArgs; i++)
@@ -122,6 +130,7 @@ public:
 			::VariantClear(&rgvarg[i]);
 		}
 		delete[] rgvarg;
+		delete[] rgdispidNamedArgs;
 	}
 
 	void set(UINT index, IDispatch* disp)
@@ -137,6 +146,11 @@ public:
 		rgvarg[index].pdispVal = 0;
 		
 		::VariantCopy(&rgvarg[index],&in);
+	}
+
+	void setName(UINT index, DISPID dispid)
+	{
+		rgdispidNamedArgs[index] = dispid;
 	}
 };
 
@@ -374,6 +388,47 @@ HRESULT __stdcall EventHandler::Invoke(DISPID dispIdMember, REFIID riid, LCID lc
 
 
 ////////////////////////////////////////////////////////////////////////
+
+HRESULT ThatCall::CreateInstance(IDispatch* target, IDispatch** out)
+{
+	Instance* i = new Instance;
+	i->target_ = target;
+
+	return i->QueryInterface(IID_IDispatch,(void**)out);
+}
+
+HRESULT __stdcall ThatCall::GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId )
+{
+	return target_->GetIDsOfNames(riid,rgszNames,cNames,lcid,rgDispId);
+}
+
+HRESULT __stdcall ThatCall::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * e)
+{
+	if ( pDisp->cNamedArgs == 0 )
+	{
+		DISPPARAMS params;
+
+		params.cArgs = pDisp->cArgs;
+		params.cNamedArgs = 1;
+		params.rgdispidNamedArgs = new DISPID[1];
+		params.rgdispidNamedArgs[0] = DISPID_THIS;
+		params.rgvarg = new VARIANTARG[params.cArgs];
+		for ( unsigned long i = 0; i < params.cArgs-1; i++)
+		{
+			params.rgvarg[i+1] = pDisp->rgvarg[i];
+		}
+		params.rgvarg[0] = pDisp->rgvarg[params.cArgs-1];
+
+		HRESULT hr = target_->Invoke( dispIdMember, riid, lcid, w, &params, pReturn, ex, e);
+		delete[] params.rgdispidNamedArgs;
+		delete[] params.rgvarg;
+
+		return hr;
+	}
+
+	HRESULT hr = target_->Invoke( dispIdMember, riid, lcid, w, pDisp, pReturn, ex, e);
+	return hr;
+}
 
 
 
@@ -1110,32 +1165,24 @@ HRESULT NetServer::getProperties(IDispatch* def, mol::SafeArray<VT_VARIANT>& res
 			if(hr != S_OK)
 				continue;
 
-			mol::SafeArray<VT_VARIANT> sfAttrDefArgs;
-			mol::variant args;
-			hr = getMemberAsVariant( L"args", jsa[i].pdispVal, &args );
-			if(hr == S_OK && args.vt != VT_EMPTY)
-			{
+			mol::SafeArray<VT_VARIANT> sfAttrDef;
+			hr = getAttributes( jsa[i].pdispVal, sfAttrDef );
 
-				jsArray jsargs = enumJSArray(args.pdispVal);
-				mol::ArrayBound abAttrDefArgs((long)jsargs.size());
-				//mol::SafeArray<VT_VARIANT> sfAttrDefArgs(abAttrDefArgs);
-				sfAttrDefArgs.Create(abAttrDefArgs);
-				{
-					mol::SFAccess<VARIANT> sfaAttrDefArgs(sfAttrDefArgs);
-					for ( long j = 0; j < jsargs.size(); j++)
-					{
-						sfaAttrDefArgs[j] = jsargs[j];
-					}
-				}
-			}
 			mol::ArrayBound abParamsDefArgs(3);
 			mol::SafeArray<VT_VARIANT> sfParams(abParamsDefArgs);
 			{
 				mol::SFAccess<VARIANT> sfaParams(sfParams);
 				sfaParams[0] = n;
 				sfaParams[1] = t;
-				sfaParams[2].vt = VT_ARRAY|VT_VARIANT;
-				::SafeArrayCopy( sfAttrDefArgs, &(sfaParams[2].parray) );
+				if ( (SAFEARRAY*)sfAttrDef == 0 )
+				{
+					sfaParams[2].vt = VT_EMPTY;
+				}
+				else
+				{
+					sfaParams[2].vt = VT_ARRAY|VT_VARIANT;
+					::SafeArrayCopy( sfAttrDef, &(sfaParams[2].parray) );
+				}
 			}
 
 			mol::vEmpty vempty;
@@ -1318,7 +1365,10 @@ HRESULT __stdcall NetServer::Declare( BSTR name, IDispatch* def, IDispatch* hand
 		{
 			mol::SFAccess<VARIANT> sfa(args);
 			sfa[0].vt = VT_DISPATCH;
-			hr = handler->QueryInterface(IID_IDispatch, (void**) &sfa[0].pdispVal );
+
+			mol::punk<IDispatch> thatCall;
+			hr = ThatCall::CreateInstance(handler,&thatCall);
+			hr = thatCall->QueryInterface(IID_IDispatch, (void**) &sfa[0].pdispVal );
 		}
 
 		hr = clr_->InvokeMethod( result, vempty, mol::bstr("ScriptHandler"),args,DISPATCH_PROPERTYPUT,&tmp);
