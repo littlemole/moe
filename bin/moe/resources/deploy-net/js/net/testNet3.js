@@ -7,7 +7,8 @@ var form = net.Runtime.System.Windows.Forms.Form.New();
 
 var button1_Click = function (e,s) {
 	
-   net.Runtime.System.Windows.Forms.Application.Exit();
+   //net.Runtime.System.Windows.Forms.Application.Exit();
+   form.Close();
 };
 
 var button1 = net.Runtime.System.Windows.Forms.Button.New();

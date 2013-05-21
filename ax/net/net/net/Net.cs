@@ -138,7 +138,9 @@ namespace org.oha7.dotnet
             }
 
             if (flags == DISPATCH_PROPERTYGET)
+            {
                 return RefWrapper.wrap(invokeGetProperty(t, that, methodName, unwrapArgs(args)));
+            }
 
             if (flags == DISPATCH_PROPERTYPUT)
                 return RefWrapper.wrap(invokePutProperty(t, that, methodName, unwrapArgs(args)));
@@ -227,7 +229,7 @@ namespace org.oha7.dotnet
                 }
             }
 
-            object result = org.oha7.dotnet.Prototype.createType(name, names, types);
+            object result = org.oha7.dotnet.ClassFactory.createType(name, names, types);
             
             return RefWrapper.wrap(result);
         }
@@ -277,7 +279,14 @@ namespace org.oha7.dotnet
 
             return RefWrapper.wrap(result);
         }
-        
+
+        [DispId(9)]
+        public Object GetSubType(Object t, String name)
+        {
+            Type type = (Type)RefWrapper.unwrap(t);
+            Type result = type.GetNestedType(name);
+            return result;
+        }
 
         public static void cacheType(String name, Type type)
         {
@@ -435,10 +444,14 @@ namespace org.oha7.dotnet
                                 continue;
 
                             if (!pi[j].ParameterType.IsAssignableFrom(types[j]))
-                            {                                
-                                match = false;
-                                break;
+                            {
+                                if (!pi[j].ParameterType.IsInstanceOfType(types[j]))
+                                {
+                                    match = false;
+                                    break;
+                                }
                             }
+
                         }
                         if(match)
                             return m;
@@ -468,7 +481,7 @@ namespace org.oha7.dotnet
                     bool match = true;
                     for (int j = 0; j < types.Length; j++)
                     {
-                        if (!pi[j].ParameterType.IsAssignableFrom(types[j]))
+                        if (!pi[j].ParameterType.IsInstanceOfType(types[j]))
                         {
                             match = false;
                             break;

@@ -3,7 +3,7 @@
 // d:\molib\ax\net\x64\uni_debug\net.tlh
 //
 // C++ source equivalent of type library net.tlb
-// compiler-generated file created 05/17/13 at 21:32:29 - DO NOT EDIT!
+// compiler-generated file created 05/20/13 at 18:10:46 - DO NOT EDIT!
 
 //
 // Cross-referenced type libraries:
@@ -37,7 +37,7 @@ struct __declspec(uuid("b0b2e2ce-dfea-33a3-b732-e032fd1d4478"))
 /* dual interface */ _ClassFactory;
 struct __declspec(uuid("08393ab3-433e-3230-a01c-c9c12d77054d"))
 /* dual interface */ _MethodHandle;
-struct __declspec(uuid("cabaad7b-efc6-3f21-b32f-01d446b32d71"))
+struct __declspec(uuid("29f6b6dc-e9dc-307a-a231-bc824ac27025"))
 /* dual interface */ _Net;
 struct __declspec(uuid("d43a385a-7508-375f-90e0-2e2a811bab6b"))
 /* dual interface */ _Property;
@@ -125,7 +125,7 @@ struct __declspec(uuid("08393ab3-433e-3230-a01c-c9c12d77054d"))
 _MethodHandle : IDispatch
 {};
 
-struct __declspec(uuid("cabaad7b-efc6-3f21-b32f-01d446b32d71"))
+struct __declspec(uuid("29f6b6dc-e9dc-307a-a231-bc824ac27025"))
 _Net : IDispatch
 {
     //
@@ -187,6 +187,10 @@ _Net : IDispatch
         /*[in]*/ SAFEARRAY * properties,
         /*[in]*/ SAFEARRAY * handles,
         /*[out,retval]*/ VARIANT * pRetVal ) = 0;
+      virtual HRESULT __stdcall GetSubType (
+        /*[in]*/ VARIANT t,
+        /*[in]*/ BSTR name,
+        /*[out,retval]*/ VARIANT * pRetVal ) = 0;
 };
 
 struct __declspec(uuid("d43a385a-7508-375f-90e0-2e2a811bab6b"))
@@ -240,7 +244,7 @@ extern "C" const GUID __declspec(selectany) IID__ClassFactory =
 extern "C" const GUID __declspec(selectany) IID__MethodHandle =
     {0x08393ab3,0x433e,0x3230,{0xa0,0x1c,0xc9,0xc1,0x2d,0x77,0x05,0x4d}};
 extern "C" const GUID __declspec(selectany) IID__Net =
-    {0xcabaad7b,0xefc6,0x3f21,{0xb3,0x2f,0x01,0xd4,0x46,0xb3,0x2d,0x71}};
+    {0x29f6b6dc,0xe9dc,0x307a,{0xa2,0x31,0xbc,0x82,0x4a,0xc2,0x70,0x25}};
 extern "C" const GUID __declspec(selectany) IID__Property =
     {0xd43a385a,0x7508,0x375f,{0x90,0xe0,0x2e,0x2a,0x81,0x1b,0xab,0x6b}};
 extern "C" const GUID __declspec(selectany) IID__PropertyDef =

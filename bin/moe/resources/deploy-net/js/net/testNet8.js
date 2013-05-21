@@ -21,7 +21,7 @@ button.Text = "click me";
 button.On("Click",function() {
 	form.Hide();
 	Dialogs.MsgBox( bs.Current, "selected:",0);
-	net.Exit();
+	form.Close();
 });
 
 combo.FormattingEnabled = true;

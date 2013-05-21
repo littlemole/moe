@@ -5,11 +5,6 @@ var net = new NET();
 var Drawing = net.Import("System.Drawing");
 var Forms   = net.Import("System.Windows.Forms");
 
-// event handler
-var callback = function() {	
-	moe.Dialogs.MsgBox("button1_Click","event",0);
-    Forms.Application.Exit();
-};
 
 // construct GUI
 
@@ -17,6 +12,12 @@ var callback = function() {
 
 var form   = new Forms.Form();
 form.SuspendLayout();
+
+// event handler
+var callback = function() {	
+	moe.Dialogs.MsgBox("button1_Click","event",0);
+    form.Close();
+};
 
 form.ClientSize =  new Drawing.Size(284, 262);
 form.Text = "Form1";

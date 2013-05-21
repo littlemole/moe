@@ -13,4 +13,3 @@ var doc = moe.Documents.New();
 doc.Object.Properties.Encoding = moe.UTF8; // UTF-8
 doc.Object.Text = result;
 
-net.Exit();

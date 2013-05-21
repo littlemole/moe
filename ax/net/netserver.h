@@ -16,8 +16,8 @@
 
 ////////////////////////////////////////////////////////////////////////
 
-#import "net.tlb"  no_namespace, raw_interfaces_only, named_guids 
-//#include "net.tlh"
+//#import "net.tlb"  no_namespace, raw_interfaces_only, named_guids 
+#include "net.tlh"
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -35,6 +35,9 @@ public:
 	void virtual dispose() 
 	{
 		clr_.release();
+		inet_.release();
+		id2name_.clear();
+		name2id_.clear();
 	};
 
 	HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo ) 
@@ -79,6 +82,7 @@ public:
 
 	void virtual dispose() 
 	{
+		target_.release();
 	};
 
 	HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo ) 
@@ -116,6 +120,7 @@ public:
 
 	void virtual dispose() 
 	{
+		handler_.release();
 		clr_.release();
 	};
 

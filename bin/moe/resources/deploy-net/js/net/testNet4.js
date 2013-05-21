@@ -10,16 +10,19 @@ var Button        = Forms.Button;
 var Point         = Drawing.Point;
 var Size		  = Drawing.Size;
 
+// main form
+var form   = new Form();
+
+
 // event handler
 var callback = function() {	
 	moe.Dialogs.MsgBox("button1_Click","event",0);
-    Application.Exit();
+    form.Close();
 };
 
 // construct GUI
 
-// main form
-var form   = new Form();
+
 form.SuspendLayout();
 
 form.ClientSize = new Size(284, 262);

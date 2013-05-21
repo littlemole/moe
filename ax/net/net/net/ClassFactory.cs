@@ -51,7 +51,7 @@ namespace org.oha7.dotnet
                            );
 
             modBuilder = asmBuilder.DefineDynamicModule(
-                         asmBuilder.GetName().Name, "test.dll"
+                         asmBuilder.GetName().Name, typeName + ".dll"
                       );
 
             return modBuilder;
@@ -64,7 +64,7 @@ namespace org.oha7.dotnet
             TypeBuilder typeBuilder = modBuilder.DefineType(typeName,
                 TypeAttributes.Public |
                 TypeAttributes.Class |
-                TypeAttributes.AutoClass |
+                //TypeAttributes.AutoClass |
                 TypeAttributes.AnsiClass |
                 TypeAttributes.BeforeFieldInit |
                 TypeAttributes.AutoLayout,
@@ -205,15 +205,100 @@ namespace org.oha7.dotnet
             foreach (Object a in property.attributes)
             {
                 AttributeDef attr = (AttributeDef)RefWrapper.unwrap(a);
-                Type[] ctorParams = typesFromArgs(attr.args);
-                ConstructorInfo classCtorInfo = attr.type.GetConstructor(ctorParams);
-
+                ConstructorInfo classCtorInfo = resolveConstructor(attr.type, attr.args);
                 CustomAttributeBuilder myCABuilder = new CustomAttributeBuilder(
                                     classCtorInfo,
                                     attr.args);
                 propertyBuilder.SetCustomAttribute(myCABuilder);
             }
         }
+
+        // resolve method
+        private static ConstructorInfo resolveConstructor(Type type, Object[] args)
+        {
+            Type[] types = typesFromArgs(args);
+            try
+            {
+                ConstructorInfo ci = type.GetConstructor(types);
+                if (ci != null)
+                {
+                    return ci;
+                }
+            }
+            catch (Exception)
+            { }
+
+            ConstructorInfo[] constructors = type.GetConstructors();
+            for (int i = 0; i < constructors.Length; i++)
+            {
+                ConstructorInfo c = constructors[i];
+                ParameterInfo[] pi = c.GetParameters();
+                if (pi.Length == types.Length)
+                {
+                    bool match = true;
+                    for (int j = 0; j < types.Length; j++)
+                    {
+                        if (types[j] == null)
+                            continue;
+
+                        if (!pi[j].ParameterType.IsInstanceOfType(types[j]))
+                        {
+                            match = false;
+                            break;
+                        }
+                    }
+                    if (match)
+                        return c;
+                }
+            }
+            return null;
+        }
+
+        // resolve method
+        private static MethodInfo resolveMethod(Type type, String methodName, Object[] args)
+        {
+            Type[] types = typesFromArgs(args);
+            try
+            {
+                MethodInfo mi = type.GetMethod(methodName, types);
+                if (mi != null)
+                {
+                    return mi;
+                }
+            }
+            catch (Exception)
+            { }
+
+            MethodInfo[] methods = type.GetMethods();
+            for (int i = 0; i < methods.Length; i++)
+            {
+                MethodInfo m = methods[i];
+                if (m.Name.Equals(methodName) || m.Name.Equals("get_" + methodName))
+                {
+                    ParameterInfo[] pi = m.GetParameters();
+                    if (pi.Length == types.Length)
+                    {
+                        bool match = true;
+                        for (int j = 0; j < types.Length; j++)
+                        {
+                            if (types[j] == null)
+                                continue;
+
+                            if (!pi[j].ParameterType.IsAssignableFrom(types[j]))
+                            {
+                                match = false;
+                                break;
+                            }
+                        }
+                        if (match)
+                            return m;
+                    }
+                }
+            }
+            return null;
+        }
+    
+
 
         private static Type[] typesFromArgs(Object[] args)
         {
@@ -237,6 +322,8 @@ namespace org.oha7.dotnet
 
         public static Type makeClass(String typeName, Type baseType, Type[] interfaces, AttributeDef[] attrs, PropertyDef[] properties, MethodHandle[] handles)
         {
+            baseType = baseType == null ? typeof(object) : baseType;
+
             if (typeCache.ContainsKey(typeName))
             {
                 return typeCache[typeName];
@@ -293,30 +380,71 @@ namespace org.oha7.dotnet
             if ( handles != null )
             for (int i = 0; i < handles.Length; i++)
             {
-                make_method(typeBuilder, handles[i], handlerField);
+                make_method(typeBuilder, baseType, handles[i], handlerField);
             }
 
             Type type = typeBuilder.CreateType();
             typeCache.Add(typeName, type);
             Net.cacheType(typeName, type);
 
-            asmBuilder.Save("test.dll");
+            asmBuilder.Save(typeName + ".dll");
             return type;
 
         }
 
-        private static MethodBuilder make_method(TypeBuilder typeBuilder, MethodHandle methodHandle, FieldBuilder handlerField)
+        private static MethodBuilder make_method(TypeBuilder typeBuilder, Type baseType, MethodHandle methodHandle, FieldBuilder handlerField)
         {
             Type[] types = typesFromArgs(methodHandle.args);
 
-            MethodBuilder methodBuilder = typeBuilder.DefineMethod(
-                                            methodHandle.name,
-                                            MethodAttributes.Public | MethodAttributes.Virtual,
-                                            methodHandle.type != null
-                                                    ? methodHandle.type
-                                                    : typeof(void),
-                                            types
-                                        );
+            MethodAttributes ma = MethodAttributes.ReuseSlot;
+
+            MethodInfo m = resolveMethod(baseType,methodHandle.name,methodHandle.args);// baseType.GetMethod(methodHandle.name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+            MethodBuilder methodBuilder;
+
+            Type[] signature;
+            if (m != null)
+            {
+                if ((m.Attributes & MethodAttributes.Private) == MethodAttributes.Private)
+                    ma |= MethodAttributes.Private;
+                if ((m.Attributes & MethodAttributes.HideBySig) == MethodAttributes.HideBySig)
+                    ma |= MethodAttributes.HideBySig;
+                if ((m.Attributes & MethodAttributes.Public) == MethodAttributes.Public)
+                    ma |= MethodAttributes.Public;
+                if ((m.Attributes & MethodAttributes.Static) == MethodAttributes.Static)
+                    ma |= MethodAttributes.Static;
+                if ((m.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
+                    ma |= MethodAttributes.Virtual;
+
+                ParameterInfo[] pi = m.GetParameters();
+                
+                signature = new Type[pi.Length];
+                for ( int i = 0; i < pi.Length;i++)
+                {
+                    signature[i] = pi[i].ParameterType;
+                }
+            }
+            else {
+                ma |= MethodAttributes.Public;
+                ma |= MethodAttributes.Virtual;
+                signature = types;
+            }
+
+            Type returnType = m != null ? m.ReturnType : methodHandle.type != null ? methodHandle.type : typeof(void);
+            
+            methodBuilder = typeBuilder.DefineMethod(
+                                           methodHandle.name,
+                                           ma,
+                                           m != null ? m.CallingConvention : CallingConventions.HasThis|CallingConventions.Standard,
+                                           returnType,
+                                           signature
+                                       );
+
+            if (m != null)
+            {
+                //if (!m.Name.Equals(methodHandle.name))
+                   // typeBuilder.DefineMethodOverride(methodBuilder, m);
+
+            }
 
             ILGenerator methodIL = methodBuilder.GetILGenerator();
 
@@ -325,12 +453,12 @@ namespace org.oha7.dotnet
 
             // Emit a declaration of a local variable if there is a return
             // type defined
-            if (methodHandle.type != null && !methodHandle.type.Equals(typeof(void)))
+            if (returnType != null && !returnType.Equals(typeof(void)))
             {
-                methodIL.DeclareLocal(methodHandle.type);
-                if (methodHandle.type.IsValueType && !methodHandle.type.IsPrimitive)
+                methodIL.DeclareLocal(returnType);
+                if (returnType.IsValueType && !returnType.IsPrimitive)
                 {
-                    methodIL.DeclareLocal(methodHandle.type);
+                    methodIL.DeclareLocal(returnType);
                 }
             }
 
@@ -345,7 +473,7 @@ namespace org.oha7.dotnet
             // load handler method name
             methodIL.Emit(OpCodes.Ldstr, methodHandle.name);
 
-            int nArgs = methodHandle.args.Length;
+            int nArgs = methodHandle.args == null ? 0 : methodHandle.args.Length;
             // prepare array of args. first load number of args
             methodIL.Emit(OpCodes.Ldc_I4, nArgs + 1);
             methodIL.Emit(OpCodes.Newarr, typeof(Object));
@@ -362,9 +490,9 @@ namespace org.oha7.dotnet
                 methodIL.Emit(OpCodes.Ldloc_0);
                 methodIL.Emit(OpCodes.Ldc_I4, j + 1);
                 methodIL.Emit(OpCodes.Ldarg, j + 1);
-                if ( ((Type)(methodHandle.args[j])).IsValueType)
+                if (((Type)(signature[j])).IsValueType)
                 {
-                    methodIL.Emit(OpCodes.Box, (Type)(methodHandle.args[j]));
+                    methodIL.Emit(OpCodes.Box, (Type)(signature[j]));
                 }
                 methodIL.Emit(OpCodes.Stelem_Ref);
             }
@@ -378,25 +506,29 @@ namespace org.oha7.dotnet
             {
                 // if the return type if a value type, then unbox the return value
                 // so that we don't get junk.
-                if (methodHandle.type.IsValueType)
+                if (returnType.IsValueType)
                 {
-                    methodIL.Emit(OpCodes.Unbox, methodHandle.type);
+                    methodIL.Emit(OpCodes.Unbox, returnType);
                     if (methodHandle.type.IsEnum)
                     {
                         methodIL.Emit(OpCodes.Ldind_I4);
                     }
-                    else if (!methodHandle.type.IsPrimitive)
+                    else if (!returnType.IsPrimitive)
                     {
-                        methodIL.Emit(OpCodes.Ldobj, methodHandle.type);
+                        methodIL.Emit(OpCodes.Ldobj, returnType);
                     }
                     else
                     {
-                        methodIL.Emit((OpCode)opCodeTypeMapper[methodHandle.type]);
+                        methodIL.Emit((OpCode)opCodeTypeMapper[returnType]);
                     }
+                }
+                else if (returnType.IsPrimitive)
+                {
+                    methodIL.Emit((OpCode)opCodeTypeMapper[returnType]);
                 }
                 else
                 {
-                    methodIL.Emit(OpCodes.Castclass, methodHandle.type);
+                    methodIL.Emit(OpCodes.Castclass, returnType);
                 }
 
                 // store the result
@@ -420,6 +552,12 @@ namespace org.oha7.dotnet
 
             // Return
             methodIL.Emit(OpCodes.Ret);
+
+            if (m != null)
+            {
+               // if ( !m.Name.Equals(methodHandle.name) )
+                //   typeBuilder.DefineMethodOverride(methodBuilder, m);
+            }
 
             return methodBuilder;
         }
