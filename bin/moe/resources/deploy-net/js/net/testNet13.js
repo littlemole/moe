@@ -1,24 +1,27 @@
+
 var net = new NET();
+
 var System = net.Import("System");
+
 var Drawing = net.Import("System.Drawing");
 var Forms = net.Import("System.Windows.Forms");
 var Design = net.Import("System.Drawing.Design");
 
 net.Import("System.Core");
 
+var defaultValues= net.Array( System.String, ["a","b","c"] );
 
-var ClassFactory = net.Runtime.org.oha7.dotnet.ClassFactory;
-
+/*
 var defaultValues = System.Array.CreateInstance( System.String, 3 );
 defaultValues.SetValue("a",0);
 defaultValues.SetValue("b",1);
 defaultValues.SetValue("c",2);
-
+*/
 
 var TypeConverter = System.ComponentModel.TypeConverter;
 var StandardValuesCollection = TypeConverter.StandardValuesCollection;
-
-Dialogs.MsgBox(StandardValuesCollection.ToString(),"ha",0);
+var ITypeDescriptorContext = System.ComponentModel.ITypeDescriptorContext;
+/*
 var ITypeDescriptorContext = System.ComponentModel.ITypeDescriptorContext;
 /*
 net.Import("MyConverter");
@@ -34,17 +37,18 @@ MyConverter.ScriptHandler =	{
 			return new StandardValuesCollection(defaultValues);
 		}
 	};
+
+var mc = new MyConverter();
+Dialogs.MsgBox("","ha",0);
 */
-//var mc = new MyConverter();
-//Dialogs.MsgBox(mc.ToString(),"ha",0);
+var cp = Forms.ControlPaint;
+
+
 
 var MyConverter = net.Declare(
 	"MyConverter", 
 	{
-		inherits : System.ComponentModel.StringConverter , 
-		implements : [  ], 
-		attributes : [],
-		properties : {},
+		inherits : System.ComponentModel.TypeConverter , 
 		methods : {
 			GetStandardValuesSupported : [ System.Boolean, [System.ComponentModel.ITypeDescriptorContext]],
 			GetStandardValues : [ StandardValuesCollection, [System.ComponentModel.ITypeDescriptorContext]],
@@ -52,12 +56,81 @@ var MyConverter = net.Declare(
 	},
 	{
 		GetStandardValuesSupported : function(c) {
-//Dialogs.MsgBox("hu","ha",0);
 			return true;
 		},
 		GetStandardValues : function(c) {
-Dialogs.MsgBox("hu","ha",0);
 			return new StandardValuesCollection(defaultValues);
+		}
+	}
+);
+
+var MySubType = net.Declare(
+	"MySubType", 
+	{
+		inherits : System.Object, 
+		attributes : [ ],//[System.ComponentModel.TypeConverterAttribute, System.ComponentModel.ExpandableObjectConverter] ], 
+		properties : {
+				avalue  : [ System.Int32//, [
+							//[System.ComponentModel.DescriptionAttribute,"some description"] 
+						 ]//]
+				},
+		methods : {}
+	},
+	{}
+);
+Dialogs.MsgBox("","ha",0);
+var CheckBoxEditorValue = net.Declare(
+	"CheckBoxEditorValue", 
+	{
+		//inherits : Design.UITypeEditor, 
+		attributes : [[System.Runtime.InteropServices.ComVisibleAttribute,true]],
+		properties : {
+					value : [System.Boolean, []]
+				},
+		methods : {
+			ToString : [ System.String, []]
+		}
+	},
+	{
+		ToString : function() {
+			//if (this.value) {
+			//	return "On";
+			//}
+			return "Off";
+		}
+	}
+);
+
+
+
+var CheckBoxEditor = net.Declare(
+	"CheckBoxEditor", 
+	{
+		inherits : Design.UITypeEditor, 
+		attributes : [[System.Runtime.InteropServices.ComVisibleAttribute,true]],
+		properties : {},
+		methods : {
+			GetPaintValueSupported : [ System.Boolean, [System.ComponentModel.ITypeDescriptorContext]],
+			PaintValue : [ void(0), [Design.PaintValueEventArgs]]
+		}
+	},
+	{
+		GetPaintValueSupported : function(c) {
+				return true;
+		},
+		PaintValue : function(a) {
+
+//				cp.DrawBorder3D(e.Graphics,e.Bounds,Forms.ButtonState.Checked);
+//x = a;
+
+				form.Text = a.Context.Instance.ToString();
+				Forms.ControlPaint.DrawCheckBox(
+						a.Graphics,
+						a.Bounds,
+						a.Context.Value == true ? Forms.ButtonState.Checked : Forms.ButtonState.Normal
+					);
+
+						//e.Context.Instance).Cb ? ButtonState.Checked : ButtonState.Normal);
 		}
 	}
 );
@@ -68,14 +141,17 @@ var MyType = net.Declare(
 	{
 		//inherits : System.Object, 
 		implements : [  ], 
-		attributes : [[System.ComponentModel.DefaultPropertyAttribute,"value2"]],
+		attributes : [[System.ComponentModel.DefaultPropertyAttribute,"value2"]], //[System.Runtime.InteropServices.ComVisibleAttribute,true]],
 		properties : {
-				value  : [ System.Int32, [
-							[System.ComponentModel.DescriptionAttribute,"some description"] 
+				value  : [ MySubType, [
+							[System.ComponentModel.DescriptionAttribute,"some description"],
+							[System.ComponentModel.TypeConverterAttribute, System.ComponentModel.ExpandableObjectConverter] 
 						 ]],
-				value2 : [ System.String, [
+				value2 : [ System.Boolean, [
 							[System.ComponentModel.CategoryAttribute,"cat1"],
-							[System.ComponentModel.DescriptionAttribute,"another description"] 
+							[System.ComponentModel.DescriptionAttribute,"another description"], 
+							//[System.ComponentModel.TypeConverterAttribute, System.ComponentModel.StringConverter] ,
+							[System.ComponentModel.EditorAttribute, CheckBoxEditor, Design.UITypeEditor]
 						 ]],
 				wahr : [ System.Boolean, [
 							[System.ComponentModel.CategoryAttribute,"cat2"],
@@ -90,6 +166,7 @@ var MyType = net.Declare(
 //							[System.ComponentModel.CategoryAttribute,"cat2"],
 //							[System.ComponentModel.DescriptionAttribute,"a font"],
 							//[System.ComponentModel.EditorAttribute, Design.FontNameEditor, Design.UITypeEditor]        
+							[System.ComponentModel.TypeConverterAttribute,MyConverter]
 							
 						 ]],			
 
@@ -118,7 +195,7 @@ var MyType = net.Declare(
 			return "3ILLROY WAS HERE! " + txt + ":"+ val + this.value;
 		},
 		test4 : function() {
-			this.value2 = "changed!";
+			this.value2.value = false
 		},
 		OnLoad : function(e) {
 			Dialogs.MsgBox("here","Ontest()",0);
@@ -152,6 +229,8 @@ form.ClientSize = Drawing.Size(384, 262);
 var propGrid = new Forms.PropertyGrid();
 propGrid.Dock = Forms.DockStyle.Fill;
 propGrid.SelectedObject = t;
+propGrid.ToolbarVisible = false;
+propGrid.HelpVisible = false;
 
 form.Controls.Add(propGrid);
 
@@ -176,10 +255,11 @@ t.On("PropertyChanged", function(s,e) {
 
 form.Show();
 form.Activate();
-
-t.value = 42;
+t.value = new MySubType();
+t.value.avalue = 42;
 Sleep(1000);
-t.value2 = "harhar";
+t.value2 = new CheckBoxEditorValue();
+t.value2.value = false;
 form.Text = t.test();
 Sleep(1000);
 
@@ -191,6 +271,7 @@ Sleep(1000);
 
 form.Text = t.test4();
 Sleep(1000);
+
 
 
 

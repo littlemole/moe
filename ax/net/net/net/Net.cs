@@ -26,14 +26,51 @@ namespace org.oha7.dotnet
         // caches
         private static Dictionary<String, Object> netTypeCache = new Dictionary<string, object>();
         private static Dictionary<String, Object> assemblyCache = new Dictionary<string, object>();
+        private static Dictionary<String, Object> dynamicAssemblyCache = new Dictionary<string, object>();
 
-         
+        private static AppDomain loaderDomain;
+
+        static Net() {
+
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.AssemblyResolve += new ResolveEventHandler(AssemblyResolveEventHandler);
+            currentDomain.TypeResolve += new ResolveEventHandler(TypeResolveEventHandler);
+
+           // loaderDomain = AppDomain.CreateDomain("Net.dynamicdomain");
+        }
+
+        private static Assembly TypeResolveEventHandler(object sender, ResolveEventArgs args)
+        {
+            if (netTypeCache.ContainsKey(args.Name))
+            {
+                return ((Type)netTypeCache[args.Name]).Assembly;
+            }
+
+            return null;
+        }
+        
+        private static Assembly AssemblyResolveEventHandler(object sender, ResolveEventArgs args)
+        {
+            if (assemblyCache.ContainsKey(args.Name))
+            {
+                return (Assembly)assemblyCache[args.Name];
+            }
+
+            if (dynamicAssemblyCache.ContainsKey(args.Name))
+            {
+                return (Assembly)dynamicAssemblyCache[args.Name];
+            }
+
+            return null;
+        }
+ 
         /**
          * Load a Net Type
          * 
          * t : refwrapper for a .NET Assembly 
          * name : name of type
          * */
+
 
         [DispId(1)]
         public Object LoadClass(Object t, String name)
@@ -291,6 +328,12 @@ namespace org.oha7.dotnet
         public static void cacheType(String name, Type type)
         {
             netTypeCache.Add(name, type);
+        }
+
+
+        public static void cacheAssembly(String name, Assembly a)
+        {
+            dynamicAssemblyCache.Add(name, a);
         }
 
         // invoke helper

@@ -49,13 +49,12 @@ HRESULT wrapNETObject(IUnknown* clr, VARIANT& in, VARIANT* out)
 	if ( !out )
 		return S_OK;
 
-	if ( in.vt != VT_DISPATCH && in.vt != VT_UNKNOWN )
+	if ( (in.vt != VT_DISPATCH) && (in.vt != VT_UNKNOWN) )
 	{
-		out->vt = VT_DISPATCH;
+		out->vt = VT_EMPTY;
 		return ::VariantCopy( out, &in );
 	}
-				
-	
+					
 	mol::punk<INetObject> no;
 	HRESULT hr = no.createObject(CLSID_DotNetObject,CLSCTX_ALL);
 	if ( hr != S_OK )
@@ -329,7 +328,6 @@ HRESULT EventHandler::CreateInstance(IUnknown* clr, IDispatch* handler, IDispatc
 {
 	Instance* i = new Instance;
 	i->handler_ = handler;
-
 	HRESULT hr = clr->QueryInterface(IID__Net,(void**)&(i->clr_) );
 	if ( hr != S_OK )
 		return hr;
@@ -395,10 +393,13 @@ HRESULT __stdcall EventHandler::Invoke(DISPID dispIdMember, REFIID riid, LCID lc
 
 ////////////////////////////////////////////////////////////////////////
 
-HRESULT ThatCall::CreateInstance(IDispatch* target, IDispatch** out)
+HRESULT ThatCall::CreateInstance(IUnknown* clr,IDispatch* target, IDispatch** out)
 {
 	Instance* i = new Instance;
 	i->target_ = target;
+	HRESULT hr = clr->QueryInterface(IID__Net,(void**)&(i->clr_) );
+	if ( hr != S_OK )
+		return hr;
 
 	return i->QueryInterface(IID_IDispatch,(void**)out);
 }
@@ -421,14 +422,22 @@ HRESULT __stdcall ThatCall::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, 
 		params.rgvarg = new VARIANTARG[params.cArgs];
 		for ( unsigned long i = 0; i < params.cArgs-1; i++)
 		{
-			params.rgvarg[i+1] = pDisp->rgvarg[i];
+			wrapNETObject( clr_, pDisp->rgvarg[i], &(params.rgvarg[i+1]) );
+			//params.rgvarg[i+1] = pDisp->rgvarg[i];
 		}
-		params.rgvarg[0] = pDisp->rgvarg[params.cArgs-1];
+		//params.rgvarg[0] = pDisp->rgvarg[params.cArgs-1];
+		wrapNETObject( clr_, pDisp->rgvarg[params.cArgs-1], &(params.rgvarg[0]) );
 
-		HRESULT hr = target_->Invoke( dispIdMember, riid, lcid, w, &params, pReturn, ex, e);
+		mol::variant v;
+		HRESULT hr = target_->Invoke( dispIdMember, riid, lcid, w, &params, &v, ex, e);
 		delete[] params.rgdispidNamedArgs;
 		delete[] params.rgvarg;
-
+		if (hr==S_OK)
+		{
+			//return wrapNETObject(clr_,v,pReturn);
+			return unwrapNETObject(v,pReturn);
+			::VariantCopy(pReturn,&v);
+		}
 		return hr;
 	}
 
@@ -1196,7 +1205,7 @@ HRESULT NetServer::getProperties(IDispatch* def, mol::SafeArray<VT_VARIANT>& res
 
 	mol::variant properties;
 	hr = getMemberAsVariant( L"properties", def, &properties);
-	if(hr!=S_OK)
+	if(hr!=S_OK || properties.vt == VT_EMPTY)
 		return hr;
 
 	mol::punk<IDispatchEx> dispEx(properties.pdispVal);
@@ -1292,7 +1301,7 @@ HRESULT NetServer::getMethods(IDispatch* def, mol::SafeArray<VT_VARIANT>& result
 
 	mol::variant methods;
 	hr = getMemberAsVariant( L"methods", def, &methods);
-	if(hr!=S_OK)
+	if(hr!=S_OK || methods.vt == VT_EMPTY)
 		return hr;
 
 	mol::punk<IDispatchEx> dispEx(methods.pdispVal);
@@ -1384,7 +1393,7 @@ HRESULT NetServer::getInterfaces(IDispatch* def, mol::SafeArray<VT_VARIANT>& res
 
 	mol::variant interfaces;
 	HRESULT hr = getMemberAsVariant( L"implements", def, &interfaces);
-	if(hr!=S_OK)
+	if(hr!=S_OK || interfaces.vt == VT_EMPTY)
 		return hr;
 
 	jsArray arrayInterfaces = enumJSArray(interfaces.pdispVal);
@@ -1434,7 +1443,9 @@ HRESULT __stdcall NetServer::Declare( BSTR name, IDispatch* def, IDispatch* hand
 	mol::variant attributes;
 	hr = getMemberAsVariant( L"attributes", def, &attributes);
 	mol::SafeArray<VT_VARIANT> sfAttrDef;
-	hr = getAttributes( attributes.pdispVal,  sfAttrDef);
+
+	if ( hr == S_OK && attributes.vt != VT_EMPTY )
+		hr = getAttributes( attributes.pdispVal,  sfAttrDef);
 //	mol::SafeArray<VT_VARIANT> sfAttrDef;
 //	hr = getAttributes( def, sfAttrDef );
 
@@ -1460,7 +1471,7 @@ HRESULT __stdcall NetServer::Declare( BSTR name, IDispatch* def, IDispatch* hand
 			sfa[0].vt = VT_DISPATCH;
 
 			mol::punk<IDispatch> thatCall;
-			hr = ThatCall::CreateInstance(handler,&thatCall);
+			hr = ThatCall::CreateInstance(clr_,handler,&thatCall);
 			hr = thatCall->QueryInterface(IID_IDispatch, (void**) &sfa[0].pdispVal );
 		}
 
@@ -1472,6 +1483,57 @@ HRESULT __stdcall NetServer::Declare( BSTR name, IDispatch* def, IDispatch* hand
 	}
 	return E_INVALIDARG;
 }
+
+HRESULT __stdcall NetServer::Array( IDispatch* arraytype, IDispatch* values, IDispatch** s)
+{
+	if(!arraytype || !values || !s )
+		return E_INVALIDARG;
+
+	mol::punk<INetType> type;
+	HRESULT hr = Type( mol::bstr("System.Array"),&type);
+	if(hr!=S_OK)
+		return hr;
+
+	mol::variant vtype;
+	hr = type->UnWrap(&vtype);
+
+	mol::variant tmp(arraytype);
+	VARIANT vat;
+	hr = unwrapNETObject(tmp,&vat);
+	if ( hr != S_OK )
+		return hr;
+
+	jsArray jsa = enumJSArray(values);
+
+	mol::ArrayBound ab(2);
+	mol::SafeArray<VT_VARIANT> sf(ab);
+	{
+		mol::SFAccess<VARIANT> sfa(sf);
+		sfa[0] = vat;
+		sfa[1] = mol::variant((long)jsa.size());
+	}
+
+	mol::vEmpty vempty;
+	mol::variant v;
+	hr = clr_->InvokeMethod(vtype,vempty,mol::bstr("CreateInstance"),sf,DISPATCH_METHOD,&v);
+
+	for ( long i = 0; i < (long)jsa.size(); i++)
+	{
+		mol::SafeArray<VT_VARIANT> args(ab);
+		{
+			mol::SFAccess<VARIANT> sfa(args);
+			sfa[0] = jsa[i];
+			sfa[1] = mol::variant(i);
+
+			mol::variant r;
+			hr = clr_->InvokeMethod(vempty,v,mol::bstr("SetValue"),args,DISPATCH_METHOD,&r);
+		}
+	}
+	mol::variant r;
+	hr = wrapNETObject(clr_,v,&r);
+	return r.pdispVal->QueryInterface( IID_IDispatch, (void**)s );
+}
+
 
 HRESULT __stdcall NetServer::String( BSTR txt, IDispatch** s)
 {

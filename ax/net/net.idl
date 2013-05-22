@@ -103,6 +103,9 @@ library NET
 				[in] IDispatch* def,
 				[in] IDispatch* handler,
 				[out,retval] IDispatch** unk);
+
+		[id(10), helpstring("create .NET Array from js array")] 
+		HRESULT Array( [in] IDispatch* type, [in] IDispatch* values, [out,retval] IDispatch** s);
 	}
 	
 

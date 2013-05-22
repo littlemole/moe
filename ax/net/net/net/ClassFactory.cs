@@ -22,6 +22,7 @@ namespace org.oha7.dotnet
         private static readonly Hashtable opCodeTypeMapper = new Hashtable();
 
         private static AssemblyBuilder asmBuilder = null;
+        private static ModuleBuilder modBuilder = null;
 
         static ClassFactory()
         {
@@ -38,22 +39,24 @@ namespace org.oha7.dotnet
 
         private static ModuleBuilder getBuilder(String typeName)
         {
-            asmBuilder = null;
-            ModuleBuilder modBuilder = null;
+//            if (asmBuilder == null)
+            {
+                asmBuilder = null;
 
-            AssemblyName assemblyName = new AssemblyName();
-            assemblyName.Name = typeName;
+                AssemblyName assemblyName = new AssemblyName();
+                assemblyName.Name = typeName;
 
-            AppDomain thisDomain = Thread.GetDomain();
-            asmBuilder = thisDomain.DefineDynamicAssembly(
-                            assemblyName,
-                            AssemblyBuilderAccess.RunAndSave, "D:\\"
-                           );
-
-            modBuilder = asmBuilder.DefineDynamicModule(
-                         asmBuilder.GetName().Name, typeName + ".dll"
-                      );
-
+                AppDomain thisDomain = Thread.GetDomain();
+                asmBuilder = thisDomain.DefineDynamicAssembly(
+                                assemblyName,
+                                AssemblyBuilderAccess.RunAndSave, "D:\\"
+                               );
+           
+                modBuilder = asmBuilder.DefineDynamicModule(
+                             asmBuilder.GetName().Name, typeName + ".dll"
+                          );
+                
+            }
             return modBuilder;
         }
 
@@ -233,10 +236,11 @@ namespace org.oha7.dotnet
             {
                 ConstructorInfo c = constructors[i];
                 ParameterInfo[] pi = c.GetParameters();
-                if (pi.Length == types.Length)
+                int len = types == null ? 0 : types.Length;
+                if (pi.Length == len)
                 {
                     bool match = true;
-                    for (int j = 0; j < types.Length; j++)
+                    for (int j = 0; j < len; j++)
                     {
                         if (types[j] == null)
                             continue;
@@ -276,10 +280,11 @@ namespace org.oha7.dotnet
                 if (m.Name.Equals(methodName) || m.Name.Equals("get_" + methodName))
                 {
                     ParameterInfo[] pi = m.GetParameters();
-                    if (pi.Length == types.Length)
+                    int len = types == null ? 0 : types.Length;
+                    if (pi.Length == len)
                     {
                         bool match = true;
-                        for (int j = 0; j < types.Length; j++)
+                        for (int j = 0; j < len; j++)
                         {
                             if (types[j] == null)
                                 continue;
@@ -388,6 +393,8 @@ namespace org.oha7.dotnet
             Net.cacheType(typeName, type);
 
             asmBuilder.Save(typeName + ".dll");
+
+            Net.cacheAssembly(modBuilder.Assembly.FullName,modBuilder.Assembly);
             return type;
 
         }

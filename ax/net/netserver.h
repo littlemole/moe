@@ -78,10 +78,11 @@ class ThatCall :
 public:
 
 	typedef mol::com_obj<ThatCall> Instance;
-	static HRESULT CreateInstance(IDispatch* target, IDispatch** out);
+	static HRESULT CreateInstance(IUnknown* clr, IDispatch* target, IDispatch** out);
 
 	void virtual dispose() 
 	{
+		clr_.release();
 		target_.release();
 	};
 
@@ -103,6 +104,7 @@ public:
 
 private:
 	mol::punk<IDispatch> target_;
+	mol::punk<_Net> clr_;
 };
 ////////////////////////////////////////////////////////////////////////
 
@@ -260,6 +262,7 @@ public:
 	HRESULT virtual __stdcall get_CLR( IUnknown** unk);
 	HRESULT virtual __stdcall Exit();
 	HRESULT virtual __stdcall Declare( BSTR name, IDispatch* def, IDispatch* handler, IDispatch** unk);
+	HRESULT virtual __stdcall Array( IDispatch* type, IDispatch* values, IDispatch** s);
 
 	HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo );
     HRESULT virtual __stdcall GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo );
