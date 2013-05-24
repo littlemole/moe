@@ -195,6 +195,8 @@ public:
 	virtual HRESULT __stdcall put_RibbonTextColor( BSTR fPath);
 	virtual HRESULT __stdcall get_RibbonTextColor(  BSTR* fPath);
 
+	virtual HRESULT __stdcall EditFileAssociations();
+
 	void setDirty(bool b);
 	bool isDirty();
 

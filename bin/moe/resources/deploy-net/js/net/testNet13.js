@@ -6,16 +6,21 @@ var System = net.Import("System");
 var Drawing = net.Import("System.Drawing");
 var Forms = net.Import("System.Windows.Forms");
 var Design = net.Import("System.Drawing.Design");
-
+net.Import("System.Design");
 net.Import("System.Core");
 
+var ListOfStrings = System.Collections.Generic.List.of(System.String);
+var ListOfInts = System.Collections.Generic.List.of(System.It32);
+
+
 var defaultValues= net.Array( System.String, ["a","b","c"] );
+var defaultIntValues= net.Array( System.Int32, [2,4,6,8] );
 
 /*
 var defaultValues = System.Array.CreateInstance( System.String, 3 );
 defaultValues.SetValue("a",0);
 defaultValues.SetValue("b",1);
-defaultValues.SetValue("c",2);
+defaultValues.SetValue("c",2);+
 */
 
 var TypeConverter = System.ComponentModel.TypeConverter;
@@ -41,10 +46,11 @@ MyConverter.ScriptHandler =	{
 var mc = new MyConverter();
 Dialogs.MsgBox("","ha",0);
 */
+/*
 var cp = Forms.ControlPaint;
 
 
-
+*/
 var MyConverter = net.Declare(
 	"MyConverter", 
 	{
@@ -64,6 +70,46 @@ var MyConverter = net.Declare(
 	}
 );
 
+var MyTabConverter = net.Declare(
+	"MyTabConverter", 
+	{
+		inherits : System.ComponentModel.TypeConverter , 
+		methods : {
+			GetStandardValuesSupported : [ System.Boolean, [System.ComponentModel.ITypeDescriptorContext]],
+			GetStandardValues : [ StandardValuesCollection, [System.ComponentModel.ITypeDescriptorContext]],
+			CanConvertFrom : [ System.Boolean, [System.ComponentModel.ITypeDescriptorContext,System.Type]],
+			ConvertFrom : [ System.Object, [System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object]]
+		}
+	},
+	{
+		GetStandardValuesSupported : function(c) {
+			return true;
+		},
+		GetStandardValues : function(c) {
+			return new StandardValuesCollection(defaultIntValues);
+		},
+		CanConvertFrom : function(ctx,type) {
+//Dialogs.MsgBox(type.ToString(),"",0);
+			if ( type.Equals(System.String) )
+				return true;
+
+Dialogs.MsgBox(type.ToString(),"false",0);
+			return false;
+		},
+		ConvertFrom : function(ctx,culture,value) {
+		//Dialogs.MsgBox(typeof(value),"",0);
+			if ( typeof(value) == "string")
+			{
+//			var type = value.GetType();
+	//		if ( type.Equals(System.String)) {
+				return System.Int32.Parse(value);
+			}
+			return void(0);
+		}
+	}
+);
+
+
 var MySubType = net.Declare(
 	"MySubType", 
 	{
@@ -78,6 +124,7 @@ var MySubType = net.Declare(
 	},
 	{}
 );
+/*
 Dialogs.MsgBox("","ha",0);
 var CheckBoxEditorValue = net.Declare(
 	"CheckBoxEditorValue", 
@@ -100,7 +147,7 @@ var CheckBoxEditorValue = net.Declare(
 		}
 	}
 );
-
+*/
 
 
 var CheckBoxEditor = net.Declare(
@@ -122,7 +169,6 @@ var CheckBoxEditor = net.Declare(
 
 //				cp.DrawBorder3D(e.Graphics,e.Bounds,Forms.ButtonState.Checked);
 //x = a;
-
 				form.Text = a.Context.Instance.ToString();
 				Forms.ControlPaint.DrawCheckBox(
 						a.Graphics,
@@ -135,6 +181,36 @@ var CheckBoxEditor = net.Declare(
 	}
 );
 
+
+var CommandEditor = net.Declare(
+	"CommandEditor", 
+	{
+		inherits : Design.UITypeEditor, 
+//		attributes : [[System.Runtime.InteropServices.ComVisibleAttribute,true]],
+	//	properties : { },
+		methods : {
+			GetEditStyle : [ Design.UITypeEditorEditStyle, [ITypeDescriptorContext]],
+			EditValue : [ System.Object, [ITypeDescriptorContext,System.IServiceProvider,System.Object]]
+		}
+	},
+	{
+		GetEditStyle : function(ctx) {
+				return Design.UITypeEditorEditStyle.Modal;
+		},
+		EditValue : function(ctx,provider,value) {
+
+			var openFileDialog = new Forms.OpenFileDialog();
+			openFileDialog.Title = ctx.PropertyDescriptor.Name;
+			if(openFileDialog.ShowDialog().Equals(Forms.DialogResult.OK))
+			{
+				value = openFileDialog.FileName;
+			}
+			return value;
+		}
+	}
+);
+
+ 
 
 var MyType = net.Declare(
 	"TestClass", 
@@ -149,18 +225,24 @@ var MyType = net.Declare(
 						 ]],
 				value2 : [ System.Boolean, [
 							[System.ComponentModel.CategoryAttribute,"cat1"],
-							[System.ComponentModel.DescriptionAttribute,"another description"], 
+							[System.ComponentModel.DescriptionAttribute,"another description"],
 							//[System.ComponentModel.TypeConverterAttribute, System.ComponentModel.StringConverter] ,
 							[System.ComponentModel.EditorAttribute, CheckBoxEditor, Design.UITypeEditor]
 						 ]],
-				wahr : [ System.Boolean, [
+				tabwidth : [ System.Int32, [
 							[System.ComponentModel.CategoryAttribute,"cat2"],
-							[System.ComponentModel.DescriptionAttribute,"a boolean"] 
-						 ]],
+							[System.ComponentModel.DescriptionAttribute,"an int32"],
+							[System.ComponentModel.TypeConverterAttribute, MyTabConverter] 
+						]],
 				schrift : [ Drawing.Font, [
 							[System.ComponentModel.CategoryAttribute,"cat2"],
 							[System.ComponentModel.DescriptionAttribute,"a font"] 
-						 ]],				
+						 ]],		
+
+				name2 : [ System.String, [
+							[System.ComponentModel.TypeConverterAttribute,MyConverter],
+							[System.ComponentModel.EditorAttribute, System.ComponentModel.Design.MultilineStringEditor, Design.UITypeEditor] 
+						 ]],		
 
 				name : [ System.String, [
 //							[System.ComponentModel.CategoryAttribute,"cat2"],
@@ -169,11 +251,25 @@ var MyType = net.Declare(
 							[System.ComponentModel.TypeConverterAttribute,MyConverter]
 							
 						 ]],			
-
+				collection : [ ListOfStrings, [
+							[System.ComponentModel.DisplayNameAttribute,"the list"],
+							[System.ComponentModel.CategoryAttribute,"cat2"],
+							[System.ComponentModel.DescriptionAttribute,"a collection"] 
+						 ]],
 				color : [ Drawing.Color, [
 							[System.ComponentModel.CategoryAttribute,"cat2"],
 							[System.ComponentModel.DescriptionAttribute,"a color"] 
-						 ]],				
+						 ]],
+				cmd1 : [ System.Object, [
+							[System.ComponentModel.CategoryAttribute,"Commands"],
+							[System.ComponentModel.DescriptionAttribute,"a cmd"],
+							[System.ComponentModel.EditorAttribute, CommandEditor, Design.UITypeEditor]
+						 ]],					
+				cmd2 : [ System.Object, [
+							[System.ComponentModel.CategoryAttribute,"Commands"],
+							[System.ComponentModel.DescriptionAttribute,"another cmd"],
+							[System.ComponentModel.EditorAttribute, CommandEditor, Design.UITypeEditor]
+						 ]]					
 				},
 
 		methods : {
@@ -195,7 +291,7 @@ var MyType = net.Declare(
 			return "3ILLROY WAS HERE! " + txt + ":"+ val + this.value;
 		},
 		test4 : function() {
-			this.value2.value = false
+			this.value2 = false
 		},
 		OnLoad : function(e) {
 			Dialogs.MsgBox("here","Ontest()",0);
@@ -222,6 +318,14 @@ var MyForm = net.Declare(
 );
 
 var t = new net.Runtime.TestClass();
+
+
+Dialogs.MsgBox(typeof(t),"false",0);
+
+t.collection = new ListOfStrings();
+t.collection.Add("one");
+t.collection.Add("two");
+t.collection.Add("three");
 
 var form = new MyForm();// Forms.Form();
 form.ClientSize = Drawing.Size(384, 262);
@@ -252,14 +356,16 @@ t.On("PropertyChanged", function(s,e) {
 });
 
 
+t.value = new MySubType();
+t.value.avalue = 42;
+t.value2 = false;
 
 form.Show();
 form.Activate();
-t.value = new MySubType();
-t.value.avalue = 42;
+
+/*
 Sleep(1000);
-t.value2 = new CheckBoxEditorValue();
-t.value2.value = false;
+
 form.Text = t.test();
 Sleep(1000);
 
@@ -271,7 +377,7 @@ Sleep(1000);
 
 form.Text = t.test4();
 Sleep(1000);
-
+*/
 
 
 

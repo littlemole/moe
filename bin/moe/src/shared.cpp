@@ -1139,6 +1139,13 @@ bool MoeConfig::isDirty()
 	return false;
 }
 
+
+HRESULT __stdcall MoeConfig::EditFileAssociations()
+{
+	mol::v7::editFileExtensions(L"moe");
+	return S_OK;
+}
+
 /////////////////////////////////////////////////////////////////////
 // config persistence
 /////////////////////////////////////////////////////////////////////

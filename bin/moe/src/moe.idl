@@ -931,6 +931,10 @@ library Moe
 		  propget,bindable,displaybind, requestedit,id(20), 
 		]
 		HRESULT RibbonTextColor( [out,retval] BSTR* c);
+
+		[id(21), helpstring("Edit moe File Associations")]
+		HRESULT EditFileAssociations();
+
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////
