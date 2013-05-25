@@ -1,6 +1,6 @@
 
 var net = new NET();
-
+Dialogs.MsgBox(typeof(net.Import),"nono",0);
 var System = net.Import("System");
 
 var Drawing = net.Import("System.Drawing");
