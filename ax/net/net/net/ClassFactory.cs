@@ -392,7 +392,7 @@ namespace org.oha7.dotnet
             typeCache.Add(typeName, type);
             Net.cacheType(typeName, type);
 
-            asmBuilder.Save(typeName + ".dll");
+            //asmBuilder.Save(typeName + ".dll");
 
             Net.cacheAssembly(modBuilder.Assembly.FullName,modBuilder.Assembly);
             return type;
@@ -602,7 +602,7 @@ namespace org.oha7.dotnet
             typeCache.Add(typeName, type);
             Net.cacheType(typeName, type);
 
-            asmBuilder.Save("test.dll");
+            //asmBuilder.Save("test.dll");
             return type;
         }
     }

@@ -29,6 +29,12 @@ namespace org.oha7.dotnet
             {
                 return null;
             }
+
+            if (o is RefWrapper)
+            {
+                return o;
+            }
+
             if (o.GetType().IsPrimitive)
             {
                 return o;
@@ -38,7 +44,21 @@ namespace org.oha7.dotnet
             {
                 return o;
             }
+
             return new RefWrapper(o);            
+        }
+
+        public static Object[] wrap(Object[] args)
+        {
+            if (args == null || args.Length == 0)
+                return args;
+
+            int len = args.Length;
+            for (int i = 0; i < len; i++)
+            {
+                args[i] = RefWrapper.wrap(args[i]);
+            }
+            return args;
         }
 
         public static Object unwrap( Object o)
@@ -50,7 +70,6 @@ namespace org.oha7.dotnet
             return o;
         }
 
-        // unwrap arguments
         public static Object[] unwrap(Object[] args)
         {
             if (args == null || args.Length == 0)
@@ -63,5 +82,6 @@ namespace org.oha7.dotnet
             }
             return args;
         }
+
     }
 }

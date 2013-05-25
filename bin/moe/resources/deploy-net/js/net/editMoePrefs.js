@@ -98,7 +98,7 @@ var Settings = net.Declare( "Moe.Settings", {
 		Value : [ System.String, [
 				[COM.CategoryAttribute,"Edit selected key"],
 				[COM.DescriptionAttribute,"The Value of this User Setting Item."],
-				[System.ComponentModel.EditorAttribute, COM.Design.MultilineStringEditor, Design.UITypeEditor] 
+				[COM.EditorAttribute, COM.Design.MultilineStringEditor, Design.UITypeEditor] 
 			 ]],
 		Path : [ System.String, [
 				[COM.CategoryAttribute,"Selection Path"],
@@ -166,20 +166,6 @@ var DocumentDefaults = net.Declare( "Moe.DocumentDefaults", {
 );
 
 
-/*
-net.Runtime.My.Style = { 
-	Id 			: System.Int32,
-	Description : System.String,
-	Bold 		: System.Boolean,
-	Italic 		: System.Boolean,
-	Eol 		: System.Boolean,
-	Fontname 	: System.String,
-	Fontsize 	: System.Int32,
-	Forecolor 	: System.String,
-	Backcolor 	: System.String
-};
-*/
-
 var Style = net.Declare( "Moe.Style", {
 	attributes : [[COM.DefaultPropertyAttribute,"Fontname"]], 
 	properties : {
@@ -202,44 +188,35 @@ var Style = net.Declare( "Moe.Style", {
 
 
 ////////////////////////////////////////////////////////////
-
+// Model
+////////////////////////////////////////////////////////////
 
 var Model = (function(){
 
 	var initialSyntax = ActiveDoc.Object.Properties.Syntax;
+	var syntaxList = net.Array( System.String, [ "text", "html", "css", "vb", "js", "sql", "shell", "perl", "c++", "java", "c#" ] );
 
 	var initialFont = new net.Runtime.org.oha7.dotnet.Property();
 	initialFont.Value = new Drawing.Font("Courier New", 8.0); // need some initial value
 
 	var bs = new Forms.BindingSource();
 
-	var syntaxList = new net.Runtime.System.Collections.ArrayList();
-	syntaxList.Add("text");
-	syntaxList.Add("html");
-	syntaxList.Add("css");
-	syntaxList.Add("vb");
-	syntaxList.Add("js");
-	syntaxList.Add("sql");
-	syntaxList.Add("shell");
-	syntaxList.Add("perl");
-	syntaxList.Add("c++");
-	syntaxList.Add("java");
-	syntaxList.Add("c#");
+	var documentDefaults = new DocumentDefaults()
+	net.CopyTo(Config,documentDefaults);
 
 	var model = {
 
-		styles		: null,
-		syntax  	: initialSyntax,
-		font 		: initialFont,
-		datasource	: bs,
-		modes		: syntaxList,
+		styles				: null,
+		syntax  			: initialSyntax,
+		font 				: initialFont,
+		datasource			: bs,
+		modes				: syntaxList,
 
-		defaults : new DocumentDefaults(),
-		defaultTabValues : net.Array( System.Int32, [2,4,6,8] ),
-//selectedConfig : null,
-		selectedSetting : null,
+		defaults 			: documentDefaults,
+		defaultTabValues 	: net.Array( System.Int32, [2,4,6,8] ),
+		selectedSetting 	: null,
 
-		fetch : function(conf,path,parent,handler)
+		fetchUserConf : function(conf,path,parent,handler)
 		{
 			for ( var i = 0; i < conf.Count(); i++ ) {
 
@@ -247,7 +224,7 @@ var Model = (function(){
 				var entry = handler(item,path,parent);
 
 				if ( item && item.Count() > 0 )	{
-					Model.fetch( item, path + "/" + item.key, entry, handler );
+					Model.fetchUserConf( item, path + "/" + item.key, entry, handler );
 				}
 			}
 		},
@@ -277,11 +254,6 @@ var Model = (function(){
 			moe.Config[name] = this.defaults[name];
 		},
 
-		htmlColor : function(col) {
-
-			return System.String.Format("#{0:X2}{1:X2}{2:X2}", col.R, col.G, col.B);
-		},
-
 		makeStyleList : function( styleSet ) {
 
 			var list = new System.Collections.ArrayList();
@@ -295,7 +267,7 @@ var Model = (function(){
 			return list;
 		},
 
-		updateDatasource : function( index ) {
+		updateStyleDatasource : function( index ) {
 
 			this.datasource.Position = 0;
 			this.datasource.DataSource = this.makeStyleList(moe.Config.StyleSets(index) );
@@ -315,17 +287,15 @@ var Model = (function(){
 									parseFloat(this.datasource.Current.Fontsize), 
 									s);
 		}
-
 	};
-
-	model.defaults.TabUsage = Config.TabUsage;
-	model.defaults.TabIndents=Config.TabIndents;
-	model.defaults.BackSpaceUnindents=Config.BackSpaceUnindents;
-	model.defaults.TabWidth=Config.TabWidth;
-	model.defaults.ShowLineNumbers=Config.ShowLineNumbers;
 
 	return model;
 }());
+
+
+////////////////////////////////////////////////////////////
+// View
+////////////////////////////////////////////////////////////
 
 var View = {
 
@@ -350,6 +320,12 @@ var View = {
 	panelTop 		: new Forms.Panel(),
 	panelBottom 	: new Forms.Panel(),
 
+
+	htmlColor : function(col) {
+
+		return System.String.Format("#{0:X2}{1:X2}{2:X2}", col.R, col.G, col.B);
+	},
+
 	updateTextControl : function(dataSource) {
 
 		this.text.ForeColor = Drawing.ColorTranslator.FromHtml(dataSource.Current.Forecolor);
@@ -363,18 +339,38 @@ var View = {
 
 		var r = colDialog.ShowDialog();
 		if (r.Equals(Forms.DialogResult.OK)) {		
-			return Model.htmlColor(colDialog.Color);
+			return View.htmlColor(colDialog.Color);
 		}
 		return color;
 	},
 
-	init : function(data,syntax) {
+	setColumnWidths : function( cols ) {
+		for ( var i = 0; i < cols.length; i++ )	{
+			if (!cols[i]) {
+				View.data.Columns.get_Item(i).Visible = false;
+			}
+			else {
+				View.data.Columns.get_Item(i).Width = cols[i];
+			}
+		}
+	},
+
+	addTreeNode : function(item,path,parent) {
+		var node = new Forms.TreeNode(item.Key);
+		node.Tag = path + "/" + item.Key;
+		parent.Nodes.Add( node );
+		return node;
+	},
+
+	init : function(data,syntax,modes) {
 
 		Forms.Application.EnableVisualStyles();
 		this.form.SuspendLayout();
+		this.form.Text = "moe settings editor";
 		this.form.ClientSize = Drawing.Size(484, 362);
+		this.form.Padding = Forms.Padding(0,5,0,0);
+
 		this.tabControl.Dock = Forms.DockStyle.Fill;
-		//this.tabControl.Padding = Forms.Padding(5,5,5,5);
 
 		this.tabPage1.Text = "Options";
 		this.tabPage1.Padding = Forms.Padding(10);
@@ -384,8 +380,8 @@ var View = {
 		this.propGrid.ToolbarVisible = false;
 		this.tabPage1.Controls.Add(this.propGrid);
 
-		this.tabPage2.Text = "User Settings";
-		this.tabPage2.Padding = Forms.Padding(10);
+		this.tabPage3.Text = "User Settings";
+		this.tabPage3.Padding = Forms.Padding(10);
 		this.treeView.Dock = Forms.DockStyle.Left;
 		this.treeView.HideSelection = false;
 		this.splitter.Dock = Forms.DockStyle.Left;
@@ -408,11 +404,11 @@ var View = {
 		this.propGridSetting.Dock = Forms.DockStyle.Fill;
 		this.propGridSetting.ToolbarVisible = false;
 
-		this.tabPage3.Text = "Editor Styles";
-		this.tabPage3.Padding = Forms.Padding(10,0,10,10);
+		this.tabPage2.Text = "Editor Styles";
+		this.tabPage2.Padding = Forms.Padding(10,0,10,10);
 		this.combo.Location = new Drawing.Point(0, 10);
 		this.combo.Size = new Drawing.Size(100, 21);
-		this.combo.DataSource = Model.modes;
+		this.combo.DataSource = modes;
 
 		this.text.Location = new Drawing.Point(150, 10);
 		this.text.Size = new Drawing.Size(305, 20);
@@ -422,15 +418,16 @@ var View = {
 		this.data.AllowUserToAddRows = false;
 		this.data.AllowUserToDeleteRows = false;
 		this.data.MultiSelect = false;
+		this.data.BorderStyle = Forms.BorderStyle.None;
 		this.data.Dock = Forms.DockStyle.Fill;
 
 		this.buttonApply.Anchor = System.Enum.Parse(Forms.AnchorStyles,"Top,Right");
 		this.buttonApply.Location = new Drawing.Point(60,10);
-		this.buttonApply.Size = new Drawing.Size(120,20);
+		this.buttonApply.Size = new Drawing.Size(120,24);
 		this.buttonApply.Text = "Apply";
 
 		this.buttonDefault.Location = new Drawing.Point(10,10);
-		this.buttonDefault.Size = new Drawing.Size(120,20);
+		this.buttonDefault.Size = new Drawing.Size(120,24);
 		this.buttonDefault.Text = "Make Default";
 
 		this.panelTop.Controls.Add(this.combo);
@@ -445,18 +442,18 @@ var View = {
 		this.panelBottom.Location = new Drawing.Point(0, 0);
 		this.panelBottom.Size = new Drawing.Size(504, 34);
 
-		this.tabPage3.Controls.Add(this.data);
-		this.tabPage3.Controls.Add(this.panelBottom);
-		this.tabPage3.Controls.Add(this.panelTop);
+		this.tabPage2.Controls.Add(this.data);
+		this.tabPage2.Controls.Add(this.panelBottom);
+		this.tabPage2.Controls.Add(this.panelTop);
 
 		this.panelButtons.Controls.Add(this.buttonNew);
 		this.panelButtons.Controls.Add(this.buttonDelete);
 		this.panelSetting.Controls.Add(this.propGridSetting);
 		this.panelSetting.Controls.Add(this.panelButtons);
-		this.tabPage2.Controls.Add(this.panelSetting);
+		this.tabPage3.Controls.Add(this.panelSetting);
 
-		this.tabPage2.Controls.Add(this.splitter);
-		this.tabPage2.Controls.Add(this.treeView);
+		this.tabPage3.Controls.Add(this.splitter);
+		this.tabPage3.Controls.Add(this.treeView);
 
 		this.tabControl.Controls.Add(this.tabPage1);
 		this.tabControl.Controls.Add(this.tabPage2);
@@ -472,21 +469,19 @@ var View = {
 	}
 };
 
+
+////////////////////////////////////////////////////////////
+// Controller
+////////////////////////////////////////////////////////////
+
 var Controller = {
 
 	run : function() {
 
-		Model.updateDatasource(Model.syntax);
+		View.init(Model.defaults,Model.syntax,Model.modes);
 
-		View.init(Model.defaults,Model.syntax);
-
-		Model.fetch( moe.Config.Settings, "", View.treeView, function(item,path,parent) {
-
-			var node = new Forms.TreeNode(item.Key);
-			node.Tag = path + "/" + item.Key;
-			parent.Nodes.Add( node );
-			return node;
-		});
+		Model.fetchUserConf( moe.Config.Settings, "", View.treeView, View.addTreeNode );
+		Model.updateStyleDatasource(Model.syntax);
 
 		var binding = new Forms.Binding("Text", Model.datasource, "Description", false);
 		View.text.DataBindings.Add(binding);
@@ -503,24 +498,15 @@ var Controller = {
 		View.buttonApply.On("Click", Controller.OnApplyClick );
 		View.buttonDefault.On("Click", Controller.OnDefaultClick );		
 
-		Model.defaults.On("PropertyChanged", Controller.OnDefaultPropertyChanged);
 		View.buttonNew.On("Click", Controller.OnNewTreeItem);
 		View.buttonDelete.On("Click", Controller.OnDeleteTreeItem);
 		View.treeView.On("AfterSelect", Controller.OnSelectTreeItem);
 
-		View.data.Columns.get_Item(0).Visible = false;
-		View.data.Columns.get_Item(1).Width=100;
-		View.data.Columns.get_Item(2).Width=40;
-		View.data.Columns.get_Item(3).Width=40;
-		View.data.Columns.get_Item(4).Width=40;
-		View.data.Columns.get_Item(5).Width=80;
-		View.data.Columns.get_Item(6).Width=25;
-		View.data.Columns.get_Item(7).Width=55;
-		View.data.Columns.get_Item(8).Width=55;
+		Model.defaults.On("PropertyChanged", Controller.OnDefaultPropertyChanged);
 
+		View.setColumnWidths([ null,100,40,40,40,80,25,55,55 ]);
 		View.data.AutoResizeColumns(Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader);		
 		View.data.Refresh();
-
 		Forms.Application.Run(View.form);
 	},
 
@@ -619,7 +605,7 @@ var Controller = {
 
 	OnSelectedIndexChanged : function() {
 
-		Model.updateDatasource(View.combo.SelectedIndex);
+		Model.updateStyleDatasource(View.combo.SelectedIndex);
 	},
 
 	OnSelectionChanged : function() {
@@ -672,7 +658,10 @@ var Controller = {
 	OnDefaultClick : function() {
 
 		var styleSet = moe.Config.StyleSets(View.combo.SelectedIndex);
-		net.copyTo(Model.datasource.Current, styleSet.Item(View.combo.SelectedIndex));
+		for ( var i = 0; i < Model.styles.Count; i++)
+		{		
+			net.copyTo(Model.styles.Item(i),styleSet.Item(i));
+		}
 	}
 };
 

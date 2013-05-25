@@ -16,9 +16,15 @@
   </ItemGroup>
 
   <ItemGroup>
-	<ClCompile Include="dot.cpp" />
+    <ClCompile Include="dot.cpp" />
     <ClCompile Include="net.cpp" />
     <ClCompile Include="netserver.cpp" />
+    <ClCompile Include="netEvent.cpp" />
+    <ClCompile Include="netNamespace.cpp" />
+    <ClCompile Include="netObject.cpp" />
+    <ClCompile Include="netThat.cpp" />
+    <ClCompile Include="netType.cpp" />
+    <ClCompile Include="Util.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

@@ -780,7 +780,12 @@
   <ItemGroup>
     <ClCompile Include="dot.cpp" />
     <ClCompile Include="net.cpp" />
+    <ClCompile Include="netEvent.cpp" />
+    <ClCompile Include="netNamespace.cpp" />
+    <ClCompile Include="netObject.cpp" />
     <ClCompile Include="netserver.cpp" />
+    <ClCompile Include="netThat.cpp" />
+    <ClCompile Include="netType.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release DLL|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release DLL|x64'">Create</PrecompiledHeader>
@@ -793,6 +798,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="net.idl" />
@@ -800,9 +806,15 @@
   <ItemGroup>
     <ClInclude Include="dot.h" />
     <ClInclude Include="mscorlib_tlh.h" />
+    <ClInclude Include="netEvent.h" />
+    <ClInclude Include="netNamespace.h" />
+    <ClInclude Include="netObj.h" />
     <ClInclude Include="netserver.h" />
+    <ClInclude Include="netThat.h" />
+    <ClInclude Include="netType.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="net.exe.manifest" />

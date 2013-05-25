@@ -35,8 +35,6 @@ namespace org.oha7.dotnet
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.AssemblyResolve += new ResolveEventHandler(AssemblyResolveEventHandler);
             currentDomain.TypeResolve += new ResolveEventHandler(TypeResolveEventHandler);
-
-           // loaderDomain = AppDomain.CreateDomain("Net.dynamicdomain");
         }
 
         private static Assembly TypeResolveEventHandler(object sender, ResolveEventArgs args)
@@ -138,7 +136,7 @@ namespace org.oha7.dotnet
                 return new RefWrapper(args[0]);
             }
             
-            args = unwrapArgs(args);
+            args = RefWrapper.unwrap(args);
 
             ConstructorInfo ci = resolveConstructor(type,args);// type.GetConstructor(getArgTypes(args));
             if (ci != null)
@@ -176,14 +174,14 @@ namespace org.oha7.dotnet
 
             if (flags == DISPATCH_PROPERTYGET)
             {
-                return RefWrapper.wrap(invokeGetProperty(t, that, methodName, unwrapArgs(args)));
+                return RefWrapper.wrap(invokeGetProperty(t, that, methodName, RefWrapper.unwrap(args)));
             }
 
             if (flags == DISPATCH_PROPERTYPUT)
-                return RefWrapper.wrap(invokePutProperty(t, that, methodName, unwrapArgs(args)));
+                return RefWrapper.wrap(invokePutProperty(t, that, methodName, RefWrapper.unwrap(args)));
 
 
-            return RefWrapper.wrap(invoke(t, that, methodName, unwrapArgs(args)));
+            return RefWrapper.wrap(invoke(t, that, methodName, RefWrapper.unwrap(args)));
         }
 
         /**
@@ -355,7 +353,6 @@ namespace org.oha7.dotnet
                 }
             }
             throw new MissingMemberException();
-//            return null;
         }
 
         // get property helper
@@ -442,19 +439,6 @@ namespace org.oha7.dotnet
             return argTypes;
         }
 
-        // unwrap arguments
-        private Object[] unwrapArgs(Object[] args)
-        {
-            if (args == null || args.Length == 0)
-                return args;
-
-            int len = args.Length;
-            for (int i = 0; i < len; i++)
-            {
-                args[i] = RefWrapper.unwrap(args[i]);
-            }
-            return args;
-        }
 
         // resolve method
         private MethodInfo resolveMethod(Type type, String methodName, Object[] args)
@@ -535,6 +519,31 @@ namespace org.oha7.dotnet
                 }
             }
             return null;
+        }
+
+        public static void copyTo(Object src, Object dest)
+        {
+            Type destType = dest.GetType();
+            Type srcType = src.GetType();
+
+            PropertyInfo[] properties = destType.GetProperties();
+            if (properties == null || properties.Length == 0)
+            {
+                properties = srcType.GetProperties();
+            }
+
+            for (int i = 0; i < properties.Length; i++)
+            {
+                try
+                {
+                    Object value = srcType.InvokeMember(properties[i].Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty, null, src, new object[] { });
+                    destType.InvokeMember(properties[i].Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty, null, dest, new object[] { value });
+                }
+                catch (Exception e)
+                {
+                    e.ToString();
+                }
+            }
         }
     }
 }

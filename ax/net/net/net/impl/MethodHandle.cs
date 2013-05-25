@@ -26,27 +26,7 @@ namespace org.oha7.dotnet
 
         public static Object invoke(object target, String method, object[] args)
         {
-            object[] a = null;
-
-            
-            if ( args != null ) {
-                a = new object[args.Length];
-                if (args.Length > 0)
-                {
-                    //a[0] = args[0];
-                    for (int i = 0; i < args.Length; i++)
-                    {
-                        if (args[i] is RefWrapper)
-                        {
-                            a[i] = args[i];
-                        }
-                        else
-                        {
-                            a[i] = RefWrapper.wrap(args[i]);
-                        }
-                    }
-                }
-            }
+            object[] a = RefWrapper.wrap(args);
             
             Object o = target.GetType().InvokeMember(
                             method,
