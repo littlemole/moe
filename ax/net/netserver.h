@@ -16,8 +16,8 @@
 
 ////////////////////////////////////////////////////////////////////////
 
-//#import "net.tlb"  no_namespace, raw_interfaces_only, named_guids 
-#include "net.tlh"
+#import "net.tlb"  no_namespace, raw_interfaces_only, named_guids 
+//#include "net.tlh"
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -66,6 +66,7 @@ private:
 	HRESULT getAttributes(IDispatch* disp, mol::SafeArray<VT_VARIANT>& result);
 	HRESULT getProperties(IDispatch* def, mol::SafeArray<VT_VARIANT>& result);
 	HRESULT getMethods(IDispatch* def, mol::SafeArray<VT_VARIANT>& result);
+	HRESULT getConstructors(IDispatch* def, mol::SafeArray<VT_VARIANT>& result);
 	HRESULT getInterfaces(IDispatch* def, mol::SafeArray<VT_VARIANT>& result);
 
 	mol::punk<_Net> clr_;

@@ -56,3 +56,37 @@ HRESULT __stdcall ThatCall::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, 
 	return hr;
 }
 
+////////////////////////////////////////////////////////////////////////
+
+HRESULT BaseCall::CreateInstance(IUnknown* clr,VARIANT target, IDispatch** out)
+{
+	Instance* i = new Instance;
+	i->target_ = target;
+	HRESULT hr = clr->QueryInterface(IID__Net,(void**)&(i->clr_) );
+	if ( hr != S_OK )
+		return hr;
+
+	return i->QueryInterface(IID_IDispatch,(void**)out);
+}
+
+HRESULT __stdcall BaseCall::GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId )
+{
+	OLECHAR* name = rgszNames[0];
+	std::string n = mol::tostring(name);
+	DISPID id = (DISPID) mol::singleton<DotNetClassNames>().getId(n);
+	rgDispId[0] = id;
+	return S_OK;
+}
+
+HRESULT __stdcall BaseCall::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * e)
+{
+	std::string name = mol::singleton<DotNetClassNames>().getName(dispIdMember); 
+
+	mol::variant vRet;
+	SafeArrayFromDispParams sa(pDisp);
+	HRESULT hr = clr_->InvokeBaseMethod( target_, mol::bstr(name),sa.value, DISPATCH_METHOD, &vRet );
+	if ( hr != S_OK )
+		return hr;
+	return wrapNETObject(clr_,vRet,pReturn);
+}
+

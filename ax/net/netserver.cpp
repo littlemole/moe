@@ -608,6 +608,101 @@ HRESULT NetServer::getMethods(IDispatch* def, mol::SafeArray<VT_VARIANT>& result
 	return S_OK;
 }
 
+HRESULT NetServer::getConstructors(IDispatch* def, mol::SafeArray<VT_VARIANT>& result) 
+{
+	if(!def)
+		return E_INVALIDARG;
+
+	DISPPARAMS emptyParams = {0};
+	EXCEPINFO ex;
+	::ZeroMemory(&ex,sizeof(EXCEPINFO));
+	UINT e = 0;
+
+	mol::punk<INetType> ctorDefType;
+	HRESULT hr = Type( mol::bstr("org.oha7.dotnet.ConstructorDef"), &ctorDefType);
+	if(hr!=S_OK)
+		return hr;
+
+	mol::variant vmethodDefType;
+	hr = ctorDefType->UnWrap(&vmethodDefType);
+	if(hr!=S_OK)
+		return hr;
+
+	mol::variant ctors;
+	hr = getMemberAsVariant( L"constructors", def, &ctors);
+	if(hr!=S_OK || ctors.vt == VT_EMPTY)
+		return hr;
+
+	mol::punk<IDispatchEx> dispEx(ctors.pdispVal);
+
+	std::vector<DISPID> dispids = enumJsDispids(ctors.pdispVal);
+
+	if ( dispids.empty() )
+		return S_OK;
+
+	mol::ArrayBound abResult((long)dispids.size());
+	result.Create(abResult);
+	{
+		mol::SFAccess<VARIANT> sfaResult(result);
+
+		for( int i = 0; i < (int)dispids.size(); i++)
+		{
+			sfaResult[i].vt = VT_EMPTY;
+
+			BSTR name;
+			hr = dispEx->GetMemberName(dispids[i],&name);
+
+			mol::variant ctor;
+			hr = dispEx->Invoke(dispids[i],IID_NULL,LOCALE_SYSTEM_DEFAULT,DISPATCH_PROPERTYGET,&emptyParams,&ctor,&ex,&e);
+
+			jsArray jsa = enumJSArray(ctor.pdispVal);
+			VARIANT t;
+			t.vt = VT_EMPTY;
+
+			mol::SafeArray<VT_VARIANT> sfArgs;
+			if(jsa.size() > 0 )
+			{			
+				mol::ArrayBound ab((long)jsa.size());
+				sfArgs.Create(ab);
+				mol::SFAccess<VARIANT> sfaArgs(sfArgs);
+				for ( long j = 0; j < jsa.size(); j++ )
+				{
+					sfaArgs[j] = jsa[j];
+				}
+			}
+
+			mol::ArrayBound abParamsDefArgs(3);
+			mol::SafeArray<VT_VARIANT> sfParams(abParamsDefArgs);
+			{
+				mol::SFAccess<VARIANT> sfaParams(sfParams);
+				sfaParams[0].vt = VT_BSTR;
+				sfaParams[0].bstrVal = name;
+				sfaParams[1] = t;
+				if ( (SAFEARRAY*)sfArgs == 0 )
+				{
+					sfaParams[2].vt = VT_EMPTY;
+				}
+				else
+				{
+					sfaParams[2].vt = VT_ARRAY|VT_VARIANT;
+					::SafeArrayCopy( sfArgs, &(sfaParams[2].parray) );
+				}
+			}
+
+			mol::vEmpty vempty;
+			::VariantInit(&sfaResult[i]);
+			hr = clr_->InvokeMethod( 
+							vmethodDefType, 
+							vempty, 
+							mol::bstr("instance"),
+							sfParams,
+							DISPATCH_METHOD,
+							&sfaResult[i]
+						);
+		}
+	}
+	return S_OK;
+}
 
 HRESULT NetServer::getInterfaces(IDispatch* def, mol::SafeArray<VT_VARIANT>& result) 
 {
@@ -666,6 +761,9 @@ HRESULT __stdcall NetServer::Declare( BSTR name, IDispatch* def, IDispatch* hand
 	if ( hr == S_OK && attributes.vt != VT_EMPTY )
 		hr = getAttributes( attributes.pdispVal,  sfAttrDef);
 
+	mol::SafeArray<VT_VARIANT> sfCtorDef;
+	hr = getConstructors( def, sfCtorDef );
+
 	mol::SafeArray<VT_VARIANT> sfPropsDef;
 	hr = getProperties( def, sfPropsDef );
 
@@ -673,7 +771,7 @@ HRESULT __stdcall NetServer::Declare( BSTR name, IDispatch* def, IDispatch* hand
 	hr = getMethods( def, sfMethodDef );
 
 	mol::variant result;
-	hr = clr_->DefineClass( name, baseType,sfInterfaces,sfAttrDef,sfPropsDef,sfMethodDef,&result);
+	hr = clr_->DefineClass( name, baseType,sfInterfaces,sfAttrDef,sfCtorDef,sfPropsDef,sfMethodDef,&result);
 	if ( hr != S_OK )
 		return hr;
 

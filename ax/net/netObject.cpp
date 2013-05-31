@@ -6,7 +6,7 @@
 #include "dot.h"
 #include "Util.h"
 #include "netEvent.h"
-
+#include "netThat.h"
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -93,6 +93,26 @@ HRESULT  __stdcall NetObject::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid
 
 	mol::vEmpty vempty;
 	mol::variant vRet;
+
+	if(name=="base" && (w & DISPATCH_PROPERTYGET) )
+	{
+		mol::punk<IDispatch> disp;
+		BaseCall::CreateInstance(clr_,v_,&disp);
+		if ( hr != S_OK )
+			return hr;
+		pReturn->vt = VT_DISPATCH;
+		return disp.queryInterface(&pReturn->pdispVal);
+	}
+	if(name=="base" && (w == DISPATCH_METHOD) )
+	{
+		mol::variant vRet;
+		SafeArrayFromDispParams sa(pDisp);
+		if(pReturn)
+			pReturn->vt = VT_EMPTY;
+		HRESULT hr = clr_->InvokeBaseMethod( v_, mol::bstr(""),sa.value, DISPATCH_METHOD, &vRet );
+		return hr;
+	}
+
 
 	if (  w == DISPATCH_PROPERTYGET ) 
 	{	

@@ -1,6 +1,6 @@
 
 var net = new NET();
-Dialogs.MsgBox(typeof(net.Import),"nono",0);
+
 var System = net.Import("System");
 
 var Drawing = net.Import("System.Drawing");
@@ -298,22 +298,34 @@ var MyType = net.Declare(
 		}
 	}
 );
-
+Dialogs.MsgBox(typeof(net.Import),"nono",0);
 var MyForm = net.Declare(
 	"MyForm", 
 	{
 		inherits : Forms.Form, 
 		implements : [  ], 
 		attributes : [],
-		properties : {},
+		constructors : { MyForm : [System.String] },
+		properties : { value : [System.String] },
 		methods : {
-			OnLoad : [ undefined, [System.EventArgs]]
+			OnLoad : [ undefined, [System.EventArgs]],
+			Show : [undefined, [] ]
+			
 		}
 	},
 	{
+		MyForm : function(t) {
+			this.value = t;
+		},
+
 		OnLoad : function(e) {
-			Dialogs.MsgBox("here!!!!!!!!!!!!!!!!!","Ontest()",0);
+			Dialogs.MsgBox(this.value,"Ontest()",0);
+		},
+		Show : function(e) {
+			//Dialogs.MsgBox("no show!","Ontest()",0);
+			this.base.Show();
 		}
+		
 	}
 );
 
@@ -327,7 +339,7 @@ t.collection.Add("one");
 t.collection.Add("two");
 t.collection.Add("three");
 
-var form = new MyForm();// Forms.Form();
+var form = new MyForm("hU");// Forms.Form();
 form.ClientSize = Drawing.Size(384, 262);
 
 var propGrid = new Forms.PropertyGrid();
@@ -380,7 +392,7 @@ Sleep(1000);
 */
 
 
-
-Forms.Application.Run(form);
+Sleep(3000);
+//Forms.Application.Run(form);
 
 

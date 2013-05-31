@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Reflection.Emit;
 
 namespace org.oha7.dotnet
 {
@@ -27,8 +28,6 @@ namespace org.oha7.dotnet
         private static Dictionary<String, Object> netTypeCache = new Dictionary<string, object>();
         private static Dictionary<String, Object> assemblyCache = new Dictionary<string, object>();
         private static Dictionary<String, Object> dynamicAssemblyCache = new Dictionary<string, object>();
-
-        private static AppDomain loaderDomain;
 
         static Net() {
 
@@ -298,18 +297,21 @@ namespace org.oha7.dotnet
         }
 
         [DispId(8)]
-        public Object DefineClass(String typeName, Object baseType, Object[] interfaces, Object[] attrs, Object[] properties, Object[] handles)
+        public Object DefineClass(String typeName, Object baseType, Object[] interfaces, Object[] attrs,Object[] constructors, Object[] properties, Object[] handles)
         {
             Type[] iTypes = getClassDefs<Type>(interfaces);
             AttributeDef[] atts = getClassDefs<AttributeDef>(attrs);
             PropertyDef[] props = getClassDefs<PropertyDef>(properties);
             MethodHandle[] meths = getClassDefs<MethodHandle>(handles);
+            ConstructorDef[] ctors = getClassDefs<ConstructorDef>(constructors); 
 
             Object result = ClassFactory.makeClass(
                 typeName,
                 (Type)RefWrapper.unwrap(baseType),
                 iTypes,
-                atts,props,meths
+                atts,
+                ctors, 
+                props,meths
                 );
 
             return RefWrapper.wrap(result);
@@ -322,6 +324,20 @@ namespace org.oha7.dotnet
             Type result = type.GetNestedType(name);
             return result;
         }
+
+        [DispId(10)]
+        public Object InvokeBaseMethod(Object that, String methodName, Object[] args, int flags)
+        {
+            if (that == null)
+                return null;
+
+            Object t = RefWrapper.unwrap(that);
+            Type type = t.GetType().BaseType;
+
+            return RefWrapper.wrap(invokeBase(type, t, methodName, RefWrapper.unwrap(args)));
+        }
+
+
 
         public static void cacheType(String name, Type type)
         {
@@ -349,6 +365,50 @@ namespace org.oha7.dotnet
                 else
                 {
                     mi.Invoke(that, args);
+                    return null;
+                }
+            }
+            throw new MissingMemberException();
+        }
+
+        private Object invokeBase(Object clazz, Object that, String methodName, Object[] args)
+        {
+            Type type = (Type)clazz;
+
+            Type[] types = getArgTypes(args);
+
+            if (methodName == null || methodName.Equals(""))
+            {
+                ConstructorInfo ci = resolveConstructor(type, args);
+                if (ci != null)
+                {
+                    DynamicMethod dm = new DynamicMethod("Create", (Type)clazz,types);
+                    ILGenerator il = dm.GetILGenerator();
+                    il.Emit(OpCodes.Ldarg_0);
+                    il.Emit(OpCodes.Call, ci);
+                    il.Emit(OpCodes.Ret);
+
+                    dm.Invoke( that, args );
+                }
+                throw new MissingMemberException();
+            }
+
+            MethodInfo mi = resolveMethod(type, methodName, args);
+            if (mi != null)
+            {
+                var ftn = mi.MethodHandle.GetFunctionPointer();
+
+                if (!mi.ReturnType.Equals(typeof(void)))
+                {
+                    Type f = typeof(Func<>).MakeGenericType(new Type[] { mi.ReturnType });
+                    object func = Activator.CreateInstance(f, that, ftn);
+                    return func.GetType().InvokeMember("Invoke", BindingFlags.Public | BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Static, null, func, null, null);  
+                }
+                else
+                {                    
+                    Type a = typeof(Action);
+                    object action = Activator.CreateInstance(a, that, ftn);
+                    action.GetType().InvokeMember("Invoke", BindingFlags.Public | BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Static, null, action, null, null);
                     return null;
                 }
             }

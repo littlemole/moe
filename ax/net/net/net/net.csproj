@@ -83,13 +83,16 @@
   <ItemGroup>
     <Compile Include="impl\AttributeDef.cs" />
     <Compile Include="ClassFactory.cs" />
+    <Compile Include="impl\ConstructorDef.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="impl\EventWrapper.cs" />
     <Compile Include="impl\MethodHandle.cs" />
     <Compile Include="Net.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Property.cs" />
-    <Compile Include="impl\PropertyDef.cs" />
     <Compile Include="impl\RefWrapper.cs" />
+    <Compile Include="impl\PropertyDef.cs" />
     <Compile Include="WPF.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

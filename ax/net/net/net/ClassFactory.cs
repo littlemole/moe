@@ -14,6 +14,7 @@ namespace org.oha7.dotnet
         private static MethodInfo DelegateRemove = typeof(Delegate).GetMethod("Remove", new Type[] { typeof(Delegate), typeof(Delegate) });
         private static MethodInfo InvokeDelegate = typeof(PropertyChangedEventHandler).GetMethod("Invoke");
         private static MethodInfo CallbackDelegate = typeof(MethodHandle).GetMethod("invoke", BindingFlags.Static | BindingFlags.Public);
+        private static MethodInfo ConstructorDelegate = typeof(ConstructorDef).GetMethod("invoke", BindingFlags.Static | BindingFlags.Public);
         private static ConstructorInfo CreateEventArgs = typeof(PropertyChangedEventArgs).GetConstructor(new Type[] { typeof(String) });
         private static MethodAttributes getSetAttr = MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig;
 
@@ -325,7 +326,7 @@ namespace org.oha7.dotnet
             return result;
         }
 
-        public static Type makeClass(String typeName, Type baseType, Type[] interfaces, AttributeDef[] attrs, PropertyDef[] properties, MethodHandle[] handles)
+        public static Type makeClass(String typeName, Type baseType, Type[] interfaces, AttributeDef[] attrs, ConstructorDef[] ctors, PropertyDef[] properties, MethodHandle[] handles)
         {
             baseType = baseType == null ? typeof(object) : baseType;
 
@@ -388,15 +389,88 @@ namespace org.oha7.dotnet
                 make_method(typeBuilder, baseType, handles[i], handlerField);
             }
 
+
+            if (ctors != null)
+                for (int i = 0; i < ctors.Length; i++)
+            {
+                make_constructor(typeBuilder, baseType, ctors[i], handlerField);
+            }
+
             Type type = typeBuilder.CreateType();
             typeCache.Add(typeName, type);
             Net.cacheType(typeName, type);
 
-            //asmBuilder.Save(typeName + ".dll");
+           // asmBuilder.Save(typeName + ".dll");
 
             Net.cacheAssembly(modBuilder.Assembly.FullName,modBuilder.Assembly);
             return type;
 
+        }
+
+        private static ConstructorBuilder make_constructor(TypeBuilder typeBuilder, Type baseType, ConstructorDef constructorDef, FieldBuilder handlerField)
+        {
+             Type[] types = typesFromArgs(RefWrapper.unwrap(constructorDef.args));
+
+             ConstructorBuilder ctorBuilder = typeBuilder.DefineConstructor(
+                                    MethodAttributes.SpecialName|MethodAttributes.Public|MethodAttributes.RTSpecialName|MethodAttributes.HideBySig,
+                                    CallingConventions.HasThis | CallingConventions.Standard,
+                                    types
+                                );
+
+             ILGenerator methodIL = ctorBuilder.GetILGenerator();
+
+             methodIL.DeclareLocal(typeof(System.Object[]));
+
+             // declare a lable for returning from the method
+             Label returnLabel = methodIL.DefineLabel();
+
+             ConstructorInfo superConstructor = baseType.GetConstructor(new Type[0]);
+
+             // Load "this"
+             methodIL.Emit(OpCodes.Ldarg_0);
+             // Call the super constructor
+             methodIL.Emit(OpCodes.Call, superConstructor);
+
+             // load "this"
+             //methodIL.Emit(OpCodes.Ldarg_0);
+             methodIL.Emit(OpCodes.Ldnull);
+             // load the handler
+             methodIL.Emit(OpCodes.Ldfld, handlerField);
+             // load handler method name
+             methodIL.Emit(OpCodes.Ldstr, constructorDef.name);
+
+             int nArgs = types == null ? 0 : types.Length;
+             // prepare array of args. first load number of args
+             methodIL.Emit(OpCodes.Ldc_I4, nArgs + 1);
+             methodIL.Emit(OpCodes.Newarr, typeof(Object));
+             methodIL.Emit(OpCodes.Stloc_0);
+
+             methodIL.Emit(OpCodes.Ldloc_0);
+             methodIL.Emit(OpCodes.Ldc_I4, 0);
+             methodIL.Emit(OpCodes.Ldarg_0);
+             methodIL.Emit(OpCodes.Stelem_Ref);
+
+             for (int j = 0; j < nArgs; j++)
+             {
+                 methodIL.Emit(OpCodes.Ldloc_0);
+                 methodIL.Emit(OpCodes.Ldc_I4, j + 1);
+                 methodIL.Emit(OpCodes.Ldarg, j + 1);
+                 if (types[j].IsValueType)
+                 {
+                     methodIL.Emit(OpCodes.Box, types[j]);
+                 }
+                 methodIL.Emit(OpCodes.Stelem_Ref);
+             }
+             methodIL.Emit(OpCodes.Ldloc_0);
+
+             // invoke "invoke" in ConstructorDef
+             methodIL.Emit(OpCodes.Call, CallbackDelegate);
+
+             methodIL.Emit(OpCodes.Pop);
+             // Return
+             methodIL.Emit(OpCodes.Ret);
+
+             return ctorBuilder;
         }
 
         private static MethodBuilder make_method(TypeBuilder typeBuilder, Type baseType, MethodHandle methodHandle, FieldBuilder handlerField)
