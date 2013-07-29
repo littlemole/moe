@@ -437,4 +437,32 @@ private:
 	mol::bstr callback_;
 };
 
+struct ThreadedTimeout
+{
+	ThreadedTimeout(IDispatch* f, long t, bool i = false)
+		: fun(f), timeout(t), interval(i)
+	{}
+
+	mol::punk<IDispatch> fun;
+	long timeout;
+	bool interval;
+};
+
+class ThreadedTimeouts
+{
+public:
+	ThreadedTimeouts() {}
+	~ThreadedTimeouts() {}
+
+	HRESULT setTimeout( mol::variant f, mol::variant t);
+	void remove( ThreadedTimeout* t);
+	bool fire();
+
+private:
+
+	std::list<ThreadedTimeout*> timeouts_;
+};
+
+ThreadedTimeouts& threadedTimeouts();
+
 #endif

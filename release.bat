@@ -21,7 +21,7 @@ echo %TODAY%
 rem SET TODAY=%date:~-4%-%date:~-7,-5%-%date:~0,2%
 
 
-SET REMOTE_DIR=/srv/www/htdocs/oha7/moe/%TODAY%/
+SET REMOTE_DIR=/var/www/oha7/htdocs/moe/%TODAY%/
 set SCP="C:\Program Files (x86)\PuTTY\pscp.exe" -i "C:\Users\mike\putty2betty.ppk"
 set RC="C:\Program Files (x86)\PuTTY\plink.exe" -i "C:\Users\mike\putty2betty.ppk" mike@knitbits.de
 

@@ -12,83 +12,60 @@ mol::string engineFromPath(const std::string& path)
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-struct ThreadedTimeout
+
+HRESULT ThreadedTimeouts::setTimeout( mol::variant f, mol::variant t)
 {
-	ThreadedTimeout(IDispatch* f, long t, bool i = false)
-		: fun(f), timeout(t), interval(i)
-	{}
+	long tick = ::GetTickCount();
+	if (f.vt != VT_DISPATCH )
+	{
+		return E_INVALIDARG;
+	}
+	if ( t.vt != VT_I4 ) 
+	{
+		t.changeType(VT_I4);
+	}
+	timeouts_.push_back( new ThreadedTimeout(f.pdispVal,t.llVal+tick) );
+	return S_OK;
+}
 
-	mol::punk<IDispatch> fun;
-	long timeout;
-	bool interval;
-};
-
-class ThreadedTimeouts
+void ThreadedTimeouts::remove( ThreadedTimeout* t)
 {
-public:
-	ThreadedTimeouts()
-	{}
-
-	~ThreadedTimeouts()
-	{}
-
-	HRESULT setTimeout( mol::variant f, mol::variant t)
+	for ( std::list<ThreadedTimeout*>::iterator it = timeouts_.begin(); it != timeouts_.end(); it++)
 	{
-		long tick = ::GetTickCount();
-		if (f.vt != VT_DISPATCH )
+		if ( *it == t )
 		{
-			return E_INVALIDARG;
-		}
-		if ( t.vt != VT_I4 ) 
-		{
-			t.changeType(VT_I4);
-		}
-		timeouts_.push_back( new ThreadedTimeout(f.pdispVal,t.llVal+tick) );
-		return S_OK;
-	}
-
-	void remove( ThreadedTimeout* t)
-	{
-		for ( std::list<ThreadedTimeout*>::iterator it = timeouts_.begin(); it != timeouts_.end(); it++)
-		{
-			if ( *it == t )
-			{
-				delete t;
-				timeouts_.erase(it);
-				return;
-			}
+			delete t;
+			timeouts_.erase(it);
+			return;
 		}
 	}
+}
 
-	bool fire()
+bool ThreadedTimeouts::fire()
+{
+	long now = ::GetTickCount();
+	std::list<ThreadedTimeout*> newList;
+	for ( std::list<ThreadedTimeout*>::iterator it = timeouts_.begin(); it != timeouts_.end(); it++)
 	{
-		long now = ::GetTickCount();
-		std::list<ThreadedTimeout*> newList;
-		for ( std::list<ThreadedTimeout*>::iterator it = timeouts_.begin(); it != timeouts_.end(); it++)
+		if ( (*it)->timeout < now ) 
 		{
-			if ( (*it)->timeout < now ) 
-			{
-				EXCEPINFO ex;
-				::ZeroMemory(&ex,sizeof(EXCEPINFO));
-				UINT e = 0;
-				DISPPARAMS p = {0,0};
+			EXCEPINFO ex;
+			::ZeroMemory(&ex,sizeof(EXCEPINFO));
+			UINT e = 0;
+			DISPPARAMS p = {0,0};
 
-				HRESULT hr = (*it)->fun->Invoke(0,IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,&p,0,&ex,&e);
-				delete *it;
-			}
-			else
-			{
-				newList.push_back(*it);
-			}
+			HRESULT hr = (*it)->fun->Invoke(0,IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,&p,0,&ex,&e);
+			delete *it;
 		}
-		timeouts_ = newList;
-		return timeouts_.empty();
+		else
+		{
+			newList.push_back(*it);
+		}
 	}
+	timeouts_ = newList;
+	return timeouts_.empty();
+}
 
-private:
-
-	std::list<ThreadedTimeout*> timeouts_;
-};
 
 ThreadedTimeouts& threadedTimeouts()
 {
