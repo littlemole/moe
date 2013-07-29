@@ -9,7 +9,7 @@
 #include "win/enc.h"
 #include "util/uni.h"
 #include "io_h.h"
-
+#include "dtl/dtl.hpp"
 #include "resource.h"
 
 using namespace mol;
@@ -70,4 +70,102 @@ private:
 	VARIANT_BOOL useBOM_;
 };
 
+class UniDiffObj : 
+	public mol::com_registerobj<UniDiffObj,CLSID_UniDiff,CLSCTX_INPROC_SERVER,
+						PROGRAMMABLE|APARTMENT|DLL_SURROGATE|CAN_ELEVATE>,
+	public mol::Dispatch<IUniDiff>,
+	public mol::interfaces< UniDiffObj,
+			mol::implements<
+				IUniDiff,
+				IDispatch > >
+{
+public:
+
+	typedef std::string elem;
+	typedef std::vector<std::string> sequence;
+
+	HRESULT virtual __stdcall Diff( BSTR a, BSTR b, BSTR* f )
+	{
+		if ( !a || !b || !f )
+			return E_INVALIDARG;
+
+		typedef std::string elem;
+		typedef std::vector<std::string> sequence;
+
+		std::string ua = mol::toUTF8( a );
+		std::string ub = mol::toUTF8( b );
+
+		ua = mol::dos2unix(ua);
+		ub = mol::dos2unix(ub);
+
+		sequence sa = mol::split(ua,"\n");
+		sequence sb = mol::split(ub,"\n");
+
+		dtl::Diff< elem, sequence > diff(sa,sb);
+		diff.compose();
+		diff.composeUnifiedHunks();
+
+		std::ostringstream oss;
+		diff.printUnifiedFormat(oss);
+
+//		diff.composeUnichunkFromStream(
+
+		*f = ::SysAllocString(mol::fromUTF8(oss.str()).c_str());
+
+		return S_OK;
+	}
+
+	HRESULT virtual __stdcall Patch( BSTR original, BSTR patch, BSTR* f )
+	{
+		if ( !original || !patch || !f )
+			return E_INVALIDARG;
+
+		std::string soriginal = mol::toUTF8( original );
+		soriginal = mol::dos2unix(soriginal);
+
+		std::string spatch = mol::toUTF8( patch );
+		spatch = mol::dos2unix(spatch);
+		
+		dtl::Diff< elem, sequence > diff = parseUnihunkFile(std::istringstream(spatch));
+
+		sequence source = mol::split(soriginal,"\n");
+		sequence result = diff.uniPatch(source);
+
+		std::ostringstream oss;
+		for ( sequence::iterator it = result.begin(); it != result.end(); it++)
+		{
+			oss << (*it) << std::endl;
+		}
+
+		*f = ::SysAllocString( mol::fromUTF8( oss.str() ).c_str() );
+		return S_OK;
+	}
+
+private:
+
+	dtl::Diff< elem, sequence > parseUnihunkFile(std::istream& is) 
+	{
+		dtl::Diff< elem, sequence > result;
+
+		while(!is.eof())
+		{
+			char c = is.peek();
+			if( c == '@' ) 
+			{
+				result.composeUnichunkFromStream(is);
+				break;
+			}
+			else 
+			{
+				elem line;
+				std::getline(is,line);
+			}
+		}
+		return result;
+	}
+
+};
+
 #endif
+
+

@@ -9,8 +9,8 @@ class ioDll :
 	public mol::Dll,
 	public mol::exports<ioDll,PathObj>,
 	public mol::exports<ioDll,DirObj>,
-	public mol::exports<ioDll,FileObj>
-
+	public mol::exports<ioDll,FileObj>,
+	public mol::exports<ioDll,UniDiffObj>
 {
 public:
 	DEFINE_APP_ID("{C7C1B932-871E-4374-B96E-88A4A09262E1}");

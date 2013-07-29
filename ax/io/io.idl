@@ -251,6 +251,26 @@ library IO
 		HRESULT Create( [in] BSTR txt, [out,retval] VARIANT_BOOL* vb  );
     };
 
+	////////////////////////////////////////////////////////////////////////////////////
+	// IUniDiff
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+	  uuid(0ADC0037-6470-43C0-BCC2-565479985A98),
+      helpstring("IUniDiff - uniform diff format interface"),
+      object,oleautomation, dual
+    ]
+	interface IUniDiff : IDispatch
+    {
+		// properties
+
+		// methods
+		[ id(1), helpstring("Get Diff")	]
+		HRESULT Diff( [in] BSTR a, [in] BSTR b, [out,retval] BSTR* f);
+
+		[ id(2), helpstring("Patch Diff")	]
+		HRESULT Patch( [in] BSTR original, [in] BSTR patch, [out,retval] BSTR* f);
+
+	};
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Co Classes ( class factories )
@@ -291,5 +311,18 @@ library IO
 	coclass Dir
 	{
 		[default]         interface     IDir;
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// UniDiff
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(6C3988A9-5DE2-4780-9DAF-8F812E4F8226)
+	]
+	coclass UniDiff
+	{
+		[default]         interface     IUniDiff;
 	}
 }

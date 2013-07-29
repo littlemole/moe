@@ -9,6 +9,12 @@
   <Import Project="..\..\master.props" />
   <Import Project="..\build.props" />
 
+  <ItemDefinitionGroup>
+    <ClCompile>
+	  <AdditionalIncludeDirectories>..\..\3dParty\dtl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
   <ItemGroup>
     <Midl Include="io.idl" />
   </ItemGroup>
