@@ -182,6 +182,7 @@ public:
  	virtual HRESULT __stdcall  Quit();
 	virtual HRESULT __stdcall  get_Dispatch(IDispatch** disp);
 	virtual HRESULT __stdcall  Callback(BSTR name,IDispatch** disp);
+	virtual HRESULT __stdcall  setTimeout( VARIANT f, VARIANT d, VARIANT* retval);
 
 private:
 	IActiveScript* host_;

@@ -196,6 +196,8 @@ class Script : public mol::com_obj<mol::ScriptHost>
 {
 public:
 
+	mol::Event completed;
+
 	static Script* CreateInstance()
 	{
 		Script* s = new Script;
@@ -222,6 +224,7 @@ private:
 	~Script();
     IScintillAx* sci_;
 };
+
 
 /////////////////////////////////////////////////////////////////////
 

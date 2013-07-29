@@ -1153,6 +1153,9 @@ library Moe
 		[id(6), helpstring("Event callback")] 
  		HRESULT Callback([in] BSTR name, [out,retval] IDispatch** disp);
 
+		[id(7), helpstring("setTimeout")] 
+		HRESULT setTimeout( [in] VARIANT f, [in] VARIANT d, [out,retval] VARIANT* r);
+
 	}
 	////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////

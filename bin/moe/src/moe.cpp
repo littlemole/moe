@@ -461,7 +461,7 @@ void MoeWnd::OnFx(int code, int id, HWND ctrl)
 // show/hide Tree View
 //
 //////////////////////////////////////////////////////////////////////////////
-
+/*
 #define connect_cmd_handler(cmd,mfp)											\
 int mol_connect_cmd##cmd##__()													\
 {																				\
@@ -470,6 +470,21 @@ int mol_connect_cmd##cmd##__()													\
 	return 0;																	\
 }																				\
 int mol_connect_cmd##cmd##__initonce__ = mol_connect_cmd##cmd##__();
+*/
+
+class ConnectCmdHandler
+{
+public:
+	template<class F>
+	ConnectCmdHandler(UINT cmd, F f)
+	{
+		IMsgMapHandler* handler = make_handler(f);
+		handler->connect_cmd( cmd );	
+	}
+};
+
+#define connect_cmd_handler(cmd,mfp) \
+	ConnectCmdHandler connectCmdHandler_##__LINE__(cmd,&mfp);
 
 
 connect_cmd_handler(IDM_VIEW_DIRVIEW,MoeWnd::OnShowDirView)

@@ -11,6 +11,90 @@ mol::string engineFromPath(const std::string& path)
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
+
+struct ThreadedTimeout
+{
+	ThreadedTimeout(IDispatch* f, long t, bool i = false)
+		: fun(f), timeout(t), interval(i)
+	{}
+
+	mol::punk<IDispatch> fun;
+	long timeout;
+	bool interval;
+};
+
+class ThreadedTimeouts
+{
+public:
+	ThreadedTimeouts()
+	{}
+
+	~ThreadedTimeouts()
+	{}
+
+	HRESULT setTimeout( mol::variant f, mol::variant t)
+	{
+		long tick = ::GetTickCount();
+		if (f.vt != VT_DISPATCH )
+		{
+			return E_INVALIDARG;
+		}
+		if ( t.vt != VT_I4 ) 
+		{
+			t.changeType(VT_I4);
+		}
+		timeouts_.push_back( new ThreadedTimeout(f.pdispVal,t.llVal+tick) );
+		return S_OK;
+	}
+
+	void remove( ThreadedTimeout* t)
+	{
+		for ( std::list<ThreadedTimeout*>::iterator it = timeouts_.begin(); it != timeouts_.end(); it++)
+		{
+			if ( *it == t )
+			{
+				delete t;
+				timeouts_.erase(it);
+				return;
+			}
+		}
+	}
+
+	bool fire()
+	{
+		long now = ::GetTickCount();
+		std::list<ThreadedTimeout*> newList;
+		for ( std::list<ThreadedTimeout*>::iterator it = timeouts_.begin(); it != timeouts_.end(); it++)
+		{
+			if ( (*it)->timeout < now ) 
+			{
+				EXCEPINFO ex;
+				::ZeroMemory(&ex,sizeof(EXCEPINFO));
+				UINT e = 0;
+				DISPPARAMS p = {0,0};
+
+				HRESULT hr = (*it)->fun->Invoke(0,IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,&p,0,&ex,&e);
+				delete *it;
+			}
+			else
+			{
+				newList.push_back(*it);
+			}
+		}
+		timeouts_ = newList;
+		return timeouts_.empty();
+	}
+
+private:
+
+	std::list<ThreadedTimeout*> timeouts_;
+};
+
+ThreadedTimeouts& threadedTimeouts()
+{
+	return mol::singleton<ThreadedTimeouts>();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -79,8 +163,9 @@ HRESULT __stdcall  MoeDebugImport::Wait(long ms,VARIANT_BOOL* vb)
 	MSG msg;
 	while( (ms == 0) || ((nowTick-startTick)<(unsigned long)ms) )
 	{
+		threadedTimeouts().fire();
 		nowTick = ::GetTickCount();
-  	    DWORD r = ::MsgWaitForMultipleObjectsEx(1,&stop_,100,QS_ALLINPUT,MWMO_INPUTAVAILABLE|MWMO_ALERTABLE);
+  	    DWORD r = ::MsgWaitForMultipleObjectsEx(1,&stop_,10,QS_ALLINPUT,MWMO_INPUTAVAILABLE|MWMO_ALERTABLE);
 		if ( r == WAIT_IO_COMPLETION || r == WAIT_TIMEOUT) 
 		{
 			continue;
@@ -146,6 +231,17 @@ HRESULT __stdcall  MoeDebugImport::Callback(BSTR name,IDispatch** disp)
 	}
 	return S_OK;
 }
+
+
+HRESULT __stdcall  MoeDebugImport::setTimeout( VARIANT f, VARIANT d, VARIANT* retval)
+{
+	if ( f.vt != VT_DISPATCH )
+		return E_INVALIDARG;
+
+	threadedTimeouts().setTimeout( mol::variant(f), mol::variant(d) );
+	return S_OK;
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -441,8 +537,13 @@ void ScriptDebugger::execute_thread( )
 		}
 	}
 	
-
 	hr = activeScript_->SetScriptState(SCRIPTSTATE_CONNECTED);
+
+	// execute any outstanding timeouts
+	while ( !threadedTimeouts().fire() )
+	{
+		mol::Sleep(10);
+	}
 }
 
 

@@ -109,6 +109,116 @@ void MoeStatusBar::status( const mol::string& txt )
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
+class Timeout
+{
+public:
+
+	typedef Script Host;
+
+	Timeout(mol::variant& f, mol::variant& d, Host* script)
+		:f_(f),script_(script)
+	{
+		timer_.set( d.lVal, boost::bind( &Timeout::operator(), this ));
+	}
+
+	~Timeout()
+	{
+	}
+
+	void operator()();
+
+	void kill()
+	{
+		timer_.kill();
+	}
+
+private:
+	mol::variant f_;
+	mol::punk<Host> script_;
+	mol::Timer timer_;
+
+};
+
+
+class Timeouts
+{
+public:
+
+	HRESULT setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script );
+	void remove(Timeout::Host* script, Timeout* t);
+	size_t count(Timeout::Host* s);
+
+
+private:
+	std::map<Timeout::Host*, std::list<Timeout*> > timeouts_;
+};
+
+Timeouts& timeouts();
+
+HRESULT Timeouts::setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script )
+{
+	Timeout* t = new Timeout(f,delay,script);
+	timeouts_[script].push_back( t );
+	if ( delay.vt != VT_I4) 
+	{
+		delay.changeType(VT_I4);
+	}
+	return S_OK;
+}
+
+void Timeouts::remove(Timeout::Host* script, Timeout* t)
+{
+	if ( timeouts_.count(script) == 0 )
+		return;
+
+	for ( std::list<Timeout*>::iterator it = timeouts_[script].begin(); it != timeouts_[script].end(); it++)
+	{
+		if ( *it == t )
+		{
+			timeouts_[script].erase(it);
+			if ( count(script) == 0  )
+			{
+				if ( script->completed.test() )
+				{
+					script->close();
+					script->Release();
+				}
+				timeouts_.erase(script);
+			}
+			delete t;
+			break;
+		}
+	}
+}
+
+size_t Timeouts::count(Timeout::Host* s)
+{
+	if ( timeouts_.count(s) == 0 )
+	{
+		return 0;
+	}
+	return timeouts_[s].size();
+}
+
+
+Timeouts& timeouts()
+{
+	return mol::singleton<Timeouts>();
+}
+
+void Timeout::operator()()
+{
+	EXCEPINFO ex;
+	::ZeroMemory(&ex,sizeof(EXCEPINFO));
+	UINT e = 0;
+	DISPPARAMS p = {0,0};
+
+	kill();
+	HRESULT hr = f_.pdispVal->Invoke(0,IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,&p,0,&ex,&e);
+	timeouts().remove(script_,this);
+
+}
+
 Script::Script()
 {
 	sci_ = 0;
@@ -176,8 +286,14 @@ void Script::eval(  const mol::string& engine, const mol::string& script, IScint
 	}
 
 	runScript(script);
-	close();
-	this->Release();
+	completed.signal();
+
+	if ( timeouts().count( this) == 0 )
+	{
+		close();
+		this->Release();
+	}
+	
 }
 
 void Script::debug(  const mol::string& engine, const mol::string& script, IScintillAx* sci )
@@ -195,8 +311,13 @@ void Script::debug(  const mol::string& engine, const mol::string& script, IScin
 	}
 
 	debugScript(script);
-	close();
-	this->Release();
+	completed.signal();
+
+	if ( timeouts().count( this) == 0 )
+	{
+		close();
+		this->Release();
+	}
 }
 void Script::call(  const mol::string& engine, const mol::string& func, const mol::string& script )
 {
@@ -210,8 +331,13 @@ void Script::call(  const mol::string& engine, const mol::string& func, const mo
 
 	runScript(script);
 	ScriptHost::call(func);
-	close();
-	this->Release();
+	completed.signal();
+
+	if ( timeouts().count( this) == 0 )
+	{
+		close();
+		this->Release();
+	}
 }
 
 
@@ -228,7 +354,6 @@ void Script::formscript( const mol::string& engine, const mol::string& s, IDispa
 	runScript(s,SCRIPTTEXT_ISVISIBLE|SCRIPTTEXT_ISPERSISTENT);//|SCRIPTTEXT_DELAYEXECUTION);	
 	
 	this->setState(SCRIPTSTATE_STARTED);
-	//close();
 	this->Release();
 }
 
@@ -245,7 +370,6 @@ void Script::formdebug( const mol::string& engine, const mol::string& s, IDispat
 	debugScript(s,SCRIPTTEXT_ISVISIBLE|SCRIPTTEXT_ISPERSISTENT);//|SCRIPTTEXT_DELAYEXECUTION);	
 	
 	this->setState(SCRIPTSTATE_STARTED);
-	//close();
 	this->Release();
 }
 
@@ -1951,6 +2075,15 @@ HRESULT __stdcall  MoeImport::Callback(BSTR name,IDispatch** disp)
 	{
 		return EventWrapper::CreateInstance(d,mol::bstr(name),disp);
 	}
+	return S_OK;
+}
+
+HRESULT __stdcall  MoeImport::setTimeout( VARIANT f, VARIANT d, VARIANT* retval)
+{
+	if ( f.vt != VT_DISPATCH )
+		return E_INVALIDARG;
+
+	timeouts().setTimeout( mol::variant(f), mol::variant(d), (Script*)(host_.interface_) );
 	return S_OK;
 }
 
