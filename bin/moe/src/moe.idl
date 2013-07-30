@@ -1153,8 +1153,11 @@ library Moe
 		[id(6), helpstring("Event callback")] 
  		HRESULT Callback([in] BSTR name, [out,retval] IDispatch** disp);
 
-		[id(7), helpstring("setTimeout")] 
+		[id(7), helpstring("set script Timeout")] 
 		HRESULT setTimeout( [in] VARIANT f, [in] VARIANT d, [out,retval] VARIANT* r);
+
+		[id(8), helpstring("clear script Timeout")] 
+		HRESULT clearTimeout( [in] VARIANT f);
 
 	}
 	////////////////////////////////////////////////////////////////////////////////////

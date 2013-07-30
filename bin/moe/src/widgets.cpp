@@ -144,7 +144,7 @@ class Timeouts
 {
 public:
 
-	HRESULT setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script );
+	Timeout* setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script );
 	void remove(Timeout::Host* script, Timeout* t);
 	size_t count(Timeout::Host* s);
 
@@ -155,7 +155,7 @@ private:
 
 Timeouts& timeouts();
 
-HRESULT Timeouts::setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script )
+Timeout Timeouts::setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script )
 {
 	Timeout* t = new Timeout(f,delay,script);
 	timeouts_[script].push_back( t );
@@ -163,7 +163,7 @@ HRESULT Timeouts::setTimeout( mol::variant& f, mol::variant& delay, Timeout::Hos
 	{
 		delay.changeType(VT_I4);
 	}
-	return S_OK;
+	return this;
 }
 
 void Timeouts::remove(Timeout::Host* script, Timeout* t)
