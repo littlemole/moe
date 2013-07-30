@@ -394,6 +394,7 @@ public:
 	virtual HRESULT __stdcall  get_Dispatch(IDispatch** disp);
 	virtual HRESULT __stdcall  Callback(BSTR name,IDispatch** disp);
 	virtual HRESULT __stdcall  setTimeout( VARIANT f, VARIANT d, VARIANT* retval);
+	virtual HRESULT __stdcall  MoeImport::clearTimeout( VARIANT t);
 
 private:
  	mol::punk<Host> host_;

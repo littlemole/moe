@@ -144,7 +144,7 @@ class Timeouts
 {
 public:
 
-	Timeout* setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script );
+	void setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script );
 	void remove(Timeout::Host* script, Timeout* t);
 	size_t count(Timeout::Host* s);
 
@@ -155,7 +155,7 @@ private:
 
 Timeouts& timeouts();
 
-Timeout Timeouts::setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script )
+void Timeouts::setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script )
 {
 	Timeout* t = new Timeout(f,delay,script);
 	timeouts_[script].push_back( t );
@@ -163,7 +163,6 @@ Timeout Timeouts::setTimeout( mol::variant& f, mol::variant& delay, Timeout::Hos
 	{
 		delay.changeType(VT_I4);
 	}
-	return this;
 }
 
 void Timeouts::remove(Timeout::Host* script, Timeout* t)
@@ -2084,10 +2083,14 @@ HRESULT __stdcall  MoeImport::setTimeout( VARIANT f, VARIANT d, VARIANT* retval)
 		return E_INVALIDARG;
 
 	timeouts().setTimeout( mol::variant(f), mol::variant(d), (Script*)(host_.interface_) );
+
 	return S_OK;
 }
 
-
+HRESULT __stdcall  MoeImport::clearTimeout( VARIANT t)
+{
+	return S_OK;
+}
 
 
 HRESULT EventWrapper::CreateInstance(IDispatch* disp, BSTR handler, IDispatch** d)
