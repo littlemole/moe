@@ -143,32 +143,65 @@ private:
 class Timeouts
 {
 public:
+	Timeouts() : count_(0) {}
 
-	void setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script );
+	int setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script );
+	void clear(Timeout::Host* script, int t);
 	void remove(Timeout::Host* script, Timeout* t);
 	size_t count(Timeout::Host* s);
 
 
 private:
+	int count_;
+	std::map<int, Timeout*> lookup_;
 	std::map<Timeout::Host*, std::list<Timeout*> > timeouts_;
 };
 
 Timeouts& timeouts();
 
-void Timeouts::setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script )
+int Timeouts::setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script )
 {
 	Timeout* t = new Timeout(f,delay,script);
 	timeouts_[script].push_back( t );
+	int result = count_;
+	count_++;
+	lookup_[result] = t;
+
 	if ( delay.vt != VT_I4) 
 	{
 		delay.changeType(VT_I4);
 	}
+	return result;
 }
 
-void Timeouts::remove(Timeout::Host* script, Timeout* t)
+void Timeouts::clear(Timeout::Host* script, int i)
 {
-	if ( timeouts_.count(script) == 0 )
+	if ( lookup_.count(i) == 0 )
 		return;
+
+	Timeout* t = lookup_[i];
+	lookup_.erase(i);
+
+	for ( std::list<Timeout*>::iterator it = timeouts_[script].begin(); it != timeouts_[script].end(); it++)
+	{
+		if ( *it == t )
+		{
+			t->kill();
+			timeouts_[script].erase(it);
+			delete t;
+			break;
+		}
+	}
+}
+
+void Timeouts::remove(Timeout::Host* script,Timeout* t)
+{
+
+	if ( timeouts_.count(script) == 0 )
+	{
+		delete t;
+		return;
+	}
 
 	for ( std::list<Timeout*>::iterator it = timeouts_[script].begin(); it != timeouts_[script].end(); it++)
 	{
@@ -2082,13 +2115,23 @@ HRESULT __stdcall  MoeImport::setTimeout( VARIANT f, VARIANT d, VARIANT* retval)
 	if ( f.vt != VT_DISPATCH )
 		return E_INVALIDARG;
 
-	timeouts().setTimeout( mol::variant(f), mol::variant(d), (Script*)(host_.interface_) );
-
+	int i = timeouts().setTimeout( mol::variant(f), mol::variant(d), (Script*)(host_.interface_) );
+	if ( retval )
+	{
+		retval->vt = VT_I4;
+		retval->lVal = i;
+	}
 	return S_OK;
 }
 
 HRESULT __stdcall  MoeImport::clearTimeout( VARIANT t)
 {
+	mol::variant v(t);
+	if ( v.vt != VT_I4 )
+	{
+		v.changeType(VT_I4);
+	}
+	timeouts().clear( (Script*)(host_.interface_), v.lVal );
 	return S_OK;
 }
 

@@ -394,7 +394,7 @@ public:
 	virtual HRESULT __stdcall  get_Dispatch(IDispatch** disp);
 	virtual HRESULT __stdcall  Callback(BSTR name,IDispatch** disp);
 	virtual HRESULT __stdcall  setTimeout( VARIANT f, VARIANT d, VARIANT* retval);
-	virtual HRESULT __stdcall  MoeImport::clearTimeout( VARIANT t);
+	virtual HRESULT __stdcall  clearTimeout( VARIANT t);
 
 private:
  	mol::punk<Host> host_;
@@ -438,32 +438,6 @@ private:
 	mol::bstr callback_;
 };
 
-struct ThreadedTimeout
-{
-	ThreadedTimeout(IDispatch* f, long t, bool i = false)
-		: fun(f), timeout(t), interval(i)
-	{}
 
-	mol::punk<IDispatch> fun;
-	long timeout;
-	bool interval;
-};
-
-class ThreadedTimeouts
-{
-public:
-	ThreadedTimeouts() {}
-	~ThreadedTimeouts() {}
-
-	HRESULT setTimeout( mol::variant f, mol::variant t);
-	void remove( ThreadedTimeout* t);
-	bool fire();
-
-private:
-
-	std::list<ThreadedTimeout*> timeouts_;
-};
-
-ThreadedTimeouts& threadedTimeouts();
 
 #endif

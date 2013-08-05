@@ -66,6 +66,9 @@ bool TypeLib2XML::loadTypeLib(const mol::string path)
 				
 						INT flags = 0;
 						ti.type_info->GetImplTypeFlags(i,&flags);
+
+						if ( flags & IMPLTYPEFLAG_FRESTRICTED )
+							break;
 						if ( flags & IMPLTYPEFLAG_FSOURCE )
 							mc.isSource = true;
 						if ( flags & IMPLTYPEFLAG_FDEFAULT )

@@ -12,6 +12,33 @@ mol::string engineFromPath(const std::string& path)
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
+struct ThreadedTimeout
+{
+	ThreadedTimeout(IDispatch* f, long t, bool i = false)
+		: fun(f), timeout(t), interval(i)
+	{}
+
+	mol::punk<IDispatch> fun;
+	long timeout;
+	bool interval;
+};
+
+class ThreadedTimeouts
+{
+public:
+	ThreadedTimeouts() : count_(0) {}
+	~ThreadedTimeouts() {}
+
+	HRESULT setTimeout( mol::variant f, mol::variant t);
+	void remove( int i );
+	bool fire();
+
+private:
+	int count_;
+	std::map<int,ThreadedTimeout*> timeouts_;
+};
+
+ThreadedTimeouts& threadedTimeouts();
 
 HRESULT ThreadedTimeouts::setTimeout( mol::variant f, mol::variant t)
 {
