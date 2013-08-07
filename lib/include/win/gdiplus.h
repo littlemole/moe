@@ -2,6 +2,7 @@
 #define _MOL_DEF_GUARD_GDIPLUS_DEF_GUARD_DEFINE_
 
 #include "conf.h"
+#include <algorithm>
 
 #define min std::min
 #define max std::max

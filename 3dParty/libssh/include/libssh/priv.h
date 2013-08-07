@@ -49,7 +49,9 @@
 #  define strcasecmp _stricmp
 #  define strncasecmp _strnicmp
 #  define strtoull _strtoui64
+#if (_MSC_VER < 1800 )
 #  define isblank(ch) ((ch) == ' ' || (ch) == '\t' || (ch) == '\n' || (ch) == '\r')
+#endif
 
 #  define usleep(X) Sleep(((X)+1000)/1000)
 

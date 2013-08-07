@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5D6DA2A2-C6DE-4C6B-8C58-D53C26982B72}</ProjectGuid>
+    <RootNamespace>libssh</RootNamespace>
+    <TargetName>libssh</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="..\..\..\master.props" />
+  <Import Project=".\build.props" />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <DisableSpecificWarnings>4244;4267</DisableSpecificWarnings>
+      <AdditionalOptions> /Zm1000 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES=1;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT=1;_CRT_NONSTDC_NO_WARNINGS=1;_CRT_SECURE_NO_WARNINGS=1;LIBSSH_STATIC;SUPPORT_UTF8;STATIC;POSIX_MALLOC_THRESHOLD=10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../libssh/build/src;../../libssh/src;../../libssh/include;../../libssh/build;../../openssl/inc64;../../zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsC</CompileAs>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\agent.c" />
+    <ClCompile Include="..\src\auth.c" />
+    <ClCompile Include="..\src\base64.c" />
+    <ClCompile Include="..\src\buffer.c" />
+    <ClCompile Include="..\src\callbacks.c" />
+    <ClCompile Include="..\src\channels.c" />
+    <ClCompile Include="..\src\client.c" />
+    <ClCompile Include="..\src\config.c" />
+    <ClCompile Include="..\src\connect.c" />
+    <ClCompile Include="..\src\crc32.c" />
+    <ClCompile Include="..\src\crypt.c" />
+    <ClCompile Include="..\src\dh.c" />
+    <ClCompile Include="..\src\error.c" />
+    <ClCompile Include="..\src\getpass.c" />
+    <ClCompile Include="..\src\gcrypt_missing.c" />
+    <ClCompile Include="..\src\gzip.c" />
+    <ClCompile Include="..\src\init.c" />
+    <ClCompile Include="..\src\kex.c" />
+    <ClCompile Include="..\src\keyfiles.c" />
+    <ClCompile Include="..\src\keys.c" />
+    <ClCompile Include="..\src\known_hosts.c" />
+    <ClCompile Include="..\src\legacy.c" />
+    <ClCompile Include="..\src\libcrypto.c" />
+    <ClCompile Include="..\src\libgcrypt.c" />
+    <ClCompile Include="..\src\log.c" />
+    <ClCompile Include="..\src\match.c" />
+    <ClCompile Include="..\src\messages.c" />
+    <ClCompile Include="..\src\misc.c" />
+    <ClCompile Include="..\src\options.c" />
+    <ClCompile Include="..\src\packet.c" />
+    <ClCompile Include="..\src\pcap.c" />
+    <ClCompile Include="..\src\pki.c" />
+    <ClCompile Include="..\src\poll.c" />
+    <ClCompile Include="..\src\session.c" />
+    <ClCompile Include="..\src\scp.c" />
+    <ClCompile Include="..\src\socket.c" />
+    <ClCompile Include="..\src\string.c" />
+    <ClCompile Include="..\src\threads.c" />
+    <ClCompile Include="..\src\wrapper.c" />
+    <ClCompile Include="..\src\sftp.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

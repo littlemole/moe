@@ -35,7 +35,7 @@ public:
 
 private:
 	int count_;
-	std::map<int,ThreadedTimeout*> timeouts_;
+	std::list<ThreadedTimeout*> timeouts_;
 };
 
 ThreadedTimeouts& threadedTimeouts();
@@ -54,7 +54,7 @@ HRESULT ThreadedTimeouts::setTimeout( mol::variant f, mol::variant t)
 	timeouts_.push_back( new ThreadedTimeout(f.pdispVal,t.llVal+tick) );
 	return S_OK;
 }
-
+/*
 void ThreadedTimeouts::remove( ThreadedTimeout* t)
 {
 	for ( std::list<ThreadedTimeout*>::iterator it = timeouts_.begin(); it != timeouts_.end(); it++)
@@ -67,7 +67,7 @@ void ThreadedTimeouts::remove( ThreadedTimeout* t)
 		}
 	}
 }
-
+*/
 bool ThreadedTimeouts::fire()
 {
 	long now = ::GetTickCount();
