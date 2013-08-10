@@ -22,6 +22,12 @@
 	tlbid="{F1D70022-14DA-4344-9A66-AE78DBF21ABF}"
   progid="IO.Dir" description="">
 </comClass>
+<comClass 
+	clsid="{6C3988A9-5DE2-4780-9DAF-8F812E4F8226}" 
+	tlbid="{F1D70022-14DA-4344-9A66-AE78DBF21ABF}"
+  progid="IO.UniDiff" description="">
+</comClass>
+
 <typelib 
 	tlbid="{F1D70022-14DA-4344-9A66-AE78DBF21ABF}" 
 	version="1.0" 
@@ -42,6 +48,11 @@
 </comInterfaceExternalProxyStub>
 <comInterfaceExternalProxyStub name="IPath" 
 	iid="{FFEB4898-0ECC-465A-851E-F5F7BB4136A8}" 
+	tlbid="{F1D70022-14DA-4344-9A66-AE78DBF21ABF}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+<comInterfaceExternalProxyStub name="IUniDiff" 
+	iid="{0ADC0037-6470-43C0-BCC2-565479985A98}" 
 	tlbid="{F1D70022-14DA-4344-9A66-AE78DBF21ABF}" 
 	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
 </comInterfaceExternalProxyStub>

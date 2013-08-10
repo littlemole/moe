@@ -13,6 +13,11 @@
   progid="ShellCtrls.ShellTree" description="">
 </comClass>
 <comClass 
+	clsid="{3709C0E3-1CED-4B80-BBE1-D80D539C5FEE}" 
+	tlbid="{74618F47-2F2A-4B0F-BDCA-344BE3208ECE}"
+  progid="ShellCtrls.NamespaceTree" description="">
+</comClass>
+<comClass 
 	clsid="{8E6A9C86-2FA6-4D02-B9BE-72326A7F6C9D}" 
 	tlbid="{74618F47-2F2A-4B0F-BDCA-344BE3208ECE}"
   progid="ShellCtrls.ShellList" description="">
@@ -26,6 +31,16 @@
 	clsid="{E83EC0F6-6AF3-44F8-901E-AF01F84FE6D0}" 
 	tlbid="{74618F47-2F2A-4B0F-BDCA-344BE3208ECE}"
   progid="ShellCtrls.HexCtrl" description="">
+</comClass>
+<comClass 
+	clsid="{CD199DC9-8BA4-4F7A-BCFA-4C3473C06F03}" 
+	tlbid="{74618F47-2F2A-4B0F-BDCA-344BE3208ECE}"
+  progid="ShellCtrls.ScpList" description="">
+</comClass>
+<comClass 
+	clsid="{733EA4E5-CDA0-4900-9255-DFC136AA3401}" 
+	tlbid="{74618F47-2F2A-4B0F-BDCA-344BE3208ECE}"
+  progid="ShellCtrls.KillRoy" description="">
 </comClass>
 <typelib 
 	tlbid="{74618F47-2F2A-4B0F-BDCA-344BE3208ECE}" 
@@ -66,6 +81,21 @@
 </comInterfaceExternalProxyStub>
 <comInterfaceExternalProxyStub name="IHexCtrlEvents" 
 	iid="{2031340D-A1E9-4FCF-8774-B94A565D6225}" 
+	tlbid="{74618F47-2F2A-4B0F-BDCA-344BE3208ECE}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+<comInterfaceExternalProxyStub name="IKillRoy" 
+	iid="{6CE312C4-CCD1-4F28-B06D-4137F486FCB4}" 
+	tlbid="{74618F47-2F2A-4B0F-BDCA-344BE3208ECE}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+<comInterfaceExternalProxyStub name="IPID" 
+	iid="{6AAA0600-70F4-4B2A-BFAA-D808EBD2D174}" 
+	tlbid="{74618F47-2F2A-4B0F-BDCA-344BE3208ECE}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+<comInterfaceExternalProxyStub name="IScpList " 
+	iid="{D30F5C7F-CFAB-4D26-8FF3-0C7F67A0269D}" 
 	tlbid="{74618F47-2F2A-4B0F-BDCA-344BE3208ECE}" 
 	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
 </comInterfaceExternalProxyStub>

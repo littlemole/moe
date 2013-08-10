@@ -20,6 +20,18 @@
   progid="Scintilla.ScintillAxProperties"
 	description="IScintillAx Property Page">
 </comClass>
+<comClass 
+	clsid="{3039CC18-067B-450F-952D-7CE2ADD79F88}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+  progid="Scintilla.ScintillAxSettings"
+	description="IScintillAxSettings Settings">
+</comClass>
+<comClass 
+	clsid="{01C47486-7B0D-43E0-B66A-386EBB6A038F}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+  progid="Scintilla.ScintillAxStyleSets"
+	description="IScintillAxStyleSets  Style Sets">
+</comClass>
 <typelib 
 	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
 	version="1.0" 
@@ -92,4 +104,25 @@
 
 
 
+
+<comInterfaceExternalProxyStub name="IScintillAxStyleSets"
+	iid="{5143947F-7A44-4EA7-904C-E7163F50A02C}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+
+
+
+<comInterfaceExternalProxyStub name="IScintillAxStyleSet"
+	iid="{EA642C7F-91FA-43F0-8A17-108FEA21321B}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+
+
+<comInterfaceExternalProxyStub name="IScintillAxStyle"
+	iid="{F2988C3B-4F96-4DA9-ABFB-3F063CA65540}" 
+	tlbid="{B353B863-12C3-45AB-82FE-2F8F9BAA91D6}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
 </assembly>

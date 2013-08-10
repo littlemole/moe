@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="uni_debug|Win32">
       <Configuration>uni_debug</Configuration>
@@ -36,37 +36,37 @@
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -185,7 +185,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/SUBSYSTEM:WINDOWS,4.00 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>..\..\lib\src\win\uni_debug\win.lib;..\..\lib\src\ole\uni_debug\ole.lib;..\..\lib\src\util\uni_debug\util.lib;..\..\lib\src\thread\uni_debug\thread.lib;..\..\3dParty\pcre\uni_debug\pcre.lib;..\..\lib\src\xml\uni_debug\xml.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Mpr.lib;gdiplus.lib;urlmon.lib;Msimg32.lib;..\..\3dParty\expat\Source\lib\uni_debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\uni_debug\win.lib;..\..\lib\src\ole\uni_debug\ole.lib;..\..\lib\src\util\uni_debug\util.lib;..\..\lib\src\xml\uni_debug\xml.lib;..\..\lib\src\thread\uni_debug\thread.lib;..\..\lib\src\ssh\uni_debug\ssh.lib;..\..\lib\src\tcp\uni_debug\tcp.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Mpr.lib;urlmon.lib;Ws2_32.lib;..\..\3dParty\pcre\uni_debug\pcre.lib;..\..\3dParty\openssl\out32D\libeay32.lib;..\..\3dParty\openssl\out32D\ssleay32.lib;Msimg32.lib;..\..\3dParty\expat\Source\lib\uni_debug\libexpatMT.lib;..\..\3dParty\zlib\debug\zlib.lib;gdiplus.lib;Propsys.lib;..\..\3dParty\libssh\build\uni_debug\libssh.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)moe.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>NotSet</SubSystem>
@@ -471,7 +471,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">code generation phase</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">cscript.exe ../../cg/js/make.js "uni_release"
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">cscript.exe "../../cg/js/make.js" "TLB"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">set UICC="C:\Program Files (x86)\Windows Kits\8.1\bin\x86\uicc.exe" &amp;&amp; cscript.exe "../../cg/js/make.js" "TLB"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;xml/ribbon.xml;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;xml/ribbon.xml;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">xmlrc.cpp;xmlrib.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;ribbonres.h;ribbonres.rc;ribbon.bml;%(Outputs)</Outputs>

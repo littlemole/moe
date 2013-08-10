@@ -33,7 +33,17 @@
   </dependency>
 <dependency>
 <dependentAssembly>
+  <assemblyIdentity type="win32" name="shellfolder" version="1.0.0.0" /> 
+  </dependentAssembly>
+  </dependency>
+<dependency>
+<dependentAssembly>
   <assemblyIdentity type="win32" name="scintillax" version="1.0.0.0" /> 
+  </dependentAssembly>
+  </dependency>
+<dependency>
+<dependentAssembly>
+  <assemblyIdentity type="win32" name="ssh" version="1.0.0.0" /> 
   </dependentAssembly>
   </dependency>
 <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">

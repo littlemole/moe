@@ -2,7 +2,7 @@
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
 <assemblyIdentity
       type="win32"
-      name="comtypes"
+      name="ssh"
       version="1.0.0.0" />
 
 
@@ -12,6 +12,12 @@
 	tlbid="{B9AA71CC-ED9E-47AB-90B9-4B84EAA3F4B2}" 
     progid="moeSSH.SSH"
 	description="SSH Session Manager COM Object">
+</comClass>
+<comClass 
+	clsid="{359A4EC7-7D01-4764-AD51-606AF6AC2943}" 
+	tlbid="{B9AA71CC-ED9E-47AB-90B9-4B84EAA3F4B2}" 
+    progid="moeSSH.ScpDataTransferObjectFactory"
+	description="SSH ScpDataTransferObjectFactory">
 </comClass>
 <typelib 
 	tlbid="{B9AA71CC-ED9E-47AB-90B9-4B84EAA3F4B2}" version="1.0" helpdir="" flags="HASDISKIMAGE">
@@ -26,6 +32,30 @@
 <comInterfaceExternalProxyStub 
 	name="ISSHConnection" 
 	iid="{5DDB7A6C-4283-4A1D-A15D-FB761DD1340B}" 
+	tlbid="{B9AA71CC-ED9E-47AB-90B9-4B84EAA3F4B2}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+<comInterfaceExternalProxyStub 
+	name="ISCP" 
+	iid="{873F0BE6-8E22-472A-B071-AC1EA3854278}" 
+	tlbid="{B9AA71CC-ED9E-47AB-90B9-4B84EAA3F4B2}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+<comInterfaceExternalProxyStub 
+	name="ISFTP" 
+	iid="{277DC7E4-6329-4D3B-9EE3-2B198A6C8A07}" 
+	tlbid="{B9AA71CC-ED9E-47AB-90B9-4B84EAA3F4B2}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+<comInterfaceExternalProxyStub 
+	name="IRemoteFile" 
+	iid="{0CAF3661-4063-416D-8548-D42144C652D3}" 
+	tlbid="{B9AA71CC-ED9E-47AB-90B9-4B84EAA3F4B2}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+<comInterfaceExternalProxyStub 
+	name="IScpDataTransferObjectFactory" 
+	iid="{BC65ED29-6378-4C70-8EED-CFCED28156EF}" 
 	tlbid="{B9AA71CC-ED9E-47AB-90B9-4B84EAA3F4B2}" 
 	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
 </comInterfaceExternalProxyStub>

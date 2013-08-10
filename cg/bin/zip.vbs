@@ -47,4 +47,4 @@ With CreateObject("Shell.Application")
 .NameSpace(MyZip).CopyHere Target
 
 End With
-wScript.Sleep 2000
+wScript.Sleep 10000
