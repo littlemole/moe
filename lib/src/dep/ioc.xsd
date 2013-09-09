@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+  <xs:complexType mixed="true" name="Value">
+    <xs:attribute name="type" type="xs:string" use="optional" />
+    <xs:attribute name="name" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType mixed="true" name="Item">
+    <xs:attribute name="name" type="xs:string" use="optional" />
+    <xs:attribute name="key" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="ConstructorArgument">
+    <xs:attribute name="type" type="xs:string" use="optional" />
+    <xs:attribute name="name" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="Constructor">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="arg" type="ConstructorArgument" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Dependency">
+    <xs:sequence minOccurs="0">
+      <xs:element minOccurs="0" maxOccurs="1" name="value" type="Value" />
+    </xs:sequence>
+    <xs:attribute name="member" type="xs:string" use="required" />
+    <xs:attribute name="name" type="xs:string" use="optional" />
+  </xs:complexType>
+  
+  <xs:complexType name="Dependencies">
+    <xs:sequence>
+      <xs:element name="dependency" type="Dependency"  maxOccurs="unbounded" minOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType mixed="true" name="Singleton">
+    <xs:sequence minOccurs="0">
+      <xs:element minOccurs="0" maxOccurs="1" name="constructor" type="Constructor" />
+      <xs:element minOccurs="0" maxOccurs="1" name="dependencies" type="Dependencies" />
+    </xs:sequence>
+    <xs:attribute name="type" type="xs:string" use="required" />
+    <xs:attribute name="name" type="xs:string" use="optional" />
+    <xs:attribute name="value" type="xs:string" use="optional" />
+    <xs:attribute name="impl" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType mixed="true" name="Factory">
+    <xs:sequence minOccurs="0">
+      <xs:element minOccurs="0" maxOccurs="1" name="constructor" type="Constructor" />
+      <xs:element minOccurs="0" maxOccurs="1" name="dependencies" type="Dependencies" />
+    </xs:sequence>
+    <xs:attribute name="type" type="xs:string" use="optional" />
+    <xs:attribute name="name" type="xs:string" use="optional" />
+    <xs:attribute name="value" type="xs:string" use="optional" />
+    <xs:attribute name="progid" type="xs:string" use="optional" />
+    <xs:attribute name="impl" type="xs:string" use="optional" />
+  </xs:complexType>
+
+
+
+  <xs:complexType mixed="true" name="List">
+    <xs:sequence minOccurs="0">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="item" type="Item" />
+    </xs:sequence>
+    <xs:attribute name="type" type="xs:string" use="optional" />
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+
+
+
+  <xs:complexType mixed="true" name="Vector">
+    <xs:sequence minOccurs="0">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="item" type="Item" />
+    </xs:sequence>
+    <xs:attribute name="type" type="xs:string" use="optional" />
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+  
+  <xs:complexType mixed="true" name="Map">
+    <xs:sequence minOccurs="0">
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="item" type="Item" />
+    </xs:sequence>
+    <xs:attribute name="key" type="xs:string" use="optional" />
+    <xs:attribute name="value" type="xs:string" use="optional" />
+    <xs:attribute name="name" type="xs:string" use="required" />
+  </xs:complexType>
+
+
+  
+  <xs:complexType mixed="true" name="Context">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="value" type="Value" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="vector" type="Vector" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="list" type="List" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="map" type="Map" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="singleton" type="Singleton" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="factory" type="Factory" />
+    </xs:sequence>
+    <xs:attribute name="namespace" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:element name="context" type="Context" />
+
+</xs:schema>

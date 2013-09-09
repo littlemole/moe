@@ -239,7 +239,7 @@ void run_on_gui_thread_impl(mol::fun::task* t);
 template<class B>
 void run_on_gui_thread( B t)
 {
-	run_on_gui_thread_impl(new AsyncCodeBlock<T>(t)) ;
+	run_on_gui_thread_impl(mol::fun::make_task(t)) ;
 }
 
 /////////////////////////////////////////////////////////////////
