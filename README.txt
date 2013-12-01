@@ -70,3 +70,38 @@ f) building moe extension (jre and net)
 
         msbuild build.xml /t:cleannet
         msbuild build.xml /t:net
+
+
+
+issues (when running without vs studio 2010 installed, only winsdk. probably occurs when .NET 4.5+ and/or VC 2012/2013 installed on a win7 box):
+
+1)
+
+http://stackoverflow.com/questions/10888391/error-link-fatal-error-lnk1123-failure-during-conversion-to-coff-file-inval
+
+
+find installed versions of cvtres.exe in your PATH using where cvtres.exe
+Delete/rename the ones installed into vc2010 subdirs, use the ones from .NET 4.5 instead
+
+2)
+
+Windows Update KB2455033 breaks build with missing ammintrin.h
+
+Install KB2519277 first, then install KB2455033 (only avail via windows update).
+
+
+
+http://blogs.msdn.com/b/vcblog/archive/2011/03/31/10148110.aspx
+
+
+3)
+
+from http://blogs.msdn.com/b/vcblog/archive/2011/03/31/10148110.aspx
+
+Our recommended install order is:
+
+    Visual Studio 2010
+    Windows SDK 7.1
+    Visual Studio 2010 SP1
+    Visual C++ 2010 SP1 Compiler Update for the Windows SDK 7.1
+

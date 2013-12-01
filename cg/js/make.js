@@ -107,7 +107,7 @@ function make_ribbon( file )
       return;
     }
 
-//  var oExec = shell.Exec("C:\\Program Files\\Windows Kits\\8.0\\bin\\x86\\uicc.exe  " + file + " ribbon.bml /header:ribbonres.h.tmp /res:ribbonres.rc.tmp");
+//    var oExec = shell.Exec("C:\\Program Files\\Windows Kits\\8.0\\bin\\x86\\uicc.exe  " + file + " ribbon.bml /header:ribbonres.h.tmp /res:ribbonres.rc.tmp");
     var uicc = shell.ExpandEnvironmentStrings("%UICC%");
     WScript.StdOut.WriteLine(uicc);
     var oExec = shell.Exec( uicc +" " + file + " ribbon.bml /header:ribbonres.h.tmp /res:ribbonres.rc.tmp");
