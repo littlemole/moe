@@ -85,6 +85,28 @@
 
  <Target Name="Clean">
 
+
+    <PropertyGroup>
+        <SciDirs>.\scintilla\bin\static\;.\scintilla\bin\static\debug;.\scintilla\bin\static64\;.\scintilla\bin\static64\debug;.\scintilla\win32;.\scintilla\win32\obj;.\scintilla\win32\obj\debug;.\scintilla\win32\obj\release;.\scintilla\win32\obj64;.\scintilla\win32\obj64\debug;.\scintilla\win32\obj64\release;</SciDirs>
+    </PropertyGroup>
+	<MakeDir
+            Directories="$(SciDirs)"/>
+
+
+    <PropertyGroup>
+        <OsslDirs>.\openssl\tmp32;.\openssl\tmp32D;.\openssl\tmp64;.\openssl\tmp64D;</OsslDirs>
+    </PropertyGroup>
+	<MakeDir
+            Directories="$(OsslDirs)"/>
+
+
+
+	<ItemGroup>
+	 <TmpFiles Include=".\openssl\tmp32\.gitignore;.\openssl\tmp64\.gitignore;.\openssl\tmp64D\.gitignore;.\openssl\out32\.gitignore;.\openssl\out32D\.gitignore;.\openssl\out64\.gitignore;.\openssl\out64D\.gitignore;" />
+	</ItemGroup>
+    
+    <Touch Files="@(TmpFiles)" AlwaysCreate="true"/>
+
         <MSBuild Projects="expat\Source\lib\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
         <MSBuild Projects="pcre/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 
@@ -107,18 +129,6 @@
 	<Exec Command="nmake -f ms\ntd64.mak clean" WorkingDirectory=".\openssl" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' "  />
 
 	<MSBuild Projects="libssh/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
-
-    <PropertyGroup>
-        <OsslDirs>.\openssl\tmp32;.\openssl\tmp32D;.\openssl\tmp64;.\openssl\tmp64D;</OsslDirs>
-    </PropertyGroup>
-	<MakeDir
-            Directories="$(OsslDirs)"/>
-
-	<ItemGroup>
-	 <TmpFiles Include=".\openssl\tmp32\.gitignore;.\openssl\tmp64\.gitignore;.\openssl\tmp64D\.gitignore;.\openssl\out32\.gitignore;.\openssl\out32D\.gitignore;.\openssl\out64\.gitignore;.\openssl\out64D\.gitignore;" />
-	</ItemGroup>
-    
-    <Touch Files="@(TmpFiles)" AlwaysCreate="true"/>
  </Target>
 
 </Project>
