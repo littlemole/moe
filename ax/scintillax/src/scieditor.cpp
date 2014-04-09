@@ -126,8 +126,59 @@ HDC getPrinterDC()
 	return hdc;
 }
 
+class PrinterDlg : public PRINTDLG
+{
+public:
+
+	PrinterDlg(HWND owner)
+	{
+		// Initialize PRINTDLG
+		ZeroMemory((PRINTDLG*)(this), sizeof(PRINTDLG));
+		lStructSize = sizeof(PRINTDLG);
+		hwndOwner = owner;
+		hDevMode = NULL;     // Don't forget to free or store hDevMode
+		hDevNames = NULL;     // Don't forget to free or store hDevNames
+		Flags = PD_USEDEVMODECOPIESANDCOLLATE | PD_RETURNDC | PD_NOPAGENUMS | PD_NOSELECTION;
+		nCopies = 1;
+		nFromPage = 0xFFFF;
+		nToPage = 0xFFFF;
+		nMinPage = 1;
+		nMaxPage = 0xFFFF;
+	}
+
+	~PrinterDlg()
+	{
+		if (hDevMode) 
+		{
+			::GlobalFree(hDevMode);
+			hDevMode = 0;
+		}
+		if (hDevNames)
+		{
+			::GlobalFree(hDevNames);
+			hDevNames = 0;
+		}
+	}
+
+	bool show()
+	{
+		return PrintDlg(this) == TRUE;
+	}
+
+private:
+
+};
+
 HDC choosePrinterDC(HWND owner, int& copies, bool& collate)
 {
+
+	PrinterDlg dlg(owner);
+	if (dlg.show())
+	{
+		return dlg.hDC;
+	}
+	return 0;
+	/*
 	PRINTDLG pd;
 
 	// Initialize PRINTDLG
@@ -152,6 +203,7 @@ HDC choosePrinterDC(HWND owner, int& copies, bool& collate)
 		return pd.hDC;
 	}
 	return 0;
+	*/
 }
 
 void ScintillaEditor::setFont(int size, const mol::string& font)
