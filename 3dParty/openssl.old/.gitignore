@@ -1,7 +1,0 @@
-MINFO
-Makefile
-Makefile.bak
-crypto/buildinf.h
-crypto/opensslconf.h
-ms/nt.mak
-ms/ntdll.mak
