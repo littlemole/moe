@@ -1315,7 +1315,7 @@ mol::string findFile(const mol::string& f)
 	}
 
 	mol::string modulePath = mol::Path::pathname(mol::app<mol::win::AppBase>().getModulePath());
-	mol::string configPath = mol::Path::pathname(mol::app<mol::win::AppBase>().CreateAppPath(_T("moe")));
+	mol::string configPath = mol::app<mol::win::AppBase>().CreateAppPath(_T("moe"));
 
 	modulePath = mol::Path::addBackSlash(modulePath);
 	configPath = mol::Path::addBackSlash(configPath);
