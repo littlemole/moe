@@ -106,10 +106,14 @@ private:
 // Singleton
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifdef _WIN32
 #ifdef _WIN64
 #define locked_comp_ex(target,value,comparand) InterlockedCompareExchange64( (volatile LONGLONG*)(target),(LONGLONG)(value),(LONGLONG)(comparand) ) 
 #else
 #define locked_comp_ex(target,value,comparand) InterlockedCompareExchange( (volatile LONG*)(target),(LONG)(value),(LONG)(comparand) ) 
+#endif
+#else
+#define locked_comp_ex(target,value,comparand) __sync_val_compare_and_swap(target,comparand,value)
 #endif
 
 template<class T>

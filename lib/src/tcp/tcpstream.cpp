@@ -61,7 +61,7 @@ bool TCPStreamBuf::connect( const std::string& server, int port )
 		SOCKET buf = sock_fd_;
 		if ( sock_fd_ == 0 )
 		{
-			int we = WSAGetLastError();
+//			int we = WSAGetLastError();
 			return false;
 		}
 
@@ -71,11 +71,13 @@ bool TCPStreamBuf::connect( const std::string& server, int port )
 			return true;
 		}
 
+#ifdef _WIN32
 		int we = WSAGetLastError();
 		if ( we == WSAETIMEDOUT )
 		{
 				continue;		
 		}
+#endif		
 		break;
 	}
 

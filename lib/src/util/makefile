@@ -30,7 +30,7 @@ BUILD = ./../../build
 LIB = ../../libutil.a
 
 # OBJects for this library
-OBJ = istr.o regex.o Str.o util.o x.o
+OBJ = istr.o regex.o Str.o util.o X.o
 
 #################################################
 # usually no need to change anything below

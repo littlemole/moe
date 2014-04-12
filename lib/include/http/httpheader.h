@@ -146,8 +146,9 @@ operator>> ( std::basic_istream<charT,Traits>& is, mol::HttpHeaders& http)
 	std::string code = "100";
 	while ( code == "100" )
 	{
-		std::string line = mol::get_line_paranoid(is);
-//		std::getline(is,line);
+//		std::string line = mol::get_line_paranoid(is);
+		std::string line;
+		std::getline(is,line);
 
 		if ( line == "" )
 			throw mol::HttpEx("HTTP ex: empty line reading HttpHeaders from stream looking for HTPP Command (socket closed?)");

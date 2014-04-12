@@ -133,9 +133,9 @@ public:
 	BufferedStreamBuf() 
 	{
 		// set output buffer
-		setp(buffer_,buffer_+bufSize_);
+		this->setp(buffer_,buffer_+bufSize_);
 		// set input buffer
-		setg(buffer_+pbSize_,buffer_+pbSize_,buffer_+pbSize_);
+		this->setg(buffer_+pbSize_,buffer_+pbSize_,buffer_+pbSize_);
 	}
 
 	~BufferedStreamBuf() 

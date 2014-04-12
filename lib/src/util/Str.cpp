@@ -608,26 +608,26 @@ std::string base64_decode(std::string const& encoded_string) {
   return ret;
 }
 
-COLORREF hex2rgb( const mol::string& h )
+COLORREF hex2rgb( const std::string& h )
 {
 	if ( h.empty())
 		return 0;
 
-	mol::string in(h);
+	std::string in(h);
 
 	if ( in.size() < 6 )
 	{
-		in.append( mol::string(6-in.size(),'0') );
+		in.append( std::string(6-in.size(),'0') );
 	}
 
 	if ( in[0] != '#' )
 	{
-		mol::string tmp(_T("#"));
+		std::string tmp("#");
 		tmp.append(in);
 		in = tmp;
 	}
 
-	std::string hex(mol::tostring(in));
+	std::string hex(in);
     char buf[3];
     buf[2]=0;
 
@@ -649,12 +649,12 @@ COLORREF hex2rgb( const mol::string& h )
     return RGB(r,g,b);
 }
 
-mol::string rgb2hex( COLORREF col )
+std::string rgb2hex( COLORREF col )
 {
     static char ret[12];
     char buf[12];
 
-    wsprintfA(buf,"%06X",col);
+    sprintf(buf,"%06X",col);
 
     ret[0] = '#';
     (ret[1]) = (buf[4]);
@@ -664,7 +664,7 @@ mol::string rgb2hex( COLORREF col )
     (ret[5]) = (buf[0]);
     (ret[6]) = (buf[1]);
     ret[7] = 0;
-    return mol::toString(ret);
+    return ret;
 }
 
 } //end namespace mol

@@ -83,6 +83,12 @@ typedef HANDLE MUTEX_HANDLE;
 
 // make SOCKET type avail under POSIX
 typedef int SOCKET;
+typedef int COLORREF;
+typedef unsigned long DWORD;
+typedef char BYTE;
+typedef unsigned short WORD;
+typedef long* LONG_PTR;
+#define RGB(r,g,b)      ((COLORREF)(((BYTE)(r)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(b))<<16)))
 
 // make win32 Socket Constants avail under POSIX
 #define WSAEMSGSIZE EMSGSIZE
