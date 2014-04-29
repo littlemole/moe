@@ -74,21 +74,21 @@ void HIMETRICtoPixel(SIZE* sz, HDC hdc )
 // string from CLSID
 //////////////////////////////////////////////////////////////////////////
 
-mol::string stringFromCLSID(REFGUID guid)
+std::wstring stringFromCLSID(REFGUID guid)
 {
 	mol::CoStrBuf clsid;
 	::StringFromCLSID(guid,&clsid);
 
-	mol::string classID = mol::toString(clsid);
+	std::wstring classID = mol::towstring(clsid);
 	return classID;
 }
 //////////////////////////////////////////////////////////////////////////
 // convert BSTR to ascii char, drop BSTR
 //////////////////////////////////////////////////////////////////////////
 
-mol::string stringFromFreedBSTR( BSTR bstr )
+std::wstring stringFromFreedBSTR( BSTR bstr )
 {
-	mol::string ret( mol::toString(bstr) );
+	std::wstring ret( mol::towstring(bstr) );
     ::SysFreeString(bstr);
     bstr=0;
     return ret;

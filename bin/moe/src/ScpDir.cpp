@@ -31,7 +31,7 @@ ScpDirChild::~ScpDirChild()
 // initialization
 //////////////////////////////////////////////////////////////////////////////
 
-ScpDirChild::Instance* ScpDirChild::CreateInstance( ISSHConnection* conn, const mol::string& dir )
+ScpDirChild::Instance* ScpDirChild::CreateInstance( ISSHConnection* conn, const std::wstring& dir )
 {
 	Instance* doc = 0;
 
@@ -54,7 +54,7 @@ ScpDirChild::Instance* ScpDirChild::CreateInstance( ISSHConnection* conn, const 
 	return doc;
 }
 
-bool ScpDirChild::initialize(const mol::string& p)
+bool ScpDirChild::initialize(const std::wstring& p)
 {
 	filename_ = p;
 
@@ -121,7 +121,7 @@ void ScpDirChild::OnMDIActivate( HWND activated )
 			mol::Ribbon::ribbon()->mode(2);
 			mol::Ribbon::ribbon()->maximize();
 		}
-		statusBar()->status(filename.toString());
+		statusBar()->status(filename.towstring());
 		tab()->select( *this );
 		moe()->redraw();
 	}
@@ -203,7 +203,7 @@ HRESULT __stdcall  ScpDirChild::Activate()
 
 HRESULT __stdcall ScpDirChild::DirChild_sink::OnListDblClick(BSTR filename,VARIANT_BOOL vb)
 {
-	docs()->open( mol::toString(filename),MOE_DOCTYPE_SFTP,CP_ACP,false,0);
+	docs()->open(mol::towstring(filename), MOE_DOCTYPE_SFTP, CP_ACP, false, 0);
 	return S_OK;
 }
 
@@ -216,15 +216,15 @@ HRESULT __stdcall ScpDirChild::DirChild_sink::OnListSelection(BSTR filename,VARI
 
 HRESULT __stdcall ScpDirChild::DirChild_sink::OnListOpen(BSTR filename,VARIANT_BOOL vb)
 {
-	docs()->open( mol::toString(filename),MOE_DOCTYPE_SFTP,CP_ACP,false,0);
+	docs()->open(mol::towstring(filename), MOE_DOCTYPE_SFTP, CP_ACP, false, 0);
 	return S_OK;
 }
 
 HRESULT __stdcall ScpDirChild::DirChild_sink::OnDirChanged(BSTR dir)
 {
 	docs()->Rename( mol::variant(This()->filename_),mol::variant(dir));
-	docs()->rename( This(), mol::toString(dir) );
-	This()->filename_ = mol::toString(dir);
-	This()->setText( mol::toString(dir) );
+	docs()->rename(This(), mol::towstring(dir));
+	This()->filename_ = mol::towstring(dir);
+	This()->setText(mol::towstring(dir));
 	return S_OK;
 }

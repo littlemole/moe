@@ -304,7 +304,7 @@ public:
 private:
 
 	void shutdown();
-	bool init(const mol::string& p);
+	bool init(const std::wstring& p);
 
 	class ProcessPipe : public mol::PipedProcess
 	{

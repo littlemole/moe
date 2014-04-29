@@ -36,22 +36,22 @@ bool JRE::isLoaded()
 	return jvm_ != 0;
 }
 
-void JRE::classpath(const mol::string& cpath )
+void JRE::classpath(const std::wstring& cpath )
 {
 	classpath_ = cpath;
 }
 
-void JRE::libpath(const mol::string& lpath )
+void JRE::libpath(const std::wstring& lpath )
 {
 	libpath_ = lpath;
 }
 
-mol::string JRE::classpath()
+std::wstring JRE::classpath()
 {
 	return classpath_;
 }
 
-mol::string JRE::libpath()
+std::wstring JRE::libpath()
 {
 	return libpath_;
 }
@@ -67,7 +67,7 @@ JNIEnv* JRE::createJVM(bool debug)
 
 	mol::win::AppBase& app = mol::App();
 	//JREApp& app = mol::app<JREApp>();
-	mol::string path =  app.getAppPath();
+	std::wstring path =  app.getAppPath();
 	path = mol::Path::pathname(path);
 	path = path + _T("\\lib");
 
@@ -120,9 +120,9 @@ JNIEnv* JRE::createJVM(bool debug)
 	return env_;
 }
 
-mol::string JRE::getJREpath()
+std::wstring JRE::getJREpath()
 {
-	static mol::string once = getJREpathOnce();
+	static std::wstring once = getJREpathOnce();
 	return once;
 }
 
@@ -140,7 +140,7 @@ JNIEnv* JRE::operator->()
 
 HMODULE JRE::loadJVM()
 {
-	mol::string path;
+	std::wstring path;
 	try {
 		path = getJREpath();
 	}
@@ -154,7 +154,7 @@ HMODULE JRE::loadJVM()
 		return module;
 
 	size_t pos = path.find(_T("client\\jvm.dll"));
-	if ( pos != mol::string::npos )
+	if ( pos != std::wstring::npos )
 	{
 		path = path.substr(0,pos) + _T("server\\jvm.dll");
 	
@@ -165,15 +165,15 @@ HMODULE JRE::loadJVM()
 	return 0;
 }
 
-mol::string JRE::getJREpathOnce()
+std::wstring JRE::getJREpathOnce()
 {
-	mol::TCHAR buf[MAX_PATH];
+	wchar_t buf[MAX_PATH];
 	if (::GetEnvironmentVariable( _T("JAVA_HOME"), buf, MAX_PATH ))
 	{
-		mol::string jh(buf);
+		std::wstring jh(buf);
 		if ( !jh.empty() )
 		{
-			mol::string path = jh + _T("\\jre\\bin\\client\\jvm.dll");
+			std::wstring path = jh + _T("\\jre\\bin\\client\\jvm.dll");
 			if ( mol::Path::exists(path) )
 				return path;
 
@@ -210,7 +210,7 @@ mol::string JRE::getJREpathOnce()
 	{
 		ver  = jre.open(_T("1.6"),KEY_READ);
 	}
-	mol::string path = ver.get(_T("RuntimeLib"));
+	std::wstring path = ver.get(_T("RuntimeLib"));
 	return path;
 }
 

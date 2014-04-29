@@ -7,14 +7,14 @@
 namespace mol {
 namespace ie  {
 
-BaseUrl::BaseUrl( const mol::string& u, IStream* s )
+BaseUrl::BaseUrl( const std::wstring& u, IStream* s )
 {
 	mime_   = mol::towstring("text/html");
     url_    = mol::towstring(u);
     stream_ = s;
 }
 
-BaseUrl::BaseUrl( const mol::string& u, const mol::string& mime, IStream* s )
+BaseUrl::BaseUrl( const std::wstring& u, const std::wstring& mime, IStream* s )
 {
 	mime_   = mol::towstring(mime);
     url_    = mol::towstring(u);
@@ -98,7 +98,7 @@ HRESULT __stdcall AsyncUrl::OnResponse( DWORD dwResponseCode,LPCWSTR szResponseH
 }
 
 
-HRESULT AsyncUrl::startDownload( const mol::string& url )
+HRESULT AsyncUrl::startDownload( const std::wstring& url )
 {
     location_ = url;
 
@@ -117,7 +117,7 @@ HRESULT AsyncUrl::startDownload( const mol::string& url )
 HttpUrl::HttpUrl() 
 {}
 
-HttpUrl::HttpUrl(const mol::string& loc, const mol::string& h, DWORD m)
+HttpUrl::HttpUrl(const std::wstring& loc, const std::wstring& h, DWORD m)
 :location_(mol::tostring(loc)),method_(m),fRedirect_(FALSE),requestHeaders_(tostring(h)),postdatasize_(0)
 {
     httpTransaction_ << "GET " << location_ << " HTTP/1.1" << std::endl;
@@ -125,7 +125,7 @@ HttpUrl::HttpUrl(const mol::string& loc, const mol::string& h, DWORD m)
     startDownload(loc);
 }
 
-HttpUrl::HttpUrl(const mol::string& loc, const mol::string& p, const mol::string& h, DWORD m )
+HttpUrl::HttpUrl(const std::wstring& loc, const std::wstring& p, const std::wstring& h, DWORD m )
 :location_(mol::tostring(loc)), method_(m), fRedirect_(FALSE), requestHeaders_(tostring(h)), postdata_(tostring(p))
 {
     httpTransaction_ << "POST " << location_ << " HTTP/1.1" << std::endl;
@@ -253,9 +253,9 @@ bool  HttpUrl::isRedirect()
     return fRedirect_ == TRUE; 
 }
 
-const mol::string HttpUrl::getLocation()        
+const std::wstring HttpUrl::getLocation()        
 { 
-	return mol::toString(location_); 
+	return mol::towstring(location_); 
 }
 
 const std::string HttpUrl::getMime()        

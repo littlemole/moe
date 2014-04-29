@@ -226,7 +226,7 @@ extern QueryFullProcessImageNamePtr* QueryFullProcessImageName;
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int msgbox( HWND parent, const mol::string& txt, const mol::string& title, const mol::string& detail, int idIcon );
+int msgbox( HWND parent, const std::wstring& txt, const std::wstring& title, const std::wstring& detail, int idIcon );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 

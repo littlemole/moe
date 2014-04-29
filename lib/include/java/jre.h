@@ -12,11 +12,11 @@ public:
 
 	typedef  jint  (__stdcall *CreateJavaVM)(JavaVM**, void**, void* );
 
-	void classpath(const mol::string& cpath );
-	void libpath(const mol::string& lpath );
+	void classpath(const std::wstring& cpath );
+	void libpath(const std::wstring& lpath );
 
-	mol::string classpath();
-	mol::string libpath();
+	std::wstring classpath();
+	std::wstring libpath();
 
 	JNIEnv* createJVM(bool debug);
 	bool isLoaded();
@@ -36,13 +36,13 @@ private:
 	JavaVMOption* options_;
 	static HMODULE jruntime_;
 
-	mol::string classpath_;
-	mol::string libpath_;
+	std::wstring classpath_;
+	std::wstring libpath_;
 
 	HMODULE loadJVM();
 
-	static mol::string getJREpath();
-	static mol::string getJREpathOnce();
+	static std::wstring getJREpath();
+	static std::wstring getJREpathOnce();
 };
 
 

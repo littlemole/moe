@@ -47,7 +47,7 @@ public:
     long			written_;
 };
 
-extern const mol::TCHAR richedit_class[];
+extern const wchar_t richedit_class[];
 
 
 

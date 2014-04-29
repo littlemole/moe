@@ -35,9 +35,9 @@ class ScriptDebugger :
 {
 public:
 	
-	mol::events::Event<int,mol::string> OnScriptThread;
+	mol::events::Event<int,std::wstring> OnScriptThread;
 	mol::events::Event<> OnScriptThreadDone;
-	mol::events::Event<mol::string> OnExpressionEvaluated;
+	mol::events::Event<std::wstring> OnExpressionEvaluated;
 
 	typedef mol::com_instance<ScriptDebugger> Instance;
 	//typedef mol::debug_com_instance<ThreadScript> ScriptInstance;
@@ -47,21 +47,21 @@ public:
 		ODBGS("TRHEADASCRIPT dead x:");
 	};
 
-	static Instance* CreateInstance( HWND owner, const mol::string& script,  const mol::string& filename );
+	static Instance* CreateInstance( HWND owner, const std::wstring& script,  const std::wstring& filename );
 
 	void execute( int flag = SCRIPTTEXT_ISVISIBLE );	
 	void cause_break();
 	void resume(BREAKRESUMEACTION ba = BREAKRESUMEACTION_CONTINUE);
 	void update_breakpoints(std::set<int> br);
-	void eval_expression(const mol::string& expr);
+	void eval_expression(const std::wstring& expr);
 
 	bool suspended() { return remote_.interface_ != 0; }
 
 	HRESULT frames(IEnumDebugStackFrames** frames);
 
 	// add a named object
-	virtual HRESULT addNamedObject( IUnknown* punk, const mol::string& obj, int state = SCRIPTITEM_ISVISIBLE| SCRIPTITEM_ISSOURCE );
-	virtual HRESULT removeNamedObject( const mol::string& obj );
+	virtual HRESULT addNamedObject( IUnknown* punk, const std::wstring& obj, int state = SCRIPTITEM_ISVISIBLE| SCRIPTITEM_ISSOURCE );
+	virtual HRESULT removeNamedObject( const std::wstring& obj );
 
 	// IDebugExpressionCallBack
 	HRESULT virtual __stdcall onComplete();
@@ -131,17 +131,17 @@ protected:
 	virtual ~ScriptDebugger();
 
 	// init and cleanup
-	void init(const mol::string& engine);
+	void init(const std::wstring& engine);
 	void execute_thread();
 	void execute_callback();
 
 	// helper
-	HRESULT getScriptEngine(const mol::string& engine, IActiveScript **ppas);
+	HRESULT getScriptEngine(const std::wstring& engine, IActiveScript **ppas);
 
 
 	std::set<int>						breakpoints_;
 	typedef std::pair<DWORD,DWORD>      ObjectMapItem;
- 	std::map<mol::string,ObjectMapItem>	objectMap_;
+ 	std::map<std::wstring,ObjectMapItem>	objectMap_;
 
 	mol::punk<IProcessDebugManager>		pdm_;
 	mol::punk<IDebugApplication>		debugApp_;
@@ -155,9 +155,9 @@ protected:
 	DWORD								offset_;
 	DWORD								scriptFlags_;
 
-	mol::string							filename_;
-	mol::string							script_;
-	mol::string							engine_;
+	std::wstring							filename_;
+	std::wstring							script_;
+	std::wstring							engine_;
 	mol::variant						varResult_;
     EXCEPINFO							ei_; 
 

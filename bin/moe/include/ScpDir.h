@@ -22,7 +22,7 @@ public:
 	virtual ~ScpDirChild();
 
 
-	static Instance* CreateInstance( ISSHConnection* conn, const mol::string& p );
+	static Instance* CreateInstance( ISSHConnection* conn, const std::wstring& p );
 
 	void OnMDIActivate(HWND activated);
     void OnClose();
@@ -55,9 +55,9 @@ private:
 		virtual HRESULT __stdcall OnDirChanged(BSTR filename);
     } sink;
 
-	bool initialize(const mol::string& p);
+	bool initialize(const std::wstring& p);
 
-	mol::string filename_;
+	std::wstring filename_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

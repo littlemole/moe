@@ -21,7 +21,7 @@ public:
 	FormEditor();
 	virtual ~FormEditor();
 
-	static Instance* CreateInstance(const mol::string& p);
+	static Instance* CreateInstance(const std::wstring& p);
 
 	/////////////////////////////////////////////////////////////////////
 
@@ -44,7 +44,7 @@ protected:
 	virtual void OnFileChangeNotify(mol::io::DirMon*);
 	void checkModifiedOnDisk( );
 
-	bool initialize(const mol::string& p);
+	bool initialize(const std::wstring& p);
 
 };
 

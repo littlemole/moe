@@ -37,7 +37,7 @@ HRESULT __stdcall SciAxAnnotation::SetText( long line,  BSTR txt)
 	if ( !txt )
 		return this->Clear(line);
 
-	sci_->edit()->setAnnotation( line, mol::bstr(txt).toString() );
+	sci_->edit()->setAnnotation( line, mol::bstr(txt).towstring() );
 	sci_->edit()->setAnnotationStyle( line, SCI_ANNO_ERRORSTYLE );
 	return S_OK;
 }

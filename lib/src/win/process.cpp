@@ -173,7 +173,7 @@ bool PipedProcess::err_eof()
 	return listStdErr_.size() > 0 ? 0 : errEOF_;  
 }
 
-bool PipedProcess::create( const mol::string& cmdline )
+bool PipedProcess::create( const std::wstring& cmdline )
 {
 	ODBGS("PipedProcess::create()");
 
@@ -210,7 +210,7 @@ bool PipedProcess::create( const mol::string& cmdline )
 	siStartInfo.hStdInput  = writePipe_.stdIn(); 
 	siStartInfo.dwFlags	  |= STARTF_USESTDHANDLES;
 
-	commandline_ = new mol::TCHAR[cmdline.size()+1];
+	commandline_ = new wchar_t[cmdline.size()+1];
 	std::copy(cmdline.c_str(), cmdline.c_str() + cmdline.size()+1, commandline_ );
 
 	if ( !::CreateProcess( 

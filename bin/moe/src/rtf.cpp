@@ -33,7 +33,7 @@ RTFEditor::~RTFEditor()
 	ODBGS("~RTFedit dead");	
 };
 
-RTFEditor::Instance* RTFEditor::CreateInstance( const mol::string& file )
+RTFEditor::Instance* RTFEditor::CreateInstance( const std::wstring& file )
 {
 	Instance* iv = new Instance;
 	iv->AddRef();
@@ -172,7 +172,7 @@ void RTFEditor::OnSaveAs()
 {
 	mol::bstr p;
 
-	static mol::TCHAR  OutFilesFilter[] = _T("save as rtf *.rtf\0*.rtf\0save as file*.*\0*.*\0\0");
+	static wchar_t  OutFilesFilter[] = _T("save as rtf *.rtf\0*.rtf\0save as file*.*\0*.*\0\0");
 
 
 	mol::FilenameDlg ofn(*this);
@@ -205,7 +205,7 @@ void RTFEditor::OnSaveAs()
 			statusBar()->status(_T("saved file"));
 		}
 
-		mol::ostringstream oss;
+		std::wostringstream oss;
 		oss << "saved as " << filename_;
 		statusBar()->status(oss.str());
 		
@@ -293,7 +293,7 @@ void RTFEditor::OnInsertColorDialog(  )
 	if ( S_OK != col->get_HexColor(&hex) || hex.bstr_ == 0)
 		return;
 
-	mol::string tmp = hex.toString();
+	std::wstring tmp = hex.towstring();
 	rtf_.sendMessage(EM_REPLACESEL,(WPARAM)TRUE,(LPARAM) (tmp.c_str()) );
 
 }
@@ -409,7 +409,7 @@ void RTFEditor::OnSearch( FINDREPLACE* find )
 
 		}
 
-		mol::ostringstream oss;
+		std::wostringstream oss;
 		oss << _T("Replace All: ") << i << _T(" replaces");
 		statusBar()->status(oss.str());
     }
@@ -429,7 +429,7 @@ void RTFEditor::OnLink(ENLINK* link)
 	rtf_.sendMessage(EM_GETTEXTRANGE,0,(LPARAM)&tr);
 	std::wstring tmp(buf.toString());
 
-	statusBar()->status(mol::toString(tmp));
+	statusBar()->status(mol::towstring(tmp));
 	
 	if (::GetAsyncKeyState(VK_SHIFT) && link->msg  == WM_LBUTTONDBLCLK )
 	{
@@ -461,7 +461,7 @@ void RTFEditor::OnReload()
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-bool RTFEditor::load(const mol::string& p)
+bool RTFEditor::load(const std::wstring& p)
 {
 	filename_ = p;
 

@@ -30,9 +30,9 @@ Hex::~Hex()
 };
 
 //////////////////////////////////////////////////////////////////////////////
-Hex::Instance* Hex::CreateInstance(const mol::string& file, bool readOnly)
+Hex::Instance* Hex::CreateInstance(const std::wstring& file, bool readOnly)
 {
-	mol::string p(file);
+	std::wstring p(file);
 	if ( mol::Path::exists(p) && mol::Path::isDir(p) )
 		return 0;
 
@@ -50,7 +50,7 @@ Hex::Instance* Hex::CreateInstance(const mol::string& file, bool readOnly)
 	return e;
 }
 
-bool Hex::initialize(const mol::string& p, bool readOnly)
+bool Hex::initialize(const std::wstring& p, bool readOnly)
 {
 	initializeMoeChild(p);
 
@@ -175,13 +175,13 @@ void Hex::OnMenu(HMENU popup)
 void Hex::updateUI()
 {
 	bstr path;
-	mol::string title = this->getText();;
+	std::wstring title = this->getText();;
 
 	punk<IHexCtrl> hexer(oleObject);
 	if ( hexer )
 		if ( S_OK == hexer->get_Filename(&path) && path)
 		{
-			title = path.toString();	
+			title = path.towstring();
 		}
 
 	setText(title);

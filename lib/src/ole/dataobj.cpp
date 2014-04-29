@@ -104,10 +104,10 @@ DataTransferObj::~DataTransferObj()
 }
 
 
-void DataTransferObj::addData( CLIPFORMAT format, const mol::string & data, int index  )
+void DataTransferObj::addData( CLIPFORMAT format, const std::wstring & data, int index  )
 {
 	format_etc fe( format, NULL, DVASPECT_CONTENT, index, TYMED_HGLOBAL );
-	StgMedium sm((mol::string &)data);
+	StgMedium sm((std::wstring &)data);
 	SetData(  &fe,  &sm,  false );
 }
 
@@ -213,13 +213,13 @@ HRESULT __stdcall DataTransferObj::SetData(  FORMATETC * pFormatetc,  STGMEDIUM 
 	void* s = glob.lock();
 
 	/*
-	mol::TCHAR* ts = (mol::TCHAR*)s;
+	wchar_t* ts = (wchar_t*)s;
 
 	size_t len = 0;
 	if ( ts != 0 )
 		len = _tcslen(ts)+1;
 
-	mol::global copy( (void*)ts,len*sizeof(mol::TCHAR));
+	mol::global copy( (void*)ts,len*sizeof(wchar_t));
 	*/
 
 	mol::global copy( s, glob.size() );
@@ -241,13 +241,13 @@ HRESULT __stdcall DataTransferObj::SetData(  FORMATETC * pFormatetc,  STGMEDIUM 
 //////////////////////////////////////////////////////////////////////////////////
 
 
-ShellDataObj::ShellDataObj( std::vector<mol::string>& v ,bool cut)
+ShellDataObj::ShellDataObj( std::vector<std::wstring>& v ,bool cut)
 : v_(v), cut_(cut)
 {
 }
 
 /*
-ShellDataObj::ShellDataObj(  HWND hwnd, int cmd, std::vector<mol::string>& v ,bool cut)
+ShellDataObj::ShellDataObj(  HWND hwnd, int cmd, std::vector<std::wstring>& v ,bool cut)
 : v_(v), cut_(cut)
 {
 //    dropEffectEvent_.subscribe(hwnd, cmd);

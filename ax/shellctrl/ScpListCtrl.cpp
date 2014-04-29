@@ -18,7 +18,7 @@ class PermissionDlg  : public mol::win::Dialog
 {
 public:
 
-	PermissionDlg(const mol::string& filename, int perm, int own, int grp)
+	PermissionDlg(const std::wstring& filename, int perm, int own, int grp)
 		: filename_(filename), permission_(perm), owner_(own), group_(grp)
 	{}
 
@@ -29,7 +29,7 @@ public:
 			case WM_INITDIALOG:
 			{
 				setDlgItemText(IDC_SCP_PROP_EDIT_FILENAME,filename_);
-				mol::ostringstream oss;
+				std::wostringstream oss;
 				oss << std::oct << permission_;
 				setDlgItemText(IDC_SCP_PROP_EDIT_PERMISSION,oss.str());
 				setDlgItemInt(IDC_SCP_PROP_EDIT_OWNER,owner_);
@@ -41,9 +41,9 @@ public:
 			{
 				if (LOWORD(wParam) == IDOK )
 				{
-					mol::string s;
+					std::wstring s;
 					getDlgItemText(IDC_SCP_PROP_EDIT_PERMISSION,s);
-					mol::istringstream iss(s);
+					std::wistringstream iss(s);
 					iss >> std::oct >> permission_;
 
 					getDlgItemInt(IDC_SCP_PROP_EDIT_OWNER,owner_);
@@ -83,7 +83,7 @@ public:
 private:
 	
 
-	mol::string filename_;
+	std::wstring filename_;
 	int permission_;
 	int owner_;
 	int group_;
@@ -94,7 +94,7 @@ class RemoteExecDlg  : public mol::win::Dialog
 {
 public:
 
-	RemoteExecDlg(const mol::string& host, int port, DWORD cookie)
+	RemoteExecDlg(const std::wstring& host, int port, DWORD cookie)
 		: host_(host), port_(port), cookie_(cookie)
 	{}
 
@@ -115,14 +115,14 @@ public:
 			{
 				if (LOWORD(wParam) == IDOK )
 				{
-					mol::string s;
+					std::wstring s;
 					getDlgItemText(IDC_EDIT_SSH_EXEC_CMD,s);
 					if ( s.empty())
 					{
 						return FALSE;
 					}
 
-					mol::string o = exec_cmd(s);
+					std::wstring o = exec_cmd(s);
 					setDlgItemText(IDC_EDIT_SSH_EXEC_OUTPUT,mol::unix2dos(o));
 
 					return FALSE;
@@ -138,18 +138,18 @@ public:
 	}
 
 	
-	mol::string cli()
+	std::wstring cli()
 	{
 		return cli_;
 	}
 
-	mol::string out()
+	std::wstring out()
 	{
 		return out_;
 	}
 private:
 
-	mol::string exec_cmd( const mol::string& cmd)
+	std::wstring exec_cmd( const std::wstring& cmd)
 	{
 		mol::GIT git;
 		mol::punk<ISSHConnection> ssh; 
@@ -162,12 +162,12 @@ private:
 		if ( hr != S_OK )
 			return _T("");
 
-		return result.toString();
+		return result.towstring();
 	}
 
-	mol::string cli_;
-	mol::string out_;
-	mol::string host_;
+	std::wstring cli_;
+	std::wstring out_;
+	std::wstring host_;
 	int port_;
 	DWORD cookie_;
 	
@@ -178,7 +178,7 @@ private:
 
 
 
-ScpDirQueueLoadAction::ScpDirQueueLoadAction( const mol::string& p, ScpListCtrl* dl )
+ScpDirQueueLoadAction::ScpDirQueueLoadAction( const std::wstring& p, ScpListCtrl* dl )
 	: path(p), scpList(dl)
 {}
 
@@ -189,7 +189,7 @@ void ScpDirQueueLoadAction::operator()()
 
 
 
-ScpDirQueueRenameAction::ScpDirQueueRenameAction( const mol::string& oldp, const mol::string& newp, ScpListCtrl* dl )
+ScpDirQueueRenameAction::ScpDirQueueRenameAction( const std::wstring& oldp, const std::wstring& newp, ScpListCtrl* dl )
 	: oldpath(oldp), newpath(newp),scpList(dl)
 {}
 
@@ -211,7 +211,7 @@ void ScpCreateDirQueueAction::operator()()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-ScpUnlinkQueueAction::ScpUnlinkQueueAction( const std::vector<mol::string>& vec, ScpListCtrl* dl )
+ScpUnlinkQueueAction::ScpUnlinkQueueAction( const std::vector<std::wstring>& vec, ScpListCtrl* dl )
 	: v(vec), scpList(dl)
 {}
 
@@ -223,7 +223,7 @@ void ScpUnlinkQueueAction::operator()()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-ScpPushFileQueueAction::ScpPushFileQueueAction( const mol::string& p, const std::vector<mol::string>& vec, ScpListCtrl* dl )
+ScpPushFileQueueAction::ScpPushFileQueueAction( const std::wstring& p, const std::vector<std::wstring>& vec, ScpListCtrl* dl )
 	: path(p),v(vec), scpList(dl)
 {}
 
@@ -260,9 +260,9 @@ ScpListCtrl::~ScpListCtrl()
 {
 }
 
-void ScpListCtrl::load( const mol::string& url )
+void ScpListCtrl::load( const std::wstring& url )
 {
-	mol::string path = url;
+	std::wstring path = url;
 	if ( path[path.size()-1] != _T('/') )
 	{
 		path = path + _T("/");
@@ -308,12 +308,12 @@ mol::sftp::RemoteFile remoteFileFromIRemoteFile(IRemoteFile* rf)
 	hr = rf->get_IsDir(&isdir);
 
 	return mol::sftp::RemoteFile( 
-					mol::toString(name), 
+					mol::towstring(name), 
 					(uint8_t)type, perms, 
 					uid, gid, 
 					mtime, size, 
-					owner.bstr_ ? mol::toString(owner) : _T("") , 
-					group.bstr_ ? mol::toString(group) : _T("") 
+					owner.bstr_ ? mol::towstring(owner) : _T("") , 
+					group.bstr_ ? mol::towstring(group) : _T("") 
 			);
 }
 
@@ -370,7 +370,7 @@ bool ScpListCtrl::connect(ISSHConnection** con )
 	*/
 }
 
-void ScpListCtrl::load_async( const mol::string& url )
+void ScpListCtrl::load_async( const std::wstring& url )
 {
 	clear();
 
@@ -386,7 +386,7 @@ void ScpListCtrl::load_async( const mol::string& url )
 	if ( hr != S_OK )
 		return;
 
-	mol::string path = url;
+	std::wstring path = url;
 	if ( path[path.size()-1] != _T('/') )
 	{
 		path = path + _T("/");
@@ -394,18 +394,18 @@ void ScpListCtrl::load_async( const mol::string& url )
 
 	uri_.set(mol::toUTF8(path));
 
-    std::vector<mol::string> files;
-    std::vector<mol::string> dirs;
+    std::vector<std::wstring> files;
+    std::vector<std::wstring> dirs;
 
-    std::map<mol::string, ScpListEntry*> filesMap;
-	std::map<mol::string, ScpListEntry*> dirsMap;
+    std::map<std::wstring, ScpListEntry*> filesMap;
+	std::map<std::wstring, ScpListEntry*> dirsMap;
 
 	mol::punk<ISFTP> sftp;
 	hr = conn->get_SFTP(&sftp);
 	if( hr != S_OK )
 		return;
 
-	mol::string grr(path);
+	std::wstring grr(path);
 	if ( grr[grr.size()-1] == _T('/') )
 		grr = grr.substr(0,grr.size()-1);
 
@@ -425,7 +425,7 @@ void ScpListCtrl::load_async( const mol::string& url )
 		return;
 	}
 
-	mol::TCHAR buf[MAX_PATH];
+	wchar_t buf[MAX_PATH];
 	::GetTempPath(MAX_PATH,buf);
 	int dirIcon = mol::io::ShellInfo::Icon(buf);
 
@@ -453,7 +453,7 @@ void ScpListCtrl::load_async( const mol::string& url )
 			return;
 		}
 
-		mol::string name = mol::toString(n.bstr_);
+		std::wstring name = mol::towstring(n.bstr_);
 
 		if ( name == _T(".") )
 			continue;
@@ -471,7 +471,7 @@ void ScpListCtrl::load_async( const mol::string& url )
 		}			
 		else
 		{
-			mol::string tmp(buf);
+			std::wstring tmp(buf);
 			tmp += name;
 
 			SHFILEINFO  shInfo;
@@ -494,10 +494,10 @@ void ScpListCtrl::load_async( const mol::string& url )
 
     int index = 0;
     list_.setRedraw(false);
-	for ( std::vector<mol::string>::iterator iter = dirs.begin(); iter != dirs.end(); iter++ )
+	for ( std::vector<std::wstring>::iterator iter = dirs.begin(); iter != dirs.end(); iter++ )
 	{
-		mol::string p(*iter);
-        std::vector<mol::string> entries;
+		std::wstring p(*iter);
+        std::vector<std::wstring> entries;
         ScpListEntry* entry = dirsMap[*iter];
 
 		entries.push_back( entry->fileinfo.getName() );
@@ -506,16 +506,16 @@ void ScpListCtrl::load_async( const mol::string& url )
 		entries.push_back( entry->fileinfo.getOwner() );
 		entries.push_back( entry->fileinfo.getGroup() );
 
-		entries.push_back(mol::toString(""));
+		entries.push_back(mol::towstring(""));
 
         list_.insertItem(entries,index,0,entry->iconindex,(LPARAM)entry);
         index++;
 	}
 
-	for ( std::vector<mol::string>::iterator iter = files.begin(); iter != files.end(); iter++ )
+	for ( std::vector<std::wstring>::iterator iter = files.begin(); iter != files.end(); iter++ )
 	{
-		mol::string p(*iter);
-        std::vector<mol::string> entries;
+		std::wstring p(*iter);
+        std::vector<std::wstring> entries;
         ScpListEntry* entry = filesMap[*iter];
 
 		entries.push_back( entry->fileinfo.getName() );
@@ -526,7 +526,7 @@ void ScpListCtrl::load_async( const mol::string& url )
 
 		long t = entry->fileinfo.getMtime();
 		char* ct = ctime((time_t*)&t);
-		entries.push_back(mol::toString(ct));
+		entries.push_back(mol::towstring(ct));
 
         list_.insertItem(entries,index,0,entry->iconindex,(LPARAM)entry);
         index++;
@@ -637,10 +637,10 @@ LRESULT ScpListCtrl::OnDblClick(UINT msg, WPARAM wParam, LPARAM lParam)
 	ScpListEntry* entry = getItemEntry(it);
 	if ( entry )
 	{
-		mol::string p(entry->filename);
+		std::wstring p(entry->filename);
 		if ( entry->isDir() )
 		{
-			mol::string name =entry->fileinfo.getName();
+			std::wstring name =entry->fileinfo.getName();
 			if ( name == _T("..") )
 			{
 				UpDir();
@@ -703,7 +703,7 @@ LRESULT ScpListCtrl::OnBeginLabelEdit(UINT msg, WPARAM wParam, LPARAM lParam)
 	return FALSE;
 }
 
-void ScpListCtrl::EndRename(const mol::string& oldpath, const mol::string& newpath)
+void ScpListCtrl::EndRename(const std::wstring& oldpath, const std::wstring& newpath)
 {
 	mol::punk<IOleInPlaceFrame> oip; 
 	mol::GIT git;
@@ -716,16 +716,16 @@ void ScpListCtrl::EndRename(const mol::string& oldpath, const mol::string& newpa
 	if ( hr != S_OK )
 		return;
 
-	mol::string pFrom( mol::fromUTF8(uri_.getPath()) ); 
+	std::wstring pFrom( mol::fromUTF8(uri_.getPath()) ); 
 	pFrom += oldpath;
 
-	mol::string tmp = pFrom;
+	std::wstring tmp = pFrom;
 	size_t pos = pFrom.find_last_of(_T("/"));
 	if ( pos != std::string::npos )
 		tmp = pFrom.substr(0,pos+1);
 
-	mol::string pTo(tmp);
-	pTo += mol::string(newpath);
+	std::wstring pTo(tmp);
+	pTo += std::wstring(newpath);
 
 	mol::punk<ISFTP> sftp;
 	hr = conn->get_SFTP(&sftp);
@@ -741,8 +741,8 @@ LRESULT ScpListCtrl::OnEndRename(UINT msg, WPARAM wParam, LPARAM lParam)
 	mol::Crack message(msg,wParam,lParam);
 	if ( message.listviewDispInfo()->item.pszText)
 	{
-		mol::string displayname = message.listviewDispInfo()->item.pszText;
-		mol::string path= getItemEntry(message.listviewDispInfo()->item.iItem)->fileinfo.getName();
+		std::wstring displayname = message.listviewDispInfo()->item.pszText;
+		std::wstring path= getItemEntry(message.listviewDispInfo()->item.iItem)->fileinfo.getName();
 
 		if(connect(&conn_))
 		{
@@ -757,7 +757,7 @@ LRESULT ScpListCtrl::OnEndRename(UINT msg, WPARAM wParam, LPARAM lParam)
 
 LRESULT ScpListCtrl::OnBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 {	
-	std::vector<mol::string> v = selectionPaths();
+	std::vector<std::wstring> v = selectionPaths();
 
 	if ( v.size() != 1 )
 		return 0;
@@ -874,7 +874,7 @@ LRESULT ScpListCtrl::OnContext(UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 			else
 			{
-				mol::string tmp(entry->filename);
+				std::wstring tmp(entry->filename);
 				this->fire(DISPID_ISHELLLISTEVENTS_ONLISTOPEN,mol::bstr(tmp),mol::variant(entry->isDir()));
 			}
 			break;
@@ -963,7 +963,7 @@ LRESULT ScpListCtrl::OnContext(UINT msg, WPARAM wParam, LPARAM lParam)
 
 HRESULT __stdcall ScpListCtrl::UpDir()
 {
-	mol::string tmp = path_;
+	std::wstring tmp = path_;
 	if ( tmp[tmp.size()-1] == _T('/'))
 		tmp = tmp.substr(0,tmp.size()-2);
 
@@ -1031,20 +1031,20 @@ void ScpListCtrl::mkdir()
 	mol::SafeArray<VT_VARIANT> safeArray;
 	safeArray.Attach(sa);
 
-	mol::string tmp = _T("newDir_");	
+	std::wstring tmp = _T("newDir_");	
 	int i = 0;
 	while(true)
 	{
-		mol::stringstream oss;
+		std::wstringstream oss;
 		oss << tmp << i;
-		mol::string newDir = oss.str();
+		std::wstring newDir = oss.str();
 
 		bool exists = false;
 		mol::SFAccess<VARIANT> sf(sa);
 		for ( size_t c = 0; c <sf.size(); c++)
 		{
 			mol::bstr b(sf[(int)c].bstrVal);
-			mol::string name = b.toString();
+			std::wstring name = b.towstring();
 			if ( newDir == name )
 			{
 				exists = true;
@@ -1098,7 +1098,7 @@ HRESULT __stdcall ScpListCtrl::Delete()
 		return S_OK;
 	}
 
-	std::vector<mol::string> tmp;
+	std::vector<std::wstring> tmp;
 	for(size_t i = 0; i < v.size(); i++)
 	{
 		tmp.push_back(v[i]->filename);
@@ -1112,7 +1112,7 @@ HRESULT __stdcall ScpListCtrl::Delete()
 	return S_OK;
 }
 
-void ScpListCtrl::unlink( const std::vector<mol::string>& v )
+void ScpListCtrl::unlink( const std::vector<std::wstring>& v )
 {
 	if ( v.empty() )
 		return;
@@ -1176,11 +1176,11 @@ void ScpListCtrl::unlink( const std::vector<mol::string>& v )
 
 HRESULT __stdcall ScpListCtrl::Properties()
 {	
-	std::vector<mol::string> v = selectionPaths();
+	std::vector<std::wstring> v = selectionPaths();
 
 	if ( v.size() > 0 )
 	{
-		mol::string path = v[0];
+		std::wstring path = v[0];
 
 		mol::Uri uri( mol::toUTF8(path) );
 		std::string host = uri.getHost();
@@ -1327,7 +1327,7 @@ HRESULT __stdcall ScpListCtrl::Paste ()
 	int port = uri.getPort();
 	std::string p = uri.getPath();
 
-	mol::string path = mol::toString(p);
+	std::wstring path = mol::towstring(p);
 	if ( e )
 	{
 		path += e->getName();
@@ -1341,7 +1341,7 @@ HRESULT __stdcall ScpListCtrl::Paste ()
 	if (!ido)
 		return S_OK;
 
-	std::vector<mol::string> v;
+	std::vector<std::wstring> v;
 	v = vectorFromDataObject(ido);
 
 	if ( v.size() < 1 )
@@ -1390,13 +1390,13 @@ HRESULT __stdcall ScpListCtrl::Paste ()
 
 //////////////////////////////////////////////////////////////////////////////
 
-int ScpListCtrl::getItemByPath(const mol::string& path)
+int ScpListCtrl::getItemByPath(const std::wstring& path)
 {
     int i = -1;
     while ( (i = list_.getNextItem(i,LVNI_ALL)) != -1 )
     {
         ScpListEntry* entry = getItemEntry(i);
-		mol::string tmp = path_;
+		std::wstring tmp = path_;
 		if ( path_[path_.size()-1] != _T('/') )
 			tmp += _T("/");
 		tmp += entry->filename;
@@ -1422,12 +1422,12 @@ ScpListEntry* ScpListCtrl::getItemEntry(int i )
 
 //////////////////////////////////////////////////////////////////////////////
 
-mol::string ScpListCtrl::getItemPath(int i)
+std::wstring ScpListCtrl::getItemPath(int i)
 {
 	ScpListEntry* entry = getItemEntry(i);
 	if ( entry )
 	{
-		mol::string tmp = path_;
+		std::wstring tmp = path_;
 		if ( path_[path_.size()-1] != _T('/') )
 			tmp += _T("/");
 		tmp += entry->getName();
@@ -1449,10 +1449,10 @@ void ScpListCtrl::clear()
 }
 //////////////////////////////////////////////////////////////////////////////
 
-std::vector<mol::string> ScpListCtrl::selectionPaths()
+std::vector<std::wstring> ScpListCtrl::selectionPaths()
 {
 	int index = -1;
-	std::vector<mol::string> v;
+	std::vector<std::wstring> v;
 	while ( (index = list_.getNextItem(index)) != -1 )
 	{
 		v.push_back( getItemPath(index) );
@@ -1504,7 +1504,7 @@ bool  ScpListCtrl::doHitTest()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void ScpListCtrl::setPath(const mol::string& p)  
+void ScpListCtrl::setPath(const std::wstring& p)  
 { 
 	path_ = p;
 	setText(p); 
@@ -1512,7 +1512,7 @@ void ScpListCtrl::setPath(const mol::string& p)
 
 //////////////////////////////////////////////////////////////////////////////
 
-mol::string ScpListCtrl::getPath()
+std::wstring ScpListCtrl::getPath()
 {
     return path_;
 }
@@ -1534,13 +1534,13 @@ HRESULT __stdcall ScpListCtrl::ShellListCtrl_Drop::Drop( IDataObject* pDataObjec
 	if ( i != -1 )
 		e = list_->getItemEntry(i);
 
-	mol::string path = mol::toString(list_->uri_.getPath());
+	std::wstring path = mol::towstring(list_->uri_.getPath());
 	if ( e && (!e->isDir()) )
 	{
 		path += e->getName();
 	}
 
-	std::vector<mol::string> v;
+	std::vector<std::wstring> v;
 	v = mol::vectorFromDataObject(pDataObject);
 
 	if ( ((*pEffect) & DROPEFFECT_MOVE ) && (keyState & MK_CONTROL) )
@@ -1573,7 +1573,7 @@ HRESULT __stdcall ScpListCtrl::ShellListCtrl_Drop::Drop( IDataObject* pDataObjec
 
 //////////////////////////////////////////////////////////////////////////////
 
-void ScpListCtrl::put( std::vector<mol::string>& v, const mol::string& path)
+void ScpListCtrl::put( std::vector<std::wstring>& v, const std::wstring& path)
 {
 	try
 	{
@@ -1686,7 +1686,7 @@ HRESULT __stdcall ScpListCtrl::put_Location		( BSTR  dirname )
 {
 	if ( dirname )
 	{
-		path_ = mol::toString(dirname);
+		path_ = mol::towstring(dirname);
 		load(path_);
 		
 		this->OnChanged(2);

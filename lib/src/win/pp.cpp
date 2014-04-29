@@ -9,7 +9,7 @@ PropPage::PropPage()
 	deleteOnNCDestroy_ = true;
 }
 
-void PropPage::create( mol::PropSheet* ps, const mol::string& tab, int id, int flags)
+void PropPage::create( mol::PropSheet* ps, const std::wstring& tab, int id, int flags)
 {
 	tab_ = tab;
 	id_ =id;
@@ -127,7 +127,7 @@ BOOL CALLBACK  PropPage::dialogProcedure (HWND hwnd, UINT message, WPARAM wParam
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-PropSheet::PropSheet(HWND owner, const mol::string& title, int flags )
+PropSheet::PropSheet(HWND owner, const std::wstring& title, int flags )
 {
 	title_ = title;
 	::ZeroMemory(&ph_,sizeof(ph_) );

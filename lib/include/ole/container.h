@@ -124,7 +124,7 @@ namespace ole {
 class OleContainerBase 
 {
 public:
-	typedef std::pair<mol::string,HMENU> namedMenu;
+	typedef std::pair<std::wstring,HMENU> namedMenu;
 
 	OleContainerBase();
 	~OleContainerBase();
@@ -134,13 +134,13 @@ public:
 public:
 
 	// public interface for menu merging and OleTargetExec setup
-	void addFileMenu( HMENU m, const mol::string& txt );
-	void addEditMenu( HMENU m, const mol::string& txt );
-	void addViewMenu( HMENU m, const mol::string& txt);
-	void addObjectMenu( HMENU m, const mol::string& txt );
+	void addFileMenu(HMENU m, const std::wstring& txt);
+	void addEditMenu(HMENU m, const std::wstring& txt);
+	void addViewMenu(HMENU m, const std::wstring& txt);
+	void addObjectMenu(HMENU m, const std::wstring& txt);
 	void setWindowMenu( HMENU m );
-	void addWindowMenu( HMENU m, const mol::string& txt );
-	void addHelpMenu( HMENU m, const mol::string& txt );
+	void addWindowMenu(HMENU m, const std::wstring& txt);
+	void addHelpMenu(HMENU m, const std::wstring& txt);
 	void addOlExecHandler( int oleCmdId, UINT cmd, GUID* cmdGroup = 0  );
 
 
@@ -360,7 +360,7 @@ public:
 	// std mole framework createWindow override
 	//////////////////////////////////////////////////////////
 
-	HWND createWindow( const mol::string& windowName, HMENU id, const mol::Rect& r, HWND parent )
+	HWND createWindow( const std::wstring& windowName, HMENU id, const mol::Rect& r, HWND parent )
 	{
 		W::createWindow( windowName, id, r, parent );
 

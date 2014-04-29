@@ -50,7 +50,7 @@ public:
 // just a thin border around scintilla adapted for molib
 ///////////////////////////////////////////////////////////////////////////////////
 
-extern const mol::TCHAR scintilla[];
+extern const wchar_t scintilla[];
 
 class Scintilla : public mol::win::CtrlClass<scintilla>
 {
@@ -704,7 +704,7 @@ public:
 		sendMessage( SCI_ZOOMOUT, (WPARAM)0 , (LPARAM)(0) );
 	}
 
-	void setAnnotation( int i, const mol::string& str )
+	void setAnnotation( int i, const std::wstring& str )
 	{
 		std::string tmp = mol::tostring(str);
 		sendMessage( SCI_ANNOTATIONSETTEXT, (WPARAM)i , (LPARAM)(tmp.c_str()) );

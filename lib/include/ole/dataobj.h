@@ -17,7 +17,7 @@ namespace mol {
 
 //////////////////////////////////////////////////////////////////////////////////
 
-std::vector<mol::string> vectorFromDataObject(IDataObject* ido);
+std::vector<std::wstring> vectorFromDataObject(IDataObject* ido);
 
 namespace ole {
 
@@ -65,10 +65,10 @@ public:
 class ShellDataObj : public com_obj<DataObj>
 {
 public:
-	ShellDataObj( std::vector<mol::string>& v, bool cut = false );
+	ShellDataObj( std::vector<std::wstring>& v, bool cut = false );
 
 	template<class E>
-    ShellDataObj( E* e, std::vector<mol::string>& v, bool cut = false )
+    ShellDataObj( E* e, std::vector<std::wstring>& v, bool cut = false )
 		: v_(v), cut_(cut)
 	{
 	//    dropEffectEvent_.subscribe(hwnd, cmd);
@@ -83,7 +83,7 @@ public:
 
 protected:
 
-	std::vector<mol::string>		v_;
+	std::vector<std::wstring>		v_;
 	bool							cut_;
 
 	format_etc_text					feText_;
@@ -108,7 +108,7 @@ public:
 	DataTransferObj(HWND hwnd, int cmd, bool cut = false);
     virtual ~DataTransferObj();
 
-	void addData( CLIPFORMAT format, const mol::string & data, int index = -1 ); 
+	void addData( CLIPFORMAT format, const std::wstring & data, int index = -1 ); 
 	void addData( CLIPFORMAT format, void* vv, size_t size, int index = -1 );
 /*	template<class T>
 	void addData( CLIPFORMAT format, T& t )

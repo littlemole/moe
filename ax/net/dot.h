@@ -30,15 +30,15 @@ public:
 	ICorRuntimeHost* operator->();
 	mscorlib::_AppDomain* DefaultDomain();
 
-	HRESULT CreateDomain( const mol::string& name, mscorlib::_AppDomain** ad );
+	HRESULT CreateDomain( const std::wstring& name, mscorlib::_AppDomain** ad );
 
-	HRESULT CreateInstance( const mol::string& assembly, 
-							const mol::string& type,
+	HRESULT CreateInstance( const std::wstring& assembly, 
+							const std::wstring& type,
 							IDispatch** disp);
 
 	template<class I>
-	HRESULT CreateInstance( const mol::string& assembly, 
-							const mol::string& type,
+	HRESULT CreateInstance( const std::wstring& assembly, 
+							const std::wstring& type,
 							I** i)
 	{
 		if (!i)
@@ -75,13 +75,13 @@ public:
 	mscorlib::_AppDomain* operator->();
 	operator mscorlib::_AppDomain* ();
 
-	HRESULT CreateInstance( const mol::string& assembly, 
-							const mol::string& type,
+	HRESULT CreateInstance( const std::wstring& assembly, 
+							const std::wstring& type,
 							IDispatch** disp);
 
 	template<class I>
-	HRESULT CreateInstance( const mol::string& assembly, 
-							const mol::string& type,
+	HRESULT CreateInstance( const std::wstring& assembly, 
+							const std::wstring& type,
 							I** i)
 	{
 		if (!i)

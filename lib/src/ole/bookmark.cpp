@@ -10,7 +10,7 @@ namespace mol {
 Bookmark::Bookmark()
 {}
 
-Bookmark::Bookmark(const mol::string& u, const mol::string& t)
+Bookmark::Bookmark(const std::wstring& u, const std::wstring& t)
 {
 	url   = u;
 	title = t;
@@ -121,9 +121,9 @@ void Bookmark::recurseFavs( LPITEMIDLIST favs, mol::io::ShellFolder& parentFolde
 	if ( S_OK == folder.enumObjects(0,SHCONTF_FOLDERS|SHCONTF_NONFOLDERS) )
 	while ( mol::io::Shit s = folder.next(0) )
 	{
-		mol::string title = folder.getDisplayNameOf(*s,SHGDN_NORMAL);
-		mol::string uri   = folder.getDisplayNameOf(*s,SHGDN_FORPARSING);
-		mol::string url   = getUrl(uri);
+		std::wstring title = folder.getDisplayNameOf(*s,SHGDN_NORMAL);
+		std::wstring uri   = folder.getDisplayNameOf(*s,SHGDN_FORPARSING);
+		std::wstring url   = getUrl(uri);
 
 		mol::Bookmark bm(url,title);
 		//if ( s->isDir() )  // VISTA?
@@ -136,14 +136,14 @@ void Bookmark::recurseFavs( LPITEMIDLIST favs, mol::io::ShellFolder& parentFolde
 
 /////////////////////////////////////////////////////////////////////////////////
 
-mol::string Bookmark::getUrl( const mol::string& uri )
+std::wstring Bookmark::getUrl( const std::wstring& uri )
 {
 	mol::punk<IUniformResourceLocator> url;
 	url.createObject(CLSID_InternetShortcut);
 
 	mol::CoStrBuf c;
 
-	mol::string ret;
+	std::wstring ret;
 	if (url)
 	{
 		mol::punk<IPersistFile> pfile(url);
@@ -157,7 +157,7 @@ mol::string Bookmark::getUrl( const mol::string& uri )
 				hr = url->GetURL(&c);
 				if ( hr == S_OK )
 				{
-					ret = mol::toString(c);
+					ret = mol::towstring(c);
 				}
 			}
 		}

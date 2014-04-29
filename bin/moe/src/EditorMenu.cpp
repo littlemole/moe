@@ -32,11 +32,11 @@ void EditorMenu::updateUI()
 	if ( hr != S_OK )
 		return;
 
-	mol::string title = path.toString();
+	std::wstring title = path.towstring();
 
 	long line=0;
 	editor_->line_->get_Current(&line);
-	mol::ostringstream oss;
+	std::wostringstream oss;
 	oss << line;
 
 	long pos = 0;
@@ -45,10 +45,10 @@ void EditorMenu::updateUI()
 	editor_->line_->PosFromLine(line-1,&linepos);
 
 	long col = pos-linepos;
-	mol::ostringstream oss2;
+	std::wostringstream oss2;
 	oss2 << col << " ";
 
-	mol::string dirty(_T(""));
+	std::wstring dirty(_T(""));
 	VARIANT_BOOL vb = VARIANT_FALSE;
 	hr = editor_->text_->get_Modified(&vb);
 	if ( vb == VARIANT_TRUE )
@@ -60,7 +60,7 @@ void EditorMenu::updateUI()
 		dirty = _T("not modified");
 	}
 
-	statusBar()->setText( path.toString(), dirty, oss.str(), oss2.str() );
+	statusBar()->setText(path.towstring(), dirty, oss.str(), oss2.str());
 
 	long encoding;
 	if ( S_OK == editor_->props_->get_Encoding(&encoding) )
@@ -364,16 +364,16 @@ void EditorMenu::walkConf(HMENU parent, ISetting* set, std::map<int,ISetting*>& 
 
 	if ( l <= 0 ) 
 	{
-		mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo(key.toString().c_str(),false,-1,0);
-		::AppendMenu( parent, MF_OWNERDRAW, (UINT_PTR)id, (mol::TCHAR*)inf);
+		mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo(key.towstring().c_str(), false, -1, 0);
+		::AppendMenu( parent, MF_OWNERDRAW, (UINT_PTR)id, (wchar_t*)inf);
 		confMap[id] = (ISetting*)set;
 		id++;
 		return;
 	}
 
 	HMENU m = ::CreateMenu();
-	mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo(key.toString().c_str(),false,-1,0);
-	::AppendMenu( parent, MF_POPUP|MF_OWNERDRAW, (UINT_PTR)m, (mol::TCHAR*)inf);
+	mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo(key.towstring().c_str(), false, -1, 0);
+	::AppendMenu( parent, MF_POPUP|MF_OWNERDRAW, (UINT_PTR)m, (wchar_t*)inf);
 
 	for ( long i = 0; i < l; i++ )
 	{

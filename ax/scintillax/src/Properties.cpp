@@ -68,7 +68,7 @@ HRESULT __stdcall SciAxProperties::put_Filename( BSTR filename)
 { 
 	filename_ = filename;
 
-	mol::string p( mol::toString(filename));
+	std::wstring p( mol::towstring(filename));
 
 	if ( sci_ )
 	{
@@ -559,7 +559,7 @@ HRESULT __stdcall SciAxProperties::ConvertTabs()
     {
         c++;
     }
-	mol::ostringstream oss;
+	std::wostringstream oss;
 	oss << c << _T(" replaces");
 	::MessageBox( *sci_,oss.str().c_str(),_T("replace result:"),MB_APPLMODAL);
 

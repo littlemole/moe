@@ -44,7 +44,7 @@ TaskDialogPtr* TaskDialog = (TaskDialogPtr*)mol::dllFunc( _T("Comctl32.dll"), _T
 
 
 
-int msgbox( HWND parent, const mol::string& txt, const mol::string& title, const mol::string& detail, int idIcon )
+int msgbox( HWND parent, const std::wstring& txt, const std::wstring& title, const std::wstring& detail, int idIcon )
 {
 	if ( TaskDialog )
 	{

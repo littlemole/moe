@@ -113,7 +113,7 @@ mscorlib::_AppDomain* NetHost::DefaultDomain()
 }
 
 
-HRESULT NetHost::CreateDomain( const mol::string& name, mscorlib::_AppDomain** ad )
+HRESULT NetHost::CreateDomain( const std::wstring& name, mscorlib::_AppDomain** ad )
 {
 	if ( !ad )
 		return E_INVALIDARG;
@@ -140,7 +140,7 @@ HRESULT NetHost::CreateDomain( const mol::string& name, mscorlib::_AppDomain** a
 	return E_UNEXPECTED;
 }
 
-HRESULT NetHost::CreateInstance( const mol::string& assembly, const mol::string& type, IDispatch** disp)
+HRESULT NetHost::CreateInstance( const std::wstring& assembly, const std::wstring& type, IDispatch** disp)
 {
 	if ( !disp )
 		return E_INVALIDARG;
@@ -181,7 +181,7 @@ Domain::Domain()
 {
 	static int i = 0;
 	i++;
-	mol::ostringstream oss;
+	std::wostringstream oss;
 	oss << _T("Moe.Form.Domain.") << i;
 
 	if ( S_OK != NET().CreateDomain( oss.str(), &domain_ ))
@@ -207,7 +207,7 @@ Domain::operator mscorlib::_AppDomain* ()
 	return domain_.interface_; 
 }
 
-HRESULT Domain::CreateInstance( const mol::string& assembly, const mol::string& type, IDispatch** disp)
+HRESULT Domain::CreateInstance( const std::wstring& assembly, const std::wstring& type, IDispatch** disp)
 {
 	if ( !disp )
 		return E_INVALIDARG;

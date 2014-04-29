@@ -44,10 +44,10 @@ public:
 
 protected:
 
-	void create( mol::PropSheet* ps, const mol::string& tab, int id, int flags = PSP_DEFAULT|PSP_USETITLE);
+	void create( mol::PropSheet* ps, const std::wstring& tab, int id, int flags = PSP_DEFAULT|PSP_USETITLE);
 	PropPage();
 
-	mol::string tab_;
+	std::wstring tab_;
 	int id_;
 
 	PROPSHEETPAGE psp_;
@@ -68,10 +68,10 @@ public:
 
 	typedef PropSheet BaseWindowType;
 
-	PropSheet( HWND owner, const mol::string& title, int flags = PSH_NOCONTEXTHELP|PSH_PROPTITLE|PSH_USEPSTARTPAGE|PSH_NOAPPLYNOW|PSH_USECALLBACK );
+	PropSheet( HWND owner, const std::wstring& title, int flags = PSH_NOCONTEXTHELP|PSH_PROPTITLE|PSH_USEPSTARTPAGE|PSH_NOAPPLYNOW|PSH_USECALLBACK );
 
 	template<class T>
-	void addPage(  const mol::string& tab, int id )
+	void addPage(  const std::wstring& tab, int id )
 	{
 		mol::win::PropPage* page = new T;
 		page->create(this,tab,id);
@@ -79,7 +79,7 @@ public:
 	}
 
 	template<class T>
-	void addPage(  const mol::string& tab, REFCLSID clsid ,  int id)
+	void addPage(  const std::wstring& tab, REFCLSID clsid ,  int id)
 	{
 		mol::ole::OlePropPage* page = new T;
 		page->create(this,tab,clsid,id);
@@ -100,7 +100,7 @@ protected:
 	int	nPages_;
 	std::vector<HPROPSHEETPAGE> pages_;
 	PROPSHEETHEADER ph_;
-	mol::string title_;
+	std::wstring title_;
 };
 
 

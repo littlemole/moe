@@ -3,17 +3,6 @@
 
 namespace mol {
 
-#ifdef _UNICODE
-
-std::wostream&  cout = std::wcout;
-std::wistream&  cin  = std::wcin;
-std::wostream&  cerr = std::wcerr;
-#else
-std::ostream&  cout  = std::cout;
-std::istream&  cin   = std::cin;
-std::ostream&  cerr  = std::cerr;
-#endif
-
 
 #ifdef _WIN32
 
@@ -132,48 +121,6 @@ std::wstring  towstring( const wchar_t* wstr, long cp)
 		return L"";
 	return std::wstring( wstr );
 }
-
-
-mol::string  toString( const std::string& str, long cp)
-{
-#ifdef _UNICODE
-	return mol::towstring(str,cp);
-#else
-	return str;
-#endif
-}
-
-mol::string  toString( const std::wstring& str, long cp)
-{
-#ifdef _UNICODE
-	return str;
-#else
-	return mol::tostring(str,cp);
-#endif
-}
-
-mol::string  toString( const char* str, long cp)
-{
-	if (!str)
-		return _T("");
-#ifdef _UNICODE
-	return mol::towstring(std::string(str),cp);
-#else
-	return std::string(str);
-#endif
-}
-
-mol::string  toString( const wchar_t* wstr, long cp)
-{
-	if (!wstr)
-		return _T("");
-#ifdef _UNICODE
-	return std::wstring(wstr);
-#else
-	return mol::tostring(std::wstring(wstr),cp);
-#endif
-}
-
 
 #endif
 

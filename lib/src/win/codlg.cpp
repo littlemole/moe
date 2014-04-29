@@ -6,8 +6,8 @@
 namespace mol  {
 
 
-mol::TCHAR SearchDlg::bufWhat_[1024]  = _T("");
-mol::TCHAR SearchDlg::bufWhich_[1024] = _T("");
+wchar_t SearchDlg::bufWhat_[1024]  = _T("");
+wchar_t SearchDlg::bufWhich_[1024] = _T("");
 
 SearchDlg::SearchDlg()
 {
@@ -34,7 +34,7 @@ int SearchDlg::getSearchMsg()
     return msg;
 }
 
-HWND SearchDlg::findText(HWND parent, DWORD flags,const mol::TCHAR* what )
+HWND SearchDlg::findText(HWND parent, DWORD flags,const wchar_t* what )
 {
     frp_.Flags			=	flags;;
     frp_.hwndOwner		=	parent;
@@ -42,7 +42,7 @@ HWND SearchDlg::findText(HWND parent, DWORD flags,const mol::TCHAR* what )
 
     if (what)
     {
-		memcpy( bufWhat_,what,frp_.wFindWhatLen*sizeof(mol::TCHAR));
+		memcpy( bufWhat_,what,frp_.wFindWhatLen*sizeof(wchar_t));
     }
     hWnd_ = ::FindText(&frp_);
     subClass(hWnd_);
@@ -50,7 +50,7 @@ HWND SearchDlg::findText(HWND parent, DWORD flags,const mol::TCHAR* what )
     return hWnd_;
 }
 
-HWND SearchDlg::replaceText( HWND parent, DWORD flags, const mol::TCHAR* what , const mol::TCHAR* which  )
+HWND SearchDlg::replaceText( HWND parent, DWORD flags, const wchar_t* what , const wchar_t* which  )
 {
     frp_.Flags			=	flags;;
     frp_.hwndOwner		=	parent;
@@ -58,11 +58,11 @@ HWND SearchDlg::replaceText( HWND parent, DWORD flags, const mol::TCHAR* what , 
 
     if (what)
     {
-			memcpy( bufWhat_,what,frp_.wFindWhatLen*sizeof(mol::TCHAR));
+			memcpy( bufWhat_,what,frp_.wFindWhatLen*sizeof(wchar_t));
     }
     if (which)
     {
-		memcpy( bufWhich_,which,frp_.wReplaceWithLen*sizeof(mol::TCHAR));
+		memcpy( bufWhich_,which,frp_.wReplaceWithLen*sizeof(wchar_t));
     }
 	hWnd_ = ::ReplaceText(&frp_);
     subClass(hWnd_);
@@ -72,7 +72,7 @@ HWND SearchDlg::replaceText( HWND parent, DWORD flags, const mol::TCHAR* what , 
 
 ////////////////////////////////////////////////
 
-const TCHAR filter[] = _T("All Files (*.*)\0*.*\0\0");
+const wchar_t filter[] = _T("All Files (*.*)\0*.*\0\0");
 
 FilenameDlg::FilenameDlg( HWND parent)
 {
@@ -83,11 +83,11 @@ FilenameDlg::FilenameDlg( HWND parent)
 	dlg_ = 0;
 }
 
-void FilenameDlg::setFilter(const mol::TCHAR* filter )
+void FilenameDlg::setFilter(const wchar_t* filter )
 {
     of_.lpstrFilter = filter;
 }
-const mol::string FilenameDlg::fileName(int i)
+const std::wstring FilenameDlg::fileName(int i)
 {
 	if ( of_.Flags & OFN_ALLOWMULTISELECT )
 	{
@@ -96,12 +96,12 @@ const mol::string FilenameDlg::fileName(int i)
     return filename_;
 }
 
-void FilenameDlg::fileName(const mol::string& s)
+void FilenameDlg::fileName(const std::wstring& s)
 {
 	filename_ = s;
 }
 
-const mol::string FilenameDlg::ext(int i)
+const std::wstring FilenameDlg::ext(int i)
 {
 	if ( of_.Flags & OFN_ALLOWMULTISELECT )
 	{
@@ -110,7 +110,7 @@ const mol::string FilenameDlg::ext(int i)
     return extension_;
 }
 
-const mol::string FilenameDlg::title(int i)
+const std::wstring FilenameDlg::title(int i)
 {
 	if ( of_.Flags & OFN_ALLOWMULTISELECT )
 	{
@@ -145,8 +145,8 @@ bool FilenameDlg::readOnly()
 
 BOOL FilenameDlg::dlgOpen( int flags)
 {
-	mol::TCHAR buf[1024];
-    mol::TCHAR buf2[1024];
+	wchar_t buf[1024];
+    wchar_t buf2[1024];
     buf[0]  = 0;
     buf2[0] = 0;
 
@@ -160,7 +160,7 @@ BOOL FilenameDlg::dlgOpen( int flags)
 	of_.lCustData      = (LPARAM)this;
 
 	if ( filename_.size() > 0 )
-		::memcpy( buf, filename_.c_str(), (filename_.size()+1)*sizeof(mol::TCHAR) );
+		::memcpy( buf, filename_.c_str(), (filename_.size()+1)*sizeof(wchar_t) );
 
     BOOL ret = ::GetOpenFileName(&of_);
 
@@ -169,23 +169,23 @@ BOOL FilenameDlg::dlgOpen( int flags)
 
 	if ( flags & OFN_ALLOWMULTISELECT )
 	{
-		mol::string p = mol::string( of_.lpstrFile, of_.nFileOffset-1 );
-		mol::TCHAR* c = of_.lpstrFile + of_.nFileOffset;
-		mol::TCHAR* b = c;
+		std::wstring p = std::wstring( of_.lpstrFile, of_.nFileOffset-1 );
+		wchar_t* c = of_.lpstrFile + of_.nFileOffset;
+		wchar_t* b = c;
 		if ( *(c-1) != 0 )
 		{
-			filenames_.push_back( p + _T("\\") + mol::string(buf + of_.nFileOffset) );
+			filenames_.push_back( p + _T("\\") + std::wstring(buf + of_.nFileOffset) );
 		}
 		else
-		while ( !( (*c == 0) && (*(c-1) == 0) ) && (int)c <= (int)of_.lpstrFile + (int)(of_.nMaxFile*sizeof(mol::TCHAR)) )
+		while ( !( (*c == 0) && (*(c-1) == 0) ) && (int)c <= (int)of_.lpstrFile + (int)(of_.nMaxFile*sizeof(wchar_t)) )
 		{
 			if ( *c == 0 )
 			{
-				mol::string s(p);
+				std::wstring s(p);
 				s.append(_T("\\"));
 				if ( c-b > 0 && *b)
 				{
-					mol::string f(b,int(c-b));
+					std::wstring f(b,int(c-b));
 					s.append(f);
 					filenames_.push_back( s );
 				}
@@ -199,7 +199,7 @@ BOOL FilenameDlg::dlgOpen( int flags)
 	filename_  = buf;
 	filetitle_ = buf2;
 	if ( of_.nFileExtension != 0 )
-		extension_ = (mol::TCHAR*)(of_.lpstrFile+of_.nFileExtension);
+		extension_ = (wchar_t*)(of_.lpstrFile+of_.nFileExtension);
 	else
 		extension_ = _T("");
 
@@ -208,8 +208,8 @@ BOOL FilenameDlg::dlgOpen( int flags)
 
 BOOL FilenameDlg::dlgSave( int flags)
 {
-    mol::TCHAR buf[1024];
-    mol::TCHAR buf2[1024];
+    wchar_t buf[1024];
+    wchar_t buf2[1024];
     buf[0]  = 0;
     buf2[0] = 0;
 
@@ -224,12 +224,12 @@ BOOL FilenameDlg::dlgSave( int flags)
 	of_.lCustData       = (LPARAM)this;
 
 	if ( filename_.size() > 0 )
-		::memcpy( buf, filename_.c_str(), (filename_.size()+1)*sizeof(mol::TCHAR) );
+		::memcpy( buf, filename_.c_str(), (filename_.size()+1)*sizeof(wchar_t) );
 
     BOOL ret =::GetSaveFileName(&of_);
 
     if ( of_.nFileExtension != 0 )
-		extension_ = mol::string( (mol::TCHAR*)(of_.lpstrFile + of_.nFileExtension) );
+		extension_ = std::wstring( (wchar_t*)(of_.lpstrFile + of_.nFileExtension) );
     else
         extension_ = _T("");
 

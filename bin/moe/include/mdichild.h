@@ -10,7 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////
 
-FILETIME getLastWriteTime(const mol::string& path);
+FILETIME getLastWriteTime(const std::wstring& path);
 
 
 template<class C,class I, long T>
@@ -65,7 +65,7 @@ public:
 		{
 			*fname = 0;
 			C* This = (C*)this;
-			mol::string filename = This->getText();
+			std::wstring filename = This->getText();
 			*fname = ::SysAllocString( mol::towstring(filename).c_str() );
 		}
 		return S_OK;
@@ -102,7 +102,7 @@ class MoeChild :
 {
 protected:
 
-	void initializeMoeChild( const mol::string& p)
+	void initializeMoeChild( const std::wstring& p)
 	{
 		// get client rectangle
 		mol::Rect r;
@@ -205,14 +205,14 @@ public:
 		return s;
 	}
 
-	HRESULT init(const mol::string& engine);
+	HRESULT init(const std::wstring& engine);
 
-	void eval ( const mol::string& engine, const mol::string& script, IScintillAx* sci );
-	void debug( const mol::string& engine, const mol::string& script, IScintillAx* sci );
-	void call ( const mol::string& engine, const mol::string& func, const mol::string& script );
+	void eval ( const std::wstring& engine, const std::wstring& script, IScintillAx* sci );
+	void debug( const std::wstring& engine, const std::wstring& script, IScintillAx* sci );
+	void call ( const std::wstring& engine, const std::wstring& func, const std::wstring& script );
 
-	void formscript( const mol::string& engine, const mol::string& script, IDispatch* form );
-	void formdebug( const mol::string& engine, const mol::string& script, IDispatch* form );
+	void formscript( const std::wstring& engine, const std::wstring& script, IDispatch* form );
+	void formdebug( const std::wstring& engine, const std::wstring& script, IDispatch* form );
 	void formcontrols( IUnknown* form );
 
     virtual HRESULT  __stdcall OnScriptError( IActiveScriptError *pscripterror);

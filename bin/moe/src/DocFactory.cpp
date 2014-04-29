@@ -29,21 +29,21 @@
 // file opening helpers
 
 template<class T>
-mol::MdiChild* load( const mol::string& path, long enc, bool readOnly )
+mol::MdiChild* load( const std::wstring& path, long enc, bool readOnly )
 {
 	typename T::Instance* t = T::CreateInstance( path, enc, readOnly );
 	return dynamic_cast<mol::MdiChild*>(t);
 }
 
 template<class T>
-mol::MdiChild* load( const mol::string& path, bool readOnly )
+mol::MdiChild* load( const std::wstring& path, bool readOnly )
 {
 	typename T::Instance* t = T::CreateInstance( path, readOnly );
 	return dynamic_cast<mol::MdiChild*>(t);
 }
 
 template<class T>
-mol::MdiChild* load( const mol::string& path)
+mol::MdiChild* load( const std::wstring& path)
 {
 	typename T::Instance* t = T::CreateInstance( path );
 	return dynamic_cast<mol::MdiChild*>(t);
@@ -74,7 +74,7 @@ public:
 
 	MoeEditorDocumentFactory(long enc, bool readOnly);
 	virtual ~MoeEditorDocumentFactory();
-	virtual mol::MdiChild* openDocument( const mol::string& dir);
+	virtual mol::MdiChild* openDocument( const std::wstring& dir);
 
 private:
 	long enc_;
@@ -89,7 +89,7 @@ MoeEditorDocumentFactory::MoeEditorDocumentFactory(long enc, bool readOnly)
 MoeEditorDocumentFactory::~MoeEditorDocumentFactory()
 {}
 
-mol::MdiChild* MoeEditorDocumentFactory::openDocument( const mol::string& path)
+mol::MdiChild* MoeEditorDocumentFactory::openDocument( const std::wstring& path)
 {
 	Editor::Instance* t = Editor::CreateInstance( path, enc_, readOnly_ );
 	return dynamic_cast<mol::MdiChild*>(t);
@@ -103,7 +103,7 @@ public:
 
 	MoeTailEditorDocumentFactory(long enc) : enc_(enc) {}
 	virtual ~MoeTailEditorDocumentFactory() {}
-	virtual mol::MdiChild* openDocument( const mol::string& path)
+	virtual mol::MdiChild* openDocument( const std::wstring& path)
 	{
 		TailEditor::Instance* t = TailEditor::CreateInstance( path );
 		return dynamic_cast<mol::MdiChild*>(t);
@@ -120,7 +120,7 @@ public:
 
 	MoeSShEditorDocumentFactory() {};
 	virtual ~MoeSShEditorDocumentFactory() {};
-	virtual mol::MdiChild* openDocument( const mol::string& path)
+	virtual mol::MdiChild* openDocument( const std::wstring& path)
 	{
 		Editor::Instance* t = Editor::CreateInstance( path );
 		return dynamic_cast<mol::MdiChild*>(t);
@@ -135,7 +135,7 @@ public:
 
 	MoeRTFEditorDocumentFactory() {};
 	virtual ~MoeRTFEditorDocumentFactory() {};
-	virtual mol::MdiChild* openDocument( const mol::string& path)
+	virtual mol::MdiChild* openDocument( const std::wstring& path)
 	{
 		RTFEditor::Instance* t = RTFEditor::CreateInstance( path );
 		return dynamic_cast<mol::MdiChild*>(t);
@@ -148,7 +148,7 @@ class MoeDirDocumentFactory : public IMoeDocumentFactory
 {
 public:
 
-	virtual mol::MdiChild* openDocument( const mol::string& path)
+	virtual mol::MdiChild* openDocument( const std::wstring& path)
 	{
 		DirChild::Instance* t = DirChild::CreateInstance( path );
 		return dynamic_cast<mol::MdiChild*>(t);
@@ -167,7 +167,7 @@ public:
 		:conn_(conn)
 	{}
 
-	virtual mol::MdiChild* openDocument( const mol::string& path)
+	virtual mol::MdiChild* openDocument( const std::wstring& path)
 	{
 		ScpDirChild::Instance* t = ScpDirChild::CreateInstance( conn_, path  );
 		return dynamic_cast<mol::MdiChild*>(t);
@@ -182,7 +182,7 @@ class MoeImageFactory : public IMoeDocumentFactory
 {
 public:
 
-	virtual mol::MdiChild* openDocument( const mol::string& path)
+	virtual mol::MdiChild* openDocument( const std::wstring& path)
 	{
 		ImgViewer::Instance* t = ImgViewer::CreateInstance( path );
 		return dynamic_cast<mol::MdiChild*>(t);
@@ -198,7 +198,7 @@ class MoeHtmlFactory : public IMoeDocumentFactory
 {
 public:
 
-	virtual mol::MdiChild* openDocument( const mol::string& path)
+	virtual mol::MdiChild* openDocument( const std::wstring& path)
 	{
 		MoeHtmlWnd::Instance* t = MoeHtmlWnd::CreateInstance( path );
 		return dynamic_cast<mol::MdiChild*>(t);
@@ -214,7 +214,7 @@ class MoeFormFactory : public IMoeDocumentFactory
 {
 public:
 
-	virtual mol::MdiChild* openDocument( const mol::string& path)
+	virtual mol::MdiChild* openDocument( const std::wstring& path)
 	{
 		FormEditor::Instance* t = FormEditor::CreateInstance( path );
 		return dynamic_cast<mol::MdiChild*>(t);
@@ -237,7 +237,7 @@ public:
 	MoeHexFactory::~MoeHexFactory()
 	{}
 
-	virtual mol::MdiChild* openDocument( const mol::string& path)
+	virtual mol::MdiChild* openDocument( const std::wstring& path)
 	{
 		Hex::Instance* t = Hex::CreateInstance(path,readOnly_);
 		return dynamic_cast<mol::MdiChild*>(t);
@@ -253,7 +253,7 @@ class MoeOleFactory : public IMoeDocumentFactory
 {
 public:
 
-	virtual mol::MdiChild* openDocument( const mol::string& path)
+	virtual mol::MdiChild* openDocument( const std::wstring& path)
 	{
 		OleChild::Instance* t = OleChild::CreateInstance( path );
 		return dynamic_cast<mol::MdiChild*>(t);
@@ -266,18 +266,18 @@ private:
 /////////////////////////////////////////////////////////////////////
 
 
-IMoeDocumentFactory* handleShellPath(  const mol::string& p )
+IMoeDocumentFactory* handleShellPath(  const std::wstring& p )
 {
-	mol::string path = p;
+	std::wstring path = p;
 	if ( path.size() > 1 && path.substr(0,2) == _T("::") ) 
 	{
-		mol::ostringstream oss;
+		std::wostringstream oss;
 		oss << _T("shell:") << path;
 		path = oss.str();
 	}
 	if ( path.size() > 2 && path.substr(0,3) == _T(":::") ) 
 	{
-		mol::ostringstream oss;
+		std::wostringstream oss;
 		oss << _T("shell") << path;
 		path = oss.str();
 	}
@@ -295,7 +295,7 @@ IMoeDocumentFactory* handleShellPath(  const mol::string& p )
 	return 0;
 }
 
-IMoeDocumentFactory* openSSHfactory(const mol::string& path)
+IMoeDocumentFactory* openSSHfactory(const std::wstring& path)
 {
 	WaitCursor wc;
 
@@ -325,7 +325,7 @@ IMoeDocumentFactory* openSSHfactory(const mol::string& path)
 			if (hr!=S_OK)
 				return 0;
 
-			mol::ostringstream oss2;
+			std::wostringstream oss2;
 			oss2 << _T("retrieving: ") << mol::fromUTF8(host) << _T(":") << port;
 			statusBar()->status(oss2.str());
 
@@ -351,9 +351,9 @@ IMoeDocumentFactory* openSSHfactory(const mol::string& path)
 
 
 
-IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const mol::string& p, MOE_DOCTYPE type, long enc, bool readOnly)
+IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const std::wstring& p, MOE_DOCTYPE type, long enc, bool readOnly)
 {
-	mol::string path = p;
+	std::wstring path = p;
 	statusBar()->status(10);
 
 	// shell link ?
@@ -365,7 +365,7 @@ IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const mol::stri
 	// shell url ?
 	if ( mol::icmp( mol::Path::ext(path), _T(".url") ) == 0 )
 	{
-		mol::string url = mol::resolveInternetShortcut(path);
+		std::wstring url = mol::resolveInternetShortcut(path);
 		if ( url.empty() )
 			return 0;
 
@@ -415,7 +415,7 @@ IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const mol::stri
 
 
 	// if path is file, check filextension
-	mol::string ext = mol::Path::ext(path);
+	std::wstring ext = mol::Path::ext(path);
     if ( ext.size() > 0 )
 	    if ( ext[0] == _T('.') )
 		    ext = ext.substr(1);
@@ -506,17 +506,17 @@ HRESULT __stdcall DocFactory::newDocument(MOE_DOCTYPE typ, IMoeDocument** d)
 	{
 		case MOE_DOCTYPE_DOC :
 		{
-			mol::string p = docs()->getNewFileName(_T(".txt"));
+			std::wstring p = docs()->getNewFileName(_T(".txt"));
 			return createFile<Editor>(p,d);
 		}
 		case MOE_DOCTYPE_RTF :
 		{
-			mol::string p = docs()->getNewFileName(_T(".rtf"));
+			std::wstring p = docs()->getNewFileName(_T(".rtf"));
 			return createFile<RTFEditor>(p,d);
 		}
 		case MOE_DOCTYPE_FORM :
 		{
-			mol::string p = docs()->getNewFileName(_T(".ufs"));
+			std::wstring p = docs()->getNewFileName(_T(".ufs"));
 			return createFile<FormEditor>(p,d);
 		}
 	}
@@ -526,9 +526,9 @@ HRESULT __stdcall DocFactory::newDocument(MOE_DOCTYPE typ, IMoeDocument** d)
 
 /////////////////////////////////////////////////////////////////////
 
-HRESULT __stdcall  DocFactory::openDocument( const mol::string& p, MOE_DOCTYPE typ, long enc, bool readOnly, IMoeDocument** doc )
+HRESULT __stdcall  DocFactory::openDocument( const std::wstring& p, MOE_DOCTYPE typ, long enc, bool readOnly, IMoeDocument** doc )
 {
-	mol::string path = p;
+	std::wstring path = p;
 
 	// deactive any active object
 	if ( moe()->activeObject)
@@ -556,17 +556,17 @@ HRESULT __stdcall  DocFactory::openDocument( const mol::string& p, MOE_DOCTYPE t
 			mol::bstr src;
 			hr = ei->GetSource(&src);
 
-			mol::ostringstream oss;
-			oss << _T(" failed to load ") << mol::toString(path) << _T(" ") << desc.toString();
+			std::wostringstream oss;
+			oss << _T(" failed to load ") << mol::towstring(path) << _T(" ") << desc.towstring();
 
-			mol::string str = oss.str();
+			std::wstring str = oss.str();
 			statusBar()->status( str );
 
 			logger(LOGINFO) << mol::tostring(str);
 		}
 		else
 		{
-			mol::ostringstream oss;
+			std::wostringstream oss;
 			oss << _T(" failed to load ") << path;
 			statusBar()->status( oss.str() );
 		}
@@ -605,7 +605,7 @@ class ComSSHErr
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
-void DocFactory::updateUI(const mol::string& p, mol::MdiChild* c)
+void DocFactory::updateUI(const std::wstring& p, mol::MdiChild* c)
 {
 	if ( docs()->size() == 0 )
 	{

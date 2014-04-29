@@ -173,14 +173,14 @@ protected:
 	void Init();
 	void disposeObject(IUnknown* unk);
 
-	//bool loadAdminCOM(const mol::string& p, const mol::string& ext,  long enc);
-	//bool saveAdminCOM(const mol::string& p);
-	std::string loadAdmin(const mol::string& p);
-	bool saveAdmin(const mol::string& p);
-	bool load(const mol::string& p, const mol::string& ext,  long enc);
-	bool openSSH(const mol::string& path,const mol::string& ext,long enc);
-	bool save(const mol::string& location);
-	bool saveSSH(const mol::string& location);
+	//bool loadAdminCOM(const std::wstring& p, const std::wstring& ext,  long enc);
+	//bool saveAdminCOM(const std::wstring& p);
+	std::string loadAdmin(const std::wstring& p);
+	bool saveAdmin(const std::wstring& p);
+	bool load(const std::wstring& p, const std::wstring& ext,  long enc);
+	bool openSSH(const std::wstring& path,const std::wstring& ext,long enc);
+	bool save(const std::wstring& location);
+	bool saveSSH(const std::wstring& location);
 };
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -30,12 +30,12 @@ class TypeLib2XML
 {
 public:
 
-	bool loadTypeLib(const mol::string path);
-	mol::string getXML();
+	bool loadTypeLib(const std::wstring path);
+	std::wstring getXML();
 
 private:
 
-	mol::string filename;
+	std::wstring filename;
 	mol::TypeLib tl;
 
 	std::list<MetaClass> iMap;
@@ -152,10 +152,10 @@ public:
 		if ( xsltDoc.vt == VT_EMPTY )
 			return S_OK;
 
-		mol::string xslt("");
+		std::wstring xslt("");
 		if ( xsltDoc.vt == VT_BSTR )
 		{
-			mol::string val = bstr(xsltDoc.bstrVal).toString();
+			std::wstring val = bstr(xsltDoc.bstrVal).toString();
 			if ( mol::Path::exists(val) )
 			{
 				mol::filestream fs;

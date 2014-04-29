@@ -6,7 +6,7 @@
 
 using namespace mol::ole;
 
-bool TypeLib2XML::loadTypeLib(const mol::string path)
+bool TypeLib2XML::loadTypeLib(const std::wstring path)
 {
 	iMap.clear();
 	coMap.clear();
@@ -60,7 +60,7 @@ bool TypeLib2XML::loadTypeLib(const mol::string path)
 					for ( int i = 0; i < ti.getAttr()->cImplTypes; i++ )
 					{									
 						HREFTYPE hrt = ti.getRefType(i);
-						mol::string n = ti.reftype_name(hrt);
+						std::wstring n = ti.reftype_name(hrt);
 						
 						MetaClass mc(n,ti.getAttr()->guid);
 				
@@ -83,7 +83,7 @@ bool TypeLib2XML::loadTypeLib(const mol::string path)
 					meta.progId = tl.getName() + _T(".") + meta.type;
 					bstr doc;
 					tl->GetDocumentation(MEMBERID_NIL,0,&doc,0,0);
-					meta.desc = doc.toString();
+					meta.desc = doc.towstring();
 
 					coMap.push_back(meta);
 				
@@ -104,9 +104,9 @@ bool TypeLib2XML::loadTypeLib(const mol::string path)
 	return true;
 }
 
-mol::string TypeLib2XML::getXML()
+std::wstring TypeLib2XML::getXML()
 {
-	mol::ostringstream oss;
+	std::wostringstream oss;
 
 	// typelib element
 	oss << _T("<typelib name='") << tl.getName() << _T("' ") << std::endl;
@@ -173,7 +173,7 @@ void TypeLib2XML::tl_funcdesc(mol::TypeInfo& ti, MetaClass& meta, int fi )
 	if (!fd )
 		return;
 
-	mol::string name = ti.name(fd->memid);
+	std::wstring name = ti.name(fd->memid);
 	if ( name == _T("CodeBehind") )
 	{
 		int i = 0;
@@ -183,7 +183,7 @@ void TypeLib2XML::tl_funcdesc(mol::TypeInfo& ti, MetaClass& meta, int fi )
 
 	MetaFunc metafunc(name,ti.return_type(fd));
 
-	metafunc.funkind = toString(mol::ole::funkind[fd->funckind]);
+	metafunc.funkind = towstring(mol::ole::funkind[fd->funckind]);
 	if ( fd->callconv == CC_STDCALL )
 		metafunc.isStdCall = true;
 
@@ -212,7 +212,7 @@ void TypeLib2XML::tl_funcdesc(mol::TypeInfo& ti, MetaClass& meta, int fi )
 
 	for ( unsigned int j = 1; j < cnames; j++ )
 	{
-		MetaParam metaparam( ti.param_type(fd,j-1), names[j].toString() );
+		MetaParam metaparam( ti.param_type(fd,j-1), names[j].towstring() );
 
 		if ( fd->lprgelemdescParam[j-1].paramdesc.wParamFlags & PARAMFLAG_FRETVAL )
 		{
@@ -231,7 +231,7 @@ void TypeLib2XML::tl_funcdesc(mol::TypeInfo& ti, MetaClass& meta, int fi )
 
 	for ( unsigned int j = cnames-1; j < (unsigned int)fd->cParams; j++ )
 	{
-		mol::ostringstream oss;
+		std::wostringstream oss;
 		oss << _T("param") << j;
 		MetaParam metaparam( ti.param_type(fd,j), oss.str() );
 
@@ -255,7 +255,7 @@ void TypeLib2XML::tl_funcdesc(mol::TypeInfo& ti, MetaClass& meta, int fi )
 	metafunc.vtindex = fd->oVft;
 	bstr doc;
 	ti.type_info->GetDocumentation(fd->memid,0,&doc,0,0);
-	metafunc.desc = doc.toString();
+	metafunc.desc = doc.towstring();
 
 	std::list<MetaFunc>::iterator it = meta.functions.begin();
 	for ( it; it != meta.functions.end(); it++)
@@ -342,7 +342,7 @@ void TypeLib2XML::tl_enum( mol::TypeInfo&  ti, int index, MetaClass& meta )
 	for ( int i = 0; i < ti.getAttr()->cVars; i++ )
 	{
 		VARDESC* vd = ti.getVarDesc(i);
-		mol::ostringstream oss;
+		std::wostringstream oss;
 		oss << (vd->lpvarValue->lVal);
 
 		MetaParam metaparam(ti.name(vd->memid),oss.str());
@@ -388,7 +388,7 @@ int main(int argc, char* argv[])
 	if ( argc < 2 )
 		return 0;
 
-	mol::string tl_name = argv[1];//"C:\\Programme\\Microsoft Office\\OFFICE11\\excel.exe"; //argv[1];
+	std::wstring tl_name = argv[1];//"C:\\Programme\\Microsoft Office\\OFFICE11\\excel.exe"; //argv[1];
 
 	TypeLib2XML tl2x;
 	if ( tl2x.loadTypeLib(tl_name) )

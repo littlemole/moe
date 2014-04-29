@@ -146,8 +146,8 @@ protected:
 class ValueDialog :	public mol::win::Dialog
 {
 public:
-	mol::string value;
-	mol::string title;
+	std::wstring value;
+	std::wstring title;
 
 	LRESULT wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -160,7 +160,7 @@ protected:
 class KeyDialog : public mol::win::Dialog
 {
 public:
-	mol::string key;
+	std::wstring key;
 
 	LRESULT wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 

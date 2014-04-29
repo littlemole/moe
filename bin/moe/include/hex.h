@@ -22,7 +22,7 @@ public:
 	Hex();
 	virtual ~Hex();
 
-	static  Instance* CreateInstance(const mol::string& p, bool readOnly);
+	static  Instance* CreateInstance(const std::wstring& p, bool readOnly);
 
 	void OnMDIActivate(HWND activated);
 	void OnMenu( HMENU menu );
@@ -36,7 +36,7 @@ public:
 	void OnBytesShown();
 
 protected:
-	bool initialize(const mol::string& p, bool readOnly);
+	bool initialize(const std::wstring& p, bool readOnly);
 	void updateUI();		
 
 

@@ -85,11 +85,11 @@ HBITMAP Bmp::load( int id )
 
 namespace win {
 
-MenuItemInfo::MenuItemInfo(const mol::string& txt, bool s, int i,HBITMAP b)
+MenuItemInfo::MenuItemInfo(const std::wstring& txt, bool s, int i,HBITMAP b)
 : text_(txt), separator_(s), icon_(i), bitmap_(b)
 {}
 
-const mol::string& MenuItemInfo::text()
+const std::wstring& MenuItemInfo::text()
 {
 	return text_;
 }
@@ -305,7 +305,7 @@ BOOL  Menu::addSubmenu( HMENU sub, int cmd, int iicon, int bmp)
 									iicon,
 									mol::UI().Bitmap(bmp));
 
-	return ::AppendMenu(hMenu_,MF_OWNERDRAW|MF_POPUP|MF_STRING,(UINT_PTR)sub,(TCHAR*)inf);
+	return ::AppendMenu(hMenu_, MF_OWNERDRAW | MF_POPUP | MF_STRING, (UINT_PTR)sub, (wchar_t*)inf);
 }
 
 BOOL Menu::addSeparator(bool ownerDrawn)
@@ -313,7 +313,7 @@ BOOL Menu::addSeparator(bool ownerDrawn)
 	if ( ownerDrawn ) 
 	{
 		mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo(_T(""),true,-1,0);
-		return ::AppendMenu(hMenu_,MF_SEPARATOR|MF_OWNERDRAW,(UINT_PTR)0,(TCHAR*)inf);
+		return ::AppendMenu(hMenu_, MF_SEPARATOR | MF_OWNERDRAW, (UINT_PTR)0, (wchar_t*)inf);
 	}
 	return ::AppendMenu(hMenu_,MF_SEPARATOR,(UINT_PTR)0,0);
 }
@@ -360,14 +360,14 @@ void  Menu::detach()
 
 /////////////////////////////////////////////////////////////////////
 
-BOOL  Menu::addItem( UINT_PTR inewItem, const mol::string& snewItem, UINT flags )
+BOOL  Menu::addItem( UINT_PTR inewItem, const std::wstring& snewItem, UINT flags )
 {
     return ::AppendMenu( hMenu_, flags, (UINT_PTR)inewItem, snewItem.c_str() );
 }
 
 /////////////////////////////////////////////////////////////////////
 
-BOOL  Menu::addSubmenu( HMENU sub, const mol::string& snewItem, UINT flags )
+BOOL  Menu::addSubmenu( HMENU sub, const std::wstring& snewItem, UINT flags )
 {
     return addItem( (UINT_PTR)sub, snewItem.c_str(),flags  );
 }
@@ -523,7 +523,7 @@ UserInterface::UserInterface()
 {
 }
 
-mol::string UserInterface::CmdString(unsigned int id)
+std::wstring UserInterface::CmdString(unsigned int id)
 {
 	if ( cmdStrings_.count(id) == 0 )
 		return 0;
@@ -591,7 +591,7 @@ HWND UserInterface::hWnd(unsigned int id)
 }
 
 
-void UserInterface::addCmd(int key, const mol::string& title)
+void UserInterface::addCmd(int key, const std::wstring& title)
 {
 	cmdStrings_.insert( std::make_pair( key, title ) );
 }
@@ -655,7 +655,7 @@ void UserInterface::addMenuSeparator(int root, int menu)
 	{
 		// winxp
 		mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo(_T(""),true,-1,0);
-		::AppendMenu( SubMenu(root,menu),MF_SEPARATOR|MF_OWNERDRAW,(UINT_PTR)0,(TCHAR*)inf);
+		::AppendMenu(SubMenu(root, menu), MF_SEPARATOR | MF_OWNERDRAW, (UINT_PTR)0, (wchar_t*)inf);
 	}
 }
 
@@ -683,12 +683,12 @@ void UserInterface::addSubMenu(int root, int menu, int cmd, int bmp)
 		}
 	}
 
-	mol::string label = CmdString(cmd);
+	std::wstring label = CmdString(cmd);
 	
 	if ( mol::OS::has_uac() )
 	{
 		// vista++
-		::AppendMenu( submenu,MF_POPUP|MF_STRING|MF_ENABLED,(UINT_PTR)popup,(TCHAR*)label.c_str());
+		::AppendMenu(submenu, MF_POPUP | MF_STRING | MF_ENABLED, (UINT_PTR)popup, (wchar_t*)label.c_str());
 
 		int index = ::GetMenuItemCount(submenu)-1;
 
@@ -701,7 +701,7 @@ void UserInterface::addSubMenu(int root, int menu, int cmd, int bmp)
 	{
 		//winxp
 		mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo( label.c_str(),false,iicon,b);
-		::AppendMenu( submenu,MF_OWNERDRAW|MF_POPUP|MF_STRING|MF_ENABLED,(UINT_PTR)popup,(TCHAR*)inf);
+		::AppendMenu(submenu, MF_OWNERDRAW | MF_POPUP | MF_STRING | MF_ENABLED, (UINT_PTR)popup, (wchar_t*)inf);
 	}
 
 	submenus_[root].insert(std::make_pair(cmd,popup));
@@ -721,7 +721,7 @@ void UserInterface::addMenuItem( int root, int menu, int cmd, int bmp, int index
 		}
 	}
 
-	mol::string label = CmdString(cmd);
+	std::wstring label = CmdString(cmd);
 	HMENU submenu = SubMenu(root,menu);
 	int cnt = ::GetMenuItemCount( submenu );
 

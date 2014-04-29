@@ -203,7 +203,7 @@ private:
 	void initRibbon(IStorage* store);
 
 	// helpers
-	void freezeConfig(const mol::string& key);
+	void freezeConfig(const std::wstring& key);
 	void fullScreen(HWND hwnd);
 	
 	/////////////////////////////////////////////////////////////////////

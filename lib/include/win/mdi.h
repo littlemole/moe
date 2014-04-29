@@ -88,7 +88,7 @@ public:
 
 protected:
 
-	HWND virtual createWindow( const mol::string& windowName, HMENU hMenu=0,const Rect& r=mol::stdRect , HWND parent=0 );
+	HWND virtual createWindow( const std::wstring& windowName, HMENU hMenu=0,const Rect& r=mol::stdRect , HWND parent=0 );
     void registerClass( HMENU& hMenu );
     HWND addChild(HWND parent);
 
@@ -153,7 +153,7 @@ protected:
 	virtual void OnAddChild(HWND hwnd)     {};
 	virtual void OnReleaseChild(HWND hwnd);
 
-	HWND createWindow( const mol::string& windowName, HMENU hMenu=0,const Rect& r=mol::stdRect , HWND parent=0 );
+	HWND createWindow( const std::wstring& windowName, HMENU hMenu=0,const Rect& r=mol::stdRect , HWND parent=0 );
     void registerClass( int& hMenu );
     void createMDIClient( LPCREATESTRUCT lpcs );
 

@@ -37,7 +37,7 @@ scpStream::~scpStream()
 {
 }
 
-void scpStream::initScp(const mol::string& host, int port, const mol::string& filename, mol::ssh::CredentialCallback* cb)
+void scpStream::initScp(const std::wstring& host, int port, const std::wstring& filename, mol::ssh::CredentialCallback* cb)
 {
 	filename_ = filename;
 	cb_		  = cb;
@@ -199,7 +199,7 @@ HRESULT __stdcall scpStream::Stat( STATSTG *pstatstg, DWORD grfStatFlag)
 
 	if ( grfStatFlag == STATFLAG_DEFAULT)
 	{
-		pstatstg->pwcsName = (mol::TCHAR*)::CoTaskMemAlloc(filename_.size()*sizeof(wchar_t));
+		pstatstg->pwcsName = (wchar_t*)::CoTaskMemAlloc(filename_.size()*sizeof(wchar_t));
 		memcpy(pstatstg->pwcsName,filename_.c_str(),filename_.size()*sizeof(wchar_t));
 	}
 	else
@@ -245,7 +245,7 @@ DelayedDataTransferObj::DelayedDataTransferObj()
 	//cf_filedescriptor_ = ::RegisterClipboardFormat(CFSTR_FILEDESCRIPTOR);
 }
 
-bool DelayedDataTransferObj::init(const mol::string& host, int port, mol::ssh::CredentialCallback* cb, BOOL cut)
+bool DelayedDataTransferObj::init(const std::wstring& host, int port, mol::ssh::CredentialCallback* cb, BOOL cut)
 {
 	host_   = host;
 	port_   = port;
@@ -258,11 +258,11 @@ bool DelayedDataTransferObj::init(const mol::string& host, int port, mol::ssh::C
 	return true;
 }
 
-bool DelayedDataTransferObj::add(const mol::string& remotefile,unsigned long long size,bool isdir)
+bool DelayedDataTransferObj::add(const std::wstring& remotefile,unsigned long long size,bool isdir)
 {
 	files_.push_back(remotefile);
 
-	mol::string tmp = remotefile;
+	std::wstring tmp = remotefile;
 
 	if ( tmp[tmp.size()-1] == L'/' )
 		tmp = tmp.substr(0,tmp.size()-1);
@@ -295,7 +295,7 @@ DelayedDataTransferObj::~DelayedDataTransferObj()
 }
 
 
-void DelayedDataTransferObj::enumerateRemoteDir(const mol::string& filename,unsigned long long size,bool isdir)
+void DelayedDataTransferObj::enumerateRemoteDir(const std::wstring& filename,unsigned long long size,bool isdir)
 {
 	ODBGS("DelayedDataTransferObj enumerateRemoteDir");
 
@@ -316,9 +316,9 @@ void DelayedDataTransferObj::enumerateRemoteDir(const mol::string& filename,unsi
 				if ( v[i].isDir() )
 				{
 	
-					mol::string tmp = filename;
+					std::wstring tmp = filename;
 
-					mol::ostringstream oss;
+					std::wostringstream oss;
 					oss << tmp;
 					if ( tmp[tmp.size()-1] != L'/' )
 					{
@@ -347,9 +347,9 @@ void DelayedDataTransferObj::enumerateRemoteDir(const mol::string& filename,unsi
 				}
 				else
 				{
-					mol::string tmp = filename;
+					std::wstring tmp = filename;
 
-					mol::ostringstream oss;
+					std::wostringstream oss;
 					oss << tmp;
 					if ( tmp[tmp.size()-1] != L'/' )
 					{
@@ -449,8 +449,8 @@ HRESULT __stdcall DelayedDataTransferObj::GetData( FORMATETC * pFormatetc, STGME
 		//FGD fgd(fds_.size());
 		for ( size_t i = 0; i < fds_.size(); i++)
 		{
-			mol::ostringstream oss;
-			mol::string tmp = fds_[i]->cFileName;
+			std::wostringstream oss;
+			std::wstring tmp = fds_[i]->cFileName;
 
 			size_t pos = tmp.find(remoteroot_);
 			if ( pos == std::string::npos)
@@ -491,7 +491,7 @@ HRESULT __stdcall DelayedDataTransferObj::GetData( FORMATETC * pFormatetc, STGME
 		for ( size_t i = 0; i < fds_.size(); i++)
 		{
 			mol::ostringstream oss;
-			mol::string tmp = fds_[i]->cFileName;
+			std::wstring tmp = fds_[i]->cFileName;
 
 			size_t pos = tmp.find(remoteroot_);
 			if ( pos == std::string::npos)
@@ -534,7 +534,7 @@ HRESULT __stdcall DelayedDataTransferObj::GetData( FORMATETC * pFormatetc, STGME
 			ODBGS1("DataTransferObj::GetData - cf_filecontents_ - index",pFormatetc->lindex);
 			pmedium->tymed = TYMED_ISTREAM;
 
-			mol::string s = fds_[pFormatetc->lindex]->cFileName;
+			std::wstring s = fds_[pFormatetc->lindex]->cFileName;
 
 			mol::punk< mol::com_obj<scpStream> > scpstream = new mol::com_obj<scpStream>;	
 			scpstream->initScp( host_, port_,s,cb_);

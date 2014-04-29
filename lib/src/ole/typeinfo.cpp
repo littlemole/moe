@@ -71,36 +71,36 @@ HREFTYPE TypeInfo::getDualRefType()
 
 }
 
-mol::string TypeInfo::reftype_name(HREFTYPE& rt)
+std::wstring TypeInfo::reftype_name(HREFTYPE& rt)
 {
 	return TypeInfo::reftype_name(rt,MEMBERID_NIL);
 }
 
-mol::string TypeInfo::reftype_name(HREFTYPE& rt, int i)
+std::wstring TypeInfo::reftype_name(HREFTYPE& rt, int i)
 {
 	mol::punk<ITypeInfo> t;
 	if ( S_OK == type_info->GetRefTypeInfo(rt,&t) )
 	{
 		mol::bstr fname;
 		t->GetDocumentation( i, &fname, NULL, 0, NULL );
-		return fname.toString();
+		return fname.towstring();
 	}
 	return _T("");
 }
 
 
-mol::string TypeInfo::variable_type(VARDESC* vd)
+std::wstring TypeInfo::variable_type(VARDESC* vd)
 { 
 	return get_type(&(vd->elemdescVar.tdesc));
 }
 
 
-mol::string TypeInfo::alias_type(TYPEATTR* ta)
+std::wstring TypeInfo::alias_type(TYPEATTR* ta)
 {
 	return get_type(&(ta->tdescAlias));
 }
 
-mol::string TypeInfo::get_type(TYPEDESC* td)
+std::wstring TypeInfo::get_type(TYPEDESC* td)
 {
 	bool isPointer        = false;
 	bool isPointerPointer = false;
@@ -139,7 +139,7 @@ mol::string TypeInfo::get_type(TYPEDESC* td)
 		ret += "*";
 	if ( isPointerPointer )
 		ret += "*";
-	return toString(ret);
+	return towstring(ret);
 }
 
 VARTYPE TypeInfo::type(TYPEDESC* td)
@@ -158,32 +158,32 @@ VARTYPE TypeInfo::pointer_pointer_type(TYPEDESC* td)
 }
 
 
-mol::string TypeInfo::user_type(TYPEDESC* td)
+std::wstring TypeInfo::user_type(TYPEDESC* td)
 {
 	return reftype_name(td->hreftype);
 }
 
-mol::string TypeInfo::user_pointer_type(TYPEDESC* td)
+std::wstring TypeInfo::user_pointer_type(TYPEDESC* td)
 {
 	return reftype_name(td->lptdesc->hreftype) + _T("*");
 }
 
-mol::string TypeInfo::user_pointer_pointer_type(TYPEDESC* td)
+std::wstring TypeInfo::user_pointer_pointer_type(TYPEDESC* td)
 {
 	return reftype_name(td->lptdesc->lptdesc->hreftype) + _T("**");
 }
 
 
-mol::string TypeInfo::name()
+std::wstring TypeInfo::name()
 {
 	return name(MEMBERID_NIL);
 }
 
-mol::string TypeInfo::name(int id)
+std::wstring TypeInfo::name(int id)
 {
 	mol::bstr tname;
 	type_info->GetDocumentation( id, &tname, NULL, 0, NULL );
-	return tname.toString();
+	return tname.towstring();
 }
 
 FUNCDESC* TypeInfo::getFuncDesc(int i)
@@ -228,40 +228,40 @@ TYPEATTR* TypeInfo::getAttr()
 	return 0;
 }
 
-mol::string TypeInfo::param_type(FUNCDESC* fd ,int i)
+std::wstring TypeInfo::param_type(FUNCDESC* fd ,int i)
 {
 	
 	return get_type(&(fd->lprgelemdescParam[i].tdesc));
 }
 
-mol::string TypeInfo::return_type(FUNCDESC* fd )
+std::wstring TypeInfo::return_type(FUNCDESC* fd )
 {
 	return get_type(&(fd->elemdescFunc.tdesc));
 }
 
 ////////////////////////////////////////////////////////////////
 
-mol::string FuncDesc::param_type(int i)
+std::wstring FuncDesc::param_type(int i)
 {
 	return get_type(&(fd_->lprgelemdescParam[i].tdesc));
 }
 
-mol::string FuncDesc::param_name(int i)
+std::wstring FuncDesc::param_name(int i)
 {
-	mol::string ret = funcNames_[i+1].toString();
+	std::wstring ret = funcNames_[i+1].towstring();
 	if ( ret == _T("") )
 		ret = _T("val");
 	return ret;
 }
 
-mol::string FuncDesc::return_type()
+std::wstring FuncDesc::return_type()
 {
 	return get_type(&(fd_->elemdescFunc.tdesc));
 }
 
-mol::string FuncDesc::name()
+std::wstring FuncDesc::name()
 {
-	return funcNames_[0].toString();
+	return funcNames_[0].towstring();
 }
 
 namespace ole {

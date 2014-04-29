@@ -15,7 +15,7 @@ int main( int nargs, char* args[] )
 		return 0;
 	}
 
-	mol::string input_file_name = mol::toString(args[1]);
+	std::wstring input_file_name = mol::towstring(args[1]);
 	std::string output_file_name = mol::tostring(args[2]);
 
 	TypeLib2XML typeLib2XML;
@@ -27,7 +27,7 @@ int main( int nargs, char* args[] )
 		return 1;
 	}
 
-	mol::string xml = typeLib2XML.getXML();
+	std::wstring xml = typeLib2XML.getXML();
 	std::string utf8 = mol::toUTF8(xml);
 
 	mol::filestream fs;

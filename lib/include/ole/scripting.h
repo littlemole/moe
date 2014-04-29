@@ -17,15 +17,15 @@ namespace ole {
 class ActiveScript 
 {
 public:
-	virtual HRESULT init(const mol::string& engine);
+	virtual HRESULT init(const std::wstring& engine);
 	virtual HRESULT setState(SCRIPTSTATE state);
 	virtual HRESULT setHost(IActiveScriptSite* host);
 	virtual HRESULT close();
 
-	virtual HRESULT addNamedObject(const mol::string& obj, int state = SCRIPTITEM_ISVISIBLE);
-	virtual HRESULT runScript(const mol::string& script, int flag = SCRIPTTEXT_ISEXPRESSION|SCRIPTTEXT_ISVISIBLE);
-	virtual HRESULT getScriptDispatch( const mol::string& script, IDispatch **ppdisp);
-	virtual HRESULT addScriptlet( mol::string& name, const mol::string& handler, const mol::string& obj, const mol::string& subobj, const mol::string& eventname );
+	virtual HRESULT addNamedObject(const std::wstring& obj, int state = SCRIPTITEM_ISVISIBLE);
+	virtual HRESULT runScript(const std::wstring& script, int flag = SCRIPTTEXT_ISEXPRESSION|SCRIPTTEXT_ISVISIBLE);
+	virtual HRESULT getScriptDispatch( const std::wstring& script, IDispatch **ppdisp);
+	virtual HRESULT addScriptlet( std::wstring& name, const std::wstring& handler, const std::wstring& obj, const std::wstring& subobj, const std::wstring& eventname );
 
 	variant& result();
 	EXCEPINFO& errorInfo();
@@ -34,10 +34,10 @@ public:
 
 
 protected:
-	mol::string							engine_;
+	std::wstring							engine_;
 	punk<IActiveScriptParse>			asp_;
 
-	HRESULT getScriptEngine(const mol::string& engine, IActiveScript **ppas);
+	HRESULT getScriptEngine(const std::wstring& engine, IActiveScript **ppas);
 
 	variant varResult_;
     EXCEPINFO ei_; 
@@ -65,24 +65,24 @@ public:
 	virtual void dispose()  {};
 
 	// init and cleanup
-	virtual HRESULT init(const mol::string& engine);
+	virtual HRESULT init(const std::wstring& engine);
 	virtual HRESULT close();
 	virtual HRESULT setState(SCRIPTSTATE state);
 
 	// parse a script
-	virtual HRESULT runScript(const mol::string& script, int flag = SCRIPTTEXT_ISVISIBLE);//SCRIPTTEXT_ISEXPRESSION
+	virtual HRESULT runScript(const std::wstring& script, int flag = SCRIPTTEXT_ISVISIBLE);//SCRIPTTEXT_ISEXPRESSION
 	// debug a script
-	virtual HRESULT debugScript(const mol::string& script, int flag = SCRIPTTEXT_ISVISIBLE);//SCRIPTTEXT_ISEXPRESSION
+	virtual HRESULT debugScript(const std::wstring& script, int flag = SCRIPTTEXT_ISVISIBLE);//SCRIPTTEXT_ISEXPRESSION
 
 	// add a named object
-	virtual HRESULT addNamedObject( IUnknown* punk, const mol::string& obj, int state = SCRIPTITEM_ISVISIBLE| SCRIPTITEM_ISSOURCE );
-	virtual HRESULT removeNamedObject( const mol::string& obj );
+	virtual HRESULT addNamedObject( IUnknown* punk, const std::wstring& obj, int state = SCRIPTITEM_ISVISIBLE| SCRIPTITEM_ISSOURCE );
+	virtual HRESULT removeNamedObject( const std::wstring& obj );
 	// add event handler
-	virtual HRESULT addScriptlet( mol::string& name, 
-						  const mol::string& handler,
-						  const mol::string& obj,
-						  const mol::string& subobj,
-						  const mol::string& eventname );
+	virtual HRESULT addScriptlet( std::wstring& name, 
+						  const std::wstring& handler,
+						  const std::wstring& obj,
+						  const std::wstring& subobj,
+						  const std::wstring& eventname );
 
 
 	// result and error info accessors
@@ -93,13 +93,13 @@ public:
 	virtual HRESULT exec();
 
 	// find dispatch pointer for parsed script
-	virtual HRESULT getScript( const mol::string& script,IDispatch **ppdisp);
+	virtual HRESULT getScript( const std::wstring& script,IDispatch **ppdisp);
 
 	// call a script function by name
-	variant call(const mol::string& func );
+	variant call(const std::wstring& func );
 
 	template<class V>
-	variant call(const mol::string& func, V& v )
+	variant call(const std::wstring& func, V& v )
 	{
 		variant ret;
 
@@ -120,7 +120,7 @@ public:
 	}
 
 	template<class V1, class V2>
-	variant call(const mol::string& func, V1& v1, V2& v2 )
+	variant call(const std::wstring& func, V1& v1, V2& v2 )
 	{
 		variant ret;
 
@@ -141,7 +141,7 @@ public:
 	}
 
 	template<class V1, class V2, class V3>
-	variant call(const mol::string& func, V1& v1, V2& v2, V3& v3 )
+	variant call(const std::wstring& func, V1& v1, V2& v2, V3& v3 )
 	{
 		variant ret;
 
@@ -163,7 +163,7 @@ public:
 
 
 	template<class V1, class V2, class V3, class V4>
-	variant call(const mol::string& func, V1& v1, V2& v2, V3& v3, V4& v4 )
+	variant call(const std::wstring& func, V1& v1, V2& v2, V3& v3, V4& v4 )
 	{
 		variant ret;
 
@@ -212,7 +212,7 @@ public:
 	virtual HRESULT  __stdcall EnableModeless(	BOOL fEnable );
 
 protected:
-	std::map<mol::string,IUnknown*>		objectMap_;
+	std::map<std::wstring,IUnknown*>		objectMap_;
 	mol::ole::ActiveScript				activeScript_;
 	mol::punk<IProcessDebugManager>		pdm_;
 	mol::punk<IDebugApplication>		debugApp_;
@@ -221,7 +221,7 @@ protected:
 	bool								debug_;
 };
 
-mol::string engineFromExtension(const mol::string& ext);
+std::wstring engineFromExtension(const std::wstring& ext);
 
 
 } // end namespace mole

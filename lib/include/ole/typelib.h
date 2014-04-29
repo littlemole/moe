@@ -20,14 +20,14 @@ public:
 	virtual ~TypeLib() {}
 
 	bool load();
-	bool load(const mol::string& lib);
+	bool load(const std::wstring& lib);
 	bool load(REFGUID libid,int major=1,int minor=1);
 	bool registerTypelib();
     bool unRegisterTypelib();
 
 	GUID getGUID();
-	mol::string getName();
-	mol::string getDescription();
+	std::wstring getName();
+	std::wstring getDescription();
 
 	unsigned short major() { return major_; }
 	unsigned short minor() { return minor_; }
@@ -36,8 +36,8 @@ public:
 	HRESULT item( unsigned int index, ITypeInfo** ti );
 	HRESULT item( REFGUID guid, ITypeInfo** ti );
 
-	mol::string getName( int index);
-	mol::string getDescription( int index);
+	std::wstring getName(int index);
+	std::wstring getDescription(int index);
 	TYPEKIND typeKind( int index);
 	GUID getGUID( int index);
 

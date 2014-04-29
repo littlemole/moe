@@ -38,12 +38,12 @@ class Elevator
 {
 public:
 
-	Elevator(const mol::string& executor)
+	Elevator(const std::wstring& executor)
 		:executor_(executor)
 	{
 	}
 
-	std::string read(const mol::string& file, const mol::string& pipename)
+	std::string read(const std::wstring& file, const std::wstring& pipename)
 	{
 		mol::UACPipe pipe;
 		pipe.create( pipename );
@@ -54,7 +54,7 @@ public:
 			throw UACex();
 		}
 
-		mol::ostringstream oss_args;
+		std::wostringstream oss_args;
 		oss_args 
 			<< _T("read")
 			<< _T(" ") 
@@ -87,7 +87,7 @@ public:
 		return data;
 	}
 
-	bool write(const mol::string& file, const mol::string& pipename, const std::string& data)
+	bool write(const std::wstring& file, const std::wstring& pipename, const std::string& data)
 	{
 		mol::UACPipe pipe;
 		pipe.create( pipename );
@@ -97,7 +97,7 @@ public:
 			throw UACex();
 		}
 
-		mol::ostringstream oss_args;
+		std::wostringstream oss_args;
 		oss_args 
 			<< _T("write")
 			<< _T(" ") 
@@ -133,7 +133,7 @@ public:
 	}
 
 private:
-	mol::string executor_;
+	std::wstring executor_;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -462,13 +462,13 @@ HRESULT __stdcall ScintillAx::Load( BSTR file )
 	if (!file)
 		return S_FALSE;
 
-	mol::string p(mol::toString(file));
+	std::wstring p(mol::towstring(file));
 	bool isSSH = p.substr(0,6) == _T("ssh://") || p.substr(0,10) == _T("moe-ssh://");
 	if ( mol::Path::exists(p) || isSSH )
 	{
 		if ( !mol::Path::isDir(p) || isSSH )
 		{
-			mol::string ext = mol::Path::ext(p);
+			std::wstring ext = mol::Path::ext(p);
 			if ( ext.size() > 0 )
 				if ( ext[0] == '.' )
 					ext = ext.substr(1);
@@ -504,13 +504,13 @@ HRESULT __stdcall ScintillAx::LoadEncoding( BSTR file, long enc )
 { 
 	if (file)
 	{
-		mol::string p(mol::toString(file));
+		std::wstring p(mol::towstring(file));
 		bool isSSH = p.substr(0,6) == _T("ssh://") || p.substr(0,10) == _T("moe-ssh://");
 		if ( mol::Path::exists(p) || isSSH )
 		{
 			if ( !mol::Path::isDir(p) || isSSH )
 			{
-				mol::string ext = mol::Path::ext(p);
+				std::wstring ext = mol::Path::ext(p);
 				if ( ext.size() > 0 )
 					if ( ext[0] == _T('.') )
 						ext = ext.substr(1);
@@ -534,7 +534,7 @@ HRESULT __stdcall ScintillAx::LoadEncoding( BSTR file, long enc )
 	return S_FALSE; 
 }
 
-SCINTILLA_SYNTAX guess ( const mol::string& p, const mol::string& ext );
+SCINTILLA_SYNTAX guess ( const std::wstring& p, const std::wstring& ext );
 
 void ScintillAx::OnAsyncLoad(const std::string& s)
 {
@@ -562,7 +562,7 @@ void ScintillAx::OnAsyncLoad(const std::string& s)
 
 	if ( fe.isBinary() )
 	{
-		if ( IDCANCEL == ::MessageBox(*this,_T("this looks like a BINARY\r\nopen anyway?"),p.toString().c_str(),MB_OKCANCEL|MB_ICONQUESTION ) )
+		if ( IDCANCEL == ::MessageBox(*this,_T("this looks like a BINARY\r\nopen anyway?"),p.towstring().c_str(),MB_OKCANCEL|MB_ICONQUESTION ) )
 		{
 			((IScintillAx*)this)->Release();
 			return;
@@ -576,8 +576,8 @@ void ScintillAx::OnAsyncLoad(const std::string& s)
 
 	edit()->setText(mol::unix2dos(utf8_bytes));
 
-	mol::string ext = mol::Path::ext(p.toString());
-	props_->put_Syntax(guess(p.toString(),ext));
+	std::wstring ext = mol::Path::ext(p.towstring());
+	props_->put_Syntax(guess(p.towstring(),ext));
 
 	edit()->setSavePoint();
 	setDirty(FALSE);
@@ -590,7 +590,7 @@ HRESULT __stdcall ScintillAx::LoadAsync( BSTR file, long enc )
 { 
 	if (file)
 	{
-		mol::string p(mol::toString(file));
+		std::wstring p(mol::towstring(file));
 		bool isSSH = p.substr(0,6) == _T("ssh://") || p.substr(0,10) == _T("moe-ssh://");
 		if ( isSSH )
 			return LoadEncoding(file,enc);
@@ -599,7 +599,7 @@ HRESULT __stdcall ScintillAx::LoadAsync( BSTR file, long enc )
 		{
 			if ( !mol::Path::isDir(p) )
 			{
-				mol::string ext = mol::Path::ext(p);
+				std::wstring ext = mol::Path::ext(p);
 				if ( ext.size() > 0 )
 					if ( ext[0] == _T('.') )
 						ext = ext.substr(1);
@@ -638,7 +638,7 @@ HRESULT __stdcall ScintillAx::Save()
 { 
 	mol::bstr filename;
 	props_->get_Filename(&filename);
-	if ( !this->save(filename.toString()) )
+	if ( !this->save(filename.towstring()) )
 		return S_FALSE;
 	return S_OK; 
 }
@@ -860,11 +860,11 @@ HRESULT ScintillAx::OnDraw( HDC hdcDraw, LPCRECTL lprcBounds, LPCRECTL lprcMFBou
 //
 //////////////////////////////////////////////////////////////////////////////
 
-bool ScintillAx::saveAdmin(const mol::string& location)
+bool ScintillAx::saveAdmin(const std::wstring& location)
 {
-	mol::string pipename( _T("\\\\.\\pipe\\mol_moe_prw_writer_pipe") );
+	std::wstring pipename( _T("\\\\.\\pipe\\mol_moe_prw_writer_pipe") );
 
-	mol::string ex = mol::Path::pathname(mol::App().getModulePath());
+	std::wstring ex = mol::Path::pathname(mol::App().getModulePath());
 	ex = ex + _T("\\") + _T("prw.exe");
 
 	Elevator elevator( ex );
@@ -938,7 +938,7 @@ bool ScintillAx::saveAdmin(const mol::string& location)
 //
 //////////////////////////////////////////////////////////////////////////////
 /*
-bool ScintillAx::saveAdminCOM(const mol::string& location)
+bool ScintillAx::saveAdminCOM(const std::wstring& location)
 {
 	mol::punk<IUnknown> unk;
 
@@ -1014,7 +1014,7 @@ bool ScintillAx::saveAdminCOM(const mol::string& location)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-bool ScintillAx::saveSSH(const mol::string& location)
+bool ScintillAx::saveSSH(const std::wstring& location)
 {
 	mol::Uri uri(mol::toUTF8(location));
 	std::string host = uri.getHost();
@@ -1113,7 +1113,7 @@ bool ScintillAx::saveSSH(const mol::string& location)
 
 
 
-bool ScintillAx::save(const mol::string& location)
+bool ScintillAx::save(const std::wstring& location)
 {
 	if ( !location.empty() )
 	{
@@ -1126,7 +1126,7 @@ bool ScintillAx::save(const mol::string& location)
 		if ( !of.good() )
 		{
 			DWORD error = ::GetLastError();
-			mol::string error_str = mol::WinErrorString(error);
+			std::wstring error_str = mol::WinErrorString(error);
 			ODBGS1("error ",error);
 			ODBGS(error_str.c_str());
 
@@ -1208,13 +1208,13 @@ bool ScintillAx::save(const mol::string& location)
 //////////////////////////////////////////////////////////////////////////////
 
 /*
-bool ScintillAx::loadAdmin(const mol::string& p, const mol::string& ext,  long enc)
+bool ScintillAx::loadAdmin(const std::wstring& p, const std::wstring& ext,  long enc)
 {
 	edit()->setText("");
 
-	mol::string pipename( _T("\\\\.\\pipe\\mol_moe_prw_reader_pipe") );
+	std::wstring pipename( _T("\\\\.\\pipe\\mol_moe_prw_reader_pipe") );
 
-	mol::string ex = mol::Path::pathname(mol::App().getModulePath());
+	std::wstring ex = mol::Path::pathname(mol::App().getModulePath());
 	ex = ex + _T("\\") + _T("prw.exe");
 
 	Elevator elevator( ex );	
@@ -1332,11 +1332,11 @@ bool ScintillAx::loadAdmin(const mol::string& p, const mol::string& ext,  long e
 */
 
 
-std::string ScintillAx::loadAdmin(const mol::string& p)
+std::string ScintillAx::loadAdmin(const std::wstring& p)
 {
-	mol::string pipename( _T("\\\\.\\pipe\\mol_moe_prw_reader_pipe") );
+	std::wstring pipename( _T("\\\\.\\pipe\\mol_moe_prw_reader_pipe") );
 
-	mol::string ex = mol::Path::pathname(mol::App().getModulePath());
+	std::wstring ex = mol::Path::pathname(mol::App().getModulePath());
 	ex = ex + _T("\\") + _T("prw.exe");
 
 	Elevator elevator( ex );	
@@ -1350,7 +1350,7 @@ std::string ScintillAx::loadAdmin(const mol::string& p)
 //
 //////////////////////////////////////////////////////////////////////////////
 /*
-bool ScintillAx::loadAdminCOM(const mol::string& p, const mol::string& ext,  long enc)
+bool ScintillAx::loadAdminCOM(const std::wstring& p, const std::wstring& ext,  long enc)
 {
 	mol::punk<IUnknown> unk;
 
@@ -1421,9 +1421,9 @@ bool ScintillAx::loadAdminCOM(const mol::string& p, const mol::string& ext,  lon
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SCINTILLA_SYNTAX guess ( const mol::string& p, const mol::string& extension )
+SCINTILLA_SYNTAX guess ( const std::wstring& p, const std::wstring& extension )
 {
-	mol::string ext(extension.empty() ? extension : extension.substr(1));
+	std::wstring ext(extension.empty() ? extension : extension.substr(1));
 
 	if ( mol::icmp( ext, _T("htm")) == 0 ||
 		 mol::icmp( ext, _T("html")) == 0 ||
@@ -1492,7 +1492,7 @@ SCINTILLA_SYNTAX guess ( const mol::string& p, const mol::string& extension )
 
 /////////////////////////////////////////////////////////////////////
 
-bool ScintillAx::openSSH(const mol::string& path,const mol::string& ext, long enc)
+bool ScintillAx::openSSH(const std::wstring& path,const std::wstring& ext, long enc)
 {
 	mol::Uri uri(mol::toUTF8(path));
 	std::string host = uri.getHost();
@@ -1560,7 +1560,7 @@ bool ScintillAx::openSSH(const mol::string& path,const mol::string& ext, long en
 
 			if ( fe.isBinary() )
 			{
-				if ( IDCANCEL == ::MessageBox(*this,_T("this looks like a BINARY\r\nopen anyway?"),mol::toString(p).c_str(),MB_OKCANCEL|MB_ICONQUESTION ) )
+				if ( IDCANCEL == ::MessageBox(*this,_T("this looks like a BINARY\r\nopen anyway?"),mol::towstring(p).c_str(),MB_OKCANCEL|MB_ICONQUESTION ) )
 					return false;
 			}
 
@@ -1569,7 +1569,7 @@ bool ScintillAx::openSSH(const mol::string& path,const mol::string& ext, long en
 			props_->put_WriteBOM( fe.hasBOM() ? VARIANT_TRUE : VARIANT_FALSE );
 
 			edit()->setText(utf8_bytes);
-			props_->put_Syntax(guess(mol::toString(p),ext));
+			props_->put_Syntax(guess(mol::towstring(p),ext));
 			edit()->setSavePoint();
 			setDirty(FALSE);
 			return true;			
@@ -1579,7 +1579,7 @@ bool ScintillAx::openSSH(const mol::string& path,const mol::string& ext, long en
 
 
 
-bool ScintillAx::load(const mol::string& p, const mol::string& ext,  long enc)
+bool ScintillAx::load(const std::wstring& p, const std::wstring& ext,  long enc)
 {
 	edit()->clearAnnotations();
 
@@ -1600,7 +1600,7 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  long enc)
     if ( !in.good() )
 	{
 		DWORD error = ::GetLastError();
-		mol::string error_str = mol::WinErrorString(error);
+		std::wstring error_str = mol::WinErrorString(error);
 		ODBGS1("error ",error);
 		ODBGS(error_str.c_str());
 
@@ -1640,7 +1640,7 @@ bool ScintillAx::load(const mol::string& p, const mol::string& ext,  long enc)
 
 	if ( fe.isBinary() )
 	{
-		if ( IDCANCEL == ::MessageBox(*this,_T("this looks like a BINARY\r\nopen anyway?"),mol::toString(p).c_str(),MB_OKCANCEL|MB_ICONQUESTION ) )
+		if ( IDCANCEL == ::MessageBox(*this,_T("this looks like a BINARY\r\nopen anyway?"),mol::towstring(p).c_str(),MB_OKCANCEL|MB_ICONQUESTION ) )
 			return false;
 	}
 
@@ -1803,13 +1803,13 @@ HRESULT  __stdcall ScintillAx::Apply(IScintillAxStyleSet * styleSet)
 			hr = style->get_Backcolor(&back);
 			if(hr ==S_OK && back.bstr_)
 			{
-				edit()->styleSetBack(id,mol::hex2rgb(back.toString()));
+				edit()->styleSetBack(id,mol::hex2rgb(back.tostring()));
 			}
 			mol::bstr fore;
 			hr = style->get_Forecolor(&fore);
 			if(hr ==S_OK && fore.bstr_)
 			{
-				edit()->styleSetFore(id,mol::hex2rgb(fore.toString()));
+				edit()->styleSetFore(id,mol::hex2rgb(fore.tostring()));
 			}
 
 			if(i==0)

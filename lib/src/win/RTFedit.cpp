@@ -3,7 +3,7 @@
 namespace mol  {
 namespace win  {
 
-const mol::TCHAR richedit_class[] = RICHEDIT_CLASS;
+const wchar_t richedit_class[] = RICHEDIT_CLASS;
 
 DWORD CALLBACK RichEditStreamCallBack::inStreamCallback( DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb )
 {
@@ -140,8 +140,8 @@ bool RichEditCtrl::search( int options)
         chrg.cpMax = 0;
     }
 
-	mol::TCHAR buf[256];
-	memcpy( buf,searchText_.c_str(), std::min( (int)(searchText_.size()*sizeof(mol::TCHAR)),255) );
+	wchar_t buf[256];
+	memcpy( buf,searchText_.c_str(), std::min( (int)(searchText_.size()*sizeof(wchar_t)),255) );
 
     ft.lpstrText = buf;
     ft.chrg = chrg;

@@ -17,14 +17,14 @@ MoeHtmlWnd::~MoeHtmlWnd()
 	ODBGS("~MoeHtmlWnd dead");
 }
 
-MoeHtmlWnd::Instance* MoeHtmlWnd::CreateInstance( const mol::string& loc)
+MoeHtmlWnd::Instance* MoeHtmlWnd::CreateInstance( const std::wstring& loc)
 {
 	statusBar()->status(20);
 
 	Instance* form = new Instance;
 	form->AddRef();
 
-	if (!form->load( mol::bstr(loc).toString() ))
+	if (!form->load(mol::bstr(loc).towstring()))
 	{
 		form->destroy();
 		form->Release();
@@ -33,7 +33,7 @@ MoeHtmlWnd::Instance* MoeHtmlWnd::CreateInstance( const mol::string& loc)
 
 	form->maximize();
 
-	mol::string tmp = loc;
+	std::wstring tmp = loc;
 	size_t pos = 0;
 	while ( (pos = tmp.find( _T("\\"), pos)) != std::string::npos ) 
 	{
@@ -170,11 +170,11 @@ HRESULT __stdcall  MoeHtmlWnd::MoeFrame::get_FilePath(  BSTR *filename)
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-bool MoeHtmlWnd::load( const mol::string& loc )
+bool MoeHtmlWnd::load( const std::wstring& loc )
 {
 	location = loc;
-	mol::string l = loc;
-	mol::string d = _T("");
+	std::wstring l = loc;
+	std::wstring d = _T("");
 
 	size_t pos = loc.find_first_of( _T("#?") );
 
@@ -411,7 +411,7 @@ HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_htmlSink::DocumentComplete( IDispatch* 
 		mol::bstr title;
 		if ( S_OK == doc->get_title(&title) && title )
 		{
-			This()->setText( title.toString() );
+			This()->setText(title.towstring());
 		}
 
 		statusBar()->status(70);
@@ -428,7 +428,7 @@ HRESULT __stdcall MoeHtmlWnd::MoeHtmlWnd_htmlSink::DocumentComplete( IDispatch* 
 	ie->get_LocationURL(&url);
 	if ( url )
 	{
-		This()->location = url.toString();
+		This()->location = url.towstring();
 		if ( This()->location == _T("about:blank") )
 			return S_OK;
 

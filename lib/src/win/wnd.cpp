@@ -179,18 +179,18 @@ BOOL Wnd::screen2Client( POINT& p )
     return ::ScreenToClient(hWnd_, &p );
 }
 
-int  Wnd::setText( const mol::string& s )
+int  Wnd::setText( const std::wstring& s )
 {
     return ::SetWindowText(hWnd_, s.c_str());
 }
 
-mol::string Wnd::getText( )
+std::wstring Wnd::getText( )
 {
 	int n = ::GetWindowTextLength(hWnd_);
 	if ( !(n > 0) )
 		return _T("");
 
-	mol::tbuff buf(n+1);
+	mol::wbuff buf(n+1);
     n = ::GetWindowText(hWnd_, buf,n+1);
 	return buf.toString(n);
 }
@@ -382,7 +382,7 @@ LRESULT WndProc::OnInvoke( UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-HWND WndProc::create( mol::string windowName, HMENU id, const Rect& r, HWND parent )
+HWND WndProc::create( std::wstring windowName, HMENU id, const Rect& r, HWND parent )
 {
     hWnd_ = createWindow( windowName, id, r, parent);
 	return hWnd_;
@@ -458,7 +458,7 @@ UINT WndProc::returnContext( HMENU m )
 
 /////////////////////////////////////////////////////////////////
 
-HWND Window::createWindow( const mol::string& windowName, HMENU hMenu, const Rect& r, HWND parent )
+HWND Window::createWindow( const std::wstring& windowName, HMENU hMenu, const Rect& r, HWND parent )
 {
 	registerClass(hMenu);
 	HMENU m = 0;

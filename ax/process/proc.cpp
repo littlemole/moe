@@ -4,7 +4,7 @@
 using namespace mol;
 
 
-bool PipedProcessAx::init(const mol::string& p)
+bool PipedProcessAx::init(const std::wstring& p)
 {
 	//shutdown();
 
@@ -89,7 +89,7 @@ HRESULT __stdcall PipedProcessAx::Create( BSTR cmdline,  VARIANT_BOOL* vbSuccess
 
 	*vbSuccess = VARIANT_FALSE;
 
-	bool b = init( bstr(cmdline).toString() );
+	bool b = init( bstr(cmdline).towstring() );
 	if (b)
 		*vbSuccess = VARIANT_TRUE;
 

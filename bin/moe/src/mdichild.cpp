@@ -3,7 +3,7 @@
 #include "moe.h"
 #include "xmlui.h"
 
-FILETIME getLastWriteTime(const mol::string& path)
+FILETIME getLastWriteTime(const std::wstring& path)
 {
 	mol::filestream fs;
 	FILETIME ft = {0,0};

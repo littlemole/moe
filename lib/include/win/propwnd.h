@@ -43,7 +43,7 @@ class AbstractProp
 {
 public:
 
-	AbstractProp( const mol::string& n, PropWindow* propWnd  )
+	AbstractProp( const std::wstring& n, PropWindow* propWnd  )
 		:name_(n), propWnd_(propWnd)
 	{}
 
@@ -56,15 +56,15 @@ public:
 	virtual void stopEdit()
 	{}
 
-	virtual mol::string getValueAsString()
+	virtual std::wstring getValueAsString()
 	{
 		return _T("");
 	}
 
-	virtual void setValueFromString(const mol::string& s)
+	virtual void setValueFromString(const std::wstring& s)
 	{}
 
-	virtual const mol::string& name()
+	virtual const std::wstring& name()
 	{
 		return name_;
 	}
@@ -86,7 +86,7 @@ protected:
 
 	mol::Rect rName_;
 	mol::Rect rValue_;
-	mol::string name_;
+	std::wstring name_;
 	PropWindow* propWnd_;
 };
 
@@ -98,7 +98,7 @@ class SelectVectorBase
 {
 public:
 	
-	typedef std::pair<T,mol::string> Property;
+	typedef std::pair<T,std::wstring> Property;
 
 	size_t size() 
 	{ 
@@ -110,7 +110,7 @@ public:
 		v_.push_back(p);
 	}
 
-	void addProperty( T t, const mol::string& n)
+	void addProperty( T t, const std::wstring& n)
 	{
 		v_.push_back( std::make_pair(t,n) );
 	}
@@ -140,11 +140,11 @@ public:
 
 
 template<>
-class SelectVector<mol::string> : public SelectVectorBase<mol::string>
+class SelectVector<std::wstring> : public SelectVectorBase<std::wstring>
 {
 public:
 	
-	void add( const mol::string& t)
+	void add( const std::wstring& t)
 	{
 		v_.push_back( std::make_pair( t,t ) );
 	}
@@ -156,7 +156,7 @@ template<class T>
 class Selection
 {
 public:
-	typedef std::pair<T,mol::string> Property;
+	typedef std::pair<T,std::wstring> Property;
 	typedef SelectVector<T> SelectPropVector;
 };
 
@@ -167,7 +167,7 @@ class PropWindow : public mol::ChildFrame<PropWindow,mol::ScrollWnd >
 {
 public:
 
-	typedef std::map<mol::string,prop::AbstractProp*> PropMap;
+	typedef std::map<std::wstring,prop::AbstractProp*> PropMap;
 	typedef PropMap::iterator PropIter;
 
 	PropWindow();
@@ -191,7 +191,7 @@ public:
 	virtual LRESULT OnSize(UINT msg, WPARAM wParam, LPARAM lParam);
 
 	template<class T>
-	prop::Category& addProperty( const mol::string& cat, const mol::string& n, T& t)
+	prop::Category& addProperty( const std::wstring& cat, const std::wstring& n, T& t)
 	{
 		static std::string empty("");
 		prop::Category& c = category(cat);
@@ -200,7 +200,7 @@ public:
 	}
 
 	template<class T>
-	prop::Category& addProperty( const mol::string& cat, const mol::string& n, T& t, const std::string& v )
+	prop::Category& addProperty( const std::wstring& cat, const std::wstring& n, T& t, const std::string& v )
 	{
 		prop::Category& c = category(cat);
 		c.add( new prop::Prop<T>(n,this,t,v)  );
@@ -208,7 +208,7 @@ public:
 	}
 
 	template<class T>
-	prop::Category& addProperty( const mol::string& cat,  const mol::string& n, T& t, typename prop::Selection<T>::SelectPropVector& v )
+	prop::Category& addProperty( const std::wstring& cat,  const std::wstring& n, T& t, typename prop::Selection<T>::SelectPropVector& v )
 	{
 		static std::string empty("");
 		prop::Category& c = category(cat);
@@ -216,9 +216,9 @@ public:
 		return c;
 	}
 
-	prop::Category& addVBProperty( const mol::string& cat, const mol::string& n, VARIANT_BOOL& t);
-	prop::Category& addProperty( const mol::string& cat, const mol::string& n, mol::bstr& t);
-	prop::Category& addProperty( const mol::string& cat, const mol::string& n, mol::bstr& t, const std::string& v);
+	prop::Category& addVBProperty( const std::wstring& cat, const std::wstring& n, VARIANT_BOOL& t);
+	prop::Category& addProperty( const std::wstring& cat, const std::wstring& n, mol::bstr& t);
+	prop::Category& addProperty( const std::wstring& cat, const std::wstring& n, mol::bstr& t, const std::string& v);
 
 	prop::AbstractProp* inEdit();
 
@@ -236,7 +236,7 @@ public:
 
 private:
 
-	prop::Category& category(const mol::string& cat);
+	prop::Category& category(const std::wstring& cat);
 	void add( prop::AbstractProp* prop);
 	
 	int borderWidth_;
@@ -262,7 +262,7 @@ class EditProp : public AbstractProp
 {
 public:
 
-	EditProp( const mol::string& n, PropWindow* propWnd, const std::string& validate );
+	EditProp( const std::wstring& n, PropWindow* propWnd, const std::string& validate );
 
 	virtual void startEdit(HWND parent);
 	virtual void stopEdit();
@@ -279,18 +279,18 @@ class Prop : public EditProp
 {
 public:
 
-	Prop( const mol::string& n, PropWindow* propWnd,  T& t, const std::string& validate )
+	Prop( const std::wstring& n, PropWindow* propWnd,  T& t, const std::string& validate )
 		: EditProp( n, propWnd, validate ), value_(t)
 	{}
 
-	virtual mol::string getValueAsString()
+	virtual std::wstring getValueAsString()
 	{
-		mol::ostringstream oss;
+		std::wostringstream oss;
 		oss << value_;
 		return oss.str();
 	}
 
-	virtual void setValueFromString(const mol::string& s)
+	virtual void setValueFromString(const std::wstring& s)
 	{
 		if ( !validator_.empty() )
 		{
@@ -301,7 +301,7 @@ public:
 				return;
 			}
 		}
-		mol::istringstream iss(s);
+		std::wistringstream iss(s);
 		iss >> value_;
 	}
 
@@ -312,21 +312,21 @@ protected:
 
 
 template<>
-class Prop<mol::string> : public EditProp
+class Prop<std::wstring> : public EditProp
 {
 public:
 
-	Prop( const mol::string& n, PropWindow* propWnd, mol::string& t, const std::string& validate )
+	Prop( const std::wstring& n, PropWindow* propWnd, std::wstring& t, const std::string& validate )
 		:EditProp( n, propWnd, validate), value_(t)
 	{}
 
 
-	virtual mol::string getValueAsString()
+	virtual std::wstring getValueAsString()
 	{
 		return value_;
 	}
 
-	virtual void setValueFromString(const mol::string& s)
+	virtual void setValueFromString(const std::wstring& s)
 	{
 		if ( !validator_.empty() )
 		{
@@ -342,7 +342,7 @@ public:
 
 protected:
 
-	mol::string& value_;
+	std::wstring& value_;
 };
 
 template<>
@@ -350,17 +350,17 @@ class Prop<mol::bstr> : public EditProp
 {
 public:
 
-	Prop( const mol::string& n, PropWindow* propWnd, mol::bstr& t, const std::string& validate )
+	Prop( const std::wstring& n, PropWindow* propWnd, mol::bstr& t, const std::string& validate )
 		:EditProp( n, propWnd, validate), value_(t)
 	{}
 
 
-	virtual mol::string getValueAsString()
+	virtual std::wstring getValueAsString()
 	{
-		return value_.toString();
+		return value_.towstring();
 	}
 
-	virtual void setValueFromString(const mol::string& s)
+	virtual void setValueFromString(const std::wstring& s)
 	{
 		if ( !validator_.empty() )
 		{
@@ -385,22 +385,22 @@ class Prop<mol::variant> : public EditProp
 {
 public:
 	
-	Prop( const mol::string& n, PropWindow* propWnd,  mol::variant& t, const std::string& validate )
+	Prop( const std::wstring& n, PropWindow* propWnd,  mol::variant& t, const std::string& validate )
 		:EditProp(n, propWnd, validate ), value_(t)
 	{}
 
-	virtual mol::string getValueAsString()
+	virtual std::wstring getValueAsString()
 	{
-		mol::ostringstream oss;
+		std::wostringstream oss;
 
 		mol::variant v(value_);
 		v.changeType(VT_BSTR);	
 
-		oss << mol::toString(v.bstrVal);
+		oss << mol::towstring(v.bstrVal);
 		return oss.str();
 	}
 
-	virtual void setValueFromString(const mol::string& s)
+	virtual void setValueFromString(const std::wstring& s)
 	{
 		if ( !validator_.empty() )
 		{
@@ -430,13 +430,13 @@ class SelectProp : public Prop<T>
 {
 public:
 
-	SelectProp( const mol::string& n, PropWindow* propWnd, T& t,  const std::string& validate )
+	SelectProp( const std::wstring& n, PropWindow* propWnd, T& t,  const std::string& validate )
 		:Prop<T>(n,propWnd,t,validate)
 	{
 		
 	}
 
-	SelectProp( const mol::string& n, PropWindow* propWnd, T& t, typename Selection<T>::SelectPropVector& values, const std::string& validate )
+	SelectProp( const std::wstring& n, PropWindow* propWnd, T& t, typename Selection<T>::SelectPropVector& values, const std::string& validate )
 		:Prop<T>(n,propWnd,t,validate)
 	{
 		values_ = values;
@@ -472,7 +472,7 @@ public:
 		if ( cursel != -1 )
 		{
 
-			mol::string tmp = box_.getString(cursel);
+			std::wstring tmp = box_.getString(cursel);
 			setValueFromString(tmp);
 		}
 
@@ -501,7 +501,7 @@ class BoolProp : public SelectProp<bool>
 {
 public:
 
-	BoolProp( const mol::string& n, PropWindow* propWnd, bool& t, const std::string& validate )
+	BoolProp( const std::wstring& n, PropWindow* propWnd, bool& t, const std::string& validate )
 		:SelectProp<bool>(n,propWnd,t,validate)
 	{
 		values_.addProperty( false, _T("false") ); 
@@ -514,7 +514,7 @@ class VariantBoolProp : public SelectProp<short>
 {
 public:
 
-	VariantBoolProp( const mol::string& n, PropWindow* propWnd, short& t, const std::string& validate )
+	VariantBoolProp( const std::wstring& n, PropWindow* propWnd, short& t, const std::string& validate )
 		:SelectProp<short>(n,propWnd,t,validate)
 	{
 		values_.addProperty( VARIANT_FALSE, _T("false") ); 
@@ -526,7 +526,7 @@ class Category: public AbstractProp
 {
 public:
 
-	Category( PropWindow* propWnd, const mol::string& n);
+	Category( PropWindow* propWnd, const std::wstring& n);
 
 	void add( AbstractProp* p)
 	{
@@ -563,7 +563,7 @@ private:
 	int w_;
 	bool collapsed_;
 	mol::Rect rMarker_;
-	std::map<mol::string,AbstractProp*> props_;
+	std::map<std::wstring,AbstractProp*> props_;
 };
 
 } // end namespace prop

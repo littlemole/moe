@@ -28,7 +28,7 @@ UINT cfstr_isSShData();
 
 struct FileDescriptor : public FILEDESCRIPTOR
 {
-	void set(const mol::string& fn, UINT attr, UINT sizeLow , UINT sizeHigh = 0, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
+	void set(const std::wstring& fn, UINT attr, UINT sizeLow , UINT sizeHigh = 0, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
 	{
 		::ZeroMemory((FILEDESCRIPTOR*)this,sizeof(FILEDESCRIPTOR));
 		wcsncpy(cFileName,fn.c_str(), fn.size()+1);
@@ -39,22 +39,22 @@ struct FileDescriptor : public FILEDESCRIPTOR
 		nFileSizeLow = sizeLow;
 	}
 
-	void set(const mol::string& fn, UINT attr, int size = 0, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
+	void set(const std::wstring& fn, UINT attr, int size = 0, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
 	{
 		set( fn, attr, size, 0, flags );
 	}
 
-	void setDirectory(const mol::string& fn, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
+	void setDirectory(const std::wstring& fn, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
 	{
 		set(fn,FILE_ATTRIBUTE_DIRECTORY,0,flags);
 	}
 
-	void setFile(const mol::string& fn, int sizeLow, int sizeHigh, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
+	void setFile(const std::wstring& fn, int sizeLow, int sizeHigh, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
 	{
 		set(fn,FILE_ATTRIBUTE_NORMAL,sizeLow,sizeHigh,flags); 
 	}
 
-	void setFile(const mol::string& fn, int size, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
+	void setFile(const std::wstring& fn, int size, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
 	{
 		set(fn,FILE_ATTRIBUTE_NORMAL,size,flags); 
 	}
@@ -191,7 +191,7 @@ public:
 		disconnect();
 	}
 
-	void initScp(const mol::string& host, int port, const mol::string& filename, mol::ssh::CredentialCallback* cb);
+	void initScp(const std::wstring& host, int port, const std::wstring& filename, mol::ssh::CredentialCallback* cb);
 
 	virtual HRESULT __stdcall  Read( void *pv, ULONG cb, ULONG *pcbRead);
     virtual HRESULT __stdcall  Write( const void *pv, ULONG cb, ULONG *pcbWritten);
@@ -210,7 +210,7 @@ private:
 	bool connect();
 	void disconnect();
 
-	mol::string filename_;
+	std::wstring filename_;
 	size_t size_;
 	size_t nread_;
 	bool connected_;
@@ -218,7 +218,7 @@ private:
 	mol::ssh::Session ssh_;
 	mol::scp::Session scp_;
 
-	mol::string host_;
+	std::wstring host_;
 	int port_;
 
 	mol::ssh::CredentialCallback* cb_;
@@ -241,8 +241,8 @@ public:
 	DelayedDataTransferObj();	
     virtual ~DelayedDataTransferObj();
 
-	bool init (const mol::string& host, int port, mol::ssh::CredentialCallback* cb, BOOL cut = false);
-	bool add (const mol::string& remotefile,unsigned long long size,bool isdir);
+	bool init (const std::wstring& host, int port, mol::ssh::CredentialCallback* cb, BOOL cut = false);
+	bool add (const std::wstring& remotefile,unsigned long long size,bool isdir);
 
 	template<class E>
 	void connect( E* e, IUnknown* unk )
@@ -264,7 +264,7 @@ public:
 
 protected:
 
-	void enumerateRemoteDir(const mol::string& filename,unsigned long long size,bool isdir);
+	void enumerateRemoteDir(const std::wstring& filename,unsigned long long size,bool isdir);
 
 	void connect()
 	{
@@ -275,10 +275,10 @@ protected:
 		sftp_.open(ssh_);
 	}
 
-	mol::string host_;
+	std::wstring host_;
 	int port_;
 
-	mol::string remoteroot_;
+	std::wstring remoteroot_;
 
 	mol::ssh::CredentialCallback* cb_;
 

@@ -22,7 +22,7 @@ public:
 	DirChild();
 	virtual ~DirChild();
 
-	static Instance* CreateInstance( const mol::string& p );
+	static Instance* CreateInstance( const std::wstring& p );
 
 	void OnMDIActivate(HWND activated);
 	void OnNcDestroy();
@@ -32,7 +32,7 @@ public:
 
 private:
 
-	mol::string	location_;
+	std::wstring	location_;
 	mol::punk<IShellPane> list;
 
 	// directory events sink
@@ -46,7 +46,7 @@ private:
 		virtual HRESULT __stdcall OnDirChanged(BSTR filename);
     } events;
 
-	bool initialize(const mol::string& p);
+	bool initialize(const std::wstring& p);
 
 };
 

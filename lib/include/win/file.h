@@ -16,40 +16,40 @@ public:
 
     DWORD attributes();
     FILETIME& creationTime();
-    mol::string created();
+    std::wstring created();
     FILETIME& lastAccessTime();
-    mol::string lastAccessed();
+    std::wstring lastAccessed();
     FILETIME& lastWriteTime();
-    mol::string lastWritten();
+    std::wstring lastWritten();
     DWORD fileSizeHigh();
     DWORD fileSizeLow();
 	unsigned long long size();
-    mol::string fileSize();
+    std::wstring fileSize();
 
     static SYSTEMTIME FileTimeToSysTime(FILETIME& FileTime);
-    static mol::string SysTime(FILETIME& FileTime);
-    static mol::string fileSize(DWORD hi, DWORD lo);
-    static mol::string fileSize(LARGE_INTEGER li);
+    static std::wstring SysTime(FILETIME& FileTime);
+    static std::wstring fileSize(DWORD hi, DWORD lo);
+    static std::wstring fileSize(LARGE_INTEGER li);
 };
 
 class Directory
 {
 public:
 	Directory();
-	Directory(const mol::string& p);
+	Directory(const std::wstring& p);
 	~Directory();
 
 	operator bool();
-	mol::string path();
-	void path( const mol::string& p );
+	std::wstring path();
+	void path( const std::wstring& p );
 
-	static std::vector<mol::string> List(const mol::string& p);
+	static std::vector<std::wstring> List(const std::wstring& p);
 
-    mol::string find(const mol::string& filter = _T("*.*") );
+    std::wstring find(const std::wstring& filter = _T("*.*") );
     void reset();
 
 private:
-	mol::string         path_;
+	std::wstring         path_;
     WIN32_FIND_DATAW	wfd_;
     HANDLE				hDir_;
 
@@ -79,7 +79,7 @@ public:
 	int seek(int s);
 	FileInfo& fileInfo();
 
-	const mol::string path();
+	const std::wstring path();
 
 private:
 
@@ -220,7 +220,7 @@ public:
 		return buf_->fileInfo();
 	}
 
-	const mol::string path()
+	const std::wstring path()
 	{
 		return buf_->path();
 	}
@@ -304,11 +304,11 @@ class File
 {
 public:
 
-	static bool exists(const mol::string& path);
-	static unsigned long long size(const mol::string& path);
-	static unsigned long sizeHigh(const mol::string& path);
-	static unsigned long sizeLow(const mol::string& path);
-	static DWORD attributes(const mol::string& path, WIN32_FILE_ATTRIBUTE_DATA* data = 0);
+	static bool exists(const std::wstring& path);
+	static unsigned long long size(const std::wstring& path);
+	static unsigned long sizeHigh(const std::wstring& path);
+	static unsigned long sizeLow(const std::wstring& path);
+	static DWORD attributes(const std::wstring& path, WIN32_FILE_ATTRIBUTE_DATA* data = 0);
 
 };
 
@@ -323,7 +323,7 @@ public:
 	~FileMapping();
 
 	operator bool();
-	bool map( const mol::string& file, DWORD access = GENERIC_READ|GENERIC_WRITE, DWORD disp = OPEN_EXISTING );
+	bool map( const std::wstring& file, DWORD access = GENERIC_READ|GENERIC_WRITE, DWORD disp = OPEN_EXISTING );
 	void close();
 
 	unsigned long long size();

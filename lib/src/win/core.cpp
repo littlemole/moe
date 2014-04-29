@@ -22,7 +22,7 @@ SetDllDirectory getDllDirectory()
 const SetDllDirectory setDllDirectory = getDllDirectory();
 
 
-void* dllFunc( const mol::string& dll, const mol::string& f )
+void* dllFunc( const std::wstring& dll, const std::wstring& f )
 {
 	HMODULE handle = ::GetModuleHandle( dll.c_str() );
 	if (!handle )
@@ -40,7 +40,7 @@ void* dllFunc( const mol::string& dll, const mol::string& f )
 }
 
 
-void* dllFunc( HMODULE module, const mol::string& f )
+void* dllFunc( HMODULE module, const std::wstring& f )
 {
 	if ( module )
 	{

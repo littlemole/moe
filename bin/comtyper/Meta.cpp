@@ -1,10 +1,10 @@
 #include "StdAfx.h"
 #include "Meta.h"
 
-mol::string encode( const mol::string& s )
+std::wstring encode( const std::wstring& s )
 {
-	mol::string val = mol::xmlentities_encode(s);
-	mol::ostringstream out;
+	std::wstring val = mol::xmlentities_encode(s);
+	std::wostringstream out;
     size_t p = 0;
     size_t len = s.size();
     while( ( p < len ) )
@@ -30,13 +30,13 @@ MetaParam::MetaParam()
 	: isPointer(false),isPointerPointer(false)
 {}
 
-MetaParam::MetaParam( const mol::string& t, const mol::string& n  )
+MetaParam::MetaParam( const std::wstring& t, const std::wstring& n  )
 	: name(n), type (t), isPointer(false),isPointerPointer(false), isRetVal(false),isIn(false),isOut(false)
 {}
 
-mol::string MetaParam::out()
+std::wstring MetaParam::out()
 {
-	mol::ostringstream oss;
+	std::wostringstream oss;
 	oss << _T("  <param type='") << type;
 	if ( isPointer )
 		oss << _T("*");
@@ -57,9 +57,9 @@ mol::string MetaParam::out()
 	return oss.str();
 }
 
-mol::string MetaParam::out_alias()
+std::wstring MetaParam::out_alias()
 {
-	mol::ostringstream oss;
+	std::wostringstream oss;
 	oss << _T("<alias name='") << name 
 		<< _T("' type='") << type 
 		<< _T("' />") << std::endl;
@@ -73,16 +73,16 @@ MetaFunc::MetaFunc()
 	: isPointer(false),isDisp(false),isStdCall(false),isPropPut(false),isPropPutRef(false),isPropGet(false)
 {}
 
-MetaFunc::MetaFunc( const mol::string& n, const mol::string& t  )
+MetaFunc::MetaFunc( const std::wstring& n, const std::wstring& t  )
 	: name(n), type (t), isPointer(false),isDisp(false),isStdCall(false),isPropPut(false),isPropPutRef(false),isPropGet(false)
 {
 
 }
 
 
-mol::string MetaFunc::out()
+std::wstring MetaFunc::out()
 {
-	mol::ostringstream oss;
+	std::wostringstream oss;
 
 	if ( isPropGet || isPropPut || isPropPutRef )
 	{
@@ -161,21 +161,21 @@ mol::string MetaFunc::out()
 MetaClass::MetaClass()
 {}
 
-MetaClass::MetaClass( const mol::string& t,  GUID& g )
+MetaClass::MetaClass( const std::wstring& t,  GUID& g )
 	: type (t), guid(g),isDual(false),isSource(false),isDefault(false)
 {
 
 }
 
-MetaClass::MetaClass( const mol::string& t, const mol::string& b, GUID& g )
+MetaClass::MetaClass( const std::wstring& t, const std::wstring& b, GUID& g )
 	: type(t), base(b), guid(g),isDual(false)
 {
 
 }
 
-mol::string MetaClass::out()
+std::wstring MetaClass::out()
 {
-	mol::ostringstream oss;
+	std::wostringstream oss;
 
 	oss << _T("<interface name='") << type << _T("' ");
 
@@ -197,9 +197,9 @@ mol::string MetaClass::out()
 	return oss.str();
 }
 
-mol::string MetaClass::out_obj()
+std::wstring MetaClass::out_obj()
 {
-	mol::ostringstream oss;
+	std::wostringstream oss;
 
 	oss << _T("<object name='") << type << _T("' ");
 	oss << _T("guid='" ) << mol::stringFromCLSID(guid) << _T("' ");
@@ -226,16 +226,16 @@ mol::string MetaClass::out_obj()
 	return oss.str();
 }
 
-mol::string MetaClass::iid_def()
+std::wstring MetaClass::iid_def()
 {
-	mol::ostringstream oss;
+	std::wostringstream oss;
 	oss << type << _T(";") << std::endl;
 	return oss.str();
 }
 
-mol::string MetaClass::iid_impls()
+std::wstring MetaClass::iid_impls()
 {
-	mol::ostringstream oss;
+	std::wostringstream oss;
 	oss << type << _T(" = { 0x") << std::endl;
 
 	oss << std::hex << (int)guid.Data1 << _T(", 0x") ;
@@ -258,15 +258,15 @@ mol::string MetaClass::iid_impls()
 MetaEnum::MetaEnum()
 {}
 
-MetaEnum::MetaEnum( const mol::string& t )
+MetaEnum::MetaEnum( const std::wstring& t )
 	: type (t)
 {
 
 }
 
-mol::string MetaEnum::out()
+std::wstring MetaEnum::out()
 {
-	mol::ostringstream oss;
+	std::wostringstream oss;
 
 	oss << _T("<enum type='") << type 
 		<< _T("' desc='") << encode(desc) 
@@ -290,15 +290,15 @@ mol::string MetaEnum::out()
 MetaRecord::MetaRecord()
 {}
 
-MetaRecord::MetaRecord( const mol::string& t )
+MetaRecord::MetaRecord( const std::wstring& t )
 	: type (t)
 {
 
 }
 
-mol::string MetaRecord::out()
+std::wstring MetaRecord::out()
 {
-	mol::ostringstream oss;
+	std::wostringstream oss;
 
 	oss << _T("<struct type='") << type << _T("' >") << std::endl;
 	for ( std::list<MetaParam>::iterator it = members.begin(); it != members.end(); it++ )

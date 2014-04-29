@@ -909,7 +909,7 @@ class PwdDlg  : public mol::win::Dialog
 {
 public:
 
-	PwdDlg(const mol::string& host, int port)
+	PwdDlg(const std::wstring& host, int port)
 		: host_(host), port_(port)
 	{}
 
@@ -933,8 +933,8 @@ public:
 			{
 				if (LOWORD(wParam) == IDOK )
 				{
-					mol::string u;
-					mol::string p;
+					std::wstring u;
+					std::wstring p;
 					getDlgItemText(IDC_EDIT_USER,u);
 					getDlgItemText(IDC_EDIT_PWD,p);
 					user = mol::ssh::wstring( u.c_str() );
@@ -954,7 +954,7 @@ public:
 
 private:
 
-	mol::string host_;
+	std::wstring host_;
 	int port_;
 
 };
@@ -965,7 +965,7 @@ class AccepHostDlg  : public mol::win::Dialog
 {
 public:
 
-	AccepHostDlg(const mol::string& host, int port, const mol::string& hash)
+	AccepHostDlg(const std::wstring& host, int port, const std::wstring& hash)
 		: host_(host), port_(port), hash_(hash)
 	{}
 
@@ -975,7 +975,7 @@ public:
 		{
 			case WM_INITDIALOG:
 			{
-				mol::ostringstream oss;
+				std::wostringstream oss;
 				oss << _T("Do you want to trust host ") << host_ << _T(" port ") << port_ << _T("?");
 				setDlgItemText(IDC_STATIC_UNKNOWN_HOST_MSG,oss.str());
 				setDlgItemText(IDC_EDIT_HOST_HASH,hash_);
@@ -1002,24 +1002,24 @@ public:
 
 private:
 
-	mol::string host_;
+	std::wstring host_;
 	int port_;
-	mol::string hash_;
+	std::wstring hash_;
 };
 
 ////////////////////////////////////////////////////////////////
 
 
-bool CredentialManager::acceptHost( mol::string host, long port, mol::string hash )
+bool CredentialManager::acceptHost( std::wstring host, long port, std::wstring hash )
 {
-	AccepHostDlg dlg( mol::toString(host), port, mol::toString(hash) );
+	AccepHostDlg dlg( mol::towstring(host), port, mol::towstring(hash) );
 
 	LRESULT r = dlg.doModal( IDD_DIALOG_SSH_ACCEPT_HOST, ::GetDesktopWindow() );
 
 	return r == IDOK;
 }
 
-bool CredentialManager::getCredentials( mol::string host, long port, mol::ssh::SecureCredentials** credentials)
+bool CredentialManager::getCredentials( std::wstring host, long port, mol::ssh::SecureCredentials** credentials)
 {
 	if(!credentials)
 		return false;

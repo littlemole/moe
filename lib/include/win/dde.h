@@ -22,18 +22,18 @@ public:
     dde_init( HWND hWnd, WPARAM wParam, LPARAM lParam);
     ~dde_init();
 
-    void ack( const mol::string& app, const mol::string& topic );
+    void ack( const std::wstring& app, const std::wstring& topic );
 
     bool  dontRespond();
-    const mol::string& app();
-    const mol::string& topic();
+    const std::wstring& app();
+    const std::wstring& topic();
 
 private:
 
     HWND		hWnd_;
     HWND		hWndClient_;
-    mol::string	inApp_;
-    mol::string	intopic_;
+    std::wstring	inApp_;
+    std::wstring	intopic_;
     ATOM		aOutApp_;
     ATOM		aOutTopic_;
 };
@@ -47,16 +47,16 @@ public:
 
     int parse( );
     void ack(int i);
-    void execute(const mol::string& path, const mol::string & clss, const mol::string& verb , int mask);
+    void execute(const std::wstring& path, const std::wstring & clss, const std::wstring& verb , int mask);
 
-    const mol::string& getCmdLine();
-    const mol::string& getCmd();
-    const mol::string& getPath();
+    const std::wstring& getCmdLine();
+    const std::wstring& getCmd();
+    const std::wstring& getPath();
 
 private:
-    mol::string	    cmdLine_;
-    mol::string     cmd_;
-    mol::string     path_;
+    std::wstring	    cmdLine_;
+    std::wstring     cmd_;
+    std::wstring     path_;
 
     int  getCommandTypeFromDDEString();
     bool getPathFromDDEString();

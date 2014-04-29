@@ -6,7 +6,7 @@
 #include "win/path.h"
 #include <winspool.h>
 
-const mol::TCHAR scintilla[] = _T("Scintilla");
+const wchar_t scintilla[] = _T("Scintilla");
 
 
 ScintillaEditor::ScintillaEditor()
@@ -23,7 +23,7 @@ SCINTILLA_SYNTAX ScintillaEditor::mode()
 }
 
 
-SCINTILLA_SYNTAX ScintillaEditor::mode( SCINTILLA_SYNTAX m, int s, const mol::string& f  ) 
+SCINTILLA_SYNTAX ScintillaEditor::mode( SCINTILLA_SYNTAX m, int s, const std::wstring& f  ) 
 { 
     SCINTILLA_SYNTAX ret = mode_;
 	mode_ = m;
@@ -33,7 +33,7 @@ SCINTILLA_SYNTAX ScintillaEditor::mode( SCINTILLA_SYNTAX m, int s, const mol::st
 
 
 
-HWND ScintillaEditor::createWindow( const mol::string& windowName, HMENU hMenu, const mol::Rect& r, HWND parent )
+HWND ScintillaEditor::createWindow( const std::wstring& windowName, HMENU hMenu, const mol::Rect& r, HWND parent )
 {
     hWnd_ = ::CreateWindowEx ( exstyle(),wndClassName().c_str(),
                                windowName.c_str(), style(),
@@ -119,7 +119,7 @@ HDC getPrinterDC()
 	else
 	{
 		DWORD len = 256;
-		mol::TCHAR buf[256];
+		wchar_t buf[256];
 		::GetDefaultPrinter(buf,&len);
 		hdc = ::CreateDC( 0, buf,0,0);
 	}
@@ -206,13 +206,13 @@ HDC choosePrinterDC(HWND owner, int& copies, bool& collate)
 	*/
 }
 
-void ScintillaEditor::setFont(int size, const mol::string& font)
+void ScintillaEditor::setFont(int size, const std::wstring& font)
 {
 	setStyle(STYLE_DEFAULT, RGB(0,0,0),  RGB(0xff,0xff,0xff), size, mol::tostring(font).c_str() );	
 }
 
 
-mol::string ScintillaEditor::SyntaxDisplayName()
+std::wstring ScintillaEditor::SyntaxDisplayName()
 {
 	return SyntaxDisplayName(mode_);//mod_.modes);
 }
@@ -243,7 +243,7 @@ void ScintillaEditor::showLineNumbers(bool b)
 
 
 
-mol::string ScintillaEditor::SyntaxDisplayName(int syntax)
+std::wstring ScintillaEditor::SyntaxDisplayName(int syntax)
 {
 	switch ( syntax )
 	{

@@ -65,12 +65,12 @@ public:
 
 	// helpers
 
-	bool open( const mol::string& dir, MOE_DOCTYPE type, long enc, bool readOnly, IMoeDocument** doc  );
+	bool open( const std::wstring& dir, MOE_DOCTYPE type, long enc, bool readOnly, IMoeDocument** doc  );
 	void remove( mol::MdiChild* mdi );
-	void rename( mol::MdiChild* mdi, const mol::string& path );
+	void rename( mol::MdiChild* mdi, const std::wstring& path );
 	void move( mol::MdiChild* mdi, int pos );
 
-	mol::string getNewFileName(const mol::string& ext);
+	std::wstring getNewFileName(const std::wstring& ext);
 
 	size_t size() { return children_.size(); }
 

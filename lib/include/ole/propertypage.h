@@ -48,7 +48,7 @@ protected:
 
 	SIZE size_;
 	BOOL bDirty_;
-	mol::string title_;
+	std::wstring title_;
 	punk<IPropertyPageSite> pageSite_;
 
 	std::vector<IUnknown*> objects_;
@@ -70,7 +70,7 @@ public:
 
 private:
 
-	void create( mol::PropSheet* ps, const mol::string& tab, REFCLSID clsid , int id,int flags = PSP_DEFAULT|PSP_USETITLE);
+	void create( mol::PropSheet* ps, const std::wstring& tab, REFCLSID clsid , int id,int flags = PSP_DEFAULT|PSP_USETITLE);
 
 	class PropertyPageSite :
 		public IPropertyPageSite,

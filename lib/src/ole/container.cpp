@@ -129,22 +129,22 @@ OleContainerBase::~OleContainerBase()
 	//////////////////////////////////////////////////////////
 
 
-void OleContainerBase::addFileMenu( HMENU m, const mol::string& txt )
+void OleContainerBase::addFileMenu( HMENU m, const std::wstring& txt )
 {
 	fileMenus_.push_back(std::make_pair(txt,m));
 }
 
-void OleContainerBase::addEditMenu( HMENU m, const mol::string& txt )
+void OleContainerBase::addEditMenu( HMENU m, const std::wstring& txt )
 {
 	editMenus_.push_back(std::make_pair(txt,m));
 }
 
-void OleContainerBase::addViewMenu( HMENU m, const mol::string& txt)
+void OleContainerBase::addViewMenu( HMENU m, const std::wstring& txt)
 {
 	viewMenus_.push_back(std::make_pair(txt,m));
 }
 
-void OleContainerBase::addObjectMenu( HMENU m, const mol::string& txt )
+void OleContainerBase::addObjectMenu( HMENU m, const std::wstring& txt )
 {
 	objectMenus_.push_back(std::make_pair(txt,m));
 }
@@ -154,12 +154,12 @@ void OleContainerBase::setWindowMenu( HMENU m )
 	winMenu_ = m;
 }
 
-void OleContainerBase::addWindowMenu( HMENU m, const mol::string& txt )
+void OleContainerBase::addWindowMenu( HMENU m, const std::wstring& txt )
 {
 	windowMenus_.push_back(std::make_pair(txt,m));
 }
 
-void OleContainerBase::addHelpMenu( HMENU m, const mol::string& txt )
+void OleContainerBase::addHelpMenu( HMENU m, const std::wstring& txt )
 {
 	helpMenus_.push_back(std::make_pair(txt,m));
 	if ( helpMenus_.size() )

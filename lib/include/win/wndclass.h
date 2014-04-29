@@ -22,8 +22,8 @@ public:
     void setDefault();
     void setHinstance( HINSTANCE h);
     void setWndProc( WNDPROC p);
-    void setClassName( const mol::string& name);
-    mol::string getClassName();
+    void setClassName( const std::wstring& name);
+    std::wstring getClassName();
     void setStyle( int s );
     void setMenu( HMENU m);
     void setIcon( HICON i );
@@ -48,13 +48,13 @@ class WndClassGenerator
 {
 public:
 	template<class T>
-    static mol::string createClass()
+    static std::wstring createClass()
 	{
-		mol::ostringstream oss;
+		std::wostringstream oss;
 		oss << _T("MOLWC_");
-		oss << mol::toString(typeid(T).name());
+		oss << mol::towstring(typeid(T).name());
 
-		mol::string cn = oss.str();
+		std::wstring cn = oss.str();
 		if ( classNameMap_.count(cn) != 0 ) 
 		{
 			return cn;
@@ -65,10 +65,10 @@ public:
 		classNameMap_.insert(std::make_pair(cn,wc));
 		return cn;
 	}
-    static WndClass& getClass(const mol::string& name);
+    static WndClass& getClass(const std::wstring& name);
 
 private:
-    static std::map<mol::string,WndClass>	classNameMap_;
+    static std::map<std::wstring,WndClass>	classNameMap_;
 };
 
 template<class T>
@@ -77,7 +77,7 @@ class windowclass : public T
 public:
 	virtual mol::win::WndClass& wndClass()				
 	{																	
-		static mol::string wc = mol::win::WndClassGenerator::createClass<T>();	
+		static std::wstring wc = mol::win::WndClassGenerator::createClass<T>();	
 		return mol::win::WndClassGenerator::getClass(wc);					
 	}
 };

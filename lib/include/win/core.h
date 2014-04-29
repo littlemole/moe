@@ -9,8 +9,8 @@
 
 namespace mol  {
 
-void* dllFunc( const mol::string& dll, const mol::string& f );
-void* dllFunc( HMODULE module, const mol::string& f );
+void* dllFunc( const std::wstring& dll, const std::wstring& f );
+void* dllFunc( HMODULE module, const std::wstring& f );
 
 template<class T>
 void zero( T& t )
@@ -194,11 +194,11 @@ public:
         return *this;
     }
 
-    mol::string dump()
+    std::wstring dump()
     {
-		mol::TCHAR buf[256];
+		wchar_t buf[256];
         wsprintf(buf,_T("l:%d t:%d r:%d b:%d"),left,top,right,bottom);
-        return mol::string(buf);
+        return std::wstring(buf);
     }
 };
 

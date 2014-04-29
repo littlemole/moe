@@ -21,17 +21,17 @@ public:
 
 namespace win  {
 
-//extern const mol::TCHAR statusbar_class[];
-extern const mol::TCHAR toolbar_class[];
-extern const mol::TCHAR rebar_class[];
-extern const mol::TCHAR tab_ctrl_class[];
-extern const mol::TCHAR combo_box_ex_class[];
-extern const mol::TCHAR tooltip_class[];
-extern const mol::TCHAR tree_ctrl_class[];
-extern const mol::TCHAR list_ctrl_class[];
-extern const mol::TCHAR header_class[];
-extern const mol::TCHAR progressbar_class[];
-extern const mol::TCHAR statusbar_class[];
+//extern const wchar_t statusbar_class[];
+extern const wchar_t toolbar_class[];
+extern const wchar_t rebar_class[];
+extern const wchar_t tab_ctrl_class[];
+extern const wchar_t combo_box_ex_class[];
+extern const wchar_t tooltip_class[];
+extern const wchar_t tree_ctrl_class[];
+extern const wchar_t list_ctrl_class[];
+extern const wchar_t header_class[];
+extern const wchar_t progressbar_class[];
+extern const wchar_t statusbar_class[];
 } // end namespace win
 
 ////////////////////////////////////////////////////////////////////////////
@@ -42,11 +42,11 @@ class StatusBar : public mol::win::CtrlClass< mol::win::statusbar_class >
 {
 public:
     int getHeight();
-    virtual int setText( const mol::string& txt );
+    virtual int setText( const std::wstring& txt );
 	
 protected:
     virtual int style();
-    HWND createWindow(  const mol::string& wndName, HMENU hMenu, const Rect& r, HWND parent );
+    HWND createWindow(  const std::wstring& wndName, HMENU hMenu, const Rect& r, HWND parent );
     int height_;
 };
 
@@ -55,17 +55,17 @@ class StatusBarEx : public StatusBar
 {
 public:
 
-	virtual int setText( const mol::string& txt);
-	virtual int setText( const mol::string& txt1, const mol::string& txt2);
-	virtual int setText( const mol::string& txt1, const mol::string& txt2, const mol::string& txt3);
-	virtual int setText( const mol::string& txt1, const mol::string& txt2, const mol::string& txt3, const mol::string& txt4);
+	virtual int setText( const std::wstring& txt);
+	virtual int setText( const std::wstring& txt1, const std::wstring& txt2);
+	virtual int setText( const std::wstring& txt1, const std::wstring& txt2, const std::wstring& txt3);
+	virtual int setText( const std::wstring& txt1, const std::wstring& txt2, const std::wstring& txt3, const std::wstring& txt4);
 
 
 	virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 protected:
-    HWND createWindow(  const mol::string& wndName, HMENU hMenu, const Rect& r, HWND parent );
-	std::vector<mol::string> parts_;
+    HWND createWindow(  const std::wstring& wndName, HMENU hMenu, const Rect& r, HWND parent );
+	std::vector<std::wstring> parts_;
 
 	void resizeStatusbar();
 };
@@ -81,8 +81,8 @@ public:
 
     LRESULT setBmp( int bmpId, int num, int w = 16, int h = 15 );
     LRESULT setStd( int bmpId = IDB_STD_SMALL_COLOR );
-	LRESULT addButton(int iBmp, int iCmd, const mol::string& txt = _T(""), BYTE fsState = TBSTATE_ENABLED, BYTE fsStyle = TBSTYLE_BUTTON /*BTNS_BUTTON*/ , DWORD* data = 0 );
-    LRESULT addString(const mol::string& txt, int iCmd, BYTE fsState = TBSTATE_ENABLED, BYTE fsStyle = TBSTYLE_BUTTON /*BTNS_BUTTON*/ , DWORD* data = 0);
+	LRESULT addButton(int iBmp, int iCmd, const std::wstring& txt = _T(""), BYTE fsState = TBSTATE_ENABLED, BYTE fsStyle = TBSTYLE_BUTTON /*BTNS_BUTTON*/ , DWORD* data = 0 );
+    LRESULT addString(const std::wstring& txt, int iCmd, BYTE fsState = TBSTATE_ENABLED, BYTE fsStyle = TBSTYLE_BUTTON /*BTNS_BUTTON*/ , DWORD* data = 0);
     LRESULT addSeperator(int ilen);
 	LRESULT setButtonSize(int w, int h);
 
@@ -96,9 +96,9 @@ public:
 
 protected:
     virtual int style();
-    HWND createWindow(  const mol::string& wndName, HMENU hMenu, const Rect& r, HWND parent );
+    HWND createWindow(  const std::wstring& wndName, HMENU hMenu, const Rect& r, HWND parent );
 
-	std::map<UINT,mol::string> tooltips_;
+	std::map<UINT,std::wstring> tooltips_;
 
     int				 bmpId_;
 };
@@ -131,7 +131,7 @@ public:
 	tbutton()
 	{}
 
-	tbutton(int Bmp, int iCmd, const mol::string& t = _T(""), BYTE State = TBSTATE_ENABLED, BYTE Style = TBSTYLE_BUTTON, DWORD_PTR data = 0, bool d = true )
+	tbutton(int Bmp, int iCmd, const std::wstring& t = _T(""), BYTE State = TBSTATE_ENABLED, BYTE Style = TBSTYLE_BUTTON, DWORD_PTR data = 0, bool d = true )
 	{
 		iBmp      = Bmp;
 		idCommand = iCmd;
@@ -147,7 +147,7 @@ public:
 	BYTE fsState;
 	BYTE fsStyle;
 	DWORD_PTR dwData;
-	mol::string txt;
+	std::wstring txt;
 	bool def;
 };
 
@@ -160,7 +160,7 @@ class CustomToolBar :
 public:
 
 	CustomToolBar();
-	LRESULT addButton(int iBmp, int iCmd, const mol::string& txt = _T(""), BYTE fsState = TBSTATE_ENABLED, BYTE fsStyle = BTNS_BUTTON , DWORD_PTR data = 0 );
+	LRESULT addButton(int iBmp, int iCmd, const std::wstring& txt = _T(""), BYTE fsState = TBSTATE_ENABLED, BYTE fsStyle = BTNS_BUTTON , DWORD_PTR data = 0 );
 	LRESULT addSeperator( int iLen );
 	LRESULT deleteButton(int index);
 	LRESULT deleteButtonCmd(int cmd);
@@ -249,7 +249,7 @@ rebar_coolbar;
 class ReBar  : public mol::win::CtrlClass<mol::win::rebar_class>
 {
 public:
-        LRESULT addBar(Wnd& bar, int cmd, int minWidth , const mol::string& txt=_T(""), int fStyle=0, int fMask=0 );
+        LRESULT addBar(Wnd& bar, int cmd, int minWidth , const std::wstring& txt=_T(""), int fStyle=0, int fMask=0 );
         LRESULT showBar(int cmd, bool dontHide = true );
 
 		bool isBandVisible(int cmd);
@@ -279,7 +279,7 @@ private:
 protected:
         virtual int style();
         virtual int exstyle();
-        HWND createWindow( const mol::string& wndName, HMENU hMenu, const Rect& r, HWND parent );
+        HWND createWindow( const std::wstring& wndName, HMENU hMenu, const Rect& r, HWND parent );
         REBARINFO     rbi;
         REBARBANDINFO rbBand;
 };
@@ -300,20 +300,20 @@ public:
 				: title(_T("")),tooltip(_T("")),lparam(0)
 			{}
 
-			TabCtrlItem(const mol::string& t) 
+			TabCtrlItem(const std::wstring& t) 
 				: title(t),tooltip(_T("")),lparam(0)
 			{}
 
-			TabCtrlItem(const mol::string& t,const mol::string& tt) 
+			TabCtrlItem(const std::wstring& t,const std::wstring& tt) 
 				: title(t),tooltip(tt),lparam(0)
 			{}
 
-			TabCtrlItem(const mol::string& t,const mol::string& tt, LPARAM p) 
+			TabCtrlItem(const std::wstring& t,const std::wstring& tt, LPARAM p) 
 				: title(t),tooltip(tt),lparam(p)
 			{}
 
-			mol::string title;
-			mol::string tooltip;
+			std::wstring title;
+			std::wstring tooltip;
 			LPARAM lparam;
 
 		};
@@ -322,24 +322,24 @@ public:
 		~TabCtrl();
 
         LRESULT insertItem( TabCtrlItem* item, int index = -1, int img = -1);
-		LRESULT renameItem( TabCtrlItem* titem,int index, const mol::string& tool = _T(""), int img = -1 );
+		LRESULT renameItem( TabCtrlItem* titem,int index, const std::wstring& tool = _T(""), int img = -1 );
         LRESULT removeItem( int index = -1);
         LRESULT count();
         LRESULT select(int i);
 		LRESULT selection();
         LRESULT getRect(RECT& r);
-        mol::string getItemText(int i);
-		mol::string getItemTooltipText(int i);
+        std::wstring getItemText(int i);
+		std::wstring getItemTooltipText(int i);
 		TabCtrlItem* getTabCtrlItem(int i);
 		HWND    hToolTip();
-		LRESULT showToolTip( LPARAM& lParam,const mol::string& txt);
+		LRESULT showToolTip( LPARAM& lParam,const std::wstring& txt);
         int hitTest();
 
 		virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 protected:
         virtual int style();
-		HWND createWindow( const mol::string& wndName, HMENU hMenu, const Rect& r, HWND parent );
+		HWND createWindow( const std::wstring& wndName, HMENU hMenu, const Rect& r, HWND parent );
 };
 
 
@@ -358,14 +358,14 @@ class ComboCoxEx : public mol::win::CtrlClass<mol::win::combo_box_ex_class>
 {
 public:
     void setImgList( HIMAGELIST himl );
-    void addItem(const mol::string& str, int img, int selectedImg = -1 );
-    void insertItem(int index, const mol::string& str, int img, int selectedImg = -1 );
+    void addItem(const std::wstring& str, int img, int selectedImg = -1 );
+    void insertItem(int index, const std::wstring& str, int img, int selectedImg = -1 );
     void deleteString( int id );
     int  getCount();
     int  getCurSel();
     void setCurSel(int n);
-    void setCurSel(const mol::string& txt);
-    mol::string getString(int id );
+    void setCurSel(const std::wstring& txt);
+    std::wstring getString(int id );
 
 protected:
     virtual int style();
@@ -376,13 +376,13 @@ protected:
 class Tooltip : public mol::win::CtrlClass<mol::win::tooltip_class>
 {
 public:
-	LRESULT addTool( mol::win::Ctrl* ctrl, const mol::string& txt );
+	LRESULT addTool( mol::win::Ctrl* ctrl, const std::wstring& txt );
 
 protected:
-    LRESULT addTool( HWND tool, const mol::string& txt );
+    LRESULT addTool( HWND tool, const std::wstring& txt );
 
     virtual int style();
-    HWND createWindow(  const mol::string& wndName, HMENU hMenu, const Rect& r, HWND parent );
+    HWND createWindow(  const std::wstring& wndName, HMENU hMenu, const Rect& r, HWND parent );
 };
 
 
@@ -393,10 +393,10 @@ protected:
 class TreeCtrl : public mol::win::CtrlClass<mol::win::tree_ctrl_class>
 {
 public:
-    HTREEITEM addNode		            ( const mol::string& txt, HTREEITEM node = TVI_ROOT, int state = TVIS_EXPANDED );
-    HTREEITEM addNodeParam		        ( const mol::string& txt, LPARAM lParam, HTREEITEM node = TVI_ROOT, int state = TVIS_EXPANDED );
-    HTREEITEM addIconNode		        ( const mol::string& txt, HTREEITEM node = TVI_ROOT, int iIcon = 0, int iSelIcon = 0, int state = TVIS_EXPANDED);
-    HTREEITEM addIconNodeParam	        ( const mol::string& txt, LPARAM lParam, HTREEITEM node = TVI_ROOT, int iIcon = 0, int iSelIcon = 0, int state = TVIS_EXPANDED);
+    HTREEITEM addNode		            ( const std::wstring& txt, HTREEITEM node = TVI_ROOT, int state = TVIS_EXPANDED );
+    HTREEITEM addNodeParam		        ( const std::wstring& txt, LPARAM lParam, HTREEITEM node = TVI_ROOT, int state = TVIS_EXPANDED );
+    HTREEITEM addIconNode		        ( const std::wstring& txt, HTREEITEM node = TVI_ROOT, int iIcon = 0, int iSelIcon = 0, int state = TVIS_EXPANDED);
+    HTREEITEM addIconNodeParam	        ( const std::wstring& txt, LPARAM lParam, HTREEITEM node = TVI_ROOT, int iIcon = 0, int iSelIcon = 0, int state = TVIS_EXPANDED);
 
 
     BOOL deleteNode		        ( HTREEITEM node = TVI_ROOT );
@@ -413,8 +413,8 @@ public:
     LRESULT setImageList	    ( HIMAGELIST hil, int type = TVSIL_NORMAL );
     BOOL    getChecked          ( HTREEITEM item );
     BOOL    setChecked          ( HTREEITEM item, BOOL fCheck );
-    mol::string getItemText	    ( HTREEITEM item );
-    LRESULT setItemText		    ( HTREEITEM item , const mol::string& str);
+    std::wstring getItemText	    ( HTREEITEM item );
+    LRESULT setItemText		    ( HTREEITEM item , const std::wstring& str);
     LRESULT setItemIcon		    ( HTREEITEM item , int icon, int selected );
     LPARAM  getLPARAM		    ( HTREEITEM item );
 	LPARAM  setLPARAM		    ( HTREEITEM item, LPARAM param );
@@ -439,16 +439,16 @@ class ListCtrl : public mol::win::CtrlClass<mol::win::list_ctrl_class>
 public:
 
     void setView(DWORD dwView);
-    void insertColumn( const mol::string& txt, int iSubItem, int width = 100, int mode = LVCFMT_LEFT );
-    mol::string getItemText(int index, int subitem=0);
+    void insertColumn( const std::wstring& txt, int iSubItem, int width = 100, int mode = LVCFMT_LEFT );
+    std::wstring getItemText(int index, int subitem=0);
     LPARAM getItemLPARAM(int index);
     UINT getItemState(int index, int mask = LVIS_SELECTED);
     void setItemState(int index, int state, int mask = LVIS_SELECTED );
     int  getItemCount();
     int  getNextItem(int index = -1, int state = LVNI_SELECTED );
-    void insertItem(const mol::string& txt, int index, int state=0, int img=0, LPARAM lParam=0 );
-    void insertItem(std::vector<mol::string>& txt, int index, int state=0, int img=0, LPARAM lParam=0 );
-    void insertSubItem(const mol::string& txt, int index, int subitem );
+    void insertItem(const std::wstring& txt, int index, int state=0, int img=0, LPARAM lParam=0 );
+    void insertItem(std::vector<std::wstring>& txt, int index, int state=0, int img=0, LPARAM lParam=0 );
+    void insertSubItem(const std::wstring& txt, int index, int subitem );
     void deleteItem(int index);
 	void deleteAllItems();
 	void editLabel(int i);
@@ -507,12 +507,12 @@ class HeaderCtrl : public mol::win::CtrlClass< mol::win::header_class >
 {
 public:
 
-  int addString(const mol::string& txt, int mWidth, int indexAfter = 0);
+  int addString(const std::wstring& txt, int mWidth, int indexAfter = 0);
 
   virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 protected:
-	virtual HWND createWindow( const mol::string& windowName, HMENU hMenu, const mol::Rect& r, HWND parent );
+	virtual HWND createWindow( const std::wstring& windowName, HMENU hMenu, const mol::Rect& r, HWND parent );
 
 };
 

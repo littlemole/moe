@@ -122,7 +122,7 @@ bool AxClientWndBase::loadObjectFromStream( REFCLSID iid, IStream* stream)
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
-bool AxClientWndBase::loadObjectFromPersistFile( REFCLSID iid, const mol::string& file)
+bool AxClientWndBase::loadObjectFromPersistFile( REFCLSID iid, const std::wstring& file)
 {
 	// embedd the COM server
 	if ( !instantiateObject(iid) )
@@ -206,7 +206,7 @@ bool AxClientWndBase::newObjectFromStorage( REFCLSID iid )
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
-bool AxClientWndBase::loadObjectFromShell( const mol::string& file)
+bool AxClientWndBase::loadObjectFromShell( const std::wstring& file)
 {
 	if ( !instantiateObject(CLSID_WebBrowser) )
 		return false;
@@ -259,7 +259,7 @@ bool AxClientWndBase::loadObject( REFCLSID iid )
 	return false;
 }
 
-bool AxClientWndBase::loadObjectFromMoniker( const mol::string& path )
+bool AxClientWndBase::loadObjectFromMoniker( const std::wstring& path )
 {
 	CLSID clsid; 
 	std::wstring			file(mol::towstring(path));
@@ -293,13 +293,13 @@ bool AxClientWndBase::loadObjectFromMoniker( const mol::string& path )
 	}
 	
 	// make a tmp copy of the file to work with
-	mol::string ext = mol::Path::ext(path);
-	mol::TCHAR  p[MAX_PATH];
-	mol::TCHAR t[MAX_PATH];
+	std::wstring ext = mol::Path::ext(path);
+	wchar_t  p[MAX_PATH];
+	wchar_t t[MAX_PATH];
 	::GetTempPath(255,p);
 	::GetTempFileName( p, _T("xmo_"), 0, t );
 	
-	mol::string tmp = t;
+	std::wstring tmp = t;
 	tmpFile_ = tmp.substr(0,tmp.size()-4) + ext;
 	
 	sfo.copy(0,path,tmpFile_,FOF_SILENT|FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
@@ -803,8 +803,8 @@ HRESULT AxClientWndBase::copyStorageTemp(IStorage* src, IStorage** copy)
 		return E_POINTER;
 
 	*copy = 0;
-	mol::TCHAR  path[MAX_PATH];
-	mol::TCHAR file[MAX_PATH];
+	wchar_t  path[MAX_PATH];
+	wchar_t file[MAX_PATH];
 	::GetTempPath(255,path);
 	::GetTempFileName( path, _T("JsHost_"), 0, file );
 

@@ -55,33 +55,33 @@ public:
 	void detach();
 
 
-	static void get(mol::global& g, mol::string& s)
+	static void get(mol::global& g, std::wstring& s)
 	{
-		s = mol::string( (mol::TCHAR*)g.lock());
+		s = std::wstring((wchar_t*)g.lock());
 		g.unLock();
 	}
 
-	static void set(mol::global& g, const mol::string& s)
+	static void set(mol::global& g, const std::wstring& s)
 	{
-		mol::TCHAR* c = (mol::TCHAR*)g.lock();
-		memcpy( (void*)c, (void*)(s.c_str()), (s.size()+1)*sizeof(mol::TCHAR));
+		wchar_t* c = (wchar_t*)g.lock();
+		memcpy((void*)c, (void*)(s.c_str()), (s.size() + 1)*sizeof(wchar_t));
 		g.unLock();
 	}
 
 
-	static void get(HGLOBAL g, mol::string& s)
+	static void get(HGLOBAL g, std::wstring& s)
 	{
 		mol::global glob(g);
-		s = mol::string( (mol::TCHAR*)glob.lock());
+		s = std::wstring((wchar_t*)glob.lock());
 		glob.unLock();
 		glob.detach();
 	}
 
-	static void set(HGLOBAL g, const mol::string& s)
+	static void set(HGLOBAL g, const std::wstring& s)
 	{
 		mol::global glob(g);
-		mol::TCHAR* c = (mol::TCHAR*)glob.lock();
-		memcpy( (void*)c, (void*)s.c_str(), (s.size()+1)*sizeof(mol::TCHAR));
+		wchar_t* c = (wchar_t*)glob.lock();
+		memcpy((void*)c, (void*)s.c_str(), (s.size() + 1)*sizeof(wchar_t));
 		glob.unLock();
 		glob.detach();
 	}

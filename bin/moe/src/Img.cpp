@@ -19,7 +19,7 @@ ImgViewer::~ImgViewer()
 	ODBGS("~ImgViewer dead");
 };
 
-ImgViewer::Instance* ImgViewer::CreateInstance( const mol::string& file )
+ImgViewer::Instance* ImgViewer::CreateInstance( const std::wstring& file )
 {
 	Instance* iv = new Instance;
 	iv->AddRef();
@@ -96,7 +96,7 @@ void ImgViewer::OnMDIActivate( HWND activated )
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-bool ImgViewer::load(const mol::string& p)
+bool ImgViewer::load(const std::wstring& p)
 {
 	initializeMoeChild(p);
 	if (!pic_.load(p))
@@ -122,9 +122,9 @@ bool ImgViewer::load(const mol::string& p)
 void ImgViewer::updateUI()
 {
 	SIZE s = pic_.getSize();
-	mol::ostringstream oss;
+	std::wostringstream oss;
 	oss <<  s.cx << _T(" ");
-	mol::ostringstream oss2;
+	std::wostringstream oss2;
 	oss2 << s.cy  << _T(" ");
 	
 	statusBar()->setText(getText(),oss.str(), oss2.str() );

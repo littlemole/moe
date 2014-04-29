@@ -29,19 +29,19 @@ std::string nl2rtf( const std::string& in );
 std::wstring str2rtf(const std::wstring& str );
 std::wstring nl2rtf( const std::wstring& in );
 
-mol::string tab2space(const mol::string& str );
-mol::string skip2spaces(const mol::string& str );
-mol::string skipNewLines(const mol::string& str);
+std::wstring tab2space(const std::wstring& str);
+std::wstring skip2spaces(const std::wstring& str);
+std::wstring skipNewLines(const std::wstring& str);
 
-mol::string nl2br(const mol::string& str);
+std::wstring nl2br(const std::wstring& str);
 
-void htmlWrap(mol::string& str, int wrap );
+void htmlWrap(std::wstring& str, int wrap);
 
 std::string URLencode( const std::string& in);
 std::string URLdecode( const std::string& in );
 
 std::string base64_encode(unsigned char const* , unsigned int len);
-std::string base64_decode(mol::string const& s);
+std::string base64_decode(std::string const& s);
 
 COLORREF hex2rgb( const std::string& hex );
 std::string rgb2hex( COLORREF col );

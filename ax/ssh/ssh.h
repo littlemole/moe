@@ -41,8 +41,8 @@ class CredentialManager : public mol::ssh::ScpCredentialManager
 {
 protected:
 
-	bool getCredentials( mol::string host, long port, mol::ssh::SecureCredentials** credentials);
-	bool acceptHost( mol::string host, long port, mol::string hash );
+	bool getCredentials( std::wstring host, long port, mol::ssh::SecureCredentials** credentials);
+	bool acceptHost( std::wstring host, long port, std::wstring hash );
 };
 
 CredentialManager& credentialManager();

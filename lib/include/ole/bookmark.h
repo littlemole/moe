@@ -19,11 +19,11 @@ public:
 	typedef BookMarkVector::iterator	BookMarkIterator;
 
 	Bookmark();
-	Bookmark(const mol::string& url, const mol::string& title);
+	Bookmark(const std::wstring& url, const std::wstring& title);
 	~Bookmark();
 
-	mol::string url;
-	mol::string title;
+	std::wstring url;
+	std::wstring title;
 
 	unsigned int size();
 	Bookmark& item(unsigned int index);
@@ -31,7 +31,7 @@ public:
 	BookMarkIterator begin();
 	BookMarkIterator end();
 
-	static mol::string getUrl( const mol::string& uri );
+	static std::wstring getUrl( const std::wstring& uri );
 
 	HMENU getMenu();
 	Bookmark& getBookmarkFromMenuId(int id);

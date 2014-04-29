@@ -23,8 +23,8 @@ public:
 	OleChild();
 	virtual ~OleChild();
 
-	static Instance* CreateInstance( const mol::string& p );
-	static Instance* CreateInstance( const mol::string& dir, CLSID& clsid );
+	static Instance* CreateInstance( const std::wstring& p );
+	static Instance* CreateInstance( const std::wstring& dir, CLSID& clsid );
 
 	/////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////
@@ -40,11 +40,11 @@ public:
 protected:
 
 	virtual void OnLoadProgress(int n);
-	bool openFile( const mol::string& path );
-	void load(const mol::string& p, CLSID& clsid);
+	bool openFile( const std::wstring& path );
+	void load(const std::wstring& p, CLSID& clsid);
 
 
-	mol::string			filename_;
+	std::wstring			filename_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

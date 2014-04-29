@@ -140,8 +140,8 @@ protected:
 	punk<IOleAdviseHolder>		adviseHolder_;
 	punk<IDataAdviseHolder>		dataAdviseHolder_;
 
-	mol::string				appname_;
-	mol::string				docname_;
+	std::wstring				appname_;
+	std::wstring				docname_;
 	mol::Rect				posRect_;
 	HWND					hwndParent_;
 	BOOL					bDirty_;
@@ -308,15 +308,15 @@ public:
 	virtual void createInplaceTools();
 	virtual void removeInplaceTools();
 
-	void addEditMenu(const mol::string& title, HMENU menu);
-	void addObjectMenu(const mol::string& title, HMENU menu);
-	void addHelpMenu(const mol::string& title, HMENU menu);
+	void addEditMenu(const std::wstring& title, HMENU menu);
+	void addObjectMenu(const std::wstring& title, HMENU menu);
+	void addHelpMenu(const std::wstring& title, HMENU menu);
 
 protected:
 	virtual void refreshInplaceMenu();
 	virtual bool renegotiateInplaceTools();
 
-	virtual HRESULT createPropFrame(const mol::string& title, int x=0, int y=0);
+	virtual HRESULT createPropFrame(const std::wstring& title, int x=0, int y=0);
 
 	virtual LRESULT wndlessProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam, bool& handled) =0;
 	virtual HWND    getWindowlessWindow();
@@ -377,7 +377,7 @@ protected:
 	HMENU										sharedMenu_;
 	HOLEMENU									holemenu_;
 
-	typedef std::pair<mol::string,HMENU> namedMenu;
+	typedef std::pair<std::wstring,HMENU> namedMenu;
 	std::vector<namedMenu> editMenus_;
 	std::vector<namedMenu> objectMenus_;
 	std::vector<namedMenu> helpMenus_;

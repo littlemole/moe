@@ -36,18 +36,18 @@ Url::~Url(void)
 std::string Url::dosPath()
 {
 	DWORD len = 1024;
-	TCHAR buf[1024];
+	wchar_t buf[1024];
 	buf[0]=0;
-	PathCreateFromUrl( mol::toString(url_).c_str(), buf, &len,0);
+	PathCreateFromUrl( mol::towstring(url_).c_str(), buf, &len,0);
 	return mol::tostring(buf);
 }
 
 std::string Url::dosPath(const std::string& u)
 {
 	DWORD len = 1024;
-	TCHAR buf[1024];
+	wchar_t buf[1024];
 	buf[0]=0;
-	PathCreateFromUrl( mol::toString(u).c_str(), buf, &len,0);
+	PathCreateFromUrl( mol::towstring(u).c_str(), buf, &len,0);
 	return mol::tostring(buf);
 }
 
@@ -72,7 +72,7 @@ Url::Url(const std::string& u, DWORD flags)
 void Url::makeUrl(const std::string& u, DWORD flags)
 {
 	url_ = u;
-	InternetCrackUrl( mol::toString(url_).c_str(), 0, flags, &components_);
+	InternetCrackUrl( mol::towstring(url_).c_str(), 0, flags, &components_);
 }
 
 void Url::makeUrl( const std::string& host,
@@ -106,7 +106,7 @@ std::string Url::scheme()
 	std::string ret = "";
 	if ( components_.lpszScheme )
 	{
-		std::string tmp( mol::tostring(mol::string(components_.lpszScheme, components_.dwSchemeLength)));
+		std::string tmp( mol::tostring(std::wstring(components_.lpszScheme, components_.dwSchemeLength)));
 		ret += tmp;
 	}
 	return  ret;
@@ -117,7 +117,7 @@ std::string Url::host()
 
 	if ( components_.lpszHostName  )
 	{
-		std::string tmp( mol::tostring( mol::string(components_.lpszHostName, components_.dwHostNameLength)));
+		std::string tmp( mol::tostring( std::wstring(components_.lpszHostName, components_.dwHostNameLength)));
 		ret += tmp;
 	}
 	return  ret;
@@ -136,7 +136,7 @@ std::string Url::fullpath()
 	std::string ret = "";
 	if ( components_.lpszUrlPath  )
 	{
-		std::string tmp( mol::tostring( mol::string( components_.lpszUrlPath, components_.dwUrlPathLength)));
+		std::string tmp( mol::tostring( std::wstring( components_.lpszUrlPath, components_.dwUrlPathLength)));
 		ret += tmp;
 	}
 	return  ret;
@@ -156,7 +156,7 @@ std::string Url::extra()
 	std::string ret = "";
 	if ( components_.lpszExtraInfo   )
 	{
-		std::string tmp( mol::tostring( mol::string( components_.lpszExtraInfo, components_.dwExtraInfoLength)));
+		std::string tmp( mol::tostring( std::wstring( components_.lpszExtraInfo, components_.dwExtraInfoLength)));
 		ret += tmp;
 	}
 	return  ret;
@@ -174,10 +174,10 @@ INTERNET_PORT Url::port()
 std::string Url::extendRelativePath(const std::string& u, DWORD flags)
 {
 	DWORD len = 2048;
-	TCHAR buf[2048];
+	wchar_t buf[2048];
 	buf[0] = 0;
-	::InternetCombineUrl( mol::toString(url_).c_str(), mol::toString(u).c_str(), buf, &len, flags );
-	return mol::tostring( mol::toString(buf));
+	::InternetCombineUrl( mol::towstring(url_).c_str(), mol::towstring(u).c_str(), buf, &len, flags );
+	return mol::tostring( mol::towstring(buf));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -200,7 +200,7 @@ BOOL Inet::canConnect()
 
 BOOL Inet::open()
 {
-    return ( 0 != ( hInternet_ = ::InternetOpen( mol::toString(userAgent_).c_str(),
+    return ( 0 != ( hInternet_ = ::InternetOpen( mol::towstring(userAgent_).c_str(),
 		INTERNET_OPEN_TYPE_DIRECT,
 		0,0,0 )
 		));
@@ -224,7 +224,7 @@ BOOL Http::open(const std::string& u, const std::string& headers_, const std::st
 {
 	Url myUrl(u);
 	con_ = ::InternetConnect( inet_.getHandle(),
-		mol::toString(myUrl.host()).c_str() ,
+		mol::towstring(myUrl.host()).c_str() ,
 		myUrl.port(),
 		0, 0, INTERNET_SERVICE_HTTP, 0, 0 );
 
@@ -234,16 +234,16 @@ BOOL Http::open(const std::string& u, const std::string& headers_, const std::st
 		method = "POST";
 
 	std::string path = myUrl.fullpath()+myUrl.extra();
-	url_ = ::HttpOpenRequest( con_, mol::toString(method).c_str(),mol::toString(path).c_str(),_T("1.1"),0,0,0,0);
+	url_ = ::HttpOpenRequest( con_, mol::towstring(method).c_str(),mol::towstring(path).c_str(),_T("1.1"),0,0,0,0);
 
-	return ::HttpSendRequest( url_, mol::toString(headers_).c_str(), (int)headers_.size(), (void*)(postdata.c_str()), (int)postdata.size() );
+	return ::HttpSendRequest( url_, mol::towstring(headers_).c_str(), (int)headers_.size(), (void*)(postdata.c_str()), (int)postdata.size() );
 }
 
 BOOL Http::open(const std::string& u)
 {
 
 	return ( 0 != ( url_ = ::InternetOpenUrl(  inet_.getHandle(),
-		mol::toString(u).c_str(),
+		mol::towstring(u).c_str(),
 		0,
 		INTERNET_FLAG_RELOAD,
 		0,0)					

@@ -31,7 +31,7 @@ public:
 private:
 
 	TaskbarWnd(Taskbar* tb, HWND doc, ITaskbarList4*, bool disabled = false );
-	static TaskbarWnd* Create( Taskbar * pMainDlg, HWND d,const mol::string& title, ITaskbarList4*,bool disabled = false);
+	static TaskbarWnd* Create( Taskbar * pMainDlg, HWND d,const std::wstring& title, ITaskbarList4*,bool disabled = false);
 
 	virtual ~TaskbarWnd();
 	virtual BOOL destroy();
@@ -69,9 +69,9 @@ public:
 
 	void init(HWND parent);
 
-	TaskbarWnd* addTab( HWND d, const mol::string& title, bool disabled = false );
+	TaskbarWnd* addTab( HWND d, const std::wstring& title, bool disabled = false );
 
-	void renameTab( HWND d, const mol::string& title );
+	void renameTab( HWND d, const std::wstring& title );
 	void moveTab( HWND d, HWND before );
 
 	HWND parent() {return parent_; }

@@ -30,7 +30,7 @@ public:
 
         //dlgItem funcs
         LRESULT sendDlgItemMsg  ( int id, UINT msg, WPARAM wParam, LPARAM lParam );
-		LRESULT setDlgItemText  ( int id, const mol::string& s );
+		LRESULT setDlgItemText  ( int id, const std::wstring& s );
         LRESULT setDlgItemInt   ( int id, int val );
         LRESULT setDlgItemFont  ( int id, HFONT hfont );
         LRESULT setDlgButtonIcon( int id, HICON hicon );
@@ -38,7 +38,7 @@ public:
         LRESULT setDlgStaticIcon( int id, HICON hicon );
 		
 
-        UINT getDlgItemText( int id, mol::string& s );
+        UINT getDlgItemText( int id, std::wstring& s );
 		UINT getDlgItemInt ( int id, int& value, BOOL bSigned = TRUE);
 		bool getDlgItemChecked( int id );
 		void setDlgItemChecked( int id );
@@ -64,7 +64,7 @@ protected:
 
 private:
         //disable that
-        HWND virtual createWindow( const mol::string& windowName, HMENU hMenu=0,const Rect& r=stdRect , HWND parent=0 ) { return 0;};
+        HWND virtual createWindow( const std::wstring& windowName, HMENU hMenu=0,const Rect& r=stdRect , HWND parent=0 ) { return 0;};
 
 };
 
@@ -100,7 +100,7 @@ class MainDialog : public mol::win::windowclass<mol::win::DlgBase>
 {
 public:
 	    // create a main Dlg from template
-        virtual HWND createDlg(int lpTemplate, const mol::string& className );
+        virtual HWND createDlg(int lpTemplate, const std::wstring& className );
 
         // dialog procedure support
 #ifdef _WIN64

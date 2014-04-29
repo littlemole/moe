@@ -133,8 +133,8 @@ void MoeWnd::OnCreate()
 void MoeWnd::loadPersistUIstate()
 {
 	// determine ui.xmo filepath or use fallback
-	mol::string appPath = mol::app<AppBase>().CreateAppPath(_T("moe"));
-	mol::string p(appPath + _T("\\ui.xmo"));
+	std::wstring appPath = mol::app<AppBase>().CreateAppPath(_T("moe"));
+	std::wstring p(appPath + _T("\\ui.xmo"));
 	if ( !mol::Path::exists(p) )
 	{
 		p = mol::Path::pathname(mol::app<mol::win::AppBase>().getModulePath()) + _T("\\ui.xmo");
@@ -320,7 +320,7 @@ void MoeWnd::OnRecentItems()
 {
 	// click on recent items list - retrieve filename
 	int selected = mol::Ribbon::handler(RibbonMRUItems)->index();
-	mol::string f = mol::Ribbon::handler(RibbonMRUItems)->recent_items()[selected].first;
+	std::wstring f = mol::Ribbon::handler(RibbonMRUItems)->recent_items()[selected].first;
 
 	mol::punk<IMoeDocument> doc;
 	docs()->Open( mol::bstr(f), &doc );
@@ -349,7 +349,7 @@ void MoeWnd::OnFileOpenHex()
 		bool result = docs()->open( dlg.fileName(), MOE_DOCTYPE_HEX,-1, dlg.readOnly(), 0 );
 		if (!result)
 		{
-			mol::ostringstream oss;
+			std::wostringstream oss;
 			oss << _T("failed to load: ") << dlg.fileName();
 			statusBar()->status(oss.str());
 		}
@@ -372,7 +372,7 @@ void MoeWnd::OnFileOpenHtml()
 			bool result = docs()->open( urlDlg->url, MOE_DOCTYPE_HTML, -1, true, 0 );
 			if (!result)
 			{
-				mol::ostringstream oss;
+				std::wostringstream oss;
 				oss << _T("failed to load: ") << urlDlg->url;
 				statusBar()->status(oss.str());
 			}
@@ -439,10 +439,10 @@ void MoeWnd::OnFx(int code, int id, HWND ctrl)
 {
 	int fx =id-IDM_F1+1;
 
-	mol::ostringstream oss;
+	std::wostringstream oss;
 	oss << _T("fx\\F") << fx << _T(".js");
 
-	mol::string file = findFile(oss.str());
+	std::wstring file = findFile(oss.str());
 	if ( file == _T("") )
 		return ;
 	
@@ -580,8 +580,8 @@ void MoeWnd::OnHelpAbout()
 {
 	statusBar()->status(_T("help"));
 
-	mol::string p( mol::app<MoeApp>().getModulePath() );
-	mol::string help = mol::Path::parentDir(p) + _T("\\doc\\index.html");
+	std::wstring p( mol::app<MoeApp>().getModulePath() );
+	std::wstring help = mol::Path::parentDir(p) + _T("\\doc\\index.html");
 
 	long left, top;
 	moeView->get_Left(&left);
@@ -639,7 +639,7 @@ HRESULT __stdcall MoeWnd::IOleInPlaceFrame_SetStatusText(LPCOLESTR txt)
 	if ( !txt )
 		statusBar()->status(_T(""));
 	else
-		statusBar()->status( mol::toString(txt) );
+		statusBar()->status( mol::towstring(txt) );
 	return S_OK;
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -742,8 +742,8 @@ HRESULT __stdcall MoeWnd::Exit()
 	}
 
 	// save persistent info
-	mol::string appPath = mol::app<AppBase>().CreateAppPath(_T("moe"));
-	mol::string p(appPath + _T("\\ui.xmo"));
+	std::wstring appPath = mol::app<AppBase>().CreateAppPath(_T("moe"));
+	std::wstring p(appPath + _T("\\ui.xmo"));
 	Storage store;
 	if ( store.create(p) )
 	{
@@ -998,7 +998,7 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 	return S_OK;
 }
 
-void  MoeWnd::freezeConfig(const mol::string& key)
+void  MoeWnd::freezeConfig(const std::wstring& key)
 {
 	// freeze top level items
 	mol::punk<IDispatch> disp;
@@ -1030,7 +1030,7 @@ void  MoeWnd::initRibbon(IStorage* store)
 	// setup handlers with special handling
 
 	// syntax select dropdown handler - populate from toolbar combobox values 
-	std::vector<mol::string> vs;
+	std::vector<std::wstring> vs;
 	for ( int i = 0; i < mol::UI().Wnd<MoeComboBox>(IDW_SYNTAX_BOX)->getCount(); i++ )
 	{
 		vs.push_back( mol::UI().Wnd<MoeComboBox>(IDW_SYNTAX_BOX)->getString(i)  );
@@ -1038,7 +1038,7 @@ void  MoeWnd::initRibbon(IStorage* store)
 	mol::Ribbon::handler(RibbonSelectLanguage)->items(vs);
 
 	// encoding dropdown handler
-	std::vector<mol::string> ve;
+	std::vector<std::wstring> ve;
 
 	//for ( size_t i = 0; i < codePages_.size(); i++)
 	for ( Encodings::Iterator it = codePages()->begin(); it!= codePages()->end(); it++)
@@ -1052,7 +1052,7 @@ void  MoeWnd::initRibbon(IStorage* store)
 	mol::Ribbon::handler(RibbonTabSize)->decimalPlaces(0);
 
 	// bytes shown dropdown handler for hex view	
-	std::vector<mol::string> vb;
+	std::vector<std::wstring> vb;
 	vb.push_back(_T("16 bytes"));
 	vb.push_back(_T("20 bytes"));
 	vb.push_back(_T("24 bytes"));

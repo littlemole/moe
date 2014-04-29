@@ -21,7 +21,7 @@ HIMAGELIST ShellInfo::SysImgList()
 	return hIml;
 }
 
-int ShellInfo::Icon( const mol::string& path )
+int ShellInfo::Icon( const std::wstring& path )
 {
 	SHFILEINFO  shInfo;
     SHGetFileInfo( path.c_str(),0,&shInfo,sizeof(shInfo),SHGFI_ICON|SHGFI_SMALLICON);
@@ -29,7 +29,7 @@ int ShellInfo::Icon( const mol::string& path )
 	return shInfo.iIcon;
 }
 
-int ShellInfo::OpenIcon  ( const mol::string& path )
+int ShellInfo::OpenIcon  ( const std::wstring& path )
 {
 	SHFILEINFO  shInfo;
     SHGetFileInfo( path.c_str(),0,&shInfo,sizeof(shInfo),SHGFI_ICON|SHGFI_OPENICON| SHGFI_SMALLICON);
@@ -37,14 +37,14 @@ int ShellInfo::OpenIcon  ( const mol::string& path )
 	return shInfo.iIcon;
 }	
 
-HICON ShellInfo::HIcon  ( const mol::string& path )
+HICON ShellInfo::HIcon  ( const std::wstring& path )
 {
 	SHFILEINFO  shInfo;
     SHGetFileInfo( path.c_str(),0,&shInfo,sizeof(shInfo),SHGFI_ICON|SHGFI_SMALLICON);
 	return shInfo.hIcon;
 }
 
-HICON ShellInfo::HOpenIcon  ( const mol::string& path )
+HICON ShellInfo::HOpenIcon  ( const std::wstring& path )
 {
 	SHFILEINFO  shInfo;
     SHGetFileInfo( path.c_str(),0,&shInfo,sizeof(shInfo),SHGFI_ICON|SHGFI_OPENICON| SHGFI_SMALLICON);
@@ -119,19 +119,19 @@ Shit ShellFolder::shellItem()
 	{
 		LPITEMIDLIST pidl;
 		if ( S_OK == pf2->GetCurFolder(&pidl) )
-			return new ShellItem(pidl,getAttributesOf(pidl));
+			return Shit(new ShellItem(pidl,getAttributesOf(pidl)));
 	}
-	return 0;
+	return Shit();
 }
 
 
-mol::string ShellFolder::getDisplayNameOf(LPITEMIDLIST pidl, DWORD flags)
+std::wstring ShellFolder::getDisplayNameOf(LPITEMIDLIST pidl, DWORD flags)
 {
 	if ( S_OK == folder->GetDisplayNameOf(pidl, flags, &strret_) )
 	{
-		mol::TCHAR buf[MAX_PATH];
+		wchar_t buf[MAX_PATH];
 		StrRetToBuf(&strret_,pidl,buf,MAX_PATH);
-		return mol::string(buf);
+		return std::wstring(buf);
 	}
 	return _T("");
 }
@@ -160,9 +160,9 @@ Shit ShellFolder::next(DWORD attributes)
 		if ( fetched == 1 )
 		{
 			ShellItem* it = new ShellItem(pidl,getAttributesOf(pidl,attributes));
-			return it;
+			return Shit(it);
 		}
-	return 0;
+	return Shit();
 }
 
 ULONG ShellFolder::getAttributesOf( LPITEMIDLIST pidl, ULONG attributes )
@@ -183,7 +183,7 @@ void ShellFolder::release(LPITEMIDLIST pidl )
 		mallocer_->Free(pidl);
 }
 
-Shit ShellFolder::parseDisplayName(const mol::string& path, DWORD attributes)
+Shit ShellFolder::parseDisplayName(const std::wstring& path, DWORD attributes)
 {
 	std::wstring ws = mol::towstring(path);
 
@@ -193,13 +193,13 @@ Shit ShellFolder::parseDisplayName(const mol::string& path, DWORD attributes)
 	if ( S_OK == folder->ParseDisplayName( 0, NULL, (LPOLESTR)(ws.c_str()), &ulong, &pidl, &attributes) )
 	{
 		ShellItem* it = new ShellItem(pidl,getAttributesOf(pidl,attributes));
-		return it;
+		return Shit(it);
 	}
-	return 0;
+	return Shit();
 }
 
 
-Shit parseDisplayName(const mol::string& path, DWORD attributes)
+Shit parseDisplayName(const std::wstring& path, DWORD attributes)
 {
 	ShellFolder	desk;
 	std::wstring ws(mol::towstring(path));
@@ -209,9 +209,9 @@ Shit parseDisplayName(const mol::string& path, DWORD attributes)
 	if ( S_OK == desk.folder->ParseDisplayName( 0, NULL, (LPOLESTR)(ws.c_str()), &ulong, &pidl, &attributes) )
 	{
 		ShellItem* it = new ShellItem(pidl,desk.getAttributesOf(pidl,attributes));
-		return it;
+		return Shit(it);
 	}
-	return 0;
+	return Shit();
 }
 
 HIMAGELIST ShellFolder::SysImgList()
@@ -229,7 +229,7 @@ HIMAGELIST ShellFolder::SysImgList()
 
 HICON ShellFolder::getIcon( mol::io::Shit& it, DWORD flag)
 {
-	mol::string path = getDisplayNameOf(*it);
+	std::wstring path = getDisplayNameOf(*it);
 	DWORD attributes = 0;
 	SHFILEINFO  shInfo;
 	if (( it->attributes_ & SFGAO_FOLDER ) == SFGAO_FOLDER )
@@ -245,16 +245,16 @@ HICON ShellFolder::getIcon( mol::io::Shit& it, DWORD flag)
 	return shInfo.hIcon;
 }
 
-const mol::TCHAR* ShellFolder::getStaticFolderPath()
+const wchar_t* ShellFolder::getStaticFolderPath()
 {
-	static mol::TCHAR buf[MAX_PATH+1];
+	static wchar_t buf[MAX_PATH+1];
 	static UINT ui = GetWindowsDirectory(buf,MAX_PATH);
     return buf;
 }
 
 int ShellFolder::getFolderIcon()
 {
-    const mol::TCHAR* path = getStaticFolderPath();
+    const wchar_t* path = getStaticFolderPath();
     DWORD attributes = FILE_ATTRIBUTE_DIRECTORY;
     SHFILEINFO  shInfo;
     ::ZeroMemory(&shInfo,sizeof(SHFILEINFO));
@@ -266,7 +266,7 @@ int ShellFolder::getFolderIcon()
  
 int ShellFolder::getOpenFolderIcon()
 {
-    const mol::TCHAR* path = getStaticFolderPath();
+    const wchar_t* path = getStaticFolderPath();
     DWORD attributes = FILE_ATTRIBUTE_DIRECTORY;
     SHFILEINFO  shInfo;
     ::ZeroMemory(&shInfo,sizeof(SHFILEINFO));
@@ -276,15 +276,15 @@ int ShellFolder::getOpenFolderIcon()
 	return shInfo.iIcon;
 }
 
-std::map<mol::string,int> ShellFolder::iconMap_;
+std::map<std::wstring,int> ShellFolder::iconMap_;
 
 int ShellFolder::getIconIndex( mol::io::Shit& it, DWORD flag )
 {
     static int ifolder     = getFolderIcon();
     static int iopenfolder = getOpenFolderIcon();
 
-    mol::string path = getDisplayNameOf(*it);
-	mol::string p = path;
+    std::wstring path = getDisplayNameOf(*it);
+	std::wstring p = path;
 	DWORD attributes = 0;
 	SHFILEINFO  shInfo;
     ::ZeroMemory(&shInfo,sizeof(SHFILEINFO));
@@ -316,7 +316,7 @@ int ShellFolder::getIconIndex( mol::io::Shit& it, DWORD flag )
 			return shInfo.iIcon;
 		}
 		size_t pos = path.find(L"/",6);
-		if ( pos == mol::string::npos || pos == path.size()-1 )
+		if ( pos == std::wstring::npos || pos == path.size()-1 )
 		{
 			mol::io::Shit net = mol::io::desktop().getSpecialFolder(CSIDL_DRIVES);
 			DWORD_PTR ret = ::SHGetFileInfo( (LPCWSTR)(LPITEMIDLIST)(*net),0,&shInfo,sizeof(shInfo), SHGFI_SYSICONINDEX|SHGFI_TYPENAME|SHGFI_PIDL );
@@ -363,8 +363,8 @@ int ShellFolder::getIconIndex( mol::io::Shit& it, DWORD flag )
 
 int ShellFolder::getIconIndexReal( mol::io::Shit& it, DWORD flag )
 {
-    mol::string path = getDisplayNameOf(*it);
-	mol::string p = path;
+    std::wstring path = getDisplayNameOf(*it);
+	std::wstring p = path;
 	SHFILEINFO  shInfo;
     ::ZeroMemory(&shInfo,sizeof(SHFILEINFO));
 
@@ -390,7 +390,7 @@ Shit ShellFolder::getSpecialFolder( int csidl)
 {
 	LPITEMIDLIST pidl = 0;
 	::SHGetSpecialFolderLocation(0,csidl,&pidl);
-	return new ShellItem(pidl, getAttributesOf(pidl) );
+	return Shit(new ShellItem(pidl, getAttributesOf(pidl) ));
 }
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
@@ -401,44 +401,44 @@ ShellFileOp::ShellFileOp()
 ShellFileOp::~ShellFileOp() 
 {}
 
-int  ShellFileOp::copy(HWND hwnd, const mol::string& from, const mol::string& to, FILEOP_FLAGS flags )
+int  ShellFileOp::copy(HWND hwnd, const std::wstring& from, const std::wstring& to, FILEOP_FLAGS flags )
 {
     return op(FO_COPY, hwnd, from, to, flags);
 }
 
-int  ShellFileOp::copy(HWND hwnd, const std::vector<mol::string>& from, const mol::string& to, FILEOP_FLAGS flags )
+int  ShellFileOp::copy(HWND hwnd, const std::vector<std::wstring>& from, const std::wstring& to, FILEOP_FLAGS flags )
 {
     return multiOp(FO_COPY, hwnd, from, to, flags);
 }
 
-int  ShellFileOp::remove(HWND hwnd, const mol::string& from, FILEOP_FLAGS flags )
+int  ShellFileOp::remove(HWND hwnd, const std::wstring& from, FILEOP_FLAGS flags )
 {
-	mol::string to(_T(""));
+	std::wstring to(_T(""));
     return op(FO_DELETE, hwnd, from, to, flags);
 }
 
-int  ShellFileOp::remove(HWND hwnd, const std::vector<mol::string>& from, FILEOP_FLAGS flags )
+int  ShellFileOp::remove(HWND hwnd, const std::vector<std::wstring>& from, FILEOP_FLAGS flags )
 {
-	mol::string to(_T(""));
+	std::wstring to(_T(""));
     return multiOp(FO_DELETE, hwnd, from, to, flags);
 }
 
-int  ShellFileOp::move(HWND hwnd, const mol::string& from, const mol::string& to, FILEOP_FLAGS flags )
+int  ShellFileOp::move(HWND hwnd, const std::wstring& from, const std::wstring& to, FILEOP_FLAGS flags )
 {
     return op(FO_MOVE, hwnd, from, to, flags);
 }
 
-int  ShellFileOp::move(HWND hwnd, const std::vector<mol::string>& from, const mol::string& to, FILEOP_FLAGS flags )
+int  ShellFileOp::move(HWND hwnd, const std::vector<std::wstring>& from, const std::wstring& to, FILEOP_FLAGS flags )
 {
     return multiOp(FO_MOVE, hwnd, from, to, flags);
 }
 
-int  ShellFileOp::rename(HWND hwnd, const mol::string& from, const mol::string& to, FILEOP_FLAGS flags)
+int  ShellFileOp::rename(HWND hwnd, const std::wstring& from, const std::wstring& to, FILEOP_FLAGS flags)
 {
     return op(FO_RENAME, hwnd, from, to, flags);
 }
 
-bool ShellFileOp::createDir( const mol::string& dirname )
+bool ShellFileOp::createDir( const std::wstring& dirname )
 {
 	return ::CreateDirectoryW(Path::wpath(dirname).c_str(),0) == TRUE;
 }
@@ -448,15 +448,15 @@ BOOL  ShellFileOp::anyOpAborted()
     return sfos_.fAnyOperationsAborted;
 }
 
-int  ShellFileOp::op(UINT  op, HWND hwnd, const mol::string& from, const mol::string& to, FILEOP_FLAGS flags)
+int  ShellFileOp::op(UINT  op, HWND hwnd, const std::wstring& from, const std::wstring& to, FILEOP_FLAGS flags)
 {
     ::ZeroMemory(&sfos_,sizeof(sfos_));
 
-	mol::tbuff f(from.size()+2);
-	mol::tbuff t(to.size()+2);
+	mol::wbuff f(from.size()+2);
+	mol::wbuff t(to.size()+2);
 
-	memcpy(f,from.c_str(),(from.size()+1)*sizeof(mol::TCHAR));
-    memcpy(t,to.c_str()  ,(to.size()+1)*sizeof(mol::TCHAR));
+	memcpy(f,from.c_str(),(from.size()+1)*sizeof(wchar_t));
+    memcpy(t,to.c_str()  ,(to.size()+1)*sizeof(wchar_t));
 
     f[from.size()+1] = 0;
     t[to.size()+1]   = 0;
@@ -472,7 +472,7 @@ int  ShellFileOp::op(UINT  op, HWND hwnd, const mol::string& from, const mol::st
     return ret;
 }
 
-int  ShellFileOp::multiOp(UINT  op, HWND hwnd, const std::vector<mol::string>& from, const mol::string& to, FILEOP_FLAGS flags)
+int  ShellFileOp::multiOp(UINT  op, HWND hwnd, const std::vector<std::wstring>& from, const std::wstring& to, FILEOP_FLAGS flags)
 {
     ::ZeroMemory(&sfos_,sizeof(sfos_));
 
@@ -482,16 +482,16 @@ int  ShellFileOp::multiOp(UINT  op, HWND hwnd, const std::vector<mol::string>& f
 		s += from[i].size()+1;
 	}
 
-	mol::tbuff f(s+1);
-	mol::tbuff t(to.size()+2);
+	mol::wbuff f(s+1);
+	mol::wbuff t(to.size()+2);
 
 	size_t c = 0;
 	for ( size_t i = 0; i < from.size(); i++ )
 	{
-		memcpy(f+c,from[i].c_str(),(from[i].size()+1)*sizeof(mol::TCHAR));
+		memcpy(f+c,from[i].c_str(),(from[i].size()+1)*sizeof(wchar_t));
 		c += from[i].size()+1;
 	}
-    memcpy(t,to.c_str()  ,(to.size()+1)*sizeof(mol::TCHAR));
+    memcpy(t,to.c_str()  ,(to.size()+1)*sizeof(wchar_t));
 
     f[s]             = 0;
     t[to.size()+1]   = 0;
@@ -508,7 +508,7 @@ int  ShellFileOp::multiOp(UINT  op, HWND hwnd, const std::vector<mol::string>& f
 }
 
 
-BOOL execute_shell( const mol::string& path, const mol::string& verb, int nShow, ULONG fMask )
+BOOL execute_shell( const std::wstring& path, const std::wstring& verb, int nShow, ULONG fMask )
 {
 	SHELLEXECUTEINFO sei;
 	ZeroMemory(&sei,sizeof(sei));
@@ -521,7 +521,7 @@ BOOL execute_shell( const mol::string& path, const mol::string& verb, int nShow,
 	return ::ShellExecuteEx(&sei);
 }
 
-BOOL exec_cmdline( const mol::string cl )
+BOOL exec_cmdline( const std::wstring cl )
 {
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
@@ -532,7 +532,7 @@ BOOL exec_cmdline( const mol::string cl )
 
     // Start the child process. 
     if( !CreateProcess( NULL,   // No module name (use command line). 
-		(mol::TCHAR*)(cl.c_str()),			// Command line. 
+		(wchar_t*)(cl.c_str()),			// Command line. 
         NULL,             // Process handle not inheritable. 
         NULL,             // Thread handle not inheritable. 
         FALSE,            // Set handle inheritance to FALSE. 
@@ -555,12 +555,12 @@ BOOL exec_cmdline( const mol::string cl )
 }
 
 
-BOOL execute_shell_admin( const mol::string& path, const mol::string& args )
+BOOL execute_shell_admin( const std::wstring& path, const std::wstring& args )
 {
 	return execute_shell_args( path, args, _T("runas") );
 }
 
-BOOL execute_shell_args( const mol::string& path, const mol::string& args, const mol::string& verb, int nShow, ULONG fMask )//SEE_MASK_INVOKEIDLIST);
+BOOL execute_shell_args( const std::wstring& path, const std::wstring& args, const std::wstring& verb, int nShow, ULONG fMask )//SEE_MASK_INVOKEIDLIST);
 {
     SHELLEXECUTEINFO   sei;
     ZeroMemory ( &sei, sizeof(sei) );
@@ -602,7 +602,7 @@ UACPipe::~UACPipe()
 	close();
 }
 
-HANDLE UACPipe::create(const mol::string& pipename )
+HANDLE UACPipe::create(const std::wstring& pipename )
 {
     pipe_ = CreateNamedPipe( 
       pipename.c_str(),             // pipe name 
@@ -619,7 +619,7 @@ HANDLE UACPipe::create(const mol::string& pipename )
 	return pipe_;
 }
 
-HANDLE UACPipe::open( const mol::string& pipename )
+HANDLE UACPipe::open( const std::wstring& pipename )
 {
 	const int BUFSIZE = 4096;
 
@@ -754,11 +754,11 @@ void UACPipe::close()
 }
 
 
-mol::string resolveShortcut( const mol::string& link)
+std::wstring resolveShortcut( const std::wstring& link)
 {
     HRESULT hr = E_FAIL;
 
-    TCHAR szPath[MAX_PATH];     
+	wchar_t szPath[MAX_PATH];
     WIN32_FIND_DATA wfd;    
 
 	mol::punk<IShellLink> ipShellLink;
@@ -783,10 +783,10 @@ mol::string resolveShortcut( const mol::string& link)
 	if ( hr != S_OK )
 		return _T("");
 
-	return mol::string(szPath);
+	return std::wstring(szPath);
 }
 
-mol::string resolveInternetShortcut( const mol::string& link)
+std::wstring resolveInternetShortcut( const std::wstring& link)
 {
     HRESULT hr = E_FAIL;
 
@@ -808,7 +808,7 @@ mol::string resolveInternetShortcut( const mol::string& link)
 	if ( hr != S_OK )
 		return _T("");
 
-	return mol::toString(purl);
+	return mol::towstring(purl);
 }
 
 } // end namespace mol;

@@ -99,7 +99,7 @@ HRESULT Stream::create(const char* data , size_t size, int opt  )
 	return Create(&interface_, data, size, opt);
 }
 
-HRESULT Stream::create(IStream** pStream, const mol::string& path, DWORD flags)
+HRESULT Stream::create(IStream** pStream, const std::wstring& path, DWORD flags)
 {
 	release();
 	return Create( &interface_, path, flags );
@@ -165,7 +165,7 @@ HRESULT Stream::Create( IStream** pStream, const char* data , size_t size , int 
 	return hr;
 }
 
-HRESULT Stream::Create(IStream** pStream, const mol::string& path, DWORD flags )
+HRESULT Stream::Create(IStream** pStream, const std::wstring& path, DWORD flags )
 {
 	return ::SHCreateStreamOnFile( path.c_str(), flags, pStream);
 }

@@ -11,27 +11,27 @@ public:
 
 public:
 
-	static mol::string ext(const mol::string& path);
-    static mol::string filename(const mol::string& path);
-	static mol::string pathname(const mol::string& path);
+	static std::wstring ext(const std::wstring& path);
+    static std::wstring filename(const std::wstring& path);
+	static std::wstring pathname(const std::wstring& path);
 
-	static mol::string stripRoot(const mol::string& path);
-    static mol::string stripToRoot(const mol::string& path);
-    static mol::string addBackSlash(const mol::string& path);
-    static mol::string removeBackSlash(const mol::string& path);
-    static mol::string addExtension(const mol::string& path, const mol::string& ext);
-    static mol::string renameExtension(const mol::string& path, const mol::string& ext);
-    static mol::string append(const mol::string& path,const mol::string& ap);
-	static bool  isSubpath(const mol::string& path, const mol::string& p);
+	static std::wstring stripRoot(const std::wstring& path);
+    static std::wstring stripToRoot(const std::wstring& path);
+    static std::wstring addBackSlash(const std::wstring& path);
+    static std::wstring removeBackSlash(const std::wstring& path);
+    static std::wstring addExtension(const std::wstring& path, const std::wstring& ext);
+    static std::wstring renameExtension(const std::wstring& path, const std::wstring& ext);
+    static std::wstring append(const std::wstring& path,const std::wstring& ap);
+	static bool  isSubpath(const std::wstring& path, const std::wstring& p);
 
-    static bool exists(const mol::string& path);
-	static bool isDir(const mol::string& path);
-    static bool isRoot(const mol::string& path);
-	static bool isUNC(const mol::string& path);
-	static bool isNetDrive(const mol::string& path);
-	static mol::string parentDir(const mol::string& path);
-	static mol::string serviceName(const mol::string& path);
-	static std::wstring wpath(const mol::string& path);
+    static bool exists(const std::wstring& path);
+	static bool isDir(const std::wstring& path);
+    static bool isRoot(const std::wstring& path);
+	static bool isUNC(const std::wstring& path);
+	static bool isNetDrive(const std::wstring& path);
+	static std::wstring parentDir(const std::wstring& path);
+	static std::wstring serviceName(const std::wstring& path);
+	static std::wstring wpath(const std::wstring& path);
 
 private:
 	Path(void);

@@ -10,11 +10,11 @@ FolderDlg::FolderDlg(HWND p)
 FolderDlg::~FolderDlg(void)
 {}
 
-bool FolderDlg::browse(const mol::TCHAR* path, const mol::TCHAR* title, int flags )
+bool FolderDlg::browse(const wchar_t* path, const wchar_t* title, int flags )
 {
     BROWSEINFO		bi;
     LPITEMIDLIST	pidl;
-	mol::TCHAR		buf[MAX_PATH];
+	wchar_t		buf[MAX_PATH];
 
     // set browseinfo
     ::ZeroMemory( &bi, sizeof(bi) );
@@ -53,7 +53,7 @@ bool FolderDlg::browse(const mol::TCHAR* path, const mol::TCHAR* title, int flag
 
 // accessors
 
-const mol::string& FolderDlg::getPath()
+const std::wstring& FolderDlg::getPath()
 {
     return path_;
 }
@@ -72,20 +72,20 @@ FolderBrowser::FolderBrowser()
 	text_  = _T("Browse for folder");
 }
 
-FolderBrowser::FolderBrowser(const mol::string& text)
+FolderBrowser::FolderBrowser(const std::wstring& text)
 	:text_(text)
 {
 	title_ = _T("FolderBrowser");
 }
 
-FolderBrowser::FolderBrowser(const mol::string& text, const mol::string& title)
+FolderBrowser::FolderBrowser(const std::wstring& text, const std::wstring& title)
 	: text_(text),title_(title)
 {
 	title_ = _T("FolderBrowser");
 	text_  = _T("Browse for folder");
 }
 
-mol::string FolderBrowser::select( HWND owner, UINT flags, mol::io::Shit& shit)
+std::wstring FolderBrowser::select( HWND owner, UINT flags, mol::io::Shit& shit)
 {
 	mol::io::Shit si = dlg( owner, flags, shit );
 	if ( si )
@@ -105,8 +105,8 @@ mol::io::Shit FolderBrowser::dlg( HWND owner, UINT flags, mol::io::Shit& shit)
 
 	LPITEMIDLIST pidl = ::SHBrowseForFolder(&bInfo_);
 	if ( pidl )
-		return new ShellItem(pidl,desktop().getAttributesOf(pidl));
-	return 0;
+		return mol::io::Shit(new ShellItem(pidl, desktop().getAttributesOf(pidl)));
+	return mol::io::Shit();
 }
 
 int FolderBrowser::OnInit( HWND hwnd)
@@ -122,13 +122,13 @@ int FolderBrowser::OnIUnknown( HWND hwnd, IUnknown* punk)
 
 int FolderBrowser::OnSelect( HWND hwnd, LPITEMIDLIST pidl)
 {
-	mol::string p   = desktop().getDisplayNameOf(pidl);
+	std::wstring p   = desktop().getDisplayNameOf(pidl);
 	std::wstring ws = mol::towstring(p);
 	::SendMessage(hwnd, BFFM_SETSTATUSTEXT, 0, (LPARAM)(p.c_str()) );
 	return 0;
 }
 
-int FolderBrowser::OnValidateFailed( HWND hwnd, const mol::TCHAR* path)
+int FolderBrowser::OnValidateFailed( HWND hwnd, const wchar_t* path)
 {
 	return 1;
 }
@@ -140,7 +140,7 @@ int FolderBrowser::browseProc( HWND hwnd, UINT uMsg, LPARAM lParam)
 		case BFFM_INITIALIZED	 : return OnInit( hwnd );
 		case BFFM_IUNKNOWN		 : return OnIUnknown( hwnd, (IUnknown*)lParam );
 		case BFFM_SELCHANGED	 : return OnSelect( hwnd, (LPITEMIDLIST)lParam );
-		case BFFM_VALIDATEFAILED : return OnValidateFailed( hwnd, (const mol::TCHAR*)lParam );
+		case BFFM_VALIDATEFAILED : return OnValidateFailed( hwnd, (const wchar_t*)lParam );
 		default:
 			return 0;
 	}
@@ -155,11 +155,11 @@ int CALLBACK FolderBrowser::BrowseCallbackProc( HWND hwnd, UINT uMsg, LPARAM lPa
 }
 
 
-extern HRESULT SimpleFolderBrowser(HWND hwnd, mol::string& directory);
+extern HRESULT SimpleFolderBrowser(HWND hwnd, std::wstring& directory);
 
-mol::string browseForFolder( HWND owner )
+std::wstring browseForFolder( HWND owner )
 {
-	mol::string retval;
+	std::wstring retval;
 
 	HRESULT hr = SimpleFolderBrowser( owner, retval );
 	if ( hr == S_OK )

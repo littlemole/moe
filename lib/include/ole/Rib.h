@@ -42,7 +42,7 @@ public:
 
 private:
 
-	mol::string label_;
+	std::wstring label_;
     int commandId_;
     int categoryId_;
 	bool pinned_;
@@ -62,30 +62,30 @@ public:
 
 	bool minimized();
 	int cmd();
-	mol::string value();
-	mol::string label();
+	std::wstring value();
+	std::wstring label();
 	bool enabled();
 	int index();
 	bool checked();
 	int decimalPlaces();
 	mol::variant decimal();
-	std::vector<mol::string> items();
-	std::vector<std::pair<mol::string,bool> > recent_items();
+	std::vector<std::wstring> items();
+	std::vector<std::pair<std::wstring, bool> > recent_items();
 	CHARFORMAT2& font();
 
 
 	void minimize(bool);
 	void checked(bool b);
 	void select(int index);
-	void value( const mol::string& v);
-	void label( const mol::string& l);
+	void value(const std::wstring& v);
+	void label(const std::wstring& l);
 	void bValue( bool b);
 	void check( bool b);
 	void enable( bool b);
 	void decimalPlaces(int);
 	void decimal(mol::variant& v);
-	void items( const std::vector<mol::string>& items, int index = 0);
-	void recent_item( std::pair<mol::string,bool>& item);
+	void items(const std::vector<std::wstring>& items, int index = 0);
+	void recent_item(std::pair<std::wstring, bool>& item);
 
     HRESULT virtual __stdcall Execute( UINT nCmdID, UI_EXECUTIONVERB verb, const PROPERTYKEY* key, const PROPVARIANT* ppropvarValue, IUISimplePropertySet* pCommandExecutionProperties);
     HRESULT virtual __stdcall UpdateProperty( UINT nCmdID, REFPROPERTYKEY key, const PROPVARIANT* ppropvarCurrentValue, PROPVARIANT* ppropvarNewValue);
@@ -95,10 +95,10 @@ protected:
 	HandlerBase();
 
 	int id_;
-	std::vector<mol::string> items_;
-	std::vector<std::pair<mol::string,bool> > recent_items_;
-	mol::string value_;
-	mol::string label_;
+	std::vector<std::wstring> items_;
+	std::vector<std::pair<std::wstring, bool> > recent_items_;
+	std::wstring value_;
+	std::wstring label_;
 	bool bValue_;
 	bool enabled_;
 	bool minimized_;
@@ -291,7 +291,7 @@ public:
 	void dispose();
 
 	void updateRecentDocs(int id);
-	void addRecentDoc( int id, const mol::string& path);
+	void addRecentDoc(int id, const std::wstring& path);
 
 	void registerCommand( HWND w,int rid, int cmd)
 	{

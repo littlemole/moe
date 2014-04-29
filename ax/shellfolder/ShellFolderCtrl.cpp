@@ -33,7 +33,7 @@ ShellFolderCtrl::~ShellFolderCtrl()
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-void ShellFolderCtrl::Folder::OnUserSelect(std::vector<mol::string>& v)
+void ShellFolderCtrl::Folder::OnUserSelect(std::vector<std::wstring>& v)
 {
 	for ( size_t i = 0; i < v.size(); i++ )
 	{
@@ -42,7 +42,7 @@ void ShellFolderCtrl::Folder::OnUserSelect(std::vector<mol::string>& v)
 }
 
 
-void ShellFolderCtrl::Folder::OnPathChanged( const mol::string& p)
+void ShellFolderCtrl::Folder::OnPathChanged( const std::wstring& p)
 {
 	This()->fire(DISPID_ISHELLPANEEVENTS_ONDIRCHANGED,mol::bstr(p));
 }
@@ -70,7 +70,7 @@ LRESULT ShellFolderCtrl::OnCreate(UINT msg, WPARAM wParam, LPARAM lParam)
 	wnd_.create(0,clientRect,*this);
 	wnd_.setRedraw(false);
 
-	mol::string s = mol::io::desktop().getDisplayNameOf(*mol::io::desktop().getSpecialFolder(CSIDL_DESKTOP));
+	std::wstring s = mol::io::desktop().getDisplayNameOf(*mol::io::desktop().getSpecialFolder(CSIDL_DESKTOP));
 	wnd_.path(s);
 	wnd_.setFocus();	
 	wnd_.show(SW_SHOW);
@@ -206,7 +206,7 @@ HRESULT __stdcall ShellFolderCtrl::Paste ()
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-void ShellFolderCtrl::setPath(const mol::string& p)  
+void ShellFolderCtrl::setPath(const std::wstring& p)  
 { 
 	setText(p); 
 	wnd_.path(p);
@@ -246,7 +246,7 @@ HRESULT __stdcall ShellFolderCtrl::put_Selection		( VARIANT  dirname )
 		{
 			b = _T("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}");
 		}
-		setPath(b.toString());
+		setPath(b.towstring());
 	}
 	return S_OK;
 }

@@ -49,7 +49,7 @@ public:
 	void OnEditCopy();
 	void OnEditPaste();
 
-	HWND createWindow( const mol::string& windowName, HMENU id, const mol::Rect& r, HWND parent );
+	HWND createWindow( const std::wstring& windowName, HMENU id, const mol::Rect& r, HWND parent );
 
 	bool hasFocus()  ;
 

@@ -37,8 +37,8 @@ class MoeApp :
 friend mol::Singleton<MoeApp>; 
 public:
 
-	virtual int runEmbedded(const mol::string& cmdline);
-	virtual int runStandalone(const mol::string& cmdline);
+	virtual int runEmbedded(const std::wstring& cmdline);
+	virtual int runStandalone(const std::wstring& cmdline);
 
 private:
 
@@ -56,7 +56,7 @@ private:
 //	void init_extensions_if();
 //	bool enableExtensions_;
 
-	void openDocsFromCommandLine( IDispatch* m, mol::string cmdline );
+	void openDocsFromCommandLine( IDispatch* m, std::wstring cmdline );
 	void openMoeDocument(IDispatch* docs, IDispatch* dialogs,const std::string& s);
 
 	std::vector<moeCliType*> moeCliTypes;

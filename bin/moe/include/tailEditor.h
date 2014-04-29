@@ -18,7 +18,7 @@ public:
 	TailEditor();
 	virtual ~TailEditor();
 
-	static Instance* CreateInstance(const mol::string& p);
+	static Instance* CreateInstance(const std::wstring& p);
 
 	/////////////////////////////////////////////////////////////////////
 
@@ -31,9 +31,9 @@ protected:
 
 	virtual void OnFileChangeNotify(mol::io::DirMon*);
 	void checkModifiedOnDisk( );
-	void append(const mol::string& path,unsigned long long size);
+	void append(const std::wstring& path,unsigned long long size);
 
-	bool initialize(const mol::string& p);
+	bool initialize(const std::wstring& p);
 
 	unsigned long long size_;
 

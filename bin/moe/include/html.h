@@ -35,7 +35,7 @@ public:
 	MoeHtmlWnd( );
 	~MoeHtmlWnd();
 
-	static  Instance* CreateInstance( const mol::string& location );
+	static  Instance* CreateInstance( const std::wstring& location );
 
 	void OnClose();
 	void OnDestroy();
@@ -133,9 +133,9 @@ protected:
 private:
 	int							style_;
 	mol::bstr					filename_;
-	mol::string					location;
+	std::wstring					location;
 
-	bool load( const mol::string& loc );
+	bool load( const std::wstring& loc );
 };
 
 #endif

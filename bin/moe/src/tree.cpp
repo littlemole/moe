@@ -97,7 +97,7 @@ void MoeTreeWnd::OnEditPaste()
 
 
 
-HWND MoeTreeWnd::createWindow( const mol::string& windowName, HMENU id, const mol::Rect& r, HWND parent )
+HWND MoeTreeWnd::createWindow( const std::wstring& windowName, HMENU id, const mol::Rect& r, HWND parent )
 {
 	mol::AxClientWnd<MoeTreeWnd,RTree>::createWindow( windowName, id, r, parent );
 	show(SW_SHOW);
@@ -119,7 +119,7 @@ HRESULT __stdcall TreeWndSink::OnTreeSelection(BSTR filename)
 
 HRESULT __stdcall TreeWndSink::OnTreeDblClick(BSTR filename,VARIANT_BOOL vb)
 {
-	mol::string p(mol::toString(filename));
+	std::wstring p(mol::towstring(filename));
 	if ( !mol::Path::exists(p) && !mol::Path::isUNC(p) )
 	{
 		if ( p.size()>4 && p.substr(0,2) != _T("::") && p.substr(0,5) != _T("ssh:/") )
@@ -132,7 +132,7 @@ HRESULT __stdcall TreeWndSink::OnTreeDblClick(BSTR filename,VARIANT_BOOL vb)
 		statusBar()->status(p);
 		if (!result)
 		{
-			statusBar()->status( mol::string(_T("failed to load ")) + p);
+			statusBar()->status( std::wstring(_T("failed to load ")) + p);
 			return S_FALSE;
 		}
 	}
@@ -141,7 +141,7 @@ HRESULT __stdcall TreeWndSink::OnTreeDblClick(BSTR filename,VARIANT_BOOL vb)
 
 HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename,VARIANT_BOOL vb)
 {
-	mol::string p(mol::toString(filename));
+	std::wstring p(mol::towstring(filename));
 	if ( !mol::Path::exists(p) && !mol::Path::isUNC(p) )
 	{
 		if ( p.size()>4 && p.substr(0,2) != _T("::") && p.substr(0,5) != _T("ssh:/") )
@@ -158,7 +158,7 @@ HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename,VARIANT_BOOL vb)
 
 			if (!result)
 			{
-				statusBar()->status( mol::string(_T("failed to load ")) + p);
+				statusBar()->status( std::wstring(_T("failed to load ")) + p);
 				return S_OK;
 			}
 			return S_OK;
@@ -174,7 +174,7 @@ HRESULT __stdcall TreeWndSink::OnTreeOpen(BSTR filename,VARIANT_BOOL vb)
 	
 				if (!result)
 				{
-					statusBar()->status( mol::string(_T("failed to load ")) + p);
+					statusBar()->status( std::wstring(_T("failed to load ")) + p);
 					return S_OK;
 				}
 				return S_OK;

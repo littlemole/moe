@@ -123,7 +123,7 @@ HRESULT InitPropVariantFromIUnknownArray( SAFEARRAY* psa,  PROPVARIANT* pPropVar
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-// Prop Variant RIIA helper
+// Prop Variant RAII helper
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 class PropVariant : public PROPVARIANT
@@ -160,7 +160,7 @@ public:
 		return this->decVal;
 	}
 
-	mol::string stringValue()
+	std::wstring stringValue()
 	{
 		switch(this->vt)
 		{
@@ -172,7 +172,7 @@ public:
 			case VT_BSTR :
 			{
 				mol::bstr bs(this->bstrVal);
-				return bs.toString();
+				return bs.towstring();
 			}
 		}
 		return _T("");
@@ -201,7 +201,7 @@ public:
 		this->ulVal = ulVal;
 	}
 
-	void initFromString( const mol::string& str )
+	void initFromString( const std::wstring& str )
 	{
 		this->vt = VT_LPWSTR;
 		HRESULT hr = ::SHStrDupW( str.c_str(), &(this->pwszVal) );
@@ -335,7 +335,7 @@ void GetCharFormat2FromIPropertyStore( IPropertyStore* pPropStore, CHARFORMAT2 *
 		if ( S_OK == pPropStore->GetValue(UI_PKEY_FontProperties_Family, &propVar) )
 		{
 			
-			mol::string family = propVar.stringValue();
+			std::wstring family = propVar.stringValue();
 			if ( family != _T("") )
 			{
 				StringCchCopyW(pCharFormat->szFaceName, ARRAYSIZE(pCharFormat->szFaceName), family.c_str() );
@@ -517,7 +517,7 @@ void GetIPropStoreFromCharFormat2(const __in CHARFORMAT2* pCharFormat, __in IPro
 		if (pCharFormat->dwMask & CFM_FACE)
 		{
 			// Set the font family value to the font name.
-			propVar.initFromString(  mol::toString(pCharFormat->szFaceName) );
+			propVar.initFromString(  mol::towstring(pCharFormat->szFaceName) );
 		}
 		else
 		{
@@ -628,19 +628,19 @@ void PropertySet::InitializeCommandProperties(int categoryId, int commandId, UI_
 void PropertySet::InitializeItemProperties(IUIImage *image, __in PCWSTR label, int categoryId)
 {
     pimgItem_ = image;
-	label_ = mol::toString(label);
+	label_ = mol::towstring(label);
     categoryId_ = categoryId;
 }
 
 void PropertySet::InitializeCategoryProperties( PCWSTR label, int categoryId)
 {
-	label_ = mol::toString(label);
+	label_ = mol::towstring(label);
     categoryId_ = categoryId;
 }
 
 void PropertySet::InitializeRecentItem( PCWSTR label, bool pinned)
 {
-	label_ = mol::toString(label);
+	label_ = mol::towstring(label);
     pinned_ = pinned;
 }
 
@@ -746,11 +746,11 @@ HRESULT __stdcall HandlerBase::Execute( UINT nCmdID, UI_EXECUTIONVERB verb, cons
 			}
 	        else if (key && *key == UI_PKEY_StringValue)
 			{
-				value_ = mol::bstr(ppropvarValue->bstrVal).toString();
+				value_ = mol::bstr(ppropvarValue->bstrVal).towstring();
 			}				
 	        else if (key && *key == UI_PKEY_Label)
 			{
-				label_ = mol::bstr(ppropvarValue->bstrVal).toString();
+				label_ = mol::bstr(ppropvarValue->bstrVal).towstring();
 			}
 
 	        else if (key && *key == UI_PKEY_DecimalValue)
@@ -791,7 +791,7 @@ HRESULT __stdcall HandlerBase::Execute( UINT nCmdID, UI_EXECUTIONVERB verb, cons
 							if ( hr == S_OK )
 							{
 								pinned = pinv.boolVal == VARIANT_TRUE ? true : false;
-								recent_items_.push_back( std::make_pair(label.toString(), pinned) );
+								recent_items_.push_back( std::make_pair(label.towstring(), pinned) );
 							}
 						}
 					}
@@ -915,7 +915,7 @@ HRESULT __stdcall HandlerBase::UpdateProperty( UINT nCmdID, REFPROPERTYKEY key, 
 
 			for ( int i = 0; i < iFileCount; i++ )
 			{
-				mol::string currentFile = recent_items_[i].first;
+				std::wstring currentFile = recent_items_[i].first;
 				PropertySet* pItem = PropertySet::CreateInstance();
 				if (!pItem)
 				{
@@ -960,24 +960,24 @@ CHARFORMAT2& HandlerBase::font()
 	return charFormat_;
 }
 
-std::vector<mol::string> HandlerBase::items()
+std::vector<std::wstring> HandlerBase::items()
 {
 	return items_;
 }
 
-std::vector<std::pair<mol::string,bool> > HandlerBase::recent_items()
+std::vector<std::pair<std::wstring,bool> > HandlerBase::recent_items()
 {
 	return recent_items_;
 }
 
-void HandlerBase::items( const std::vector<mol::string>& items, int index )
+void HandlerBase::items( const std::vector<std::wstring>& items, int index )
 {
 	index_ = index;
 	items_ = items;
 	ribbon()->update(id_);
 }
 
-void HandlerBase::recent_item( std::pair<mol::string,bool>& item)
+void HandlerBase::recent_item( std::pair<std::wstring,bool>& item)
 {
 	
 	for ( size_t i = 0; i < recent_items_.size(); i++ )
@@ -988,8 +988,8 @@ void HandlerBase::recent_item( std::pair<mol::string,bool>& item)
 	
 	if ( recent_items_.size() > 9 )
 	{
-		std::vector<std::pair<mol::string,bool> > tmp;
-		std::vector<std::pair<mol::string,bool> >::iterator it = recent_items_.begin();
+		std::vector<std::pair<std::wstring,bool> > tmp;
+		std::vector<std::pair<std::wstring,bool> >::iterator it = recent_items_.begin();
 		bool f = false;
 		for ( size_t i = 0; i < 9; i++ )
 		{
@@ -1025,12 +1025,12 @@ mol::variant HandlerBase::decimal()
 	return decimal_; 
 }
 
-mol::string HandlerBase::value() 
+std::wstring HandlerBase::value() 
 { 
 	return value_; 
 }
 
-mol::string HandlerBase::label() 
+std::wstring HandlerBase::label() 
 { 
 	return label_; 
 }
@@ -1086,13 +1086,13 @@ void HandlerBase::select(int index)
 	ribbon()->update(id_);
 }
 
-void HandlerBase::value( const mol::string& v)
+void HandlerBase::value( const std::wstring& v)
 {
 	value_ = v;
 	ribbon()->update(id_);
 }
 
-void HandlerBase::label( const mol::string& l)
+void HandlerBase::label( const std::wstring& l)
 {
 	label_ = l;
 	ribbon()->update(id_);
@@ -1392,11 +1392,11 @@ void Ribbon::updateRecentDocs(int id)
 		if ( hr != S_OK )
 			continue;
 
-		mol::Ribbon::ribbon()->addRecentDoc(id,mol::string(buf));
+		mol::Ribbon::ribbon()->addRecentDoc(id,std::wstring(buf));
 	}
 }
 
-void Ribbon::addRecentDoc( int id, const mol::string& path)
+void Ribbon::addRecentDoc( int id, const std::wstring& path)
 {
 	if (!ribbon )
 		return;

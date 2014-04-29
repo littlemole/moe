@@ -5,13 +5,13 @@ namespace mol {
 namespace win {
 
 
-WndClass& WndClassGenerator::getClass(const mol::string& name)
+WndClass& WndClassGenerator::getClass(const std::wstring& name)
 {
 	return classNameMap_[name];
 }
 
 
-std::map<mol::string,WndClass>	WndClassGenerator::classNameMap_;
+std::map<std::wstring,WndClass>	WndClassGenerator::classNameMap_;
 
 WndClass::WndClass()
 {
@@ -32,8 +32,8 @@ WndClass::WndClass(const WndClass& wc)
 {
 	this->wcex_ = wc.wcex_;
 	size_t len = _tcslen(wc.wcex_.lpszClassName)+1;
-	this->wcex_.lpszClassName = new mol::TCHAR[len];
-	memcpy((void*)(this->wcex_.lpszClassName), wc.wcex_.lpszClassName, len*sizeof(mol::TCHAR));
+	this->wcex_.lpszClassName = new wchar_t[len];
+	memcpy((void*)(this->wcex_.lpszClassName), wc.wcex_.lpszClassName, len*sizeof(wchar_t));
 }
 
 WndClass& WndClass::operator=(const WndClass& wc)
@@ -45,8 +45,8 @@ WndClass& WndClass::operator=(const WndClass& wc)
 
 	this->wcex_ = wc.wcex_;
 	size_t len = _tcslen(wc.wcex_.lpszClassName)+1;
-	this->wcex_.lpszClassName = new mol::TCHAR[len];
-	memcpy((void*)(this->wcex_.lpszClassName), wc.wcex_.lpszClassName, len*sizeof(mol::TCHAR));
+	this->wcex_.lpszClassName = new wchar_t[len];
+	memcpy((void*)(this->wcex_.lpszClassName), wc.wcex_.lpszClassName, len*sizeof(wchar_t));
 	return *this;
 }
 
@@ -118,15 +118,15 @@ void WndClass::hIconSm( HICON i)
     wcex_.hIconSm = i;
 }
 
-void WndClass::setClassName( const mol::string& name)
+void WndClass::setClassName( const std::wstring& name)
 {
-	mol::TCHAR* buf = new mol::TCHAR[255];
-	memcpy( buf , name.c_str(), name.size()*sizeof(mol::TCHAR) );
+	wchar_t* buf = new wchar_t[255];
+	memcpy( buf , name.c_str(), name.size()*sizeof(wchar_t) );
     buf[name.size()] = 0;
     wcex_.lpszClassName = buf;
 }
 
-mol::string WndClass::getClassName()
+std::wstring WndClass::getClassName()
 {
     return wcex_.lpszClassName;
 };

@@ -28,14 +28,14 @@ DirChild::~DirChild()
 // initialization
 //////////////////////////////////////////////////////////////////////////////
 
-DirChild::Instance* DirChild::CreateInstance( const mol::string& dir )
+DirChild::Instance* DirChild::CreateInstance( const std::wstring& dir )
 {
 	Instance* doc = 0;
 
 	if ( dir.size() < 1 )
 		return doc;
 
-	mol::string p(dir);
+	std::wstring p(dir);
 	if ( !mol::Path::exists(p) && ( (dir.size() > 8) && (dir.substr(0,8) != _T("shell:::") ) && (dir.substr(0,2) != _T("::") ) ) )
         return doc;
 
@@ -55,7 +55,7 @@ DirChild::Instance* DirChild::CreateInstance( const mol::string& dir )
 	return doc;
 }
 
-bool DirChild::initialize(const mol::string& p)
+bool DirChild::initialize(const std::wstring& p)
 {
 	// initial Addref
 	((IMoeDocument*)this)->AddRef();
@@ -145,7 +145,7 @@ HRESULT __stdcall DirChild::DirChild_Events::OnListDblClick(BSTR filename)
 	mol::punk<IShellList> list(This()->oleObject);
 	if ( list )
 	{
-		mol::string p(mol::toString(filename));
+		std::wstring p(mol::towstring(filename));
 		if ( mol::Path::exists(p) )
 		{		
 			if ( mol::Path::isDir(p) )
@@ -155,7 +155,7 @@ HRESULT __stdcall DirChild::DirChild_Events::OnListDblClick(BSTR filename)
 			bool result = docs()->open(p,MOE_DOCTYPE_DOC,-1,false,0);
 			if (!result)
 			{
-				mol::ostringstream oss;
+				std::wostringstream oss;
 				oss << _T("unable to open ") << p;
 				statusBar()->status(oss.str());
 			}
@@ -171,17 +171,17 @@ HRESULT __stdcall DirChild::DirChild_Events::OnListDblClick(BSTR filename)
 
 HRESULT __stdcall DirChild::DirChild_Events::OnListSelection(BSTR filename)
 {
-	statusBar()->status(mol::bstr(filename).toString());
+	statusBar()->status(mol::bstr(filename).towstring());
 	return S_OK;
 }
 
 HRESULT __stdcall DirChild::DirChild_Events::OnListOpen(BSTR filename)
 {
-	mol::string p(mol::toString(filename));
+	std::wstring p(mol::towstring(filename));
 	bool result = docs()->open(p,MOE_DOCTYPE_DOC,-1,false,0);
 	if (!result)
 	{
-		mol::ostringstream oss;
+		std::wostringstream oss;
 		oss << _T("unable to open ") << p;
 		statusBar()->status(oss.str());
 	}
@@ -191,7 +191,7 @@ HRESULT __stdcall DirChild::DirChild_Events::OnListOpen(BSTR filename)
 
 HRESULT __stdcall DirChild::DirChild_Events::OnDirChanged(BSTR dir)
 {
-	This()->location_ = mol::toString(dir);
+	This()->location_ = mol::towstring(dir);
 	docs()->rename( This(),This()->location_ );
 	This()->setText( This()->location_ );
 	return S_OK;

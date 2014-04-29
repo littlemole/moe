@@ -116,7 +116,7 @@ OlePropPage::OlePropPage()
 }
 
 
-void OlePropPage::create( mol::PropSheet* ps, const mol::string& tab, REFCLSID clsid, int id,int flags )
+void OlePropPage::create( mol::PropSheet* ps, const std::wstring& tab, REFCLSID clsid, int id,int flags )
 {
 	mol::win::PropPage::create(ps,tab,id,flags);
 

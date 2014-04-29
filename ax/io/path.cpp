@@ -23,7 +23,7 @@ HRESULT __stdcall PathObj::Extension( BSTR f,  BSTR* ret)
 	if ( f == 0 )
 		return S_OK;
 
-	mol::string s = bstr(f).toString();
+	std::wstring s = bstr(f).towstring();
 	if ( s.empty() )
 		return S_OK;
 
@@ -40,7 +40,7 @@ HRESULT __stdcall PathObj::Filename( BSTR f, BSTR* ret)
 	if ( f == 0 )
 		return S_OK;
 
-	mol::string s = bstr(f).toString();
+	std::wstring s = bstr(f).towstring();
 	if ( s.empty() )
 		return S_OK;
 
@@ -57,7 +57,7 @@ HRESULT __stdcall PathObj::Path( BSTR f,  BSTR* ret)
 	if ( f == 0 )
 		return S_OK;
 
-	mol::string s = bstr(f).toString();
+	std::wstring s = bstr(f).towstring();
 	if ( s.empty() )
 		return S_OK;
 
@@ -75,7 +75,7 @@ HRESULT __stdcall PathObj::StripRoot( BSTR f,  BSTR* ret)
 	if ( f == 0 )
 		return S_OK;
 
-	mol::string s = bstr(f).toString();
+	std::wstring s = bstr(f).towstring();
 	if ( s.empty() )
 		return S_OK;
 
@@ -92,7 +92,7 @@ HRESULT __stdcall PathObj::Root( BSTR f,  BSTR* ret)
 	if ( f == 0 )
 		return S_OK;
 
-	mol::string s = bstr(f).toString();
+	std::wstring s = bstr(f).towstring();
 	if ( s.empty() )
 		return S_OK;
 
@@ -109,7 +109,7 @@ HRESULT __stdcall PathObj::AddBackSlash( BSTR f,  BSTR* ret)
 	if ( f == 0 )
 		return S_OK;
 
-	mol::string s = bstr(f).toString();
+	std::wstring s = bstr(f).towstring();
 	if ( s.empty() )
 		return S_OK;
 
@@ -126,7 +126,7 @@ HRESULT __stdcall PathObj::RemoveBackSlash( BSTR f,  BSTR* ret)
 	if ( f == 0 )
 		return S_OK;
 
-	mol::string s = bstr(f).toString();
+	std::wstring s = bstr(f).towstring();
 	if ( s.empty() )
 		return S_OK;
 
@@ -143,15 +143,15 @@ HRESULT __stdcall PathObj::AddExtension( BSTR f,  BSTR e,  BSTR* ret)
 	if ( f == 0 || e == 0)
 		return S_OK;
 
-	mol::string s = bstr(f).toString();
+	std::wstring s = bstr(f).towstring();
 	if ( s.empty() )
 		return S_OK;
 
-	mol::string s2 = bstr(e).toString();
+	std::wstring s2 = bstr(e).towstring();
 	if ( s2.empty() )
 		return S_OK;
 
-	mol::string r = mol::Path::append(s,s2);
+	std::wstring r = mol::Path::append(s,s2);
 
 	*ret = ::SysAllocString( mol::towstring( r ).c_str() );
 	return S_OK;
@@ -166,11 +166,11 @@ HRESULT __stdcall PathObj::IsSubPath( BSTR p1,  BSTR p2,  VARIANT_BOOL* ret)
 	if ( p1 == 0 || p2 == 0)
 		return S_OK;
 
-	mol::string s = bstr(p1).toString();
+	std::wstring s = bstr(p1).towstring();
 	if ( s.empty() )
 		return S_OK;
 
-	mol::string s2 = bstr(p2).toString();
+	std::wstring s2 = bstr(p2).towstring();
 	if ( s2.empty() )
 		return S_OK;
 
@@ -189,7 +189,7 @@ HRESULT __stdcall PathObj::Exists( BSTR f,  VARIANT_BOOL* ret)
 	if ( f == 0 )
 		return S_OK;
 
-	mol::string s = bstr(f).toString();
+	std::wstring s = bstr(f).towstring();
 	if ( s.empty() )
 		return S_OK;
 
@@ -206,7 +206,7 @@ HRESULT __stdcall PathObj::IsDir( BSTR f,  VARIANT_BOOL* ret)
 	if ( f == 0 )
 		return S_OK;
 
-	mol::string s = bstr(f).toString();
+	std::wstring s = bstr(f).towstring();
 	if ( s.empty() )
 		return S_OK;
 
@@ -223,7 +223,7 @@ HRESULT __stdcall PathObj::IsRoot( BSTR f,  VARIANT_BOOL* ret)
 	if ( f == 0 )
 		return S_OK;
 
-	mol::string s = bstr(f).toString();
+	std::wstring s = bstr(f).towstring();
 	if ( s.empty() )
 		return S_OK;
 
@@ -240,7 +240,7 @@ HRESULT __stdcall PathObj::IsUNC( BSTR f,  VARIANT_BOOL* ret)
 	if ( f == 0 )
 		return S_OK;
 
-	mol::string s = bstr(f).toString();
+	std::wstring s = bstr(f).towstring();
 	if ( s.empty() )
 		return S_OK;
 
@@ -257,7 +257,7 @@ HRESULT __stdcall PathObj::IsNetDrive( BSTR f,  VARIANT_BOOL* ret)
 	if ( f == 0 )
 		return S_OK;
 
-	mol::string s = bstr(f).toString();
+	std::wstring s = bstr(f).towstring();
 	if ( s.empty() )
 		return S_OK;
 
@@ -274,7 +274,7 @@ HRESULT __stdcall PathObj::ParentDir( BSTR f,  BSTR* ret)
 	if ( f == 0 )
 		return S_OK;
 
-	mol::string s = bstr(f).toString();
+	std::wstring s = bstr(f).towstring();
 	if ( s.empty() )
 		return S_OK;
 
@@ -291,7 +291,7 @@ HRESULT __stdcall PathObj::OpenDir( BSTR f,  IDir** ret)
 	if ( f == 0 )
 		return S_OK;
 
-	mol::string s = bstr(f).toString();
+	std::wstring s = bstr(f).towstring();
 	if ( s.empty() )
 		return S_OK;
 	if (!mol::Path::isDir(s) )
@@ -299,7 +299,7 @@ HRESULT __stdcall PathObj::OpenDir( BSTR f,  IDir** ret)
 		return S_OK;
 	}
 
-	std::vector<mol::string> v = mol::Directory::List(s);
+	std::vector<std::wstring> v = mol::Directory::List(s);
 
 	DirObj::Instance* dir = DirObj::CreateInstance(v);
 
@@ -317,7 +317,7 @@ HRESULT __stdcall PathObj::OpenFile( BSTR f,  IFile** ret)
 
 	*ret = 0;
 
-	mol::string p = bstr(f).toString();
+	std::wstring p = bstr(f).towstring();
 	if ( !mol::Path::exists(p) )
 		return S_OK;
 
@@ -338,7 +338,7 @@ HRESULT __stdcall PathObj::ChooseDir( BSTR* ret)
 		return E_INVALIDARG;
 
 	mol::io::FolderBrowser fb( _T("browse for folder"), _T("FolderBrowser"));
-	mol::string p = fb.select(0,BIF_USENEWUI|BIF_STATUSTEXT|BIF_SHAREABLE|BIF_BROWSEINCLUDEURLS);
+	std::wstring p = fb.select(0,BIF_USENEWUI|BIF_STATUSTEXT|BIF_SHAREABLE|BIF_BROWSEINCLUDEURLS);
 	*ret = ::SysAllocString( mol::towstring(p).c_str() );
 
 	return S_OK;

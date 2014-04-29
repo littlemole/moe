@@ -54,7 +54,7 @@ LRESULT ShellFolderWnd::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 	return mol::Window::wndProc(hwnd,message,wParam,lParam);
 }
 
-std::vector<mol::string> ShellFolderWnd::selected()
+std::vector<std::wstring> ShellFolderWnd::selected()
 {
 	mol::punk<IDataObject> dao;
 	HRESULT hr = sv_->GetItemObject(SVGIO_SELECTION,IID_IDataObject ,(void**)&dao);
@@ -62,7 +62,7 @@ std::vector<mol::string> ShellFolderWnd::selected()
 	{
 		return mol::vectorFromDataObject(dao);
 	}
-	return std::vector<mol::string>();
+	return std::vector<std::wstring>();
 }
 
 bool ShellFolderWnd::displayFiles()					
@@ -75,13 +75,13 @@ void ShellFolderWnd::displayFiles(bool b)
 	displayFiles_ = b; 
 }
 
-void ShellFolderWnd::path( const mol::string& p)	
+void ShellFolderWnd::path( const std::wstring& p)	
 { 
 	path_ = p; 
 	showPath(p);
 }
 
-mol::string ShellFolderWnd::path()		
+std::wstring ShellFolderWnd::path()		
 { 
 	return path_; 
 };
@@ -110,7 +110,7 @@ void ShellFolderWnd::cut()
 	hr = sv_->GetItemObject(SVGIO_SELECTION,IID_IDataObject ,(void**)&dao);
 	if(hr == S_OK )
 	{
-		std::vector<mol::string> v = mol::vectorFromDataObject(dao);
+		std::vector<std::wstring> v = mol::vectorFromDataObject(dao);
 		if ( !v.empty() )
 		{
 			mol::punk<IDataObject> ido = new mol::ShellDataObj(v,true);
@@ -141,7 +141,7 @@ void ShellFolderWnd::copy()
 	HRESULT hr = sv_->GetItemObject(SVGIO_SELECTION,IID_IDataObject ,(void**)&dao);
 	if(hr == S_OK )
 	{
-		std::vector<mol::string> v = mol::vectorFromDataObject(dao);
+		std::vector<std::wstring> v = mol::vectorFromDataObject(dao);
 		if ( !v.empty() )
 		{
 			mol::punk<IDataObject> ido = new mol::ShellDataObj(v,false);
@@ -160,13 +160,13 @@ void ShellFolderWnd::paste()
 
 	mol::punk<IDataObject> dao;
 	HRESULT hr = sv_->GetItemObject(SVGIO_SELECTION,IID_IDataObject ,(void**)&dao);
-	std::vector<mol::string> v;
+	std::vector<std::wstring> v;
 	if(hr == S_OK )
 	{
 		v = mol::vectorFromDataObject(dao);
 	}
 
-	mol::string path;
+	std::wstring path;
 	if ( v.size() == 1 )
 		path = v[0];
 	else
@@ -228,7 +228,7 @@ void ShellFolderWnd::rename()
 	HRESULT hr = sv_->GetItemObject(SVGIO_SELECTION,IID_IDataObject ,(void**)&dao);
 	if(hr == S_OK )
 	{
-		std::vector<mol::string> v = mol::vectorFromDataObject(dao);
+		std::vector<std::wstring> v = mol::vectorFromDataObject(dao);
 		if ( !v.empty())
 		{
 			mol::io::Shit it;
@@ -251,7 +251,7 @@ void ShellFolderWnd::erase()
 	HRESULT hr = sv_->GetItemObject(SVGIO_SELECTION,IID_IDataObject ,(void**)&dao);
 	if(hr == S_OK )
 	{
-		std::vector<mol::string> v = mol::vectorFromDataObject(dao);
+		std::vector<std::wstring> v = mol::vectorFromDataObject(dao);
 		if ( !v.empty())
 		{
 			mol::io::ShellFileOp sfo;
@@ -269,7 +269,7 @@ void ShellFolderWnd::execute()
 	HRESULT hr = sv_->GetItemObject(SVGIO_SELECTION,IID_IDataObject ,(void**)&dao);
 	if(hr == S_OK )
 	{
-		std::vector<mol::string> v = mol::vectorFromDataObject(dao);
+		std::vector<std::wstring> v = mol::vectorFromDataObject(dao);
 		if ( !v.empty())
 		{
 			mol::io::execute_shell( v[0] );		
@@ -286,7 +286,7 @@ void ShellFolderWnd::properties()
 	HRESULT hr = sv_->GetItemObject(SVGIO_SELECTION,IID_IDataObject ,(void**)&dao);
 	if(hr == S_OK )
 	{
-		std::vector<mol::string> v = mol::vectorFromDataObject(dao);
+		std::vector<std::wstring> v = mol::vectorFromDataObject(dao);
 		if ( !v.empty() )
 		{
 			mol::io::execute_shell( v[0], _T("properties"),1,SEE_MASK_INVOKEIDLIST );		
@@ -304,15 +304,15 @@ void ShellFolderWnd::newdir()
 	HRESULT hr = sv_->GetItemObject(SVGIO_SELECTION,IID_IDataObject ,(void**)&dao);
 	if(hr == S_OK )
 	{
-		std::vector<mol::string> v = mol::vectorFromDataObject(dao);
+		std::vector<std::wstring> v = mol::vectorFromDataObject(dao);
 		if ( !v.empty())
 		{
-			mol::string tmp = _T("newDir_");	
+			std::wstring tmp = _T("newDir_");	
 			int i = 0;
 			while(true)
 			{
-				mol::string p(path_);
-				mol::stringstream oss;
+				std::wstring p(path_);
+				std::wstringstream oss;
 				oss << tmp << i;
 				p = mol::Path::append(p,oss.str());
 				if ( !::CreateDirectory(p.c_str(),0) )
@@ -332,8 +332,8 @@ void ShellFolderWnd::newdir()
 
 void ShellFolderWnd::updir()
 {
-	mol::string p(path_);
-	mol::string parent (mol::Path::parentDir(p));
+	std::wstring p(path_);
+	std::wstring parent (mol::Path::parentDir(p));
 	parent = mol::Path::addBackSlash(parent);
 	if ( mol::Path::isDir(parent) )
 	{
@@ -393,7 +393,7 @@ HRESULT __stdcall ShellFolderWnd::TranslateAcceleratorSB( MSG *pmsg,WORD wID)
 
 HRESULT __stdcall ShellFolderWnd::BrowseObject( PCUIDLIST_RELATIVE pidl,UINT wFlags)
 {
-	//mol::string s =	mol::io::desktop().getDisplayNameOf((LPITEMIDLIST)pidl);
+	//std::wstring s =	mol::io::desktop().getDisplayNameOf((LPITEMIDLIST)pidl);
 
 	return S_OK;
 }
@@ -467,7 +467,7 @@ HRESULT __stdcall ShellFolderWnd::OnDefaultCommand( IShellView *ppshv)
 	HRESULT hr = ppshv->GetItemObject(SVGIO_SELECTION,IID_IDataObject ,(void**)&dao);
 	if(hr == S_OK )
 	{
-		std::vector<mol::string> v = mol::vectorFromDataObject(dao);
+		std::vector<std::wstring> v = mol::vectorFromDataObject(dao);
 		for ( size_t i = 0; i < v.size(); i++)
 		{
 			//ODBGS(v[i].c_str());
@@ -519,7 +519,7 @@ HRESULT __stdcall ShellFolderWnd::Notify( IShellView *pshv, DWORD dwNotifyType)
 	return S_OK;
 }
 
-bool ShellFolderWnd::showPath( const mol::string& path)
+bool ShellFolderWnd::showPath( const std::wstring& path)
 {
 	mol::io::Shit it;
 	mol::io::ShellFolder& sf =  mol::io::desktop();

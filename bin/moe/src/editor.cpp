@@ -16,7 +16,7 @@ using namespace mol::win;
 using namespace mol::ole;
 using namespace mol::io;
 
-mol::TCHAR OutFilesFilter[]   = _T("all files (*.*)\0*.*\0\0");
+wchar_t OutFilesFilter[]   = _T("all files (*.*)\0*.*\0\0");
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -43,11 +43,11 @@ Editor::~Editor()
 
 
 //////////////////////////////////////////////////////////////////////////////
-Editor::Instance* Editor::CreateInstance(const mol::string& file, long enc, bool readOnly)
+Editor::Instance* Editor::CreateInstance(const std::wstring& file, long enc, bool readOnly)
 {
 	statusBar()->status(20);
 
-	mol::string p(file);
+	std::wstring p(file);
 	if ( mol::Path::exists(p) && mol::Path::isDir(p) )
 	{
 		logger(LOGINFO) << "path is directory " << mol::tostring(p);
@@ -79,7 +79,7 @@ void Editor::prepareInterfaces()
 	sci->get_Text(&text_);
 }
 
-bool Editor::initialize(const mol::string& p, long enc, bool readOnly)
+bool Editor::initialize(const std::wstring& p, long enc, bool readOnly)
 {
 	initializeMoeChild(p);
 
@@ -208,8 +208,8 @@ LRESULT Editor::OnClose()
 	{
 		mol::bstr p;
 		props_->get_Filename(&p);
-		mol::ostringstream oss;
-		oss << p.toString() << _T("\r\nis modified! ");
+		std::wostringstream oss;
+		oss << p.towstring() << _T("\r\nis modified! ");
 		LRESULT r = mol::v7::msgbox( *moe(), _T("close without save?"), _T("document modified!"),oss.str().c_str(), IDI_MOE );
 		if ( r != IDYES )
 		{
@@ -400,7 +400,7 @@ void Editor::OnUserBatch(int code, int id, HWND ctrl)
 	if ( S_OK != set->get_Value(&val) || !val.bstr_ )
 		return;
 
-	mol::string cmd = val.toString();
+	std::wstring cmd = val.towstring();
 	if ( cmd.empty() )
 		return;
 
@@ -410,8 +410,8 @@ void Editor::OnUserBatch(int code, int id, HWND ctrl)
 		if ( mol::OS::has_uac() )
 		{
 			size_t p = cmd.find(_T("|"));
-			mol::string args;
-			if ( p != mol::string::npos )
+			std::wstring args;
+			if ( p != std::wstring::npos )
 			{
 				if ( p < cmd.size() )
 					args = cmd.substr(p+1);
@@ -423,8 +423,8 @@ void Editor::OnUserBatch(int code, int id, HWND ctrl)
 	}
 
 	size_t p = cmd.find(_T("|"));
-	mol::string args;
-	if ( p != mol::string::npos )
+	std::wstring args;
+	if ( p != std::wstring::npos )
 	{
 		if ( p < cmd.size() )
 			args = cmd.substr(p+1);
@@ -444,8 +444,8 @@ void Editor::OnUserForm(int code, int id, HWND ctrl)
 	if ( S_OK != set->get_Value(&val) || !val.bstr_ )
 		return ;
 
-	mol::string path = val.toString();
-	mol::string file = path;
+	std::wstring path = val.towstring();
+	std::wstring file = path;
 	RECT r;
 	moe()->getWindowRect(r);
 
@@ -455,7 +455,7 @@ void Editor::OnUserForm(int code, int id, HWND ctrl)
 	int h = r.bottom-r.top-100;
 	int o = 2;
 
-	std::vector<mol::string> v = mol::split(path,_T(","));
+	std::vector<std::wstring> v = mol::split(path,_T(","));
 
 	switch ( v.size() )
 	{
@@ -486,10 +486,10 @@ void Editor::OnUserScript(int code, int id, HWND ctrl)
 	if ( S_OK != set->get_Value(&val) || !val.bstr_ )
 		return ;
 
-	mol::string file = _T("");
-	mol::string func = _T("");
+	std::wstring file = _T("");
+	std::wstring func = _T("");
 
-	mol::string tmp = mol::toString(val);
+	std::wstring tmp = mol::towstring(val);
 	size_t pos = tmp.find(_T("!"));
 	if ( pos != std::string::npos)
 	{
@@ -504,13 +504,13 @@ void Editor::OnUserScript(int code, int id, HWND ctrl)
 	if ( file == _T("") )
 		return ;
 
-	mol::string ext = mol::Path::ext(file);
+	std::wstring ext = mol::Path::ext(file);
 	if ( mol::icmp(ext, _T(".bat") ) == 0 )
 	{
 		execute_shell( file );
 		return ;
 	}
-	mol::string engine = engineFromPath(mol::tostring(file));
+	std::wstring engine = engineFromPath(mol::tostring(file));
 
 	mol::filestream fs;
 	fs.open(mol::tostring(file), GENERIC_READ);
@@ -520,7 +520,7 @@ void Editor::OnUserScript(int code, int id, HWND ctrl)
 	std::string script = fs.readAll();
 	fs.close();
 
-	Script::CreateInstance()->call( mol::toString(engine),func,mol::toString(script));
+	Script::CreateInstance()->call(mol::towstring(engine), func, mol::towstring(script));
 
 }
 
@@ -603,7 +603,7 @@ void Editor::OnSearch(FINDREPLACE* find)
 				
 			if ( VARIANT_FALSE == vb )
 			{
-				mol::ostringstream oss;
+				std::wostringstream oss;
 				oss << _T("Replace All: ") << c << _T(" replaces");
 				statusBar()->status(oss.str());
 			}
@@ -649,7 +649,7 @@ void Editor::OnSettings()
 	if ( S_OK == props_->get_Filename(&path) )
 	{
 		LPUNKNOWN unks[2] = { (IUnknown*)unk, (IUnknown*)unk };
-		mol::string filename(mol::Path::filename(path.toString()));
+		std::wstring filename(mol::Path::filename(path.towstring()));
 
 		::OleCreatePropertyFrame( *this, 10, 10,
 								  filename.c_str(),
@@ -685,7 +685,7 @@ void Editor::OnLexer(int code, int id, HWND ctrl)
 	mol::bstr displayname;
 	if ( S_OK == props_->GetSyntaxDisplayName(syntax,&displayname) )
 	{
-		statusBar()->status(displayname.toString());
+		statusBar()->status(displayname.towstring());
 	}
 
 }
@@ -729,29 +729,29 @@ void Editor::OnReload()
 		return ;
 	}
 
-	if ( mol::toString(filename).substr(0,6) == _T("ssh://") || mol::toString(filename).substr(0,6) == _T("moe-ssh://") )
+	if (mol::towstring(filename).substr(0, 6) == _T("ssh://") || mol::towstring(filename).substr(0, 6) == _T("moe-ssh://"))
 	{
 		sci->LoadEncoding(filename,CP_UTF8);
 		props_->put_ReadOnly(vb);
-		statusBar()->status(filename.toString());
+		statusBar()->status(filename.towstring());
 		scrollDown();
 		return ;
 	}
 
-	lastWriteTime_ = getLastWriteTime(filename.toString());
+	lastWriteTime_ = getLastWriteTime(filename.towstring());
 
 	if ( t == SCINTILLA_ENCODING_UTF8 )
 	{
 
 		sci->LoadEncoding(filename,CP_UTF8);
 		props_->put_ReadOnly(vb);
-		statusBar()->status(filename.toString());
+		statusBar()->status(filename.towstring());
 		scrollDown();
 		return ;
 	}
 	sci->Load(filename);
 	props_->put_ReadOnly(vb);
-	statusBar()->status(filename.toString());
+	statusBar()->status(filename.towstring());
 	scrollDown();
 }
 
@@ -795,7 +795,7 @@ void Editor::OnSaveAs()
 		enc = fd.encoding();
 		props_->put_Encoding(enc);
 
-		mol::ostringstream oss;
+		std::wostringstream oss;
 		if ( S_OK == sci->SaveAs( mol::bstr(fd.path() ) ) )
 		{
 			lastWriteTime_ = getLastWriteTime( fd.path() );
@@ -817,7 +817,7 @@ void Editor::OnSaveAs()
 	ofn.setFilter( OutFilesFilter );		
 	ofn.index(0);
 	ofn.codePage(enc);
-	ofn.fileName(p.toString());
+	ofn.fileName(p.towstring());
 
 	if ( ofn.dlgSave( OFN_OVERWRITEPROMPT| OFN_NOTESTFILECREATE| OFN_NOVALIDATE |OFN_EXPLORER | OFN_ENABLEHOOK | OFN_ENABLETEMPLATE ) )
 	{	
@@ -825,7 +825,7 @@ void Editor::OnSaveAs()
 			props_->put_Encoding(ofn.index()-1);
 		if (sci)
 		{
-			mol::ostringstream oss;
+			std::wostringstream oss;
 
 			if ( S_OK == sci->SaveAs( mol::bstr(ofn.fileName() ) ) )
 			{
@@ -854,10 +854,10 @@ void Editor::OnSave()
 	mol::bstr filename;
 	props_->get_Filename(&filename);
 
-	mol::string path = mol::toString(filename);
+	std::wstring path = mol::towstring(filename);
 
 	saving_ = true;
-	mol::ostringstream oss;
+	std::wostringstream oss;
 
 	HRESULT hr = sci->Save();
 	if ( hr == S_OK )
@@ -990,7 +990,7 @@ void Editor::OnScriptThreadDone()
 	es.scriptThreadDone();
 }
 
-void Editor::OnScriptThread( int line, mol::string error )
+void Editor::OnScriptThread( int line, std::wstring error )
 {
 	if ( mol::guithread() != mol::Thread::self() )
 	{
@@ -1054,7 +1054,7 @@ HRESULT __stdcall  Editor::Sintilla_Events::OnPosChange( long line )
 	if ( !This()->sci )
 		return S_OK;
 
-	mol::ostringstream oss;
+	std::wostringstream oss;
 	oss << (line+1);
 
 	long pos = 0;
@@ -1063,13 +1063,13 @@ HRESULT __stdcall  Editor::Sintilla_Events::OnPosChange( long line )
 	This()->line_->PosFromLine(line,&linepos);
 
 	long col = pos-linepos;
-	mol::ostringstream oss2;
+	std::wostringstream oss2;
 	oss2 << col << " "; 
 
 	mol::bstr path;
 	This()->props_->get_Filename(&path);
 
-	mol::string dirty(_T(""));
+	std::wstring dirty(_T(""));
 	VARIANT_BOOL vb = VARIANT_FALSE;
 	HRESULT hr = This()->text_->get_Modified(&vb);
 	if ( vb == VARIANT_TRUE )
@@ -1081,7 +1081,7 @@ HRESULT __stdcall  Editor::Sintilla_Events::OnPosChange( long line )
 		dirty = _T("not modified");
 	}
 
-	statusBar()->setText( path.toString(), dirty, oss.str(), oss2.str());
+	statusBar()->setText(path.towstring(), dirty, oss.str(), oss2.str());
 	return S_OK;
 }
 
@@ -1175,7 +1175,7 @@ void Editor::checkModifiedOnDisk()
 		return;
 	}
 
-	FILETIME ft = getLastWriteTime( path.toString() );
+	FILETIME ft = getLastWriteTime(path.towstring());
 
 
 	if ( (ft.dwHighDateTime != lastWriteTime_.dwHighDateTime) || (ft.dwLowDateTime != lastWriteTime_.dwLowDateTime) )

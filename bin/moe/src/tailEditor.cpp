@@ -10,7 +10,7 @@ using namespace mol::win;
 using namespace mol::ole;
 using namespace mol::io;
 
-mol::TCHAR TailOutFilesFilter[]   = _T("File \0*.*\0\0");
+wchar_t TailOutFilesFilter[]   = _T("File \0*.*\0\0");
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -41,18 +41,18 @@ void TailEditor::checkModifiedOnDisk( )
 	mol::bstr path;
 	props_->get_Filename(&path);
 
-	ODBGS(path.toString());
+	ODBGS(path.towstring());
 
 	static mol::CriticalSection cs;
 	LOCK(cs);
 
-	unsigned long long size = mol::File::size(path.toString());
+	unsigned long long size = mol::File::size(path.towstring());
 
 	ODBGS1("size",(int)size);
 	ODBGS1("size_",(int)size_);
 	if ( size > size_ )
 	{
-		append(path.toString(),size);
+		append(path.towstring(), size);
 	}
 	else if ( size < size_ )
 	{
@@ -69,11 +69,11 @@ LRESULT TailEditor::OnClose()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-TailEditor::Instance* TailEditor::CreateInstance(const mol::string& file)
+TailEditor::Instance* TailEditor::CreateInstance(const std::wstring& file)
 {
 	statusBar()->status(20);
 
-	mol::string p(file);
+	std::wstring p(file);
 	if ( mol::Path::exists(p) && mol::Path::isDir(p) )
 		return 0;
 
@@ -91,7 +91,7 @@ TailEditor::Instance* TailEditor::CreateInstance(const mol::string& file)
 }
 
 
-bool TailEditor::initialize(const mol::string& p)
+bool TailEditor::initialize(const std::wstring& p)
 {
 	initializeMoeChild(p);
 
@@ -137,7 +137,7 @@ void TailEditor::OnReload()
 		return ;
 	}
 
-	mol::string fp(mol::toString(filename));
+	std::wstring fp(mol::towstring(filename));
 	props_->put_ReadOnly(VARIANT_FALSE);
 	sci->Load(filename);
 	props_->put_ReadOnly(VARIANT_TRUE);
@@ -149,11 +149,11 @@ void TailEditor::OnReload()
 	LONG len = 0;
 	text_->get_Length(&len);
 	size_ = len;
-	statusBar()->status(filename.toString());
+	statusBar()->status(filename.towstring());
 	
 }
 
-void TailEditor::append(const mol::string& path,unsigned long long size)
+void TailEditor::append(const std::wstring& path,unsigned long long size)
 {
 	if ( !sci )
 		return;

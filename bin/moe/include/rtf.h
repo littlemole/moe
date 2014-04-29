@@ -24,7 +24,7 @@ public:
 	RTFEditor();
 	virtual ~RTFEditor();
 
-	static Instance* CreateInstance( const mol::string& p );
+	static Instance* CreateInstance( const std::wstring& p );
 
 	void OnMDIActivate(WPARAM unused, HWND activated);
 	void OnCreate();
@@ -76,7 +76,7 @@ private:
 
 	mol::stack_obj<RichEditOleCallback> reolecb_;
 
-	mol::string filename_;
+	std::wstring filename_;
 
 
 	class RTF : public mol::RichEditCtrl
@@ -108,7 +108,7 @@ private:
 
 	mol::stack_obj<RTFDocument> rtfDocument_;
 
-	bool load(const mol::string& path);
+	bool load(const std::wstring& path);
 
 	FINDTEXT findText_;
 

@@ -86,7 +86,7 @@ public:
 
 protected:
 
-	void setPath(const mol::string& p);
+	void setPath(const std::wstring& p);
 
 	msg_handler( WM_CREATE,	OnCreate ) 
 		LRESULT virtual OnCreate( UINT, WPARAM, LPARAM );
@@ -106,8 +106,8 @@ protected:
 	{
 		public:
 			outer_this(ShellFolderCtrl,wnd_);
-			void OnUserSelect(std::vector<mol::string>& v);
-			void OnPathChanged( const mol::string& p);
+			void OnUserSelect(std::vector<std::wstring>& v);
+			void OnPathChanged( const std::wstring& p);
 	};
 
 	mol::stack_obj<Folder> wnd_;

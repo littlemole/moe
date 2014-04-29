@@ -292,19 +292,19 @@ public:
 		mol::purge(objects_);
 	}
 
-	virtual int runEmbedded(const mol::string& cmdline)
+	virtual int runEmbedded(const std::wstring& cmdline)
 	{
 			RegisterClassObjects(CLSCTX_LOCAL_SERVER );
 			return msgLoop_(*this);	
 	}
 
-	virtual int runStandalone(const mol::string& cmdline)
+	virtual int runStandalone(const std::wstring& cmdline)
 	{
 			RegisterClassObjects(CLSCTX_LOCAL_SERVER );
 			return msgLoop_(*this);	
 	}
 
-    virtual int run(const mol::string& cmdline) 
+    virtual int run(const std::wstring& cmdline) 
 	{ 
 		// handle registry command line switches
 		if ( _tcsicmp(cmdline.c_str(), _T("/regserver")) == 0 )

@@ -64,7 +64,7 @@ void _cry();
 namespace mol {
 
 #ifdef _WIN32
-mol::string WinErrorString(unsigned long err = 0);
+std::wstring WinErrorString(unsigned long err = 0);
 #endif
 
 // general exception class

@@ -33,7 +33,7 @@ moeShell::~moeShell()
 	//ODBGS("moeShell::~moeShell() ");
 }
 
-void  moeShell::registerMenuItem( UINT& iCmd, const mol::string& proto, const mol::string& desc )
+void  moeShell::registerMenuItem( UINT& iCmd, const std::wstring& proto, const std::wstring& desc )
 {
 	moeShellMenuItem* cmd = new moeShellMenuItem(iCmd,proto,desc);
 	menu_cmds_.insert( std::make_pair((UINT)iCmd, std::shared_ptr<moeShellMenuItem>(cmd)) );
@@ -171,7 +171,7 @@ HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 		return S_OK;
 	}
 	
-	std::vector<mol::string>::iterator it = filepaths_.begin();
+	std::vector<std::wstring>::iterator it = filepaths_.begin();
 	for ( it; it != filepaths_.end(); it++)
 	{
 		menu_cmds_[cmd]->openMoeCom(punk,*it,(cmds)c);
@@ -179,17 +179,17 @@ HRESULT __stdcall moeShell::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 	return S_OK;
 }
 
-HRESULT __stdcall moeShellMenuItem::openMoeCmdline(std::vector<mol::string>& filepaths)
+HRESULT __stdcall moeShellMenuItem::openMoeCmdline(std::vector<std::wstring>& filepaths)
 {
-	mol::string p = mol::singleton<moeShellDll>().getModulePath();
+	std::wstring p = mol::singleton<moeShellDll>().getModulePath();
 
-	mol::stringstream oss;
+	std::wstringstream oss;
 	oss << _T("\"")
 		<< mol::Path::pathname(p) 
 		<< _T("\\")
 		<< _T("moe.exe\"");
 
-	for ( std::vector<mol::string>::iterator it = filepaths.begin(); it != filepaths.end(); it++)
+	for ( std::vector<std::wstring>::iterator it = filepaths.begin(); it != filepaths.end(); it++)
 	{
 		oss
 		<< _T(" \"")
@@ -201,7 +201,7 @@ HRESULT __stdcall moeShellMenuItem::openMoeCmdline(std::vector<mol::string>& fil
 	return S_OK;
 }
 
-HRESULT __stdcall moeShellMenuItem::openMoeCom(IUnknown* punk,const mol::string& filepath,cmds cmd)
+HRESULT __stdcall moeShellMenuItem::openMoeCom(IUnknown* punk,const std::wstring& filepath,cmds cmd)
 {
 	mol::punk<IMoe> moe(punk);
 	if (!moe)

@@ -133,7 +133,7 @@ LRESULT DlgBase::sendDlgItemMsg( int id, UINT msg, WPARAM wParam, LPARAM lParam 
         return (::SendMessage( getDlgItem(id), msg, wParam, lParam) );
 }
 
-LRESULT DlgBase::setDlgItemText( int id, const mol::string& s )
+LRESULT DlgBase::setDlgItemText( int id, const std::wstring& s )
 {
         return sendDlgItemMsg(id, WM_SETTEXT, 0, (LPARAM)(s.c_str()) );
 }
@@ -158,9 +158,9 @@ LRESULT DlgBase::setDlgStaticIcon( int id, HICON hicon )
         return sendDlgItemMsg(id, STM_SETIMAGE, (WPARAM)IMAGE_ICON,  (LPARAM)(hicon) );
 }
 
-UINT DlgBase::getDlgItemText( int id, mol::string& s )
+UINT DlgBase::getDlgItemText( int id, std::wstring& s )
 {
-	    mol::TCHAR  buf[4096];
+	    wchar_t  buf[4096];
         if (!(::GetDlgItemText( hWnd_, id, buf, 4096) ))
                 return 0;
         s = buf;
@@ -229,7 +229,7 @@ LRESULT Dialog::doModal(int lpTemplate, HWND hWndParent )
 //////////////////////////////////////////////////////////////////////////////////
 
 
-HWND MainDialog::createDlg(int lpTemplate, const mol::string& className )
+HWND MainDialog::createDlg(int lpTemplate, const std::wstring& className )
 {
 		mol::win::WndClass& wc = wndClass();
         wc.setClassName(className);

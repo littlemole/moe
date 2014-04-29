@@ -12,18 +12,18 @@ class MetaParam
 public:
 
 	MetaParam();
-	MetaParam( const mol::string& t, const mol::string& n  );
+	MetaParam( const std::wstring& t, const std::wstring& n  );
 
-	mol::string name;
-	mol::string type;
+	std::wstring name;
+	std::wstring type;
 	bool isPointer;
 	bool isPointerPointer;
 	bool isRetVal;
 	bool isIn;
 	bool isOut;
 
-	mol::string out();
-	mol::string out_alias();
+	std::wstring out();
+	std::wstring out_alias();
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -33,12 +33,12 @@ class MetaFunc
 public:
 
 	MetaFunc();
-	MetaFunc( const mol::string& n, const mol::string& t  );
+	MetaFunc( const std::wstring& n, const std::wstring& t  );
 
-	mol::string name;
-	mol::string type;
-	mol::string funkind;
-	mol::string desc;
+	std::wstring name;
+	std::wstring type;
+	std::wstring funkind;
+	std::wstring desc;
 
 	bool isPointer;
 	bool isRetPointer;
@@ -53,7 +53,7 @@ public:
 
 	std::list<MetaParam> params;
 
-	mol::string out();
+	std::wstring out();
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -63,12 +63,12 @@ class MetaClass
 public:
 
 	MetaClass();
-	MetaClass( const mol::string& t,  GUID& g );
-	MetaClass( const mol::string& t, const mol::string& b, GUID& g );
+	MetaClass( const std::wstring& t,  GUID& g );
+	MetaClass( const std::wstring& t, const std::wstring& b, GUID& g );
 
-	mol::string type;
-	mol::string base;
-	mol::string desc;
+	std::wstring type;
+	std::wstring base;
+	std::wstring desc;
 	bool isDisp;
 	bool isDual;
 	bool isSource;
@@ -77,15 +77,15 @@ public:
 	GUID guid;
 	long major;
 	long minor;
-	mol::string progId;
+	std::wstring progId;
 
 	std::list<MetaFunc> functions;
 	std::list<MetaClass> interfaces;
 
-	mol::string out();
-	mol::string out_obj();
-	mol::string iid_def();
-	mol::string iid_impls();
+	std::wstring out();
+	std::wstring out_obj();
+	std::wstring iid_def();
+	std::wstring iid_impls();
 
 };
 
@@ -96,14 +96,14 @@ class MetaEnum
 public:
 
 	MetaEnum();
-	MetaEnum( const mol::string& t );
+	MetaEnum( const std::wstring& t );
 
-	mol::string type;
-	mol::string desc;
+	std::wstring type;
+	std::wstring desc;
 
 	std::list<MetaParam> enums;
 
-	mol::string out();
+	std::wstring out();
 };
 
 
@@ -114,14 +114,14 @@ class MetaRecord
 public:
 
 	MetaRecord();
-	MetaRecord( const mol::string& t );
+	MetaRecord( const std::wstring& t );
 
-	mol::string type;
-	mol::string desc;
+	std::wstring type;
+	std::wstring desc;
 
 	std::list<MetaParam> members;
 
-	mol::string out();
+	std::wstring out();
 };
 
 #endif

@@ -35,7 +35,7 @@ public:
 		return l;
 	}
 
-	HKEY open( const mol::string& subkey, REGSAM sam = KEY_ALL_ACCESS)
+	HKEY open( const std::wstring& subkey, REGSAM sam = KEY_ALL_ACCESS)
 	{
 		HKEY sub = 0;
 		if ( ERROR_SUCCESS != RegOpenKeyEx( hkey_, subkey.c_str(), 0,  sam, &sub) )
@@ -43,7 +43,7 @@ public:
 		return sub;
 	}
 
-	HKEY create( const mol::string& subkey, REGSAM sam = KEY_ALL_ACCESS)
+	HKEY create( const std::wstring& subkey, REGSAM sam = KEY_ALL_ACCESS)
 	{
 		HKEY sub = 0;
 		DWORD disp;
@@ -52,7 +52,7 @@ public:
 		return sub;
 	}
 
-	void del( const mol::string& subkey, REGSAM sam = KEY_ALL_ACCESS)
+	void del( const std::wstring& subkey, REGSAM sam = KEY_ALL_ACCESS)
 	{
 		if ( subkey.empty() )
 			return;
@@ -61,7 +61,7 @@ public:
 			throw mol::X(_T("RegDeleteKey failed"));
 	}
 
-	void erase( const mol::string& subkey )
+	void erase( const std::wstring& subkey )
 	{
 		if ( subkey.empty() )
 			return;
@@ -77,31 +77,31 @@ public:
 		setInt ( _T(""), i, type );
 	}
 
-	void setInt( const mol::string& name, int i, int type = REG_DWORD )
+	void setInt( const std::wstring& name, int i, int type = REG_DWORD )
 	{
 		if ( ERROR_SUCCESS != RegSetValueEx( hkey_, name.c_str(), 0, type, (const BYTE*)&i, sizeof(DWORD)) )
 			throw mol::X(name.c_str());
 	}
 
-	void set( const mol::string& value, int type = REG_SZ )
+	void set( const std::wstring& value, int type = REG_SZ )
 	{
 		set( _T(""), value, type );
 	}
 
-	void set( const mol::string& name, const mol::string& value, int type = REG_SZ )
+	void set( const std::wstring& name, const std::wstring& value, int type = REG_SZ )
 	{
-		if ( ERROR_SUCCESS != RegSetValueEx( hkey_, name.c_str(), 0, type, (const BYTE*)(value.c_str()), (DWORD)(value.size()+1)*sizeof(mol::TCHAR)) )
+		if (ERROR_SUCCESS != RegSetValueEx(hkey_, name.c_str(), 0, type, (const BYTE*)(value.c_str()), (DWORD)(value.size() + 1)*sizeof(wchar_t)))
 			throw mol::X(name.c_str());
 	}
 
-	mol::string get( )
+	std::wstring get( )
 	{
 		return get( _T("") );
 	}
 
-	mol::string get( const mol::string& name )
+	std::wstring get( const std::wstring& name )
 	{
-		mol::TCHAR buf[2048];
+		wchar_t buf[2048];
 		DWORD size=2047;
 		DWORD type;
 		if ( name == _T("") )

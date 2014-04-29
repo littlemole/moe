@@ -19,16 +19,16 @@ public:
         FolderDlg(HWND parent = ::GetDesktopWindow() );
         virtual ~FolderDlg(void);
 
-		bool  browse( const mol::TCHAR* path  = 0,
-                      const mol::TCHAR* title = 0,
+		bool  browse( const wchar_t* path  = 0,
+                      const wchar_t* title = 0,
                       int flags = BIF_NONEWFOLDERBUTTON|BIF_NEWDIALOGSTYLE );
 
-        const mol::string& getPath();
+        const std::wstring& getPath();
         bool  isPath();
 
 private:
         HWND				parent_;
-        mol::string			path_;
+        std::wstring			path_;
         bool				ispath_;
 };
 
@@ -40,10 +40,10 @@ class FolderBrowser
 {
 public:
 	FolderBrowser();
-	FolderBrowser(const mol::string& text);
-	FolderBrowser(const mol::string& text, const mol::string& title);
+	FolderBrowser(const std::wstring& text);
+	FolderBrowser(const std::wstring& text, const std::wstring& title);
 
-	mol::string select( HWND owner, 
+	std::wstring select( HWND owner, 
 			  UINT flags = BIF_NEWDIALOGSTYLE|
               BIF_RETURNFSANCESTORS|BIF_SHAREABLE, 
 			  mol::io::Shit& shit = desktop().shellItem()
@@ -59,7 +59,7 @@ protected:
 	virtual int OnInit( HWND hwnd);
 	virtual int OnIUnknown( HWND hwnd, IUnknown* punk);
 	virtual int OnSelect( HWND hwnd, LPITEMIDLIST pidl);
-	virtual int OnValidateFailed( HWND hwnd, const mol::TCHAR* path);
+	virtual int OnValidateFailed( HWND hwnd, const wchar_t* path);
 
 	virtual int browseProc( HWND hwnd, UINT uMsg, LPARAM lParam);
 
@@ -67,13 +67,13 @@ private:
 
 	static int CALLBACK BrowseCallbackProc( HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData);
 
-	mol::string		text_;
-	mol::string		title_;
+	std::wstring		text_;
+	std::wstring		title_;
 	BROWSEINFO		bInfo_;
 };
 
 // handifier to call std XP or Vista style folder browser
-extern mol::string browseForFolder( HWND owner );
+extern std::wstring browseForFolder( HWND owner );
 
 } // end namespace mol::win::io;
 } // end namespace mol;

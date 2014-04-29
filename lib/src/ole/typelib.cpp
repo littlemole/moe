@@ -9,7 +9,7 @@
 
 namespace mol {
 
-bool TypeLib::load(const mol::string& lib)
+bool TypeLib::load(const std::wstring& lib)
 {
 	std::wstring ws = mol::towstring(lib);
 
@@ -49,10 +49,10 @@ bool TypeLib::load(REFGUID libid,int major,int minor)
         //cry();
 
 		//ODBGS("try loading typelib via HKCU");
-		mol::string lp;
+		std::wstring lp;
 		try 
 		{
-			mol::string typelib_guid;
+			std::wstring typelib_guid;
 			typelib_guid = stringFromCLSID(libid);	
 
 			mol::RegKey root;
@@ -69,9 +69,9 @@ bool TypeLib::load(REFGUID libid,int major,int minor)
 			typeLibKey = typeLibsKey.open(typelib_guid);
 
 
-			mol::ostringstream oss;
+			std::wostringstream oss;
 			oss << major << _T(".") << minor;
-			mol::string version = oss.str();
+			std::wstring version = oss.str();
 
 			mol::RegKey versionKey = typeLibKey.open(version);
 			mol::RegKey tlbKey = versionKey.open(_T("0"));
@@ -121,7 +121,7 @@ bool TypeLib::registerTypelib()
 	*/
 		try 
 		{
-			mol::string typelib_guid;
+			std::wstring typelib_guid;
 			typelib_guid = stringFromCLSID(getGUID());	
 
 			ODBGS("register typelib in HKCU");
@@ -154,11 +154,11 @@ bool TypeLib::registerTypelib()
 			}
 			typeLibKey = typeLibsKey.create(typelib_guid);
 
-			mol::ostringstream oss;
+			std::wostringstream oss;
 	//		oss << tl.getName() << _T(".") << coClassName;
 	//		version_independent_progid = oss.str();
 			oss << major() << _T(".") << minor();
-			mol::string version = oss.str();
+			std::wstring version = oss.str();
 
 			mol::RegKey versionKey = typeLibKey.create(version);
 			versionKey.set(getDescription());
@@ -166,7 +166,7 @@ bool TypeLib::registerTypelib()
 			mol::RegKey tlbKey = versionKey.create(_T("0"));
 			mol::RegKey helpDir = tlbKey.create(_T("HELPDIR"));
 			mol::RegKey win32  = tlbKey.create(_T("win32"));
-			win32.set( mol::toString(ws) );
+			win32.set( mol::towstring(ws) );
 
 			mol::RegKey interfaces;
 			try
@@ -221,7 +221,7 @@ bool TypeLib::unRegisterTypelib()
 
 		try 
 		{
-			mol::string typelib_guid;
+			std::wstring typelib_guid;
 			typelib_guid = stringFromCLSID(getGUID());	
 
 			mol::RegKey root;
@@ -237,11 +237,11 @@ bool TypeLib::unRegisterTypelib()
 			typeLibKey = typeLibsKey.open(typelib_guid);
 
 
-			mol::ostringstream oss;
+			std::wostringstream oss;
 	//		oss << tl.getName() << _T(".") << coClassName;
 	//		version_independent_progid = oss.str();
 			oss << major() << _T(".") << minor();
-			mol::string version = oss.str();
+			std::wstring version = oss.str();
 
 			mol::RegKey interfaces;
 			interfaces = classes.open(_T("Interface"));
@@ -295,26 +295,26 @@ GUID TypeLib::getGUID()
 	return guid_;
 }
 
-mol::string TypeLib::getName()
+std::wstring TypeLib::getName()
 {
 	BSTR name = 0;
 	if ( S_OK == interface_->GetDocumentation(-1,&name,NULL,NULL,NULL) )
 		if ( name )
 		{
-			mol::string s = mol::toString(name);
+			std::wstring s = mol::towstring(name);
 			::SysFreeString(name);
 			return s;
 		}
 	return _T("");
 }
 
-mol::string TypeLib::getDescription()
+std::wstring TypeLib::getDescription()
 {
 	BSTR desc = 0;
 	if ( S_OK == interface_->GetDocumentation(-1,NULL,&desc,NULL,NULL) )
 		if ( desc )
 		{
-			mol::string s = mol::toString(desc);
+			std::wstring s = mol::towstring(desc);
 			::SysFreeString(desc);
 			return s;			
 		}
@@ -336,26 +336,26 @@ HRESULT TypeLib::item( REFGUID guid, ITypeInfo** ti )
 	return interface_->GetTypeInfoOfGuid(  guid, ti );
 }
 
-mol::string TypeLib::getName(int index)
+std::wstring TypeLib::getName(int index)
 {
 	BSTR name = 0;
 	if ( S_OK == interface_->GetDocumentation(index,&name,NULL,NULL,NULL) )
 		if ( name )
 		{
-			mol::string s = mol::toString(name);
+			std::wstring s = mol::towstring(name);
 			::SysFreeString(name);
 			return s;
 		}
 	return _T("");
 }
 
-mol::string TypeLib::getDescription( int index)
+std::wstring TypeLib::getDescription( int index)
 {
 	BSTR desc = 0;
 	if ( S_OK == interface_->GetDocumentation(index,NULL,&desc,NULL,NULL) )
 		if ( desc )
 		{
-			mol::string s = mol::toString(desc);
+			std::wstring s = mol::towstring(desc);
 			::SysFreeString(desc);
 			return s;
 		}

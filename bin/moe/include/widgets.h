@@ -4,7 +4,7 @@
 #include "shared.h"
 #include "win/v7.h"
 
-extern mol::TCHAR  InFilesFilter[];
+extern wchar_t  InFilesFilter[];
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // widgets for moe
@@ -12,8 +12,8 @@ extern mol::TCHAR  InFilesFilter[];
 
 class MoeWnd;
 
-mol::string findFile(const mol::string& f);
-mol::string engineFromPath(const std::string& path);
+std::wstring findFile(const std::wstring& f);
+std::wstring engineFromPath(const std::string& path);
 std::string resolvePath(const std::string& p);
 
 /////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ public:
 
 	virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-	mol::string url;
+	std::wstring url;
 
     virtual HRESULT __stdcall Load( LPSTREAM pStm);
     virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
@@ -111,7 +111,7 @@ class MoeStatusBar : public mol::StatusBarEx
 public:
 
 	void status(int i);
-	void status( const mol::string& txt );
+	void status( const std::wstring& txt );
 };
 
 
@@ -206,7 +206,7 @@ class FormScriptEventHandler : public IDispatch
 public:
 	~FormScriptEventHandler();
 
-	void init(Script* s, REFIID iid, const mol::string& on);
+	void init(Script* s, REFIID iid, const std::wstring& on);
 	virtual void dispose() {}
 
 	HRESULT virtual __stdcall QueryInterfaceImpl(REFIID iid , LPVOID* ppv) ;              
@@ -219,7 +219,7 @@ private:
 	IID riid;
 	Script* script;
 	mol::punk< ITypeInfo> info;
-	mol::string objname;
+	std::wstring objname;
 };
 
 
@@ -350,7 +350,7 @@ public:
 public:
 
 	typedef mol::com_obj<MoeScriptObject> Instance;
-	static HRESULT CreateInstance(IDispatch** d, const mol::string& progid);
+	static HRESULT CreateInstance(IDispatch** d, const std::wstring& progid);
 
 	void virtual dispose() {};
 
@@ -370,7 +370,7 @@ public:
 
 private:
 
-	mol::string progId_;
+	std::wstring progId_;
 };
 
 class MoeImport : 

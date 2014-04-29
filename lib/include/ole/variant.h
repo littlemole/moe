@@ -545,7 +545,7 @@ public:
         return std::wstring( (wchar_t*)bstrVal ) ;
     }
 
-    mol::string toString()
+/*    std::wstring toString()
     {
 #ifdef _UNICODE
 		return towstring();
@@ -553,7 +553,7 @@ public:
 		return tostring();
 #endif
     }
-
+	*/
 	void toStream( IStream* stream );
 	void fromStream( IStream* stream );
 
@@ -587,7 +587,7 @@ class vEmpty : public concreteVariant<VT_EMPTY> {};
 class vError : public concreteVariant<VT_ERROR> {};
 
 
-mol::string valueOf( mol::variant& v);
+std::wstring valueOf( mol::variant& v);
 
 //BSTR valueOf( mol::variant& v);
 

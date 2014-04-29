@@ -31,12 +31,12 @@ class TypeLib2XML
 {
 public:
 
-	bool loadTypeLib(const mol::string path);
-	mol::string getXML();
+	bool loadTypeLib(const std::wstring path);
+	std::wstring getXML();
 
 private:
 
-	mol::string filename;
+	std::wstring filename;
 	mol::TypeLib tl;
 
 	std::list<MetaClass> iMap;
@@ -105,7 +105,7 @@ public:
 			return E_INVALIDARG;
 
 		xml_ = 0;
-		bool b = converter_.loadTypeLib( bstr(filename).toString() );
+		bool b = converter_.loadTypeLib( bstr(filename).towstring() );
 
 		*vbSuccess = b ? VARIANT_TRUE : VARIANT_FALSE;
 		isErr_ = *vbSuccess;
@@ -153,10 +153,10 @@ public:
 		if ( xsltDoc.vt == VT_EMPTY )
 			return S_OK;
 
-		mol::string xslt("");
+		std::wstring xslt("");
 		if ( xsltDoc.vt == VT_BSTR )
 		{
-			mol::string val = bstr(xsltDoc.bstrVal).toString();
+			std::wstring val = bstr(xsltDoc.bstrVal).toString();
 			if ( mol::Path::exists(val) )
 			{
 				mol::filestream fs;
@@ -371,7 +371,7 @@ private:
 
 		FireOnStatus( bstr("loading typelib") );
 
-		bool b = converter_.loadTypeLib( bstr(filename).toString() );
+		bool b = converter_.loadTypeLib( bstr(filename).towstring() );
 
 		if (!b)
 		{
@@ -402,7 +402,7 @@ private:
 		if ( xsltDoc.vt == VT_BSTR )
 		{
 			std::string val = bstr(xsltDoc.bstrVal).tostring();
-			if ( mol::Path::exists(mol::toString(val)) )
+			if ( mol::Path::exists(mol::towstring(val)) )
 			{
 				mol::filestream fs;
 				if ( !fs.open(mol::tostring(val)) )

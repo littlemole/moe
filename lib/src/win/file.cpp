@@ -11,7 +11,7 @@ Directory::Directory()
  : hDir_(0)
 {}
 
-Directory::Directory(const mol::string& p) 
+Directory::Directory(const std::wstring& p) 
 : path_(Path::addBackSlash(p)) ,hDir_(0)
 {}
 
@@ -23,26 +23,26 @@ Directory::operator bool()
 	return Path::exists(path_) && Path::isDir(path_);
 }
 
-mol::string Directory::path() 
+std::wstring Directory::path() 
 { 
 	return path_; 
 }
 
-void Directory::path( const mol::string& p ) 
+void Directory::path( const std::wstring& p ) 
 { 
 	path_ = p; 
 }
 
-std::vector<mol::string> Directory::List(const mol::string& p)
+std::vector<std::wstring> Directory::List(const std::wstring& p)
 {
-	std::vector<mol::string> v;
+	std::vector<std::wstring> v;
 
 	Directory dir(p);
 
 	if (!dir)
 		return v;
 
-    mol::string entry;
+    std::wstring entry;
     while( (entry = dir.find(_T("*.*"))) != _T("") )
     {
         if ( entry == _T(".") )
@@ -54,14 +54,14 @@ std::vector<mol::string> Directory::List(const mol::string& p)
     return v;
 }
 
-mol::string Directory::find(const mol::string& filter  )
+std::wstring Directory::find(const std::wstring& filter  )
 {
 	if (!(*this))
         return _T("");
 
     if ( !hDir_ )
     {      
-		mol::string f = Path::append(path_,filter);
+		std::wstring f = Path::append(path_,filter);
 
         std::wstring ws = mol::towstring(f);
 		if ( !Path::isUNC(f) )
@@ -73,7 +73,7 @@ mol::string Directory::find(const mol::string& filter  )
             reset();
             return _T("");
         }
-        return mol::toString(wfd_.cFileName);
+        return mol::towstring(wfd_.cFileName);
     }
     else
     {
@@ -82,7 +82,7 @@ mol::string Directory::find(const mol::string& filter  )
             reset();
             return _T("");
         }
-        return mol::toString(wfd_.cFileName);
+		return mol::towstring(wfd_.cFileName);
     }
 }
 
@@ -103,13 +103,13 @@ SYSTEMTIME FileInfo::FileTimeToSysTime(FILETIME& FileTime)
     return st;
 }
 
-mol::string FileInfo::SysTime(FILETIME& FileTime)
+std::wstring FileInfo::SysTime(FILETIME& FileTime)
 {
     SYSTEMTIME st;
     if (!FileTimeToSystemTime( &FileTime,&st))
         return _T("");
 
-    mol::ostringstream oss;
+    std::wostringstream oss;
     oss << st.wYear << _T("-") << st.wMonth << _T("-") << st.wDay << _T(" ") << st.wHour << _T(":") << st.wMinute;
     return oss.str();
 }
@@ -124,7 +124,7 @@ FILETIME& FileInfo::creationTime()
     return ftCreationTime;  
 }
 
-mol::string FileInfo::created()
+std::wstring FileInfo::created()
 {
     return SysTime(creationTime());
 }
@@ -134,7 +134,7 @@ FILETIME& FileInfo::lastAccessTime()
     return ftLastAccessTime;  
 }
 
-mol::string FileInfo::lastAccessed()
+std::wstring FileInfo::lastAccessed()
 {
     return SysTime(lastAccessTime());
 }
@@ -144,7 +144,7 @@ FILETIME& FileInfo::lastWriteTime()
     return ftLastWriteTime;  
 }
 
-mol::string FileInfo::lastWritten()
+std::wstring FileInfo::lastWritten()
 {
     return SysTime(lastWriteTime());
 }
@@ -167,7 +167,7 @@ unsigned long long FileInfo::size()
 	return uli.QuadPart;
 }
 
-mol::string FileInfo::fileSize()
+std::wstring FileInfo::fileSize()
 {
     LARGE_INTEGER li;
     li.HighPart = nFileSizeHigh;
@@ -175,7 +175,7 @@ mol::string FileInfo::fileSize()
     return fileSize(li);
 }
 
-mol::string FileInfo::fileSize(DWORD hi, DWORD lo)
+std::wstring FileInfo::fileSize(DWORD hi, DWORD lo)
 {
     LARGE_INTEGER li;
     li.HighPart = hi;
@@ -183,9 +183,9 @@ mol::string FileInfo::fileSize(DWORD hi, DWORD lo)
     return fileSize(li);
 }
 
-mol::string FileInfo::fileSize(LARGE_INTEGER li)
+std::wstring FileInfo::fileSize(LARGE_INTEGER li)
 {
-    mol::ostringstream oss;
+    std::wostringstream oss;
     oss << std::setprecision( 4 );
     if ( li.HighPart  )
     {
@@ -235,7 +235,7 @@ bool filestream_buf::open( const std::string& fn, DWORD access, DWORD share,  LP
 {
 	filename_ = fn;
 	handle_ = ::CreateFileW( 
-					Path::wpath(mol::toString(fn)).c_str(), 
+					Path::wpath(mol::towstring(fn)).c_str(), 
 					access,
 					share,
 					sec,
@@ -293,9 +293,9 @@ int filestream_buf::seek(int s)
 	return ::SetFilePointer( handle_, s, NULL, FILE_BEGIN);
 }
 
-const mol::string filestream_buf::path()
+const std::wstring filestream_buf::path()
 {
-	return mol::toString(filename_);
+	return mol::towstring(filename_);
 }
 
 FileInfo& filestream_buf::fileInfo()
@@ -377,7 +377,7 @@ unsigned long FileMapping::pageSize()
 	return l;
 }
 
-bool FileMapping::map( const mol::string& file, DWORD access, DWORD disp)
+bool FileMapping::map( const std::wstring& file, DWORD access, DWORD disp)
 {
 	close();
 
@@ -514,13 +514,13 @@ unsigned long long FileMapping::offset()
 //////////////////////////////////////////////////////////////////////////
 
 
-bool File::exists(const mol::string& path)
+bool File::exists(const std::wstring& path)
 {
 	DWORD atts = File::attributes(path);
 	return (atts & FILE_ATTRIBUTE_NORMAL) != 0;
 }
 
-unsigned long long File::size(const mol::string& path)
+unsigned long long File::size(const std::wstring& path)
 {
 	WIN32_FILE_ATTRIBUTE_DATA wfad;
 	DWORD atts = File::attributes(path,&wfad);
@@ -532,21 +532,21 @@ unsigned long long File::size(const mol::string& path)
 	return uli.QuadPart;
 }
 
-unsigned long File::sizeHigh(const mol::string& path)
+unsigned long File::sizeHigh(const std::wstring& path)
 {
 	WIN32_FILE_ATTRIBUTE_DATA wfad;
 	DWORD atts = File::attributes(path,&wfad);
 	return wfad.nFileSizeHigh;
 }
 
-unsigned long File::sizeLow(const mol::string& path)
+unsigned long File::sizeLow(const std::wstring& path)
 {
 	WIN32_FILE_ATTRIBUTE_DATA wfad;
 	DWORD atts = File::attributes(path,&wfad);
 	return wfad.nFileSizeLow;
 }
 
-DWORD File::attributes(const mol::string& path, WIN32_FILE_ATTRIBUTE_DATA* data )
+DWORD File::attributes(const std::wstring& path, WIN32_FILE_ATTRIBUTE_DATA* data )
 {
 	WIN32_FILE_ATTRIBUTE_DATA wfad;
 	if ( data == 0 )

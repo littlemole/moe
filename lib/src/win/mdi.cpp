@@ -6,7 +6,7 @@
 
 namespace mol {
 
-HWND MdiChild::createWindow( const mol::string& windowName, HMENU hMenu, const Rect& r, HWND p )
+HWND MdiChild::createWindow( const std::wstring& windowName, HMENU hMenu, const Rect& r, HWND p )
 {
 	this->isMidi_ = true;
     registerClass(hMenu);
@@ -691,7 +691,7 @@ LRESULT MdiFrame::OnLayout( UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-HWND MdiFrame::createWindow( const mol::string& windowName, HMENU hMenu, const Rect& r, HWND parent )
+HWND MdiFrame::createWindow( const std::wstring& windowName, HMENU hMenu, const Rect& r, HWND parent )
 {
 		mol::win::WndClass& wic = this->wndClass();
         wic.setWndProc(MdiFrame::windowProcedure);

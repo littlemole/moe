@@ -58,7 +58,7 @@ public:
 		if ( p.substr(0,4) == "moe:" ) 
 		{
 			p = p.substr(4);
-			if ( mol::Path::isDir(mol::toString(p)) )
+			if ( mol::Path::isDir(mol::towstring(p)) )
 			{
 				mol::disp_invoke(docs, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR , mol::variant(p) );
 			}
@@ -82,7 +82,7 @@ public:
 		if ( p.empty() )
 			return true;
 
-		if ( mol::Path::isDir(mol::toString(p)) )
+		if ( mol::Path::isDir(mol::towstring(p)) )
 		{
 			mol::disp_invoke(docs, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR, mol::variant(p) );
 		}
@@ -154,9 +154,9 @@ public:
 		if ( p.substr(0,8) == "moe-dir:" ) 
 		{
 			p = p.substr(8);
-			if ( !mol::Path::isDir(mol::toString(p)) )
+			if ( !mol::Path::isDir(mol::towstring(p)) )
 			{
-				p = mol::tostring(mol::Path::parentDir(mol::toString(p)));
+				p = mol::tostring(mol::Path::parentDir(mol::towstring(p)));
 			}
 			mol::disp_invoke(docs, DISPID_IMOEDOCUMENTCOLLECTION_OPENDIR, mol::variant(p) );					
 			return true;
@@ -258,8 +258,8 @@ MoeApp::MoeApp()
 
 	log().level(LOGINFO);
 
-	mol::string appPath = CreateAppPath(_T("moe"));
-	mol::string logPath = appPath + _T("\\moe.log");
+	std::wstring appPath = CreateAppPath(_T("moe"));
+	std::wstring logPath = appPath + _T("\\moe.log");
 	log().add( new FileAppender(mol::tostring(logPath)) );
 
 	//MoeConsole& con = moeConsole();
@@ -273,7 +273,7 @@ MoeApp::~MoeApp()
 }
 
 // embedded moe 
-int MoeApp::runEmbedded(const mol::string& cmdline)
+int MoeApp::runEmbedded(const std::wstring& cmdline)
 {
 	// load the generated metadata
 	::load_codegen_metadata();
@@ -290,7 +290,7 @@ int MoeApp::runEmbedded(const mol::string& cmdline)
 // because we havent registered them to COM
 // however COM always knows how to marshal IDispatch, which we utilize :-)
 
-int MoeApp::runStandalone(const mol::string& cmdline)
+int MoeApp::runStandalone(const std::wstring& cmdline)
 {
 	//check if moe is running
 	mol::punk<IDispatch> m = getActiveInstance<IDispatch>(CLSID_Application);
@@ -327,7 +327,7 @@ int MoeApp::runStandalone(const mol::string& cmdline)
 
 
 
-void MoeApp::openDocsFromCommandLine( IDispatch* moe, mol::string cmdline )
+void MoeApp::openDocsFromCommandLine( IDispatch* moe, std::wstring cmdline )
 {
 	std::string cl = mol::toUTF8(cmdline);
 

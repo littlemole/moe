@@ -54,11 +54,11 @@ public:
 
 	bool displayFiles();
 	void displayFiles(bool b);
-	void path( const mol::string& p);
-	mol::string path();
+	void path( const std::wstring& p);
+	std::wstring path();
 	bool hasFocus();
 
-	std::vector<mol::string> selected();
+	std::vector<std::wstring> selected();
 
 	void refresh();
 	void cut();
@@ -98,15 +98,15 @@ public:
 	HWND viewWnd_;
 
 
-	virtual void OnUserSelect(std::vector<mol::string>& v) {};
-	virtual void OnPathChanged(const mol::string& p) {};
+	virtual void OnUserSelect(std::vector<std::wstring>& v) {};
+	virtual void OnPathChanged(const std::wstring& p) {};
 
 protected:
 
-	bool showPath( const mol::string& path);
+	bool showPath( const std::wstring& path);
 
 	mol::punk<IShellView> sv_;
-	mol::string path_;
+	std::wstring path_;
 	bool displayFiles_;
 };
 

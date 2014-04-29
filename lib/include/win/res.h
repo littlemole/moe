@@ -63,16 +63,16 @@ namespace win {
 class MenuItemInfo
 {
 public:
-	MenuItemInfo(const mol::string& txt, bool s, int i,HBITMAP b);
+	MenuItemInfo(const std::wstring& txt, bool s, int i,HBITMAP b);
 
 private:
-	mol::string text_;
+	std::wstring text_;
 	int icon_;
 	bool separator_;
 	HBITMAP bitmap_;
 
 public:
-	const mol::string& text();
+	const std::wstring& text();
 	int icon();
 	bool separator();
 	HBITMAP bitmap();
@@ -103,11 +103,11 @@ public:
 	void attach( HMENU hMenu, bool atached = true );
     HMENU load( int id, bool atached = true  );
 
-    BOOL  addItem   ( UINT_PTR cmd, const mol::string& snewItem, UINT flags = MF_STRING);
+    BOOL  addItem   ( UINT_PTR cmd, const std::wstring& snewItem, UINT flags = MF_STRING);
 	
 	BOOL  addItem   ( UINT_PTR cmd, int iicon, int bmp, bool checked = false, bool enabled = true );
 
-    BOOL  addSubmenu( HMENU sub, const mol::string& snewItem, UINT flags = MF_POPUP|MF_STRING );
+    BOOL  addSubmenu( HMENU sub, const std::wstring& snewItem, UINT flags = MF_POPUP|MF_STRING );
 
     BOOL  addSubmenu( HMENU sub, int cmd);
 
@@ -156,15 +156,15 @@ namespace win  {
 
 class restype_text
 {
-public:	static mol::TCHAR* type() { return _T("TXT"); }
+public:	static wchar_t* type() { return _T("TXT"); }
 };
 class restype_html
 {
-public:	static mol::TCHAR* type(){ return RT_HTML; } //"HTML"; }
+public:	static wchar_t* type(){ return RT_HTML; } //"HTML"; }
 };
 class restype_img
 {
-public:	static mol::TCHAR* type() { return _T("IMAGE"); }
+public:	static wchar_t* type() { return _T("IMAGE"); }
 };
 
 } // end namespace win
@@ -200,7 +200,7 @@ public:
         return load( id, mol::hinstance() );
     }
 
-    BOOL load(const mol::string& id)
+    BOOL load(const std::wstring& id)
     {
         return load( id, mol::hinstance() );
     }
@@ -226,7 +226,7 @@ public:
         return (BOOL)(res_!=0);
     }
 
-	BOOL load(const mol::string& id, HINSTANCE hinst)
+	BOOL load(const std::wstring& id, HINSTANCE hinst)
     {
         res_  = 0;
         len_  = 0;
@@ -295,7 +295,7 @@ public:
     int frameRect( const RECT& r, HBRUSH hbr )		{ return ::FrameRect( hdc_, &r, hbr );}
     COLORREF setBkColor( COLORREF crColor )			{ return ::SetBkColor( hdc_, crColor); }
     COLORREF setTextColor( COLORREF crColor )		{ return ::SetTextColor( hdc_, crColor); }
-    BOOL textOut( int x, int y, mol::string t )		{ return ::TextOut(hdc_,x,y, t.c_str(), (int)t.size());}
+    BOOL textOut( int x, int y, std::wstring t )		{ return ::TextOut(hdc_,x,y, t.c_str(), (int)t.size());}
 
 	void createMetaFile()							{ attached_ = true; hdc_ = ::CreateMetaFile(NULL); }
 	void save()										{ ::SaveDC(hdc_); }
@@ -370,7 +370,7 @@ public:
 
 	UserInterface();
 
-	mol::string CmdString(unsigned int id);
+	std::wstring CmdString(unsigned int id);
 	HMENU Menu(unsigned int id);
 	HMENU SubMenu(unsigned int menu,unsigned int id);
 	HBITMAP Bitmap(unsigned int id);
@@ -392,7 +392,7 @@ public:
 
 private:
 
-	void addCmd(int key, const mol::string& title);
+	void addCmd(int key, const std::wstring& title);
 	void addBmp(int key);
 	void addBmpCmd(int bmp, int cmd);
 	void addMenu(int menu);
@@ -402,7 +402,7 @@ private:
 	void addMenuItem( int root, int menu, int cmd, int bmp, int idx, bool checked = false, bool enabled = true);
 
 
-	std::map<int,mol::string> cmdStrings_;
+	std::map<int,std::wstring> cmdStrings_;
 	std::map<int,HMENU> menus_;
 	std::map<int,std::map<int,HMENU>> submenus_;
 	std::map<int,bitmapinfo> bmps_;
@@ -442,7 +442,7 @@ protected:
 	}
 
 	template<class T>
-	void makeMainWindow( T* t, const mol::string& name, HMENU menu, const mol::Rect& r, int id )
+	void makeMainWindow( T* t, const std::wstring& name, HMENU menu, const mol::Rect& r, int id )
 	{
 		t->uiBuilder_ = this;
 		t->create( name, (HMENU)mol::UI().Menu((unsigned int)menu), r );
@@ -451,7 +451,7 @@ protected:
 
 
 	template<class T>
-	void makeMdiWindow( T* t, const mol::string& name, HMENU menu, const mol::Rect& r )
+	void makeMdiWindow( T* t, const std::wstring& name, HMENU menu, const mol::Rect& r )
 	{
 		t->uiBuilder_ = this;
 		t->create( name, (HMENU)mol::UI().Menu(menu), r );

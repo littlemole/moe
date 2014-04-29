@@ -5,7 +5,7 @@ namespace ssh {
 
 ///////////////////////////////////////////////////////////////////////////////
 	/*
-bool ScpCredentialManager::getCredentials( mol::string host, long port, SecureCredentials** credentials)
+bool ScpCredentialManager::getCredentials( std::wstring host, long port, SecureCredentials** credentials)
 {
 	if(!credentials)
 		return false;
@@ -26,7 +26,7 @@ bool ScpCredentialManager::getCredentials( mol::string host, long port, SecureCr
 */
 
 
-void ScpCredentialManager::remberSessionCredentials( mol::string host, long port, SecureCredentials* credentials)
+void ScpCredentialManager::remberSessionCredentials( std::wstring host, long port, SecureCredentials* credentials)
 {
 	if ( credentialsMap_.count(host) > 0 )
 	{
@@ -36,7 +36,7 @@ void ScpCredentialManager::remberSessionCredentials( mol::string host, long port
 	credentialsMap_[host] = credentials;
 }
 
-void ScpCredentialManager::removeSessionCredentials( mol::string host, long port)
+void ScpCredentialManager::removeSessionCredentials( std::wstring host, long port)
 {
 	if ( credentialsMap_.count(host) > 0 )
 	{
@@ -73,7 +73,7 @@ bool ScpCredentialManager::Credentials::getCredentials(const std::string& host, 
 {
 	SecureCredentials* credentials = 0;
 
-	mol::string h = mol::fromUTF8(host);
+	std::wstring h = mol::fromUTF8(host);
 
 	if ( This()->credentialsMap_.count(h) > 0 )
 	{

@@ -23,8 +23,8 @@ public:
 	void debugScriptQuit();
 	void debugScriptEval();
 
-	void scriptThread( int line, mol::string error);
-	void scriptThread2( int line, mol::string error);
+	void scriptThread( int line, std::wstring error);
+	void scriptThread2( int line, std::wstring error);
 
 	void scriptThreadDone();
 
@@ -32,7 +32,7 @@ public:
 private:
 	Editor* editor_;
 	ScriptDebugger::Instance* debugger_;
-	static void onDebugExpressionEval(mol::string result);
+	static void onDebugExpressionEval(std::wstring result);
 
 };
 

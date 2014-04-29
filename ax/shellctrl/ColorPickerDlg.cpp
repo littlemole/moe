@@ -76,7 +76,7 @@ ColorPickerDlg::ColorPickerDlg(COLORREF c  )
 
 ColorPickerDlg::ColorPickerDlg(const std::string& c )
 {
-	COLORREF col = mol::hex2rgb(mol::toString(c));
+	COLORREF col = mol::hex2rgb(mol::tostring(c));
 	init(col);
 }
 
@@ -581,7 +581,7 @@ LRESULT ColorPickerDlg::OnChangeEditVal( UINT msg, WPARAM wParam, LPARAM lParam 
 
 LRESULT ColorPickerDlg::OnChangeEditHex( UINT msg, WPARAM wParam, LPARAM lParam )
 {
-	mol::string hex;
+	std::wstring hex;
 	getDlgItemText(IDC_EDIT_HEX,hex);
 	if ( hex.size() == 0 || hex[0] != _T('#') )
 	{
@@ -589,7 +589,7 @@ LRESULT ColorPickerDlg::OnChangeEditHex( UINT msg, WPARAM wParam, LPARAM lParam 
 	}
 	else if ( hex.size() > 6 )
 	{
-		COLORREF col = hex2rgb(hex);
+		COLORREF col = hex2rgb(mol::tostring(hex));
 		if( color.color() != col && bInitOver)
 		{
 			color.r = GetRValue(col);
@@ -967,8 +967,8 @@ void ColorPickerDlg::setEditVals()
 	sendDlgItemMsg(IDC_SPIN_GREEN,  UDM_SETPOS32,0,color.g);
 	sendDlgItemMsg(IDC_SPIN_BLUE,   UDM_SETPOS32,0,color.b);
 
-	mol::string col = mol::rgb2hex(color.color());
-	setDlgItemText(IDC_EDIT_HEX,col);
+	std::string col = mol::rgb2hex(color.color());
+	setDlgItemText(IDC_EDIT_HEX,mol::towstring(col));
 
 	sendDlgItemMsg(IDC_SPIN_HUE,    UDM_SETPOS32,0,hsvColor.h);
 	sendDlgItemMsg(IDC_SPIN_SAT,    UDM_SETPOS32,0,hsvColor.s);

@@ -13,7 +13,7 @@
 #include "util/regex.h"
 
 // open file dialog std filte for moe
-mol::TCHAR  InFilesFilter[]   = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
+wchar_t  InFilesFilter[]   = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,14 +43,14 @@ void MoeStatusBar::status(int i)
 	progress()->setPos(i);
 }
 
-void MoeStatusBar::status( const mol::string& txt )
+void MoeStatusBar::status( const std::wstring& txt )
 {
 	progress()->show(SW_HIDE);
 
-	mol::ostringstream oss;
-	mol::ostringstream oss2;
+	std::wostringstream oss;
+	std::wostringstream oss2;
 
-	mol::string dirty(_T("         "));
+	std::wstring dirty(_T("         "));
 	VARIANT_BOOL vb = VARIANT_FALSE;
 
 	mol::punk<IMoeDocument> doc;
@@ -268,7 +268,7 @@ Script::~Script()
 	ODBGS("Script death");
 }
 
-HRESULT Script::init(const mol::string& engine)
+HRESULT Script::init(const std::wstring& engine)
 {
 	if ( sci_ )
 	{
@@ -303,7 +303,7 @@ HRESULT Script::init(const mol::string& engine)
 }
 
 
-void Script::eval(  const mol::string& engine, const mol::string& script, IScintillAx* sci )
+void Script::eval(  const std::wstring& engine, const std::wstring& script, IScintillAx* sci )
 {
 	sci_ = sci;
 
@@ -328,7 +328,7 @@ void Script::eval(  const mol::string& engine, const mol::string& script, IScint
 	
 }
 
-void Script::debug(  const mol::string& engine, const mol::string& script, IScintillAx* sci )
+void Script::debug(  const std::wstring& engine, const std::wstring& script, IScintillAx* sci )
 {
 	sci_ = sci;
 
@@ -351,7 +351,7 @@ void Script::debug(  const mol::string& engine, const mol::string& script, IScin
 		this->Release();
 	}
 }
-void Script::call(  const mol::string& engine, const mol::string& func, const mol::string& script )
+void Script::call(  const std::wstring& engine, const std::wstring& func, const std::wstring& script )
 {
 	HRESULT hr = init(engine);
 	if ( hr != S_OK )
@@ -373,7 +373,7 @@ void Script::call(  const mol::string& engine, const mol::string& func, const mo
 }
 
 
-void Script::formscript( const mol::string& engine, const mol::string& s, IDispatch* form )
+void Script::formscript( const std::wstring& engine, const std::wstring& s, IDispatch* form )
 {
 	HRESULT hr = init(engine);
 	if ( hr != S_OK )
@@ -389,7 +389,7 @@ void Script::formscript( const mol::string& engine, const mol::string& s, IDispa
 	this->Release();
 }
 
-void Script::formdebug( const mol::string& engine, const mol::string& s, IDispatch* form )
+void Script::formdebug( const std::wstring& engine, const std::wstring& s, IDispatch* form )
 {
 	HRESULT hr = init(engine);
 	if ( hr != S_OK )
@@ -445,7 +445,7 @@ void Script::formcontrols( IUnknown* f )
 		if ( !name )
 			continue;
 
-		addNamedObject((MSForms::IControl*)(c),name.toString(),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE );
+		addNamedObject((MSForms::IControl*)(c),name.towstring(),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE );
 	}
 }
 
@@ -463,8 +463,8 @@ HRESULT  __stdcall Script::OnScriptError( IActiveScriptError *pscripterror)
 	LONG pos;
 	pscripterror->GetSourcePosition(&context,&line,&pos);
 
-	mol::ostringstream oss;
-	oss << "line: " << (line+1) << std::endl << mol::bstr(ex.bstrDescription).toString();
+	std::wostringstream oss;
+	oss << "line: " << (line+1) << std::endl << mol::bstr(ex.bstrDescription).towstring();
 
 	mol::punk<IScintillAxAnnotation> anno;
 	sci_->get_Annotation(&anno);
@@ -482,7 +482,7 @@ HRESULT  __stdcall Script::GetWindow(HWND *phwnd )
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-HRESULT  MoeScriptObject::CreateInstance(IDispatch** d, const mol::string& progid)
+HRESULT  MoeScriptObject::CreateInstance(IDispatch** d, const std::wstring& progid)
 {
 	Instance* i = new Instance;
 	i->progId_ = progid;
@@ -573,7 +573,7 @@ FormScriptEventHandler::~FormScriptEventHandler()
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void FormScriptEventHandler::init(Script* s, REFIID iid, const mol::string& on)
+void FormScriptEventHandler::init(Script* s, REFIID iid, const std::wstring& on)
 {
 	riid = iid;
 	script = s;
@@ -716,12 +716,12 @@ void UrlBox::updateGUI()
 	}
 
 	std::list<std::string>::iterator it = history_.begin();
-	setText( mol::toString((*it)) );
+	setText( mol::towstring((*it)) );
     editBox().setSelection( (int)(*it).size(), (int)(*it).size() );
 
     for ( int i = 0; i < s; i++ )
     {
-		addString( mol::toString((*it)) );
+		addString( mol::towstring((*it)) );
         it++;
     }
 }
@@ -898,10 +898,10 @@ LRESULT DebugDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 			if (LOWORD(wParam) == IDOK )
 			{/*
 				Mmoe()->getActive()
-				mol::string result = 
+				std::wstring result = 
 				exp_.release();
 
-				mol::string code;
+				std::wstring code;
 				getDlgItemText(IDC_EDIT_DEBUG_EXP,code);
 
 				if ( code.empty() )
@@ -1089,17 +1089,17 @@ HRESULT DebugDlg::addPropertyToList(HWND tree, TV_INSERTSTRUCTW *insertStruct, I
 		std::wstringstream oss;
 		if ( pi.m_bstrName )
 		{
-			oss << mol::bstr(pi.m_bstrName).toString() << " - ";
+			oss << mol::bstr(pi.m_bstrName).towstring() << " - ";
 			::SysFreeString(pi.m_bstrName);
 		}
 		if ( pi.m_bstrType )
 		{
-			oss << mol::bstr(pi.m_bstrType).toString() << " : ";
+			oss << mol::bstr(pi.m_bstrType).towstring() << " : ";
 			::SysFreeString(pi.m_bstrType);
 		}
 		if ( pi.m_bstrValue )
 		{
-			oss << mol::bstr(pi.m_bstrValue).toString() << std::endl;
+			oss << mol::bstr(pi.m_bstrValue).towstring() << std::endl;
 			::SysFreeString(pi.m_bstrValue);	
 		}
 
@@ -1221,7 +1221,7 @@ HRESULT __stdcall UrlDlg::GetSizeMax( ULARGE_INTEGER *pCbSize)
 
 std::string resolvePath(const std::string& p)
 {
-	if ( mol::Path::exists(mol::toString(p)) )
+	if (mol::Path::exists(mol::towstring(p)))
 	{
 		return p;
 	}
@@ -1284,7 +1284,7 @@ std::string resolvePath(const std::string& p)
 		return s.substr(cygdrive.size(),1) + ":\\" + s.substr(cygdrive.size()+2);
 	}
 
-	if ( mol::Path::exists(mol::toString(s)) )
+	if (mol::Path::exists(mol::towstring(s)))
 	{
 		return s;
 	}
@@ -1296,7 +1296,7 @@ std::string resolvePath(const std::string& p)
 	oss3 << buf << "\\" << s;
 
 	std::string path = oss3.str();
-	if ( mol::Path::exists(mol::toString(path)) )
+	if (mol::Path::exists(mol::towstring(path)))
 	{
 		return path;
 	}
@@ -1304,7 +1304,7 @@ std::string resolvePath(const std::string& p)
 }
 
 
-mol::string findFile(const mol::string& f)
+std::wstring findFile(const std::wstring& f)
 {
 	ODBGS(f);
 
@@ -1314,8 +1314,8 @@ mol::string findFile(const mol::string& f)
 		return f;
 	}
 
-	mol::string modulePath = mol::Path::pathname(mol::app<mol::win::AppBase>().getModulePath());
-	mol::string configPath = mol::app<mol::win::AppBase>().CreateAppPath(_T("moe"));
+	std::wstring modulePath = mol::Path::pathname(mol::app<mol::win::AppBase>().getModulePath());
+	std::wstring configPath = mol::app<mol::win::AppBase>().CreateAppPath(_T("moe"));
 
 	modulePath = mol::Path::addBackSlash(modulePath);
 	configPath = mol::Path::addBackSlash(configPath);
@@ -1337,7 +1337,7 @@ mol::string findFile(const mol::string& f)
 		return modulePath;
 	}
 
-	return mol::toString(resolvePath(mol::tostring(f)));
+	return mol::towstring(resolvePath(mol::tostring(f)));
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1353,7 +1353,7 @@ mol::string findFile(const mol::string& f)
 
 HRESULT __stdcall MoeDrop::Drop( IDataObject* pDataObject, DWORD keyState, POINTL pt , DWORD* pEffect)
 {
-	std::vector<mol::string> v;
+	std::vector<std::wstring> v;
     v = mol::vectorFromDataObject(pDataObject);
 	mol::ImageList::drop(*moe());
 	for ( unsigned int i = 0; i < v.size(); i++ )
@@ -2006,14 +2006,14 @@ MoeImport::Instance* MoeImport::CreateInstance(Host* host)
  
 HRESULT __stdcall  MoeImport::Import(BSTR filename)
 {
- 	mol::string file = findFile( mol::toString(filename) );
+	std::wstring file = findFile(mol::towstring(filename));
  
  	mol::filestream fs;
  	fs.open(mol::tostring(file),GENERIC_READ);
  	std::string s = fs.readAll();
  	fs.close();
  
- 	host_->runScript( mol::toString(s) );
+	host_->runScript(mol::towstring(s));
  	return S_OK;
 }
 

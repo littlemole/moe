@@ -32,7 +32,7 @@ void EditorScript::execScript()
 	if ( S_OK != editor_->props_->get_Filename(&filename) )
 		return ;
 
-	mol::string engine = engineFromPath(filename.tostring());
+	std::wstring engine = engineFromPath(filename.tostring());
 	if ( engine == _T("") )
 		return ;
 
@@ -41,7 +41,7 @@ void EditorScript::execScript()
 		return ;
 
 	//moe()->scriptHost->eval(engine,script.toString(),editor_->sci);
-	Script::CreateInstance()->eval(engine,script.toString(),editor_->sci);
+	Script::CreateInstance()->eval(engine, script.towstring(), editor_->sci);
 
 	mol::bstr out;
 	moe()->stdOut(&out);
@@ -62,7 +62,7 @@ void EditorScript::execForm(  )
 
 	editor_->saving_ = true;
 	editor_->sci->Save();
-	editor_->lastWriteTime_ = getLastWriteTime( filename.toString() );
+	editor_->lastWriteTime_ = getLastWriteTime(filename.towstring());
 	editor_->saving_ = false;
 
 	mol::punk<IMoeDocument> doc;
@@ -100,7 +100,7 @@ void EditorScript::debugScriptGo()
 	if ( S_OK != editor_->text_->GetText(&script) )
 		return ;
 
-	mol::string engine = engineFromPath(filename.tostring());
+	std::wstring engine = engineFromPath(filename.tostring());
 	if ( engine == _T("") )
 		return ;
 
@@ -116,7 +116,7 @@ void EditorScript::debugScriptGo()
 		}
 	}
 
-	debugger_= ScriptDebugger::CreateInstance( *moe(), script.toString(), filename.toString() );
+	debugger_ = ScriptDebugger::CreateInstance(*moe(), script.towstring(), filename.towstring());
 	debugger_->addNamedObject((IMoe*)moe(), _T("moe"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 	debugger_->update_breakpoints(s);
 	debugger_->OnScriptThread = mol::events::event_handler(&Editor::OnScriptThread,editor_);
@@ -216,7 +216,7 @@ void EditorScript::debugScriptQuit()
 }
 
 
-void EditorScript::onDebugExpressionEval( mol::string result)
+void EditorScript::onDebugExpressionEval( std::wstring result)
 {
 	debugDlg()->setDlgItemText(IDC_EDIT_DEBUG_RESULT,result.c_str());
 }
@@ -228,7 +228,7 @@ void EditorScript::debugScriptEval()
 	
 	debugger_->OnExpressionEvaluated = mol::events::event_handler(&EditorScript::onDebugExpressionEval);
 
-	mol::string code;
+	std::wstring code;
 	debugDlg()->getDlgItemText(IDC_EDIT_DEBUG_EXP,code);
 
 	if ( code.empty() )
@@ -242,7 +242,7 @@ void EditorScript::debugScriptEval()
 
 
 
-void EditorScript::scriptThread( int line, mol::string error )
+void EditorScript::scriptThread( int line, std::wstring error )
 {
 	mol::punk<IEnumDebugStackFrames> frames;
 	if( S_OK == debugger_->frames(&frames) && frames )
@@ -251,7 +251,7 @@ void EditorScript::scriptThread( int line, mol::string error )
 		debugDlg()->update_variables(frames);
 	}
 
-	mol::ostringstream oss;
+	std::wostringstream oss;
 	if ( !error.empty() )
 	{
 		oss << _T("line: ") << (line+1) << _T(" ");
@@ -265,7 +265,7 @@ void EditorScript::scriptThread( int line, mol::string error )
 }
 
 
-void EditorScript::scriptThread2( int line, mol::string error )
+void EditorScript::scriptThread2( int line, std::wstring error )
 {
 	if ( !editor_->sci )
 		return;

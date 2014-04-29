@@ -18,13 +18,13 @@ namespace ole {
 
 HRESULT ComRegisterObjBase::RegisterObjectHK( TypeLib& tl, mol::RegKey& root, REFGUID guid, DWORD miscStatus, OLEVERB* oleverbs, int flags, int clsctx, REGCLS cls)
 {
-	mol::string path = mol::App().getModulePath();
-	mol::string coClassName;
-	mol::string coClassDesc;
-	mol::string version_independent_progid;
-	mol::string versioned_progid;
-	mol::string coClass_clsid = stringFromCLSID(guid);
-	mol::string typelib_guid;
+	std::wstring path = mol::App().getModulePath();
+	std::wstring coClassName;
+	std::wstring coClassDesc;
+	std::wstring version_independent_progid;
+	std::wstring versioned_progid;
+	std::wstring coClass_clsid = stringFromCLSID(guid);
+	std::wstring typelib_guid;
 
 	typelib_guid = stringFromCLSID(tl.getGUID());
 
@@ -44,11 +44,11 @@ HRESULT ComRegisterObjBase::RegisterObjectHK( TypeLib& tl, mol::RegKey& root, RE
 		}
 	}
 
-	mol::ostringstream oss_version;
+	std::wostringstream oss_version;
 	oss_version << tl.major() << _T(".") << tl.minor();
-	mol::string version = oss_version.str();
+	std::wstring version = oss_version.str();
 
-	mol::ostringstream oss_progid;
+	std::wostringstream oss_progid;
 	oss_progid << tl.getName() << _T(".") << coClassName;
 	version_independent_progid = oss_progid.str();
 	oss_progid << _T(".") << tl.major() << _T(".") << tl.minor();
@@ -110,7 +110,7 @@ HRESULT ComRegisterObjBase::RegisterObjectHK( TypeLib& tl, mol::RegKey& root, RE
 
 	if ( mol::App().getAppId() != 0 )
 	{
-		mol::ostringstream oss;
+		std::wostringstream oss;
 		oss << "@" << path << ",-" << mol::App().getElevationStringIdentifier();
 		clsid.set( _T("AppId"), mol::App().getAppId() );
 		clsid.set( _T("LocalizedString"), oss.str() );
@@ -178,7 +178,7 @@ HRESULT ComRegisterObjBase::RegisterObjectHK( TypeLib& tl, mol::RegKey& root, RE
 	// misc status
 
 	mol::RegKey misc = clsid.create(_T("MiscStatus"));
-	mol::ostringstream moss;
+	std::wostringstream moss;
 	moss << miscStatus;
 	misc.set(moss.str());
 		
@@ -189,15 +189,15 @@ HRESULT ComRegisterObjBase::RegisterObjectHK( TypeLib& tl, mol::RegKey& root, RE
 		mol::RegKey verbs = clsid.create(_T("verb"));
 		while ( oleverbs && oleverbs->lpszVerbName )
 		{
-			mol::ostringstream oss_key;
+			std::wostringstream oss_key;
 			oss_key << oleverbs->lVerb ;
 			
 			mol::RegKey verb = verbs.create(oss_key.str());
 
-			mol::ostringstream oss_val;
+			std::wostringstream oss_val;
 
 
-			oss_val << mol::toString(oleverbs->lpszVerbName).c_str() << _T(",") << (oleverbs->fuFlags) << _T(",") << (oleverbs->grfAttribs);
+			oss_val << mol::towstring(oleverbs->lpszVerbName).c_str() << _T(",") << (oleverbs->fuFlags) << _T(",") << (oleverbs->grfAttribs);
 
 			verb.set(oss_val.str());
 
@@ -213,8 +213,8 @@ HRESULT ComRegisterObjBase::RegisterObjectHK( TypeLib& tl, mol::RegKey& root, RE
 	auxType_3.set(version_independent_progid);
 
 	// categories
-	mol::string safe_script = stringFromCLSID(CATID_SafeForScripting);
-	mol::string safe_init = stringFromCLSID(CATID_SafeForInitializing);
+	std::wstring safe_script = stringFromCLSID(CATID_SafeForScripting);
+	std::wstring safe_init = stringFromCLSID(CATID_SafeForInitializing);
 
 	mol::RegKey cat = clsid.create(_T("Implemented Categories"));
 	if ( flags & SAFE_SCRIPT )
@@ -292,13 +292,13 @@ HRESULT ComRegisterObjBase::RegisterObject(REFGUID guid, DWORD miscStatus, OLEVE
 
 HRESULT ComRegisterObjBase::UnRegisterObject(REFGUID guid, DWORD miscStatus, OLEVERB* oleverbs, int flags, int clsctx, REGCLS cls)
 {
-	mol::string path = mol::App().getModulePath();
-	mol::string coClassName;
-	mol::string coClassDesc;
-	mol::string version_independent_progid;
-	mol::string versioned_progid;
-	mol::string coClass_clsid = stringFromCLSID(guid);
-	mol::string typelib_guid;
+	std::wstring path = mol::App().getModulePath();
+	std::wstring coClassName;
+	std::wstring coClassDesc;
+	std::wstring version_independent_progid;
+	std::wstring versioned_progid;
+	std::wstring coClass_clsid = stringFromCLSID(guid);
+	std::wstring typelib_guid;
 
 	TypeLib tl;
 	if(!tl.load()) 
@@ -328,7 +328,7 @@ HRESULT ComRegisterObjBase::UnRegisterObject(REFGUID guid, DWORD miscStatus, OLE
 	if ( coClassName.empty() )
 		return S_OK;
 
-	mol::ostringstream oss;
+	std::wstringstream oss;
 	oss << tl.getName() << _T(".") << coClassName;
 	version_independent_progid = oss.str();
 	oss << _T(".") << tl.major() << _T(".") << tl.minor();

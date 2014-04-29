@@ -25,40 +25,40 @@ class RemoteFile
 public:
 
 	RemoteFile() {};
-	RemoteFile(	const mol::string& name, uint8_t type, 
+	RemoteFile(	const std::wstring& name, uint8_t type, 
 				uint32_t perms, uint32_t uid, uint32_t gid, 
 				uint32_t mtime, unsigned long long size, 
-				const mol::string& owner, const mol::string& group ); 
+				const std::wstring& owner, const std::wstring& group ); 
 
 	RemoteFile(sftp_attributes_struct* att);
 
-	mol::string getName();
+	std::wstring getName();
 	uint8_t getType();
 	uint32_t getPermissions();
 	uint32_t getUID();
 	uint32_t getGID();
 	uint32_t getMtime();
-	mol::string getOwner();
-	mol::string getGroup();
+	std::wstring getOwner();
+	std::wstring getGroup();
 	unsigned long long getSize();
 
-	mol::string toString();
-	mol::string formattedSize();
-	mol::string formattedPermissions();
+	std::wstring toString();
+	std::wstring formattedSize();
+	std::wstring formattedPermissions();
 
 	bool isDir();
 
 private:
 
-	mol::string name_;
+	std::wstring name_;
 	uint8_t type_;
 	uint32_t permissions_;
 	uint32_t uid_;
 	uint32_t gid_;
 	uint32_t mtime_;
 	unsigned long long size_;
-	mol::string owner_;
-	mol::string group_;
+	std::wstring owner_;
+	std::wstring group_;
 };
 
 ///////////////////////////////////////////////////////////////////////

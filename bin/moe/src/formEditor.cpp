@@ -9,7 +9,7 @@ using namespace mol::win;
 using namespace mol::ole;
 using namespace mol::io;
 
-mol::TCHAR FormOutFilesFilter[]   = _T("UserFormScript \0*.ufs\0\0");
+wchar_t FormOutFilesFilter[]   = _T("UserFormScript \0*.ufs\0\0");
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -37,11 +37,11 @@ void FormEditor::checkModifiedOnDisk()
 
 }
 //////////////////////////////////////////////////////////////////////////////
-FormEditor::Instance* FormEditor::CreateInstance(const mol::string& file)
+FormEditor::Instance* FormEditor::CreateInstance(const std::wstring& file)
 {
 	statusBar()->status(20);
 
-	mol::string p(file);
+	std::wstring p(file);
 	if ( mol::Path::exists(p) && mol::Path::isDir(p) )
 		return 0;
 
@@ -58,7 +58,7 @@ FormEditor::Instance* FormEditor::CreateInstance(const mol::string& file)
 	return e;
 }
 
-bool FormEditor::initialize(const mol::string& p)
+bool FormEditor::initialize(const std::wstring& p)
 {
 	initializeMoeChild(p);
 
@@ -185,7 +185,7 @@ void FormEditor::OnReload()
 	if ( hr != S_OK )
 		return;
 
-	mol::string path = mol::toString(filename);
+	std::wstring path = mol::towstring(filename);
 
 		// if file exists, load
 	if ( !mol::Path::exists(path) )
@@ -282,7 +282,7 @@ LRESULT FormEditor::OnSaveAs()
 
 	mol::FilenameDlg ofn(*this);
 	ofn.setFilter( FormOutFilesFilter );		
-	ofn.fileName(path.toString());
+	ofn.fileName(path.towstring());
 
 	mol::punk<IScintillAxText> txt;
 	sci->get_Text(&txt);
@@ -290,7 +290,7 @@ LRESULT FormEditor::OnSaveAs()
 
 	if ( IDOK == ofn.dlgSave( OFN_OVERWRITEPROMPT ) )
 	{
-		if ( ofn.fileName() != path.toString() )
+		if (ofn.fileName() != path.towstring())
 		{
 			mol::punk<IMoeDocument> doc;
 			if ( (S_OK == docs()->Item(mol::variant(ofn.fileName()),&doc)) && doc )
@@ -350,7 +350,7 @@ LRESULT FormEditor::OnSave()
 	hr = txt->GetText(&s);
 
 	mol::punk<IStorage> dest;
-	if ( S_OK == ::StgCreateDocfile( path.toString().c_str(), STGM_READWRITE|STGM_CREATE|STGM_SHARE_EXCLUSIVE,0,&dest) )
+	if (S_OK == ::StgCreateDocfile(path.towstring().c_str(), STGM_READWRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE, 0, &dest))
 	{
 		::WriteClassStg( dest, IID_IMoeUserForm );
 

@@ -37,7 +37,7 @@ public:
 		: t_(t)
 	{}
 
-	Property( const mol::string& name, T* t)
+	Property( const std::wstring& name, T* t)
 		: name_(name), t_(t)
 	{}
 
@@ -68,7 +68,7 @@ public:
 	}
 
 private:
-	mol::string name_;
+	std::wstring name_;
 	T* t_;
 };
 
@@ -81,7 +81,7 @@ public:
 		: t_(t)
 	{}
 
-	Property( const mol::string& name, SIZEL* t)
+	Property( const std::wstring& name, SIZEL* t)
 		: name_(name), t_(t)
 	{}
 
@@ -125,7 +125,7 @@ public:
 	}
 
 private:
-	mol::string name_;
+	std::wstring name_;
 	SIZEL* t_;
 };
 
@@ -138,7 +138,7 @@ public:
 		: bstr_(b)
 	{}
 
-	Property( const mol::string& name, mol::bstr& b)
+	Property( const std::wstring& name, mol::bstr& b)
 		: name_(name), bstr_(b)
 	{}
 
@@ -184,7 +184,7 @@ public:
 
 private:
 	mol::bstr& bstr_;
-	mol::string name_;
+	std::wstring name_;
 };
 
 
@@ -197,7 +197,7 @@ public:
 		: str_(s)
 	{}
 
-	Property( const mol::string& name, std::string& s)
+	Property( const std::wstring& name, std::string& s)
 		: name_(name), str_(s)
 	{}
 
@@ -242,7 +242,7 @@ public:
 
 private:
 	std::string& str_;
-	mol::string name_;
+	std::wstring name_;
 };
 
 
@@ -256,7 +256,7 @@ public:
 		: str_(s)
 	{}
 
-	Property( const mol::string& name, std::wstring& s)
+	Property( const std::wstring& name, std::wstring& s)
 		: name_(name), str_(s)
 	{}
 
@@ -299,7 +299,7 @@ public:
 	}
 private:
 	std::wstring& str_;
-	mol::string name_;
+	std::wstring name_;
 };
 
 
@@ -307,7 +307,7 @@ template<>
 class Property<mol::DispId>
 {
 public:
-	Property( const mol::string& name, mol::DispId id)
+	Property( const std::wstring& name, mol::DispId id)
 		: name_(name), id_(id)
 	{}
 
@@ -350,7 +350,7 @@ public:
 	}
 
 private:
-	mol::string name_;
+	std::wstring name_;
 	mol::DispId id_;
 };
 
@@ -390,7 +390,7 @@ IStream* operator>>( IStream* stream, mol::persist::Property<T>& prop )
 namespace mol {
 
 template<class T>
-mol::persist::Property<T> property( const mol::string& name, T* t)
+mol::persist::Property<T> property( const std::wstring& name, T* t)
 {
 	return mol::persist::Property<T>(name,t);
 }
@@ -402,7 +402,7 @@ mol::persist::Property<T> property( T* t)
 }
 
 
-inline mol::persist::Property<mol::DispId> property( const mol::string& name, mol::DispId t)
+inline mol::persist::Property<mol::DispId> property( const std::wstring& name, mol::DispId t)
 {
 	return mol::persist::Property<mol::DispId>(name,t);
 }
@@ -417,7 +417,7 @@ inline mol::persist::Property<mol::bstr> property( mol::bstr& t)
 	return mol::persist::Property<mol::bstr>(t);
 }
 
-inline mol::persist::Property<mol::bstr> property( const mol::string& name, mol::bstr& t)
+inline mol::persist::Property<mol::bstr> property( const std::wstring& name, mol::bstr& t)
 {
 	return mol::persist::Property<mol::bstr>(name,t);
 }
@@ -606,7 +606,7 @@ public:
 		variant v((BSTR)0);
 		if ( S_OK == pPropBag->Read( mol::ansi2wstring(key).c_str(), &v, NULL ) )
 		{
-			mol::string s = v.toString();
+			std::wstring s = v.toString();
 			std::vector<std::string> xy = mol::split(mol::tostring(s),"|");
 			if ( xy.size() > 1 )
 			{
@@ -778,7 +778,7 @@ public:
         return *this;							
 	}
 
-	bool create( const mol::string& path, DWORD flags = STGM_READWRITE | STGM_SHARE_EXCLUSIVE|STGM_CREATE )
+	bool create( const std::wstring& path, DWORD flags = STGM_READWRITE | STGM_SHARE_EXCLUSIVE|STGM_CREATE )
 	{
 		release();
 		if ( S_OK == ::StgCreateDocfile(mol::towstring(path).c_str(),flags ,0,&interface_) )
@@ -786,7 +786,7 @@ public:
 		return false;
 	}
 
-	bool open( const mol::string& path, DWORD flags = STGM_READ | STGM_SHARE_EXCLUSIVE )
+	bool open( const std::wstring& path, DWORD flags = STGM_READ | STGM_SHARE_EXCLUSIVE )
 	{
 		release();
 		HRESULT hr = ::StgOpenStorage( mol::towstring(path).c_str(), NULL,flags,0,0,&interface_);
@@ -1114,7 +1114,7 @@ public:
 		if ( pszFileName )
 		{
 			Storage store;
-			mol::string file = mol::toString(pszFileName);
+			std::wstring file = mol::towstring(pszFileName);
 			if ( store.open(file,dwMode|STGM_SHARE_EXCLUSIVE) )
 			{
 				filename_ = file;
@@ -1138,7 +1138,7 @@ public:
 		if ( pszFileName )
 		{
 			Storage store;
-			mol::string file = mol::toString(pszFileName);
+			std::wstring file = mol::towstring(pszFileName);
 			if ( store.create(file) )
 			{
 				store.clsid(t->getCoClassID());
@@ -1170,7 +1170,7 @@ public:
 	}
 
 protected:
-	mol::string				filename_;
+	std::wstring				filename_;
 };
 
 

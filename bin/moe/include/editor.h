@@ -32,7 +32,7 @@ public:
 	Editor();
 	virtual ~Editor();
 
-	static Instance* CreateInstance(const mol::string& p, long enc = CP_UTF8, bool readOnly = false);
+	static Instance* CreateInstance(const std::wstring& p, long enc = CP_UTF8, bool readOnly = false);
 
 	// std windows msgs
 
@@ -99,14 +99,14 @@ public:
 
 	LRESULT OnToolbarDropDown(NMTOOLBAR* toolbar );
 
-	void OnScriptThread( int line, mol::string error);
+	void OnScriptThread( int line, std::wstring error);
 	void OnScriptThreadDone();
 
    virtual HRESULT __stdcall get_FilePath( BSTR *fname);
 
 protected:
 
-	bool initialize(const mol::string& p, long enc, bool readOnly);
+	bool initialize(const std::wstring& p, long enc, bool readOnly);
 	void updateUI();		
 	void prepareInterfaces();
 	void scrollDown();
@@ -138,7 +138,7 @@ protected:
 	mol::Timer timer_;
 
 	ScriptDebugger::Instance* debugger_;
-	mol::string	lasterror_;
+	std::wstring	lasterror_;
 	FILETIME lastWriteTime_;
 
 

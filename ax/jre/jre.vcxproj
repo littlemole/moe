@@ -313,7 +313,7 @@
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">C:\Java\glassfish\jdk7\include\win32;C:\Java\glassfish\jdk7\include;D:\boost\boost_1_52_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">C:\Program Files %28x86%29\Java\jdk1.6.0_22\include\win32;C:\Program Files %28x86%29\Java\jdk1.6.0_22\include;D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">D:\java\jdk\include\win32;D:\java\jdk\include;D:\boost\boost_1_52_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">D:\java\jdk\include\win32;D:\java\jdk\include;D:\boost\boost_1_55_0;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>

@@ -11,10 +11,10 @@ namespace sftp {
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
-RemoteFile::RemoteFile(	const mol::string& name, uint8_t type, 
+RemoteFile::RemoteFile(	const std::wstring& name, uint8_t type, 
 			uint32_t perms, uint32_t uid, uint32_t gid, 
 			uint32_t mtime, unsigned long long size, 
-			const mol::string& owner, const mol::string& group )
+			const std::wstring& owner, const std::wstring& group )
 
 			: name_(name), type_(type), 
 			  permissions_(perms), uid_(uid), gid_(gid),
@@ -55,7 +55,7 @@ bool RemoteFile::isDir()
 	return (type_ & SSH_FILEXFER_TYPE_DIRECTORY) != 0;
 }
 
-mol::string RemoteFile::getName() 
+std::wstring RemoteFile::getName() 
 {
 	return name_;
 }
@@ -85,12 +85,12 @@ uint32_t RemoteFile::getMtime()
 	return mtime_;
 }
 
-mol::string RemoteFile::getOwner() 
+std::wstring RemoteFile::getOwner() 
 {
 	return owner_;
 }
 
-mol::string RemoteFile::getGroup() 
+std::wstring RemoteFile::getGroup() 
 {
 	return group_;
 }
@@ -100,9 +100,9 @@ unsigned long long RemoteFile::getSize()
 	return size_;
 }
 
-mol::string RemoteFile::toString()
+std::wstring RemoteFile::toString()
 {
-	mol::ostringstream oss;
+	std::wostringstream oss;
 
 	oss << getName() << _T("\t")
 		<< getOwner() << _T("(")
@@ -114,7 +114,7 @@ mol::string RemoteFile::toString()
 	return oss.str();
 }
 
-mol::string RemoteFile::formattedSize()
+std::wstring RemoteFile::formattedSize()
 {
 	if(isDir())
 	{
@@ -122,13 +122,13 @@ mol::string RemoteFile::formattedSize()
 	}
 	LARGE_INTEGER li;
 	li.QuadPart = size_;
-	mol::string s = FileInfo::fileSize(li);
+	std::wstring s = FileInfo::fileSize(li);
 	return s;
 }
 
-mol::string RemoteFile::formattedPermissions()
+std::wstring RemoteFile::formattedPermissions()
 {
-	mol::ostringstream oss;
+	std::wostringstream oss;
 	oss << std::oct << permissions_;
 	return oss.str();
 }

@@ -118,29 +118,29 @@ protected:
     virtual int style()   { return WS_CHILD|WS_BORDER|WS_VISIBLE; }
 
     // prepare wndclass support
-    virtual const mol::string& wndClassName() ;
-    virtual HWND createWindow( const mol::string& windowName, HMENU hMenu, const Rect& r, HWND parent );
+    virtual const std::wstring& wndClassName() ;
+    virtual HWND createWindow( const std::wstring& windowName, HMENU hMenu, const Rect& r, HWND parent );
 
     WNDPROC	oldProc;
 };
 
 
-template<const mol::TCHAR* classname>
+template<const wchar_t* classname>
 struct CtrlClass : public mol::win::Ctrl 
 {
-    const mol::string& wndClassName() 
+    const std::wstring& wndClassName() 
     { 
-		static mol::string s(classname); 
+		static std::wstring s(classname); 
         return s; 
     }
 };
 
-extern const mol::TCHAR button_class[];
-extern const mol::TCHAR edit_class[];
-extern const mol::TCHAR combo_box_class[];
-extern const mol::TCHAR list_box_class[];
-extern const mol::TCHAR scrollbar_class[];
-extern const mol::TCHAR static_class[];
+extern const wchar_t button_class[];
+extern const wchar_t edit_class[];
+extern const wchar_t combo_box_class[];
+extern const wchar_t list_box_class[];
+extern const wchar_t scrollbar_class[];
+extern const wchar_t static_class[];
 
 } // end namespace win
 
@@ -182,14 +182,14 @@ public:
 class ComboBox : public mol::win::CtrlClass<mol::win::combo_box_class>
 {
 public:
-    void insertString(const mol::string& str, int index );
-    void addString(const mol::string& str );
+    void insertString(const std::wstring& str, int index );
+    void addString(const std::wstring& str );
     void deleteString( int id );
     int  getCount();
     int  getCurSel();
     void setCurSel(int n);
-    void setCurSel(const mol::string& txt);
-    mol::string getString(int id );
+    void setCurSel(const std::wstring& txt);
+    std::wstring getString(int id );
     void clear();
 
 protected:
@@ -210,11 +210,11 @@ combobox;
 class ListBox : public mol::win::CtrlClass<mol::win::list_box_class>
 {
 public:
-    void addString( const mol::string& s );
+    void addString( const std::wstring& s );
     int getCurSel();
-    mol::string getString(int index);
+    std::wstring getString(int index);
     void resetContent();
-	int index(const mol::string& s );
+	int index(const std::wstring& s );
 	int count();
 
 	void setData(int index,void* d);
@@ -290,7 +290,7 @@ public:
     void subClassEdit();
 private:
 
-    virtual HWND createWindow( const mol::string& windowName, HMENU hMenu, const Rect& r, HWND parent );
+    virtual HWND createWindow( const std::wstring& windowName, HMENU hMenu, const Rect& r, HWND parent );
 
     class RcomboBoxEdit : public EditBox
     {

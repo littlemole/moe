@@ -52,14 +52,14 @@ public:
 	mol::bstr* funcNames(FUNCDESC* fd, UINT& cnames);
 
 
-	mol::string reftype_name(HREFTYPE& rt);
-	mol::string reftype_name(HREFTYPE& rt, int i);
+	std::wstring reftype_name(HREFTYPE& rt);
+	std::wstring reftype_name(HREFTYPE& rt, int i);
 
-	mol::string variable_type(VARDESC* vd);
-	mol::string alias_type(TYPEATTR* ta);
+	std::wstring variable_type(VARDESC* vd);
+	std::wstring alias_type(TYPEATTR* ta);
 
-	mol::string name();
-	mol::string name(int id);
+	std::wstring name();
+	std::wstring name(int id);
 
 	FUNCDESC* getFuncDesc(int i);
 	VARDESC* getVarDesc(int i);
@@ -68,10 +68,10 @@ public:
 	void releaseVarDesc( VARDESC* vd );
 
 	TYPEATTR* getAttr();
-	mol::string get_type(TYPEDESC* td);
+	std::wstring get_type(TYPEDESC* td);
 
-	mol::string param_type(FUNCDESC* fd ,int i);
-	mol::string return_type(FUNCDESC* fd );
+	std::wstring param_type(FUNCDESC* fd, int i);
+	std::wstring return_type(FUNCDESC* fd);
 
 	mol::punk<ITypeInfo>		type_info;
 
@@ -80,9 +80,9 @@ protected:
 	VARTYPE type(TYPEDESC* td);
 	VARTYPE pointer_type(TYPEDESC* td);
 	VARTYPE pointer_pointer_type(TYPEDESC* td);
-	mol::string user_type(TYPEDESC* td);
-	mol::string user_pointer_type(TYPEDESC* td);
-	mol::string user_pointer_pointer_type(TYPEDESC* td);
+	std::wstring user_type(TYPEDESC* td);
+	std::wstring user_pointer_type(TYPEDESC* td);
+	std::wstring user_pointer_pointer_type(TYPEDESC* td);
 
 	TYPEATTR* type_attr_;
 	TYPEKIND  type_kind_;
@@ -119,9 +119,9 @@ public:
 		return fd_->cParams;
 	}
 
-	mol::string c_signature()
+	std::wstring c_signature()
 	{
-		mol::ostringstream oss;
+		std::wostringstream oss;
 
 		oss << return_type() << _T(" ");
 		oss << name() << _T("( ");
@@ -139,9 +139,9 @@ public:
 		return oss.str();
 	}
 
-	mol::string script_signature()
+	std::wstring script_signature()
 	{
-		mol::ostringstream oss;
+		std::wostringstream oss;
 	
 		if ( fd_->invkind != INVOKE_FUNC)
 		{
@@ -156,7 +156,7 @@ public:
 			oss << _T("(");
 			for ( int i = 0; i < nParams(); i++ )
 			{
-				mol::string s = param_name(i);
+				std::wstring s = param_name(i);
 				if ( s == _T("") )
 					oss << _T(" ") << param_type(i);
 				else
@@ -173,10 +173,10 @@ public:
 		return oss.str();
 	}
 
-	mol::string name();
-	mol::string param_type(int i);
-	mol::string param_name(int i);
-	mol::string return_type();
+	std::wstring name();
+	std::wstring param_type(int i);
+	std::wstring param_name(int i);
+	std::wstring return_type();
 
 	FUNCDESC* fd_;
 
@@ -186,7 +186,7 @@ private:
 	mol::bstr* funcNames_;
 	unsigned int cFuncNames_;
 
-	mol::string get_type(TYPEDESC* td)
+	std::wstring get_type(TYPEDESC* td)
 	{
 		return ti_.get_type(td);
 	}

@@ -171,11 +171,11 @@ namespace mol  {
 		HRESULT	doc2(IHTMLDocument2** doc);
 
 		// impl
-		mol::string charsetImpl();
+		std::wstring charsetImpl();
 		bool aboutBlankImpl();			
 		bool setHtmlImpl( const std::string& html, const std::string& url, const std::string& mime);
 		bool setHtmlImpl( const std::wstring& html );
-		bool writeImpl( const mol::string& html );
+		bool writeImpl(const std::wstring& html);
 		void getSourceImpl(std::string& src);
 
 		//screenshot impl
@@ -183,8 +183,8 @@ namespace mol  {
 		BOOL IPictureDispFromHtmlControlImpl( IPictureDisp** pic );
 
 		// find in page impl
-		int findImpl(const mol::string& txt, int options );
-		int findUpImpl(const mol::string& txt, int options );
+		int findImpl(const std::wstring& txt, int options);
+		int findUpImpl(const std::wstring& txt, int options);
 
 	protected:
 
@@ -193,7 +193,7 @@ namespace mol  {
 		virtual HWND getHtmlWnd() = 0;
 
 		// data members
-		mol::string			        searchText_;
+		std::wstring		        searchText_;
 		int					        nextSearchPos_;
 		int					        lastSearchDir_;  
 
@@ -321,7 +321,7 @@ namespace mol  {
 
 
 		// HTML methods
-		mol::string charset()
+		std::wstring charset()
 		{
 			return this->charsetImpl();
 		}
@@ -343,7 +343,7 @@ namespace mol  {
 			return this->setHtmlImpl( html );
 		}
 
-		bool write( const mol::string& html )
+		bool write(const std::wstring& html)
 		{
 			return this->writeImpl( html );
 		}
@@ -371,7 +371,7 @@ namespace mol  {
 		}
 
 		// save
-		HRESULT save(const mol::string& file)
+		HRESULT save(const std::wstring& file)
 		{
 			std::wstring ws = mol::towstring(file);
 
@@ -391,7 +391,7 @@ namespace mol  {
 			return this->aboutBlankImpl();
 		}
 
-		bool setLocation(mol::string url)
+		bool setLocation(std::wstring url)
 		{
 			mol::punk<IWebBrowser2>	wb;
 			if ( S_OK != ie(&wb) )
@@ -403,7 +403,7 @@ namespace mol  {
 			return hr == S_OK;
 		}
 
-		mol::string  getLocation()
+		std::wstring  getLocation()
 		{
 			mol::punk<IWebBrowser2>	wb;
 			if ( S_OK != ie(&wb) )
@@ -514,12 +514,12 @@ namespace mol  {
 		}
 
 
-		int find(const mol::string& txt, int options )
+		int find(const std::wstring& txt, int options)
 		{
 			return this->findImpl( txt,options );
 		}
 
-		int findUp(const mol::string& txt, int options )
+		int findUp(const std::wstring& txt, int options)
 		{
 			return this->findUpImpl( txt,options  );
 		}
@@ -559,7 +559,7 @@ protected:
 		virtual HRESULT hideContextMenu()   { return S_OK; }
 
 		// HTML methods
-		mol::string charset()
+		std::wstring charset()
 		{
 			mol::punk<IWebBrowser2>		ie(oleObject);
 			mol::punk<IDispatch>		disp;
@@ -641,7 +641,7 @@ protected:
 			return hr == S_OK;
 		}
 
-		bool write( const mol::string& html )
+		bool write( const std::wstring& html )
 		{
 			mol::punk<IWebBrowser2>	ie(oleObject);
 
@@ -966,7 +966,7 @@ protected:
 		}
 
 		// save
-		HRESULT save(const mol::string& file)
+		HRESULT save(const std::wstring& file)
 		{
 			std::wstring ws = mol::ansi2wstring(file);
 
@@ -994,7 +994,7 @@ protected:
 			return (hr == S_OK);
 		}
 
-		bool setLocation(mol::string url)
+		bool setLocation(std::wstring url)
 		{
 			mol::punk<IWebBrowser2>	ie(oleObject);
 
@@ -1004,7 +1004,7 @@ protected:
 			return hr == S_OK;
 		}
 
-		mol::string  getLocation()
+		std::wstring  getLocation()
 		{
 			mol::punk<IWebBrowser2>	ie(oleObject);
 			mol::bstr bstr;
@@ -1099,7 +1099,7 @@ protected:
 			oleTargetExec(1);
 		}
 
-		int find(const mol::string& txt, int options )
+		int find(const std::wstring& txt, int options )
 		{
 			if ( (lastSearchDir_ & FR_DOWN) != ( options & FR_DOWN ) )
 			{
@@ -1179,7 +1179,7 @@ protected:
 
 
 
-		int findUp(const mol::string& txt, int options )
+		int findUp(const std::wstring& txt, int options )
 		{
 			mol::punk<IWebBrowser2>			ie(oleObject);
 			mol::punk<IDispatch>			pDisp;
@@ -1286,7 +1286,7 @@ protected:
 		}
 
 	protected:
-		mol::string			        searchText_;
+		std::wstring			        searchText_;
 		int					        nextSearchPos_;
 		int					        lastSearchDir_;  
 

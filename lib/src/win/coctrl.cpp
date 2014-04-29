@@ -6,17 +6,17 @@
 namespace mol  {
 namespace win  {
 
-//const mol::TCHAR statusbar_class[]		= _T("Status");
-const mol::TCHAR toolbar_class[]		= TOOLBARCLASSNAME;
-const mol::TCHAR rebar_class[]			= REBARCLASSNAME;
-const mol::TCHAR tab_ctrl_class[]		= WC_TABCONTROL;
-const mol::TCHAR combo_box_ex_class[]	= WC_COMBOBOXEX;
-const mol::TCHAR tooltip_class[]		= TOOLTIPS_CLASS;
-const mol::TCHAR tree_ctrl_class[]		= WC_TREEVIEW;
-const mol::TCHAR list_ctrl_class[]		= WC_LISTVIEW;
-const mol::TCHAR header_class[]			= WC_HEADER;
-const mol::TCHAR progressbar_class[]    = PROGRESS_CLASS;
-const mol::TCHAR statusbar_class[]		= STATUSCLASSNAME;
+//const wchar_t statusbar_class[]		= _T("Status");
+const wchar_t toolbar_class[]		= TOOLBARCLASSNAME;
+const wchar_t rebar_class[]			= REBARCLASSNAME;
+const wchar_t tab_ctrl_class[]		= WC_TABCONTROL;
+const wchar_t combo_box_ex_class[]	= WC_COMBOBOXEX;
+const wchar_t tooltip_class[]		= TOOLTIPS_CLASS;
+const wchar_t tree_ctrl_class[]		= WC_TREEVIEW;
+const wchar_t list_ctrl_class[]		= WC_LISTVIEW;
+const wchar_t header_class[]			= WC_HEADER;
+const wchar_t progressbar_class[]    = PROGRESS_CLASS;
+const wchar_t statusbar_class[]		= STATUSCLASSNAME;
 
 } // endnamespace mol::win
 
@@ -45,7 +45,7 @@ int StatusBar::getHeight()
     return height_; 
 }
 
-HWND StatusBar::createWindow( const mol::string& wndName, HMENU hMenu, const Rect& r, HWND parent )
+HWND StatusBar::createWindow( const std::wstring& wndName, HMENU hMenu, const Rect& r, HWND parent )
 {
 //    hWnd_ = ::CreateStatusWindow( style(), wndName.c_str(), parent, (UINT_PTR)hMenu );
 
@@ -65,7 +65,7 @@ HWND StatusBar::createWindow( const mol::string& wndName, HMENU hMenu, const Rec
 
 
 
-int StatusBar::setText( const mol::string& txt )
+int StatusBar::setText( const std::wstring& txt )
 {
     return (int)sendMessage(  SB_SETTEXT, 255, (WPARAM) txt.c_str() );
 }
@@ -74,7 +74,7 @@ int StatusBar::setText( const mol::string& txt )
 // statusbar ex
 ////////////////////////////////////////////////////////////////////////////
 
-HWND StatusBarEx::createWindow( const mol::string& wndName, HMENU hMenu, const Rect& r, HWND parent )
+HWND StatusBarEx::createWindow( const std::wstring& wndName, HMENU hMenu, const Rect& r, HWND parent )
 {
 //    hWnd_ = ::CreateStatusWindow( style(), wndName.c_str(), parent, (UINT_PTR)hMenu );
 
@@ -94,7 +94,7 @@ HWND StatusBarEx::createWindow( const mol::string& wndName, HMENU hMenu, const R
 
 
 
-int StatusBarEx::setText( const mol::string& txt)
+int StatusBarEx::setText( const std::wstring& txt)
 {
 	parts_.clear();
 	parts_.push_back(txt);
@@ -103,7 +103,7 @@ int StatusBarEx::setText( const mol::string& txt)
 	return 0;
 }
 
-int StatusBarEx::setText( const mol::string& txt1, const mol::string& txt2)
+int StatusBarEx::setText( const std::wstring& txt1, const std::wstring& txt2)
 {
 	parts_.clear();
 	parts_.push_back(txt1);
@@ -114,7 +114,7 @@ int StatusBarEx::setText( const mol::string& txt1, const mol::string& txt2)
 	return 0;
 }
 
-int StatusBarEx::setText( const mol::string& txt1, const mol::string& txt2, const mol::string& txt3)
+int StatusBarEx::setText( const std::wstring& txt1, const std::wstring& txt2, const std::wstring& txt3)
 {
 	parts_.clear();
 	parts_.push_back(txt1);
@@ -127,7 +127,7 @@ int StatusBarEx::setText( const mol::string& txt1, const mol::string& txt2, cons
 	return 0;
 }
 
-int StatusBarEx::setText( const mol::string& txt1, const mol::string& txt2, const mol::string& txt3, const mol::string& txt4)
+int StatusBarEx::setText( const std::wstring& txt1, const std::wstring& txt2, const std::wstring& txt3, const std::wstring& txt4)
 {
 	parts_.clear();
 	parts_.push_back(txt1);
@@ -223,7 +223,7 @@ LRESULT ToolBar::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				if ( tooltips_.count((int)id) > 0 )
 				{
 					di->szText[0] = 0;
-					di->lpszText = (mol::TCHAR*)(tooltips_[(int)id].c_str());
+					di->lpszText = (wchar_t*)(tooltips_[(int)id].c_str());
 				}
 			}
 			return 0;
@@ -245,7 +245,7 @@ LRESULT ToolBar::setBmp( int bmpId, int num, int w, int h )
     return sendMessage( TB_ADDBITMAP, (WPARAM)num, (LPARAM)&bmp);
 }
 
-LRESULT ToolBar::addButton(int iBmp, int iCmd,  const mol::string& txt, BYTE fsState, BYTE fsStyle , DWORD* data )
+LRESULT ToolBar::addButton(int iBmp, int iCmd,  const std::wstring& txt, BYTE fsState, BYTE fsStyle , DWORD* data )
 {
     TBBUTTON butt;
 	ZeroMemory(&butt,sizeof(butt));
@@ -259,13 +259,13 @@ LRESULT ToolBar::addButton(int iBmp, int iCmd,  const mol::string& txt, BYTE fsS
 	}
 	else 
 	{
-		butt.iString=(INT_PTR)(mol::TCHAR*)(txt.c_str());
+		butt.iString=(INT_PTR)(wchar_t*)(txt.c_str());
 	}
 	butt.dwData=(DWORD_PTR)data;
     return sendMessage(TB_ADDBUTTONS,(WPARAM)1,(LPARAM)&(butt));
 }
 
-LRESULT ToolBar::addString(const mol::string& txt, int iCmd, BYTE fsState, BYTE fsStyle , DWORD* data )
+LRESULT ToolBar::addString(const std::wstring& txt, int iCmd, BYTE fsState, BYTE fsStyle , DWORD* data )
 {
     TBBUTTON butt;
     butt.iBitmap = I_IMAGENONE;
@@ -319,7 +319,7 @@ LRESULT ToolBar::setButtonSize(int w, int h)
 }
 
 
-HWND ToolBar::createWindow(  const mol::string& wndName, HMENU hMenu, const Rect& r, HWND parent )
+HWND ToolBar::createWindow(  const std::wstring& wndName, HMENU hMenu, const Rect& r, HWND parent )
 {
     hWnd_ = ::CreateWindowEx( exstyle(),wndClassName().c_str(),
                               wndName.c_str(), style(),
@@ -354,7 +354,7 @@ CustomToolBar::CustomToolBar()
 	reset();
 }
 
-LRESULT CustomToolBar::addButton(int iBmp, int iCmd, const mol::string& txt, BYTE fsState, BYTE fsStyle, DWORD_PTR data )
+LRESULT CustomToolBar::addButton(int iBmp, int iCmd, const std::wstring& txt, BYTE fsState, BYTE fsStyle, DWORD_PTR data )
 {
 	if ( style() & TBSTYLE_TOOLTIPS )
 	{
@@ -599,7 +599,7 @@ int ReBar::exstyle()
 }
 
 
-HWND ReBar::createWindow( const mol::string& wndName, HMENU hMenu, const Rect& r, HWND parent )
+HWND ReBar::createWindow( const std::wstring& wndName, HMENU hMenu, const Rect& r, HWND parent )
 {
     hWnd_ = ::CreateWindowEx( exstyle(),wndClassName().c_str(),
                               wndName.c_str(), style(),
@@ -618,7 +618,7 @@ HWND ReBar::createWindow( const mol::string& wndName, HMENU hMenu, const Rect& r
     return hWnd_;
 }
 
-LRESULT ReBar::addBar(Wnd& bar, int cmd, int minWidth, const mol::string& txt, int fStyle,int fMask )
+LRESULT ReBar::addBar(Wnd& bar, int cmd, int minWidth, const std::wstring& txt, int fStyle,int fMask )
 {
     RECT r;
 	::ZeroMemory(&rbBand,sizeof(REBARBANDINFO));
@@ -631,7 +631,7 @@ LRESULT ReBar::addBar(Wnd& bar, int cmd, int minWidth, const mol::string& txt, i
     // Set values unique to the band
     bar.getWindowRect(r);
 
-	rbBand.lpText     = (mol::TCHAR*)(txt.c_str());
+	rbBand.lpText     = (wchar_t*)(txt.c_str());
     rbBand.hwndChild  = bar;
     rbBand.cxMinChild = r.right-r.left;
     rbBand.cyMinChild = r.bottom - r.top;
@@ -1002,7 +1002,7 @@ TabCtrl::~TabCtrl()
 	}
 }
 
-HWND TabCtrl::createWindow( const mol::string& wndName, HMENU hMenu, const Rect& r, HWND parent )
+HWND TabCtrl::createWindow( const std::wstring& wndName, HMENU hMenu, const Rect& r, HWND parent )
 {
 	int s = style();
 	s = s | (TCS_FLATBUTTONS|TCS_BUTTONS);
@@ -1080,7 +1080,7 @@ LRESULT TabCtrl::insertItem( TabCtrlItem* titem, int index, int img )
 
     TCITEM item;
     item.mask = TCIF_TEXT| TCIF_IMAGE|TCIF_PARAM;
-	item.pszText = (mol::TCHAR*)(titem->title.c_str());
+	item.pszText = (wchar_t*)(titem->title.c_str());
 	item.cchTextMax = (int)titem->title.size();
     item.iImage = img;
 	item.lParam = (LPARAM)(titem);
@@ -1089,9 +1089,9 @@ LRESULT TabCtrl::insertItem( TabCtrlItem* titem, int index, int img )
     return i;
 }
 
-mol::string TabCtrl::getItemText(int index)
+std::wstring TabCtrl::getItemText(int index)
 {
-	mol::TCHAR  buf[2048];
+	wchar_t  buf[2048];
     TCITEM item;
     item.mask = TCIF_TEXT| TCIF_TEXT;
     item.pszText = buf;
@@ -1102,9 +1102,9 @@ mol::string TabCtrl::getItemText(int index)
     return item.pszText;
 }
 
-mol::string TabCtrl::getItemTooltipText(int index)
+std::wstring TabCtrl::getItemTooltipText(int index)
 {
-	return (mol::TCHAR*)(getTabCtrlItem(index)->tooltip.c_str());
+	return (wchar_t*)(getTabCtrlItem(index)->tooltip.c_str());
 }
 
 TabCtrl::TabCtrlItem* TabCtrl::getTabCtrlItem(int index)
@@ -1116,7 +1116,7 @@ TabCtrl::TabCtrlItem* TabCtrl::getTabCtrlItem(int index)
 	return (TabCtrlItem*)(item.lParam);
 }
 
-LRESULT TabCtrl::renameItem( TabCtrlItem* titem, int index, const mol::string& tool, int img )
+LRESULT TabCtrl::renameItem( TabCtrlItem* titem, int index, const std::wstring& tool, int img )
 {
 	TabCtrlItem* c = (TabCtrlItem*)getTabCtrlItem(index);
 	if ( c )
@@ -1124,7 +1124,7 @@ LRESULT TabCtrl::renameItem( TabCtrlItem* titem, int index, const mol::string& t
 
     TCITEM item;
     item.mask = TCIF_TEXT| TCIF_IMAGE|TCIF_PARAM;
-	item.pszText = (mol::TCHAR*)(titem->title.c_str());
+	item.pszText = (wchar_t*)(titem->title.c_str());
 	item.cchTextMax = (int)titem->title.size();
     item.iImage = img;
 	item.lParam = (LPARAM)titem;
@@ -1177,10 +1177,10 @@ LRESULT TabCtrl::select(int i)
     return sendMessage(TCM_SETCURSEL,(WPARAM) i,0);
 }
 
-LRESULT TabCtrl::showToolTip(LPARAM& lParam, const mol::string& txt)
+LRESULT TabCtrl::showToolTip(LPARAM& lParam, const std::wstring& txt)
 {
 	LPNMTTDISPINFO disp = (LPNMTTDISPINFO)lParam;
-	disp->lpszText = (mol::TCHAR*)(txt.c_str());
+	disp->lpszText = (wchar_t*)(txt.c_str());
 	return 0;
 }
 
@@ -1198,12 +1198,12 @@ void ComboCoxEx::setImgList( HIMAGELIST himl )
     LRESULT l = sendMessage(CBEM_SETIMAGELIST,0,(LPARAM)himl);
 }
 
-void ComboCoxEx::addItem(const mol::string& str, int img, int selectedImg  )
+void ComboCoxEx::addItem(const std::wstring& str, int img, int selectedImg  )
 {
     insertItem( -1, str, img, selectedImg);
 }
 
-void ComboCoxEx::insertItem(int index, const mol::string& str, int img, int selectedImg  )
+void ComboCoxEx::insertItem(int index, const std::wstring& str, int img, int selectedImg  )
 {
     COMBOBOXEXITEM cbei;
     cbei.mask = CBEIF_TEXT | CBEIF_INDENT | CBEIF_IMAGE | CBEIF_SELECTEDIMAGE;
@@ -1213,7 +1213,7 @@ void ComboCoxEx::insertItem(int index, const mol::string& str, int img, int sele
         cbei.iSelectedImage = selectedImg = selectedImg;
 
     cbei.iItem          = (index == -1 ) ? getCount() : index ;
-	cbei.pszText        = (mol::TCHAR*)(str.c_str());
+	cbei.pszText        = (wchar_t*)(str.c_str());
     cbei.cchTextMax     = (int)str.size();
     cbei.iImage         = img;
     cbei.iIndent        = 0;
@@ -1241,7 +1241,7 @@ void ComboCoxEx::setCurSel(int n)
     sendMessage( CB_SETCURSEL,n,0 ); 
 }
 
-void ComboCoxEx::setCurSel(const mol::string& txt)
+void ComboCoxEx::setCurSel(const std::wstring& txt)
 {
     for ( int i = 0; i < getCount(); i++)
         if ( txt == getString(i) )
@@ -1251,15 +1251,15 @@ void ComboCoxEx::setCurSel(const mol::string& txt)
         }
 }
 
-mol::string ComboCoxEx::getString(int id )
+std::wstring ComboCoxEx::getString(int id )
 {
-	mol::tbuff buf(2048);
-	if ( CB_ERR == sendMessage( CB_GETLBTEXT,id,(LPARAM)(mol::TCHAR*)buf))
+	mol::wbuff buf(2048);
+	if ( CB_ERR == sendMessage( CB_GETLBTEXT,id,(LPARAM)(wchar_t*)buf))
             throw X(_T("getString failed"));
 
     return buf.toString();
 
-/*	mol::TCHAR  buf[1024];
+/*	wchar_t  buf[1024];
     ::memset(buf,32,1024);
     buf[1023] = 0;
 
@@ -1300,12 +1300,12 @@ TVHITTESTINFO&	TreeCtrl::hitTest		( POINT& p )
     return tvHitTestInfo_;
 }
 
-HTREEITEM TreeCtrl::addNode( const mol::string& txt, HTREEITEM node,int state )
+HTREEITEM TreeCtrl::addNode( const std::wstring& txt, HTREEITEM node,int state )
 {
     TVITEM tvi;
     TVINSERTSTRUCT tvins;
 
-	mol::TCHAR * c = (mol::TCHAR*)txt.c_str();
+	wchar_t * c = (wchar_t*)txt.c_str();
     tvi.mask = TVIF_TEXT | TVIF_STATE;
     tvi.pszText = c;
     tvi.cchTextMax = (int)txt.size();
@@ -1319,12 +1319,12 @@ HTREEITEM TreeCtrl::addNode( const mol::string& txt, HTREEITEM node,int state )
     return (HTREEITEM) sendMessage( TVM_INSERTITEM, 0, (LPARAM) (LPTVINSERTSTRUCT) &tvins);
 }
 
-HTREEITEM TreeCtrl::addNodeParam( const mol::string& txt, LPARAM lParam,  HTREEITEM node,int state )
+HTREEITEM TreeCtrl::addNodeParam( const std::wstring& txt, LPARAM lParam,  HTREEITEM node,int state )
 {
     TVITEM tvi;
     TVINSERTSTRUCT tvins;
 
-    mol::TCHAR* c = (mol::TCHAR*)txt.c_str();
+    wchar_t* c = (wchar_t*)txt.c_str();
     tvi.mask = TVIF_TEXT | TVIF_STATE|TVIF_PARAM;
     tvi.pszText = c;
     tvi.cchTextMax = (int)txt.size();
@@ -1339,12 +1339,12 @@ HTREEITEM TreeCtrl::addNodeParam( const mol::string& txt, LPARAM lParam,  HTREEI
     return (HTREEITEM) sendMessage( TVM_INSERTITEM, 0, (LPARAM) (LPTVINSERTSTRUCT) &tvins);
 }
 
-HTREEITEM TreeCtrl::addIconNode( const mol::string& txt, HTREEITEM node, int iIcon, int iSelIcon, int state )
+HTREEITEM TreeCtrl::addIconNode( const std::wstring& txt, HTREEITEM node, int iIcon, int iSelIcon, int state )
 {
     TVITEM tvi;
     TVINSERTSTRUCT tvins;
 
-    mol::TCHAR* c = (mol::TCHAR*)txt.c_str();
+    wchar_t* c = (wchar_t*)txt.c_str();
     tvi.mask = TVIF_TEXT | TVIF_STATE | TVIF_IMAGE|TVIF_SELECTEDIMAGE;
     tvi.pszText = c;
     tvi.cchTextMax = (int)txt.size();
@@ -1361,12 +1361,12 @@ HTREEITEM TreeCtrl::addIconNode( const mol::string& txt, HTREEITEM node, int iIc
     return hti;
 }
 
-HTREEITEM TreeCtrl::addIconNodeParam( const mol::string& txt, LPARAM lParam, HTREEITEM node, int iIcon, int iSelIcon, int state )
+HTREEITEM TreeCtrl::addIconNodeParam( const std::wstring& txt, LPARAM lParam, HTREEITEM node, int iIcon, int iSelIcon, int state )
 {
     TVITEM tvi;
     TVINSERTSTRUCT tvins;
 
-    mol::TCHAR* c = (mol::TCHAR*)txt.c_str();
+    wchar_t* c = (wchar_t*)txt.c_str();
     tvi.mask = TVIF_TEXT | TVIF_STATE | TVIF_IMAGE|TVIF_SELECTEDIMAGE|TVIF_PARAM;
     tvi.pszText = c;
     tvi.cchTextMax = (int)txt.size();
@@ -1384,12 +1384,12 @@ HTREEITEM TreeCtrl::addIconNodeParam( const mol::string& txt, LPARAM lParam, HTR
     return hti;
 }
 
-mol::string TreeCtrl::getItemText( HTREEITEM item )
+std::wstring TreeCtrl::getItemText( HTREEITEM item )
 {
     TVITEM tvi;
     tvi.mask = TVIF_TEXT | TVIF_HANDLE ;
 
-    mol::TCHAR buf[1024];
+    wchar_t buf[1024];
     tvi.pszText = buf;
     tvi.cchTextMax = 1024;
     tvi.hItem = item;
@@ -1398,12 +1398,12 @@ mol::string TreeCtrl::getItemText( HTREEITEM item )
     return buf;
 }
 
-LRESULT TreeCtrl::setItemText( HTREEITEM item, const mol::string& str )
+LRESULT TreeCtrl::setItemText( HTREEITEM item, const std::wstring& str )
 {
     TVITEM tvi;
     tvi.mask = TVIF_TEXT | TVIF_HANDLE ;
 
-    tvi.pszText = (mol::TCHAR*)str.c_str();
+    tvi.pszText = (wchar_t*)str.c_str();
     tvi.cchTextMax = (int)str.size();
     tvi.hItem = item;
 
@@ -1533,7 +1533,7 @@ int Tooltip::style()
     return WS_POPUP|TTS_NOPREFIX|TTS_ALWAYSTIP; 
 }
 
-LRESULT Tooltip::addTool( HWND tool, const mol::string& txt )
+LRESULT Tooltip::addTool( HWND tool, const std::wstring& txt )
 {
     TOOLINFO ti;
     Rect r;
@@ -1544,7 +1544,7 @@ LRESULT Tooltip::addTool( HWND tool, const mol::string& txt )
     ti.hwnd = tool;
     ti.hinst = hinstance();
     ti.uId = ::GetDlgCtrlID(tool);
-    ti.lpszText = (mol::TCHAR*)(txt.c_str());
+    ti.lpszText = (wchar_t*)(txt.c_str());
     ti.rect.left = r.left;
     ti.rect.top = r.top;
     ti.rect.right = r.right;
@@ -1552,7 +1552,7 @@ LRESULT Tooltip::addTool( HWND tool, const mol::string& txt )
     return sendMessage( TTM_ADDTOOL, 0, (LPARAM) (LPTOOLINFO) &ti);
 }
 
-LRESULT Tooltip::addTool( mol::win::Ctrl* ctrl, const mol::string& txt )
+LRESULT Tooltip::addTool( mol::win::Ctrl* ctrl, const std::wstring& txt )
 {
     //undo subclassing
     ctrl->deClass();
@@ -1564,7 +1564,7 @@ LRESULT Tooltip::addTool( mol::win::Ctrl* ctrl, const mol::string& txt )
     return lr;
 }
 
-HWND Tooltip::createWindow( const mol::string& wndName, HMENU hMenu, const Rect& r, HWND parent )
+HWND Tooltip::createWindow( const std::wstring& wndName, HMENU hMenu, const Rect& r, HWND parent )
 {
     hWnd_ = ::CreateWindowEx( exstyle(),this->wndClassName().c_str(),
                                 wndName.c_str(), style(),
@@ -1630,19 +1630,19 @@ void ListCtrl::setView(DWORD dwView)
 		::SetWindowLong(hWnd_, GWL_STYLE, (dwStyle & ~LVS_TYPEMASK) | dwView); 
 }
 
-void ListCtrl::insertColumn( const mol::string& txt, int iSubItem, int width , int mode  )
+void ListCtrl::insertColumn( const std::wstring& txt, int iSubItem, int width , int mode  )
 {
 	LVCOLUMN lvc; 
 	lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM; 
 	lvc.fmt = mode;
 	lvc.iSubItem=iSubItem;
-	lvc.pszText=(mol::TCHAR*)txt.c_str();
+	lvc.pszText=(wchar_t*)txt.c_str();
 	lvc.cx = width;
 	ListView_InsertColumn(hWnd_,iSubItem,&lvc);
 	
 }
 
-mol::string ListCtrl::getItemText(int index, int subitem)
+std::wstring ListCtrl::getItemText(int index, int subitem)
 {
 	LVITEM lvi;
 	lvi.mask = LVIF_TEXT; 
@@ -1700,7 +1700,7 @@ int ListCtrl::getNextItem(int index, int state  )
 	return ListView_GetNextItem(hWnd_,index,state);		
 }
 
-void ListCtrl::insertItem(const mol::string& txt, int index, int state, int img, LPARAM lParam )
+void ListCtrl::insertItem(const std::wstring& txt, int index, int state, int img, LPARAM lParam )
 {
 	LVITEM lvi;
 	lvi.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE; 
@@ -1709,11 +1709,11 @@ void ListCtrl::insertItem(const mol::string& txt, int index, int state, int img,
 	lvi.iSubItem = 0;
 	lvi.state = 0;
 	lvi.lParam = (LPARAM) lParam;
-	lvi.pszText = (mol::TCHAR*)txt.c_str();
+	lvi.pszText = (wchar_t*)txt.c_str();
 	int r = ListView_InsertItem(hWnd_,&lvi);		
 }
 
-void ListCtrl::insertItem(std::vector<mol::string>& txt, int index, int state, int img, LPARAM lParam )
+void ListCtrl::insertItem(std::vector<std::wstring>& txt, int index, int state, int img, LPARAM lParam )
 {
 	LVITEM lvi;
 	lvi.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE; 
@@ -1722,25 +1722,25 @@ void ListCtrl::insertItem(std::vector<mol::string>& txt, int index, int state, i
 	lvi.iSubItem = 0;
 	lvi.state = state;
 	lvi.lParam = (LPARAM) lParam;
-	lvi.pszText = (mol::TCHAR*)txt[0].c_str();
+	lvi.pszText = (wchar_t*)txt[0].c_str();
 	int r = ListView_InsertItem(hWnd_,&lvi);		
 
 	for ( unsigned int i = 1; i < txt.size(); i++ )
 	{
 		lvi.mask = LVIF_TEXT ; 
 		lvi.iSubItem = i;
-		lvi.pszText = (mol::TCHAR*)txt[i].c_str();
+		lvi.pszText = (wchar_t*)txt[i].c_str();
 		int r = ListView_SetItem(hWnd_,&lvi);		
 	}
 }
 
-void ListCtrl::insertSubItem(const mol::string& txt, int index, int subitem )
+void ListCtrl::insertSubItem(const std::wstring& txt, int index, int subitem )
 {		
 	LVITEM lvi;
 	lvi.mask = LVIF_TEXT ; 
    	lvi.iItem = index;
 	lvi.iSubItem = subitem+1;
-	lvi.pszText = (mol::TCHAR*)txt.c_str();
+	lvi.pszText = (wchar_t*)txt.c_str();
 	ListView_SetItem(hWnd_,&lvi);
 }
 
@@ -1893,7 +1893,7 @@ void ImageList::drop(HWND hwnd)
 // Header Ctrl
 ////////////////////////////////////////////////////////////////
 
-int HeaderCtrl::addString(const mol::string& txt, int nWidth, int indexAfter)
+int HeaderCtrl::addString(const std::wstring& txt, int nWidth, int indexAfter)
 {
     HDITEM hdi; 
     int index = 0; 
@@ -1915,7 +1915,7 @@ LRESULT HeaderCtrl::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
 }
 
 
-HWND HeaderCtrl::createWindow( const mol::string& windowName, HMENU hMenu, const mol::Rect& r, HWND parent )
+HWND HeaderCtrl::createWindow( const std::wstring& windowName, HMENU hMenu, const mol::Rect& r, HWND parent )
 {
 	mol::win::CtrlClass< mol::win::header_class >::createWindow( windowName, hMenu, r, parent );
 

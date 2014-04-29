@@ -21,11 +21,11 @@ class ScpListCtrl;
 
 struct ScpListEntry
 {
-	ScpListEntry(const mol::string& fn, const mol::sftp::RemoteFile& rf, int index )
+	ScpListEntry(const std::wstring& fn, const mol::sftp::RemoteFile& rf, int index )
 		: filename(fn), fileinfo(rf), iconindex(index), isParsed(false) 
     {}
 	
-	mol::string				filename;
+	std::wstring				filename;
     int						iconindex;
     bool					isParsed;
 	mol::sftp::RemoteFile	fileinfo;
@@ -35,7 +35,7 @@ struct ScpListEntry
 		return fileinfo.isDir();
 	}
 
-	mol::string getName()
+	std::wstring getName()
 	{
 		return fileinfo.getName();
 	}
@@ -54,11 +54,11 @@ public:
 class ScpDirQueueLoadAction : public ScpDirQueueAction
 {
 public:
-	ScpDirQueueLoadAction( const mol::string& p, ScpListCtrl* dl );
+	ScpDirQueueLoadAction( const std::wstring& p, ScpListCtrl* dl );
 
 	virtual void operator()();
 
-	mol::string		    path;
+	std::wstring		    path;
 	ScpListCtrl*		scpList;
 };
 
@@ -66,12 +66,12 @@ public:
 class ScpDirQueueRenameAction : public ScpDirQueueAction
 {
 public:
-	ScpDirQueueRenameAction( const mol::string& oldp, const mol::string& newp,ScpListCtrl* dl );
+	ScpDirQueueRenameAction( const std::wstring& oldp, const std::wstring& newp,ScpListCtrl* dl );
 
 	virtual void operator()();
 
-	mol::string		    oldpath;
-	mol::string		    newpath;
+	std::wstring		    oldpath;
+	std::wstring		    newpath;
 	ScpListCtrl*		scpList;
 };
 
@@ -89,11 +89,11 @@ public:
 class ScpUnlinkQueueAction : public ScpDirQueueAction
 {
 public:
-	ScpUnlinkQueueAction( const std::vector<mol::string>& v, ScpListCtrl* dl );
+	ScpUnlinkQueueAction( const std::vector<std::wstring>& v, ScpListCtrl* dl );
 
 	virtual void operator()();
 
-	std::vector<mol::string> v;
+	std::vector<std::wstring> v;
 	ScpListCtrl*		scpList;
 };
 
@@ -102,12 +102,12 @@ public:
 class ScpPushFileQueueAction : public ScpDirQueueAction
 {
 public:
-	ScpPushFileQueueAction( const mol::string& p, const std::vector<mol::string>& v, ScpListCtrl* dl );
+	ScpPushFileQueueAction( const std::wstring& p, const std::vector<std::wstring>& v, ScpListCtrl* dl );
 
 	virtual void operator()();
 
-	mol::string		    path;
-	std::vector<mol::string> v;
+	std::wstring		    path;
+	std::vector<std::wstring> v;
 	ScpListCtrl*		scpList;
 };
 ///////////////////////////////////////////////////////////////////////////////
@@ -143,13 +143,13 @@ public:
     ScpListCtrl(void);
     ~ScpListCtrl();
 
-	void load( const mol::string& uri );
-	void load_async( const mol::string& uri );
+	void load( const std::wstring& uri );
+	void load_async( const std::wstring& uri );
 	void mkdir();
-	void unlink( const std::vector<mol::string>& v);
-	void put( std::vector<mol::string>& v, const mol::string& path);
+	void unlink( const std::vector<std::wstring>& v);
+	void put( std::vector<std::wstring>& v, const std::wstring& path);
 
-	void EndRename(const mol::string& oldpath, const mol::string& newpath);
+	void EndRename(const std::wstring& oldpath, const std::wstring& newpath);
 
 	// COM properties
 
@@ -221,18 +221,18 @@ protected:
 	virtual int listStyle()   { return WS_CHILD|LVS_REPORT|LVS_SHAREIMAGELISTS|LVS_EDITLABELS|WS_VSCROLL ; }
 	virtual int listExStyle() { return WS_EX_RIGHTSCROLLBAR; }
 
-    std::vector<mol::string>   selectionPaths();
+    std::vector<std::wstring>   selectionPaths();
     std::vector<int>           selectionIndexes();
     std::vector<ScpListEntry*> selectionEntries();
 
 	ScpListEntry* getItemEntry(int i );
-	mol::string getItemPath(int i);
-    int getItemByPath(const mol::string& path);
+	std::wstring getItemPath(int i);
+    int getItemByPath(const std::wstring& path);
 
 	bool doHitTest();
 	void clear();
-	mol::string getPath();
-    void setPath(const mol::string& path);
+	std::wstring getPath();
+    void setPath(const std::wstring& path);
 	bool connect(ISSHConnection** con );
 
 	class ShellList : 
@@ -262,7 +262,7 @@ protected:
 	mol::punk<ISSHConnection>			conn_;
 	mol::punk<ShellListCtrl_Drop>		Drop;
 	mol::Uri							uri_;
-    mol::string							path_;
+    std::wstring							path_;
 	mol::punk<ISSH>						ssh_;
 	OLE_COLOR							bgCol_;
 	OLE_COLOR							foreCol_;

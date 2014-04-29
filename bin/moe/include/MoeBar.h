@@ -46,7 +46,7 @@ private:
 	int  index ( HWND d );
 	void remove( HWND d );
 	void move  ( HWND what, HWND to );
-	void rename( HWND d,const mol::string& newpath, const mol::string& name );
+	void rename( HWND d,const std::wstring& newpath, const std::wstring& name );
 
 	
 	// Drag&Drop COM Callback

@@ -70,9 +70,9 @@ public:
     virtual BOOL move( const RECT& r, BOOL bRepaint = TRUE );
 
     // setText
-    virtual int setText( const mol::string& s );
+    virtual int setText( const std::wstring& s );
     virtual int setFont( HFONT font );
-	virtual mol::string  getText();
+	virtual std::wstring  getText();
 
 	virtual HBITMAP snapshot(RECT* r = 0);
 	//virtual HBITMAP createDIB(int nWidth =-1, int nHeight=-1);
@@ -146,7 +146,7 @@ public:
 	virtual ~WndProc();
 
 	// public interface to construct window with title
-    HWND create( mol::string windowName, HMENU id=0, const Rect& r=stdRect, HWND parent=0 );
+    HWND create( std::wstring windowName, HMENU id=0, const Rect& r=stdRect, HWND parent=0 );
 
 	// public interface to construct window without title
     HWND create( HMENU id=0, const Rect& r=stdRect, HWND parent=0 );
@@ -198,7 +198,7 @@ protected:
 
     static LRESULT CALLBACK windowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-    HWND virtual createWindow( const mol::string& windowName, HMENU hMenu=0,const Rect& r=stdRect , HWND parent=0 )=0;
+    HWND virtual createWindow( const std::wstring& windowName, HMENU hMenu=0,const Rect& r=stdRect , HWND parent=0 )=0;
 
 	int	eraseBackground_;
 
@@ -232,7 +232,7 @@ public:
 
 protected:
     virtual mol::win::WndClass& wndClass();
-	virtual HWND createWindow( const mol::string& windowName, HMENU hMenu=0,const Rect& r=mol::stdRect , HWND parent=0 );
+	virtual HWND createWindow( const std::wstring& windowName, HMENU hMenu=0,const Rect& r=mol::stdRect , HWND parent=0 );
     virtual void registerClass( HMENU& hMenu );
 };
 
@@ -284,7 +284,7 @@ protected:
 
     virtual mol::win::WndClass& wndClass()				
     {																	
-		static mol::string wc = mol::win::WndClassGenerator::createClass<C>();	
+		static std::wstring wc = mol::win::WndClassGenerator::createClass<C>();	
 		return mol::win::WndClassGenerator::getClass(wc);					
     }
 

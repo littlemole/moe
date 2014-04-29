@@ -31,20 +31,20 @@ public:
 	~ScintillaEditor();
 
 	SCINTILLA_SYNTAX mode();
-	SCINTILLA_SYNTAX mode( SCINTILLA_SYNTAX m, int size, const mol::string& font );
+	SCINTILLA_SYNTAX mode( SCINTILLA_SYNTAX m, int size, const std::wstring& font );
 
 	void print();
-	void setFont(int size, const mol::string& font);
+	void setFont(int size, const std::wstring& font);
 
 	bool showLineNumbers();
 	void showLineNumbers(bool b );
 
 
-	mol::string SyntaxDisplayName();
-	mol::string SyntaxDisplayName(int syntax);
+	std::wstring SyntaxDisplayName();
+	std::wstring SyntaxDisplayName(int syntax);
 
 protected:
-	virtual HWND createWindow( const mol::string& windowName, HMENU hMenu, const mol::Rect& r, HWND parent );
+	virtual HWND createWindow( const std::wstring& windowName, HMENU hMenu, const mol::Rect& r, HWND parent );
 
 	SCINTILLA_SYNTAX mode_;
 };

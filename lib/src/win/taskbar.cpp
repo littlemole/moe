@@ -119,7 +119,7 @@ void TaskbarWnd::enableTabs(bool b)
 	}
 }
 
-TaskbarWnd *TaskbarWnd::Create( Taskbar * pMainDlg, HWND d, const mol::string& title, ITaskbarList4* tbl, bool disabled)
+TaskbarWnd *TaskbarWnd::Create( Taskbar * pMainDlg, HWND d, const std::wstring& title, ITaskbarList4* tbl, bool disabled)
 {
     TaskbarWnd *pWnd = new TaskbarWnd( pMainDlg, d, tbl, disabled);
 
@@ -339,7 +339,7 @@ void Taskbar::init(HWND parent)
 	parent_ = parent;
 }
 
-TaskbarWnd* Taskbar::addTab( HWND d, const mol::string& title, bool disabled )
+TaskbarWnd* Taskbar::addTab( HWND d, const std::wstring& title, bool disabled )
 {
 	if ( tbl_ )
     {
@@ -357,7 +357,7 @@ TaskbarWnd* Taskbar::addTab( HWND d, const mol::string& title, bool disabled )
 	return 0;
 }
 
-void Taskbar::renameTab( HWND d, const mol::string& title )
+void Taskbar::renameTab( HWND d, const std::wstring& title )
 {
 	if ( tabs_.count(d) == 0 )
 		return;

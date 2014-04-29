@@ -4,9 +4,9 @@
 #include "widgets.h"
 
 
-mol::string engineFromPath(const std::string& path)
+std::wstring engineFromPath(const std::string& path)
 {
-	return mol::toString(mol::engineFromExtension(mol::Path::ext(mol::toString(path))));
+	return mol::towstring(mol::engineFromExtension(mol::Path::ext(mol::towstring(path))));
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ ThreadedTimeouts& threadedTimeouts()
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-mol::string findFile(const mol::string& f);
+std::wstring findFile(const std::wstring& f);
  
 void MoeDebugImport::dispose() 
 {
@@ -128,7 +128,7 @@ HRESULT __stdcall  MoeDebugImport::Import(BSTR filename)
  	if ( hr != S_OK )
  		return E_FAIL;
  
- 	mol::string file = findFile( mol::toString(filename) );
+ 	std::wstring file = findFile( mol::towstring(filename) );
  
  	mol::filestream fs;
  	fs.open(mol::tostring(file),GENERIC_READ);
@@ -264,7 +264,7 @@ ScriptDebugger::~ScriptDebugger()
 	ODBGS("ScriptDebugger died"); 
 }
 
-void ScriptDebugger::init(const mol::string& engine)
+void ScriptDebugger::init(const std::wstring& engine)
 {
 	HRESULT hr;
 
@@ -343,7 +343,7 @@ void ScriptDebugger::init(const mol::string& engine)
 DEFINE_GUID( GUID_JSCRIPT9, 0x16d51579L, 0xa30b, 0x4c8b, 
     0xa2, 0x76, 0x0f,0xf4, 0xdc, 0x41, 0xe7, 0x55 );
 
-HRESULT ScriptDebugger::getScriptEngine(const mol::string& engine, IActiveScript **ppas)
+HRESULT ScriptDebugger::getScriptEngine(const std::wstring& engine, IActiveScript **ppas)
 {
 	*ppas = 0;
 	CLSID clsid;
@@ -365,7 +365,7 @@ HRESULT ScriptDebugger::getScriptEngine(const mol::string& engine, IActiveScript
 }
 
 
-HRESULT ScriptDebugger::addNamedObject( IUnknown* punk, const mol::string& obj, int state )
+HRESULT ScriptDebugger::addNamedObject( IUnknown* punk, const std::wstring& obj, int state )
 {
 	mol::GIT git;
 	HRESULT hr;
@@ -391,7 +391,7 @@ HRESULT ScriptDebugger::addNamedObject( IUnknown* punk, const mol::string& obj, 
 	return E_FAIL;
 }
 
-HRESULT ScriptDebugger::removeNamedObject( const mol::string& obj )
+HRESULT ScriptDebugger::removeNamedObject( const std::wstring& obj )
 {
 	mol::GIT git;
 	if ( objectMap_[obj].first > 0 )
@@ -409,7 +409,7 @@ HRESULT ScriptDebugger::removeNamedObject( const mol::string& obj )
 }
 
 
-ScriptDebugger::Instance* ScriptDebugger::CreateInstance( HWND owner, const mol::string& script, const mol::string& filename)
+ScriptDebugger::Instance* ScriptDebugger::CreateInstance( HWND owner, const std::wstring& script, const std::wstring& filename)
 {
 	ODBGS("ThreadScript::execute()\r\n");
 
@@ -526,7 +526,7 @@ void ScriptDebugger::execute_thread( )
 	init(engine_);
 
 	ODBGS("engine initialized");
-	for ( std::map<mol::string,ObjectMapItem>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++) 
+	for ( std::map<std::wstring,ObjectMapItem>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++) 
 	{
 		 hr = activeScript_->AddNamedItem(mol::towstring( (*it).first).c_str(),(*it).second.second);
 	}
@@ -567,7 +567,7 @@ void ScriptDebugger::execute_callback()
 	activeScript_.release();
 
 	mol::GIT git;	
-	for ( std::map<mol::string,ObjectMapItem>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
+	for ( std::map<std::wstring,ObjectMapItem>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
 	{
 		git.revokeInterface((*it).second.first);
 	}
@@ -592,7 +592,7 @@ void ScriptDebugger::execute_callback()
 
 }
 
-void ScriptDebugger::eval_expression(const mol::string& expr)
+void ScriptDebugger::eval_expression(const std::wstring& expr)
 {
 	exp_.release();
 
@@ -643,14 +643,14 @@ void ScriptDebugger::eval_expression(const mol::string& expr)
 
 HRESULT __stdcall ScriptDebugger::onComplete()
 {
-	mol::string result;
+	std::wstring result;
 	mol::bstr txt;
 
 	HRESULT phr = 0;
 	HRESULT hr =exp_->GetResultAsString(&phr,&txt);
 	if(hr == S_OK && txt)
 	{
-		result = txt.toString();
+		result = txt.towstring();
 		OnExpressionEvaluated.fire(result);
 	}
 
@@ -672,9 +672,9 @@ HRESULT  __stdcall ScriptDebugger::GetItemInfo( LPCOLESTR pstrName,DWORD dwRetur
 	mol::GIT git;
 	if ( SCRIPTINFO_IUNKNOWN & dwReturnMask )
 	{
-		for ( std::map<mol::string,ObjectMapItem>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
+		for ( std::map<std::wstring,ObjectMapItem>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
 		{
-			mol::string tmp = (*it).first;
+			std::wstring tmp = (*it).first;
 			if ( _wcsicmp(mol::towstring(tmp).c_str(),pstrName) == 0 )
 			{
 				mol::punk<IUnknown> unk;
@@ -689,9 +689,9 @@ HRESULT  __stdcall ScriptDebugger::GetItemInfo( LPCOLESTR pstrName,DWORD dwRetur
 	}
 	if ( SCRIPTINFO_ITYPEINFO & dwReturnMask )
 	{
-		for ( std::map<mol::string,ObjectMapItem>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
+		for ( std::map<std::wstring,ObjectMapItem>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
 		{
-			mol::string tmp = (*it).first;
+			std::wstring tmp = (*it).first;
 			if ( _wcsicmp(mol::towstring(tmp).c_str(),pstrName) == 0 )
 			{
 				mol::punk<IUnknown> unk;
@@ -730,7 +730,7 @@ HRESULT  __stdcall ScriptDebugger::OnScriptError( IActiveScriptError *pscripterr
 {
 	remote_.release();
 
-	mol::ostringstream oss;
+	std::wostringstream oss;
 	
 	DWORD context;
 	ULONG line;
@@ -749,7 +749,7 @@ HRESULT  __stdcall ScriptDebugger::OnScriptError( IActiveScriptError *pscripterr
 			f->GetDescriptionString(TRUE,&e);
 
 			if ( e )
-				oss << e.toString() << std::endl;
+				oss << e.towstring() << std::endl;
 		}
 	}
 
@@ -757,7 +757,7 @@ HRESULT  __stdcall ScriptDebugger::OnScriptError( IActiveScriptError *pscripterr
 	pscripterror->GetExceptionInfo(&ex);
 	if ( ex.bstrDescription )
 	{
-		oss << mol::bstr(ex.bstrDescription).toString();
+		oss << mol::bstr(ex.bstrDescription).towstring();
 	}
 
 	OnScriptThread.fire( line, oss.str()  );
@@ -831,7 +831,7 @@ HRESULT  __stdcall  ScriptDebugger::onDebugOutput(LPCOLESTR pstr)
 		return S_OK;
 }
 
-//extern void enumProps( mol::ostringstream& oss, IDebugProperty* prop, int level = 0 );
+//extern void enumProps( std::wostringstream& oss, IDebugProperty* prop, int level = 0 );
 
 HRESULT  __stdcall  ScriptDebugger::onHandleBreakPoint(IRemoteDebugApplicationThread *rthread, BREAKREASON br, IActiveScriptErrorDebug *pError)
 {
@@ -905,7 +905,7 @@ HRESULT  __stdcall  ScriptDebugger::onHandleBreakPoint(IRemoteDebugApplicationTh
 
 	remote_ = rthread;
 
-	mol::ostringstream oss;
+	std::wostringstream oss;
 	if ( pError )
 	{
 		EXCEPINFO ex;
@@ -925,13 +925,13 @@ HRESULT  __stdcall  ScriptDebugger::onHandleBreakPoint(IRemoteDebugApplicationTh
 				f->GetDescriptionString(TRUE,&e);
 
 				if ( e )
-					oss << e.toString() << std::endl;
+					oss << e.towstring() << std::endl;
 			}
 		}
 
 		if ( ex.bstrDescription )
 		{
-			oss << mol::bstr(ex.bstrDescription).toString();
+			oss << mol::bstr(ex.bstrDescription).towstring();
 		}
 	}
 

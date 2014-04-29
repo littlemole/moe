@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "dir.h"
 
-DirObj::Instance* DirObj::CreateInstance(std::vector<mol::string>& v)
+DirObj::Instance* DirObj::CreateInstance(std::vector<std::wstring>& v)
 {
 	Instance* i = new Instance;
 	i->AddRef();

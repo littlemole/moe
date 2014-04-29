@@ -100,10 +100,10 @@ std::string trim ( const std::string& in )
 {
     size_t first = in.find_first_not_of(" \r\n\t");
     size_t last  = in.find_last_not_of(" \r\n\t");
-    if ( (first == mol::string::npos) && (last == mol::string::npos) )
+    if ( (first == std::string::npos) && (last == std::string::npos) )
             return "";
-    size_t from  = ( first != mol::string::npos ) ? first : 0 ;
-    size_t to    = ( last  != mol::string::npos ) ? last-from+1  : in.size()-from ;
+	size_t from = (first != std::string::npos) ? first : 0;
+	size_t to = (last != std::string::npos) ? last - from + 1 : in.size() - from;
     return in.substr(from,to);
 }
 
@@ -112,10 +112,10 @@ std::wstring trim ( const std::wstring& in )
 {
     size_t first = in.find_first_not_of(L" \r\n\t");
     size_t last  = in.find_last_not_of(L" \r\n\t");
-    if ( (first == mol::string::npos) && (last == mol::string::npos) )
+	if ((first == std::string::npos) && (last == std::string::npos))
             return L"";
-    size_t from  = ( first != mol::string::npos ) ? first : 0 ;
-    size_t to    = ( last  != mol::string::npos ) ? last-from+1  : in.size()-from ;
+	size_t from = (first != std::string::npos) ? first : 0;
+	size_t to = (last != std::string::npos) ? last - from + 1 : in.size() - from;
     return in.substr(from,to);
 }
 
@@ -332,9 +332,9 @@ std::string nl2rtf( const std::string& in )
     return out.str();
 }
 
-mol::string tab2space( const mol::string& in )
+std::wstring tab2space(const std::wstring& in)
 {
-    mol::ostringstream out;
+    std::wostringstream out;
     size_t p = 0;
     size_t len = in.size();
     while( ( p < len ) )
@@ -352,9 +352,9 @@ mol::string tab2space( const mol::string& in )
     return out.str();
 }
 
-mol::string skip2spaces( const mol::string& in )
+std::wstring skip2spaces( const std::wstring& in )
 {
-    mol::ostringstream out;
+    std::wstringstream out;
     size_t p = 0;
     size_t len = in.size();
     while( ( p < len ) )
@@ -372,9 +372,9 @@ mol::string skip2spaces( const mol::string& in )
     return out.str();
 }
 
-mol::string skipNewLines( const mol::string& in )
+std::string skipNewLines( const std::string& in )
 {
-    mol::ostringstream out;
+    std::ostringstream out;
     size_t p = 0;
     size_t len = in.size();
     while( ( p < len ) )
@@ -388,14 +388,14 @@ mol::string skipNewLines( const mol::string& in )
     return out.str();
 }
 
-void htmlWrap(mol::string& str, int wrap )
+void htmlWrap(std::wstring& str, int wrap )
 {
     size_t pos = 0;
     size_t p   = 0;
 
     str += _T(" ");
 
-    while ( (p = str.find_first_of(_T(" "),pos)) != mol::string::npos )
+    while ( (p = str.find_first_of(_T(" "),pos)) != std::wstring::npos )
     {
         size_t len = p - pos;
         if ( (int)len > wrap )
@@ -413,9 +413,9 @@ void htmlWrap(mol::string& str, int wrap )
 		str.erase(str.size()-1,1);
 }
 
-mol::string nl2br( const mol::string& in )
+std::wstring nl2br( const std::wstring& in )
 {
-    mol::ostringstream out;
+    std::wostringstream out;
     size_t p = 0;
     size_t len = in.size();
     while( ( p < len ) )

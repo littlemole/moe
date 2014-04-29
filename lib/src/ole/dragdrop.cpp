@@ -23,7 +23,7 @@ struct format_etc_shellpidl : public format_etc
 #define molGetPIDLItem(pida, i) (LPCITEMIDLIST)(((LPBYTE)pida)+(pida)->aoffset[i+1])
 
 
-std::vector<mol::string> vectorFromDataObject(IDataObject* ido)
+std::vector<std::wstring> vectorFromDataObject(IDataObject* ido)
 {
 	//ODBGS("vectorFromDataObject");
 
@@ -33,11 +33,11 @@ std::vector<mol::string> vectorFromDataObject(IDataObject* ido)
 	format_etc_dropfile			fe;
 
 	STGMEDIUM					sm;
-	mol::TCHAR*					fname   = 0;
+	wchar_t*					fname   = 0;
 	int							len		= 0;
 	int							n		= 0;
 	
-	std::vector<mol::string>	v;
+	std::vector<std::wstring>	v;
 
 	if (!ido)
 		return v;
@@ -57,16 +57,16 @@ std::vector<mol::string> vectorFromDataObject(IDataObject* ido)
 
 			LPCITEMIDLIST folder = molGetPIDLFolder(cida);		
 			mol::io::ShellFolder sf( (LPITEMIDLIST)folder);
-			mol::string parent = mol::io::desktop().getDisplayNameOf((LPITEMIDLIST)folder);
+			std::wstring parent = mol::io::desktop().getDisplayNameOf((LPITEMIDLIST)folder);
 			if ( sf )
 			{
 				int n = cida->cidl;
 				for ( int i = 0; i < n; i++ )
 				{
 					LPCITEMIDLIST item = molGetPIDLItem(cida,i);
-					//mol::string s = mol::io::desktop().getDisplayNameOf((LPITEMIDLIST)item,SHGDN_FORPARSING);				
-					//mol::string s2 = sf.getDisplayNameOf((LPITEMIDLIST)item,SHGDN_INFOLDER);
-					mol::string s3 = sf.getDisplayNameOf((LPITEMIDLIST)item,SHGDN_FORPARSING);
+					//std::wstring s = mol::io::desktop().getDisplayNameOf((LPITEMIDLIST)item,SHGDN_FORPARSING);				
+					//std::wstring s2 = sf.getDisplayNameOf((LPITEMIDLIST)item,SHGDN_INFOLDER);
+					std::wstring s3 = sf.getDisplayNameOf((LPITEMIDLIST)item,SHGDN_FORPARSING);
 					v.push_back(s3);
 				}
 			}
@@ -92,7 +92,7 @@ std::vector<mol::string> vectorFromDataObject(IDataObject* ido)
 			if (!len )
 				break;
 
-			mol::tbuff buf(len+1);
+			mol::wbuff buf(len+1);
 			::DragQueryFile( hDrop, i, buf, len+1 );
 			v.push_back(buf.toString());
 			i++;

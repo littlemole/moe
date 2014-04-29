@@ -10,7 +10,7 @@ class UAC_Elevator
 {
 public:
 
-	static bool read_to_pipe(const mol::string& pipename, const mol::string& filename )
+	static bool read_to_pipe(const std::wstring& pipename, const std::wstring& filename )
 	{
 		//::MessageBox(0,_T("read_to_pipe"),_T("UAC"),0);
 
@@ -38,7 +38,7 @@ public:
 		return true;
 	}
 
-	static bool write_from_pipe(const mol::string& pipename, const mol::string& filename )
+	static bool write_from_pipe(const std::wstring& pipename, const std::wstring& filename )
 	{
 		//::MessageBox(0,_T("write_from_pipe"),_T("UAC"),0);
 
@@ -72,7 +72,7 @@ public:
 };
 
 
-int _tmain(int argc, _TCHAR* argv[])
+int wmain(int argc, wchar_t* argv[])
 {
 	if ( argc < 4 )
 	{
@@ -80,9 +80,9 @@ int _tmain(int argc, _TCHAR* argv[])
 		return 0;
 	}
 
-	mol::string cmd      = argv[1];
-	mol::string pipename = argv[2];
-	mol::string filename = argv[3];
+	std::wstring cmd      = argv[1];
+	std::wstring pipename = argv[2];
+	std::wstring filename = argv[3];
 
 	if ( cmd == _T("read") )
 	{

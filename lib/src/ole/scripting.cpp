@@ -7,7 +7,7 @@ namespace ole {
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-HRESULT ActiveScript::init(const mol::string& engine)
+HRESULT ActiveScript::init(const std::wstring& engine)
 {
 	ODBGS(engine);
 
@@ -69,13 +69,13 @@ HRESULT ActiveScript::close()
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 
-HRESULT ActiveScript::addNamedObject(const mol::string& obj, int state)
+HRESULT ActiveScript::addNamedObject(const std::wstring& obj, int state)
 {
 	return activeScript->AddNamedItem(mol::towstring(obj).c_str(),state);
 }
 
 
-HRESULT ActiveScript::runScript(const mol::string& script, int flag)
+HRESULT ActiveScript::runScript(const std::wstring& script, int flag)
 {
 	::VariantClear(&varResult_);
 	::ZeroMemory(&ei_, sizeof(ei_));
@@ -95,7 +95,7 @@ HRESULT ActiveScript::runScript(const mol::string& script, int flag)
 	return E_FAIL;
 }
 
-HRESULT ActiveScript::getScriptDispatch( const mol::string& script, IDispatch **ppdisp)
+HRESULT ActiveScript::getScriptDispatch( const std::wstring& script, IDispatch **ppdisp)
 {
 	if ( activeScript )
 		if ( script.length() > 0 )
@@ -106,11 +106,11 @@ HRESULT ActiveScript::getScriptDispatch( const mol::string& script, IDispatch **
 	return E_FAIL;
 }
 
-HRESULT ActiveScript::addScriptlet( mol::string& name, 
-					  const mol::string& handler,
-					  const mol::string& obj,
-					  const mol::string& subobj,
-					  const mol::string& eventname )
+HRESULT ActiveScript::addScriptlet( std::wstring& name, 
+					  const std::wstring& handler,
+					  const std::wstring& obj,
+					  const std::wstring& subobj,
+					  const std::wstring& eventname )
 {
 	::VariantClear(&varResult_);
 	::ZeroMemory(&ei_, sizeof(ei_));
@@ -146,7 +146,7 @@ EXCEPINFO& ActiveScript::errorInfo()
 DEFINE_GUID( GUID_JSCRIPT9, 0x16d51579L, 0xa30b, 0x4c8b, 
     0xa2, 0x76, 0x0f,0xf4, 0xdc, 0x41, 0xe7, 0x55 );
 
-HRESULT ActiveScript::getScriptEngine(const mol::string& engine, IActiveScript **ppas)
+HRESULT ActiveScript::getScriptEngine(const std::wstring& engine, IActiveScript **ppas)
 {
 	*ppas = 0;
 	CLSID clsid;
@@ -167,7 +167,7 @@ HRESULT ActiveScript::getScriptEngine(const mol::string& engine, IActiveScript *
 	return hr;
 }
 /*
- HRESULT ActiveScript::getScriptEngine(const mol::string& engine, IActiveScript **ppas)
+ HRESULT ActiveScript::getScriptEngine(const std::wstring& engine, IActiveScript **ppas)
  {
    *ppas = 0;
    CLSID clsid;
@@ -180,7 +180,7 @@ HRESULT ActiveScript::getScriptEngine(const mol::string& engine, IActiveScript *
 	   return hr;
    }
 
-   mol::string s = mol::stringFromCLSID(clsid);
+   std::wstring s = std::wstringFromCLSID(clsid);
    ODBGS(s);
    
    hr = CoCreateInstance(clsid, 0, CLSCTX_ALL,IID_IActiveScript,(void**)ppas);
@@ -236,7 +236,7 @@ ScriptHost::~ScriptHost()
 HRESULT ScriptHost::close()
 {
 
-	for ( std::map<mol::string,IUnknown*>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
+	for ( std::map<std::wstring,IUnknown*>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
 	{
 		(*it).second->Release();
 	}
@@ -244,7 +244,7 @@ HRESULT ScriptHost::close()
 	return activeScript_.close();
 }
 
-HRESULT ScriptHost::init(const mol::string& engine)
+HRESULT ScriptHost::init(const std::wstring& engine)
 {
 	HRESULT hr;
 	hr = activeScript_.init(engine);
@@ -279,7 +279,7 @@ HRESULT ScriptHost::exec()
 	return activeScript_.setState(SCRIPTSTATE_STARTED);
 }
 
-HRESULT ScriptHost::addNamedObject( IUnknown* punk, const mol::string& obj, int state )
+HRESULT ScriptHost::addNamedObject( IUnknown* punk, const std::wstring& obj, int state )
 {
 	punk->AddRef();
 	if ( objectMap_.count(obj) > 0 ) 
@@ -298,7 +298,7 @@ HRESULT ScriptHost::addNamedObject( IUnknown* punk, const mol::string& obj, int 
 	return hr;
 }
 
-HRESULT ScriptHost::removeNamedObject( const mol::string& obj )
+HRESULT ScriptHost::removeNamedObject( const std::wstring& obj )
 {
 	if ( objectMap_.count(obj) > 0 )
 	{
@@ -309,17 +309,17 @@ HRESULT ScriptHost::removeNamedObject( const mol::string& obj )
 	return S_OK;
 }
 
-HRESULT ScriptHost::addScriptlet( mol::string& name, 
-					  const mol::string& handler,
-					  const mol::string& obj,
-					  const mol::string& subobj,
-					  const mol::string& eventname )
+HRESULT ScriptHost::addScriptlet( std::wstring& name, 
+					  const std::wstring& handler,
+					  const std::wstring& obj,
+					  const std::wstring& subobj,
+					  const std::wstring& eventname )
 {
 	debug_ = false;
 	return activeScript_.addScriptlet(name, handler, obj, subobj, eventname );
 }
 
-HRESULT ScriptHost::runScript(const mol::string& script, int flag)
+HRESULT ScriptHost::runScript(const std::wstring& script, int flag)
 {
 	debug_ = false;
 	HRESULT hr;
@@ -366,7 +366,7 @@ HRESULT ScriptHost::runScript(const mol::string& script, int flag)
 }
 
 
-HRESULT ScriptHost::debugScript(const mol::string& script, int flag)
+HRESULT ScriptHost::debugScript(const std::wstring& script, int flag)
 {
 	debug_ = true;
 	HRESULT hr;
@@ -407,12 +407,12 @@ HRESULT ScriptHost::debugScript(const mol::string& script, int flag)
 	return hr;
 }
 
-HRESULT ScriptHost::getScript( const mol::string& script,IDispatch **ppdisp)
+HRESULT ScriptHost::getScript( const std::wstring& script,IDispatch **ppdisp)
 {
 	return activeScript_.getScriptDispatch(script,ppdisp);
 }
 
-variant ScriptHost::call(const mol::string& func )
+variant ScriptHost::call(const std::wstring& func )
 {
 	variant ret;
 
@@ -453,9 +453,9 @@ HRESULT  __stdcall ScriptHost::GetItemInfo( LPCOLESTR pstrName,DWORD dwReturnMas
 {
 	if ( SCRIPTINFO_IUNKNOWN & dwReturnMask )
 	{
-		for ( std::map<mol::string,IUnknown*>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
+		for ( std::map<std::wstring,IUnknown*>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
 		{
-			mol::string tmp = (*it).first;
+			std::wstring tmp = (*it).first;
 			if ( _wcsicmp(mol::towstring(tmp).c_str(),pstrName) == 0 )
 			{
 				IUnknown* punk = (*it).second;
@@ -465,9 +465,9 @@ HRESULT  __stdcall ScriptHost::GetItemInfo( LPCOLESTR pstrName,DWORD dwReturnMas
 	}
 	if ( SCRIPTINFO_ITYPEINFO & dwReturnMask )
 	{
-		for ( std::map<mol::string,IUnknown*>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
+		for ( std::map<std::wstring,IUnknown*>::iterator it = objectMap_.begin(); it != objectMap_.end(); it++)
 		{
-			mol::string tmp = (*it).first;
+			std::wstring tmp = (*it).first;
 			if ( _wcsicmp(mol::towstring(tmp).c_str(),pstrName) == 0 )
 			{
 				IUnknown* unk = (*it).second;
@@ -547,22 +547,22 @@ HRESULT  __stdcall ScriptHost::EnableModeless(	BOOL fEnable )
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-mol::string engineFromExtension(const mol::string& ext)
+std::wstring engineFromExtension(const std::wstring& ext)
 {
 	try {
 		
-		mol::string x = ext;
+		std::wstring x = ext;
 		mol::RegKey root(HKEY_CLASSES_ROOT, KEY_READ);
 
 		if ( ext[0] != _T('.') )
 		{
-			mol::string tmp(_T("."));
+			std::wstring tmp(_T("."));
 			tmp += ext;
 			x = tmp;
 		}
 		
 		mol::RegKey extKey = root.open(x, KEY_READ);
-		mol::string extFile = extKey.get();
+		std::wstring extFile = extKey.get();
 		mol::RegKey fileKey = root.open(extFile, KEY_READ);
 		mol::RegKey engineKey = fileKey.open( _T("ScriptEngine"), KEY_READ );
 		return engineKey.get();

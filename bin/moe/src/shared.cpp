@@ -141,7 +141,7 @@ HRESULT __stdcall MoeDialogView::get_Title( BSTR* title )
 	if ( !title )
 		return E_INVALIDARG;
 
-	mol::string t = wnd_->getText();
+	std::wstring t = wnd_->getText();
 	*title = ::SysAllocString( mol::towstring(t).c_str() );
 	return S_OK;
 }
@@ -152,7 +152,7 @@ HRESULT __stdcall MoeDialogView::put_Title( BSTR title )
 	if ( !title )
 		return S_FALSE;
 
-	wnd_->setText( mol::bstr(title).toString() );
+	wnd_->setText( mol::bstr(title).towstring() );
 	return S_OK;
 }
 
@@ -431,8 +431,8 @@ REFGUID MoeDialogs::getCoClassID()
 HRESULT __stdcall MoeDialogs::MsgBox( BSTR text, BSTR title, long flags, long* result)
 {
 	((IMoe*)moe())->AddRef();
-	mol::string txt = text  ? mol::toString(text)  : _T("");
-	mol::string ttl = title ? mol::toString(title) : _T("");
+	std::wstring txt = text  ? mol::towstring(text)  : _T("");
+	std::wstring ttl = title ? mol::towstring(title) : _T("");
 
 	long res = ::MessageBox(*moe(),txt.c_str(),ttl.c_str(),flags);
 	if ( result )
@@ -445,7 +445,7 @@ HRESULT __stdcall MoeDialogs::MsgBox( BSTR text, BSTR title, long flags, long* r
 HRESULT __stdcall MoeDialogs::Open(BSTR path,IMoeDocument** d)
 {
 
-	static mol::TCHAR  InFilesFilter[] = _T("open text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
+	static wchar_t  InFilesFilter[] = _T("open text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
 
 	if ( mol::Ribbon::ribbon()->enabled() )
 	{
@@ -492,7 +492,7 @@ HRESULT __stdcall MoeDialogs::Open(BSTR path,IMoeDocument** d)
 	ofn.setFilter( InFilesFilter );			
 	if ( path )
 	{
-		mol::string p = mol::toString(path);
+		std::wstring p = mol::towstring(path);
 		ofn.fileName(p);
 	}
 
@@ -549,7 +549,7 @@ HRESULT __stdcall MoeDialogs::OpenDir( IMoeDocument** d)
 	mol::bstr dir;
 	if ( S_OK == ChooseDir(&dir) && dir)
 	{
-		mol::string s = dir.toString();
+		std::wstring s = dir.towstring();
 		if ( s != _T("") )
 		{
 			//if ( mol::Path::exists(s) ) // too restrictive, would filter ssh
@@ -571,7 +571,7 @@ HRESULT __stdcall MoeDialogs::ChooseFile( BSTR* f )
 	mol::FilenameDlg ofn(*moe());
 	if ( ofn.dlgOpen( OFN_NOVALIDATE | OFN_EXPLORER | OFN_NOTESTFILECREATE ) )
 	{
-		mol::string fn = ofn.fileName();
+		std::wstring fn = ofn.fileName();
 		*f = ::SysAllocString( mol::towstring(fn).c_str() );
 	}
 	return S_OK;
@@ -584,7 +584,7 @@ HRESULT __stdcall MoeDialogs::ChooseDir( BSTR* d )
 
 	*d = 0;
 
-	mol::string dir = mol::io::browseForFolder( *moe() );
+	std::wstring dir = mol::io::browseForFolder( *moe() );
 	if ( !dir.empty() )
 	{
 		*d = ::SysAllocString( mol::towstring(dir).c_str() );
@@ -626,8 +626,8 @@ REFGUID MoeScript::getCoClassID()
 
 HRESULT __stdcall MoeScript::Run( BSTR f, BSTR engine )
 {
-	statusBar()->status(mol::bstr(f).toString());
-	mol::string s = findFile(mol::bstr(f).toString());
+	statusBar()->status(mol::bstr(f).towstring());
+	std::wstring s = findFile(mol::bstr(f).towstring());
 	if ( s == _T("") )
 		return E_FAIL;
 
@@ -648,7 +648,7 @@ HRESULT __stdcall MoeScript::Eval( BSTR scrpt, BSTR scrptLanguage)
 
 
 	//moe()->scriptHost->eval( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
-	Script::CreateInstance()->eval( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
+	Script::CreateInstance()->eval( mol::towstring(scrptLanguage),mol::towstring(scrpt),0 );
 	return S_OK;
 }
 
@@ -658,7 +658,7 @@ HRESULT __stdcall MoeScript::Debug( BSTR scrpt, BSTR scrptLanguage)
 		return E_INVALIDARG;
 
 	//moe()->scriptHost->debug( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
-	Script::CreateInstance()->debug( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
+	Script::CreateInstance()->debug( mol::towstring(scrptLanguage),mol::towstring(scrpt),0 );
 	return S_OK;
 }
 
@@ -682,11 +682,11 @@ HRESULT __stdcall MoeScript::CreateObjectAdmin( BSTR progid, IDispatch** disp)
 
 HRESULT __stdcall MoeScript::ShowHtmlForm( BSTR src, long l, int t, int w, int h, int formStyle )
 {
-	statusBar()->status(mol::bstr(src).toString());
+	statusBar()->status(mol::bstr(src).towstring());
 
 	typedef mol::com_obj<MoeFormWnd> form;
 	form* f = MoeFormWnd::CreateInstance( 
-							mol::bstr(src).toString(),
+							mol::bstr(src).towstring(),
 							l,t,w,h, 
 							formStyle 
 						);
@@ -699,7 +699,7 @@ HRESULT __stdcall MoeScript::ShowUserForm( BSTR pathname, IMoeUserForm** form )
 	if ( form )
 		*form = 0;
 
-	UserForm::Instance* userForm = UserForm::CreateInstance( mol::bstr(pathname).toString(), false );
+	UserForm::Instance* userForm = UserForm::CreateInstance( mol::bstr(pathname).towstring(), false );
 	if ( !userForm )
 		return E_FAIL;
 
@@ -716,7 +716,7 @@ HRESULT __stdcall MoeScript::DebugUserForm(  BSTR pathname, IMoeUserForm** form 
 	if ( form )
 		*form = 0;
 
-	UserForm::Instance* userForm = UserForm::CreateInstance( mol::bstr(pathname).toString(), false );
+	UserForm::Instance* userForm = UserForm::CreateInstance( mol::bstr(pathname).towstring(), false );
 	if ( !userForm )
 		return E_FAIL;
 
@@ -729,8 +729,8 @@ HRESULT __stdcall MoeScript::DebugUserForm(  BSTR pathname, IMoeUserForm** form 
 
 HRESULT __stdcall MoeScript::System( BSTR f)
 {
-	statusBar()->status(mol::bstr(f).toString());
-	mol::string s = findFile(mol::bstr(f).toString());
+	statusBar()->status(mol::bstr(f).towstring());
+	std::wstring s = findFile(mol::bstr(f).towstring());
 	if ( s == _T("") )
 		return E_FAIL;
 
@@ -745,7 +745,7 @@ HRESULT __stdcall MoeScript::Picture( BSTR f, IDispatch** disp )
 	*disp = 0;
 
 	mol::Picture pic;
-	HRESULT hr = pic.load( mol::toString(f) );
+	HRESULT hr = pic.load( mol::towstring(f) );
 	if ( hr != S_OK )
 		return S_OK;
 
@@ -822,7 +822,7 @@ HRESULT __stdcall MoeConfig::get_ConfigPath( BSTR* fPath)
 {
 	if ( !fPath ) 
 		return E_POINTER;
-	mol::string tmp( mol::Path::parentDir(mol::App().getAppPath()));
+	std::wstring tmp( mol::Path::parentDir(mol::App().getAppPath()));
 	*fPath = ::SysAllocString(mol::towstring(tmp).c_str());
 	return S_OK;
 }
@@ -831,7 +831,7 @@ HRESULT __stdcall MoeConfig::get_ModulePath(  BSTR* fPath)
 {
 	if ( !fPath ) 
 		return E_POINTER;
-	mol::string tmp( mol::Path::parentDir(mol::App().getModulePath()));
+	std::wstring tmp( mol::Path::parentDir(mol::App().getModulePath()));
 	*fPath = ::SysAllocString(mol::towstring(tmp).c_str());
 	return S_OK;
 }
@@ -949,8 +949,8 @@ HRESULT __stdcall MoeConfig::EditPreferences( )
 
 	// use custom html dialog for settings:
 
-	//mol::string p( mol::app<MoeApp>().getModulePath() );
-	//mol::string prefs = mol::Path::parentDir(p) + _T("\\forms\\prefs.html");
+	//std::wstring p( mol::app<MoeApp>().getModulePath() );
+	//std::wstring prefs = mol::Path::parentDir(p) + _T("\\forms\\prefs.html");
 
 	//long left, top;
 	//moe()->moeView->get_Left(&left);
@@ -1081,7 +1081,7 @@ HRESULT  __stdcall MoeConfig::ResetStyles()
 
 HRESULT __stdcall MoeConfig::put_RibbonForeColor( BSTR fPath)
 {
-	foreColor_ = mol::hex2rgb(mol::bstr(fPath).toString());
+	foreColor_ = mol::hex2rgb(mol::bstr(fPath).tostring());
 	mol::Ribbon::ribbon()->setColor(foreColor_,backColor_,textColor_);
 	return S_OK;
 }
@@ -1091,13 +1091,13 @@ HRESULT __stdcall MoeConfig::get_RibbonForeColor(  BSTR* fPath)
 	if(!fPath)
 		return E_INVALIDARG;
 
-	*fPath = ::SysAllocString(mol::rgb2hex(foreColor_).c_str());
+	*fPath = ::SysAllocString(mol::towstring(mol::rgb2hex(foreColor_)).c_str());
 	return S_OK;
 }
 
 HRESULT __stdcall MoeConfig::put_RibbonBackColor( BSTR fPath)
 {
-	backColor_ = mol::hex2rgb(mol::bstr(fPath).toString());
+	backColor_ = mol::hex2rgb(mol::bstr(fPath).tostring());
 	mol::Ribbon::ribbon()->setColor(foreColor_,backColor_,textColor_);
 
 	return S_OK;
@@ -1108,13 +1108,13 @@ HRESULT __stdcall MoeConfig::get_RibbonBackColor(  BSTR* fPath)
 	if(!fPath)
 		return E_INVALIDARG;
 
-	*fPath = ::SysAllocString(mol::rgb2hex(backColor_).c_str());
+	*fPath = ::SysAllocString(mol::towstring(mol::rgb2hex(backColor_)).c_str());
 	return S_OK;
 }
 
 HRESULT __stdcall MoeConfig::put_RibbonTextColor( BSTR fPath)
 {
-	textColor_ = mol::hex2rgb(mol::bstr(fPath).toString());
+	textColor_ = mol::hex2rgb(mol::bstr(fPath).tostring());
 	mol::Ribbon::ribbon()->setColor(foreColor_,backColor_,textColor_);
 
 	return S_OK;
@@ -1125,7 +1125,7 @@ HRESULT __stdcall MoeConfig::get_RibbonTextColor(  BSTR* fPath)
 	if(!fPath)
 		return E_INVALIDARG;
 
-	*fPath = ::SysAllocString(mol::rgb2hex(textColor_).c_str());
+	*fPath = ::SysAllocString(mol::towstring(mol::rgb2hex(textColor_)).c_str());
 	return S_OK;
 }
 
@@ -1204,7 +1204,7 @@ std::string now()
 Log::Log()
 {
 	logLevel_ = LOGINFO;
-//	mol::string path = appPath() + _T("\\moe.log");
+//	std::wstring path = appPath() + _T("\\moe.log");
 //	fs_.open( mol::tostring(path), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS );
 }
 
@@ -1268,7 +1268,7 @@ Logger logger(LogLevel level)
 }
 
 
-//	mol::string path = appPath() + _T("\\moe.log");
+//	std::wstring path = appPath() + _T("\\moe.log");
 
 ///////////////////////////////////////////////////////////////
 

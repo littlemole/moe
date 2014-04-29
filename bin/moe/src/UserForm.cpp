@@ -14,7 +14,7 @@
 class EventDlg  : public mol::win::Dialog
 {
 public:
-	EventDlg(MSForms::_UserForm* f, const mol::string& engine );
+	EventDlg(MSForms::_UserForm* f, const std::wstring& engine );
 	virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	mol::punk<MSForms::_UserForm> form;
@@ -30,7 +30,7 @@ private:
 
 	mol::TreeCtrl		tree_;
 	mol::ListBox		list_;
-	mol::string			engine_;
+	std::wstring			engine_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ private:
 class FuncDlg  : public mol::win::Dialog
 {
 public:
-	FuncDlg(MSForms::_UserForm* f, const mol::string& engine);
+	FuncDlg(MSForms::_UserForm* f, const std::wstring& engine);
 	virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	mol::punk<MSForms::_UserForm> form;
@@ -54,7 +54,7 @@ private:
 
 	mol::TreeCtrl		tree_;
 	mol::ListBox		list_;
-	mol::string			engine_;
+	std::wstring			engine_;
 };
 
 
@@ -105,14 +105,14 @@ void UserForm::OnMembers()
 // initialization
 //////////////////////////////////////////////////////////////////////////////
 
-UserForm::Instance* UserForm::CreateInstance( const mol::string& f, bool designMode, bool Debug )
+UserForm::Instance* UserForm::CreateInstance( const std::wstring& f, bool designMode, bool Debug )
 {
 	Instance* doc = 0;
 
 	if ( f.size() < 1 )
 		return doc;
 
-	mol::string p = findFile(f);
+	std::wstring p = findFile(f);
 
 	if ( mol::Path::isDir(p) )
 		return doc;
@@ -130,7 +130,7 @@ UserForm::Instance* UserForm::CreateInstance( const mol::string& f, bool designM
 	return doc;
 }
 
-bool UserForm::initialize(const mol::string& p, bool designMode, bool Debug)
+bool UserForm::initialize(const std::wstring& p, bool designMode, bool Debug)
 {
 	filename_ = p;
 
@@ -231,7 +231,7 @@ bool UserForm::initialize(const mol::string& p, bool designMode, bool Debug)
 					if ( S_OK == hr )
 					{
 						std::wstring ws = buf.toString(nread/sizeof(wchar_t));// std::wstring( buf, nread/sizeof(wchar_t) );
-						scriptEngine_ = mol::toString(ws);
+						scriptEngine_ = mol::towstring(ws);
 					}
 				}
 			}
@@ -257,9 +257,9 @@ bool UserForm::initialize(const mol::string& p, bool designMode, bool Debug)
 
 
 						if ( !Debug )
-							script->formscript( scriptEngine_, mol::toString(ws), (IMoeUserForm*)this);
+							script->formscript( scriptEngine_, mol::towstring(ws), (IMoeUserForm*)this);
 						else
-							script->formdebug( scriptEngine_, mol::toString(ws), (IMoeUserForm*)this);
+							script->formdebug( scriptEngine_, mol::towstring(ws), (IMoeUserForm*)this);
 
 						script->formcontrols(form);
 
@@ -308,8 +308,8 @@ bool UserForm::initialize(const mol::string& p, bool designMode, bool Debug)
 		view = MoeDialogView::CreateInstance(this);
 		this->show(SW_SHOW);
 
-		mol::TCHAR  path[MAX_PATH];
-		mol::TCHAR  file[MAX_PATH];
+		wchar_t  path[MAX_PATH];
+		wchar_t  file[MAX_PATH];
 		::GetTempPath(255,path);
 		::GetTempFileName( path, _T("pf_"), 0, file );
 
@@ -618,7 +618,7 @@ void UserForm::adviseControl(mol::bstr& name, IDispatch* disp)
 
 		//TODO: assure only to advis IF script handler present
 		// use static factory func pattern
-		handler->init(script,iid,name.toString());
+		handler->init(script,iid,name.towstring());
 
 		mol::punk<IConnectionPointContainer>	icPc(disp);
 		mol::punk<IConnectionPoint>			icP;
@@ -697,7 +697,7 @@ void UserForm::disconnectObjects()
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-EventDlg::EventDlg( MSForms::_UserForm* f , const mol::string& engine)
+EventDlg::EventDlg( MSForms::_UserForm* f , const std::wstring& engine)
 {
 	form = f;
 	engine_ = engine;
@@ -722,7 +722,7 @@ void EventDlg::freeList( )
 {
 	for ( int i = 0; i < list_.count(); i++ )
 	{
-		mol::TCHAR* c = (mol::TCHAR*)list_.getData(i);
+		wchar_t* c = (wchar_t*)list_.getData(i);
 		if ( c )
 		{
 			list_.setData(i,0);
@@ -779,78 +779,78 @@ void EventDlg::populateControlList(HTREEITEM hit)
 			{
 				if ( engine_ == _T("PerlScript") ) {
 
-					mol::ostringstream oss;
-					oss << _T("\r\nsub ") << name.toString() << _T("_") << mol::toString(bstrs[0]);
+					std::wostringstream oss;
+					oss << _T("\r\nsub ") << name.towstring() << _T("_") << mol::towstring(bstrs[0]);
 
 					oss << _T(" {\r\n");
 
 					for ( unsigned short int n = 1; n < nNames; n++ )
 					{
 						oss << _T("  my $");
-						oss << mol::toString(bstrs[n]);
+						oss << mol::towstring(bstrs[n]);
 						oss <<  _T(" = shift;\r\n");
 					}
 					oss << _T("\r\n}\r\n");
 
 					
-					list_.addString(mol::toString(bstrs[0]));
+					list_.addString(mol::towstring(bstrs[0]));
 
-					int index = list_.index(mol::toString(bstrs[0]));
+					int index = list_.index(mol::towstring(bstrs[0]));
 					if ( index != -1 )
 					{
-						mol::string s = oss.str();
-						mol::TCHAR* c = new mol::TCHAR[s.size()+1];
-						memcpy( c, s.c_str(), (s.size()+1)*sizeof(mol::TCHAR) );
+						std::wstring s = oss.str();
+						wchar_t* c = new wchar_t[s.size()+1];
+						memcpy( c, s.c_str(), (s.size()+1)*sizeof(wchar_t) );
 						list_.setData( index, (void*)c );
 					}
 				}
 				if ( engine_ == _T("Javascript") ) {
 
-					mol::ostringstream oss;
-					oss << _T("\r\nfunction ") << name.toString() << _T("_") << mol::toString(bstrs[0]) << _T("( ");
+					std::wostringstream oss;
+					oss << _T("\r\nfunction ") << name.towstring() << _T("_") << mol::towstring(bstrs[0]) << _T("( ");
 
 					for ( unsigned short int n = 1; n < nNames; n++ )
 					{
-						oss << mol::toString(bstrs[n]);
+						oss << mol::towstring(bstrs[n]);
 						if ( n < ( nNames-1) )
 							oss <<  _T(", ");
 					}
 
 					oss << _T(")\r\n{\r\n");
 					oss << _T("}\r\n");
-					list_.addString(mol::toString(bstrs[0]));
+					list_.addString(mol::towstring(bstrs[0]));
 
-					int index = list_.index(mol::toString(bstrs[0]));
+					int index = list_.index(mol::towstring(bstrs[0]));
 					if ( index != -1 )
 					{
-						mol::string s = oss.str();
-						mol::TCHAR* c = new mol::TCHAR[s.size()+1];
-						memcpy( c, s.c_str(), (s.size()+1)*sizeof(mol::TCHAR) );
+						std::wstring s = oss.str();
+						wchar_t* c = new wchar_t[s.size()+1];
+						memcpy( c, s.c_str(), (s.size()+1)*sizeof(wchar_t) );
 						list_.setData( index, (void*)c );
 					}
 				}
 				if ( engine_ == _T("VBScript") ) {
 
-					mol::ostringstream oss;
-					oss << _T("\r\nSub ") << name.toString() << _T("_") << mol::toString(bstrs[0]) << _T("( ");
+					std::wostringstream oss;
+					oss << _T("\r\nSub ") << name.towstring() << _T("_") << mol::towstring(bstrs[0]) << _T("( ");
 
 					for ( unsigned short int n = 1; n < nNames; n++ )
 					{
-						oss << mol::toString(bstrs[n]);
+						oss << mol::towstring(bstrs[n]);
 						if ( n < ( nNames-1) )
 							oss <<  _T(", ");
 					}
 
 					oss << _T(")\r\n\r\n");
 					oss << _T("End Sub\r\n");
-					list_.addString(mol::toString(bstrs[0]));
+					list_.addString(mol::towstring(bstrs[0]));
 
-					int index = list_.index(mol::toString(bstrs[0]));
+					int index = list_.index(mol::towstring(bstrs[0]));
 					if ( index != -1 )
 					{
-						mol::string s = oss.str();
-						mol::TCHAR* c = new mol::TCHAR[s.size()+1];
-						memcpy( c, s.c_str(), (s.size()+1)*sizeof(mol::TCHAR) );
+						std::wstring s = oss.str();
+						wchar_t* c = new wchar_t[s.size()+1];
+						memcpy( c, s.c_str(), (s.size()+1)*sizeof(wchar_t) );
 						list_.setData( index, (void*)c );
 					}
 				}
@@ -894,7 +894,7 @@ void EventDlg::populateControlTree(IUnknown* ctrl, HTREEITEM hit)
 		if ( (S_OK == c->get_Name(&name)) && name )
 		{
 			disp->AddRef();
-			tree_.addNodeParam(name.toString(),(LPARAM)(IUnknown*)disp);
+			tree_.addNodeParam(name.towstring(),(LPARAM)(IUnknown*)disp);
 		}
 	}
 }
@@ -902,7 +902,7 @@ void EventDlg::populateControlTree(IUnknown* ctrl, HTREEITEM hit)
 void EventDlg::copySelectionToClipboard()
 {
 	int pos = list_.getCurSel();
-	mol::TCHAR* handler = (mol::TCHAR*)list_.getData(pos);
+	wchar_t* handler = (wchar_t*)list_.getData(pos);
 	if (!handler)
 		return;
 
@@ -998,7 +998,7 @@ LRESULT EventDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 
-FuncDlg::FuncDlg( MSForms::_UserForm* f, const mol::string& engine )
+FuncDlg::FuncDlg( MSForms::_UserForm* f, const std::wstring& engine )
 {
 	engine_ = engine;
 	form = f;
@@ -1024,7 +1024,7 @@ void FuncDlg::freeList( )
 {
 	for ( int i = 0; i < list_.count(); i++ )
 	{
-		mol::TCHAR* c = (mol::TCHAR*)list_.getData(i);
+		wchar_t* c = (wchar_t*)list_.getData(i);
 		if ( c )
 		{
 			list_.setData(i,0);
@@ -1102,7 +1102,7 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 				{
 					if ( nNames > 0 )
 					{
-						mol::string func( mol::toString(bstrs[0]) );						
+						std::wstring func( mol::towstring(bstrs[0]) );						
 
 						if ( 
 							 ( func[0] != '_' ) &&
@@ -1118,8 +1118,8 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 							if ( engine_ == _T("PerlScript")) {
 								if ( funcdesc->invkind & DISPATCH_PROPERTYGET )
 								{
-									mol::string tmp = _T("my $var = $");
-									tmp += name.toString();
+									std::wstring tmp = _T("my $var = $");
+									tmp += name.towstring();
 									tmp += _T("{");
 									tmp += func;
 									tmp += _T("};");
@@ -1128,8 +1128,8 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 								}
 								else if ( funcdesc->invkind & DISPATCH_PROPERTYPUT )
 								{
-									mol::string tmp = _T("$");
-									tmp += name.toString();
+									std::wstring tmp = _T("$");
+									tmp += name.towstring();
 									tmp +=_T("{");
 									tmp += func;
 									tmp +=_T("} = $var;");
@@ -1139,7 +1139,7 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 								else if ( funcdesc->invkind == DISPATCH_METHOD )
 								{
 									list_.addString(func);
-									func = name.toString() + _T(".") + func;
+									func = name.towstring() + _T(".") + func;
 									if ( funcdesc->elemdescFunc.tdesc.vt != VT_VOID)
 									{
 										func = _T("my $retval = ") + func;
@@ -1148,7 +1148,7 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 									for ( unsigned short int n = 1; n < nNames-1; n++ )
 									{
 										func += _T("$");
-										func += mol::toString(bstrs[n]);
+										func += mol::towstring(bstrs[n]);
 										if ( n < nNames-1 )
 										{
 											func += _T(", ");
@@ -1162,22 +1162,22 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 								}
 								
 
-								int index = list_.index(mol::toString(bstrs[0]));
+								int index = list_.index(mol::towstring(bstrs[0]));
 								if ( index != -1 )
 								{
-									mol::string s = func;
-									mol::TCHAR* c = new mol::TCHAR[s.size()+1];
-									memcpy( c, s.c_str(), (s.size()+1)*sizeof(mol::TCHAR) );
+									std::wstring s = func;
+									wchar_t* c = new wchar_t[s.size()+1];
+									memcpy( c, s.c_str(), (s.size()+1)*sizeof(wchar_t) );
 									list_.setData( index, (void*)c );
 								}
 							}
 							if ( engine_ == _T("Javascript")) {
 
-								mol::ostringstream oss;
+								std::wostringstream oss;
 								if ( funcdesc->invkind & DISPATCH_PROPERTYGET )
 								{
 									oss << _T("\r\nvar value = ");
-									oss << name.toString();
+									oss << name.towstring();
 									oss << _T(".");
 									oss << func;
 									oss << _T(";\r\n");
@@ -1186,7 +1186,7 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 								else if ( funcdesc->invkind & DISPATCH_PROPERTYPUT )
 								{
 									oss << _T("\r\n");
-									oss << name.toString();
+									oss << name.towstring();
 									oss << _T(".");
 									oss << func;
 									oss << _T(" = value;\r\n");
@@ -1202,7 +1202,7 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 									oss << name << _T(".") << func << _T("( ");
 									for ( unsigned short int n = 1; n < nNames-1; n++ )
 									{
-										func += mol::toString(bstrs[n]);
+										func += mol::towstring(bstrs[n]);
 										if ( n < nNames-1 )
 										{
 											func += _T(", ");
@@ -1215,22 +1215,22 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 									continue;
 								}
 
-								int index = list_.index(mol::toString(bstrs[0]));
+								int index = list_.index(mol::towstring(bstrs[0]));
 								if ( index != -1 )
 								{
-									mol::string s = oss.str();
-									mol::TCHAR* c = new mol::TCHAR[s.size()+1];
-									memcpy( c, s.c_str(), (s.size()+1)*sizeof(mol::TCHAR) );
+									std::wstring s = oss.str();
+									wchar_t* c = new wchar_t[s.size()+1];
+									memcpy( c, s.c_str(), (s.size()+1)*sizeof(wchar_t) );
 									list_.setData( index, (void*)c );
 								}
 							}
 							if ( engine_ == _T("VBScript")) {
 
-								mol::ostringstream oss;
+								std::wostringstream oss;
 								if ( funcdesc->invkind & DISPATCH_PROPERTYGET )
 								{
 									oss << _T("\r\nvalue = ");
-									oss << name.toString();
+									oss << name.towstring();
 									oss << _T(".");
 									oss << func;
 									oss << _T("\r\n");
@@ -1239,7 +1239,7 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 								else if ( funcdesc->invkind & DISPATCH_PROPERTYPUT )
 								{
 									oss << _T("\r\n");
-									oss << name.toString();
+									oss << name.towstring();
 									oss << _T(".");
 									oss << func;
 									oss << _T(" = value\r\n");
@@ -1255,7 +1255,7 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 									oss << name << _T(".") << func << _T("( ");
 									for ( unsigned short int n = 1; n < nNames-1; n++ )
 									{
-										func += mol::toString(bstrs[n]);
+										func += mol::towstring(bstrs[n]);
 										if ( n < nNames-1 )
 										{
 											func += _T(", ");
@@ -1268,12 +1268,12 @@ HRESULT FuncDlg::addTypeInfo(ITypeInfo* typInf, mol::bstr& name )
 									continue;
 								}
 
-								int index = list_.index(mol::toString(bstrs[0]));
+								int index = list_.index(mol::towstring(bstrs[0]));
 								if ( index != -1 )
 								{
-									mol::string s = oss.str();
-									mol::TCHAR* c = new mol::TCHAR[s.size()+1];
-									memcpy( c, s.c_str(), (s.size()+1)*sizeof(mol::TCHAR) );
+									std::wstring s = oss.str();
+									wchar_t* c = new wchar_t[s.size()+1];
+									memcpy( c, s.c_str(), (s.size()+1)*sizeof(wchar_t) );
 									list_.setData( index, (void*)c );
 								}
 							}
@@ -1323,7 +1323,7 @@ void FuncDlg::populateControlTree(IUnknown* ctrl, HTREEITEM hit)
 		if ( (S_OK == c->get_Name(&name)) && name )
 		{
 			disp->AddRef();
-			tree_.addNodeParam(name.toString(),(LPARAM)(IUnknown*)disp);
+			tree_.addNodeParam(name.towstring(),(LPARAM)(IUnknown*)disp);
 		}
 	}
 }
@@ -1331,7 +1331,7 @@ void FuncDlg::populateControlTree(IUnknown* ctrl, HTREEITEM hit)
 void FuncDlg::copySelectionToClipboard()
 {
 	int pos = list_.getCurSel();
-	mol::TCHAR* handler = (mol::TCHAR*)list_.getData(pos);
+	wchar_t* handler = (wchar_t*)list_.getData(pos);
 	if (!handler)
 		return;
 

@@ -43,10 +43,10 @@ void HexToolBar::enable(bool b)
 // set a byte value given as hex string for one of the byte edit boxes
 ///////////////////////////////////////////////////////////////////////////////////
 
-void HexToolBar::setByteValue( ToolEditLc& edit, const mol::string& byte )
+void HexToolBar::setByteValue( ToolEditLc& edit, const std::wstring& byte )
 {
 	unsigned int i = 0;
-	mol::istringstream iss(byte);
+	std::wistringstream iss(byte);
 	iss >> std::hex >> i;
 
 	i = i < 256 ? i : 255;
@@ -59,7 +59,7 @@ void HexToolBar::setByteValue( ToolEditLc& edit, const mol::string& byte )
 	DWORD start = 0;
 	DWORD end   = 0;
 	edit.sendMessage(EM_GETSEL, (WPARAM)&start,(LPARAM)&end);
-	edit.setText(mol::toString(oss.str()));
+	edit.setText(mol::towstring(oss.str()));
 	edit.sendMessage(EM_SETSEL, (WPARAM)&start,(LPARAM)&end);
 	updating_ = false;
 }
@@ -68,10 +68,10 @@ void HexToolBar::setByteValue( ToolEditLc& edit, const mol::string& byte )
 // set a char value given as hex string for one of the char edit boxes
 ///////////////////////////////////////////////////////////////////////////////////
 
-void HexToolBar::setCharValue( ToolEdit& edit, const mol::string& byte )
+void HexToolBar::setCharValue( ToolEdit& edit, const std::wstring& byte )
 {
 	unsigned int i = 0;
-	mol::istringstream iss(byte);
+	std::wistringstream iss(byte);
 	iss >> std::hex >> i;
 
 	i = i < 256 ? i : 255;
@@ -79,7 +79,7 @@ void HexToolBar::setCharValue( ToolEdit& edit, const mol::string& byte )
 	char c = (char)i;
 
 	updating_ = true;
-	edit.setText(mol::toString(std::string(1,(char)i)));
+	edit.setText(mol::towstring(std::string(1,(char)i)));
 	updating_ = false;
 }
 
@@ -88,7 +88,7 @@ void HexToolBar::setCharValue( ToolEdit& edit, const mol::string& byte )
 // set new offset and value in toolbar edit boxes
 ///////////////////////////////////////////////////////////////////////////////////
 
-void HexToolBar::setValue( const mol::string& address, const mol::string& val )
+void HexToolBar::setValue( const std::wstring& address, const std::wstring& val )
 {
 	DWORD start = 0;
 	DWORD end   = 0;
@@ -103,10 +103,10 @@ void HexToolBar::setValue( const mol::string& address, const mol::string& val )
 	hexEdit_.sendMessage(EM_SETSEL, (WPARAM)start,(LPARAM)end);
 	updating_ = false;
 
-	mol::string byteVal1 = val.substr(0,2);
-	mol::string byteVal2 = val.substr(2,2);
-	mol::string byteVal3 = val.substr(4,2);
-	mol::string byteVal4 = val.substr(6,2);
+	std::wstring byteVal1 = val.substr(0,2);
+	std::wstring byteVal2 = val.substr(2,2);
+	std::wstring byteVal3 = val.substr(4,2);
+	std::wstring byteVal4 = val.substr(6,2);
 
 	setByteValue( byteEdit1_, byteVal1 );
 	setByteValue( byteEdit2_, byteVal2 );
@@ -123,7 +123,7 @@ void HexToolBar::setValue( const mol::string& address, const mol::string& val )
 // create new toolbar window
 ///////////////////////////////////////////////////////////////////////////////////
 
-HWND HexToolBar::createWindow(  const mol::string& wndName, HMENU hMenu, const mol::Rect& r, HWND parent )
+HWND HexToolBar::createWindow(  const std::wstring& wndName, HMENU hMenu, const mol::Rect& r, HWND parent )
 {
 	//create tool bar
 	HWND hWnd = mol::ToolBar::createWindow( wndName, hMenu, r, parent );
@@ -132,7 +132,7 @@ HWND HexToolBar::createWindow(  const mol::string& wndName, HMENU hMenu, const m
 	//one edit box for address and hex value each, 4 boxes each for
 	//single decimal byte and char display
 
-	mol::string tmp(_T("value at offset"));
+	std::wstring tmp(_T("value at offset"));
 
 	mol::DC dc(*this);			
 
@@ -277,7 +277,7 @@ LRESULT HexToolBar::wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 					if ( updating_ )
 						return 0;
 
-					mol::string addr = offsetEdit_.getText();
+					std::wstring addr = offsetEdit_.getText();
 
 					// make sure value jas changed, is exact 8 chars
 					// and has only valid hex chars
@@ -290,7 +290,7 @@ LRESULT HexToolBar::wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 					if ( updating_ )
 						return 0;
 
-					mol::string val = hexEdit_.getText();
+					std::wstring val = hexEdit_.getText();
 
 					// make sure value jas changed, is exact 8 chars
 					// and has only valid hex chars
@@ -299,7 +299,7 @@ LRESULT HexToolBar::wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 						return 0;
 
 					size_t pos = val.find_first_not_of(_T("0123456789abcdef"));
-					if ( pos != mol::string::npos )
+					if ( pos != std::wstring::npos )
 						return 0;
 
 					// set value at current offset
@@ -313,10 +313,10 @@ LRESULT HexToolBar::wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 					if ( updating_ )
 						return 0;
 
-					mol::TCHAR bytes[4];
+					wchar_t bytes[4];
 					::GetDlgItemText( *this, LOWORD(wParam), bytes, 4 );
 
-					mol::string val(bytes);
+					std::wstring val(bytes);
 
 					if ( val.size() != 3 )
 						return 0;
@@ -410,7 +410,7 @@ unsigned int HexWnd::getCols()
 	return cols_;
 }
 
-const mol::string& HexWnd::getFilename()
+const std::wstring& HexWnd::getFilename()
 {
 	return filename_;
 }
@@ -420,7 +420,7 @@ const mol::string& HexWnd::getFilename()
 // load file and map it to memory
 ///////////////////////////////////////////////////////////////////////////////////
 
-bool HexWnd::load(const mol::string& filename, bool readOnly)
+bool HexWnd::load(const std::wstring& filename, bool readOnly)
 {
 	if ( map_)
 		map_.close();
@@ -445,7 +445,7 @@ bool HexWnd::load(const mol::string& filename, bool readOnly)
 	fsize_ = (unsigned int) map_.size();
 
 	// set new main window text
-	mol::stringstream oss;
+	std::wstringstream oss;
 	oss << filename;
 	if ( readOnly )
 		oss << _T(" [readonly]");
@@ -486,7 +486,7 @@ unsigned int HexWnd::getOffset()
 // set value at current offset (from statusbar)
 ///////////////////////////////////////////////////////////////////////////////////
 
-void HexWnd::setOffsetValue( const mol::string& val)
+void HexWnd::setOffsetValue( const std::wstring& val)
 {
 	if (!map_)
 		return;
@@ -507,7 +507,7 @@ void HexWnd::setOffsetValue( const mol::string& val)
 // set a single byte value at current offset (from statusbar)
 ///////////////////////////////////////////////////////////////////////////////////
 
-void HexWnd::setByteOffsetValue( const mol::string& val, int off, bool hex)
+void HexWnd::setByteOffsetValue( const std::wstring& val, int off, bool hex)
 {
 	if (!map_)
 		return;
@@ -521,8 +521,8 @@ void HexWnd::setByteOffsetValue( const mol::string& val, int off, bool hex)
 	if ( off > 3 )
 		return;
 
-	mol::string byte( val.c_str(), hex ? 2 : 3 );
-	mol::istringstream iss(byte);
+	std::wstring byte( val.c_str(), hex ? 2 : 3 );
+	std::wistringstream iss(byte);
 
 	if ( hex )
 		iss >> std::hex;
@@ -648,7 +648,7 @@ void HexWnd::updateOffset(unsigned int offset)
 	offset_ = offset;
 
 	//prepare offset addres as hex string for toolbar
-	mol::ostringstream ossAddr;
+	std::wostringstream ossAddr;
 	ossAddr.fill(_T('0'));
 	ossAddr << std::hex 
 			<< std::setw( 8 ) 
@@ -657,7 +657,7 @@ void HexWnd::updateOffset(unsigned int offset)
 	//prepare offset value as hex string
 	unsigned char c = 0;
 	unsigned int  i = 0;
-	mol::ostringstream ossVal;
+	std::wostringstream ossVal;
 	ossVal.fill(_T('0'));
 	ossVal << std::hex << std::setw( 2 );
 	
@@ -768,7 +768,7 @@ void HexWnd::setSearchPos(unsigned int p)
 	searchPos_ = p;
 }
 
-bool HexWnd::search(const mol::string& txt, DWORD flags)
+bool HexWnd::search(const std::wstring& txt, DWORD flags)
 {
 	if (!map_)
 		return false;
@@ -790,9 +790,9 @@ bool HexWnd::search(const mol::string& txt, DWORD flags)
 
 			int result = 0;
 			if ( flags & FR_MATCHCASE )
-				result = _tcsncmp(txt.c_str(),(const mol::TCHAR*)c, s );
+				result = _tcsncmp(txt.c_str(),(const wchar_t*)c, s );
 			else
-				result = _tcsncicmp(txt.c_str(),(const mol::TCHAR*)c, s );
+				result = _tcsncicmp(txt.c_str(),(const wchar_t*)c, s );
 
 			if ( result == 0 )
 			{
@@ -815,7 +815,7 @@ bool HexWnd::search(const mol::string& txt, DWORD flags)
 // search in hex view (upwards)
 ///////////////////////////////////////////////////////////////////////////////////
 
-bool HexWnd::searchUp(const mol::string& txt, int flags)
+bool HexWnd::searchUp(const std::wstring& txt, int flags)
 {
 	if (!map_)
 		return false;
@@ -835,9 +835,9 @@ bool HexWnd::searchUp(const mol::string& txt, int flags)
 		{			
 			int result = 0;
 			if ( flags & FR_MATCHCASE )
-				result = _tcsncmp(txt.c_str(),(const mol::TCHAR*)c, s );
+				result = _tcsncmp(txt.c_str(),(const wchar_t*)c, s );
 			else
-				result = _tcsncicmp(txt.c_str(),(const mol::TCHAR*)c, s );
+				result = _tcsncicmp(txt.c_str(),(const wchar_t*)c, s );
 
 			if ( result == 0 )
 			{
@@ -863,7 +863,7 @@ bool HexWnd::searchUp(const mol::string& txt, int flags)
 ///////////////////////////////////////////////////////////////////////////////////
 
 
-void HexWnd::scrollTo(const mol::string& off)
+void HexWnd::scrollTo(const std::wstring& off)
 {
 	if ( off.size() != 8 )
 		return;
@@ -873,7 +873,7 @@ void HexWnd::scrollTo(const mol::string& off)
 		return;
 
 	unsigned int ui = 0;
-	mol::istringstream iss(off);
+	std::wistringstream iss(off);
 	iss >> std::hex >> ui;
 
 	scrollTo(ui);
@@ -912,7 +912,7 @@ bool HexWnd::getReadOnly()
 	return readOnly_;
 }
 
-mol::string HexWnd::value(unsigned int index)
+std::wstring HexWnd::value(unsigned int index)
 {
 	index = ( index / 4 ) * 4;
 
@@ -921,7 +921,7 @@ mol::string HexWnd::value(unsigned int index)
 
 	unsigned int  i = 0;
 	unsigned char c = 0;
-	mol::ostringstream oss;
+	std::wostringstream oss;
 	oss.fill(_T('0'));
 	oss << std::hex << std::setw( 2 );
 	
@@ -1055,7 +1055,7 @@ LRESULT HexWnd::wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				int  x   = 0;
 				int  y   = 0;
 				int  tab = 0;
-				static mol::TCHAR buf[32];
+				static wchar_t buf[32];
 
 				// determine y offset
 				y = (c/cols_-siV_.nPos)*(ttheight_+4);
@@ -1280,18 +1280,18 @@ LRESULT HexWnd::wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						::HideCaret(*this);
 						mol::DC dc(*this);
 
-						mol::string s(1,(wchar_t)wParam);
+						std::wstring s(1,(wchar_t)wParam);
 
 						size_t p = s.find_first_not_of(_T("0123456789abcdef"));
-						if ( p == mol::string::npos )
+						if ( p == std::wstring::npos )
 						{			
 							int f = caretX_ % 2;							
 							int off = (caretX_/2) + ( caretY_ * cols_ );
 							off = off - offset_;
 							if ( off >= 0 && off <= 3 )
 							{
-								mol::string currVal = currentOffsetValue_.substr(off*2,2);
-								mol::string tmp(_T(""));
+								std::wstring currVal = currentOffsetValue_.substr(off*2,2);
+								std::wstring tmp(_T(""));
 								if ( f == 1 )
 									tmp = currVal.substr(0,1);
 								tmp.append( s );
@@ -1381,7 +1381,7 @@ HRESULT __stdcall HexCtrl::put_Filename		( BSTR  fn )
 	if ( S_OK != OnRequestEdit(3) )
 		return S_FALSE;
 
-	if ( hex_.load( bstr(fn).toString(), vbReadOnly_ == VARIANT_TRUE ? true : false ))
+	if ( hex_.load( bstr(fn).towstring(), vbReadOnly_ == VARIANT_TRUE ? true : false ))
 	{
 		this->OnChanged(3);
 		this->fire( 1, fn, vbReadOnly_ );
@@ -1541,7 +1541,7 @@ HRESULT __stdcall HexCtrl::Open( BSTR file, VARIANT_BOOL* vbSuccess)
 	if ( !vbSuccess )
 		return E_INVALIDARG;
 
-	bool b = hex_.load( bstr(file).toString(), false );
+	bool b = hex_.load( bstr(file).towstring(), false );
 	*vbSuccess = b ? VARIANT_TRUE : VARIANT_FALSE;
 	
 	clientRect_ = mol::Rect(0,0,0,0);
@@ -1554,7 +1554,7 @@ HRESULT __stdcall HexCtrl::OpenReadOnly( BSTR file, VARIANT_BOOL* vbSuccess )
 	if ( !vbSuccess )
 		return E_INVALIDARG;
 
-	bool b = hex_.load( bstr(file).toString(), true );
+	bool b = hex_.load( bstr(file).towstring(), true );
 	*vbSuccess = b ? VARIANT_TRUE : VARIANT_FALSE;
 
 	clientRect_ = mol::Rect(0,0,0,0);
@@ -1568,7 +1568,7 @@ HRESULT __stdcall HexCtrl::SetOffsetDWORD( long offset, BSTR val )
 	if ( offset != off )
 		return E_INVALIDARG;
 
-	mol::string s = bstr(val).toString();
+	std::wstring s = bstr(val).towstring();
 	if ( s.size() < 2 )
 		return E_INVALIDARG;
 
@@ -1579,7 +1579,7 @@ HRESULT __stdcall HexCtrl::SetOffsetDWORD( long offset, BSTR val )
 		return E_INVALIDARG;
 
 	size_t p = s.find_first_not_of(_T("0123456789ABCDEFabcdef"));
-	if ( p != mol::string::npos )
+	if ( p != std::wstring::npos )
 		return E_INVALIDARG;
 
 	hex_.scrollTo(offset);
@@ -1590,7 +1590,7 @@ HRESULT __stdcall HexCtrl::SetOffsetDWORD( long offset, BSTR val )
 
 HRESULT __stdcall HexCtrl::SetOffsetByte( long offset, BSTR val )
 {
-	mol::string s = bstr(val).toString();
+	std::wstring s = bstr(val).towstring();
 	if ( s.size() < 2 )
 		return E_INVALIDARG;
 
@@ -1601,7 +1601,7 @@ HRESULT __stdcall HexCtrl::SetOffsetByte( long offset, BSTR val )
 		return E_INVALIDARG;
 
 	size_t p = s.find_first_not_of(_T("0123456789ABCDEFabcdef"));
-	if ( p != mol::string::npos )
+	if ( p != std::wstring::npos )
 		return E_INVALIDARG;
 
 	unsigned int off = (offset / 4) * 4;
@@ -1625,7 +1625,7 @@ HRESULT __stdcall HexCtrl::SetOffsetChar( long offset, long val )
 
 HRESULT __stdcall HexCtrl::Search( BSTR what, long flags)
 {
-	hex_.search( bstr(what).toString(), flags );
+	hex_.search( bstr(what).towstring(), flags );
 	return S_OK;
 }
 

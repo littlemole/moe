@@ -112,7 +112,7 @@ void MoeTabControl::OnSelect()
     return ;
 }
 
-mol::string dirPathFromChildHWND(HWND hwnd)
+std::wstring dirPathFromChildHWND(HWND hwnd)
 {
 	// get mdi child from HWND
 	mol::MdiChild* mdi = mol::wndFromHWND<mol::MdiChild>(hwnd);
@@ -127,7 +127,7 @@ mol::string dirPathFromChildHWND(HWND hwnd)
 	mol::bstr path;
 	if ( doc->get_FilePath(&path) != S_OK )
 		return _T("");
-	return mol::Path::parentDir(mol::toString(path));
+	return mol::Path::parentDir(mol::towstring(path));
 }
 
 void MoeTabControl::OnRightClick()
@@ -296,7 +296,7 @@ void MoeTabControl::remove( HWND d )
 	removeItem(i);
 }
 
-void MoeTabControl::rename( HWND d, const mol::string& newpath, const mol::string& name )
+void MoeTabControl::rename( HWND d, const std::wstring& newpath, const std::wstring& name )
 {
 	int i = index(d);
 	if ( i == -1 )

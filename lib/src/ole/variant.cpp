@@ -4,9 +4,9 @@
 namespace mol {
 
 
-mol::string valueOf( mol::variant& v)
+std::wstring valueOf( mol::variant& v)
 {
-	return v.toString();
+	return v.towstring();
 }
 
 /*

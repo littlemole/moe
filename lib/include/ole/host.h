@@ -51,11 +51,11 @@ public:
 
 	virtual bool loadObjectFromStorage( REFCLSID iid, IStorage* store );
 	virtual bool loadObjectFromStream( REFCLSID iid, IStream* stream);
-	virtual bool loadObjectFromPersistFile( REFCLSID iid, const mol::string& file);
+	virtual bool loadObjectFromPersistFile( REFCLSID iid, const std::wstring& file);
 	virtual bool newObjectFromStorage( REFCLSID iid );
-	virtual bool loadObjectFromShell( const mol::string& file);
+	virtual bool loadObjectFromShell(const std::wstring& file);
 	virtual bool loadObject( REFCLSID iid );
-	virtual bool loadObjectFromMoniker( const mol::string& path );
+	virtual bool loadObjectFromMoniker(const std::wstring& path);
 
 	//////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////
@@ -224,7 +224,7 @@ protected:
 	bool			isUIActive;
 	bool			isShuttingDown_;
 	DWORD			cookie_;
-	mol::string		tmpFile_;
+	std::wstring	tmpFile_;
 };
 
 }
@@ -261,7 +261,7 @@ public:
 
 	//////////////////////////////////////////////////////////////////////
 
-	virtual bool loadObjectFromMoniker( const mol::string& path )
+	virtual bool loadObjectFromMoniker(const std::wstring& path)
 	{
 		if ( !mol::ole::AxClientWndBase::loadObjectFromMoniker( path ))
 			return false;
@@ -294,7 +294,7 @@ public:
 
 protected:
 
-	HWND createWindow( const mol::string& windowName, HMENU id, const mol::Rect& r, HWND frame )
+	HWND createWindow(const std::wstring& windowName, HMENU id, const mol::Rect& r, HWND frame)
 	{
 		W::createWindow( windowName, id, r, frame );
 
@@ -474,7 +474,7 @@ class AxWnd : public AxClientWnd<C,W>
 {
 public:
 
-	HWND createWindow( const mol::string& windowName, HMENU id, const mol::Rect& r, HWND parent )
+	HWND createWindow(const std::wstring& windowName, HMENU id, const mol::Rect& r, HWND parent)
     {
 		AxClientWnd<C,W>::createWindow( windowName, id, r, parent );
 		show(SW_SHOW);

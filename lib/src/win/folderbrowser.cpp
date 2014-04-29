@@ -19,7 +19,7 @@ namespace io  {
 
 typedef 	HRESULT __stdcall SHCreateItemInKnownFolderProc( REFKNOWNFOLDERID kfid, DWORD dwKFFlags, PCWSTR pszItem, REFIID riid, void **ppv );
 
-HRESULT SimpleFolderBrowser(HWND hwnd, mol::string& directory)
+HRESULT SimpleFolderBrowser(HWND hwnd, std::wstring& directory)
 {
     mol::punk<mol::v7::IFileDialog> fd;
 	mol::punk<IShellItem> desktop;
@@ -66,7 +66,7 @@ HRESULT SimpleFolderBrowser(HWND hwnd, mol::string& directory)
 			hr = siResult->GetDisplayName( SIGDN_DESKTOPABSOLUTEPARSING, &buf );
 			if ( S_OK == hr )
 			{
-				directory = mol::toString(buf);
+				directory = mol::towstring(buf);
 			}
         }
     }

@@ -61,16 +61,16 @@ public:
 	~HexToolBar();
 
 	void enable(bool b);
-	void setValue( const mol::string& address, const mol::string& val );
+	void setValue( const std::wstring& address, const std::wstring& val );
 
 	LRESULT virtual wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
 
-	HWND createWindow(  const mol::string& wndName, HMENU hMenu, const mol::Rect& r, HWND parent );
+	HWND createWindow(  const std::wstring& wndName, HMENU hMenu, const mol::Rect& r, HWND parent );
 
-	void setByteValue( ToolEditLc& edit, const mol::string& byte );
-	void setCharValue( ToolEdit& edit, const mol::string& byte );
+	void setByteValue( ToolEditLc& edit, const std::wstring& byte );
+	void setCharValue( ToolEdit& edit, const std::wstring& byte );
 
 	HexCtrl*	hexCtrl_;
 	bool		updating_;
@@ -111,8 +111,8 @@ public:
 	~HexWnd();
 
 	// load file, get filename
-	bool load(const mol::string& filename, bool readOnly);
-	const mol::string& getFilename();
+	bool load(const std::wstring& filename, bool readOnly);
+	const std::wstring& getFilename();
 
 	// set view columns, get fileinfo
 	void setCols(unsigned int c);
@@ -123,22 +123,22 @@ public:
 	// update current offset, get offset and get offset value as string
 	void updateOffset();
 	unsigned int getOffset();
-	mol::string value(unsigned int index);
+	std::wstring value(unsigned int index);
 
 	// set current offset value, as hex string (4bytes), as 
 	// byte string (1byte) or as char (1byte)
-	void setOffsetValue( const mol::string& val);
-	void setByteOffsetValue( const mol::string& val, int off, bool hex);
+	void setOffsetValue( const std::wstring& val);
+	void setByteOffsetValue( const std::wstring& val, int off, bool hex);
 	void setCharOffsetValue( const char& c, int off);
 
 	// scroll to offset, given as hex string (4bytes) or unsigned int
-	void scrollTo(const mol::string& off);
+	void scrollTo(const std::wstring& off);
 	void scrollTo(unsigned int off,bool adjust=true);
 
 	// search support
 	size_t getSearchPos();
 	void setSearchPos(unsigned int p);
-	bool search(const mol::string& txt, DWORD flags = FR_DOWN);
+	bool search(const std::wstring& txt, DWORD flags = FR_DOWN);
 
 	// window messages
     LRESULT virtual wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -150,7 +150,7 @@ private:
 	void onVScroll(unsigned int pos);
 
 	// search upwards
-	bool searchUp(const mol::string& txt, int flags);
+	bool searchUp(const std::wstring& txt, int flags);
 
 	// set and update offset 
 	void updateOffset(unsigned int offset);
@@ -169,13 +169,13 @@ private:
 	bool				showToolBar_;
 
 	// file and file mapping info
-	mol::string			filename_;
+	std::wstring			filename_;
 	mol::FileMapping	map_;
 	unsigned int		fsize_;
 	unsigned int		offset_;
 
 	// current value as hex string (4 bytes)
-	mol::string			currentOffsetValue_;
+	std::wstring			currentOffsetValue_;
 
 	// caret and search position info
 	unsigned int		caretX_;

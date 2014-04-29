@@ -38,16 +38,16 @@ class mol::uuid_info<IContextMenu>
 class moeShellMenuItem
 {
 public:
-	moeShellMenuItem(int cmd, const mol::string& p,const mol::string& desc)
+	moeShellMenuItem(int cmd, const std::wstring& p,const std::wstring& desc)
 		: iCmd(cmd), proto(p), description(desc)
 	{}
 
 	UINT iCmd;
-	mol::string proto;
-	mol::string description;
+	std::wstring proto;
+	std::wstring description;
 
-	HRESULT __stdcall openMoeCom(IUnknown* punk,const mol::string& filepath,cmds cmd);
-	HRESULT __stdcall openMoeCmdline( std::vector<mol::string>& filepath);
+	HRESULT __stdcall openMoeCom(IUnknown* punk,const std::wstring& filepath,cmds cmd);
+	HRESULT __stdcall openMoeCmdline( std::vector<std::wstring>& filepath);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -77,9 +77,9 @@ public:
 
 protected:
 
-	void registerMenuItem( UINT& iCmd, const mol::string& proto, const mol::string& desc );
+	void registerMenuItem( UINT& iCmd, const std::wstring& proto, const std::wstring& desc );
 
-	std::vector<mol::string> filepaths_;
+	std::vector<std::wstring> filepaths_;
 
 	mol::Bmp bmp_;
 	mol::Bmp bmp2_;

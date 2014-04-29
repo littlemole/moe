@@ -163,7 +163,7 @@ int  FileEncoding::getEncoding(const std::string& c, const std::string& h )
 
 		if ( rgxp.match(h) )
 		{
-			mol::string s = mol::toString(rgxp(h,2));
+			std::wstring s = mol::towstring(rgxp(h,2));
 			s = mol::trim(s);
 
 			mol::bstr bstr(s);
@@ -186,7 +186,7 @@ int  FileEncoding::getEncoding(const std::string& c, const std::string& h )
 	{
 		//std::string s = reg_xml(c,4);
 
-		mol::string s = mol::toString(reg_xml(c,4));
+		std::wstring s = mol::towstring(reg_xml(c,4));
 		s = mol::trim(s);
 
 		mol::bstr b(s);

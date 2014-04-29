@@ -4,12 +4,12 @@
 namespace mol  {
 namespace win  {
 
-const mol::TCHAR button_class[]			= _T("Button");
-const mol::TCHAR edit_class[]			= _T("Edit");
-const mol::TCHAR combo_box_class[]		= _T("ComboBox");
-const mol::TCHAR list_box_class[]		= _T("ListBox");
-const mol::TCHAR scrollbar_class[]		= _T("ScrollBar");
-const mol::TCHAR static_class[]			= _T("Static");
+const wchar_t button_class[]			= _T("Button");
+const wchar_t edit_class[]			= _T("Edit");
+const wchar_t combo_box_class[]		= _T("ComboBox");
+const wchar_t list_box_class[]		= _T("ListBox");
+const wchar_t scrollbar_class[]		= _T("ScrollBar");
+const wchar_t static_class[]			= _T("Static");
 
 
 Ctrl::~Ctrl()
@@ -17,9 +17,9 @@ Ctrl::~Ctrl()
 	//ODBGS("~Ctrl");
 }
 
-const mol::string& Ctrl::wndClassName() 
+const std::wstring& Ctrl::wndClassName() 
 {
-    static mol::string s(_T(""));
+    static std::wstring s(_T(""));
     return s;
 }
 
@@ -61,7 +61,7 @@ LRESULT Ctrl::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     return ::CallWindowProc( oldProc, hwnd, message, wParam, lParam );
 }
 
-HWND Ctrl::createWindow( const mol::string& windowName, HMENU hMenu, const Rect& r, HWND parent )
+HWND Ctrl::createWindow( const std::wstring& windowName, HMENU hMenu, const Rect& r, HWND parent )
 {
     hWnd_ = ::CreateWindowEx( exstyle(),wndClassName().c_str(),
                               windowName.c_str(), style(),
@@ -122,12 +122,12 @@ int ListBox::style()
 }
 /////////////////////////////////////////////////////////////////////////////////
 
-void ComboBox::insertString(const mol::string& str, int index ) 
+void ComboBox::insertString(const std::wstring& str, int index ) 
 { 
     sendMessage( CB_INSERTSTRING,index,(LPARAM)(str.c_str())  ); 	
 }
 
-void ComboBox::addString(const mol::string& str ) 
+void ComboBox::addString(const std::wstring& str ) 
 { 
     sendMessage( CB_ADDSTRING,0,(LPARAM)(str.c_str()) ); 
 }
@@ -157,7 +157,7 @@ void ComboBox::setCurSel(int n)
     sendMessage( CB_SETCURSEL,n,0 ); 
 }
 
-void ComboBox::setCurSel(const mol::string& txt)
+void ComboBox::setCurSel(const std::wstring& txt)
 {
     for ( int i = 0; i < getCount(); i++)
         if ( txt == getString(i) )
@@ -166,16 +166,16 @@ void ComboBox::setCurSel(const mol::string& txt)
             break;
         }
 }
-mol::string ComboBox::getString(int id )
+std::wstring ComboBox::getString(int id )
 {
-	mol::tbuff buf(2048,32);
-    if ( CB_ERR == sendMessage( CB_GETLBTEXT,id,(LPARAM)(mol::TCHAR*)buf))
+	mol::wbuff buf(2048,32);
+    if ( CB_ERR == sendMessage( CB_GETLBTEXT,id,(LPARAM)(wchar_t*)buf))
        throw X( _T("getString failed"));
 	buf[2047] = 0;
     return buf.toString();
 	/*
-	mol::TCHAR buf[1024];
-	::memset(buf,32,1024*sizeof(mol::TCHAR));
+	wchar_t buf[1024];
+	::memset(buf,32,1024*sizeof(wchar_t));
     buf[1023] = 0;
 
     if ( CB_ERR == sendMessage( CB_GETLBTEXT,id,(LPARAM)buf))
@@ -188,7 +188,7 @@ mol::string ComboBox::getString(int id )
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 
-void ListBox::addString( const mol::string& s ) 
+void ListBox::addString( const std::wstring& s ) 
 { 
     sendMessage( LB_ADDSTRING,0,(LPARAM)s.c_str() ); 
 }
@@ -198,18 +198,18 @@ int ListBox::getCurSel()
     return (int) sendMessage( LB_GETCURSEL,0,0); 
 }
 
-mol::string ListBox::getString(int index)
+std::wstring ListBox::getString(int index)
 {
-	//mol::TCHAR* buf = 0;
+	//wchar_t* buf = 0;
     int   len = 0;
 
     len = (int)sendMessage(LB_GETTEXTLEN, (WPARAM)index,(LPARAM)0);
     if ( len == -1)
             return _T("");
 
-	mol::tbuff buf(len);
+	mol::wbuff buf(len);
 
-    sendMessage( LB_GETTEXT,(WPARAM)index,(LPARAM)(mol::TCHAR*)buf);
+    sendMessage( LB_GETTEXT,(WPARAM)index,(LPARAM)(wchar_t*)buf);
     buf[len] = 0;
 	return buf.toString();
 }
@@ -219,7 +219,7 @@ void ListBox::resetContent()
     sendMessage( LB_RESETCONTENT,0,0 ) ; 
 }
 
-int ListBox::index(const mol::string& s )
+int ListBox::index(const std::wstring& s )
 {
 	LRESULT r = sendMessage( LB_FINDSTRING,-1, (LPARAM)s.c_str() ) ; 
 	return (int)r;
@@ -290,7 +290,7 @@ void RcomboBox::subClassEdit()
     edit.attach(child);
     edit.subClass();
 }
-HWND RcomboBox::createWindow( const mol::string& windowName, HMENU hMenu, const Rect& r, HWND parent )
+HWND RcomboBox::createWindow( const std::wstring& windowName, HMENU hMenu, const Rect& r, HWND parent )
 {
     ComboBox::createWindow( windowName, hMenu, r, parent );
     subClassEdit();

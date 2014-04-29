@@ -52,7 +52,7 @@ HRESULT	HtmlWndBase::doc2(IHTMLDocument2** doc)
 }
 
 
-mol::string HtmlWndBase::charsetImpl()
+std::wstring HtmlWndBase::charsetImpl()
 {
 	mol::punk<IHTMLDocument2>	doc;
 	if ( S_OK != this->doc2(&doc) )
@@ -60,7 +60,7 @@ mol::string HtmlWndBase::charsetImpl()
 
 	mol::bstr bstr;
 	if ( S_OK == doc->get_charset(&bstr) )
-		return bstr.toString();
+		return bstr.towstring();
 
 	return _T("");
 }
@@ -94,7 +94,7 @@ bool HtmlWndBase::setHtmlImpl( const std::string& html, const std::string& url, 
 	if ( pmon )
 	{
 		mol::ie::BindCtx b;
-		mol::punk<mol::ie::BaseUrl> baseUrl = new mol::ie::BaseUrl( mol::toString(url),mol::toString(mime), stream );
+		mol::punk<mol::ie::BaseUrl> baseUrl = new mol::ie::BaseUrl( mol::towstring(url),mol::towstring(mime), stream );
 		HRESULT hr = pmon->Load(TRUE, baseUrl, b, STGM_READ ); 
 		return true;
 	}
@@ -125,7 +125,7 @@ bool HtmlWndBase::setHtmlImpl( const std::wstring& html )
 	return hr == S_OK;
 }
 
-bool HtmlWndBase::writeImpl( const mol::string& html )
+bool HtmlWndBase::writeImpl( const std::wstring& html )
 {
 	mol::punk<IDispatch> d;
 
@@ -429,7 +429,7 @@ BOOL HtmlWndBase::IPictureDispFromHtmlControlImpl( IPictureDisp** pic )
 }
 
 
-int HtmlWndBase::findImpl(const mol::string& txt, int options )
+int HtmlWndBase::findImpl(const std::wstring& txt, int options )
 {
 	if ( (lastSearchDir_ & FR_DOWN) != ( options & FR_DOWN ) )
 	{
@@ -503,7 +503,7 @@ int HtmlWndBase::findImpl(const mol::string& txt, int options )
 	return ret;
 }
 
-int HtmlWndBase::findUpImpl(const mol::string& txt, int options )
+int HtmlWndBase::findUpImpl(const std::wstring& txt, int options )
 {
 	mol::punk<IHTMLDocument2>	html;
 	if ( S_OK != doc2(&html) )

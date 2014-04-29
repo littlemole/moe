@@ -21,7 +21,7 @@ public:
 		this->hGlobal		 = hglob;
 	}
 
-	StgMedium( const mol::string& s, int opt = GMEM_MOVEABLE|GMEM_NODISCARD, IUnknown* pUnk = 0)
+	StgMedium( const std::wstring& s, int opt = GMEM_MOVEABLE|GMEM_NODISCARD, IUnknown* pUnk = 0)
 	{
 		mol::global glob(s,opt);
 		this->tymed          = TYMED_HGLOBAL;

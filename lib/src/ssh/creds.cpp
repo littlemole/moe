@@ -6,7 +6,7 @@ namespace ssh {
 
 
 
-SecureCredentials::SecureCredentials( const mol::string& h, int p, const mol::ssh::string& u, const mol::ssh::string& pass)
+SecureCredentials::SecureCredentials( const std::wstring& h, int p, const mol::ssh::string& u, const mol::ssh::string& pass)
 		: host(h),port(p)
 {
 

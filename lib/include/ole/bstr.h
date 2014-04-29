@@ -53,7 +53,8 @@ public:
 		return std::wstring(bstr_); 
 	}
 
-    mol::string toString() 	
+	/*
+    std::wstring toString() 	
 	{ 
 #ifdef _UNICODE
 		return towstring();
@@ -61,6 +62,7 @@ public:
 		return tostring();
 #endif
 	}
+	*/
 
     bstr& operator=( const bstr& b )
     {

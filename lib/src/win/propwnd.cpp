@@ -28,7 +28,7 @@ void AbstractProp::draw( mol::win::DCbase& dc, RECT& r, int& offset )
 }
 
 
-EditProp::EditProp( const mol::string& n, PropWindow* propWnd, const std::string& validate )
+EditProp::EditProp( const std::wstring& n, PropWindow* propWnd, const std::string& validate )
 	:AbstractProp(n,propWnd)
 {
 	validator_ = validate;
@@ -221,7 +221,7 @@ void PropWindow::OnEditDone()
 	}
 }
 
-prop::Category& PropWindow::category(const mol::string& cat)
+prop::Category& PropWindow::category(const std::wstring& cat)
 {
 	if ( props_.count(cat) == 0 )
 	{
@@ -282,7 +282,7 @@ HBRUSH PropWindow::blackBrush()
 	return (HBRUSH)::GetStockObject(BLACK_BRUSH);
 }
 
-prop::Category& PropWindow::addVBProperty( const mol::string& cat, const mol::string& n, VARIANT_BOOL& t)
+prop::Category& PropWindow::addVBProperty( const std::wstring& cat, const std::wstring& n, VARIANT_BOOL& t)
 {
 	static std::string empty("");
 	prop::Category& c = category(cat);
@@ -290,7 +290,7 @@ prop::Category& PropWindow::addVBProperty( const mol::string& cat, const mol::st
 	return c;
 }
 
-prop::Category& PropWindow::addProperty( const mol::string& cat, const mol::string& n, mol::bstr& t)
+prop::Category& PropWindow::addProperty( const std::wstring& cat, const std::wstring& n, mol::bstr& t)
 {
 	static std::string empty("");
 	prop::Category& c = category(cat);
@@ -298,7 +298,7 @@ prop::Category& PropWindow::addProperty( const mol::string& cat, const mol::stri
 	return c;
 }
 
-prop::Category& PropWindow::addProperty( const mol::string& cat, const mol::string& n, mol::bstr& t, const std::string& v)
+prop::Category& PropWindow::addProperty( const std::wstring& cat, const std::wstring& n, mol::bstr& t, const std::string& v)
 {
 	static std::string empty("");
 	prop::Category& c = category(cat);
@@ -309,7 +309,7 @@ prop::Category& PropWindow::addProperty( const mol::string& cat, const mol::stri
 
 namespace prop {
 
-Category::Category( PropWindow* propWnd, const mol::string& n)
+Category::Category( PropWindow* propWnd, const std::wstring& n)
 	: AbstractProp (n, propWnd)
 {
 	w_ = 32;
@@ -371,7 +371,7 @@ void Category::draw( mol::win::DCbase& dc, RECT& r, int& offset )
 
 	if ( !collapsed_ )
 	{
-		for ( std::map<mol::string,AbstractProp*>::iterator it = props_.begin(); it != props_.end(); it++)
+		for ( std::map<std::wstring,AbstractProp*>::iterator it = props_.begin(); it != props_.end(); it++)
 		{
 			(*it).second->draw( dc, childRect, offset );
 		}
@@ -384,7 +384,7 @@ AbstractProp* Category::hitTest( POINT& pos, HWND parent )
 {
 	if ( !collapsed_ )
 	{
-		for ( std::map<mol::string,AbstractProp*>::iterator it = props_.begin(); it != props_.end(); it++)
+		for ( std::map<std::wstring,AbstractProp*>::iterator it = props_.begin(); it != props_.end(); it++)
 		{
 			AbstractProp* p = (*it).second->hitTest(pos, parent);
 			if ( p )

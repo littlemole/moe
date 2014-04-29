@@ -14,12 +14,12 @@ namespace ssh {
 
 struct SecureCredentials
 {
-	SecureCredentials( const mol::string& h, int p, const mol::ssh::string& u, const mol::ssh::string& pass);
+	SecureCredentials( const std::wstring& h, int p, const mol::ssh::string& u, const mol::ssh::string& pass);
 	SecureCredentials( const SecureCredentials& rhs );
 	SecureCredentials( SecureCredentials&& rhs );
 	~SecureCredentials();
 
-	mol::string host;
+	std::wstring host;
 	int port;
 
 	void decrypt( mol::ssh::string& u, mol::ssh::string& pass );

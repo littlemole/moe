@@ -32,14 +32,14 @@ public:
 
 	typedef com_instance<DirObj> Instance;
 
-	static Instance* CreateInstance(std::vector<mol::string>& v);
+	static Instance* CreateInstance(std::vector<std::wstring>& v);
 	virtual void dispose();
 
 	HRESULT __stdcall _NewEnum( IEnumVARIANT** newEnum);
 	HRESULT __stdcall Item( long i,  BSTR* direntry);
 	HRESULT __stdcall Count( long* cnt);
 
-	std::vector<mol::string> entries;
+	std::vector<std::wstring> entries;
 };
 
 #endif

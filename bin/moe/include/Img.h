@@ -22,7 +22,7 @@ public:
 	ImgViewer();
 	virtual ~ImgViewer();
 
-	static Instance* CreateInstance( const mol::string& p );
+	static Instance* CreateInstance( const std::wstring& p );
 
 	void OnMDIActivate(HWND activated);
 	void OnCreate();
@@ -40,7 +40,7 @@ public:
 private:
 	mol::Picture							pic_;
 
-	bool load(const mol::string& path);
+	bool load(const std::wstring& path);
 	void updateUI();
 };
 

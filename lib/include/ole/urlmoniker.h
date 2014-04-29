@@ -86,8 +86,8 @@ public:
 class BaseUrl : public mol::com_obj<mol::ole::Moniker>
 {
 public:
-    BaseUrl( const mol::string& u, IStream* s );
-	BaseUrl( const mol::string& u, const mol::string& mime, IStream* s );
+	BaseUrl(const std::wstring& u, IStream* s);
+	BaseUrl(const std::wstring& u, const std::wstring& mime, IStream* s);
     virtual HRESULT __stdcall BindToStorage( IBindCtx *pbc, IMoniker *pmkToLeft, REFIID riid, void **ppvObj) ;
     virtual HRESULT __stdcall GetDisplayName( IBindCtx *pbc, IMoniker *pmkToLeft, LPOLESTR *ppszDisplayName);
 
@@ -126,9 +126,9 @@ public:
 
 protected:
 
-    HRESULT startDownload( const mol::string& url );
+	HRESULT startDownload(const std::wstring& url);
 
-    mol::string					location_;
+	std::wstring					location_;
     mol::punk<IMoniker>			mon_;
 };
 
@@ -136,8 +136,8 @@ class HttpUrl : public mol::com_obj<AsyncUrl>
 {
 public:
     HttpUrl();
-    HttpUrl(const mol::string& loc, const mol::string& h, DWORD m = BINDVERB_GET);
-    HttpUrl(const mol::string& loc, const mol::string& p, const mol::string& h, DWORD m = BINDVERB_POST);
+	HttpUrl(const std::wstring& loc, const std::wstring& h, DWORD m = BINDVERB_GET);
+	HttpUrl(const std::wstring& loc, const std::wstring& p, const std::wstring& h, DWORD m = BINDVERB_POST);
     ~HttpUrl();
 
     HRESULT __stdcall OnDataAvailable( DWORD grfBSCF,DWORD dwSize, FORMATETC *pformatetc,STGMEDIUM *pstgmed);
@@ -148,7 +148,7 @@ public:
 
     DWORD getMethod();
     bool  isRedirect();
-    const mol::string getLocation();
+	const std::wstring getLocation();
 	const std::string getMime();
     const std::string getRequestHeaders();
     const std::string getResponseHeaders();

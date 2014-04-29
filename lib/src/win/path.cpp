@@ -7,20 +7,20 @@ namespace mol {
 ///////////////////////////////////////////////////////////////////////
 
 
-mol::string Path::ext(const mol::string& path)
+std::wstring Path::ext(const std::wstring& path)
 {
-	mol::string p = Path::removeBackSlash(path);
+	std::wstring p = Path::removeBackSlash(path);
 	size_t pos = p.find_last_of(_T("."));
-	if ( (pos != mol::string::npos) && (pos < p.size()-1) )
+	if ( (pos != std::wstring::npos) && (pos < p.size()-1) )
 		return p.substr(pos);
 	return _T("");
 }
 
-mol::string Path::filename(const mol::string& path)
+std::wstring Path::filename(const std::wstring& path)
 {
-	mol::string p = Path::removeBackSlash(path);
+	std::wstring p = Path::removeBackSlash(path);
 	size_t pos = p.find_last_of(_T("/\\"));
-	if ( (pos != mol::string::npos) && (pos < p.size()-2) )
+	if ( (pos != std::wstring::npos) && (pos < p.size()-2) )
 		p = p.substr(pos+1);
 	if ( (pos = p.find_first_of(_T("?#"))) != std::string::npos )
 	{
@@ -29,32 +29,32 @@ mol::string Path::filename(const mol::string& path)
 	return p;
 }
 
-mol::string Path::pathname(const mol::string& path)
+std::wstring Path::pathname(const std::wstring& path)
 {
-	mol::string p = Path::removeBackSlash(path);
+	std::wstring p = Path::removeBackSlash(path);
 	size_t pos = p.find_last_of(_T("/\\"));
-	if ( (pos != mol::string::npos) && (pos < p.size()-2) )
+	if ( (pos != std::wstring::npos) && (pos < p.size()-2) )
 		return p.substr(0,pos);
 	return p;
 }
 
-mol::string Path::stripRoot(const mol::string& fn)
+std::wstring Path::stripRoot(const std::wstring& fn)
 {
-	mol::string path(fn);
+	std::wstring path(fn);
 	size_t pos = path.find_first_of(_T("/\\"));
-	if ( (pos != mol::string::npos) && (pos != path.size()) )
+	if ( (pos != std::wstring::npos) && (pos != path.size()) )
 	{
 		size_t p   = path.find_first_not_of(_T("/\\"),pos);
-		if ( (p != mol::string::npos) && (p != path.size()) )
+		if ( (p != std::wstring::npos) && (p != path.size()) )
 			pos = p;
 		path = path.substr(pos);
 	}
 	return path;	
 }
 
-mol::string Path::stripToRoot(const mol::string& fn)
+std::wstring Path::stripToRoot(const std::wstring& fn)
 {
-	mol::string path(fn);
+	std::wstring path(fn);
 	size_t pos = path.find(_T(":\\\\"));
 	if ( pos == 1 )
 	{
@@ -72,17 +72,17 @@ mol::string Path::stripToRoot(const mol::string& fn)
 	if ( pos == 0 )
 	{
 		size_t p = path.find(_T("\\"),3);
-		if ( p != mol::string::npos )
+		if ( p != std::wstring::npos )
 		{
 			path = path.substr(0,p);
 			return path;
 		}
 	}
 	pos = path.find(_T("://"));
-	if ( pos != mol::string::npos )
+	if ( pos != std::wstring::npos )
 	{
 		size_t p = path.find(_T("/"),pos+3);
-		if ( pos != mol::string::npos )
+		if ( pos != std::wstring::npos )
 		{
 			path = path.substr(0,p);
 			return path;
@@ -91,7 +91,7 @@ mol::string Path::stripToRoot(const mol::string& fn)
 	if ( path.size() > 1 )
 	{
 		pos = path.find_first_of(_T("/\\"),2);
-		if ( pos != mol::string::npos )
+		if ( pos != std::wstring::npos )
 		{
 			path = path.substr(0,pos);
 			return path;
@@ -100,35 +100,35 @@ mol::string Path::stripToRoot(const mol::string& fn)
 	return path;
 }
 
-mol::string Path::addBackSlash(const mol::string& path)
+std::wstring Path::addBackSlash(const std::wstring& path)
 {
-	mol::string p(path);
+	std::wstring p(path);
 	if ( p.size() > 0 )
 		if ( p[p.size()-1] != _T('\\') )
 			p += _T("\\");
     return p;
 }
 
-mol::string Path::removeBackSlash(const mol::string& path)
+std::wstring Path::removeBackSlash(const std::wstring& path)
 {
-	mol::string p(path);
+	std::wstring p(path);
 	if ( p.size() > 0 )
 		if ( p[p.size()-1] == _T('\\') )
 			p.erase(p.size()-1,1);
     return p;
 }
 
-mol::string Path::addExtension(const mol::string& path,const mol::string& e)
+std::wstring Path::addExtension(const std::wstring& path,const std::wstring& e)
 {
-	mol::string p(path);
+	std::wstring p(path);
     if ( ext(path) == _T("") )
 		p += e;
     return p; 
 }
 
-mol::string Path::renameExtension(const mol::string& path,const mol::string& e)
+std::wstring Path::renameExtension(const std::wstring& path,const std::wstring& e)
 {
-	mol::string p(path);
+	std::wstring p(path);
     if ( ext(path) == _T("") )
 		p = p.substr(0,p.size()-ext(path).size());
 	else
@@ -137,44 +137,44 @@ mol::string Path::renameExtension(const mol::string& path,const mol::string& e)
     return p; 
 }
 
-mol::string Path::append(const mol::string& path,const mol::string& ap)
+std::wstring Path::append(const std::wstring& path,const std::wstring& ap)
 {
-	mol::string ret = Path::addBackSlash(path);
-	mol::string a(ap);
+	std::wstring ret = Path::addBackSlash(path);
+	std::wstring a(ap);
 	if ( a[0] == _T('\\') )
 		a = a.substr(1);
 
 	ret += a;
     return ret; 
 }
-bool Path::isNetDrive(const mol::string& path)
+bool Path::isNetDrive(const std::wstring& path)
 {
 	return DRIVE_REMOTE == GetDriveType(path.c_str());
 }
 
-bool Path::isUNC(const mol::string& path)
+bool Path::isUNC(const std::wstring& path)
 {
 	return path.substr(0,2) == _T("\\\\");
 }
 
-mol::string Path::serviceName(const mol::string& path)
+std::wstring Path::serviceName(const std::wstring& path)
 {
 	if ( isUNC(path) )
 	{
 		return path.substr(0,path.find(_T('/'),3));
 	}
-	mol::string remotename;
-	mol::string p(path);
+	std::wstring remotename;
+	std::wstring p(path);
 	p = stripToRoot(p);
 	p = removeBackSlash(p);
 	if ( isNetDrive(p) )
 	{		
-		mol::string localname(mol::str::toupper(p));
+		std::wstring localname(mol::str::toupper(p));
 		DWORD len = 0;
 		::WNetGetConnection(p.c_str(), 0, &len);
 		if ( len )
 		{
-			mol::tbuff buf(len);
+			mol::wbuff buf(len);
 			if (::WNetGetConnection(p.c_str(), buf, &len) )
 			{
 				remotename = buf.toString(len);
@@ -184,7 +184,7 @@ mol::string Path::serviceName(const mol::string& path)
 	return remotename;
 }
 
-std::wstring Path::wpath(const mol::string& path)
+std::wstring Path::wpath(const std::wstring& path)
 {
 	std::wstring ws = mol::towstring(path);
 
@@ -196,7 +196,7 @@ std::wstring Path::wpath(const mol::string& path)
 	return ws;
 }
 
-bool Path::exists(const mol::string& path)
+bool Path::exists(const std::wstring& path)
 {
 	if ( path.empty() )
 		return false;
@@ -205,16 +205,16 @@ bool Path::exists(const mol::string& path)
 	return (attributes != INVALID_FILE_ATTRIBUTES);
 }
 
-bool Path::isDir(const mol::string& path)
+bool Path::isDir(const std::wstring& path)
 {
 	if ( path.empty() )
 		return false;
 
 	if ( isUNC(path) ) 
 	{
-		mol::string tmp = path.substr(2);
+		std::wstring tmp = path.substr(2);
 		size_t p = tmp.find_first_of(_T("/\\"));
-		if ( p == mol::string::npos ) 
+		if ( p == std::wstring::npos ) 
 		{
 			// top level network share
 			return true;
@@ -232,18 +232,18 @@ bool Path::isDir(const mol::string& path)
 	return (attributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 }
 
-bool Path::isRoot(const mol::string& path)
+bool Path::isRoot(const std::wstring& path)
 {
-	mol::string p(path);
+	std::wstring p(path);
 	p = stripToRoot(p);
 	if ( p == path )
 		return true;
 	return false;
 }
 
-mol::string Path::parentDir(const mol::string& path)
+std::wstring Path::parentDir(const std::wstring& path)
 {
-    mol::string ret = path;
+    std::wstring ret = path;
 
 	if ( path.size() == 0 )
 		return ret;
@@ -252,7 +252,7 @@ mol::string Path::parentDir(const mol::string& path)
       ret.erase(ret.size()-1);
 
     size_t pos = ret.find_last_of(_T('\\'));
-    if ( pos != mol::string::npos )
+    if ( pos != std::wstring::npos )
     {
       ret = ret.substr(0,pos);
     }
@@ -261,10 +261,10 @@ mol::string Path::parentDir(const mol::string& path)
     return ret;
 }
 
-bool Path::isSubpath(const mol::string& path,const mol::string& p)
+bool Path::isSubpath(const std::wstring& path,const std::wstring& p)
 {
-	mol::string p1(path);
-	mol::string p2(p);
+	std::wstring p1(path);
+	std::wstring p2(p);
 
 	if ( filename(p1) != p1.c_str() )
 	{
@@ -276,14 +276,14 @@ bool Path::isSubpath(const mol::string& path,const mol::string& p)
 		p2 = pathname(p2);
 	}
 
-	mol::string  ci1 = mol::str::tolower( p1.c_str() );
-	mol::string  ci2 = mol::str::tolower( p2.c_str() );
+	std::wstring  ci1 = mol::str::tolower( p1.c_str() );
+	std::wstring  ci2 = mol::str::tolower( p2.c_str() );
 
 	if ( ci1 == ci2 )
 		return false;
 
 	size_t pos = ci1.find(ci2);
-	return ( pos != mol::string::npos ) ;
+	return ( pos != std::wstring::npos ) ;
 }
 
 

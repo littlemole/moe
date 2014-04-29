@@ -158,9 +158,9 @@ HRESULT __stdcall OleObjBase::EnumDAdvise( IEnumSTATDATA ** ppenumAdvise )
 HRESULT __stdcall OleObjBase::SetHostNames( LPCOLESTR szContainerApp,LPCOLESTR szContainerObj)
 {
 	if ( szContainerApp )
-		appname_ = mol::toString(szContainerApp);
+		appname_ = mol::towstring(szContainerApp);
 	if ( szContainerObj )
-		docname_ = mol::toString(szContainerObj);
+		docname_ = mol::towstring(szContainerObj);
 	return S_OK;
 }
 
@@ -535,17 +535,17 @@ OleCtrlBase::OleCtrlBase()
 	holemenu_ = 0;
 };
 
-void OleCtrlBase::addEditMenu(const mol::string& title, HMENU menu)
+void OleCtrlBase::addEditMenu(const std::wstring& title, HMENU menu)
 {
 	editMenus_.push_back(std::make_pair(title,menu));
 }
 
-void OleCtrlBase::addObjectMenu(const mol::string& title, HMENU menu)
+void OleCtrlBase::addObjectMenu(const std::wstring& title, HMENU menu)
 {
 	objectMenus_.push_back(std::make_pair(title,menu));
 }
 
-void OleCtrlBase::addHelpMenu(const mol::string& title, HMENU menu)
+void OleCtrlBase::addHelpMenu(const std::wstring& title, HMENU menu)
 {
 	helpMenus_.push_back(std::make_pair(title,menu));
 }
@@ -858,7 +858,7 @@ HRESULT __stdcall OleCtrlBase::GetPages( CAUUID *pPages)
 	return S_OK;
 }
 
-HRESULT OleCtrlBase::createPropFrame(const mol::string& title, int x, int y)
+HRESULT OleCtrlBase::createPropFrame(const std::wstring& title, int x, int y)
 {
 	initPropPages();
 	if ( clsids_proppages_.size() >  0 )

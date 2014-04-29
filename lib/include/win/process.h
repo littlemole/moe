@@ -79,7 +79,7 @@ public:
 
 	enum READYSTATE { ERR = 0, INITIALIZED = 1, RUNNING = 2, DONE = 3 };
 
-	bool create( const mol::string& cmdline);
+	bool create( const std::wstring& cmdline);
 	void close();
 
 	void terminate();
@@ -134,7 +134,7 @@ private:
 	mol::Event  eSuspendThreadQueue_;
 
 	PROCESS_INFORMATION piProcInfo_;
-	mol::TCHAR* commandline_;
+	wchar_t* commandline_;
 
 };
 

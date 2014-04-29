@@ -59,7 +59,7 @@ BOOL Picture::load( UINT nIDRes)
 //////////////////
 // Load from path name.
 //
-BOOL Picture::load(const mol::string& pathName)
+BOOL Picture::load(const std::wstring& pathName)
 {
 //	mol::cistring filename(mol::tostring(pathName).c_str());
 

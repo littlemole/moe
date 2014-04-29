@@ -5,7 +5,7 @@
 #include "win/wnd.h"
 #include "ole/com.h"
 #include "ole/punk.h"
-#include "util/refptr.h"
+#include "boost/shared_ptr.hpp"
 #include "thread/ThreadQueue.h"
 #include <Shlobj.h>
 #include <Shlwapi.h>
@@ -35,10 +35,10 @@ class ShellInfo
 {
 public:
 	static HIMAGELIST SysImgList();
-	static int Icon         ( const mol::string& path );
-	static int OpenIcon     ( const mol::string& path );
-    static HICON HIcon      ( const mol::string& path );
-	static HICON HOpenIcon  ( const mol::string& path );
+	static int Icon         ( const std::wstring& path );
+	static int OpenIcon     ( const std::wstring& path );
+    static HICON HIcon      ( const std::wstring& path );
+	static HICON HOpenIcon  ( const std::wstring& path );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@ private:
 // add refcounting to this one:
 ////////////////////////////////////////////////////////////////////////////////////
 
-typedef mol::RefPtr<mol::io::ShellItem> Shit; 
+typedef boost::shared_ptr<mol::io::ShellItem> Shit; 
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ public:
 
 	Shit shellItem();
 
-	mol::string getDisplayNameOf( LPITEMIDLIST pidl, DWORD flags = SHGDN_FORPARSING);
+	std::wstring getDisplayNameOf( LPITEMIDLIST pidl, DWORD flags = SHGDN_FORPARSING);
 	Shit getSpecialFolder( int csidl);
 
 	// prepare enumeration
@@ -103,7 +103,7 @@ public:
 	void reset();
 
 	// get item
-	Shit parseDisplayName(const mol::string& path, DWORD attributes = SFGAO_FOLDER|SFGAO_STREAM|SFGAO_FILESYSTEM|SFGAO_BROWSABLE|SFGAO_FILESYSANCESTOR);
+	Shit parseDisplayName(const std::wstring& path, DWORD attributes = SFGAO_FOLDER|SFGAO_STREAM|SFGAO_FILESYSTEM|SFGAO_BROWSABLE|SFGAO_FILESYSANCESTOR);
 
 	// get Attributes of item
 	ULONG getAttributesOf( LPITEMIDLIST pidl, ULONG attributes = SFGAO_FOLDER|SFGAO_STREAM|SFGAO_FILESYSTEM|SFGAO_BROWSABLE|SFGAO_FILESYSANCESTOR );
@@ -126,7 +126,7 @@ protected:
 
 	void release(LPITEMIDLIST pidl);
 
-	const mol::TCHAR* getStaticFolderPath();
+	const wchar_t* getStaticFolderPath();
 
 	// get folder from item
 	IShellFolder* subFolder(LPITEMIDLIST pidl);
@@ -136,12 +136,12 @@ protected:
 	mol::punk<IMalloc>					mallocer_;
 	STRRET								strret_;
 
-    static std::map<mol::string,int>	iconMap_;
+    static std::map<std::wstring,int>	iconMap_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-Shit parseDisplayName(const mol::string& path, DWORD attributes = SFGAO_FOLDER|SFGAO_STREAM|SFGAO_FILESYSTEM|SFGAO_BROWSABLE|SFGAO_FILESYSANCESTOR);
+Shit parseDisplayName(const std::wstring& path, DWORD attributes = SFGAO_FOLDER|SFGAO_STREAM|SFGAO_FILESYSTEM|SFGAO_BROWSABLE|SFGAO_FILESYSANCESTOR);
 
 ////////////////////////////////////////////////////////////////////////////////////
 // File Operations unsing windows shell (windows explorer.exe)
@@ -155,53 +155,53 @@ public:
 
     int  copy(
 			HWND hwnd, 
-			const mol::string& from, 
-			const mol::string& to, 
+			const std::wstring& from, 
+			const std::wstring& to, 
 			FILEOP_FLAGS flags = FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
 
 	int  copy(
 			HWND hwnd, 
-			const std::vector<mol::string>& from, 
-			const mol::string& to, 
+			const std::vector<std::wstring>& from, 
+			const std::wstring& to, 
 			FILEOP_FLAGS flags = FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
 
     int  remove(
 			HWND hwnd, 
-			const mol::string& from, 
+			const std::wstring& from, 
 			FILEOP_FLAGS flags =FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
 
 	int  remove(
 			HWND hwnd, 
-			const std::vector<mol::string>& from, 
+			const std::vector<std::wstring>& from, 
 			FILEOP_FLAGS flags =FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
 
     int  move(
 			HWND hwnd, 
-			const mol::string& from, 
-			const mol::string& to, 
+			const std::wstring& from, 
+			const std::wstring& to, 
 			FILEOP_FLAGS flags =FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
 
 	int  move(
 			HWND hwnd, 
-			const std::vector<mol::string>& from, 
-			const mol::string& to, 
+			const std::vector<std::wstring>& from, 
+			const std::wstring& to, 
 			FILEOP_FLAGS flags =FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
 
     int  rename(
 			HWND hwnd, 
-			const mol::string& from, 
-			const mol::string& to, 
+			const std::wstring& from, 
+			const std::wstring& to, 
 			FILEOP_FLAGS flags =FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
 
-	bool createDir( const mol::string& dirname );
+	bool createDir( const std::wstring& dirname );
 
     BOOL  anyOpAborted();
 
 private:
     SHFILEOPSTRUCT sfos_;
 
-    int  op     (UINT  op, HWND hwnd, const mol::string& from, const mol::string& to, FILEOP_FLAGS flags = FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
-	int  multiOp(UINT  op, HWND hwnd, const std::vector<mol::string>& from, const mol::string& to, FILEOP_FLAGS flags = FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
+    int  op     (UINT  op, HWND hwnd, const std::wstring& from, const std::wstring& to, FILEOP_FLAGS flags = FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
+	int  multiOp(UINT  op, HWND hwnd, const std::vector<std::wstring>& from, const std::wstring& to, FILEOP_FLAGS flags = FOF_NOCONFIRMATION|FOF_NOCONFIRMMKDIR|FOF_NOERRORUI);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -209,26 +209,26 @@ private:
 ////////////////////////////////////////////////////////////////////////////////////
 
 BOOL execute_shell( 
-				   const mol::string& path, 
-				   const mol::string& verb = _T("open"), 
+				   const std::wstring& path, 
+				   const std::wstring& verb = _T("open"), 
 				   int nShow = SW_SHOWNORMAL, ULONG fMask = 0 //SEE_MASK_INVOKEIDLIST);
 				   );	
 
 
 BOOL execute_shell_args( 
-					const mol::string& path, 
-					const mol::string& args, 
-					const mol::string& verb = _T("open"), 
+					const std::wstring& path, 
+					const std::wstring& args, 
+					const std::wstring& verb = _T("open"), 
 					int nShow = SW_SHOWNORMAL, ULONG fMask = SEE_MASK_FLAG_DDEWAIT | SEE_MASK_FLAG_NO_UI );//SEE_MASK_INVOKEIDLIST);
 
 
-BOOL execute_shell_admin( const mol::string& path, const mol::string& args );
+BOOL execute_shell_admin( const std::wstring& path, const std::wstring& args );
 
 ////////////////////////////////////////////////////////////////////////////////////
 // execute a commandline w/o  cmd.exe
 ////////////////////////////////////////////////////////////////////////////////////
 
-BOOL exec_cmdline( const mol::string cl );
+BOOL exec_cmdline( const std::wstring cl );
 
 } // end namespace mol::win::io;
 
@@ -240,8 +240,8 @@ public:
 	UACPipe();
 	~UACPipe();
 	
-	HANDLE create(const mol::string& pipename );
-	HANDLE open( const mol::string& pipename );
+	HANDLE create(const std::wstring& pipename );
+	HANDLE open( const std::wstring& pipename );
 
 	bool connect(int milisecs = 3000);
 	void disconnect();
@@ -260,8 +260,8 @@ private:
 	static const int BUFSIZE;
 };
 
-mol::string resolveShortcut( const mol::string& link);
-mol::string resolveInternetShortcut( const mol::string& link);
+std::wstring resolveShortcut( const std::wstring& link);
+std::wstring resolveInternetShortcut( const std::wstring& link);
 
 } // end namespace mol;
 

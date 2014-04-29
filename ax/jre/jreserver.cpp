@@ -105,7 +105,7 @@ HRESULT __stdcall JREServer::Exit()
 
 HRESULT __stdcall JREServer::put_Classpath( BSTR cp) 
 {
-	mol::java::jre().classpath( mol::bstr(cp).toString() );
+	mol::java::jre().classpath( mol::bstr(cp).towstring() );
 	return S_OK;
 }
 
@@ -114,14 +114,14 @@ HRESULT __stdcall JREServer::get_Classpath( BSTR *cp)
 	if ( !cp )
 		return E_INVALIDARG;
 
-	mol::string p = mol::java::jre().classpath();
+	std::wstring p = mol::java::jre().classpath();
 	*cp = ::SysAllocString( mol::towstring(p).c_str() );
 	return S_OK;
 }
 
 HRESULT __stdcall JREServer::put_Libpath( BSTR lp)
 {
-	mol::java::jre().libpath( mol::bstr(lp).toString() );
+	mol::java::jre().libpath( mol::bstr(lp).towstring() );
 	return S_OK;
 }
 
@@ -130,7 +130,7 @@ HRESULT __stdcall JREServer::get_Libpath( BSTR *lp)
 	if ( !lp )
 		return E_INVALIDARG;
 
-	mol::string p = mol::java::jre().libpath();
+	std::wstring p = mol::java::jre().libpath();
 
 	*lp = ::SysAllocString( mol::towstring(p).c_str() );
 

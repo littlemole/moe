@@ -26,7 +26,7 @@ public:
 
 	void dispose()
 	{
-		for ( std::map<mol::string,SecureCredentials*>::iterator it = credentialsMap_.begin(); it!=credentialsMap_.end();it++)
+		for ( std::map<std::wstring,SecureCredentials*>::iterator it = credentialsMap_.begin(); it!=credentialsMap_.end();it++)
 		{
 			delete (*it).second;
 		}
@@ -50,13 +50,13 @@ public:
 
 protected:
 
-	virtual bool getCredentials( mol::string host, long port, SecureCredentials** credentials) = 0;
-	virtual bool acceptHost( mol::string host, long port, mol::string hash ) = 0;
+	virtual bool getCredentials( std::wstring host, long port, SecureCredentials** credentials) = 0;
+	virtual bool acceptHost( std::wstring host, long port, std::wstring hash ) = 0;
 
-	void remberSessionCredentials( mol::string host, long port, SecureCredentials* credentials);
-	void removeSessionCredentials( mol::string host, long port);
+	void remberSessionCredentials( std::wstring host, long port, SecureCredentials* credentials);
+	void removeSessionCredentials( std::wstring host, long port);
 
-	std::map<mol::string,SecureCredentials*> credentialsMap_;
+	std::map<std::wstring,SecureCredentials*> credentialsMap_;
 };
 
 

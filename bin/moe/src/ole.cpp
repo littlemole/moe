@@ -25,7 +25,7 @@ OleChild::~OleChild()
 };
 
 
-OleChild::Instance* OleChild::CreateInstance( const mol::string& p )
+OleChild::Instance* OleChild::CreateInstance( const std::wstring& p )
 {
 	Instance* doc = 0;
 
@@ -59,7 +59,7 @@ OleChild::Instance* OleChild::CreateInstance( const mol::string& p )
 	return doc;
 }
 
-OleChild::Instance* OleChild::CreateInstance( const mol::string& p, CLSID& clsid )
+OleChild::Instance* OleChild::CreateInstance( const std::wstring& p, CLSID& clsid )
 {
 	Instance* doc = 0;
 
@@ -103,7 +103,7 @@ void OleChild::OnMDIActivate(WPARAM unused, HWND activated)
 {
 	ODBGS("OleChild::OnMDIActivate");
 
-	mol::string filename = getText();
+	std::wstring filename = getText();
 	statusBar()->status( filename );
 	tab()->select( *this );
 
@@ -127,7 +127,7 @@ void OleChild::OnMDIActivate(WPARAM unused, HWND activated)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-void OleChild::load(const mol::string& p, CLSID& clsid)
+void OleChild::load(const std::wstring& p, CLSID& clsid)
 {
 	filename_ = p;
 
@@ -149,7 +149,7 @@ void OleChild::load(const mol::string& p, CLSID& clsid)
 
 }
 
-bool OleChild::openFile( const mol::string& path )
+bool OleChild::openFile( const std::wstring& path )
 {
     CLSID					clsid; 
 
@@ -258,7 +258,7 @@ HRESULT __stdcall OleChild::IOleClientSite_SaveObject( )
 				}
 			}
 		}
-		statusBar()->status( mol::string( _T("Error saving ")) + filename_ );
+		statusBar()->status( std::wstring( _T("Error saving ")) + filename_ );
 		return E_FAIL;
 	}
 
@@ -266,7 +266,7 @@ HRESULT __stdcall OleChild::IOleClientSite_SaveObject( )
 	mol::punk<IPersistStorage> ps(oleObject);
 	if (!ps)
 	{
-		statusBar()->status( mol::string(_T("Error saving ")) + filename_ );
+		statusBar()->status( std::wstring(_T("Error saving ")) + filename_ );
 		return E_FAIL;
 	}
 
@@ -282,14 +282,14 @@ HRESULT __stdcall OleChild::IOleClientSite_SaveObject( )
 		hr = ps->GetClassID(&clsid);
 		if ( hr != S_OK )
 		{
-			statusBar()->status( mol::string(_T("Error saving ")) + filename_ );
+			statusBar()->status( std::wstring(_T("Error saving ")) + filename_ );
 			return hr;
 		}
 
 		hr = store->SetClass(clsid);
 		if ( hr != S_OK )
 		{
-			statusBar()->status( mol::string(_T("Error saving ")) + filename_ );
+			statusBar()->status( std::wstring(_T("Error saving ")) + filename_ );
 			return hr;
 		}
 
@@ -298,7 +298,7 @@ HRESULT __stdcall OleChild::IOleClientSite_SaveObject( )
 		hr = ps->Save(store,FALSE);
 		if ( hr != S_OK )
 		{
-			statusBar()->status( mol::string(_T("Error saving ")) + filename_ );
+			statusBar()->status( std::wstring(_T("Error saving ")) + filename_ );
 			return hr;
 		}
 
@@ -307,7 +307,7 @@ HRESULT __stdcall OleChild::IOleClientSite_SaveObject( )
 		hr = ps->SaveCompleted(store);
 		if ( hr != S_OK )
 		{
-			statusBar()->status( mol::string(_T("Error saving ")) + filename_ );
+			statusBar()->status( std::wstring(_T("Error saving ")) + filename_ );
 			return hr;
 		}
 
@@ -316,12 +316,12 @@ HRESULT __stdcall OleChild::IOleClientSite_SaveObject( )
 		hr = store->Commit(0);
 		if ( hr != S_OK )
 		{
-			statusBar()->status( mol::string( _T("Error saving ")) + filename_ );
+			statusBar()->status( std::wstring( _T("Error saving ")) + filename_ );
 			return hr;
 		}
 
 	}
-	statusBar()->status( mol::string(_T("saved file ")) + filename_ );
+	statusBar()->status( std::wstring(_T("saved file ")) + filename_ );
 	return 	S_OK ;
 }
 

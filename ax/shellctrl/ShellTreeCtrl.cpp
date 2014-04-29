@@ -27,7 +27,7 @@ ShellTreeAction::ShellTreeAction(ShellTree* sw)
 // ShellTreeActionPath opens a given path
 ///////////////////////////////////////////////////////////////////////
 
-ShellTreeActionPath::ShellTreeActionPath(ShellTree* sw, const mol::string& path)
+ShellTreeActionPath::ShellTreeActionPath(ShellTree* sw, const std::wstring& path)
 :ShellTreeAction(sw),path_(path)
 {}
 
@@ -35,21 +35,21 @@ ShellTreeActionPath::ShellTreeActionPath(ShellTree* sw, const mol::string& path)
 // this is called recursivly, starts with parent == TVI_ROOT
 ///////////////////////////////////////////////////////////////////////
 
-void ShellTreeActionPath::openPath( const mol::string& p, HTREEITEM parent)
+void ShellTreeActionPath::openPath( const std::wstring& p, HTREEITEM parent)
 {
 	if ( p.size() == 0 )
 		return ;
 
-	mol::string root(p);
+	std::wstring root(p);
 	root = mol::Path::stripToRoot(root);
 
     HTREEITEM i = sw_->tree_.getChildItem( parent );
     while ( i )
     {
-		mol::string t = sw_->tree_.getItemText(i);
+		std::wstring t = sw_->tree_.getItemText(i);
 		if ( t.size() > 0 )
 		{
-			//mol::string p(t);
+			//std::wstring p(t);
 			t = mol::Path::removeBackSlash(t);
 			if ( root == t )
 			{
@@ -57,7 +57,7 @@ void ShellTreeActionPath::openPath( const mol::string& p, HTREEITEM parent)
 				TreeView_Select(sw_->tree_,i,TVGN_CARET);	
 				TreeView_EnsureVisible(sw_->tree_,i);
 
-				mol::string sub = mol::Path::stripRoot(p);
+				std::wstring sub = mol::Path::stripRoot(p);
 				if ( sub == p )
 					return;
 
@@ -75,7 +75,7 @@ void ShellTreeActionPath::openPath( const mol::string& p, HTREEITEM parent)
 
 void ShellTreeActionPath::operator() ()
 {
-	mol::string p(path_);
+	std::wstring p(path_);
 	if ( mol::Path::isDir(p) )
 		p = mol::Path::removeBackSlash(p);
 
@@ -95,7 +95,7 @@ void ShellTreeActionPath::operator() ()
 		TreeEntry* entry = sw_->getItemEntry(i);
 		if ( entry )
 		{
-			mol::string tmp(entry->filename);
+			std::wstring tmp(entry->filename);
 			//tmp = mol::Path::removeBackSlash(tmp);
 			if ( p == tmp )
 			{
@@ -103,7 +103,7 @@ void ShellTreeActionPath::operator() ()
 				TreeView_Select(sw_->tree_,i,TVGN_CARET);	
 				TreeView_EnsureVisible(sw_->tree_,i);
 
-				mol::string sub = mol::Path::stripRoot(path_);
+				std::wstring sub = mol::Path::stripRoot(path_);
 				if ( sub == path_ )
 					return;
 
@@ -305,7 +305,7 @@ LRESULT ShellTree::OnTreeContext(UINT msg, WPARAM wParam, LPARAM lParam)
 
 	// get selection, if we have a hittest update selection beforehand
 	HTREEITEM hit = getHitTest();
-	mol::string p = getPath();
+	std::wstring p = getPath();
 	// check if to display a context menu
 	if ( !hit )
 		return 0;
@@ -460,7 +460,7 @@ LRESULT ShellTree::OnTreeDblClick(UINT msg, WPARAM wParam, LPARAM lParam)
 		if ( hit == root )
 			return 1;
 
-		mol::string p = this->getPath();
+		std::wstring p = this->getPath();
 		mol::variant v2(getItemEntry(hit)->isDir());
 		this->fire(DISPID_ISHELLTREEEVENTS_ONTREEDBLCLICK,variant(p),v2);
 	}
@@ -482,7 +482,7 @@ LRESULT ShellTree::OnTreeClick(UINT msg, WPARAM wParam, LPARAM lParam)
 
 LRESULT ShellTree::OnTreeSelection(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	mol::string path = getPath();
+	std::wstring path = getPath();
 	this->fire( DISPID_ISHELLTREEEVENTS_ONTREESELECTION, variant(path));
 	return 0;
 }
@@ -509,7 +509,7 @@ LRESULT ShellTree::OnTreeBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 	mol::Crack message(msg,wParam,lParam);
    	HTREEITEM hti = message.nmtreeview()->itemNew.hItem;
 
-	mol::string p(getItemPath(hti));
+	std::wstring p(getItemPath(hti));
 	if ( !mol::Path::isDir(p) && !mol::Path::exists(p) )
 		return 0;
 
@@ -521,7 +521,7 @@ LRESULT ShellTree::OnTreeBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 	mol::ImageList::beginDrag(*this,himl);
 	mol::ImageList::enterDrag(*this);
 
-	std::vector<mol::string> v;
+	std::vector<std::wstring> v;
 	v.push_back(p);
 
 	punk<IDropSource> drop = new DropSrc;
@@ -543,11 +543,11 @@ LRESULT ShellTree::OnTreeBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 LRESULT ShellTree::OnDataObject(IDataObject* data)
 {
 //    IDataObject* data = (IDataObject*)lParam;
-	std::vector<mol::string> v = vectorFromDataObject(data);
+	std::vector<std::wstring> v = vectorFromDataObject(data);
 
 	if ( v.size() == 0 )
 		return 0;
-	mol::string p(v[0]);
+	std::wstring p(v[0]);
 	p = mol::Path::parentDir(p);
 	
 	if ( mol::Path::isDir(p) )
@@ -575,8 +575,8 @@ LRESULT ShellTree::OnTreeRename(UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		HTREEITEM hit = this->tree_.getParentItem(message.treeViewDispInfo()->item.hItem);
 
-		mol::string pFrom(getItemPath(message.treeViewDispInfo()->item.hItem));
-		mol::string pTo( mol::Path::pathname(pFrom) );
+		std::wstring pFrom(getItemPath(message.treeViewDispInfo()->item.hItem));
+		std::wstring pTo( mol::Path::pathname(pFrom) );
 		pTo = mol::Path::append(pTo, message.treeViewDispInfo()->item.pszText);
 
 		ShellFileOp sfo;
@@ -600,7 +600,7 @@ LRESULT ShellTree::OnTreeRename(UINT msg, WPARAM wParam, LPARAM lParam)
 // Get selected path
 ///////////////////////////////////////////////////////////////////////
 
-mol::string ShellTree::getPath()
+std::wstring ShellTree::getPath()
 {
 	HTREEITEM hit = tree_.getSelection();
 	return getItemPath(hit);
@@ -647,12 +647,12 @@ void ShellTree::release(HTREEITEM it )
 // display specific path
 ///////////////////////////////////////////////////////////////////////
 
-BOOL ShellTree::displayPath(const mol::string& p)
+BOOL ShellTree::displayPath(const std::wstring& p)
 {
 	if (!mol::Path::isDir(p))
 		return FALSE;
 
-	if ( p == mol::string(_T("")) )
+	if ( p == std::wstring(_T("")) )
 		return FALSE;
 
 	queue_.push( new ShellTreeActionPath(this,p));
@@ -673,7 +673,7 @@ BOOL ShellTree::displayItem(HTREEITEM item)
 
 ///////////////////////////////////////////////////////////////////////
 
-mol::string ShellTree::getItemPath( HTREEITEM item )
+std::wstring ShellTree::getItemPath( HTREEITEM item )
 {
 	TreeEntry* entry = getItemEntry(item);
 	if (entry)
@@ -683,7 +683,7 @@ mol::string ShellTree::getItemPath( HTREEITEM item )
 
 ///////////////////////////////////////////////////////////////////////
 
-HTREEITEM ShellTree::getChildByPath( HTREEITEM item, const mol::string& p)
+HTREEITEM ShellTree::getChildByPath( HTREEITEM item, const std::wstring& p)
 {
     HTREEITEM i = tree_.getChildItem( item );
     while ( i )
@@ -691,7 +691,7 @@ HTREEITEM ShellTree::getChildByPath( HTREEITEM item, const mol::string& p)
 			TreeEntry* entry = getItemEntry(i);
 			if ( entry )
 			{
-				mol::string tmp(entry->filename);
+				std::wstring tmp(entry->filename);
 				if ( p == tmp )
 					break;
 				i = tree_.getNextItem(i);
@@ -702,7 +702,7 @@ HTREEITEM ShellTree::getChildByPath( HTREEITEM item, const mol::string& p)
 
 ///////////////////////////////////////////////////////////////////////
 
-HTREEITEM ShellTree::findItemByPath( const mol::string& p, HTREEITEM parent)
+HTREEITEM ShellTree::findItemByPath( const std::wstring& p, HTREEITEM parent)
 {
 	if ( p.size() == 0 )
 		return 0;
@@ -713,7 +713,7 @@ HTREEITEM ShellTree::findItemByPath( const mol::string& p, HTREEITEM parent)
 		TreeEntry* entry = getItemEntry(i);
 		if ( entry )
 		{
-			mol::string tmp(entry->filename);
+			std::wstring tmp(entry->filename);
 			tmp = mol::Path::removeBackSlash(tmp);
 			if ( p == tmp )
 				break;
@@ -742,8 +742,8 @@ HTREEITEM ShellTree::addFolderNode( ShellFolder& folder, Shit& it, HTREEITEM par
     int			iImage   = 0;
     int			iIconSet = 0;
 
-	mol::string name = folder.getDisplayNameOf(*it,SHGDN_INFOLDER);// | SHGDN_FORPARSING);
-	mol::string p(folder.getDisplayNameOf(*it));
+	std::wstring name = folder.getDisplayNameOf(*it,SHGDN_INFOLDER);// | SHGDN_FORPARSING);
+	std::wstring p(folder.getDisplayNameOf(*it));
 	if ( mol::Path::isUNC(p) )
 		name = mol::Path::filename(p);
 
@@ -782,15 +782,15 @@ BOOL ShellTree::expandFolder( HTREEITEM item, bool force, int flags )
 
 
 
-    mol::string p = entry->filename;
+    std::wstring p = entry->filename;
 
 	ShellFolder& desk = desktop();
 
-	std::vector<mol::string> files;
-	std::vector<mol::string> dirs;
+	std::vector<std::wstring> files;
+	std::vector<std::wstring> dirs;
 
-	std::map<mol::string, Shit> filesMap;
-	std::map<mol::string, Shit> dirsMap;
+	std::map<std::wstring, Shit> filesMap;
+	std::map<std::wstring, Shit> dirsMap;
 		
 	Shit shit;
 	shit = desk.parseDisplayName(p);
@@ -802,7 +802,7 @@ BOOL ShellTree::expandFolder( HTREEITEM item, bool force, int flags )
 			HRESULT hr = folder.enumObjects(0,SHCONTF_FOLDERS|SHCONTF_NONFOLDERS|SHCONTF_NAVIGATION_ENUM);
 			while( Shit it = folder.next() )
 			{
-				mol::string name = folder.getDisplayNameOf(*it);
+				std::wstring name = folder.getDisplayNameOf(*it);
 				if ( it->isDir() )// && mol::Path::isDir(name) )
 				{
 					//if ( it->isPartOfFileSystem() )
@@ -819,7 +819,7 @@ BOOL ShellTree::expandFolder( HTREEITEM item, bool force, int flags )
 				else
 				if (displayFiles_ )//&& mol::Path::exists(name) )
 				{
-					mol::string name = folder.getDisplayNameOf(*it);
+					std::wstring name = folder.getDisplayNameOf(*it);
 					files.push_back(name);
 					filesMap[name] = it;
 				}
@@ -842,14 +842,14 @@ BOOL ShellTree::expandFolder( HTREEITEM item, bool force, int flags )
 		std::sort( dirs.begin(), dirs.end()   );
 
 
-		for ( std::vector<mol::string>::iterator iter = dirs.begin(); iter != dirs.end(); iter++ )
+		for ( std::vector<std::wstring>::iterator iter = dirs.begin(); iter != dirs.end(); iter++ )
 		{
 			Shit& it = dirsMap[*iter];
 			HTREEITEM hItem = addFolderNode( folder, it, item, 0 );
             tree_.addNode(_T(""),hItem);
 		}
 
-		for ( std::vector<mol::string>::iterator iter = files.begin(); iter != files.end(); iter++ )
+		for ( std::vector<std::wstring>::iterator iter = files.begin(); iter != files.end(); iter++ )
 		{
 			Shit& it = filesMap[*iter];
 			HTREEITEM hItem = addFolderNode( folder, it, item, 0 );
@@ -919,13 +919,13 @@ BOOL ShellTree::initDesk (bool displayFiles)
 	TreeEntry* entry = new TreeEntry(desk.getDisplayNameOf(pidl),fi,drivesIcon);
 
 	DWORD len = 256;
-	mol::TCHAR buf[256];
+	wchar_t buf[256];
 	BOOL b = ::GetComputerName( buf, &len );
 	
 	//TreeEntry* entry = new TreeEntry(desk.getDisplayNameOf(*drives),fi,drivesIcon);
 	
     entry->isParsed=true;
-	hParent = tree_.addIconNodeParam( mol::string(buf,len), (LPARAM)entry, 0, drivesIcon,drivesIcon );
+	hParent = tree_.addIconNodeParam( std::wstring(buf,len), (LPARAM)entry, 0, drivesIcon,drivesIcon );
 
 	//ShellFolder folder(*drives,desk );
 	//ShellFolder folder(pidl,desk );
@@ -1024,7 +1024,7 @@ HRESULT __stdcall ShellTree::get_Selection		( BSTR* dirname )
 HRESULT __stdcall ShellTree::put_Selection		( BSTR  dirname )
 {
 	bstr b(dirname);
-	displayPath(b.toString());
+	displayPath(b.towstring());
 	return S_OK;
 }
 
@@ -1054,7 +1054,7 @@ HRESULT ShellTree::RemoveFolder(BSTR dirname)
 	HTREEITEM hit = tree_.getSelection();
 	if ( hit )
 	{
-		mol::string p = getItemPath(hit);
+		std::wstring p = getItemPath(hit);
 		if ( !mol::Path::isRoot(p) )
         {
 		    HTREEITEM parent = tree_.getParentItem(hit);
@@ -1072,7 +1072,7 @@ HRESULT ShellTree::RemoveFolder(BSTR dirname)
 HRESULT ShellTree::AddFolder(BSTR dirname)
 {
 	bstr b(dirname);
-	Shit shit = desktop().parseDisplayName(b.toString());
+	Shit shit = desktop().parseDisplayName(b.towstring());
 
     HTREEITEM hItem = addFolderNode( desktop(), shit, TVI_ROOT,0 );
     tree_.addNode( _T(""),hItem);
@@ -1109,7 +1109,7 @@ HRESULT ShellTree::Cut ()
 	if ( hit )
 	{
 		tree_.setItemState(hit,TVIS_CUT,TVIS_CUT);
-		std::vector<mol::string> v;
+		std::vector<std::wstring> v;
 		v.push_back(getItemPath(hit));
 		punk<IDataObject> ido = new ShellDataObj( mol::events::event_handler( &ShellTree::OnDataObject,this), v,true);        
 		HRESULT r = ::OleSetClipboard(ido);
@@ -1129,7 +1129,7 @@ HRESULT ShellTree::Copy ()
 	if ( hit )
 	{
 		tree_.setItemState(hit,TVIS_CUT,0);
-		std::vector<mol::string> v;
+		std::vector<std::wstring> v;
 		v.push_back(getItemPath(hit));
 		punk<IDataObject> ido = new ShellDataObj( mol::events::event_handler( &ShellTree::OnDataObject,this), v);        
 		HRESULT r = ::OleSetClipboard(ido);
@@ -1150,14 +1150,14 @@ HRESULT ShellTree::Paste ()
 	if ( !ido )
 		return E_FAIL;
 
-	std::vector<mol::string> v = vectorFromDataObject(ido);
+	std::vector<std::wstring> v = vectorFromDataObject(ido);
 	if ( v.size() < 1 )
 		return E_FAIL;
 
 	HTREEITEM hit = tree_.getSelection();
 	if ( hit )
 	{
-		mol::string p = getItemPath(hit);
+		std::wstring p = getItemPath(hit);
 		if ( mol::Path::isDir(p) )
 		{
 			DWORD  dw = DROPEFFECT_COPY;
@@ -1213,7 +1213,7 @@ HRESULT ShellTree::Delete()
 	HTREEITEM hit = tree_.getSelection();
 	if ( hit )
 	{
-		mol::string p = getItemPath(hit);
+		std::wstring p = getItemPath(hit);
 		if ( mol::Path::isRoot(p) ) {
 			return S_FALSE;
 		}
@@ -1261,12 +1261,12 @@ HRESULT ShellTree::Execute()
 //////////////////////////////////////////////////////////////////////////////
 HRESULT ShellTree::CreateDir()
 {
-	mol::string tmp = _T("newDir_");	
+	std::wstring tmp = _T("newDir_");	
 	int i = 0;
 	while(true)
 	{
-		mol::string p(getPath());
-		mol::stringstream oss;
+		std::wstring p(getPath());
+		std::wstringstream oss;
 		oss << tmp << i;
 		p = mol::Path::append(p,oss.str());
 		if ( !::CreateDirectory(p.c_str(),0) )
@@ -1285,7 +1285,7 @@ HRESULT ShellTree::CreateDir()
 
 HRESULT __stdcall ShellTree::IsDir(BSTR path,VARIANT_BOOL* vb)
 {
-	HTREEITEM hit = findItemByPath( mol::toString(path) );
+	HTREEITEM hit = findItemByPath( mol::towstring(path) );
 	*vb = getItemEntry(hit)->isDir() ? VARIANT_TRUE: VARIANT_FALSE;
 	return S_OK;
 }
@@ -1330,7 +1330,7 @@ HRESULT __stdcall ShellTree::Save( IPropertyBag *pPropBag,BOOL fClearDirty,BOOL 
 
 HRESULT __stdcall ShellTree::put_ForeColor( BSTR fPath)
 {
-	foreCol_ = mol::hex2rgb(mol::bstr(fPath).toString());
+	foreCol_ = mol::hex2rgb(mol::bstr(fPath).tostring());
 	return S_OK;
 }
 
@@ -1339,13 +1339,13 @@ HRESULT __stdcall ShellTree::get_ForeColor(  BSTR* fPath)
 	if(!fPath)
 		return E_INVALIDARG;
 
-	*fPath = ::SysAllocString(mol::rgb2hex(foreCol_).c_str());
+	*fPath = ::SysAllocString(mol::towstring(mol::rgb2hex(foreCol_)).c_str());
 	return S_OK;
 }
 
 HRESULT __stdcall ShellTree::put_BackColor( BSTR fPath)
 {
-	bgCol_ = mol::hex2rgb(mol::bstr(fPath).toString());
+	bgCol_ = mol::hex2rgb(mol::bstr(fPath).tostring());
 	return S_OK;
 }
 
@@ -1354,7 +1354,7 @@ HRESULT __stdcall ShellTree::get_BackColor(  BSTR* fPath)
 	if(!fPath)
 		return E_INVALIDARG;
 
-	*fPath = ::SysAllocString(mol::rgb2hex(bgCol_).c_str());
+	*fPath = ::SysAllocString(mol::towstring(mol::rgb2hex(bgCol_)).c_str());
 	return S_OK;
 }
 
@@ -1386,11 +1386,11 @@ HRESULT __stdcall ShellTree::ShellTreeCtrl_Drop::Drop( IDataObject* pDataObject,
 	if ( tvht.hItem != NULL )
 	{             
 		TreeEntry* entry = (TreeEntry*)(tree_->tree_.getLPARAM(tvht.hItem));
-		mol::string p = entry->filename;
+		std::wstring p = entry->filename;
 		
 		if ( mol::Path::isDir(p) )
 		{
-			std::vector<mol::string> v = vectorFromDataObject(pDataObject);
+			std::vector<std::wstring> v = vectorFromDataObject(pDataObject);
 			*pEffect &= (DROPEFFECT_COPY|DROPEFFECT_MOVE);
 			if ( (*pEffect & DROPEFFECT_MOVE ) && (keyState & MK_CONTROL) )
 			{

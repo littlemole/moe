@@ -26,11 +26,11 @@ class ShellListCtrl;
 
 struct DirListEntry
 {
-	DirListEntry(const mol::string& fn, mol::FileInfo& fi, int index )
+	DirListEntry(const std::wstring& fn, mol::FileInfo& fi, int index )
 		: filename(fn), fileinfo(fi), iconindex(index), isParsed(false) 
     {}
 	
-	mol::string				filename;
+	std::wstring				filename;
 	mol::FileInfo			fileinfo;
     int						iconindex;
     bool					isParsed;
@@ -46,13 +46,13 @@ struct DirListEntry
 class DirQueueAction
 {
 public:
-	DirQueueAction( const mol::string& p, ShellListCtrl* dl )
+	DirQueueAction( const std::wstring& p, ShellListCtrl* dl )
 		: path(p), dirlist(dl)
 	{}
 
 	void operator()();
 
-	mol::string		    path;
+	std::wstring		    path;
 	ShellListCtrl*		dirlist;
 };
 
@@ -193,27 +193,27 @@ protected:
 
 	//persist_member(cs_,sizel);
 
-    void setPath(const mol::string& path);
-    mol::string getPath();
+    void setPath(const std::wstring& path);
+    std::wstring getPath();
 
 	void refresh( mol::io::DirMon* dirmon = 0);
     BOOL sort(int c);
 	bool doHitTest();
 
-    std::vector<mol::string>   selectionPaths();
+    std::vector<std::wstring>   selectionPaths();
     std::vector<int>           selectionIndexes();
     std::vector<DirListEntry*> selectionEntries();
 
 	DirListEntry* getItemEntry(int i );
-	mol::string getItemPath(int i);
-    int getItemByPath(const mol::string& path);
+	std::wstring getItemPath(int i);
+    int getItemByPath(const std::wstring& path);
 
     virtual int listStyle()   { return WS_VISIBLE|WS_CHILD|WS_CLIPSIBLINGS|WS_CLIPCHILDREN|LVS_REPORT|LVS_SHAREIMAGELISTS|LVS_EDITLABELS; }
     virtual int listExStyle() { return 0; }
 
     void clear();
 
-	void run(const mol::string& s);
+	void run(const std::wstring& s);
 
     virtual int compare(LPARAM lParam1, LPARAM lParam2);
     static int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
@@ -247,7 +247,7 @@ protected:
 
     int						sortCol_;
 	int						sortDir_;
-    mol::string				path_;
+    std::wstring				path_;
     BOOL					bCancel_;
 	RECT					clientRect_;
 

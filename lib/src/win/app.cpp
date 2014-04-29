@@ -85,12 +85,12 @@ HINSTANCE AppBase::hinstance()
 
 
 
-mol::string AppBase::CreateAppPath(const mol::string& dir)
+std::wstring AppBase::CreateAppPath(const std::wstring& dir)
 {
-	mol::TCHAR buff[MAX_PATH];
+	wchar_t buff[MAX_PATH];
 	::SHGetSpecialFolderPath(0,buff,CSIDL_APPDATA,TRUE);
 
-	mol::string path = buff;
+	std::wstring path = buff;
 	path += _T("\\");
 	path += dir;
 
@@ -105,7 +105,7 @@ mol::string AppBase::CreateAppPath(const mol::string& dir)
     return path;
 }
 
-mol::string AppBase::UnpackAppFile(const mol::string& file, int id, bool createIf )
+std::wstring AppBase::UnpackAppFile(const std::wstring& file, int id, bool createIf)
 {
     if ( createIf == false )
     {
@@ -126,17 +126,17 @@ mol::string AppBase::UnpackAppFile(const mol::string& file, int id, bool createI
     return file;
 }
 
-mol::string AppBase::getModulePath()
+std::wstring AppBase::getModulePath()
 {
-	mol::tbuff buf(2048);
+	mol::wbuff buf(2048);
 	::GetModuleFileName( mol::hinstance(), buf, 2047 );
 	buf[2047] = 0;
 	return buf.toString();
 }
 
-mol::string AppBase::getAppPath()
+std::wstring AppBase::getAppPath()
 {
-	mol::tbuff buf(2048);
+	mol::wbuff buf(2048);
 	::GetModuleFileName( 0, buf, 2047 );
 	buf[2047] = 0;
 	return buf.toString();

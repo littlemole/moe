@@ -30,7 +30,7 @@ public:
 	virtual void dispose() {}
 
 	typedef mol::com_instance<MoeFormWnd> Instance;
-	static  Instance* CreateInstance( const mol::string& location, int left,  int top, int width, int height, int style );
+	static  Instance* CreateInstance( const std::wstring& location, int left,  int top, int width, int height, int style );
 
 	DWORD UIflags();
 	HRESULT hideContextMenu();
@@ -57,13 +57,13 @@ public:
   private:
 
 	/////////////////////////////////////////////////////////////////////
-	void load( const mol::string& loc, int s, mol::Rect& r );
+	void load( const std::wstring& loc, int s, mol::Rect& r );
 	virtual int style();
 
 	/////////////////////////////////////////////////////////////////////
 
 	int							style_;
-	mol::string					location_;
+	std::wstring					location_;
 
 	/////////////////////////////////////////////////////////////////////
 	// external events called from script inside MoeWnd

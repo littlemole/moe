@@ -17,10 +17,10 @@ dde_init::dde_init( HWND hwnd, WPARAM wParam, LPARAM lParam)
     hWnd_			= hwnd;
     hWndClient_		= (HWND)wParam;
 
-	mol::TCHAR buf[1024];
+	wchar_t buf[1024];
     buf[0]=0;
     GlobalGetAtomName(LOWORD(lParam),buf,1024);
-    inApp_ = mol::string(buf);
+    inApp_ = std::wstring(buf);
     GlobalGetAtomName(HIWORD(lParam),buf,1024);
     intopic_ = buf;
 }
@@ -33,7 +33,7 @@ dde_init::~dde_init()
         GlobalDeleteAtom(aOutTopic_);
 }
 
-void dde_init::ack( const mol::string& app, const mol::string& topic )
+void dde_init::ack( const std::wstring& app, const std::wstring& topic )
 {
 
     aOutApp_   = GlobalAddAtom(app.c_str());
@@ -56,12 +56,12 @@ bool dde_init::dontRespond()
     return true;
 }
 
-const mol::string& dde_init::app()
+const std::wstring& dde_init::app()
 {
     return inApp_;
 }
 
-const mol::string& dde_init::topic()
+const std::wstring& dde_init::topic()
 {
     return intopic_;
 }
@@ -80,7 +80,7 @@ dde_exec::dde_exec( HWND hwnd, WPARAM w, LPARAM l)
     ZeroMemory(&ddeAck_, sizeof(ddeAck_));
 
     if ( UnpackDDElParam( WM_DDE_EXECUTE, lParam_, &uLo_, (PUINT_PTR)&hgMem_) )
-		cmdLine_	= mol::string((mol::TCHAR*)GlobalLock(hgMem_));
+		cmdLine_	= std::wstring((wchar_t*)GlobalLock(hgMem_));
 
     getCommandTypeFromDDEString();
     getPathFromDDEString( );
@@ -91,17 +91,17 @@ dde_exec::~dde_exec()
     GlobalUnlock(hgMem_);
 }
 
-const mol::string& dde_exec::getCmdLine()
+const std::wstring& dde_exec::getCmdLine()
 {
     return cmdLine_;
 }
 
-const mol::string& dde_exec::getCmd()
+const std::wstring& dde_exec::getCmd()
 {
     return cmd_;
 }
 
-const mol::string& dde_exec::getPath()
+const std::wstring& dde_exec::getPath()
 {
     return path_;
 }
@@ -115,7 +115,7 @@ void dde_exec::ack(int i)
         ReuseDDElParam(lParam_, WM_DDE_EXECUTE, WM_DDE_ACK, *lpTemp, (UINT_PTR)hgMem_));
 }
 
-void dde_exec::execute(const mol::string& path, const mol::string & clss, const mol::string& verb, int mask )
+void dde_exec::execute(const std::wstring& path, const std::wstring & clss, const std::wstring& verb, int mask )
 {
     dde::bDontRespond_=TRUE;
 
@@ -146,7 +146,7 @@ int dde_exec::getCommandTypeFromDDEString()
     size_t startPos = cmdLine_.find(_T('['));
     size_t endPos   = cmdLine_.find(_T('('));
 
-    if ( (startPos != mol::string::npos ) && (endPos != mol::string::npos ))
+    if ( (startPos != std::wstring::npos ) && (endPos != std::wstring::npos ))
         cmd_ = cmdLine_.substr( startPos+1, endPos-startPos-1 );
 
     return 0;
@@ -159,11 +159,11 @@ int dde_exec::getCommandTypeFromDDEString()
 bool dde_exec::getPathFromDDEString()
 {
     size_t startPos = cmdLine_.find('"');
-    if ( startPos == mol::string::npos || (startPos+1 > cmdLine_.size()) )
+    if ( startPos == std::wstring::npos || (startPos+1 > cmdLine_.size()) )
         return false;
 
     size_t endPos   = cmdLine_.find('"',startPos+1 );
-    if ( endPos == mol::string::npos || (endPos <= startPos) )
+    if ( endPos == std::wstring::npos || (endPos <= startPos) )
         return false;
 
     path_ = cmdLine_.substr(startPos+1,endPos-startPos-1);

@@ -571,7 +571,7 @@ HRESULT __stdcall FindWalker( ISetting* root, BSTR key, ISetting** result)
 {
 	*result = 0;
 
-	mol::string path = mol::toString(key);
+	std::wstring path = mol::towstring(key);
 
 	if ( !path.empty() && path[0] == _T('/') ) {
 		path = path.substr(1);
@@ -582,7 +582,7 @@ HRESULT __stdcall FindWalker( ISetting* root, BSTR key, ISetting** result)
 		return root->QueryInterface(IID_ISetting,(void**)result);
 	}
 
-	std::vector<mol::string> v = mol::split(path,_T("/"));
+	std::vector<std::wstring> v = mol::split(path,_T("/"));
 	mol::punk<ISetting> item(root);
 
 	size_t i = 0;
@@ -612,7 +612,7 @@ HRESULT __stdcall FindWalker( ISetting* root, BSTR key, ISetting** result)
 			if ( hr != S_OK )
 				return hr;
 
-			if ( v[i] == mol::toString(key) ) 
+			if ( v[i] == mol::towstring(key) ) 
 			{
 				found = true;
 				break;
@@ -971,9 +971,9 @@ LRESULT SettingProperties::OnInitDialog(UINT msg, WPARAM wParam, LPARAM lParam)
 			bstr key;
 			if ( S_OK == clone_->get_Key(&key)  )
 			{
-				mol::string k(_T(""));
+				std::wstring k(_T(""));
 				if ( key )
-					k = mol::toString(key);
+					k = mol::towstring(key);
 				if ( k == _T("") )
 					k = _T("Properties");
 				HTREEITEM root = tree_.addNodeParam(k,(LPARAM)(ISetting*)clone_);
@@ -1142,8 +1142,8 @@ bool SettingProperties::editValue(HTREEITEM hit)
 
 	ValueDialog dlg;
 
-	dlg.value = mol::unix2dos( val.toString() );
-	dlg.title = key.toString();
+	dlg.value = mol::unix2dos( val.towstring() );
+	dlg.title = key.towstring();
 
 	if ( IDOK == dlg.doModal(IDD_DIALOG_VALUE,*this) )
 	{
@@ -1153,7 +1153,7 @@ bool SettingProperties::editValue(HTREEITEM hit)
 			set->get_Key(&k);
 			HTREEITEM parent = tree_.getParentItem(hit);
 			tree_.deleteNode(hit);
-			tree_.addNodeParam( k.toString(), (LPARAM)(ISetting*)set,parent);
+			tree_.addNodeParam( k.towstring(), (LPARAM)(ISetting*)set,parent);
 			this->setDirty();
 			return true;
 		}
@@ -1176,7 +1176,7 @@ void SettingProperties::initWalker(HTREEITEM parent, ISetting* set)
 	hr = set->get_Key(&key);
 	if ( hr == S_OK )
 	{
-		item = tree_.addNodeParam(key.toString(),(LPARAM)(ISetting*)set,parent,0);
+		item = tree_.addNodeParam(key.towstring(),(LPARAM)(ISetting*)set,parent,0);
 	}
 
 	hr = set->Count(&l);

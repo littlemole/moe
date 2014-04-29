@@ -31,7 +31,7 @@ public:
 	virtual ~UserForm();
 
 	typedef mol::com_obj<UserForm> Instance;
-	static Instance* CreateInstance( const mol::string& p, bool designMode, bool Debug = false  );
+	static Instance* CreateInstance( const std::wstring& p, bool designMode, bool Debug = false  );
 
 	static REFGUID getCoClassID()
 	{
@@ -92,9 +92,9 @@ public:
 private:
 
 	bool dirty_;
-	mol::string title_;
-	mol::string filename_;
-	mol::string scriptEngine_;
+	std::wstring title_;
+	std::wstring filename_;
+	std::wstring scriptEngine_;
 
 	ScriptingHost script;
 
@@ -102,7 +102,7 @@ private:
 	std::map<DWORD,IUnknown*>   ctrls;
 	std::map<DWORD,IID>			iids;
 
-	bool initialize(const mol::string& p, bool designMode, bool Debug);
+	bool initialize(const std::wstring& p, bool designMode, bool Debug);
 
 	void adviseControls();
 	void adviseControl(mol::bstr& name, IDispatch* disp);

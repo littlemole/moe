@@ -25,14 +25,14 @@ MoeFormWnd::~MoeFormWnd()
 }
 
 
-MoeFormWnd::Instance* MoeFormWnd::CreateInstance( const mol::string& loc, int left, int top, int width, int height, int style )
+MoeFormWnd::Instance* MoeFormWnd::CreateInstance( const std::wstring& loc, int left, int top, int width, int height, int style )
 {
-	mol::string tmp = loc;
+	std::wstring tmp = loc;
 	size_t pos = loc.find_first_of( _T("#?"));
 	if ( pos != std::string::npos )
 		tmp = loc.substr(0,pos);
 
-	mol::string f = findFile(tmp);
+	std::wstring f = findFile(tmp);
 
 	if ( !mol::Path::exists(f) )
 		return 0;
@@ -42,15 +42,15 @@ MoeFormWnd::Instance* MoeFormWnd::CreateInstance( const mol::string& loc, int le
 	form->AddRef();
 
 	form->location_ = f;
-	form->load( bstr(f).toString(), style, mol::Rect( left, top, width, height)  );
+	form->load( bstr(f).towstring(), style, mol::Rect( left, top, width, height)  );
 
 	return form;
 }
 
 
-void MoeFormWnd::load( const mol::string& loc, int s, Rect& r )
+void MoeFormWnd::load( const std::wstring& loc, int s, Rect& r )
 {
-	mol::string l = loc;
+	std::wstring l = loc;
 
 	size_t pos = loc.find_first_of( _T("#?"));
 	if ( pos != std::string::npos )
@@ -373,7 +373,7 @@ HRESULT __stdcall MoeFormWnd::MoeFormWnd_htmlSink::DocumentComplete( IDispatch* 
 		bstr title;
 		if ( S_OK == doc->get_title(&title) && title )
 		{
-			This()->setText( title.toString() );
+			This()->setText( title.towstring() );
 		}
 	}
 	return S_OK;

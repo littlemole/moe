@@ -13,7 +13,7 @@ namespace mol {
 namespace io {
 
 
-std::multimap<mol::string,DirMon*> DirMon::monitorMap_;
+std::multimap<std::wstring,DirMon*> DirMon::monitorMap_;
 
 DirMon::DirMon()
 	:  path_(_T(""))
@@ -28,7 +28,7 @@ DirMon::~DirMon()
     monitorMap_.erase(path_);
 }
 
-void DirMon::watch( const mol::string& path, int flags, bool subtree )
+void DirMon::watch( const std::wstring& path, int flags, bool subtree )
 { 
     if ( path.size() == 0 )
 	{
@@ -48,7 +48,7 @@ void DirMon::watch( const mol::string& path, int flags, bool subtree )
 	if ( !Path::exists(path_) )
         return;
 
-	for( std::multimap<mol::string,DirMon*>::iterator it = monitorMap_.begin(); it != monitorMap_.end(); it++)
+	for( std::multimap<std::wstring,DirMon*>::iterator it = monitorMap_.begin(); it != monitorMap_.end(); it++)
 	{
 		if ( (*it).second == this )
 		{
@@ -107,21 +107,21 @@ void DirMon::resume()
 	events.fire(this);
 }
 
-void DirMon::cancel(const mol::string& path)
+void DirMon::cancel(const std::wstring& path)
 {
-    for( std::multimap<mol::string,DirMon*>::iterator it = monitorMap_.begin(); it != monitorMap_.end(); it++)
+    for( std::multimap<std::wstring,DirMon*>::iterator it = monitorMap_.begin(); it != monitorMap_.end(); it++)
     {
-        mol::string p( (*it).first);
+        std::wstring p( (*it).first);
         if ( p == path )
             (*it).second->cancel();
     }
 }
 
-void DirMon::resume(const mol::string& path)
+void DirMon::resume(const std::wstring& path)
 {
-    for( std::multimap<mol::string,DirMon*>::iterator it = monitorMap_.begin(); it != monitorMap_.end(); it++)
+    for( std::multimap<std::wstring,DirMon*>::iterator it = monitorMap_.begin(); it != monitorMap_.end(); it++)
     {
-        mol::string p( (*it).first );
+        std::wstring p( (*it).first );
         if ( p == path )
             (*it).second->resume();
     }

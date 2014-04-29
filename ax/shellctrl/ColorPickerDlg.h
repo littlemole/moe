@@ -205,14 +205,14 @@ public:
 		HRESULT virtual __stdcall put_HexColor( BSTR col)
 		{
 			bstr b(col);
-			col_ = mol::hex2rgb(b.toString());
+			col_ = mol::hex2rgb(b.tostring());
 			return S_OK;
 		}
 		HRESULT virtual __stdcall get_HexColor( BSTR* col)
 		{
 			if ( col )
 			{
-				*col = ::SysAllocString(mol::rgb2hex(col_).c_str());
+				*col = ::SysAllocString(mol::towstring(mol::rgb2hex(col_)).c_str());
 			}
 			return S_OK;
 		}

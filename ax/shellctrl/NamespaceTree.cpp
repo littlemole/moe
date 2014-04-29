@@ -477,12 +477,12 @@ HRESULT NamespaceTree::Execute()
 //////////////////////////////////////////////////////////////////////////////
 HRESULT NamespaceTree::CreateDir()
 {
-	mol::string tmp = _T("newDir_");	
+	std::wstring tmp = _T("newDir_");	
 	int i = 0;
 	while(true)
 	{
-		mol::string p(currentPath_.toString());
-		mol::stringstream oss;
+		std::wstring p(currentPath_.towstring());
+		std::wstringstream oss;
 		oss << tmp << i;
 		p = mol::Path::append(p,oss.str());
 		if ( !::CreateDirectory(p.c_str(),0) )
@@ -503,13 +503,13 @@ HRESULT __stdcall NamespaceTree::IsDir(BSTR path,VARIANT_BOOL* vb)
 	if(vb==0)
 		return E_INVALIDARG;
 
-	*vb = mol::Path::isDir(mol::bstr(path).toString()) ? VARIANT_TRUE : VARIANT_FALSE;
+	*vb = mol::Path::isDir(mol::bstr(path).towstring()) ? VARIANT_TRUE : VARIANT_FALSE;
 	return S_OK;
 }
 
 HRESULT __stdcall NamespaceTree::put_ForeColor( BSTR fPath)
 {
-	foreCol_ = mol::hex2rgb(mol::bstr(fPath).toString());
+	foreCol_ = mol::hex2rgb(mol::bstr(fPath).tostring());
 	return S_OK;
 }
 
@@ -518,13 +518,13 @@ HRESULT __stdcall NamespaceTree::get_ForeColor(  BSTR* fPath)
 	if(!fPath)
 		return E_INVALIDARG;
 
-	*fPath = ::SysAllocString(mol::rgb2hex(foreCol_).c_str());
+	*fPath = ::SysAllocString(mol::towstring(mol::rgb2hex(foreCol_)).c_str());
 	return S_OK;
 }
 
 HRESULT __stdcall NamespaceTree::put_BackColor( BSTR fPath)
 {
-	bgCol_ = mol::hex2rgb(mol::bstr(fPath).toString());
+	bgCol_ = mol::hex2rgb(mol::bstr(fPath).tostring());
 	if ( bgBrush_)
 		::DeleteObject(bgBrush_);
 	bgBrush_ = ::CreateSolidBrush(bgCol_);
@@ -536,7 +536,7 @@ HRESULT __stdcall NamespaceTree::get_BackColor(  BSTR* fPath)
 	if(!fPath)
 		return E_INVALIDARG;
 
-	*fPath = ::SysAllocString(mol::rgb2hex(bgCol_).c_str());
+	*fPath = ::SysAllocString(mol::towstring(mol::rgb2hex(bgCol_)).c_str());
 	return S_OK;
 }
 

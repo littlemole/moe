@@ -19,7 +19,7 @@ public:
     BOOL load(UINT nIDRes);
 
     // load from file or http
-    BOOL load(const mol::string& pathName);
+    BOOL load(const std::wstring& pathName);
 
     // load from stream
     BOOL load(IStream* pstm);

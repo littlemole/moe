@@ -35,7 +35,7 @@ T& app()
 
 
 template<class T>
-int run( mol::TCHAR* lpCmdLine)
+int run(wchar_t* lpCmdLine)
 {
 	T& a =  app<T>();
     return a.run(lpCmdLine);
@@ -68,23 +68,23 @@ friend class mol::Singleton<AppBase>;
 public:
 
 		// run the application
-		virtual int run(const mol::string& cmdline)		{ return 0; };
+		virtual int run(const std::wstring& cmdline)		{ return 0; };
 
 		// message loop callback (idle time)
         virtual void idle(MSG& msg) {}
 
-		virtual mol::TCHAR* getAppId()					{ return 0; };
-		virtual int getElevationStringIdentifier()		{ return 0; };
+		virtual wchar_t* getAppId()							{ return 0; };
+		virtual int getElevationStringIdentifier()			{ return 0; };
 
 		virtual void lock();
 		virtual void unlock();
         virtual bool locked();
 
-        mol::string CreateAppPath(const mol::string& dir);
-        mol::string UnpackAppFile(const mol::string& file, int id, bool createIf=false); 
+        std::wstring CreateAppPath(const std::wstring& dir);
+        std::wstring UnpackAppFile(const std::wstring& file, int id, bool createIf=false); 
 
-		mol::string getModulePath();
-		mol::string getAppPath();
+		std::wstring getModulePath();
+		std::wstring getAppPath();
 
 		virtual HRESULT __stdcall RegisterServer(void)		{ return S_OK; } 
 		virtual HRESULT __stdcall UnregisterServer(void)	{ return S_OK; } 
@@ -154,7 +154,7 @@ public:
     ~Application() 
 	{}
 
-    virtual int run(const mol::string& cmdline) 
+    virtual int run(const std::wstring& cmdline) 
 	{ 
 		return msgLoop_(*this);	
 	}
@@ -246,9 +246,9 @@ void pumpMessages();
 
 
 #define DEFINE_APP_ID(appid) \
-mol::TCHAR* getAppId() \
+wchar_t* getAppId() \
 {							 \
-	static mol::TCHAR appid_[] = _T(appid); \
+	static wchar_t appid_[] = _T(appid); \
 	return appid_;	\
 };
 

@@ -33,11 +33,11 @@ class ShellTreeAction;
 
 struct TreeEntry
 {
-	TreeEntry(const mol::string& fn,  mol::FileInfo& fi, int index )
+	TreeEntry(const std::wstring& fn,  mol::FileInfo& fi, int index )
         : filename(fn), fileinfo(fi), iconindex(index), isParsed(false)
     {}
 
-	mol::string		filename;
+	std::wstring		filename;
 	mol::FileInfo	fileinfo;
     int				iconindex;
     bool			isParsed;
@@ -70,12 +70,12 @@ protected:
 class ShellTreeActionPath : public ShellTreeAction
 {
 public:
-    ShellTreeActionPath(ShellTree* sw, const mol::string& path);
+    ShellTreeActionPath(ShellTree* sw, const std::wstring& path);
     virtual void operator() ();
 	
 protected:
-	void openPath( const mol::string& path, HTREEITEM parent);
-    mol::string path_;
+	void openPath( const std::wstring& path, HTREEITEM parent);
+    std::wstring path_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -262,21 +262,21 @@ protected:
 	BOOL initDesk           ( bool displayFiles = true);
 
     // change selection
-    BOOL displayPath ( const mol::string& path);
+    BOOL displayPath ( const std::wstring& path);
 	BOOL displayItem ( HTREEITEM item);
 
     // get item entry
 	TreeEntry* getItemEntry( HTREEITEM it ) { return (TreeEntry*)tree_.getLPARAM(it); }
 
 	// get full path (shell displayname) for item
-    mol::string getItemPath    ( HTREEITEM item );
+    std::wstring getItemPath    ( HTREEITEM item );
 
 	// get the ShellItem from TreeItem
 	Shit getShellItem ( HTREEITEM item);
 
     // select a child item by name/path
-    HTREEITEM getChildByPath  ( HTREEITEM item, const mol::string& path);
-	HTREEITEM findItemByPath  ( const mol::string& path, HTREEITEM item = TVI_ROOT );
+    HTREEITEM getChildByPath  ( HTREEITEM item, const std::wstring& path);
+	HTREEITEM findItemByPath  ( const std::wstring& path, HTREEITEM item = TVI_ROOT );
 
 	// add a new FolderNode with assoc. Info
 	HTREEITEM addFolderNode ( ShellFolder& folder, Shit& item, HTREEITEM node = TVI_ROOT, int state = TVIS_EXPANDED);
@@ -292,7 +292,7 @@ protected:
 	HTREEITEM getHitTest();
 
 	// get current path
-	mol::string getPath();
+	std::wstring getPath();
 
     // Drop Target 
     class ShellTreeCtrl_Drop: public DropTarget

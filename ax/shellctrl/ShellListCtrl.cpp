@@ -45,19 +45,19 @@ ShellListCtrl::~ShellListCtrl()
 }
 
 
-void ShellListCtrl::run( const mol::string& uri )
+void ShellListCtrl::run( const std::wstring& uri )
 {
     path_ = uri;
 
 	clear();
 
-    std::vector<mol::string> files;
-    std::vector<mol::string> dirs;
+    std::vector<std::wstring> files;
+    std::vector<std::wstring> dirs;
 
-    std::map<mol::string, DirListEntry*> filesMap;
-	std::map<mol::string, DirListEntry*> dirsMap;
+    std::map<std::wstring, DirListEntry*> filesMap;
+	std::map<std::wstring, DirListEntry*> dirsMap;
 
-	//mol::string p( mol::toString(path_));
+	//std::wstring p( mol::toString(path_));
     //p.addBackSlash();
 
 	Shit shit = parseDisplayName(path_);
@@ -74,10 +74,10 @@ void ShellListCtrl::run( const mol::string& uri )
         sf.enumObjects(0);
         while( Shit it = sf.next() )
         {
-			mol::string tmp = sf.getDisplayNameOf(*it);
+			std::wstring tmp = sf.getDisplayNameOf(*it);
 //			file f(tmp);
             int i = sf.getIconIndex(it);
-            mol::string filename = sf.getDisplayNameOf(*it,SHGDN_INFOLDER | SHGDN_FORPARSING);
+            std::wstring filename = sf.getDisplayNameOf(*it,SHGDN_INFOLDER | SHGDN_FORPARSING);
 
 			if ( filename.substr(0,3) == _T("::{") )
 				continue;
@@ -118,10 +118,10 @@ void ShellListCtrl::run( const mol::string& uri )
 
         int index = 0;
         list_.setRedraw(false);
-		for ( std::vector<mol::string>::iterator iter = dirs.begin(); iter != dirs.end(); iter++ )
+		for ( std::vector<std::wstring>::iterator iter = dirs.begin(); iter != dirs.end(); iter++ )
 		{
-			mol::string p(*iter);
-            std::vector<mol::string> entries;
+			std::wstring p(*iter);
+            std::vector<std::wstring> entries;
             DirListEntry* entry = dirsMap[*iter];
 			entries.push_back(mol::Path::filename(p));
             entries.push_back(_T("directory"));
@@ -131,10 +131,10 @@ void ShellListCtrl::run( const mol::string& uri )
 		}
 
 		if ( displayFiles_ )
-		for ( std::vector<mol::string>::iterator iter = files.begin(); iter != files.end(); iter++ )
+		for ( std::vector<std::wstring>::iterator iter = files.begin(); iter != files.end(); iter++ )
 		{
-			mol::string p(*iter);
-            std::vector<mol::string> entries;
+			std::wstring p(*iter);
+            std::vector<std::wstring> entries;
             DirListEntry* entry = filesMap[*iter];
             entries.push_back(mol::Path::filename(p));
             entries.push_back(entry->fileinfo.fileSize());
@@ -225,7 +225,7 @@ LRESULT ShellListCtrl::OnDblClick(UINT msg, WPARAM wParam, LPARAM lParam)
 	DirListEntry* entry = getItemEntry(it);
 	if ( entry )
 	{
-		mol::string p(entry->filename);
+		std::wstring p(entry->filename);
 		if ( entry->isDir() )
 		{
 			setPath(p);
@@ -290,8 +290,8 @@ LRESULT ShellListCtrl::OnEndRename(UINT msg, WPARAM wParam, LPARAM lParam)
 	mol::Crack message(msg,wParam,lParam);
 	if ( message.listviewDispInfo()->item.pszText)
 	{
-		mol::string pFrom( getItemPath(message.listviewDispInfo()->item.iItem) );
-		mol::string pTo  ( mol::Path::pathname(pFrom) );
+		std::wstring pFrom( getItemPath(message.listviewDispInfo()->item.iItem) );
+		std::wstring pTo  ( mol::Path::pathname(pFrom) );
 		pTo = mol::Path::append( pTo, message.listviewDispInfo()->item.pszText);
 
 		ShellFileOp sfo;
@@ -306,7 +306,7 @@ LRESULT ShellListCtrl::OnEndRename(UINT msg, WPARAM wParam, LPARAM lParam)
 
 LRESULT ShellListCtrl::OnBeginDrag(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	std::vector<mol::string> v = selectionPaths();
+	std::vector<std::wstring> v = selectionPaths();
 	std::vector<int> vi        = selectionIndexes();
 
 	//beginDrag( vi );      
@@ -351,7 +351,7 @@ LRESULT ShellListCtrl::OnContext(UINT msg, WPARAM wParam, LPARAM lParam)
 
 	// get selection, if we have a hittest update selection beforehand
 	int hit = this->list_.hitTest(LVHT_TOLEFT|LVHT_ONITEM);
-	mol::string p ;
+	std::wstring p ;
 	if ( hit != -1 )
 	{
 		p = this->getItemPath(hit);
@@ -362,8 +362,8 @@ LRESULT ShellListCtrl::OnContext(UINT msg, WPARAM wParam, LPARAM lParam)
 	//if ( hit!=-1 )
 	//	return 0;
 
-	mol::string selection = _T("");
-	std::vector<mol::string> v = selectionPaths();
+	std::wstring selection = _T("");
+	std::vector<std::wstring> v = selectionPaths();
 	if ( v.size() > 0 )
 	{
 		selection = v[0];
@@ -461,10 +461,10 @@ LRESULT ShellListCtrl::OnContext(UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		case IDM_LIST_ENTERDIR :
 		{
-			std::vector<mol::string> v = selectionPaths();
+			std::vector<std::wstring> v = selectionPaths();
 			if ( v.size() == 1 )
 			{
-				mol::string tmp(v[0]);
+				std::wstring tmp(v[0]);
 				if ( mol::Path::isDir(tmp) )
 				{
 					setPath(tmp);
@@ -504,8 +504,8 @@ LRESULT ShellListCtrl::OnDirMon(UINT msg, WPARAM wParam, LPARAM lParam)
 
 HRESULT __stdcall ShellListCtrl::UpDir()
 {
-	mol::string p(getPath());
-	mol::string parent (mol::Path::parentDir(p));
+	std::wstring p(getPath());
+	std::wstring parent (mol::Path::parentDir(p));
 	parent = mol::Path::addBackSlash(parent);
 	if ( mol::Path::isDir(parent) )
 	{
@@ -531,12 +531,12 @@ HRESULT __stdcall ShellListCtrl::Update()
 
 HRESULT __stdcall ShellListCtrl::CreateDir()
 {
-	mol::string tmp = _T("newDir_");	
+	std::wstring tmp = _T("newDir_");	
 	int i = 0;
 	while(true)
 	{
-		mol::string p(getPath());
-		mol::stringstream oss;
+		std::wstring p(getPath());
+		std::wstringstream oss;
 		oss << tmp << i;
 		p = mol::Path::append(p,oss.str());
 		if ( !::CreateDirectory(p.c_str(),0) )
@@ -575,7 +575,7 @@ HRESULT __stdcall ShellListCtrl::Rename()
 
 HRESULT __stdcall ShellListCtrl::Delete()
 {
-	std::vector<mol::string> v = selectionPaths();
+	std::vector<std::wstring> v = selectionPaths();
 	if ( v.size() > 0 )
 	{
 		ShellFileOp sfo;
@@ -586,7 +586,7 @@ HRESULT __stdcall ShellListCtrl::Delete()
 
 HRESULT __stdcall ShellListCtrl::Properties()
 {
-	std::vector<mol::string> v = selectionPaths();
+	std::vector<std::wstring> v = selectionPaths();
 
 	if ( v.size() > 0 )
 	{
@@ -597,7 +597,7 @@ HRESULT __stdcall ShellListCtrl::Properties()
 
 HRESULT __stdcall ShellListCtrl::Execute()
 {
-	std::vector<mol::string> v = selectionPaths();
+	std::vector<std::wstring> v = selectionPaths();
 
 	if ( v.size() > 0 )
 	{
@@ -619,7 +619,7 @@ HRESULT __stdcall ShellListCtrl::Cut ()
 {
 	list_.setItemState(-1, 0, LVIS_CUT );
 	int index = -1;
-	std::vector<mol::string> v;
+	std::vector<std::wstring> v;
 	while ( (index = list_.getNextItem(index)) != -1 )
 	{
 		list_.setItemState(index, LVIS_CUT, LVIS_CUT );
@@ -639,7 +639,7 @@ HRESULT __stdcall ShellListCtrl::Copy ()
 {
 	list_.setItemState(-1, 0, LVIS_CUT );
 	int index = -1;
-	std::vector<mol::string> v = selectionPaths();
+	std::vector<std::wstring> v = selectionPaths();
 	if ( v.size() > 0 )
 	{
 		punk<IDataObject> ido = new ShellDataObj(v);
@@ -652,11 +652,11 @@ HRESULT __stdcall ShellListCtrl::Copy ()
 
 HRESULT __stdcall ShellListCtrl::Paste ()
 {
-	std::vector<mol::string> v = selectionPaths();
+	std::vector<std::wstring> v = selectionPaths();
 	if ( v.size() > 1 )
 		return S_OK;
 
-	mol::string path;
+	std::wstring path;
 	if ( v.size() == 1 )
 		path = v[0];
 	else
@@ -785,7 +785,7 @@ void ShellListCtrl::clear()
 
 void ShellListCtrl::refresh( mol::io::DirMon* unused )
 {
-	mol::string p(path_);
+	std::wstring p(path_);
 
 	if ( !mol::Path::exists(p) ) 
 	{
@@ -803,7 +803,7 @@ void ShellListCtrl::refresh( mol::io::DirMon* unused )
 
 //////////////////////////////////////////////////////////////////////////////
 
-int ShellListCtrl::getItemByPath(const mol::string& path)
+int ShellListCtrl::getItemByPath(const std::wstring& path)
 {
     int i = -1;
     while ( (i = list_.getNextItem(i,LVNI_ALL)) != -1 )
@@ -830,7 +830,7 @@ DirListEntry* ShellListCtrl::getItemEntry(int i )
 
 //////////////////////////////////////////////////////////////////////////////
 
-mol::string ShellListCtrl::getItemPath(int i)
+std::wstring ShellListCtrl::getItemPath(int i)
 {
 	DirListEntry* entry = getItemEntry(i);
 	if ( entry )
@@ -842,10 +842,10 @@ mol::string ShellListCtrl::getItemPath(int i)
 
 //////////////////////////////////////////////////////////////////////////////
 
-std::vector<mol::string> ShellListCtrl::selectionPaths()
+std::vector<std::wstring> ShellListCtrl::selectionPaths()
 {
 	int index = -1;
-	std::vector<mol::string> v;
+	std::vector<std::wstring> v;
 	while ( (index = list_.getNextItem(index)) != -1 )
 	{
 		v.push_back( getItemPath(index) );
@@ -896,7 +896,7 @@ bool  ShellListCtrl::doHitTest()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void ShellListCtrl::setPath(const mol::string& p)  
+void ShellListCtrl::setPath(const std::wstring& p)  
 { 
 	setText(p); 
 //    pathEvent.fire((LPARAM)p.c_str());    
@@ -907,7 +907,7 @@ void ShellListCtrl::setPath(const mol::string& p)
 
 //////////////////////////////////////////////////////////////////////////////
 
-mol::string ShellListCtrl::getPath()
+std::wstring ShellListCtrl::getPath()
 {
     return path_;
 }
@@ -987,7 +987,7 @@ int ShellListCtrl::compare(LPARAM lParam1, LPARAM lParam2)
 
 HRESULT __stdcall ShellListCtrl::ShellListCtrl_Drop::Drop( IDataObject* pDataObject, DWORD keyState, POINTL pt , DWORD* pEffect)
 {
-	mol::string p;
+	std::wstring p;
 	mol::ImageList::drop(*list_);
 
 	int i = list_->list_.hitTest();
@@ -997,7 +997,7 @@ HRESULT __stdcall ShellListCtrl::ShellListCtrl_Drop::Drop( IDataObject* pDataObj
 	if ( (p == _T("") ) || (!mol::Path::isDir(p)) )
 		p = list_->getPath();
 
-	std::vector<mol::string> v;
+	std::vector<std::wstring> v;
 	v = vectorFromDataObject(pDataObject);
 
 	if ( ((*pEffect) & DROPEFFECT_MOVE ) && (keyState & MK_CONTROL) )
@@ -1095,7 +1095,7 @@ HRESULT __stdcall ShellListCtrl::put_Selection		( VARIANT  dirname )
 		{
 			b = _T("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}");
 		}
-		setPath(b.toString());
+		setPath(b.towstring());
 		this->OnChanged(2);
 	}
 	return S_OK;
