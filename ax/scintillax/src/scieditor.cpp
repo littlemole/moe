@@ -165,6 +165,16 @@ public:
 		return PrintDlg(this) == TRUE;
 	}
 
+	bool collate()
+	{
+		return (Flags & PD_COLLATE) != 0;
+	}
+
+	int copies()
+	{
+		return nCopies;
+	}
+
 private:
 
 };
@@ -175,6 +185,8 @@ HDC choosePrinterDC(HWND owner, int& copies, bool& collate)
 	PrinterDlg dlg(owner);
 	if (dlg.show())
 	{
+		copies = dlg.copies();
+		collate = dlg.collate();
 		return dlg.hDC;
 	}
 	return 0;
