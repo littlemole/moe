@@ -64,7 +64,7 @@ public:
 				if (   GetProcessTimes(hProcess, &ftCreate, &ftExit,&ftKernel, &ftUser) 
 					&& CompareFileTime(&ft_, &ftCreate) == 0) 
 				{
-					if ( mol::v7::QueryFullProcessImageName(hProcess, 0, sz, &cch) && cch <= MAX_PATH) 
+					if ( ::QueryFullProcessImageName(hProcess, 0, sz, &cch) && cch <= MAX_PATH) 
 					{
 						*path = ::SysAllocString(sz);
 					}

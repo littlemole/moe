@@ -1,8 +1,7 @@
 #include "win/Taskbar.h"
 #include "win/mdi.h"
+#include <dwmapi.h>
 
-#define MOL_WM_DWMSENDICONICTHUMBNAIL           0x0323
-#define MOL_WM_DWMSENDICONICLIVEPREVIEWBITMAP   0x0326
 
 #define min std::min
 #define max std::max
@@ -12,40 +11,8 @@
 #undef min
 #undef max
 
-typedef HRESULT __stdcall DwmSetIconicThumbnailPtr( HWND hwnd, HBITMAP hbmp, DWORD dwSITFlags);
-typedef HRESULT __stdcall DwmSetIconicLivePreviewBitmapPtr( HWND hwnd, HBITMAP hbmp, POINT *pptClient, DWORD dwSITFlags );
-typedef HRESULT __stdcall DwmSetWindowAttributePtr( HWND hwnd, DWORD dwAttribute, LPCVOID pvAttribute, DWORD cbAttribute );
-
-DwmSetIconicThumbnailPtr* DwmSetIconicThumbnail = (DwmSetIconicThumbnailPtr*)mol::dllFunc( _T("dwmapi.dll"), _T("DwmSetIconicThumbnail") );
-DwmSetIconicLivePreviewBitmapPtr* DwmSetIconicLivePreviewBitmap = (DwmSetIconicLivePreviewBitmapPtr*)mol::dllFunc( _T("dwmapi.dll"), _T("DwmSetIconicLivePreviewBitmap") );
-DwmSetWindowAttributePtr* DwmSetWindowAttribute = (DwmSetWindowAttributePtr*)mol::dllFunc( _T("dwmapi.dll"), _T("DwmSetWindowAttribute") );
-
-
 typedef BOOL __stdcall PrintWindowPtr( HWND hwnd, HDC hdcBlt, UINT nFlags );
 PrintWindowPtr* PrintWindow2 = (PrintWindowPtr*)mol::dllFunc( _T("User32.dll"), _T("PrintWindow") );
-
-typedef HRESULT __stdcall DwmInvalidateIconicBitmapsPtr( HWND hwnd );
-DwmInvalidateIconicBitmapsPtr* DwmInvalidateIconicBitmaps = (DwmInvalidateIconicBitmapsPtr*)mol::dllFunc( _T("dwmapi.dll"), _T("DwmInvalidateIconicBitmaps") );
-
-// Window attributes
-enum MOL_DWMWINDOWATTRIBUTE
-{
-    DWMWA_NCRENDERING_ENABLED = 1,      // [get] Is non-client rendering enabled/disabled
-    DWMWA_NCRENDERING_POLICY,           // [set] Non-client rendering policy
-    DWMWA_TRANSITIONS_FORCEDISABLED,    // [set] Potentially enable/forcibly disable transitions
-    DWMWA_ALLOW_NCPAINT,                // [set] Allow contents rendered in the non-client area to be visible on the DWM-drawn frame.
-    DWMWA_CAPTION_BUTTON_BOUNDS,        // [get] Bounds of the caption button area in window-relative space.
-    DWMWA_NONCLIENT_RTL_LAYOUT,         // [set] Is non-client content RTL mirrored
-    DWMWA_FORCE_ICONIC_REPRESENTATION,  // [set] Force this window to display iconic thumbnails.
-    DWMWA_FLIP3D_POLICY,                // [set] Designates how Flip3D will treat the window.
-    DWMWA_EXTENDED_FRAME_BOUNDS,        // [get] Gets the extended frame bounds rectangle in screen space
-    DWMWA_HAS_ICONIC_BITMAP,            // [set] Indicates an available bitmap when there is no better thumbnail representation.
-    DWMWA_DISALLOW_PEEK,                // [set] Don't invoke Peek on the window.
-    DWMWA_EXCLUDED_FROM_PEEK,           // [set] LivePreview exclusion information
-    DWMWA_LAST
-};
-
-
 
 namespace mol {
 namespace win {
@@ -94,29 +61,26 @@ void TaskbarWnd::enableTabs(bool b)
     BOOL fHasIconicBitmap = b;
 	BOOL fDisallowPeek = b;
 
-	if ( DwmSetWindowAttribute )
-	{
-		DwmSetWindowAttribute(
-			*this,
-			DWMWA_FORCE_ICONIC_REPRESENTATION,
-			&fForceIconic,
-			sizeof(fForceIconic));
+	DwmSetWindowAttribute(
+		*this,
+		DWMWA_FORCE_ICONIC_REPRESENTATION,
+		&fForceIconic,
+		sizeof(fForceIconic));
 
 		
-		DwmSetWindowAttribute(
-			*this,
-			DWMWA_HAS_ICONIC_BITMAP,
-			&fHasIconicBitmap,
-			sizeof(fHasIconicBitmap));
+	DwmSetWindowAttribute(
+		*this,
+		DWMWA_HAS_ICONIC_BITMAP,
+		&fHasIconicBitmap,
+		sizeof(fHasIconicBitmap));
 /*
-		DwmSetWindowAttribute(
-			hWnd,
-			DWMWA_DISALLOW_PEEK,
-			&fDisallowPeek,
-			sizeof(fDisallowPeek));
+	DwmSetWindowAttribute(
+		hWnd,
+		DWMWA_DISALLOW_PEEK,
+		&fDisallowPeek,
+		sizeof(fDisallowPeek));
 */					
-		this->tbl_->SetTabProperties( *this, b ? STPF_NONE : STPF_USEAPPPEEKALWAYS|STPF_USEAPPTHUMBNAILALWAYS );
-	}
+	this->tbl_->SetTabProperties( *this, b ? STPF_NONE : STPF_USEAPPPEEKALWAYS|STPF_USEAPPTHUMBNAILALWAYS );
 }
 
 TaskbarWnd *TaskbarWnd::Create( Taskbar * pMainDlg, HWND d, const std::wstring& title, ITaskbarList4* tbl, bool disabled)
@@ -199,14 +163,14 @@ LRESULT TaskbarWnd::wndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 			break;
 		}
 
-        case MOL_WM_DWMSENDICONICTHUMBNAIL:
+        case WM_DWMSENDICONICTHUMBNAIL:
 		{
 			HBITMAP bmp = GetIconicRepresentation( HIWORD(lParam), LOWORD(lParam), 2 );
 			DwmSetIconicThumbnail( *this, bmp, 0);
 			break;
 		}
 
-        case MOL_WM_DWMSENDICONICLIVEPREVIEWBITMAP:
+        case WM_DWMSENDICONICLIVEPREVIEWBITMAP:
 		{
 			sendLivePreviewBitmap();
 			break;

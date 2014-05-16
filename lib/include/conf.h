@@ -31,7 +31,7 @@
 #define _WIN32_IE _WIN32_IE_IE60 //SP2
 */
 
-
+/*
 // minimum windows target version
 #define WINVER  _WIN32_WINNT_WINXP
 #define _WIN32_WINDOWS _WIN32_WINNT_WINXP
@@ -39,8 +39,13 @@
 #define _WIN32_WINNT _WIN32_WINNT_WINXP
 //#define _WIN32_IE 0x0501
 #define _WIN32_IE _WIN32_IE_IE80 //SP2
+*/
 
-
+// minimum windows target version
+#define WINVER  _WIN32_WINNT_WIN6
+#define _WIN32_WINDOWS _WIN32_WINNT_WIN7
+#define _WIN32_WINNT _WIN32_WINNT_WIN7
+#define _WIN32_IE _WIN32_IE_IE90 
 
 
 // main windows headers

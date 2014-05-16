@@ -2,7 +2,7 @@
 echo "building the moe universe"
 echo %1 %2 %3
 
-call env %1 %2
+call env12 %1 %2
 
 echo %Platform% %Configuration%
 msbuild build.xml /t:%3

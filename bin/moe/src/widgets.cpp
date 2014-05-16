@@ -1668,7 +1668,7 @@ MoeVistaFileDialog::MoeVistaFileDialog(HWND parent)
 	: parent_(parent),filter_(0),nFilters_(0),readOnly_(false),encoding_(CP_ACP)
 {}
 
-void MoeVistaFileDialog::setFilter(mol::v7::COMDLG_FILTERSPEC* filter, int size)
+void MoeVistaFileDialog::setFilter(COMDLG_FILTERSPEC* filter, int size)
 {
 	filter_ = filter;
 	nFilters_ = size;
@@ -1701,7 +1701,7 @@ HRESULT MoeVistaFileDialog::open(int options)
 	if (hr != S_OK)
 		return hr;
 
-	mol::punk<mol::v7::IFileOpenDialog> fod(fd_);
+	mol::punk<IFileOpenDialog> fod(fd_);
 	if (!fod)
 		return hr;
 
@@ -1774,7 +1774,7 @@ HRESULT MoeVistaFileDialog::save(int options)
 		return hr;
 
 	// populate box
-	hr = fdc_->SetControlState(CONTROL_COMBOBOX, mol::v7::CDCS_VISIBLE |mol::v7::CDCS_ENABLED);
+	hr = fdc_->SetControlState(CONTROL_COMBOBOX, CDCS_VISIBLE | CDCS_ENABLED);
 	if (hr != S_OK)
 		return hr;
 
@@ -1868,7 +1868,7 @@ HRESULT MoeVistaFileDialog::addEncodingComboBox()
 		return hr;
 
 	// populate box
-	hr = fdc_->SetControlState(CONTROL_COMBOBOX, mol::v7::CDCS_VISIBLE | mol::v7::CDCS_ENABLED);
+	hr = fdc_->SetControlState(CONTROL_COMBOBOX, CDCS_VISIBLE | CDCS_ENABLED);
 	if (hr != S_OK)
 		return hr;
 
@@ -1924,23 +1924,20 @@ HRESULT MoeVistaFileDialog::init(int options, REFCLSID clsid)
 		if (hr != S_OK)
 			return hr;
 
-		if ( mol::v7::SHCreateItemFromParsingName )
-		{
-			mol::punk<IShellItem> shit;
-			hr = mol::v7::SHCreateItemFromParsingName( 
-						mol::Path::parentDir(path_).c_str(),
-						NULL,
-						IID_IShellItem,
-						(void**)&shit
-					);
+		mol::punk<IShellItem> shit;
+		hr = ::SHCreateItemFromParsingName( 
+					mol::Path::parentDir(path_).c_str(),
+					NULL,
+					IID_IShellItem,
+					(void**)&shit
+				);
 
-			if (hr != S_OK)
-				return hr;
+		if (hr != S_OK)
+			return hr;
 
-			hr = fd_->SetFolder(shit);			
-			if (hr != S_OK)
-				return hr;
-		}
+		hr = fd_->SetFolder(shit);			
+		if (hr != S_OK)
+			return hr;
 
 	}
 

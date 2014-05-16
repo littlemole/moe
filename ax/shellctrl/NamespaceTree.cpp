@@ -124,7 +124,7 @@ LRESULT NamespaceTree::OnCreate(UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 				mol::punk<IShellItem> desktop;
-				hr = mol::v7::SHCreateItemInKnownFolder(FOLDERID_Desktop, 0, NULL, IID_PPV_ARGS(&desktop));
+				hr = ::SHCreateItemInKnownFolder(FOLDERID_Desktop, 0, NULL, IID_PPV_ARGS(&desktop));
 				if (SUCCEEDED(hr))
 				{
 					// Add hidden root

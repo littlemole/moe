@@ -21,13 +21,12 @@
   </ItemGroup>
 
   <PropertyGroup Label="Configuration">
-    <PlatformToolset Condition="'$(PlatformToolset)' == '' ">v110</PlatformToolset>
-	<boost Condition=" '$(boost)' == '' ">D:\boost\boost_1_52_0\</boost>
+    <PlatformToolset Condition="'$(PlatformToolset)' == '' ">v120</PlatformToolset>
+	<boost Condition=" '$(boost)' == '' ">D:\boost\boost_1_55_0\</boost>
 	<java  Condition=" '$(java)' == '' ">D:\java\jdk\include\win32;D:\java\jdk\include;</java>
 	<UICC Condition="'$(UICC)' == ''">C:\Program Files (x86)\Windows Kits\8.0\bin\x86\uicc.exe</UICC>
 	<Configuration Condition=" '$(Configuration)' == '' ">uni_debug</Configuration>
 	<Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
-<!--	<PlatformToolset>v110</PlatformToolset>-->
   </PropertyGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -53,7 +52,7 @@
 
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
     <ClCompile>
-      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>

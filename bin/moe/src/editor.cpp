@@ -779,16 +779,16 @@ void Editor::OnSaveAs()
 
 	if ( mol::Ribbon::ribbon()->enabled() )
 	{
-		const mol::v7::COMDLG_FILTERSPEC c_rgSaveTypes[] =
+		const COMDLG_FILTERSPEC c_rgSaveTypes[] =
 		{
 			{ L"all files (*.*)",       L"*.*"}
 		};
 
 		MoeVistaFileDialog fd(*moe());
-		fd.setFilter((mol::v7::COMDLG_FILTERSPEC*)&c_rgSaveTypes,ARRAYSIZE(c_rgSaveTypes));
+		fd.setFilter((COMDLG_FILTERSPEC*)&c_rgSaveTypes,ARRAYSIZE(c_rgSaveTypes));
 		fd.encoding( enc );
 		fd.path(mol::towstring(p));
-		HRESULT hr = fd.save(mol::v7::FOS_NOVALIDATE);
+		HRESULT hr = fd.save(FOS_NOVALIDATE);
 		if ( hr != S_OK )
 			return;
 

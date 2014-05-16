@@ -9,42 +9,8 @@
 
 #define TWIPS_PER_POINT 20 // For setting font size in CHARFORMAT2.
 
-DEFINE_GUID(IID_molIApplicationDocumentLists,0x3c594f9fL,0x9f30, 0x47a1, 0x97, 0x9a, 0xc9,0xe8,0x3d,0x3d,0x0a,0x06);
-
-
 namespace mol
 {
-
-namespace ole
-{
-
-typedef enum MOLAPPDOCLISTTYPE
-{	
-	ADLT_RECENT	    = 0,
-	ADLT_FREQUENT	= ( ADLT_RECENT + 1 ) 
-} 	
-MOLAPPDOCLISTTYPE;
-
-
-class molIApplicationDocumentLists : public IUnknown
-{
-public:
-    virtual HRESULT STDMETHODCALLTYPE SetAppID( LPCWSTR pszAppID) = 0;        
-    virtual HRESULT STDMETHODCALLTYPE GetList( MOLAPPDOCLISTTYPE listtype, UINT cItemsDesired, REFIID riid, void **ppv) = 0;        
-};
-
-} // end namespace ole
-
-template <> 
-class uuid_info<mol::ole::molIApplicationDocumentLists>
-{
- public:
-   static REFIID uuidof; 
-   typedef mol::ole::molIApplicationDocumentLists uuid_type;
-};
-
-REFIID uuid_info<mol::ole::molIApplicationDocumentLists>::uuidof = IID_molIApplicationDocumentLists;
-
 namespace Ribbon
 {
 
@@ -1363,13 +1329,13 @@ void Ribbon::updateRecentDocs(int id)
 	if (!ribbon )
 		return;
 
-	mol::punk<mol::ole::molIApplicationDocumentLists> appDocLists;
+	mol::punk<IApplicationDocumentLists> appDocLists;
 	HRESULT hr = appDocLists.createObject(CLSID_ApplicationDocumentLists);
 	if ( hr != S_OK )
 		return;
 
 	mol::punk<IObjectArray> objects; 
-	hr = appDocLists->GetList( mol::ole::ADLT_RECENT, 10, IID_IObjectArray,(void**)&objects);
+	hr = appDocLists->GetList( ADLT_RECENT, 10, IID_IObjectArray,(void**)&objects);
 
 	if ( hr != S_OK || !objects )
 		return;

@@ -4,7 +4,7 @@
 
 #include <win/msgmap.h>
 
-#include <boost/preprocessor.hpp>
+//#include <boost/preprocessor.hpp>
 
 
 /////////////////////////////////////////////////////////////////
@@ -42,125 +42,27 @@ public:
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 
-template<class R,class T,class N1=void, class N2=void, class N3=void>
-class MsgMapHandler : public MsgMapHandlerImpl<T>
-{
-public:
+template<class ... Args>
+class MsgMapHandler
+{};
 
-	typedef R (T::*Function)(N1,N2,N3);
+template<class ... Args>
+class StdCallMsgMapHandler
+{};
 
-	MsgMapHandler( Function ptr )
-		:ptr_(ptr)
-	{}
+template< class ... Args>
+class GenericMsgMapHandler
+{};
 
-	LRESULT operator()( mol::win::WndProc* This, UINT msg, WPARAM wParam, LPARAM lParam)
-	{
-		T* wnd = (T*)This;
-		N1 n1 = (N1)msg;
-		N2 n2 = (N2)wParam;
-		N3 n3 = (N3)lParam;
-		(wnd->*ptr_)(n1,n2,n3);
-		wnd->BaseWindowType::wndProc( *This, msg, wParam, lParam);
-		return 0;
-	}
-
-private:
-	Function ptr_;
-};
-
-// LRESULT specialization
-template<class T,class N1, class N2, class N3>
-class MsgMapHandler<T,N1,N2,N3,LRESULT> : public MsgMapHandlerImpl<T>
-{
-public:
-
-	typedef LRESULT (T::*Function)(N1,N2,N3);
-
-	MsgMapHandler( Function ptr )
-		:ptr_(ptr)
-	{}
-
-	LRESULT operator()( mol::win::WndProc* This, UINT msg, WPARAM wParam, LPARAM lParam)
-	{
-		T* wnd = (T*)This;
-		N1 n1 = (N1)msg;
-		N2 n2 = (N2)wParam;
-		N3 n3 = (N3)lParam;
-		LRESULT lr = (LRESULT)((wnd->*ptr_)(n1,n2,n3));
-		return lr;
-	}
-
-private:
-	Function ptr_;
-};
-
-
-// __stdcall support
-#ifndef _WIN64
-
-template<class R,class T,class N1=void, class N2=void, class N3=void>
-class StdCallMsgMapHandler : public MsgMapHandlerImpl<T>
-{
-public:
-
-	typedef R (__stdcall T::*Function)(N1,N2,N3);
-
-	StdCallMsgMapHandler( Function ptr )
-		:ptr_(ptr)
-	{}
-
-	LRESULT operator()( mol::win::WndProc* This, UINT msg, WPARAM wParam, LPARAM lParam)
-	{
-		T* wnd = (T*)This;
-		N1 n1 = (N1)msg;
-		N2 n2 = (N2)wParam;
-		N3 n3 = (N3)lParam;
-		(wnd->*ptr_)(n1,n2,n3);
-		wnd->BaseWindowType::wndProc( *This, msg, wParam, lParam);
-		return 0;
-	}
-
-private:
-	Function ptr_;
-};
-
-
-#endif
-
-/////////////////////////////////////////////////////////////////
-// specific specializations
-/////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////
-// full std msg handler including MSG parameter
-/////////////////////////////////////////////////////////////////
-
-template<class T>
-class MsgMapHandler<LRESULT,T,UINT,WPARAM,LPARAM> : public MsgMapHandlerImpl<T>
-{
-public:
-
-	typedef LRESULT (T::*Function)(UINT,WPARAM,LPARAM);
-
-	MsgMapHandler( Function ptr )
-		:ptr_(ptr)
-	{}
-
-	LRESULT operator()( mol::win::WndProc* This, UINT msg, WPARAM wParam, LPARAM lParam)
-	{
-		T* wnd = (T*)This;
-		return (wnd->*ptr_)(msg,wParam,lParam);
-	}
-
-private:
-	Function ptr_;
-};
+template<class ... Args>
+class GenericStdCallMsgMapHandler
+{};
 
 /////////////////////////////////////////////////////////////////
 // full cracked std msg handler including MSG parameter
 /////////////////////////////////////////////////////////////////
-template<class T, class R>
-class MsgMapHandler<R,T,mol::Crack&,void,void> : public MsgMapHandlerImpl<T>
+template<class R, class T>
+class MsgMapHandler<R,T,mol::Crack&> : public MsgMapHandlerImpl<T>
 {
 public:
 
@@ -183,7 +85,10 @@ private:
 	Function ptr_;
 };
 
+/////////////////////////////////////////////////////////////////
 // lresult override
+/////////////////////////////////////////////////////////////////
+
 template<class T>
 class MsgMapHandler<LRESULT,T,mol::Crack&,void,void> : public MsgMapHandlerImpl<T>
 {
@@ -200,32 +105,6 @@ public:
 		T* wnd = (T*)This;
 		mol::Crack crack(msg,wParam,lParam);
 		return (wnd->*ptr_)(crack);
-	}
-
-private:
-	Function ptr_;
-};
-
-/////////////////////////////////////////////////////////////////
-// simple std msg handler w/o MSG parameter
-/////////////////////////////////////////////////////////////////
-
-
-template<class T>
-class MsgMapHandler<LRESULT,T,WPARAM,LPARAM,void> : public MsgMapHandlerImpl<T>
-{
-public:
-
-	typedef LRESULT (T::*Function)(WPARAM,LPARAM);
-
-	MsgMapHandler( Function ptr )
-		:ptr_(ptr)
-	{}
-
-	LRESULT operator()( mol::win::WndProc* This, UINT msg, WPARAM wParam, LPARAM lParam)
-	{
-		T* wnd = (T*)This;
-		return (wnd->*ptr_)(wParam,lParam);
 	}
 
 private:
@@ -262,7 +141,9 @@ private:
 	Function ptr_;
 };
 
+/////////////////////////////////////////////////////////////////
 // LRESULT variant
+/////////////////////////////////////////////////////////////////
 
 template<class T>
 class MsgMapHandler<LRESULT,T,int,int,HWND> : public MsgMapHandlerImpl<T>
@@ -293,404 +174,345 @@ private:
 // generic handlers - allows to bind parameters at def time
 /////////////////////////////////////////////////////////////////
 
-#define GENERIC_HANDLER_SIZE 4
-#define GENERIC_PARAM(z,n,unused) Param##n(p##n) BOOST_PP_COMMA_IF(BOOST_PP_SUB(BOOST_PP_SUB(GENERIC_HANDLER_SIZE,1),n))
-#define GENERIC_PARAM_DECL(z,n,unused) P##n Param##n; 
+
+
+template<class R, class ... Args>
+class GenericMsgMapHandlerParams
+{};
+
+template<class R>
+class GenericMsgMapHandlerParams<R>
+{
+public:
+	template<class T, class F, class ... Args >
+	R invoke(T* t, F f, Args&& ... args)
+	{
+		return (t->*f)(std::forward<Args>(args)...);
+	}
+};
+
+template< class R, class P, class ... Args>
+class GenericMsgMapHandlerParams<R,P,Args...> : public GenericMsgMapHandlerParams<R,Args ...>
+{
+public:
+	typedef GenericMsgMapHandlerParams<R,Args ...> BASE;
+
+	GenericMsgMapHandlerParams(P p, Args&& ... args)
+		: arg_(std::move(p)), BASE(args...)
+	{}
+
+	template<class T, class F, class ... VArgs >
+	R invoke(T* t, F f, VArgs&& ... vargs)
+	{
+		return BASE::invoke(t, f, vargs..., arg_);
+	}
+
+private:
+
+	P arg_;
+};
 
 /////////////////////////////////////////////////////////////////
 // main generic handler template
 /////////////////////////////////////////////////////////////////
 
-template<class R, 
-		 class T, 
-		 BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(GENERIC_HANDLER_SIZE,class P,void)
->
-class GenericMsgMapHandler : public MsgMapHandlerImpl<T>
+template< class R, class T, class ... Args>
+class GenericMsgMapHandler<R,T,Args...>: public MsgMapHandlerImpl<T>
 {
 public:
 
-	typedef R (T::*Fun)(BOOST_PP_ENUM_PARAMS(GENERIC_HANDLER_SIZE,P));
-	
-	GenericMsgMapHandler( Fun ptr, BOOST_PP_ENUM_BINARY_PARAMS(GENERIC_HANDLER_SIZE,P,p) )
-		:func(ptr),BOOST_PP_REPEAT(GENERIC_HANDLER_SIZE,GENERIC_PARAM,~)
+	typedef R(T::*Fun)(Args...);
+
+	GenericMsgMapHandler(Fun ptr, Args&& ... args)
+		:fun_(ptr), params_(std::forward<Args>(args)...)
 	{}
 
-	LRESULT operator()( mol::win::WndProc* This, UINT msg, WPARAM wParam, LPARAM lParam)
+	LRESULT operator()(mol::win::WndProc* This, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
-		object = (T*)This;
-		(object->*func)( BOOST_PP_ENUM_PARAMS(GENERIC_HANDLER_SIZE,Param) );
-		object->BaseWindowType::wndProc( *This, msg, wParam, lParam);
+		T* object = (T*)This;
+		params_.invoke(object, fun_);
+		object->BaseWindowType::wndProc(*This, msg, wParam, lParam);
 		return 0;
 	}
 
-	BOOST_PP_REPEAT(GENERIC_HANDLER_SIZE,GENERIC_PARAM_DECL,~)
+private:
 
-	Fun				func;
+	GenericMsgMapHandlerParams<R,Args...> params_;
+	Fun				fun_;
 };
 
+// LRESULT override
 
-/////////////////////////////////////////////////////////////////
-// generic handler template with LRESULT specialization
-/////////////////////////////////////////////////////////////////
-
-
-template<class T, 
-		 BOOST_PP_ENUM_PARAMS(GENERIC_HANDLER_SIZE,class P)
->
-class GenericMsgMapHandler<LRESULT,T,BOOST_PP_ENUM_PARAMS(GENERIC_HANDLER_SIZE,P)> 
-	: public MsgMapHandlerImpl<T>
+template< class T, class ... Args >
+class GenericMsgMapHandler<LRESULT, T, Args...> : public MsgMapHandlerImpl<T>
 {
 public:
 
-	typedef LRESULT (T::*Fun)(BOOST_PP_ENUM_PARAMS(GENERIC_HANDLER_SIZE,P));
+	typedef LRESULT(T::*Fun)(Args...);
 
-	GenericMsgMapHandler( Fun ptr, BOOST_PP_ENUM_BINARY_PARAMS(GENERIC_HANDLER_SIZE,P,p) )
-		:func(ptr),BOOST_PP_REPEAT(GENERIC_HANDLER_SIZE,GENERIC_PARAM,~)
+	GenericMsgMapHandler(Fun ptr, Args&& ... args)
+		:fun_(ptr), params_(std::forward<Args>(args)...)
 	{}
 
-	LRESULT operator()( mol::win::WndProc* This, UINT msg, WPARAM wParam, LPARAM lParam)
+	LRESULT operator()(mol::win::WndProc* This, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		T* object = (T*)This;
-		LRESULT lr = (object->*func)( BOOST_PP_ENUM_PARAMS(GENERIC_HANDLER_SIZE,Param) );
-		object->BaseWindowType::wndProc( *This, msg, wParam, lParam);
-		return lr;
+		LRESULT result = params_.invoke(object, fun_);
+		object->BaseWindowType::wndProc(*This, msg, wParam, lParam);
+		return result;
 	}
 
-	BOOST_PP_REPEAT(GENERIC_HANDLER_SIZE,GENERIC_PARAM_DECL,~)
+private:
 
-	Fun				func;
+	GenericMsgMapHandlerParams<LRESULT,Args...> params_;
+	Fun				fun_;
 };
-
-
-
-/////////////////////////////////////////////////////////////////
-// Generic __stdcall support
-/////////////////////////////////////////////////////////////////
-
-#ifndef _WIN64
-
-template<class R, 
-		 class T, 
-		 BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(GENERIC_HANDLER_SIZE,class P,void)
->
-class GenericStdCallMsgMapHandler : public MsgMapHandlerImpl<T>
-{
-public:
-
-	typedef R (__stdcall T::*Fun)( BOOST_PP_ENUM_PARAMS(GENERIC_HANDLER_SIZE,P) );
-	
-	GenericStdCallMsgMapHandler( Fun ptr, BOOST_PP_ENUM_BINARY_PARAMS(GENERIC_HANDLER_SIZE,P,p) )
-		:func(ptr),BOOST_PP_REPEAT(GENERIC_HANDLER_SIZE,GENERIC_PARAM,~)
-	{}
-
-	LRESULT operator()( mol::win::WndProc* This, UINT msg, WPARAM wParam, LPARAM lParam)
-	{
-		T* object = (T*)This;
-		(object->*func)( BOOST_PP_ENUM_PARAMS(GENERIC_HANDLER_SIZE,Param) );
-		object->BaseWindowType::wndProc( *This, msg, wParam, lParam);
-		return 0;
-	}
-
-	BOOST_PP_REPEAT(GENERIC_HANDLER_SIZE,GENERIC_PARAM_DECL,~)
-
-	Fun				func;
-};
-
-#endif 
 
 
 /////////////////////////////////////////////////////////////////
 // msg handler for embedded ole objects main template
 /////////////////////////////////////////////////////////////////
 
-template<	 class T, 
-			 class I,
-			 BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(GENERIC_HANDLER_SIZE,class P,void)
->
+template<class T,class I,class ... Args>
 class OleMsgMapHandler : public MsgMapHandlerImpl<T>
 {
 public:
 
-	typedef HRESULT (__stdcall I::*Fun)(BOOST_PP_ENUM_PARAMS(GENERIC_HANDLER_SIZE,P));
-	
-	OleMsgMapHandler( Fun ptr, BOOST_PP_ENUM_BINARY_PARAMS(GENERIC_HANDLER_SIZE,P,p) )
-		:func(ptr), BOOST_PP_REPEAT(GENERIC_HANDLER_SIZE,GENERIC_PARAM,~)
+	typedef HRESULT(__stdcall I::*Fun)(Args...);
+
+	OleMsgMapHandler(Fun ptr, Args&& ... args)
+		:fun_(ptr), params_(std::forward<Args>(args)...)
 	{}
 
-	LRESULT operator()( mol::win::WndProc* This, UINT msg, WPARAM wParam, LPARAM lParam)
+	LRESULT operator()(mol::win::WndProc* This, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		T* t = (T*)This;
 		mol::punk<I> p(t->oleObject);
-		if ( p )
+		if (p)
 		{
 			I* object = p.interface_;
-			(object->*func)( BOOST_PP_ENUM_PARAMS(GENERIC_HANDLER_SIZE,Param) );
+			params_.invoke(object, fun_);
 		}
-		t->BaseWindowType::wndProc( *This, msg, wParam, lParam);
+		t->BaseWindowType::wndProc(*This, msg, wParam, lParam);
 		return 0;
 	}
 
-	BOOST_PP_REPEAT(GENERIC_HANDLER_SIZE,GENERIC_PARAM_DECL,~)
-
-	Fun				func;
+	GenericMsgMapHandlerParams<HRESULT,Args...> params_;
+	Fun				fun_;
 };
 
 
-/////////////////////////////////////////////////////////////////
-// code gen
-/////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
-// generate specializations for less then 3 params
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
-
-#define MSG_HANDLER_SIZE 3
-
-#define  MSGHANDLER_PARAMS_2 P0 param0 = (P0)wParam; P1 param1 = (P1)lParam;
-#define  MSGHANDLER_PARAMS_1 P0 param0 = (P0)lParam;
-#define  MSGHANDLER_PARAMS_0 
-
-#define MSGHANDLER_CLASS_NAME MsgMapHandler
-#define MSGHANDLER_CALL_TYPE
-
-
-// specializations for less then 3 params
-#define MSGHANDLER_RET_TYPE R
-#define MSGHANDLER_RET_CLASS class R,
-#define MSGHANDLER_RET_VALUE 
-#define MSGHANDLER_RETURN return 0
-#define MSGHANDLER_BASE_CALL wnd->BaseWindowType::wndProc( *This, msg, wParam, lParam)
-
-#define BOOST_PP_ITERATION_LIMITS (0, MSG_HANDLER_SIZE-1)
-#define BOOST_PP_FILENAME_1       "win/MsgMapHandler_repeat.inc"
-#include BOOST_PP_ITERATE()
-
-// cleanup 
-#undef MSGHANDLER_RET_TYPE 
-#undef MSGHANDLER_RET_CLASS
-#undef MSGHANDLER_RET_VALUE
-#undef MSGHANDLER_RETURN 
-#undef MSGHANDLER_BASE_CALL
-
-// specializations for less then 3 params, LRESULT retvalue
-#define MSGHANDLER_RET_TYPE LRESULT
-#define MSGHANDLER_RET_CLASS 
-#define MSGHANDLER_RET_VALUE LRESULT retval = 
-#define MSGHANDLER_RETURN return (LRESULT)retval
-#define MSGHANDLER_BASE_CALL
-
-#define BOOST_PP_ITERATION_LIMITS (0, MSG_HANDLER_SIZE-1)
-#define BOOST_PP_FILENAME_1       "win/MsgMapHandler_repeat.inc"
-#include BOOST_PP_ITERATE()
-
-// cleanup 
-#undef MSGHANDLER_RET_TYPE 
-#undef MSGHANDLER_RET_CLASS
-#undef MSGHANDLER_RET_VALUE
-#undef MSGHANDLER_RETURN 
-#undef MSGHANDLER_BASE_CALL
-#undef MSGHANDLER_CLASS_NAME
-#undef MSGHANDLER_CALL_TYPE
 
 #ifndef _WIN64
 
-// specializations for less then 3 params __stdcall signature
-#define MSGHANDLER_CLASS_NAME StdCallMsgMapHandler
-#define MSGHANDLER_CALL_TYPE __stdcall
-#define MSGHANDLER_RET_TYPE HRESULT
-#define MSGHANDLER_RET_CLASS 
-#define MSGHANDLER_RET_VALUE  
-#define MSGHANDLER_RETURN return 0
-#define MSGHANDLER_BASE_CALL wnd->BaseWindowType::wndProc( *This, msg, wParam, lParam)
 
-#define BOOST_PP_ITERATION_LIMITS (0, MSG_HANDLER_SIZE-1)
-#define BOOST_PP_FILENAME_1       "win/MsgMapHandler_repeat.inc"
-#include BOOST_PP_ITERATE()
+template< class R, class T, class ... Args>
+class GenericStdCallMsgMapHandler<R, T, Args...> : public MsgMapHandlerImpl<T>
+{
+public:
+
+	typedef R(__stdcall T::*Fun)(Args...);
+
+	GenericStdCallMsgMapHandler(Fun ptr, Args&& ... args)
+		:fun_(ptr), params_(std::forward<Args>(args)...)
+	{}
+
+	LRESULT operator()(mol::win::WndProc* This, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+		T* object = (T*)This;
+		params_.invoke(object, fun_);
+		object->BaseWindowType::wndProc(*This, msg, wParam, lParam);
+		return 0;
+	}
+
+private:
+
+	GenericMsgMapHandlerParams<R,Args...> params_;
+	Fun				fun_;
+};
 
 #endif
 
+template<class ... Args>
+class MsgMapHandlerParams
+{};
 
-// cleanup 
-#undef MSGHANDLER_CLASS_NAME
-#undef MSGHANDLER_RET_TYPE 
-#undef MSGHANDLER_RET_CLASS
-#undef MSGHANDLER_RET_VALUE
-#undef MSGHANDLER_RETURN 
-#undef MSGHANDLER_BASE_CALL
-#undef MSGHANDLER_CALL_TYPE
+template<class R, class P1, class P2, class P3>
+class MsgMapHandlerParams<R,P1,P2,P3>
+{
+public:
+	template<class T, class F>
+	R invoke(T* t, F f, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+		return (t->*f)( (P1)msg, (P2) wParam, (P3) lParam);
+	}
+};
 
-/////////////////////////////////////////////////////////////////
-// generic specializations
-/////////////////////////////////////////////////////////////////
+template<class R, class P1, class P2>
+class MsgMapHandlerParams<R, P1, P2>
+{
+public:
+	template<class T, class F>
+	R invoke(T* t, F f, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+		return (t->*f)((P1)wParam, (P2)lParam);
+	}
+};
 
-#undef GENERIC_PARAM
-#define GENERIC_PARAM(z,c,unused) Param##c(p##c) BOOST_PP_COMMA_IF(BOOST_PP_SUB(BOOST_PP_SUB(n,1),c))
+template<class R, class P1>
+class MsgMapHandlerParams<R, P1>
+{
+public:
+	template<class T, class F>
+	R invoke(T* t, F f, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+		return (t->*f)((P1)lParam);
+	}
+};
 
 
-// generic handler for arbitary mem functions
-#define GENERICHANDLER_CLASS_NAME GenericMsgMapHandler
-#define GENERICHANDLER_CALL_TYPE 
-#define GENERICHANDLER_RETURN_CLASS class R,
-#define GENERICHANDLER_RETURN_TYPE R
-#define GENERICHANDLER_RETURN_DECL
-#define GENERICHANDLER_RETURN_POLICY return 0
-#define GENERICHANDLER_BASE_CALL object->BaseWindowType::wndProc( *This, msg, wParam, lParam)
+template<class R>
+class MsgMapHandlerParams<R>
+{
+public:
+	template<class T, class F>
+	R invoke(T* t, F f, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+		return (t->*f)();
+	}
+};
+
+template<class R, class T, class ... Args>
+class MsgMapHandler<R, T, Args ...> : public MsgMapHandlerImpl<T>
+{
+public:
+
+	typedef R( T::*Function)(Args...);
+
+	MsgMapHandler(Function ptr)
+		:ptr_(ptr)
+	{}
+
+	LRESULT operator()(mol::win::WndProc* This, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+		T* wnd = (T*)This;
+		params_.invoke(wnd, ptr_, msg, wParam, lParam);
+		wnd->BaseWindowType::wndProc(*This, msg, wParam, lParam);
+		return 0;
+	}
+
+private:
+	Function ptr_;
+	MsgMapHandlerParams<R, Args...> params_;
+};
 
 
-#define BOOST_PP_ITERATION_LIMITS (0, GENERIC_HANDLER_SIZE-1)
-#define BOOST_PP_FILENAME_1       "win/GenericMsgMapHandler_repeat.inc"
-#include BOOST_PP_ITERATE()
+template<class T, class ... Args>
+class MsgMapHandler<LRESULT, T, Args ...> : public MsgMapHandlerImpl<T>
+{
+public:
 
-#undef GENERICHANDLER_CLASS_NAME
-#undef GENERICHANDLER_RETURN_CLASS
-#undef GENERICHANDLER_RETURN_TYPE
-#undef GENERICHANDLER_RETURN_POLICY
-#undef GENERICHANDLER_RETURN_DECL
-#undef GENERICHANDLER_CALL_TYPE
-#undef GENERICHANDLER_BASE_CALL 
+	typedef LRESULT(T::*Function)(Args...);
 
-// specialization for LRESULT return type
-#define GENERICHANDLER_CLASS_NAME GenericMsgMapHandler
-#define GENERICHANDLER_CALL_TYPE 
-#define GENERICHANDLER_RETURN_CLASS 
-#define GENERICHANDLER_RETURN_DECL LRESULT lr = 
-#define GENERICHANDLER_RETURN_TYPE LRESULT
-#define GENERICHANDLER_RETURN_POLICY return lr
-#define GENERICHANDLER_BASE_CALL
+	MsgMapHandler(Function ptr)
+		:ptr_(ptr)
+	{}
 
-#define BOOST_PP_ITERATION_LIMITS (0, GENERIC_HANDLER_SIZE-1)
-#define BOOST_PP_FILENAME_1       "win/GenericMsgMapHandler_repeat.inc"
-#include BOOST_PP_ITERATE()
+	LRESULT operator()(mol::win::WndProc* This, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+		T* wnd = (T*)This;
+		LRESULT result = params_.invoke(wnd, ptr_, msg, wParam, lParam);
+		wnd->BaseWindowType::wndProc(*This, msg, wParam, lParam);
+		return result;
+	}
 
-#undef GENERICHANDLER_CLASS_NAME
-#undef GENERICHANDLER_RETURN_CLASS
-#undef GENERICHANDLER_RETURN_TYPE
-#undef GENERICHANDLER_RETURN_POLICY
-#undef GENERICHANDLER_RETURN_DECL
-#undef GENERICHANDLER_CALL_TYPE
-#undef GENERICHANDLER_BASE_CALL 
+private:
+	Function ptr_;
+	MsgMapHandlerParams<LRESULT, Args...> params_;
+};
 
 #ifndef _WIN64
 
-// speczialization for __stdcall mem functions
-#define GENERICHANDLER_CLASS_NAME GenericStdCallMsgMapHandler
-#define GENERICHANDLER_CALL_TYPE __stdcall
-#define GENERICHANDLER_RETURN_CLASS class R,
-#define GENERICHANDLER_RETURN_TYPE R
-#define GENERICHANDLER_RETURN_DECL 
-#define GENERICHANDLER_RETURN_POLICY return 0
-#define GENERICHANDLER_BASE_CALL object->BaseWindowType::wndProc( *This, msg, wParam, lParam)
+template<class R, class T, class ... Args>
+class StdCallMsgMapHandler<R, T, Args ...> : public MsgMapHandlerImpl<T>
+{
+public:
+	typedef R( __stdcall T::*Function)(Args...);
+
+	StdCallMsgMapHandler(Function ptr)
+		:ptr_(ptr)
+	{}
+
+	LRESULT operator()(mol::win::WndProc* This, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+		T* wnd = (T*)This;
+
+		params_.invoke(wnd, ptr_, msg, wParam, lParam);
+		wnd->BaseWindowType::wndProc(*This, msg, wParam, lParam);
+		return 0;
+	}
+
+private:
 
 
-#define BOOST_PP_ITERATION_LIMITS (0, GENERIC_HANDLER_SIZE-1)
-#define BOOST_PP_FILENAME_1       "win/GenericMsgMapHandler_repeat.inc"
-#include BOOST_PP_ITERATE()
+	StdCallMsgMapHandler(const StdCallMsgMapHandler<R,T,Args...> &)
+	{}
+
+	Function ptr_;
+	MsgMapHandlerParams<R, Args...> params_;
+};
 
 #endif
-
-// speczialization for embedded Ole object interface handler
-
-#define BOOST_PP_ITERATION_LIMITS (0, GENERIC_HANDLER_SIZE-1)
-#undef BOOST_PP_FILENAME_1
-#define BOOST_PP_FILENAME_1       "win/OleMsgMapHandler_repeat.inc"
-#include BOOST_PP_ITERATE()
-
-
-// cleanup
-
-#undef BOOST_PP_ITERATION_LIMITS
-#undef BOOST_PP_FILENAME_1
-#undef GENERIC_PARAM
-#undef GENERIC_PARAM_DECL
-
-#undef GENERICHANDLER_CLASS_NAME
-#undef GENERICHANDLER_RETURN_CLASS
-#undef GENERICHANDLER_RETURN_TYPE
-#undef GENERICHANDLER_RETURN_POLICY
-#undef GENERICHANDLER_RETURN_DECL
-#undef GENERICHANDLER_CALL_TYPE
-#undef GENERICHANDLER_BASE_CALL 
-
-#undef GENERIC_HANDLER_SIZE
 
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 // make_handler & co functions
 /////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
 
-#define MAKE_HANDLER_NAME MsgMapHandler
-#define MAKE_HANDLE_CALL_TYPE
 
-#define BOOST_PP_ITERATION_LIMITS (0, MSG_HANDLER_SIZE)
-#define BOOST_PP_FILENAME_1       "win/make_handler_repeat.inc"
-#include BOOST_PP_ITERATE()
-
-#undef MAKE_HANDLER_NAME 
-#undef MAKE_HANDLE_CALL_TYPE
-
-/////////////////////////////////////////////////////////////////
+template<class R, class T, class ... Args>
+MsgMapHandler<R,T,Args...>* make_handler(R(T::*memFunPtr)(Args...))
+{
+	return new MsgMapHandler<R, T, Args...>(memFunPtr);
+}
 
 #ifndef _WIN64
 
-#define MAKE_HANDLER_NAME StdCallMsgMapHandler
-#define MAKE_HANDLE_CALL_TYPE __stdcall
-
-#define BOOST_PP_ITERATION_LIMITS (0, MSG_HANDLER_SIZE)
-#define BOOST_PP_FILENAME_1       "win/make_handler_repeat.inc"
-#include BOOST_PP_ITERATE()
-
-#undef MAKE_HANDLER_NAME 
-#undef MAKE_HANDLE_CALL_TYPE
+template<class R, class T, class ... Args>
+StdCallMsgMapHandler<R, T, Args...>* make_handler(R(__stdcall T::*memFunPtr)(Args...))
+{
+	return new StdCallMsgMapHandler<R, T, Args...>(memFunPtr);
+}
 
 
 #endif
 
-
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 
-#define MAKE_HANDLER_NAME GenericMsgMapHandler
-#define MAKE_HANDLE_CALL_TYPE 
-
-#define BOOST_PP_ITERATION_LIMITS (0, MSG_HANDLER_SIZE)
-#define BOOST_PP_FILENAME_1       "win/make_generic_handler_repeat.inc"
-#include BOOST_PP_ITERATE()
-
-#undef MAKE_HANDLER_NAME 
-#undef MAKE_HANDLE_CALL_TYPE
-
+template< class R, class T, class ... Args>
+GenericMsgMapHandler<R, T, Args...>* make_generic_handler(R(T::*memFunPtr)(Args...), Args&& ... args)
+{
+	return new GenericMsgMapHandler<R, T, Args...>(memFunPtr, std::forward<Args>(args) ... );
+}
 
 #ifndef _WIN64
 
-#define MAKE_HANDLER_NAME GenericStdCallMsgMapHandler
-#define MAKE_HANDLE_CALL_TYPE __stdcall
-
-#define BOOST_PP_ITERATION_LIMITS (0, MSG_HANDLER_SIZE)
-#define BOOST_PP_FILENAME_1       "win/make_generic_handler_repeat.inc"
-#include BOOST_PP_ITERATE()
-
-#undef MAKE_HANDLER_NAME 
-#undef MAKE_HANDLE_CALL_TYPE
+template< class R, class T, class ... Args>
+GenericStdCallMsgMapHandler<R, T, Args...>* make_generic_handler(R(__stdcall T::*memFunPtr)(Args...), Args&& ... args)
+{
+	return new GenericStdCallMsgMapHandler<R, T, Args...>(memFunPtr, std::forward<Args>(args) ...);
+}
 
 #endif
 
-
-/////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 
+template< class T, class I, class ... Args>
+OleMsgMapHandler<T, I, Args...>* make_ole_handler(HRESULT(__stdcall I::*memFunPtr)(Args...), Args&&... args)
+{
+	return new OleMsgMapHandler<T, I, Args...>(memFunPtr, std::forward<Args>(args)...);
+}
 
-#define BOOST_PP_ITERATION_LIMITS (0, MSG_HANDLER_SIZE)
-#define BOOST_PP_FILENAME_1       "win/make_ole_handler_repeat.inc"
-#include BOOST_PP_ITERATE()
-
-
-/////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////

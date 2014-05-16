@@ -307,7 +307,7 @@ public:
 
 	MoeVistaFileDialog(HWND parent);
 
-	void setFilter(mol::v7::COMDLG_FILTERSPEC* filter, int size);
+	void setFilter(COMDLG_FILTERSPEC* filter, int size);
 
 	HRESULT open(int options);
 	HRESULT save(int options);
@@ -328,8 +328,8 @@ private:
 	HRESULT addEncodingComboBox();
 	HRESULT init(int options, REFCLSID clsid);
 
-	mol::punk<mol::v7::IFileDialog> fd_;
-	mol::punk<mol::v7::IFileDialogCustomize> fdc_;
+	mol::punk<IFileDialog> fd_;
+	mol::punk<IFileDialogCustomize> fdc_;
 
 	HWND parent_;
 	long encoding_;
@@ -338,7 +338,7 @@ private:
 	UINT nFilters_;
 	std::wstring path_;
 	std::vector<std::wstring> paths_;
-	mol::v7::COMDLG_FILTERSPEC* filter_;
+	COMDLG_FILTERSPEC* filter_;
 };
 
 MOE_DOCTYPE index2type(int index);

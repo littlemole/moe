@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "Killroy.h"
 #include "win/Res.h"
+#include "RestartManager.h"
 
 class RmSession
 {
@@ -17,19 +18,14 @@ public:
 
 	long getPidForFilename( const std::wstring& filename, IPID** pid )
 	{
-		if (!mol::v7::RmStartSession)
-		{
-			return -1;
-		}
-
-		dwError_ = mol::v7::RmStartSession(&dwSession_, 0, szSessionKey_);
+		dwError_ = ::RmStartSession(&dwSession_, 0, szSessionKey_);
 		if (dwError_ != ERROR_SUCCESS) 
 		{
 			return -1;
 		}
 
 		PCWSTR pszFile = filename.c_str();
-		dwError_ = mol::v7::RmRegisterResources(dwSession_, 1, &pszFile,0, NULL, 0, NULL);
+		dwError_ = ::RmRegisterResources(dwSession_, 1, &pszFile,0, NULL, 0, NULL);
 		if (dwError_ != ERROR_SUCCESS) 
 		{
 			return -1;
@@ -38,8 +34,8 @@ public:
 		DWORD dwReason;
 		UINT nProcInfoNeeded;
 		UINT nProcInfo = 1;
-		mol::v7::RM_PROCESS_INFO rgpi;
-		dwError_ = mol::v7::RmGetList(dwSession_, &nProcInfoNeeded, &nProcInfo, &rgpi, &dwReason);
+		RM_PROCESS_INFO rgpi;
+		dwError_ = ::RmGetList(dwSession_, &nProcInfoNeeded, &nProcInfo, &rgpi, &dwReason);
 		if (dwError_ != ERROR_SUCCESS) 
 		{
 			return -1;
@@ -67,7 +63,7 @@ public:
 	{
 		if ( dwSession_ != 0 )
 		{
-			mol::v7::RmEndSession(dwSession_);
+			::RmEndSession(dwSession_);
 			dwSession_ = 0;
 		}
 	}

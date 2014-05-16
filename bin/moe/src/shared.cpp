@@ -449,7 +449,7 @@ HRESULT __stdcall MoeDialogs::Open(BSTR path,IMoeDocument** d)
 
 	if ( mol::Ribbon::ribbon()->enabled() )
 	{
-		const mol::v7::COMDLG_FILTERSPEC c_rgSaveTypes[] =
+		const COMDLG_FILTERSPEC c_rgSaveTypes[] =
 		{
 			{ L"open text files",       L"*.*"},
 			{ L"open HTML files",	    L"*.*"},
@@ -459,7 +459,7 @@ HRESULT __stdcall MoeDialogs::Open(BSTR path,IMoeDocument** d)
 		};
 
 		MoeVistaFileDialog fd(*moe());
-		fd.setFilter((mol::v7::COMDLG_FILTERSPEC*)&c_rgSaveTypes,ARRAYSIZE(c_rgSaveTypes));
+		fd.setFilter((COMDLG_FILTERSPEC*)&c_rgSaveTypes,ARRAYSIZE(c_rgSaveTypes));
 		if ( path )
 		{
 			std::wstring p = mol::towstring(path);
@@ -468,7 +468,7 @@ HRESULT __stdcall MoeDialogs::Open(BSTR path,IMoeDocument** d)
 				fd.path(p);
 			}
 		}
-		HRESULT hr = fd.open(mol::v7::FOS_ALLOWMULTISELECT  | mol::v7::FOS_NOVALIDATE | mol::v7::FOS_ALLNONSTORAGEITEMS);
+		HRESULT hr = fd.open(FOS_ALLOWMULTISELECT  | FOS_NOVALIDATE | FOS_ALLNONSTORAGEITEMS);
 		if ( hr != S_OK )
 			return hr;
 
