@@ -10,7 +10,22 @@
   <Import Project="..\..\..\master.props" />
   <Import Project=".\build.props" />
 
-  <ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Platform)' == 'Win32' "  >
+    <ClCompile>
+	  <DisableSpecificWarnings>4244;4267</DisableSpecificWarnings>
+      <AdditionalOptions> /Zm1000 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES=1;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT=1;_CRT_NONSTDC_NO_WARNINGS=1;_CRT_SECURE_NO_WARNINGS=1;LIBSSH_STATIC;SUPPORT_UTF8;STATIC;POSIX_MALLOC_THRESHOLD=10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../libssh/build/src;../../libssh/src;../../libssh/include;../../libssh/build;../../openssl/inc32;../../zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsC</CompileAs>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Platform)' == 'x64' "  >
     <ClCompile>
 	  <DisableSpecificWarnings>4244;4267</DisableSpecificWarnings>
       <AdditionalOptions> /Zm1000 %(AdditionalOptions)</AdditionalOptions>

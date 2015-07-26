@@ -45,7 +45,7 @@
 	<Exec Command="nmake -f scintilla-static64.mak DEBUG=1" WorkingDirectory=".\scintilla\win32" Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' "  />
 
     <PropertyGroup>
-        <OsslDirs>.\openssl\tmp32;.\openssl\tmp32D;.\openssl\tmp64;.\openssl\tmp64D;.\openssl\inc32;.\openssl\inc64;</OsslDirs>
+        <OsslDirs>.\openssl\tmp32;.\openssl\tmp32D;.\openssl\tmp64;.\openssl\tmp64D;.\openssl\inc32;.\openssl\inc64;.\openssl\out32;.\openssl\out32D;.\openssl\out64;.\openssl\out64D</OsslDirs>
     </PropertyGroup>
 	<MakeDir
             Directories="$(OsslDirs)"/>
@@ -92,13 +92,11 @@
 	<MakeDir
             Directories="$(SciDirs)"/>
 
-
     <PropertyGroup>
-        <OsslDirs>.\openssl\tmp32;.\openssl\tmp32D;.\openssl\tmp64;.\openssl\tmp64D;</OsslDirs>
+        <OsslDirs>.\openssl\tmp32;.\openssl\tmp32D;.\openssl\tmp64;.\openssl\tmp64D;.\openssl\inc32;.\openssl\inc64;.\openssl\out32;.\openssl\out32D;.\openssl\out64;.\openssl\out64D</OsslDirs>
     </PropertyGroup>
 	<MakeDir
             Directories="$(OsslDirs)"/>
-
 
 
 	<ItemGroup>

@@ -1,7 +1,7 @@
 @echo off
 
 set PlatformToolset=v120
-set UICC="C:\Program Files (x86)\Windows Kits\8.0\bin\x86\uicc.exe"
+set UICC="C:\Program Files (x86)\Windows Kits\8.1\bin\x86\uicc.exe"
 
 set CONF=%1
 if %1!==! SET CONF=uni_debug
