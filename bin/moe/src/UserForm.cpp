@@ -366,7 +366,7 @@ LRESULT UserForm::OnClose()
 			}
 		}
 	}
-	this->destroy();
+	//this->destroy();
 	return 0;
 }
 
@@ -542,7 +542,7 @@ HRESULT __stdcall UserForm::InitNew(IStorage *pStg)
 HRESULT __stdcall  UserForm::Close()
 {
 	//mol::invoke( boost::bind( &UserForm::destroy, this ) );
-	destroy();
+	//destroy();
 	return S_OK;
 }
 
