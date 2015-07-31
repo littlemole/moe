@@ -16,10 +16,6 @@ class ScriptDebugger :
 	public IApplicationDebugger,
 	public IApplicationDebuggerUI,
 	public IDebugSessionProvider,
-/*	public IDebugDocumentTextAuthor,
-	public IDebugDocumentProvider,
-	public IDebugDocumentContext,
-	*/
 	public IDebugExpressionCallBack,
 	public mol::interfaces< ScriptDebugger, 
 				mol::implements< IActiveScriptSite, 
@@ -29,14 +25,6 @@ class ScriptDebugger :
 							IApplicationDebuggerUI,
 							IDebugExpressionCallBack,
 							IDebugSessionProvider
-							/*
-							mol::interface_ex<IDebugDocument,IDebugDocumentTextAuthor>,
-							mol::interface_ex<IDebugDocumentInfo,IDebugDocumentTextAuthor>,
-							mol::interface_ex<IDebugDocumentText,IDebugDocumentTextAuthor>,
-							IDebugDocumentTextAuthor,
-							IDebugDocumentProvider,
-							IDebugDocumentContext
-							*/
 							> >
 {
 public:
@@ -83,24 +71,7 @@ public:
 	virtual HRESULT  __stdcall  BringDocumentToTop(IDebugDocumentText *);
 	virtual HRESULT  __stdcall  BringDocumentContextToTop(IDebugDocumentContext *);
 
-	/*
-	virtual HRESULT  __stdcall  GetName( DOCUMENTNAMETYPE, BSTR *);
-	virtual HRESULT  __stdcall  GetDocumentClassId( CLSID *);
-	virtual HRESULT  __stdcall  GetDocumentAttributes( TEXT_DOC_ATTR *);
-	virtual HRESULT  __stdcall  GetSize( ULONG *, ULONG *);
-	virtual HRESULT  __stdcall  GetPositionOfLine( ULONG, ULONG *);
-	virtual HRESULT  __stdcall  GetLineOfPosition( ULONG, ULONG *, ULONG *);
-	virtual HRESULT  __stdcall  GetText( ULONG, WCHAR *, SOURCE_TEXT_ATTR *, ULONG *, ULONG);
-	virtual HRESULT  __stdcall  GetPositionOfContext( IDebugDocumentContext *, ULONG *, ULONG *);
-	virtual HRESULT  __stdcall  GetContextOfPosition( ULONG, ULONG, IDebugDocumentContext **);
-	virtual HRESULT  __stdcall  InsertText( ULONG, ULONG, OLECHAR *);
-	virtual HRESULT  __stdcall  RemoveText( ULONG, ULONG);
-	virtual HRESULT  __stdcall  ReplaceText( ULONG, ULONG, OLECHAR *);
 
-
-	virtual HRESULT  __stdcall  GetDocument(IDebugDocument **pObj);
-	virtual HRESULT  __stdcall  EnumCodeContexts(IEnumDebugCodeContexts **pObj);
-	*/
 	virtual HRESULT  __stdcall StartDebugSession(/*[in]*/ IRemoteDebugApplication* pApp)
 	{
 		IApplicationDebugger* ad = (IApplicationDebugger*)this;
@@ -112,7 +83,6 @@ public:
 	mol::events::Event<std::wstring> OnExpressionEvaluated;
 
 	typedef mol::com_instance<ScriptDebugger> Instance;
-	//typedef mol::debug_com_instance<ThreadScript> ScriptInstance;
 
 	virtual void dispose()  
 	{
@@ -153,6 +123,7 @@ protected:
 	HRESULT getScriptEngine(const std::wstring& engine, IActiveScript **ppas);
 
 	bool								stepping_;
+	bool								chakra_;
 	std::set<int>						breakpoints_;
 	typedef std::pair<DWORD,DWORD>      ObjectMapItem;
  	std::map<std::wstring,ObjectMapItem>	objectMap_;
@@ -179,8 +150,6 @@ protected:
 
 	HWND								owner_;
 
-	JsRuntimeHandle jsRuntime_;
-	JsContextRef jsContext_;
 };
 
 class MoeDebugImport : 

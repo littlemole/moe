@@ -54,20 +54,7 @@ HRESULT ThreadedTimeouts::setTimeout( mol::variant f, mol::variant t)
 	timeouts_.push_back( new ThreadedTimeout(f.pdispVal,t.llVal+tick) );
 	return S_OK;
 }
-/*
-void ThreadedTimeouts::remove( ThreadedTimeout* t)
-{
-	for ( std::list<ThreadedTimeout*>::iterator it = timeouts_.begin(); it != timeouts_.end(); it++)
-	{
-		if ( *it == t )
-		{
-			delete t;
-			timeouts_.erase(it);
-			return;
-		}
-	}
-}
-*/
+
 bool ThreadedTimeouts::fire()
 {
 	long now = ::GetTickCount();
@@ -273,6 +260,7 @@ void ScriptDebugger::init(const std::wstring& engine)
 
 	engine_ = engine;
 	stepping_ = false;
+	chakra_ = false;
 
 	remote_.release();
 	activeScript_.release();
@@ -300,16 +288,7 @@ void ScriptDebugger::init(const std::wstring& engine)
 			return;
 
 	}
-	/*
 
-	jsRuntime_ = 0;
-	hr = JsCreateRuntime(JsRuntimeAttributeNone, JsRuntimeVersion11, nullptr, &jsRuntime_);
-	if (hr == S_OK)
-		hr = JsCreateContext(jsRuntime_, debugApp_, &jsContext_);
-
-	if (hr == S_OK)
-		hr = JsSetCurrentContext(jsContext_);
-*/
 
 	hr = getScriptEngine( engine_,&activeScript_ );
 	if ( hr != S_OK || !activeScript_ )
@@ -333,13 +312,6 @@ void ScriptDebugger::init(const std::wstring& engine)
 		hr = debugHelper_->DefineScriptBlock(0, script_.size(), activeScript_, false, &debugCookie_);
 	}
 
-	/*
-	hr = JsStartDebugging(debugApp_);
-	if (hr != JsNoError)
-	{
-		hr = E_FAIL;
-	}
-	*/
 	mol::punk<IActiveScriptProperty> asprop(activeScript_);
 	if (asprop)
 	{
@@ -400,7 +372,10 @@ HRESULT ScriptDebugger::getScriptEngine(const std::wstring& engine, IActiveScrip
 		clsid = GUID_JSCRIPT9;
 		hr = CoCreateInstance(clsid, 0, CLSCTX_ALL,IID_IActiveScript,(void**)ppas);
 		if (hr == S_OK)
+		{
+			chakra_ = true;
 			return hr;
+		}
 	}
    
 	hr = CLSIDFromProgID(mol::towstring(engine).c_str(), &clsid);
@@ -494,8 +469,10 @@ void ScriptDebugger::resume(BREAKRESUMEACTION ba)
 	
 	mol::punk<IRemoteDebugApplication> app;
 
-	switch (ba)
+	if (chakra_)
 	{
+		switch (ba)
+		{
 		case BREAKRESUMEACTION_ABORT:
 		{
 			stepping_ = false;
@@ -514,6 +491,7 @@ void ScriptDebugger::resume(BREAKRESUMEACTION ba)
 			stepping_ = true;
 			ba = BREAKRESUMEACTION_STEP_INTO;
 			break;
+		}
 		}
 	}
 
@@ -588,7 +566,6 @@ void ScriptDebugger::execute_thread( )
 	ODBGS("ScriptDebugger::execute()\r\n");
 
 	::CoInitialize(0);
-	//::CoInitializeEx(0, COINIT_APARTMENTTHREADED);
 
 	HRESULT hr;
 
@@ -857,7 +834,10 @@ HRESULT  __stdcall ScriptDebugger::OnEnterScript( void)
 	}
 
 //	if ( debug_  && debugApp_)
-	HRESULT hr = debugApp_->CauseBreak();
+	if (chakra_)
+	{
+		HRESULT hr = debugApp_->CauseBreak();
+	}
 
 	return S_OK;
 }
@@ -967,11 +947,15 @@ HRESULT  __stdcall  ScriptDebugger::onHandleBreakPoint(IRemoteDebugApplicationTh
 			{
 				hr = docText->GetLineOfPosition( position, &line, &offset );
 				hr = docText->GetPositionOfLine(line, &position);
-				if (stepping_ == false && !pError) {
-					if (breakpoints_.find(position) == breakpoints_.end()) {
-						remote_ = rthread;
-						resume(BREAKRESUMEACTION_CONTINUE);
-						return S_OK;
+
+				if (chakra_)
+				{
+					if (stepping_ == false && !pError) {
+						if (breakpoints_.find(position) == breakpoints_.end()) {
+							remote_ = rthread;
+							resume(BREAKRESUMEACTION_CONTINUE);
+							return S_OK;
+						}
 					}
 				}
 			}
@@ -1043,222 +1027,6 @@ HRESULT  __stdcall  ScriptDebugger::BringDocumentContextToTop( IDebugDocumentCon
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-/*
-
-HRESULT  __stdcall  ScriptDebugger::GetName( DOCUMENTNAMETYPE dnt, BSTR * str)
-{
-	if ( !str ) 
-		return E_INVALIDARG;
-
-	*str = ::SysAllocString( filename_.c_str() );
-	return S_OK;
-}
-
-HRESULT  __stdcall  ScriptDebugger::GetDocumentClassId(CLSID * clsid)
-{
-	if ( !clsid ) 
-		return E_INVALIDARG;
-	
-	memcpy(clsid, &GUID_NULL, sizeof(GUID));
-	return S_OK;
-}
-
-HRESULT  __stdcall  ScriptDebugger::GetDocumentAttributes(TEXT_DOC_ATTR * attr)
-{
-		*attr = TEXT_DOC_ATTR_READONLY;
-		return S_OK;
-}
-
-HRESULT  __stdcall  ScriptDebugger::GetSize(ULONG *  numLines, ULONG* numChars)
-{
-	DWORD	chars;
-	DWORD	lines;
-	WCHAR	*ptr;
-
-	chars = (DWORD)script_.size();
-	*numChars = chars;
-
-	ptr = (WCHAR*)script_.c_str();
-	lines = 0;
-	while (chars--)
-	{
-		if (*ptr == '\r')
-		{
-			if (chars && *(ptr + 1) == '\n')
-			{
-				--chars;
-				++ptr;
-			}
-		}
-
-		if (*ptr == '\n')
-			++lines;
-
-		++ptr;
-	}
-
-	// Count any final line that doesn't end with \r or \n
-	if ( script_.size() && (*(ptr - 1) != '\r' || *(ptr - 1) != '\n')) ++lines;
-
-	*numLines = lines;
-	return S_OK;
-}
-
-HRESULT  __stdcall  ScriptDebugger::GetPositionOfLine( ULONG lineNum, ULONG* pos)
-{
-	DWORD	lines, offset;
-	WCHAR	*ptr;
-
-	ptr = (WCHAR*)script_.c_str();
-	offset = lines = 0;
-	while (lineNum != lines && offset < script_.size() )
-	{
-		if (*ptr == '\r')
-		{
-			if (offset < script_.size() && *(ptr + 1) == '\n')
-			{
-				++offset;
-				++ptr;
-			}
-		}
-
-		if (*ptr == '\n')
-			++lines;
-
-		++offset;
-		++ptr;
-	}
-
-	*pos = offset;
-
-	return S_OK;
-}
-
-HRESULT  __stdcall  ScriptDebugger::GetLineOfPosition( ULONG position, ULONG * lineNum, ULONG * charOffset)
-{
-	DWORD	lines, offset;
-	WCHAR	*ptr;
-	DWORD	prevLine;
-
-	ptr = (WCHAR*)script_.c_str();
-	prevLine = offset = lines = 0;
-	while (offset < script_.size() && offset < position)
-	{
-		if (*ptr == '\r')
-		{
-			if (offset < script_.size() && offset < position && *(ptr + 1) == '\n')
-			{
-				++offset;
-				++ptr;
-			}
-		}
-
-		if (*ptr == '\n')
-		{
-			prevLine = offset + 1;
-			++lines;
-		}
-
-		++offset;
-		++ptr;
-	}
-
-	*lineNum = lines;
-	if (charOffset) *charOffset = offset - prevLine;
-
-	return S_OK;
-
-}
-
-HRESULT  __stdcall  ScriptDebugger::GetText(ULONG position, WCHAR * text, SOURCE_TEXT_ATTR * attr, ULONG * numChars, ULONG max)
-{
-	register DWORD		offset;
-	register WCHAR		*ptr;
-	
-
-	if (position >= script_.size() )
-	{
-		*numChars = 0;
-		if (!max) 
-			return S_OK;
-		
-		return E_FAIL ;
-	}
-
-	// Get the start of text
-	ptr = (WCHAR*)script_.c_str() + position;
-
-	// Make sure caller isn't asking for more chars than are remaining
-	offset = max;
-	if ((offset + position) > (DWORD)script_.size() ) offset = (DWORD)script_.size() - position;
-	*numChars = offset;
-
-	if (text) 
-		::CopyMemory(text, script_.c_str() + position, offset);
-
-	if (attr)
-	{
-		mol::punk<IActiveScriptDebug>	debug(activeScript_);
-
-		if ( !debug )
-			return S_OK;
-
-		debug->GetScriptTextAttributes( script_.c_str() + position, offset, 0, 0, attr);
-	}
-
-	return S_OK;
-}
-
-HRESULT  __stdcall  ScriptDebugger::GetPositionOfContext( IDebugDocumentContext * ctx, ULONG *position, ULONG * numChars)
-{
-	*numChars = (DWORD)script_.size();
-	*position = 0;
-	return S_OK;
-}
-
-HRESULT  __stdcall  ScriptDebugger::GetContextOfPosition(ULONG position, ULONG numCHars, IDebugDocumentContext ** cts)
-{
-	return ((IActiveScriptSite*)this)->QueryInterface( IID_IDebugDocumentContext, (void**) cts );
-}
-
-HRESULT  __stdcall  ScriptDebugger::InsertText( ULONG, ULONG, OLECHAR *)
-{
-	return E_FAIL;
-}
-
-HRESULT  __stdcall  ScriptDebugger::RemoveText( ULONG, ULONG)
-{
-	return E_FAIL;
-}
-
-HRESULT  __stdcall  ScriptDebugger::ReplaceText( ULONG, ULONG, OLECHAR *)
-{
-	return E_FAIL;
-}
-*/
-/*
-HRESULT  __stdcall  ScriptDebugger::GetDocument(IDebugDocument **pObj)
-{
-	HRESULT hr = ((IDebugDocument*)this)->QueryInterface(IID_IDebugDocument, (void**)pObj );
-	return hr;
-}
-
-HRESULT  __stdcall  ScriptDebugger::EnumCodeContexts(IEnumDebugCodeContexts **pObj)
-{
-	HRESULT hr;
-
-	mol::punk<IActiveScriptDebug> debug(activeScript_);
-	if ( !debug )
-	{
-		return E_FAIL;
-	}
-
-	hr = debug->EnumCodeContextsOfPosition( debugCookie_,0,(ULONG)(script_.size()/2),pObj);
-	return hr;
-}
-*/
-
-/////////////////////////////////////////////////////////////////////////////////////////////
 
 // IActiveScriptSiteDebug Implementation
 HRESULT  STDMETHODCALLTYPE  ScriptDebugger::GetDocumentContextFromPosition(
@@ -1286,14 +1054,7 @@ HRESULT  STDMETHODCALLTYPE  ScriptDebugger::GetDocumentContextFromPosition(
 	if (SUCCEEDED(hr))
 		return debugHelper_->CreateDebugDocumentContext(ulStartPos + uCharacterOffset, uNumChars, ppsc);
 	return hr;
-	/*
-   if ( script_.size() > uCharacterOffset )
-   {
-	   offset_ = uCharacterOffset;
-	   return ((IDebugDocumentContext*)this)->QueryInterface( IID_IDebugDocumentContext, (void**)ppsc );
-   }
-   return E_FAIL;
-   */
+
 }
 
 
