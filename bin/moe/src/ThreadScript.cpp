@@ -138,7 +138,7 @@ HRESULT __stdcall  MoeDebugImport::Import(BSTR filename)
  	mol::variant varResult;
  	EXCEPINFO ei;
  	::ZeroMemory(&ei,sizeof(ei));
- 	hr = asp->ParseScriptText( mol::bstr(s), NULL,0,0,0,0,SCRIPTTEXT_ISPERSISTENT|SCRIPTTEXT_ISVISIBLE , &varResult,&ei);
+ 	hr = asp->ParseScriptText( mol::bstr(s), NULL,0,0,1,0,SCRIPTTEXT_ISPERSISTENT|SCRIPTTEXT_ISVISIBLE , &varResult,&ei);
  	return hr;
 }
 
@@ -257,7 +257,10 @@ HRESULT __stdcall  MoeDebugImport::clearTimeout( VARIANT t)
 
  
 ScriptDebugger::ScriptDebugger()
-{}
+{
+	debugCookie_ = 10;
+
+}
 
 ScriptDebugger::~ScriptDebugger()
 {
@@ -269,37 +272,74 @@ void ScriptDebugger::init(const std::wstring& engine)
 	HRESULT hr;
 
 	engine_ = engine;
+	stepping_ = false;
 
 	remote_.release();
 	activeScript_.release();
 	asp_.release();
 
 	hr = pdm_.createObject(CLSID_ProcessDebugManager);
-	if ( hr == S_OK && pdm_ )
+	if (hr == S_OK && pdm_)
 	{
 		hr = pdm_->CreateApplication(&debugApp_);
-		if ( S_OK != hr )
+		if (S_OK != hr)
 			return;
 
 		hr = debugApp_->SetName(L"moe script");
-		if ( S_OK != hr )
+		if (S_OK != hr)
 			return;
 
-	
+
+
 		hr = pdm_->AddApplication(debugApp_, &dwAppCookie_);
-		if ( S_OK != hr )
+		if (S_OK != hr)
 			return;
 
-		hr = debugApp_->ConnectDebugger( (IApplicationDebugger*)this );
-		if ( S_OK != hr )
+		hr = debugApp_->ConnectDebugger((IApplicationDebugger*)this);
+		if (S_OK != hr)
 			return;
+
 	}
-	
+	/*
+
+	jsRuntime_ = 0;
+	hr = JsCreateRuntime(JsRuntimeAttributeNone, JsRuntimeVersion11, nullptr, &jsRuntime_);
+	if (hr == S_OK)
+		hr = JsCreateContext(jsRuntime_, debugApp_, &jsContext_);
+
+	if (hr == S_OK)
+		hr = JsSetCurrentContext(jsContext_);
+*/
+
 	hr = getScriptEngine( engine_,&activeScript_ );
 	if ( hr != S_OK || !activeScript_ )
 		return;
 
+	hr = pdm_->CreateDebugDocumentHelper(0, &debugHelper_);
+	if (hr == S_OK)
+	{
+		hr = debugHelper_->Init(debugApp_, L"moed", L"moe debug helper", TEXT_DOC_ATTR_READONLY | TEXT_DOC_ATTR_TYPE_SCRIPT);
+	}
+	if (hr == S_OK)
+	{
+		hr = debugHelper_->Attach(NULL);
+	}
+	if (hr == S_OK)
+	{
+		hr = debugHelper_->AddUnicodeText(script_.c_str());
+	}
+	if (hr == S_OK)
+	{
+		hr = debugHelper_->DefineScriptBlock(0, script_.size(), activeScript_, false, &debugCookie_);
+	}
 
+	/*
+	hr = JsStartDebugging(debugApp_);
+	if (hr != JsNoError)
+	{
+		hr = E_FAIL;
+	}
+	*/
 	mol::punk<IActiveScriptProperty> asprop(activeScript_);
 	if (asprop)
 	{
@@ -316,6 +356,7 @@ void ScriptDebugger::init(const std::wstring& engine)
 		return;
 
 
+
 	hr = activeScript_->SetScriptSite((IActiveScriptSite*)this);
 	if ( hr != S_OK )
 		return;
@@ -324,6 +365,10 @@ void ScriptDebugger::init(const std::wstring& engine)
 	if ( hr != S_OK )
 		return;
 
+
+	
+
+	
 
  	import = MoeDebugImport::CreateInstance(activeScript_);
  	addNamedObject((IMoeImport*)(import),_T("Importer"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
@@ -449,6 +494,29 @@ void ScriptDebugger::resume(BREAKRESUMEACTION ba)
 	
 	mol::punk<IRemoteDebugApplication> app;
 
+	switch (ba)
+	{
+		case BREAKRESUMEACTION_ABORT:
+		{
+			stepping_ = false;
+			break;
+		}
+		case BREAKRESUMEACTION_CONTINUE:
+		{
+			stepping_ = false;
+			ba = BREAKRESUMEACTION_STEP_INTO;
+			break;
+		}
+		case BREAKRESUMEACTION_STEP_INTO:
+		case BREAKRESUMEACTION_STEP_OVER:
+		case BREAKRESUMEACTION_STEP_OUT:
+		{
+			stepping_ = true;
+			ba = BREAKRESUMEACTION_STEP_INTO;
+			break;
+		}
+	}
+
 	HRESULT hr = remote_->GetApplication(&app);
 	if ( hr == S_OK && app ) 
 	{
@@ -481,7 +549,7 @@ void  ScriptDebugger::update_breakpoints(std::set<int> br)
 	for ( std::set<int>::iterator it = breakpoints_.begin(); it != breakpoints_.end(); it++ )
 	{
 		mol::punk<IEnumDebugCodeContexts> debugCtx;
-		HRESULT hr = sdebug->EnumCodeContextsOfPosition( 0, (*it), 40, &debugCtx );
+		HRESULT hr = sdebug->EnumCodeContextsOfPosition(debugCookie_, (*it), (ULONG)(script_.size() / 2), &debugCtx);
 		if ( hr == S_OK && debugCtx )
 		{
 			ULONG numFetched = 0;
@@ -500,7 +568,7 @@ void  ScriptDebugger::update_breakpoints(std::set<int> br)
 	for ( std::set<int>::iterator it = breakpoints_.begin(); it != breakpoints_.end(); it++ )
 	{
 		mol::punk<IEnumDebugCodeContexts> debugCtx;
-		HRESULT hr = sdebug->EnumCodeContextsOfPosition( 0, (*it), 40, &debugCtx );
+		HRESULT hr = sdebug->EnumCodeContextsOfPosition(debugCookie_, (*it), (ULONG)(script_.size() / 2), &debugCtx);
 		if ( hr == S_OK && debugCtx )
 		{
 			ULONG numFetched = 0;
@@ -520,6 +588,7 @@ void ScriptDebugger::execute_thread( )
 	ODBGS("ScriptDebugger::execute()\r\n");
 
 	::CoInitialize(0);
+	//::CoInitializeEx(0, COINIT_APARTMENTTHREADED);
 
 	HRESULT hr;
 
@@ -538,7 +607,7 @@ void ScriptDebugger::execute_thread( )
 	if ( asp_ )
 	{
 		hr = asp_->ParseScriptText( mol::towstring(script_).c_str(),
-									  NULL,0,0,0,0,SCRIPTTEXT_ISVISIBLE ,
+									  NULL,0,0,debugCookie_,0,SCRIPTTEXT_ISVISIBLE ,
 									  &varResult_,&ei_);
 		if ( hr != S_OK )
 		{
@@ -774,7 +843,7 @@ HRESULT  __stdcall ScriptDebugger::OnEnterScript( void)
 	for ( std::set<int>::iterator it = breakpoints_.begin(); it != breakpoints_.end(); it++ )
 	{
 		mol::punk<IEnumDebugCodeContexts> debugCtx;
-		HRESULT hr = sdebug->EnumCodeContextsOfPosition( 0, (*it), 40, &debugCtx );
+		HRESULT hr = sdebug->EnumCodeContextsOfPosition(debugCookie_, (*it),(ULONG)(script_.size() ), &debugCtx);
 		if ( hr == S_OK && debugCtx )
 		{
 			ULONG numFetched = 0;
@@ -788,7 +857,7 @@ HRESULT  __stdcall ScriptDebugger::OnEnterScript( void)
 	}
 
 //	if ( debug_  && debugApp_)
-		//HRESULT hr = debugApp_->CauseBreak();
+	HRESULT hr = debugApp_->CauseBreak();
 
 	return S_OK;
 }
@@ -897,6 +966,14 @@ HRESULT  __stdcall  ScriptDebugger::onHandleBreakPoint(IRemoteDebugApplicationTh
 			if ( hr == S_OK )
 			{
 				hr = docText->GetLineOfPosition( position, &line, &offset );
+				hr = docText->GetPositionOfLine(line, &position);
+				if (stepping_ == false && !pError) {
+					if (breakpoints_.find(position) == breakpoints_.end()) {
+						remote_ = rthread;
+						resume(BREAKRESUMEACTION_CONTINUE);
+						return S_OK;
+					}
+				}
 			}
 		}
 	}
@@ -966,7 +1043,7 @@ HRESULT  __stdcall  ScriptDebugger::BringDocumentContextToTop( IDebugDocumentCon
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 
 HRESULT  __stdcall  ScriptDebugger::GetName( DOCUMENTNAMETYPE dnt, BSTR * str)
 {
@@ -1158,8 +1235,8 @@ HRESULT  __stdcall  ScriptDebugger::ReplaceText( ULONG, ULONG, OLECHAR *)
 {
 	return E_FAIL;
 }
-
-
+*/
+/*
 HRESULT  __stdcall  ScriptDebugger::GetDocument(IDebugDocument **pObj)
 {
 	HRESULT hr = ((IDebugDocument*)this)->QueryInterface(IID_IDebugDocument, (void**)pObj );
@@ -1176,9 +1253,10 @@ HRESULT  __stdcall  ScriptDebugger::EnumCodeContexts(IEnumDebugCodeContexts **pO
 		return E_FAIL;
 	}
 
-	hr = debug->EnumCodeContextsOfPosition( (DWORD)0,0,(ULONG)script_.size(),pObj);
+	hr = debug->EnumCodeContextsOfPosition( debugCookie_,0,(ULONG)(script_.size()/2),pObj);
 	return hr;
 }
+*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1193,31 +1271,40 @@ HRESULT  STDMETHODCALLTYPE  ScriptDebugger::GetDocumentContextFromPosition(
 								  ULONG uNumChars,			
 								  IDebugDocumentContext **ppsc)
 {
+
+	if (!ppsc) return E_POINTER;
+	*ppsc = NULL;
+	if (!debugHelper_) return E_UNEXPECTED;
+
+	// every running document has a special "cookie" associated with it. 
+	// this code assumes only 1 document with a cookie value stored in 
+	// m_dwDocCookie. It then asks the helper interface IDebugDocumentHelper 
+	// to convert from a character offset to a document context interface. 
+	ULONG ulStartPos = 0;
+	HRESULT hr = debugHelper_->GetScriptBlockInfo(debugCookie_, NULL, &ulStartPos, NULL);
+
+	if (SUCCEEDED(hr))
+		return debugHelper_->CreateDebugDocumentContext(ulStartPos + uCharacterOffset, uNumChars, ppsc);
+	return hr;
+	/*
    if ( script_.size() > uCharacterOffset )
    {
 	   offset_ = uCharacterOffset;
 	   return ((IDebugDocumentContext*)this)->QueryInterface( IID_IDebugDocumentContext, (void**)ppsc );
    }
    return E_FAIL;
+   */
 }
 
 
 HRESULT  __stdcall ScriptDebugger::GetApplication(IDebugApplication **ppda)
 {
-   if (!ppda)
-   {
-      return E_INVALIDARG;
-   }
+	if (!ppda) return E_POINTER;
+	*ppda = NULL;
+	if (!debugApp_) return E_UNEXPECTED;
 
-   if (debugApp_)
-   {
-      ULONG ul = debugApp_->AddRef();
-	  *ppda = debugApp_;
-	  return S_OK;
-   }
-
-   *ppda = 0;
-	return E_FAIL;
+	// return the IDebugApplication interface we created earlier.
+	return debugApp_.queryInterface(ppda);
 }
 
 HRESULT  __stdcall ScriptDebugger::GetRootApplicationNode(IDebugApplicationNode **ppdanRoot)
@@ -1226,6 +1313,9 @@ HRESULT  __stdcall ScriptDebugger::GetRootApplicationNode(IDebugApplicationNode 
    {
       return E_INVALIDARG;
    }
+
+   *ppdanRoot = NULL;
+   return S_OK;
 
    if (debugApp_)
    {

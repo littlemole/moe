@@ -1,18 +1,17 @@
-﻿// Created by Microsoft (R) C/C++ Compiler Version 14.00.50727.762 (027991c9).
+﻿// Created by Microsoft (R) C/C++ Compiler Version 12.00.31101.0 (2b50c2e3).
 //
-// c:\dokumente und einstellungen\mike\eigene dateien\visual studio 2005\projects\f2\f2\debug\fm20.tlh
+// c:\molib\bin\moe\uni_debug\fm20.tlh
 //
-// C++ source equivalent of Win32 type library C:\WINDOWS\system32\fm20.dll
-// compiler-generated file created 02/24/07 at 17:21:37 - DO NOT EDIT!
+// C++ source equivalent of Win32 type library C:\Program Files\Microsoft Office 15\Root\VFS\SystemX86\FM20.DLL
+// compiler-generated file created 07/31/15 at 18:55:59 - DO NOT EDIT!
 
 #pragma once
 #pragma pack(push, 8)
 
-//#include <comdef.h>
+#include <comdef.h>
 
 namespace MSForms {
 
-extern VARIANT vtMissing;
 //
 // Forward references and typedefs
 //
@@ -223,10 +222,105 @@ struct /* coclass */ Page;
 enum fmListBoxStyles;
 enum fmRepeatDirection;
 enum fmEnAutoSize;
+struct /* coclass */ TextBox2;
+struct /* coclass */ CommandButton2;
+struct /* coclass */ Image2;
+struct /* coclass */ Label2;
+struct /* coclass */ ScrollBar2;
+struct /* coclass */ SpinButton2;
+struct /* coclass */ TabStrip2;
+struct /* coclass */ ListBox2;
+struct /* coclass */ ComboBox2;
+struct /* coclass */ CheckBox2;
+struct /* coclass */ OptionButton2;
+struct /* coclass */ ToggleButton2;
+struct /* coclass */ UserForm2;
+struct /* coclass */ Frame2;
+struct /* coclass */ DataObject2;
+struct /* coclass */ MultiPage2;
+struct /* coclass */ HTMLSubmit2;
+struct /* coclass */ HTMLImage2;
+struct /* coclass */ HTMLReset2;
+struct /* coclass */ HTMLCheckbox2;
+struct /* coclass */ HTMLOption2;
+struct /* coclass */ HTMLText2;
+struct /* coclass */ HTMLHidden2;
+struct /* coclass */ HTMLPassword2;
+struct /* coclass */ HTMLSelect2;
+struct /* coclass */ HTMLTextArea2;
 typedef long OLE_COLOR;
 typedef long OLE_HANDLE;
 typedef VARIANT_BOOL OLE_OPTEXCLUSIVE;
 typedef IUnknown * PIROWSET;
+
+//
+// Smart pointer typedef declarations
+//
+
+_COM_SMARTPTR_TYPEDEF(Font, __uuidof(Font));
+_COM_SMARTPTR_TYPEDEF(IDataAutoWrapper, __uuidof(IDataAutoWrapper));
+_COM_SMARTPTR_TYPEDEF(IReturnInteger, __uuidof(IReturnInteger));
+_COM_SMARTPTR_TYPEDEF(IReturnBoolean, __uuidof(IReturnBoolean));
+_COM_SMARTPTR_TYPEDEF(IReturnString, __uuidof(IReturnString));
+_COM_SMARTPTR_TYPEDEF(IReturnSingle, __uuidof(IReturnSingle));
+_COM_SMARTPTR_TYPEDEF(IReturnEffect, __uuidof(IReturnEffect));
+_COM_SMARTPTR_TYPEDEF(IControl, __uuidof(IControl));
+_COM_SMARTPTR_TYPEDEF(ControlEvents, __uuidof(ControlEvents));
+_COM_SMARTPTR_TYPEDEF(Controls, __uuidof(Controls));
+_COM_SMARTPTR_TYPEDEF(IOptionFrame, __uuidof(IOptionFrame));
+_COM_SMARTPTR_TYPEDEF(_UserForm, __uuidof(_UserForm));
+_COM_SMARTPTR_TYPEDEF(FormEvents, __uuidof(FormEvents));
+_COM_SMARTPTR_TYPEDEF(OptionFrameEvents, __uuidof(OptionFrameEvents));
+_COM_SMARTPTR_TYPEDEF(ILabelControl, __uuidof(ILabelControl));
+_COM_SMARTPTR_TYPEDEF(ICommandButton, __uuidof(ICommandButton));
+_COM_SMARTPTR_TYPEDEF(IMdcText, __uuidof(IMdcText));
+_COM_SMARTPTR_TYPEDEF(IMdcList, __uuidof(IMdcList));
+_COM_SMARTPTR_TYPEDEF(IMdcCombo, __uuidof(IMdcCombo));
+_COM_SMARTPTR_TYPEDEF(IMdcCheckBox, __uuidof(IMdcCheckBox));
+_COM_SMARTPTR_TYPEDEF(IMdcOptionButton, __uuidof(IMdcOptionButton));
+_COM_SMARTPTR_TYPEDEF(IMdcToggleButton, __uuidof(IMdcToggleButton));
+_COM_SMARTPTR_TYPEDEF(IScrollbar, __uuidof(IScrollbar));
+_COM_SMARTPTR_TYPEDEF(Tab, __uuidof(Tab));
+_COM_SMARTPTR_TYPEDEF(Tabs, __uuidof(Tabs));
+_COM_SMARTPTR_TYPEDEF(ITabStrip, __uuidof(ITabStrip));
+_COM_SMARTPTR_TYPEDEF(ISpinbutton, __uuidof(ISpinbutton));
+_COM_SMARTPTR_TYPEDEF(IImage, __uuidof(IImage));
+_COM_SMARTPTR_TYPEDEF(IWHTMLSubmitButton, __uuidof(IWHTMLSubmitButton));
+_COM_SMARTPTR_TYPEDEF(IWHTMLImage, __uuidof(IWHTMLImage));
+_COM_SMARTPTR_TYPEDEF(IWHTMLReset, __uuidof(IWHTMLReset));
+_COM_SMARTPTR_TYPEDEF(IWHTMLCheckbox, __uuidof(IWHTMLCheckbox));
+_COM_SMARTPTR_TYPEDEF(IWHTMLOption, __uuidof(IWHTMLOption));
+_COM_SMARTPTR_TYPEDEF(IWHTMLText, __uuidof(IWHTMLText));
+_COM_SMARTPTR_TYPEDEF(IWHTMLHidden, __uuidof(IWHTMLHidden));
+_COM_SMARTPTR_TYPEDEF(IWHTMLPassword, __uuidof(IWHTMLPassword));
+_COM_SMARTPTR_TYPEDEF(IWHTMLSelect, __uuidof(IWHTMLSelect));
+_COM_SMARTPTR_TYPEDEF(IWHTMLTextArea, __uuidof(IWHTMLTextArea));
+_COM_SMARTPTR_TYPEDEF(LabelControlEvents, __uuidof(LabelControlEvents));
+_COM_SMARTPTR_TYPEDEF(CommandButtonEvents, __uuidof(CommandButtonEvents));
+_COM_SMARTPTR_TYPEDEF(MdcTextEvents, __uuidof(MdcTextEvents));
+_COM_SMARTPTR_TYPEDEF(MdcListEvents, __uuidof(MdcListEvents));
+_COM_SMARTPTR_TYPEDEF(MdcComboEvents, __uuidof(MdcComboEvents));
+_COM_SMARTPTR_TYPEDEF(MdcCheckBoxEvents, __uuidof(MdcCheckBoxEvents));
+_COM_SMARTPTR_TYPEDEF(MdcOptionButtonEvents, __uuidof(MdcOptionButtonEvents));
+_COM_SMARTPTR_TYPEDEF(MdcToggleButtonEvents, __uuidof(MdcToggleButtonEvents));
+_COM_SMARTPTR_TYPEDEF(ScrollbarEvents, __uuidof(ScrollbarEvents));
+_COM_SMARTPTR_TYPEDEF(TabStripEvents, __uuidof(TabStripEvents));
+_COM_SMARTPTR_TYPEDEF(SpinbuttonEvents, __uuidof(SpinbuttonEvents));
+_COM_SMARTPTR_TYPEDEF(ImageEvents, __uuidof(ImageEvents));
+_COM_SMARTPTR_TYPEDEF(WHTMLControlEvents, __uuidof(WHTMLControlEvents));
+_COM_SMARTPTR_TYPEDEF(WHTMLControlEvents1, __uuidof(WHTMLControlEvents1));
+_COM_SMARTPTR_TYPEDEF(WHTMLControlEvents2, __uuidof(WHTMLControlEvents2));
+_COM_SMARTPTR_TYPEDEF(WHTMLControlEvents3, __uuidof(WHTMLControlEvents3));
+_COM_SMARTPTR_TYPEDEF(WHTMLControlEvents4, __uuidof(WHTMLControlEvents4));
+_COM_SMARTPTR_TYPEDEF(WHTMLControlEvents5, __uuidof(WHTMLControlEvents5));
+_COM_SMARTPTR_TYPEDEF(WHTMLControlEvents6, __uuidof(WHTMLControlEvents6));
+_COM_SMARTPTR_TYPEDEF(WHTMLControlEvents7, __uuidof(WHTMLControlEvents7));
+_COM_SMARTPTR_TYPEDEF(WHTMLControlEvents9, __uuidof(WHTMLControlEvents9));
+_COM_SMARTPTR_TYPEDEF(WHTMLControlEvents10, __uuidof(WHTMLControlEvents10));
+_COM_SMARTPTR_TYPEDEF(IPage, __uuidof(IPage));
+_COM_SMARTPTR_TYPEDEF(MultiPageEvents, __uuidof(MultiPageEvents));
+_COM_SMARTPTR_TYPEDEF(Pages, __uuidof(Pages));
+_COM_SMARTPTR_TYPEDEF(IMultiPage, __uuidof(IMultiPage));
 
 //
 // Type library items
@@ -234,29 +328,7 @@ typedef IUnknown * PIROWSET;
 
 struct __declspec(uuid("bef6e003-a874-101a-8bba-00aa00300cab"))
 Font : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Properties:
-    HRESULT get_Name ( BSTR * _presult );
-    HRESULT put_Name ( BSTR _val );
-    HRESULT get_Size ( CURRENCY * _presult );
-    HRESULT put_Size ( const CURRENCY & _val );
-    HRESULT get_Bold ( VARIANT_BOOL * _presult );
-    HRESULT put_Bold ( VARIANT_BOOL _val );
-    HRESULT get_Italic ( VARIANT_BOOL * _presult );
-    HRESULT put_Italic ( VARIANT_BOOL _val );
-    HRESULT get_Underline ( VARIANT_BOOL * _presult );
-    HRESULT put_Underline ( VARIANT_BOOL _val );
-    HRESULT get_Strikethrough ( VARIANT_BOOL * _presult );
-    HRESULT put_Strikethrough ( VARIANT_BOOL _val );
-    HRESULT get_Weight ( short * _presult );
-    HRESULT put_Weight ( short _val );
-    HRESULT get_Charset ( short * _presult );
-    HRESULT put_Charset ( short _val );
-};
+{};
 
 enum __declspec(uuid("10bb4720-f797-11ce-b9ec-00aa006b1a69"))
 fmDropEffect
@@ -709,19 +781,7 @@ IControl : IDispatch
 
 struct __declspec(uuid("9a4bbf53-4e46-101b-8bbd-00aa003e3b29"))
 ControlEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void Enter ( );
-   void Exit (
-        /*[in]*/ struct IReturnBoolean * Cancel );
-   void BeforeUpdate (
-        /*[in]*/ struct IReturnBoolean * Cancel );
-   void AfterUpdate ( );
-};
+{};
 
 struct __declspec(uuid("909e0ae0-16dc-11ce-9e98-00aa00574a4f"))
 Control;
@@ -980,155 +1040,11 @@ _UserForm : IOptionFrame
 
 struct __declspec(uuid("5b9d8fc8-4a71-101b-97a6-00000b65c08b"))
 FormEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void AddControl (
-        /*[in]*/ struct IControl * Control );
-   void BeforeDragOver (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IControl * Control,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ enum fmDragState State,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void BeforeDropOrPaste (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IControl * Control,
-        /*[in]*/ enum fmAction Action,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void Click ( );
-   void DblClick (
-        /*[in]*/ struct IReturnBoolean * Cancel );
-   void Error (
-        /*[in]*/ short Number,
-        /*[in]*/ struct IReturnString * Description,
-        /*[in]*/ long SCode,
-        /*[in]*/ BSTR Source,
-        /*[in]*/ BSTR HelpFile,
-        /*[in]*/ long HelpContext,
-        /*[in]*/ struct IReturnBoolean * CancelDisplay );
-   void KeyDown (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void KeyPress (
-        /*[in]*/ struct IReturnInteger * KeyAscii );
-   void KeyUp (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void Layout ( );
-   void MouseDown (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseMove (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseUp (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void RemoveControl (
-        /*[in]*/ struct IControl * Control );
-   void Scroll (
-        /*[in]*/ enum fmScrollAction ActionX,
-        /*[in]*/ enum fmScrollAction ActionY,
-        /*[in]*/ float RequestDx,
-        /*[in]*/ float RequestDy,
-        /*[in]*/ struct IReturnSingle * ActualDx,
-        /*[in]*/ struct IReturnSingle * ActualDy );
-   void Zoom (
-        /*[in,out]*/ short * Percent );
-};
+{};
 
 struct __declspec(uuid("cf3f94a0-f546-11ce-9bce-00aa00608e01"))
 OptionFrameEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void AddControl (
-        /*[in]*/ struct IControl * Control );
-   void BeforeDragOver (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IControl * Control,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ enum fmDragState State,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void BeforeDropOrPaste (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IControl * Control,
-        /*[in]*/ enum fmAction Action,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void Click ( );
-   void DblClick (
-        /*[in]*/ struct IReturnBoolean * Cancel );
-   void Error (
-        /*[in]*/ short Number,
-        /*[in]*/ struct IReturnString * Description,
-        /*[in]*/ long SCode,
-        /*[in]*/ BSTR Source,
-        /*[in]*/ BSTR HelpFile,
-        /*[in]*/ long HelpContext,
-        /*[in]*/ struct IReturnBoolean * CancelDisplay );
-   void KeyDown (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void KeyPress (
-        /*[in]*/ struct IReturnInteger * KeyAscii );
-   void KeyUp (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void Layout ( );
-   void MouseDown (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseMove (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseUp (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void RemoveControl (
-        /*[in]*/ struct IControl * Control );
-   void Scroll (
-        /*[in]*/ enum fmScrollAction ActionX,
-        /*[in]*/ enum fmScrollAction ActionY,
-        /*[in]*/ float RequestDx,
-        /*[in]*/ float RequestDy,
-        /*[in]*/ struct IReturnSingle * ActualDx,
-        /*[in]*/ struct IReturnSingle * ActualDy );
-   void Zoom (
-        /*[in,out]*/ short * Percent );
-};
+{};
 
 struct __declspec(uuid("c62a69f0-16dc-11ce-9e98-00aa00574a4f"))
 UserForm;
@@ -2995,55 +2911,7 @@ IWHTMLTextArea : IDispatch
 
 struct __declspec(uuid("978c9e22-d4b0-11ce-bf2d-00aa003f40d0"))
 LabelControlEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void BeforeDragOver (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ enum fmDragState DragState,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void BeforeDropOrPaste (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ enum fmAction Action,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void Click ( );
-   void DblClick (
-        /*[in]*/ struct IReturnBoolean * Cancel );
-   void Error (
-        /*[in]*/ short Number,
-        /*[in]*/ struct IReturnString * Description,
-        /*[in]*/ long SCode,
-        /*[in]*/ BSTR Source,
-        /*[in]*/ BSTR HelpFile,
-        /*[in]*/ long HelpContext,
-        /*[in]*/ struct IReturnBoolean * CancelDisplay );
-   void MouseDown (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseMove (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseUp (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-};
+{};
 
 struct __declspec(uuid("978c9e23-d4b0-11ce-bf2d-00aa003f40d0"))
 Label;
@@ -3052,63 +2920,7 @@ Label;
 
 struct __declspec(uuid("7b020ec1-af6c-11ce-9f46-00aa00574a4f"))
 CommandButtonEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void BeforeDragOver (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ enum fmDragState DragState,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void BeforeDropOrPaste (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ enum fmAction Action,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void Click ( );
-   void DblClick (
-        /*[in]*/ struct IReturnBoolean * Cancel );
-   void Error (
-        /*[in]*/ short Number,
-        /*[in]*/ struct IReturnString * Description,
-        /*[in]*/ long SCode,
-        /*[in]*/ BSTR Source,
-        /*[in]*/ BSTR HelpFile,
-        /*[in]*/ long HelpContext,
-        /*[in]*/ struct IReturnBoolean * CancelDisplay );
-   void KeyDown (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void KeyPress (
-        /*[in]*/ struct IReturnInteger * KeyAscii );
-   void KeyUp (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void MouseDown (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseMove (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseUp (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-};
+{};
 
 struct __declspec(uuid("d7053240-ce69-11cd-a777-00dd01143c57"))
 CommandButton;
@@ -3117,64 +2929,7 @@ CommandButton;
 
 struct __declspec(uuid("8bd21d12-ec42-11ce-9e0d-00aa006002f3"))
 MdcTextEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void BeforeDragOver (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ enum fmDragState DragState,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void BeforeDropOrPaste (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ enum fmAction Action,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void Change ( );
-   void DblClick (
-        /*[in]*/ struct IReturnBoolean * Cancel );
-   void DropButtonClick ( );
-   void Error (
-        /*[in]*/ short Number,
-        /*[in]*/ struct IReturnString * Description,
-        /*[in]*/ long SCode,
-        /*[in]*/ BSTR Source,
-        /*[in]*/ BSTR HelpFile,
-        /*[in]*/ long HelpContext,
-        /*[in]*/ struct IReturnBoolean * CancelDisplay );
-   void KeyDown (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void KeyPress (
-        /*[in]*/ struct IReturnInteger * KeyAscii );
-   void KeyUp (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void MouseDown (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseMove (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseUp (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-};
+{};
 
 struct __declspec(uuid("8bd21d10-ec42-11ce-9e0d-00aa006002f3"))
 TextBox;
@@ -3183,64 +2938,7 @@ TextBox;
 
 struct __declspec(uuid("8bd21d22-ec42-11ce-9e0d-00aa006002f3"))
 MdcListEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void BeforeDragOver (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ enum fmDragState DragState,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void BeforeDropOrPaste (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ enum fmAction Action,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void Change ( );
-   void Click ( );
-   void DblClick (
-        /*[in]*/ struct IReturnBoolean * Cancel );
-   void Error (
-        /*[in]*/ short Number,
-        /*[in]*/ struct IReturnString * Description,
-        /*[in]*/ long SCode,
-        /*[in]*/ BSTR Source,
-        /*[in]*/ BSTR HelpFile,
-        /*[in]*/ long HelpContext,
-        /*[in]*/ struct IReturnBoolean * CancelDisplay );
-   void KeyDown (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void KeyPress (
-        /*[in]*/ struct IReturnInteger * KeyAscii );
-   void KeyUp (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void MouseDown (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseMove (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseUp (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-};
+{};
 
 struct __declspec(uuid("8bd21d20-ec42-11ce-9e0d-00aa006002f3"))
 ListBox;
@@ -3249,65 +2947,7 @@ ListBox;
 
 struct __declspec(uuid("8bd21d32-ec42-11ce-9e0d-00aa006002f3"))
 MdcComboEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void BeforeDragOver (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ enum fmDragState DragState,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void BeforeDropOrPaste (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ enum fmAction Action,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void Change ( );
-   void Click ( );
-   void DblClick (
-        /*[in]*/ struct IReturnBoolean * Cancel );
-   void DropButtonClick ( );
-   void Error (
-        /*[in]*/ short Number,
-        /*[in]*/ struct IReturnString * Description,
-        /*[in]*/ long SCode,
-        /*[in]*/ BSTR Source,
-        /*[in]*/ BSTR HelpFile,
-        /*[in]*/ long HelpContext,
-        /*[in]*/ struct IReturnBoolean * CancelDisplay );
-   void KeyDown (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void KeyPress (
-        /*[in]*/ struct IReturnInteger * KeyAscii );
-   void KeyUp (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void MouseDown (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseMove (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseUp (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-};
+{};
 
 struct __declspec(uuid("8bd21d30-ec42-11ce-9e0d-00aa006002f3"))
 ComboBox;
@@ -3316,186 +2956,15 @@ ComboBox;
 
 struct __declspec(uuid("8bd21d42-ec42-11ce-9e0d-00aa006002f3"))
 MdcCheckBoxEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void BeforeDragOver (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ enum fmDragState DragState,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void BeforeDropOrPaste (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ enum fmAction Action,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void Change ( );
-   void Click ( );
-   void DblClick (
-        /*[in]*/ struct IReturnBoolean * Cancel );
-   void Error (
-        /*[in]*/ short Number,
-        /*[in]*/ struct IReturnString * Description,
-        /*[in]*/ long SCode,
-        /*[in]*/ BSTR Source,
-        /*[in]*/ BSTR HelpFile,
-        /*[in]*/ long HelpContext,
-        /*[in]*/ struct IReturnBoolean * CancelDisplay );
-   void KeyDown (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void KeyPress (
-        /*[in]*/ struct IReturnInteger * KeyAscii );
-   void KeyUp (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void MouseDown (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseMove (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseUp (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-};
+{};
 
 struct __declspec(uuid("8bd21d52-ec42-11ce-9e0d-00aa006002f3"))
 MdcOptionButtonEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void BeforeDragOver (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ enum fmDragState DragState,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void BeforeDropOrPaste (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ enum fmAction Action,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void Change ( );
-   void Click ( );
-   void DblClick (
-        /*[in]*/ struct IReturnBoolean * Cancel );
-   void Error (
-        /*[in]*/ short Number,
-        /*[in]*/ struct IReturnString * Description,
-        /*[in]*/ long SCode,
-        /*[in]*/ BSTR Source,
-        /*[in]*/ BSTR HelpFile,
-        /*[in]*/ long HelpContext,
-        /*[in]*/ struct IReturnBoolean * CancelDisplay );
-   void KeyDown (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void KeyPress (
-        /*[in]*/ struct IReturnInteger * KeyAscii );
-   void KeyUp (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void MouseDown (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseMove (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseUp (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-};
+{};
 
 struct __declspec(uuid("8bd21d62-ec42-11ce-9e0d-00aa006002f3"))
 MdcToggleButtonEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void BeforeDragOver (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ enum fmDragState DragState,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void BeforeDropOrPaste (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ enum fmAction Action,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void Change ( );
-   void Click ( );
-   void DblClick (
-        /*[in]*/ struct IReturnBoolean * Cancel );
-   void Error (
-        /*[in]*/ short Number,
-        /*[in]*/ struct IReturnString * Description,
-        /*[in]*/ long SCode,
-        /*[in]*/ BSTR Source,
-        /*[in]*/ BSTR HelpFile,
-        /*[in]*/ long HelpContext,
-        /*[in]*/ struct IReturnBoolean * CancelDisplay );
-   void KeyDown (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void KeyPress (
-        /*[in]*/ struct IReturnInteger * KeyAscii );
-   void KeyUp (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void MouseDown (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseMove (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseUp (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-};
+{};
 
 struct __declspec(uuid("8bd21d40-ec42-11ce-9e0d-00aa006002f3"))
 CheckBox;
@@ -3519,47 +2988,7 @@ NewFont;
 
 struct __declspec(uuid("7b020ec2-af6c-11ce-9f46-00aa00574a4f"))
 ScrollbarEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void BeforeDragOver (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ enum fmDragState DragState,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void BeforeDropOrPaste (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ enum fmAction Action,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void Change ( );
-   void Error (
-        /*[in]*/ short Number,
-        /*[in]*/ struct IReturnString * Description,
-        /*[in]*/ long SCode,
-        /*[in]*/ BSTR Source,
-        /*[in]*/ BSTR HelpFile,
-        /*[in]*/ long HelpContext,
-        /*[in]*/ struct IReturnBoolean * CancelDisplay );
-   void KeyDown (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void KeyPress (
-        /*[in]*/ struct IReturnInteger * KeyAscii );
-   void KeyUp (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void Scroll ( );
-};
+{};
 
 struct __declspec(uuid("dfd181e0-5e2f-11ce-a449-00aa004a803d"))
 ScrollBar;
@@ -3568,71 +2997,7 @@ ScrollBar;
 
 struct __declspec(uuid("7b020ec7-af6c-11ce-9f46-00aa00574a4f"))
 TabStripEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void BeforeDragOver (
-        /*[in]*/ long Index,
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ enum fmDragState DragState,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void BeforeDropOrPaste (
-        /*[in]*/ long Index,
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ enum fmAction Action,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void Change ( );
-   void Click (
-        /*[in]*/ long Index );
-   void DblClick (
-        /*[in]*/ long Index,
-        /*[in]*/ struct IReturnBoolean * Cancel );
-   void Error (
-        /*[in]*/ short Number,
-        /*[in]*/ struct IReturnString * Description,
-        /*[in]*/ long SCode,
-        /*[in]*/ BSTR Source,
-        /*[in]*/ BSTR HelpFile,
-        /*[in]*/ long HelpContext,
-        /*[in]*/ struct IReturnBoolean * CancelDisplay );
-   void KeyDown (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void KeyPress (
-        /*[in]*/ struct IReturnInteger * KeyAscii );
-   void KeyUp (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void MouseDown (
-        /*[in]*/ long Index,
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseMove (
-        /*[in]*/ long Index,
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseUp (
-        /*[in]*/ long Index,
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-};
+{};
 
 struct __declspec(uuid("eae50eb0-4a62-11ce-bed6-00aa00611080"))
 TabStrip;
@@ -3641,48 +3006,7 @@ TabStrip;
 
 struct __declspec(uuid("79176fb2-b7f2-11ce-97ef-00aa006d2776"))
 SpinbuttonEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void BeforeDragOver (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ enum fmDragState DragState,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void BeforeDropOrPaste (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ enum fmAction Action,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void Change ( );
-   void Error (
-        /*[in]*/ short Number,
-        /*[in]*/ struct IReturnString * Description,
-        /*[in]*/ long SCode,
-        /*[in]*/ BSTR Source,
-        /*[in]*/ BSTR HelpFile,
-        /*[in]*/ long HelpContext,
-        /*[in]*/ struct IReturnBoolean * CancelDisplay );
-   void KeyDown (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void KeyPress (
-        /*[in]*/ struct IReturnInteger * KeyAscii );
-   void KeyUp (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void SpinUp ( );
-   void SpinDown ( );
-};
+{};
 
 struct __declspec(uuid("79176fb0-b7f2-11ce-97ef-00aa006d2776"))
 SpinButton;
@@ -3691,55 +3015,7 @@ SpinButton;
 
 struct __declspec(uuid("4c5992a5-6926-101b-9992-00000b65c6f9"))
 ImageEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void BeforeDragOver (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ enum fmDragState DragState,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void BeforeDropOrPaste (
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ enum fmAction Action,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void Click ( );
-   void DblClick (
-        /*[in]*/ struct IReturnBoolean * Cancel );
-   void Error (
-        /*[in]*/ short Number,
-        /*[in]*/ struct IReturnString * Description,
-        /*[in]*/ long SCode,
-        /*[in]*/ BSTR Source,
-        /*[in]*/ BSTR HelpFile,
-        /*[in]*/ long HelpContext,
-        /*[in]*/ struct IReturnBoolean * CancelDisplay );
-   void MouseDown (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseMove (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseUp (
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-};
+{};
 
 struct __declspec(uuid("4c599241-6926-101b-9992-00000b65c6f9"))
 Image;
@@ -3748,113 +3024,43 @@ Image;
 
 struct __declspec(uuid("796ed650-5fe9-11cf-8d68-00aa00bdce1d"))
 WHTMLControlEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void Click ( );
-};
+{};
 
 struct __declspec(uuid("47ff8fe0-6198-11cf-8ce8-00aa006cb389"))
 WHTMLControlEvents1 : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void Click ( );
-};
+{};
 
 struct __declspec(uuid("47ff8fe1-6198-11cf-8ce8-00aa006cb389"))
 WHTMLControlEvents2 : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void Click ( );
-};
+{};
 
 struct __declspec(uuid("47ff8fe2-6198-11cf-8ce8-00aa006cb389"))
 WHTMLControlEvents3 : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void Click ( );
-};
+{};
 
 struct __declspec(uuid("47ff8fe3-6198-11cf-8ce8-00aa006cb389"))
 WHTMLControlEvents4 : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void Click ( );
-};
+{};
 
 struct __declspec(uuid("47ff8fe4-6198-11cf-8ce8-00aa006cb389"))
 WHTMLControlEvents5 : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void Click ( );
-};
+{};
 
 struct __declspec(uuid("47ff8fe5-6198-11cf-8ce8-00aa006cb389"))
 WHTMLControlEvents6 : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void Click ( );
-};
+{};
 
 struct __declspec(uuid("47ff8fe6-6198-11cf-8ce8-00aa006cb389"))
 WHTMLControlEvents7 : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void Click ( );
-};
+{};
 
 struct __declspec(uuid("47ff8fe8-6198-11cf-8ce8-00aa006cb389"))
 WHTMLControlEvents9 : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void Click ( );
-};
+{};
 
 struct __declspec(uuid("47ff8fe9-6198-11cf-8ce8-00aa006cb389"))
 WHTMLControlEvents10 : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void Click ( );
-};
+{};
 
 struct __declspec(uuid("5512d110-5cc6-11cf-8d67-00aa00bdce1d"))
 HTMLSubmit;
@@ -4109,93 +3315,7 @@ IPage : IDispatch
 
 struct __declspec(uuid("7b020ec8-af6c-11ce-9f46-00aa00574a4f"))
 MultiPageEvents : IDispatch
-{
-    //
-    // Wrapper methods
-    //
-
-    // Methods:
-   void AddControl (
-        /*[in]*/ long Index,
-        /*[in]*/ struct IControl * Control );
-   void BeforeDragOver (
-        /*[in]*/ long Index,
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IControl * Control,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ enum fmDragState State,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void BeforeDropOrPaste (
-        /*[in]*/ long Index,
-        /*[in]*/ struct IReturnBoolean * Cancel,
-        /*[in]*/ struct IControl * Control,
-        /*[in]*/ enum fmAction Action,
-        /*[in]*/ struct IDataAutoWrapper * Data,
-        /*[in]*/ float X,
-        /*[in]*/ float Y,
-        /*[in]*/ struct IReturnEffect * Effect,
-        /*[in]*/ short Shift );
-   void Change ( );
-   void Click (
-        /*[in]*/ long Index );
-   void DblClick (
-        /*[in]*/ long Index,
-        /*[in]*/ struct IReturnBoolean * Cancel );
-   void Error (
-        /*[in]*/ long Index,
-        /*[in]*/ short Number,
-        /*[in]*/ struct IReturnString * Description,
-        /*[in]*/ long SCode,
-        /*[in]*/ BSTR Source,
-        /*[in]*/ BSTR HelpFile,
-        /*[in]*/ long HelpContext,
-        /*[in]*/ struct IReturnBoolean * CancelDisplay );
-   void KeyDown (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void KeyPress (
-        /*[in]*/ struct IReturnInteger * KeyAscii );
-   void KeyUp (
-        /*[in]*/ struct IReturnInteger * KeyCode,
-        /*[in]*/ short Shift );
-   void Layout (
-        /*[in]*/ long Index );
-   void MouseDown (
-        /*[in]*/ long Index,
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseMove (
-        /*[in]*/ long Index,
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void MouseUp (
-        /*[in]*/ long Index,
-        /*[in]*/ short Button,
-        /*[in]*/ short Shift,
-        /*[in]*/ float X,
-        /*[in]*/ float Y );
-   void RemoveControl (
-        /*[in]*/ long Index,
-        /*[in]*/ struct IControl * Control );
-   void Scroll (
-        /*[in]*/ long Index,
-        /*[in]*/ enum fmScrollAction ActionX,
-        /*[in]*/ enum fmScrollAction ActionY,
-        /*[in]*/ float RequestDx,
-        /*[in]*/ float RequestDy,
-        /*[in]*/ struct IReturnSingle * ActualDx,
-        /*[in]*/ struct IReturnSingle * ActualDy );
-   void Zoom (
-        /*[in]*/ long Index,
-        /*[in,out]*/ short * Percent );
-};
+{};
 
 struct __declspec(uuid("46e31370-3f7a-11ce-bed6-00aa00611080"))
 MultiPage;
@@ -4363,6 +3483,135 @@ fmEnAutoSize
     _fmEnAutoSizeVertical = 2,
     _fmEnAutoSizeBoth = 3
 };
+
+struct __declspec(uuid("dd4cb8c5-f540-47ff-84d7-67390d2743ca"))
+TextBox2;
+    // [ default ] interface IMdcText
+    // [ default, source ] dispinterface MdcTextEvents
+
+struct __declspec(uuid("86f56b7f-a81b-478d-b231-50fd37cbe761"))
+CommandButton2;
+    // [ default ] interface ICommandButton
+    // [ default, source ] dispinterface CommandButtonEvents
+
+struct __declspec(uuid("dca0ed3c-b95d-490f-9c60-0ff3726c789a"))
+Image2;
+    // [ default ] interface IImage
+    // [ default, source ] dispinterface ImageEvents
+
+struct __declspec(uuid("5052a832-2c0f-46c7-b67c-1f1fec37b280"))
+Label2;
+    // [ default ] interface ILabelControl
+    // [ default, source ] dispinterface LabelControlEvents
+
+struct __declspec(uuid("6240ef28-7eab-4dc7-a5e3-7cfb35efb34d"))
+ScrollBar2;
+    // [ default ] interface IScrollbar
+    // [ default, source ] dispinterface ScrollbarEvents
+
+struct __declspec(uuid("ea778db4-ce69-4da5-bc1d-34e2168d5eed"))
+SpinButton2;
+    // [ default ] interface ISpinbutton
+    // [ default, source ] dispinterface SpinbuttonEvents
+
+struct __declspec(uuid("fdea20db-ac7a-42f8-90ee-82208b9b4fc0"))
+TabStrip2;
+    // [ default ] interface ITabStrip
+    // [ default, source ] dispinterface TabStripEvents
+
+struct __declspec(uuid("19fed08e-efd1-45da-b524-7be4774a6aee"))
+ListBox2;
+    // [ default ] interface IMdcList
+    // [ default, source ] dispinterface MdcListEvents
+
+struct __declspec(uuid("6c177ebd-c42d-4728-a04b-4131892edbf6"))
+ComboBox2;
+    // [ default ] interface IMdcCombo
+    // [ default, source ] dispinterface MdcComboEvents
+
+struct __declspec(uuid("e9729012-8271-4e1f-bc56-cf85f914915a"))
+CheckBox2;
+    // [ default ] interface IMdcCheckBox
+    // [ default, source ] dispinterface MdcCheckBoxEvents
+
+struct __declspec(uuid("02af6dd2-77e6-44df-b3e1-57cf1476d8ea"))
+OptionButton2;
+    // [ default ] interface IMdcOptionButton
+    // [ default, source ] dispinterface MdcOptionButtonEvents
+
+struct __declspec(uuid("3d0fd779-0c2d-4708-a9ba-62f7458a5a53"))
+ToggleButton2;
+    // [ default ] interface IMdcToggleButton
+    // [ default, source ] dispinterface MdcToggleButtonEvents
+
+struct __declspec(uuid("4795051a-6429-4d63-bca0-d706532954ac"))
+UserForm2;
+    // [ default ] interface _UserForm
+    // [ default, source ] dispinterface FormEvents
+
+struct __declspec(uuid("7931f65c-2564-4c19-ae71-e7ddfa008f6a"))
+Frame2;
+    // [ default ] interface IOptionFrame
+    // [ default, source ] dispinterface OptionFrameEvents
+
+struct __declspec(uuid("646be917-efed-46c6-afc9-ca1fbd3c5100"))
+DataObject2;
+    // [ default ] interface IDataAutoWrapper
+
+struct __declspec(uuid("6c1b3099-127a-4be1-93bc-dd4771eeef90"))
+MultiPage2;
+    // [ default ] interface IMultiPage
+    // [ default, source ] dispinterface MultiPageEvents
+
+struct __declspec(uuid("9432194c-df54-4824-8e24-b013bf2b90e3"))
+HTMLSubmit2;
+    // [ default ] interface IWHTMLSubmitButton
+    // [ default, source ] dispinterface WHTMLControlEvents
+
+struct __declspec(uuid("9bdac276-be24-4f04-bb22-11469b28a496"))
+HTMLImage2;
+    // [ default ] interface IWHTMLImage
+    // [ default, source ] dispinterface WHTMLControlEvents1
+
+struct __declspec(uuid("227b1f3b-c276-4de0-9faa-c0ad42addcf0"))
+HTMLReset2;
+    // [ default ] interface IWHTMLReset
+    // [ default, source ] dispinterface WHTMLControlEvents2
+
+struct __declspec(uuid("5cba34ae-e344-40cf-b61d-fba4d0d1ff54"))
+HTMLCheckbox2;
+    // [ default ] interface IWHTMLCheckbox
+    // [ default, source ] dispinterface WHTMLControlEvents3
+
+struct __declspec(uuid("5e90cc8b-e402-4350-82d7-996e92010608"))
+HTMLOption2;
+    // [ default ] interface IWHTMLOption
+    // [ default, source ] dispinterface WHTMLControlEvents4
+
+struct __declspec(uuid("04082fc6-e032-49f2-a263-fe64e9da1fa3"))
+HTMLText2;
+    // [ default ] interface IWHTMLText
+    // [ default, source ] dispinterface WHTMLControlEvents5
+
+struct __declspec(uuid("fb453ad8-2ef4-44d3-98a8-8c6474e63ce4"))
+HTMLHidden2;
+    // [ default ] interface IWHTMLHidden
+    // [ default, source ] dispinterface WHTMLControlEvents6
+
+struct __declspec(uuid("787a2d6b-ef66-488d-a303-513c9c75c344"))
+HTMLPassword2;
+    // [ default ] interface IWHTMLPassword
+    // [ default, source ] dispinterface WHTMLControlEvents7
+
+struct __declspec(uuid("f14e8b03-d080-4d3a-aeba-355e77b20f3d"))
+HTMLSelect2;
+    // [ default ] interface IWHTMLSelect
+    // [ default, source ] dispinterface WHTMLControlEvents9
+
+struct __declspec(uuid("13d557b6-a469-4362-beaf-52bfd0f180e2"))
+HTMLTextArea2;
+    // [ default ] interface IWHTMLTextArea
+    // [ default, source ] dispinterface WHTMLControlEvents10
 
 //
 // Named GUID constants initializations
@@ -4566,6 +3815,58 @@ extern "C" const GUID __declspec(selectany) IID_Pages =
     {0x92e11a03,0x7358,0x11ce,{0x80,0xcb,0x00,0xaa,0x00,0x61,0x10,0x80}};
 extern "C" const GUID __declspec(selectany) IID_IMultiPage =
     {0x04598fc9,0x866c,0x11cf,{0xab,0x7c,0x00,0xaa,0x00,0xc0,0x8f,0xcf}};
+extern "C" const GUID __declspec(selectany) CLSID_TextBox2 =
+    {0xdd4cb8c5,0xf540,0x47ff,{0x84,0xd7,0x67,0x39,0x0d,0x27,0x43,0xca}};
+extern "C" const GUID __declspec(selectany) CLSID_CommandButton2 =
+    {0x86f56b7f,0xa81b,0x478d,{0xb2,0x31,0x50,0xfd,0x37,0xcb,0xe7,0x61}};
+extern "C" const GUID __declspec(selectany) CLSID_Image2 =
+    {0xdca0ed3c,0xb95d,0x490f,{0x9c,0x60,0x0f,0xf3,0x72,0x6c,0x78,0x9a}};
+extern "C" const GUID __declspec(selectany) CLSID_Label2 =
+    {0x5052a832,0x2c0f,0x46c7,{0xb6,0x7c,0x1f,0x1f,0xec,0x37,0xb2,0x80}};
+extern "C" const GUID __declspec(selectany) CLSID_ScrollBar2 =
+    {0x6240ef28,0x7eab,0x4dc7,{0xa5,0xe3,0x7c,0xfb,0x35,0xef,0xb3,0x4d}};
+extern "C" const GUID __declspec(selectany) CLSID_SpinButton2 =
+    {0xea778db4,0xce69,0x4da5,{0xbc,0x1d,0x34,0xe2,0x16,0x8d,0x5e,0xed}};
+extern "C" const GUID __declspec(selectany) CLSID_TabStrip2 =
+    {0xfdea20db,0xac7a,0x42f8,{0x90,0xee,0x82,0x20,0x8b,0x9b,0x4f,0xc0}};
+extern "C" const GUID __declspec(selectany) CLSID_ListBox2 =
+    {0x19fed08e,0xefd1,0x45da,{0xb5,0x24,0x7b,0xe4,0x77,0x4a,0x6a,0xee}};
+extern "C" const GUID __declspec(selectany) CLSID_ComboBox2 =
+    {0x6c177ebd,0xc42d,0x4728,{0xa0,0x4b,0x41,0x31,0x89,0x2e,0xdb,0xf6}};
+extern "C" const GUID __declspec(selectany) CLSID_CheckBox2 =
+    {0xe9729012,0x8271,0x4e1f,{0xbc,0x56,0xcf,0x85,0xf9,0x14,0x91,0x5a}};
+extern "C" const GUID __declspec(selectany) CLSID_OptionButton2 =
+    {0x02af6dd2,0x77e6,0x44df,{0xb3,0xe1,0x57,0xcf,0x14,0x76,0xd8,0xea}};
+extern "C" const GUID __declspec(selectany) CLSID_ToggleButton2 =
+    {0x3d0fd779,0x0c2d,0x4708,{0xa9,0xba,0x62,0xf7,0x45,0x8a,0x5a,0x53}};
+extern "C" const GUID __declspec(selectany) CLSID_UserForm2 =
+    {0x4795051a,0x6429,0x4d63,{0xbc,0xa0,0xd7,0x06,0x53,0x29,0x54,0xac}};
+extern "C" const GUID __declspec(selectany) CLSID_Frame2 =
+    {0x7931f65c,0x2564,0x4c19,{0xae,0x71,0xe7,0xdd,0xfa,0x00,0x8f,0x6a}};
+extern "C" const GUID __declspec(selectany) CLSID_DataObject2 =
+    {0x646be917,0xefed,0x46c6,{0xaf,0xc9,0xca,0x1f,0xbd,0x3c,0x51,0x00}};
+extern "C" const GUID __declspec(selectany) CLSID_MultiPage2 =
+    {0x6c1b3099,0x127a,0x4be1,{0x93,0xbc,0xdd,0x47,0x71,0xee,0xef,0x90}};
+extern "C" const GUID __declspec(selectany) CLSID_HTMLSubmit2 =
+    {0x9432194c,0xdf54,0x4824,{0x8e,0x24,0xb0,0x13,0xbf,0x2b,0x90,0xe3}};
+extern "C" const GUID __declspec(selectany) CLSID_HTMLImage2 =
+    {0x9bdac276,0xbe24,0x4f04,{0xbb,0x22,0x11,0x46,0x9b,0x28,0xa4,0x96}};
+extern "C" const GUID __declspec(selectany) CLSID_HTMLReset2 =
+    {0x227b1f3b,0xc276,0x4de0,{0x9f,0xaa,0xc0,0xad,0x42,0xad,0xdc,0xf0}};
+extern "C" const GUID __declspec(selectany) CLSID_HTMLCheckbox2 =
+    {0x5cba34ae,0xe344,0x40cf,{0xb6,0x1d,0xfb,0xa4,0xd0,0xd1,0xff,0x54}};
+extern "C" const GUID __declspec(selectany) CLSID_HTMLOption2 =
+    {0x5e90cc8b,0xe402,0x4350,{0x82,0xd7,0x99,0x6e,0x92,0x01,0x06,0x08}};
+extern "C" const GUID __declspec(selectany) CLSID_HTMLText2 =
+    {0x04082fc6,0xe032,0x49f2,{0xa2,0x63,0xfe,0x64,0xe9,0xda,0x1f,0xa3}};
+extern "C" const GUID __declspec(selectany) CLSID_HTMLHidden2 =
+    {0xfb453ad8,0x2ef4,0x44d3,{0x98,0xa8,0x8c,0x64,0x74,0xe6,0x3c,0xe4}};
+extern "C" const GUID __declspec(selectany) CLSID_HTMLPassword2 =
+    {0x787a2d6b,0xef66,0x488d,{0xa3,0x03,0x51,0x3c,0x9c,0x75,0xc3,0x44}};
+extern "C" const GUID __declspec(selectany) CLSID_HTMLSelect2 =
+    {0xf14e8b03,0xd080,0x4d3a,{0xae,0xba,0x35,0x5e,0x77,0xb2,0x0f,0x3d}};
+extern "C" const GUID __declspec(selectany) CLSID_HTMLTextArea2 =
+    {0x13d557b6,0xa469,0x4362,{0xbe,0xaf,0x52,0xbf,0xd0,0xf1,0x80,0xe2}};
 
 } // namespace MSForms
 
