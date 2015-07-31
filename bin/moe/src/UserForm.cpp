@@ -541,7 +541,8 @@ HRESULT __stdcall UserForm::InitNew(IStorage *pStg)
 
 HRESULT __stdcall  UserForm::Close()
 {
-	mol::invoke( boost::bind( &UserForm::destroy, this ) );
+	//mol::invoke( boost::bind( &UserForm::destroy, this ) );
+	destroy();
 	return S_OK;
 }
 
