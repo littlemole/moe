@@ -13,7 +13,7 @@ LRESULT DlgBase::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		case WM_INITDIALOG :
 		{
-			return ::CallWindowProc( defProc, hwnd, message, wParam, lParam );
+			return 0;//::CallWindowProc(defProc, hwnd, message, wParam, lParam);
 		}
 		case WM_ERASEBKGND : 
 		{
@@ -86,7 +86,7 @@ LRESULT CALLBACK Dialog::dialogProcedure (HWND hwnd, UINT message, WPARAM wParam
 			Dialog* pThis = (Dialog*)lParam;
 			pThis->subClass(hwnd);
 			dialogs().registerDialog(hwnd);
-            return (BOOL)(pThis->wndProc( hwnd, message,wParam,lParam));
+			return (BOOL)(pThis->wndProc(hwnd, message, wParam, lParam));
         }
         return FALSE;
 }

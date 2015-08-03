@@ -50,7 +50,7 @@ Editor::Instance* Editor::CreateInstance(const std::wstring& file, long enc, boo
 	std::wstring p(file);
 	if ( mol::Path::exists(p) && mol::Path::isDir(p) )
 	{
-		logger(LOGINFO) << "path is directory " << mol::tostring(p);
+		//logger(LOGINFO) << "path is directory " << mol::tostring(p);
 		return 0;
 	}
 

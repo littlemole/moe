@@ -1235,11 +1235,12 @@ void Log::add( Appender* a)
 {
 	appenders_.push_back( appender(a) );
 }
-
+/*
 Logger Log::getLogger(LogLevel level)
 {
 	return Logger(level);
 }
+*/
 
 Log& log()
 {
@@ -1262,10 +1263,12 @@ Logger::~Logger()
    }
 }
 
+/*
 Logger logger(LogLevel level)
 {
 	return log().getLogger(level);
 }
+*/
 
 
 //	std::wstring path = appPath() + _T("\\moe.log");

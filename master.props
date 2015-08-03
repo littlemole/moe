@@ -22,8 +22,8 @@
 
   <PropertyGroup Label="Configuration">
     <PlatformToolset Condition="'$(PlatformToolset)' == '' ">v120</PlatformToolset>
-	<boost Condition=" '$(boost)' == '' ">C:\boost\boost_1_55_0\</boost>
-	<java  Condition=" '$(java)' == '' ">C:\java\jdk8\include\win32;C:\java\jdk8\include;</java>
+	<boost Condition=" '$(boost)' == '' ">E:\boost\boost_1_55_0\</boost>
+	<java  Condition=" '$(java)' == '' ">E:\java\jdk8\include\win32;E:\java\jdk8\include;</java>
 	<UICC Condition="'$(UICC)' == ''">C:\Program Files (x86)\Windows Kits\8.1\bin\x86\uicc.exe</UICC>
 	<Configuration Condition=" '$(Configuration)' == '' ">uni_debug</Configuration>
 	<Platform Condition=" '$(Platform)' == '' ">Win32</Platform>

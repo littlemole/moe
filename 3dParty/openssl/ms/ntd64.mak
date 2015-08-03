@@ -429,7 +429,8 @@ T_EXE=$(TEST_D)\md4test.exe \
 E_SHLIB=
 
 ###################################################################
-all: banner $(TMP_D) $(BIN_D) $(TEST_D) $(LIB_D) $(INCO_D) headers lib exe 
+all: banner $(TMP_D) $(BIN_D) $(TEST_D) $(LIB_D) $(INCO_D) headers lib 
+#exe 
 
 banner:
 	@echo Building OpenSSL

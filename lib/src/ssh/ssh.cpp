@@ -243,7 +243,7 @@ void Session::open(const std::string& host, CredentialCallback* cb , int port )
 		}
 		catch(Ex& ex)
 		{
-			if ( ex.code == SSH_SERVER_NOT_KNOWN )
+			if ( ex.code == SSH_SERVER_NOT_KNOWN || ex.code == SSH_SERVER_FOUND_OTHER)
 			{			
 				if(!cb_)
 					throw Ex(SSH_SERVER_NOT_KNOWN,"server verification failed");
@@ -651,7 +651,7 @@ void Session::verify_knownhost()
 		}
 		case SSH_SERVER_FOUND_OTHER:
 		{
-			dispose();
+			//dispose();
 			throw Ex(SSH_SERVER_FOUND_OTHER,"The host key for this server was not found but an other ype of key exists");
 		}
 		case SSH_SERVER_FILE_NOT_FOUND:

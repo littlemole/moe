@@ -431,6 +431,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	ODBGS("moe startup");
 	ODBGS(lpCmdLine);
 
+	const mol::CodePages& cp = mol::CodePages::instance();
+
 	int result = 0;
 	try {
 		result = mol::run<MoeApp>(lpCmdLine);

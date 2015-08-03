@@ -10,6 +10,49 @@
 
 namespace mol {
 
+CodePages::Entries codePages_;
+
+const CodePages::Entries& CodePages::codePages()
+{
+	return codePages_;
+}
+
+const CodePages::Entry& CodePages::systemDefaultCodePage()
+{
+	static Entry entry(std::make_pair(instance().cpi_.CodePage, instance().cpi_.CodePageName));
+	return entry;
+}
+
+const CodePages::Entry& CodePages::UTF7()
+{
+	return codePages_[CP_UTF7];
+}
+
+const CodePages::Entry& CodePages::UTF8()
+{
+	return codePages_[CP_UTF8];
+}
+
+const CodePages::Entry& CodePages::UTF16()
+{
+	static Entry entry(CP_WINUNICODE, L"1200 (Unicode utf-16)");
+	return entry;
+}
+
+const CodePages::Entry& CodePages::ANSI()
+{
+	static Entry entry(CP_WINANSI, L"Ansi (Windows Default)");
+	return entry;
+}
+
+
+CodePages& CodePages::instance()
+{
+	static CodePages cp;
+	return cp;
+}
+
+
 BOOL CALLBACK CodePages::codePageEnumProc( LPTSTR lpCodePageString)
 {
 	int cp = _wtoi(lpCodePageString);
@@ -18,7 +61,7 @@ BOOL CALLBACK CodePages::codePageEnumProc( LPTSTR lpCodePageString)
 	if ( ::GetCPInfoEx(cp,0,&cpi) )
 	{
 		std::wstring s(cpi.CodePageName);
-		instance().codePages_.insert( std::make_pair(cp,std::make_pair(cp,s)) );
+		codePages_.insert( std::make_pair(cp,std::make_pair(cp,s)) );
 	}
 	return TRUE;
 }

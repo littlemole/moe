@@ -105,10 +105,11 @@ BOOL TaskbarWnd::destroy()
 {
     if (hWnd_ != NULL)
     {
-		tb_->RemoveTab(*this);
+		tb_->RemoveTab(doc);
 		tbl_.release();
-		//::DestroyWindow(hWnd_);		
+		::DestroyWindow(hWnd_);		
 		hWnd_ = NULL;
+		delete this;
     }
 	return TRUE;
 }

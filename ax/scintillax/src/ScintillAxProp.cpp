@@ -143,6 +143,7 @@ LRESULT EncodingDialog::wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 			{
 				ListBox_AddString( list, (*it).second.second.c_str() );
 			}
+			return 0;
 			break;
 		}
 		case WM_COMMAND :

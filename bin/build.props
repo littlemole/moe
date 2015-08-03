@@ -29,6 +29,8 @@
       <DebugInformationFormat></DebugInformationFormat>
       <WholeProgramOptimization>false</WholeProgramOptimization>
 	  <PrecompiledHeader>Use</PrecompiledHeader>
+    <AdditionalOptions>-Zm123</AdditionalOptions>
+    
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>

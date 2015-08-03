@@ -98,7 +98,7 @@ int StatusBarEx::setText( const std::wstring& txt)
 {
 	parts_.clear();
 	parts_.push_back(txt);
-	sendMessage(  SB_SETTEXT, 0, (LPARAM) txt.c_str() );	
+	sendMessage(  SB_SETTEXT, 0, (LPARAM)(parts_[0].c_str()) );
 	resizeStatusbar();
 	return 0;
 }
@@ -108,8 +108,8 @@ int StatusBarEx::setText( const std::wstring& txt1, const std::wstring& txt2)
 	parts_.clear();
 	parts_.push_back(txt1);
 	parts_.push_back(txt2);
-	sendMessage(  SB_SETTEXT, 0, (LPARAM) txt1.c_str() );	
-	sendMessage(  SB_SETTEXT, 1, (LPARAM) txt2.c_str() );	
+	sendMessage(  SB_SETTEXT, 0, (LPARAM)(parts_[0].c_str()));
+	sendMessage(  SB_SETTEXT, 1, (LPARAM)(parts_[1].c_str()));
 	resizeStatusbar();
 	return 0;
 }
@@ -120,9 +120,9 @@ int StatusBarEx::setText( const std::wstring& txt1, const std::wstring& txt2, co
 	parts_.push_back(txt1);
 	parts_.push_back(txt2);
 	parts_.push_back(txt3);
-	sendMessage(  SB_SETTEXT, 0, (LPARAM) txt1.c_str() );	
-	sendMessage(  SB_SETTEXT, 1, (LPARAM) txt2.c_str() );	
-	sendMessage(  SB_SETTEXT, 2, (LPARAM) txt3.c_str() );	
+	sendMessage(  SB_SETTEXT, 0, (LPARAM)(parts_[0].c_str()));
+	sendMessage(  SB_SETTEXT, 1, (LPARAM)(parts_[1].c_str()));
+	sendMessage(  SB_SETTEXT, 2, (LPARAM)(parts_[2].c_str()));
 	resizeStatusbar();
 	return 0;
 }
@@ -134,10 +134,10 @@ int StatusBarEx::setText( const std::wstring& txt1, const std::wstring& txt2, co
 	parts_.push_back(txt2);
 	parts_.push_back(txt3);
 	parts_.push_back(txt4);
-	sendMessage(  SB_SETTEXT, 0, (LPARAM) txt1.c_str() );	
-	sendMessage(  SB_SETTEXT, 1, (LPARAM) txt2.c_str() );	
-	sendMessage(  SB_SETTEXT, 2, (LPARAM) txt3.c_str() );	
-	sendMessage(  SB_SETTEXT, 3, (LPARAM) txt4.c_str() );	
+	sendMessage(  SB_SETTEXT, 0, (LPARAM)(parts_[0].c_str()));
+	sendMessage(  SB_SETTEXT, 1, (LPARAM)(parts_[1].c_str()));
+	sendMessage(  SB_SETTEXT, 2, (LPARAM)(parts_[2].c_str()));
+	sendMessage(  SB_SETTEXT, 3, (LPARAM)(parts_[3].c_str()));
 	resizeStatusbar();
 	return 0;
 }

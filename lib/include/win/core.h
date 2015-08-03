@@ -254,7 +254,7 @@ protected:
             if ( p )
 			{
                 (*p)();
-
+				delete p;
 			}
         }
     }

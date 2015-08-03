@@ -273,8 +273,7 @@ class OleCtrlBase :
 public:
 
 	OleCtrlBase();
-	virtual ~OleCtrlBase() 
-	{};
+	virtual ~OleCtrlBase();
 
 	// IOleWIndow
     virtual HRESULT __stdcall GetWindow( HWND *phwnd);
@@ -348,6 +347,9 @@ protected:
 	{
 	public:	
 
+		virtual ~OleInPlaceActiveObjBase() {
+
+		}
 		virtual void dispose() {}
 
 		virtual HRESULT __stdcall GetWindow( HWND *phwnd);
@@ -368,6 +370,10 @@ protected:
 		OleInPlaceActiveObj(OleCtrlBase* ctrl) 
 		{ 
 			ctrl_ = ctrl; 
+		}
+
+		virtual ~OleInPlaceActiveObj() {
+
 		}
 	};
 

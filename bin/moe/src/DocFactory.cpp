@@ -406,7 +406,7 @@ IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const std::wstr
 		{
 			return openSSHfactory(path);
 		}
-		logger(LOGINFO) << "path does not exist : " << mol::tostring(path);
+		//logger(LOGINFO) << "path does not exist : " << mol::tostring(path);
 		return 0;
 	}
 
@@ -542,7 +542,7 @@ HRESULT __stdcall  DocFactory::openDocument( const std::wstring& p, MOE_DOCTYPE 
 	mol::MdiChild* mdi = factory->openDocument( path );
 	if (!mdi)
 	{
-		logger(LOGINFO) << "failed to load " << mol::tostring(path);
+		//logger(LOGINFO) << "failed to load " << mol::tostring(path);
 		// failed to load
 		if ( moe()->activeObject)
 			moe()->activeObject->OnDocWindowActivate(TRUE);
@@ -562,7 +562,7 @@ HRESULT __stdcall  DocFactory::openDocument( const std::wstring& p, MOE_DOCTYPE 
 			std::wstring str = oss.str();
 			statusBar()->status( str );
 
-			logger(LOGINFO) << mol::tostring(str);
+			//logger(LOGINFO) << mol::tostring(str);
 		}
 		else
 		{

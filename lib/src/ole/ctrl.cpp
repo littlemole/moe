@@ -535,6 +535,12 @@ OleCtrlBase::OleCtrlBase()
 	holemenu_ = 0;
 };
 
+OleCtrlBase::~OleCtrlBase()
+{
+
+}
+
+
 void OleCtrlBase::addEditMenu(const std::wstring& title, HMENU menu)
 {
 	editMenus_.push_back(std::make_pair(title,menu));
@@ -1002,12 +1008,12 @@ HRESULT OleCtrlBase::uiActivate()
 
 	if ( frame_ )
 	{
-		active_->AddRef();
+		//active_->AddRef();
 		frame_->SetActiveObject((active_),0);
 	}
 	if ( uiWnd_ )
 	{
-		active_->AddRef();
+		//active_->AddRef();
 		uiWnd_->SetActiveObject((active_),0);
 	}
 	

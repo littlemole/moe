@@ -16,6 +16,8 @@
 // scintilla control DLL impl
 ///////////////////////////////////////////////////////////////////////////////////
 
+
+
 class scintillaDll : 
 	public mol::Dll,
 	public mol::exports_aggregable<scintillaDll,ScintillAx>,
@@ -26,7 +28,8 @@ class scintillaDll :
 public:
 	scintillaDll() : si(mol::hinstance()) // brings in scintilla lib
 	{
-		::load_codegen_metadata();
+		mol::CodePages& cp = mol::CodePages::instance();
+		::load_codegen_metadata();		
 	}
 
 private:

@@ -188,6 +188,11 @@ public:
 		{
 			col_ = (OLE_COLOR)RGB(255,125,75);
 		}
+		
+		~ColorDlg()
+		{
+			ODBGS("ColorDlg died");
+		}
 
 		HRESULT virtual __stdcall put_Color( OLE_COLOR col)
 		{

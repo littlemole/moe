@@ -422,7 +422,7 @@ public:
 	{
 		T* wnd = (T*)This;
 		LRESULT result = params_.invoke(wnd, ptr_, msg, wParam, lParam);
-		wnd->BaseWindowType::wndProc(*This, msg, wParam, lParam);
+		//wnd->BaseWindowType::wndProc(*This, msg, wParam, lParam);
 		return result;
 	}
 

@@ -5,7 +5,7 @@
 #include "commons.h"
 #include <ActivScp.h>
 #include <ActivDbg.h>
-#include "jsrt.h"
+//#include "jsrt.h"
 
 class Editor;
 
