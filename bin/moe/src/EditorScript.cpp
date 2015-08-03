@@ -40,7 +40,6 @@ void EditorScript::execScript()
 	if ( S_OK != editor_->text_->GetText(&script) )
 		return ;
 
-	//moe()->scriptHost->eval(engine,script.toString(),editor_->sci);
 	Script::CreateInstance()->eval(engine, script.towstring(), editor_->sci);
 
 	mol::bstr out;

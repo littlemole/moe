@@ -182,7 +182,6 @@ void MoeTabControl::OnRightClick()
 		}
 		case IDM_TAB_DIRTAB:
 		{
-			//::PostMessage( h, WM_COMMAND, IDM_TAB_DIRTAB, 0 );
 			docs()->OpenDir( mol::bstr(dirPathFromChildHWND(h)), 0 );
 			break;
 		}

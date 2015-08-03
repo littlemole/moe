@@ -50,7 +50,6 @@ Editor::Instance* Editor::CreateInstance(const std::wstring& file, long enc, boo
 	std::wstring p(file);
 	if ( mol::Path::exists(p) && mol::Path::isDir(p) )
 	{
-		//logger(LOGINFO) << "path is directory " << mol::tostring(p);
 		return 0;
 	}
 
@@ -82,8 +81,6 @@ void Editor::prepareInterfaces()
 bool Editor::initialize(const std::wstring& p, long enc, bool readOnly)
 {
 	initializeMoeChild(p);
-
-	//monitor_.events += mol::events::event_handler( &Editor::OnFileChangeNotify, this );
 
 	// init last write timestamp for p
 	lastWriteTime_ = getLastWriteTime(p);

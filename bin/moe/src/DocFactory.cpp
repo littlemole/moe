@@ -464,21 +464,6 @@ IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const std::wstr
 		return new MoeImageFactory;
     }
 
-	/*
-	// assuming text so far - sniff encoding, try to detect binaries ...
-	std::stringstream is;
-	mol::filestream in;
-	in.open( mol::tostring(p),GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,0,OPEN_EXISTING);
-
-    char buf[1024];
-    if ( !in.eof() )
-    {
-        in.read(buf,1023);
-		is.write(buf,in.gcount());
-    }
-	in.close();
-	*/
-
 	// ... so try open in text editor
 	return new MoeEditorDocumentFactory(enc,readOnly);
 }
@@ -542,7 +527,6 @@ HRESULT __stdcall  DocFactory::openDocument( const std::wstring& p, MOE_DOCTYPE 
 	mol::MdiChild* mdi = factory->openDocument( path );
 	if (!mdi)
 	{
-		//logger(LOGINFO) << "failed to load " << mol::tostring(path);
 		// failed to load
 		if ( moe()->activeObject)
 			moe()->activeObject->OnDocWindowActivate(TRUE);
@@ -561,8 +545,6 @@ HRESULT __stdcall  DocFactory::openDocument( const std::wstring& p, MOE_DOCTYPE 
 
 			std::wstring str = oss.str();
 			statusBar()->status( str );
-
-			//logger(LOGINFO) << mol::tostring(str);
 		}
 		else
 		{
@@ -610,7 +592,6 @@ void DocFactory::updateUI(const std::wstring& p, mol::MdiChild* c)
 	if ( docs()->size() == 0 )
 	{
 		tab()->show(SW_SHOW);
-		//moe()->doLayout();
 	}
 		
 	docs()->children_.push_back( c );

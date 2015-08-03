@@ -204,7 +204,8 @@ private:
 
 	// helpers
 	void freezeConfig(const std::wstring& key);
-	void fullScreen(HWND hwnd);
+
+	//void fullScreen(HWND hwnd);
 	
 	/////////////////////////////////////////////////////////////////////
 	// data members

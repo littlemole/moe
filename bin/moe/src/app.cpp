@@ -262,7 +262,6 @@ MoeApp::MoeApp()
 	std::wstring logPath = appPath + _T("\\moe.log");
 	log().add( new FileAppender(mol::tostring(logPath)) );
 
-	//MoeConsole& con = moeConsole();
 }
 
 MoeApp::~MoeApp()
@@ -431,6 +430,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	ODBGS("moe startup");
 	ODBGS(lpCmdLine);
 
+	// early init codepages
 	const mol::CodePages& cp = mol::CodePages::instance();
 
 	int result = 0;

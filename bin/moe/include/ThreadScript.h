@@ -5,7 +5,6 @@
 #include "commons.h"
 #include <ActivScp.h>
 #include <ActivDbg.h>
-//#include "jsrt.h"
 
 class Editor;
 
@@ -71,8 +70,7 @@ public:
 	virtual HRESULT  __stdcall  BringDocumentToTop(IDebugDocumentText *);
 	virtual HRESULT  __stdcall  BringDocumentContextToTop(IDebugDocumentContext *);
 
-
-	virtual HRESULT  __stdcall StartDebugSession(/*[in]*/ IRemoteDebugApplication* pApp)
+	virtual HRESULT  __stdcall StartDebugSession( IRemoteDebugApplication* pApp)
 	{
 		IApplicationDebugger* ad = (IApplicationDebugger*)this;
 		return pApp->ConnectDebugger(ad);

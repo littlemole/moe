@@ -646,8 +646,6 @@ HRESULT __stdcall MoeScript::Eval( BSTR scrpt, BSTR scrptLanguage)
 	if ( !scrpt || !scrptLanguage )
 		return E_INVALIDARG;
 
-
-	//moe()->scriptHost->eval( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
 	Script::CreateInstance()->eval( mol::towstring(scrptLanguage),mol::towstring(scrpt),0 );
 	return S_OK;
 }
@@ -657,7 +655,6 @@ HRESULT __stdcall MoeScript::Debug( BSTR scrpt, BSTR scrptLanguage)
 	if ( !scrpt || !scrptLanguage )
 		return E_INVALIDARG;
 
-	//moe()->scriptHost->debug( mol::toString(scrptLanguage),mol::toString(scrpt),0 );
 	Script::CreateInstance()->debug( mol::towstring(scrptLanguage),mol::towstring(scrpt),0 );
 	return S_OK;
 }
@@ -947,7 +944,7 @@ HRESULT __stdcall MoeConfig::EditPreferences( )
 
 	INT_PTR r = ps.create( );
 
-	// use custom html dialog for settings:
+	// we used custom html dialog for settings back then:
 
 	//std::wstring p( mol::app<MoeApp>().getModulePath() );
 	//std::wstring prefs = mol::Path::parentDir(p) + _T("\\forms\\prefs.html");

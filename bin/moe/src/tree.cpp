@@ -104,7 +104,6 @@ HWND MoeTreeWnd::createWindow( const std::wstring& windowName, HMENU id, const m
 	getClientRect(clientRect_);
 	const GUID* clsid = &CLSID_ShellTree;
 	if ( mol::OS::has_uac() )
-	//if ( mol::Ribbon::ribbon()->enabled())
 	{
 		clsid = &CLSID_NamespaceTree;
 	}
