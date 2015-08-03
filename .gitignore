@@ -24,3 +24,5 @@ static64/
 ipch/
 *.lib
 ax/net/net/net/obj/
+.vs
+
