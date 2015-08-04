@@ -76,6 +76,7 @@ HRESULT __stdcall SciAxText::GetText( BSTR* text)
 		sci_->edit()->getText(c,s+1);
 		c[s] = 0;
 		*text = ::SysAllocString(mol::fromUTF8(c).c_str());
+		delete c;
 	}
 	return S_OK; 
 }

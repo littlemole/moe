@@ -342,7 +342,7 @@ LRESULT WndProc::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	if ( message == WM_INVOKE  )
 	{
-		if ( wParam == 0 )
+		//if ( wParam == 0 )
 			return OnInvoke(message,wParam,lParam);
 	}
 	return ::DefWindowProc(hwnd,message,wParam,lParam);

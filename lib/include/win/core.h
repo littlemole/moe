@@ -237,7 +237,9 @@ public:
         if ( id_ )
         {
             ::KillTimer(0,id_);
-            map().erase(id_);
+			mol::fun::task* p = map()[id_];
+			map().erase(id_);
+			delete p;
             id_ = 0;
         }
     }
@@ -254,7 +256,6 @@ protected:
             if ( p )
 			{
                 (*p)();
-				delete p;
 			}
         }
     }

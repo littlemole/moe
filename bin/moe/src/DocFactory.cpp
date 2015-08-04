@@ -519,7 +519,7 @@ HRESULT __stdcall  DocFactory::openDocument( const std::wstring& p, MOE_DOCTYPE 
 	if ( moe()->activeObject)
 		moe()->activeObject->OnDocWindowActivate(FALSE);
 
-	IMoeDocumentFactory* factory = MoeDocumentFactory::getOpenDocumentFactory(p,typ,enc,readOnly);
+	boost::scoped_ptr<IMoeDocumentFactory> factory(MoeDocumentFactory::getOpenDocumentFactory(p,typ,enc,readOnly));
 	if(!factory)
 		return E_FAIL;
 
