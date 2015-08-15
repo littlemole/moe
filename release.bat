@@ -7,11 +7,11 @@ SET MODE=%3
 set year=%date:~-4%
 rem echo year=%year%
 
-set month=%date:~-7,-5%
+set month=%date:~-10,-8%
 if "%month:~0,1%" == " " set month=0%month:~1,1%
 rem echo month=%month%
 
-set day=%date:~0,2%
+set day=%date:~7,2%
 if "%day:~0,1%" == " " set day=0%day:~1,1%
 rem echo day=%day%
 
