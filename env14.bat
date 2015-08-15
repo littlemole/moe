@@ -1,5 +1,5 @@
 @echo off
-
+set MSBUILDTREATALLTOOLSVERSIONSASCURRENT 
 set PlatformToolset=v140
 set UICC="C:\Program Files (x86)\Windows Kits\8.1\bin\x86\uicc.exe"
 

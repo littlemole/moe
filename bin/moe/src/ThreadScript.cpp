@@ -527,7 +527,7 @@ void  ScriptDebugger::update_breakpoints(std::set<int> br)
 	for ( std::set<int>::iterator it = breakpoints_.begin(); it != breakpoints_.end(); it++ )
 	{
 		mol::punk<IEnumDebugCodeContexts> debugCtx;
-		HRESULT hr = sdebug->EnumCodeContextsOfPosition(debugCookie_, (*it), (ULONG)(script_.size() / 2), &debugCtx);
+		HRESULT hr = sdebug->EnumCodeContextsOfPosition(debugCookie_, (*it), (ULONG)(script_.size() ), &debugCtx);
 		if ( hr == S_OK && debugCtx )
 		{
 			ULONG numFetched = 0;
@@ -546,7 +546,7 @@ void  ScriptDebugger::update_breakpoints(std::set<int> br)
 	for ( std::set<int>::iterator it = breakpoints_.begin(); it != breakpoints_.end(); it++ )
 	{
 		mol::punk<IEnumDebugCodeContexts> debugCtx;
-		HRESULT hr = sdebug->EnumCodeContextsOfPosition(debugCookie_, (*it), (ULONG)(script_.size() / 2), &debugCtx);
+		HRESULT hr = sdebug->EnumCodeContextsOfPosition(debugCookie_, (*it), (ULONG)(script_.size() ), &debugCtx);
 		if ( hr == S_OK && debugCtx )
 		{
 			ULONG numFetched = 0;

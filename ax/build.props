@@ -16,7 +16,7 @@
   </ImportGroup>
 
   <PropertyGroup Label="UserMacros" />
-
+ 
   <ItemDefinitionGroup>
     <Midl>
     <OutputDirectory>$(OutDir)</OutputDirectory>
@@ -27,8 +27,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(boost);..\..\..\3dParty\expat\Source\lib;..\..\lib\include;..\..\..\3dParty\pcre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;MOL_DLL;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;PCRE_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat></DebugInformationFormat>
+      <WarningLevel>Level3</WarningLevel>      
       <WholeProgramOptimization>false</WholeProgramOptimization>
 	  <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
@@ -47,6 +46,8 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 	  <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <BrowseInformation>true</BrowseInformation>
+	  <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\..\lib\src\win\uni_debug\win.lib;..\..\lib\src\ole\uni_debug\ole.lib;..\..\lib\src\util\uni_debug\util.lib;..\..\3dParty\pcre\uni_debug\pcre.lib;..\..\lib\src\thread\uni_debug\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\lib\src\xml\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\uni_debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -61,12 +62,15 @@
       <Optimization>Full</Optimization>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+	  <DebugInformationFormat></DebugInformationFormat>
+	  <BrowseInformation>false</BrowseInformation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\..\lib\src\win\uni_release\win.lib;..\..\lib\src\ole\uni_release\ole.lib;..\..\lib\src\util\uni_release\util.lib;..\..\3dParty\pcre\uni_release\pcre.lib;..\..\lib\src\thread\uni_release\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\lib\src\xml\uni_release\xml.lib;..\..\3dParty\expat\Source\lib\uni_release\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
       <MinimumRequiredVersion>5.0</MinimumRequiredVersion>
+	  <BrowseInformation>true</BrowseInformation>
     </Link>
   </ItemDefinitionGroup>
 
@@ -78,6 +82,8 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WIN64;WIN64;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+	  <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+	  <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\3dParty\pcre\x64\uni_debug\pcre.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\lib\src\xml\x64\uni_debug\xml.lib;..\..\3dParty\expat\Source\lib\x64\uni_debug\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -94,6 +100,8 @@
       <Optimization>Full</Optimization>
       <PreprocessorDefinitions>WIN64;_WIN64;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+	  <DebugInformationFormat></DebugInformationFormat>
+	  <BrowseInformation>false</BrowseInformation>
     </ClCompile>
     <Link>
      <AdditionalDependencies>..\..\lib\src\win\x64\uni_release\win.lib;..\..\lib\src\ole\x64\uni_release\ole.lib;..\..\lib\src\util\x64\uni_release\util.lib;..\..\3dParty\pcre\x64\uni_release\pcre.lib;..\..\lib\src\thread\x64\uni_release\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;gdiplus.lib;..\..\lib\src\xml\x64\uni_release\xml.lib;..\..\3dParty\expat\Source\lib\x64\uni_release\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>

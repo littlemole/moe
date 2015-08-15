@@ -895,7 +895,10 @@ bool ScintillAx::saveAdmin(const std::wstring& location)
 	else
 	if ( enc == SCINTILLA_ENCODING_UTF8 )
 	{
-		oss.write((const char*)mol::FileEncoding::UTF8_BOM,3);
+		if (vb == VARIANT_TRUE)
+		{
+			oss.write((const char*)mol::FileEncoding::UTF8_BOM, 3);
+		}
 		if ( eol == SCINTILLA_SYSTYPE_UNIX )
 		{
 			txt = mol::toUTF8(mol::dos2unix(mol::fromUTF8(txt)));
@@ -909,6 +912,7 @@ bool ScintillAx::saveAdmin(const std::wstring& location)
 		{
 			txt = mol::dos2unix(txt);
 		}
+		txt = mol::tostring(txt, enc);
 	}
 	
 	oss.write( txt.c_str(), txt.size() );

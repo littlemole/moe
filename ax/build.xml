@@ -30,6 +30,6 @@
 
 		<MSBuild Projects="net/net/net/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 		<MSBuild Projects="net/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
- </Target>
+ </Target> 
 
 </Project>
