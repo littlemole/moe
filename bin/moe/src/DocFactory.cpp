@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "FormEditor.h" // keep this one include at top ...
 #include "TailEditor.h"
 #include "Editor.h"
 #include "Img.h"
@@ -209,23 +208,6 @@ private:
 };
 
 
-
-class MoeFormFactory : public IMoeDocumentFactory
-{
-public:
-
-	virtual mol::MdiChild* openDocument( const std::wstring& path)
-	{
-		FormEditor::Instance* t = FormEditor::CreateInstance( path );
-		return dynamic_cast<mol::MdiChild*>(t);
-	}
-
-private:
-
-};
-
-
-
 class MoeHexFactory : public IMoeDocumentFactory
 {
 public:
@@ -429,7 +411,7 @@ IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const std::wstr
 	// form20 support
 	if ( mol::icmp( ext,  _T("ufs") ) == 0 )
 	{
-		return new MoeFormFactory;
+		//return new MoeFormFactory;
 	}
 
 	// rtf support
@@ -501,8 +483,8 @@ HRESULT __stdcall DocFactory::newDocument(MOE_DOCTYPE typ, IMoeDocument** d)
 		}
 		case MOE_DOCTYPE_FORM :
 		{
-			std::wstring p = docs()->getNewFileName(_T(".ufs"));
-			return createFile<FormEditor>(p,d);
+			//std::wstring p = docs()->getNewFileName(_T(".ufs"));
+			//return createFile<FormEditor>(p,d);
 		}
 	}
 

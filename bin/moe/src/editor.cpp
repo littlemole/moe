@@ -464,13 +464,13 @@ void Editor::OnUserForm(int code, int id, HWND ctrl)
 		case 1 : file = v[0];
 		default : ;
 	}
-
+	/*
 	if ( mol::Path::ext(file) == _T(".ufs") ) 
 	{
 		moe()->moeScript->ShowUserForm( mol::bstr(file),0);
 		return;
 	}
-
+	*/
 	moe()->moeScript->ShowHtmlForm( mol::bstr(file), l, t, w, h, o );
 }
 

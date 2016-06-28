@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6A95F801-2A30-4574-BD62-B72798142550}</ProjectGuid>
+    <RootNamespace>jre</RootNamespace>
+	<TargetName>userforms</TargetName>
+    <TargetExt>exe</TargetExt>
+  </PropertyGroup>
+
+
+  <Import Project="..\..\master.props" />
+  <Import Project="build.props" />
+
+  <ItemGroup>
+    <Midl Include="userform.idl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="CtrlWnd.cpp" />
+    <ClCompile Include="EventDlg.cpp" />
+    <ClCompile Include="MemberDlg.cpp" />
+    <ClCompile Include="Handler.cpp" />
+    <ClCompile Include="UserForm.cpp" />
+    <ClCompile Include="userformCtrl.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+
+</Project>

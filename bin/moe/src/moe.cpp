@@ -292,13 +292,6 @@ void MoeWnd::OnFileNew()
 }
 
 
-void MoeWnd::OnFileNewUFS()
-{
-	mol::punk<IMoeDocument> doc;
-	docs()->NewUserForm(&doc);
-}
-
-
 void MoeWnd::OnFileNewRTF()
 {
 	mol::punk<IMoeDocument> doc;

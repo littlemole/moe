@@ -60,7 +60,6 @@
     <ClCompile Include="src\EditorScript.cpp" />
     <ClCompile Include="src\EditorMenu.cpp" />
     <ClCompile Include="src\form.cpp" />
-    <ClCompile Include="src\formEditor.cpp" />
     <ClCompile Include="src\TailEditor.cpp" />
     <ClCompile Include="src\hex.cpp" />
     <ClCompile Include="src\html.cpp" />
@@ -69,7 +68,6 @@
     <ClCompile Include="src\MoeBar.cpp" />
     <ClCompile Include="src\ole.cpp" />
     <ClCompile Include="src\shared.cpp" />
-    <ClCompile Include="src\UserForm.cpp" />
     <ClCompile Include="src\widgets.cpp" />
     <ClCompile Include="src\ThreadScript.cpp" />
     <ClCompile Include="src\xmlrc.cpp" />

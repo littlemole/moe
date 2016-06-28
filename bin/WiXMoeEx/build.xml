@@ -21,6 +21,11 @@
   <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' ">bin\x64\Debug</netConfPath>
   <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' ">bin\x64\Release</netConfPath>
 
+  <userformConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' ">uni_debug</userformConfPath>
+  <userformConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' ">uni_release</userformConfPath>
+  <userformConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' ">uni_debug</userformConfPath>
+  <userformConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' ">uni_release</userformConfPath>
+
   <arch Condition=" '$(Platform)' == 'x64' ">x64</arch>
   <arch Condition=" '$(Platform)' == 'Win32' ">x86</arch>
 
@@ -127,7 +132,10 @@
             SourceFiles="..\prw\prw\$(confPath)\prw.exe"
             DestinationFolder=".\moe"
         />
-
+        <Copy
+            SourceFiles="..\..\ax\userform\$(userformConfPath)\userforms.exe"
+            DestinationFolder=".\moe"
+        />
         <Copy
             SourceFiles="..\..\ax\io\$(confPath)\io.dll"
             DestinationFolder=".\moe"

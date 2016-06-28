@@ -90,12 +90,10 @@ public:
 	virtual HRESULT __stdcall Eval( BSTR scrpt, BSTR scrptLanguage);
 	virtual HRESULT __stdcall Debug( BSTR scrpt, BSTR scrptLanguage);
 	virtual HRESULT __stdcall CreateObjectAdmin( BSTR progid, IDispatch** disp);
-	virtual HRESULT __stdcall ShowHtmlForm( BSTR src, long l, int t, int w, int h, int formStyle );
-	virtual HRESULT __stdcall ShowUserForm( BSTR pathname, IMoeUserForm** form );
-	virtual HRESULT __stdcall DebugUserForm( BSTR pathname, IMoeUserForm** form );
 	virtual HRESULT __stdcall System( BSTR f);
 	virtual HRESULT __stdcall Picture( BSTR f, IDispatch** disp );
 	virtual	HRESULT __stdcall CreateObject(BSTR progid, IDispatch** disp);
+	virtual HRESULT __stdcall ShowHtmlForm(BSTR, long, int, int, int, int);
 
 	virtual HRESULT __stdcall  get_FORM_DEFAULT( long* d )		{ if(d) *d =  MOE_FORMFLAG_NONE; return S_OK; }
 	virtual HRESULT __stdcall  get_FORM_TITLE( long* d )		{ if(d) *d =  MOE_FORMFLAG_TITLE; return S_OK; }

@@ -196,7 +196,7 @@
         <index cmd="IDM_FILE_OPEN_HTML" />
         <index cmd="IDM_VIEW_TOOLBARS" />
         <index cmd="" />
-        <index cmd="IDM_FILE_NEW_UFS" />
+        <index cmd="" />
         <index cmd="IDM_EDIT_DEBUG" />
         <index cmd="IDM_EDIT_DEBUG_QUIT" />
         <index cmd="IDM_EDIT_DEBUG_STEPIN" />

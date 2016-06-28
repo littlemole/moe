@@ -8,7 +8,6 @@
 #include "ribbonres.h"
 #include "resource.h"
 #include "Shobjidl.h"
-#include "fm20_tlh.h"
 #include "win/msgloop.h"
 #include "util/regex.h"
 
@@ -373,81 +372,6 @@ void Script::call(  const std::wstring& engine, const std::wstring& func, const 
 }
 
 
-void Script::formscript( const std::wstring& engine, const std::wstring& s, IDispatch* form )
-{
-	HRESULT hr = init(engine);
-	if ( hr != S_OK )
-	{
-		ODBGS("failed to init engine");
-		this->Release();
-		return;
-	}
-
-	runScript(s,SCRIPTTEXT_ISVISIBLE|SCRIPTTEXT_ISPERSISTENT);//|SCRIPTTEXT_DELAYEXECUTION);	
-	
-	this->setState(SCRIPTSTATE_STARTED);
-	this->Release();
-}
-
-void Script::formdebug( const std::wstring& engine, const std::wstring& s, IDispatch* form )
-{
-	HRESULT hr = init(engine);
-	if ( hr != S_OK )
-	{
-		ODBGS("failed to init engine");
-		this->Release();
-		return;
-	}
-
-	debugScript(s,SCRIPTTEXT_ISVISIBLE|SCRIPTTEXT_ISPERSISTENT);//|SCRIPTTEXT_DELAYEXECUTION);	
-	
-	this->setState(SCRIPTSTATE_STARTED);
-	this->Release();
-}
-
-void Script::formcontrols( IUnknown* f )
-{
-	mol::punk<MSForms::_UserForm> form(f);
-	if (!form)
-		return;
-
-	if ( !form )
-		return;
-
-	mol::punk<MSForms::Controls> controls;
-	if ( S_OK != form->get_Controls(&controls) )
-		return;
-
-	if ( !controls )
-		return;
-
-	long n = 0;
-	if ( S_OK != controls->get_Count(&n) )
-		return;
-
-	for ( long i = 0; i < n; i++ )
-	{
-		mol::punk<IDispatch> disp;
-		if ( S_OK != controls->Item(mol::variant(i),&disp) )
-			continue;
-
-		if ( !disp )
-			continue;
-
-		mol::punk<MSForms::IControl> c(disp);
-		if ( !c )
-			continue;
-
-		mol::bstr name;
-		if ( S_OK != c->get_Name(&name) )
-			continue;
-
-		if ( !name )
-			continue;
-
-		addNamedObject((MSForms::IControl*)(c),name.towstring(),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE );
-	}
-}
 
 
 HRESULT  __stdcall Script::OnScriptError( IActiveScriptError *pscripterror)
@@ -565,112 +489,6 @@ HRESULT __stdcall MoeScriptObject::GetNameSpaceParent( IUnknown **ppunk)
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-
-FormScriptEventHandler::~FormScriptEventHandler()
-{
-	ODBGS("FormScriptEventHandler dead");
-}
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-
-void FormScriptEventHandler::init(Script* s, REFIID iid, const std::wstring& on)
-{
-	riid = iid;
-	script = s;
-	objname = on;
-	info.release();
-	if ( (S_OK == mol::typeInfoForInterface(riid,&info)) && info )
-	{
-		
-	}
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall FormScriptEventHandler::QueryInterfaceImpl(REFIID iid , LPVOID* ppv)  
-{                                                                       
-	ODBGS("::QueryInterface ScriptEventHandler");                                        
-	if (ppv==(void**)0)                                                 
-		return E_INVALIDARG;                                            
-                                                                        
-	if(IsEqualIID(iid, IID_IUnknown))                                   
-	{                                                                   
-		*ppv = (IUnknown*)this;                          
-		((IUnknown*)(*ppv))->AddRef();                                  
-		return S_OK;                                                    
-	}                                                                   
-	if(IsEqualIID(iid, IID_IDispatch))                                   
-	{                                                                   
-		*ppv = (IDispatch*)this;                          
-		((IDispatch*)(*ppv))->AddRef();                                  
-		return S_OK;                                                    
-	}    
-	if(IsEqualIID(iid, riid))                                   
-	{                                                                   
-		*ppv = (IDispatch*)this;                          
-		((IDispatch*)(*ppv))->AddRef();                                  
-		return S_OK;                                                    
-	} 
-	ODBGS("ScriptEventHandler::QueryInterface E_NOINTERFACE");                          
-	*ppv = (IUnknown*)(0);                                              
-	return E_NOINTERFACE;                                               
-}                                                                       
-       
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall FormScriptEventHandler::GetTypeInfoCount (unsigned int FAR*  pctinfo ) 
-{ 
-    *pctinfo = 1;
-    return S_OK; 
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall FormScriptEventHandler::GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo ) 
-{ 
-	return info->QueryInterface(IID_ITypeInfo,(void**)ppTInfo);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall FormScriptEventHandler::GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId ) 
-{ 
-	return info->GetIDsOfNames( rgszNames, cNames, rgDispId );
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall FormScriptEventHandler::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i) 
-{ 
-	UINT nNames = 0;
-	mol::bstr name;
-	if ( (S_OK == info->GetNames(dispIdMember,&name,1,&nNames)) && (nNames == 1) )
-	{
-		std::stringstream oss;
-		oss << mol::tostring(objname) << "_";
-		oss << mol::tostring(name); 
-
-		mol::punk<IDispatch> disp;
-		if ( (S_OK == script->getScript(_T(""),&disp)) )
-		{
-			DISPID dispid;
-			std::wstring ws = mol::towstring(oss.str());
-			mol::bstr func(ws);
-			HRESULT hr = disp->GetIDsOfNames(IID_NULL, &(func), 1, 0, &dispid);
-			if ( hr == S_OK )
-			{
-				mol::variant varResult;
-				disp->Invoke( dispid, IID_NULL, 
-							  LOCALE_SYSTEM_DEFAULT, 
-							  w, 
-							  pDisp, 
-							  &varResult, NULL, NULL 
-							 );
-			}				
-		}
-	}
-    return S_OK;
-}	
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////

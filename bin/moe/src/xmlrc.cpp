@@ -12,8 +12,6 @@
 
 #include "editor.h"
 
-#include "formeditor.h"
-
 #include "taileditor.h"
 
 #include "hex.h"
@@ -185,7 +183,6 @@ extern "C" void load_codegen_metadata()
   UI().addCmd(IDM_FORMLANG_JAVASCRIPT,_T("Javascript"));  
   UI().addCmd(IDM_FORMLANG_VBSCRIPT,_T("VBScript"));  
   UI().addCmd(IDM_FORMLANG_PERLSCRIPT,_T("PerlScript"));  
-  UI().addCmd(IDM_FILE_NEW_UFS,_T("New UFS"));  
   UI().addCmd(IDM_TREE,_T("Tree Window Context Menu"));  
   UI().addCmd(IDM_TREE_OPEN,_T("Open in moe"));  
   UI().addCmd(IDM_TREE_UPDATE,_T("Update"));  
@@ -263,7 +260,7 @@ extern "C" void load_codegen_metadata()
   UI().addBmpCmd( IDB_TOOLBAR, IDM_FILE_OPEN_HTML );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_VIEW_TOOLBARS );
   UI().addBmpCmd( IDB_TOOLBAR, -1 );
-  UI().addBmpCmd( IDB_TOOLBAR, IDM_FILE_NEW_UFS );
+  UI().addBmpCmd( IDB_TOOLBAR, -1 );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_EDIT_DEBUG );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_EDIT_DEBUG_QUIT );
   UI().addBmpCmd( IDB_TOOLBAR, IDM_EDIT_DEBUG_STEPIN );
@@ -295,7 +292,6 @@ extern "C" void load_codegen_metadata()
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_MODE_USERSTYLES, IDB_TOOLBAR, IDM_MODE_USERSTYLES, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_FILE);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW_RTF, IDB_TOOLBAR, IDM_FILE_NEW_RTF, false, true);
-        UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, IDM_FILE_NEW_UFS, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_FILE);
         UI().addMenuItem(IDM_MOE, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, IDM_FILE_EXIT, false, true);
 
@@ -486,7 +482,6 @@ extern "C" void load_codegen_metadata()
         UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_MODE_PREFERENCES, IDB_TOOLBAR, IDM_MODE_PREFERENCES, false, true);
         UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_MODE_USERSTYLES, IDB_TOOLBAR, IDM_MODE_USERSTYLES, false, true);
     UI().addMenuSeparator(IDM_SMALL_MENU,IDM_FILE);
-        UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, IDM_FILE_NEW_UFS, false, true);
     UI().addMenuSeparator(IDM_SMALL_MENU,IDM_FILE);
         UI().addMenuItem(IDM_SMALL_MENU, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, IDM_FILE_EXIT, false, true);
 
@@ -690,7 +685,6 @@ extern "C" void load_codegen_metadata()
         UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_MODE_USERSTYLES, IDB_TOOLBAR, IDM_MODE_USERSTYLES, false, true);
     UI().addMenuSeparator(IDM_MOE_RTF,IDM_FILE);
         UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_FILE_NEW_RTF, IDB_TOOLBAR, IDM_FILE_NEW_RTF, false, true);
-        UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_FILE_NEW_UFS, IDB_TOOLBAR, IDM_FILE_NEW_UFS, false, true);
     UI().addMenuSeparator(IDM_MOE_RTF,IDM_FILE);
         UI().addMenuItem(IDM_MOE_RTF, IDM_FILE, IDM_FILE_EXIT, IDB_TOOLBAR, IDM_FILE_EXIT, false, true);
 
@@ -751,8 +745,6 @@ mol::msgMap<MoeWnd>().addMsgHandler( WM_MDIACTIVATE, make_handler(&MoeWnd::OnMDI
 mol::msgMap<MoeWnd>().addMsgHandler( WM_INITMENUPOPUP, make_handler(&MoeWnd::OnMenu) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_NEW, make_handler(&MoeWnd::OnFileNew) );
-
-mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_NEW_UFS, make_handler(&MoeWnd::OnFileNewUFS) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_NEW_RTF, make_handler(&MoeWnd::OnFileNewRTF) );
 
@@ -1101,32 +1093,6 @@ make_command_range_handler( Editor, ID_FIRST_USER_FORM, ID_LAST_USER_FORM, OnUse
 make_command_range_handler( Editor, ID_FIRST_USER_SCRIPT, ID_LAST_USER_SCRIPT, OnUserScript );
 
 mol::msgMap<Editor>().addNotifyCodeHandler( TBN_DROPDOWN, make_handler(&Editor::OnToolbarDropDown) );
-
-mol::msgMap<FormEditor>().addMsgHandler( WM_DESTROY, make_handler(&FormEditor::OnDestroy) );
-
-mol::msgMap<FormEditor>().addMsgHandler( WM_NCDESTROY, make_handler(&FormEditor::OnNcDestroy) );
-
-mol::msgMap<FormEditor>().addCmdHandler( IDM_FILE_SAVE_AS, make_handler(&FormEditor::OnSaveAs) );
-
-mol::msgMap<FormEditor>().addCmdHandler( IDM_FILE_SAVE, make_handler(&FormEditor::OnSave) );
-
-mol::msgMap<FormEditor>().addMsgHandler( WM_MDIACTIVATE, make_handler(&FormEditor::OnMDIActivate) );
-
-mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_EXECUTESCRIPT, make_handler(&FormEditor::OnExecScript) );
-
-mol::msgMap<FormEditor>().addCmdHandler( IDM_MODE_EXECUTEFORM, make_handler(&FormEditor::OnExecForm) );
-
-mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_DEBUG_GO, make_handler(&FormEditor::OnDebugScriptGo) );
-
-mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_DEBUG_STEPIN, make_handler(&FormEditor::OnDebugScriptStepIn) );
-
-mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_DEBUG_STEPOVER, make_handler(&FormEditor::OnDebugScriptStepOver) );
-
-mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_DEBUG_STEPOUT, make_handler(&FormEditor::OnDebugScriptStepOut) );
-
-mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_DEBUG_STOP, make_handler(&FormEditor::OnDebugScriptStop) );
-
-mol::msgMap<FormEditor>().addCmdHandler( IDM_EDIT_DEBUG_QUIT, make_handler(&FormEditor::OnDebugScriptQuit) );
 
 mol::msgMap<Hex>().addMsgHandler( WM_MDIACTIVATE, make_handler(&Hex::OnMDIActivate) );
 

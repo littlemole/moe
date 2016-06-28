@@ -26,6 +26,28 @@ public:
         }
     }
 
+	punk(const punk<I>& rhs)
+	{
+		interface_ = rhs.interface_;
+
+		if (rhs.interface_) {
+		
+			interface_->AddRef();
+		}
+	}
+
+	template<class T>
+	punk(const punk<T>& rhs)
+	{
+		interface_ = 0;
+		if (rhs.interface_)
+		{
+			HRESULT hr = rhs.queryInterface(&interface_);
+			if (S_OK != hr)
+				interface_ = 0;
+		}
+	}
+
     punk( IUnknown* iUnknown )
         :interface_(0) 
     {

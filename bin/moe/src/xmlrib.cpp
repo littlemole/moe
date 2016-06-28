@@ -146,8 +146,6 @@ void init_ribbon_ui(  mol::win::WndProc* wnd )
   
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonParentDirectory, IDM_TAB_DIRTAB );
   
-    mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonFileNewUFS, IDM_FILE_NEW_UFS );
-  
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonOpenTree, IDM_TREE_OPEN );
   
     mol::Ribbon::ribbon()->registerCommand(*wnd,RibbonReloadTree, IDM_TREE_UPDATE );

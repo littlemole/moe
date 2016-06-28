@@ -38,6 +38,7 @@
     <CustomAction Id="MOEEXE" Property='MOEEXE' Value='[INSTALLLOCATION]\moe\moe.exe' />
     <CustomAction Id="NETEXE" Property='NETEXE' Value='[INSTALLLOCATION]\moe\net.exe' />
     <CustomAction Id="JREEXE" Property='JREEXE' Value='[INSTALLLOCATION]\moe\jre.exe' />
+	<CustomAction Id="USERFORMEXE" Property='USERFORMEXE' Value='[INSTALLLOCATION]\moe\userforms.exe' />
 <!--
     <CustomAction Id="MOEPATH" Property='MOEPATH' Value='[INSTALLLOCATION]\moe\' />
 -->
@@ -81,6 +82,8 @@
     <CustomAction Id="EXEREG_jre"  Property="JREEXE" ExeCommand="/REGSERVER" Execute="deferred" Impersonate="no"  />
     <CustomAction Id="EXEUNREG_jre" Property="JREEXE" ExeCommand="/UNREGSERVER" Execute="deferred" Impersonate="no" Return="ignore"/>
 
+    <CustomAction Id="EXEREG_userform"  Property="USERFORMEXE" ExeCommand="/REGSERVER" Execute="deferred" Impersonate="no"  />
+    <CustomAction Id="EXEUNREG_userform" Property="USERFORMEXE" ExeCommand="/UNREGSERVER" Execute="deferred" Impersonate="no" Return="ignore"/>
 
     <!-- make an extra copy of the installed fx file folder to a user folder for the user to modify -->
     <CustomAction Id="CopyFx" Script="vbscript">
@@ -186,11 +189,13 @@
       <Custom Action='MOEEXE' Before='InstallFiles' />
       <Custom Action='NETEXE' Before='InstallFiles' />
       <Custom Action='JREEXE' Before='InstallFiles' />
+	  <Custom Action='USERFORMEXE' Before='InstallFiles' />
 <!--      <Custom Action='MOEPATH' Before='InstallFiles' /> -->
 
 
       <!-- register COM objects  -->
       <Custom Action='EXEREG_moe' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
+	  <Custom Action='EXEREG_userform' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLREG_io' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLREG_pipedprocess' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLREG_comtypes' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
@@ -201,10 +206,11 @@
       <Custom Action='DLLREG_moeShell' After='InstallFiles'>(NOT Installed OR UPGRADINGPRODUCTCODE) AND (&amp;MoeShell=3)</Custom>
       <Custom Action='EXEREG_net' After='InstallFiles'>(NOT Installed OR UPGRADINGPRODUCTCODE) AND (&amp;MoeNet=3)</Custom>
       <Custom Action='EXEREG_jre' After='InstallFiles'>(NOT Installed OR UPGRADINGPRODUCTCODE) AND (&amp;MoeJava=3)</Custom>
-	<Custom Action='DLLREG_moeSSH' After='InstallFiles'>(NOT Installed OR UPGRADINGPRODUCTCODE) AND (&amp;MoeSSH=3)</Custom>
+	  <Custom Action='DLLREG_moeSSH' After='InstallFiles'>(NOT Installed OR UPGRADINGPRODUCTCODE) AND (&amp;MoeSSH=3)</Custom>
 
       <!-- unregister COM objects  -->
       <Custom Action='EXEUNREG_moe' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action='EXEUNREG_userform' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLUNREG_io' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLUNREG_pipedprocess' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLUNREG_comtypes' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
@@ -215,7 +221,7 @@
       <Custom Action='DLLUNREG_moeShell' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='EXEUNREG_net' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='EXEUNREG_jre' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
-	<Custom Action='DLLUNREG_moeSSH' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+	  <Custom Action='DLLUNREG_moeSSH' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
 
       <Custom Action="CopyFx" After="InstallFinalize">Not Installed</Custom>
 

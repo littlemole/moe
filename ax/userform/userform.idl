@@ -1,0 +1,165 @@
+import "oaidl.idl";
+
+////////////////////////////////////////////////////////////////////////////////////////
+// mol IO COM Lib
+////////////////////////////////////////////////////////////////////////////////////////
+
+[
+  uuid(04B72C32-1E72-4D42-8010-70827CEECEAB),
+  version(1.0),
+  helpstring("Fm20.dll outofproc wrapper")
+]
+library MoeUserForm
+{
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Interfaces
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+    // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
+	////////////////////////////////////////////////////////////////////////////////////
+	importlib("stdole32.tlb");
+
+
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+      uuid(0DFFAACE-906D-4545-853A-BEE593283BDB),
+      helpstring("IMoeUserForm Interface - User Form (FM20.dll)"),
+      object,oleautomation, dual
+    ]
+	interface IMoeUserForm : IDispatch
+    {
+		/////////////////////////////////////////////////////////////////////
+		[
+			id(DISPID_VALUE),
+			helpstring("Get the MSForms FM20.dll Form Object for this User Frame")
+
+		]
+		HRESULT Item([in] VARIANT index,[out, retval] IDispatch** d);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propget,bindable,displaybind, requestedit,id(1), 
+		  helpstring("Get the MSForms FM20.dll Form Object for this User Frame")
+
+		]
+		HRESULT Controls( [out,retval] IDispatch** d);
+
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		 propget,bindable,displaybind, requestedit,id(2), 
+		 helpstring("Get embeded User Form Script IDpispatch interface")
+		]
+		HRESULT Script( [out,retval] IDispatch** s);
+
+		[		
+		  id(3), helpstring("Show Form")
+		]
+		HRESULT Show();
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  id(4), helpstring("Close the HTML User Frame Window")
+		]
+		HRESULT Close();
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  id(5), helpstring("Hide Form")
+		]
+		HRESULT Hide(  );
+
+		/////////////////////////////////////////////////////////////////////
+
+		[ 
+		  requestedit,id(6), 
+		  helpstring("load form filename")
+		]
+		HRESULT Load( [in] IDispatch* scriptDispatch, [in] BSTR filename, VARIANT_BOOL designMode);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(7), 
+		  helpstring("Get/Set Top window position")
+		]
+		HRESULT Top( [in] long t);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(7), 
+		]
+		HRESULT Top( [out,retval] long* t);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(8), 
+		  helpstring("Get/Set Left window position ")
+		]
+		HRESULT Left( [in] long l);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(8), 
+		]
+		HRESULT Left( [out,retval] long* l);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(9), 
+		  helpstring("Get/Set Height of window")
+		]
+		HRESULT Height( [in] long h);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(9), 
+		]
+		HRESULT Height( [out,retval] long* h);
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(10), 
+		  helpstring("Get/Set Width of window")
+		]
+		HRESULT Width( [in] long w);
+		[ 
+		  propget,bindable,displaybind, requestedit,id(10), 
+		]
+		HRESULT Width( [out,retval] long* w);
+
+
+		/////////////////////////////////////////////////////////////////////
+		[ 
+		  propput,bindable,displaybind, requestedit,id(11), 
+		  helpstring("Get/Set Title of Dialog window")
+		]
+		HRESULT Title( [in] BSTR t);
+
+		[ 
+		  propget,bindable,displaybind, requestedit,id(11), 
+		]
+		HRESULT Title( [out,retval] BSTR* t);
+
+		[
+		     requestedit, id(12),
+		]
+		HRESULT Save();
+
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// Co Classes ( class factories )
+////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IMoeUserForm
+	////////////////////////////////////////////////////////////////////////////////////
+
+	[
+		uuid(156CEEA7-89BF-467B-BAFE-E673219B54BE),
+		helpstring("IMoeUserForm - FM20.dll wrapper")
+	]
+	coclass UserFormRunner
+	{
+		[default]         interface     IMoeUserForm;
+	}
+}

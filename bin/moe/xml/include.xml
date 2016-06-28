@@ -13,7 +13,6 @@
   <include>dir3.h</include>
   <include>scpdir.h</include>
   <include>editor.h</include>
-  <include>formeditor.h</include>
   <include>taileditor.h</include>
   <include>hex.h</include>
   <include>html.h</include>

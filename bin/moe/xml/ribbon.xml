@@ -295,14 +295,6 @@
       </Command.LargeImages>
     </Command>
 
-    <Command Name="RibbonFileNewUFS"  LabelTitle="New User Form Script">
-      <Command.TooltipTitle>New User Form Script</Command.TooltipTitle>
-      <Command.TooltipDescription>Create a new User Form and Script module</Command.TooltipDescription>
-      <Command.LargeImages>
-        <Image Source="ribbon\New.bmp"/>
-      </Command.LargeImages>
-    </Command>
-
     <Command Name="RibbonFileNewRTF"  LabelTitle="New RTF Document">
       <Command.TooltipTitle>New RTF Doucment</Command.TooltipTitle>
       <Command.TooltipDescription>Create a new RTF Document</Command.TooltipDescription>
@@ -1355,7 +1347,6 @@
               <SplitButton.MenuGroups>
                 <MenuGroup >
                   <Button CommandName="RibbonFileNew"/>
-                  <Button CommandName="RibbonFileNewUFS"/>
                   <Button CommandName="RibbonFileNewRTF"/>
                 </MenuGroup>
               </SplitButton.MenuGroups>

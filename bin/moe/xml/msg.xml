@@ -23,7 +23,6 @@
 
         <!-- main menu handlers -->
         <msg  handler="OnFileNew" cmd="IDM_FILE_NEW" />
-        <msg  handler="OnFileNewUFS" cmd="IDM_FILE_NEW_UFS" />
         <msg  handler="OnFileNewRTF" cmd="IDM_FILE_NEW_RTF" />
         <msg  handler="OnFileOpen" cmd="IDM_FILE_OPEN"  />
         <msg  handler="OnFileOpenHtml" cmd="IDM_FILE_OPEN_HTML"  />
@@ -264,23 +263,6 @@
 
     </class>
 
-    <class type="FormEditor" >
-      <msg  handler="OnDestroy" msg="WM_DESTROY" />
-      <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
-      <msg  handler="OnSaveAs" cmd="IDM_FILE_SAVE_AS" />
-      <msg  handler="OnSave" cmd="IDM_FILE_SAVE" />
-      <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
-
-      <msg  handler="OnExecScript" cmd="IDM_EDIT_EXECUTESCRIPT" />
-      <msg  handler="OnExecForm" cmd="IDM_MODE_EXECUTEFORM" />
-
-      <msg  handler="OnDebugScriptGo" cmd="IDM_EDIT_DEBUG_GO" />
-      <msg  handler="OnDebugScriptStepIn" cmd="IDM_EDIT_DEBUG_STEPIN" />
-      <msg  handler="OnDebugScriptStepOver" cmd="IDM_EDIT_DEBUG_STEPOVER" />
-      <msg  handler="OnDebugScriptStepOut" cmd="IDM_EDIT_DEBUG_STEPOUT" />
-      <msg  handler="OnDebugScriptStop" cmd="IDM_EDIT_DEBUG_STOP" />
-      <msg  handler="OnDebugScriptQuit" cmd="IDM_EDIT_DEBUG_QUIT" />
-    </class>
     
     <class type="Hex"  >
 

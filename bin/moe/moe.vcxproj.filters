@@ -9,9 +9,6 @@
     <ClCompile Include="src\dir3.cpp">
       <Filter>mdi</Filter>
     </ClCompile>
-    <ClCompile Include="src\formEditor.cpp">
-      <Filter>mdi</Filter>
-    </ClCompile>
     <ClCompile Include="src\form.cpp">
       <Filter>widget</Filter>
     </ClCompile>
@@ -28,9 +25,6 @@
       <Filter>mdi</Filter>
     </ClCompile>
     <ClCompile Include="src\MoeBar.cpp">
-      <Filter>widget</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UserForm.cpp">
       <Filter>widget</Filter>
     </ClCompile>
     <ClCompile Include="src\xmlrc.cpp">
@@ -87,9 +81,6 @@
     <ClInclude Include="include\editor.h">
       <Filter>mdi</Filter>
     </ClInclude>
-    <ClInclude Include="include\formEditor.h">
-      <Filter>mdi</Filter>
-    </ClInclude>
     <ClInclude Include="include\form.h">
       <Filter>widget</Filter>
     </ClInclude>
@@ -106,9 +97,6 @@
       <Filter>mdi</Filter>
     </ClInclude>
     <ClInclude Include="include\MoeBar.h">
-      <Filter>widget</Filter>
-    </ClInclude>
-    <ClInclude Include="include\UserForm.h">
       <Filter>widget</Filter>
     </ClInclude>
     <ClInclude Include="include\xmlid.h">

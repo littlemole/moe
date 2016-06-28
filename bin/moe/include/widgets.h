@@ -192,39 +192,8 @@ private:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-// Simple Script Host (not the debug version, see ThreadScript.h for the full blown one)
-/////////////////////////////////////////////////////////////////////////////////////////////
-
 
 class Script;
-
-/////////////////////////////////////////////////////////////////////
-
-class FormScriptEventHandler : public IDispatch
-{
-public:
-	~FormScriptEventHandler();
-
-	void init(Script* s, REFIID iid, const std::wstring& on);
-	virtual void dispose() {}
-
-	HRESULT virtual __stdcall QueryInterfaceImpl(REFIID iid , LPVOID* ppv) ;              
-    HRESULT virtual __stdcall GetTypeInfoCount (unsigned int FAR*  pctinfo );
-    HRESULT virtual __stdcall GetTypeInfo ( unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR*  ppTInfo );
-    HRESULT virtual __stdcall GetIDsOfNames( REFIID  riid, OLECHAR FAR* FAR*  rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR*  rgDispId );
-    HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS *pDisp, VARIANT* pReturn, EXCEPINFO * ex, UINT * i);
-
-private:
-	IID riid;
-	Script* script;
-	mol::punk< ITypeInfo> info;
-	std::wstring objname;
-};
-
-
-
-
 
 
 /////////////////////////////////////////////////////////////////////

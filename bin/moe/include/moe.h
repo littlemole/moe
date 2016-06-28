@@ -89,7 +89,6 @@ public:
 	/////////////////////////////////////////////////////////////////////
 
 	 void OnFileNew();
-	 void OnFileNewUFS();
 	 void OnFileNewRTF();
 	 void OnFileOpen ();
 	 void OnFileOpenHtml ();

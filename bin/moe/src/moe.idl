@@ -25,7 +25,6 @@ library Moe
 	interface IMoeDocumentView;
 
 	interface IMoeHtmlFrame;
-	interface IMoeUserFrame;
 	interface IMoeDialogView;
 	interface IMoeRichText;
 
@@ -196,11 +195,6 @@ library Moe
 		[id(8), helpstring("Open HTML Document as MDI Child (embedded IE)")] 
 		HRESULT OpenHtmlFrame( [in] BSTR f, [out,retval] IMoeDocument** htmlWnd);
 
-		[id(9), helpstring("Edit a User Form")] 
-		HRESULT OpenUserForm( [in] BSTR pathname, [out,retval] IMoeDocument** form );	
-
-		[id(10), helpstring("New User Form")] 
-		HRESULT NewUserForm(  [out,retval] IMoeDocument** form );	
 
 		/////////////////////////////////////////////////////////////////////
 
@@ -625,62 +619,7 @@ library Moe
 
 
 	////////////////////////////////////////////////////////////////////////////////////
-	[
-      uuid(0DFFAACE-906D-4545-853A-BEE593283BDB),
-      helpstring("IMoeUserForm Interface - User Form (FM20.dll)"),
-      object,oleautomation, dual
-    ]
-	interface IMoeUserForm : IDispatch
-    {
-		/////////////////////////////////////////////////////////////////////
-		[ 
-		  propget,bindable,displaybind, requestedit,id(DISPID_VALUE), 
-		  helpstring("Get the MSForms FM20.dll Form Object for this User Frame")
 
-		]
-		HRESULT Object( [out,retval] IDispatch** d);
-
-		/////////////////////////////////////////////////////////////////////
-		[ 
-		  propget,bindable,displaybind, requestedit,id(1), 
-		  helpstring("Get the View Object for this User Form")
-		]
-		HRESULT View( [out,retval] IMoeDialogView** d);
-
-
-		/////////////////////////////////////////////////////////////////////
-		[ 
-		 propget,bindable,displaybind, requestedit,id(2), 
-		 helpstring("Get embeded User Form Script IDpispatch interface")
-		]
-		HRESULT Script( [out,retval] IDispatch** s);
-
-		[		
-		  id(3), helpstring("Show Form")
-		]
-		HRESULT Show();
-
-		/////////////////////////////////////////////////////////////////////
-		[ 
-		  id(4), helpstring("Close the HTML User Frame Window")
-		]
-		HRESULT Close();
-
-		/////////////////////////////////////////////////////////////////////
-		[ 
-		  id(5), helpstring("Hide Form")
-		]
-		HRESULT Hide(  );
-
-		/////////////////////////////////////////////////////////////////////
-
-		[ 
-		  propget,bindable,displaybind, requestedit,id(6), 
-		  helpstring("Get/Set user form filename")
-		]
-		HRESULT FilePath( [out,retval] BSTR* filename);
-
-	}
 
 	////////////////////////////////////////////////////////////////////////////////////
 	// IMoeDocument
@@ -961,12 +900,6 @@ library Moe
 
 		[id(5), helpstring("Show a user-defined HTML Form")]
 		HRESULT ShowHtmlForm( [in] BSTR src, [in] long l, [in] int t, [in] int w, [in] int h, [in] int formStyle );
-
-		[id(6), helpstring("Edit a User Form Module with moe")] 
-		HRESULT ShowUserForm( [in] BSTR pathname, [out,retval] IMoeUserForm** form );
-
-		[id(7), helpstring("Show a User Form in Debug Mode")] 
-		HRESULT DebugUserForm( [in] BSTR pathname, [out,retval] IMoeUserForm** form );
 
 		[id(8), helpstring("Execute a Shell command")]
 		HRESULT System( [in] BSTR f);

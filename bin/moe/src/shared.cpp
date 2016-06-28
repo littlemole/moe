@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "UserForm.h"
 #include "shared.h"
 #include "tree.h"
 #include "moe.h"
@@ -9,7 +8,8 @@
 #include "xmlui.h"
 #include "moe_dispid.h"
 #include "resource.h"
-
+#include "ole/SimpleHost.h"
+#include "mdichild.h"
 /////////////////////////////////////////////////////////////////////
 //
 //  moe child dialog view sub obj
@@ -691,38 +691,6 @@ HRESULT __stdcall MoeScript::ShowHtmlForm( BSTR src, long l, int t, int w, int h
 }
 
 
-HRESULT __stdcall MoeScript::ShowUserForm( BSTR pathname, IMoeUserForm** form )
-{
-	if ( form )
-		*form = 0;
-
-	UserForm::Instance* userForm = UserForm::CreateInstance( mol::bstr(pathname).towstring(), false );
-	if ( !userForm )
-		return E_FAIL;
-
-	if ( !form )
-		return S_OK;
-
-	HRESULT hr = userForm->QueryInterface( IID_IDispatch, (void**)form );
-	return hr;
-}
-
-HRESULT __stdcall MoeScript::DebugUserForm(  BSTR pathname, IMoeUserForm** form )
-{
-	// TODO - really use debug mode !
-	if ( form )
-		*form = 0;
-
-	UserForm::Instance* userForm = UserForm::CreateInstance( mol::bstr(pathname).towstring(), false );
-	if ( !userForm )
-		return E_FAIL;
-
-	if ( !form )
-		return S_OK;
-
-	HRESULT hr = userForm->QueryInterface( IID_IDispatch, (void**)form );
-	return hr;
-}
 
 HRESULT __stdcall MoeScript::System( BSTR f)
 {

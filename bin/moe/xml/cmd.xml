@@ -167,7 +167,6 @@
     <cmd id="IDM_FORMLANG_VBSCRIPT" title="VBScript"/>
     <cmd id="IDM_FORMLANG_PERLSCRIPT" title="PerlScript"/>
 
-    <cmd id="IDM_FILE_NEW_UFS" title="New UFS" ribbon="RibbonFileNewUFS" />
     <cmd id="IDM_TREE" title="Tree Window Context Menu" />
 
     <cmd id="IDM_TREE_OPEN" title="Open in moe" ribbon="RibbonOpenTree" />

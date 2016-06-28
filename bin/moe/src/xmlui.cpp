@@ -12,8 +12,6 @@
 
 #include "editor.h"
 
-#include "formeditor.h"
-
 #include "taileditor.h"
 
 #include "hex.h"
