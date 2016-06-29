@@ -16,8 +16,11 @@ public:
 		::ZeroMemory(szSessionKey_,MOL_CCH_RM_SESSION_KEY+1);		
 	}
 
-	long getPidForFilename( const std::wstring& filename, IPID** pid )
+	long getPidForFilename( const std::wstring& filename, IPIDS** pid )
 	{
+		mol::punk<Pids> pids = Pids::CreateInstance();
+		pids.queryInterface(pid);
+
 		dwError_ = ::RmStartSession(&dwSession_, 0, szSessionKey_);
 		if (dwError_ != ERROR_SUCCESS) 
 		{
@@ -32,31 +35,34 @@ public:
 		}
 
 		DWORD dwReason;
-		UINT nProcInfoNeeded;
-		UINT nProcInfo = 1;
-		RM_PROCESS_INFO rgpi;
-		dwError_ = ::RmGetList(dwSession_, &nProcInfoNeeded, &nProcInfo, &rgpi, &dwReason);
+		UINT nProcInfoNeeded = 10;
+		UINT nProcInfo = 10;
+		RM_PROCESS_INFO rgpi[10];
+		dwError_ = ::RmGetList(dwSession_, &nProcInfoNeeded, &nProcInfo, rgpi, &dwReason);
 		if (dwError_ != ERROR_SUCCESS) 
 		{
 			return -1;
 		}
 
-		HANDLE hProcess = ::OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, rgpi.Process.dwProcessId);
-		if (hProcess) 
+		for (UINT i = 0; i < nProcInfo; i++)
 		{
-			FILETIME ftCreate, ftExit, ftKernel, ftUser;
-			if (::GetProcessTimes(hProcess, &ftCreate, &ftExit,&ftKernel, &ftUser) &&
-				::CompareFileTime(&rgpi.Process.ProcessStartTime,&ftCreate) == 0) 
-			{
-				::CloseHandle(hProcess);
 
-				Pid::Instance* p = Pid::CreateInstance(rgpi.Process.dwProcessId,ftCreate);
-				p->QueryInterface(IID_IPID,(void**)pid);
-				return rgpi.Process.dwProcessId;
+			HANDLE hProcess = ::OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, rgpi[i].Process.dwProcessId);
+			if (hProcess)
+			{
+				FILETIME ftCreate, ftExit, ftKernel, ftUser;
+				if (::GetProcessTimes(hProcess, &ftCreate, &ftExit, &ftKernel, &ftUser) &&
+					::CompareFileTime(&rgpi[i].Process.ProcessStartTime, &ftCreate) == 0)
+				{
+					::CloseHandle(hProcess);
+
+					Pid::Instance* p = Pid::CreateInstance(rgpi[i].Process.dwProcessId, ftCreate);
+					pids->add(p);
+				}
+				::CloseHandle(hProcess);
 			}
-			::CloseHandle(hProcess);
 		}
-		return -1;
+		return 1;
 	}
 
 	~RmSession()
@@ -75,7 +81,7 @@ private:
 };
 
 
-HRESULT __stdcall KillRoy::FindPIDforFile( BSTR filename, IPID** pid)
+HRESULT __stdcall KillRoy::FindPIDSforFile( BSTR filename, IPIDS** pid)
 {
 	if ( pid == 0 )
 		return E_INVALIDARG;
@@ -84,6 +90,113 @@ HRESULT __stdcall KillRoy::FindPIDforFile( BSTR filename, IPID** pid)
 
 	RmSession rms;	
 	rms.getPidForFilename(fn,pid);
+
+	return S_OK;
+}
+
+
+Pids::~Pids() {
+
+	for (auto it = pids_.begin(); it != pids_.end(); it++)
+	{
+		(*it)->Release();
+	}
+}
+
+void Pids::dispose() {}
+
+Pids::Instance* Pids::CreateInstance()
+{
+	Instance* instance = new Instance();
+	return instance;
+}
+
+Pids* Pids::add(IPID* pid)
+{
+	pids_.push_back(pid);
+	pid->AddRef();
+	return this;
+}
+
+HRESULT __stdcall Pids::Item(VARIANT i, IPID** docItem) 
+{
+	mol::variant v(i);
+	v.changeType(VT_UI4);
+	return pids_[v.uintVal]->QueryInterface(IID_IPID, (void**)(docItem));
+}
+
+HRESULT __stdcall Pids::get_Count(long* cnt)
+{
+	*cnt = pids_.size();
+	return S_OK;
+}
+
+
+Pid::Pid()
+{
+}
+
+void Pid::dispose() {}
+
+Pid::Instance* Pid::CreateInstance(long pid, FILETIME ft)
+{
+	Instance* instance = new Instance();
+	instance->pid_ = pid;
+	instance->ft_ = ft;
+	return instance;
+}
+
+HRESULT __stdcall Pid::get_PID(long* pid)
+{
+	if (!pid)
+		return E_INVALIDARG;
+	*pid = pid_;
+	return S_OK;
+}
+
+HRESULT __stdcall Pid::get_Name(BSTR* path)
+{
+	if (!path)
+		return E_INVALIDARG;
+
+	*path = 0;
+
+	WCHAR sz[MAX_PATH];
+	DWORD cch = MAX_PATH;
+
+	HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid_);
+	if (hProcess)
+	{
+		FILETIME ftCreate, ftExit, ftKernel, ftUser;
+		if (GetProcessTimes(hProcess, &ftCreate, &ftExit, &ftKernel, &ftUser)
+			&& CompareFileTime(&ft_, &ftCreate) == 0)
+		{
+			if (::QueryFullProcessImageName(hProcess, 0, sz, &cch) && cch <= MAX_PATH)
+			{
+				*path = ::SysAllocString(sz);
+			}
+		}
+		::CloseHandle(hProcess);
+	}
+	return S_OK;
+}
+
+HRESULT __stdcall Pid::TerminateProcess(VARIANT_BOOL *ok)
+{
+	if (ok)
+		*ok = VARIANT_FALSE;
+
+	HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION | PROCESS_TERMINATE, FALSE, pid_);
+	if (hProcess)
+	{
+		FILETIME ftCreate, ftExit, ftKernel, ftUser;
+		if (GetProcessTimes(hProcess, &ftCreate, &ftExit, &ftKernel, &ftUser)
+			&& CompareFileTime(&ft_, &ftCreate) == 0)
+		{
+			::TerminateProcess(hProcess, 0);
+		}
+		::CloseHandle(hProcess);
+	}
 
 	return S_OK;
 }

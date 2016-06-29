@@ -24,80 +24,42 @@ class Pid :
 	public interfaces< Pid, implements< IDispatch, IPID> >
 {
 public:
-		Pid()
-		{
-		}
+	Pid();
 
-		void dispose() {}
+	void dispose();
 
-		typedef mol::com_instance<Pid> Instance;
-		static Instance* CreateInstance(long pid, FILETIME ft)
-		{
-			Instance* instance = new Instance();
-			instance->pid_ = pid;
-			instance->ft_ = ft;
-			return instance;
-		}
+	typedef mol::com_instance<Pid> Instance;
+	static Instance* CreateInstance(long pid, FILETIME ft);
 
-        virtual HRESULT __stdcall get_PID( long* pid)
-		{
-			if (!pid)
-				return E_INVALIDARG;
-			*pid = pid_;
-			return S_OK;
-		}
-        
-        virtual HRESULT __stdcall get_Name( BSTR* path)
-		{
-			if (!path)
-				return E_INVALIDARG;
-
-			*path = 0;
-
-			WCHAR sz[MAX_PATH];
-			DWORD cch = MAX_PATH;
-
-			HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid_);
-		    if (hProcess) 
-			{
-				FILETIME ftCreate, ftExit, ftKernel, ftUser;
-				if (   GetProcessTimes(hProcess, &ftCreate, &ftExit,&ftKernel, &ftUser) 
-					&& CompareFileTime(&ft_, &ftCreate) == 0) 
-				{
-					if ( ::QueryFullProcessImageName(hProcess, 0, sz, &cch) && cch <= MAX_PATH) 
-					{
-						*path = ::SysAllocString(sz);
-					}
-				}
-				::CloseHandle(hProcess);
-			}			
-			return S_OK;
-		}
-
-        virtual HRESULT __stdcall TerminateProcess( VARIANT_BOOL *ok)
-		{
-			if ( ok )
-				*ok = VARIANT_FALSE;
-
-			HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION|PROCESS_TERMINATE, FALSE, pid_);
-		    if (hProcess) 
-			{
-				FILETIME ftCreate, ftExit, ftKernel, ftUser;
-				if (   GetProcessTimes(hProcess, &ftCreate, &ftExit,&ftKernel, &ftUser) 
-					&& CompareFileTime(&ft_, &ftCreate) == 0) 
-				{
-					::TerminateProcess(hProcess,0);
-				}
-				::CloseHandle(hProcess);
-			}	
-			
-			return S_OK;
-		}
+	virtual HRESULT __stdcall get_PID(long* pid);
+	virtual HRESULT __stdcall get_Name(BSTR* path);
+	virtual HRESULT __stdcall TerminateProcess(VARIANT_BOOL *ok);
 
 protected:
 
 	FILETIME ft_;
 	long	pid_;
+};
+
+
+class Pids :
+	public Dispatch<IPIDS>,
+	public interfaces< Pids, implements< IDispatch, IPIDS> >
+{
+public:
+	typedef mol::com_instance<Pids> Instance;
+	static Instance* CreateInstance();
+
+	~Pids();
+	void dispose();
+
+	Pids* add(IPID* pid);
+
+	virtual HRESULT __stdcall Item( VARIANT i,  IPID** docItem);
+	virtual HRESULT __stdcall get_Count(long* cnt);
+
+private:
+	std::vector<IPID*> pids_;
 };
 
 class KillRoy : 
@@ -106,14 +68,10 @@ class KillRoy :
 	public interfaces< KillRoy, implements< IDispatch, IKillRoy> >
 {
 public:
-		KillRoy()
-		{
-		}
+	KillRoy()
+	{}
 
-        virtual HRESULT __stdcall FindPIDforFile( BSTR filename, IPID** pid);
-        
-
-protected:
+    virtual HRESULT __stdcall FindPIDSforFile( BSTR filename, IPIDS** pid);
 };
 
 #endif

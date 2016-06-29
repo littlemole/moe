@@ -499,6 +499,25 @@ library ShellCtrls
 		HRESULT TerminateProcess( [out,retval] VARIANT_BOOL* ok);
 	};
 
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// IPIDS
+	////////////////////////////////////////////////////////////////////////////////////
+	[
+		uuid("5044D500-240B-4A14-BCD4-CADFADC2D38F"),
+		helpstring("Collection of pids"),
+		object, oleautomation, dual
+	]
+	interface IPIDS : IDispatch
+	{
+
+		[id(DISPID_VALUE), helpstring("Item - retrieve pid")]
+		HRESULT Item([in] VARIANT i, [out, retval] IPID** docItem);
+
+		[id(1), propget, helpstring("Count number of pids")]
+		HRESULT Count([out, retval] long* cnt);
+	};
+
 	////////////////////////////////////////////////////////////////////////////////////
 	// IKillRoy
 	////////////////////////////////////////////////////////////////////////////////////
@@ -514,13 +533,10 @@ library ShellCtrls
 		[ 
 		  id(1), helpstring("find pid for file")
 		] 
-		HRESULT FindPIDforFile([in] BSTR filename, [out,retval] IPID** pid);
+		HRESULT FindPIDSforFile([in] BSTR filename, [out,retval] IPIDS** pid);
 
 	};
 
-
-
-	
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // Event Disp Interfaces
