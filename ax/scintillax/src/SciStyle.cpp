@@ -993,7 +993,8 @@ HRESULT __stdcall AxStyle::Load( LPSTREAM pStm)
 		>> mol::property( fontname_ )
 		>> mol::property( &fontsize_ )
 		>> mol::property( foreColor_ )
-		>> mol::property( backColor_ );
+		>> mol::property( backColor_ )
+		>> mol::property( &eol_);
 	return S_OK;
 }
 
@@ -1007,7 +1008,8 @@ HRESULT __stdcall AxStyle::Save( LPSTREAM pStm,BOOL fClearDirty)
 		<< mol::property( fontname_ )
 		<< mol::property( &fontsize_ )
 		<< mol::property( foreColor_ )
-		<< mol::property( backColor_ );
+		<< mol::property( backColor_ )
+		<< mol::property( &eol_);
 	return S_OK;
 }
 
