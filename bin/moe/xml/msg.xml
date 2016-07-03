@@ -81,6 +81,7 @@
         <msg  handler="OnDispatch" cmd="IDM_LEXER_HTML" />
         <msg  handler="OnDispatch" cmd="IDM_LEXER_PLAIN" />
         <msg  handler="OnDispatch" cmd="IDM_LEXER_CSHARP" />
+        <msg  handler="OnDispatch" cmd="IDM_LEXER_D" />
         <msg  handler="OnDispatch" cmd="IDM_MODE_EOL" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_COLOR" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_SELECT" />
@@ -89,12 +90,6 @@
         <msg  handler="OnDispatch" cmd="IDM_EDIT_STOP" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_UPDATE" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_INDENTION" />
-        <msg  handler="OnDispatch" cmd="IDM_LEXER_JAVASCRIPT" />
-        <msg  handler="OnDispatch" cmd="IDM_LEXER_JAVASCRIPT" />
-        <msg  handler="OnDispatch" cmd="IDM_LEXER_JAVASCRIPT" />
-        <msg  handler="OnDispatch" cmd="IDM_LEXER_JAVASCRIPT" />
-        <msg  handler="OnDispatch" cmd="IDM_LEXER_JAVASCRIPT" />
-        <msg  handler="OnDispatch" cmd="IDM_LEXER_JAVASCRIPT" />
 
         <msg  handler="OnDispatch" cmd="IDM_FILE_NEWDIR" />
         <msg  handler="OnDispatch" cmd="IDM_FILE_UPDIR" />
@@ -121,14 +116,14 @@
         <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_QUIT" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_DEBUG_EVAL_EXPR" />
 
-      <msg  handler="OnDispatch" cmd="IDM_NAVIGATE_NEXT" />
+        <msg  handler="OnDispatch" cmd="IDM_NAVIGATE_NEXT" />
         <msg  handler="OnDispatch" cmd="IDM_NAVIGATE_BACK" />
      
         <msg  handler="OnDispatch" cmd="IDM_MODE_EXECUTEFORM" />
         <msg  handler="OnDispatch" cmd="IDM_MODE_SHOW_LINE_NUMBERS" />
         <msg  handler="OnDispatch" cmd="IDM_RIBBON_FONT_CTRL" />
 
-      <msg  handler="OnDispatchTree" cmd="IDM_TREE_OPEN" />
+        <msg  handler="OnDispatchTree" cmd="IDM_TREE_OPEN" />
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_UPDATE" />
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_RENAME" />
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_DELETE" />
@@ -140,7 +135,7 @@
         <msg  handler="OnDispatchTree" cmd="IDM_TREE_NEWDIR" />
       
 
-      <msgrange type="cmd" from="ID_FIRST_USER_CMD" to="ID_LAST_USER_CMD" handler="OnDispatch" />
+        <msgrange type="cmd" from="ID_FIRST_USER_CMD" to="ID_LAST_USER_CMD" handler="OnDispatch" />
         <msgrange type="cmd" from="ID_FIRST_USER_SCRIPT" to="ID_LAST_USER_SCRIPT" handler="OnDispatch" />
         <msgrange type="cmd" from="ID_FIRST_USER_BATCH" to="ID_LAST_USER_BATCH" handler="OnDispatch" />
         <msgrange type="cmd" from="ID_FIRST_USER_FORM" to="ID_LAST_USER_FORM" handler="OnDispatch" />
@@ -245,7 +240,7 @@
         <msg  handler="OnPasteAs" cmd="IDM_EDIT_PASTEAS" />
 
       <!-- choose lexer -->
-        <msgrange type="cmd" from="IDM_LEXER_PLAIN" to="IDM_LEXER_CSHARP" handler="OnLexer" />
+        <msgrange type="cmd" from="IDM_LEXER_PLAIN" to="IDM_LEXER_D" handler="OnLexer" />
       
         <!-- choose user defined command -->
         <msgrange type="cmd" from="ID_FIRST_USER_CMD" to="ID_LAST_USER_CMD" handler="OnUserCommand" />

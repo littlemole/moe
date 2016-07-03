@@ -6,6 +6,7 @@
 
 class UserForm;
 
+
 class FrameWindow : public mol::Frame<
 		FrameWindow,
 		mol::ole::SimpleAxHost<FrameWindow, mol::Window>,
@@ -28,9 +29,11 @@ public:
 	cmd_handler(IDM_FILE_SAVE, OnSave)
 		LRESULT OnSave();
 
+
 	msg_handler(WM_CLOSE, OnClose)
 	cmd_handler(IDM_FILE_CLOSE, OnClose)
 		LRESULT OnClose();
+
 
 	msg_handler(WM_DESTROY, OnDestroy)
 		void OnDestroy();

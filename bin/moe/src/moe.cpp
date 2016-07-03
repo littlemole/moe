@@ -961,16 +961,16 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 		initRibbon(pStgLoad);
 
 	// -- reset styles to default 
-	/*
-	mol::punk<IPersistStreamInit> psi(styles());
+	
+	mol::punk<IPersistStreamInit> psi(moeStyles);
 	if(psi)
 	{
 		HRESULT hr = psi->InitNew();
 	}
 
+
+	//return S_OK;
 	
-	return S_OK;
-	*/
 	
 	// open Style stream
 	hr = pStgLoad->OpenStream( L"STYLES", NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);

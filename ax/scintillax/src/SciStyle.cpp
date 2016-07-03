@@ -224,6 +224,17 @@ const std::string csharpKeywords =
 "else long static "   
 "enum namespace string //@ref //@lang ";
 
+const std::string dKeywords = 
+"abstract alias align asm assert auto body bool break byte case cast catch cdouble cent cfloat char class const continue creal "
+"dchar debug default delegate delete deprecated do double else enum export extern "
+"false final finally float for foreach foreach_reverse function goto idouble "
+"if ifloat immutable import in inout int interface invariant ireal is lazy long "
+"mixin module new nothrow null out override package pragma private protected public pure "
+"real ref return scope shared short static struct super switch synchronized "
+"template this throw true try typedef typeid typeof "
+"ubyte ucent uint ulong union unittest ushort version void wchar while with "
+"__FILE__ __MODULE__ __LINE__ __FUNCTION__ __PRETTY_FUNCTION__ __gshared __traits __vector __parameters "
+"string wstring dstring size_t ptrdiff_t";
 
  std::string font = "Courier New";
 
@@ -426,6 +437,35 @@ static Style cssStyles[] = {
 	STYLE(SCE_CSS_SINGLESTRING, 0, 0, 0, font, 10, lightGreen, white)
 };
 
+static Style dStyles[] = {
+	STYLE(STYLE_DEFAULT, 0, 0, 0, font, 10, black, white),
+	STYLE(STYLE_LINENUMBER, 0, 0, 0, font, 10, black, white),
+	STYLE(STYLE_BRACELIGHT, 1, 0, 0, font, 10, black, white),
+	STYLE(SCE_D_CHARACTER, 0, 0, 0, font, 10, orange, white),
+	STYLE(SCE_D_COMMENT, 0, 0, 0, font, 10, grey, white),
+	STYLE(SCE_D_COMMENTDOC, 0, 0, 0, font, 10, grey, white),
+	STYLE(SCE_D_COMMENTDOCKEYWORD, 0, 1, 0, font, 10, grey, white),
+	STYLE(SCE_D_COMMENTDOCKEYWORDERROR,0, 1, 0, font, 10, orange, white),
+	STYLE(SCE_D_COMMENTLINE, 0, 0, 1, font, 10, grey, white),
+	STYLE(SCE_D_COMMENTLINEDOC, 0, 0, 1, font, 10, grey, white),
+	STYLE(SCE_D_COMMENTNESTED, 0, 0, 0, font, 10, grey, white),
+	STYLE(SCE_D_IDENTIFIER, 1, 0, 0, font, 10, blue, white),
+	STYLE(SCE_D_NUMBER, 1, 0, 0, font, 10, darkblue, white),
+	STYLE(SCE_D_OPERATOR ,1, 0, 0, font, 10, black, white),
+	STYLE(SCE_D_STRING, 0, 0, 0, font, 10, darkGreen, white),
+	STYLE(SCE_D_STRINGB, 0, 0, 0, font, 10, darkGreen, white),
+	STYLE(SCE_D_STRINGEOL, 0, 1, 1, font, 10, orange, white),
+	STYLE(SCE_D_STRINGR, 0, 0, 0, font, 10, brown, white),
+	STYLE(SCE_D_TYPEDEF, 0, 0, 0, font, 10, darkblue, white),
+	STYLE(SCE_D_WORD, 0, 0, 0, font, 10, blue, white),
+	STYLE(SCE_D_WORD2, 0, 0, 0, font, 10, blue, white),
+	STYLE(SCE_D_WORD3, 0, 0, 0, font, 10, blue, white),
+	STYLE(SCE_D_WORD5, 0, 0, 0, font, 10, blue, white),
+	STYLE(SCE_D_WORD6, 0, 0, 0, font, 10, blue, white),
+	STYLE(SCE_D_WORD7, 0, 0, 0, font, 10, blue, white)
+
+};
+
 AxStyleSets::Instance* AxStyleSets::CreateInstance()
 {
 	Instance* d = new Instance; 
@@ -496,7 +536,23 @@ HRESULT __stdcall AxStyleSets::Load( LPSTREAM pStm)
 			{
 				ps->Load(pStm);
 			}
-			collection_.push_back(mol::variant(styleSet));
+
+			bool found = false;
+			for (long j = 0; j < collection_.size(); j++) {
+			
+				long tmp = 0;
+				mol::variant vdisp = collection_[j];
+				mol::punk<IScintillAxStyleSet> set(vdisp.pdispVal);
+				set->get_Id(&tmp);
+				if (tmp == id) {
+					found = true;
+					collection_[j] = mol::variant(styleSet);
+					break;
+				}
+			}
+			if (!found) {
+				collection_.push_back(mol::variant(styleSet));
+			}
 		}
 	}
 
@@ -653,7 +709,7 @@ HRESULT __stdcall AxStyleSets::InitNew()
 	MAKE_STYLE(cppSet,SCINTILLA_SYNTAX_CPP,SCLEX_CPP,cppStyles,cppKeyWords);
 	MAKE_STYLE(javaSet,SCINTILLA_SYNTAX_JAVA,SCLEX_CPP,cppStyles,javaKeywords);
 	MAKE_STYLE(csharpSet,SCINTILLA_SYNTAX_CSHARP,SCLEX_CPP,cppStyles,csharpKeywords);
-
+	MAKE_STYLE(dSet, SCINTILLA_SYNTAX_D, SCLEX_D, dStyles, dKeywords);
 	return S_OK;
 }
 

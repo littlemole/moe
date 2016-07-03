@@ -203,6 +203,7 @@
           <add member="String">_T("c++")</add>
           <add member="String">_T("java")</add>
           <add member="String">_T("c#")</add>
+          <add member="String">_T("d")</add>
           <set member="CurSel">0</set>
         </bar>
 

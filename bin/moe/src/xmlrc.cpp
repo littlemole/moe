@@ -135,6 +135,7 @@ extern "C" void load_codegen_metadata()
   UI().addCmd(IDM_LEXER_CPP,_T("C/C++"));  
   UI().addCmd(IDM_LEXER_JAVA,_T("Java"));  
   UI().addCmd(IDM_LEXER_CSHARP,_T("C#"));  
+  UI().addCmd(IDM_LEXER_D,_T("D"));  
   UI().addCmd(IDM_VIEW,_T("View"));  
   UI().addCmd(IDM_VIEW_DIRVIEW,_T("View Dirview"));  
   UI().addCmd(IDM_VIEW_MAXIMIZE,_T("Maximize"));  
@@ -347,6 +348,7 @@ extern "C" void load_codegen_metadata()
         UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_CPP, IDB_TOOLBAR, IDM_LEXER_CPP, false, true);
         UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_JAVA, IDB_TOOLBAR, IDM_LEXER_JAVA, false, true);
         UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_CSHARP, IDB_TOOLBAR, IDM_LEXER_CSHARP, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_D, IDB_TOOLBAR, IDM_LEXER_D, false, true);
         UI().addMenuItem(IDM_MOE, IDM_MODE, IDM_MODE_SETTINGS, IDB_TOOLBAR, IDM_MODE_SETTINGS, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_MODE);
         UI().addMenuItem(IDM_MOE, IDM_MODE, IDM_MODE_USERSTYLES, IDB_TOOLBAR, IDM_MODE_USERSTYLES, false, true);
@@ -824,6 +826,8 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_LEXER_PLAIN, make_handler(&MoeWnd::OnDi
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_LEXER_CSHARP, make_handler(&MoeWnd::OnDispatch) );
 
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_LEXER_D, make_handler(&MoeWnd::OnDispatch) );
+
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_EOL, make_handler(&MoeWnd::OnDispatch) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_COLOR, make_handler(&MoeWnd::OnDispatch) );
@@ -839,18 +843,6 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_STOP, make_handler(&MoeWnd::OnDisp
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_UPDATE, make_handler(&MoeWnd::OnDispatch) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_INDENTION, make_handler(&MoeWnd::OnDispatch) );
-
-mol::msgMap<MoeWnd>().addCmdHandler( IDM_LEXER_JAVASCRIPT, make_handler(&MoeWnd::OnDispatch) );
-
-mol::msgMap<MoeWnd>().addCmdHandler( IDM_LEXER_JAVASCRIPT, make_handler(&MoeWnd::OnDispatch) );
-
-mol::msgMap<MoeWnd>().addCmdHandler( IDM_LEXER_JAVASCRIPT, make_handler(&MoeWnd::OnDispatch) );
-
-mol::msgMap<MoeWnd>().addCmdHandler( IDM_LEXER_JAVASCRIPT, make_handler(&MoeWnd::OnDispatch) );
-
-mol::msgMap<MoeWnd>().addCmdHandler( IDM_LEXER_JAVASCRIPT, make_handler(&MoeWnd::OnDispatch) );
-
-mol::msgMap<MoeWnd>().addCmdHandler( IDM_LEXER_JAVASCRIPT, make_handler(&MoeWnd::OnDispatch) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_NEWDIR, make_handler(&MoeWnd::OnDispatch) );
 
@@ -1082,7 +1074,7 @@ mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_REDO, make_ole_handler<Editor>(&IS
 
 mol::msgMap<Editor>().addCmdHandler( IDM_FILE_PRINT, make_ole_handler<Editor>(&IScintillAx::Print) );
 
-make_command_range_handler( Editor, IDM_LEXER_PLAIN, IDM_LEXER_CSHARP, OnLexer );
+make_command_range_handler( Editor, IDM_LEXER_PLAIN, IDM_LEXER_D, OnLexer );
 
 make_command_range_handler( Editor, ID_FIRST_USER_CMD, ID_LAST_USER_CMD, OnUserCommand );
 

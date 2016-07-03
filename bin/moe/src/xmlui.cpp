@@ -217,6 +217,7 @@ void MoeWndGUIBuilder::makeUI()
     syntax->addString(_T("c++"));
     syntax->addString(_T("java"));
     syntax->addString(_T("c#"));
+    syntax->addString(_T("d"));
     syntax->setCurSel(0);
     reBar->show(SW_SHOW);
 
