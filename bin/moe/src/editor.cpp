@@ -672,7 +672,7 @@ void Editor::OnLexer(int code, int id, HWND ctrl)
 
 	int syntax = id;
 
-	if ( syntax < IDM_LEXER_PLAIN || syntax > IDM_LEXER_D )
+	if ( syntax < IDM_LEXER_PLAIN || syntax > IDM_LEXER_PYTHON )
 		return ;
 
 	syntax -= IDM_LEXER_PLAIN;

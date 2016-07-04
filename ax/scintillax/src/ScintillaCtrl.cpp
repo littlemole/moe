@@ -1491,6 +1491,18 @@ SCINTILLA_SYNTAX guess ( const std::wstring& p, const std::wstring& extension )
     {
         return SCINTILLA_SYNTAX_SQL;
     }
+	if (mol::icmp(ext, _T("d")) == 0)
+	{
+		return SCINTILLA_SYNTAX_D;
+	}
+	if (mol::icmp(ext, _T("di")) == 0)
+	{
+		return SCINTILLA_SYNTAX_D;
+	}
+	if (mol::icmp(ext, _T("py")) == 0)
+	{
+		return SCINTILLA_SYNTAX_PYTHON;
+	}
 	return SCINTILLA_SYNTAX_PLAIN;
 }
 

@@ -136,6 +136,7 @@ extern "C" void load_codegen_metadata()
   UI().addCmd(IDM_LEXER_JAVA,_T("Java"));  
   UI().addCmd(IDM_LEXER_CSHARP,_T("C#"));  
   UI().addCmd(IDM_LEXER_D,_T("D"));  
+  UI().addCmd(IDM_LEXER_PYTHON,_T("Python"));  
   UI().addCmd(IDM_VIEW,_T("View"));  
   UI().addCmd(IDM_VIEW_DIRVIEW,_T("View Dirview"));  
   UI().addCmd(IDM_VIEW_MAXIMIZE,_T("Maximize"));  
@@ -349,6 +350,7 @@ extern "C" void load_codegen_metadata()
         UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_JAVA, IDB_TOOLBAR, IDM_LEXER_JAVA, false, true);
         UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_CSHARP, IDB_TOOLBAR, IDM_LEXER_CSHARP, false, true);
         UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_D, IDB_TOOLBAR, IDM_LEXER_D, false, true);
+        UI().addMenuItem(IDM_MOE, IDM_MODE_LANGUAGE, IDM_LEXER_PYTHON, IDB_TOOLBAR, IDM_LEXER_PYTHON, false, true);
         UI().addMenuItem(IDM_MOE, IDM_MODE, IDM_MODE_SETTINGS, IDB_TOOLBAR, IDM_MODE_SETTINGS, false, true);
     UI().addMenuSeparator(IDM_MOE,IDM_MODE);
         UI().addMenuItem(IDM_MOE, IDM_MODE, IDM_MODE_USERSTYLES, IDB_TOOLBAR, IDM_MODE_USERSTYLES, false, true);
@@ -828,6 +830,8 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_LEXER_CSHARP, make_handler(&MoeWnd::OnD
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_LEXER_D, make_handler(&MoeWnd::OnDispatch) );
 
+mol::msgMap<MoeWnd>().addCmdHandler( IDM_LEXER_PYTHON, make_handler(&MoeWnd::OnDispatch) );
+
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_EOL, make_handler(&MoeWnd::OnDispatch) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_EDIT_COLOR, make_handler(&MoeWnd::OnDispatch) );
@@ -954,6 +958,8 @@ mol::msgMap<DirChild>().addMsgHandler( WM_NCDESTROY, make_handler(&DirChild::OnN
 
 mol::msgMap<DirChild>().addMsgHandler( WM_DESTROY, make_handler(&DirChild::OnDestroy) );
 
+mol::msgMap<DirChild>().addCmdHandler( IDM_VIEW_CLOSEALL, make_handler(&DirChild::OnCloseAll) );
+
 mol::msgMap<DirChild>().addCmdHandler( IDM_EDIT_UPDATE, make_ole_handler<DirChild>(&IShellPane::Update) );
 
 mol::msgMap<DirChild>().addCmdHandler( IDM_EDIT_CUT, make_ole_handler<DirChild>(&IShellPane::Cut) );
@@ -975,6 +981,8 @@ mol::msgMap<ScpDirChild>().addMsgHandler( WM_MDIACTIVATE, make_handler(&ScpDirCh
 mol::msgMap<ScpDirChild>().addMsgHandler( WM_NCDESTROY, make_handler(&ScpDirChild::OnNcDestroy) );
 
 mol::msgMap<ScpDirChild>().addMsgHandler( WM_DESTROY, make_handler(&ScpDirChild::OnDestroy) );
+
+mol::msgMap<ScpDirChild>().addCmdHandler( IDM_VIEW_CLOSEALL, make_handler(&ScpDirChild::OnCloseAll) );
 
 mol::msgMap<ScpDirChild>().addCmdHandler( IDM_EDIT_UPDATE, make_ole_handler<ScpDirChild>(&IScpList::Update) );
 
@@ -1001,6 +1009,8 @@ mol::msgMap<Editor>().addMsgHandler( WM_DESTROY, make_handler(&Editor::OnDestroy
 mol::msgMap<Editor>().addMsgHandler( WM_NCDESTROY, make_handler(&Editor::OnNcDestroy) );
 
 mol::msgMap<Editor>().addMsgHandler( WM_CLOSE, make_handler(&Editor::OnClose) );
+
+mol::msgMap<Editor>().addCmdHandler( IDM_VIEW_CLOSEALL, make_handler(&Editor::OnCloseAll) );
 
 mol::msgMap<Editor>().addMsgHandler( WM_SEARCH_MSG, make_handler(&Editor::OnSearch) );
 
@@ -1040,6 +1050,8 @@ mol::msgMap<Editor>().addCmdHandler( IDM_MODE_SHOW_LINE_NUMBERS, make_handler(&E
 
 mol::msgMap<Editor>().addCmdHandler( IDM_RIBBON_WRITE_BOM, make_handler(&Editor::OnWriteBOM) );
 
+mol::msgMap<Editor>().addCmdHandler( IDM_VIEW_CLOSEALL, make_handler(&Editor::OnCloseAll) );
+
 mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_EXECUTESCRIPT, make_handler(&Editor::OnExecScript) );
 
 mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_DEBUG_GO, make_handler(&Editor::OnDebugScriptGo) );
@@ -1074,7 +1086,7 @@ mol::msgMap<Editor>().addCmdHandler( IDM_EDIT_REDO, make_ole_handler<Editor>(&IS
 
 mol::msgMap<Editor>().addCmdHandler( IDM_FILE_PRINT, make_ole_handler<Editor>(&IScintillAx::Print) );
 
-make_command_range_handler( Editor, IDM_LEXER_PLAIN, IDM_LEXER_D, OnLexer );
+make_command_range_handler( Editor, IDM_LEXER_PLAIN, IDM_LEXER_PYTHON, OnLexer );
 
 make_command_range_handler( Editor, ID_FIRST_USER_CMD, ID_LAST_USER_CMD, OnUserCommand );
 
@@ -1095,6 +1107,8 @@ mol::msgMap<Hex>().addMsgHandler( WM_DESTROY, make_handler(&Hex::OnDestroy) );
 mol::msgMap<Hex>().addMsgHandler( WM_NCDESTROY, make_handler(&Hex::OnNcDestroy) );
 
 mol::msgMap<Hex>().addMsgHandler( WM_CLOSE, make_handler(&Hex::OnClose) );
+
+mol::msgMap<Hex>().addCmdHandler( IDM_VIEW_CLOSEALL, make_handler(&Hex::OnCloseAll) );
 
 mol::msgMap<Hex>().addCmdHandler( IDM_EDIT_FIND, make_handler(&Hex::OnFind) );
 
@@ -1124,6 +1138,8 @@ mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_EDIT_UPDATE, make_handler(&MoeHtmlW
 
 mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_MODE_SETTINGS, make_handler(&MoeHtmlWnd::options) );
 
+mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_VIEW_CLOSEALL, make_handler(&MoeHtmlWnd::OnCloseAll) );
+
 mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_EDIT_COPY, make_generic_handler(&MoeHtmlWnd::oleStdTargetExec, OLECMDID_COPY ) );
 
 mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_EDIT_CUT, make_generic_handler(&MoeHtmlWnd::oleStdTargetExec, OLECMDID_CUT ) );
@@ -1143,6 +1159,8 @@ mol::msgMap<ImgViewer>().addMsgHandler( WM_DESTROY, make_handler(&ImgViewer::OnD
 mol::msgMap<ImgViewer>().addMsgHandler( WM_NCDESTROY, make_handler(&ImgViewer::OnNcDestroy) );
 
 mol::msgMap<ImgViewer>().addMsgHandler( WM_PAINT, make_handler(&ImgViewer::OnPaint) );
+
+mol::msgMap<ImgViewer>().addCmdHandler( IDM_VIEW_CLOSEALL, make_handler(&ImgViewer::OnCloseAll) );
 
 mol::msgMap<OleChild>().addMsgHandler( WM_DESTROY, make_handler(&OleChild::OnDestroy) );
 
@@ -1165,6 +1183,8 @@ mol::msgMap<OleChild>().addCmdHandler( IDM_EDIT_PASTE, make_generic_handler(&Ole
 mol::msgMap<OleChild>().addCmdHandler( IDM_EDIT_UNDO, make_generic_handler(&OleChild::oleTargetExec, OLECMDID_UNDO,OLECMDEXECOPT_DODEFAULT ) );
 
 mol::msgMap<OleChild>().addCmdHandler( IDM_EDIT_REDO, make_generic_handler(&OleChild::oleTargetExec, OLECMDID_REDO,OLECMDEXECOPT_DODEFAULT ) );
+
+mol::msgMap<OleChild>().addCmdHandler( IDM_VIEW_CLOSEALL, make_handler(&OleChild::OnCloseAll) );
 
 mol::msgMap<MoeFormWnd>().addMsgHandler( WM_CLOSE, make_handler(&MoeFormWnd::OnClose) );
 
@@ -1200,6 +1220,8 @@ mol::msgMap<TailEditor>().addMsgHandler( WM_CLOSE, make_handler(&TailEditor::OnC
 
 mol::msgMap<TailEditor>().addCmdHandler( IDM_EDIT_UPDATE, make_handler(&TailEditor::OnReload) );
 
+mol::msgMap<TailEditor>().addCmdHandler( IDM_VIEW_CLOSEALL, make_handler(&TailEditor::OnCloseAll) );
+
 mol::msgMap<RTFEditor>().addMsgHandler( WM_MDIACTIVATE, make_handler(&RTFEditor::OnMDIActivate) );
 
 mol::msgMap<RTFEditor>().addMsgHandler( WM_CREATE, make_handler(&RTFEditor::OnCreate) );
@@ -1211,6 +1233,8 @@ mol::msgMap<RTFEditor>().addMsgHandler( WM_NCDESTROY, make_handler(&RTFEditor::O
 mol::msgMap<RTFEditor>().addMsgHandler( WM_PAINT, make_handler(&RTFEditor::OnPaint) );
 
 mol::msgMap<RTFEditor>().addMsgHandler( WM_CLOSE, make_handler(&RTFEditor::OnClose) );
+
+mol::msgMap<RTFEditor>().addCmdHandler( IDM_VIEW_CLOSEALL, make_handler(&RTFEditor::OnCloseAll) );
 
 mol::msgMap<RTFEditor>().addCmdHandler( IDM_FILE_SAVE, make_handler(&RTFEditor::OnSave) );
 

@@ -236,6 +236,10 @@ const std::string dKeywords =
 "__FILE__ __MODULE__ __LINE__ __FUNCTION__ __PRETTY_FUNCTION__ __gshared __traits __vector __parameters "
 "string wstring dstring size_t ptrdiff_t";
 
+const std::string pythonKeywords =
+"and as assert break class continue def del elif else except exec finally for from global if import "
+"in is lambda not or pass print raise return try while with yield";
+
  std::string font = "Courier New";
 
 	// Style(WPARAM style, bool bold, bool italic, bool eol,const char* font, long size, COLORREF fore, COLORREF back, const char* desc) 
@@ -457,13 +461,33 @@ static Style dStyles[] = {
 	STYLE(SCE_D_STRINGEOL, 0, 1, 1, font, 10, orange, white),
 	STYLE(SCE_D_STRINGR, 0, 0, 0, font, 10, brown, white),
 	STYLE(SCE_D_TYPEDEF, 0, 0, 0, font, 10, darkblue, white),
-	STYLE(SCE_D_WORD, 0, 0, 0, font, 10, blue, white),
+	STYLE(SCE_D_WORD, 1, 0, 0, font, 10, blue, white),
 	STYLE(SCE_D_WORD2, 0, 0, 0, font, 10, blue, white),
 	STYLE(SCE_D_WORD3, 0, 0, 0, font, 10, blue, white),
 	STYLE(SCE_D_WORD5, 0, 0, 0, font, 10, blue, white),
 	STYLE(SCE_D_WORD6, 0, 0, 0, font, 10, blue, white),
 	STYLE(SCE_D_WORD7, 0, 0, 0, font, 10, blue, white)
 
+};
+
+static Style pythonStyles[] = {
+	STYLE(STYLE_DEFAULT, 0, 0, 0, font, 10, black, white),
+	STYLE(STYLE_LINENUMBER, 0, 0, 0, font, 10, black, white),
+	STYLE(STYLE_BRACELIGHT, 1, 0, 0, font, 10, black, white),
+	STYLE(SCE_P_CLASSNAME, 1, 0, 0, font, 10, lightblue, white),
+	STYLE(SCE_P_COMMENTBLOCK, 0, 0, 1, font, 10, grey, white),
+	STYLE(SCE_P_COMMENTLINE, 0, 0,1, font, 10, grey, white),
+	STYLE(SCE_P_DECORATOR, 0, 0, 0, font, 10, lightblue, white),
+	STYLE(SCE_P_DEFNAME, 1, 0, 0, font, 10, lightblue, white),
+	STYLE(SCE_P_IDENTIFIER, 0, 0, 0, font, 10, blue, white),
+	STYLE(SCE_P_NUMBER, 1, 0, 0, font, 10, darkblue, white),
+	STYLE(SCE_P_OPERATOR, 1, 0, 0, font, 10, black, white),
+	STYLE(SCE_P_STRING, 0, 0, 0, font, 10, green, white),
+	STYLE(SCE_P_STRINGEOL, 0, 0,1, font, 10, orange, white),
+	STYLE(SCE_P_TRIPLE, 0, 0, 0, font, 10, lightblue, white),
+	STYLE(SCE_P_TRIPLEDOUBLE, 0, 0, 0, font, 10, blue, white),
+	STYLE(SCE_P_WORD, 1, 0, 0, font, 10, blue, white),
+	STYLE(SCE_P_WORD2, 0, 0, 0, font, 10, black, white)
 };
 
 AxStyleSets::Instance* AxStyleSets::CreateInstance()
@@ -652,7 +676,6 @@ HRESULT make_set( long id, Style* styles, int nStyles, AxStyleSet** result)
 	{
 		AxStyle* style = 0;
 		make_style(styles[i],&style);
-		//(*result)->collection_.Insert( mol::variant((LONG)styles[i].style_), mol::variant((IScintillAxStyle*)style) );
 		(*result)->collection_.push_back( mol::variant((IScintillAxStyle*)style) );
 		((IScintillAxStyle*)style)->Release();
 	}
@@ -710,6 +733,7 @@ HRESULT __stdcall AxStyleSets::InitNew()
 	MAKE_STYLE(javaSet,SCINTILLA_SYNTAX_JAVA,SCLEX_CPP,cppStyles,javaKeywords);
 	MAKE_STYLE(csharpSet,SCINTILLA_SYNTAX_CSHARP,SCLEX_CPP,cppStyles,csharpKeywords);
 	MAKE_STYLE(dSet, SCINTILLA_SYNTAX_D, SCLEX_D, dStyles, dKeywords);
+	MAKE_STYLE(pythonSet, SCINTILLA_SYNTAX_PYTHON, SCLEX_PYTHON, pythonStyles, pythonKeywords);
 	return S_OK;
 }
 

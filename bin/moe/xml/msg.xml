@@ -82,6 +82,7 @@
         <msg  handler="OnDispatch" cmd="IDM_LEXER_PLAIN" />
         <msg  handler="OnDispatch" cmd="IDM_LEXER_CSHARP" />
         <msg  handler="OnDispatch" cmd="IDM_LEXER_D" />
+        <msg  handler="OnDispatch" cmd="IDM_LEXER_PYTHON" />
         <msg  handler="OnDispatch" cmd="IDM_MODE_EOL" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_COLOR" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_SELECT" />
@@ -158,6 +159,7 @@
       <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
       <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
       <msg  handler="OnDestroy" msg="WM_DESTROY" />
+      <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
       
       <!-- pass messages to embedded ole object -->
       <msg  ole="Update" cmd="IDM_EDIT_UPDATE" interface="IShellPane"/>
@@ -176,6 +178,7 @@
       <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
       <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
       <msg  handler="OnDestroy" msg="WM_DESTROY" />
+      <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
 
       <!-- pass messages to embedded ole object -->
       <msg  ole="Update" cmd="IDM_EDIT_UPDATE" interface="IScpList"/>
@@ -196,6 +199,7 @@
         <msg  handler="OnDestroy" msg="WM_DESTROY" />
         <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
         <msg  handler="OnClose" msg="WM_CLOSE" />
+        <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
       
         <!-- menu commans -->
         <msg  handler="OnSearch" msg="WM_SEARCH_MSG" />
@@ -220,7 +224,7 @@
         <msg  handler="OnBackspaceUnindents" cmd="IDM_RIBBON_BACKSPACE_UNIDENTS"  />
         <msg  handler="OnShowLineNumbers" cmd="IDM_MODE_SHOW_LINE_NUMBERS" />      
         <msg  handler="OnWriteBOM" cmd="IDM_RIBBON_WRITE_BOM"  />
-
+        <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
         <msg  handler="OnExecScript" cmd="IDM_EDIT_EXECUTESCRIPT" />
         <msg  handler="OnDebugScriptGo" cmd="IDM_EDIT_DEBUG_GO" />
         <msg  handler="OnDebugScriptStepIn" cmd="IDM_EDIT_DEBUG_STEPIN" />
@@ -240,7 +244,7 @@
         <msg  handler="OnPasteAs" cmd="IDM_EDIT_PASTEAS" />
 
       <!-- choose lexer -->
-        <msgrange type="cmd" from="IDM_LEXER_PLAIN" to="IDM_LEXER_D" handler="OnLexer" />
+        <msgrange type="cmd" from="IDM_LEXER_PLAIN" to="IDM_LEXER_PYTHON" handler="OnLexer" />
       
         <!-- choose user defined command -->
         <msgrange type="cmd" from="ID_FIRST_USER_CMD" to="ID_LAST_USER_CMD" handler="OnUserCommand" />
@@ -267,7 +271,7 @@
       <msg  handler="OnDestroy" msg="WM_DESTROY" />
       <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
       <msg  handler="OnClose" msg="WM_CLOSE" />
-
+      <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
       <!-- menu -->
       <msg  handler="OnFind" cmd="IDM_EDIT_FIND" />
       <msg  handler="OnSearch" msg="WM_SEARCH_MSG" />
@@ -292,7 +296,7 @@
       <msg  handler="stop" cmd="IDM_EDIT_STOP" />
       <msg  handler="reload" cmd="IDM_EDIT_UPDATE" />
       <msg  handler="options" cmd="IDM_MODE_SETTINGS" />
-
+      <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
 
       <!-- call the oleStdTargetExec handler with given params for these msgs -->
       <msg  handler="oleStdTargetExec" params="OLECMDID_COPY" cmd="IDM_EDIT_COPY" />
@@ -310,7 +314,7 @@
       <msg  handler="OnDestroy" msg="WM_DESTROY" />
       <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
       <msg  handler="OnPaint" msg="WM_PAINT" />
-
+      <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
     </class>
      
     <class type="OleChild">
@@ -329,6 +333,7 @@
       <msg  handler="oleTargetExec" params="OLECMDID_PASTE,OLECMDEXECOPT_DODEFAULT" cmd="IDM_EDIT_PASTE" />
       <msg  handler="oleTargetExec" params="OLECMDID_UNDO,OLECMDEXECOPT_DODEFAULT" cmd="IDM_EDIT_UNDO" />
       <msg  handler="oleTargetExec" params="OLECMDID_REDO,OLECMDEXECOPT_DODEFAULT" cmd="IDM_EDIT_REDO" />
+      <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
     </class>
 
     <class type="MoeFormWnd" >
@@ -360,7 +365,7 @@
       <!-- std windows msgs -->
       <msg  handler="OnClose" msg="WM_CLOSE" />
       <msg  handler="OnReload" cmd="IDM_EDIT_UPDATE" />
-
+      <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
     </class>
 
     <class type="RTFEditor" >
@@ -372,6 +377,7 @@
       <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
       <msg  handler="OnPaint" msg="WM_PAINT" />
       <msg  handler="OnClose" msg="WM_CLOSE" />
+      <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
       
       <msg  handler="OnSave" cmd="IDM_FILE_SAVE" />
       <msg  handler="OnSaveAs" cmd="IDM_FILE_SAVE_AS" />

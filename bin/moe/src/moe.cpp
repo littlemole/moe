@@ -162,10 +162,20 @@ void MoeWnd::loadPersistUIstate()
 
 LRESULT MoeWnd::OnClose()
 {
-	Exit();
-	return 0;
-}
+	int n = this->count();
+	if (n == 0)
+	{
+		Exit();
+		return 0;
+	}
 
+	for (int i = n - 1; i >= 0; i--)
+	{
+		HWND child = this->childAt(i);
+		::PostMessage(child, WM_COMMAND, IDM_VIEW_CLOSEALL, 0);
+	}
+	return 1;
+}
 
 LRESULT MoeWnd::OnCloseAllButThis()
 {
@@ -704,6 +714,13 @@ HRESULT __stdcall MoeWnd::get_Dialogs( IMoeDialogs **d)
 
 HRESULT __stdcall MoeWnd::Exit()
 {
+	int n = this->count();
+	for (int i = n-1; i >= 0; i--)
+	{
+		HWND child = this->childAt(i);
+		::DestroyWindow(child);
+	}
+	/*
 	// tear down open documents gently
 	long cnt = 0;
 	HRESULT hr = docs()->get_Count(&cnt);
@@ -727,6 +744,7 @@ HRESULT __stdcall MoeWnd::Exit()
 		if( hr != S_OK )
 			return S_FALSE;
 	}
+	*/
 
 	// if we have ribbon, maximize it before persistence
 	if ( mol::Ribbon::ribbon()->enabled())

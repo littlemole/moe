@@ -100,6 +100,26 @@ class MoeChild :
 	public mol::interfaces< C, mol::implements< IDispatch, IMoeDocument, IProvideClassInfo> >
 
 {
+public:
+
+	LRESULT OnCloseAll()
+	{
+
+		LRESULT r = ::SendMessage(*this, WM_CLOSE, 0, 0);
+		if (r == 0) {
+
+			docs()->remove(this);
+
+			long cnt = 0;
+			docs()->get_Count(&cnt);
+			if (cnt == 0)
+			{
+				moe()->Exit();
+			}
+		}
+		return r;
+	}
+
 protected:
 
 	void initializeMoeChild( const std::wstring& p)
@@ -136,7 +156,9 @@ protected:
 
 template<class C, long D, const CLSID* clsid, UINT M>
 class MoeAxChild : public MoeChild<C,mol::AxWnd<C,mol::MdiChild,clsid>,D,M>
-{};
+{
+
+};
 
 /////////////////////////////////////////////////////////////////////
 //

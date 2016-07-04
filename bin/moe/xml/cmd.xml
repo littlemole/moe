@@ -115,7 +115,7 @@
     <cmd id="IDM_LEXER_JAVA" title="Java" />
     <cmd id="IDM_LEXER_CSHARP" title="C#" />
     <cmd id="IDM_LEXER_D" title="D" />
-    
+    <cmd id="IDM_LEXER_PYTHON" title="Python" />
     <cmd id="IDM_VIEW" title="View" />
     <cmd id="IDM_VIEW_DIRVIEW" title="View Dirview" ribbon="RibbonShowDirView"/>
     <cmd id="IDM_VIEW_MAXIMIZE" title="Maximize" ribbon="RibbonViewMaximize"/>

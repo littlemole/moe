@@ -84,6 +84,7 @@
           <menu cmd="IDM_LEXER_JAVA" />
           <menu cmd="IDM_LEXER_CSHARP" />
           <menu cmd="IDM_LEXER_D" />
+          <menu cmd="IDM_LEXER_PYTHON" />
         </menu>
         <menu cmd="IDM_MODE_SETTINGS" />
         <menu separator="true"  />
