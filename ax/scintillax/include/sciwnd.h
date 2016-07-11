@@ -471,11 +471,20 @@ public:
 
 	int styleSetFore(int style, int col)
 	{
+		if (style == STYLE_LINENUMBER)
+		{
+			setCaretForeCol(col);
+			sendMessage(SCI_SETSELBACK, (WPARAM)(1), (LPARAM)(col));
+		}
 		return sendMessage( SCI_STYLESETFORE, (WPARAM)style , (LPARAM)col );
 	}
 
 	int styleSetBack(int style, int col)
 	{
+		if (style == STYLE_LINENUMBER)
+		{
+			sendMessage(SCI_SETSELFORE, (WPARAM)(1), (LPARAM)(col));
+		}
 		return sendMessage( SCI_STYLESETBACK, (WPARAM)style , (LPARAM)col );
 	}
 
@@ -487,6 +496,12 @@ public:
 	int styleSetCharacterSet(int style, int set)
 	{
 		return sendMessage( SCI_STYLESETCHARACTERSET, (WPARAM)style , (LPARAM)set );
+	}
+
+
+	int setCaretForeCol(int col)
+	{
+		return sendMessage(SCI_SETCARETFORE, (WPARAM)col, (LPARAM)col);
 	}
 
 	int setCodePage(int cp)
@@ -557,6 +572,12 @@ public:
 	int getMarginWidth(int margin )
 	{
 		return sendMessage( SCI_SETMARGINWIDTHN, (WPARAM)margin , (LPARAM)(0) );
+	}
+
+	int setMarginStyle(int margin) 
+	{
+		 sendMessage(SCI_SETMARGINTYPEN, margin, SC_MARGIN_FORE);
+		return sendMessage(SCI_SETMARGINTYPEN, margin, SC_MARGIN_BACK);
 	}
 
 	int setOvertype(bool b)
@@ -795,13 +816,24 @@ public:
 	{
 		if ( b )
 		{
+			
+			LRESULT fore = sendMessage(SCI_STYLEGETFORE, (WPARAM)STYLE_DEFAULT, (LPARAM)0);
+			LRESULT back = sendMessage(SCI_STYLEGETBACK, (WPARAM)STYLE_DEFAULT, (LPARAM)0);
+		
 			sendMessage( SCI_SETMARGINWIDTHN, (WPARAM)(2), (LPARAM)(16) );
 			sendMessage( SCI_SETMARGINSENSITIVEN, (WPARAM)(2), (LPARAM)(true) );
 			sendMessage( SCI_MARKERDEFINE, (WPARAM)(2), (LPARAM)(SC_MARK_CIRCLE) );
-			sendMessage( SCI_MARKERSETFORE, (WPARAM)(2), (LPARAM)(RGB(0,0,0)) );
+
 			sendMessage( SCI_SETMARGINMASKN, (WPARAM)(1), (LPARAM)(0) );
-			sendMessage( SCI_SETMARGINMASKN, (WPARAM)(2), (LPARAM)(-1) );
-			//sendMessage( SCI_MARKERSETBACK, (WPARAM)(2), (LPARAM)(SC_MARK_CIRCLE) );
+			sendMessage(SCI_SETMARGINMASKN, (WPARAM)(2),  (LPARAM)(~SC_MASK_FOLDERS) );
+			//sendMessage( SCI_MARKERSETBACK, (WPARAM)(2), (LPARAM)(back) );
+			//sendMessage(SCI_MARKERSETFORE, (WPARAM)(2), (LPARAM)(fore));
+			//sendMessage(SCI_SETFOLDMARGINCOLOUR, (WPARAM)1, (LPARAM)(fore));
+			//sendMessage(SCI_SETFOLDMARGINHICOLOUR, (WPARAM)1, (LPARAM)(back));
+
+		//	sendMessage(SCI_SETMARGINTYPEN, (WPARAM)(2) ,(LPARAM)(SC_MARGIN_BACK));
+		//	sendMessage(SCI_SETMARGINTYPEN, (WPARAM)(2), (LPARAM)(SC_MARGIN_FORE));
+			setCaretForeCol(fore);
 			return;
 		}
 		sendMessage( SCI_SETMARGINWIDTHN, (WPARAM)(2), (LPARAM)(0) );

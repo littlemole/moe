@@ -5,8 +5,6 @@ SET TARGET=%2
 SET MODE=%3
 
 set year=%date:~-4%
-rem echo year=%year%
-
 set month=%date:~3,2%
 set day=%date:~-10,-8%
 
