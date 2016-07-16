@@ -7,11 +7,11 @@ I) pre steps
 a) pre-requisites:
 
 	* Visual Studio 2015
-    * WIX 3.8
+	* WIX 3.8
 	* boost (recommended: 1.61)
 	* perl (recommended: activestate perl)
-    * java jdk
-    * ant ( for java extensions )
+	* java jdk
+	* ant ( for java extensions )
 
 b) setup environment
 	* JAVA_HOME is supposed to point to a java sdk >= 1.6
