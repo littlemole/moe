@@ -1,17 +1,22 @@
 @echo off
-set MSBUILDTREATALLTOOLSVERSIONSASCURRENT 
 
-rem compiler version
-set PlatformToolset=v140
-
-rem initialise VC environment
-set VCVARSBAT="C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
+rem ###################################################
+rem configuration - usually no need to check anything
+rem but the boost path
+rem ###################################################
 
 rem boost
 set boost=C:\boost\boost_1_61_0\
 
+rem compiler version
+set MSBUILDTREATALLTOOLSVERSIONSASCURRENT 
+set PlatformToolset=v140
+
+rem initialise VC environment
+set VCVARSBAT="%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
+
 rem ribbon toolbar compiler
-set UICC="C:\Program Files (x86)\Windows Kits\8.1\bin\x86\uicc.exe"
+set UICC="%ProgramFiles(x86)%\Windows Kits\8.1\bin\x86\uicc.exe"
 
 rem java includes
 set java=%JAVA_HOME%\include\win32;%JAVA_HOME%\include;
