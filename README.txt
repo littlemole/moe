@@ -23,7 +23,7 @@ b) setup environment
 c) configure paths
 
 
-check env14.bat for paths to external dependencies and verify the are correct
+check env14.bat for paths to external dependencies and verify they are correct
 
   * PlatformToolset should be set to v14 for Visual Studio 2015
   * VCVARSBAT should point to the Visual Studio vcvarsall.bat script
