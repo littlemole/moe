@@ -1,7 +1,24 @@
 @echo off
 set MSBUILDTREATALLTOOLSVERSIONSASCURRENT 
+
+rem compiler version
 set PlatformToolset=v140
+
+rem initialise VC environment
+set VCVARSBAT="C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
+
+rem boost
+set boost=C:\boost\boost_1_61_0\
+
+rem ribbon toolbar compiler
 set UICC="C:\Program Files (x86)\Windows Kits\8.1\bin\x86\uicc.exe"
+
+rem java includes
+set java=%JAVA_HOME%\include\win32;%JAVA_HOME%\include;
+
+
+rem ###################################################
+
 
 set CONF=%1
 if %1!==! SET CONF=uni_debug
@@ -19,7 +36,7 @@ set CONFIG=/Debug
 
 
 :psdk
-call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %PLAT%
+call %VCVARSBAT% %PLAT%
 
 set Configuration=%CONF%
 

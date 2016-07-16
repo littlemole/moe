@@ -1,107 +1,69 @@
 building moe
 ------------
 
+I) pre steps
+============
+
 a) pre-requisites:
 
+	* Visual Studio 2015
+    * WIX 3.8
+	* boost (recommended: 1.61)
+	* perl (recommended: activestate perl)
+    * java jdk
+    * ant ( for java extensions )
 
-	* Win 7.1 SDK
-        * WIX 3.5
-	* boost 
-	* activestate perl
-        * java jdk
-        * ant ( for extensions )
+b) setup environment
+	* JAVA_HOME is supposed to point to a java sdk >= 1.6
+	* ant is supposed to be on the PATH
+	* perl is supposed to be on the PATH
+	* WIX environment variable points to WIX installation. 
+	  (hint: for a fresh WIX install a new login session is needed.)
 
-
-
-b) setup paths
-
-
-check master.props for paths to external dependencies:
-
-  * boost
-  * java (for extentions, see below)
-
-perl and ant are supposed to be in the path
+c) configure paths
 
 
-c) setup the env
+check env14.bat for paths to external dependencies and verify the are correct
+
+  * PlatformToolset should be set to v14 for Visual Studio 2015
+  * VCVARSBAT should point to the Visual Studio vcvarsall.bat script
+  * boost variable should point to a recent boost libraries installation. boost must not be compiled we only use include only libraries.
+  * UICC variable should point to the ms ribbon compiler. 8.1 is recommended.
+  * java should point to the JDK native c++ include directories. Should work out of the box if JAVA_HOME is set properly.
+  
+
+II) compiling moe
+================
 
 
-call env.bat specifying configuration and platform:
+a) full build
 
-either of:
-	env uni_debug /x86
-	env uni_release /x86
-	env uni_debug /x64
-	env uni_release /x64
+to run a full build open a regular cmd prompt, navigate to molib root folder and type:
+C:\molib> nb.bat armageddon
 
-env.bat is a simple batch file which calls SetEnv.cmd from the PLATFORM SDK
+this will do a clean followed by a full release build of moe, its com controls, internal libraries as well as compile the external dependencies for
+both x86 and x64. It will also compile the installer packages.
 
-it expects the platform sdk at the default location, modify if necessary:
-"C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\SetEnv.Cmd"
+replace armageddon with kosmos to skip the clean step. to only clean, replace armageddon with clean.
 
+b) single platform build
 
+to create a debug build only for x64 or x86, specify:
+C:\molib> nbs.bat uni_debug x86 armageddon
 
-d) optional: use msbuild to (re)build 3dparty libs
+replace uni_debug with uni_release to crate a release build. replace x86 with x64 to go 64bit.
+replace armageddon with kosmos to skip the clean step. to only clean, replace armageddon with clean.
 
+c) only build a specific project
 
-	cd 3dParty
-	msbuild build.xml /t:Clean
-	msbuild build.xml
-	cd ..
+first, from a new cmd line window navigate to molib's root folder and type:
+C:\molib> env14.bat uni_debug x86
 
+to initialize a debug environment for the x86 platform. 
 
-e) build moe
+then use msbuild as follows, to build the win library:
+C:\molib> cd lib\src\win
+C:\molib\lib\src\win> msbuild build.xml
 
-	msbuild build.xml /t:Clean
-	msbuild build.xml
-
-
-
-f) building moe extension (jre and net)
-
-	* (should be obsolete requirement:) moe must be installed in the version (win32/x64) matching the
-	  build environment
-        * ant must be in the path (for java)
-
-
-        msbuild build.xml /t:cleanjre
-        msbuild build.xml /t:jre
-
-        msbuild build.xml /t:cleannet
-        msbuild build.xml /t:net
-
-
-
-issues (when running without vs studio 2010 installed, only winsdk. probably occurs when .NET 4.5+ and/or VC 2012/2013 installed on a win7 box):
-
-1)
-
-http://stackoverflow.com/questions/10888391/error-link-fatal-error-lnk1123-failure-during-conversion-to-coff-file-inval
-
-
-find installed versions of cvtres.exe in your PATH using where cvtres.exe
-Delete/rename the ones installed into vc2010 subdirs, use the ones from .NET 4.5 instead
-
-2)
-
-Windows Update KB2455033 breaks build with missing ammintrin.h
-
-Install KB2519277 first, then install KB2455033 (only avail via windows update).
-
-
-
-http://blogs.msdn.com/b/vcblog/archive/2011/03/31/10148110.aspx
-
-
-3)
-
-from http://blogs.msdn.com/b/vcblog/archive/2011/03/31/10148110.aspx
-
-Our recommended install order is:
-
-    Visual Studio 2010
-    Windows SDK 7.1
-    Visual Studio 2010 SP1
-    Visual C++ 2010 SP1 Compiler Update for the Windows SDK 7.1
-
+in order to clean a project, run:
+C:\molib\lib\src\win> msbuild build.xml /t:Clean
