@@ -983,7 +983,7 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 	mol::punk<IPersistStreamInit> psi(moeStyles);
 	if(psi)
 	{
-		HRESULT hr = psi->InitNew();
+		//HRESULT hr = psi->InitNew();
 	}
 
 

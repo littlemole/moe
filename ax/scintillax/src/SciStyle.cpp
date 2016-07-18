@@ -562,6 +562,9 @@ HRESULT __stdcall AxStyleSets::Load( LPSTREAM pStm)
 			}
 
 			bool found = false;
+			/*
+			// this looks nice but is broken as the lexer id is not unique.
+			// to make this work we need a unique styleset id at least.
 			for (long j = 0; j < collection_.size(); j++) {
 			
 				long tmp = 0;
@@ -574,6 +577,7 @@ HRESULT __stdcall AxStyleSets::Load( LPSTREAM pStm)
 					break;
 				}
 			}
+			*/
 			if (!found) {
 				collection_.push_back(mol::variant(styleSet));
 			}
