@@ -10,7 +10,9 @@
         <MSBuild Projects="setting/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		<MSBuild Projects="ssh/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
         <MSBuild Projects="shellctrl/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+<!--
         <MSBuild Projects="shellfolder/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
+-->
         <MSBuild Projects="scintillax/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
 		<MSBuild Projects="userform/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"/>
  </Target>
@@ -22,7 +24,9 @@
         <MSBuild Projects="process/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
         <MSBuild Projects="setting/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
         <MSBuild Projects="shellctrl/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+<!--
         <MSBuild Projects="shellfolder/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
+-->
         <MSBuild Projects="scintillax/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 		<MSBuild Projects="userform/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
 		<MSBuild Projects="ssh/build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />

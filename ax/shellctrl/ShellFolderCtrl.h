@@ -1,5 +1,5 @@
-#ifndef MOL_DEF_SHELLDIR_VIEW_DEF_GUARDING_
-#define MOL_DEF_SHELLDIR_VIEW_DEF_GUARDING_
+#ifndef MOL_DEF_SHELLDIRPANE_VIEW_DEF_GUARDING_
+#define MOL_DEF_SHELLDIRPANE_VIEW_DEF_GUARDING_
 
 #pragma once
 #include "win/IO.h"
@@ -11,7 +11,7 @@
 #include "ole/DragDrop.h"
 #include "ole/Ctrl.h"
 #include "ole/ShellFolderWnd.h"
-#include "shellFolder_h.h"
+#include "shellCtrl_h.h"
 #include "resource.h"
 
 using namespace mol;

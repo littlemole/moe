@@ -39,9 +39,6 @@
     <CustomAction Id="NETEXE" Property='NETEXE' Value='[INSTALLLOCATION]\moe\net.exe' />
     <CustomAction Id="JREEXE" Property='JREEXE' Value='[INSTALLLOCATION]\moe\jre.exe' />
 	<CustomAction Id="USERFORMEXE" Property='USERFORMEXE' Value='[INSTALLLOCATION]\moe\userforms.exe' />
-<!--
-    <CustomAction Id="MOEPATH" Property='MOEPATH' Value='[INSTALLLOCATION]\moe\' />
--->
 
     <!-- register/unregister moe's dlls -->
     <CustomAction Id="DLLREG_io" Property="REGSVR32" ExeCommand='/s "[INSTALLLOCATION]\moe\io.dll"' Execute="deferred" Impersonate="no" />
@@ -61,9 +58,6 @@
 
     <CustomAction Id="DLLREG_shellCtrl" Property="REGSVR32" ExeCommand='/s "[INSTALLLOCATION]\moe\shellCtrl.dll"' Execute="deferred" Impersonate="no" />
     <CustomAction Id="DLLUNREG_shellCtrl" Property="REGSVR32" ExeCommand='/s /u "[INSTALLLOCATION]\moe\shellCtrl.dll"' Execute="deferred" Impersonate="no" Return="ignore"/>
-
-    <CustomAction Id="DLLREG_shellFolder" Property="REGSVR32" ExeCommand='/s "[INSTALLLOCATION]\moe\shellFolder.dll"' Execute="deferred" Impersonate="no" />
-    <CustomAction Id="DLLUNREG_shellFolder" Property="REGSVR32" ExeCommand='/s /u "[INSTALLLOCATION]\moe\shellFolder.dll"' Execute="deferred" Impersonate="no" Return="ignore"/>
 
     <CustomAction Id="DLLREG_moeShell" Property="REGSVR32" ExeCommand='/s "[INSTALLLOCATION]\moe\moeShell.dll"' Execute="deferred" Impersonate="no" />
     <CustomAction Id="DLLUNREG_moeShell" Property="REGSVR32" ExeCommand='/s /u "[INSTALLLOCATION]\moe\moeShell.dll"' Execute="deferred" Impersonate="no" Return="ignore"/>
@@ -201,7 +195,6 @@
       <Custom Action='DLLREG_comtypes' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLREG_ScintillAX' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLREG_shellCtrl' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
-      <Custom Action='DLLREG_shellFolder' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLREG_setting' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLREG_moeShell' After='InstallFiles'>(NOT Installed OR UPGRADINGPRODUCTCODE) AND (&amp;MoeShell=3)</Custom>
       <Custom Action='EXEREG_net' After='InstallFiles'>(NOT Installed OR UPGRADINGPRODUCTCODE) AND (&amp;MoeNet=3)</Custom>
@@ -216,7 +209,6 @@
       <Custom Action='DLLUNREG_comtypes' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLUNREG_ScintillAX' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLUNREG_shellCtrl' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
-      <Custom Action='DLLUNREG_shellFolder' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLUNREG_setting' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLUNREG_moeShell' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='EXEUNREG_net' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>

@@ -112,11 +112,12 @@
             SourceFiles="..\..\ax\shellctrl\$(confPath)\shellctrl.dll"
             DestinationFolder=".\moe"
         />
-
+<!--
         <Copy
             SourceFiles="..\..\ax\shellfolder\$(confPath)\shellfolder.dll"
             DestinationFolder=".\moe"
         />
+-->
 
         <Copy
             SourceFiles="..\..\ax\ssh\$(confPath)\ssh.dll"
@@ -192,7 +193,9 @@
 		<Exec Command='mt.exe -manifest .\$(regfree)\pipedprocess.dll.isolated.manifest -outputresource:".\$(regfree)\moe\pipedprocess.dll;#2" -verbose' WorkingDirectory="."/>
 		<Exec Command='mt.exe -manifest .\$(regfree)\shellctrl.dll.isolated.manifest -outputresource:".\$(regfree)\moe\shellctrl.dll;#2" -verbose' WorkingDirectory="."/>
 		<Exec Command='mt.exe -manifest .\$(regfree)\scintillax.dll.isolated.manifest -outputresource:".\$(regfree)\moe\scintillax.dll;#2" -verbose' WorkingDirectory="."/>
+<!--
 		<Exec Command='mt.exe -manifest .\$(regfree)\shellfolder.dll.isolated.manifest -outputresource:".\$(regfree)\moe\shellfolder.dll;#2" -verbose' WorkingDirectory="."/>
+-->
 		<Exec Command='mt.exe -manifest .\$(regfree)\ssh.dll.isolated.manifest -outputresource:".\$(regfree)\moe\ssh.dll;#2" -verbose' WorkingDirectory="."/>
 
 		<Exec Command='cscript "..\..\cg\bin\zip.vbs" "$(regfreeTargetPath)\moe.zip" "$(regfree)\moe"' WorkingDirectory="."/>

@@ -163,11 +163,6 @@
         />
 
         <Copy
-            SourceFiles="..\..\ax\shellfolder\$(confPath)\shellfolder.dll"
-            DestinationFolder=".\moe"
-        />
-
-        <Copy
             SourceFiles="..\..\ax\ssh\$(confPath)\ssh.dll"
             DestinationFolder=".\moe"
         />

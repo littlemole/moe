@@ -9,7 +9,6 @@
 #include "moe_i.c"
 #include "ax/scintillax/scintillax_i.c"
 #include "ax/shellctrl/shellctrl_i.c"
-#include "ax/shellfolder/shellfolder_i.c"
 #include "ax/setting/setting_i.c"
 #include "ax/ssh/ssh_i.c"
 

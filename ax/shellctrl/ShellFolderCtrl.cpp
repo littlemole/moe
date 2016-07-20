@@ -4,7 +4,7 @@
 #include "ole/enum.h"
 #include "ole/Img.h"
 #include "util/str.h"
-#include "shellfolder_dispid.h"
+#include "shellctrl_dispid.h"
 #include <sstream>
 
 

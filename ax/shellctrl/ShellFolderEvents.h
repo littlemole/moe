@@ -1,12 +1,12 @@
-#ifndef MOL_DEF_SHELLFOLDER_VIEW_DEF_GUARDING_
-#define MOL_DEF_SHELLFOLDER_VIEW_DEF_GUARDING_
+#ifndef MOL_DEF_SHELLFOLDERPANE_VIEW_DEF_GUARDING_
+#define MOL_DEF_SHELLFOLDERPANE_VIEW_DEF_GUARDING_
 
 #pragma once
 #include "ole/Bstr.h"
 #include "ole/Variant.h"
 #include "ole/Aut.h"
 #include "ole/cp.h"
-#include "shellfolder_h.h"
+#include "shellCtrl_h.h"
 
 // not using namespace mol::ole;
 // not using namespace mol::io;
@@ -16,7 +16,7 @@
 class ShellFolderEvents : 
 	public mol::Dispatch< IShellPaneEvents, 
 					 &IID_IShellPaneEvents, 
-					 &LIBID_ShellFolder, 1, 0 > ,
+					 &LIBID_ShellCtrls, 1, 0 > ,
 	public mol::interfaces< ShellFolderEvents, 
 			mol::implements< IDispatch, _IShellPaneEvents> >
 {

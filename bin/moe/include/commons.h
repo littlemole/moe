@@ -56,7 +56,7 @@
 // ax impl
 #include "ax/setting/setting_h.h"
 #include "ax/shellctrl/ShellListEvents.h"
-#include "ax/shellfolder/ShellFolderEvents.h"
+#include "ax/shellctrl/ShellFolderEvents.h"
 #include "ax/shellctrl/ShellTreeEvents.h"
 #include "ax/shellctrl/HexCtrlEvents.h"
 #include "ax/ScintillAx/include/ScintillaxEvents.h"

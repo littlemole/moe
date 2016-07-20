@@ -58,6 +58,7 @@
     <ClCompile Include="HexCtrl.cpp" />
     <ClCompile Include="shellCtrl.cpp" />
     <ClCompile Include="ShellListCtrl.cpp" />
+    <ClCompile Include="ShellFolderCtrl.cpp" />
     <ClCompile Include="ScpListCtrl.cpp" />
     <ClCompile Include="ShellTreeCtrl.cpp" />
     <ClCompile Include="NamespaceTree.cpp" />
