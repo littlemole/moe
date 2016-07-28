@@ -695,7 +695,7 @@ HRESULT __stdcall MoeScript::ShowHtmlForm( BSTR src, long l, int t, int w, int h
 HRESULT __stdcall MoeScript::System( BSTR f)
 {
 	statusBar()->status(mol::bstr(f).towstring());
-	std::wstring s = findFile(mol::bstr(f).towstring());
+	std::wstring s = /*findFile*/(mol::bstr(f).towstring());
 	if ( s == _T("") )
 		return E_FAIL;
 

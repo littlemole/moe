@@ -208,7 +208,8 @@ bool PipedProcess::create( const std::wstring& cmdline )
 	siStartInfo.hStdError  = errorPipe_.stdOut();  
 	siStartInfo.hStdOutput = readPipe_.stdOut(); 
 	siStartInfo.hStdInput  = writePipe_.stdIn(); 
-	siStartInfo.dwFlags	  |= STARTF_USESTDHANDLES;
+	siStartInfo.dwFlags	   = STARTF_USESTDHANDLES| STARTF_USESHOWWINDOW;
+	siStartInfo.wShowWindow = SW_HIDE;
 
 	commandline_ = new wchar_t[cmdline.size()+1];
 	std::copy(cmdline.c_str(), cmdline.c_str() + cmdline.size()+1, commandline_ );
@@ -219,7 +220,8 @@ bool PipedProcess::create( const std::wstring& cmdline )
 							  NULL,					// process security attributes 
 							  NULL,					// primary thread security attributes 
 							  TRUE,					// handles are inherited 
-							  DETACHED_PROCESS,		// creation flags 
+							  //DETACHED_PROCESS| 
+							  CREATE_NO_WINDOW,		// creation flags 
 							  NULL,					// use parent's environment 
 							  NULL,					// use parent's current directory 
 							  &siStartInfo,			// STARTUPINFO pointer 
