@@ -1,4 +1,7 @@
-var java = moe.Script.CreateObject("JRE.Java");
+//var java = moe.Script.CreateObject("JRE.Java");
+
+var java = new Java();
+if(java) Dialogs.MsgBox("hu","ha",0);
 
 var JOptionPane = java.Runtime.javax.swing.JOptionPane;
 

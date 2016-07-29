@@ -8,6 +8,11 @@
 
 <file name="shellctrl.dll" hashalg="SHA1">
 <comClass 
+	clsid="{3609D58F-1D8E-437d-BA8A-11A5DBF59BAD}" 
+	tlbid="{AD81C1CC-B3F3-47e8-BB69-31912616A39F}"
+  	progid="ShellFolder.ShellPane" description="">
+</comClass>
+<comClass 
 	clsid="{22C25563-E185-4753-8299-1998CD73D389}" 
 	tlbid="{74618F47-2F2A-4B0F-BDCA-344BE3208ECE}"
   progid="ShellCtrls.ShellTree" description="">
@@ -97,6 +102,16 @@
 <comInterfaceExternalProxyStub name="IScpList " 
 	iid="{D30F5C7F-CFAB-4D26-8FF3-0C7F67A0269D}" 
 	tlbid="{74618F47-2F2A-4B0F-BDCA-344BE3208ECE}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+<comInterfaceExternalProxyStub name="IShellPane" 
+	iid="{8E03AB4B-E12B-42a2-905D-F106854C7153}" 
+	tlbid="{AD81C1CC-B3F3-47e8-BB69-31912616A39F}" 
+	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
+</comInterfaceExternalProxyStub>
+<comInterfaceExternalProxyStub name="IShellPaneEvents" 
+	iid="{3B3FF6F3-D0DB-4ada-A593-D99E6F79E6D1}" 
+	tlbid="{AD81C1CC-B3F3-47e8-BB69-31912616A39F}" 
 	proxyStubClsid32="{00020424-0000-0000-C000-000000000046}">
 </comInterfaceExternalProxyStub>
 </assembly>

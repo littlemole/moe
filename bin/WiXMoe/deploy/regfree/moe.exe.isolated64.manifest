@@ -32,11 +32,7 @@
   </dependentAssembly>
   </dependency>
 <dependency>
-<dependentAssembly>
-  <assemblyIdentity type="win32" name="shellfolder" version="1.0.0.0" /> 
-  </dependentAssembly>
-  </dependency>
-<dependency>
+
 <dependentAssembly>
   <assemblyIdentity type="win32" name="scintillax" version="1.0.0.0" /> 
   </dependentAssembly>
