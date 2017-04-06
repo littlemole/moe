@@ -496,12 +496,15 @@ void MoeWnd::OnShowDirView ()
 	Menu m(*this);
 	if ( !treeWnd()->isVisible() )
 	{
-		treeWnd()->show(SW_SHOW);
+		moeConfig->put_ShowTreeView(VARIANT_TRUE);
+
+		//treeWnd()->show(SW_SHOW);
 		::InvalidateRect(mdiClient(),0,TRUE);
 	}
 	else
 	{
-		treeWnd()->show(SW_HIDE);
+		moeConfig->put_ShowTreeView(VARIANT_FALSE);
+		//treeWnd()->show(SW_HIDE);
 	}
 	OnLayout(0,0,0);
 }
@@ -1072,8 +1075,10 @@ void  MoeWnd::initRibbon(IStorage* store)
 	mol::Ribbon::handler(RibbonBytesShown)->items(vb);
 
 	// Check the Show Dir View Handler
-	mol::Ribbon::handler(RibbonShowDirView)->check(true);
-
+	if (treeWnd()->isVisible())
+	{
+		mol::Ribbon::handler(RibbonShowDirView)->check(true);
+	}
 	reBar()->show(SW_HIDE);
 	// default Ribbon mode
 	Ribbon::ribbon()->mode(0);

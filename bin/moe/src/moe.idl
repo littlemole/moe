@@ -874,6 +874,16 @@ library Moe
 		[id(21), helpstring("Edit moe File Associations")]
 		HRESULT EditFileAssociations();
 
+		/////////////////////////////////////////////////////////////////////
+		[
+			propput, bindable, displaybind, requestedit, id(22),
+			helpstring("Get/Set Tree Visibility")
+		]
+		HRESULT ShowTreeView([in] VARIANT_BOOL vbShowTreeView);
+		[
+			propget, bindable, displaybind, requestedit, id(22),
+		]
+		HRESULT ShowTreeView([out, retval] VARIANT_BOOL* vbShowTreeView);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////

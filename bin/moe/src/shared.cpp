@@ -896,6 +896,33 @@ HRESULT __stdcall MoeConfig::get_ShowLineNumbers(  VARIANT_BOOL* vb)
 	return S_OK;
 }
 
+HRESULT __stdcall MoeConfig::put_ShowTreeView(VARIANT_BOOL vb)
+{
+	if (showTreeView_ != vb)
+	{
+		if (vb == VARIANT_TRUE)
+		{
+			treeWnd()->show(SW_SHOW);
+		}
+		else		
+		{
+			treeWnd()->show(SW_HIDE);
+		}
+	}
+
+	showTreeView_ = vb;
+	return S_OK;
+}
+
+HRESULT __stdcall MoeConfig::get_ShowTreeView(VARIANT_BOOL* vb)
+{
+	if (vb)
+	{
+		*vb = showTreeView_;
+	}
+	return S_OK;
+}
+
 HRESULT __stdcall  MoeConfig::get_Settings( IDispatch** settings)
 {
 	return settings_.queryInterface(settings);
@@ -1126,7 +1153,8 @@ HRESULT __stdcall MoeConfig::Load( LPSTREAM pStm)
 		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_SHOWLINENUMBERS,VT_BOOL) )
 		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONBACKCOLOR,VT_BSTR) )
 		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONFORECOLOR,VT_BSTR) )
-		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONTEXTCOLOR,VT_BSTR) );
+		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONTEXTCOLOR,VT_BSTR) )
+		 >> mol::property(mol::DispId(this, DISPID_IMOECONFIG_SHOWTREEVIEW, VT_BOOL));
 
 	return S_OK;
 }
@@ -1142,8 +1170,8 @@ HRESULT __stdcall MoeConfig::Save( LPSTREAM pStm,BOOL fClearDirty)
 		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_SHOWLINENUMBERS,VT_BOOL) )
 		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONBACKCOLOR,VT_BSTR) )
 		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONFORECOLOR,VT_BSTR) )
-		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONTEXTCOLOR,VT_BSTR) );
-
+		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONTEXTCOLOR,VT_BSTR) )
+		 << mol::property( mol::DispId(this, DISPID_IMOECONFIG_SHOWTREEVIEW, VT_BOOL));
 
 	return S_OK;
 }

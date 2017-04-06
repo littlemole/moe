@@ -133,6 +133,7 @@ private:
 	VARIANT_BOOL					fullScreen_;
 	VARIANT_BOOL					backSpaceUnIndents_;
 	VARIANT_BOOL					showLineNumbers_;
+	VARIANT_BOOL					showTreeView_;
 	COLORREF						foreColor_;
 	COLORREF						backColor_;
 	COLORREF						textColor_;
@@ -194,6 +195,9 @@ public:
 	virtual HRESULT __stdcall get_RibbonTextColor(  BSTR* fPath);
 
 	virtual HRESULT __stdcall EditFileAssociations();
+
+	virtual HRESULT __stdcall put_ShowTreeView(VARIANT_BOOL vb);
+	virtual HRESULT __stdcall get_ShowTreeView(VARIANT_BOOL* vb);
 
 	void setDirty(bool b);
 	bool isDirty();
