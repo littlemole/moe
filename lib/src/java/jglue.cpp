@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "ole/aut.h"
 #include "java/jglue.h"
 #include "java/jre.h"

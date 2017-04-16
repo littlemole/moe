@@ -88,16 +88,18 @@ table {
 
 
 <script language="javascript">
+var home = external.Moe.Config.ModulePath;
+alert(home);
 
 var typelibs = [
-	'C:\\Program Files\\mol\\moe\\moe.exe',
-	'C:\\Program Files\\mol\\moe\\scintillax.dll',
-	'C:\\Program Files\\mol\\moe\\shellctrl.dll',
-	'C:\\Program Files\\mol\\moe\\shellfolder.dll',
-	'C:\\Program Files\\mol\\moe\\setting.dll',
-	'C:\\Program Files\\mol\\moe\\ssh.dll',
-	'C:\\Program Files\\mol\\moe\\io.dll',
-	'C:\\Program Files\\mol\\moe\\comtypes.dll'
+	home + '\\moe.exe',
+	home + '\\scintillax.dll',
+	home + '\\shellctrl.dll',
+	home + '\\shellfolder.dll',
+	home + '\\setting.dll',
+	home + '\\ssh.dll',
+	home + '\\io.dll',
+	home + '\\comtypes.dll'
 ];
 
 var $tabs;

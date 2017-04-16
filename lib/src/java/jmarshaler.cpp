@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "java/jmarshaler.h"
 #include "java/java2variant.h"
 #include "java/variant2java.h"

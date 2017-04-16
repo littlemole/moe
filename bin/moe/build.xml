@@ -24,7 +24,7 @@
 
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>.\;.\include;..\..\;..\..\ax\scintillax;..\..\3dParty\pcre;..\..\lib\include\ole;..\..\lib\include;..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;.\include;..\..\;..\..\ax\scintillax;..\..\lib\include\ole;..\..\lib\include;..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ResourceCompile>

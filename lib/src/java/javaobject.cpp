@@ -1,7 +1,6 @@
-// types.cpp : Definiert den Einstiegspunkt für die Konsolenanwendung.
+// types.cpp : Definiert den Einstiegspunkt f? die Konsolenanwendung.
 //
 
-#include "stdafx.h"
 #include "ole/aut.h"
 #include "java/jre.h"
 #include "java/javaobject.h"

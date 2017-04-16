@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{5BCE91B6-0B68-4CEE-9AB0-96236F6AF4FA}"
 EndProject
@@ -152,7 +152,7 @@ Global
 		{73DC413C-CE91-4651-A992-3592338BE98C}.uni_debug|Win32.Build.0 = uni_debug|Win32
 		{73DC413C-CE91-4651-A992-3592338BE98C}.uni_debug|x64.ActiveCfg = uni_debug|x64
 		{73DC413C-CE91-4651-A992-3592338BE98C}.uni_debug|x64.Build.0 = uni_debug|x64
-		{73DC413C-CE91-4651-A992-3592338BE98C}.uni_debug|x86.ActiveCfg = uni_debug|x64
+		{73DC413C-CE91-4651-A992-3592338BE98C}.uni_debug|x86.ActiveCfg = uni_debug|Win32
 		{73DC413C-CE91-4651-A992-3592338BE98C}.uni_debug2|Any CPU.ActiveCfg = uni_debug|x64
 		{73DC413C-CE91-4651-A992-3592338BE98C}.uni_debug2|Mixed Platforms.ActiveCfg = uni_debug|x64
 		{73DC413C-CE91-4651-A992-3592338BE98C}.uni_debug2|Mixed Platforms.Build.0 = uni_debug|x64

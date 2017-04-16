@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+//#include "StdAfx.h"
 #include "ole/ShellFolderWnd.h"
 #include "win/shell.h"
 #include "ole/dataobj.h"

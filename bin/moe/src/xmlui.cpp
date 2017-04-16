@@ -30,7 +30,7 @@
 
 #include "MoeBar.h"
 
-#include "tree.h"
+#include "mtree.h"
 
 #include "win/msghandler.h"
 

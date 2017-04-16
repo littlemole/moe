@@ -4,9 +4,9 @@
 #include "util/uni.h"
 #include "win/Ctrl.h"
 
-#include "scintilla/include/Platform.h"
-#include "scintilla/include/Scintilla.h"
-#include "scintilla/include/SciLexer.h"
+#include "scintilla/Scintilla.h"
+#include "scintilla/Platform.h"
+#include "scintilla/SciLexer.h"
 
 ///////////////////////////////////////////////////////////////////////////////////
 // this is the most basic scintilla wrapper

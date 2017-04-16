@@ -36,6 +36,7 @@
 
  </Target>
 
+<!--
  <Target Name="3dParty">
         <MSBuild Projects=".\3dParty\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
  </Target>
@@ -43,6 +44,7 @@
  <Target Name="clean3dParty">
 		<MSBuild Projects=".\3dParty\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean" />
  </Target>
+-->
 
  <Target Name="jre">
 
@@ -88,12 +90,14 @@
  </Target>
 
  <Target Name="universe">
-        <CallTarget Targets="3dParty"/>
+<!--
+    <CallTarget Targets="3dParty"/>
+-->
   	<CallTarget Targets="build"/>
  </Target>
 
  <Target Name="kosmos">
-        <CallTarget Targets="build"/>
+    <CallTarget Targets="build"/>
   	<CallTarget Targets="net"/>
 	<CallTarget Targets="jre"/>
 	<CallTarget Targets="WixmoeEx"/>
@@ -101,11 +105,15 @@
 
  <Target Name="armageddon">
         <CallTarget Targets="clean"/>
+<!--
         <CallTarget Targets="clean3dParty"/>
+-->
         <CallTarget Targets="cleannet"/>
         <CallTarget Targets="cleanjre"/>
         <CallTarget Targets="cleanWixmoeEx"/>
+<!--
         <CallTarget Targets="3dParty"/>
+-->
   	<CallTarget Targets="kosmos"/>
  </Target>
 

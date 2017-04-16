@@ -3,6 +3,7 @@
 #include "widgets.h"
 #include "util/regex.h"
 #include "win/v7.h"
+#include "mtree.h"
 #include "xmlui.h"
 #include "moe_dispid.h"
 

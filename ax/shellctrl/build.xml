@@ -17,7 +17,7 @@
       <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES=1;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT=1;_CRT_NONSTDC_NO_WARNINGS=1;_CRT_SECURE_NO_WARNINGS=1;_NDEBUG;LIBSSH_STATIC;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\ssh\x64\uni_release\ssh.lib;Ws2_32.lib;..\..\lib\src\tcp\x64\uni_release\tcp.lib;..\..\3dParty\libssh\build\x64\uni_release\libssh.lib;..\..\3dParty\zlib\x64\release\zlib.lib;..\..\3dParty\openssl\out64\ssleay32.lib;..\..\3dParty\openssl\out64\libeay32.lib;Crypt32.lib;Rstrtmgr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\ssh\x64\uni_release\molssh.lib;Ws2_32.lib;..\..\lib\src\tcp\x64\uni_release\tcp.lib;ssh.lib;zlib.lib;ssleay32.lib;libeay32.lib;Crypt32.lib;Rstrtmgr.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
 
@@ -26,7 +26,7 @@
       <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES=1;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT=1;_CRT_NONSTDC_NO_WARNINGS=1;_CRT_SECURE_NO_WARNINGS=1;_DEBUG;LIBSSH_STATIC;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\ssh\x64\uni_debug\ssh.lib;Ws2_32.lib;..\..\lib\src\tcp\x64\uni_debug\tcp.lib;..\..\3dParty\libssh\build\x64\uni_debug\libssh.lib;..\..\3dParty\zlib\x64\debug\zlib.lib;..\..\3dParty\openssl\out64D\ssleay32.lib;..\..\3dParty\openssl\out64D\libeay32.lib;Crypt32.lib;Rstrtmgr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\ssh\x64\uni_debug\molssh.lib;Ws2_32.lib;..\..\lib\src\tcp\x64\uni_debug\tcp.lib;ssh.lib;zlibd.lib;ssleay32.lib;libeay32.lib;Crypt32.lib;Rstrtmgr.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
 
@@ -36,7 +36,7 @@
       <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES=1;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT=1;_CRT_NONSTDC_NO_WARNINGS=1;_CRT_SECURE_NO_WARNINGS=1;_NDEBUG;LIBSSH_STATIC;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\ssh\uni_release\ssh.lib;Ws2_32.lib;..\..\lib\src\tcp\uni_release\tcp.lib;..\..\3dParty\libssh\build\uni_release\libssh.lib;..\..\3dParty\zlib\zlib.lib;..\..\3dParty\openssl\out32\ssleay32.lib;..\..\3dParty\openssl\out32\libeay32.lib;Crypt32.lib;Rstrtmgr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\ssh\uni_release\molssh.lib;Ws2_32.lib;..\..\lib\src\tcp\uni_release\tcp.lib;ssh.lib;zlib.lib;ssleay32.lib;libeay32.lib;Crypt32.lib;Rstrtmgr.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
 
@@ -45,7 +45,7 @@
       <PreprocessorDefinitions>_WIN32;WIN32;_WINDOWS;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES=1;_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT=1;_CRT_NONSTDC_NO_WARNINGS=1;_CRT_SECURE_NO_WARNINGS=1;_DEBUG;LIBSSH_STATIC;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\ssh\uni_debug\ssh.lib;Ws2_32.lib;..\..\lib\src\tcp\uni_debug\tcp.lib;..\..\3dParty\libssh\build\uni_debug\libssh.lib;..\..\3dParty\zlib\debug\zlib.lib;..\..\3dParty\openssl\out32D\ssleay32.lib;..\..\3dParty\openssl\out32D\libeay32.lib;Crypt32.lib;Rstrtmgr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\ssh\uni_debug\molssh.lib;Ws2_32.lib;..\..\lib\src\tcp\uni_debug\tcp.lib;ssh.lib;zlibd.lib;ssleay32.lib;libeay32.lib;Crypt32.lib;Rstrtmgr.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
 

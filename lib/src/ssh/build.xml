@@ -4,7 +4,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C30B9869-9223-4802-86D7-66AE90A193A5}</ProjectGuid>
     <RootNamespace>ssh</RootNamespace>
-    <TargetName>ssh</TargetName>  
+    <TargetName>molssh</TargetName>  
   </PropertyGroup>
 
   <Import Project="..\..\..\master.props" />
@@ -23,7 +23,7 @@
 
   <ItemDefinitionGroup>
     <Lib>
-      <OutputFile>$(OutDir)ssh.lib</OutputFile>
+      <OutputFile>$(OutDir)molssh.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
 

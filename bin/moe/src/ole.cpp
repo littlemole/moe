@@ -219,6 +219,27 @@ HRESULT __stdcall OleChild::IOleClientSite_SaveObject( )
 { 
 	statusBar()->status(10);
 
+	// special ppt hack. it doesn't work :-(
+	/*
+	std::wstring ext = mol::Path::ext(filename_);
+	if (ext == L".pptx" || ext == L".pptm")
+	{
+		mol::punk<IDispatch> disp(oleObject);
+		if (disp)
+		{
+			//mol::io::ShellFileOp fo;
+			//fo.remove(*this, filename_);
+			const int dispid_saveas = 0x000007f4;
+			mol::disp_invoke(disp, dispid_saveas, mol::variant(filename_), mol::variant(25), mol::variant(-2));
+			statusBar()->status(80);
+			statusBar()->status(std::wstring(_T("saved file ")) + filename_);
+			return 	S_OK;
+		}
+		statusBar()->status(std::wstring(_T("Error saving ")) + filename_);
+		return E_FAIL;
+	}
+	*/
+
 	// have we loaded from tmp file 
 	if ( !tmpFile_.empty())
 	{		

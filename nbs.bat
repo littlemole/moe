@@ -2,7 +2,16 @@
 echo "building the moe universe"
 echo %1 %2 %3
 
-call env14 %1 %2
+if "%2"=="x86" goto x86
+
+call boot x64-windows-static
+goto start
+
+:x86
+call boot x86-windows-static
+
+:start
+call env15 %1 %2
 
 echo %Platform% %Configuration%
 msbuild build.xml /t:%3

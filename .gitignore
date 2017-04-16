@@ -25,4 +25,4 @@ ipch/
 *.lib
 ax/net/net/net/obj/
 .vs
-
+vcpkg/

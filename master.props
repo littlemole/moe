@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Configuration">
+    <vcpkg>$(MSBuildThisFileDirectory)\vcpkg</vcpkg>
 <!--
     <PlatformToolset Condition="'$(PlatformToolset)' == '' ">v140</PlatformToolset>
 	<boost Condition=" '$(boost)' == '' ">C:\boost\boost_1_61_0\</boost>
@@ -46,26 +47,50 @@
 
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">
     <ClCompile>
+	  <AdditionalIncludeDirectories>$(VCPKG)\installed\x86-windows-static\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
+    <Link>
+	  <AdditionalLibraryDirectories>$(VCPKG)\installed\x86-windows-static\debug\lib;$(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
 
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
     <ClCompile>
+	  <AdditionalIncludeDirectories>$(VCPKG)\installed\x64-windows-static\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
+    <Link>
+	  <AdditionalLibraryDirectories>$(VCPKG)\installed\x64-windows-static\debug\lib;$(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
 
-  <ItemDefinitionGroup Condition="'$(Configuration)'=='uni_release'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
     <ClCompile>
+	  <AdditionalIncludeDirectories>$(VCPKG)\installed\x86-windows-static\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>false</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
+    <Link>
+	  <AdditionalLibraryDirectories>$(VCPKG)\installed\x86-windows-static\lib;$(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">
+    <ClCompile>
+	  <AdditionalIncludeDirectories>$(VCPKG)\installed\x64-windows-static\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BrowseInformation>false</BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+    </ClCompile>
+    <Link>
+	  <AdditionalLibraryDirectories>$(VCPKG)\installed\x64-windows-static\lib;$(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
 
 </Project>

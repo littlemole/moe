@@ -4,12 +4,13 @@
 #include "moe.h"
 #include "Docs.h"
 #include "MoeBar.h"
-#include "tree.h"
 
 #include "xmlui.h"
 
 #include "resource.h"
 #include "Ribbonres.h"
+
+#include "mtree.h"
 
 using namespace mol::io;
 using namespace mol;

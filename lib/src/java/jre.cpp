@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "java/jre.h"
 #include "win/regkey.h"
 #include "win/app.h"
