@@ -5,8 +5,7 @@
 #include "util/Str.h"
 #include <Shlobj.h>
 #include <fstream>
-#include "boost/scoped_ptr.hpp"
-#include "boost/shared_ptr.hpp"
+#include <memory>
 
 namespace mol  {
 
@@ -150,7 +149,7 @@ void LoopBase::doMsg(MSG& msg, AppBase& app)
 	{
 		if ( (msg.message == WM_INVOKE) && (msg.wParam == 0) )
 		{
-			boost::shared_ptr<mol::fun::task> task( (mol::fun::task*) (msg.lParam) );
+			std::shared_ptr<mol::fun::task> task( (mol::fun::task*) (msg.lParam) );
 			(*task)();
 			return;
 		}

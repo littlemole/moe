@@ -3,7 +3,8 @@
 
 #include "win/wnd.h"
 #include <sstream>
-#include "boost/shared_ptr.hpp"
+#include <memory>
+#include <functional>
 
 namespace mol {
 namespace win {
@@ -81,7 +82,7 @@ private:
 
 	static void __stdcall onLoadAsync(DWORD dwErrorCode, DWORD dwNumberOfBytesTransfered, LPOVERLAPPED lpOverlapped)
 	{
-		boost::shared_ptr<AsyncFile> overLap((AsyncFile*)lpOverlapped);
+		std::shared_ptr<AsyncFile> overLap((AsyncFile*)lpOverlapped);
 		if ( dwErrorCode != ERROR_SUCCESS )
 		{
 			overLap->errorHandler(dwErrorCode);
@@ -133,14 +134,14 @@ public:
 	template<class T>
 	DWORD then( T* t, void (T::*fun)(const std::string&)  )
 	{
-		return async_file( file_, boost::bind(fun,t,_1), [](DWORD){} );
+		return async_file( file_, std::bind(fun,t,std::placeholders::_1), [](DWORD){} );
 	}
 
 
 	template<class T>
 	DWORD then( T* t, void (T::*onSuccess)(const std::string&), void (T::*onError)(DWORD) )
 	{
-		return async_file( file_, boost::bind(onSuccess,t,_1), boost::bind(onError,t,_1 ) );
+		return async_file( file_, std::bind(onSuccess,t, std::placeholders::_1), std::bind(onError,t, std::placeholders::_1 ) );
 	}
 
 private:

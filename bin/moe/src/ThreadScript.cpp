@@ -449,8 +449,8 @@ void ScriptDebugger::execute( int flag )
 	scriptFlags_ = flag;
 
 	mol::thread( 
-		boost::bind( &ScriptDebugger::execute_thread, this ), 
-		boost::bind(&ScriptDebugger::execute_callback,this) 
+		std::bind( &ScriptDebugger::execute_thread, this ), 
+		std::bind(&ScriptDebugger::execute_callback,this) 
 	);	
 }
 

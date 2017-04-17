@@ -20,8 +20,8 @@ cmd /Q /C .\bootstrap-vcpkg
 
 
 .\vcpkg install zlib:%CONF%
-.\vcpkg install bzip2:%CONF%
-.\vcpkg install boost:%CONF%
+rem .\vcpkg install bzip2:%CONF%
+rem .\vcpkg install boost:%CONF%
 
 .\vcpkg install openssl:%CONF%
 .\vcpkg install expat:%CONF%

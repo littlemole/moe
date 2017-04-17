@@ -21,8 +21,7 @@
 
 //#include "../shellctrl/shellctrl_h.h"
 
-#define BOOST_BIND_ENABLE_STDCALL 
-#include "boost/bind.hpp"
+#include <functional>
 
 #include "ssh_h.h"
 

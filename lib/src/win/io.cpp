@@ -59,7 +59,7 @@ void DirMon::watch( const std::wstring& path, int flags, bool subtree )
 
 	cancel();
     monitorMap_.insert(std::make_pair(path_,this));
-	mol::thread( boost::bind( &DirMon::run, this) );
+	mol::thread( std::bind( &DirMon::run, this) );
 }
 
 void DirMon::run()

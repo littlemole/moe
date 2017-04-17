@@ -1075,10 +1075,17 @@ void  MoeWnd::initRibbon(IStorage* store)
 	vb.push_back(_T("32 bytes"));
 	mol::Ribbon::handler(RibbonBytesShown)->items(vb);
 
+	bool showDirTree = mol::Ribbon::handler(RibbonShowDirView)->checked();
+
 	// Check the Show Dir View Handler
-	if (treeWnd()->isVisible())
+	if (showDirTree)
 	{
-		mol::Ribbon::handler(RibbonShowDirView)->check(true);
+		treeWnd()->show(SW_SHOW);
+		//mol::Ribbon::handler(RibbonShowDirView)->check(true);
+	}
+	else
+	{
+		treeWnd()->show(SW_HIDE);
 	}
 	reBar()->show(SW_HIDE);
 	// default Ribbon mode

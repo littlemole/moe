@@ -979,7 +979,7 @@ void Editor::OnScriptThreadDone()
 {
 	if ( mol::guithread() != mol::Thread::self() )
 	{
-		mol::invoke( boost::bind( &Editor::OnScriptThreadDone, this) );		
+		mol::invoke( std::bind( &Editor::OnScriptThreadDone, this) );		
 		return;
 	}
 

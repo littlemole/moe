@@ -285,7 +285,7 @@ HRESULT __stdcall UserForm::put_Height(long height)
 
 HRESULT __stdcall  UserForm::Close()
 {
-	mol::invoke( boost::bind( &FrameWindow::destroy, &frame ) );
+	mol::invoke( std::bind( &FrameWindow::destroy, &frame ) );
 	//frame.destroy();
 	return S_OK;
 }

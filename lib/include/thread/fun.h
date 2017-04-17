@@ -1,10 +1,10 @@
 #ifndef MOL_DEF_GUARD_FUN_THREAD_DEFINE_GUARD_DEFINE_
 #define MOL_DEF_GUARD_FUN_THREAD_DEFINE_GUARD_DEFINE_
 
-#include <boost/function.hpp>
-#include <boost/bind.hpp>
-#include <boost/any.hpp>
-#include <boost/type_traits.hpp>
+#include <functional>
+#include <any>
+
+//#include <boost/type_traits.hpp>
 #include <iostream>
 
 
@@ -29,7 +29,7 @@ class task
 
 		virtual mol::fun::task* clone() = 0;
 
-		virtual boost::any retval()     = 0;
+		virtual std::any retval()     = 0;
 
 
 };
@@ -111,9 +111,9 @@ public:
 		return new Task<B>(bound);
 	}
 
-	virtual boost::any retval()
+	virtual std::any retval()
 	{
-		return boost::any(result.value);
+		return std::any(result.value);
 	}
 
 	typedef typename B::result_type ResultType;
@@ -159,9 +159,9 @@ public:
 	{
 	}
 
-	virtual boost::any retval()
+	virtual std::any retval()
 	{
-		return boost::any((task_->result.value));
+		return std::any((task_->result.value));
 	}
 
 
@@ -194,7 +194,7 @@ inline TaskCallback<B,CB>* make_task_callback( B bound, CB cb )
 template<class T,class C>
 T& unwrap(C* task)
 {
-	return boost::any_cast<T>(task->retval());
+	return std::any_cast<T>(task->retval());
 }
 
 } // end namespace fun

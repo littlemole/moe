@@ -40,7 +40,7 @@ public:
 		:go_(false),cancel_(false)
 	{
 		thread_ = mol::thread( 
-						boost::bind( 
+						std::bind( 
 								&mol::ThreadQueue<T,Synchronize,P,PS>::worker, 
 								this
 							) 

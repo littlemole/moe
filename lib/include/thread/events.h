@@ -4,10 +4,12 @@
 #include <vector>
 #include <list>
 
-#include "boost/function.hpp"
-#include "boost/bind.hpp"
-#include "boost/any.hpp"
-#include <boost/type_traits.hpp>
+//#include "boost/function.hpp"
+#include <functional>
+#include <any>
+//#include "boost/bind.hpp"
+//#include "boost/any.hpp"
+//#include <boost/type_traits.hpp>
 #include <iostream>
 #include "util/signature.h"
 #include "util/util.h"

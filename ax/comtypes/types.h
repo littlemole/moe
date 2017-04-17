@@ -22,8 +22,8 @@
 #include "Meta.h"
 #include "comtypes_h.h"
 
-#define BOOST_BIND_ENABLE_STDCALL 
-#include "boost/bind.hpp"
+//#define BOOST_BIND_ENABLE_STDCALL 
+#include <functional>
 
 using namespace mol;
 
@@ -244,7 +244,7 @@ public:
 	{
 		isErr_ = VARIANT_TRUE;
 
-		mol::thread( boost::bind( &Type2XML::async_transformer, this, filename, filter, xsltDoc) );
+		mol::thread( std::bind( &Type2XML::async_transformer, this, filename, filter, xsltDoc) );
 
 		return S_OK;
 	}

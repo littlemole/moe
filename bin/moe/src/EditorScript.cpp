@@ -258,7 +258,7 @@ void EditorScript::scriptThread( int line, std::wstring error )
 		oss << std::endl;
 	}
 
-	mol::invoke( boost::bind( &Editor::OnScriptThread, editor_, line, oss.str() ) );
+	mol::invoke( std::bind( &Editor::OnScriptThread, editor_, line, oss.str() ) );
 	return;
 	
 }

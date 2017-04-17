@@ -58,9 +58,9 @@ public:
 	mol::punk<ShellTreeEvents> treeWndSink;
 	//mol::punk<Script> scriptHost;
 
-	boost::scoped_ptr<MoeDrop> moeDrop;
-	boost::scoped_ptr<mol::SearchDlg> searchDlg;
-	boost::scoped_ptr<UrlDlg> urlDlg;
+	std::unique_ptr<MoeDrop> moeDrop;
+	std::unique_ptr<mol::SearchDlg> searchDlg;
+	std::unique_ptr<UrlDlg> urlDlg;
 
 	/////////////////////////////////////////////////////////////////////
 	// std windows msgs - Creation / Activation / Destruction

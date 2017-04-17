@@ -1,9 +1,7 @@
 #include "win/async.h"
 #include "win/app.h"
 #include "util/X.h"
-#include "boost/scoped_ptr.hpp"
-#include "boost/shared_ptr.hpp"
-
+#include <memory>
 
 namespace mol {
 namespace win {

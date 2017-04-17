@@ -265,7 +265,7 @@ void TaskbarWnd::cacheIconicRepresentation()
 
 void TaskbarWnd::refreshIconDelayed()
 {
-	timer_.set(1, boost::bind(&TaskbarWnd::timer_callback,this) );
+	timer_.set(1, std::bind(&TaskbarWnd::timer_callback,this) );
 }
 
 void TaskbarWnd::sendLivePreviewBitmap( )

@@ -244,7 +244,7 @@ bool PipedProcess::create( const std::wstring& cmdline )
 	}
 	else
 	{
-		asyncThread_ = mol::thread( boost::bind( &PipedProcess::pipe, this) );
+		asyncThread_ = mol::thread( std::bind( &PipedProcess::pipe, this) );
 	}
 	return true;
 }
@@ -258,8 +258,8 @@ void PipedProcess::pipe()
 
 	eSuspendThreadQueue_.signal();
 
-	readerThread_ = mol::thread( boost::bind( &PipedProcess::readFromChildProcessStdOut,this) );
-	errorThread_  = mol::thread( boost::bind( &PipedProcess::readFromChildProcessStdErr,this) );
+	readerThread_ = mol::thread( std::bind( &PipedProcess::readFromChildProcessStdOut,this) );
+	errorThread_  = mol::thread( std::bind( &PipedProcess::readFromChildProcessStdErr,this) );
 
 	mol::Thread::wait(readerThread_);
 	mol::Thread::wait(errorThread_);

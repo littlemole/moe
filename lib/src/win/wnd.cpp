@@ -3,8 +3,7 @@
 #include "win/Res.h"
 #include "win/Layout.h"
 #include "util/X.h"
-#include "boost/scoped_ptr.hpp"
-#include "boost/shared_ptr.hpp"
+#include <memory>
 
 
 namespace mol {
@@ -376,7 +375,7 @@ LRESULT WndProc::OnLayout( UINT message, WPARAM wParam, LPARAM lParam)
 
 LRESULT WndProc::OnInvoke( UINT message, WPARAM wParam, LPARAM lParam)
 {
-	boost::shared_ptr<mol::fun::task> task((mol::fun::task*)lParam);
+	std::shared_ptr<mol::fun::task> task((mol::fun::task*)lParam);
 	(*task)();
 
 	return 0;

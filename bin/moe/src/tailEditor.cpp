@@ -33,7 +33,7 @@ TailEditor::~TailEditor()
 void TailEditor::OnFileChangeNotify(mol::io::DirMon* dirmon)
 {
 	::Sleep(1000);
-	mol::invoke( boost::bind( &TailEditor::checkModifiedOnDisk, this ) );
+	mol::invoke( std::bind( &TailEditor::checkModifiedOnDisk, this ) );
 }
 
 void TailEditor::checkModifiedOnDisk( )

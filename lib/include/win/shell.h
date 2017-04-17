@@ -5,7 +5,7 @@
 #include "win/wnd.h"
 #include "ole/com.h"
 #include "ole/punk.h"
-#include "boost/shared_ptr.hpp"
+#include <memory>
 #include "thread/ThreadQueue.h"
 #include <Shlobj.h>
 #include <Shlwapi.h>
@@ -71,7 +71,7 @@ private:
 // add refcounting to this one:
 ////////////////////////////////////////////////////////////////////////////////////
 
-typedef boost::shared_ptr<mol::io::ShellItem> Shit; 
+typedef std::shared_ptr<mol::io::ShellItem> Shit; 
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////

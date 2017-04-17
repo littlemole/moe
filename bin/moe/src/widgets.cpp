@@ -117,7 +117,7 @@ public:
 	Timeout(mol::variant& f, mol::variant& d, Host* script)
 		:f_(f),script_(script)
 	{
-		timer_.set( d.lVal, boost::bind( &Timeout::operator(), this ));
+		timer_.set( d.lVal, std::bind( &Timeout::operator(), this ));
 	}
 
 	~Timeout()

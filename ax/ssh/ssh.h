@@ -34,8 +34,7 @@
 #include "ssh_h.h"
 #include <memory>
 
-#define BOOST_BIND_ENABLE_STDCALL 
-#include "boost/bind.hpp"
+#include <functional>
 
 class CredentialManager : public mol::ssh::ScpCredentialManager
 {

@@ -898,16 +898,13 @@ HRESULT __stdcall MoeConfig::get_ShowLineNumbers(  VARIANT_BOOL* vb)
 
 HRESULT __stdcall MoeConfig::put_ShowTreeView(VARIANT_BOOL vb)
 {
-	if (showTreeView_ != vb)
+	if (vb == VARIANT_TRUE)
 	{
-		if (vb == VARIANT_TRUE)
-		{
-			treeWnd()->show(SW_SHOW);
-		}
-		else		
-		{
-			treeWnd()->show(SW_HIDE);
-		}
+		treeWnd()->show(SW_SHOW);
+	}
+	else		
+	{
+		treeWnd()->show(SW_HIDE);
 	}
 
 	showTreeView_ = vb;

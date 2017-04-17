@@ -20,7 +20,6 @@
 #include <set>
 #include <vector>
 
-#define BOOST_BIND_ENABLE_STDCALL 
-#include "boost/bind.hpp"
+#include <functional>
 
 #include "userform_h.h"

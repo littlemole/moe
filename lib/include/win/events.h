@@ -9,8 +9,11 @@
 #include "thread/sync.h"
 #include "win/wnd.h"
 
-#include "boost/bind.hpp"
-#include "boost/any.hpp"
+//#include "boost/bind.hpp"
+//#include "boost/any.hpp"
+
+#include <functional>
+#include <any>
 
 namespace mol {
 namespace win {

@@ -2,7 +2,7 @@
 #define HTTP_REQUEST_DEF_GUARD_DEF
 
 #include "http/reader.h"
-#include "boost/shared_ptr.hpp"
+#include <memory>
 
 namespace mol {
 
@@ -34,7 +34,7 @@ public:
 
 protected:
 
-	boost::shared_ptr<AbstractBodyReader> reader_;
+	std::shared_ptr<AbstractBodyReader> reader_;
 	std::string body_;
 
     typedef std::pair<std::string,std::string> KeyVal;

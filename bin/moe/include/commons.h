@@ -68,8 +68,8 @@
 // resource identifiers defines //BAD BAD BAD
 //#include "resource.h"
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
+#include <functional>
 
 enum LogLevel { LOGERROR, LOGWARN, LOGINFO, LOGDEBUG };
 
@@ -132,7 +132,7 @@ private:
    std::ostringstream oss_;
 };
 
-typedef boost::shared_ptr<Appender> appender;
+typedef std::shared_ptr<Appender> appender;
 
 class Log
 {

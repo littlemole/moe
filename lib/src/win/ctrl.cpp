@@ -1,5 +1,6 @@
 #include "win/Ctrl.h"
 #include "win/Layout.h"
+#include <algorithm>
 
 namespace mol  {
 namespace win  {
