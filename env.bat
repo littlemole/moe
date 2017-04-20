@@ -1,15 +1,38 @@
+@echo off
+
+rem ###################################################
+rem configuration - usually no need to check anything
+rem but the boost path
+rem ###################################################
+
+rem boost
+rem set boost=C:\boost\boost_1_61_0\
+
+rem compiler version
+set MSBUILDTREATALLTOOLSVERSIONSASCURRENT 
+set PlatformToolset=v141
+
+rem initialise VC environment
+rem set VCVARSBAT="%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvarsall.bat"
+set VCVARSBAT="%VSROOT%\VC\Auxiliary\Build\vcvarsall.bat"
+
+rem ribbon toolbar compiler - can now be left empty :)
+rem set UICC="%ProgramFiles(x86)%\Windows Kits\8.1\bin\x86\uicc.exe"
+
+rem java includes
+set java=%JAVA_HOME%\include\win32;%JAVA_HOME%\include;
+
+
+rem ###################################################
+
+
 set CONF=%1
 if %1!==! SET CONF=uni_debug
 
 set PLAT=%2
-if %2!==! set PLAT=/x86
-
-set PlatformToolset=v100
-
+if %2!==! set PLAT=x86
 
 if "%CONF%"=="uni_debug" goto debug
-
-
 
 set CONFIG=/Release
 goto psdk
@@ -19,12 +42,11 @@ set CONFIG=/Debug
 
 
 :psdk
-call "C:\Program Files\Microsoft SDKs\Windows\v7.1\bin\SetEnv.Cmd" %CONFIG% %PLAT%
+call %VCVARSBAT% %PLAT%
 
-set UICC="C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\UICC.exe"
 set Configuration=%CONF%
 
-if "%PLAT%"=="/x86" goto x86
+if "%PLAT%"=="x86" goto x86
 set Platform=x64
 goto end
 
@@ -35,7 +57,6 @@ set Platform=Win32
 
 echo Configuration: %Configuration%
 echo Platform: %Platform%
-echo Toolset: %PlatformToolset%
 echo %PLAT%
-echo %UICC%
+echo %PlatformToolset%
 exit /B

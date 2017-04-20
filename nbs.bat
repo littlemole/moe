@@ -11,7 +11,7 @@ goto start
 call boot x86-windows-static
 
 :start
-call env15 %1 %2
+call env %1 %2
 
 echo %Platform% %Configuration%
 msbuild build.xml /t:%3

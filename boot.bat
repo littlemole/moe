@@ -3,6 +3,18 @@
 set CONF=%1
 if %1!==! SET CONF=x86-windows
 
+IF EXIST %VCPKG%\vswhere.exe GOTO alreadyhavevswhere
+
+cscript /nologo winget.js https://github.com/Microsoft/vswhere/releases/download/1.0.62/vswhere.exe vswhere.exe
+
+:alreadyhavevswhere
+
+for /f "usebackq tokens=1* delims=: " %%i in (`vswhere -latest`) do (
+  if /i "%%i"=="installationPath" set VSROOT=%%j
+)
+
+echo VSROOT=%VSROOT%
+
 set CWD=%CD%
 set VCPKG=%CWD%\vcpkg
 

@@ -26,3 +26,4 @@ ipch/
 ax/net/net/net/obj/
 .vs
 vcpkg/
+vswhere.exe
