@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "app.h"
 #include "widgets.h"
-#include "util/regex.h"
+#include <regex>
 #include "win/v7.h"
 #include "mtree.h"
 #include "xmlui.h"
@@ -353,17 +353,18 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, std::wstring cmdline )
 
 	::CoAllowSetForegroundWindow(moe,0);
 
-	mol::RegExp rgxp("(\"([^\"]*)\")|([^ ]+)");
-	while ( rgxp.nextMatch( cl ) )
+	std::regex rgxp("(\"([^\"]*)\")|([^ ]+)");
+	std::smatch m;
+	std::string::const_iterator searchStart( cl.cbegin() );
+	while ( regex_search( searchStart, cl.cend(), m, rgxp ) )
 	{
-		std::string s = rgxp.subString( cl, 2 );
+		std::string s = m[2];
 		if ( s == "" )
 		{
-			s = rgxp.subString( cl, 3 );
+			s = m[3];
 		}
 
-		openMoeDocument(dispDoc,dialogs.pdispVal,s);
-		
+		openMoeDocument(dispDoc,dialogs.pdispVal,s);		
 	}
 }
 

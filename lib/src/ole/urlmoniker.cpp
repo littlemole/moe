@@ -1,7 +1,6 @@
 
 #include "ole/urlmoniker.h"
 #include "util/str.h"
-#include "util/regex.h"
 #include <initguid.h>
 
 namespace mol {

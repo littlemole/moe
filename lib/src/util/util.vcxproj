@@ -126,7 +126,7 @@
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
-    <IncludePath>E:\boost\boost_1_55_0;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\..\vcpkg\x64-windows-static\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
     <ClCompile>
@@ -198,8 +198,7 @@
       <AdditionalIncludeDirectories>..\..\..\3dParty\zlib\;E:\molib\3dParty\zlib;D:\boost\boost_1_44_0;..\..\..\3dParty\pcre;..\..\..\lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN64;DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;PCRE_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BrowseInformation>true</BrowseInformation>
@@ -250,9 +249,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="gzip.cpp" />
     <ClCompile Include="istr.cpp" />
-    <ClCompile Include="regex.cpp" />
     <ClCompile Include="Str.cpp">
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='uni_release_64|Win32'">false</WholeProgramOptimization>
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">false</WholeProgramOptimization>
@@ -273,10 +270,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\util\gzip.h" />
     <ClInclude Include="..\..\include\util\icv.h" />
     <ClInclude Include="..\..\include\util\istr.h" />
-    <ClInclude Include="..\..\include\util\regex.h" />
     <ClInclude Include="..\..\include\util\signature.h" />
     <ClInclude Include="..\..\include\util\str.h" />
     <ClInclude Include="..\..\include\util\uni.h" />

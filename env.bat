@@ -1,28 +1,37 @@
 @echo off
 
 rem ###################################################
-rem configuration - usually no need to check anything
-rem but the boost path
+rem bootstrap 3dparty deps and locate vc++
 rem ###################################################
 
-rem boost
-rem set boost=C:\boost\boost_1_61_0\
+if "%2"=="x86" goto x86
+
+call boot x64-windows-static
+goto start
+
+:x86
+call boot x86-windows-static
+
+
+rem ###################################################
+rem initialize environment
+rem ###################################################
+
+:start
 
 rem compiler version
 set MSBUILDTREATALLTOOLSVERSIONSASCURRENT 
 set PlatformToolset=v141
 
 rem initialise VC environment
-rem set VCVARSBAT="%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvarsall.bat"
 set VCVARSBAT="%VSROOT%\VC\Auxiliary\Build\vcvarsall.bat"
-
-rem ribbon toolbar compiler - can now be left empty :)
-rem set UICC="%ProgramFiles(x86)%\Windows Kits\8.1\bin\x86\uicc.exe"
 
 rem java includes
 set java=%JAVA_HOME%\include\win32;%JAVA_HOME%\include;
 
 
+rem ###################################################
+rem figure out how to call vcvarsall.bat
 rem ###################################################
 
 
@@ -41,8 +50,17 @@ goto psdk
 set CONFIG=/Debug
 
 
+rem ###################################################
+rem finally make the call to vcvarsall.bat
+rem ###################################################
+
 :psdk
 call %VCVARSBAT% %PLAT%
+
+
+rem ###################################################
+rem set some final vars
+rem ###################################################
 
 set Configuration=%CONF%
 
@@ -52,6 +70,11 @@ goto end
 
 :x86
 set Platform=Win32
+
+
+rem ###################################################
+rem ouput some diagnostics
+rem ###################################################
 
 :end
 

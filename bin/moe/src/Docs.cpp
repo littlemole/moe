@@ -424,7 +424,19 @@ Docs::childlist::iterator Docs::iterator(mol::MdiChild* mdi)
 std::wstring Docs::getNewFileName(const std::wstring& ext)
 {
 	wchar_t buf[MAX_PATH];
-	::SHGetSpecialFolderPath( *moe(), buf, CSIDL_MYDOCUMENTS, TRUE );
+	BOOL b = ::SHGetSpecialFolderPath( *moe(), buf, CSIDL_MYDOCUMENTS, TRUE );
+
+	if (!b)
+	{
+		b = ::SHGetSpecialFolderPath(*moe(), buf, CSIDL_PROFILE, TRUE);
+		if (!b)
+		{
+			buf[0] = L'C';
+			buf[1] = L':';
+			buf[2] = L'\\';
+			buf[3] = L'0';
+		}
+	}
 
 	std::wstring p(buf);
 	p = mol::Path::addBackSlash(p);

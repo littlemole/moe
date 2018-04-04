@@ -18,11 +18,13 @@
 
   <ItemGroup>
     <ClCompile Include="istr.cpp" />
-    <ClCompile Include="regex.cpp" />
     <ClCompile Include="Str.cpp" />
     <ClCompile Include="uni.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="X.cpp" />
+<!--
+    <ClCompile Include="gzip.cpp" />
+-->
   </ItemGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

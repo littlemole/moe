@@ -24,7 +24,7 @@
 #include "win/msg_macro.h"
 #include "util/util.h"
 #include "util/str.h"
-#include "util/regex.h"
+#include <regex>
 
 #define IDM_EDIT_DONE 101
 #define IDC_PROP_EDIT 102
@@ -294,9 +294,11 @@ public:
 	{
 		if ( !validator_.empty() )
 		{
-			mol::RegExp regex( validator_);
+			std::smatch m;
+			std::regex e(validator_);
+			std::string c = mol::tostring(s);
 
-			if ( !regex.match( mol::tostring(s)  ) )
+			if (!std::regex_match(c, m, e))
 			{
 				return;
 			}
@@ -328,11 +330,13 @@ public:
 
 	virtual void setValueFromString(const std::wstring& s)
 	{
-		if ( !validator_.empty() )
+		if (!validator_.empty())
 		{
-			mol::RegExp regex( validator_);
+			std::smatch m;
+			std::regex e(validator_);
 
-			if ( !regex.match( mol::tostring(s)  ) )
+			std::string c = mol::tostring(s);
+			if (!std::regex_match(c, m, e))
 			{
 				return;
 			}
@@ -362,11 +366,13 @@ public:
 
 	virtual void setValueFromString(const std::wstring& s)
 	{
-		if ( !validator_.empty() )
+		if (!validator_.empty())
 		{
-			mol::RegExp regex( validator_);
+			std::smatch m;
+			std::regex e(validator_);
 
-			if ( !regex.match( mol::tostring(s)  ) )
+			std::string c = mol::tostring(s);
+			if (!std::regex_match(c, m, e))
 			{
 				return;
 			}
@@ -402,11 +408,13 @@ public:
 
 	virtual void setValueFromString(const std::wstring& s)
 	{
-		if ( !validator_.empty() )
+		if (!validator_.empty())
 		{
-			mol::RegExp regex( validator_);
+			std::smatch m;
+			std::regex e(validator_);
 
-			if ( !regex.match( mol::tostring(s)  ) )
+			std::string c = mol::tostring(s);
+			if (!std::regex_match(c, m, e))
 			{
 				return;
 			}

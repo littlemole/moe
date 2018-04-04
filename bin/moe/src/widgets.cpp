@@ -9,7 +9,7 @@
 #include "resource.h"
 #include "Shobjidl.h"
 #include "win/msgloop.h"
-#include "util/regex.h"
+#include <regex>
 
 // open file dialog std filte for moe
 wchar_t  InFilesFilter[]   = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
@@ -1364,8 +1364,10 @@ std::wstring PasteAs::get()
 			continue;
 		}
 
-		mol::RegExp regex( PCRE_CASELESS,"xml" );
-		if ( regex.imatch( mol::tostring(v[i].title) ) )
+		std::regex rgxp("xml", std::regex_constants::ECMAScript | std::regex_constants::icase);
+		std::smatch m;
+		std::string s = mol::tostring(v[i].title);
+		if( std::regex_search( s, m, rgxp ))
 		{
 			formats.insert(std::make_pair(v[i].format,v[i]));
 			continue;

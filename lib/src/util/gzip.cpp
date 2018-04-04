@@ -1,10 +1,9 @@
 #include "util/gzip.h"
-#include "StdAfx.h"
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
-#include "zutil.h"
+//#include "zutil.h"
 #include <string>
 
 namespace mol {

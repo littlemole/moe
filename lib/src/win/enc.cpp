@@ -1,5 +1,6 @@
 #include "win/enc.h"
-#include "util/regex.h"
+//#include "util/regex.h"
+#include <regex>
 #include "ole/bstr.h"
 
 ///////////////////////////////////////////////////////////////////////
@@ -178,6 +179,19 @@ int  FileEncoding::investigate(const std::string& c, const std::string& h )
     return codePage_;
 }
 
+
+bool match(const std::string& pattern, const std::string& s)
+{
+	std::smatch m;
+	std::regex e(pattern); 
+
+	if (std::regex_search(s, m, e)) 
+	{
+		return true;
+	}
+	return false;
+}
+
 int  FileEncoding::getEncoding(const std::string& c, const std::string& h )
 {
 	enc_ = "UNKNOWN";
@@ -202,11 +216,14 @@ int  FileEncoding::getEncoding(const std::string& c, const std::string& h )
 	// second check headers for charset specs in content-type
 	if ( !h.empty() )
 	{
-		mol::RegExp rgxp(PCRE_CASELESS,"content-type.*:(.*);.*charset.*=(.*)");
+//		mol::RegExp rgxp(PCRE_CASELESS,"content-type.*:(.*);.*charset.*=(.*)");
 
-		if ( rgxp.match(h) )
+		std::smatch m;
+		std::regex e("content-type.*:(.*);.*charset.*=(.*)");
+
+		if (std::regex_search(h, m, e))
 		{
-			std::wstring s = mol::towstring(rgxp(h,2));
+			std::wstring s = mol::towstring(m[2]);
 			s = mol::trim(s);
 
 			mol::bstr bstr(s);
@@ -224,12 +241,16 @@ int  FileEncoding::getEncoding(const std::string& c, const std::string& h )
 
 	// third, try to find xml decl
 	//	<?xml version="1.0" encoding="ISO-8859-1" ?>
-	mol::RegExp reg_xml(PCRE_CASELESS,"<?xml +version *= *('|\")[^'\"]*('|\") +encoding *= *('|\")([^'\"]*)('|\")");
-	if ( reg_xml.match(c) )
+	//mol::RegExp reg_xml(PCRE_CASELESS,"<?xml +version *= *('|\")[^'\"]*('|\") +encoding *= *('|\")([^'\"]*)('|\")");
+	//if ( reg_xml.match(c) )
+	std::smatch m_xml;
+	std::regex e_xml("<?xml +version *= *('|\")[^'\"]*('|\") +encoding *= *('|\")([^'\"]*)('|\")");
+
+	if (std::regex_search(c, m_xml, e_xml))
 	{
 		//std::string s = reg_xml(c,4);
 
-		std::wstring s = mol::towstring(reg_xml(c,4));
+		std::wstring s = mol::towstring(m_xml[4]);
 		s = mol::trim(s);
 
 		mol::bstr b(s);
@@ -246,10 +267,15 @@ int  FileEncoding::getEncoding(const std::string& c, const std::string& h )
 
 	// forth, search body for meta-tag
 	// caseless match <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-	mol::RegExp reg_con(PCRE_CASELESS,"<meta[^>'\"]*http-equiv *= *('|\")content-type('|\") *content *= *('|\")[^'\"]*charset[^'\"=]*=([^'\"]*)('|\") */? *>");
-	if ( reg_con.match(c) )
+	//mol::RegExp reg_con(PCRE_CASELESS,"<meta[^>'\"]*http-equiv *= *('|\")content-type('|\") *content *= *('|\")[^'\"]*charset[^'\"=]*=([^'\"]*)('|\") */? *>");
+	//if ( reg_con.match(c) )
+
+	std::smatch m_meta;
+	std::regex e_meta("<meta[^>'\"]*http-equiv *= *('|\")content-type('|\") *content *= *('|\")[^'\"]*charset[^'\"=]*=([^'\"]*)('|\") */? *>");
+
+	if (std::regex_search(c, m_meta, e_meta))
 	{
-		std::string s = mol::tostring(reg_con(c,4));
+		std::string s = mol::tostring(m_meta[4]);
 		s = mol::trim(s);
 
 		// can't be UTF-16 - if we matched the *ASCII* string "UTF-16", then encoding is broken!
