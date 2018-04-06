@@ -364,7 +364,9 @@ void MoeApp::openDocsFromCommandLine( IDispatch* moe, std::wstring cmdline )
 			s = m[3];
 		}
 
-		openMoeDocument(dispDoc,dialogs.pdispVal,s);		
+		openMoeDocument(dispDoc,dialogs.pdispVal,s);	
+
+ 		searchStart += m.position() + m.length();	
 	}
 }
 
