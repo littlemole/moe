@@ -72,7 +72,7 @@ public:
 
 	};
 
-	int printPage ( bool bDraw, RangeToFormat *pfr)
+	int printPage ( bool bDraw, Sci_RangeToFormat *pfr)
 	{
 		return sendMessage( SCI_FORMATRANGE, (WPARAM)bDraw , (LPARAM)pfr );		
 	}
@@ -85,8 +85,8 @@ public:
 	bool search( const std::string& what, int options)
 	{
 
-        TextToFind ft;
-        CharacterRange chrg;
+        Sci_TextToFind ft;
+        Sci_CharacterRange chrg;
 
         if ( nextSearchPos_ != 0 )
             if ( (searchOptions_ & FR_DOWN) != ( options & FR_DOWN ) )
@@ -143,8 +143,8 @@ public:
 
 	bool replace( const std::string& what, const std::string& whith, int options)
 	{
-        TextToFind ft;		
-        CharacterRange chrg;
+        Sci_TextToFind ft;		
+		Sci_CharacterRange chrg;
 
         if ( nextSearchPos_ != 0 )
             if ( (searchOptions_ & FR_DOWN) != ( options & FR_DOWN ) )
@@ -314,7 +314,7 @@ public:
 
 	std::string getTextRange(int start, int end)
 	{
-		TextRange tr;
+		Sci_TextRange tr;
 		tr.chrg.cpMin = start;
 		tr.chrg.cpMax = end;
 		tr.lpstrText = new char [(end-start+1)*2];
@@ -404,7 +404,7 @@ public:
 		sendMessage( SCI_SETANCHOR, (WPARAM)pos , (LPARAM)0 );
 	}
 
-	int findText(int searchFlags, TextToFind *ttf)
+	int findText(int searchFlags, Sci_TextToFind *ttf)
 	{
 		return sendMessage( SCI_FINDTEXT, (WPARAM)searchFlags , (LPARAM)ttf );
 	}

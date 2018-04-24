@@ -112,7 +112,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\boost\boost_1_55_0;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\..\vcpkg\installed\x64-windows-static\include;$(IncludePath)</IncludePath>
     <TargetExt>.lib</TargetExt>
     <OutDir>$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
@@ -151,6 +151,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>..\..\include;..\..\..\3dParty\libssh\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

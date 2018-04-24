@@ -123,7 +123,7 @@
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" />
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">E:\boost\boost_1_55_0;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">C:\boost\boost_1_61_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\..\vcpkg\installed\x64-windows-static\include;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
   </PropertyGroup>
@@ -198,11 +198,11 @@
       <AdditionalIncludeDirectories>D:\boost\boost_1_55_0;..\..\..\3dParty\expat\Source\lib;..\..\..\3dParty\pcre;..\..\..\lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN64;WIN64;DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_SECURE_SCL=0;_SCL_SECURE_NO_WARNINGS;SUPPORT_UTF8;STATIC;PCRE_STATIC;POSIX_MALLOC_THRESHOLD=10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BrowseInformation>true</BrowseInformation>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)win.lib</OutputFile>

@@ -264,6 +264,7 @@
       <BrowseInformation>true</BrowseInformation>
       <DisableSpecificWarnings>4244</DisableSpecificWarnings>
       <AdditionalOptions>-Zm110 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>

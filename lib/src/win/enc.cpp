@@ -244,7 +244,7 @@ int  FileEncoding::getEncoding(const std::string& c, const std::string& h )
 	//mol::RegExp reg_xml(PCRE_CASELESS,"<?xml +version *= *('|\")[^'\"]*('|\") +encoding *= *('|\")([^'\"]*)('|\")");
 	//if ( reg_xml.match(c) )
 	std::smatch m_xml;
-	std::regex e_xml("<?xml +version *= *('|\")[^'\"]*('|\") +encoding *= *('|\")([^'\"]*)('|\")");
+	std::regex e_xml("<\\?xml +version *= *('|\")[^'\"]*('|\") +encoding *= *('|\")([^'\"]*)('|\")");
 
 	if (std::regex_search(c, m_xml, e_xml))
 	{

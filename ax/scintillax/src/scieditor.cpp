@@ -65,7 +65,7 @@ void ScintillaEditor::print()
 		xPage = ::GetDeviceCaps( hdcPrinter, HORZRES );
 		yPage = ::GetDeviceCaps( hdcPrinter, VERTRES );
 
-		RangeToFormat rtf;
+		Sci_RangeToFormat rtf;
 		rtf.hdc = hdcPrinter;
 		rtf.hdcTarget = hdcPrinter;
 		rtf.chrg.cpMin = 0;
@@ -86,7 +86,7 @@ void ScintillaEditor::print()
 			{
 				if ( ::StartPage( hdcPrinter ) > 0 )
 				{
-					RangeToFormat r = rtf;
+					Sci_RangeToFormat r = rtf;
 
 					for ( int j = 0; j < copies2; j++ )
 					{
