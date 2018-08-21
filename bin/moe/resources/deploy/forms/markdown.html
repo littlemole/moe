@@ -1,0 +1,49 @@
+<html>
+
+<head>
+  <script> 
+  // legacy IE polyfill to make shutdown.js work
+if (!Array.isArray) {
+  Array.isArray = function(arg) {
+    return Object.prototype.toString.call(arg) === '[object Array]';
+  };
+}
+  </script>
+  <script src="C:\\molib\\bin\\moe\\resources\\deploy\\js\\showdown.js"></script>
+</head>
+
+<body>
+
+<div id="markdown"></div>
+
+<script> 
+
+var src       = null;
+var obj       = null;
+var markdown  = document.getElementById("markdown");
+var converter = new showdown.Converter();
+
+function onChange()
+{
+	var txt = "" + src.object.Text;
+	
+    var html      = converter.makeHtml(txt);
+
+	markdown.innerHTML = html;
+}
+
+function init(s)
+{
+	src = s;
+	obj = src.object;
+
+	onChange();
+	
+	eval("function obj::OnChar(c) {return onChange();}");
+}
+
+
+</script>
+
+</body>
+</html>
