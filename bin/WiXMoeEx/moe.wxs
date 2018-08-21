@@ -6,7 +6,7 @@
 <?endif?>
 
   <!-- the product (moe) to install -->
-  <Product Id="59A16F7E-EC77-437b-978F-DDAAF554BE80"
+  <Product Id="*"
            Name="moe" Language="1033" Version="$(var.VERSION)"
            Manufacturer="mole"
            UpgradeCode="8F05D4B2-5D80-4978-9227-5E7511668B6A">
@@ -178,6 +178,8 @@
     <!-- fire custom actions -->
 
     <InstallExecuteSequence>
+
+	  <RemoveExistingProducts Before='InstallInitialize' />
 
       <!-- set path to moe.exe -->
       <Custom Action='MOEEXE' Before='InstallFiles' />
