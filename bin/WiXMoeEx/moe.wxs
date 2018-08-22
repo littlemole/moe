@@ -20,13 +20,15 @@
     <?define Win64 = "yes" ?>
     <?endif?>
 
-
-
     <!-- msi version and packaging-->
     <Package InstallerVersion="200" Compressed="yes" />
 
     <!-- msi media: use single embedded cabinet archive-->
     <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+	<!-- no repair or change options in installer -->
+	<Property Id="ARPNOREPAIR" Value="yes" Secure="yes" /> 
+	<Property Id="ARPNOMODIFY" Value="yes" Secure="yes" />
 
     <!-- package icon -->
     <Icon Id="icon.ico" SourceFile=".\moe\moe.ico"/>
