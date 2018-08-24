@@ -138,13 +138,13 @@ HRESULT __stdcall CreateObjectAdmin( HWND hwnd, BSTR progid, IUnknown** unk)
 		return hr;
 
 	std::wstringstream oss;
-	oss << L"Elevation:Administrator!new:" << wszCLSID;
+	oss << L"Elevation:Administrator!new:" << ((WCHAR*)(wszCLSID));
 
     BIND_OPTS3 bo;
     memset(&bo, 0, sizeof(bo));
     bo.cbStruct = sizeof(bo);
     bo.hwnd = hwnd;
-    bo.dwClassContext  = CLSCTX_LOCAL_SERVER;
+	bo.dwClassContext = CLSCTX_LOCAL_SERVER;
 	hr = ::CoGetObject( oss.str().c_str(), &bo, IID_IUnknown, (void**)unk);
 
 	return hr;
