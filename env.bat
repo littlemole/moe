@@ -6,11 +6,11 @@ rem ###################################################
 
 if "%2"=="x86" goto x86
 
-call boot x64-windows-static
+call boot x64-windows
 goto start
 
 :x86
-call boot x86-windows-static
+call boot x86-windows
 
 
 rem ###################################################
@@ -21,7 +21,7 @@ rem ###################################################
 
 rem compiler version
 set MSBUILDTREATALLTOOLSVERSIONSASCURRENT 
-set PlatformToolset=v141
+set PlatformToolset=v142
 
 rem initialise VC environment
 set VCVARSBAT="%VSROOT%\VC\Auxiliary\Build\vcvarsall.bat"

@@ -23,7 +23,7 @@ HDC choosePrinterDC(HWND owner, int& copies, bool& collate);
 // scintilla with pre-defined lexers
 ///////////////////////////////////////////////////////////////////////////////////
 
-class ScintillaEditor : public Scintilla
+class ScintillaEditor : public ScintillaWnd
 {
 
 public:

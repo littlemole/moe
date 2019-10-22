@@ -1,7 +1,7 @@
 #include "ssh/sftp.h"
 #include <libssh/libssh.h>
 #include <libssh/callbacks.h>
-#include <libssh/scp.h>
+//#include <libssh/scp.h>
 #include <libssh/sftp.h>
 #include <fcntl.h>
 

@@ -52,18 +52,18 @@ public:
 
 extern const wchar_t scintilla[];
 
-class Scintilla : public mol::win::CtrlClass<scintilla>
+class ScintillaWnd : public mol::win::CtrlClass<scintilla>
 {
 public:
 
-	Scintilla()
+	ScintillaWnd()
 	{
 		nextSearchPos_=0;
 		searchOptions_=FR_DOWN;
 		highlight_= 0;
 	}
 
-	~Scintilla()
+	~ScintillaWnd()
 	{
 	}
 

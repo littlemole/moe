@@ -31,20 +31,20 @@ git checkout moe
 cmd /Q /C .\bootstrap-vcpkg
 
 
-.\vcpkg install zlib:%CONF%
-rem .\vcpkg install bzip2:%CONF%
-rem .\vcpkg install boost:%CONF%
+.\vcpkg install zlib:%CONF%-static
+rem .\vcpkg install bzip2:%CONF%-static
+rem .\vcpkg install boost:%CONF%-static
 
-.\vcpkg install openssl:%CONF%
-.\vcpkg install expat:%CONF%
-.\vcpkg install gtest:%CONF%
-.\vcpkg install libiconv:%CONF%
-.\vcpkg install pcre:%CONF%
+.\vcpkg install openssl:%CONF%-static
+.\vcpkg install expat:%CONF%-static
+.\vcpkg install gtest:%CONF%-static
+.\vcpkg install libiconv:%CONF%-static
+.\vcpkg install pcre:%CONF%-static
 
-.\vcpkg install libssh:%CONF%
+.\vcpkg install libssh:%CONF%-static
 .\vcpkg install scintilla:%CONF%
-.\vcpkg install utf8:%CONF%
-.\vcpkg install dtl:%CONF%
+.\vcpkg install utf8:%CONF%-static
+.\vcpkg install dtl:%CONF%-static
 
 copy /y nul %CONF%-bootstrapped.txt
 

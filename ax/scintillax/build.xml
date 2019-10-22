@@ -20,10 +20,10 @@
       <PreprocessorDefinitions>STATIC_BUILD;INCLUDE_DEPRECATED_FEATURES;%(PreprocessorDefinitions)</PreprocessorDefinitions>  
 	</ClCompile>
     <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">..\..\lib\src\ssh\uni_debug\molssh.lib;..\..\lib\src\tcp\uni_debug\tcp.lib;Crypt32.lib;Ws2_32.lib;SciLexer.lib;Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
-	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">..\..\lib\src\ssh\uni_release\molssh.lib;..\..\lib\src\tcp\uni_release\tcp.lib;Crypt32.lib;Ws2_32.lib;SciLexer.lib;Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
-	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\lib\src\ssh\x64\uni_debug\molssh.lib;..\..\lib\src\tcp\x64\uni_debug\tcp.lib;Crypt32.lib;Ws2_32.lib;SciLexer.lib;Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
-	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">..\..\lib\src\ssh\x64\uni_release\molssh.lib;..\..\lib\src\tcp\x64\uni_release\tcp.lib;Crypt32.lib;Ws2_32.lib;SciLexer.lib;Scintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">..\..\lib\src\ssh\uni_debug\molssh.lib;..\..\lib\src\tcp\uni_debug\tcp.lib;Crypt32.lib;Ws2_32.lib;SciLexer.lib;libscintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">..\..\lib\src\ssh\uni_release\molssh.lib;..\..\lib\src\tcp\uni_release\tcp.lib;Crypt32.lib;Ws2_32.lib;SciLexer.lib;libscintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\lib\src\ssh\x64\uni_debug\molssh.lib;..\..\lib\src\tcp\x64\uni_debug\tcp.lib;Crypt32.lib;Ws2_32.lib;SciLexer.lib;libscintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">..\..\lib\src\ssh\x64\uni_release\molssh.lib;..\..\lib\src\tcp\x64\uni_release\tcp.lib;Crypt32.lib;Ws2_32.lib;SciLexer.lib;libscintilla.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <PreprocessorDefinitions>STATIC_BUILD;INCLUDE_DEPRECATED_FEATURES;%(PreprocessorDefinitions)</PreprocessorDefinitions>  
     </Link>
   </ItemDefinitionGroup>
