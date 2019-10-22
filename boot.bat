@@ -42,7 +42,7 @@ rem .\vcpkg install boost:%CONF%-static
 .\vcpkg install pcre:%CONF%-static
 
 .\vcpkg install libssh:%CONF%-static
-.\vcpkg install scintilla:%CONF%
+.\vcpkg install scintilla:%CONF%-static
 .\vcpkg install utf8:%CONF%-static
 .\vcpkg install dtl:%CONF%-static
 
