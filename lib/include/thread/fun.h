@@ -116,7 +116,8 @@ public:
 		return std::any(result.value);
 	}
 
-	typedef typename B::result_type ResultType;
+	//typedef typename B::result_type ResultType;
+	using ResultType = decltype(std::declval<B>()());
 	fun::Invoker<ResultType> result;
 	B	bound;
 };
