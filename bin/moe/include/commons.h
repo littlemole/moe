@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 
+
 // mol libs
 #include "util/istr.h"
 #include "xml/html.h"
@@ -52,6 +53,8 @@
 #include <activdbg.h>
 #include <Prsht.h>
 #include <mshtml.h>
+
+#include "ChromeEdge.h"
 
 // ax impl
 #include "ax/setting/setting_h.h"
@@ -163,7 +166,6 @@ private:
 Log& log();
 
 Logger logger(LogLevel level);
-
 
 
 

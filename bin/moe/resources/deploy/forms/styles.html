@@ -116,7 +116,7 @@ function getStyle(item)
 function selectColor(id)
 {
 	var e = document.getElementById(id);
-	var ax = new ActiveXObject("ShellCtrls.ColorDialog");
+	var ax = window.chrome.webview.hostObjects.sync.external.Moe.Script.CreateObject("ShellCtrls.ColorDialog");
 	ax.HexColor = e.value;
 	var r = ax.Show();
 		
@@ -142,7 +142,7 @@ function onSelectStyleSet()
 	var e = document.getElementById("styleSet");
 	var syntax = e.options[e.selectedIndex].value;
 
-	var styleSet = external.moe.Config.StyleSets.Item(syntax);
+	var styleSet = window.chrome.webview.hostObjects.sync.external.Moe.Config.StyleSets.Item(syntax);
 
 	var html = "<table class='result'>";
 
@@ -175,15 +175,15 @@ function el(id)
 
 function applyStyles()
 {
-	var n = external.moe.Documents.Count;
+	var n = window.chrome.webview.hostObjects.sync.external.Moe.Documents.Count;
 	for ( var i = 0; i < n; i++ )
 	{
-		var item = external.moe.Documents.Item(i);
-		if ( item.Type != external.moe.Documents.DOCTYPE_EDITOR )
+		var item = window.chrome.webview.hostObjects.sync.external.Moe.Documents.Item(i);
+		if ( item.Type != window.chrome.webview.hostObjects.sync.external.Moe.Documents.DOCTYPE_EDITOR )
 			continue;
 
-		var s = item.Object.Properties.Syntax;
-		item.Object.Properties.Syntax = s;
+		var s = window.chrome.webview.hostObjects.sync.external.Moe.Documents.Item(i).Object.Properties.Syntax;
+		window.chrome.webview.hostObjects.sync.external.Moe.Documents.Item(i).Object.Properties.Syntax = s;
 	}
 }
 
@@ -192,7 +192,7 @@ function onChange(id)
 	var e = document.getElementById("styleSet");
 	var syntax = e.options[e.selectedIndex].value;
 
-	var styleSet = external.moe.Config.StyleSets.Item(syntax);
+	var styleSet = window.chrome.webview.hostObjects.sync.external.Moe.Config.StyleSets.Item(syntax);
 
 	var item = styleSet.Item(id);
 	item.Bold = el("bold_"+id).checked;

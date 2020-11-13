@@ -50,7 +50,7 @@ HRESULT __stdcall SciAxLine::get_Count( long* line)
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
-HRESULT __stdcall SciAxLine::get_Current( long* line)
+HRESULT __stdcall SciAxLine::Current( long* line)
 { 
 	if (!sci_)
 		return E_FAIL;

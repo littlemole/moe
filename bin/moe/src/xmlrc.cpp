@@ -18,6 +18,8 @@
 
 #include "html.h"
 
+#include "html2.h"
+
 #include "img.h"
 
 #include "ole.h"
@@ -1149,6 +1151,38 @@ mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_EDIT_PASTE, make_generic_handler(&M
 mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_FILE_SAVE_AS, make_generic_handler(&MoeHtmlWnd::oleStdTargetExec, OLECMDID_SAVEAS ) );
 
 mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_FILE_PRINT, make_generic_handler(&MoeHtmlWnd::oleStdTargetExec, OLECMDID_PRINT ) );
+
+mol::msgMap<MoeHtml2Wnd>().addMsgHandler( WM_CLOSE, make_handler(&MoeHtml2Wnd::OnClose) );
+
+mol::msgMap<MoeHtml2Wnd>().addMsgHandler( WM_DESTROY, make_handler(&MoeHtml2Wnd::OnDestroy) );
+
+mol::msgMap<MoeHtml2Wnd>().addMsgHandler( WM_NCDESTROY, make_handler(&MoeHtml2Wnd::OnNcDestroy) );
+
+mol::msgMap<MoeHtml2Wnd>().addMsgHandler( WM_SEARCH_MSG, make_handler(&MoeHtml2Wnd::OnSearch) );
+
+mol::msgMap<MoeHtml2Wnd>().addMsgHandler( WM_MDIACTIVATE, make_handler(&MoeHtml2Wnd::OnMDIActivate) );
+
+mol::msgMap<MoeHtml2Wnd>().addMsgHandler( WM_SIZE, make_handler(&MoeHtml2Wnd::OnSize) );
+
+mol::msgMap<MoeHtml2Wnd>().addCmdHandler( IDM_NAVIGATE_BACK, make_handler(&MoeHtml2Wnd::back) );
+
+mol::msgMap<MoeHtml2Wnd>().addCmdHandler( IDM_NAVIGATE_NEXT, make_handler(&MoeHtml2Wnd::forward) );
+
+mol::msgMap<MoeHtml2Wnd>().addCmdHandler( IDM_EDIT_STOP, make_handler(&MoeHtml2Wnd::stop) );
+
+mol::msgMap<MoeHtml2Wnd>().addCmdHandler( IDM_EDIT_UPDATE, make_handler(&MoeHtml2Wnd::reload) );
+
+mol::msgMap<MoeHtml2Wnd>().addCmdHandler( IDM_MODE_SETTINGS, make_handler(&MoeHtml2Wnd::options) );
+
+mol::msgMap<MoeHtml2Wnd>().addCmdHandler( IDM_VIEW_CLOSEALL, make_handler(&MoeHtml2Wnd::OnCloseAll) );
+
+mol::msgMap<MoeHtml2Wnd>().addCmdHandler( IDM_FILE_PRINT, make_handler(&MoeHtml2Wnd::print) );
+
+mol::msgMap<MoeHtml2Wnd>().addCmdHandler( IDM_EDIT_CUT, make_handler(&MoeHtml2Wnd::cut) );
+
+mol::msgMap<MoeHtml2Wnd>().addCmdHandler( IDM_EDIT_COPY, make_handler(&MoeHtml2Wnd::copy) );
+
+mol::msgMap<MoeHtml2Wnd>().addCmdHandler( IDM_EDIT_PASTE, make_handler(&MoeHtml2Wnd::paste) );
 
 mol::msgMap<ImgViewer>().addMsgHandler( WM_MDIACTIVATE, make_handler(&ImgViewer::OnMDIActivate) );
 

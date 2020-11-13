@@ -36,37 +36,37 @@
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -142,6 +142,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">
     <LibraryPath>..\..\vcpkg\installed\x86-windows-static\debug\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
     <SourcePath>$(;VC_SourcePath);</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">
+    <LibraryPath>C:\moe\vcpkg\installed\x64-windows-static\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
     <ClCompile>
@@ -227,10 +230,11 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BrowseInformation>true</BrowseInformation>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalOptions>/SUBSYSTEM:WINDOWS,4.00 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>..\..\lib\src\win\x64\uni_Release\win.lib;..\..\lib\src\ole\x64\uni_Release\ole.lib;..\..\lib\src\util\x64\uni_Release\util.lib;..\..\lib\src\xml\x64\uni_Release\xml.lib;..\..\lib\src\thread\x64\uni_Release\thread.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Mpr.lib;gdiplus.lib;urlmon.lib;Msimg32.lib;Propsys.lib;..\..\3dParty\pcre\x64\uni_Release\pcre.lib;..\..\3dParty\expat\Source\lib\x64\uni_Release\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\x64\uni_Release\win.lib;..\..\lib\src\ole\x64\uni_Release\ole.lib;..\..\lib\src\util\x64\uni_Release\util.lib;..\..\lib\src\xml\x64\uni_Release\xml.lib;..\..\lib\src\thread\x64\uni_Release\thread.lib;..\..\lib\src\tcp\x64\uni_Release\tcp.lib;..\..\lib\src\ssh\x64\uni_Release\molssh.lib;Imm32.lib;shlwapi.lib;wininet.lib;comctl32.lib;Mpr.lib;gdiplus.lib;urlmon.lib;Msimg32.lib;Propsys.lib;pcre.lib;expat.lib;ssh.lib;ssleay32.lib;libeay32.lib;zlib.lib;Ws2_32.lib;Dwmapi.lib;jsrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)moe.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>NotSet</SubSystem>
@@ -365,9 +369,9 @@
     <ClCompile Include="src\editor.cpp" />
     <ClCompile Include="src\EditorMenu.cpp" />
     <ClCompile Include="src\EditorScript.cpp" />
-    <ClCompile Include="src\form.cpp" />
+    <ClCompile Include="src\form2.cpp" />
     <ClCompile Include="src\hex.cpp" />
-    <ClCompile Include="src\html.cpp" />
+    <ClCompile Include="src\html2.cpp" />
     <ClCompile Include="src\Img.cpp" />
     <ClCompile Include="src\mdichild.cpp" />
     <ClCompile Include="src\moe.cpp" />
@@ -395,6 +399,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\app.h" />
+    <ClInclude Include="include\ChromeEdge.h" />
     <ClInclude Include="include\commons.h" />
     <ClInclude Include="include\dir3.h" />
     <ClInclude Include="include\DocFactory.h" />
@@ -402,9 +407,9 @@
     <ClInclude Include="include\editor.h" />
     <ClInclude Include="include\EditorMenu.h" />
     <ClInclude Include="include\EditorScript.h" />
-    <ClInclude Include="include\form.h" />
+    <ClInclude Include="include\form2.h" />
     <ClInclude Include="include\hex.h" />
-    <ClInclude Include="include\html.h" />
+    <ClInclude Include="include\html2.h" />
     <ClInclude Include="include\Img.h" />
     <ClInclude Include="include\mdichild.h" />
     <ClInclude Include="include\moe.h" />
@@ -447,6 +452,7 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
     </CustomBuild>
     <None Include="..\..\cg\xsl\uimenu.xsl" />
+    <None Include="packages.config" />
     <None Include="resources\mol.rc.inc" />
     <None Include="resources\favs.bmp" />
     <None Include="resources\moe.bmp" />
@@ -513,5 +519,12 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\Microsoft.Web.WebView2.1.0.622.22\build\native\Microsoft.Web.WebView2.targets" Condition="Exists('packages\Microsoft.Web.WebView2.1.0.622.22\build\native\Microsoft.Web.WebView2.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Microsoft.Web.WebView2.1.0.622.22\build\native\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.Web.WebView2.1.0.622.22\build\native\Microsoft.Web.WebView2.targets'))" />
+  </Target>
 </Project>

@@ -484,7 +484,7 @@ library ShellCtrls
     {
 		//methods
 		[ 
-		  propget,id(DISPID_VALUE), helpstring("pid (process id)")
+		  propget,id(3), helpstring("pid (process id)")
 		] 
 		HRESULT PID([out,retval] LONG* pid);
 

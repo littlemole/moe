@@ -21,6 +21,8 @@
   <Import Project="..\..\master.props" />
   <Import Project="..\build.props" />
 
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
 
   <ItemDefinitionGroup>
     <ClCompile>
@@ -63,6 +65,7 @@
     <ClCompile Include="src\TailEditor.cpp" />
     <ClCompile Include="src\hex.cpp" />
     <ClCompile Include="src\html.cpp" />
+    <ClCompile Include="src\html2.cpp" />
     <ClCompile Include="src\Img.cpp" />
     <ClCompile Include="src\moe.cpp" />
     <ClCompile Include="src\MoeBar.cpp" />
@@ -99,10 +102,21 @@
     </CustomBuild>
   </ItemGroup>
 
-
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\Microsoft.Web.WebView2.1.0.622.22\build\native\Microsoft.Web.WebView2.targets" Condition="Exists('packages\Microsoft.Web.WebView2.1.0.622.22\build\native\Microsoft.Web.WebView2.targets')" />
   </ImportGroup>
+
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Microsoft.Web.WebView2.1.0.622.22\build\native\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.Web.WebView2.1.0.622.22\build\native\Microsoft.Web.WebView2.targets'))" />
+  </Target>
 
 </Project>

@@ -575,10 +575,16 @@ library Moe
     {
 		/////////////////////////////////////////////////////////////////////
 		[ 
-		  propget,bindable,displaybind, requestedit,id(DISPID_VALUE), 
-		  helpstring("Get the HTML Document for this User Frame")
+		  propget,bindable,displaybind, requestedit,id(6), 
+		  helpstring("get onDocumentLoad callback")
 		]
-		HRESULT Object( [out,retval] IDispatch** d);
+		HRESULT onDocumentLoad( [out,retval] IDispatch** d);
+
+		[
+			propput, bindable, displaybind, requestedit, id(6),
+			helpstring("set onDocumentLoad callback")
+		]
+		HRESULT onDocumentLoad([in] IDispatch* d);
 
 		/////////////////////////////////////////////////////////////////////
 		[ 
@@ -590,16 +596,29 @@ library Moe
 
 		/////////////////////////////////////////////////////////////////////
 		[ 
-		  propget,bindable,displaybind, requestedit,id(2), 
-		  helpstring("Get embeded HTML Scripts IDpispatch interface")
+		  id(2), 
+		  helpstring("Post a JSON message to the webview")
 		]
-		HRESULT Scripts( [out,retval] IDispatch** s);
+		HRESULT PostMessage2WebView( [in] BSTR json);
+
+		/////////////////////////////////////////////////////////////////////
+		[
+			propput,id(7),
+			helpstring("set a handler to receive messages from webview")
+		]
+		HRESULT onMessage([in] IDispatch* handler);
+
+		[
+			propget, id(7),
+			helpstring("get a handler to receive messages from webview")
+		]
+		HRESULT onMessage([out,retval] IDispatch** handler);
 
 		/////////////////////////////////////////////////////////////////////
 		[ 
 		  id(3), helpstring("Eval(uate) a User Script in the HTML Frame document context")
 		]
-		HRESULT Eval( [in] BSTR src, [in] BSTR scriptLanguage );
+		HRESULT Eval( [in] BSTR src, [in] IDispatch* future );
 
 		/////////////////////////////////////////////////////////////////////
 		[ 
@@ -665,6 +684,13 @@ library Moe
 
 		[id(5), helpstring("Save Document As")]
 		HRESULT SaveAs( [in] BSTR f );
+
+		/////////////////////////////////////////////////////////////////////
+		[
+			propget, bindable, displaybind, requestedit, id(6),
+			helpstring("Get the embdded Document Object for this moe MDI Document")
+		]
+		HRESULT Model([out, retval] IDispatch** d);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////
@@ -1051,10 +1077,10 @@ library Moe
 	interface IExternalMoe : IDispatch
     {
 		[		
-		  propget,id(DISPID_VALUE), 
+		  propget,id(6),//DISPID_VALUE), 
 		  helpstring("Get moe application object reference")
 		]
-		HRESULT Moe([out,retval] IMoe** m);
+		HRESULT Moe([out,retval] IDispatch** m);
 
 
 		[		
@@ -1066,6 +1092,7 @@ library Moe
 
 		[id(2), helpstring("Close current frame")] 
 		HRESULT Close();
+
 	}
 
  	////////////////////////////////////////////////////////////////////////////////////

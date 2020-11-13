@@ -152,14 +152,31 @@ HRESULT MoeFormWnd::hideContextMenu()
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
-HRESULT __stdcall  MoeFormWnd::get_Object( IDispatch **d)
+HRESULT __stdcall MoeFormWnd::get_onDocumentLoad(IDispatch** disp)
 {
-	if (!d)
-		return E_INVALIDARG;
-	*d=0;
-
-	return this->doc(d);
+	return E_NOTIMPL;
 }
+
+HRESULT __stdcall MoeHtMoeFormWndml2Wnd::put_onDocumentLoad(IDispatch* disp)
+{
+	return E_NOTIMPL;
+}
+
+HRESULT __stdcall MoeFormWnd::get_onMessage(IDispatch** disp)
+{
+	return E_NOTIMPL;
+}
+
+HRESULT __stdcall MoeFormWnd::put_onMessage(IDispatch* disp)
+{
+	return E_NOTIMPL;
+}
+
+HRESULT __stdcall MoeFormWnd::PostMessage2WebView(BSTR json)
+{
+	return E_NOTIMPL;
+}
+
 
 HRESULT __stdcall  MoeFormWnd::get_View(  IMoeDialogView **d)
 {
@@ -193,7 +210,7 @@ HRESULT __stdcall  MoeFormWnd::get_Scripts(  IDispatch **s)
 	return E_FAIL;
 }
 
-HRESULT __stdcall  MoeFormWnd::Eval(  BSTR src, BSTR scriptLanguage)
+HRESULT __stdcall  MoeFormWnd::Eval(  BSTR src, IDispatch* future)
 {
 	punk<IDispatch> disp;
 	if ( S_OK == get_Object(&disp) && disp )
@@ -262,7 +279,7 @@ MoeFormWnd::ExternalMoe::~ExternalMoe()
 	ODBGS("ExternalMoe ~");
 }
 
-HRESULT __stdcall MoeFormWnd::ExternalMoe::get_Moe(IMoe** disp)
+HRESULT __stdcall MoeFormWnd::ExternalMoe::get_Moe(IDispatch** disp)
 {
 	if ( !disp )
 		return E_INVALIDARG;
@@ -273,6 +290,8 @@ HRESULT __stdcall MoeFormWnd::ExternalMoe::get_Moe(IMoe** disp)
 
 	return hr;
 }
+
+
 
 HRESULT __stdcall MoeFormWnd::ExternalMoe::Close()
 {

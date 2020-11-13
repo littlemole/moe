@@ -37,10 +37,14 @@ public:
 
 	mol::punk<IMoeDialogView> view;
 
-    virtual HRESULT __stdcall get_Object( IDispatch **d);    
-    virtual HRESULT __stdcall get_View(  IMoeDialogView **d);    
+	virtual HRESULT __stdcall get_onDocumentLoad(IDispatch** d);
+	virtual HRESULT __stdcall put_onDocumentLoad(IDispatch* d);
+	virtual HRESULT __stdcall get_onMessage(IDispatch** d);
+	virtual HRESULT __stdcall put_onMessage(IDispatch* d);
+	virtual HRESULT __stdcall PostMessage2WebView(BSTR json);
+	virtual HRESULT __stdcall get_View(  IMoeDialogView **d);    
     virtual HRESULT __stdcall get_Scripts(  IDispatch **s);    
-    virtual HRESULT __stdcall Eval(  BSTR src, BSTR scriptLanguage);    
+    virtual HRESULT __stdcall Eval(  BSTR src, IDispatch* future);    
     virtual HRESULT __stdcall OleCmd(  long cmd);    
     virtual HRESULT __stdcall get_FilePath(  BSTR *filename);
 
@@ -81,15 +85,12 @@ public:
 		ExternalMoe();
 		~ExternalMoe();
 
-		virtual HRESULT __stdcall get_Moe(IMoe** disp);
+		virtual HRESULT __stdcall get_Moe(IDispatch** disp);
 		virtual HRESULT __stdcall Close();
 		virtual HRESULT __stdcall CreateObject( BSTR progId, IDispatch** disp);
 		virtual HRESULT __stdcall get_Frame( IMoeHtmlFrame** f);
 		virtual HRESULT __stdcall CodeBehind( BSTR fname );
 		virtual HRESULT __stdcall get_Code( IDispatch** code );
-
-		private:
-
 
 	};
 

@@ -48,7 +48,24 @@ public:
 	   *d = 0;
 
 	   C* This = (C*)this;
+	   if (!This->oleObject)
+		   return E_NOINTERFACE;
+
 	   return This->oleObject->QueryInterface( IID_IDispatch, (void**)d );
+   }
+
+
+   virtual HRESULT __stdcall get_Model(IDispatch** d)
+   {
+	   if (!d)
+		   return E_INVALIDARG;
+	   *d = 0;
+
+	   C* This = (C*)this;
+	   if (!This->oleObject)
+		   return E_NOINTERFACE;
+
+	   return This->oleObject->QueryInterface(IID_IDispatch, (void**)d);
    }
 
    virtual HRESULT __stdcall get_View(  IMoeDocumentView **d)

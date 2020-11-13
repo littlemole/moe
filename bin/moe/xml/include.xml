@@ -16,6 +16,7 @@
   <include>taileditor.h</include>
   <include>hex.h</include>
   <include>html.h</include>
+  <include>html2.h</include>
   <include>img.h</include>
   <include>ole.h</include>
   <include>form.h</include>

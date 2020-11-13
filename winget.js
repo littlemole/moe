@@ -1,6 +1,11 @@
 var WinHttpReq = new ActiveXObject("WinHttp.WinHttpRequest.5.1");
 WinHttpReq.Open("GET", WScript.Arguments(0), /*async=*/false);
+
+WinHttpRequestOption_EnableRedirects = 6;
+WinHttpReq.Option(WinHttpRequestOption_EnableRedirects,1);
+
 WinHttpReq.Send();
+
 
 //WScript.Echo(WinHttpReq.ResponseText);
 

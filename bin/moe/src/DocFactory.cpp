@@ -8,6 +8,7 @@
 #include "rtf.h"
 #include "hex.h"
 #include "html.h"
+#include "html2.h"
 #include "ole.h"
 #include "rtf.h"
 #include "moe.h"
@@ -199,7 +200,7 @@ public:
 
 	virtual mol::MdiChild* openDocument( const std::wstring& path)
 	{
-		MoeHtmlWnd::Instance* t = MoeHtmlWnd::CreateInstance( path );
+		MoeHtml2Wnd::Instance* t = MoeHtml2Wnd::CreateInstance( path );
 		return dynamic_cast<mol::MdiChild*>(t);
 	}
 

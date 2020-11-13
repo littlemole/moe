@@ -38,7 +38,7 @@ public:
 
 	static REFGUID getCoClassID();
 	
-	HRESULT virtual __stdcall get_Current( long* line);
+	HRESULT virtual __stdcall Current( long* line);
 	HRESULT virtual __stdcall get_Count( long* cnt);
 
 	HRESULT virtual __stdcall LineFromPos( long pos, long* line );

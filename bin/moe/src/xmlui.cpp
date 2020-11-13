@@ -18,6 +18,8 @@
 
 #include "html.h"
 
+#include "html2.h"
+
 #include "img.h"
 
 #include "ole.h"

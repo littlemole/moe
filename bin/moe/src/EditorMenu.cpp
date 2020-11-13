@@ -35,7 +35,7 @@ void EditorMenu::updateUI()
 	std::wstring title = path.towstring();
 
 	long line=0;
-	editor_->line_->get_Current(&line);
+	editor_->line_->Current(&line);
 	std::wostringstream oss;
 	oss << line;
 

@@ -65,9 +65,9 @@ library HTTP
 		[ id(1), propget ] 
 		HRESULT Name([out,retval] BSTR* m);
 
-		[ id(DISPID_VALUE), propput, helpstring("HTTP header value") ] 
+		[ id(2), propput, helpstring("HTTP header value") ] 
 		HRESULT Value([in] BSTR m);
-		[ id(DISPID_VALUE), propget ] 
+		[ id(2), propget ] 
 		HRESULT Value([out,retval] BSTR* m);
 	}
 

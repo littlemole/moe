@@ -436,12 +436,12 @@ library Scintilla
 		//properties:
 
 		[ 
-		  propput,bindable,displaybind,defaultbind,requestedit,id(DISPID_VALUE), 
+		  propput,bindable,displaybind,defaultbind,requestedit,id(6), 
 		  helpstring("Get/Set Caret position")
 		]
 		HRESULT Caret( [in] long p);
 		[ 
-		  propget,bindable,displaybind, requestedit,id(DISPID_VALUE)
+		  propget,bindable,displaybind, requestedit,id(6)
 		]
 		HRESULT Caret( [out,retval] long* p);
 
@@ -561,8 +561,8 @@ library Scintilla
 		//properties:
 
 		[ 
-		  propget,bindable,displaybind, requestedit,id(DISPID_VALUE),
-		  helpstring("Get/Set current line")
+		  id(DISPID_VALUE),
+		  helpstring("Get current line")
 		]
 		HRESULT Current( [out,retval] long* p);
 

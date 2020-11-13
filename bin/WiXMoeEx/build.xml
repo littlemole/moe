@@ -128,6 +128,12 @@
             SourceFiles="..\moe\$(confPath)\moe.exe"
             DestinationFolder=".\moe"
         />
+
+        <Copy
+            SourceFiles="..\moe\$(confPath)\WebView2Loader.dll"
+            DestinationFolder=".\moe"
+        />
+
         <Copy
             SourceFiles="..\prw\prw\$(confPath)\prw.exe"
             DestinationFolder=".\moe"

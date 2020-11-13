@@ -1440,8 +1440,8 @@
             </SplitButton>
             <Button CommandName="RibbonFilePrint" />
           </Group>
-          <Group CommandName="RibbonFileGroup2" SizeDefinition="FileGroupSize" ApplicationModes="5" >
-            <Button CommandName="RibbonFileSaveAs"/>
+          <Group CommandName="RibbonFileGroup2" SizeDefinition="SingleControl" ApplicationModes="5" >
+<!--            <Button CommandName="RibbonFileSaveAs"/> -->
             <Button CommandName="RibbonFilePrint" />
           </Group>
 

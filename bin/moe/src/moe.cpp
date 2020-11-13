@@ -55,7 +55,7 @@ MoeWnd::MoeWnd()
 	//scriptHost  = new Script;
 	moeStyles.createObject(CLSID_ScintillAxStyleSets,CLSCTX_INPROC_SERVER);
 
-
+	edge = ChromeEdge::CreateInstance();
 }
 
 //////////////////////////////////////////////////////////////////////////////

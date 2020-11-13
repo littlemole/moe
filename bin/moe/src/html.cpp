@@ -47,7 +47,7 @@ MoeHtmlWnd::Instance* MoeHtmlWnd::CreateInstance( const std::wstring& loc)
 	}
 
 	statusBar()->status(100);
-	form->frame_.Release();
+// ??	form->frame_.Release();
 	::SetFocus(*form);	
     return form;
 }
@@ -296,12 +296,12 @@ MoeHtmlWnd::ExternalMoe::~ExternalMoe()
 	ODBGS("ExternalMoe ~");
 }
 
-HRESULT __stdcall MoeHtmlWnd::ExternalMoe::get_Moe(IMoe** disp)
+HRESULT __stdcall MoeHtmlWnd::ExternalMoe::get_Moe(IDispatch** disp)
 {
 	if ( !disp )
 		return E_INVALIDARG;
 
-	HRESULT hr = ((IMoe*)(moe()))->QueryInterface(IID_IMoe, (void**)disp );
+	HRESULT hr = ((IMoe*)(moe()))->QueryInterface(IID_IDispatch, (void**)disp );
 	if ( hr != S_OK )
 		*disp = 0;
 

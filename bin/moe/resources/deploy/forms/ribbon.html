@@ -33,23 +33,23 @@ var foreColor = document.getElementById("forecolor");
 var backColor = document.getElementById("backcolor");
 var textColor = document.getElementById("textcolor");
 
-foreColor.value = window.external.moe.Config.RibbonForeColor;
-backColor.value = window.external.moe.Config.RibbonBackColor;
-textColor.value = window.external.moe.Config.RibbonTextColor;
+foreColor.value = window.chrome.webview.hostObjects.sync.external.moe.Config.RibbonForeColor;
+backColor.value = window.chrome.webview.hostObjects.sync.external.moe.Config.RibbonBackColor;
+textColor.value = window.chrome.webview.hostObjects.sync.external.moe.Config.RibbonTextColor;
 
 
 function setColors()
 {
 
-	window.external.moe.Config.RibbonForeColor = foreColor.value;
-	window.external.moe.Config.RibbonBackColor = backColor.value;
-	window.external.moe.Config.RibbonTextColor = textColor.value;
+	window.chrome.webview.hostObjects.sync.external.moe.Config.RibbonForeColor = foreColor.value;
+	window.chrome.webview.hostObjects.sync.external.moe.Config.RibbonBackColor = backColor.value;
+	window.chrome.webview.hostObjects.sync.external.moe.Config.RibbonTextColor = textColor.value;
 }
 
 function changeColor(id)
 {
 	var e = document.getElementById(id);
-	var ax = new ActiveXObject("ShellCtrls.ColorDialog");
+	var ax = window.chrome.webview.hostObjects.sync.external.Moe.Script.CreateObject("ShellCtrls.ColorDialog");
 	ax.HexColor = e.value;
 	var r = ax.Show();
 		
@@ -57,7 +57,6 @@ function changeColor(id)
 	{
 		var col = ax.HexColor;
 		e.value=col;
-		e.onchange();
 		document.body.focus();
 	}
 }

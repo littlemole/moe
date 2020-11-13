@@ -9,3 +9,5 @@ moe_dispid.h
 ribbonres.h
 ribbonres.rc
 moe.VC*
+packages/
+obj/

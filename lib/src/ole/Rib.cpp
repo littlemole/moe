@@ -1436,13 +1436,15 @@ bool Ribbon::load(IStorage* s)
 	{
 		return false;
 	}
-
-	hr = rib->LoadSettingsFromStream(stream);
-	if ( hr != S_OK )
+	if (rib)
+	{
+		hr = rib->LoadSettingsFromStream(stream);
+	}
+	/*if ( hr != S_OK )
 	{
 		return false;
 	}
-
+	*/
 	return true;
 }
 
@@ -1462,9 +1464,12 @@ bool Ribbon::save(IStorage* storage)
 	if ( hr != S_OK )
 		return false;
 
-	hr = rib->SaveSettingsToStream(s);
-	if ( hr != S_OK )
-		return false;
+	if (rib)
+	{
+		hr = rib->SaveSettingsToStream(s);
+	}
+	//if ( hr != S_OK )
+		//return false;
 
 	return true;
 }

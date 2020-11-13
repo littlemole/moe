@@ -81,12 +81,15 @@
  <Target Name="WixmoeEx">
 
 		<MSBuild Projects=".\bin\WixMoeEx\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+		<MSBuild Projects=".\bin\moeBundle\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+
  </Target>
 
 
  <Target Name="cleanWixmoeEx">
 
 		<MSBuild Projects=".\bin\WixMoeEx\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"  Targets="Clean"/>
+		<MSBuild Projects=".\bin\moeBundle\build.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)" Targets="Clean"/>
  </Target>
 
  <Target Name="universe">

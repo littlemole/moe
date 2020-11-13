@@ -9,13 +9,7 @@
     <ClCompile Include="src\dir3.cpp">
       <Filter>mdi</Filter>
     </ClCompile>
-    <ClCompile Include="src\form.cpp">
-      <Filter>widget</Filter>
-    </ClCompile>
     <ClCompile Include="src\hex.cpp">
-      <Filter>mdi</Filter>
-    </ClCompile>
-    <ClCompile Include="src\html.cpp">
       <Filter>mdi</Filter>
     </ClCompile>
     <ClCompile Include="src\Img.cpp">
@@ -67,6 +61,12 @@
     <ClCompile Include="src\EditorScript.cpp">
       <Filter>mdi</Filter>
     </ClCompile>
+    <ClCompile Include="src\html2.cpp">
+      <Filter>mdi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\form2.cpp">
+      <Filter>widget</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\app.h" />
@@ -81,13 +81,7 @@
     <ClInclude Include="include\editor.h">
       <Filter>mdi</Filter>
     </ClInclude>
-    <ClInclude Include="include\form.h">
-      <Filter>widget</Filter>
-    </ClInclude>
     <ClInclude Include="include\hex.h">
-      <Filter>mdi</Filter>
-    </ClInclude>
-    <ClInclude Include="include\html.h">
       <Filter>mdi</Filter>
     </ClInclude>
     <ClInclude Include="include\Img.h">
@@ -144,6 +138,15 @@
     </ClInclude>
     <ClInclude Include="include\EditorMenu.h">
       <Filter>mdi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\html2.h">
+      <Filter>mdi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ChromeEdge.h">
+      <Filter>widget</Filter>
+    </ClInclude>
+    <ClInclude Include="include\form2.h">
+      <Filter>widget</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -212,6 +215,7 @@
     <None Include="xml\ribbon.xml">
       <Filter>resources\xml</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="mdi">

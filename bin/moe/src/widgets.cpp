@@ -74,7 +74,7 @@ void MoeStatusBar::status( const std::wstring& txt )
 				if(line)
 				{
 					long l = 0;
-					line->get_Current(&l);
+					line->Current(&l);
 					oss << (l+1);
 
 					long pos = 0;

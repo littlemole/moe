@@ -3,9 +3,17 @@
 set CONF=%1
 if %1!==! SET CONF=x86-windows
 
-IF EXIST %VCPKG%\vswhere.exe GOTO alreadyhavevswhere
+IF EXIST .\vswhere.exe GOTO alreadyhavevswhere
 
-cscript /nologo winget.js https://github.com/Microsoft/vswhere/releases/download/1.0.62/vswhere.exe vswhere.exe
+@echo "download wshere.exe"
+cscript /nologo winget.js "https://github.com/Microsoft/vswhere/releases/download/1.0.62/vswhere.exe" vswhere.exe
+
+@echo "download webview SDK"
+cscript /nologo winget.js "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/1.0.622.22" bin/moe/packages/webview.zip
+cscript /nologo cg\bin\unzip.vbs bin\moe\packages\webview.zip bin\moe\packages\Microsoft.Web.WebView2.1.0.622.22
+
+@echo "download webview runtime web installer"
+cscript /nologo winget.js https://go.microsoft.com/fwlink/p/?LinkId=2124703  bin/moeBundle/prereq/MicrosoftEdgeWebview2Setup.exe
 
 :alreadyhavevswhere
 
@@ -45,6 +53,7 @@ rem .\vcpkg install boost:%CONF%-static
 .\vcpkg install scintilla:%CONF%-static
 .\vcpkg install utf8:%CONF%-static
 .\vcpkg install dtl:%CONF%-static
+.\vcpkg install jsoncpp:%CONF%-static
 
 copy /y nul %CONF%-bootstrapped.txt
 

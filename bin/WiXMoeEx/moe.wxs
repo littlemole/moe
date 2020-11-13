@@ -21,7 +21,7 @@
     <?endif?>
 
     <!-- msi version and packaging-->
-    <Package InstallerVersion="200" Compressed="yes" />
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <!-- msi media: use single embedded cabinet archive-->
     <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />

@@ -103,14 +103,13 @@ protected:
 			ExternalMoe();
 			~ExternalMoe();
 
-			virtual HRESULT __stdcall get_Moe(IMoe** disp);
+			virtual HRESULT __stdcall get_Moe(IDispatch** disp);
 			virtual HRESULT __stdcall Close();
 			virtual HRESULT __stdcall CreateObject( BSTR progId, IDispatch** disp);
 			virtual HRESULT __stdcall get_Frame( IMoeHtmlFrame** f);
 			virtual HRESULT __stdcall CodeBehind( BSTR fname );
 			virtual HRESULT __stdcall get_Code( IDispatch** code );
 
-		private:
 
 	};
 	mol::stack_obj<ExternalMoe>		external_;
