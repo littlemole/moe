@@ -3,7 +3,7 @@
 #include "mtree.h"
 #include "moe.h"
 #include "app.h"
-#include "form.h"
+#include "form2.h"
 #include "Docs.h"
 #include "xmlui.h"
 #include "moe_dispid.h"
@@ -681,8 +681,8 @@ HRESULT __stdcall MoeScript::ShowHtmlForm( BSTR src, long l, int t, int w, int h
 {
 	statusBar()->status(mol::bstr(src).towstring());
 
-	typedef mol::com_obj<MoeFormWnd> form;
-	form* f = MoeFormWnd::CreateInstance( 
+	typedef mol::com_obj<MoeForm2Wnd> form;
+	form* f = MoeForm2Wnd::CreateInstance( 
 							mol::bstr(src).towstring(),
 							l,t,w,h, 
 							formStyle 

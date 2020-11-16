@@ -40,7 +40,7 @@
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <PlatformToolset>v142</PlatformToolset>
@@ -138,6 +138,9 @@
     <TargetExt>.exe</TargetExt>
     <TargetName>userforms</TargetName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
+    <TargetName>userforms</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
     <ClCompile>
       <Optimization>MinSpace</Optimization>
@@ -148,13 +151,13 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TLB=uni_release/userform.tlb;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\uni_Release\win.lib;..\..\lib\src\ole\uni_Release\ole.lib;..\..\lib\src\util\uni_Release\util.lib;..\..\lib\src\thread\uni_Release\thread.lib;..\..\3dParty\pcre\uni_Release\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ModuleDefinitionFile>comtypes.def</ModuleDefinitionFile>
+      <AdditionalDependencies>..\..\lib\src\win\uni_Release\win.lib;..\..\lib\src\ole\uni_Release\ole.lib;..\..\lib\src\util\uni_Release\util.lib;..\..\lib\src\thread\uni_Release\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -211,10 +214,10 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\x64\uni_Release\win.lib;..\..\lib\src\ole\x64\uni_Release\ole.lib;..\..\lib\src\util\x64\uni_Release\util.lib;..\..\lib\src\thread\x64\uni_Release\thread.lib;..\..\3dParty\pcre\x64\uni_Release\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ModuleDefinitionFile>comtypes.def</ModuleDefinitionFile>
+      <AdditionalDependencies>..\..\lib\src\win\x64\uni_Release\win.lib;..\..\lib\src\ole\x64\uni_Release\ole.lib;..\..\lib\src\util\x64\uni_Release\util.lib;..\..\lib\src\thread\x64\uni_Release\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -227,7 +230,7 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <ResourceCompile>
-      <PreprocessorDefinitions>TLB=x64/uni_release/comtypes.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TLB=x64\uni_release/userform.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
@@ -243,6 +246,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\..\lib\src\win\x64\uni_debug\win.lib;..\..\lib\src\ole\x64\uni_debug\ole.lib;..\..\lib\src\util\x64\uni_debug\util.lib;..\..\lib\src\thread\x64\uni_debug\thread.lib;..\..\3dParty\pcre\x64\uni_debug\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>

@@ -633,6 +633,18 @@ library Moe
 		  propget,bindable,displaybind, requestedit,id(5), 
 		]
 		HRESULT FilePath( [out,retval] BSTR* filename);
+
+		[
+			helpstring("add external object "), id(8)
+		]
+		HRESULT addExternalObject([in] BSTR name, [in] IDispatch* disp);
+
+		[
+			helpstring("remove external object "), id(9)
+		]
+		HRESULT removeExternalObject([in] BSTR name);
+
+
 	}
 
 
@@ -691,6 +703,20 @@ library Moe
 			helpstring("Get the embdded Document Object for this moe MDI Document")
 		]
 		HRESULT Model([out, retval] IDispatch** d);
+
+		/////////////////////////////////////////////////////////////////////
+		[
+			propget, bindable, displaybind, requestedit, id(7),
+			helpstring("get onClose callback")
+		]
+		HRESULT onClose([out, retval] IDispatch** d);
+
+		[
+			propput, bindable, displaybind, requestedit, id(7),
+			helpstring("set onClose callback")
+		]
+		HRESULT onClose([in] IDispatch* d);
+
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////

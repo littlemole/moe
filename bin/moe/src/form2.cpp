@@ -226,7 +226,16 @@ void MoeForm2Wnd::onPermissionRequest(ICoreWebView2PermissionRequestedEventArgs*
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 
+void MoeForm2Wnd::OnSize(WPARAM wParam, LPARAM lParam)
+{
+	if (webViewController)
+	{
+		RECT bounds;
+		GetClientRect(hWnd_, &bounds);
+		webViewController->put_Bounds(bounds);
+	};
 
+}
 void MoeForm2Wnd::OnClose()
 {
 	ODBGS("MoeFormWnd::OnClose");
@@ -405,6 +414,25 @@ HRESULT __stdcall  MoeForm2Wnd::get_FilePath(  BSTR *filename)
 	return S_OK;
 }
 
+
+HRESULT __stdcall MoeForm2Wnd::addExternalObject(BSTR name, IDispatch* disp)
+{
+	if (!oleObject)
+		return S_FALSE;
+
+	mol::bstr objName(name);
+	mol::variant v(disp);
+	return oleObject->AddHostObjectToScript(objName.towstring().c_str(), &v);
+}
+
+HRESULT __stdcall MoeForm2Wnd::removeExternalObject(BSTR name)
+{
+	if (!oleObject)
+		return S_FALSE;
+
+	mol::bstr objName(name);
+	return oleObject->RemoveHostObjectFromScript(objName.towstring().c_str());
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // external events called from script inside MoeWnd

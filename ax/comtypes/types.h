@@ -347,7 +347,25 @@ private:
 			punk<IDispatch>  disp;
 			GIT git;
 			git.getInterface(cookie_completeEvent_,&disp);
-			disp_invoke(disp,DISPID_VALUE);
+			//disp_invoke(disp,DISPID_VALUE);
+
+			EXCEPINFO ex;
+			::ZeroMemory(&ex, sizeof(EXCEPINFO));
+			UINT e = 0;
+			DISPPARAMS p = { 0,0 };
+			p.cArgs = 1;
+
+			mol::bstr r;
+			this->get_Result(&r);
+
+			mol::variant v(r);
+			p.rgvarg = &v;
+
+			HRESULT hr = disp->Invoke(DISPID_UNKNOWN, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &p, NULL, &ex, &e);
+			if (hr != S_OK)
+			{
+				//::MessageBoxA(0,"hu", "ha", 0);
+			}
 		}
 	}
 
@@ -396,7 +414,7 @@ private:
 		if ( xsltDoc.vt == VT_EMPTY )
 			return S_OK;
 
-		FireOnStatus( bstr("loading xsl template") );
+		//FireOnStatus( bstr("loading xsl template") );
 
 		std::string xslt("");
 		if ( xsltDoc.vt == VT_BSTR )
@@ -451,7 +469,7 @@ private:
 		if ( S_OK != xslTemplate->putref_stylesheet(xsl) )
 			return S_OK;
 
-		FireOnStatus( bstr("processing xslt transformation") );
+		//FireOnStatus( bstr("processing xslt transformation") );
 
 		punk<IXMLDOMDocument2> doc;
 		if (S_OK != doc.createObject(CLSID_DOMDocument) )

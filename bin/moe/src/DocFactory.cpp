@@ -7,7 +7,7 @@
 #include "Form.h"
 #include "rtf.h"
 #include "hex.h"
-#include "html.h"
+//#include "html.h"
 #include "html2.h"
 #include "ole.h"
 #include "rtf.h"

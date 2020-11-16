@@ -169,6 +169,35 @@ void MoeHtml2Wnd::stop()
 	oleObject->Stop();
 }
 
+HRESULT __stdcall MoeHtml2Wnd::get_FilePath(BSTR* fname)
+{
+	if (fname)
+	{
+		*fname = 0;
+		*fname = ::SysAllocString(mol::towstring(location).c_str());
+	}
+	return S_OK;
+}
+
+HRESULT __stdcall MoeHtml2Wnd::get_Object(IDispatch** d)
+{
+	if (!d)
+		return E_INVALIDARG;
+	*d = 0;
+
+	return frame_.QueryInterface(IID_IDispatch, (void**) d);
+}
+
+
+HRESULT __stdcall MoeHtml2Wnd::get_Model(IDispatch** d)
+{
+	if (!d)
+		return E_INVALIDARG;
+	*d = 0;
+
+	return frame_.QueryInterface(IID_IDispatch, (void**)d);
+}
+
 /////////////////////////////////////////////////////////////////////
 
 HRESULT __stdcall MoeHtml2Wnd::MoeFrame::Eval( BSTR src, IDispatch* future )
@@ -293,6 +322,26 @@ HRESULT __stdcall  MoeHtml2Wnd::MoeFrame::get_FilePath(  BSTR *filename)
 	*filename = ::SysAllocString( mol::towstring(This()->location).c_str() );
 	return S_OK;
 }
+
+HRESULT __stdcall MoeHtml2Wnd::MoeFrame::addExternalObject(BSTR name, IDispatch* disp)
+{
+	if (!This()->oleObject)
+		return S_FALSE;
+
+	mol::bstr objName(name);
+	mol::variant v(disp);
+	return This()->oleObject->AddHostObjectToScript(objName.towstring().c_str(), &v);
+}
+
+HRESULT __stdcall MoeHtml2Wnd::MoeFrame::removeExternalObject(BSTR name)
+{
+	if (!This()->oleObject)
+		return S_FALSE;
+
+	mol::bstr objName(name);
+	return This()->oleObject->RemoveHostObjectFromScript(objName.towstring().c_str());
+}
+
 
 
 
@@ -486,6 +535,15 @@ void MoeHtml2Wnd::OnDestroy()
 		webViewController->Close();
 		webViewController.release();
 		oleObject.release();
+	}
+
+	if (this->onCloseHandler)
+	{
+		EXCEPINFO ex;
+		::ZeroMemory(&ex, sizeof(EXCEPINFO));
+		UINT e = 0;
+		DISPPARAMS p = { 0,0 };
+		this->onCloseHandler->Invoke(DISPID_VALUE, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD, &p, NULL, &ex, &e);
 	}
 
 	docs()->remove(this);

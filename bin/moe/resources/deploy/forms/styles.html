@@ -182,8 +182,8 @@ function applyStyles()
 		if ( item.Type != window.chrome.webview.hostObjects.sync.external.Moe.Documents.DOCTYPE_EDITOR )
 			continue;
 
-		var s = window.chrome.webview.hostObjects.sync.external.Moe.Documents.Item(i).Object.Properties.Syntax;
-		window.chrome.webview.hostObjects.sync.external.Moe.Documents.Item(i).Object.Properties.Syntax = s;
+		var s = window.chrome.webview.hostObjects.sync.external.Moe.Documents.Item(i).Model.Properties.Syntax;
+		window.chrome.webview.hostObjects.sync.external.Moe.Documents.Item(i).Model.Properties.Syntax = s;
 	}
 }
 

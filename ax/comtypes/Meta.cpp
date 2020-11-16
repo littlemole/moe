@@ -142,6 +142,7 @@ std::wstring MetaFunc::out()
 		oss << _T("desc='") << encode(desc) << _T("' >");
 
 		oss << std::endl;
+		if(params.size()>0)
 		for ( std::list<MetaParam>::iterator it = params.begin(); it != params.end(); it )
 		{
 			if ( !(*it).isRetVal )

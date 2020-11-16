@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26228.12
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{5BCE91B6-0B68-4CEE-9AB0-96236F6AF4FA}"
 EndProject
@@ -2083,8 +2083,8 @@ Global
 		{0FEB10C3-66D5-41F1-8CDC-563E0B1374F6}.uni_release|Mixed Platforms.Build.0 = uni_release|Win32
 		{0FEB10C3-66D5-41F1-8CDC-563E0B1374F6}.uni_release|Win32.ActiveCfg = uni_release|Win32
 		{0FEB10C3-66D5-41F1-8CDC-563E0B1374F6}.uni_release|Win32.Build.0 = uni_release|Win32
-		{0FEB10C3-66D5-41F1-8CDC-563E0B1374F6}.uni_release|x64.ActiveCfg = uni_release|x64
-		{0FEB10C3-66D5-41F1-8CDC-563E0B1374F6}.uni_release|x64.Build.0 = uni_release|x64
+		{0FEB10C3-66D5-41F1-8CDC-563E0B1374F6}.uni_release|x64.ActiveCfg = uni_release|Win32
+		{0FEB10C3-66D5-41F1-8CDC-563E0B1374F6}.uni_release|x64.Build.0 = uni_release|Win32
 		{0FEB10C3-66D5-41F1-8CDC-563E0B1374F6}.uni_release|x86.ActiveCfg = uni_release|Win32
 		{0FEB10C3-66D5-41F1-8CDC-563E0B1374F6}.uni_release|x86.Build.0 = uni_release|Win32
 		{0FEB10C3-66D5-41F1-8CDC-563E0B1374F6}.Unicode Debug|Any CPU.ActiveCfg = uni_debug|Win32
@@ -2127,6 +2127,9 @@ Global
 		{99959704-1968-482F-98A7-0989E5B59D4E} = {EB2E915A-66AA-4396-B57E-653E4303F14D}
 		{9B696DD7-AC44-479E-82E3-89BF89877ABC} = {EB2E915A-66AA-4396-B57E-653E4303F14D}
 		{0FEB10C3-66D5-41F1-8CDC-563E0B1374F6} = {EB2E915A-66AA-4396-B57E-653E4303F14D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {51051523-7EE1-4032-82F6-6D006CD1361C}
 	EndGlobalSection
 	GlobalSection(EnterprisejectConfiguration) = postSolution
 	EndGlobalSection

@@ -42,6 +42,7 @@ private:
 
 	bool load(const std::wstring& path);
 	void updateUI();
+
 };
 
 #endif

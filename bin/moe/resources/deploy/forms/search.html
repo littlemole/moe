@@ -1,63 +1,104 @@
 <html>
  <head>
   <title>RegEx Find in Files</title>
-  <link rel="stylesheet" type="text/css" href="../css/dialog.css">
-  <script language="javascript" src="../js/dialog.js"></script>
-  <script language="javascript" src="../js/drag.js"></script>
-  <script language="javascript" src="../js/htmlencode.js"></script>
+  <style type="text/css">
+ /* Style the tab */
+
+form {
+  padding:0px;
+  margin:0px;
+}
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 0px;
+  border: 1px solid #ccc;
+  border-top: none;
+} 
+
+.moe {
+
+  background-color: #F0F0F0;
+  padding:2px;
+  margin:3px;
+}
+  </style>
  </head>
 
  <body>
 
-   <div class="tab-container" id="container" style="width:100%;height:300px">
+	<div class="tab">
+	  <button class="tablinks active" onclick="showPane(event,'pane1')">active file</button>
+	  <button class="tablinks" onclick="showPane(event,'pane2')">all files</button>
+	</div>
 
-    <ul  id="tabs" class="tabs" style="float:left;z-index:2;width:412px">
-     <li><a href="#" onClick="return showPane('pane1', this)" id="tab1">active file</a></li>
-     <li><a href="#" onClick="return showPane('pane2', this)">all files</a></li>
-    </ul>
-	<ul class="tabs" style="float:right;z-index:1;">
-	 <li ><a href="javascript:external.Close();" >x</a></li>
-    </ul>
-
-    <div class="tab-panes">  
-
-     <div id="pane1" style="width:412px;padding:10px 0p 0px 10px;">
+	<!-- Tab content -->
+	<div id="pane1" class="tabcontent active" style="display:block;">
        regex search active file
       <br>
 	  <form name="theForm" action="#" onSubmit="return onSearch();">
-      <input name="what" type="text" value="" size="35">
+      <input id="what" name="what" type="text" value="" size="35">
 	  <input type="submit" value="Search" >
       <br>
       <br>
-	  <input name="word" type="checkbox" >whole word
-	  <input name="case" type="checkbox" >caseless
+	  <input id="word" name="word" type="checkbox" >whole word
+	  <input id="case" name="case" type="checkbox" >caseless
 	  <br>
-	  <div class="tab-container" id="results" 
-		   style="max-width:400px;width:400px;padding:0px;margin:8px;overflow-y:scroll;height:120px;word-wrap:break-word">
+	  <div id="results" 
+		   style="padding:0px;margin:8px 0px;overflow-y:scroll;height:45%;word-wrap:break-word">
 	   <a name="result" ></a>
  	  </div>
       </form>
       <br>
-	 </div>
-   
-     <div id="pane2" style="width:412px;padding:10px 0p 0px 10px;">
+
+	</div>
+
+	<div id="pane2" class="tabcontent">
        regex search in all open files
       <br><br>
 	  <form name="theFormAll" action="#" onSubmit="return onSearchAll();">
-      <input name="whatAll" type="text" value=""  size="35">
+      <input id="whatAll" name="whatAll" type="text" value=""  size="35">
 	  <input type="submit" value="Search" >
       <br>
       <br>
-	  <input name="wordAll" type="checkbox" >whole word
-	  <input name="caseAll" type="checkbox" >caseless
+	  <input id="wordAll" name="wordAll" type="checkbox" >whole word
+	  <input id="caseAll" name="caseAll" type="checkbox" >caseless
 	  <br>
-	  <div class="tab-container" id="resultsAll" 
-		   style="max-width:400px;width:400px;padding:0px;margin:8px;overflow-y:scroll;height:120px;word-wrap:break-word">
+	  <div id="resultsAll" 
+		   style="padding:0px;margin:8px 0px;overflow-y:scroll;height:45%;word-wrap:break-word">
 	   <a name="resultAll" ></a>
 	  </div>
 	  </form>
       <br>
-     </div>
+	</div>
+
     
     </div>
  </body>
@@ -74,15 +115,14 @@ function onSearch()
   if ( !what || what == "" )
     return false;
 
-  var name = external.Moe.ActiveDoc.FilePath;
-  var sci = external.Moe.ActiveDoc.Object;
+  var name = window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.FilePath;
+  var sci = window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.Model;
   if ( sci )
   {
-    var txt = "" + sci.Text;
+    var txt = "" + sci.Text.GetText();
 	var pos = 0;
 	var p   = 0;
 	var s   = what;
-
 	var flags = "g";
 
 	if ( useCase )
@@ -92,7 +132,6 @@ function onSearch()
 		s = "\\b" + what + "\\b";
 
 	var s = new RegExp ( s, flags  );
-
 	var out = "<small><b>filename: " + sci.Properties.Filename + "</b></small>";
 
 	while ( -1 != ( p = txt.substring(pos).search(s) ) )
@@ -103,7 +142,6 @@ function onSearch()
 	  var start  = pos+p;
 	  var end    = pos+p+what.length;
       var m = txt.substring(start,end);
-
 	  out += "<div class='moe'><a class='moe' href='#result' ";
 	  out += "onClick='JumpTo(";
 	  out += start + ", " + end;
@@ -112,10 +150,10 @@ function onSearch()
 	  out += "</b></a><small class='moe'>";
 	  
 	  var l = htmlEncode(sci.Line.LineText(line));
-	  var r = new RegExp( what, flags + "g" );
+	  var r = new RegExp( what, flags  );
 	  l = l.replace( s, "<i class='match'>" + what + "</i>" );
 	  out += l;
-	  out += "</small></div><br><br>\r\n";
+	  out += "</small></div>\r\n";
 
 	  pos = end+1;
 	}
@@ -138,13 +176,13 @@ function onSearchAll()
 
   var out = "";
 
-  for ( i = 0; i < external.Moe.Documents.Count; i++ )
+  for ( i = 0; i < window.chrome.webview.hostObjects.sync.external.Moe.Documents.Count; i++ )
   {
-    var doc = external.Moe.Documents(i);
+    var doc = window.chrome.webview.hostObjects.sync.external.Moe.Documents(i);
     if ( doc.type == 1 )
 	{
-	  var sci = doc.Object;
-	  var txt = sci.Text;
+	  var sci = doc.Model;
+	  var txt = sci.Text.GetText();
 	  var pos = 0;
 	  var p   = 0;
 	  var s   = what;
@@ -159,6 +197,7 @@ function onSearchAll()
 
 	  var s = new RegExp ( s, flags  );
 
+
 	  out += "<small><b>filename: " + sci.Properties.Filename + "</b></small>";
 	
 	  while ( -1 != ( p = txt.substring(pos).search(s) ) )
@@ -168,7 +207,6 @@ function onSearchAll()
 		var start  = pos+p;
 		var end    = pos+p+what.length;
 		var m = txt.substring(start,end);
-		
 		out += "<div class='moe'><a class='moe' href='#result' ";
 		out += "onClick='GoTo( " + i + ", " + start;
 		out += ", " + end + ")' ><b>";
@@ -176,10 +214,10 @@ function onSearchAll()
 		out += "</b></a><small class='moe'>";
 		
 		var l = htmlEncode(sci.Line.LineText(line));
-		var r = new RegExp( what, flags + "g" );
+		var r = new RegExp( what, flags  );
 		l = l.replace( s, "<i class='match'>" + what + "</i>" );
 		out += l;
-		out += "</small></div><br><br>\r\n";
+		out += "</small></div>\r\n";
 		
   	    pos = end+1;
 			
@@ -194,13 +232,13 @@ function onSearchAll()
 
 function JumpTo(  start, end )
 {
-	var d = external.Moe.ActiveDoc;
+	var d = window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc;
 	if ( d )
 	{
 		if ( d.Type == 1 )
 		{
 			d.View.Activate();
-			var sci = d.Object;
+			var sci = d.Model;
 			sci.Selection.SetSelection( start, end );
 			sci.Position.ScrollIntoView();
 		}
@@ -209,26 +247,132 @@ function JumpTo(  start, end )
 
 function GoTo( index, start, end )
 {
-	var d = external.Moe.Documents(index);
+	var d = window.chrome.webview.hostObjects.sync.external.Moe.Documents(index);
 	if ( d )
 	{
 		if ( d.Type == 1 )
 		{
 			d.View.Activate();
-			var sci = d.Object;
+			var sci = d.Model;
 			sci.Selection.SetSelection( start, end );
 			sci.Position.ScrollIntoView();
 		}
 	}
 }
 
-function init()
-{
-	setupPanes("container", "tab1");
-	draggable("tabs");
-}
 
-window.onload = init;
+function showPane(evt, cityName) {
+  // Declare all variables
+  var i, tabcontent, tablinks;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+} 
+
+function htmlEncode(source, display, tabs)
+{
+	function special(source)
+	{
+		var result = '';
+		for (var i = 0; i < source.length; i++)
+		{
+			var c = source.charAt(i);
+			if (c < ' ' || c > '~')
+			{
+				c = '&#' + c.charCodeAt() + ';';
+			}
+			result += c;
+		}
+		return result;
+	}
+	
+	function format(source)
+	{
+		// Use only integer part of tabs, and default to 4
+		tabs = (tabs >= 0) ? Math.floor(tabs) : 4;
+		
+		// split along line breaks
+		var lines = source.split(/\r\n|\r|\n/);
+		
+		// expand tabs
+		for (var i = 0; i < lines.length; i++)
+		{
+			var line = lines[i];
+			var newLine = '';
+			for (var p = 0; p < line.length; p++)
+			{
+				var c = line.charAt(p);
+				if (c === '\t')
+				{
+					var spaces = tabs - (newLine.length % tabs);
+					for (var s = 0; s < spaces; s++)
+					{
+						newLine += ' ';
+					}
+				}
+				else
+				{
+					newLine += c;
+				}
+			}
+			// If a line starts or ends with a space, it evaporates in html
+			// unless it's an nbsp.
+			newLine = newLine.replace(/(^ )|( $)/g, '&nbsp;');
+			lines[i] = newLine;
+		}
+		
+		// re-join lines
+		var result = lines.join('<br />');
+		
+		// break up contiguous blocks of spaces with non-breaking spaces
+		result = result.replace(/  /g, ' &nbsp;');
+		
+		// tada!
+		return result;
+	}
+
+	var result = source;
+	
+	// ampersands (&)
+	result = result.replace(/\&/g,'&amp;');
+
+	// less-thans (<)
+	result = result.replace(/\</g,'&lt;');
+
+	// greater-thans (>)
+	result = result.replace(/\>/g,'&gt;');
+	
+	if (display)
+	{
+		// format for display
+		result = format(result);
+	}
+	else
+	{
+		// Replace quotes if it isn't for display,
+		// since it's probably going in an html attribute.
+		result = result.replace(new RegExp('"','g'), '&quot;');
+	}
+
+	// special characters
+	result = special(result);
+	
+	// tada!
+	return result;
+}
 
 </script>
 

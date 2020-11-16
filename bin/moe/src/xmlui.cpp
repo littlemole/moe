@@ -16,15 +16,13 @@
 
 #include "hex.h"
 
-#include "html.h"
-
 #include "html2.h"
 
 #include "img.h"
 
 #include "ole.h"
 
-#include "form.h"
+#include "form2.h"
 
 #include "rtf.h"
 

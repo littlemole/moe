@@ -15,11 +15,11 @@
   <include>editor.h</include>
   <include>taileditor.h</include>
   <include>hex.h</include>
-  <include>html.h</include>
+<!--  <include>html.h</include> -->
   <include>html2.h</include>
   <include>img.h</include>
   <include>ole.h</include>
-  <include>form.h</include>
+  <include>form2.h</include>
   <include>rtf.h</include>
   <include>Docs.h</include>
   <include>MoeBar.h</include>

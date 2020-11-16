@@ -16,15 +16,13 @@
 
 #include "hex.h"
 
-#include "html.h"
-
 #include "html2.h"
 
 #include "img.h"
 
 #include "ole.h"
 
-#include "form.h"
+#include "form2.h"
 
 #include "rtf.h"
 
@@ -1120,38 +1118,6 @@ mol::msgMap<Hex>().addCmdHandler( IDM_RIBBON_BYTES_SHOWN, make_handler(&Hex::OnB
 
 make_command_range_handler( Hex, IDM_EDIT_16BYTES, IDM_EDIT_32BYTES, OnHexRange );
 
-mol::msgMap<MoeHtmlWnd>().addMsgHandler( WM_CLOSE, make_handler(&MoeHtmlWnd::OnClose) );
-
-mol::msgMap<MoeHtmlWnd>().addMsgHandler( WM_DESTROY, make_handler(&MoeHtmlWnd::OnDestroy) );
-
-mol::msgMap<MoeHtmlWnd>().addMsgHandler( WM_NCDESTROY, make_handler(&MoeHtmlWnd::OnNcDestroy) );
-
-mol::msgMap<MoeHtmlWnd>().addMsgHandler( WM_SEARCH_MSG, make_handler(&MoeHtmlWnd::OnSearch) );
-
-mol::msgMap<MoeHtmlWnd>().addMsgHandler( WM_MDIACTIVATE, make_handler(&MoeHtmlWnd::OnMDIActivate) );
-
-mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_NAVIGATE_BACK, make_handler(&MoeHtmlWnd::back) );
-
-mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_NAVIGATE_NEXT, make_handler(&MoeHtmlWnd::forward) );
-
-mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_EDIT_STOP, make_handler(&MoeHtmlWnd::stop) );
-
-mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_EDIT_UPDATE, make_handler(&MoeHtmlWnd::reload) );
-
-mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_MODE_SETTINGS, make_handler(&MoeHtmlWnd::options) );
-
-mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_VIEW_CLOSEALL, make_handler(&MoeHtmlWnd::OnCloseAll) );
-
-mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_EDIT_COPY, make_generic_handler(&MoeHtmlWnd::oleStdTargetExec, OLECMDID_COPY ) );
-
-mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_EDIT_CUT, make_generic_handler(&MoeHtmlWnd::oleStdTargetExec, OLECMDID_CUT ) );
-
-mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_EDIT_PASTE, make_generic_handler(&MoeHtmlWnd::oleStdTargetExec, OLECMDID_PASTE ) );
-
-mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_FILE_SAVE_AS, make_generic_handler(&MoeHtmlWnd::oleStdTargetExec, OLECMDID_SAVEAS ) );
-
-mol::msgMap<MoeHtmlWnd>().addCmdHandler( IDM_FILE_PRINT, make_generic_handler(&MoeHtmlWnd::oleStdTargetExec, OLECMDID_PRINT ) );
-
 mol::msgMap<MoeHtml2Wnd>().addMsgHandler( WM_CLOSE, make_handler(&MoeHtml2Wnd::OnClose) );
 
 mol::msgMap<MoeHtml2Wnd>().addMsgHandler( WM_DESTROY, make_handler(&MoeHtml2Wnd::OnDestroy) );
@@ -1220,9 +1186,11 @@ mol::msgMap<OleChild>().addCmdHandler( IDM_EDIT_REDO, make_generic_handler(&OleC
 
 mol::msgMap<OleChild>().addCmdHandler( IDM_VIEW_CLOSEALL, make_handler(&OleChild::OnCloseAll) );
 
-mol::msgMap<MoeFormWnd>().addMsgHandler( WM_CLOSE, make_handler(&MoeFormWnd::OnClose) );
+mol::msgMap<MoeForm2Wnd>().addMsgHandler( WM_SIZE, make_handler(&MoeForm2Wnd::OnSize) );
 
-mol::msgMap<MoeFormWnd>().addMsgHandler( WM_NCDESTROY, make_handler(&MoeFormWnd::OnNcDestroy) );
+mol::msgMap<MoeForm2Wnd>().addMsgHandler( WM_CLOSE, make_handler(&MoeForm2Wnd::OnClose) );
+
+mol::msgMap<MoeForm2Wnd>().addMsgHandler( WM_NCDESTROY, make_handler(&MoeForm2Wnd::OnNcDestroy) );
 
 mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_TREE_OPEN, make_handler(&MoeTreeWnd::OnTreeOpen) );
 

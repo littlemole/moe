@@ -15,7 +15,7 @@ std::vector<std::string> split( const std::string& what, const std::string& deli
 		ret.push_back( what.substr( p, pos-p ) );
 		p = pos + delim.length();
 	}
-	if ( p < what.size()-1 )
+	if ( p <= what.size()-1 )
 	{
 		ret.push_back( what.substr( p ) );
 	}
@@ -35,7 +35,7 @@ std::vector<std::wstring> split( const std::wstring& what, const std::wstring& d
 		ret.push_back( what.substr( p, pos-p ) );
 		p = pos + delim.length();
 	}
-	if ( p < what.size()-1 )
+	if ( p <= what.size()-1 )
 	{
 		ret.push_back( what.substr( p ) );
 	}

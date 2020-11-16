@@ -61,10 +61,12 @@
     <ClCompile Include="src\editor.cpp" />
     <ClCompile Include="src\EditorScript.cpp" />
     <ClCompile Include="src\EditorMenu.cpp" />
-    <ClCompile Include="src\form.cpp" />
+    <ClCompile Include="src\form2.cpp" />
     <ClCompile Include="src\TailEditor.cpp" />
     <ClCompile Include="src\hex.cpp" />
+<!--
     <ClCompile Include="src\html.cpp" />
+-->
     <ClCompile Include="src\html2.cpp" />
     <ClCompile Include="src\Img.cpp" />
     <ClCompile Include="src\moe.cpp" />

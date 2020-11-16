@@ -171,7 +171,7 @@ bool FrameWindow::initialize_existing(IStorage* store,const std::wstring& p, boo
 	else
 	{
 		formStyle = WS_SYSMENU | WS_CAPTION | WS_BORDER | WS_CAPTION | WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
-		createFrame(p, menu, formStyle);
+		createFrame(p, 0, formStyle);
 	}
 
 	loadObject(MSForms::CLSID_UserForm, formStore);
@@ -432,7 +432,7 @@ void FrameWindow::createFrame(std::wstring p, HMENU menu, DWORD formStyle) {
 	::SetWindowLong(*this, GWL_STYLE, formStyle);
 	::SetForegroundWindow(*this);
 	this->show(SW_SHOW);
-}
+} 
 
 void FrameWindow::setExtent() {
 

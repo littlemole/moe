@@ -51,11 +51,14 @@ public:
 	virtual HRESULT __stdcall Eval(BSTR src, IDispatch* future);
 	virtual HRESULT __stdcall OleCmd(long cmd);
 	virtual HRESULT __stdcall get_FilePath(BSTR* filename);
+	virtual HRESULT __stdcall addExternalObject(BSTR name, IDispatch* disp);
+	virtual HRESULT __stdcall removeExternalObject(BSTR name);
 
 	/////////////////////////////////////////////////////////////////////
 	// msg handlers
 	/////////////////////////////////////////////////////////////////////
 
+	void OnSize(WPARAM wParam, LPARAM lParam);
 	void OnClose();
 	void OnNcDestroy();
 

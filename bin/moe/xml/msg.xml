@@ -280,17 +280,17 @@
       <msgrange type="cmd" from="IDM_EDIT_16BYTES" to="IDM_EDIT_32BYTES" handler="OnHexRange" />
       
     </class>
-    
+    <!--
     <class type="MoeHtmlWnd">
 
-      <!-- std windows msgs -->
+      <! - - std windows msgs - - >
       <msg  handler="OnClose" msg="WM_CLOSE" />
       <msg  handler="OnDestroy" msg="WM_DESTROY" />
       <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
       <msg  handler="OnSearch" msg="WM_SEARCH_MSG" />
       <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
 
-      <!-- menu -->
+      <! - - menu - - >
       <msg  handler="back" cmd="IDM_NAVIGATE_BACK" />
       <msg  handler="forward" cmd="IDM_NAVIGATE_NEXT" />
       <msg  handler="stop" cmd="IDM_EDIT_STOP" />
@@ -298,14 +298,14 @@
       <msg  handler="options" cmd="IDM_MODE_SETTINGS" />
       <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
 
-      <!-- call the oleStdTargetExec handler with given params for these msgs -->
+      <! - - call the oleStdTargetExec handler with given params for these msgs - - >
       <msg  handler="oleStdTargetExec" params="OLECMDID_COPY" cmd="IDM_EDIT_COPY" />
       <msg  handler="oleStdTargetExec" params="OLECMDID_CUT" cmd="IDM_EDIT_CUT" />
       <msg  handler="oleStdTargetExec" params="OLECMDID_PASTE" cmd="IDM_EDIT_PASTE" />
       <msg  handler="oleStdTargetExec" params="OLECMDID_SAVEAS" cmd="IDM_FILE_SAVE_AS" />
       <msg  handler="oleStdTargetExec" params="OLECMDID_PRINT" cmd="IDM_FILE_PRINT" />
     </class>
-
+-->
     <class type="MoeHtml2Wnd">
 
       <!-- std windows msgs -->
@@ -372,9 +372,10 @@
       <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
     </class>
 
-    <class type="MoeFormWnd" >
+    <class type="MoeForm2Wnd" >
 
         <!-- std windows msgs -->
+        <msg  handler="OnSize" msg="WM_SIZE" />
         <msg  handler="OnClose" msg="WM_CLOSE" />
         <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
     </class>

@@ -18,30 +18,44 @@ if (!Array.isArray) {
 
 <script> 
 
-var src       = null;
-var obj       = null;
-var markdown  = document.getElementById("markdown");
-var converter = new showdown.Converter();
+var txt = "";
 
-function onChange()
+var markdown;//  = document.getElementById("markdown");
+var converter;// = new showdown.Converter();
+
+var active;// = window.chrome.webview.hostObjects.sync.Controller.getActive();
+//alert(active);
+function update()
 {
-	var txt = "" + src.object.Text;
-	
-    var html      = converter.makeHtml(txt);
+	active = window.chrome.webview.hostObjects.sync.Controller.getActive();
+	console.log(active);
 
-	markdown.innerHTML = html;
+try {
+	var tmp = active.Model.Text.GetText();
+	if(tmp != txt) 
+	{
+		txt = tmp;
+		var html = converter.makeHtml(txt);
+		markdown.innerHTML = html;
+	}
+}
+catch(e) {
+}
+	setTimeout( update, 1000 );
 }
 
-function init(s)
-{
-	src = s;
-	obj = src.object;
 
-	onChange();
-	
-	eval("function obj::OnChar(c) {return onChange();}");
-}
+setTimeout(function() {
 
+	markdown  = document.getElementById("markdown");
+	converter = new showdown.Converter();
+
+  //alert("onload");
+//alert();
+	//alert(active);
+
+  update();
+},500);
 
 </script>
 

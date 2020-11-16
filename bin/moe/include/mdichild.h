@@ -22,6 +22,7 @@ public:
 	typedef mol::com_instance<C> Instance;
 
 	mol::punk<IMoeDocumentView> view;
+	mol::punk<IDispatch> onCloseHandler;
 
 	DispatchMdiWindow()
 	{
@@ -88,6 +89,7 @@ public:
 		return S_OK;
    }
 
+
    virtual HRESULT __stdcall get_Type(long *typ)
    {
 	   if ( !typ )
@@ -105,6 +107,21 @@ public:
    virtual HRESULT __stdcall SaveAs( BSTR f)
    {
 	   return E_NOTIMPL;
+   }
+
+   virtual HRESULT __stdcall put_onClose(IDispatch* disp)
+   {
+	   onCloseHandler = disp;
+	   return S_OK;
+   }
+
+   virtual HRESULT __stdcall get_onClose(IDispatch** disp)
+   {
+	   if (!disp)
+		   return E_INVALIDARG;
+	   *disp = 0;
+
+	   return onCloseHandler.queryInterface(disp);
    }
 
 };

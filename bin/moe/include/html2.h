@@ -57,25 +57,19 @@ public:
 	void onPermissionRequest(ICoreWebView2PermissionRequestedEventArgs* args);
 	void onCreateWebView(std::wstring target, ICoreWebView2Controller* controller);
 
-   virtual HRESULT __stdcall get_FilePath( BSTR *fname)
-   {
-		if ( fname  )
-		{
-			*fname = 0;
-			*fname = ::SysAllocString( mol::towstring(location).c_str() );
-		}
-		return S_OK;
-   }
+	virtual HRESULT __stdcall get_FilePath(BSTR* fname);
+	virtual HRESULT __stdcall get_Object(IDispatch** d);
+	virtual HRESULT __stdcall get_Model(IDispatch** d);
 
-   void back();
-   void forward();
-   void reload();
-   void options();
-   void print();
-   void cut();
-   void copy();
-   void paste();
-   void stop();
+	void back();
+	void forward();
+	void reload();
+	void options();
+	void print();
+	void cut();
+	void copy();
+	void paste();
+	void stop();
 
 protected:
 
@@ -105,6 +99,9 @@ protected:
 		virtual HRESULT __stdcall Eval(  BSTR src,  IDispatch* future);    
 		virtual HRESULT __stdcall OleCmd(  long cmd);    
 		virtual HRESULT __stdcall get_FilePath(  BSTR *filename);
+
+		virtual HRESULT __stdcall addExternalObject(BSTR name, IDispatch* disp);
+		virtual HRESULT __stdcall removeExternalObject(BSTR name);
 
 	};
 	mol::stack_obj<MoeFrame> frame_;
