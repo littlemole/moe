@@ -516,7 +516,7 @@ HRESULT  __stdcall ScriptHost::OnScriptError( IActiveScriptError *pscripterror)
 
 HRESULT  __stdcall ScriptHost::OnEnterScript( void)
 {
-	((IActiveScriptSite*)this)->AddRef();
+	//((IActiveScriptSite*)this)->AddRef();
 
 	if ( debug_  && debugApp_)
 		HRESULT hr = debugApp_->CauseBreak();
@@ -529,7 +529,7 @@ HRESULT  __stdcall ScriptHost::OnLeaveScript( void)
 	if ( debugDocHelper_ )
 		debugDocHelper_->Detach();
 
-	((IActiveScriptSite*)this)->Release();
+	//((IActiveScriptSite*)this)->Release();
 	return S_OK;
 }
 

@@ -342,33 +342,6 @@ private:
 	std::wstring progId_;
 };
 
-class MoeImport : 
- 	public mol::Dispatch<IMoeImport>,
- 	public mol::interfaces< MoeImport, 
- 				mol::implements< IDispatch, IMoeImport> >
-{
-public:
- 
- 	typedef mol::com_obj<MoeImport> Instance;
- 	typedef mol::com_obj<mol::ScriptHost> Host;
- 
- 	void dispose();
- 
- 	static Instance* CreateInstance(Host* host);
- 
- 	virtual HRESULT __stdcall  Import(BSTR filename);
- 	virtual HRESULT __stdcall  Sleep(long ms);
- 	virtual HRESULT __stdcall  Wait(long ms,VARIANT_BOOL* vb);
- 	virtual HRESULT __stdcall  Quit();
-	virtual HRESULT __stdcall  get_Dispatch(IDispatch** disp);
-	virtual HRESULT __stdcall  Callback(BSTR name,IDispatch** disp);
-	virtual HRESULT __stdcall  setTimeout( VARIANT f, VARIANT d, VARIANT* retval);
-	virtual HRESULT __stdcall  clearTimeout( VARIANT t);
-
-private:
- 	mol::punk<Host> host_;
-	HANDLE stop_;
-};
 
 
 

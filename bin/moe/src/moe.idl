@@ -983,7 +983,6 @@ library Moe
 
 		[id(14), propget, helpstring("Get FORM_DIALOG constant")]
 		HRESULT FORM_DIALOG( [out,retval] long* d );
-
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////

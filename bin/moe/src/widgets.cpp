@@ -133,7 +133,7 @@ public:
 
 private:
 	mol::variant f_;
-	mol::punk<Host> script_;
+	Host* script_;
 	mol::Timer timer_;
 
 };
@@ -146,6 +146,7 @@ public:
 
 	int setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script );
 	void clear(Timeout::Host* script, int t);
+	void clear(Timeout::Host* script);
 	void remove(Timeout::Host* script, Timeout* t);
 	size_t count(Timeout::Host* s);
 
@@ -193,6 +194,16 @@ void Timeouts::clear(Timeout::Host* script, int i)
 	}
 }
 
+void Timeouts::clear(Timeout::Host* script)
+{
+	for (std::list<Timeout*>::iterator it = timeouts_[script].begin(); it != timeouts_[script].end(); it++)
+	{
+		(*it)->kill();
+		delete (*it);
+	}
+	timeouts_.erase(script);
+}
+
 void Timeouts::remove(Timeout::Host* script,Timeout* t)
 {
 
@@ -209,10 +220,11 @@ void Timeouts::remove(Timeout::Host* script,Timeout* t)
 			timeouts_[script].erase(it);
 			if ( count(script) == 0  )
 			{
-				if ( script->completed.test() )
+				// necessary?
+				if ( script->completed.test() && script->done() )
 				{
 					script->close();
-					script->Release();
+					((Script::Instance*)script)->Release();
 				}
 				timeouts_.erase(script);
 			}
@@ -264,6 +276,7 @@ Script::~Script()
 	removeNamedObject(L"MoeImport");
 
 	close();
+
 	ODBGS("Script death");
 }
 
@@ -280,7 +293,7 @@ HRESULT Script::init(const std::wstring& engine)
 	if ( hr != S_OK )
 	{
 		ODBGS("failed to init engine");
-		this->Release();
+		((IActiveScriptSite*)this)->Release();
 		return hr;
 	}
 
@@ -312,17 +325,18 @@ void Script::eval(  const std::wstring& engine, const std::wstring& script, ISci
 	if ( hr != S_OK )
 	{
 		ODBGS("failed to init engine");
-		this->Release();
+		((Instance*)this)->Release();
 		return;
 	}
 
 	runScript(script);
 	completed.signal();
 
-	if ( timeouts().count( this) == 0 )
+	if ( quit_ == true )
 	{
+		timeouts().clear(this);
 		close();
-		this->Release();
+		((Instance*)this)->Release();
 	}
 	
 }
@@ -337,17 +351,18 @@ void Script::debug(  const std::wstring& engine, const std::wstring& script, ISc
 	if ( hr != S_OK )
 	{
 		ODBGS("failed to init engine");
-		this->Release();
+		((Instance*)this)->Release();
 		return;
 	}
 
 	debugScript(script);
 	completed.signal();
 
-	if ( timeouts().count( this) == 0 )
+	if (  quit_ == true )
 	{
+		timeouts().clear(this);
 		close();
-		this->Release();
+		((Instance*)this)->Release();
 	}
 }
 void Script::call(  const std::wstring& engine, const std::wstring& func, const std::wstring& script )
@@ -356,7 +371,7 @@ void Script::call(  const std::wstring& engine, const std::wstring& func, const 
 	if ( hr != S_OK )
 	{
 		ODBGS("failed to init engine");
-		this->Release();
+		((Instance*)this)->Release();
 		return;
 	}
 
@@ -364,15 +379,34 @@ void Script::call(  const std::wstring& engine, const std::wstring& func, const 
 	ScriptHost::call(func);
 	completed.signal();
 
-	if ( timeouts().count( this) == 0 )
+	if (  quit_ == true)
 	{
+		timeouts().clear(this);
 		close();
-		this->Release();
+		((Instance*)this)->Release();
 	}
 }
 
 
+void  Script::quit()
+{
+	quit_ = true;
+	if (completed.test() )
+	{
+		timeouts().clear(this);
+		close();
+		((Instance*)this)->Release();
+	}
+}
 
+
+void  Script::wait()
+{
+	if (completed.test())
+		return;
+
+	quit_ = false;
+}
 
 HRESULT  __stdcall Script::OnScriptError( IActiveScriptError *pscripterror)
 {
@@ -1842,6 +1876,8 @@ HRESULT __stdcall  MoeImport::Sleep(long ms)
 
 HRESULT __stdcall  MoeImport::Wait(long ms,VARIANT_BOOL* vb)
 {
+	this->host_->wait();
+	/*
 	DWORD startTick = ::GetTickCount();
 	DWORD nowTick = startTick;
 
@@ -1898,16 +1934,19 @@ HRESULT __stdcall  MoeImport::Wait(long ms,VARIANT_BOOL* vb)
 		::CloseHandle(stop_);
 		stop_ = 0;
 	}
-
+	*/
 	return S_OK;
 }
 
 HRESULT __stdcall  MoeImport::Quit()
 {
+	host_->quit();
+	/*
 	if(stop_)
 	{
 		::SetEvent(stop_);
 	}
+	*/
 	return S_OK;
 }
 
@@ -1932,7 +1971,7 @@ HRESULT __stdcall  MoeImport::setTimeout( VARIANT f, VARIANT d, VARIANT* retval)
 	if ( f.vt != VT_DISPATCH )
 		return E_INVALIDARG;
 
-	int i = timeouts().setTimeout( mol::variant(f), mol::variant(d), (Script*)(host_.interface_) );
+	int i = timeouts().setTimeout( mol::variant(f), mol::variant(d),host_ );
 	if ( retval )
 	{
 		retval->vt = VT_I4;
@@ -1948,7 +1987,7 @@ HRESULT __stdcall  MoeImport::clearTimeout( VARIANT t)
 	{
 		v.changeType(VT_I4);
 	}
-	timeouts().clear( (Script*)(host_.interface_), v.lVal );
+	timeouts().clear(host_, v.lVal );
 	return S_OK;
 }
 

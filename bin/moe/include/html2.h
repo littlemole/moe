@@ -103,6 +103,7 @@ protected:
 		virtual HRESULT __stdcall addExternalObject(BSTR name, IDispatch* disp);
 		virtual HRESULT __stdcall removeExternalObject(BSTR name);
 
+		std::set<std::wstring> objects_;
 	};
 	mol::stack_obj<MoeFrame> frame_;
 

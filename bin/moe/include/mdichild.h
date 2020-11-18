@@ -248,17 +248,41 @@ public:
 };
 
 
-class Script : public mol::com_obj<mol::ScriptHost>
+class Script : public  mol::com_obj<mol::ScriptHost>//mol::ScriptHost
 {
 public:
 
+	//typedef mol::com_obj<Script> Instance;
+	typedef Script Instance;
+
 	mol::Event completed;
 
-	static Script* CreateInstance()
+	static Instance* CreateInstance()
 	{
-		Script* s = new Script;
+		Instance* s = new Instance;
 		s->AddRef();
 		return s;
+	}
+
+	Script();
+	~Script();
+
+
+	ULONG   virtual __stdcall AddRef()
+	{
+		::InterlockedIncrement((volatile long*)&molrefcount_);
+		return molrefcount_;
+	}
+
+	ULONG   virtual __stdcall Release()
+	{
+		if (::InterlockedDecrement((volatile long*)&molrefcount_) == 0)
+		{
+			this->dispose();
+			delete this;
+			return 0;
+		}
+		return molrefcount_;
 	}
 
 	HRESULT init(const std::wstring& engine);
@@ -267,6 +291,9 @@ public:
 	void debug( const std::wstring& engine, const std::wstring& script, IScintillAx* sci );
 	void call ( const std::wstring& engine, const std::wstring& func, const std::wstring& script );
 
+	void quit();
+	void wait();
+
 	void formscript( const std::wstring& engine, const std::wstring& script, IDispatch* form );
 	void formdebug( const std::wstring& engine, const std::wstring& script, IDispatch* form );
 	void formcontrols( IUnknown* form );
@@ -274,11 +301,14 @@ public:
     virtual HRESULT  __stdcall OnScriptError( IActiveScriptError *pscripterror);
 	virtual HRESULT  __stdcall GetWindow(HWND *phwnd );
 
+	bool done()
+	{
+		return quit_;
+	}
 private:
 
-	Script();
-	~Script();
     IScintillAx* sci_;
+	bool quit_ = true;
 };
 
 
@@ -286,6 +316,35 @@ private:
 
 typedef mol::punk<Script>		ScriptingHost;
 
+class MoeImport :
+	public mol::Dispatch<IMoeImport>,
+	public mol::interfaces< MoeImport,
+	mol::implements< IDispatch, IMoeImport> >
+{
+public:
+
+	typedef mol::com_obj<MoeImport> Instance;
+	//typedef mol::com_obj<mol::ScriptHost> Host;
+	typedef Script Host;
+
+	void dispose();
+
+	static Instance* CreateInstance(Host* host);
+
+	virtual HRESULT __stdcall  Import(BSTR filename);
+	virtual HRESULT __stdcall  Sleep(long ms);
+	virtual HRESULT __stdcall  Wait(long ms, VARIANT_BOOL* vb);
+	virtual HRESULT __stdcall  Quit();
+	virtual HRESULT __stdcall  get_Dispatch(IDispatch** disp);
+	virtual HRESULT __stdcall  Callback(BSTR name, IDispatch** disp);
+	virtual HRESULT __stdcall  setTimeout(VARIANT f, VARIANT d, VARIANT* retval);
+	virtual HRESULT __stdcall  clearTimeout(VARIANT t);
+
+private:
+	//mol::punk<Host> host_;
+	Host* host_;
+	HANDLE stop_;
+};
 
 
 #endif

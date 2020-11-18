@@ -328,7 +328,11 @@ HRESULT __stdcall MoeHtml2Wnd::MoeFrame::addExternalObject(BSTR name, IDispatch*
 	if (!This()->oleObject)
 		return S_FALSE;
 
+	removeExternalObject(name);
+
 	mol::bstr objName(name);
+	objects_.insert(objName.towstring());
+
 	mol::variant v(disp);
 	return This()->oleObject->AddHostObjectToScript(objName.towstring().c_str(), &v);
 }
@@ -339,6 +343,9 @@ HRESULT __stdcall MoeHtml2Wnd::MoeFrame::removeExternalObject(BSTR name)
 		return S_FALSE;
 
 	mol::bstr objName(name);
+	if (objects_.count(objName.towstring()) == 0)
+		return S_OK;
+
 	return This()->oleObject->RemoveHostObjectFromScript(objName.towstring().c_str());
 }
 
@@ -525,6 +532,10 @@ void MoeHtml2Wnd::OnDestroy()
 
 	if (oleObject)
 	{
+		for (auto& it : frame_.objects_)
+		{
+			oleObject->RemoveHostObjectFromScript(it.c_str());
+		}
 		oleObject->RemoveHostObjectFromScript(L"external");
 		oleObject->remove_DocumentTitleChanged(documentTitleChangedToken);
 		oleObject->remove_NavigationStarting(navigationStartingToken);
