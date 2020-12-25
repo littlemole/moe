@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+ <!-- Configuration -->
+
+ <PropertyGroup Label="Configuration">
+
+  <app Condition=" '$(app)' == '' ">TestBalloon</app>
+  <version>$([System.DateTime]::Now.ToString("yy.MM.dd.HH"))</version>
+
+  <!-- paths -->
+  <Configuration Condition=" '$(Configuration)' == '' ">uni_debug</Configuration>
+  <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
+
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' ">uni_debug</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' ">uni_release</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' ">x64\uni_debug</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' ">x64\uni_release</confPath>
+
+  <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' ">bin\Debug</netConfPath>
+  <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' ">bin\Release</netConfPath>
+  <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' ">bin\x64\Debug</netConfPath>
+  <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' ">bin\x64\Release</netConfPath>
+
+  <userformConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' ">uni_debug</userformConfPath>
+  <userformConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' ">uni_release</userformConfPath>
+  <userformConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' ">uni_debug</userformConfPath>
+  <userformConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' ">uni_release</userformConfPath>
+
+  <arch Condition=" '$(Platform)' == 'x64' ">x64</arch>
+  <arch Condition=" '$(Platform)' == 'Win32' ">x86</arch>
+
+  <!-- wix ui helper dll-->
+  <uiext>$(WIX)\bin\WixUIExtension.dll</uiext>
+
+  <!-- generated wix objects to link into .msi file -->
+  <genObj>obj\$(confPath)\gen.wixobj</genObj>
+  <appObj>obj\$(confPath)\app.wixobj</appObj>
+  <monObj>obj\$(confPath)\mon.wixobj</monObj>
+
+  <!-- wix output file -->
+  <msiTarget>.\bin\$(confPath)\$(app).msi</msiTarget>
+
+  <!-- admin and non-privilegded user install packets -->
+  <deployTarget>.\deploy\$(confPath)\$(app).msi</deployTarget>
+
+ </PropertyGroup>
+
+ <!-- Build -->
+
+
+ <Target Name="Build" DependsOnTargets="Clean">
+
+		<Message Text="building Wix Installer MOE EX" />
+		<Message Text="Project Configuration = $(Configuration)" />
+		<Message Text="Project Platform = $(Platform)" />
+		<Message Text="$(MSBuildProjectDirectory)" />
+
+		<!-- prepare directory structure -->
+
+		<MakeDir Directories=".\bin"/>
+		<MakeDir Directories=".\tmp"/>
+		<MakeDir Directories=".\obj"/>
+		<MakeDir Directories=".\deploy\$(confPath)"/>
+
+		<!-- copy files -->
+
+        <Copy
+            SourceFiles="app\bundleTest.txt"
+            DestinationFiles=".\bin\bundleTest.txt"
+        />
+	
+
+	<!-- heat -->
+		<Exec Command='"$(WIX)\bin\heat.exe" dir . -sw5150 -sw5151 -gg -cg "BundleTestCompGroup" -dr INSTALLLOCATION -var var.SourceDir  -o ..\gen.wxs' WorkingDirectory="./app"/>
+
+    <!-- candle -->
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(genObj)" gen.wxs -dVERSION=$(version) -dSourceDir=".\app" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(appObj)" app.wxs -dVERSION=$(version) -dSourceDir=".\app" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(monObj)" MondoNoLicense.wxs -dVERSION=$(version) -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
+
+
+
+    <!-- light -->
+		<Exec Command='"$(WIX)\bin\light.exe" -ext "$(uiext)" -out "$(msiTarget)" -cultures:en-us -loc en-us.wxl "$(genObj)" "$(appObj)" "$(monObj)"' WorkingDirectory="."/>
+
+
+	<!-- admin install -->
+
+        <Copy
+            SourceFiles="$(msiTarget)"
+            DestinationFiles="$(deployTarget)"
+        />
+
+
+ </Target>
+
+
+<!-- Clean -->
+
+ <Target Name="Clean">
+    <RemoveDir Directories=".\deploy\$(confPath)" />
+    <RemoveDir Directories=".\bin;.\tmp;.\obj" />
+	
+ </Target>
+
+
+
+</Project>

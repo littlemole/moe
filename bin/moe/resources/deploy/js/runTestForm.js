@@ -22,4 +22,4 @@ var Controller = {
 var form = Script.CreateObject("MoeUserForm.UserFormRunner"); 
 form.Load( Controller, "forms\\test.ucs", false);
 
-wait(0);
+wait();

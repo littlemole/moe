@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <script src="../js/lib/viz.js"></script>
+  <script src="../js/lib/full.render.js"></script>
+  <script src="../js/lib/svg-pan-zoom.js"></script>
+ 
+<style>
+body {
+  height:100vh;
+  display: flex;
+  overflow:hidden;
+  margin:0px;
+  padding:0px;
+}
+
+#zoom-img {
+  cursor: move;
+  height:100vh;
+  width:100vw;
+  padding:0px;
+  margin:0px;
+}
+
+#zoom-container {
+  background: white;
+  height:100vh;
+  padding:0px;
+  margin:0px;
+}
+
+</style>
+</head>
+<body id="fullbody">
+
+<div id="zoom-container"></div>
+
+<script>
+
+var txt = "";
+
+function render(txt)
+{
+	try {
+
+		 let init = false;
+		 let pan =  null;
+		 let zoom = 1;
+		 if(window.zoomSVG )
+		 {
+		     init = true;
+		     window.zoomSVG.updateBBox();
+			 pan = window.zoomSVG.getPan();
+			 zoom = window.zoomSVG.getZoom();
+		 }
+
+		var viz = new Viz();
+		viz.renderSVGElement(txt)
+		.then(function(element) {
+
+		  document.getElementById("zoom-container").innerHTML = "";
+		  element.id = "zoom-img";
+		  document.getElementById("zoom-container").appendChild(element);
+		
+		  let options = {
+			  zoomEnabled: true,
+			  controlIconsEnabled: true,
+			  fit: true,
+			  center: true,
+		  };
+
+		  window.zoomSVG = svgPanZoom('#zoom-img', options);
+
+		  if(init)
+		  {
+		      window.zoomSVG.updateBBox();
+			  let p = pan;
+			  window.zoomSVG.zoom(zoom);
+			  if(p)
+				window.zoomSVG.pan(p);
+		  }
+		});
+	}
+	catch(e) 
+	{};
+}
+
+
+function update()
+{
+	try {
+		let active = window.chrome.webview.hostObjects.sync.Controller.getActive();
+		var tmp = active.Model.Text.GetText();
+		if(tmp != txt) 
+		{
+			txt = tmp;
+			render(txt);
+		}
+	}
+	catch(e) {
+		//alert(e);
+	}
+
+	setTimeout(update,500);
+}
+
+setTimeout(update,500);
+
+</script>
+</body>
+</html>
+

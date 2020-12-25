@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="INSTALLLOCATION">
+            <Directory Id="dir2C5ACE5E587A89ECCD24F947621D29B8" Name="app" />
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="BundleTestCompGroup">
+            <Component Id="cmpE66EB7FFC047D005143C0A80655D8E1D" Directory="dir2C5ACE5E587A89ECCD24F947621D29B8" Guid="{A4BBF86C-3B31-41C5-B8AE-61E954D92B9C}">
+                <File Id="filD8B30BD4E47B23C1A40952FFEC2254A7" KeyPath="yes" Source="$(var.SourceDir)\bundleTest.txt" />
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+</Wix>

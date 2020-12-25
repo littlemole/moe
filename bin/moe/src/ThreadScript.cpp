@@ -32,9 +32,11 @@ public:
 	HRESULT setTimeout( mol::variant f, mol::variant t);
 	void remove( int i );
 	bool fire();
+	void clear();
 
 private:
 	int count_;
+	bool done_ = false;
 	std::list<ThreadedTimeout*> timeouts_;
 };
 
@@ -63,12 +65,15 @@ bool ThreadedTimeouts::fire()
 	{
 		if ( (*it)->timeout < now ) 
 		{
-			EXCEPINFO ex;
-			::ZeroMemory(&ex,sizeof(EXCEPINFO));
-			UINT e = 0;
-			DISPPARAMS p = {0,0};
+			if (!done_)
+			{
+				EXCEPINFO ex;
+				::ZeroMemory(&ex, sizeof(EXCEPINFO));
+				UINT e = 0;
+				DISPPARAMS p = { 0,0 };
 
-			HRESULT hr = (*it)->fun->Invoke(0,IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,&p,0,&ex,&e);
+				HRESULT hr = (*it)->fun->Invoke(0, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD, &p, 0, &ex, &e);
+			}
 			delete *it;
 		}
 		else
@@ -76,8 +81,24 @@ bool ThreadedTimeouts::fire()
 			newList.push_back(*it);
 		}
 	}
+	if (done_)
+	{
+		for (std::list<ThreadedTimeout*>::iterator it = newList.begin(); it != newList.end(); it++)
+		{
+			delete (*it);
+		}
+		newList.clear();
+		done_ = false;
+	}
 	timeouts_ = newList;
 	return timeouts_.empty();
+}
+
+void ThreadedTimeouts::clear()
+{
+	std::list<ThreadedTimeout*> newList;
+	//timeouts_.clear();
+	done_ = true;
 }
 
 
@@ -93,18 +114,12 @@ std::wstring findFile(const std::wstring& f);
  
 void MoeDebugImport::dispose() 
 {
-	if(stop_)
-	{
-		::CloseHandle(stop_);
-		stop_ = 0;
-	}
 }
  
-MoeDebugImport::Instance* MoeDebugImport::CreateInstance(IActiveScript* host)
+MoeDebugImport::Instance* MoeDebugImport::CreateInstance(ScriptDebugger::Instance* host)
 {
  	Instance* i = new Instance();
  	i->host_ = host;
-	i->stop_ = 0;
  	return i;
 }
  
@@ -135,87 +150,28 @@ HRESULT __stdcall  MoeDebugImport::Sleep(long ms)
 	return S_OK;
 }
 
-HRESULT __stdcall  MoeDebugImport::Wait(long ms,VARIANT_BOOL* vb)
+HRESULT __stdcall  MoeDebugImport::Wait(VARIANT_BOOL* vb)
 {
-	DWORD startTick = ::GetTickCount();
-	DWORD nowTick = startTick;
-
-	if(vb)
-	{
-		*vb = VARIANT_FALSE;
-	}
-
-	if(stop_)
-	{
-		::CloseHandle(stop_);
-	}
-	stop_ = ::CreateEvent(NULL,FALSE,FALSE,NULL);
-
-	MSG msg;
-	while( (ms == 0) || ((nowTick-startTick)<(unsigned long)ms) )
-	{
-		threadedTimeouts().fire();
-		nowTick = ::GetTickCount();
-  	    DWORD r = ::MsgWaitForMultipleObjectsEx(1,&stop_,10,QS_ALLINPUT,MWMO_INPUTAVAILABLE|MWMO_ALERTABLE);
-		if ( r == WAIT_IO_COMPLETION || r == WAIT_TIMEOUT) 
-		{
-			continue;
-		}
-
-		if ( r == WAIT_OBJECT_0 )
-		{
-			if(vb)
-			{
-				*vb = VARIANT_TRUE;
-			}
-			break;
-		}
-
-		if(!::GetMessage(&msg,0,0,0) || msg.message == WM_QUIT)
-		{
-			if(vb)
-			{
-				*vb = VARIANT_TRUE;
-			}
-			
-			break;
-		}
-
-		if ( mol::win::dialogs().isDialogMessage(msg) )
-			continue;
-
-		if ( mol::win::accelerators().translate(msg) )
-			continue;
-
-		::TranslateMessage(&msg);
-		::DispatchMessage(&msg);
-	}
-	if(stop_)
-	{
-		::CloseHandle(stop_);
-		stop_ = 0;
-	}
+	this->host_->wait();
 	return S_OK;
+
 }
 
 HRESULT __stdcall  MoeDebugImport::Quit()
 {
-	if(stop_)
-	{
-		::SetEvent(stop_);
-	}
+	host_->quit();
 	return S_OK;
 }
 
 HRESULT __stdcall  MoeDebugImport::get_Dispatch(IDispatch** disp)
 {
-	return host_->GetScriptDispatch(L"",disp);
+	return host_->activeScript_->GetScriptDispatch(L"",disp);
 }
 
 HRESULT __stdcall  MoeDebugImport::Callback(BSTR name,IDispatch** disp)
 {
 	mol::punk<IDispatch> d;
-	HRESULT hr = host_->GetScriptDispatch(L"",&d);
+	HRESULT hr = host_->activeScript_->GetScriptDispatch(L"",&d);
 	if ( hr == S_OK && d )
 	{
 		return EventWrapper::CreateInstance(d,mol::bstr(name),disp);
@@ -253,6 +209,28 @@ ScriptDebugger::~ScriptDebugger()
 {
 	ODBGS("ScriptDebugger died"); 
 }
+
+
+void  ScriptDebugger::quit()
+{
+	quit_ = true;
+//	if (OnScriptThreadDone.test())
+	{
+		threadedTimeouts().clear();
+//		close();
+		//((Instance*)this)->Release();
+	}
+}
+
+
+void  ScriptDebugger::wait()
+{
+//	if (completed.test())
+	//	return;
+
+	quit_ = false;
+}
+
 
 void ScriptDebugger::init(const std::wstring& engine)
 {
@@ -342,7 +320,7 @@ void ScriptDebugger::init(const std::wstring& engine)
 
 	
 
- 	import = MoeDebugImport::CreateInstance(activeScript_);
+ 	import = MoeDebugImport::CreateInstance((Instance*)this);
  	addNamedObject((IMoeImport*)(import),_T("Importer"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 
 	mol::punk<IDispatch> java;
@@ -566,6 +544,7 @@ void ScriptDebugger::execute_thread( )
 	ODBGS("ScriptDebugger::execute()\r\n");
 
 	::CoInitialize(0);
+	//::CoInitializeEx(0, COINIT_MULTITHREADED);
 
 	HRESULT hr;
 
@@ -594,10 +573,39 @@ void ScriptDebugger::execute_thread( )
 	
 	hr = activeScript_->SetScriptState(SCRIPTSTATE_CONNECTED);
 
-	// execute any outstanding timeouts
-	while ( !threadedTimeouts().fire() )
+
+	DWORD startTick = ::GetTickCount();
+	DWORD nowTick = startTick;
+
+	MSG msg;
+	while( !quit_)
 	{
-		mol::Sleep(10);
+		threadedTimeouts().fire();
+		nowTick = ::GetTickCount();
+		DWORD r = ::MsgWaitForMultipleObjectsEx(0,0,10,QS_ALLINPUT,MWMO_INPUTAVAILABLE|MWMO_ALERTABLE);
+		if ( r == WAIT_IO_COMPLETION || r == WAIT_TIMEOUT)
+		{
+			continue;
+		}
+
+/*		if ( r == WAIT_OBJECT_0 )
+		{
+			break;
+		}
+		*/
+		if(!::GetMessage(&msg,0,0,0) || msg.message == WM_QUIT)
+		{
+			break;
+		}
+
+		if ( mol::win::dialogs().isDialogMessage(msg) )
+			continue;
+
+		if ( mol::win::accelerators().translate(msg) )
+			continue;
+
+		::TranslateMessage(&msg);
+		::DispatchMessage(&msg);
 	}
 }
 
@@ -619,7 +627,7 @@ void ScriptDebugger::execute_callback()
 	}
 	objectMap_.clear();
 
-	import->Quit();
+//	import->Quit();
 	import.release();
 
 
@@ -812,7 +820,7 @@ HRESULT  __stdcall ScriptDebugger::OnScriptError( IActiveScriptError *pscripterr
 
 HRESULT  __stdcall ScriptDebugger::OnEnterScript( void)
 {
-	((IActiveScriptSite*)this)->AddRef();
+	//((IActiveScriptSite*)this)->AddRef();
 
 	mol::punk<IActiveScriptDebug> sdebug(activeScript_);
 
@@ -845,7 +853,7 @@ HRESULT  __stdcall ScriptDebugger::OnEnterScript( void)
 HRESULT  __stdcall ScriptDebugger::OnLeaveScript( void)
 {
 
-	((IActiveScriptSite*)this)->Release();
+	//((IActiveScriptSite*)this)->Release();
 	return S_OK;
 }
 

@@ -209,7 +209,6 @@ void Timeouts::remove(Timeout::Host* script,Timeout* t)
 
 	if ( timeouts_.count(script) == 0 )
 	{
-		delete t;
 		return;
 	}
 
@@ -221,11 +220,14 @@ void Timeouts::remove(Timeout::Host* script,Timeout* t)
 			if ( count(script) == 0  )
 			{
 				// necessary?
+				/*
 				if ( script->completed.test() && script->done() )
 				{
 					script->close();
 					((Script::Instance*)script)->Release();
 				}
+				timeouts_.erase(script);
+				*/
 				timeouts_.erase(script);
 			}
 			delete t;
@@ -258,8 +260,7 @@ void Timeout::operator()()
 
 	kill();
 	HRESULT hr = f_.pdispVal->Invoke(0,IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,&p,0,&ex,&e);
-	timeouts().remove(script_,this);
-
+	timeouts().remove(script_, this);
 }
 
 Script::Script()
@@ -1840,18 +1841,12 @@ MOE_DOCTYPE index2type(int index)
 
 void MoeImport::dispose() 
 {
-	if(stop_)
-	{
-		::CloseHandle(stop_);
-		stop_ = 0;
-	}
 }
  
 MoeImport::Instance* MoeImport::CreateInstance(Host* host)
 {
  	Instance* i = new Instance();
  	i->host_ = host;
-	i->stop_ = 0;
  	return i;
 }
  
@@ -1874,79 +1869,15 @@ HRESULT __stdcall  MoeImport::Sleep(long ms)
 	return S_OK;
 }
 
-HRESULT __stdcall  MoeImport::Wait(long ms,VARIANT_BOOL* vb)
+HRESULT __stdcall  MoeImport::Wait(VARIANT_BOOL* vb)
 {
 	this->host_->wait();
-	/*
-	DWORD startTick = ::GetTickCount();
-	DWORD nowTick = startTick;
-
-	if(vb)
-	{
-		*vb = VARIANT_FALSE;
-	}
-
-	if(stop_)
-	{
-		::CloseHandle(stop_);
-	}
-	stop_ = ::CreateEvent(NULL,FALSE,FALSE,NULL);
-
-	MSG msg;
-	while( (ms == 0) || ((nowTick-startTick)<(unsigned long)ms) )
-	{
-		nowTick = ::GetTickCount();
-  	    DWORD r = ::MsgWaitForMultipleObjectsEx(1,&stop_,100,QS_ALLINPUT,MWMO_INPUTAVAILABLE|MWMO_ALERTABLE);
-		if ( r == WAIT_IO_COMPLETION || r == WAIT_TIMEOUT) 
-		{
-			continue;
-		}
-		if ( r == WAIT_OBJECT_0 )
-		{
-			if(vb)
-			{
-				*vb = VARIANT_TRUE;
-			}
-			break;
-		}
-
-		if (!::GetMessage(&msg,0,0,0) || msg.message == WM_QUIT)
-		{
-			if(vb)
-			{
-				*vb = VARIANT_TRUE;
-			}
-			break;
-		}
-	
-		if ( mol::win::dialogs().isDialogMessage(msg) )
-			continue;
-
-		if ( mol::win::accelerators().translate(msg) )
-			continue;
-
-		::TranslateMessage(&msg);
-		::DispatchMessage(&msg);
-	}
-		
-	if(stop_)
-	{
-		::CloseHandle(stop_);
-		stop_ = 0;
-	}
-	*/
 	return S_OK;
 }
 
 HRESULT __stdcall  MoeImport::Quit()
 {
 	host_->quit();
-	/*
-	if(stop_)
-	{
-		::SetEvent(stop_);
-	}
-	*/
 	return S_OK;
 }
 

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+<?if $(var.VERSION) = "" ?>
+<?define VERSION = "1.0.0.0" ?>
+<?endif?>
+
+  <!-- the product (moe) to install -->
+  <Product Id="*"
+           Name="app" Language="1033" Version="$(var.VERSION)"
+           Manufacturer="mole"
+           UpgradeCode="D1E48FA2-BE5F-4A34-B65E-550983287DCB">
+
+
+    <?if $(var.BuildArch) = "x86" ?>
+    <?define PF = ProgramFilesFolder ?>
+    <?define Win64 = "no" ?>
+    <?elseif $(var.BuildArch) = "x64" ?>
+    <?define PF = ProgramFiles64Folder ?>
+    <?define Win64 = "yes" ?>
+    <?endif?>
+
+    <!-- msi version and packaging-->
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <!-- msi media: use single embedded cabinet archive-->
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+	<!-- no repair or change options in installer -->
+	<Property Id="ARPNOREPAIR" Value="yes" Secure="yes" /> 
+	<Property Id="ARPNOMODIFY" Value="yes" Secure="yes" />
+
+    <!-- package icon -->
+    <Icon Id="icon.ico" SourceFile=".\app.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
+    <!-- installation directory structure -->
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+
+      <!-- Binaries -->
+      <Directory Id="$(var.PF)">
+        <Directory Id="INSTALLLOCATION" Name="mol">
+
+          <Component Id="app" Guid="{D5F7AB60-9A35-47c0-9629-FF02CB9E7718}"
+            SharedDllRefCount="no" KeyPath="no" NeverOverwrite="no" Permanent="no" Transitive="no"
+            Win64="$(var.Win64)" Location="either">
+            <CreateFolder/>
+          </Component>       
+        </Directory>
+	  <Directory Id='MOEPATH' Name='moe' />   
+
+        </Directory>
+      </Directory>
+
+    <!-- Features -->
+
+    <Feature AllowAdvertise='no' InstallDefault='local' Absent='disallow'
+             Id='AppMain' Title='app' Description='bundletest app test application '
+             Level='1' ConfigurableDirectory="INSTALLLOCATION">
+
+      <Feature Id="AppCore" Title="app" Description='testbundle application core binaries' Level="1">
+	  <ComponentRef Id="app" />
+      	  <ComponentGroupRef Id='BundleTestCompGroup' />
+      </Feature>
+
+    </Feature>
+
+    <!-- fire custom actions -->
+
+    <InstallExecuteSequence>
+
+	  <RemoveExistingProducts Before='InstallInitialize' />
+
+    </InstallExecuteSequence>
+
+    <!-- WIX UI overrides-->
+    <WixVariable Id="WixUILicenseRtf" Value=".\res\License.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value=".\res\moeinstall.jpg" />
+    <WixVariable Id="WixUIDialogBmp" Value=".\res\front.jpg" />
+
+    <!-- WIX UI support -->
+    <UIRef Id="WixUI_ErrorProgressText" />
+    <UIRef Id="WixUI_MondoNoLicense"/>
+    
+  </Product>
+</Wix>

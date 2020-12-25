@@ -324,7 +324,6 @@ class MoeImport :
 public:
 
 	typedef mol::com_obj<MoeImport> Instance;
-	//typedef mol::com_obj<mol::ScriptHost> Host;
 	typedef Script Host;
 
 	void dispose();
@@ -333,7 +332,7 @@ public:
 
 	virtual HRESULT __stdcall  Import(BSTR filename);
 	virtual HRESULT __stdcall  Sleep(long ms);
-	virtual HRESULT __stdcall  Wait(long ms, VARIANT_BOOL* vb);
+	virtual HRESULT __stdcall  Wait( VARIANT_BOOL* vb);
 	virtual HRESULT __stdcall  Quit();
 	virtual HRESULT __stdcall  get_Dispatch(IDispatch** disp);
 	virtual HRESULT __stdcall  Callback(BSTR name, IDispatch** disp);
@@ -341,9 +340,7 @@ public:
 	virtual HRESULT __stdcall  clearTimeout(VARIANT t);
 
 private:
-	//mol::punk<Host> host_;
 	Host* host_;
-	HANDLE stop_;
 };
 
 

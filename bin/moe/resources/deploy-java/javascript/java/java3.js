@@ -7,10 +7,12 @@ var panel = new java.Runtime.javax.swing.JPanel();
 
 var handler = function() 
 {
-  moe.Dialogs.MsgBox("he","hehe",0);
+//  moe.Dialogs.MsgBox("he","hehe",0);
   java.Exit();
   Quit();
 }
+
+
 
 frame.getContentPane().add(panel);
 
@@ -27,4 +29,4 @@ frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 frame.setVisible(true);
 //frame.setAlwaysOnTop(true);
 
-Wait(0);
+Wait();

@@ -1137,7 +1137,7 @@ library Moe
  		HRESULT Sleep([in]LONG ms);
 
  		[id(3), helpstring("wait for ansync sript completion")] 
- 		HRESULT Wait([in]LONG ms,[out,retval] VARIANT_BOOL* vb);
+ 		HRESULT Wait([out,retval] VARIANT_BOOL* vb);
 
  		[id(4), helpstring("quit the msgloop")] 
  		HRESULT Quit();

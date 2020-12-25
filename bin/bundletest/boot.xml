@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+ <!-- Configuration -->
+
+ <PropertyGroup Label="Configuration">
+
+	<version>$([System.DateTime]::Now.ToString("yy.MM.dd.HH"))</version>
+    <app>TestBalloon</app>
+
+  <!-- paths -->
+  <Configuration Condition=" '$(Configuration)' == '' ">uni_debug</Configuration>
+  <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
+
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' ">uni_debug</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' ">uni_release</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' ">x64\uni_debug</confPath>
+  <confPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' ">x64\uni_release</confPath>
+
+  <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' ">bin\Debug</netConfPath>
+  <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' ">bin\Release</netConfPath>
+  <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' ">bin\x64\Debug</netConfPath>
+  <netConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' ">bin\x64\Release</netConfPath>
+
+  <userformConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|Win32' ">uni_debug</userformConfPath>
+  <userformConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|Win32' ">uni_release</userformConfPath>
+  <userformConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_debug|x64' ">uni_debug</userformConfPath>
+  <userformConfPath Condition=" '$(Configuration)|$(Platform)' == 'uni_release|x64' ">uni_release</userformConfPath>
+
+  <arch Condition=" '$(Platform)' == 'x64' ">x64</arch>
+  <arch Condition=" '$(Platform)' == 'Win32' ">x86</arch>
+
+
+  <!-- wix bootstrapper helper dll-->
+  <bootext>$(WIX)\bin\WixBalExtension.dll</bootext>
+  <utilext>$(WIX)\bin\WixUtilExtension.dll</utilext>
+
+  <!-- wix output file -->
+  <bundleTarget>.\tmp\$(app)Setup.exe</bundleTarget>
+
+  <!-- admin and non-privilegded user install packets -->
+  <deployTarget>.\deploy\$(confPath)\$(app)Setup.exe</deployTarget>
+
+ </PropertyGroup>
+
+  <Target Name="msi">
+    <MSBuild Projects="app.xml" Properties="Configuration=$(Configuration);Platform=$(Platform);app=$(app)"/>
+
+        <Copy
+            SourceFiles="deploy\$(confPath)\$(app).msi"
+            DestinationFiles=".\tmp\$(app).msi"
+        />
+
+ </Target>
+
+ <Target Name="Build" DependsOnTargets="Clean;msi">
+
+		<Message Text="building Bundle Installer " />
+		<Message Text="Project Configuration = $(Configuration)" />
+		<Message Text="Project Platform = $(Platform)" />
+		<Message Text="$(MSBuildProjectDirectory)" />
+
+	<!-- prepare directory structure -->
+
+		<MakeDir Directories=".\bin"/>
+		<MakeDir Directories=".\deploy\$(confPath)"/>
+
+	<!-- copy files -->
+
+
+    <!-- candle -->
+
+		<Exec Command='"$(WIX)\bin\candle.exe" -o "tmp\boot.wixobj" boot.wxs -ext "$(utilext)"  -ext "%WIX%\bin\WixBalExtension.dll" -dAPP=$(app) -dVERSION=$(version)  -dBuildArch=$(arch) -arch $(arch)' WorkingDirectory="."/>
+
+
+    <!-- light -->
+		<Exec Command='"$(WIX)\bin\light.exe" .\tmp\boot.wixobj -ext "$(utilext)" -ext "%WIX%\bin\WixBalExtension.dll"  -out "$(bundleTarget)" -cultures:en-us -loc en-us.wxl' WorkingDirectory="."/>
+
+	<!-- admin install -->
+        <Copy
+            SourceFiles="$(bundleTarget)"
+            DestinationFiles="$(deployTarget)"
+        />
+
+
+ </Target> 
+
+
+
+<!-- Clean -->
+
+ <Target Name="Clean">
+   <Delete Files="deploy\$(confPath)\$(app).msi;deploy\$(confPath)$(app)Setup.exe" /> 
+   <Delete Files="tmp\$(app).msi;tmp\boot.wixobj" /> 
+
+    <MSBuild Projects="app.xml" Properties="Configuration=$(Configuration);Platform=$(Platform)"  Targets="Clean"/>
+
+ </Target>
+
+</Project>

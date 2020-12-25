@@ -9,7 +9,7 @@ var Controller = {
 	}
 };
 
-var html = Documents.OpenHtmlFrame( moe.Config.ModulePath + "\\" + "forms\\markdown.html");
+var html = Documents.OpenHtmlFrame( moe.Config.ModulePath + "\\" + "forms\\dot.html");
 html.Model.onDocumentLoad = function(){
 	html.Model.addExternalObject("Controller",Controller);
 	View.Tile();
@@ -20,3 +20,4 @@ html.onClose = function() {
 }
 
 Wait();
+

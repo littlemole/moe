@@ -292,6 +292,8 @@ void EditorScript::scriptThreadDone()
 {
 	editor_->debugger_= 0;
 
+	debugDlg()->show(SW_HIDE);
+
 	if ( editor_->sci)
 		editor_->line_->Highlite(-1);
 

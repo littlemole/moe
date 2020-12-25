@@ -107,6 +107,15 @@ public:
 
 	mol::punk<IMoeImport>				import;
 
+	void quit();
+	void wait();
+	bool done()
+	{
+		return quit_;
+	}
+
+	mol::punk<IActiveScript>			activeScript_;
+
 protected:
 
 	ScriptDebugger();
@@ -120,6 +129,7 @@ protected:
 	// helper
 	HRESULT getScriptEngine(const std::wstring& engine, IActiveScript **ppas);
 
+	bool								quit_ = true;
 	bool								stepping_;
 	bool								chakra_;
 	std::set<int>						breakpoints_;
@@ -128,7 +138,6 @@ protected:
 
 	mol::punk<IProcessDebugManager>		pdm_;
 	mol::punk<IDebugApplication>		debugApp_;
-	mol::punk<IActiveScript>			activeScript_;
 	mol::punk<IActiveScriptParse>		asp_;
 	mol::punk<IDebugExpression>			exp_;
 	mol::punk<IDebugDocumentHelper>     debugHelper_;
@@ -160,11 +169,11 @@ public:
  
  	void dispose();
  
- 	static Instance* CreateInstance(IActiveScript* host);
+ 	static Instance* CreateInstance(ScriptDebugger::Instance* host);
  
  	virtual HRESULT __stdcall  Import(BSTR filename);
   	virtual HRESULT __stdcall  Sleep(long ms);
- 	virtual HRESULT __stdcall  Wait(long ms,VARIANT_BOOL* vb);
+ 	virtual HRESULT __stdcall  Wait(VARIANT_BOOL* vb);
  	virtual HRESULT __stdcall  Quit();
 	virtual HRESULT __stdcall  get_Dispatch(IDispatch** disp);
 	virtual HRESULT __stdcall  Callback(BSTR name,IDispatch** disp);
@@ -172,8 +181,7 @@ public:
 	virtual HRESULT __stdcall  clearTimeout( VARIANT t);
 
 private:
-	IActiveScript* host_;
-	HANDLE stop_;
+	ScriptDebugger::Instance* host_;
 };
 
 
