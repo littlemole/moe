@@ -85,6 +85,10 @@ public:
 		HRESULT virtual __stdcall get_IsDirty		( VARIANT_BOOL* vb );
 		HRESULT virtual __stdcall put_IsDirty		( VARIANT_BOOL  vb );
 
+		HRESULT virtual __stdcall get_XML(BSTR* xml);
+		HRESULT virtual __stdcall put_XML(BSTR xml);
+
+
 	// COM methods
 
 		HRESULT virtual __stdcall _NewEnum			(IEnumVARIANT** newEnum);
@@ -121,7 +125,7 @@ protected:
 	HRESULT makeKey(std::wstring key, ISetting* parent, ISetting** newKey);
 	std::wstring getSingleKey(const std::wstring& key, size_t pos);
 	HRESULT getKey(const std::wstring& key, ISetting** newKey);
-	void saveWalker(ISetting* set, std::ofstream& ofs );
+	void saveWalker(ISetting* set, std::ostream& ofs );
 
 
 	BOOL						bDirty_;

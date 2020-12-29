@@ -149,6 +149,19 @@ library Settings
 
 		[id(19), helpstring("Find")] 
 		HRESULT Find([in] BSTR key, [out,retval] ISetting** s);
+
+		[
+			propget, id(20),
+			helpstring("get/set XML")
+		]
+		HRESULT XML([out, retval] BSTR* xml);
+
+		[
+			propput, id(20),
+		]
+		HRESULT XML([in] BSTR xml);
+
+
     };
 
 

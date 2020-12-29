@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title></title>
+  <link rel="stylesheet" href="ribbon.css">
+  <script src="js/mustache.js"></script>
+  <script src="js/mustache.js"></script>
+  <style type="text/css">
+    .close {	
+		position:absolute;
+		right:10px;
+		bottom:0px;
+		font-size:1.5em;
+		z-index:10;
+	}
+	.close a {
+		text-decoration:none;
+		color:black;
+		font-weight:bold;
+	}
+
+	img {
+		width:32px;
+		height:32px;
+	}
+	.tabcontent {
+		display:none;
+		width:400px;
+		border: 0px solid #ccc;
+	}
+
+	.tabcontent img {
+		width:24px;
+		height:24px;
+	}
+
+	body,div {
+		overflow:hidden;
+	}
+
+	div.tab {
+		flex-direction:row;
+		justify-content:flex-start;
+		padding:6px;
+	}
+
+	div > a {
+		text-decoration:none;
+		color:black;
+	}
+
+	.vcenter {
+		align-items:center;
+	}
+
+  </style>
+ </head>
+ 
+ <body style="border:1px solid #aaa;">
+
+	
+    <div class="flex row stretch" style="background-color:#f1f1f1;position:relative;width:100%;">
+
+	<div class="close">
+	 <a href="mol://close">x</a>
+	</div>
+
+     <div class="flex column" style="padding:3px">
+
+  	  <div class="flex row tab hover stretch " id="new" title="Create New Document">
+	   <img src="img/document-new.svg">
+       <span>&nbsp;New</span>
+      </div>
+
+	  <div class="flex hover row stretch tab" id="open" title="Open Existing Document">
+       <div class="flex row stretch " >
+	    <img src="img/document-open.svg" >
+        <span>&nbsp;Open</span>
+		<div class="stretch" style="text-align:right;">▶</div>
+       </div>
+      </div>
+
+	  <div class=" hover stretch tab" id="save" title="Save Document">
+       <div class="flex row stretch" >
+ 	    <img src="img/document-save.svg">
+        <span>&nbsp;Save</span>
+		<div class="stretch" style="text-align:right;">▶</div>
+       </div>
+      </div>
+
+  	  <div class="divider flex stretch row" style="width:110px;border-bottom:1px solid #aaa;"></div>
+
+	  <div class=" flex hover stretch tab" title="Print Document">
+	   <img src="img/document-print.svg">
+       <span>&nbsp;Print</span>
+      </div>
+
+	  <div class="flex hover stretch tab" title="Edit Preferences">
+	   <img src="img/document-properties.svg">
+       <span>&nbsp;Preferences</span>
+      </div>
+
+	  <div class="flex hover stretch tab" title="Customize">
+	   <img src="img/preferences-desktop.svg">
+       <span>&nbsp;Customize</span>
+      </div>
+
+  	  <div class="divider flex stretch row" style="width:110px;border-bottom:1px solid #aaa;"></div>
+
+	  <div class="button hover stretch tab" title="Exit Application">
+	   <img src="img/application-exit.svg">
+       <span>&nbsp;Quit</span>
+      </div>
+
+     </div>	  
+
+	<div class="divider"></div>
+
+    <div id="recent" class="tabcontent recent column">
+      <h4>Recent Files</h4>
+	  <div class="flow column">
+	   <div class="hover flex row vcenter">
+	    <img src="img/document.svg">
+        <a href="#">File1.txt</a>
+       </div>
+	   <div class="hover flex row vcenter">
+	    <img src="img/document.svg">
+        <a href="#">File2.txt</a>
+       </div>
+	   <div class="hover flex row vcenter">
+	    <img src="img/document.svg">
+        <a href="#">File3.txt</a>
+       </div>
+      </div>
+     </div>
+
+     <div id="createNew" class="tabcontent recent column">
+      <h4>Open existing Document</h4>
+	  <div class="flow button column ">
+	   <div class="flex row hover">
+	    <img src="img/document.svg">
+		<span>Open&nbsp;File</span>
+	   </div>
+	   <div class="flex row hover">
+	    <img src="img/folder.svg">
+		<span>Open&nbsp;Folder</span>
+	   </div>
+	   <div class="flex row hover">
+	    <img src="img/web-browser.svg">
+		<span>Open&nbsp;Url</span>
+	   </div>
+      </div>
+     </div>
+
+     <div id="saveDocument" class="tabcontent recent column">
+      <h4>Save the Document to Disk</h4>
+	  <div class="flow column button">
+	   <div class="flex row hover">
+	    <img src="img/document-save.svg">
+		<span>Save Document</span>
+	   </div>
+	   <div class="flex row hover">
+	    <img src="img/document-save-as.svg">
+		<span>Save Document As</span>
+	   </div>
+      </div>
+     </div>
+
+    </div>
+   </div>
+<script>
+
+function showTab(id) {
+	Array.from(document.getElementsByClassName("tabcontent"))
+	.forEach(function(tab) {
+		tab.style.display="none";
+	});
+
+	document.getElementById(id).style.display="flex";
+}
+
+Array.from(document.getElementsByClassName("tab"))
+.forEach(function(el){
+	el.onmouseover = function(e) {
+		showTab("recent");
+	};
+});
+
+document.getElementById("recent").style.display="flex";
+document.getElementById("open").onmouseover = function(e) {
+	showTab("createNew");
+};
+document.getElementById("save").onmouseover = function(e) {
+	showTab("saveDocument");
+};
+
+
+</script>
+ </body>
+</html>

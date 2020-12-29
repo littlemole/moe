@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "SciStyle.h"
+#include "xml/document.h"
+#include "xml/xml.h"
 
 class Style
 {
@@ -490,12 +492,190 @@ static Style pythonStyles[] = {
 	STYLE(SCE_P_WORD2, 0, 0, 0, font, 10, black, white)
 };
 
-AxStyleSets::Instance* AxStyleSets::CreateInstance()
+void AxStyleSets::CreateInstance(Instance** inst)
 {
 	Instance* d = new Instance; 
 	d->AddRef();
-	return d;
+	*inst = d;
 }
+
+
+HRESULT __stdcall AxStyleSets::put_JSON(BSTR json)
+{
+	return S_OK;
+}
+
+HRESULT __stdcall AxStyleSets::get_JSON(BSTR* json)
+{
+	return S_OK;
+}
+
+HRESULT __stdcall AxStyleSets::put_XML(BSTR xml)
+{
+	mol::XMLDocument doc;
+	mol::Element* root = doc.parse(mol::toUTF8(mol::bstr(xml).towstring()));
+	if (!root)
+		return S_FALSE;
+
+	collection_.clear();
+
+	mol::Element* stylesetsElement = root->getElementByTagName("stylesets");
+	mol::NodeList stylesets = stylesetsElement->getElementsByTagName("styleset");
+
+	for (int syntaxId = 0; syntaxId < SCINTILLA_MAX_SYNTAX; syntaxId++)
+	{
+		std::wstring syntax = ScintillaEditor::SyntaxDisplayName(syntaxId);
+	
+		mol::Element* styleSetElement = stylesetsElement->getElementById("syntax", mol::toUTF8(syntax));
+		if (styleSetElement)
+		{
+			std::string id = styleSetElement->attr("id");
+			std::string syntax = styleSetElement->attr("syntax");
+
+			mol::punk<AxStyleSet::Instance> axStyleSet;
+			AxStyleSet::CreateInstance(atoi(id.c_str()), &axStyleSet);
+
+			mol::NodeList keywords = styleSetElement->getElementsByTagName("keywords");
+			int len = keywords.length();
+			for (int j = 0; j < len; j++)
+			{
+				mol::Node* kw = keywords.item(j);
+				mol::Element* e = (mol::Element*)kw;
+				std::string txt = e->innerXml();
+				axStyleSet->AddKeyWords(mol::bstr(txt));
+			}
+
+			mol::NodeList styles = styleSetElement->getElementsByTagName("style");
+			len = styles.length();
+			for (int j = 0; j < len; j++)
+			{
+				mol::Node* s = styles.item(j);
+				mol::Element* e = (mol::Element*)s;
+
+				std::string id = e->attr("id");
+				std::string desc = e->attr("desc");
+				std::string font = e->attr("font");
+				std::string fs = e->attr("font-size");
+				std::string bold = e->attr("bold");
+				std::string italic = e->attr("italic");
+				std::string eol = e->attr("eol");
+				std::string bgcol = e->attr("background-color");
+				std::string forecol = e->attr("foreground-color");
+
+				mol::punk<AxStyle::Instance> axStyle;
+				AxStyle::CreateInstance(&axStyle);
+				axStyle->put_Id(atoi(id.c_str()));
+				axStyle->put_Description(mol::bstr(desc));
+				axStyle->put_Fontname(mol::bstr(font));
+				axStyle->put_Fontsize(atoi(fs.c_str()));
+				axStyle->put_Forecolor(mol::bstr(forecol));
+				axStyle->put_Backcolor(mol::bstr(bgcol));
+				axStyle->put_Bold(bold == "true" ? VARIANT_TRUE : VARIANT_FALSE);
+				axStyle->put_Italic(italic == "true" ? VARIANT_TRUE : VARIANT_FALSE);
+				axStyle->put_Eol(eol == "true" ? VARIANT_TRUE : VARIANT_FALSE);
+
+				axStyleSet->Add(axStyle);
+			}
+			collection_.push_back(mol::variant(axStyleSet));
+
+		}
+	}
+
+	return S_OK;
+}
+
+HRESULT __stdcall AxStyleSets::get_XML(BSTR* xml)
+{
+	mol::XMLDocument doc;
+	mol::Element* root = doc.documentElement();
+	mol::Element* stylesets = doc.createElement("stylesets");
+	root->appendChild(stylesets);
+
+	for (size_t pos = 0; pos < collection_.size(); pos++)
+	{
+		auto& v = collection_[pos];
+		mol::Element* styleset = doc.createElement("styleset");
+
+		stylesets->appendChild(styleset);
+		if (v.isType(VT_UNKNOWN) || v.isType(VT_DISPATCH))
+		{
+			mol::punk<IScintillAxStyleSet> axStyleSet(v.punkVal);
+			if (axStyleSet)
+			{
+				std::wstring syntax = ScintillaEditor::SyntaxDisplayName(pos);
+				styleset->setAttribute("syntax", mol::toUTF8(syntax));
+
+				long id;
+				axStyleSet->get_Id(&id);
+				styleset->setAttribute("id", std::to_string(id));
+
+				long cnt = 0;
+				axStyleSet->CountKeyWords(&cnt);
+				for (long i = 0; i < cnt; i++)
+				{
+					mol::bstr kw;
+					axStyleSet->GetKeyWord(i, &kw);
+					mol::Element* keywords = doc.createElement("keywords");
+					styleset->appendChild(keywords);
+					mol::Text* txt = doc.createTextNode(mol::toUTF8(kw.towstring()));
+					keywords->appendChild(txt);
+				}
+
+				axStyleSet->get_Count(&cnt);
+				for (long i = 0; i < cnt; i++)
+				{
+					mol::punk<IScintillAxStyle> axStyle;
+					axStyleSet->Item(mol::variant(i), &axStyle);
+
+					mol::Element* style = doc.createElement("style");
+					styleset->appendChild(style);
+
+					long id = 0;
+					axStyle->get_Id(&id);
+					style->setAttribute("id", std::to_string(id));
+
+					mol::bstr desc;
+					axStyle->get_Description(&desc);
+					style->setAttribute("desc", desc.tostring());
+
+					mol::bstr col;
+					axStyle->get_Backcolor(&col);
+					style->setAttribute("background-color", col.tostring());
+
+					VARIANT_BOOL vb;
+					axStyle->get_Bold(&vb);
+					style->setAttribute("bold", vb == VARIANT_TRUE ? "true" : "false");
+
+					VARIANT_BOOL eol;
+					axStyle->get_Eol(&eol);
+					style->setAttribute("eol", vb == VARIANT_TRUE ? "true" : "false");
+
+					mol::bstr font;
+					axStyle->get_Fontname(&font);
+					style->setAttribute("font", font.tostring());
+
+					long font_size;
+					axStyle->get_Fontsize(&font_size);
+					style->setAttribute("font-size", std::to_string(font_size));
+
+					mol::bstr forecol;
+					axStyle->get_Forecolor(&forecol);
+					style->setAttribute("foreground-color", forecol.tostring());
+
+					VARIANT_BOOL italic;
+					axStyle->get_Italic(&italic);
+					style->setAttribute("italic", vb == VARIANT_TRUE ? "true" : "false");
+				}
+			}
+		}
+	}
+
+	std::string s = doc.toString();
+	*xml = ::SysAllocString(mol::towstring(s).c_str());
+
+	return S_OK;
+}
+
 
 
 HRESULT __stdcall  AxStyleSets::_NewEnum(IEnumVARIANT** newEnum)
@@ -513,7 +693,7 @@ HRESULT __stdcall  AxStyleSets::get_Count( long* cnt)
 	if (!cnt)
 		return E_INVALIDARG;
 
-	*cnt = collection_.size();
+	*cnt = (long)collection_.size();
 	return S_OK;
 }
 
@@ -554,7 +734,8 @@ HRESULT __stdcall AxStyleSets::Load( LPSTREAM pStm)
 			long id = 0;
 			pStm >> mol::property(&id);
 
-			mol::punk<IScintillAxStyleSet> styleSet = AxStyleSet::CreateInstance(id);
+			mol::punk<AxStyleSet::Instance> styleSet;
+			AxStyleSet::CreateInstance(id,&styleSet);
 			mol::punk<IPersistStream> ps(styleSet);
 			if(ps)
 			{
@@ -589,7 +770,7 @@ HRESULT __stdcall AxStyleSets::Load( LPSTREAM pStm)
 
 HRESULT __stdcall AxStyleSets::Save( LPSTREAM pStm,BOOL fClearDirty)
 {
-	long cnt = collection_.size();
+	long cnt = (long)collection_.size();
 	pStm << mol::property(&cnt);
 
 	for ( long i = 0; i < cnt; i++)
@@ -659,7 +840,10 @@ const char* rgb2hex( COLORREF col )
 
 HRESULT make_style( Style& style, AxStyle** result)
 {
-	*result = AxStyle::CreateInstance();
+	AxStyle::Instance* inst;
+	AxStyle::CreateInstance(&inst);
+	*result = inst;
+
 	(*result)->put_Bold(style.bold_ ? VARIANT_TRUE : VARIANT_FALSE);
 	(*result)->put_Italic(style.italic_ ? VARIANT_TRUE : VARIANT_FALSE);
 	(*result)->put_Eol(style.eol_ ? VARIANT_TRUE : VARIANT_FALSE);
@@ -668,13 +852,15 @@ HRESULT make_style( Style& style, AxStyle** result)
 	(*result)->put_Forecolor(mol::bstr(rgb2hex(style.foreColor_)));
 	(*result)->put_Backcolor(mol::bstr(rgb2hex(style.backColor_)));
 	(*result)->desc_ = style.description_;
-	(*result)->id_ = style.style_;
+	(*result)->id_ = (long)style.style_;
 	return S_OK;
 }
 
 HRESULT make_set( long id, Style* styles, int nStyles, AxStyleSet** result)
 {
-	*result = AxStyleSet::CreateInstance(id);
+	AxStyleSet::Instance* inst;
+	AxStyleSet::CreateInstance(id,&inst);
+	*result = inst;
 
 	for ( int i = 0; i < nStyles; i++)
 	{
@@ -743,12 +929,12 @@ HRESULT __stdcall AxStyleSets::InitNew()
 
 /////////////////////////////////////////////////////////////////
 
-AxStyleSet::Instance* AxStyleSet::CreateInstance(long id)
+void AxStyleSet::CreateInstance(long id,Instance** inst)
 {
 	Instance* d = new Instance; 
 	d->AddRef();
 	d->id_ = id;
-	return d;
+	*inst = d;
 }
 
 
@@ -764,7 +950,7 @@ HRESULT __stdcall  AxStyleSet::_NewEnum(IEnumVARIANT** newEnum)
 
 HRESULT __stdcall  AxStyleSet::get_Count( long* cnt)
 {
-	*cnt = collection_.size();
+	*cnt = (long)collection_.size();
 	return S_OK;
 }
 
@@ -798,13 +984,22 @@ HRESULT __stdcall  AxStyleSet::get_Id(  long *id)
 	return S_OK;
 }
 
+HRESULT __stdcall AxStyleSet::Add(IScintillAxStyle* s)
+{
+	if(!s)
+		return E_INVALIDARG;
+	collection_.push_back(mol::variant(s));
+	return S_OK;
+
+}
+
 
 HRESULT __stdcall AxStyleSet::CountKeyWords(long* cnt)
 {
 	if (!cnt)
 		return E_INVALIDARG;
 
-	*cnt = keyWords_.size();
+	*cnt = (long)keyWords_.size();
 	return S_OK;
 }
 
@@ -840,7 +1035,8 @@ HRESULT __stdcall AxStyleSet::Load( LPSTREAM pStm)
 	{
 		for ( long i = 0; i < cnt; i++)
 		{
-			mol::punk<IScintillAxStyle> style = AxStyle::CreateInstance();
+			mol::punk<AxStyle::Instance> style;
+			AxStyle::CreateInstance(&style);
 			mol::punk<IPersistStream> ps(style);
 			if(ps)
 			{
@@ -871,7 +1067,7 @@ HRESULT __stdcall AxStyleSet::Load( LPSTREAM pStm)
 
 HRESULT __stdcall AxStyleSet::Save( LPSTREAM pStm,BOOL fClearDirty)
 {
-	long cnt = collection_.size();
+	long cnt = (long)collection_.size();
 	pStm << mol::property(&cnt);
 
 	for ( long i = 0; i < cnt; i++)
@@ -892,7 +1088,7 @@ HRESULT __stdcall AxStyleSet::Save( LPSTREAM pStm,BOOL fClearDirty)
 	//if(hr != S_OK)
 	//	return hr;
 
-	cnt = keyWords_.size();
+	cnt = (long)keyWords_.size();
 	pStm << mol::property(&cnt);
 	for ( long i = 0; i < cnt; i++)
 	{
@@ -934,11 +1130,11 @@ HRESULT __stdcall AxStyleSet::InitNew()
 
 /////////////////////////////////////////////////////////////////
 
-AxStyle::Instance* AxStyle::CreateInstance()
+void AxStyle::CreateInstance(Instance** inst)
 {
 	Instance* d = new Instance; 
 	d->AddRef();
-	return d;
+	*inst = d;
 }
 
 HRESULT __stdcall  AxStyle::get_Id(  long *id)
@@ -949,11 +1145,23 @@ HRESULT __stdcall  AxStyle::get_Id(  long *id)
 	return S_OK;
 }
 
+HRESULT __stdcall  AxStyle::put_Id(long id)
+{
+	id_ = id;
+	return S_OK;
+}
+
 HRESULT __stdcall  AxStyle::get_Description(  BSTR *desc)
 {
 	if(!desc)
 		return E_INVALIDARG;
 	*desc = ::SysAllocString(desc_);
+	return S_OK;
+}
+
+HRESULT __stdcall  AxStyle::put_Description(BSTR desc)
+{
+	desc_ = desc;
 	return S_OK;
 }
 

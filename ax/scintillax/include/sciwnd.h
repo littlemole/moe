@@ -72,7 +72,7 @@ public:
 
 	};
 
-	int printPage ( bool bDraw, Sci_RangeToFormat *pfr)
+	LRESULT printPage ( bool bDraw, Sci_RangeToFormat *pfr)
 	{
 		return sendMessage( SCI_FORMATRANGE, (WPARAM)bDraw , (LPARAM)pfr );		
 	}
@@ -103,11 +103,11 @@ public:
 
         searchOptions_ = options;
         chrg.cpMin = nextSearchPos_;
-        chrg.cpMax = getLength();
+        chrg.cpMax = (int)getLength();
 
         if ( 0 == (options & FR_DOWN) )
         {
-			int len = getLength();
+			int len = (int)getLength();
 
             if ( nextSearchPos_ == 0 )
                 chrg.cpMin = len-nextSearchPos_;//
@@ -117,7 +117,7 @@ public:
         ft.lpstrText = (char*)(what.c_str());
         ft.chrg = chrg;
 
-		int r = findText(options,&ft);
+		int r = (int) findText(options,&ft);
 
 		if ( r == -1 )
         {
@@ -161,11 +161,11 @@ public:
 
         searchOptions_ = options;
         chrg.cpMin = nextSearchPos_;
-        chrg.cpMax = this->getLength();
+        chrg.cpMax = (int)this->getLength();
 
         if ( !(options & FR_DOWN) )
         {
-			int len = this->getLength();
+			int len = (int)this->getLength();
 
             if ( nextSearchPos_ == 0 )
                 chrg.cpMin = len-nextSearchPos_;//
@@ -175,7 +175,7 @@ public:
         ft.lpstrText = (char*)(what.c_str());
         ft.chrg = chrg;
 
-		int r = this->findText(options,&ft);
+		int r = (int) this->findText(options,&ft);
 	
 		if ( r == -1 )
         {
@@ -205,13 +205,13 @@ public:
 	std::string get_Text()
 	{
 		std::string txt;
-		int len = getLength();
+		int len = (int) getLength();
 		mol::cbuff buf(len+1);
-		int lr = sendMessage( SCI_GETTEXT, (WPARAM)len+1 , (LPARAM)(char*)buf );	
+		LRESULT lr = sendMessage( SCI_GETTEXT, (WPARAM)len+1 , (LPARAM)(char*)buf );
 		return buf.toString(lr);
 	}
 
-	int getSelTextLen()
+	LRESULT getSelTextLen()
 	{
 		return sendMessage( SCI_GETSELTEXT, (WPARAM)0, (LPARAM)0 );		
 	}
@@ -219,43 +219,43 @@ public:
 	std::string getSelText()
 	{
 		std::string txt;
-		int len = getSelTextLen();
+		LRESULT len = getSelTextLen();
 
 		mol::cbuff buf(len+1);
-		int lr = sendMessage( SCI_GETSELTEXT, (WPARAM)len , (LPARAM)(char*)buf );	
+		LRESULT lr = sendMessage( SCI_GETSELTEXT, (WPARAM)len , (LPARAM)(char*)buf );
 		return buf.toString(lr);
 	}
 
 	std::string getLine(int line)
 	{
 		std::string txt;
-		int len = sendMessage( SCI_GETLINE, (WPARAM)0 , (LPARAM)0 );	
+		LRESULT len = sendMessage( SCI_GETLINE, (WPARAM)0 , (LPARAM)0 );
 		mol::cbuff buf(len+1);
-		int lr = sendMessage( SCI_GETLINE, (WPARAM)len , (LPARAM)(char*)buf );		
+		LRESULT lr = sendMessage( SCI_GETLINE, (WPARAM)len , (LPARAM)(char*)buf );
 		return buf.toString(lr);
 	}
 
-	int insertText(const std::string& txt, int p = -1)
+	LRESULT insertText(const std::string& txt, int p = -1)
 	{
 		if ( p == -1 )
-			p = pos();
+			p = (int)pos();
 		int pos = p + (int)txt.size();
 		sendMessage( SCI_INSERTTEXT, (WPARAM)p, (LPARAM)txt.c_str() );		
 		this->setSel(pos,pos);
 		return TRUE;
 	}
 
-	int replaceSel(const std::string& txt)
+	LRESULT replaceSel(const std::string& txt)
 	{
 		return sendMessage( SCI_REPLACESEL, (WPARAM)0 , (LPARAM)(txt.c_str()) );		
 	}
 
-	int setSel(int anchorPos, int currentPos)
+	LRESULT setSel(int anchorPos, int currentPos)
 	{
 		return sendMessage( SCI_SETSEL, (WPARAM)anchorPos , (LPARAM)currentPos );		
 	}
 
-	int getSelStart()
+	LRESULT getSelStart()
 	{
 		return sendMessage( SCI_GETSELECTIONSTART, (WPARAM)0 , (LPARAM)0 );		
 	}
@@ -270,44 +270,44 @@ public:
 		sendMessage( SCI_SETSELECTIONEND, (WPARAM)pos , (LPARAM)0 );		
 	}
 
-	int getSelEnd()
+	LRESULT getSelEnd()
 	{
 		return sendMessage( SCI_GETSELECTIONEND, (WPARAM)0 , (LPARAM)0 );		
 	}
 
-	int getModified()
+	LRESULT getModified()
 	{
 		return sendMessage( SCI_GETMODIFY, (WPARAM)0 , (LPARAM)0 );		
 	}
 
-	int setReadOnly(bool b)
+	LRESULT setReadOnly(bool b)
 	{
 		return sendMessage( SCI_SETREADONLY, (WPARAM)b , (LPARAM)0 );		
 	}
 
-	int getReadOnly(bool b)
+	LRESULT getReadOnly(bool b)
 	{
 		return sendMessage( SCI_GETREADONLY, (WPARAM)0 , (LPARAM)0 );		
 	}
 
-	int setText(const std::string& txt)
+	LRESULT setText(const std::string& txt)
 	{
 		return  sendMessage( SCI_SETTEXT, (WPARAM)0, (LPARAM)(txt.c_str()) );		
 	}
 
-	int setText(const char* c)
+	LRESULT setText(const char* c)
 	{
 		return  sendMessage( SCI_SETTEXT, (WPARAM)0, (LPARAM)(c) );		
 	}
 
 
-	int setText(const char* c, int size)
+	LRESULT setText(const char* c, int size)
 	{
 		sendMessage( SCI_SETTEXT, (WPARAM)0, (LPARAM)("") );	
 		return  sendMessage( SCI_ADDTEXT, (WPARAM)size, (LPARAM)(c) );		
 	}
 
-	int getText(char* c, int size)
+	LRESULT getText(char* c, int size)
 	{
 		return  sendMessage( SCI_GETTEXT, (WPARAM)size, (LPARAM)c );	
 	}
@@ -324,77 +324,77 @@ public:
 		return ret;
 	}
 
-	int appendText(const std::string& txt)
+	LRESULT appendText(const std::string& txt)
 	{
 		return  sendMessage( SCI_APPENDTEXT, (WPARAM)txt.size(), (LPARAM)(txt.c_str()) );		
 	}
 
-	int setStyleBits(int bits)
+	LRESULT setStyleBits(int bits)
 	{
-		return  sendMessage( SCI_SETSTYLEBITS, (WPARAM)bits, (LPARAM)0 );		
+		return  0;// sendMessage(SCI_SETSTYLEBITS, (WPARAM)bits, (LPARAM)0);
 	}
 
-	int getLength()
+	LRESULT getLength()
 	{
 		return sendMessage( SCI_GETLENGTH, (WPARAM)0 , (LPARAM)0 );
 	}
 
-	int getCharAt(int pos)
+	LRESULT getCharAt(int pos)
 	{
 		return sendMessage( SCI_GETCHARAT, (WPARAM)pos , (LPARAM)0 );
 	}
 
-	int getLineLength(int line)
+	LRESULT getLineLength(int line)
 	{
 		return sendMessage( SCI_LINELENGTH, (WPARAM)line , (LPARAM)0 );
 	}
 
-	int getLineCount()
+	LRESULT getLineCount()
 	{
 		return sendMessage( SCI_GETLINECOUNT, (WPARAM)0 , (LPARAM)0 );
 	}
 
-	int getFirstVisibleLine()
+	LRESULT getFirstVisibleLine()
 	{
 		return sendMessage( SCI_GETFIRSTVISIBLELINE, (WPARAM)0 , (LPARAM)0 );
 	}
 
-	int getLinesOnScreen()
+	LRESULT getLinesOnScreen()
 	{
 		return sendMessage( SCI_LINESONSCREEN, (WPARAM)0 , (LPARAM)0 );
 	}
 
-	int gotoLine(int line)
+	LRESULT gotoLine(int line)
 	{
 		return sendMessage( SCI_GOTOLINE, (WPARAM)line , (LPARAM)0 );
 	}
 
-	int lineFromPos(int pos)
+	LRESULT lineFromPos(int pos)
 	{
 		return sendMessage( SCI_LINEFROMPOSITION, (WPARAM)pos , (LPARAM)0 );
 	}
 
-	int lineEndPos(int line)
+	LRESULT lineEndPos(int line)
 	{
 		return sendMessage( SCI_GETLINEENDPOSITION, (WPARAM)line , (LPARAM)0 );
 	}
 
-	int posFromLine(int line)
+	LRESULT posFromLine(int line)
 	{
 		return sendMessage( SCI_POSITIONFROMLINE, (WPARAM)line , (LPARAM)0 );
 	}
 
-	int pos()
+	LRESULT pos()
 	{
 		return sendMessage( SCI_GETCURRENTPOS, (WPARAM)0 , (LPARAM)0 );
 	}
 
-	void pos(int pos)
+	LRESULT pos(int pos)
 	{
-		sendMessage( SCI_SETCURRENTPOS, (WPARAM)pos , (LPARAM)0 );
+		return sendMessage( SCI_SETCURRENTPOS, (WPARAM)pos , (LPARAM)0 );
 	}
 
-	int anchor()
+	LRESULT anchor()
 	{
 		return sendMessage( SCI_GETANCHOR, (WPARAM)0 , (LPARAM)0 );
 	}
@@ -404,72 +404,72 @@ public:
 		sendMessage( SCI_SETANCHOR, (WPARAM)pos , (LPARAM)0 );
 	}
 
-	int findText(int searchFlags, Sci_TextToFind *ttf)
+	LRESULT findText(int searchFlags, Sci_TextToFind *ttf)
 	{
 		return sendMessage( SCI_FINDTEXT, (WPARAM)searchFlags , (LPARAM)ttf );
 	}
 
-	int setSavePoint()
+	LRESULT setSavePoint()
 	{
 		return sendMessage( SCI_SETSAVEPOINT, (WPARAM)0 , (LPARAM)0 );
 	}
 
-	int cut()
+	LRESULT cut()
 	{
 		return sendMessage( SCI_CUT, (WPARAM)0 , (LPARAM)0 );
 	}
 
-	int copy()
+	LRESULT copy()
 	{
 		return sendMessage( SCI_COPY, (WPARAM)0 , (LPARAM)0 );
 	}
 
-	int paste()
+	LRESULT paste()
 	{
 		return sendMessage( SCI_PASTE, (WPARAM)0 , (LPARAM)0 );
 	}
 
-	int undo()
+	LRESULT undo()
 	{
 		return sendMessage( SCI_UNDO, (WPARAM)0 , (LPARAM)0 );
 	}
 
-	int redo()
+	LRESULT redo()
 	{
 		return sendMessage( SCI_REDO, (WPARAM)0 , (LPARAM)0 );
 	}
 
-	int styleClearAll()
+	LRESULT styleClearAll()
 	{
 		return sendMessage( SCI_STYLECLEARALL, (WPARAM)0 , (LPARAM)0 );
 	}
 
-	int styleSetFont(int style, const std::string& font)
+	LRESULT styleSetFont(int style, const std::string& font)
 	{
 		return sendMessage( SCI_STYLESETFONT, (WPARAM)style , (LPARAM)(font.c_str()) );
 	}
 
-	int styleSetSize(int style, int size)
+	LRESULT styleSetSize(int style, int size)
 	{
 		return sendMessage( SCI_STYLESETSIZE, (WPARAM)style , (LPARAM)size );
 	}
 
-	int styleSetBold(int style, bool bold)
+	LRESULT styleSetBold(int style, bool bold)
 	{
 		return sendMessage( SCI_STYLESETBOLD, (WPARAM)style , (LPARAM)bold );
 	}
 
-	int styleSetItalic(int style, bool bold)
+	LRESULT styleSetItalic(int style, bool bold)
 	{
 		return sendMessage( SCI_STYLESETITALIC, (WPARAM)style , (LPARAM)bold );
 	}
 
-	int styleSetUnderline(int style, bool bold)
+	LRESULT styleSetUnderline(int style, bool bold)
 	{
 		return sendMessage( SCI_STYLESETUNDERLINE, (WPARAM)style , (LPARAM)bold );
 	}
 
-	int styleSetFore(int style, int col)
+	LRESULT styleSetFore(int style, int col)
 	{
 		if (style == STYLE_LINENUMBER)
 		{
@@ -479,7 +479,7 @@ public:
 		return sendMessage( SCI_STYLESETFORE, (WPARAM)style , (LPARAM)col );
 	}
 
-	int styleSetBack(int style, int col)
+	LRESULT styleSetBack(int style, int col)
 	{
 		if (style == STYLE_LINENUMBER)
 		{
@@ -488,229 +488,229 @@ public:
 		return sendMessage( SCI_STYLESETBACK, (WPARAM)style , (LPARAM)col );
 	}
 
-	int styleSetEolFilled(int style, bool filled)
+	LRESULT styleSetEolFilled(int style, bool filled)
 	{
 		return sendMessage( SCI_STYLESETEOLFILLED, (WPARAM)style , (LPARAM)filled );
 	}
 
-	int styleSetCharacterSet(int style, int set)
+	LRESULT styleSetCharacterSet(int style, int set)
 	{
 		return sendMessage( SCI_STYLESETCHARACTERSET, (WPARAM)style , (LPARAM)set );
 	}
 
 
-	int setCaretForeCol(int col)
+	LRESULT setCaretForeCol(int col)
 	{
 		return sendMessage(SCI_SETCARETFORE, (WPARAM)col, (LPARAM)col);
 	}
 
-	int setCodePage(int cp)
+	LRESULT setCodePage(int cp)
 	{
 		return sendMessage( SCI_SETCODEPAGE, (WPARAM)cp , (LPARAM)0 );
 	}
 
-	int getCodePage()
+	LRESULT getCodePage()
 	{
 		return sendMessage( SCI_GETCODEPAGE, (WPARAM)0 , (LPARAM)0 );
 	}
 
-	int getTabWidth()
+	LRESULT getTabWidth()
 	{
 		return sendMessage( SCI_GETTABWIDTH, (WPARAM)0 , (LPARAM)0 );
 	}
 
-	int setTabWidth(int w)
+	LRESULT setTabWidth(int w)
 	{
 		return sendMessage( SCI_SETTABWIDTH, (WPARAM)w , (LPARAM)0 );
 	}
 
-	int setUseTabs(bool b)
+	LRESULT setUseTabs(bool b)
 	{
 		return sendMessage( SCI_SETUSETABS, (WPARAM)b , (LPARAM)0 );
 	}
 
-	int getUseTabs()
+	LRESULT getUseTabs()
 	{
 		return sendMessage( SCI_GETUSETABS, (WPARAM)0 , (LPARAM)0 );
 	}
 
-	int setLexer(int lexer)
+	LRESULT setLexer(int lexer)
 	{
 		return sendMessage( SCI_SETLEXER, (WPARAM)lexer , (LPARAM)0 );
 	}
 
-	int getLexer()
+	LRESULT getLexer()
 	{
 		return sendMessage( SCI_GETLEXER, (WPARAM)0 , (LPARAM)0 );
 	}
 
-	int colorize(int start, int end = -1)
+	LRESULT colorize(int start, int end = -1)
 	{
 		return sendMessage( SCI_COLOURISE, (WPARAM)start , (LPARAM)end );
 	}
 
-	int setKeywords(int keySet, const std::string& keyList )
+	LRESULT setKeywords(int keySet, const std::string& keyList )
 	{
 		return sendMessage( SCI_SETKEYWORDS, (WPARAM)keySet , (LPARAM)(keyList.c_str()) );
 	}
 
-	int setMarginType(int margin, int type)
+	LRESULT setMarginType(int margin, int type)
 	{
 		return sendMessage( SCI_SETMARGINTYPEN, (WPARAM)margin , (LPARAM)(type) );
 	}
 
-	int getMarginType(int margin )
+	LRESULT getMarginType(int margin )
 	{
 		return sendMessage( SCI_GETMARGINTYPEN, (WPARAM)margin , (LPARAM)(0) );
 	}
 
-	int setMarginWidth(int margin, int w)
+	LRESULT setMarginWidth(int margin, int w)
 	{
 		return sendMessage( SCI_SETMARGINWIDTHN, (WPARAM)margin , (LPARAM)(w) );
 	}
 
-	int getMarginWidth(int margin )
+	LRESULT getMarginWidth(int margin )
 	{
 		return sendMessage( SCI_SETMARGINWIDTHN, (WPARAM)margin , (LPARAM)(0) );
 	}
 
-	int setMarginStyle(int margin) 
+	LRESULT setMarginStyle(int margin)
 	{
 		 sendMessage(SCI_SETMARGINTYPEN, margin, SC_MARGIN_FORE);
 		return sendMessage(SCI_SETMARGINTYPEN, margin, SC_MARGIN_BACK);
 	}
 
-	int setOvertype(bool b)
+	LRESULT setOvertype(bool b)
 	{
 		return sendMessage( SCI_SETOVERTYPE, (WPARAM)b , (LPARAM)(0) );
 	}
 
-	int getOvertype()
+	LRESULT getOvertype()
 	{
 		return sendMessage( SCI_GETOVERTYPE, (WPARAM)0 , (LPARAM)(0) );
 	}
 
-	int lineScroll(int col, int line)
+	LRESULT lineScroll(int col, int line)
 	{
 		return sendMessage( SCI_LINESCROLL, (WPARAM)col , (LPARAM)(line) );
 	}
 
-	int scrollCaret()
+	LRESULT scrollCaret()
 	{
 		return sendMessage( SCI_SCROLLCARET, (WPARAM)0 , (LPARAM)(0) );
 	}
 
-	int getCaretWidth()
+	LRESULT getCaretWidth()
 	{
 		return sendMessage( SCI_SETCARETWIDTH, (WPARAM)0 , (LPARAM)(0) );
 	}
 
-	int setCaretWidth(int w )
+	LRESULT setCaretWidth(int w )
 	{
 		return sendMessage( SCI_GETCARETWIDTH, (WPARAM)w , (LPARAM)(0) );
 	}
 
-	int getFocus()
+	LRESULT getFocus()
 	{
 		return sendMessage( SCI_GETFOCUS, (WPARAM)0 , (LPARAM)(0) );
 	}
 
-	int getScrollWidth()
+	LRESULT getScrollWidth()
 	{
 		return sendMessage( SCI_GETSCROLLWIDTH, (WPARAM)0 , (LPARAM)(0) );
 	}
 
-	int setScrollWidth(int w)
+	LRESULT setScrollWidth(int w)
 	{
 		return sendMessage( SCI_SETSCROLLWIDTH, (WPARAM)w , (LPARAM)(0) );
 	}
 
-	int setUsePopUp(bool b)
+	LRESULT setUsePopUp(bool b)
 	{
 		return sendMessage( SCI_USEPOPUP, (WPARAM)b , (LPARAM)(0) );
 	}
 
-	int setIndent(int w)
+	LRESULT setIndent(int w)
 	{
 		return postMessage( SCI_SETINDENT, (WPARAM)w , (LPARAM)(0) );
 	}
 
-	int getIndent()
+	LRESULT getIndent()
 	{
 		return sendMessage( SCI_GETINDENT, (WPARAM)0 , (LPARAM)(0) );
 	}
 
-	int setLineIndent(int l,int w)
+	LRESULT setLineIndent(int l,int w)
 	{
 		return sendMessage( SCI_SETLINEINDENTATION, (WPARAM)l , (LPARAM)(w) );
 	}
 
-	int getLineIndent(int l)
+	LRESULT getLineIndent(int l)
 	{
 		return sendMessage( SCI_GETLINEINDENTATION, (WPARAM)l , (LPARAM)(0) );
 	}
 
-	int setTabIndents(bool b)
+	LRESULT setTabIndents(bool b)
 	{
 		return sendMessage( SCI_SETTABINDENTS, (WPARAM)b , (LPARAM)(0) );
 	}
 
-	int getTabIndents()
+	LRESULT getTabIndents()
 	{
 		return sendMessage( SCI_GETTABINDENTS, (WPARAM)0 , (LPARAM)(0) );
 	}
 
-	int setBackSpaceUnindents(bool b)
+	LRESULT setBackSpaceUnindents(bool b)
 	{
 		return sendMessage( SCI_SETBACKSPACEUNINDENTS, (WPARAM)b , (LPARAM)(0) );
 	}
 
-	int getBackSpaceUnindents()
+	LRESULT getBackSpaceUnindents()
 	{
 		return sendMessage( SCI_GETBACKSPACEUNINDENTS, (WPARAM)0 , (LPARAM)(0) );
 	}
 
-	int setViewEol(bool b)
+	LRESULT setViewEol(bool b)
 	{
 		return sendMessage( SCI_SETVIEWEOL, (WPARAM)b , (LPARAM)(0) );
 	}
 
-	int getViewEol()
+	LRESULT getViewEol()
 	{
 		return sendMessage( SCI_GETVIEWEOL, (WPARAM)0 , (LPARAM)(0) );
 	}
 
-	int setEolMode(int mode)
+	LRESULT setEolMode(int mode)
 	{
 		return sendMessage( SCI_SETEOLMODE, (WPARAM)mode , (LPARAM)(0) );
 	}
 
-	int getEolMode()
+	LRESULT getEolMode()
 	{
 		return sendMessage( SCI_GETEOLMODE, (WPARAM)0 , (LPARAM)(0) );
 	}
 
-	int convertEol(int mode)
+	LRESULT convertEol(int mode)
 	{
 		return sendMessage( SCI_CONVERTEOLS, (WPARAM)mode , (LPARAM)(0) );
 	}
 
-	int braceHighlight(int pos1, int pos2)
+	LRESULT braceHighlight(int pos1, int pos2)
 	{
 		return sendMessage( SCI_BRACEHIGHLIGHT, (WPARAM)pos1 , (LPARAM)(pos2) );
 	}
 
-	int braceMatch(int pos)
+	LRESULT braceMatch(int pos)
 	{
 		return sendMessage( SCI_BRACEMATCH, (WPARAM)pos , (LPARAM)(0) );
 	}
 
-	int setZoom(int zoom)
+	LRESULT setZoom(int zoom)
 	{
 		return sendMessage( SCI_SETZOOM, (WPARAM)zoom , (LPARAM)(0) );
 	}
 
-	int getZoom()
+	LRESULT getZoom()
 	{
 		return sendMessage( SCI_GETZOOM, (WPARAM)0 , (LPARAM)(0) );
 	}
@@ -767,7 +767,7 @@ public:
 		for( std::set<LRESULT>::iterator it = markers_.begin(); it != markers_.end(); it++)
 		{
 			LRESULT markerhandler = (*it);
-			int l = sendMessage( SCI_MARKERLINEFROMHANDLE, (WPARAM)markerhandler , (LPARAM)(0) );
+			LRESULT l = sendMessage( SCI_MARKERLINEFROMHANDLE, (WPARAM)markerhandler , (LPARAM)(0) );
 			if ( l == line )
 			{				
 				markers_.erase(markerhandler);
@@ -783,8 +783,8 @@ public:
 		for( std::set<LRESULT>::iterator it = markers_.begin(); it != markers_.end(); it++)
 		{
 			LRESULT markerhandler = (*it);
-			int line = sendMessage( SCI_MARKERLINEFROMHANDLE, (WPARAM)markerhandler , (LPARAM)(0) );
-			int pos = posFromLine(line);
+			int line = (int)sendMessage( SCI_MARKERLINEFROMHANDLE, (WPARAM)markerhandler , (LPARAM)(0) );
+			int pos = (int)posFromLine(line);
 			lines.insert(pos);
 		}
 		return lines;
@@ -792,7 +792,7 @@ public:
 
 	bool hasMarker(int line, int mask = 0x04)
 	{
-		int val = sendMessage( SCI_MARKERGET, (WPARAM)(line), (LPARAM)(0) );
+		LRESULT val = sendMessage( SCI_MARKERGET, (WPARAM)(line), (LPARAM)(0) );
 		if ( mask & val )
 		{
 			return true;
@@ -833,7 +833,7 @@ public:
 
 		//	sendMessage(SCI_SETMARGINTYPEN, (WPARAM)(2) ,(LPARAM)(SC_MARGIN_BACK));
 		//	sendMessage(SCI_SETMARGINTYPEN, (WPARAM)(2), (LPARAM)(SC_MARGIN_FORE));
-			setCaretForeCol(fore);
+			setCaretForeCol((int)fore);
 			return;
 		}
 		sendMessage( SCI_SETMARGINWIDTHN, (WPARAM)(2), (LPARAM)(0) );

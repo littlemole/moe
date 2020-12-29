@@ -44,8 +44,8 @@ HRESULT __stdcall SciAxSelection::GetSelection	( long* first, long* last)
 
 	if ( first && last )
 	{
-		*first = sci_->edit()->getSelStart();
-		*last  = sci_->edit()->getSelEnd();
+		*first = (long) sci_->edit()->getSelStart();
+		*last  = (long) sci_->edit()->getSelEnd();
 	}
 	return S_OK;
 }
@@ -95,7 +95,7 @@ HRESULT __stdcall SciAxSelection::get_Start( long* pos)
 
 	if ( pos )
 	{
-		*pos = sci_->edit()->getSelStart();
+		*pos = (long)sci_->edit()->getSelStart();
 	}
 	return S_OK; 
 }
@@ -121,7 +121,7 @@ HRESULT __stdcall SciAxSelection::get_End( long* pos)
 
 	if ( pos )
 	{
-		*pos = sci_->edit()->getSelEnd();
+		*pos = (long)sci_->edit()->getSelEnd();
 	}
 	return S_OK; 
 }

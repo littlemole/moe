@@ -71,7 +71,7 @@ HRESULT __stdcall SciAxText::GetText( BSTR* text)
 
 	if ( text )
 	{
-		int s = sci_->edit()->getLength();
+		int s = (int)sci_->edit()->getLength();
 		char* c = new char[s+1];
 		sci_->edit()->getText(c,s+1);
 		c[s] = 0;
@@ -93,7 +93,7 @@ HRESULT __stdcall SciAxText::get_Length( long* size)
 
 	if ( size )
 	{
-		*size = sci_->edit()->getLength();
+		*size = (long)sci_->edit()->getLength();
 	}
 	return S_OK; 
 }

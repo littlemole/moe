@@ -1,0 +1,375 @@
+  body,div,button {
+    padding:0px;
+    margin:0px;
+	font-family: Segoe UI;
+  }
+
+  div {
+	xbackground-color: #f1f1f1;
+	xborder:1px solid #f1f1f1;
+  }
+
+  select {
+	width:70px;
+  }
+
+  label {
+	cursor: pointer;
+  }
+
+  #ribbon {
+	width: 100vw;
+	height: 99px;
+	background-color: #f1f1f1;
+	border:0px sloid black;
+	border-bottom: 1px solid #ccc;
+	display:none;
+  }
+
+  /* commons */
+
+	img {
+		width:48px;
+		height:auto;
+	}
+
+	img.img-small {
+		width:24px;
+		height:auto;
+	}
+
+	div.viewbar > div > img {
+		width:18px;
+		height:auto;
+	}
+
+	.center {
+		text-align:center;
+		justify-content:center;
+		align-items:center;
+	}
+
+	.fixed {
+		flex: 0; 
+	}
+
+	.stretch {
+		flex:1;
+	}
+
+	.row {
+		flex-direction:row;
+	}
+
+	.column {
+		flex-direction:column;
+	}
+
+	div.hover {
+	  background-color: #f1f1f1;
+	  border: 1px solid #f1f1f1;
+	  border-radius:5px;
+	}
+
+	div.hover:hover {
+	  background-color: #ddd;
+	  border: 1px solid #aaa;
+	}
+
+	.flex {
+	  display: flex;
+	}
+
+	.recent {
+		padding:1px;
+		width:100%;
+		background-color: #f1f1f1;
+		font-size:0.8em;
+	}
+
+	.recent h4 {
+		padding:4px;
+		font-weight:bold;
+		margin:2px 0px;
+		background-color:#ddd;
+		color:#555;
+	}
+
+	div.divider {
+		width:0px;
+		padding:0px;
+		margin: 5px;
+		border-left:1px solid #ccc;
+	}
+
+	.down { 
+		float:right;
+		position:relative;
+		right:5px;
+		font-size:12px;
+		color:#666;
+		margin-left:5px;
+	}
+
+	div.toggle {
+		border: 1px solid #aaa;
+		border-radius:5px;
+	}
+
+	div.toggle > img{
+		width:30px;
+		height:30px;
+	}
+
+    div .active {
+	  background-color: #ccc;
+	  border: 1px solid #aaa;
+	  border-radius:5px;
+	  box-shadow: inset 0px 0px 5px #c1c1c1;
+    }
+
+   /* Style the tab */
+  .tab {
+	overflow: hidden;
+	border-bottom: 1px solid #ccc;
+	background-color: #f1f1f1;
+  }
+
+  /* Style the buttons that are used to open the tab content */
+  .tab button {
+	background-color: inherit;
+	float: left;
+	border: 1px solid #f1f1f1;
+	outline: none;
+	cursor: pointer;
+	padding: 6px 6px;
+	transition: 0.3s;
+  }
+
+  /* Change background color of buttons on hover */
+  .tab button:hover {
+	background-color: #ddd;
+
+  }
+
+  /* Create an active/current tablink class */
+  .tab button.active {
+	background-color: #ccc;
+	border-radius:0px;
+	xborder:0px;
+  }
+
+  /* Style the tab content */
+  .tabcontent {
+	xdisplay: none;
+	padding: 6px 6px;
+	xborder: 1px solid #ccc;
+	xborder-top: none;
+  } 
+
+
+  /* buttons and button groups */
+
+  div.button {
+	display:flex;
+	flex-direction:column;
+	padding: 2px 6px;
+    xtext-align:center;
+	cursor:pointer;
+	justify-content:center;
+  }
+
+  div.one-button {
+	flex-direction: column;
+	padding: 6px 6px;
+	justify-content:center;
+	text-align:center;
+	cursor:pointer;
+  }
+
+  div.one-and-a-half-buttons {
+	flex-direction: column;
+	height:90px;
+	justify-content:center;
+  }
+
+  div.one-and-a-half-buttons > div {
+	text-align:center;
+	justify-content:center;
+  }
+
+  div.one-and-a-half-buttons > div > div {
+	cursor:pointer;
+	text-align:center;
+	justify-content:center;
+  }
+
+  div.two-buttons {
+	flex-direction: row;
+	height:90px;
+	justify-content:center;
+	text-align:center;
+  }
+
+  div.two-buttons > div {
+	padding: 3px 6px;
+	cursor:pointer;
+  }
+
+  div.two-buttons-stacked {
+	flex-direction: column;
+	height:90px;
+	justify-content:center;
+	text-align:center;
+  }
+
+  div.two-buttons-stacked > div {
+	padding: 2px 4px;
+	cursor:pointer;
+	flex-direction: row;
+  }
+
+  div.two-buttons-stacked > div > span {
+	font-size:0.9em;
+	padding-bottom:3px;
+  }
+
+  div.two-buttons-stacked > div > img{
+	width:32px;
+	height:32px;
+  }
+
+  div.three-buttons {
+	flex-direction: row;
+	height:90px;
+  }
+
+  div.three-buttons > div {
+	flex: 1; 
+	padding:3px 6px;
+	text-align:center;
+	cursor:pointer;
+  }
+
+  div.three-small-items {
+	flex-direction: column;
+	height:90px;
+	text-align:left;
+  }
+
+  div.three-small-items > div {
+	display:flex;
+	flex-direction:row;
+	justify-content:flex-start;	
+	cursor:pointer;
+  }
+
+  div.three-small-items > div > img {
+	height:24px;
+	width:24px;
+	margin-right:6px;
+  }
+
+  div.four-small-items {
+	flex-direction: column;
+	height:90px;
+  }
+
+  div.four-small-items > div > img {
+	flex-direction: column;
+	width:16px !important;
+	height:16px !important;
+  }
+
+  div.four-buttons {
+    xflex-direction:column;
+	xjustify-content:center;
+	xbackground-color:red;
+  }
+
+  div.four-buttons > div > div {
+	padding:6px 6px;
+	cursor:pointer;
+  }
+
+
+/* reactive */
+
+@media only screen and (max-width: 1000px) {
+
+  span.label {
+	font-size:0.9em;
+  }
+
+  div.four-buttons {
+    flex-direction:column;
+	justify-content:center;
+  }
+
+  div.four-buttons > div > div {
+    padding:3px 6px;
+  }
+
+  div.four-buttons > div > div > img {
+    width:30px;
+    height:30px;
+  }
+
+  div.four-buttons > div > div > span {
+    display:none;
+  }
+}
+
+
+@media only screen and (max-width: 900px) {
+
+  #ribbon {
+	xheight: 40px;
+  }
+
+  div.three-buttons > div {
+	flex-direction:row;
+  }
+
+  div.three-buttons {
+	display: flex;
+	flex-direction: column;
+	height:90px;
+  }
+
+  div.three-buttons > div {
+	padding: 2px 3px;
+    text-align:left;
+	justify-content:flex-start;
+  }
+
+  div.three-buttons > div > img {
+	width:20px;
+	height:20px;
+	margin-right:3px;
+  }
+}
+
+
+@media only screen and (max-width:680px) {
+
+  span.label {
+	 display : none;
+  }
+
+  #ribbon {
+	xheight: 40px;
+  }
+
+  div.two-buttons {
+	flex-direction:column;
+  }
+
+  div.two-buttons > div > img {
+	height:30px;
+	width:30px;
+  }
+  div.two-buttons > div > span {
+	display:none;
+  }
+}

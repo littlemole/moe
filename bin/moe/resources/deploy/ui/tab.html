@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title></title>
+  <link rel="stylesheet" href="ribbon.css">
+  <script src="js/mustache.js"></script>
+  <script src="js/mustache.js"></script>
+  <style type="text/css">
+
+	img {
+		width:20px;
+		height:20px;
+	}
+
+	body,div {
+		overflow:hidden;
+		font-size:0.95em;
+	}
+
+	div.tab {
+		flex-direction:row;
+		justify-content:flex-start;
+		padding:3px;
+	}
+
+  </style>
+ </head>
+ 
+ <body style="border:1px solid #aaa;;width:130px">
+
+	
+    <div class="flex row stretch" style="background-color:#f1f1f1;position:relative">
+
+     <div class="flex column" style="padding:3px">
+
+  	  <div class="flex row tab hover stretch " id="close">
+	   <img src="img/document-close.svg">
+       <span>&nbsp;Close</span>
+      </div>
+
+  	  <div class="flex row tab hover stretch " id="insertTemplate">
+	   <img src="img/application-exit.svg" style="width:16px;height:16px;">
+       <span>&nbsp;Close&nbsp;Others</span>
+      </div>
+
+  	  <div class="divider flex stretch row" style="width:110px;border-bottom:1px solid #aaa;"></div>
+
+  	  <div class="flex row tab hover stretch " id="Reload">
+	   <img src="img/View-refresh.svg">
+       <span>&nbsp;Reload</span>
+      </div>
+  	  <div class="flex row tab hover stretch " id="Save">
+	   <img src="img/document-save.svg">
+       <span>&nbsp;Save</span>
+      </div>
+
+  	  <div class="divider flex stretch row" style="width:110px;border-bottom:1px solid #aaa;"></div>
+
+  	  <div class="flex row tab hover stretch " id="Directory">
+	   <img src="img/folder.svg">
+       <span>&nbsp;Directory</span>
+      </div>
+
+    </div>
+   </div>
+<script>
+
+
+</script>
+ </body>
+</html>

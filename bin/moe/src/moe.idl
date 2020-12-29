@@ -936,6 +936,9 @@ library Moe
 			propget, bindable, displaybind, requestedit, id(22),
 		]
 		HRESULT ShowTreeView([out, retval] VARIANT_BOOL* vbShowTreeView);
+
+		[ id(23), helpstring("Get available Encodings as JSON string") ]
+		HRESULT GetEncodings([out, retval] BSTR* json);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////

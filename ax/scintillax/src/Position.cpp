@@ -57,7 +57,7 @@ HRESULT __stdcall SciAxPosition::get_Caret( long* pos)
 	{
 		*pos = 0;
 		if ( sci_->edit() )
-			*pos = sci_->edit()->pos();
+			*pos = (long)sci_->edit()->pos();
 	}
 	return S_OK; 
 }
@@ -153,7 +153,7 @@ HRESULT __stdcall SciAxPosition::get_Anchor( long* pos)
 
 	if ( pos )
 	{
-		*pos = sci_->edit()->anchor();
+		*pos = (long)sci_->edit()->anchor();
 	}
 	return S_OK; 
 }

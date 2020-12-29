@@ -69,7 +69,7 @@ void ScintillaEditor::print()
 		rtf.hdc = hdcPrinter;
 		rtf.hdcTarget = hdcPrinter;
 		rtf.chrg.cpMin = 0;
-		rtf.chrg.cpMax = this->getLength();
+		rtf.chrg.cpMax = (int) this->getLength();
 		rtf.rc.left = 0;
 		rtf.rc.top = 0;
 		rtf.rc.right = xPage-1;
@@ -90,7 +90,7 @@ void ScintillaEditor::print()
 
 					for ( int j = 0; j < copies2; j++ )
 					{
-						rtf.chrg.cpMin = this->printPage(true,&r);
+						rtf.chrg.cpMin = (int)this->printPage(true,&r);
 					}
 					if ( ::EndPage(hdcPrinter) <= 0 )
 						break;
@@ -231,7 +231,7 @@ std::wstring ScintillaEditor::SyntaxDisplayName()
 
 bool ScintillaEditor::showLineNumbers()
 {
-	int w = sendMessage( SCI_GETMARGINWIDTHN, (WPARAM)0 , (LPARAM)0 );
+	LRESULT w = sendMessage( SCI_GETMARGINWIDTHN, (WPARAM)0 , (LPARAM)0 );
 	return w != 0;
 }
 
@@ -244,11 +244,11 @@ void ScintillaEditor::showLineNumbers(bool b)
 		return;
 	}
 
-	int lines = getLineCount();
+	int lines = (int) getLineCount();
 	std::ostringstream oss;
 	oss << "_" << lines;
 
-	int w = sendMessage( SCI_TEXTWIDTH, (WPARAM)STYLE_LINENUMBER, (LPARAM)(oss.str().c_str()) );
+	int w = (int) sendMessage( SCI_TEXTWIDTH, (WPARAM)STYLE_LINENUMBER, (LPARAM)(oss.str().c_str()) );
 	sendMessage( SCI_SETMARGINWIDTHN, (WPARAM)(0), (LPARAM)(w) );
 	sendMessage( SCI_SETMARGINWIDTHN, (WPARAM)(1), (LPARAM)(4) );
 }

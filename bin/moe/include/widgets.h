@@ -124,7 +124,7 @@ class Encodings
 {
 public:
 
-  	 Encodings();
+	 Encodings();
 
 	 typedef std::pair<int,std::wstring> CodePage;
 	 typedef std::vector<CodePage>::iterator Iterator;

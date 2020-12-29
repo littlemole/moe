@@ -43,7 +43,7 @@ HRESULT __stdcall SciAxLine::get_Count( long* line)
 		return E_FAIL;
 
 	if ( line )
-		*line = sci_->edit()->getLineCount();
+		*line = (long)sci_->edit()->getLineCount();
 	return S_OK; 
 }
 
@@ -56,7 +56,7 @@ HRESULT __stdcall SciAxLine::Current( long* line)
 		return E_FAIL;
 
 	if ( line )
-		*line = sci_->edit()->lineFromPos(sci_->edit()->pos());
+		*line = (long)sci_->edit()->lineFromPos((int)sci_->edit()->pos());
 	return S_OK; 
 }
 
@@ -69,7 +69,7 @@ HRESULT __stdcall SciAxLine::LineFromPos( long pos, long* line )
 		return E_FAIL;
 
 	if ( line )
-		*line = sci_->edit()->lineFromPos(pos);
+		*line = (long)sci_->edit()->lineFromPos(pos);
 
 	return S_OK; 
 }
@@ -83,7 +83,7 @@ HRESULT __stdcall SciAxLine::PosFromLine( long line, long* pos )
 		return E_FAIL;
 
 	if ( pos )
-		*pos = sci_->edit()->posFromLine(line);
+		*pos = (long)sci_->edit()->posFromLine(line);
 	return S_OK; 
 }
 
@@ -96,7 +96,7 @@ HRESULT __stdcall SciAxLine::LineEndPos( long line, long* pos )
 		return E_FAIL;
 
 	if ( pos )
-		*pos = sci_->edit()->lineEndPos(line);
+		*pos = (long)sci_->edit()->lineEndPos(line);
 	return S_OK; 
 }
 
@@ -109,7 +109,7 @@ HRESULT __stdcall SciAxLine::FirstVisibleLine( long* line )
 		return E_FAIL;
 
 	if ( line )
-		*line = sci_->edit()->getFirstVisibleLine();
+		*line = (long)sci_->edit()->getFirstVisibleLine();
 	return S_OK; 
 }
 
@@ -122,7 +122,7 @@ HRESULT __stdcall SciAxLine::LinesOnScreen( long* lines )
 		return E_FAIL;
 
 	if ( lines )
-		*lines = sci_->edit()->getLinesOnScreen();
+		*lines = (long)sci_->edit()->getLinesOnScreen();
 
 	return S_OK; 
 }
@@ -137,7 +137,7 @@ HRESULT __stdcall SciAxLine::LineLength( long line, long* length)
 
 	if ( length )
 	{
-		*length = sci_->edit()->getLineLength(line);
+		*length = (long) sci_->edit()->getLineLength(line);
 	}
 	return S_OK; 
 }
@@ -151,11 +151,11 @@ HRESULT __stdcall SciAxLine::LineText( long line, BSTR* text )
 
 	if ( text )
 	{
-		int e,s;
+		LRESULT e,s;
 		s = sci_->edit()->posFromLine(line);
 		e = sci_->edit()->lineEndPos(line);
 		std::string l = "";
-		l = sci_->edit()->getTextRange(s,e);
+		l = sci_->edit()->getTextRange((int)s,(int)e);
 		*text = ::SysAllocString(mol::fromUTF8(l).c_str());
 	}
 	return S_OK; 
@@ -173,9 +173,9 @@ HRESULT __stdcall SciAxLine::SetLineText( long line, BSTR text )
 	{
 		if ( line <= sci_->edit()->getLineCount() )
 		{
-			int start = sci_->edit()->posFromLine(line);
-			int end   = sci_->edit()->lineEndPos(line);
-			sci_->edit()->setSel(start,end);
+			LRESULT start = sci_->edit()->posFromLine(line);
+			LRESULT end   = sci_->edit()->lineEndPos(line);
+			sci_->edit()->setSel( (int)start,(int)end);
 			sci_->edit()->replaceSel(mol::BSTR2ansi(text));
 		}
 	}

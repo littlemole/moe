@@ -48,7 +48,8 @@ library Scintilla
 		SCINTILLA_SYNTAX_JAVA   = 9,
 		SCINTILLA_SYNTAX_CSHARP = 10,
 		SCINTILLA_SYNTAX_D	    = 11,
-		SCINTILLA_SYNTAX_PYTHON = 12
+		SCINTILLA_SYNTAX_PYTHON = 12,
+		SCINTILLA_MAX_SYNTAX = 13
 	};
 
 	interface IScintillAxProperties;
@@ -81,8 +82,14 @@ library Scintilla
 		[id(1),propget, helpstring("style id")] 
 		HRESULT Id([out,retval] long* id);
 
+		[id(1), propput, helpstring("style id")]
+		HRESULT Id([in] long id);
+
 		[id(2),propget, helpstring("style description")] 
 		HRESULT Description([out,retval] BSTR* desc);
+
+		[id(2), propput, helpstring("style description")]
+		HRESULT Description([in] BSTR desc);
 
 		[id(3),propget, helpstring("bold")] 
 		HRESULT Bold([out,retval] VARIANT_BOOL* vb);
@@ -152,6 +159,9 @@ library Scintilla
 		[id(5), helpstring("Get Keyword")] 
 		HRESULT GetKeyWord([in] long index, [out,retval] BSTR* words);
 
+		[id(6), helpstring("Add Style")]
+		HRESULT Add([in] IScintillAxStyle* s);
+
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////
@@ -172,6 +182,18 @@ library Scintilla
 
 		[id(1),propget, helpstring("Count number of stylesets")] 
 		HRESULT Count([out,retval] long* cnt);
+
+		[id(2), propget, helpstring("Get JSON representation")]
+		HRESULT JSON([out, retval] Bstr* json);
+
+		[id(2), propput, helpstring("Parse JSON representation")]
+		HRESULT JSON([in] Bstr json);
+
+		[id(3), propget, helpstring("Get XML representation")]
+		HRESULT XML([out, retval] Bstr* xml);
+
+		[id(3), propput, helpstring("Parse XML representation")]
+		HRESULT XML([in] Bstr xml);
 
 	}
 

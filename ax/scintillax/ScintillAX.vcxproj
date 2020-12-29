@@ -133,10 +133,13 @@
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\vcpkg\installed\x64-windows-static\include;$(IncludePath)</IncludePath>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">Midl</CustomBuildAfterTargets>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">C:\moe\vcpkg\installed\x64-windows-static\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
     <LibraryPath>..\..\vcpkg\installed\x64-windows-static\debug\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">
+    <LibraryPath>C:\moe\vcpkg\installed\x64-windows-static\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
     <ClCompile>
@@ -148,6 +151,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\..\lib\src\win\uni_Release\win.lib;..\..\lib\src\ole\uni_Release\ole.lib;..\..\lib\src\util\uni_Release\util.lib;..\..\lib\src\thread\uni_Release\thread.lib;..\..\3dParty\scintilla\bin\static\SciLexer.lib;..\..\\3dParty\scintilla\bin\static\Scintilla.lib;..\..\3dParty\pcre\uni_Release\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Imm32.lib;Msimg32.lib;..\..\lib\src\xml\uni_Release\xml.lib;..\..\3dParty\expat\Source\lib\uni_release\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -208,9 +212,10 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BrowseInformation>false</BrowseInformation>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\x64\uni_Release\win.lib;..\..\lib\src\ole\x64\uni_Release\ole.lib;..\..\lib\src\util\x64\uni_Release\util.lib;..\..\lib\src\thread\x64\uni_Release\thread.lib;..\..\3dParty\scintilla\bin\static64\SciLexer.lib;..\..\\3dParty\scintilla\bin\static64\Scintilla.lib;..\..\3dParty\pcre\x64\uni_Release\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Imm32.lib;Msimg32.lib;..\..\lib\src\xml\x64\uni_Release\xml.lib;..\..\3dParty\expat\Source\lib\x64\uni_Release_64\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\x64\uni_Release\win.lib;..\..\lib\src\ole\x64\uni_Release\ole.lib;..\..\lib\src\util\x64\uni_Release\util.lib;..\..\lib\src\thread\x64\uni_Release\thread.lib;SciLexer.lib;Scintilla.lib;libscintilla.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Imm32.lib;Msimg32.lib;Ws2_32.lib;Crypt32.lib;..\..\lib\src\xml\x64\uni_Release\xml.lib;expat.lib;..\..\lib\src\tcp\x64\uni_release\tcp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>ScintillAx.def</ModuleDefinitionFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -362,8 +367,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">codegen phase</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">codegen phase</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">cscript.exe ../../cg/js/make.js "x64\uni_release"
-</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">cscript.exe ../../cg/js/make.js "TLB"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">cscript.exe "../../cg/js/make.js" TLB</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>

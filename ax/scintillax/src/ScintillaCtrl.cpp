@@ -359,25 +359,25 @@ LRESULT ScintillAx::OnUpdateUI(UINT msg, WPARAM wParam, LPARAM lParam)
 	mol::Crack mess(msg,wParam,lParam);
 	if ( mess.nmhdr()->code == SCN_UPDATEUI )
 	{
-		int pos = edit()->pos();
-		int line = edit()->lineFromPos(pos);
+		LRESULT pos = edit()->pos();
+		int line = (int)edit()->lineFromPos( (int) pos);
 		//int tmp = line+1;
 		this->fire(DISPID_ISCINTILLAXEVENTS_ONPOSCHANGE,line);
 
 		if ( line > 0 )
 		{
-			int indent = edit()->getLineIndent(line-1);
-			edit()->setIndent(indent);
+			LRESULT indent = edit()->getLineIndent( (int)line-1);
+			edit()->setIndent((int)indent);
 		}
 		if ( edit()->pos() > 0 )
 		{
-			char c = edit()->getCharAt(edit()->pos()-1);
+			char c = (char)edit()->getCharAt( (int)edit()->pos()-1);
 			if ( c == '{' || c == '(' || c == ')' || c == '}' )
 			{
-				int start = edit()->braceMatch(		edit()->pos()-1 );
+				LRESULT start = edit()->braceMatch(	(int)	edit()->pos()-1 );
 				if ( start != -1 )
 				{
-					edit()->braceHighlight(start,		edit()->pos()-1);
+					edit()->braceHighlight( (int)start,	(int)	edit()->pos()-1);
 				}
 			}
 			else
@@ -428,8 +428,8 @@ LRESULT ScintillAx::OnDblClick(UINT msg, WPARAM wParam, LPARAM lParam)
 LRESULT ScintillAx::OnMarginClick(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	SCNotification* sciNotify = (SCNotification*)lParam;
-	int pos = sciNotify->position;
-	int line = edit()->lineFromPos(pos);
+	LRESULT pos = sciNotify->position;
+	int line = (int)edit()->lineFromPos((int)(pos));
 	edit()->highliteLine(-1);
 	this->fire(DISPID_ISCINTILLAXEVENTS_ONMARKER,line);
 	return 0;

@@ -41,7 +41,7 @@ public:
 
 
 	std::wstring SyntaxDisplayName();
-	std::wstring SyntaxDisplayName(int syntax);
+	static std::wstring SyntaxDisplayName(int syntax);
 
 protected:
 	virtual HWND createWindow( const std::wstring& windowName, HMENU hMenu, const mol::Rect& r, HWND parent );

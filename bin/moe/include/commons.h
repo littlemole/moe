@@ -74,6 +74,8 @@
 #include <memory>
 #include <functional>
 
+#include "json/json.h" 
+
 enum LogLevel { LOGERROR, LOGWARN, LOGINFO, LOGDEBUG };
 
 class Appender
@@ -167,7 +169,84 @@ Log& log();
 
 Logger logger(LogLevel level);
 
+namespace JSON {
 
+	class ParseEx : public std::exception
+	{
+	public:
+		ParseEx(const std::string& s)
+			: msg(s)
+		{}
+
+		const char* what() const noexcept
+		{
+			return msg.c_str();
+		}
+
+		std::string msg;
+	};
+
+	//////////////////////////////////////////////////////////////
+
+	//! parse string containing JSON 
+	//! \ingroup json
+	inline Json::Value parse(const std::string& txt)
+	{
+		Json::Value json;
+
+		Json::CharReaderBuilder rbuilder;
+		std::string errs;
+		std::istringstream iss(txt);
+		bool ok = Json::parseFromStream(rbuilder, iss, &json, &errs);
+		if (!ok)
+		{
+			throw ParseEx(errs);
+		}
+		return json;
+	}
+
+	//////////////////////////////////////////////////////////////
+
+	//! serialize JSON structure into plaintext
+	//! \ingroup json
+
+	inline const std::string stringify(Json::Value value)
+	{
+		Json::StreamWriterBuilder wbuilder;
+		return Json::writeString(wbuilder, value);
+
+	}
+
+	//! flatten a JSON structure removing whitespace and newlines
+	//! \ingroup json
+	inline const std::string flatten(Json::Value value)
+	{
+		Json::StreamWriterBuilder wbuilder;
+		wbuilder["commentStyle"] = "None";
+		wbuilder["indentation"] = "";
+		return Json::writeString(wbuilder, value);
+	}
+
+} // end namespace JSON
+
+
+inline std::string slurp(const std::string& path)
+{
+	std::ostringstream oss;
+	std::ifstream ifs;
+	ifs.open(path);
+	if (ifs)
+	{
+		while (ifs)
+		{
+			char buf[4096];
+			ifs.read(buf, 4096);
+			oss.write(buf, ifs.gcount());
+		}
+		ifs.close();
+	}
+	return oss.str();
+}
 
 #endif
 

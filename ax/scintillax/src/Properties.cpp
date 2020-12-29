@@ -407,7 +407,7 @@ HRESULT __stdcall SciAxProperties::put_TabWidth( long width)
 HRESULT __stdcall SciAxProperties::get_TabWidth( long* width)
 { 	
 	if ( sci_->edit() )
-		tabWidth_ = sci_->edit()->getTabWidth();
+		tabWidth_ = (long)sci_->edit()->getTabWidth();
 
 	*width = tabWidth_;
 	return S_OK; 
@@ -548,7 +548,7 @@ HRESULT __stdcall SciAxProperties::ConvertTabs()
 
 	std::string what = "\t";
 	std::string with = "";
-	int n = sci_->edit()->getTabWidth();
+	int n = (int)sci_->edit()->getTabWidth();
     for ( int i = 0; i < n; i++ )
         with +=" ";
 	std::string utf8what(mol::toUTF8(what));

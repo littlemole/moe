@@ -21,7 +21,7 @@ public:
 
 	typedef mol::com_instance<AxStyleSets> Instance;
 
-	static Instance* CreateInstance();
+	static void CreateInstance(Instance** inst);
 	virtual void dispose() {};
 
 	virtual HRESULT __stdcall _NewEnum(IEnumVARIANT** newEnum);
@@ -34,6 +34,12 @@ public:
 	virtual HRESULT __stdcall IsDirty( );
 	virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER* ui ) ;
 	virtual HRESULT __stdcall InitNew();
+
+	virtual HRESULT __stdcall put_JSON(BSTR json);
+	virtual HRESULT __stdcall get_JSON(BSTR* json);
+
+	virtual HRESULT __stdcall put_XML(BSTR xml);
+	virtual HRESULT __stdcall get_XML(BSTR* xml);
 
 	std::vector<mol::variant> collection_;
 };
@@ -54,7 +60,7 @@ public:
 
 	typedef mol::com_instance<AxStyleSet> Instance;
 
-	static Instance* CreateInstance(long id);
+	static void CreateInstance(long id, Instance** inst);
 	virtual void dispose() {};
 
 	virtual HRESULT __stdcall _NewEnum(IEnumVARIANT** newEnum);
@@ -64,7 +70,7 @@ public:
 	virtual HRESULT __stdcall CountKeyWords(long* cnt);
 	virtual HRESULT __stdcall GetKeyWord(long index, BSTR* words);
     virtual HRESULT __stdcall  get_Id(  long *id); 
-
+	virtual HRESULT __stdcall Add( IScintillAxStyle* s);
 
 	virtual HRESULT __stdcall Load( LPSTREAM pStm);
 	virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
@@ -95,12 +101,14 @@ public:
 
 	typedef mol::com_instance<AxStyle> Instance;
 
-	static Instance* CreateInstance();
+	static void CreateInstance(Instance** inst);
 	virtual void dispose() {};
 
     virtual HRESULT __stdcall  get_Id(  long *id);        
-    virtual HRESULT __stdcall  get_Description(  BSTR *desc);
-    virtual HRESULT __stdcall  get_Bold(  VARIANT_BOOL *vb);
+	virtual HRESULT __stdcall  put_Id(long id);
+	virtual HRESULT __stdcall  get_Description(  BSTR *desc);
+	virtual HRESULT __stdcall  put_Description(BSTR desc);
+	virtual HRESULT __stdcall  get_Bold(  VARIANT_BOOL *vb);
     virtual HRESULT __stdcall  put_Bold(  VARIANT_BOOL vb);
     virtual HRESULT __stdcall  get_Italic(  VARIANT_BOOL *vb);
     virtual HRESULT __stdcall  put_Italic(  VARIANT_BOOL vb);

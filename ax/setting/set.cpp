@@ -9,6 +9,10 @@
 #include "win/file.h"
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+
+void readWalker(mol::Element* element, ISetting* parent);
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 Setting::Setting(void)	
@@ -30,6 +34,46 @@ Setting::~Setting()
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall Setting::get_XML(BSTR* xml)
+{
+	std::ostringstream ofs;
+	if (ofs)
+	{
+		ofs << "<settings>\r\n";
+		for (std::list<ISetting*>::iterator it = entries_.begin(); it != entries_.end(); it++)
+		{
+
+			saveWalker((*it), ofs);
+		}
+		ofs << "</settings>\r\n";
+	}
+	*xml = ::SysAllocString(mol::towstring(ofs.str()).c_str());
+	return S_OK;
+}
+
+HRESULT __stdcall Setting::put_XML(BSTR xml)
+{
+	mol::XMLDocument xmlDoc;
+	std::string utf8 = mol::toUTF8(mol::bstr(xml).towstring());
+	if (!xmlDoc.parse(utf8))
+	{
+		return E_INVALIDARG;
+	}
+
+	if (!xmlDoc.documentElement()->hasChildNodes())
+	{
+		return S_OK;
+	}
+
+	this->setDirty(FALSE);
+	this->Clear();
+
+	mol::Element* root = (mol::Element*)xmlDoc.documentElement();
+	mol::Element* el = root->getElementByName("settings");
+	readWalker(el, this);
+	return S_OK;
+}
 
 
 HRESULT __stdcall Setting::get_Key	( BSTR* key )
@@ -474,7 +518,8 @@ HRESULT __stdcall Setting::Load( BSTR filename)
 	this->Clear();
 
 	mol::Element* root = (mol::Element*)xmlDoc.documentElement()->firstChild();
-	readWalker(root,this);
+	mol::Element* settingSelement = root->getElementByTagName("settings");
+	readWalker(settingSelement,this);
 	return S_OK;
 
 
@@ -864,7 +909,7 @@ HRESULT Setting::getKey(const std::wstring& key, ISetting** newKey)
 // save helper
 ///////////////////////////////////////////////////////////////////////////////
 
-void Setting::saveWalker(ISetting* set, std::ofstream& ofs )
+void Setting::saveWalker(ISetting* set, std::ostream& ofs )
 {
 	HRESULT hr;
 

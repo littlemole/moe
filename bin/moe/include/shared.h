@@ -199,6 +199,8 @@ public:
 	virtual HRESULT __stdcall put_ShowTreeView(VARIANT_BOOL vb);
 	virtual HRESULT __stdcall get_ShowTreeView(VARIANT_BOOL* vb);
 
+	virtual HRESULT __stdcall GetEncodings(BSTR* json);
+
 	void setDirty(bool b);
 	bool isDirty();
 

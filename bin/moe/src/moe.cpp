@@ -133,8 +133,17 @@ void MoeWnd::OnCreate()
 
 void MoeWnd::loadPersistUIstate()
 {
-	// determine ui.xmo filepath or use fallback
 	std::wstring appPath = mol::app<AppBase>().CreateAppPath(_T("moe"));
+
+	std::wstring settingsPath = appPath + L"\\settings.xml";
+
+	this->moeConfig->ImportSettings(mol::bstr(settingsPath));
+
+	std::wstring stylesPath = appPath + L"\\styles.xml";
+	std::string xml = slurp(mol::tostring(stylesPath));
+	this->moeStyles->put_XML(mol::bstr(xml));
+
+	// determine ui.xmo filepath or use fallback
 	std::wstring p(appPath + _T("\\ui.xmo"));
 	if ( !mol::Path::exists(p) )
 	{
@@ -767,9 +776,24 @@ HRESULT __stdcall MoeWnd::Exit()
 		if ( ps )
 		{
 			ps->Save(store,FALSE);
-			destroy();
-			return S_OK;
 		}
+	}
+
+	// save xml
+
+	p = appPath + L"\\settings.xml";
+	HRESULT hr = moeConfig->ExportSettings(mol::bstr(p));
+
+	p = appPath + L"\\styles.xml";
+	mol::bstr xml;
+	hr = moeStyles->get_XML(&xml);
+	std::ofstream ofs;
+	ofs.open(mol::tostring(p), std::ios::binary | std::ios::out);
+	if (ofs)
+	{
+		std::string utf8 = toUTF8(xml.towstring());
+		ofs.write(utf8.c_str(),utf8.size());
+		ofs.close();
 	}
 
 	// harakiri
@@ -880,6 +904,7 @@ HRESULT __stdcall MoeWnd::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
 	return S_OK;
 }
 
+//#define STILL_USING_STRUCTURED_STORAGE_IN_2020 1
 
 HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 {
@@ -888,9 +913,14 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 	static LPCOLESTR con = OLESTR("CONF");
 	static LPCOLESTR reb = OLESTR("REBAR");	
 
-	// open defaults stream
 	punk<IStream> stream;
-	HRESULT hr = pStgLoad->OpenStream( def, NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
+
+	HRESULT hr;
+
+#ifdef STILL_USING_STRUCTURED_STORAGE_IN_2020 
+
+	// open defaults stream
+	hr = pStgLoad->OpenStream( def, NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
 	if ( stream && hr == S_OK )
 	{
 		mol::punk<IMoeConfig> moeConf;
@@ -905,6 +935,7 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 	}
 
 	stream.release();
+#endif
 
 	// open UI stream
 	hr = pStgLoad->OpenStream( ui, NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
@@ -926,6 +957,8 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 
 	stream.release();
 
+#ifdef STILL_USING_STRUCTURED_STORAGE_IN_2020 
+
 	mol::punk<IStorage> store;
 	hr = pStgLoad->OpenStorage(con,0,STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,0,&store);
 	if ( hr == S_OK && store )
@@ -943,6 +976,9 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 		if ( hr != S_OK )
 			return S_OK;
 	}
+
+#endif
+
 	// DEBUG: enable/disable creation of new top level user setting items
 	//config()->put_ChildrenAllowed(VARIANT_FALSE);
 
@@ -993,7 +1029,8 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 
 	//return S_OK;
 	
-	
+#ifdef STILL_USING_STRUCTURED_STORAGE_IN_2020 
+
 	// open Style stream
 	hr = pStgLoad->OpenStream( L"STYLES", NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
 	if ( !stream || (hr != S_OK) )
@@ -1009,6 +1046,7 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 		return S_OK;
 	
 	stream.release();
+#endif 
 
 	return S_OK;
 }

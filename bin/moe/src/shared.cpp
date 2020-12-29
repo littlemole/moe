@@ -10,6 +10,7 @@
 #include "resource.h"
 #include "ole/SimpleHost.h"
 #include "mdichild.h"
+#include "xml/xml.h"
 /////////////////////////////////////////////////////////////////////
 //
 //  moe child dialog view sub obj
@@ -925,6 +926,27 @@ HRESULT __stdcall  MoeConfig::get_Settings( IDispatch** settings)
 	return settings_.queryInterface(settings);
 }
 
+HRESULT __stdcall MoeConfig::GetEncodings(BSTR* json)
+{
+	Json::Value result(Json::arrayValue);
+
+	for (auto& it = codePages()->begin(); it != codePages()->end(); it++)
+	{
+		int cp = (*it).first;
+		std::wstring n = (*it).second;
+
+		Json::Value codepage(Json::objectValue);
+		codepage["value"] = cp;
+		codepage["name"] = mol::toUTF8(n);
+
+		result.append(codepage);
+	}
+
+	std::string utf8 = JSON::stringify(result);
+	*json = ::SysAllocString(mol::towstring(utf8).c_str());
+	return S_OK;
+}
+
 
 HRESULT __stdcall MoeConfig::EditPreferences( )
 {
@@ -964,7 +986,35 @@ HRESULT __stdcall MoeConfig::ExportSettings( BSTR f )
 {
 	if ( f )
 	{
-		settings_->Save(f);
+		std::ofstream ofs;
+		ofs.open(mol::bstr(f).tostring(), std::ios::binary | std::ios::out);
+		if (ofs)
+		{
+			ofs << "<config>" << std::endl;
+
+			ofs << " <systype>" << std::to_string(systype_) << "</systype>" << std::endl;
+			ofs << " <encoding>" << std::to_string(encoding_) << "</encoding>" << std::endl;
+			ofs << " <tabwidth>" << std::to_string(tabwidth_) << "</tabwidth>" << std::endl;
+
+			ofs << " <tabUsage>" << (tabUsage_ == VARIANT_TRUE ? "true" : "false") << "</tabUsage>" << std::endl;
+			ofs << " <tabIndents>" << (tabIndents_ == VARIANT_TRUE ? "true" : "false") << "</tabIndents>" << std::endl;
+			ofs << " <fullScreen>" << (fullScreen_ == VARIANT_TRUE ? "true" : "false") << "</fullScreen>" << std::endl;
+			ofs << " <backSpaceUnIndents>" << (backSpaceUnIndents_ == VARIANT_TRUE ? "true" : "false") << "</backSpaceUnIndents>" << std::endl;
+			ofs << " <showLineNumbers>" << (showLineNumbers_ == VARIANT_TRUE ? "true" : "false") << "</showLineNumbers>" << std::endl;
+			ofs << " <showTreeView>" << (showTreeView_ == VARIANT_TRUE ? "true" : "false") << "</showTreeView>" << std::endl;
+
+			ofs << " <foreColor>" << mol::rgb2hex(foreColor_) << "</foreColor>" << std::endl;
+			ofs << " <backColor>" << mol::rgb2hex(backColor_) << "</backColor>" << std::endl;
+			ofs << " <textColor>" << mol::rgb2hex(textColor_) << "</textColor>" << std::endl;
+
+			mol::bstr s;
+			settings_->get_XML(&s);
+			std::string utf8 = mol::toUTF8(s.towstring());
+			ofs.write(utf8.c_str(), utf8.size());
+
+			ofs << "</config>" << std::endl;
+			ofs.close();
+		}
 	}	
 	return S_OK;
 }
@@ -974,6 +1024,123 @@ HRESULT __stdcall MoeConfig::ImportSettings( BSTR f )
 	if ( f )
 	{
 		settings_->Load(f);
+
+		std::ostringstream oss;
+		std::ifstream ifs;
+		ifs.open(mol::bstr(f).tostring(), std::ios::in | std::ios::binary);
+		if (ifs)
+		{
+			while (ifs)
+			{
+				char buf[4096];
+				ifs.read(buf, 4096);
+				oss.write(buf, ifs.gcount());
+			}
+			ifs.close();
+
+			std::string xml = oss.str();
+			mol::XMLDocument doc;
+			mol::Element* root = doc.parse(xml);
+			if (root)
+			{
+				mol::Element* config = root->getElementByTagName("config");
+				if (config)
+				{
+					mol::Element* el = config->getElementByTagName("systype");
+					if (el)
+					{
+						std::string value = el->innerXml();
+						long l = atol(value.c_str());
+						systype_ = l;
+					}
+
+					el = config->getElementByTagName("encodig");
+					if (el)
+					{
+						std::string value = el->innerXml();
+						long l = atol(value.c_str());
+						encoding_ = l;
+					}
+
+					el = config->getElementByTagName("tabwidth");
+					if (el)
+					{
+						std::string value = el->innerXml();
+						long l = atol(value.c_str());
+						tabwidth_ = l;
+					}
+
+					el = config->getElementByTagName("tabUsage");
+					if (el)
+					{
+						std::string value = el->innerXml();
+						bool b = value == "true" ? true : false;
+						tabUsage_ = b ? VARIANT_TRUE : VARIANT_FALSE;
+					}
+
+					el = config->getElementByTagName("tabIndents");
+					if (el)
+					{
+						std::string value = el->innerXml();
+						bool b = value == "true" ? true : false;
+						tabIndents_ = b ? VARIANT_TRUE : VARIANT_FALSE;
+					}
+
+					el = config->getElementByTagName("fullScreen");
+					if (el)
+					{
+						std::string value = el->innerXml();
+						bool b = value == "true" ? true : false;
+						fullScreen_ = b ? VARIANT_TRUE : VARIANT_FALSE;
+					}
+
+					el = config->getElementByTagName("backSpaceUnIndents");
+					if (el)
+					{
+						std::string value = el->innerXml();
+						bool b = value == "true" ? true : false;
+						backSpaceUnIndents_ = b ? VARIANT_TRUE : VARIANT_FALSE;
+					}
+
+					el = config->getElementByTagName("showLineNumbers");
+					if (el)
+					{
+						std::string value = el->innerXml();
+						bool b = value == "true" ? true : false;
+						showLineNumbers_ = b ? VARIANT_TRUE : VARIANT_FALSE;
+					}
+
+					el = config->getElementByTagName("showTreeView");
+					if (el)
+					{
+						std::string value = el->innerXml();
+						bool b = value == "true" ? true : false;
+						showTreeView_ = b ? VARIANT_TRUE : VARIANT_FALSE;
+					}
+
+					el = config->getElementByTagName("foreColor");
+					if (el)
+					{
+						std::string value = el->innerXml();
+						foreColor_ = mol::hex2rgb(value);
+					}
+
+					el = config->getElementByTagName("backColor");
+					if (el)
+					{
+						std::string value = el->innerXml();
+						backColor_ = mol::hex2rgb(value);
+					}
+
+					el = config->getElementByTagName("textColor");
+					if (el)
+					{
+						std::string value = el->innerXml();
+						textColor_ = mol::hex2rgb(value);
+					}
+				}
+			}
+		}
 	}	
 	return S_OK;
 }

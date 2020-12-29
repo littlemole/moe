@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title></title>
+  <link rel="stylesheet" href="ribbon.css">
+  <script src="js/mustache.js"></script>
+  <script src="js/mustache.js"></script>
+  <style type="text/css">
+
+	img {
+		width:20px;
+		height:20px;
+	}
+
+	body,div {
+		overflow:hidden;
+		font-size:0.95em;
+	}
+
+	div.tab {
+		flex-direction:row;
+		justify-content:flex-start;
+		padding:3px;
+	}
+
+  </style>
+ </head>
+ 
+ <body style="border:1px solid #aaa;;width:120px">
+
+	
+    <div class="flex row stretch" style="background-color:#f1f1f1;position:relative">
+
+     <div class="flex column" style="padding:3px">
+
+  	  <div class="flex row tab hover stretch " id="selectAll">
+	   <img src="img/View-fullscreen.svg">
+       <span>&nbsp;Select All</span>
+      </div>
+
+  	  <div class="flex row tab hover stretch " id="insertTemplate">
+	   <img src="img/document-properties.svg">
+       <span>&nbsp;Template</span>
+      </div>
+
+  	  <div class="divider flex stretch row" style="width:100px;border-bottom:1px solid #aaa;"></div>
+
+  	  <div class="flex row tab hover stretch " id="Cut">
+	   <img src="img/edit-cut.svg">
+       <span>&nbsp;Cut</span>
+      </div>
+  	  <div class="flex row tab hover stretch " id="Copy">
+	   <img src="img/edit-copy.svg">
+       <span>&nbsp;Copy</span>
+      </div>
+  	  <div class="flex row tab hover stretch " id="Pase">
+	   <img src="img/edit-paste.svg">
+       <span>&nbsp;Paste</span>
+      </div>
+  	  <div class="flex row tab hover stretch " id="PaseAs">
+	   <img src="img/edit-paste.svg">
+       <span>&nbsp;Paste As</span>
+      </div>
+
+  	  <div class="divider flex stretch row" style="width:100px;border-bottom:1px solid #aaa;"></div>
+
+  	  <div class="flex row tab hover stretch " id="Settings">
+	   <img src="img/Applications-system.svg">
+       <span>&nbsp;Settings</span>
+      </div>
+
+    </div>
+   </div>
+<script>
+
+</script>
+ </body>
+</html>

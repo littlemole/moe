@@ -390,7 +390,6 @@ public:
 		std::vector<int> index;
 	};
 
-private:
 
 	void addCmd(int key, const std::wstring& title);
 	void addBmp(int key);
@@ -401,6 +400,7 @@ private:
 	void addSubMenu(int root, int menu, int cmd, int bmp);
 	void addMenuItem( int root, int menu, int cmd, int bmp, int idx, bool checked = false, bool enabled = true);
 
+private:
 
 	std::map<int,std::wstring> cmdStrings_;
 	std::map<int,HMENU> menus_;
