@@ -152,9 +152,9 @@ void Hex::OnBytesShown()
     if (!hexer)
 		return;
 
-	int bytes = mol::Ribbon::handler(RibbonBytesShown)->index();
+	//int bytes = mol::Ribbon::handler(RibbonBytesShown)->index();
 
-	hexer->put_DisplayColumns(bytes*4+16);
+	//hexer->put_DisplayColumns(bytes*4+16);
 }
 
 
@@ -186,6 +186,8 @@ void Hex::updateUI()
 
 	setText(title);
 
+	ribbon()->setAppMode("Hex");
+	/*
 	if ( mol::Ribbon::ribbon()->enabled())
 	{
 		Ribbon::ribbon()->mode(4);
@@ -201,7 +203,7 @@ void Hex::updateUI()
 			}
 		}
 	}
-
+	*/
 
 }
 

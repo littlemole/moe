@@ -748,6 +748,10 @@ mol::msgMap<MoeWnd>().addMsgHandler( WM_MDIACTIVATE, make_handler(&MoeWnd::OnMDI
 
 mol::msgMap<MoeWnd>().addMsgHandler( WM_INITMENUPOPUP, make_handler(&MoeWnd::OnMenu) );
 
+mol::msgMap<MoeWnd>().addMsgHandler( WM_SYSCOMMAND , make_handler(&MoeWnd::OnSysCommand) );
+
+mol::msgMap<MoeWnd>().addMsgHandler( WM_EXITMENULOOP , make_handler(&MoeWnd::OnExitLoop) );
+
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_NEW, make_handler(&MoeWnd::OnFileNew) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_FILE_NEW_RTF, make_handler(&MoeWnd::OnFileNewRTF) );
@@ -775,8 +779,6 @@ mol::msgMap<MoeWnd>().addCmdHandler( IDM_MODE_USERSTYLES, make_handler(&MoeWnd::
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_HELP_ABOUT, make_handler(&MoeWnd::OnHelpAbout) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_TOOLBARS_FREEZE, make_handler(&MoeWnd::OnFreezeToolBar) );
-
-mol::msgMap<MoeWnd>().addCmdHandler( IDW_SYNTAX_BOX, make_handler(&MoeWnd::OnSyntax) );
 
 mol::msgMap<MoeWnd>().addCmdHandler( IDM_RIBBON_RECENTITEMS, make_handler(&MoeWnd::OnRecentItems) );
 
@@ -1192,6 +1194,8 @@ mol::msgMap<MoeForm2Wnd>().addMsgHandler( WM_CLOSE, make_handler(&MoeForm2Wnd::O
 
 mol::msgMap<MoeForm2Wnd>().addMsgHandler( WM_NCDESTROY, make_handler(&MoeForm2Wnd::OnNcDestroy) );
 
+mol::msgMap<MoeForm2Wnd>().addMsgHandler( WM_ACTIVATE , make_handler(&MoeForm2Wnd::OnActivate) );
+
 mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_TREE_OPEN, make_handler(&MoeTreeWnd::OnTreeOpen) );
 
 mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_TREE_UPDATE, make_handler(&MoeTreeWnd::OnTreeUpdate) );
@@ -1282,7 +1286,13 @@ mol::msgMap<MoeTabControl>().addNotifyCodeHandler( TCN_SELCHANGE, make_handler(&
 
 mol::msgMap<MoeTabControl>().addNotifyCodeHandler( NM_RCLICK, make_handler(&MoeTabControl::OnRightClick) );
 
-mol::msgMap<MoeToolBar>().addNotifyCodeHandler( NM_RCLICK, make_handler(&MoeToolBar::OnRightClick) );
+mol::msgMap<MoeHtmlRibbon>().addMsgHandler( WM_CREATE, make_handler(&MoeHtmlRibbon::OnCreate) );
+
+mol::msgMap<MoeHtmlRibbon>().addMsgHandler( WM_CLOSE, make_handler(&MoeHtmlRibbon::OnClose) );
+
+mol::msgMap<MoeHtmlRibbon>().addMsgHandler( WM_SIZE, make_handler(&MoeHtmlRibbon::OnSize) );
+
+mol::msgMap<MoeHtmlRibbon>().addMsgHandler( WM_NCDESTROY, make_handler(&MoeHtmlRibbon::OnNcDestroy) );
 
 
 }

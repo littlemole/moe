@@ -27,12 +27,18 @@ void EditorMenu::updateUI()
 		return;
 	}
 
+	Json::Value json(Json::objectValue);
+	json["doctype"] = MOE_DOCTYPE_DOC;
+	json["appmode"] = "Scintilla";
+
 	mol::bstr path;
 	HRESULT hr = editor_->props_->get_Filename(&path);
 	if ( hr != S_OK )
 		return;
 
 	std::wstring title = path.towstring();
+
+	json["filename"] = mol::toUTF8(title);
 
 	long line=0;
 	editor_->line_->Current(&line);
@@ -65,6 +71,13 @@ void EditorMenu::updateUI()
 	long encoding;
 	if ( S_OK == editor_->props_->get_Encoding(&encoding) )
 	{
+		size_t idx = codePages()->index(encoding);
+		Encodings::CodePage enc = codePages()->item(idx);
+		std::wstring cp = enc.second;
+
+		json["encoding"] = encoding;
+		json["codepage"] = mol::toUTF8(cp);
+
 		switch ( encoding )
 		{
 			case SCINTILLA_ENCODING_UTF16 :
@@ -83,70 +96,95 @@ void EditorMenu::updateUI()
 				break;
 			}
 		}
-		if ( mol::Ribbon::ribbon()->enabled())
+
+/*		if ( mol::Ribbon::ribbon()->enabled())
 		{
 			mol::Ribbon::handler(RibbonEncoding)->select((int)codePages()->index((int)encoding));
 		}
+*/
 	}
 	
 	long systype;
 	if ( S_OK == editor_->props_->get_SysType(&systype) )
 	{
+		json["systype"] = systype;
 		if ( systype ==  SCINTILLA_SYSTYPE_UNIX )
 		{
 			title += _T(" UNIX");
+/*
 			if ( mol::Ribbon::ribbon()->enabled())
 			{
 				mol::Ribbon::handler(RibbonSelectModeUnix)->check(true); 
 				mol::Ribbon::handler(RibbonSelectModeWin32)->check(false); 
 			}
+*/
 		}
 		else
 		{
 			title += _T(" WIN32");
+/*
 			if ( mol::Ribbon::ribbon()->enabled())
 			{
 				mol::Ribbon::handler(RibbonSelectModeUnix)->check(false); 
 				mol::Ribbon::handler(RibbonSelectModeWin32)->check(true); 
 			}
+*/
 		}
 	}
 
 	LONG type = 0;
 	editor_->props_->get_Syntax(&type);
-	mol::UI().Wnd<MoeComboBox>(IDW_SYNTAX_BOX)->setCurSel(type);
-//	syntax()->setCurSel(type);
+	json["syntax"] = type;
 
+//	mol::UI().Wnd<MoeComboBox>(IDW_SYNTAX_BOX)->setCurSel(type);
+	/*
 	if ( mol::Ribbon::ribbon()->enabled())
 	{
 		mol::Ribbon::handler(RibbonSelectLanguage)->select(type);
 	}
-
+	*/
 	if ( S_OK == editor_->props_->get_ReadOnly(&vb) )
 	{
-		if ( vb == VARIANT_TRUE )
+		if (vb == VARIANT_TRUE)
+		{
 			title += _T(" [ReadOnly]");
+			json["readonly"] = true;
+		}
+		else
+		{
+			json["readonly"] = false;
+		}
 	}
 	editor_->setText(title);
 
 
-	if ( mol::Ribbon::ribbon()->enabled())
+	//if ( mol::Ribbon::ribbon()->enabled())
 	{
+		if (S_OK == moe()->moeConfig->get_ShowTreeView(&vb))
+		{
+			json["showTreeView"] = vb == VARIANT_TRUE ? true : false;
+			//mol::Ribbon::handler(RibbonTabUseTabs)->check(vb == VARIANT_TRUE ? true : false );
+		}
+
 		if ( S_OK == editor_->props_->get_TabUsage(&vb) )
 		{
-			mol::Ribbon::handler(RibbonTabUseTabs)->check(vb == VARIANT_TRUE ? true : false );
+			json["tabUsage"] = vb == VARIANT_TRUE ? true : false;
+			//mol::Ribbon::handler(RibbonTabUseTabs)->check(vb == VARIANT_TRUE ? true : false );
 		}
 		if ( S_OK == editor_->props_->get_TabIndents(&vb) )
 		{
-			mol::Ribbon::handler(RibbonTabIndents)->check(vb == VARIANT_TRUE ? true : false );
+			json["tabIndents"] = vb == VARIANT_TRUE ? true : false;
+			//mol::Ribbon::handler(RibbonTabIndents)->check(vb == VARIANT_TRUE ? true : false );
 		}
 		if ( S_OK == editor_->props_->get_BackSpaceUnindents(&vb) )
 		{
-			mol::Ribbon::handler(RibbonTabBackSpaceUnIndents)->check(vb == VARIANT_TRUE ? true : false );
+			json["backSpaceUnindents"] = vb == VARIANT_TRUE ? true : false;
+			//mol::Ribbon::handler(RibbonTabBackSpaceUnIndents)->check(vb == VARIANT_TRUE ? true : false );
 		}
 		long w = 0;
 		if ( S_OK == editor_->props_->get_TabWidth(&w) )
 		{
+			json["tabWidth"] = w;
 			DECIMAL d;
 			::ZeroMemory(&d,sizeof(d));
 			d.Lo32 = w;
@@ -158,13 +196,14 @@ void EditorMenu::updateUI()
 
 			mol::variant var(v);
 
-			mol::Ribbon::handler(RibbonTabSize)->decimal(var);
+			//mol::Ribbon::handler(RibbonTabSize)->decimal(var);
 
 			::VariantClear(&v);
 		}
 		if ( S_OK == editor_->props_->get_WriteBOM(&vb) )
 		{
-			mol::Ribbon::handler(RibbonWriteBOM)->check(vb == VARIANT_TRUE ? true : false );
+			json["writeBOM"] = vb == VARIANT_TRUE ? true : false;
+			//mol::Ribbon::handler(RibbonWriteBOM)->check(vb == VARIANT_TRUE ? true : false );
 		}
 	}
 
@@ -172,13 +211,18 @@ void EditorMenu::updateUI()
 	if ( S_OK != editor_->props_->get_ShowLineNumbers(&vb) )
 		return;
 
+	json["showLineNumbers"] = vb == VARIANT_TRUE ? true : false;
+	/*
 	if ( mol::Ribbon::ribbon()->enabled() )
 	{
 		bool  b = vb == VARIANT_TRUE ? true : false;
 		mol::Ribbon::handler(RibbonShowLineNumbers)->check(b);
 	}
 	else
+	*/
+	/*
 	{
+
 		mol::Menu mode(mol::UI().SubMenu(IDM_MOE,IDM_MODE));
 
 		if ( vb == VARIANT_TRUE )
@@ -186,17 +230,22 @@ void EditorMenu::updateUI()
 		else
 			mode.unCheckItem( IDM_MODE_SHOW_LINE_NUMBERS );
 	}
-
+	*/
 	if (!editor_->debugger_)
 	{		
-		mol::Ribbon::ribbon()->mode(1);		
+		//mol::Ribbon::ribbon()->mode(1);		
 	}
 	else
 	{
+		json["appmode"] = "Debug";
 		debugDlg()->show(SW_SHOW);
-		mol::Ribbon::ribbon()->mode(9);		
+		//mol::Ribbon::ribbon()->mode(9);		
 	}
-	mol::Ribbon::ribbon()->maximize();
+	//mol::Ribbon::ribbon()->maximize();
+
+
+	std::string utf8 = JSON::flatten(json);
+	ribbon()->oleObject->PostWebMessageAsJson(mol::fromUTF8(utf8).c_str());
 }
 
 void EditorMenu::createMenuFromConf(HMENU m,HMENU popup)
@@ -223,7 +272,9 @@ void EditorMenu::createMenuFromConf(HMENU m,HMENU popup)
 
 	updateToolMenu(tools);
 
+	/*
 	if ( !mol::Ribbon::ribbon()->enabled())
+	*/
 		::DrawMenuBar(*moe()); 
 	::UpdateWindow(*moe()); 
 

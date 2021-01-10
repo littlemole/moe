@@ -32,7 +32,8 @@ public:
 	enum styles { TITLE = 1, NOSCROLL = 2, DIALOG = 4, STANDALONE = 8 };
 
 	mol::punk< ICoreWebView2Controller> webViewController;
-	mol::punk< ICoreWebView2> oleObject;
+	mol::punk< IMoeHtmlFrame> oleObject;
+	mol::punk< ICoreWebView2> webview;
 
 	mol::punk<IDispatch> onDocumentLoadHandler;
 	mol::punk<IDispatch> onMessageHandler;
@@ -86,9 +87,6 @@ protected:
 		MoeFrame();
 		~MoeFrame();
 
-
-		mol::punk<IMoeDialogView> view;
-
 		virtual HRESULT __stdcall get_onDocumentLoad( IDispatch **d);
 		virtual HRESULT __stdcall put_onDocumentLoad(IDispatch* d);
 		virtual HRESULT __stdcall get_onMessage(IDispatch** d);
@@ -102,6 +100,10 @@ protected:
 
 		virtual HRESULT __stdcall addExternalObject(BSTR name, IDispatch* disp);
 		virtual HRESULT __stdcall removeExternalObject(BSTR name);
+
+		virtual HRESULT __stdcall Reload();
+		virtual HRESULT __stdcall Next();
+		virtual HRESULT __stdcall Back();
 
 		std::set<std::wstring> objects_;
 	};

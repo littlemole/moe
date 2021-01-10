@@ -104,6 +104,8 @@ public:
 
    virtual HRESULT __stdcall get_FilePath( BSTR *fname);
 
+   virtual HRESULT __stdcall SaveAsDialog();
+
 protected:
 
 	bool initialize(const std::wstring& p, long enc, bool readOnly);
@@ -128,7 +130,14 @@ protected:
 		virtual HRESULT __stdcall OnSystem( long s);
 		virtual HRESULT __stdcall OnEncoding( long e);
 		virtual HRESULT __stdcall OnMarker( long line);
-    } events;
+		virtual HRESULT __stdcall OnTabUsage(VARIANT_BOOL vb);
+		virtual HRESULT __stdcall OnTabIndents(VARIANT_BOOL vb);
+		virtual HRESULT __stdcall OnBackspaceUnindents(VARIANT_BOOL vb);
+		virtual HRESULT __stdcall OnShowLineNumbers(VARIANT_BOOL vb);
+		virtual HRESULT __stdcall OnWriteBOM(VARIANT_BOOL vb);
+		virtual HRESULT __stdcall OnTabWidth(long w);
+
+	} events;
 
 	std::map<int,ISetting*>		shortCutMap;
 	std::map<int,ISetting*>		scriptMap;

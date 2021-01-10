@@ -16,6 +16,8 @@ MoeForm2Wnd::MoeForm2Wnd(  )
     eraseBackground_ = 1;
 	wndClass().setIcon(moe()->icon); 
 	wndClass().hIconSm(moe()->icon); 
+
+	//oleObject = this;
 }
 
 
@@ -91,13 +93,13 @@ void MoeForm2Wnd::onCreateWebView(std::wstring target, ICoreWebView2Controller* 
 {
 	webViewController = controller;
 
-	webViewController->get_CoreWebView2(&oleObject);
+	webViewController->get_CoreWebView2(&webview);
 
 	mol::punk<IDispatch> disp(&external_);
 	mol::variant obj(disp);
-	oleObject->AddHostObjectToScript(L"external", &obj);
+	webview->AddHostObjectToScript(L"external", &obj);
 
-	oleObject->add_DocumentTitleChanged(
+	webview->add_DocumentTitleChanged(
 		make_callback<ICoreWebView2DocumentTitleChangedEventHandler>(
 			[this](ICoreWebView2* sender, IUnknown*)
 	{
@@ -106,7 +108,7 @@ void MoeForm2Wnd::onCreateWebView(std::wstring target, ICoreWebView2Controller* 
 		&documentTitleChangedToken
 		);
 
-	oleObject->add_NavigationStarting(
+	webview->add_NavigationStarting(
 		make_callback<ICoreWebView2NavigationStartingEventHandler>(
 			[this](ICoreWebView2* webView, ICoreWebView2NavigationStartingEventArgs* args)
 	{
@@ -115,7 +117,7 @@ void MoeForm2Wnd::onCreateWebView(std::wstring target, ICoreWebView2Controller* 
 		&navigationStartingToken
 		);
 
-	oleObject->add_PermissionRequested(
+	webview->add_PermissionRequested(
 		make_callback<ICoreWebView2PermissionRequestedEventHandler>(
 			[this](ICoreWebView2* webView, ICoreWebView2PermissionRequestedEventArgs* args)
 	{
@@ -124,14 +126,14 @@ void MoeForm2Wnd::onCreateWebView(std::wstring target, ICoreWebView2Controller* 
 		&permissionRequestToken
 		);
 
-	oleObject->Navigate(target.c_str());
+	webview->Navigate(target.c_str());
 }
 
 
 void MoeForm2Wnd::onDocumentTitleChanged()
 {
 	LPWSTR title = nullptr;
-	oleObject->get_DocumentTitle(&title);
+	webview->get_DocumentTitle(&title);
 	this->setText(title);
 	::CoTaskMemFree(title);
 }
@@ -144,7 +146,15 @@ void MoeForm2Wnd::onNavigationStarted(ICoreWebView2NavigationStartingEventArgs* 
 	{
 		args->put_Cancel(TRUE);
 		::CoTaskMemFree(uri);
-		postMessage(WM_CLOSE, 0, 0);
+
+		if (style_ & HIDE_ON_KILL_FOCUS)
+		{
+			show(SW_HIDE);
+		}
+		else
+		{
+			postMessage(WM_CLOSE, 0, 0);
+		}
 		return;
 	}
 
@@ -245,17 +255,19 @@ void MoeForm2Wnd::OnNcDestroy()
 {
 	ODBGS("MoeFormWnd::OnNcDestroy");
 
-	if (oleObject)
+	if (webview)
 	{
-		oleObject->RemoveHostObjectFromScript(L"external");
-		oleObject->remove_DocumentTitleChanged(documentTitleChangedToken);
-		oleObject->remove_NavigationStarting(navigationStartingToken);
-		oleObject->remove_PermissionRequested(permissionRequestToken);
+		webview->RemoveHostObjectFromScript(L"external");
+		webview->remove_DocumentTitleChanged(documentTitleChangedToken);
+		webview->remove_NavigationStarting(navigationStartingToken);
+		webview->remove_PermissionRequested(permissionRequestToken);
 
 		webViewController->Close();
 		webViewController.release();
-		oleObject.release();
+		webview.release();
 	}
+
+	//oleObject.release();
 
 	::CoDisconnectObject(((IExternalMoe*)&external_), 0);
 
@@ -274,6 +286,21 @@ void MoeForm2Wnd::OnNcDestroy()
 	((IMoeHtmlFrame*)this)->Release();
 
 	ODBGS("~MoeFormWnd()OnNcDestroy --");
+}
+
+void MoeForm2Wnd::OnActivate(WPARAM wParam, LPARAM lParam)
+{
+	if (style_ & HIDE_ON_KILL_FOCUS)
+	{
+		WORD mode = LOWORD(wParam);
+		if (mode == WA_INACTIVE && (HWND)lParam != hWnd_)
+		{
+			show(SW_HIDE);
+			//postMessage(WM_CLOSE, 0, 0);
+			//destroy();
+			//::SetActiveWindow(*moe());
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -339,9 +366,9 @@ HRESULT __stdcall  MoeForm2Wnd::get_Scripts(IDispatch** s)
 
 HRESULT __stdcall  MoeForm2Wnd::Eval(BSTR src, IDispatch* future)
 {
-	if (!oleObject) return S_OK;
+	if (!webview) return S_OK;
 
-	return oleObject->ExecuteScript(mol::bstr(src).towstring().c_str(), nullptr);
+	return webview->ExecuteScript(mol::bstr(src).towstring().c_str(), nullptr);
 
 }
 
@@ -370,23 +397,23 @@ HRESULT __stdcall  MoeForm2Wnd::OleCmd(  long cmd)
 
 void MoeForm2Wnd::cut()
 {
-	if (!oleObject) return;
+	if (!webview) return;
 
-	oleObject->ExecuteScript(L"document.execCommand('cut')", nullptr);
+	webview->ExecuteScript(L"document.execCommand('cut')", nullptr);
 
 }
 void MoeForm2Wnd::copy()
 {
-	if (!oleObject) return;
+	if (!webview) return;
 
-	oleObject->ExecuteScript(L"document.execCommand('copy')", nullptr);
+	webview->ExecuteScript(L"document.execCommand('copy')", nullptr);
 }
 
 std::wstring escape_json_str(const std::wstring& in);
 
 void MoeForm2Wnd::paste()
 {
-	if (!oleObject) return;
+	if (!webview) return;
 
 	mol::win::ClipBoard clip(hWnd_);
 	UINT format = clip.format(mol::win::ClipBoard::UNICODE_TEXT);
@@ -400,7 +427,7 @@ void MoeForm2Wnd::paste()
 		<< L"el.value.substring(el.selectionEnd,el.value.length); }) ();";
 
 	std::wstring ws(oss.str());
-	oleObject->ExecuteScript(ws.c_str(), nullptr);
+	webview->ExecuteScript(ws.c_str(), nullptr);
 }
 
 
@@ -417,23 +444,52 @@ HRESULT __stdcall  MoeForm2Wnd::get_FilePath(  BSTR *filename)
 
 HRESULT __stdcall MoeForm2Wnd::addExternalObject(BSTR name, IDispatch* disp)
 {
-	if (!oleObject)
+	if (!webview)
 		return S_FALSE;
 
 	mol::bstr objName(name);
 	mol::variant v(disp);
-	return oleObject->AddHostObjectToScript(objName.towstring().c_str(), &v);
+	return webview->AddHostObjectToScript(objName.towstring().c_str(), &v);
 }
 
 HRESULT __stdcall MoeForm2Wnd::removeExternalObject(BSTR name)
 {
-	if (!oleObject)
+	if (!webview)
 		return S_FALSE;
 
 	mol::bstr objName(name);
-	return oleObject->RemoveHostObjectFromScript(objName.towstring().c_str());
+	return webview->RemoveHostObjectFromScript(objName.towstring().c_str());
 }
 
+
+HRESULT __stdcall MoeForm2Wnd::Reload()
+{
+	if (!webview)
+		return S_FALSE;
+
+	webview->Reload();
+
+	return S_OK;
+}
+
+HRESULT __stdcall MoeForm2Wnd::Next()
+{
+	if (!webview)
+		return S_FALSE;
+
+	webview->GoForward();
+
+	return S_OK;
+}
+
+HRESULT __stdcall MoeForm2Wnd::Back()
+{
+	if (!webview)
+		return S_FALSE;
+
+	webview->GoBack();
+	return S_OK;
+}
 /////////////////////////////////////////////////////////////////////////////////////////////
 // external events called from script inside MoeWnd
 /////////////////////////////////////////////////////////////////////////////////////////////

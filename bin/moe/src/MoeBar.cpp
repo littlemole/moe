@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MoeBar.h"
 #include "moe.h"
+#include "app.h"
 #include "docs.h"
 #include "xmlui.h"
 #include "resource.h"
@@ -402,7 +403,7 @@ HRESULT  __stdcall MoeTabControl::MoeTabControl_Drop::DragLeave()
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 void MoeToolBar::OnRightClick(NMHDR* notify)
 {
 	if ( moe()->toolbarFrozen() )
@@ -462,7 +463,218 @@ LRESULT MoeBar::wndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return mol::ReBar::wndProc(wnd,msg,wParam,lParam);
 }
 
+*/
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
+
+MoeHtmlRibbon::MoeHtmlRibbon()
+{
+	eraseBackground_ = 1;
+//	wndClass().setIcon(moe()->icon);
+//	wndClass().hIconSm(moe()->icon);
+}
+
+
+MoeHtmlRibbon::~MoeHtmlRibbon()
+{
+	ODBGS("~MoeHtmlRibbon() dropped dead");
+}
+
+void MoeHtmlRibbon::OnCreate()
+{
+}
+
+void MoeHtmlRibbon::load(mol::punk<ChromeEdge> edge)
+{
+	std::wstring l = mol::app<MoeApp>().CreateAppPath(L"moe");
+	location_ = l + L"\\ui\\ribbon.html";
+
+	edge->createWebView(hWnd_, [this](HRESULT hr, ICoreWebView2Controller* controller)
+	{
+		this->onCreateWebView(location_, controller);
+	});
+}
+
+void MoeHtmlRibbon::setAppMode(const std::string& m)
+{
+	std::ostringstream oss;
+	oss << "{ \"appmode\" : \"" << m << "\" }";
+	ribbon()->oleObject->PostWebMessageAsJson(mol::towstring(oss.str()).c_str());
+}
+
+void MoeHtmlRibbon::onCreateWebView(std::wstring target, ICoreWebView2Controller* controller)
+{
+	webViewController = controller;
+
+	webViewController->get_CoreWebView2(&oleObject);
+
+	mol::punk<IDispatch> disp(&external_);
+	mol::variant obj(disp);
+	oleObject->AddHostObjectToScript(L"external", &obj);
+
+	oleObject->add_NavigationStarting(
+		make_callback<ICoreWebView2NavigationStartingEventHandler>(
+			[this](ICoreWebView2* webView, ICoreWebView2NavigationStartingEventArgs* args)
+		{
+			this->onNavigationStarted(args);
+		}),
+		&navigationStartingToken
+	);
+
+	oleObject->Navigate(target.c_str());
+}
+
+
+
+void MoeHtmlRibbon::onNavigationStarted(ICoreWebView2NavigationStartingEventArgs* args)
+{
+	/*
+	LPWSTR uri = nullptr;
+	args->get_Uri(&uri);
+	if (mol::wcstricmp(uri, L"mol://close") == 0)
+	{
+		args->put_Cancel(TRUE);
+		::CoTaskMemFree(uri);
+		postMessage(WM_CLOSE, 0, 0);
+		return;
+	}
+
+	::CoTaskMemFree(uri);
+	*/
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void MoeHtmlRibbon::OnSize(WPARAM wParam, LPARAM lParam)
+{
+	if (webViewController)
+	{
+		RECT bounds;
+		GetClientRect(hWnd_, &bounds);
+		webViewController->put_Bounds(bounds);
+	};
+
+}
+void MoeHtmlRibbon::OnClose()
+{
+	ODBGS("MoeHtmlRibbon::OnClose");
+}
+
+void MoeHtmlRibbon::OnNcDestroy()
+{
+	ODBGS("MoeHtmlRibbon::OnNcDestroy");
+
+	if (oleObject)
+	{
+		oleObject->RemoveHostObjectFromScript(L"external");
+//		oleObject->remove_DocumentTitleChanged(documentTitleChangedToken);
+		oleObject->remove_NavigationStarting(navigationStartingToken);
+	//	oleObject->remove_PermissionRequested(permissionRequestToken);
+
+		webViewController->Close();
+		webViewController.release();
+		oleObject.release();
+	}
+
+	::CoDisconnectObject(((IExternalMoe*)&external_), 0);
+
+	//delete this;
+	ODBGS("~MoeFormWnd()OnNcDestroy --");
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+int MoeHtmlRibbon::style()
+{
+	static int s = WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+
+	return s | WS_VISIBLE | WS_CHILD;
+}
+
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+// external events called from script inside MoeWnd
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+MoeHtmlRibbon::ExternalMoe::ExternalMoe()
+{
+}
+
+MoeHtmlRibbon::ExternalMoe::~ExternalMoe()
+{
+	ODBGS("MoeHtmlRibbon::ExternalMoe ~");
+}
+
+HRESULT __stdcall MoeHtmlRibbon::ExternalMoe::get_Moe(IDispatch** disp)
+{
+	if (!disp)
+		return E_INVALIDARG;
+
+	HRESULT hr = ((IMoe*)(moe()))->QueryInterface(IID_IDispatch, (void**)disp);
+	if (hr != S_OK)
+		*disp = 0;
+
+	return hr;
+}
+
+
+
+HRESULT __stdcall MoeHtmlRibbon::ExternalMoe::Close()
+{
+	ODBGS("MoeHtmlRibbon::ExternalMoe::Close()");
+	moe()->postMessage(WM_CLOSE, 0, 0);
+	return S_OK;
+}
+
+HRESULT __stdcall MoeHtmlRibbon::ExternalMoe::CreateObject(BSTR progId, IDispatch** disp)
+{
+	if (!disp)
+		return E_INVALIDARG;
+
+	*disp = 0;
+	CLSID clsid;
+
+	if (S_OK == ::CLSIDFromProgID(progId, &clsid))
+	{
+		if (S_OK == ::CoCreateInstance(clsid, NULL, CLSCTX_INPROC | CLSCTX_LOCAL_SERVER, IID_IDispatch, (void**)disp))
+			return S_OK;
+	}
+	return E_FAIL;
+}
+
+HRESULT __stdcall MoeHtmlRibbon::ExternalMoe::get_Frame(IMoeHtmlFrame** f)
+{
+	if (!f)
+		return E_INVALIDARG;
+	return E_NOTIMPL;
+}
+
+
+HRESULT __stdcall MoeHtmlRibbon::ExternalMoe::CodeBehind(BSTR fname)
+{
+	return E_NOTIMPL;
+}
+
+HRESULT __stdcall MoeHtmlRibbon::ExternalMoe::get_Code(IDispatch** code)
+{
+	if (!code)
+		return E_INVALIDARG;
+
+	*code = 0;
+	return E_NOTIMPL;
+}
+
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////

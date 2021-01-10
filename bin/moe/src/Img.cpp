@@ -129,11 +129,7 @@ void ImgViewer::updateUI()
 	
 	statusBar()->setText(getText(),oss.str(), oss2.str() );
 
-	if ( mol::Ribbon::ribbon()->enabled())
-	{
-		mol::Ribbon::ribbon()->mode(3);
-		mol::Ribbon::ribbon()->maximize();
-	}
+	ribbon()->setAppMode("Img");
 }
 
 //////////////////////////////////////////////////////////////////////////////

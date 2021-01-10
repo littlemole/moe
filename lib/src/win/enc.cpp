@@ -294,6 +294,32 @@ int  FileEncoding::getEncoding(const std::string& c, const std::string& h )
 		}
 	}
 
+	// fith, search body for HTML5 meta-tag <meta charset="UTF-8">
+
+	std::smatch m_metac;
+	std::regex e_metac("<meta *charset=['\"]([^'\"]*)['\"]>");
+	if (std::regex_search(c, m_metac, e_metac))
+	{
+		std::string s = mol::tostring(m_metac[1]);
+		s = mol::trim(s);
+
+		// can't be UTF-16 - if we matched the *ASCII* string "UTF-16", then encoding is broken!
+		if (s != "UTF-16")
+		{
+			mol::bstr b(s);
+			MIMECSETINFO minfo;
+
+			HRESULT hr = multiLang_->GetCharsetInfo(b, &minfo);
+			if (hr == S_OK)
+			{
+				enc_ = mol::tostring(minfo.wszCharset);
+				codePage_ = minfo.uiInternetEncoding;
+				return minfo.uiInternetEncoding;
+			}
+		}
+	}
+
+
 	// no result yet? start start guessing with IMultiLang
     const int dEncInfoSize = 10;
     int s = dEncInfoSize;

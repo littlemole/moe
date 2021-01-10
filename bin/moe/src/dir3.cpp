@@ -123,11 +123,21 @@ void DirChild::OnMDIActivate( HWND activated )
 {
 	if ( activated == *this )
 	{
+		Json::Value json(Json::objectValue);
+		json["doctype"] = MOE_DOCTYPE_DIR;
+		json["appmode"] = "Directory";
+
+		std::string utf8 = JSON::flatten(json);
+		ribbon()->setAppMode("Directory");
+		ribbon()->oleObject->PostWebMessageAsJson(mol::fromUTF8(utf8).c_str());
+/*
+
 		if ( mol::Ribbon::ribbon()->enabled())
 		{
 			mol::Ribbon::ribbon()->mode(2);
 			mol::Ribbon::ribbon()->maximize();
 		}
+		*/
 		statusBar()->status(location_);
 		tab()->select( *this );
 	}

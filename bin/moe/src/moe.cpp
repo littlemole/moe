@@ -99,7 +99,7 @@ void MoeWnd::OnCreate()
 	// the main window and GUI elements have been created
 	// initialize critical GUI parts now
 
-	this->layout_->hasRibbon(true);
+	//this->layout_->hasRibbon(true);
 
 	ODBGS("MoeWnd::OnCreate()");
 
@@ -114,14 +114,18 @@ void MoeWnd::OnCreate()
 	tree->put_UseContext(VARIANT_FALSE);
 	treeWndSink->Advise(treeWnd()->oleObject);
 
+
+
 	// load UI state
 	loadPersistUIstate();
+
+	ribbon()->load(edge);
 
 	// update the menu
 	::DrawMenuBar(*this);
 
     // update ribbon's recent documents
-	mol::Ribbon::ribbon()->updateRecentDocs(RibbonMRUItems);
+	//mol::Ribbon::ribbon()->updateRecentDocs(RibbonMRUItems);
 
 	// pre-init the debug dialog (hidden)
 	debugDlg()->doModeless( IDD_DIALOG_DEBUG, *this );
@@ -152,6 +156,10 @@ void MoeWnd::loadPersistUIstate()
 	if ( !mol::Path::exists(p) )
 		return;
 
+	std::wstring recentUrlsPath = appPath + L"\\recentUrls.xml";
+	urlDlg->readXML(recentUrlsPath);
+
+	
 	// open the storage
 	Storage store;
 	if ( !store.open(p, STGM_READ | STGM_SHARE_EXCLUSIVE ))
@@ -160,7 +168,8 @@ void MoeWnd::loadPersistUIstate()
 	// load moe config data from storage
 	mol::punk<IPersistStorage> ps;
 	((IMoe*)this)->QueryInterface( IID_IPersistStorage, (void**)&ps);
-	HRESULT hr = ps->Load( store );
+//	HRESULT hr = ps->Load( store );
+	
 }
 
 
@@ -203,7 +212,7 @@ LRESULT MoeWnd::OnCloseAllButThis()
 
 void MoeWnd::OnDestroy()
 {	
-	Ribbon::ribbon()->tearDown();
+//	Ribbon::ribbon()->tearDown();
 
 	treeWndSink->UnAdvise(treeWnd()->oleObject);
 	::CoDisconnectObject(treeWnd()->oleObject,0);
@@ -241,8 +250,8 @@ void MoeWnd::OnMDIActivate(HWND activated)
 
 LRESULT MoeWnd::OnMenu(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if ( mol::Ribbon::ribbon()->enabled())
-		return 0;
+//	if ( mol::Ribbon::ribbon()->enabled())
+	//	return 0;
 
 	Menu m( (HMENU)wParam );
 
@@ -252,7 +261,7 @@ LRESULT MoeWnd::OnMenu(UINT msg, WPARAM wParam, LPARAM lParam)
 		m.unCheckItem(IDM_VIEW_DIRVIEW );
 	else
 		m.checkItem(IDM_VIEW_DIRVIEW);
-
+	/*
 	for ( int i = IDC_TOOLBARS_FILEBAR; i <= IDC_TOOLBARS_USERBAR; i++ )
 	{
 		int index = i-IDC_TOOLBARS_FILEBAR + IDM_TOOLBARS_FILEBAR;
@@ -271,7 +280,7 @@ LRESULT MoeWnd::OnMenu(UINT msg, WPARAM wParam, LPARAM lParam)
 		m.checkItem(IDM_TOOLBARS_FREEZE);
 	else
 		m.unCheckItem(IDM_TOOLBARS_FREEZE);
-
+		*/
 	// pass to active window
 	::SendMessage(getActive(),msg, wParam, lParam);
 
@@ -332,11 +341,12 @@ void MoeWnd::OnFileOpen()
 void MoeWnd::OnRecentItems()
 {
 	// click on recent items list - retrieve filename
-	int selected = mol::Ribbon::handler(RibbonMRUItems)->index();
+/*	int selected = mol::Ribbon::handler(RibbonMRUItems)->index();
 	std::wstring f = mol::Ribbon::handler(RibbonMRUItems)->recent_items()[selected].first;
 
 	mol::punk<IMoeDocument> doc;
 	docs()->Open( mol::bstr(f), &doc );
+	*/
 }
 
 
@@ -419,6 +429,22 @@ void MoeWnd::OnFind()
 void MoeWnd::OnReplace()
 {
     searchDlg->replaceText(*this);
+}
+
+void MoeWnd::OnSysCommand(WPARAM wParam)
+{
+	// that did not work out as planned :-(
+	/*
+	if (wParam == VK_MENU)
+	{
+		::SetMenu(hWnd_, UI().Menu(IDM_MOE));
+	}
+	*/
+}
+
+void MoeWnd::OnExitLoop()
+{
+//	::SetMenu(hWnd_, 0);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -527,6 +553,7 @@ void MoeWnd::OnShowDirView ()
 
 void MoeWnd::OnShowToolBar (int code, int id, HWND ctrl)
 {
+	/*
 	Menu m(*this);
 	switch(id)
 	{
@@ -564,6 +591,7 @@ void MoeWnd::OnShowToolBar (int code, int id, HWND ctrl)
 			break;
 		}
 	}
+	*/
 	OnLayout(0,0,0);
 }
 
@@ -575,6 +603,7 @@ void MoeWnd::OnShowToolBar (int code, int id, HWND ctrl)
 
 void MoeWnd::OnFreezeToolBar ()
 {
+	/*
 	if ( toolBarFrozen_ )
 	{
 		toolBarFrozen_ = 0;
@@ -585,6 +614,7 @@ void MoeWnd::OnFreezeToolBar ()
 		toolBarFrozen_ = 1;
 		reBar()->freeze(true);
 	}
+	*/
 }
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -619,11 +649,13 @@ void MoeWnd::OnHelpAbout()
 
 void MoeWnd::OnSyntax(int code, int id, HWND ctrl)
 {
+	/*
 	if ( code == CBN_SELCHANGE )
 	{
 		int sel = mol::UI().Wnd<MoeComboBox>(IDW_SYNTAX_BOX)->getCurSel();
 		::PostMessage(getActive(),WM_COMMAND,IDM_LEXER_PLAIN+sel,(LPARAM)ctrl);
 	}
+	*/
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -760,13 +792,17 @@ HRESULT __stdcall MoeWnd::Exit()
 	*/
 
 	// if we have ribbon, maximize it before persistence
+	/*
 	if ( mol::Ribbon::ribbon()->enabled())
 	{
 		mol::Ribbon::ribbon()->maximize();
 	}
+	*/
 
-	// save persistent info
 	std::wstring appPath = mol::app<AppBase>().CreateAppPath(_T("moe"));
+	std::wstring p;
+	/*
+	// save persistent info
 	std::wstring p(appPath + _T("\\ui.xmo"));
 	Storage store;
 	if ( store.create(p) )
@@ -778,7 +814,7 @@ HRESULT __stdcall MoeWnd::Exit()
 			ps->Save(store,FALSE);
 		}
 	}
-
+	*/
 	// save xml
 
 	p = appPath + L"\\settings.xml";
@@ -796,8 +832,33 @@ HRESULT __stdcall MoeWnd::Exit()
 		ofs.close();
 	}
 
+	p = appPath + L"\\recentUrls.xml";
+	urlDlg->saveXML(p);
+
 	// harakiri
 	destroy();
+	return S_OK;
+}
+
+HRESULT __stdcall MoeWnd::PasteAs()
+{
+	HWND active = this->getActive();
+	if (!active) return S_OK;
+
+	::PostMessage(active, WM_COMMAND, IDM_EDIT_PASTEAS, 0);
+	return S_OK;
+}
+
+HRESULT __stdcall MoeWnd::InsertTemplate()
+{
+	HWND active = this->getActive();
+	if (!active) return S_OK;
+
+	NMTOOLBAR nmTb;
+	nmTb.hdr.code = TBN_DROPDOWN;
+	nmTb.iItem = IDM_USER_SHORTCUT;
+
+	::SendMessage(active, WM_NOTIFY, 0, (WPARAM)&nmTb);
 	return S_OK;
 }
 
@@ -838,13 +899,15 @@ HRESULT MoeWnd::stdOut(BSTR* ret)
 HRESULT __stdcall MoeWnd::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
 {
 	// save moe UI settings
+	/*
 	punk<IStream> stream;
 	if ( S_OK == pStgSave->CreateStream( L"UI", STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,0,&stream) )
 	{
 		urlDlg->Save(stream,FALSE);
 	}
 	stream.release();
-
+	*/
+	/*
 	if ( S_OK == pStgSave->CreateStream( L"REBAR", STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,0,&stream) )
 	{
 		if ( mol::Ribbon::ribbon()->enabled() ) 
@@ -859,7 +922,8 @@ HRESULT __stdcall MoeWnd::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
 		}
 	}
 	stream.release();
-
+	*/
+	/*
 	mol::punk<IDispatch> disp;
 	moeConfig->get_Settings(&disp);
 	mol::punk<ISetting> config(disp);
@@ -901,6 +965,7 @@ HRESULT __stdcall MoeWnd::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
 			ps->Save(stream,TRUE);
 		}
 	}
+	*/
 	return S_OK;
 }
 
@@ -917,7 +982,7 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 
 	HRESULT hr;
 
-#ifdef STILL_USING_STRUCTURED_STORAGE_IN_2020 
+#ifndef STILL_USING_STRUCTURED_STORAGE_IN_2020 
 
 	// open defaults stream
 	hr = pStgLoad->OpenStream( def, NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
@@ -947,6 +1012,7 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 	
 	stream.release();
 
+	/*
 	hr = pStgLoad->OpenStream( reb, NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
 	if ( !stream || (hr != S_OK) )
 		return S_OK;
@@ -954,10 +1020,11 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 	data_.copyFrom(stream);
 
 	reBar()->Load(stream);
-
+	
 	stream.release();
+	*/
 
-#ifdef STILL_USING_STRUCTURED_STORAGE_IN_2020 
+#ifndef STILL_USING_STRUCTURED_STORAGE_IN_2020 
 
 	mol::punk<IStorage> store;
 	hr = pStgLoad->OpenStorage(con,0,STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,0,&store);
@@ -1014,6 +1081,8 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 		}
 	}
 
+	showRibbon = false;
+
 	// show the ribbon if avail and load persistent ribbon settings from store
 	if ( showRibbon ) 
 		initRibbon(pStgLoad);
@@ -1029,7 +1098,7 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 
 	//return S_OK;
 	
-#ifdef STILL_USING_STRUCTURED_STORAGE_IN_2020 
+//#ifdef STILL_USING_STRUCTURED_STORAGE_IN_2020 
 
 	// open Style stream
 	hr = pStgLoad->OpenStream( L"STYLES", NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
@@ -1046,7 +1115,7 @@ HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
 		return S_OK;
 	
 	stream.release();
-#endif 
+//#endif 
 
 	return S_OK;
 }
@@ -1071,6 +1140,7 @@ void  MoeWnd::freezeConfig(const std::wstring& key)
 
 void  MoeWnd::initRibbon(IStorage* store)
 {
+	/*
 	// show the Ribbon
 	Ribbon::ribbon()->show(*this);
 
@@ -1084,6 +1154,7 @@ void  MoeWnd::initRibbon(IStorage* store)
 
 	// syntax select dropdown handler - populate from toolbar combobox values 
 	std::vector<std::wstring> vs;
+	
 	for ( int i = 0; i < mol::UI().Wnd<MoeComboBox>(IDW_SYNTAX_BOX)->getCount(); i++ )
 	{
 		vs.push_back( mol::UI().Wnd<MoeComboBox>(IDW_SYNTAX_BOX)->getString(i)  );
@@ -1142,6 +1213,7 @@ void  MoeWnd::initRibbon(IStorage* store)
 	moeConfig->put_RibbonTextColor(textCol);
 
 	Ribbon::ribbon()->flush();
+	*/
 }
 
 HRESULT __stdcall MoeWnd::Load( LPSTREAM pStm) 
@@ -1161,7 +1233,7 @@ HRESULT __stdcall MoeWnd::Save( LPSTREAM pStm,BOOL fClearDirty)
 HRESULT __stdcall MoeWnd::GetSizeMax( ULARGE_INTEGER *pCbSize)
 {
 	urlDlg->GetSizeMax(pCbSize);
-	reBar()->GetSizeMax(pCbSize);
+	//reBar()->GetSizeMax(pCbSize);
 	pCbSize->QuadPart += sizeof(ULONG)*2 + sizeof(BYTE)*3;
 	
 	mol::punk<IDispatch> disp;

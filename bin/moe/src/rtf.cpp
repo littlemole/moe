@@ -138,15 +138,15 @@ void RTFEditor::OnMDIActivate( WPARAM unused, HWND activated)
 			richEditOle->InPlaceDeactivate();
 		}
 		
-		mol::Ribbon::ribbon()->mode(10);
-		mol::Ribbon::ribbon()->maximize();
+		ribbon()->setAppMode("Rtf");
 	}
 	else 
 	{
 		if (!shuttingDown_)
 		{
 			tab()->select( *this );
-			Ribbon::ribbon()->mode(10);
+
+			ribbon()->setAppMode("Rtf");
 		}
 	}
 }
@@ -253,8 +253,8 @@ void RTFEditor::OnSelectAll()
 
 void RTFEditor::OnFont()
 {
-	CHARFORMAT2& c2 = mol::Ribbon::handler(RibbonFontControl)->font();
-	rtf_.sendMessage( EM_SETCHARFORMAT, (WPARAM) SCF_SELECTION, (LPARAM)&c2);
+//	CHARFORMAT2& c2 = mol::Ribbon::handler(RibbonFontControl)->font();
+//	rtf_.sendMessage( EM_SETCHARFORMAT, (WPARAM) SCF_SELECTION, (LPARAM)&c2);
 }
 
 void RTFEditor::OnSelectionChange(SELCHANGE * selc)
@@ -270,8 +270,8 @@ void RTFEditor::OnSelectionChange(SELCHANGE * selc)
 	c2.cbSize = sizeof(c2);
 
 	rtf_.sendMessage(EM_GETCHARFORMAT,(WPARAM)SCF_SELECTION,(LPARAM)&c2);
-	mol::Ribbon::handler(RibbonFontControl)->font() = c2;
-	mol::Ribbon::ribbon()->update(RibbonFontControl);
+//	mol::Ribbon::handler(RibbonFontControl)->font() = c2;
+	//mol::Ribbon::ribbon()->update(RibbonFontControl);
 }
 
 void RTFEditor::OnInsertColorDialog(  )
@@ -443,7 +443,7 @@ void RTFEditor::OnFilter(MSGFILTER* filter)
 	{
 		POINT pt;
 		::GetCursorPos(&pt);
-		mol::Ribbon::ribbon()->showContextualUI(RibbonRTFDocumentContextMap,pt.x,pt.y);
+//		mol::Ribbon::ribbon()->showContextualUI(RibbonRTFDocumentContextMap,pt.x,pt.y);
 	}
 
 }
@@ -715,13 +715,13 @@ HRESULT __stdcall RTFEditor::RichEditOleCallback::ShowContainerUI(BOOL fShow)
 				frame->SetBorderSpace(0);
 			}
 		}
-		
-		mol::Ribbon::ribbon()->mode(10);
+
+		ribbon()->setAppMode("Rtf");
 		This()->rtf_.redraw();
 	}
 	else
 	{
-		mol::Ribbon::ribbon()->mode(0);
+		ribbon()->setAppMode("Scintilla");
 		if (!This()->shuttingDown_)
 		{
 			This()->rtf_.redraw();

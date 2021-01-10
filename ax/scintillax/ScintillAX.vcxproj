@@ -211,13 +211,13 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformation>true</BrowseInformation>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\..\lib\src\win\x64\uni_Release\win.lib;..\..\lib\src\ole\x64\uni_Release\ole.lib;..\..\lib\src\util\x64\uni_Release\util.lib;..\..\lib\src\thread\x64\uni_Release\thread.lib;SciLexer.lib;Scintilla.lib;libscintilla.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Imm32.lib;Msimg32.lib;Ws2_32.lib;Crypt32.lib;..\..\lib\src\xml\x64\uni_Release\xml.lib;expat.lib;..\..\lib\src\tcp\x64\uni_release\tcp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>ScintillAx.def</ModuleDefinitionFile>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

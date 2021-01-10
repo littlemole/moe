@@ -64,6 +64,91 @@ private:
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
+// html form window
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+class MoeHtmlRibbon :
+	public mol::Frame<MoeHtmlRibbon,mol::Window,  WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,0>
+{
+public:
+
+	mol::punk< ICoreWebView2Controller> webViewController;
+	mol::punk< ICoreWebView2> oleObject;
+	mol::punk<IMoeDialogView> view;
+
+	MoeHtmlRibbon();
+	~MoeHtmlRibbon();
+
+//	virtual void dispose() {}
+
+
+//	void onDocumentTitleChanged();
+	void onNavigationStarted(ICoreWebView2NavigationStartingEventArgs* args);
+//	void onPermissionRequest(ICoreWebView2PermissionRequestedEventArgs* args);
+	void onCreateWebView(std::wstring target, ICoreWebView2Controller* controller);
+
+
+	/////////////////////////////////////////////////////////////////////
+	// msg handlers
+	/////////////////////////////////////////////////////////////////////
+
+	void OnCreate();
+	void OnSize(WPARAM wParam, LPARAM lParam);
+	void OnClose();
+	void OnNcDestroy();
+
+	void load(mol::punk<ChromeEdge> edge);
+
+	void setAppMode(const std::string& m);
+
+private:
+
+	/////////////////////////////////////////////////////////////////////
+	virtual int style();
+
+	void onDocumentLoad();
+
+	/////////////////////////////////////////////////////////////////////
+
+	int							style_;
+	std::wstring				location_;
+
+//	EventRegistrationToken		documentTitleChangedToken;
+	EventRegistrationToken		navigationStartingToken;
+//	EventRegistrationToken		permissionRequestToken;
+
+	/////////////////////////////////////////////////////////////////////
+	// external events called from script inside MoeWnd
+	/////////////////////////////////////////////////////////////////////
+
+	class ExternalMoe :
+		public mol::Dispatch<IExternalMoe>,
+		public mol::interfaces< ExternalMoe,
+		mol::implements< IDispatch, IExternalMoe> >
+
+	{
+	public:
+		outer_this(MoeHtmlRibbon, external_);
+
+		ExternalMoe();
+		~ExternalMoe();
+
+		virtual HRESULT __stdcall get_Moe(IDispatch** disp);
+		virtual HRESULT __stdcall Close();
+		virtual HRESULT __stdcall CreateObject(BSTR progId, IDispatch** disp);
+		virtual HRESULT __stdcall get_Frame(IMoeHtmlFrame** f);
+		virtual HRESULT __stdcall CodeBehind(BSTR fname);
+		virtual HRESULT __stdcall get_Code(IDispatch** code);
+
+	};
+
+	mol::stack_obj<ExternalMoe>		external_;
+
+};
+
+
+/*
+/////////////////////////////////////////////////////////////////////////////////////////////
 // customizable toolbar
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -93,7 +178,7 @@ class MoeComboBox : public mol::Control< mol::ComboBox,
 					  CBS_DROPDOWNLIST |CBS_HASSTRINGS,
 					  0 > 
 {};
-
+*/
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -103,14 +188,14 @@ class MoeComboBox : public mol::Control< mol::ComboBox,
 // the moe rebar
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 class MoeBar : public mol::Control< 
 						mol::ReBar,
-						/*WS_BORDER|*/WS_CHILD|WS_VISIBLE|
+						WS_CHILD|WS_VISIBLE|
 						WS_CLIPCHILDREN|WS_CLIPSIBLINGS|CCS_NODIVIDER|
-						RBS_BANDBORDERS|/*RBS_VARHEIGHT|CCS_NOPARENTALIGN|*/
+						RBS_BANDBORDERS|
 						RBS_REGISTERDROP,
-						WS_EX_TOOLWINDOW/*|WS_EX_CLIENTEDGE*/ >
+						WS_EX_TOOLWINDOW >
 {
 friend class MoeWnd;
 public:
@@ -126,7 +211,7 @@ public:
 
 };
 
-
+*/
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 

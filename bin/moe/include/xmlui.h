@@ -34,6 +34,10 @@ extern void init_ribbon_ui(mol::win::WndProc* wnd);
 MoeWnd* moe();
 
 //childWindow
+class MoeHtmlRibbon;
+MoeHtmlRibbon* ribbon();
+
+//childWindow
 class MoeTreeWnd;
 MoeTreeWnd* treeWnd();
 
@@ -49,11 +53,6 @@ MoeStatusBar* statusBar();
 //childWindow
 class mol::ProgressbarCtrl;
 mol::ProgressbarCtrl* progress();
-
-
-//reBar
-class MoeBar;
-MoeBar* reBar();
 
 class Documents;    
 Documents* docs();

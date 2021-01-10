@@ -1,4 +1,4 @@
-Import("js\\base64.js");
+Import("js\\lib\\base64.js");
 
 var selection = ActiveDoc.Object.Selection;
 if (selection) {

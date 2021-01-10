@@ -2,6 +2,7 @@
 #define _MAINFRAME_WND_X_DEF_
 
 #include "commons.h"
+#include "form2.h"
 
 class TreeWndSink;
 class MoeDrop;
@@ -57,6 +58,8 @@ public:
 	mol::punk<IMoeConfig>  moeConfig;
 	mol::punk<IScintillAxStyleSets> moeStyles;
 	mol::punk<ShellTreeEvents> treeWndSink;
+	mol::punk<MoeForm2Wnd::Instance> fileMenu;
+	mol::punk<MoeForm2Wnd::Instance> contextMenu;
 	//mol::punk<Script> scriptHost;
 
 	std::unique_ptr<MoeDrop> moeDrop;
@@ -112,6 +115,8 @@ public:
 	 void OnFind ();
 	 void OnReplace ();
 
+	 void OnSysCommand(WPARAM wParam);
+	 void OnExitLoop();
 	/////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////
 	// ribbon handlers
@@ -135,6 +140,8 @@ public:
 	virtual HRESULT __stdcall Print(BSTR txt);
     virtual HRESULT __stdcall Exit();
 
+	virtual HRESULT __stdcall PasteAs();
+	virtual HRESULT __stdcall InsertTemplate();
 
 	virtual HRESULT __stdcall get_IDOK(long* d)			{ if(d) *d = IDOK; return S_OK; }
 	virtual HRESULT __stdcall get_IDCANCEL(long* d)		{ if(d) *d =  IDCANCEL; return S_OK; }

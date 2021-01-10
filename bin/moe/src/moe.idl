@@ -94,58 +94,64 @@ library Moe
 		[id(8), helpstring("Print")] 
 		HRESULT Print(  );	
 
-		[id(9),propget, helpstring("get SEARCH_DOWN constant")] 
+		[id(9), helpstring("Find")]
+		HRESULT Find();
+
+		[id(10), helpstring("Replace")]
+		HRESULT Replace();
+
+		[id(11),propget, helpstring("get SEARCH_DOWN constant")] 
 		HRESULT SEARCH_DOWN([out,retval] long* d);
 
-		[id(10),propget, helpstring("get SEARCH_WHOLEWORD constant")] 
+		[id(12),propget, helpstring("get SEARCH_WHOLEWORD constant")] 
 		HRESULT SEARCH_WHOLEWORD([out,retval] long* d);
 
-		[id(11),propget, helpstring("get SEARCH_MATCHCASE constant")] 
+		[id(13),propget, helpstring("get SEARCH_MATCHCASE constant")] 
 		HRESULT SEARCH_MATCHCASE([out,retval] long* d);
 
-		[id(12),propget, helpstring("get SEARCH_FINDNEXT constant")] 
+		[id(14),propget, helpstring("get SEARCH_FINDNEXT constant")] 
 		HRESULT SEARCH_FINDNEXT([out,retval] long* d);
 
-		[id(13),propget, helpstring("get SEARCH_REPLACE constant")] 
+		[id(15),propget, helpstring("get SEARCH_REPLACE constant")] 
 		HRESULT SEARCH_REPLACE([out,retval] long* d);
 
-		[id(14),propget, helpstring("get SEARCH_REPLACEALL constant")] 
+		[id(16),propget, helpstring("get SEARCH_REPLACEALL constant")] 
 		HRESULT SEARCH_REPLACEALL([out,retval] long* d);
 
-		[id(15),propget, helpstring("get SEARCH_DIALOGTERM constant")] 
+		[id(17),propget, helpstring("get SEARCH_DIALOGTERM constant")] 
 		HRESULT SEARCH_DIALOGTERM([out,retval] long* d);
 
-		[id(16),propget, helpstring("OK constant")] 
+		[id(18),propget, helpstring("OK constant")] 
 		HRESULT OK( [out,retval] long* d);
 
-		[id(17),propget, helpstring("OKCANCEL constant")] 
+		[id(19),propget, helpstring("OKCANCEL constant")] 
 		HRESULT OKCANCEL( [out,retval] long* d);
 
-		[id(18),propget, helpstring("ABORTRETRYIGNORE constant")] 
+		[id(20),propget, helpstring("ABORTRETRYIGNORE constant")] 
 		HRESULT ABORTRETRYIGNORE( [out,retval] long* d);
 
-		[id(19),propget, helpstring("YESNOCANCEL constant")] 
+		[id(21),propget, helpstring("YESNOCANCEL constant")] 
 		HRESULT YESNOCANCEL( [out,retval] long* d);
 
-		[id(20),propget, helpstring("YESNO constant")] 
+		[id(22),propget, helpstring("YESNO constant")] 
 		HRESULT YESNO( [out,retval] long* d);
 
-		[id(21),propget, helpstring("RETRYCANCEL constant")] 
+		[id(23),propget, helpstring("RETRYCANCEL constant")] 
 		HRESULT RETRYCANCEL( [out,retval] long* d);
 
-		[id(22),propget, helpstring("CANCELTRYCONTINUE constant")] 
+		[id(24),propget, helpstring("CANCELTRYCONTINUE constant")] 
 		HRESULT CANCELTRYCONTINUE( [out,retval] long* d);
 
-		[id(23),propget, helpstring("ICONERROR constant")] 
+		[id(25),propget, helpstring("ICONERROR constant")] 
 		HRESULT ICONERROR( [out,retval] long* d);
 
-		[id(24),propget, helpstring("ICONQUESTION constant")] 
+		[id(26),propget, helpstring("ICONQUESTION constant")] 
 		HRESULT ICONQUESTION( [out,retval] long* d);
 
-		[id(25),propget, helpstring("ICONINFORMATION constant")] 
+		[id(27),propget, helpstring("ICONINFORMATION constant")] 
 		HRESULT ICONINFORMATION( [out,retval] long* d);
 
-		[id(26),propget, helpstring("ICONWARNING constant")] 
+		[id(28),propget, helpstring("ICONWARNING constant")] 
 		HRESULT ICONWARNING( [out,retval] long* d);
 	}
 	////////////////////////////////////////////////////////////////////////////////////
@@ -222,39 +228,40 @@ library Moe
 		[id(18), helpstring("Open RTF document")] 
 		HRESULT OpenRTFDocument( [in] BSTR fPath, [out,retval] IMoeDocument** d);
 
+		[id(19), helpstring("Open URL dialog")]
+		HRESULT OpenURLDialog();
 
-
-		[id(19), propget, helpstring("Get DOCTYPE_NONE constant")]
+		[id(20), propget, helpstring("Get DOCTYPE_NONE constant")]
 		HRESULT DOCTYPE_NONE( [out,retval] long* d );
 
-		[id(20), propget, helpstring("Get DOCTYPE_EDITOR constant")]
+		[id(21), propget, helpstring("Get DOCTYPE_EDITOR constant")]
 		HRESULT DOCTYPE_EDITOR( [out,retval] long* d );
 
-		[id(21), propget, helpstring("Get DOCTYPE_DIR constant")]
+		[id(22), propget, helpstring("Get DOCTYPE_DIR constant")]
 		HRESULT DOCTYPE_DIR( [out,retval] long* d );
 
-		[id(22), propget, helpstring("Get DOCTYPE_PIC constant")]
+		[id(23), propget, helpstring("Get DOCTYPE_PIC constant")]
 		HRESULT DOCTYPE_PIC( [out,retval] long* d );
 
-		[id(23), propget, helpstring("Get DOCTYPE_HEX constant")]
+		[id(24), propget, helpstring("Get DOCTYPE_HEX constant")]
 		HRESULT DOCTYPE_HEX( [out,retval] long* d );
 
-		[id(24), propget, helpstring("Get DOCTYPE_HTML constant")]
+		[id(25), propget, helpstring("Get DOCTYPE_HTML constant")]
 		HRESULT DOCTYPE_HTML( [out,retval] long* d );
 
-		[id(25), propget, helpstring("Get DOCTYPE_OLE constant")]
+		[id(26), propget, helpstring("Get DOCTYPE_OLE constant")]
 		HRESULT DOCTYPE_OLE( [out,retval] long* d );
 
-		[id(26), propget, helpstring("Get DOCTYPE_FORM constant")]
+		[id(27), propget, helpstring("Get DOCTYPE_FORM constant")]
 		HRESULT DOCTYPE_FORM( [out,retval] long* d );
 
-		[id(27), propget, helpstring("Get DOCTYPE_RTF constant")]
+		[id(28), propget, helpstring("Get DOCTYPE_RTF constant")]
 		HRESULT DOCTYPE_RTF( [out,retval] long* d );
 
-		[id(28), propget, helpstring("Get DOCTYPE_TAIL constant")]
+		[id(29), propget, helpstring("Get DOCTYPE_TAIL constant")]
 		HRESULT DOCTYPE_TAIL( [out,retval] long* d );
 
-		[id(29), propget, helpstring("Get DOCTYPE_SFTP constant")]
+		[id(30), propget, helpstring("Get DOCTYPE_SFTP constant")]
 		HRESULT DOCTYPE_SFTP( [out,retval] long* d );
 
 	}
@@ -562,6 +569,13 @@ library Moe
 
 		[id(15), helpstring("make Screenshot")]
 		HRESULT Screenshot();
+
+		[id(16), helpstring("show FileMenu")]
+		HRESULT ShowFileMenu();
+
+		[id(17), helpstring("show ContextMenu")]
+		HRESULT ShowContextMenu();
+
 	}
 
 
@@ -639,11 +653,17 @@ library Moe
 		]
 		HRESULT addExternalObject([in] BSTR name, [in] IDispatch* disp);
 
-		[
-			helpstring("remove external object "), id(9)
-		]
+		[ helpstring("remove external object "), id(9) ]
 		HRESULT removeExternalObject([in] BSTR name);
 
+		[ helpstring("Reload HTML page"), id(10) ]
+		HRESULT Reload();
+
+		[helpstring("Navigate Back"), id(11)]
+		HRESULT Back();
+
+		[helpstring("Navigate Forward"), id(12)]
+		HRESULT Next();
 
 	}
 
@@ -716,6 +736,9 @@ library Moe
 			helpstring("set onClose callback")
 		]
 		HRESULT onClose([in] IDispatch* d);
+
+		[id(8), helpstring("Open SaveAs Dialog")]
+		HRESULT SaveAsDialog();
 
 	}
 
@@ -939,6 +962,9 @@ library Moe
 
 		[ id(23), helpstring("Get available Encodings as JSON string") ]
 		HRESULT GetEncodings([out, retval] BSTR* json);
+
+		[id(24), helpstring("Get recent files as json array")]
+		HRESULT GetRecentFilesJSON([out, retval] BSTR* json);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////
@@ -975,16 +1001,25 @@ library Moe
 		[id(10), helpstring("Create a dispatchable Object from ProgId")]
 		HRESULT CreateObject( [in] BSTR f, [out,retval] IDispatch** disp );
 
-		[id(11), propget, helpstring("Get FORM_DEFAULT constant")]
+		[id(11), helpstring("Run current editor as script")]
+		HRESULT RunScript();
+
+		[id(12), helpstring("Debug current editor as script")]
+		HRESULT DebugScript();
+
+		[id(13), helpstring("show current editor as HTML")]
+		HRESULT ShowHTML();
+
+		[id(14), propget, helpstring("Get FORM_DEFAULT constant")]
 		HRESULT FORM_DEFAULT( [out,retval] long* d );
 
-		[id(12), propget, helpstring("Get FORM_TITLE constant")]
+		[id(15), propget, helpstring("Get FORM_TITLE constant")]
 		HRESULT FORM_TITLE( [out,retval] long* d );
 
-		[id(13), propget, helpstring("Get FORM_NOSCROLL constant")]
+		[id(16), propget, helpstring("Get FORM_NOSCROLL constant")]
 		HRESULT FORM_NOSCROLL( [out,retval] long* d );
 
-		[id(14), propget, helpstring("Get FORM_DIALOG constant")]
+		[id(17), propget, helpstring("Get FORM_DIALOG constant")]
 		HRESULT FORM_DIALOG( [out,retval] long* d );
 	}
 
@@ -1092,6 +1127,20 @@ library Moe
 		  helpstring("Exit Moe Editor and close the App")
 		]
 		HRESULT Exit();
+
+		/////////////////////////////////////////////////////////////////////
+		[
+			id(21),
+			helpstring("Paste As")
+		]
+		HRESULT PasteAs();
+
+		[
+			id(22),
+			helpstring("Insert Template")
+		]
+		HRESULT InsertTemplate();
+
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////

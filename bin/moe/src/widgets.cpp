@@ -10,6 +10,7 @@
 #include "Shobjidl.h"
 #include "win/msgloop.h"
 #include <regex>
+#include "xml/xml.h"
 
 // open file dialog std filte for moe
 wchar_t  InFilesFilter[]   = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
@@ -649,6 +650,48 @@ HRESULT __stdcall UrlBox::GetSizeMax( ULARGE_INTEGER *pCbSize)
 	return S_OK;
 }
 
+void UrlBox::saveXML(const std::wstring& path)
+{
+	std::ostringstream oss;
+	oss << "<recentUrls>" << std::endl;
+
+	for (std::list<std::string>::iterator it = history_.begin(); it != history_.end(); it++)
+	{
+		oss << "<url>" << (*it) << "</url>" << std::endl;
+	}
+	oss << "</recentUrls>" << std::endl;
+
+	std::ofstream ofs(path, std::ios::binary | std::ios::out);
+	if(ofs)
+	{
+		ofs << oss.str();
+		ofs.close();
+	}
+}
+
+void UrlBox::readXML(const std::wstring& path)
+{
+	history_.clear();
+	std::string utf8 = slurp(mol::tostring(path));
+	
+	mol::XMLDocument doc;
+	mol::Element* root = doc.parse(utf8);
+	if (root)
+	{
+		mol::Element* recentUrls = root->getElementByTagName("recentUrls");
+		if (recentUrls)
+		{
+			mol::NodeList urls = recentUrls->getElementsByTagName("url");
+			for (int i = 0; i < urls.length(); i++)
+			{
+				mol::Element* el = (mol::Element*)urls.item(i);
+				std::string url = el->innerXml();
+				history_.push_back(url);
+			}
+		}
+	}
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -1069,6 +1112,17 @@ HRESULT __stdcall UrlDlg::GetSizeMax( ULARGE_INTEGER *pCbSize)
 {
 	return urlBox_.GetSizeMax(pCbSize);
 }
+
+void UrlDlg::saveXML(const std::wstring& path)
+{
+	return urlBox_.saveXML(path);
+}
+
+void UrlDlg::readXML(const std::wstring& path)
+{
+	return urlBox_.readXML(path);
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 

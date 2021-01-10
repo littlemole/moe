@@ -11,6 +11,9 @@ MoeHtml2Wnd::MoeHtml2Wnd( )
 	wndClass().setIcon(moe()->icon); 
 	wndClass().hIconSm(moe()->icon); 
 
+//	this->frame_.QueryInterface(IID_IMoeHtmlFrame, (void**)&oleObject);
+
+	oleObject = &frame_;
 }
 
 MoeHtml2Wnd::~MoeHtml2Wnd()
@@ -58,8 +61,7 @@ void MoeHtml2Wnd::OnMDIActivate( HWND activated )
 	tab()->select( *this );
 	statusBar()->status( location );
 
-	mol::Ribbon::ribbon()->maximize();
-	mol::Ribbon::ribbon()->mode(5);
+	ribbon()->setAppMode("Html");
 }
 
 
@@ -92,61 +94,61 @@ MoeHtml2Wnd::MoeFrame::~MoeFrame()
 
 void MoeHtml2Wnd::back()
 {
-	if (!oleObject) return;
+	if (!webview) return;
 
-	oleObject->GoBack();
+	webview->GoBack();
 }
 
 void MoeHtml2Wnd::forward()
 {
-	if (!oleObject) return;
+	if (!webview) return;
 
-	oleObject->GoForward();
+	webview->GoForward();
 
 }
 
 void MoeHtml2Wnd::reload()
 {
-	if (!oleObject) return;
+	if (!webview) return;
 
-	oleObject->Reload();
+	webview->Reload();
 
 }
 
 void MoeHtml2Wnd::options()
 {
-	if (!oleObject) return;
+	if (!webview) return;
 
-	oleObject->OpenDevToolsWindow();
+	webview->OpenDevToolsWindow();
 }
 
 
 void MoeHtml2Wnd::print()
 {
-	if (!oleObject) return;
+	if (!webview) return;
 
-	oleObject->ExecuteScript(L"window.print();", nullptr);
+	webview->ExecuteScript(L"window.print();", nullptr);
 }
 
 void MoeHtml2Wnd::cut()
 {
-	if (!oleObject) return;
+	if (!webview) return;
 
-	oleObject->ExecuteScript(L"document.execCommand('cut')", nullptr);
+	webview->ExecuteScript(L"document.execCommand('cut')", nullptr);
 
 }
 void MoeHtml2Wnd::copy()
 {
-	if (!oleObject) return;
+	if (!webview) return;
 
-	oleObject->ExecuteScript(L"document.execCommand('copy')", nullptr);
+	webview->ExecuteScript(L"document.execCommand('copy')", nullptr);
 }
 
 std::wstring escape_json_str(const std::wstring& in);
 
 void MoeHtml2Wnd::paste()
 {
-	if (!oleObject) return;
+	if (!webview) return;
 
 	mol::win::ClipBoard clip(hWnd_);
 	UINT format = clip.format(mol::win::ClipBoard::UNICODE_TEXT);
@@ -160,13 +162,13 @@ void MoeHtml2Wnd::paste()
 		<< L"el.value.substring(el.selectionEnd,el.value.length); }) ();";
 
 	std::wstring ws(oss.str());
-	oleObject->ExecuteScript(ws.c_str(), nullptr);
+	webview->ExecuteScript(ws.c_str(), nullptr);
 }
 
 void MoeHtml2Wnd::stop()
 {
-	if (!oleObject) return;
-	oleObject->Stop();
+	if (!webview) return;
+	webview->Stop();
 }
 
 HRESULT __stdcall MoeHtml2Wnd::get_FilePath(BSTR* fname)
@@ -224,7 +226,7 @@ HRESULT __stdcall MoeHtml2Wnd::MoeFrame::Eval( BSTR src, IDispatch* future )
 
 		HRESULT hr = disp->Invoke(DISPID_VALUE, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD, &p, NULL, &ex, &e);
 	});
-	return This()->oleObject->ExecuteScript(mol::bstr(src).towstring().c_str(), cb);
+	return This()->webview->ExecuteScript(mol::bstr(src).towstring().c_str(), cb);
 
 }
 
@@ -272,7 +274,7 @@ HRESULT __stdcall MoeHtml2Wnd::MoeFrame::PostMessage2WebView(BSTR json)
 
 	mol::bstr b(json);
 
-	return This()->oleObject->PostWebMessageAsJson(b.towstring().c_str());
+	return This()->webview->PostWebMessageAsJson(b.towstring().c_str());
 }
 
 HRESULT __stdcall  MoeHtml2Wnd::MoeFrame::get_View(  IMoeDialogView **d)
@@ -281,7 +283,7 @@ HRESULT __stdcall  MoeHtml2Wnd::MoeFrame::get_View(  IMoeDialogView **d)
 		return E_INVALIDARG;
 	*d=0;
 
-	return view->QueryInterface( IID_IMoeDialogView, (void**)d);
+	return This()->view.queryInterface(d);
 }
 
 HRESULT __stdcall  MoeHtml2Wnd::MoeFrame::get_Scripts(  IDispatch **s)
@@ -334,19 +336,48 @@ HRESULT __stdcall MoeHtml2Wnd::MoeFrame::addExternalObject(BSTR name, IDispatch*
 	objects_.insert(objName.towstring());
 
 	mol::variant v(disp);
-	return This()->oleObject->AddHostObjectToScript(objName.towstring().c_str(), &v);
+	return This()->webview->AddHostObjectToScript(objName.towstring().c_str(), &v);
 }
 
 HRESULT __stdcall MoeHtml2Wnd::MoeFrame::removeExternalObject(BSTR name)
 {
-	if (!This()->oleObject)
+	if (!This()->webview)
 		return S_FALSE;
 
 	mol::bstr objName(name);
 	if (objects_.count(objName.towstring()) == 0)
 		return S_OK;
 
-	return This()->oleObject->RemoveHostObjectFromScript(objName.towstring().c_str());
+	return This()->webview->RemoveHostObjectFromScript(objName.towstring().c_str());
+}
+
+HRESULT __stdcall MoeHtml2Wnd::MoeFrame::Reload()
+{
+	if (!This()->webview)
+		return S_FALSE;
+
+	This()->webview->Reload();
+
+	return S_OK;
+}
+
+HRESULT __stdcall MoeHtml2Wnd::MoeFrame::Next()
+{
+	if (!This()->webview)
+		return S_FALSE;
+
+	This()->webview->GoForward();
+
+	return S_OK;
+}
+
+HRESULT __stdcall MoeHtml2Wnd::MoeFrame::Back()
+{
+	if (!This()->webview)
+		return S_FALSE;
+
+	This()->webview->GoBack();
+	return S_OK;
 }
 
 
@@ -428,13 +459,13 @@ void MoeHtml2Wnd::onCreateWebView(std::wstring target, ICoreWebView2Controller* 
 {
 	webViewController = controller;
 
-	webViewController->get_CoreWebView2(&oleObject);
+	webViewController->get_CoreWebView2(&webview);
 
 	mol::punk<IDispatch> disp(&external_);
 	mol::variant obj(disp);
-	oleObject->AddHostObjectToScript(L"external", &obj);
+	webview->AddHostObjectToScript(L"external", &obj);
 
-	oleObject->add_DocumentTitleChanged(
+	webview->add_DocumentTitleChanged(
 		make_callback<ICoreWebView2DocumentTitleChangedEventHandler>(
 			[this](ICoreWebView2* sender, IUnknown*)
 			{
@@ -443,7 +474,7 @@ void MoeHtml2Wnd::onCreateWebView(std::wstring target, ICoreWebView2Controller* 
 		&documentTitleChangedToken
 		);
 
-	oleObject->add_NavigationStarting(
+	webview->add_NavigationStarting(
 		make_callback<ICoreWebView2NavigationStartingEventHandler>(
 			[this](ICoreWebView2* webView, ICoreWebView2NavigationStartingEventArgs* args)
 			{
@@ -452,7 +483,7 @@ void MoeHtml2Wnd::onCreateWebView(std::wstring target, ICoreWebView2Controller* 
 		&navigationStartingToken
 		);
 
-	oleObject->add_PermissionRequested(
+	webview->add_PermissionRequested(
 		make_callback<ICoreWebView2PermissionRequestedEventHandler>(
 			[this](ICoreWebView2* webView, ICoreWebView2PermissionRequestedEventArgs* args)
 			{
@@ -461,7 +492,7 @@ void MoeHtml2Wnd::onCreateWebView(std::wstring target, ICoreWebView2Controller* 
 		&permissionRequestToken
 	);
 
-	oleObject->add_NavigationCompleted(
+	webview->add_NavigationCompleted(
 		make_callback< ICoreWebView2NavigationCompletedEventHandler>(
 			[this](ICoreWebView2* webView, ICoreWebView2NavigationCompletedEventArgs* args) 
 			{
@@ -473,7 +504,7 @@ void MoeHtml2Wnd::onCreateWebView(std::wstring target, ICoreWebView2Controller* 
 		&onDocumentLoadedToken
 	);
 
-	oleObject->add_WebMessageReceived(
+	webview->add_WebMessageReceived(
 		make_callback< ICoreWebView2WebMessageReceivedEventHandler>(
 			[this](ICoreWebView2* webView, ICoreWebView2WebMessageReceivedEventArgs* args)
 			{
@@ -486,7 +517,7 @@ void MoeHtml2Wnd::onCreateWebView(std::wstring target, ICoreWebView2Controller* 
 		&onMessageToken
 	);
 
-	oleObject->Navigate(target.c_str());
+	webview->Navigate(target.c_str());
 }
 
 void MoeHtml2Wnd::onDocumentLoad()
@@ -534,14 +565,14 @@ void MoeHtml2Wnd::OnDestroy()
 	{
 		for (auto& it : frame_.objects_)
 		{
-			oleObject->RemoveHostObjectFromScript(it.c_str());
+			webview->RemoveHostObjectFromScript(it.c_str());
 		}
-		oleObject->RemoveHostObjectFromScript(L"external");
-		oleObject->remove_DocumentTitleChanged(documentTitleChangedToken);
-		oleObject->remove_NavigationStarting(navigationStartingToken);
-		oleObject->remove_PermissionRequested(permissionRequestToken);
-		oleObject->remove_NavigationCompleted(onDocumentLoadedToken);
-		oleObject->remove_WebMessageReceived(onMessageToken);
+		webview->RemoveHostObjectFromScript(L"external");
+		webview->remove_DocumentTitleChanged(documentTitleChangedToken);
+		webview->remove_NavigationStarting(navigationStartingToken);
+		webview->remove_PermissionRequested(permissionRequestToken);
+		webview->remove_NavigationCompleted(onDocumentLoadedToken);
+		webview->remove_WebMessageReceived(onMessageToken);
 
 		webViewController->Close();
 		webViewController.release();
@@ -599,14 +630,14 @@ void MoeHtml2Wnd::OnSearch(FINDREPLACE* fi)
 	oss << L"window.find('" << escape_json_str(fi->lpstrFindWhat) << L"', "
 		<< caseSensitite << L", " << !down << L", 1, " << wholeWord << ", 1, 1 );";
 
-	oleObject->ExecuteScript(oss.str().c_str(), nullptr);
+	webview->ExecuteScript(oss.str().c_str(), nullptr);
 }
 
 
 void MoeHtml2Wnd::onDocumentTitleChanged()
 {
 	LPWSTR title = nullptr;
-	oleObject->get_DocumentTitle(&title);
+	webview->get_DocumentTitle(&title);
 	this->setText(title);
 	::CoTaskMemFree(title);
 }
@@ -747,7 +778,8 @@ HRESULT __stdcall MoeHtml2Wnd::ExternalMoe:: get_Frame( IMoeHtmlFrame** f)
 {
 	if (!f) 
 		return E_INVALIDARG;
-	return ((IMoeHtmlFrame*)This())->QueryInterface( IID_IMoeHtmlFrame, (void**) f );
+
+	return This()->frame_.QueryInterface( IID_IMoeHtmlFrame, (void**) f );
 }
 
 

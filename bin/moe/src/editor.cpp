@@ -184,6 +184,7 @@ void Editor::OnMDIActivate(WPARAM unused, HWND activated)
 		sci->SetFocus();
 
 		checkModifiedOnDisk();
+		ribbon()->setAppMode("Scintilla");
 	}
 }
 
@@ -279,18 +280,18 @@ void Editor::OnEncoding()
 		return;
 
 	// get chosen encoding index
-	int enc = mol::Ribbon::handler(RibbonEncoding)->index();
-	props_->put_Encoding( codePages()->item(enc).first );
+//	int enc = mol::Ribbon::handler(RibbonEncoding)->index();
+	//props_->put_Encoding( codePages()->item(enc).first );
 }
 
 
 void Editor::OnLanguage()
 {
 	// get chosen lexer id
-	int lexer = mol::Ribbon::handler(RibbonSelectLanguage)->index();
+//	int lexer = mol::Ribbon::handler(RibbonSelectLanguage)->index();
 
 	// convert to menu message
-	postMessage(WM_COMMAND,IDM_LEXER_PLAIN + lexer,0);
+//	postMessage(WM_COMMAND,IDM_LEXER_PLAIN + lexer,0);
 }
 
 void Editor::OnTabUsage()
@@ -298,8 +299,8 @@ void Editor::OnTabUsage()
 	if ( !sci )
 		return;
 
-	VARIANT_BOOL vb = mol::Ribbon::handler(RibbonTabUseTabs)->checked() ? VARIANT_TRUE: VARIANT_FALSE;
-	props_->put_TabUsage(vb);
+//	VARIANT_BOOL vb = mol::Ribbon::handler(RibbonTabUseTabs)->checked() ? VARIANT_TRUE: VARIANT_FALSE;
+//	props_->put_TabUsage(vb);
 }
 
 void Editor::OnTabWidth()
@@ -307,11 +308,11 @@ void Editor::OnTabWidth()
 	if ( !sci )
 		return;
 
-	mol::variant v = mol::Ribbon::handler(RibbonTabSize)->decimal();
+//	mol::variant v = mol::Ribbon::handler(RibbonTabSize)->decimal();
 
-	DECIMAL d = v.decVal;
-	long w = d.Lo32;
-	props_->put_TabWidth(w);
+//	DECIMAL d = v.decVal;
+//	long w = d.Lo32;
+//	props_->put_TabWidth(w);
 
 }
 
@@ -320,8 +321,8 @@ void Editor::OnTabIndents()
 	if ( !sci )
 		return;
 
-	VARIANT_BOOL vb = mol::Ribbon::handler(RibbonTabIndents)->checked() ? VARIANT_TRUE: VARIANT_FALSE;
-	props_->put_TabIndents(vb);
+//	VARIANT_BOOL vb = mol::Ribbon::handler(RibbonTabIndents)->checked() ? VARIANT_TRUE: VARIANT_FALSE;
+//	props_->put_TabIndents(vb);
 }
 
 void Editor::OnBackspaceUnindents()
@@ -329,8 +330,8 @@ void Editor::OnBackspaceUnindents()
 	if ( !sci )
 		return;
 
-	VARIANT_BOOL vb = mol::Ribbon::handler(RibbonTabBackSpaceUnIndents)->checked() ? VARIANT_TRUE: VARIANT_FALSE;
-	props_->put_BackSpaceUnindents(vb);
+//	VARIANT_BOOL vb = mol::Ribbon::handler(RibbonTabBackSpaceUnIndents)->checked() ? VARIANT_TRUE: VARIANT_FALSE;
+//	props_->put_BackSpaceUnindents(vb);
 
 }
 
@@ -339,8 +340,8 @@ void Editor::OnWriteBOM()
 	if ( !sci )
 		return;
 
-	VARIANT_BOOL vb = mol::Ribbon::handler(RibbonWriteBOM)->checked() ? VARIANT_TRUE: VARIANT_FALSE;
-	props_->put_WriteBOM(vb);
+//	VARIANT_BOOL vb = mol::Ribbon::handler(RibbonWriteBOM)->checked() ? VARIANT_TRUE: VARIANT_FALSE;
+//	props_->put_WriteBOM(vb);
 }
 
  
@@ -426,9 +427,9 @@ void Editor::OnUserBatch(int code, int id, HWND ctrl)
 		if ( p < cmd.size() )
 			args = cmd.substr(p+1);
 		cmd = cmd.substr(0,p);	
-		execute_shell_args(cmd,args);
 	}
-	exec_cmdline( cmd );
+	execute_shell_args(cmd, args);
+//	exec_cmdline( cmd );
 	return ;
 }
 
@@ -725,6 +726,11 @@ void Editor::OnReload()
 	{
 		return ;
 	}
+	long syntax;
+	if (S_OK != props_->get_Syntax(&syntax))
+	{
+		return;
+	}
 
 	if (mol::towstring(filename).substr(0, 6) == _T("ssh://") || mol::towstring(filename).substr(0, 6) == _T("moe-ssh://"))
 	{
@@ -737,19 +743,23 @@ void Editor::OnReload()
 
 	lastWriteTime_ = getLastWriteTime(filename.towstring());
 
-	if ( t == SCINTILLA_ENCODING_UTF8 )
+//	if ( t == SCINTILLA_ENCODING_UTF8 )
 	{
 
 		sci->LoadEncoding(filename,CP_UTF8);
 		props_->put_ReadOnly(vb);
+		props_->put_Syntax(syntax);
 		statusBar()->status(filename.towstring());
 		scrollDown();
 		return ;
 	}
+	/*
 	sci->Load(filename);
 	props_->put_ReadOnly(vb);
+	props_->put_Syntax(syntax);
 	statusBar()->status(filename.towstring());
 	scrollDown();
+	*/
 }
 
 
@@ -774,7 +784,7 @@ void Editor::OnSaveAs()
 		return;
 	}
 
-	if ( mol::Ribbon::ribbon()->enabled() )
+	if ( true ) //mol::Ribbon::ribbon()->enabled() )
 	{
 		const COMDLG_FILTERSPEC c_rgSaveTypes[] =
 		{
@@ -808,7 +818,7 @@ void Editor::OnSaveAs()
 		statusBar()->status(oss.str());
 		return;
 	}
-
+	/*
 	MolFileFialog ofn(*this);
 
 	ofn.setFilter( OutFilesFilter );		
@@ -839,6 +849,7 @@ void Editor::OnSaveAs()
 			statusBar()->status(oss.str());
 		}
 	}
+	*/
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1026,6 +1037,12 @@ HRESULT __stdcall Editor::get_FilePath( BSTR *fname)
 	return S_OK;
 }
 
+HRESULT __stdcall Editor::SaveAsDialog()
+{
+	this->OnSaveAs();
+	return S_OK;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 
 HRESULT __stdcall  Editor::Sintilla_Events::OnFileNameChanged( BSTR filename, BSTR path)
@@ -1036,12 +1053,13 @@ HRESULT __stdcall  Editor::Sintilla_Events::OnFileNameChanged( BSTR filename, BS
 
 HRESULT __stdcall  Editor::Sintilla_Events::OnShowMenu( VARIANT_BOOL* showMenue)
 {
-	if ( mol::Ribbon::ribbon()->enabled() )
+	//if ( mol::Ribbon::ribbon()->enabled() )
 	{
 		*showMenue = VARIANT_FALSE;
-		POINT p;
-		::GetCursorPos(&p);
-		mol::Ribbon::ribbon()->showContextualUI( RibbonDocumentContextMap, p.x, p.y);
+//		POINT p;
+//		::GetCursorPos(&p);
+		//mol::Ribbon::ribbon()->showContextualUI( RibbonDocumentContextMap, p.x, p.y);
+		moe()->moeView->ShowContextMenu();
 	}
 	return S_OK;
 }
@@ -1131,6 +1149,42 @@ HRESULT __stdcall Editor::Sintilla_Events::OnMarker( long line)
 		This()->debugger_->update_breakpoints(s);
 	}
 	return S_OK; 
+}
+
+HRESULT __stdcall Editor::Sintilla_Events::OnTabUsage(VARIANT_BOOL vb)
+{
+	This()->updateUI();
+	return S_OK;
+}
+
+HRESULT __stdcall Editor::Sintilla_Events::OnTabIndents(VARIANT_BOOL vb)
+{
+	This()->updateUI();
+	return S_OK;
+}
+
+HRESULT __stdcall Editor::Sintilla_Events::OnBackspaceUnindents(VARIANT_BOOL vb)
+{
+	This()->updateUI();
+	return S_OK;
+}
+
+HRESULT __stdcall Editor::Sintilla_Events::OnShowLineNumbers(VARIANT_BOOL vb)
+{
+	This()->updateUI();
+	return S_OK;
+}
+
+HRESULT __stdcall Editor::Sintilla_Events::OnWriteBOM(VARIANT_BOOL vb)
+{
+	This()->updateUI();
+	return S_OK;
+}
+
+HRESULT __stdcall Editor::Sintilla_Events::OnTabWidth(long w)
+{
+	This()->updateUI();
+	return S_OK;
 }
 
 

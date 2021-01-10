@@ -70,6 +70,9 @@ public:
     virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
     virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER *pCbSize);
    
+	void saveXML(const std::wstring& path);
+	void readXML(const std::wstring& path);
+
 private:
 				
 	std::list<std::string>  history_;
@@ -95,6 +98,9 @@ public:
     virtual HRESULT __stdcall Load( LPSTREAM pStm);
     virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
 	virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER *pCbSize);
+
+	void saveXML(const std::wstring& path);
+	void readXML(const std::wstring& path);
 
 private:
 	UrlBox urlBox_;

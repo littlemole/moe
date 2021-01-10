@@ -7,6 +7,8 @@
 // moe view sub obj
 /////////////////////////////////////////////////////////////////////
 
+class MoeForm2Wnd;
+ 
 class MoeView : 
 	public mol::Dispatch<IMoeView>,
 	public mol::ProvideClassInfo<MoeView>,
@@ -24,6 +26,7 @@ private:
 
 public:
 
+	MoeView();
 	virtual ~MoeView();
 
 	typedef mol::com_obj<MoeView> Instance;
@@ -58,7 +61,8 @@ public:
 	virtual HRESULT __stdcall get_Fullscreen( VARIANT_BOOL* vb );
 	virtual HRESULT __stdcall get_TreeView( IDispatch** tv);
 	virtual HRESULT __stdcall Screenshot();
-
+	virtual HRESULT __stdcall ShowFileMenu();
+	virtual HRESULT __stdcall ShowContextMenu();
 };
 
 
@@ -94,6 +98,10 @@ public:
 	virtual HRESULT __stdcall Picture( BSTR f, IDispatch** disp );
 	virtual	HRESULT __stdcall CreateObject(BSTR progid, IDispatch** disp);
 	virtual HRESULT __stdcall ShowHtmlForm(BSTR, long, int, int, int, int);
+
+	virtual HRESULT __stdcall RunScript();
+	virtual HRESULT __stdcall DebugScript();
+	virtual HRESULT __stdcall ShowHTML();
 
 	virtual HRESULT __stdcall  get_FORM_DEFAULT( long* d )		{ if(d) *d =  MOE_FORMFLAG_NONE; return S_OK; }
 	virtual HRESULT __stdcall  get_FORM_TITLE( long* d )		{ if(d) *d =  MOE_FORMFLAG_TITLE; return S_OK; }
@@ -201,6 +209,8 @@ public:
 
 	virtual HRESULT __stdcall GetEncodings(BSTR* json);
 
+	virtual HRESULT __stdcall GetRecentFilesJSON(BSTR* result);
+
 	void setDirty(bool b);
 	bool isDirty();
 
@@ -293,6 +303,8 @@ public:
 	virtual HRESULT __stdcall ChooseDir( BSTR* d );
 	virtual HRESULT __stdcall Help();
 	virtual HRESULT __stdcall Print();
+	virtual HRESULT __stdcall Find();
+	virtual HRESULT __stdcall Replace();
 
 
 	virtual HRESULT __stdcall get_OK(long* d)				{ if(d) *d =  MB_OK; return S_OK; }

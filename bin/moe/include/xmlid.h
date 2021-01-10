@@ -223,18 +223,11 @@
 #define IDM_CONTEXT_TREE                         704
 #define IDM_MOE_RTF                              705
 #define IDW_MOE                                  706
-#define IDW_TREE_VIEW                            707
-#define IDW_TAB_CTRL                             708
-#define IDW_STATUS                               709
-#define IDW_PROGRESS_BAR                         710
-#define IDW_REBAR                                711
-#define IDC_TOOLBARS_FILEBAR                     712
-#define IDC_TOOLBARS_EDITBAR                     713
-#define IDC_TOOLBARS_TOOLBAR                     714
-#define IDC_TOOLBARS_SETTINGBAR                  715
-#define IDC_TOOLBARS_VIEWBAR                     716
-#define IDC_TOOLBARS_USERBAR                     717
-#define IDW_SYNTAX_BOX                           718
+#define ID_MOE_HTML_RIBBON                       707
+#define IDW_TREE_VIEW                            708
+#define IDW_TAB_CTRL                             709
+#define IDW_STATUS                               710
+#define IDW_PROGRESS_BAR                         711
 
 
 #endif

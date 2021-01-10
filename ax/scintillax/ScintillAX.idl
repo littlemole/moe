@@ -884,6 +884,24 @@ library Scintilla
 		[id(8), helpstring("Encoding changed")]  
 		void OnEncoding([in] long e );
 
+		[id(9), helpstring("Tab Usage changed")]
+		void OnTabUsage([in] VARIANT_BOOL vb);
+
+		[id(10), helpstring("Tab Indents changed")]
+		void OnTabIndents([in] VARIANT_BOOL vb);
+
+		[id(11), helpstring("Backspace UnIndents changed")]
+		void OnBackspaceUnindents([in] VARIANT_BOOL vb);
+
+		[id(12), helpstring("Show Line numbers changed")]
+		void OnShowLineNumbers([in] VARIANT_BOOL vb);
+
+		[id(13), helpstring("Write BOM changed")]
+		void OnWriteBOM([in] VARIANT_BOOL vb);
+
+		[id(14), helpstring("Tab Width changed")]
+		void OnTabWidth([in] long w);
+
 	};
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -924,6 +942,25 @@ library Scintilla
 
 		[id(8), helpstring("Encoding changed")]  
 		HRESULT OnEncoding([in] long e );
+
+		[id(9), helpstring("Tab Usage changed")]
+		HRESULT OnTabUsage([in] VARIANT_BOOL vb);
+
+		[id(10), helpstring("Tab Indents changed")]
+		HRESULT OnTabIndents([in] VARIANT_BOOL vb);
+
+		[id(11), helpstring("Backspace UnIndents changed")]
+		HRESULT OnBackspaceUnindents([in] VARIANT_BOOL vb);
+
+		[id(12), helpstring("Show Line numbers changed")]
+		HRESULT OnShowLineNumbers([in] VARIANT_BOOL vb);
+
+		[id(13), helpstring("Write BOM changed")]
+		HRESULT OnWriteBOM([in] VARIANT_BOOL vb);
+
+		[id(14), helpstring("Tab Width changed")]
+		HRESULT OnTabWidth([in] long w);
+
 	};
 
 

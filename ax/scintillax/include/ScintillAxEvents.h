@@ -37,6 +37,18 @@ public:
 
 	HRESULT virtual __stdcall OnMarker( long iLine )				{ return S_OK; }
 
+	HRESULT virtual __stdcall OnTabUsage( VARIANT_BOOL vb)			{ return S_OK; }
+
+	HRESULT virtual __stdcall OnTabIndents( VARIANT_BOOL vb)		{ return S_OK; }
+
+	HRESULT virtual __stdcall OnBackspaceUnindents( VARIANT_BOOL vb) { return S_OK; }
+
+	HRESULT virtual __stdcall OnShowLineNumbers( VARIANT_BOOL vb)	{ return S_OK; }
+
+	HRESULT virtual __stdcall OnWriteBOM( VARIANT_BOOL vb)			{ return S_OK; }
+
+	HRESULT virtual __stdcall OnTabWidth( long w)					{ return S_OK; }
+
     HRESULT Advise(IUnknown* object )
     {
         return mol::advise<_IScintillAxEvents>(object,this,cookie_);

@@ -583,7 +583,7 @@ void DocFactory::updateUI(const std::wstring& p, mol::MdiChild* c)
 
 	progress()->show(SW_HIDE);
 
-	mol::Ribbon::ribbon()->addRecentDoc(RibbonMRUItems,p);
+	//mol::Ribbon::ribbon()->addRecentDoc(RibbonMRUItems,p);
 	moe()->doLayout();
 	moe()->redraw();
 }

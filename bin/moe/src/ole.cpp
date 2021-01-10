@@ -109,12 +109,11 @@ void OleChild::OnMDIActivate(WPARAM unused, HWND activated)
 
 	if ( activated == *this )
 	{
-		mol::Ribbon::ribbon()->mode(0);
-		mol::Ribbon::ribbon()->minimize();
+		ribbon()->setAppMode("Img");
 	}
 	else 
 	{
-		mol::Ribbon::ribbon()->maximize();
+//		mol::Ribbon::ribbon()->maximize();
 	}
 }
 

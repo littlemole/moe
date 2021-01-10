@@ -165,6 +165,13 @@ HRESULT __stdcall MoeDialogView::put_Title( BSTR title )
 /////////////////////////////////////////////////////////////////////
 
 
+MoeView::MoeView()
+{
+	ODBGS("MoeView");
+
+}
+
+
 MoeView::~MoeView()
 {
 	ODBGS("~MoeView dies ...");
@@ -313,31 +320,13 @@ HRESULT __stdcall MoeView::Cascade()
 
 HRESULT __stdcall MoeView::get_ShowTreeView( VARIANT_BOOL* vb )
 {
-	if ( vb )
-	{
-		if ( treeWnd()->isVisible() )
-			*vb = VARIANT_TRUE;
-		else
-			*vb = VARIANT_FALSE;
-	}
-	return S_OK;
+	return moe()->moeConfig->get_ShowTreeView(vb);
 }
 
 
 HRESULT __stdcall MoeView::put_ShowTreeView( VARIANT_BOOL vb )
 {
-	if ( vb == VARIANT_TRUE )
-	{
-		treeWnd()->show(SW_SHOW);
-		::InvalidateRect(moe()->mdiClient(),0,TRUE);
-	}
-	if ( vb == VARIANT_FALSE )
-	{
-		treeWnd()->show(SW_HIDE);
-	}
-
-	moe()->OnLayout(0,0,0);
-	return S_OK;
+	return moe()->moeConfig->put_ShowTreeView(vb);
 }
 
 void MoeView::fullScreen(HWND hwnd)
@@ -409,6 +398,42 @@ HRESULT __stdcall MoeView::Screenshot()
 	return S_OK;
 }
 
+HRESULT __stdcall MoeView::ShowFileMenu()
+{
+	if (!moe()->fileMenu)
+	{
+		std::wstring appPath = mol::app<mol::win::AppBase>().CreateAppPath(_T("moe"));
+		std::wstring fileMenuPath = appPath + L"\\ui\\file.html";
+
+		long left = 0;
+		long top = 0;
+		get_Left(&left);
+		get_Top(&top);
+
+		moe()->fileMenu = MoeForm2Wnd::CreateInstance(fileMenuPath, left + 20, top + 60, 600, 355, MoeForm2Wnd::HIDE_ON_KILL_FOCUS);
+	}
+	moe()->fileMenu->show(SW_SHOW);
+	return S_OK;
+}
+
+HRESULT __stdcall MoeView::ShowContextMenu()
+{
+	POINT p;
+	::GetCursorPos(&p);
+
+	if (!moe()->contextMenu)
+	{
+		std::wstring appPath = mol::app<mol::win::AppBase>().CreateAppPath(_T("moe"));
+		std::wstring contextMenuPath = appPath + L"\\ui\\context.html";
+
+		moe()->contextMenu = MoeForm2Wnd::CreateInstance(contextMenuPath, p.x, p.y, 125, 200, MoeForm2Wnd::HIDE_ON_KILL_FOCUS);
+	}
+//	moe()->contextMenu->show(SW_SHOW);
+	::SetWindowPos(*(moe()->contextMenu.interface_),0, p.x, p.y, 250, 200, SWP_SHOWWINDOW| SWP_NOZORDER|SWP_NOSIZE);
+	return S_OK;
+}
+
+
 /////////////////////////////////////////////////////////////////////
 //
 // moe dialogs sub obj
@@ -448,7 +473,7 @@ HRESULT __stdcall MoeDialogs::Open(BSTR path,IMoeDocument** d)
 
 	static wchar_t  InFilesFilter[] = _T("open text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
 
-	if ( mol::Ribbon::ribbon()->enabled() )
+	if ( true) //mol::Ribbon::ribbon()->enabled() )
 	{
 		const COMDLG_FILTERSPEC c_rgSaveTypes[] =
 		{
@@ -605,6 +630,18 @@ HRESULT __stdcall MoeDialogs::Print()
 	return S_OK;
 }
 
+HRESULT __stdcall MoeDialogs::Find()
+{
+	::PostMessage( *moe(), WM_COMMAND, IDM_EDIT_FIND, 0);
+	return S_OK;
+}
+
+HRESULT __stdcall MoeDialogs::Replace()
+{
+	::PostMessage( *moe(), WM_COMMAND, IDM_EDIT_REPLACE, 0);
+	return S_OK;
+}
+
 /////////////////////////////////////////////////////////////////////
 //
 // moe script sub obj
@@ -691,6 +728,23 @@ HRESULT __stdcall MoeScript::ShowHtmlForm( BSTR src, long l, int t, int w, int h
 	return S_OK;
 }
 
+HRESULT __stdcall MoeScript::RunScript()
+{
+	moe()->postMessage(WM_COMMAND, IDM_EDIT_EXECUTESCRIPT, 0);
+	return S_OK;
+}
+
+HRESULT __stdcall MoeScript::DebugScript()
+{
+	moe()->postMessage(WM_COMMAND, IDM_EDIT_DEBUG_GO, 0);
+	return S_OK;
+}
+
+HRESULT __stdcall MoeScript::ShowHTML()
+{
+	moe()->postMessage(WM_COMMAND, IDM_MODE_EXECUTEFORM, 0);
+	return S_OK;
+}
 
 
 HRESULT __stdcall MoeScript::System( BSTR f)
@@ -699,7 +753,17 @@ HRESULT __stdcall MoeScript::System( BSTR f)
 	std::wstring s = /*findFile*/(mol::bstr(f).towstring());
 	if ( s == _T("") )
 		return E_FAIL;
-
+	
+	size_t p = s.find(_T("|"));
+	std::wstring args;
+	if (p != std::wstring::npos)
+	{
+		if (p < s.size())
+			args = s.substr(p + 1);
+		s = s.substr(0, p);
+		mol::io::execute_shell_args(s, args);
+		return S_OK;
+	}
 	mol::io::exec_cmdline( s );
 	return S_OK;
 }
@@ -788,8 +852,11 @@ HRESULT __stdcall MoeConfig::get_ConfigPath( BSTR* fPath)
 {
 	if ( !fPath ) 
 		return E_POINTER;
-	std::wstring tmp( mol::Path::parentDir(mol::App().getAppPath()));
-	*fPath = ::SysAllocString(mol::towstring(tmp).c_str());
+//	std::wstring tmp( mol::Path::parentDir(mol::App().getAppPath()));
+
+	std::wstring appPath = mol::app<mol::win::AppBase>().CreateAppPath(_T("moe"));
+
+	*fPath = ::SysAllocString(appPath.c_str());
 	return S_OK;
 }
 
@@ -909,6 +976,12 @@ HRESULT __stdcall MoeConfig::put_ShowTreeView(VARIANT_BOOL vb)
 	}
 
 	showTreeView_ = vb;
+
+	auto m = moe();
+	if (m)
+	{
+		m->OnLayout(0, 0, 0);
+	}
 	return S_OK;
 }
 
@@ -1019,6 +1092,50 @@ HRESULT __stdcall MoeConfig::ExportSettings( BSTR f )
 	return S_OK;
 }
 
+HRESULT __stdcall MoeConfig::GetRecentFilesJSON(BSTR* result)
+{
+	if (!result)
+		return E_INVALIDARG;
+	*result = 0;
+
+	mol::punk<IApplicationDocumentLists> appDocLists;
+	HRESULT hr = appDocLists.createObject(CLSID_ApplicationDocumentLists);
+	if (hr == S_OK)
+	{
+		mol::punk<IObjectArray> objects;
+		hr = appDocLists->GetList(ADLT_RECENT, 10, IID_IObjectArray, (void**)&objects);
+
+		if (hr == S_OK && objects)
+		{
+			Json::Value recentFiles(Json::arrayValue);
+			unsigned int cnt = 0;
+			hr = objects->GetCount(&cnt);
+			for (unsigned int i = 0; i < cnt; i++)
+			{
+				mol::punk<IUnknown> unk;
+				hr = objects->GetAt(i, IID_IUnknown, (void**)(&unk));
+				if (hr != S_OK)
+					break;
+
+				mol::punk<IShellItem> shit(unk);
+				if (!shit)
+					continue;
+
+				mol::CoStrBuf buf;
+				hr = shit->GetDisplayName(SIGDN_FILESYSPATH, &buf);
+				if (hr != S_OK)
+					continue;
+
+				std::string utf8(mol::toUTF8(std::wstring(buf)));
+				recentFiles.append(utf8);
+			}
+
+			std::string utf8 = JSON::flatten(recentFiles);
+			*result = ::SysAllocString(mol::fromUTF8(utf8).c_str());
+		}
+	}
+	return S_OK;
+}
 HRESULT __stdcall MoeConfig::ImportSettings( BSTR f )
 {
 	if ( f )
@@ -1116,6 +1233,15 @@ HRESULT __stdcall MoeConfig::ImportSettings( BSTR f )
 						std::string value = el->innerXml();
 						bool b = value == "true" ? true : false;
 						showTreeView_ = b ? VARIANT_TRUE : VARIANT_FALSE;
+
+						if(b)
+						{ 
+							treeWnd()->show(SW_SHOW);
+						}
+						else 
+						{
+							treeWnd()->show(SW_HIDE);
+						}
 					}
 
 					el = config->getElementByTagName("foreColor");
@@ -1205,7 +1331,7 @@ HRESULT __stdcall MoeConfig::InitializeEditorFromPreferences( IMoeDocument* d )
 		return hr;
 
 	// use ribbon context menue if avail
-	if ( mol::Ribbon::ribbon()->enabled() )
+//	if ( mol::Ribbon::ribbon()->enabled() )
 	{
 		hr = props->put_UseContext(VARIANT_FALSE);
 		if ( hr != S_OK )
@@ -1237,8 +1363,8 @@ HRESULT  __stdcall MoeConfig::ResetStyles()
 
 HRESULT __stdcall MoeConfig::put_RibbonForeColor( BSTR fPath)
 {
-	foreColor_ = mol::hex2rgb(mol::bstr(fPath).tostring());
-	mol::Ribbon::ribbon()->setColor(foreColor_,backColor_,textColor_);
+//	foreColor_ = mol::hex2rgb(mol::bstr(fPath).tostring());
+//	mol::Ribbon::ribbon()->setColor(foreColor_,backColor_,textColor_);
 	return S_OK;
 }
 
@@ -1254,7 +1380,7 @@ HRESULT __stdcall MoeConfig::get_RibbonForeColor(  BSTR* fPath)
 HRESULT __stdcall MoeConfig::put_RibbonBackColor( BSTR fPath)
 {
 	backColor_ = mol::hex2rgb(mol::bstr(fPath).tostring());
-	mol::Ribbon::ribbon()->setColor(foreColor_,backColor_,textColor_);
+//	mol::Ribbon::ribbon()->setColor(foreColor_,backColor_,textColor_);
 
 	return S_OK;
 }
@@ -1271,7 +1397,7 @@ HRESULT __stdcall MoeConfig::get_RibbonBackColor(  BSTR* fPath)
 HRESULT __stdcall MoeConfig::put_RibbonTextColor( BSTR fPath)
 {
 	textColor_ = mol::hex2rgb(mol::bstr(fPath).tostring());
-	mol::Ribbon::ribbon()->setColor(foreColor_,backColor_,textColor_);
+//	mol::Ribbon::ribbon()->setColor(foreColor_,backColor_,textColor_);
 
 	return S_OK;
 }

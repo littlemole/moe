@@ -116,11 +116,8 @@ void ScpDirChild::OnMDIActivate( HWND activated )
 
 	if ( activated == *this )
 	{
-		if ( mol::Ribbon::ribbon()->enabled())
-		{
-			mol::Ribbon::ribbon()->mode(2);
-			mol::Ribbon::ribbon()->maximize();
-		}
+		ribbon()->setAppMode("Directory");
+
 		statusBar()->status(filename.towstring());
 		tab()->select( *this );
 		moe()->redraw();

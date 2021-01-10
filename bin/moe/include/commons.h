@@ -47,7 +47,7 @@
 #include "ole/img.h"
 #include "ole/cp.h"
 #include "ole/propertypage.h"
-#include "ole/Rib.h"
+//#include "ole/Rib.h"
 #include "ole/enum.h"
 
 #include <activdbg.h>

@@ -80,7 +80,8 @@ void EditorScript::debugScriptGo()
 
 	if ( debugger_&& debugger_->suspended())
 	{		
-		mol::Ribbon::ribbon()->mode(8);
+		//mol::Ribbon::ribbon()->mode(8);
+		ribbon()->setAppMode("Script");
 		debugger_->resume();
 		return;
 	}
@@ -123,7 +124,8 @@ void EditorScript::debugScriptGo()
 	debugger_->execute( SCRIPTTEXT_ISVISIBLE);
 	editor_->debugger_= debugger_;
 
-	mol::Ribbon::ribbon()->mode(8);
+	//mol::Ribbon::ribbon()->mode(8);
+	ribbon()->setAppMode("Script");
 }
 
 void EditorScript::debugScriptStepIn()
@@ -139,7 +141,7 @@ void EditorScript::debugScriptStepIn()
 
 	debugger_->resume(BREAKRESUMEACTION_STEP_INTO);
 
-	mol::Ribbon::ribbon()->mode(9);
+	ribbon()->setAppMode("Script");
 }
 
 void EditorScript::debugScriptStepOver()
@@ -155,7 +157,7 @@ void EditorScript::debugScriptStepOver()
 
 	debugger_->resume(BREAKRESUMEACTION_STEP_OVER);
 
-	mol::Ribbon::ribbon()->mode(9);
+	ribbon()->setAppMode("Script");
 }
 
 void EditorScript::debugScriptStepOut()
@@ -171,7 +173,7 @@ void EditorScript::debugScriptStepOut()
 
 	debugger_->resume(BREAKRESUMEACTION_STEP_OUT);
 
-	mol::Ribbon::ribbon()->mode(9);
+	ribbon()->setAppMode("Script");
 }
 
 void EditorScript::debugScriptStop()
@@ -184,7 +186,7 @@ void EditorScript::debugScriptStop()
 
 	debugger_->cause_break();
 
-	mol::Ribbon::ribbon()->mode(9);
+	ribbon()->setAppMode("Script");
 }
 
 void EditorScript::debugScriptQuit()
@@ -203,7 +205,7 @@ void EditorScript::debugScriptQuit()
 		editor_->annotation_->SetText(0,out);
 	}
 
-	mol::Ribbon::ribbon()->mode(1);
+	ribbon()->setAppMode("Scintilla");
 
 	if ( debugger_->suspended())
 	{
@@ -282,7 +284,8 @@ void EditorScript::scriptThread2( int line, std::wstring error )
 	editor_->line_->Goto(line);
 	editor_->line_->Highlite(line);
 
-	mol::Ribbon::ribbon()->mode(9);
+	ribbon()->setAppMode("Script");
+
 	ODBGS1("Leaving OnScriptThread:",line);
 }
 
@@ -304,5 +307,5 @@ void EditorScript::scriptThreadDone()
 		editor_->annotation_->SetText(0,out);
 	}
 
-	mol::Ribbon::ribbon()->mode(1);
+	ribbon()->setAppMode("Scintilla");
 }

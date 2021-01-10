@@ -47,6 +47,8 @@ public:
 	virtual HRESULT __stdcall OpenRTFDocument(BSTR pathname, IMoeDocument** d);
 	virtual HRESULT __stdcall OpenTailDocument( BSTR pathname, IMoeDocument** doc );	
 
+	virtual HRESULT __stdcall OpenURLDialog();
+
 	virtual HRESULT __stdcall SaveAll();
 	virtual HRESULT __stdcall CloseAll();
 

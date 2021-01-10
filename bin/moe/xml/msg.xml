@@ -21,6 +21,9 @@
         <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
         <msg  handler="OnMenu" msg="WM_INITMENUPOPUP"  />
 
+        <msg  handler="OnSysCommand" msg="WM_SYSCOMMAND "  />
+        <msg  handler="OnExitLoop" msg="WM_EXITMENULOOP "  />
+      
         <!-- main menu handlers -->
         <msg  handler="OnFileNew" cmd="IDM_FILE_NEW" />
         <msg  handler="OnFileNewRTF" cmd="IDM_FILE_NEW_RTF" />
@@ -38,7 +41,6 @@
         <msg  handler="OnHelpAbout" cmd="IDM_HELP_ABOUT" />
   <!--      <msg  handler="OnShowDirView" cmd="IDM_VIEW_DIRVIEW" /> -->
         <msg  handler="OnFreezeToolBar" cmd="IDM_TOOLBARS_FREEZE" />
-        <msg  handler="OnSyntax" cmd="IDW_SYNTAX_BOX" />
 
 
         <!-- ribbon -->
@@ -378,6 +380,8 @@
         <msg  handler="OnSize" msg="WM_SIZE" />
         <msg  handler="OnClose" msg="WM_CLOSE" />
         <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
+        <msg  handler="OnActivate" msg="WM_ACTIVATE " />
+    
     </class>
 
     <class type="MoeTreeWnd" >
@@ -442,17 +446,20 @@
       <msg  handler="OnMouseUp" msg="WM_LBUTTONUP" />
       <msg  handler="OnTimer" msg="WM_TIMER" />
 
-
       <notify handler="OnGetObject" code="TCN_GETOBJECT" />
       <notify handler="OnSelect" code="TCN_SELCHANGE" />      
       <notify handler="OnRightClick" code="NM_RCLICK" />      
       
     </class>
     
-    <class type="MoeToolBar" >
-      <notify handler="OnRightClick" code="NM_RCLICK" />
-    </class>
+    <class type="MoeHtmlRibbon" >
 
+      <msg  handler="OnCreate" msg="WM_CREATE" />
+      <msg  handler="OnClose" msg="WM_CLOSE" />
+      <msg  handler="OnSize" msg="WM_SIZE" />
+      <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
+      
+    </class>
 
   </msgs>
 

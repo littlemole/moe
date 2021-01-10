@@ -200,7 +200,7 @@ HRESULT __stdcall SciAxProperties::put_SysType( long type)
 
 	sci_->fire(DISPID_ISCINTILLAXEVENTS_ONSYSTEM,type);
 	return S_OK; 
-}
+} 
 
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
@@ -263,6 +263,8 @@ HRESULT __stdcall SciAxProperties::put_TabUsage( VARIANT_BOOL vbTabUsage)
 			sci_->edit()->setUseTabs(true);
 		else
 			sci_->edit()->setUseTabs(false);
+
+		sci_->fire(DISPID_ISCINTILLAXEVENTS_ONTABUSAGE, vbTabUsage_);
 	}
 
 	return S_OK; 
@@ -309,6 +311,8 @@ HRESULT __stdcall SciAxProperties::put_TabIndents( VARIANT_BOOL vbTabIndents)
 			sci_->edit()->setTabIndents(true);
 		else
 			sci_->edit()->setTabIndents(false);
+
+		sci_->fire(DISPID_ISCINTILLAXEVENTS_ONTABINDENTS, vbTabIndents_);
 	}
 
 	return S_OK; 
@@ -355,6 +359,8 @@ HRESULT __stdcall SciAxProperties::put_BackSpaceUnindents( VARIANT_BOOL vbBackSp
 			sci_->edit()->setBackSpaceUnindents(true);
 		else
 			sci_->edit()->setBackSpaceUnindents(false);
+
+		sci_->fire(DISPID_ISCINTILLAXEVENTS_ONBACKSPACEUNINDENTS, vbBackSpaceUnindents_);
 	}
 
 	return S_OK; 
@@ -397,6 +403,8 @@ HRESULT __stdcall SciAxProperties::put_TabWidth( long width)
 	if ( sci_->edit() )
 	{
 		sci_->edit()->setTabWidth(width);
+
+		sci_->fire(DISPID_ISCINTILLAXEVENTS_ONTABWIDTH, tabWidth_);
 	}
 	return S_OK; 
 }
@@ -492,7 +500,7 @@ HRESULT __stdcall SciAxProperties::get_UseContext(VARIANT_BOOL* vbContext)
 HRESULT __stdcall SciAxProperties::put_WriteBOM( VARIANT_BOOL vb)
 {
 	vbWriteBOM_ = vb;
-
+	sci_->fire(DISPID_ISCINTILLAXEVENTS_ONWRITEBOM, vbWriteBOM_);
 	return S_OK;
 }
 
@@ -578,6 +586,9 @@ HRESULT __stdcall SciAxProperties::put_ShowLineNumbers(VARIANT_BOOL useLineNums)
 
 	bool b = useLineNums == VARIANT_TRUE ? true : false;
 	sci_->edit()->showLineNumbers(b);
+
+	sci_->fire(DISPID_ISCINTILLAXEVENTS_ONSHOWLINENUMBERS, useLineNums);
+
 	return S_OK;
 }
 

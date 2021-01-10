@@ -199,12 +199,6 @@ HRESULT __stdcall TreeWndSink::OnContextMenu(BSTR fname,VARIANT_BOOL vb)
 	POINT pt;
 	::GetCursorPos(&pt);
 
-	if ( mol::Ribbon::ribbon()->enabled() )
-	{
-		mol::Ribbon::ribbon()->showContextualUI( RibbonTreeViewContextMap, pt.x, pt.y);
-		return 0;
-	}
-
 	mol::Menu sub = mol::UI().SubMenu(IDM_CONTEXT_TREE,IDM_TREE);
 
 	moe()->showContext(sub);

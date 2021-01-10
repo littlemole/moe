@@ -22,10 +22,11 @@ class MoeForm2Wnd  :
 {
 public:
 
-	enum styles { TITLE = 1, NOSCROLL = 2, DIALOG = 4, STANDALONE = 8 };
+	enum styles { TITLE = 1, NOSCROLL = 2, DIALOG = 4, STANDALONE = 8, HIDE_ON_KILL_FOCUS = 16 };
 
 	mol::punk< ICoreWebView2Controller> webViewController;
-	mol::punk< ICoreWebView2> oleObject;
+	mol::punk< ICoreWebView2> webview;
+//	mol::punk< IMoeHtmlFrame> oleObject;
 	mol::punk<IMoeDialogView> view;
 
 	MoeForm2Wnd( );
@@ -54,6 +55,11 @@ public:
 	virtual HRESULT __stdcall addExternalObject(BSTR name, IDispatch* disp);
 	virtual HRESULT __stdcall removeExternalObject(BSTR name);
 
+	virtual HRESULT __stdcall Reload();
+	virtual HRESULT __stdcall Next();
+	virtual HRESULT __stdcall Back();
+
+
 	/////////////////////////////////////////////////////////////////////
 	// msg handlers
 	/////////////////////////////////////////////////////////////////////
@@ -61,6 +67,7 @@ public:
 	void OnSize(WPARAM wParam, LPARAM lParam);
 	void OnClose();
 	void OnNcDestroy();
+	void OnActivate(WPARAM wParam, LPARAM lParam);
 
 	void cut();
 	void copy();

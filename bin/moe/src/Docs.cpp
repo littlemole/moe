@@ -3,6 +3,7 @@
 #include "MoeBar.h"
 #include "Moe.h"
 #include "xmlui.h"
+#include "xmlid.h"
 #include "DocFactory.h"
 
 using namespace mol;
@@ -13,7 +14,7 @@ using namespace mol;
 
 Docs::Instance* Docs::CreateInstance()
 {
-	Instance* d = new Instance;
+	Instance* d = new Instance;  
 	d->AddRef();
 	return d;
 }
@@ -64,8 +65,9 @@ void Docs::remove( mol::MdiChild* mdi )
 						frame->SetBorderSpace(0);
 					}
 				}
-				mol::Ribbon::ribbon()->mode(0);
-				mol::Ribbon::ribbon()->maximize();
+				std::string utf8 = "{ appmode : \"Image\" }";
+				ribbon()->oleObject->PostWebMessageAsJson(mol::fromUTF8(utf8).c_str());
+
 				moe()->doLayout();	
 				moe()->redraw();
 				statusBar()->status(_T(""));
@@ -233,6 +235,13 @@ HRESULT __stdcall Docs::OpenTailDocument(BSTR fp, IMoeDocument** d)
 {
 	return factory_->openDocument(mol::towstring(fp),MOE_DOCTYPE_TAIL,-1,false,d);
 }
+
+HRESULT __stdcall Docs::OpenURLDialog()
+{
+	moe()->postMessage(WM_COMMAND, IDM_FILE_OPEN_HTML, 0);
+	return S_OK;
+}
+
 
 HRESULT __stdcall Docs::Open( BSTR fPath, IMoeDocument** d)
 {
