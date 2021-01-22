@@ -1007,19 +1007,37 @@ library Moe
 		[id(12), helpstring("Debug current editor as script")]
 		HRESULT DebugScript();
 
-		[id(13), helpstring("show current editor as HTML")]
+		[id(13), helpstring("Break script")]
+		HRESULT BreakScript();
+
+		[id(14), helpstring("Continue script")]
+		HRESULT ContinueScript();
+
+		[id(15), helpstring("Stop script")]
+		HRESULT StopScript();
+
+		[id(16), helpstring("Step over script")]
+		HRESULT StepOver();
+
+		[id(17), helpstring("Step into script")]
+		HRESULT StepIn();
+
+		[id(18), helpstring("Step out script")]
+		HRESULT StepOut();
+
+		[id(19), helpstring("show current editor as HTML")]
 		HRESULT ShowHTML();
 
-		[id(14), propget, helpstring("Get FORM_DEFAULT constant")]
+		[id(20), propget, helpstring("Get FORM_DEFAULT constant")]
 		HRESULT FORM_DEFAULT( [out,retval] long* d );
 
-		[id(15), propget, helpstring("Get FORM_TITLE constant")]
+		[id(21), propget, helpstring("Get FORM_TITLE constant")]
 		HRESULT FORM_TITLE( [out,retval] long* d );
 
-		[id(16), propget, helpstring("Get FORM_NOSCROLL constant")]
+		[id(22), propget, helpstring("Get FORM_NOSCROLL constant")]
 		HRESULT FORM_NOSCROLL( [out,retval] long* d );
 
-		[id(17), propget, helpstring("Get FORM_DIALOG constant")]
+		[id(23), propget, helpstring("Get FORM_DIALOG constant")]
 		HRESULT FORM_DIALOG( [out,retval] long* d );
 	}
 
@@ -1135,11 +1153,17 @@ library Moe
 		]
 		HRESULT PasteAs();
 
-		[
-			id(22),
-			helpstring("Insert Template")
-		]
+		[ id(22), helpstring("Insert Template") ]
 		HRESULT InsertTemplate();
+
+		[ id(23), helpstring("Cut") ]
+		HRESULT Cut();
+
+		[ id(24), helpstring("Copy") ]
+		HRESULT Copy();
+
+		[ id(25), helpstring("Paste") ]
+		HRESULT Paste();
 
 	}
 

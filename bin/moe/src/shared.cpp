@@ -746,6 +746,44 @@ HRESULT __stdcall MoeScript::ShowHTML()
 	return S_OK;
 }
 
+HRESULT __stdcall MoeScript::BreakScript()
+{
+	moe()->postMessage(WM_COMMAND, IDM_EDIT_DEBUG_STOP, 0);
+	return S_OK;
+}
+
+HRESULT __stdcall MoeScript::ContinueScript()
+{
+	moe()->postMessage(WM_COMMAND, IDM_EDIT_DEBUG_GO, 0);
+	return S_OK;
+}
+
+HRESULT __stdcall MoeScript::StopScript()
+{
+	moe()->postMessage(WM_COMMAND, IDM_EDIT_DEBUG_QUIT, 0);
+	return S_OK;
+}
+
+
+HRESULT __stdcall MoeScript::StepOver()
+{
+	moe()->postMessage(WM_COMMAND, IDM_EDIT_DEBUG_STEPOVER, 0);
+	return S_OK;
+}
+
+HRESULT __stdcall MoeScript::StepIn()
+{
+	moe()->postMessage(WM_COMMAND, IDM_EDIT_DEBUG_STEPIN, 0);
+	return S_OK;
+}
+
+HRESULT __stdcall MoeScript::StepOut()
+{
+	moe()->postMessage(WM_COMMAND, IDM_EDIT_DEBUG_STEPOUT, 0);
+	return S_OK;
+}
+
+
 
 HRESULT __stdcall MoeScript::System( BSTR f)
 {

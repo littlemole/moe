@@ -336,7 +336,7 @@ HRESULT __stdcall OleContainerBase::handleRemoveMenus( HMENU hmenuShared)
 		return S_OK;
 
 	// Remove our added menus (in reverse order, since we remove by position)...
-	for (int i = cItems; i >= 0; i--)
+	for (int i = cItems-1; i >= 0; i--)
 	{
 		hMenuTemp = ::GetSubMenu(hmenuShared, i);
 

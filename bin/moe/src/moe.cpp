@@ -840,6 +840,52 @@ HRESULT __stdcall MoeWnd::Exit()
 	return S_OK;
 }
 
+HRESULT __stdcall MoeWnd::Cut()
+{
+	if (treeWnd()->hasFocus())
+	{
+		treeWnd()->postMessage(WM_COMMAND, IDM_EDIT_CUT, 0);
+		return S_OK;
+	}
+
+	HWND active = this->getActive();
+
+	if (!active) return S_OK;
+
+	::PostMessage(active, WM_COMMAND, IDM_EDIT_CUT, 0);
+	return S_OK;
+}
+
+HRESULT __stdcall MoeWnd::Copy()
+{
+	if (treeWnd()->hasFocus())
+	{
+		treeWnd()->postMessage(WM_COMMAND, IDM_EDIT_COPY, 0);
+		return S_OK;
+	}
+
+	HWND active = this->getActive();
+	if (!active) return S_OK;
+
+	::PostMessage(active, WM_COMMAND, IDM_EDIT_COPY, 0);
+	return S_OK;
+}
+
+HRESULT __stdcall MoeWnd::Paste()
+{
+	if (treeWnd()->hasFocus())
+	{
+		treeWnd()->postMessage(WM_COMMAND, IDM_EDIT_PASTE, 0);
+		return S_OK;
+	}
+
+	HWND active = this->getActive();
+	if (!active) return S_OK;
+
+	::PostMessage(active, WM_COMMAND, IDM_EDIT_PASTE, 0);
+	return S_OK;
+}
+
 HRESULT __stdcall MoeWnd::PasteAs()
 {
 	HWND active = this->getActive();

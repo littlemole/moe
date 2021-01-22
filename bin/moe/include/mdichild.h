@@ -126,6 +126,9 @@ public:
 		   return E_INVALIDARG;
 	   *disp = 0;
 
+	   if (!onCloseHandler)
+		   return S_FALSE;
+
 	   return onCloseHandler.queryInterface(disp);
    }
 
@@ -172,13 +175,13 @@ protected:
 		ODBGS1("initializeMoeChild2 b: ",r.bottom);
 
 		// determine window menu
-		//HMENU m = mol::UI().Menu(M);
-		//windowMenu_ = mol::UI().SubMenu( M ,IDM_VIEW_WINDOWS);
+		HMENU m = mol::UI().Menu(M);
+		windowMenu_ = mol::UI().SubMenu( M ,IDM_VIEW_WINDOWS);
 		statusBar()->status(40);
 
 		// create
 		moe()->setRedraw(false);
-		create(p,0 /*(HMENU)m*/,r,*moe());
+		create(p,0/*a(HMENU)m*/,r,*moe());
 		show(SW_SHOW);	
 		statusBar()->status(50);
 

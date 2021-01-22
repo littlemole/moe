@@ -130,6 +130,7 @@ protected:
 	HRESULT getScriptEngine(const std::wstring& engine, IActiveScript **ppas);
 
 	bool								quit_ = true;
+	bool								break_ = false;
 	bool								stepping_;
 	bool								chakra_;
 	std::set<int>						breakpoints_;

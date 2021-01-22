@@ -2,6 +2,7 @@
 #include "form2.h"
 #include "app.h"
 #include "xmlui.h"
+#include "xmlid.h"
 
 using namespace mol::win;
 using namespace mol::ole;
@@ -149,7 +150,7 @@ void MoeForm2Wnd::onNavigationStarted(ICoreWebView2NavigationStartingEventArgs* 
 
 		if (style_ & HIDE_ON_KILL_FOCUS)
 		{
-			show(SW_HIDE);
+			postMessage(WM_COMMAND, IDM_HTML_FORM_HIDE, 0);
 		}
 		else
 		{
@@ -288,19 +289,28 @@ void MoeForm2Wnd::OnNcDestroy()
 	ODBGS("~MoeFormWnd()OnNcDestroy --");
 }
 
-void MoeForm2Wnd::OnActivate(WPARAM wParam, LPARAM lParam)
+void MoeForm2Wnd::OnHide()
+{
+	show(SW_HIDE);
+}
+
+LRESULT MoeForm2Wnd::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	if (style_ & HIDE_ON_KILL_FOCUS)
 	{
 		WORD mode = LOWORD(wParam);
 		if (mode == WA_INACTIVE && (HWND)lParam != hWnd_)
 		{
-			show(SW_HIDE);
+			// TODO: post yourself a SW_HIDE request ;-)
+			// this crashes MDI managemt otherwise ??????
+			//show(SW_HIDE);
+			postMessage(WM_COMMAND, IDM_HTML_FORM_HIDE, 0);
 			//postMessage(WM_CLOSE, 0, 0);
 			//destroy();
 			//::SetActiveWindow(*moe());
 		}
 	}
+	return 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////

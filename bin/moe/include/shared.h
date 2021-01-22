@@ -103,6 +103,14 @@ public:
 	virtual HRESULT __stdcall DebugScript();
 	virtual HRESULT __stdcall ShowHTML();
 
+	virtual HRESULT __stdcall BreakScript();
+	virtual HRESULT __stdcall ContinueScript();
+	virtual HRESULT __stdcall StopScript();
+
+	virtual HRESULT __stdcall StepOver();
+	virtual HRESULT __stdcall StepIn();
+	virtual HRESULT __stdcall StepOut();
+
 	virtual HRESULT __stdcall  get_FORM_DEFAULT( long* d )		{ if(d) *d =  MOE_FORMFLAG_NONE; return S_OK; }
 	virtual HRESULT __stdcall  get_FORM_TITLE( long* d )		{ if(d) *d =  MOE_FORMFLAG_TITLE; return S_OK; }
 	virtual HRESULT __stdcall  get_FORM_NOSCROLL( long* d )		{ if(d) *d =  MOE_FORMFLAG_NOSCROLL; return S_OK; }

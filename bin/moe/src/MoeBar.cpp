@@ -490,6 +490,12 @@ void MoeHtmlRibbon::OnCreate()
 {
 }
 
+void MoeHtmlRibbon::postMessageAsJSON(const Json::Value& json)
+{
+	std::string utf8 = JSON::flatten(json);
+	oleObject->PostWebMessageAsJson(mol::fromUTF8(utf8).c_str());
+}
+
 void MoeHtmlRibbon::load(mol::punk<ChromeEdge> edge)
 {
 	std::wstring l = mol::app<MoeApp>().CreateAppPath(L"moe");

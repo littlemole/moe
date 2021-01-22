@@ -207,11 +207,12 @@ void EditorScript::debugScriptQuit()
 
 	ribbon()->setAppMode("Scintilla");
 
+	
 	if ( debugger_->suspended())
 	{
 		debugger_->resume(BREAKRESUMEACTION_ABORT);
 	}
-
+	
 	debugger_->import->Quit();
 	debugger_= 0;
 }

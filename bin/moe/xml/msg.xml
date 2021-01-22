@@ -382,6 +382,8 @@
         <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
         <msg  handler="OnActivate" msg="WM_ACTIVATE " />
     
+        <msg handler="OnHide" cmd="IDM_HTML_FORM_HIDE" />
+    
     </class>
 
     <class type="MoeTreeWnd" >

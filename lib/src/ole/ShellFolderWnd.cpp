@@ -275,6 +275,11 @@ void ShellFolderWnd::execute()
 			mol::io::execute_shell( v[0] );		
 		}
 	}
+	if (hr == HRESULT_FROM_WIN32(ERROR_NOT_FOUND))
+	{
+		// no selection
+		mol::io::execute_shell(path_);
+	}
 }
 
 void ShellFolderWnd::properties()
@@ -291,6 +296,11 @@ void ShellFolderWnd::properties()
 		{
 			mol::io::execute_shell( v[0], _T("properties"),1,SEE_MASK_INVOKEIDLIST );		
 		}
+	}
+	if (hr == HRESULT_FROM_WIN32(ERROR_NOT_FOUND))
+	{
+		// no selection
+		mol::io::execute_shell(path_, _T("properties"), 1, SEE_MASK_INVOKEIDLIST);
 	}
 }
 
@@ -326,6 +336,29 @@ void ShellFolderWnd::newdir()
 				this->update();
 				return;
 			}	
+		}
+	}
+	if (hr == HRESULT_FROM_WIN32(ERROR_NOT_FOUND))
+	{
+		// no selection
+		std::wstring tmp = _T("newDir_");
+		int i = 0;
+		while (true)
+		{
+			std::wstring p(path_);
+			std::wstringstream oss;
+			oss << tmp << i;
+			p = mol::Path::append(p, oss.str());
+			if (!::CreateDirectory(p.c_str(), 0))
+			{
+				if (::GetLastError() == ERROR_ALREADY_EXISTS)
+				{
+					i++;
+					continue;
+				}
+			}
+			this->update();
+			return;
 		}
 	}
 }

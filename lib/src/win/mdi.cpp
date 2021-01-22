@@ -801,9 +801,9 @@ void MdiFrame::setMenu( HMENU newMenu, HMENU windowMenu   )
 	}
 	if ( !mol::Ribbon::ribbon()->enabled())
 	{
-	    ::SendMessage( mdiClient(),WM_MDISETMENU, (WPARAM)newMenu, (LPARAM)(wm) );
+		::SendMessage(mdiClient(), WM_MDISETMENU, (WPARAM)newMenu, (LPARAM)(wm));
+		::SendMessage(mdiClient(), WM_MDIREFRESHMENU, 0, 0);
 
-		::SendMessage( mdiClient(), WM_MDIREFRESHMENU ,0,0);	
 		::DrawMenuBar( *this );
 	}
 }

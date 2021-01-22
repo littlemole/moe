@@ -65,7 +65,7 @@ void Docs::remove( mol::MdiChild* mdi )
 						frame->SetBorderSpace(0);
 					}
 				}
-				std::string utf8 = "{ appmode : \"Image\" }";
+				std::string utf8 = "{ \"appmode\" : \"Img\" }";
 				ribbon()->oleObject->PostWebMessageAsJson(mol::fromUTF8(utf8).c_str());
 
 				moe()->doLayout();	

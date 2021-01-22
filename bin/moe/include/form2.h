@@ -67,7 +67,8 @@ public:
 	void OnSize(WPARAM wParam, LPARAM lParam);
 	void OnClose();
 	void OnNcDestroy();
-	void OnActivate(WPARAM wParam, LPARAM lParam);
+	void OnHide();
+	LRESULT OnActivate(WPARAM wParam, LPARAM lParam);
 
 	void cut();
 	void copy();

@@ -182,7 +182,9 @@
     <cmd id="IDM_TREE_NEWDIR" title="New Directory" ribbon="RibbonNewDirTree" />
 
     <cmd id="IDM_CLI_RETURN"/>
-    
+
+    <cmd id="IDM_HTML_FORM_HIDE"/>
+
   </cmds>
 </mol:codegen>
 

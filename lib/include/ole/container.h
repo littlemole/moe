@@ -445,7 +445,8 @@ protected:
 
 	virtual void setFrameMenu( HMENU newMenu, HMENU windowMenu   ) 
 	{
-		this->setMenu( newMenu, windowMenu );
+		if(this->menue_)
+			this->setMenu( newMenu, windowMenu );
 	}
 
 	// route windows message to this windows base class window proc

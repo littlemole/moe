@@ -186,7 +186,22 @@ void Hex::updateUI()
 
 	setText(title);
 
-	ribbon()->setAppMode("Hex");
+//	ribbon()->setAppMode("Hex");
+
+	Json::Value json(Json::objectValue);
+	json["doctype"] = MOE_DOCTYPE_HEX;
+	json["appmode"] = "Hex";
+
+	long bytes = 0;
+	
+	if (hexer)
+	{
+		hexer->get_DisplayColumns(&bytes);
+	}
+	json["showBytes"] = bytes;
+
+	ribbon()->postMessageAsJSON(json);
+
 	/*
 	if ( mol::Ribbon::ribbon()->enabled())
 	{

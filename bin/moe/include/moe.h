@@ -140,6 +140,10 @@ public:
 	virtual HRESULT __stdcall Print(BSTR txt);
     virtual HRESULT __stdcall Exit();
 
+	virtual HRESULT __stdcall Cut();
+	virtual HRESULT __stdcall Copy();
+	virtual HRESULT __stdcall Paste();
+
 	virtual HRESULT __stdcall PasteAs();
 	virtual HRESULT __stdcall InsertTemplate();
 

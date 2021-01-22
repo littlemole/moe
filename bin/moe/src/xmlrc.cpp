@@ -197,6 +197,7 @@ extern "C" void load_codegen_metadata()
   UI().addCmd(IDM_TREE_EXECUTE,_T("Execute"));  
   UI().addCmd(IDM_TREE_NEWDIR,_T("New Directory"));  
   UI().addCmd(IDM_CLI_RETURN,_T(""));  
+  UI().addCmd(IDM_HTML_FORM_HIDE,_T(""));  
 
   
   //foreach bitmap - loads and registers bitmap
@@ -1195,6 +1196,8 @@ mol::msgMap<MoeForm2Wnd>().addMsgHandler( WM_CLOSE, make_handler(&MoeForm2Wnd::O
 mol::msgMap<MoeForm2Wnd>().addMsgHandler( WM_NCDESTROY, make_handler(&MoeForm2Wnd::OnNcDestroy) );
 
 mol::msgMap<MoeForm2Wnd>().addMsgHandler( WM_ACTIVATE , make_handler(&MoeForm2Wnd::OnActivate) );
+
+mol::msgMap<MoeForm2Wnd>().addCmdHandler( IDM_HTML_FORM_HIDE, make_handler(&MoeForm2Wnd::OnHide) );
 
 mol::msgMap<MoeTreeWnd>().addCmdHandler( IDM_TREE_OPEN, make_handler(&MoeTreeWnd::OnTreeOpen) );
 

@@ -2,7 +2,7 @@
 #include "ThreadScript.h"
 #include "xmlui.h"
 #include "widgets.h"
-
+#include <mutex>
 
 std::wstring engineFromPath(const std::string& path)
 {
@@ -33,17 +33,38 @@ public:
 	void remove( int i );
 	bool fire();
 	void clear();
+	bool stepping();
+	void stepping(bool b);
 
 private:
+	std::mutex mutex_;
 	int count_;
+	bool stepping_ = false;
 	bool done_ = false;
 	std::list<ThreadedTimeout*> timeouts_;
 };
 
 ThreadedTimeouts& threadedTimeouts();
 
+bool ThreadedTimeouts::stepping()
+{
+	std::lock_guard lock(mutex_);
+	return stepping_;
+}
+
+void ThreadedTimeouts::stepping(bool b)
+{
+	std::lock_guard lock(mutex_);
+	stepping_ = b;
+}
+
 HRESULT ThreadedTimeouts::setTimeout( mol::variant f, mol::variant t)
 {
+	std::lock_guard lock(mutex_);
+
+	if (done_)
+		return S_OK;
+
 	long tick = ::GetTickCount();
 	if (f.vt != VT_DISPATCH )
 	{
@@ -60,44 +81,64 @@ HRESULT ThreadedTimeouts::setTimeout( mol::variant f, mol::variant t)
 bool ThreadedTimeouts::fire()
 {
 	long now = ::GetTickCount();
-	std::list<ThreadedTimeout*> newList;
-	for ( std::list<ThreadedTimeout*>::iterator it = timeouts_.begin(); it != timeouts_.end(); it++)
-	{
-		if ( (*it)->timeout < now ) 
-		{
-			if (!done_)
-			{
-				EXCEPINFO ex;
-				::ZeroMemory(&ex, sizeof(EXCEPINFO));
-				UINT e = 0;
-				DISPPARAMS p = { 0,0 };
 
-				HRESULT hr = (*it)->fun->Invoke(0, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD, &p, 0, &ex, &e);
-			}
-			delete *it;
-		}
-		else
+	std::list<ThreadedTimeout*>::iterator it = timeouts_.begin();
+	mol::punk<IDispatch> disp;
+
+	{
+		std::lock_guard lock(mutex_);
+
+		if (timeouts_.empty())
 		{
-			newList.push_back(*it);
+			return true;
+		}
+
+		if (!done_ && !stepping_)
+		{
+			for (it; it != timeouts_.end(); it++)
+			{
+				if ((*it)->timeout < now)
+				{
+					disp = (*it)->fun;
+					break;
+				}
+			}
 		}
 	}
+
+	if (disp)
+	{
+		EXCEPINFO ex;
+		::ZeroMemory(&ex, sizeof(EXCEPINFO));
+		UINT e = 0;
+		DISPPARAMS p = { 0,0 };
+
+		HRESULT hr = (*it)->fun->Invoke(0, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD, &p, 0, &ex, &e);
+	}
+
+	std::lock_guard lock(mutex_);
+
+	if (it != timeouts_.end())
+	{
+		delete* it;
+		timeouts_.erase(it);
+	}
+
 	if (done_)
 	{
-		for (std::list<ThreadedTimeout*>::iterator it = newList.begin(); it != newList.end(); it++)
+		for (it = timeouts_.begin(); it != timeouts_.end(); it++)
 		{
 			delete (*it);
 		}
-		newList.clear();
+		timeouts_.clear();
 		done_ = false;
 	}
-	timeouts_ = newList;
 	return timeouts_.empty();
 }
 
 void ThreadedTimeouts::clear()
 {
-	std::list<ThreadedTimeout*> newList;
-	//timeouts_.clear();
+	std::lock_guard lock(mutex_);
 	done_ = true;
 }
 
@@ -213,6 +254,8 @@ ScriptDebugger::~ScriptDebugger()
 
 void  ScriptDebugger::quit()
 {
+	break_ = false;
+	stepping_ = false;
 	quit_ = true;
 //	if (OnScriptThreadDone.test())
 	{
@@ -437,6 +480,9 @@ void ScriptDebugger::cause_break()
 	if ( !debugApp_ )
 		return;
 
+//	threadedTimeouts().stepping = true;
+	stepping_ = true;
+	break_ = true;
 	debugApp_->CauseBreak();
 }
 
@@ -453,12 +499,15 @@ void ScriptDebugger::resume(BREAKRESUMEACTION ba)
 		{
 		case BREAKRESUMEACTION_ABORT:
 		{
+			break_ = false;
 			stepping_ = false;
+			threadedTimeouts().clear();
 			break;
 		}
 		case BREAKRESUMEACTION_CONTINUE:
 		{
 			stepping_ = false;
+			threadedTimeouts().stepping(false);
 			ba = BREAKRESUMEACTION_STEP_INTO;
 			break;
 		}
@@ -467,6 +516,7 @@ void ScriptDebugger::resume(BREAKRESUMEACTION ba)
 		case BREAKRESUMEACTION_STEP_OUT:
 		{
 			stepping_ = true;
+			threadedTimeouts().stepping(true);
 			ba = BREAKRESUMEACTION_STEP_INTO;
 			break;
 		}
@@ -892,6 +942,8 @@ HRESULT  __stdcall  ScriptDebugger::onDebugOutput(LPCOLESTR pstr)
 
 HRESULT  __stdcall  ScriptDebugger::onHandleBreakPoint(IRemoteDebugApplicationThread *rthread, BREAKREASON br, IActiveScriptErrorDebug *pError)
 {
+	
+
 	ODBGS("onHandleBreakPoint");
 	ULONG						line = (ULONG)-1;
 
@@ -956,12 +1008,13 @@ HRESULT  __stdcall  ScriptDebugger::onHandleBreakPoint(IRemoteDebugApplicationTh
 				hr = docText->GetLineOfPosition( position, &line, &offset );
 				hr = docText->GetPositionOfLine(line, &position);
 
-				if (chakra_)
+				if (chakra_ && !break_)
 				{
 					if (stepping_ == false && !pError) {
 						if (breakpoints_.find(position) == breakpoints_.end()) {
 							remote_ = rthread;
 							resume(BREAKRESUMEACTION_CONTINUE);
+
 							return S_OK;
 						}
 					}
@@ -969,7 +1022,11 @@ HRESULT  __stdcall  ScriptDebugger::onHandleBreakPoint(IRemoteDebugApplicationTh
 			}
 		}
 	}
+
+	break_ = false;
 	
+	stepping_ = true;
+	threadedTimeouts().stepping(true);
 	ODBGS1("errorhandler line :",line);
 
 	remote_ = rthread;

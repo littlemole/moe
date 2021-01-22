@@ -248,5 +248,48 @@ inline std::string slurp(const std::string& path)
 	return oss.str();
 }
 
+#define handle_cmd(cmd,mfp)								\
+static auto mol_connect_cmd##cmd##__LINE__ = []()			\
+{															\
+	IMsgMapHandler* handler = make_handler(&mfp);			\
+	handler->connect_cmd(cmd);								\
+	return 0;												\
+}();
+
+#define handle_msg(msg,mfp)								\
+static auto mol_connect_msg##msg##__LINE__ = []()			\
+{															\
+	IMsgMapHandler* handler = make_handler(&mfp);			\
+	handler->connect_msg(msg);								\
+	return 0;												\
+}();
+
+#define handle_cmd_range(i,j,mfp)							\
+static auto mol_connect_cmd_range##cmd##__LINE__ = []()		\
+{															\
+	for( UINT cmd = i; cmd  < j+1; cmd++)					\
+	{														\
+		IMsgMapHandler* handler = make_handler(&mfp);		\
+		handler->connect_cmd(cmd);							\
+	}														\
+	return 0;												\
+}();
+
+#define handle_notify_id(id,mfp)							\
+static auto mol_connect_notify_id##id##__LINE__ = []()		\
+{															\
+	IMsgMapHandler* handler = make_handler(&mfp);			\
+	handler->connect_notify_id(id);							\
+	return 0;												\
+}();
+
+#define handle_notify_code(code,mfp)						\
+static auto mol_connect_notify_code##code##__LINE__ = []()	\
+{															\
+	IMsgMapHandler* handler = make_handler(&mfp);			\
+	handler->connect_notify_code(code);						\
+	return 0;												\
+}();
+
 #endif
 
