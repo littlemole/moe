@@ -40,7 +40,7 @@ MoeWnd::MoeWnd()
     eraseBackground_    = 0;
 
 	// tell MDI impl where mdi child ids start (enable window menu - XP style only)
-    setFirstChildId(ID_FIRST_CHILD_WND);	
+   // setFirstChildId(ID_FIRST_CHILD_WND);	
 
 	// set window icon
 	icon.load(IDI_MOE);
@@ -87,8 +87,15 @@ MoeWnd::Instance* MoeWnd::CreateInstance()
 	::CoAllowSetForegroundWindow((IMoe*)moe,0);
 
 	// create the generated UI widgets
-	build_ui<MoeWnd>(moe);
-	DWORD e = ::GetLastError();
+	//
+	//build_ui<MoeWnd>(moe);
+
+//	MoeWnd* moe = (MoeWnd*)wnd_;
+
+	UI().makeMainWindow(moe, _T("moe"), (HMENU)0, stdRect, IDW_MOE);
+
+//	moe->create( L"moe", 0, stdRect);
+
 	return moe;
 }
 
@@ -106,9 +113,67 @@ static  int mol_connect_msgs_xxx = []()
 void MoeWnd::OnCreate()
 {
 	// the main window and GUI elements have been created
+
+	ODBGS("MoeWnd::OnCreate()");
+
 	// initialize critical GUI parts now
 
-	//this->layout_->hasRibbon(true);
+	BorderLayout* layout = setLayout(new BorderLayout);
+
+	// menu ribbon
+	MoeHtmlRibbon* ribbon = UI().makeWindow<MoeHtmlRibbon>((HMENU)ID_MOE_HTML_RIBBON, mol::Rect(0, 0, 160, 133), hWnd_);
+	ribbon->show(SW_SHOW);
+	ribbon->load(edge);
+	layout->add(*ribbon, BorderLayout::NORTH);
+
+	// directory tree
+	MoeTreeWnd* treeWnd = UI().makeWindow<MoeTreeWnd>((HMENU)IDW_TREE_VIEW, mol::Rect(0, 0, 160, 200), hWnd_);
+	treeWnd->show(SW_SHOW);
+	layout->add(*treeWnd, BorderLayout::WEST);
+
+	mol::punk<IShellTree> tree(treeWnd->oleObject);
+	tree->put_UseContext(VARIANT_FALSE);
+	treeWndSink->Advise(treeWnd->oleObject);
+
+	// MDI tabs bas
+	MoeTabControl* tab = UI().makeWindow<MoeTabControl>((HMENU)IDW_TAB_CTRL, mol::Rect(0, 0, 160, 26), hWnd_);
+	tab->show(SW_HIDE);
+	layout->add(*tab, BorderLayout::SOUTH);
+
+	// status bar
+	MoeStatusBar* statusBar = UI().makeWindow<MoeStatusBar>((HMENU)IDW_STATUS, stdRect,hWnd_);
+	statusBar->show(SW_SHOW);
+	layout->addStatusBar(statusBar);
+	statusBar->setText(_T(""));
+
+	// progress bar
+	mol::ProgressbarCtrl* progress = UI().makeWindow<mol::ProgressbarCtrl>((HMENU)IDW_PROGRESS_BAR, mol::Rect(3, 7, 300, 12), (HWND)*statusBar);
+	progress->show(SW_SHOW);
+	progress->setColor(RGB(175, 175, 175));
+	progress->setBkColor(RGB(222, 222, 222));
+	progress->setRange(0, 100);
+	progress->setPos(10);
+
+	// add MDI workspace to layout
+	layout->add( mdiClient(), BorderLayout::FILL);
+
+	// drag n drop    
+	::RegisterDragDrop(hWnd_, moeDrop.get());
+
+	// keybord shortcuts (accellerators)
+	mol::win::accelerators().load(IDA_MOE, hWnd_);
+
+	// hook up ole container menus for OLE embedding
+	setWindowMenu(mol::UI().SubMenu(IDM_MOE, IDM_VIEW_WINDOWS));
+	addFileMenu(mol::UI().SubMenu(IDM_MOE, IDM_FILE), mol::UI().CmdString(IDM_FILE));
+	addWindowMenu(mol::UI().SubMenu(IDM_MOE, IDM_VIEW), mol::UI().CmdString(IDM_VIEW));
+
+	addOlExecHandler(OLECMDID_NEW, IDM_FILE_NEW);
+	addOlExecHandler(OLECMDID_OPEN, IDM_FILE_OPEN);
+	addOlExecHandler(OLECMDID_SAVE, IDM_FILE_SAVE);
+	addOlExecHandler(OLECMDID_SAVEAS, IDM_FILE_SAVE_AS);
+	addOlExecHandler(OLECMDID_PRINT, IDM_FILE_PRINT);
+
 
 	ODBGS("MoeWnd::OnCreate()");
 
@@ -116,22 +181,13 @@ void MoeWnd::OnCreate()
 	HRESULT hr = ::RegisterActiveObject( (IMoe*)this,CLSID_Application,ACTIVEOBJECT_STRONG,&activeObj_);
 
 	// hide the progress window
-	progress()->show(SW_HIDE);
-
-	// initialize tree child window and hook up tree window COM events
-	mol::punk<IShellTree> tree(treeWnd()->oleObject);
-	tree->put_UseContext(VARIANT_FALSE);
-	treeWndSink->Advise(treeWnd()->oleObject);
-
-
+	progress->show(SW_HIDE);
 
 	// load UI state
 	loadPersistUIstate();
 
-	ribbon()->load(edge);
-
 	// update the menu
-	::DrawMenuBar(*this);
+	//::DrawMenuBar(*this);
 
     // update ribbon's recent documents
 	//mol::Ribbon::ribbon()->updateRecentDocs(RibbonMRUItems);
@@ -659,9 +715,9 @@ void MoeWnd::OnShowToolBar (int code, int id, HWND ctrl)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-handle_cmd(&MoeWnd::OnFreezeToolBar, IDM_TOOLBARS_FREEZE)
-void MoeWnd::OnFreezeToolBar ()
-{
+//handle_cmd(&MoeWnd::OnFreezeToolBar, IDM_TOOLBARS_FREEZE)
+//void MoeWnd::OnFreezeToolBar ()
+//{
 	/*
 	if ( toolBarFrozen_ )
 	{
@@ -674,7 +730,7 @@ void MoeWnd::OnFreezeToolBar ()
 		reBar()->freeze(true);
 	}
 	*/
-}
+//}
 //////////////////////////////////////////////////////////////////////////////
 //
 // OnHelpAbout - show help dialog

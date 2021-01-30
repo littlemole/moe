@@ -706,7 +706,7 @@ HWND MdiFrame::createWindow( const std::wstring& windowName, HMENU hMenu, const 
 				menue_ = ::LoadMenu(mol::hinstance(),MAKEINTRESOURCE(hMenu));
 			
 
-        return this->hWnd_ = ::CreateWindowEx( exstyle(),
+        this->hWnd_ = ::CreateWindowEx( exstyle(),
                                                wic.getClassName().c_str(),
                                                windowName.c_str(),
                                                style(),
@@ -715,6 +715,15 @@ HWND MdiFrame::createWindow( const std::wstring& windowName, HMENU hMenu, const 
                                                (HMENU)(this->menue_),
 											   mol::hinstance(),
                                                (PVOID)this );
+
+		if (this->hWnd_ == 0)
+		{
+			DWORD e = ::GetLastError();
+			std::wostringstream woss;
+			woss << "create window failed " << (int)e;
+			::MessageBox(0, woss.str().c_str(), 0, 0);
+		}
+		return this->hWnd_;
 }
 
 void MdiFrame::registerClass( int& hMenu )

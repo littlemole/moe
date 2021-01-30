@@ -134,6 +134,7 @@ class WndProc : public Wnd
 friend class WndClass;
 friend class CtrlResizerImpl;
 friend class UIBuilder;
+friend class mol::UserInterface;
 public:
 
     typedef WndProc BaseWindowType;

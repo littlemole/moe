@@ -72,7 +72,7 @@ void EditorMenu::updateUI()
 	if ( S_OK == editor_->props_->get_Encoding(&encoding) )
 	{
 		size_t idx = codePages()->index(encoding);
-		Encodings::CodePage enc = codePages()->item(idx);
+		Encodings::CodePage enc = codePages()->item((int)idx);
 		std::wstring cp = enc.second;
 
 		json["encoding"] = encoding;

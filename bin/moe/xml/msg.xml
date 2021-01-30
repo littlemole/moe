@@ -202,7 +202,7 @@
         <xmsg  handler="OnDestroy" msg="WM_DESTROY" />
         <xmsg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
         <xmsg  handler="OnClose" msg="WM_CLOSE" />
-        <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
+        <xmsg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
       
         <!-- menu commans -->
         <xmsg  handler="OnSearch" msg="WM_SEARCH_MSG" />

@@ -81,6 +81,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compiler.cs" />
     <Compile Include="impl\AttributeDef.cs" />
     <Compile Include="ClassFactory.cs" />
     <Compile Include="impl\ConstructorDef.cs">

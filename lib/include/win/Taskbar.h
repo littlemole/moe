@@ -116,12 +116,18 @@ public:
 		}
 	}
 
-	~TaskThumbnail()
+	void destroy()
 	{
-		if ( wnd_ )
+		if (wnd_)
 		{
 			wnd_->destroy();
+			wnd_ = nullptr;
 		}
+	}
+
+	~TaskThumbnail()
+	{
+		destroy();
 	}
 
 private:

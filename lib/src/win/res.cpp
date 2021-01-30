@@ -239,6 +239,7 @@ void MenuItemInfo::DrawCheckMark(HDC dc,int x,int y,COLORREF color)
 
 Menu::Menu()
 {
+	hMenu_ = 0;
     atached_ = false;
 }
 

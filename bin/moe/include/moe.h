@@ -194,7 +194,7 @@ public:
 	 // toolbars (winxp style only)
 
 	 // freeze the toolbars
-	 void OnFreezeToolBar();
+	// void OnFreezeToolBar();
 
 	 // select syntax dropdown box
 	 void OnSyntax(int code, int id, HWND ctrl);
@@ -202,7 +202,7 @@ public:
 	 // show toolbar switches
 	 void OnShowToolBar(int code, int id, HWND ctrl);
 
-	 bool toolbarFrozen() { return toolBarFrozen_ == 0; }
+//	 bool toolbarFrozen() { return toolBarFrozen_ == 0; }
 
 	 void OnScreenShot();
 
@@ -228,8 +228,8 @@ private:
 	BOOL							bDirty_;
 
 	// UI data
-	BYTE							toolBarFrozen_;
-	mol::Stream						data_;
+	//BYTE							toolBarFrozen_;
+	//mol::Stream						data_;
 
 	// cookie into IRunningObjectTable for our running OLE server
 	DWORD							activeObj_;

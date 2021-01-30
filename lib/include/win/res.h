@@ -400,6 +400,36 @@ public:
 	void addSubMenu(int root, int menu, int cmd, int bmp);
 	void addMenuItem( int root, int menu, int cmd, int bmp, int idx, bool checked = false, bool enabled = true);
 
+	template<class T>
+	T* makeWindow(HMENU id, const mol::Rect& r, HWND parent)
+	{
+		T* t = new T;
+		t->deleteOnNCDestroy_ = true;
+		t->create(id, r, parent);
+		addWnd((int)id, *t);
+		return t;
+	}
+
+	template<class T>
+	void makeMainWindow(T* t, const std::wstring& name, HMENU menu, const mol::Rect& r, int id)
+	{
+		t->create(name, (HMENU)mol::UI().Menu((unsigned int)menu), r);
+		addWnd(id, *t);
+	}
+
+
+	template<class T>
+	void makeMdiWindow(T* t, const std::wstring& name, HMENU menu, const mol::Rect& r)
+	{
+		t->create(name, (HMENU)mol::UI().Menu(menu), r);
+		//addWnd(id,*t);
+	}
+
+	void addWnd(int key, HWND wnd)
+	{
+		hWnds_.insert(std::make_pair(key, wnd));
+	}
+
 private:
 
 	std::map<int,std::wstring> cmdStrings_;

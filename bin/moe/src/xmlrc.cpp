@@ -739,8 +739,6 @@ extern "C" void load_codegen_metadata()
 
 mol::msgMap<Editor>().addCmdHandler( IDM_VIEW_CLOSEALL, make_handler(&Editor::OnCloseAll) );
 
-mol::msgMap<Editor>().addCmdHandler( IDM_VIEW_CLOSEALL, make_handler(&Editor::OnCloseAll) );
-
 
 }
 
