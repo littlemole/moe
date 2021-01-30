@@ -31,6 +31,7 @@ bool MoeTreeWnd::hasFocus()
 	return true;
 }
 
+handle_cmd(&MoeTreeWnd::OnTreeOpen, IDM_TREE_OPEN)
 void MoeTreeWnd::OnTreeOpen()
 {
 	mol::bstr p;
@@ -41,60 +42,71 @@ void MoeTreeWnd::OnTreeOpen()
 	moe()->treeWndSink->OnTreeOpen(p,vb);
 }
 
+handle_cmd(&MoeTreeWnd::OnTreeUpdate, IDM_TREE_UPDATE)
 void MoeTreeWnd::OnTreeUpdate()
 {
 	mol::punk<IShellTree> tree(oleObject);
 	tree->Update();
 }			
 
+handle_cmd(&MoeTreeWnd::OnTreeRename, IDM_TREE_RENAME)
 void MoeTreeWnd::OnTreeRename()
 {
 	mol::punk<IShellTree> tree(oleObject);
 	tree->Rename();
 }
 
+handle_cmd(&MoeTreeWnd::OnTreeDelete, IDM_TREE_DELETE)
 void MoeTreeWnd::OnTreeDelete()
 {
 	mol::punk<IShellTree> tree(oleObject);
 	tree->Delete();
 }
 
+handle_cmd(&MoeTreeWnd::OnTreeExecute, IDM_TREE_EXECUTE)
 void MoeTreeWnd::OnTreeExecute()
 {
 	mol::punk<IShellTree> tree(oleObject);
 	tree->Execute();
 }
 
+handle_cmd(&MoeTreeWnd::OnTreeProperties, IDM_TREE_PROPERTIES)
 void MoeTreeWnd::OnTreeProperties()
 {
 	mol::punk<IShellTree> tree(oleObject);
 	tree->Properties();
 }
 
+handle_cmd(&MoeTreeWnd::OnTreeNewDir, IDM_TREE_NEWDIR)
 void MoeTreeWnd::OnTreeNewDir()
 {
 	mol::punk<IShellTree> tree(oleObject);
 	tree->CreateDir();
 }
 
+handle_cmd(&MoeTreeWnd::OnEditCut, IDM_TREE_CUT)
+handle_cmd(&MoeTreeWnd::OnEditCut, IDM_EDIT_CUT)
 void MoeTreeWnd::OnEditCut()
 {
 	mol::punk<IShellTree> tree(oleObject);
 	tree->Cut();
 }
 
+handle_cmd(&MoeTreeWnd::OnEditCopy, IDM_TREE_COPY)
+handle_cmd(&MoeTreeWnd::OnEditCopy, IDM_EDIT_COPY)
 void MoeTreeWnd::OnEditCopy()
 {
 	mol::punk<IShellTree> tree(oleObject);
 	tree->Copy();
 }
 
+handle_cmd(&MoeTreeWnd::OnEditPaste, IDM_TREE_PASTE)
+handle_cmd(&MoeTreeWnd::OnEditPaste, IDM_EDIT_PASTE)
 void MoeTreeWnd::OnEditPaste()
 {
 	mol::punk<IShellTree> tree(oleObject);
 	tree->Paste();
 }
-
 
 
 HWND MoeTreeWnd::createWindow( const std::wstring& windowName, HMENU id, const mol::Rect& r, HWND parent )
@@ -206,3 +218,4 @@ HRESULT __stdcall TreeWndSink::OnContextMenu(BSTR fname,VARIANT_BOOL vb)
 	return S_OK;
 
 }
+

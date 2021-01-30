@@ -62,11 +62,15 @@ void TailEditor::checkModifiedOnDisk( )
 }
 
 
+handle_msg(&TailEditor::OnClose,WM_CLOSE)
 LRESULT TailEditor::OnClose()
 {
 	this->destroy();
 	return 0;
 }
+
+handle_cmd(&TailEditor::OnCloseAll, IDM_VIEW_CLOSEALL)
+
 
 //////////////////////////////////////////////////////////////////////////////
 TailEditor::Instance* TailEditor::CreateInstance(const std::wstring& file)
@@ -126,6 +130,7 @@ bool TailEditor::initialize(const std::wstring& p)
 
 //////////////////////////////////////////////////////////////////////////////
 
+handle_cmd(&TailEditor::OnReload, IDM_EDIT_UPDATE)
 void TailEditor::OnReload()
 {
 	if ( !sci )

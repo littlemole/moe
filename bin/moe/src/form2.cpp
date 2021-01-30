@@ -236,7 +236,7 @@ void MoeForm2Wnd::onPermissionRequest(ICoreWebView2PermissionRequestedEventArgs*
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-
+handle_msg(&MoeForm2Wnd::OnSize,WM_SIZE)
 void MoeForm2Wnd::OnSize(WPARAM wParam, LPARAM lParam)
 {
 	if (webViewController)
@@ -247,11 +247,14 @@ void MoeForm2Wnd::OnSize(WPARAM wParam, LPARAM lParam)
 	};
 
 }
+
+handle_msg(&MoeForm2Wnd::OnClose, WM_CLOSE)
 void MoeForm2Wnd::OnClose()
 {
 	ODBGS("MoeFormWnd::OnClose");
 }
 
+handle_msg(&MoeForm2Wnd::OnNcDestroy, WM_NCDESTROY)
 void MoeForm2Wnd::OnNcDestroy()
 {
 	ODBGS("MoeFormWnd::OnNcDestroy");
@@ -289,11 +292,13 @@ void MoeForm2Wnd::OnNcDestroy()
 	ODBGS("~MoeFormWnd()OnNcDestroy --");
 }
 
+handle_cmd(&MoeForm2Wnd::OnHide, IDM_HTML_FORM_HIDE)
 void MoeForm2Wnd::OnHide()
 {
 	show(SW_HIDE);
 }
 
+handle_msg(&MoeForm2Wnd::OnActivate, WM_ACTIVATE)
 LRESULT MoeForm2Wnd::OnActivate(WPARAM wParam, LPARAM lParam)
 {
 	if (style_ & HIDE_ON_KILL_FOCUS)

@@ -248,48 +248,135 @@ inline std::string slurp(const std::string& path)
 	return oss.str();
 }
 
-#define handle_cmd(cmd,mfp)								\
-static auto mol_connect_cmd##cmd##__LINE__ = []()			\
-{															\
-	IMsgMapHandler* handler = make_handler(&mfp);			\
-	handler->connect_cmd(cmd);								\
-	return 0;												\
+template<class MFP>
+int make_msg_handlers(MFP mfp)
+{
+	return 0;
+}
+
+template<class MFP, class ... Args>
+int make_msg_handlers(MFP mfp, int msg, Args ... args)
+{
+	mol::IMsgMapHandler* handler = mol::make_handler(mfp);				
+	handler->connect_msg(msg);									
+	return make_msg_handlers(mfp, args...);
+}
+
+template<class MFP>
+int make_cmd_handlers(MFP mfp)
+{
+	return 0;
+}
+
+template<class MFP, class ... Args>
+int make_cmd_handlers(MFP mfp, int cmd, Args ... args)
+{
+	mol::IMsgMapHandler* handler = mol::make_handler(mfp);
+	handler->connect_cmd(cmd);
+	return make_cmd_handlers(mfp, args...);
+}
+
+#define CONCAT_(a, b) a ## b
+
+
+
+
+#define handle_msg_impl(mfp,line, ...)							\
+static  int CONCAT_(mol_connect_msgs,line) = []()				\
+{																\
+	return make_msg_handlers(mfp,__VA_ARGS__);					\
 }();
 
-#define handle_msg(msg,mfp)								\
-static auto mol_connect_msg##msg##__LINE__ = []()			\
-{															\
-	IMsgMapHandler* handler = make_handler(&mfp);			\
-	handler->connect_msg(msg);								\
-	return 0;												\
+#define handle_msg(mfp,...)									\
+handle_msg_impl(mfp,__LINE__,__VA_ARGS__)
+
+
+
+#define handle_msg_range_impl(mfp,i,j,line)						\
+static int CONCAT_(mol_connect_msg_range,line) = []()			\
+{																\
+	for( UINT msg = i; msg  < j+1; msg++)						\
+	{															\
+		mol::IMsgMapHandler* handler = mol::make_handler(mfp);	\
+		handler->connect_msg(msg);								\
+	}															\
+	return 0;													\
 }();
 
-#define handle_cmd_range(i,j,mfp)							\
-static auto mol_connect_cmd_range##cmd##__LINE__ = []()		\
-{															\
-	for( UINT cmd = i; cmd  < j+1; cmd++)					\
-	{														\
-		IMsgMapHandler* handler = make_handler(&mfp);		\
-		handler->connect_cmd(cmd);							\
-	}														\
-	return 0;												\
+#define handle_msg_range(mfp,i,j)								\
+handle_msg_range_impl(mfp,i,j,__LINE)
+
+
+
+
+
+#define handle_cmd_impl(mfp,line,...)							\
+static int CONCAT_(mol_connect_cmds,line) = []()				\
+{																\
+	return make_cmd_handlers(mfp,__VA_ARGS__);					\
 }();
 
-#define handle_notify_id(id,mfp)							\
-static auto mol_connect_notify_id##id##__LINE__ = []()		\
-{															\
-	IMsgMapHandler* handler = make_handler(&mfp);			\
-	handler->connect_notify_id(id);							\
-	return 0;												\
+#define handle_cmd(mfp,...)										\
+handle_cmd_impl(mfp,__LINE__,__VA_ARGS__)
+
+
+
+#define handle_cmd_range_impl(mfp,i,j,line)						\
+static int CONCAT_(mol_connect_cmd_range,line) = []()			\
+{																\
+	for( UINT cmd = i; cmd  < j+1; cmd++)						\
+	{															\
+		mol::IMsgMapHandler* handler = mol::make_handler(mfp);	\
+		handler->connect_cmd(cmd);								\
+	}															\
+	return 0;													\
 }();
 
-#define handle_notify_code(code,mfp)						\
-static auto mol_connect_notify_code##code##__LINE__ = []()	\
-{															\
-	IMsgMapHandler* handler = make_handler(&mfp);			\
-	handler->connect_notify_code(code);						\
-	return 0;												\
+#define handle_cmd_range(mfp,i,j)								\
+handle_cmd_range_impl(mfp,i,j,__LINE__)
+
+
+
+#define handle_notify_id_impl(mfp,id,line)						\
+static int CONCAT_(mol_connect_notify_id,line) = []()			\
+{																\
+	mol::IMsgMapHandler* handler = mol::make_handler(mfp);		\
+	handler->connect_notify_id(id);								\
+	return 0;													\
 }();
+
+#define handle_notify_id(mfp,id)								\
+handle_notify_id_impld(mfp,id,__LINE__)
+
+
+
+#define handle_notify_code_impl(mfp,code,line)					\
+static  int CONCAT_(mol_connect_notify_code,line) = []()		\
+{																\
+	mol::IMsgMapHandler* handler = mol::make_handler(mfp);		\
+	handler->connect_notify_code(code);							\
+	return 0;													\
+}();
+
+#define handle_notify_code(mfp,code)							\
+handle_notify_code_impl(mfp,code,__LINE__)
+
+
+
+
+
+#define handle_ole_cmd_impl(clazz,cmd,mfp,line)							\
+static int CONCAT_(mol_connect_ole_cmd,line) = []()						\
+{																		\
+	mol::IMsgMapHandler* handler = mol::make_ole_handler<clazz>(mfp);	\
+	handler->connect_cmd(cmd);											\
+	return 0;															\
+}();
+
+#define handle_ole_cmd(clazz,cmd,mfp)									\
+handle_ole_cmd_impl(clazz,cmd,mfp,__LINE__)
+
+
 
 #endif
 

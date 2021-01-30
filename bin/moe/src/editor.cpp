@@ -135,6 +135,7 @@ bool Editor::initialize(const std::wstring& p, long enc, bool readOnly)
 //
 //////////////////////////////////////////////////////////////////////////////
 
+handle_msg(&Editor::OnDestroy,WM_DESTROY)
 void Editor::OnDestroy()
 {
 	ODBGS("Editor::OnDestroy()");
@@ -158,9 +159,12 @@ void Editor::OnDestroy()
 	}
 }
 
+handle_msg(&Editor::OnNcDestroy, WM_NCDESTROY)
 void Editor::OnNcDestroy()
 {
 	ODBGS("Editor::OnNcDestroy()");
+
+	thumb.destroy();
 	
 	IMoeDocument*e = (IMoeDocument*)this;
 	::CoDisconnectObject(((IMoeDocument*)this),0);
@@ -170,6 +174,7 @@ void Editor::OnNcDestroy()
 
 //////////////////////////////////////////////////////////////////////////////
 
+handle_msg(&Editor::OnMDIActivate, WM_MDIACTIVATE)
 void Editor::OnMDIActivate(WPARAM unused, HWND activated)
 {
 	ODBGS("Editor::OnMDIActivate");
@@ -193,7 +198,7 @@ void Editor::OnMDIActivate(WPARAM unused, HWND activated)
 
 //////////////////////////////////////////////////////////////////////////////
 
-
+handle_msg(&Editor::OnClose, WM_CLOSE)
 LRESULT Editor::OnClose()
 {
 	if (saving_ )
@@ -219,11 +224,13 @@ LRESULT Editor::OnClose()
 	return 0;
 }
 
+handle_cmd(&Editor::OnCliReturn, IDM_CLI_RETURN)
 void Editor::OnCliReturn()
 {
 
 }
 
+handle_cmd(&Editor::OnCut, IDM_EDIT_CUT)
 void Editor::OnCut()
 {
 	if ( !sci )
@@ -232,6 +239,7 @@ void Editor::OnCut()
 	selection_->Cut();
 }
 
+handle_cmd(&Editor::OnCopy, IDM_EDIT_COPY)
 void Editor::OnCopy()
 {
 	if ( !sci )
@@ -240,6 +248,7 @@ void Editor::OnCopy()
 	selection_->Copy();
 }
 
+handle_cmd(&Editor::OnPaste, IDM_EDIT_PASTE)
 void Editor::OnPaste()
 {
 	if ( !sci )
@@ -248,7 +257,7 @@ void Editor::OnPaste()
 	selection_->Paste();
 }
 
-
+handle_cmd(&Editor::OnPasteAs, IDM_EDIT_PASTEAS)
 void Editor::OnPasteAs()
 {
 	if ( !sci )
@@ -266,6 +275,7 @@ void Editor::OnPasteAs()
 	selection_->put_Text( mol::bstr(data) );
 }
 
+handle_cmd(&Editor::OnConvertTabs, IDM_RIBBON_TABCONVERT)
 void Editor::OnConvertTabs()
 {
 	if ( !sci )
@@ -274,6 +284,7 @@ void Editor::OnConvertTabs()
 	props_->ConvertTabs();
 }
 
+handle_cmd(&Editor::OnEncoding, IDM_RIBBON_ENCODING)
 void Editor::OnEncoding()
 {
 	if ( !sci )
@@ -284,7 +295,7 @@ void Editor::OnEncoding()
 	//props_->put_Encoding( codePages()->item(enc).first );
 }
 
-
+handle_cmd(&Editor::OnLanguage, IDM_RIBBON_LANGUAGE)
 void Editor::OnLanguage()
 {
 	// get chosen lexer id
@@ -294,6 +305,7 @@ void Editor::OnLanguage()
 //	postMessage(WM_COMMAND,IDM_LEXER_PLAIN + lexer,0);
 }
 
+handle_cmd(&Editor::OnTabUsage, IDM_RIBBON_TABUSAGE)
 void Editor::OnTabUsage()
 {
 	if ( !sci )
@@ -303,6 +315,7 @@ void Editor::OnTabUsage()
 //	props_->put_TabUsage(vb);
 }
 
+handle_cmd(&Editor::OnTabWidth, IDM_RIBBON_TABWIDTH)
 void Editor::OnTabWidth()
 {
 	if ( !sci )
@@ -316,6 +329,7 @@ void Editor::OnTabWidth()
 
 }
 
+handle_cmd(&Editor::OnTabIndents, IDM_RIBBON_TABINDENTS)
 void Editor::OnTabIndents()
 {
 	if ( !sci )
@@ -325,6 +339,7 @@ void Editor::OnTabIndents()
 //	props_->put_TabIndents(vb);
 }
 
+handle_cmd(&Editor::OnBackspaceUnindents, IDM_RIBBON_BACKSPACE_UNIDENTS)
 void Editor::OnBackspaceUnindents()
 {
 	if ( !sci )
@@ -335,6 +350,7 @@ void Editor::OnBackspaceUnindents()
 
 }
 
+handle_cmd(&Editor::OnWriteBOM, IDM_RIBBON_WRITE_BOM)
 void Editor::OnWriteBOM()
 {
 	if ( !sci )
@@ -346,6 +362,8 @@ void Editor::OnWriteBOM()
 
  
 //////////////////////////////////////////////////////////////////////////////
+
+handle_cmd(&Editor::OnSelectAll, IDM_EDIT_SELECT)
 void Editor::OnSelectAll()
 {
 	if ( !sci )
@@ -357,6 +375,7 @@ void Editor::OnSelectAll()
 	selection_->SetSelection(0,len);
 }
 
+handle_cmd_range(&Editor::OnUserCommand, ID_FIRST_USER_CMD, ID_LAST_USER_CMD)
 void Editor::OnUserCommand(int code, int id, HWND ctrl)
 {
 	if ( !sci )
@@ -390,6 +409,7 @@ void Editor::OnUserCommand(int code, int id, HWND ctrl)
 	}
 }
 
+handle_cmd_range(&Editor::OnUserBatch, ID_FIRST_USER_BATCH, ID_LAST_USER_BATCH)
 void Editor::OnUserBatch(int code, int id, HWND ctrl)
 {
 	mol::punk<ISetting> set = batchMap[id];
@@ -433,7 +453,7 @@ void Editor::OnUserBatch(int code, int id, HWND ctrl)
 	return ;
 }
 
-
+handle_cmd_range(&Editor::OnUserForm, ID_FIRST_USER_FORM, ID_LAST_USER_FORM)
 void Editor::OnUserForm(int code, int id, HWND ctrl)
 {
 	mol::punk<ISetting> set = formMap[id];
@@ -475,7 +495,7 @@ void Editor::OnUserForm(int code, int id, HWND ctrl)
 	moe()->moeScript->ShowHtmlForm( mol::bstr(file), l, t, w, h, o );
 }
 
-
+handle_cmd_range(&Editor::OnUserScript, ID_FIRST_USER_SCRIPT, ID_LAST_USER_SCRIPT)
 void Editor::OnUserScript(int code, int id, HWND ctrl)
 {
 	mol::punk<ISetting> set = scriptMap[id];
@@ -522,6 +542,7 @@ void Editor::OnUserScript(int code, int id, HWND ctrl)
 
 }
 
+handle_cmd(&Editor::OnBeautify, IDM_EDIT_INDENTION)
 void Editor::OnBeautify()
 {
 	if ( !sci )
@@ -554,6 +575,8 @@ void Editor::OnBeautify()
 	text_->SetText(mol::bstr(os.str()));
 }
 
+
+handle_msg(&Editor::OnSearch, WM_SEARCH_MSG)
 void Editor::OnSearch(FINDREPLACE* find)
 {
 	if ( !sci )
@@ -615,13 +638,14 @@ void Editor::OnSearch(FINDREPLACE* find)
 
 //////////////////////////////////////////////////////////////////////////////
 
-
+handle_cmd(&Editor::OnUnix, IDM_MODE_UNIX)
 void Editor::OnUnix()
 {
 	props_->put_SysType(SCINTILLA_SYSTYPE_UNIX);
 }
 
 
+handle_cmd(&Editor::OnWin32, IDM_MODE_WIN32)
 void Editor::OnWin32()
 {
 	props_->put_SysType(SCINTILLA_SYSTYPE_WIN32);
@@ -629,6 +653,7 @@ void Editor::OnWin32()
 }
 
 
+handle_cmd(&Editor::OnSettings, IDM_MODE_SETTINGS)
 void Editor::OnSettings()
 {
 	mol::punk<IUnknown> unk(oleObject);
@@ -657,6 +682,7 @@ void Editor::OnSettings()
 	
 }
 
+handle_cmd(&Editor::OnInsertColorDialog, IDM_EDIT_COLOR)
 void Editor::OnInsertColorDialog()
 {
 	sci->InsertColorDialog();
@@ -665,7 +691,7 @@ void Editor::OnInsertColorDialog()
 
 ////////////////////////////////////////////////////////////////////////////// 
 
-
+handle_cmd_range(&Editor::OnLexer, IDM_LEXER_PLAIN, IDM_LEXER_PYTHON)
 void Editor::OnLexer(int code, int id, HWND ctrl)
 {
 	if ( !sci )
@@ -693,7 +719,7 @@ void Editor::OnLexer(int code, int id, HWND ctrl)
 
 //////////////////////////////////////////////////////////////////////////////
 
-
+handle_cmd(&Editor::OnReload, IDM_EDIT_UPDATE)
 void Editor::OnReload()
 {
 	if ( !sci )
@@ -766,6 +792,7 @@ void Editor::OnReload()
 
 //////////////////////////////////////////////////////////////////////////////
 
+handle_cmd(&Editor::OnSaveAs, IDM_FILE_SAVE_AS)
 void Editor::OnSaveAs()
 {
 	if ( !sci )
@@ -854,6 +881,7 @@ void Editor::OnSaveAs()
 
 //////////////////////////////////////////////////////////////////////////////
 
+handle_cmd(&Editor::OnSave, IDM_FILE_SAVE)
 void Editor::OnSave()
 {
 	if ( !sci )
@@ -883,7 +911,7 @@ void Editor::OnSave()
 	saving_ = false;
 }
 
-
+handle_cmd(&Editor::OnShowLineNumbers, IDM_MODE_SHOW_LINE_NUMBERS)
 void Editor::OnShowLineNumbers()
 {
 	if ( !sci )
@@ -904,13 +932,14 @@ void Editor::OnShowLineNumbers()
 		mode.unCheckItem( IDM_MODE_SHOW_LINE_NUMBERS );
 }
 
-
+handle_msg(&Editor::OnShowLineNumbers, WM_INITMENUPOPUP)
 void Editor::OnMenu(HMENU popup, LPARAM unused)
 {
 	EditorMenu em(this);
 	em.onMenu(popup,unused);
 }
 
+handle_notify_code(&Editor::OnToolbarDropDown, TBN_DROPDOWN)
 LRESULT Editor::OnToolbarDropDown(NMTOOLBAR* toolbar)
 {
 	mol::Menu m(mol::UI().Menu(IDM_MOE),false);
@@ -930,61 +959,75 @@ LRESULT Editor::OnToolbarDropDown(NMTOOLBAR* toolbar)
 	return TBDDRET_DEFAULT;
 }
 
+handle_cmd(&Editor::OnExecScript, IDM_EDIT_EXECUTESCRIPT)
 void Editor::OnExecScript()
 {
 	EditorScript es(this);
 	es.execScript();
 }
 
+handle_cmd(&Editor::OnExecForm, IDM_MODE_EXECUTEFORM)
 void Editor::OnExecForm()
 {
 	EditorScript es(this);
 	es.execForm();
 }
 
-
+handle_cmd(&Editor::OnDebugScriptGo, IDM_EDIT_DEBUG_GO)
 void Editor::OnDebugScriptGo()
 {
 	EditorScript es(this);
 	es.debugScriptGo();
 }
 
-
+handle_cmd(&Editor::OnDebugScriptStepIn, IDM_EDIT_DEBUG_STEPIN)
 void Editor::OnDebugScriptStepIn()
 {
 	EditorScript es(this);
 	es.debugScriptStepIn();
 }
 
+handle_cmd(&Editor::OnDebugScriptStepOver, IDM_EDIT_DEBUG_STEPOVER)
 void Editor::OnDebugScriptStepOver()
 {
 	EditorScript es(this);
 	es.debugScriptStepOver();
 }
 
+handle_cmd(&Editor::OnDebugScriptStepOut, IDM_EDIT_DEBUG_STEPOUT)
 void Editor::OnDebugScriptStepOut()
 {
 	EditorScript es(this);
 	es.debugScriptStepOut();
 }
 
+handle_cmd(&Editor::OnDebugScriptStop, IDM_EDIT_DEBUG_STOP)
 void Editor::OnDebugScriptStop()
 {
 	EditorScript es(this);
 	es.debugScriptStop();
 }
 
+handle_cmd(&Editor::OnDebugScriptQuit, IDM_EDIT_DEBUG_QUIT)
 void Editor::OnDebugScriptQuit()
 {
 	EditorScript es(this);
 	es.debugScriptQuit();
 }
 
+handle_cmd(&Editor::OnDebugScriptEval, IDM_EDIT_DEBUG_EVAL_EXPR)
 void Editor::OnDebugScriptEval()
 {
 	EditorScript es(this);
 	es.debugScriptEval();
 }
+
+handle_cmd(&Editor::OnCloseAll, IDM_VIEW_CLOSEALL)
+
+handle_ole_cmd(Editor, IDM_EDIT_UNDO, &IScintillAx::Undo)
+handle_ole_cmd(Editor, IDM_EDIT_REDO, &IScintillAx::Redo)
+handle_ole_cmd(Editor, IDM_FILE_PRINT, &IScintillAx::Print)
+
 
 void Editor::OnScriptThreadDone()
 {

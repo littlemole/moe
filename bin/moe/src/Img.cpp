@@ -36,6 +36,7 @@ ImgViewer::Instance* ImgViewer::CreateInstance( const std::wstring& file )
 	return iv;
 }
 
+handle_msg(&ImgViewer::OnCreate,WM_CREATE)
 void ImgViewer::OnCreate()
 {
 	show(SW_SHOW);
@@ -43,16 +44,18 @@ void ImgViewer::OnCreate()
 }
 //////////////////////////////////////////////////////////////////////////////
 
+handle_msg(&ImgViewer::OnDestroy, WM_DESTROY)
 LRESULT ImgViewer::OnDestroy()
 {
 	docs()->remove(this);
 	return 0;
 }
 
+handle_msg(&ImgViewer::OnNcDestroy, WM_NCDESTROY)
 LRESULT ImgViewer::OnNcDestroy()
 {
 
-
+	thumb.destroy();
 	::CoDisconnectObject(((IMoeDocument*)this),0);
 	((IMoeDocument*)this)->Release();
 	return 0;
@@ -61,6 +64,7 @@ LRESULT ImgViewer::OnNcDestroy()
 //////////////////////////////////////////////////////////////////////////////
 
 
+handle_msg(&ImgViewer::OnPaint, WM_PAINT)
 void ImgViewer::OnPaint()
 {
 	static RECT clientRect;
@@ -82,11 +86,15 @@ void ImgViewer::OnPaint()
 
 //////////////////////////////////////////////////////////////////////////////
 
+handle_msg(&ImgViewer::OnMDIActivate, WM_MDIACTIVATE)
 void ImgViewer::OnMDIActivate( HWND activated )
 {
 	tab()->select( *this );
 	updateUI();
 }
+
+handle_cmd(&ImgViewer::OnCloseAll, IDM_VIEW_CLOSEALL)
+
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////

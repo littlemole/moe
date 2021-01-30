@@ -48,6 +48,7 @@ RTFEditor::Instance* RTFEditor::CreateInstance( const std::wstring& file )
 	return iv;
 }
 
+handle_msg(&RTFEditor::OnCreate,WM_CREATE)
 void RTFEditor::OnCreate()
 {
 	RECT r;
@@ -66,6 +67,7 @@ void RTFEditor::OnCreate()
 }
 //////////////////////////////////////////////////////////////////////////////
 
+handle_msg(&RTFEditor::OnClose, WM_CLOSE)
 LRESULT RTFEditor::OnClose()
 {
 	if ( moe()->activeObject )
@@ -80,18 +82,23 @@ LRESULT RTFEditor::OnClose()
 	return 0;
 }
 
+
+handle_msg(&RTFEditor::OnDestroy, WM_DESTROY)
 LRESULT RTFEditor::OnDestroy()
 {
 	shuttingDown_ = true;
 	return 0;
 }
 
+
+handle_msg(&RTFEditor::OnNcDestroy, WM_NCDESTROY)
 LRESULT RTFEditor::OnNcDestroy()
 {
 	oleObject.release();
 	richEditOle.release();
 
 	docs()->remove(this);
+	thumb.destroy();
 	::CoDisconnectObject(((IMoeDocument*)this),0);
 	((IMoeDocument*)this)->Release();
 	return 0;
@@ -100,6 +107,7 @@ LRESULT RTFEditor::OnNcDestroy()
 //////////////////////////////////////////////////////////////////////////////
 
 
+handle_msg(&RTFEditor::OnPaint, WM_PAINT)
 void RTFEditor::OnPaint()
 {
 	mol::PaintDC dc(*this);
@@ -109,6 +117,8 @@ void RTFEditor::OnPaint()
 	dc.fillRect(r,(HBRUSH)::GetStockObject(BLACK_BRUSH));
 }
 
+
+handle_msg(&RTFEditor::OnSize, WM_SIZE)
 LRESULT RTFEditor::OnSize(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	mol::Crack message(msg,wParam,lParam) ;
@@ -118,6 +128,7 @@ LRESULT RTFEditor::OnSize(UINT msg, WPARAM wParam, LPARAM lParam)
 
 //////////////////////////////////////////////////////////////////////////////
 
+handle_msg(&RTFEditor::OnMDIActivate, WM_MDIACTIVATE)
 void RTFEditor::OnMDIActivate( WPARAM unused, HWND activated)
 {
 	if ( activated != *this )
@@ -151,6 +162,7 @@ void RTFEditor::OnMDIActivate( WPARAM unused, HWND activated)
 	}
 }
 
+handle_cmd(&RTFEditor::OnSave, IDM_FILE_SAVE)
 void RTFEditor::OnSave()
 {
 	std::string tmp;
@@ -168,6 +180,7 @@ void RTFEditor::OnSave()
 	statusBar()->status(_T("saved file"));
 }
 
+handle_cmd(&RTFEditor::OnSaveAs, IDM_FILE_SAVE_AS)
 void RTFEditor::OnSaveAs()
 {
 	mol::bstr p;
@@ -212,37 +225,43 @@ void RTFEditor::OnSaveAs()
 	}
 }
 
+handle_cmd(&RTFEditor::OnCut, IDM_EDIT_CUT)
 void RTFEditor::OnCut()
 {
 	rtf_.sendMessage(WM_CUT,0,0);
 }
 
+handle_cmd(&RTFEditor::OnCopy, IDM_EDIT_COPY)
 void RTFEditor::OnCopy()
 {
 	rtf_.sendMessage(WM_COPY,0,0);
 }
 
+handle_cmd(&RTFEditor::OnPaste, IDM_EDIT_PASTE)
 void RTFEditor::OnPaste()
 {
 	rtf_.sendMessage(WM_PASTE,0,0);
 }
 
+handle_cmd(&RTFEditor::OnUndo, IDM_EDIT_UNDO)
 void RTFEditor::OnUndo()
 {
 	rtf_.sendMessage(EM_UNDO,0,0);
 }
 
+handle_cmd(&RTFEditor::OnRedo, IDM_EDIT_REDO)
 void RTFEditor::OnRedo()
 {
 	rtf_.sendMessage(EM_REDO,0,0);
 }
 
-
+handle_cmd(&RTFEditor::OnPrint, IDM_FILE_PRINT)
 void RTFEditor::OnPrint()
 {
 	rtf_.PrintRTF();
 }
 
+handle_cmd(&RTFEditor::OnSelectAll, IDM_EDIT_SELECT)
 void RTFEditor::OnSelectAll()
 {
 	CHARRANGE rg;
@@ -251,12 +270,14 @@ void RTFEditor::OnSelectAll()
 	rtf_.sendMessage(EM_EXSETSEL,0,(LPARAM)&rg);
 }
 
+handle_cmd(&RTFEditor::OnFont, IDM_RIBBON_FONT_CTRL)
 void RTFEditor::OnFont()
 {
 //	CHARFORMAT2& c2 = mol::Ribbon::handler(RibbonFontControl)->font();
 //	rtf_.sendMessage( EM_SETCHARFORMAT, (WPARAM) SCF_SELECTION, (LPARAM)&c2);
 }
 
+handle_notify_code(&RTFEditor::OnFont, EN_SELCHANGE)
 void RTFEditor::OnSelectionChange(SELCHANGE * selc)
 {
 	if ( !selc )
@@ -274,6 +295,7 @@ void RTFEditor::OnSelectionChange(SELCHANGE * selc)
 	//mol::Ribbon::ribbon()->update(RibbonFontControl);
 }
 
+handle_cmd(&RTFEditor::OnInsertColorDialog, IDM_EDIT_COLOR)
 void RTFEditor::OnInsertColorDialog(  )
 {
 	mol::punk<IColorPicker> col;
@@ -298,6 +320,7 @@ void RTFEditor::OnInsertColorDialog(  )
 
 }
 
+handle_msg(&RTFEditor::OnSearch, WM_SEARCH_MSG)
 void RTFEditor::OnSearch( FINDREPLACE* find )
 {
 	CHARRANGE cr;
@@ -416,6 +439,7 @@ void RTFEditor::OnSearch( FINDREPLACE* find )
 
 }
 
+handle_notify_code(&RTFEditor::OnLink, EN_LINK)
 void RTFEditor::OnLink(ENLINK* link)
 {
 	int start = link->chrg.cpMin;
@@ -437,6 +461,8 @@ void RTFEditor::OnLink(ENLINK* link)
 	}
 }
 
+
+handle_notify_code(&RTFEditor::OnFilter, EN_MSGFILTER)
 void RTFEditor::OnFilter(MSGFILTER* filter)
 {
 	if ( filter->msg ==  WM_RBUTTONDOWN )
@@ -448,10 +474,14 @@ void RTFEditor::OnFilter(MSGFILTER* filter)
 
 }
 
+handle_cmd(&RTFEditor::OnReload, IDM_EDIT_UPDATE)
 void RTFEditor::OnReload()
 {
 	load(filename_);
 }
+
+handle_cmd(&RTFEditor::OnCloseAll, IDM_VIEW_CLOSEALL)
+
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////

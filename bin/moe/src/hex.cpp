@@ -91,24 +91,30 @@ bool Hex::initialize(const std::wstring& p, bool readOnly)
 // OnDestroy - over and out
 //
 //////////////////////////////////////////////////////////////////////////////
+
+handle_msg(&Hex::OnClose,WM_CLOSE)
 void Hex::OnClose()
 {
 }
 
+handle_msg(&Hex::OnDestroy, WM_DESTROY)
 void Hex::OnDestroy()
 {
 	docs()->remove(this);
 	sink.UnAdvise(oleObject);
 }
 
+handle_msg(&Hex::OnNcDestroy, WM_NCDESTROY)
 void Hex::OnNcDestroy()
 {
+	thumb.destroy();
 	::CoDisconnectObject(((IMoeDocument*)this),0);
 	((IMoeDocument*)this)->Release();
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
+handle_msg(&Hex::OnMDIActivate, WM_MDIACTIVATE)
 void Hex::OnMDIActivate(HWND activated)
 {
 	if ( activated == this->hWnd_ )
@@ -120,13 +126,14 @@ void Hex::OnMDIActivate(HWND activated)
 	}
 }
 
-
+handle_cmd(&Hex::OnFind, IDM_EDIT_FIND)
 void Hex::OnFind()
 {
 	::PostMessage(mdiParent(),WM_COMMAND,IDM_EDIT_FIND,0);
 }
 
 
+handle_msg(&Hex::OnSearch, WM_SEARCH_MSG)
 void Hex::OnSearch(FINDREPLACE* find)
 {
    punk<IHexCtrl> hexer(oleObject);
@@ -136,6 +143,7 @@ void Hex::OnSearch(FINDREPLACE* find)
    }
 }
 
+handle_cmd_range(&Hex::OnHexRange, IDM_EDIT_16BYTES, IDM_EDIT_32BYTES)
 void Hex::OnHexRange(int code, int id, HWND ctrl)
 {
    punk<IHexCtrl> hexer(oleObject);
@@ -145,7 +153,7 @@ void Hex::OnHexRange(int code, int id, HWND ctrl)
    }   
 }
 
-
+handle_cmd(&Hex::OnBytesShown, IDM_RIBBON_BYTES_SHOWN)
 void Hex::OnBytesShown()
 {
 	punk<IHexCtrl> hexer(oleObject);
@@ -166,6 +174,8 @@ void Hex::OnBytesShown()
 //////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////
+
+handle_msg(&Hex::OnMenu, WM_INITMENUPOPUP)
 void Hex::OnMenu(HMENU popup)
 {
 }
@@ -221,6 +231,9 @@ void Hex::updateUI()
 	*/
 
 }
+
+
+handle_cmd(&Hex::OnCloseAll, IDM_VIEW_CLOSEALL)
 
 
 //////////////////////////////////////////////////////////////////////////////

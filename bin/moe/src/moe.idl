@@ -975,7 +975,7 @@ library Moe
       helpstring("IMoeScriptInterface - the moe scripting world"),
       object,oleautomation, dual
     ]
-	interface IMoeScript : IDispatch
+	interface IMoeScript : IDispatch 
     {
 		[id(1), helpstring("Run a Script from disk inside moe context")]
 		HRESULT Run( [in] BSTR f, [in] BSTR engine );

@@ -14,51 +14,52 @@
     <class type="MoeWnd">
       
         <!-- std window commands -->
-        <msg  handler="OnCreate" msg="WM_CREATE" />
-        <msg  handler="OnClose" msg="WM_CLOSE"  />
-        <msg  handler="OnDestroy" msg="WM_DESTROY" />
-        <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
-        <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
-        <msg  handler="OnMenu" msg="WM_INITMENUPOPUP"  />
+        <xmsg  handler="OnCreate" msg="WM_CREATE" />
+        <xmsg  handler="OnClose" msg="WM_CLOSE"  />
+        <xmsg  handler="OnDestroy" msg="WM_DESTROY" />
+        <xmsg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
+        <xmsg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
+        <xmsg  handler="OnMenu" msg="WM_INITMENUPOPUP"  />
 
-        <msg  handler="OnSysCommand" msg="WM_SYSCOMMAND "  />
-        <msg  handler="OnExitLoop" msg="WM_EXITMENULOOP "  />
+        <xmsg  handler="OnSysCommand" msg="WM_SYSCOMMAND "  />
+        <xmsg  handler="OnExitLoop" msg="WM_EXITMENULOOP "  />
       
         <!-- main menu handlers -->
-        <msg  handler="OnFileNew" cmd="IDM_FILE_NEW" />
-        <msg  handler="OnFileNewRTF" cmd="IDM_FILE_NEW_RTF" />
-        <msg  handler="OnFileOpen" cmd="IDM_FILE_OPEN"  />
-        <msg  handler="OnFileOpenHtml" cmd="IDM_FILE_OPEN_HTML"  />
-        <msg  handler="OnFileOpenDir" cmd="IDM_FILE_OPEN_FOLDER"  />
-        <msg  handler="OnFileOpenHex" cmd="IDM_FILE_OPEN_HEX"  />
-        <msg  handler="OnFileExit" cmd="IDM_FILE_EXIT" />
-        <msg  handler="OnFind" cmd="IDM_EDIT_FIND" />
-        <msg  handler="OnReplace" cmd="IDM_EDIT_REPLACE" />
+        <xmsg  handler="OnFileNew" cmd="IDM_FILE_NEW" />
+        <xmsg  handler="OnFileNewRTF" cmd="IDM_FILE_NEW_RTF" />
+        <xmsg  handler="OnFileOpen" cmd="IDM_FILE_OPEN"  />
+        <xmsg  handler="OnFileOpenHtml" cmd="IDM_FILE_OPEN_HTML"  />
+        <mxsg  handler="OnFileOpenDir" cmd="IDM_FILE_OPEN_FOLDER"  />
+        <xmsg  handler="OnFileOpenHex" cmd="IDM_FILE_OPEN_HEX"  />
+        <xmsg  handler="OnFileExit" cmd="IDM_FILE_EXIT" />
+        <xmsg  handler="OnFind" cmd="IDM_EDIT_FIND" />
+        <xmsg  handler="OnReplace" cmd="IDM_EDIT_REPLACE" />
       
-        <msg  handler="OnEditSettings" cmd="IDM_MODE_EDITSETTINGS" />
-        <msg  handler="OnEditPrefs" cmd="IDM_MODE_PREFERENCES" />
-        <msg  handler="OnEditUserStyles" cmd="IDM_MODE_USERSTYLES" />
-        <msg  handler="OnHelpAbout" cmd="IDM_HELP_ABOUT" />
+        <xmsg  handler="OnEditSettings" cmd="IDM_MODE_EDITSETTINGS" />
+        <xmsg  handler="OnEditPrefs" cmd="IDM_MODE_PREFERENCES" />
+        <xmsg  handler="OnEditUserStyles" cmd="IDM_MODE_USERSTYLES" />
+        <xmsg  handler="OnHelpAbout" cmd="IDM_HELP_ABOUT" />
   <!--      <msg  handler="OnShowDirView" cmd="IDM_VIEW_DIRVIEW" /> -->
-        <msg  handler="OnFreezeToolBar" cmd="IDM_TOOLBARS_FREEZE" />
+        <xmsg  handler="OnFreezeToolBar" cmd="IDM_TOOLBARS_FREEZE" />
 
 
         <!-- ribbon -->
-        <msg  handler="OnRecentItems" cmd="IDM_RIBBON_RECENTITEMS"  />
+        <xmsg  handler="OnRecentItems" cmd="IDM_RIBBON_RECENTITEMS"  />
 
         <!-- user fx handlers -->
-        <msgrange type="cmd" from="IDM_F1" to="IDM_F12" handler="OnFx" />
+        <xmsgrange type="cmd" from="IDM_F1" to="IDM_F12" handler="OnFx" />
         
         <!-- show/hide toolbars-->
-        <msgrange type="cmd" from="IDM_TOOLBARS_FILEBAR" to="IDM_TOOLBARS_DIRVIEW" handler="OnShowToolBar" />
+        <xmsgrange type="cmd" from="IDM_TOOLBARS_FILEBAR" to="IDM_TOOLBARS_DIRVIEW" handler="OnShowToolBar" />
         
         <!-- tab ctrl events-->
 <!--        <notify handler="OnTabCtrl" ctrl="IDW_TAB_CTRL" />
 -->
-        <notify handler="OnDispatch" code="TBN_DROPDOWN" />
+        <xnotify handler="OnDispatch" code="TBN_DROPDOWN" />
   <!--       <notify handler="OnToolbarRightClick" code="NM_RCLICK" />
 -->
         <!-- dispatched to active mdi child window -->
+      <!--
         <msg  handler="OnDispatch" cmd="IDM_EDIT_CUT" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_COPY" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_PASTE" />
@@ -88,7 +89,7 @@
         <msg  handler="OnDispatch" cmd="IDM_MODE_EOL" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_COLOR" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_SELECT" />
-        <msg  handler="OnDispatch" cmd="IDM_EDIT_UNDO" />
+        <msg  handler="OnDispatch" cmd="IDM_EDIT_SELECT" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_REDO" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_STOP" />
         <msg  handler="OnDispatch" cmd="IDM_EDIT_UPDATE" />
@@ -125,142 +126,142 @@
         <msg  handler="OnDispatch" cmd="IDM_MODE_EXECUTEFORM" />
         <msg  handler="OnDispatch" cmd="IDM_MODE_SHOW_LINE_NUMBERS" />
         <msg  handler="OnDispatch" cmd="IDM_RIBBON_FONT_CTRL" />
-
-        <msg  handler="OnDispatchTree" cmd="IDM_TREE_OPEN" />
-        <msg  handler="OnDispatchTree" cmd="IDM_TREE_UPDATE" />
-        <msg  handler="OnDispatchTree" cmd="IDM_TREE_RENAME" />
-        <msg  handler="OnDispatchTree" cmd="IDM_TREE_DELETE" />
-        <msg  handler="OnDispatchTree" cmd="IDM_TREE_CUT" />
-        <msg  handler="OnDispatchTree" cmd="IDM_TREE_COPY" />
-        <msg  handler="OnDispatchTree" cmd="IDM_TREE_PASTE" />
-        <msg  handler="OnDispatchTree" cmd="IDM_TREE_PROPERTIES" />
-        <msg  handler="OnDispatchTree" cmd="IDM_TREE_EXECUTE" />
-        <msg  handler="OnDispatchTree" cmd="IDM_TREE_NEWDIR" />
+-->
+        <xmsg  handler="OnDispatchTree" cmd="IDM_TREE_OPEN" />
+        <xmsg  handler="OnDispatchTree" cmd="IDM_TREE_UPDATE" />
+        <xmsg  handler="OnDispatchTree" cmd="IDM_TREE_RENAME" />
+        <xmsg  handler="OnDispatchTree" cmd="IDM_TREE_DELETE" />
+        <xmsg  handler="OnDispatchTree" cmd="IDM_TREE_CUT" />
+        <xmsg  handler="OnDispatchTree" cmd="IDM_TREE_COPY" />
+        <xmsg  handler="OnDispatchTree" cmd="IDM_TREE_PASTE" />
+        <xmsg  handler="OnDispatchTree" cmd="IDM_TREE_PROPERTIES" />
+        <xmsg  handler="OnDispatchTree" cmd="IDM_TREE_EXECUTE" />
+        <xmsg  handler="OnDispatchTree" cmd="IDM_TREE_NEWDIR" />
       
 
-        <msgrange type="cmd" from="ID_FIRST_USER_CMD" to="ID_LAST_USER_CMD" handler="OnDispatch" />
-        <msgrange type="cmd" from="ID_FIRST_USER_SCRIPT" to="ID_LAST_USER_SCRIPT" handler="OnDispatch" />
-        <msgrange type="cmd" from="ID_FIRST_USER_BATCH" to="ID_LAST_USER_BATCH" handler="OnDispatch" />
-        <msgrange type="cmd" from="ID_FIRST_USER_FORM" to="ID_LAST_USER_FORM" handler="OnDispatch" />
-        <msgrange type="cmd" from="IDM_EDIT_16BYTES" to="IDM_EDIT_32BYTES" handler="OnDispatch" />
+        <xmsgrange type="cmd" from="ID_FIRST_USER_CMD" to="ID_LAST_USER_CMD" handler="OnDispatch" />
+        <xmsgrange type="cmd" from="ID_FIRST_USER_SCRIPT" to="ID_LAST_USER_SCRIPT" handler="OnDispatch" />
+        <xmsgrange type="cmd" from="ID_FIRST_USER_BATCH" to="ID_LAST_USER_BATCH" handler="OnDispatch" />
+        <xmsgrange type="cmd" from="ID_FIRST_USER_FORM" to="ID_LAST_USER_FORM" handler="OnDispatch" />
+        <xmsgrange type="cmd" from="IDM_EDIT_16BYTES" to="IDM_EDIT_32BYTES" handler="OnDispatch" />
 
         <!-- std mdi child window mgt support -->
-        <msg  handler="OnMaximize" cmd="IDM_VIEW_MAXIMIZE" />
-        <msg  handler="OnMinimize" cmd="IDM_VIEW_MINIMIZE" />
-        <msg  handler="OnTileHorizontal" cmd="IDM_VIEW_TILE" />
-        <msg  handler="OnCascade" cmd="IDM_VIEW_CASCADE" />
-        <msg  handler="OnNext" cmd="IDM_VIEW_NEXT" />
-        <msg  handler="OnCloseChild" cmd="IDM_VIEW_CLOSE" />
-        <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
+        <xmsg  xhandler="OnMaximize" cmd="IDM_VIEW_MAXIMIZE" />
+        <xmsg  xhandler="OnMinimize" cmd="IDM_VIEW_MINIMIZE" />
+        <xmsg  xhandler="OnTileHorizontal" cmd="IDM_VIEW_TILE" />
+        <xmsg  xhandler="OnCascade" cmd="IDM_VIEW_CASCADE" />
+        <xmsg  xhandler="OnNext" cmd="IDM_VIEW_NEXT" />
+        <xmsg  xhandler="OnCloseChild" cmd="IDM_VIEW_CLOSE" />
+        <xmsg  xhandler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
 
       </class>
 
     <class type="DirChild" >
 
       <!-- std windows msgs -->
-      <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
-      <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
-      <msg  handler="OnDestroy" msg="WM_DESTROY" />
-      <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
+      <xmsg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
+      <xmsg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
+      <xmsg  handler="OnDestroy" msg="WM_DESTROY" />
+      <xmsg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
       
       <!-- pass messages to embedded ole object -->
-      <msg  ole="Update" cmd="IDM_EDIT_UPDATE" interface="IShellPane"/>
-      <msg  ole="Cut" cmd="IDM_EDIT_CUT" interface="IShellPane"/>
-      <msg  ole="Copy" cmd="IDM_EDIT_COPY" interface="IShellPane"/>
-      <msg  ole="Paste" cmd="IDM_EDIT_PASTE" interface="IShellPane"/>
-      <msg  ole="Execute" cmd="IDM_FILE_DIREXEC" interface="IShellPane"/>
-      <msg  ole="Properties" cmd="IDM_FILE_DIRPROP" interface="IShellPane"/>
-      <msg  ole="CreateDir" cmd="IDM_FILE_NEWDIR" interface="IShellPane"/>
-      <msg  ole="UpDir" cmd="IDM_FILE_UPDIR" interface="IShellPane"/>
+      <xmsg  ole="Update" cmd="IDM_EDIT_UPDATE" interface="IShellPane"/>
+      <xmsg  ole="Cut" cmd="IDM_EDIT_CUT" interface="IShellPane"/>
+      <xmsg  ole="Copy" cmd="IDM_EDIT_COPY" interface="IShellPane"/>
+      <xmsg  ole="Paste" cmd="IDM_EDIT_PASTE" interface="IShellPane"/>
+      <mxsg  ole="Execute" cmd="IDM_FILE_DIREXEC" interface="IShellPane"/>
+      <xmsg  ole="Properties" cmd="IDM_FILE_DIRPROP" interface="IShellPane"/>
+      <xmsg  ole="CreateDir" cmd="IDM_FILE_NEWDIR" interface="IShellPane"/>
+      <xmsg  ole="UpDir" cmd="IDM_FILE_UPDIR" interface="IShellPane"/>
     </class>
 
     <class type="ScpDirChild" >
 
       <!-- std windows msgs -->
-      <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
-      <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
-      <msg  handler="OnDestroy" msg="WM_DESTROY" />
-      <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
+      <xmsg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
+      <xmsg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
+      <xmsg  handler="OnDestroy" msg="WM_DESTROY" />
+      <xmsg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
 
       <!-- pass messages to embedded ole object -->
-      <msg  ole="Update" cmd="IDM_EDIT_UPDATE" interface="IScpList"/>
-      <msg  ole="Cut" cmd="IDM_EDIT_CUT" interface="IScpList"/>
-      <msg  ole="Copy" cmd="IDM_EDIT_COPY" interface="IScpList"/>
-      <msg  ole="Paste" cmd="IDM_EDIT_PASTE" interface="IScpList"/>
-      <msg  ole="Execute" cmd="IDM_FILE_DIREXEC" interface="IScpList"/>
-      <msg  ole="Properties" cmd="IDM_FILE_DIRPROP" interface="IScpList"/>
-      <msg  ole="CreateDir" cmd="IDM_FILE_NEWDIR" interface="IScpList"/>
-      <msg  ole="UpDir" cmd="IDM_FILE_UPDIR" interface="IScpList"/>
+      <xmsg  ole="Update" cmd="IDM_EDIT_UPDATE" interface="IScpList"/>
+      <xmsg  ole="Cut" cmd="IDM_EDIT_CUT" interface="IScpList"/>
+      <xmsg  ole="Copy" cmd="IDM_EDIT_COPY" interface="IScpList"/>
+      <xmsg  ole="Paste" cmd="IDM_EDIT_PASTE" interface="IScpList"/>
+      <xmsg  ole="Execute" cmd="IDM_FILE_DIREXEC" interface="IScpList"/>
+      <xmsg  ole="Properties" cmd="IDM_FILE_DIRPROP" interface="IScpList"/>
+      <xmsg  ole="CreateDir" cmd="IDM_FILE_NEWDIR" interface="IScpList"/>
+      <xmsg  ole="UpDir" cmd="IDM_FILE_UPDIR" interface="IScpList"/>
     </class>
 
     <class type="Editor" >
 
         <!-- std windows msgs -->
-        <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
-        <msg  handler="OnMenu" msg="WM_INITMENUPOPUP" />
-        <msg  handler="OnDestroy" msg="WM_DESTROY" />
-        <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
-        <msg  handler="OnClose" msg="WM_CLOSE" />
+        <xmsg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
+        <xmsg  handler="OnMenu" msg="WM_INITMENUPOPUP" />
+        <xmsg  handler="OnDestroy" msg="WM_DESTROY" />
+        <xmsg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
+        <xmsg  handler="OnClose" msg="WM_CLOSE" />
         <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
       
         <!-- menu commans -->
-        <msg  handler="OnSearch" msg="WM_SEARCH_MSG" />
-        <msg  handler="OnBeautify" cmd="IDM_EDIT_INDENTION" />
-        <msg  handler="OnSaveAs" cmd="IDM_FILE_SAVE_AS" />
-        <msg  handler="OnSave" cmd="IDM_FILE_SAVE" />
-        <msg  handler="OnUnix" cmd="IDM_MODE_UNIX" />
-        <msg  handler="OnWin32" cmd="IDM_MODE_WIN32" />
-        <msg  handler="OnSettings" cmd="IDM_MODE_SETTINGS" />
-        <msg  handler="OnReload" cmd="IDM_EDIT_UPDATE" />
-        <msg  handler="OnSelectAll" cmd="IDM_EDIT_SELECT" />
-        <msg  handler="OnInsertColorDialog" cmd="IDM_EDIT_COLOR" />
+        <xmsg  handler="OnSearch" msg="WM_SEARCH_MSG" />
+        <xmsg  handler="OnBeautify" cmd="IDM_EDIT_INDENTION" />
+        <xmsg  handler="OnSaveAs" cmd="IDM_FILE_SAVE_AS" />
+        <xmsg  handler="OnSave" cmd="IDM_FILE_SAVE" />
+        <xmsg  handler="OnUnix" cmd="IDM_MODE_UNIX" />
+        <xmsg  handler="OnWin32" cmd="IDM_MODE_WIN32" />
+        <xmsg  handler="OnSettings" cmd="IDM_MODE_SETTINGS" />
+        <xmsg  handler="OnReload" cmd="IDM_EDIT_UPDATE" />
+        <xmsg  handler="OnSelectAll" cmd="IDM_EDIT_SELECT" />
+        <xmsg  handler="OnInsertColorDialog" cmd="IDM_EDIT_COLOR" />
 
 
       <!-- ribbon extended commands -->
-        <msg  handler="OnConvertTabs" cmd="IDM_RIBBON_TABCONVERT"/>
-        <msg  handler="OnEncoding" cmd="IDM_RIBBON_ENCODING"  />
-        <msg  handler="OnLanguage" cmd="IDM_RIBBON_LANGUAGE"  />
-        <msg  handler="OnTabUsage" cmd="IDM_RIBBON_TABUSAGE"  />
-        <msg  handler="OnTabWidth" cmd="IDM_RIBBON_TABWIDTH"  />
-        <msg  handler="OnTabIndents" cmd="IDM_RIBBON_TABINDENTS"  />
-        <msg  handler="OnBackspaceUnindents" cmd="IDM_RIBBON_BACKSPACE_UNIDENTS"  />
-        <msg  handler="OnShowLineNumbers" cmd="IDM_MODE_SHOW_LINE_NUMBERS" />      
-        <msg  handler="OnWriteBOM" cmd="IDM_RIBBON_WRITE_BOM"  />
+        <xmsg  handler="OnConvertTabs" cmd="IDM_RIBBON_TABCONVERT"/>
+        <xmsg  handler="OnEncoding" cmd="IDM_RIBBON_ENCODING"  />
+        <xmsg  handler="OnLanguage" cmd="IDM_RIBBON_LANGUAGE"  />
+        <xmsg  handler="OnTabUsage" cmd="IDM_RIBBON_TABUSAGE"  />
+        <ymsg  handler="OnTabWidth" cmd="IDM_RIBBON_TABWIDTH"  />
+        <xmsg  handler="OnTabIndents" cmd="IDM_RIBBON_TABINDENTS"  />
+        <xmsg  handler="OnBackspaceUnindents" cmd="IDM_RIBBON_BACKSPACE_UNIDENTS"  />
+        <xmsg  handler="OnShowLineNumbers" cmd="IDM_MODE_SHOW_LINE_NUMBERS" />      
+        <xmsg  handler="OnWriteBOM" cmd="IDM_RIBBON_WRITE_BOM"  />
         <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
-        <msg  handler="OnExecScript" cmd="IDM_EDIT_EXECUTESCRIPT" />
-        <msg  handler="OnDebugScriptGo" cmd="IDM_EDIT_DEBUG_GO" />
-        <msg  handler="OnDebugScriptStepIn" cmd="IDM_EDIT_DEBUG_STEPIN" />
-        <msg  handler="OnDebugScriptStepOver" cmd="IDM_EDIT_DEBUG_STEPOVER" />
-        <msg  handler="OnDebugScriptStepOut" cmd="IDM_EDIT_DEBUG_STEPOUT" />
-        <msg  handler="OnDebugScriptStop" cmd="IDM_EDIT_DEBUG_STOP" />
-        <msg  handler="OnDebugScriptQuit" cmd="IDM_EDIT_DEBUG_QUIT" />
-        <msg  handler="OnDebugScriptEval" cmd="IDM_EDIT_DEBUG_EVAL_EXPR" />
+        <xmsg  handler="OnExecScript" cmd="IDM_EDIT_EXECUTESCRIPT" />
+        <xmsg  handler="OnDebugScriptGo" cmd="IDM_EDIT_DEBUG_GO" />
+        <xmsg  handler="OnDebugScriptStepIn" cmd="IDM_EDIT_DEBUG_STEPIN" />
+        <xmsg  handler="OnDebugScriptStepOver" cmd="IDM_EDIT_DEBUG_STEPOVER" />
+        <xmsg  handler="OnDebugScriptStepOut" cmd="IDM_EDIT_DEBUG_STEPOUT" />
+        <xmsg  handler="OnDebugScriptStop" cmd="IDM_EDIT_DEBUG_STOP" />
+        <xmsg  handler="OnDebugScriptQuit" cmd="IDM_EDIT_DEBUG_QUIT" />
+        <xmsg  handler="OnDebugScriptEval" cmd="IDM_EDIT_DEBUG_EVAL_EXPR" />
 
-      <msg  handler="OnExecForm" cmd="IDM_MODE_EXECUTEFORM" />
+        <xmsg  handler="OnExecForm" cmd="IDM_MODE_EXECUTEFORM" />
 
-        <msg  handler="OnCliReturn" cmd="IDM_CLI_RETURN" />
+        <xmsg  handler="OnCliReturn" cmd="IDM_CLI_RETURN" />
       
-        <msg  handler="OnCut" cmd="IDM_EDIT_CUT" />
-        <msg  handler="OnCopy" cmd="IDM_EDIT_COPY" />
-        <msg  handler="OnPaste" cmd="IDM_EDIT_PASTE" />
-        <msg  handler="OnPasteAs" cmd="IDM_EDIT_PASTEAS" />
+        <xmsg  handler="OnCut" cmd="IDM_EDIT_CUT" />
+        <xmsg  handler="OnCopy" cmd="IDM_EDIT_COPY" />
+        <xmsg  handler="OnPaste" cmd="IDM_EDIT_PASTE" />
+        <xmsg  handler="OnPasteAs" cmd="IDM_EDIT_PASTEAS" />
 
       <!-- choose lexer -->
-        <msgrange type="cmd" from="IDM_LEXER_PLAIN" to="IDM_LEXER_PYTHON" handler="OnLexer" />
+        <xmsgrange type="cmd" from="IDM_LEXER_PLAIN" to="IDM_LEXER_PYTHON" handler="OnLexer" />
       
         <!-- choose user defined command -->
-        <msgrange type="cmd" from="ID_FIRST_USER_CMD" to="ID_LAST_USER_CMD" handler="OnUserCommand" />
-        <msgrange type="cmd" from="ID_FIRST_USER_BATCH" to="ID_LAST_USER_BATCH" handler="OnUserBatch" />
-        <msgrange type="cmd" from="ID_FIRST_USER_FORM" to="ID_LAST_USER_FORM" handler="OnUserForm" />
-        <msgrange type="cmd" from="ID_FIRST_USER_SCRIPT" to="ID_LAST_USER_SCRIPT" handler="OnUserScript" />
+        <ymsgrange type="cmd" from="ID_FIRST_USER_CMD" to="ID_LAST_USER_CMD" handler="OnUserCommand" />
+        <ymsgrange type="cmd" from="ID_FIRST_USER_BATCH" to="ID_LAST_USER_BATCH" handler="OnUserBatch" />
+        <xmsgrange type="cmd" from="ID_FIRST_USER_FORM" to="ID_LAST_USER_FORM" handler="OnUserForm" />
+        <xmsgrange type="cmd" from="ID_FIRST_USER_SCRIPT" to="ID_LAST_USER_SCRIPT" handler="OnUserScript" />
 
         <!-- handle toolbar dropdown user defined commands -->
-        <notify handler="OnToolbarDropDown" code="TBN_DROPDOWN" /> 
+        <xnotify handler="OnToolbarDropDown" code="TBN_DROPDOWN" /> 
 
         <!-- pass messages to embedded ole object -->
-        <msg  ole="Undo" cmd="IDM_EDIT_UNDO" interface="IScintillAx" />
-        <msg  ole="Redo" cmd="IDM_EDIT_REDO" interface="IScintillAx" />
-        <msg  ole="Print" cmd="IDM_FILE_PRINT" interface="IScintillAx" />  
+        <xmsg  ole="Undo" cmd="IDM_EDIT_UNDO" interface="IScintillAx" />
+        <xmsg  ole="Redo" cmd="IDM_EDIT_REDO" interface="IScintillAx" />
+        <xmsg  ole="Print" cmd="IDM_FILE_PRINT" interface="IScintillAx" />  
 
     </class>
 
@@ -268,18 +269,18 @@
     <class type="Hex"  >
 
       <!-- std windows msgs -->
-      <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
-      <msg  handler="OnMenu" msg="WM_INITMENUPOPUP" />
-      <msg  handler="OnDestroy" msg="WM_DESTROY" />
-      <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
-      <msg  handler="OnClose" msg="WM_CLOSE" />
-      <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
+      <xmsg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
+      <xmsg  handler="OnMenu" msg="WM_INITMENUPOPUP" />
+      <xmsg  handler="OnDestroy" msg="WM_DESTROY" />
+      <xmsg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
+      <xmsg  handler="OnClose" msg="WM_CLOSE" />
+      <xmsg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
       <!-- menu -->
-      <msg  handler="OnFind" cmd="IDM_EDIT_FIND" />
-      <msg  handler="OnSearch" msg="WM_SEARCH_MSG" />
-      <msg  handler="OnBytesShown" cmd="IDM_RIBBON_BYTES_SHOWN"  />
+      <xmsg  handler="OnFind" cmd="IDM_EDIT_FIND" />
+      <xmsg  handler="OnSearch" msg="WM_SEARCH_MSG" />
+      <xmsg  handler="OnBytesShown" cmd="IDM_RIBBON_BYTES_SHOWN"  />
 
-      <msgrange type="cmd" from="IDM_EDIT_16BYTES" to="IDM_EDIT_32BYTES" handler="OnHexRange" />
+      <xmsgrange type="cmd" from="IDM_EDIT_16BYTES" to="IDM_EDIT_32BYTES" handler="OnHexRange" />
       
     </class>
     <!--
@@ -311,27 +312,27 @@
     <class type="MoeHtml2Wnd">
 
       <!-- std windows msgs -->
-      <msg  handler="OnClose" msg="WM_CLOSE" />
-      <msg  handler="OnDestroy" msg="WM_DESTROY" />
-      <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
-      <msg  handler="OnSearch" msg="WM_SEARCH_MSG" />
-      <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
-      <msg  handler="OnSize" msg="WM_SIZE" />
+      <xmsg  handler="OnClose" msg="WM_CLOSE" />
+      <xmsg  handler="OnDestroy" msg="WM_DESTROY" />
+      <xmsg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
+      <xmsg  handler="OnSearch" msg="WM_SEARCH_MSG" />
+      <xmsg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
+      <xmsg  handler="OnSize" msg="WM_SIZE" />
 
       <!-- menu -->
-      <msg  handler="back" cmd="IDM_NAVIGATE_BACK" />
-      <msg  handler="forward" cmd="IDM_NAVIGATE_NEXT" />
-      <msg  handler="stop" cmd="IDM_EDIT_STOP" />
-      <msg  handler="reload" cmd="IDM_EDIT_UPDATE" />
-      <msg  handler="options" cmd="IDM_MODE_SETTINGS" />
+      <xmsg  handler="back" cmd="IDM_NAVIGATE_BACK" />
+      <xmsg  handler="forward" cmd="IDM_NAVIGATE_NEXT" />
+      <xmsg  handler="stop" cmd="IDM_EDIT_STOP" />
+      <xmsg  handler="reload" cmd="IDM_EDIT_UPDATE" />
+      <xmsg  handler="options" cmd="IDM_MODE_SETTINGS" />
 
-      <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
+      <xmsg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
 
-      <msg  handler="print" cmd="IDM_FILE_PRINT" />
+      <xmsg  handler="print" cmd="IDM_FILE_PRINT" />
 
-      <msg  handler="cut" cmd="IDM_EDIT_CUT" />
-      <msg  handler="copy" cmd="IDM_EDIT_COPY" />
-      <msg  handler="paste" cmd="IDM_EDIT_PASTE" />
+      <xmsg  handler="cut" cmd="IDM_EDIT_CUT" />
+      <xmsg  handler="copy" cmd="IDM_EDIT_COPY" />
+      <xmsg  handler="paste" cmd="IDM_EDIT_PASTE" />
 
       <!-- call the oleStdTargetExec handler with given params for these msgs -->
       
@@ -347,119 +348,119 @@
     <class type="ImgViewer" >
       
       <!-- std windows msgs -->
-      <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
-      <msg  handler="OnCreate" msg="WM_CREATE" />
-      <msg  handler="OnDestroy" msg="WM_DESTROY" />
-      <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
-      <msg  handler="OnPaint" msg="WM_PAINT" />
-      <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
+      <xmsg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
+      <xmsg  handler="OnCreate" msg="WM_CREATE" />
+      <xmsg  handler="OnDestroy" msg="WM_DESTROY" />
+      <xmsg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
+      <xmsg  handler="OnPaint" msg="WM_PAINT" />
+      <xmsg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
     </class>
      
     <class type="OleChild">
 
       <!-- std windows msgs -->
-      <msg  handler="OnDestroy" msg="WM_DESTROY" />
-      <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
-      <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
+      <xmsg  handler="OnDestroy" msg="WM_DESTROY" />
+      <xmsg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
+      <xmsg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
 
       <!-- interaction with embedded ole client -->
-      <msg  handler="IOleClientSite_SaveObject" cmd="IDM_FILE_SAVE" />
-      <msg  handler="oleTargetExec" params="OLECMDID_SAVECOPYAS,OLECMDEXECOPT_PROMPTUSER" cmd="IDM_FILE_SAVE_AS" />
-      <msg  handler="oleTargetExec" params="OLECMDID_PRINT,OLECMDEXECOPT_PROMPTUSER" cmd="IDM_FILE_PRINT" />
-      <msg  handler="oleTargetExec" params="OLECMDID_COPY,OLECMDEXECOPT_DODEFAULT" cmd="IDM_EDIT_COPY" />
-      <msg  handler="oleTargetExec" params="OLECMDID_CUT,OLECMDEXECOPT_DODEFAULT" cmd="IDM_EDIT_CUT" />
-      <msg  handler="oleTargetExec" params="OLECMDID_PASTE,OLECMDEXECOPT_DODEFAULT" cmd="IDM_EDIT_PASTE" />
-      <msg  handler="oleTargetExec" params="OLECMDID_UNDO,OLECMDEXECOPT_DODEFAULT" cmd="IDM_EDIT_UNDO" />
-      <msg  handler="oleTargetExec" params="OLECMDID_REDO,OLECMDEXECOPT_DODEFAULT" cmd="IDM_EDIT_REDO" />
-      <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
+      <xmsg  handler="IOleClientSite_SaveObject" cmd="IDM_FILE_SAVE" />
+      <xmsg  handler="oleTargetExec" params="OLECMDID_SAVECOPYAS,OLECMDEXECOPT_PROMPTUSER" cmd="IDM_FILE_SAVE_AS" />
+      <xmsg  handler="oleTargetExec" params="OLECMDID_PRINT,OLECMDEXECOPT_PROMPTUSER" cmd="IDM_FILE_PRINT" />
+      <xmsg  handler="oleTargetExec" params="OLECMDID_COPY,OLECMDEXECOPT_DODEFAULT" cmd="IDM_EDIT_COPY" />
+      <xmsg  handler="oleTargetExec" params="OLECMDID_CUT,OLECMDEXECOPT_DODEFAULT" cmd="IDM_EDIT_CUT" />
+      <xmsg  handler="oleTargetExec" params="OLECMDID_PASTE,OLECMDEXECOPT_DODEFAULT" cmd="IDM_EDIT_PASTE" />
+      <xmsg  handler="oleTargetExec" params="OLECMDID_UNDO,OLECMDEXECOPT_DODEFAULT" cmd="IDM_EDIT_UNDO" />
+      <xmsg  handler="oleTargetExec" params="OLECMDID_REDO,OLECMDEXECOPT_DODEFAULT" cmd="IDM_EDIT_REDO" />
+      <xmsg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
     </class>
 
     <class type="MoeForm2Wnd" >
 
         <!-- std windows msgs -->
-        <msg  handler="OnSize" msg="WM_SIZE" />
-        <msg  handler="OnClose" msg="WM_CLOSE" />
-        <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
-        <msg  handler="OnActivate" msg="WM_ACTIVATE " />
+        <xmsg  handler="OnSize" msg="WM_SIZE" />
+        <xmsg  handler="OnClose" msg="WM_CLOSE" />
+        <xmsg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
+        <xmsg  handler="OnActivate" msg="WM_ACTIVATE " />
     
-        <msg handler="OnHide" cmd="IDM_HTML_FORM_HIDE" />
+        <xmsg handler="OnHide" cmd="IDM_HTML_FORM_HIDE" />
     
     </class>
 
     <class type="MoeTreeWnd" >
       
-      <msg  handler="OnTreeOpen" cmd="IDM_TREE_OPEN" />
-      <msg  handler="OnTreeUpdate" cmd="IDM_TREE_UPDATE" />
-      <msg  handler="OnTreeRename" cmd="IDM_TREE_RENAME" />
-      <msg  handler="OnTreeDelete" cmd="IDM_TREE_DELETE" />
-      <msg  handler="OnTreeExecute" cmd="IDM_TREE_EXECUTE" />
-      <msg  handler="OnTreeProperties" cmd="IDM_TREE_PROPERTIES" />
-      <msg  handler="OnTreeNewDir" cmd="IDM_TREE_NEWDIR" />
-      <msg  handler="OnEditCut" cmd="IDM_TREE_CUT" />
-      <msg  handler="OnEditCopy" cmd="IDM_TREE_COPY" />
-      <msg  handler="OnEditPaste" cmd="IDM_TREE_PASTE" />
-      <msg  handler="OnEditCut" cmd="IDM_EDIT_CUT" />
-      <msg  handler="OnEditCopy" cmd="IDM_EDIT_COPY" />
-      <msg  handler="OnEditPaste" cmd="IDM_EDIT_PASTE" />
+      <xmsg  handler="OnTreeOpen" cmd="IDM_TREE_OPEN" />
+      <xmsg  handler="OnTreeUpdate" cmd="IDM_TREE_UPDATE" />
+      <xmsg  handler="OnTreeRename" cmd="IDM_TREE_RENAME" />
+      <xmsg  handler="OnTreeDelete" cmd="IDM_TREE_DELETE" />
+      <mxsg  handler="OnTreeExecute" cmd="IDM_TREE_EXECUTE" />
+      <mxsg  handler="OnTreeProperties" cmd="IDM_TREE_PROPERTIES" />
+      <mxsg  handler="OnTreeNewDir" cmd="IDM_TREE_NEWDIR" />
+      <mxsg  handler="OnEditCut" cmd="IDM_TREE_CUT" />
+      <mxsg  handler="OnEditCopy" cmd="IDM_TREE_COPY" />
+      <xmsg  handler="OnEditPaste" cmd="IDM_TREE_PASTE" />
+      <xmsg  handler="OnEditCut" cmd="IDM_EDIT_CUT" />
+      <xmsg  handler="OnEditCopy" cmd="IDM_EDIT_COPY" />
+      <xmsg  handler="OnEditPaste" cmd="IDM_EDIT_PASTE" />
     </class>
 
     <class type="TailEditor" >
 
       <!-- std windows msgs -->
-      <msg  handler="OnClose" msg="WM_CLOSE" />
-      <msg  handler="OnReload" cmd="IDM_EDIT_UPDATE" />
-      <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
+      <xmsg  handler="OnClose" msg="WM_CLOSE" />
+      <xmsg  handler="OnReload" cmd="IDM_EDIT_UPDATE" />
+      <xmsg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
     </class>
 
     <class type="RTFEditor" >
 
       <!-- std windows msgs -->
-      <msg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
-      <msg  handler="OnCreate" msg="WM_CREATE" />
-      <msg  handler="OnDestroy" msg="WM_DESTROY" />
-      <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
-      <msg  handler="OnPaint" msg="WM_PAINT" />
-      <msg  handler="OnClose" msg="WM_CLOSE" />
-      <msg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
+      <xmsg  handler="OnMDIActivate" msg="WM_MDIACTIVATE" />
+      <xmsg  handler="OnCreate" msg="WM_CREATE" />
+      <xmsg  handler="OnDestroy" msg="WM_DESTROY" />
+      <xmsg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
+      <mxsg  handler="OnPaint" msg="WM_PAINT" />
+      <mxsg  handler="OnClose" msg="WM_CLOSE" />
+      <mxsg  handler="OnCloseAll" cmd="IDM_VIEW_CLOSEALL" />
       
-      <msg  handler="OnSave" cmd="IDM_FILE_SAVE" />
-      <msg  handler="OnSaveAs" cmd="IDM_FILE_SAVE_AS" />
-      <msg  handler="OnCut" cmd="IDM_EDIT_CUT" />
-      <msg  handler="OnCopy" cmd="IDM_EDIT_COPY" />
-      <msg  handler="OnPaste" cmd="IDM_EDIT_PASTE" />
-      <msg  handler="OnUndo" cmd="IDM_EDIT_UNDO" />
-      <msg  handler="OnRedo" cmd="IDM_EDIT_REDO" />
-      <msg  handler="OnFont" cmd="IDM_RIBBON_FONT_CTRL" />
-      <msg  handler="OnSelectAll" cmd="IDM_EDIT_SELECT" />
-      <msg  handler="OnInsertColorDialog" cmd="IDM_EDIT_COLOR" />
-      <msg  handler="OnPrint" cmd="IDM_FILE_PRINT"  />
-      <msg  handler="OnReload" cmd="IDM_EDIT_UPDATE" />
-      <msg  handler="OnSearch" msg="WM_SEARCH_MSG" />
+      <xmsg  handler="OnSave" cmd="IDM_FILE_SAVE" />
+      <xmsg  handler="OnSaveAs" cmd="IDM_FILE_SAVE_AS" />
+      <xmsg  handler="OnCut" cmd="IDM_EDIT_CUT" />
+      <xmsg  handler="OnCopy" cmd="IDM_EDIT_COPY" />
+      <xmsg  handler="OnPaste" cmd="IDM_EDIT_PASTE" />
+      <xmsg  handler="OnUndo" cmd="IDM_EDIT_UNDO" />
+      <xmsg  handler="OnRedo" cmd="IDM_EDIT_REDO" />
+      <xmsg  handler="OnFont" cmd="IDM_RIBBON_FONT_CTRL" />
+      <xmsg  handler="OnSelectAll" cmd="IDM_EDIT_SELECT" />
+      <xmsg  handler="OnInsertColorDialog" cmd="IDM_EDIT_COLOR" />
+      <xmsg  handler="OnPrint" cmd="IDM_FILE_PRINT"  />
+      <xmsg  handler="OnReload" cmd="IDM_EDIT_UPDATE" />
+      <xmsg  handler="OnSearch" msg="WM_SEARCH_MSG" />
 
-      <notify handler="OnFilter" code="EN_MSGFILTER" />      
-      <notify handler="OnSelectionChange" code="EN_SELCHANGE" />
-      <notify handler="OnLink" code="EN_LINK" />
+      <xnotify handler="OnFilter" code="EN_MSGFILTER" />      
+      <xnotify handler="OnSelectionChange" code="EN_SELCHANGE" />
+      <xnotify handler="OnLink" code="EN_LINK" />
       
     </class>
 
     <class type="MoeTabControl" >
 
-      <msg  handler="OnMouseDown" msg="WM_LBUTTONDOWN" />
-      <msg  handler="OnMouseUp" msg="WM_LBUTTONUP" />
-      <msg  handler="OnTimer" msg="WM_TIMER" />
+      <xmsg  handler="OnMouseDown" msg="WM_LBUTTONDOWN" />
+      <xmsg  handler="OnMouseUp" msg="WM_LBUTTONUP" />
+      <xmsg  handler="OnTimer" msg="WM_TIMER" />
 
-      <notify handler="OnGetObject" code="TCN_GETOBJECT" />
-      <notify handler="OnSelect" code="TCN_SELCHANGE" />      
-      <notify handler="OnRightClick" code="NM_RCLICK" />      
+      <xnotify handler="OnGetObject" code="TCN_GETOBJECT" />
+      <xnotify handler="OnSelect" code="TCN_SELCHANGE" />      
+      <xnotify handler="OnRightClick" code="NM_RCLICK" />      
       
     </class>
     
     <class type="MoeHtmlRibbon" >
 
-      <msg  handler="OnCreate" msg="WM_CREATE" />
-      <msg  handler="OnClose" msg="WM_CLOSE" />
-      <msg  handler="OnSize" msg="WM_SIZE" />
-      <msg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
+      <xmsg  handler="OnCreate" msg="WM_CREATE" />
+      <xmsg  handler="OnClose" msg="WM_CLOSE" />
+      <xmsg  handler="OnSize" msg="WM_SIZE" />
+      <xmsg  handler="OnNcDestroy" msg="WM_NCDESTROY" />
       
     </class>
 

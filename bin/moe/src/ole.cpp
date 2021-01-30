@@ -76,29 +76,34 @@ OleChild::Instance* OleChild::CreateInstance( const std::wstring& p, CLSID& clsi
 
 //////////////////////////////////////////////////////////////////////////////
 
+handle_msg(&OleChild::OnDestroy,WM_DESTROY)
 void OleChild::OnDestroy()
 {
 }
 
 
+//disabled
+//handle_msg(&OleChild::OnPaint, WM_PAINT)
 void OleChild::OnPaint()
 {
 	mol::PaintDC dc(*this);
 	thumb.refreshIcon();
 }
 
+handle_msg(&OleChild::OnNcDestroy, WM_NCDESTROY)
 void OleChild::OnNcDestroy()
 {
 	// excel specific: don't do this in OnDestroy or garbage layout
 	// when excel doc is last document
 	docs()->remove(this);
-
+	thumb.destroy();
 	IMoeDocument* doc = (IMoeDocument*)this;	
 	::CoDisconnectObject( doc,0);
 	doc->Release();	
 }
 
 
+handle_msg(&OleChild::OnMDIActivate, WM_MDIACTIVATE)
 void OleChild::OnMDIActivate(WPARAM unused, HWND activated)
 {
 	ODBGS("OleChild::OnMDIActivate");
@@ -119,6 +124,80 @@ void OleChild::OnMDIActivate(WPARAM unused, HWND activated)
 	}
 }
 
+handle_cmd(&OleChild::OnSave, IDM_FILE_SAVE)
+void OleChild::OnSave()
+{
+	if (oleObject)
+		return;
+
+	IOleClientSite_SaveObject();
+}
+
+handle_cmd(&OleChild::OnSaveAs, IDM_FILE_SAVE_AS)
+void OleChild::OnSaveAs()
+{
+	if (oleObject)
+		return;
+
+	oleTargetExec(OLECMDID_SAVECOPYAS, OLECMDEXECOPT_PROMPTUSER);
+}
+
+handle_cmd(&OleChild::OnPrint, IDM_FILE_PRINT)
+void OleChild::OnPrint()
+{
+	if (oleObject)
+		return;
+
+	oleTargetExec(OLECMDID_PRINT, OLECMDEXECOPT_PROMPTUSER);
+}
+
+handle_cmd(&OleChild::OnCut, IDM_EDIT_CUT)
+void OleChild::OnCut()
+{
+	if (oleObject)
+		return;
+
+	oleTargetExec(OLECMDID_CUT, OLECMDEXECOPT_PROMPTUSER);
+}
+
+handle_cmd(&OleChild::OnCopy, IDM_EDIT_COPY)
+void OleChild::OnCopy()
+{
+	if (oleObject)
+		return;
+
+	oleTargetExec(OLECMDID_COPY, OLECMDEXECOPT_PROMPTUSER);
+}
+
+handle_cmd(&OleChild::OnPaste, IDM_EDIT_PASTE)
+void OleChild::OnPaste()
+{
+	if (oleObject)
+		return;
+
+	oleTargetExec(OLECMDID_PASTE, OLECMDEXECOPT_PROMPTUSER);
+}
+
+handle_cmd(&OleChild::OnUndo, IDM_EDIT_UNDO)
+void OleChild::OnUndo()
+{
+	if (oleObject)
+		return;
+
+	oleTargetExec(OLECMDID_UNDO, OLECMDEXECOPT_PROMPTUSER);
+}
+
+handle_cmd(&OleChild::OnRedo, IDM_EDIT_REDO)
+void OleChild::OnRedo()
+{
+	if (oleObject)
+		return;
+
+	oleTargetExec(OLECMDID_REDO, OLECMDEXECOPT_PROMPTUSER);
+}
+
+
+handle_cmd(&OleChild::OnCloseAll, IDM_VIEW_CLOSEALL)
 
 
 

@@ -662,12 +662,54 @@ REFGUID MoeScript::getCoClassID()
 	return IID_IMoeScript;
 }
 
+void executeCSharpScript(const std::wstring& path)
+{
+	mol::punk<IDispatch> disp;
+	HRESULT hr = moe()->moeConfig->get_Settings(&disp);
+	if (hr != S_OK)
+		return;
+
+	mol::punk<ISetting> set(disp);
+	if (!set)
+		return;
+
+	mol::punk<ISetting> cis;
+	hr = set->Find(mol::bstr("csi"), &cis);
+	if (hr != S_OK)
+		return;
+
+	mol::bstr value;
+	hr = cis->get_Value(&value);
+	if (hr != S_OK)
+		return;
+
+	mol::bstr module;
+	hr = moe()->moeConfig->get_ModulePath(&module);
+	if (hr != S_OK)
+		return;
+
+	std::wostringstream woss;
+	woss << value.towstring() << " /lib:\"" << module.towstring()
+		<< "\" \"" << path << "\"";
+
+	std::wstring ws = woss.str();
+	mol::io::exec_cmdline(ws);
+}
 HRESULT __stdcall MoeScript::Run( BSTR f, BSTR engine )
 {
 	statusBar()->status(mol::bstr(f).towstring());
 	std::wstring s = findFile(mol::bstr(f).towstring());
 	if ( s == _T("") )
 		return E_FAIL;
+
+	std::wstring lang = mol::bstr(engine).towstring();
+	if (lang == L"csharp")
+	{
+		std::wstring path = mol::bstr(f).towstring();
+		executeCSharpScript(path);
+		return S_OK;
+	}
+
 
 	mol::filestream fi;
 	if ( fi.open( mol::tostring(s), GENERIC_READ ) )
@@ -678,6 +720,7 @@ HRESULT __stdcall MoeScript::Run( BSTR f, BSTR engine )
 	}
 	return S_OK;
 }
+
 
 HRESULT __stdcall MoeScript::Eval( BSTR scrpt, BSTR scrptLanguage)
 {

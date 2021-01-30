@@ -97,6 +97,7 @@ void MoeTabControl::OnCtrlCreated()
 	TabCtrl_SetExtendedStyle(*this,TCS_EX_REGISTERDROP );
 }
 
+handle_notify_code(&MoeTabControl::OnSelect, TCN_SELCHANGE)
 void MoeTabControl::OnSelect()
 {
     int sel = (int)selection();
@@ -131,6 +132,7 @@ std::wstring dirPathFromChildHWND(HWND hwnd)
 	return mol::Path::parentDir(mol::towstring(path));
 }
 
+handle_notify_code(&MoeTabControl::OnRightClick, NM_RCLICK)
 void MoeTabControl::OnRightClick()
 {
 	// check whether right click hit a tab
@@ -191,7 +193,7 @@ void MoeTabControl::OnRightClick()
 }
 
 
-
+handle_msg(&MoeTabControl::OnMouseDown, WM_LBUTTONDOWN)
 void MoeTabControl::OnMouseDown()
 {
 	isMouseDown_ = false;
@@ -205,12 +207,14 @@ void MoeTabControl::OnMouseDown()
 	}
 }
 
+handle_msg(&MoeTabControl::OnMouseUp, WM_LBUTTONUP)
 void MoeTabControl::OnMouseUp()
 {
 	isMouseDown_ = false;
 }
 
 
+handle_msg(&MoeTabControl::OnTimer, WM_TIMER)
 void MoeTabControl::OnTimer(int id,int)
 {
 	if ( id == ID_TABDRAGDROPTIMER && isMouseDown_)
@@ -227,6 +231,7 @@ void MoeTabControl::OnTimer(int id,int)
 	}
 }
 
+handle_notify_code(&MoeTabControl::OnGetObject, TCN_GETOBJECT)
 void MoeTabControl::OnGetObject(NMOBJECTNOTIFY* notify)
 {
 	// return our drop source for a drag-drop event
@@ -486,6 +491,7 @@ MoeHtmlRibbon::~MoeHtmlRibbon()
 	ODBGS("~MoeHtmlRibbon() dropped dead");
 }
 
+handle_msg(&MoeHtmlRibbon::OnCreate,WM_CREATE)
 void MoeHtmlRibbon::OnCreate()
 {
 }
@@ -558,7 +564,7 @@ void MoeHtmlRibbon::onNavigationStarted(ICoreWebView2NavigationStartingEventArgs
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-
+handle_msg(&MoeHtmlRibbon::OnSize, WM_SIZE)
 void MoeHtmlRibbon::OnSize(WPARAM wParam, LPARAM lParam)
 {
 	if (webViewController)
@@ -569,11 +575,14 @@ void MoeHtmlRibbon::OnSize(WPARAM wParam, LPARAM lParam)
 	};
 
 }
+
+handle_msg(&MoeHtmlRibbon::OnClose, WM_CLOSE)
 void MoeHtmlRibbon::OnClose()
 {
 	ODBGS("MoeHtmlRibbon::OnClose");
 }
 
+handle_msg(&MoeHtmlRibbon::OnNcDestroy, WM_NCDESTROY)
 void MoeHtmlRibbon::OnNcDestroy()
 {
 	ODBGS("MoeHtmlRibbon::OnNcDestroy");

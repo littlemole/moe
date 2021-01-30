@@ -85,19 +85,22 @@ bool ScpDirChild::initialize(const std::wstring& p)
 //
 //////////////////////////////////////////////////////////////////////////////
 
+handle_msg(&ScpDirChild::OnClose,WM_CLOSE)
 void ScpDirChild::OnClose()
 {
 }
 
-
+handle_msg(&ScpDirChild::OnDestroy, WM_DESTROY)
 void ScpDirChild::OnDestroy()
 {
 	docs()->remove(this);
 	sink.UnAdvise(oleObject);
 }
 
+handle_msg(&ScpDirChild::OnNcDestroy, WM_NCDESTROY)
 void ScpDirChild::OnNcDestroy()
 {
+	thumb.destroy();
 	::CoDisconnectObject(((IMoeDocument*)this),0);
 	((IMoeDocument*)this)->Release();
 }
@@ -108,7 +111,7 @@ void ScpDirChild::OnNcDestroy()
 //
 //////////////////////////////////////////////////////////////////////////////
 
-
+handle_msg(&ScpDirChild::OnMDIActivate, WM_MDIACTIVATE)
 void ScpDirChild::OnMDIActivate( HWND activated )
 {
 	mol::bstr filename;
@@ -123,6 +126,19 @@ void ScpDirChild::OnMDIActivate( HWND activated )
 		moe()->redraw();
 	}
 }
+
+
+handle_cmd(&ScpDirChild::OnCloseAll, IDM_VIEW_CLOSEALL)
+handle_ole_cmd(ScpDirChild, IDM_EDIT_UPDATE, &IScpList::Update)
+
+handle_ole_cmd(ScpDirChild, IDM_EDIT_CUT, &IScpList::Cut)
+handle_ole_cmd(ScpDirChild, IDM_EDIT_COPY, &IScpList::Copy)
+handle_ole_cmd(ScpDirChild, IDM_EDIT_PASTE, &IScpList::Paste)
+handle_ole_cmd(ScpDirChild, IDM_FILE_DIREXEC, &IScpList::Execute)
+handle_ole_cmd(ScpDirChild, IDM_FILE_DIRPROP, &IScpList::Properties)
+handle_ole_cmd(ScpDirChild, IDM_FILE_NEWDIR, &IScpList::CreateDir)
+handle_ole_cmd(ScpDirChild, IDM_FILE_UPDIR, &IScpList::UpDir)
+
 
 
 //////////////////////////////////////////////////////////////////////////////

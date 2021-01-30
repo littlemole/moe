@@ -14,124 +14,51 @@
 <settings>
 <setting key='shortcuts'>
 <setting key='doctype'>
-<setting key='4.01 loose'><![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-]]></setting>
-<setting key='4.01 strict'><![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-]]></setting>
-<setting key='4.01 transitional'><![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-]]></setting>
-<setting key='4.01 frameset'><![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
-]]></setting>
-<setting key='X1.0 strict'><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-]]></setting>
-<setting key='X1.0 transitional'><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-]]></setting>
-<setting key='X1.0 frameset'><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
-]]></setting>
+<setting key='4.01 loose'><![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">]]></setting>
+<setting key='4.01 strict'><![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">]]></setting>
+<setting key='4.01 transitional'><![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">]]></setting>
+<setting key='4.01 frameset'><![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">]]></setting>
+<setting key='X1.0 strict'><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">]]></setting>
+<setting key='X1.0 transitional'><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">]]></setting>
+<setting key='X1.0 frameset'><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">]]></setting>
 </setting>
 <setting key='form'>
-<setting key='form'><![CDATA[<form name="theForm" action="" method="post" >
-<!-- moleCursor -->
-</form>
-]]></setting>
-<setting key='input'><![CDATA[<input name="input" type="text" size="" maxlength="" value="">
-]]></setting>
-<setting key='pwd'><![CDATA[<input name="pwd" type="passwordd" size="" maxlength="" value="">
-]]></setting>
-<setting key='submit'><![CDATA[<input name="submit" type="submit" value="OK">
-]]></setting>
-<setting key='textarea'><![CDATA[<textarea name="textarea" width="30" height="10">
-<!-- moleCursor -->
-</textarea>
-]]></setting>
-<setting key='option'><![CDATA[<option value=""><!-- moleCursor --></option>
-]]></setting>
-<setting key='radio'><![CDATA[<input name="radio" type="radio" value="">
-]]></setting>
-<setting key='checkbox'><![CDATA[<input name="checkbox" type="checkbox" value="">
-]]></setting>
-<setting key='upload'><![CDATA[<input name="upload" type="file" size="" maxlength="" accept="text/*">
-]]></setting>
-<setting key='hidden'><![CDATA[<input type="hidden" name="hidden" value="">
-]]></setting>
-<setting key='select'><![CDATA[<select name="select" size="1">
-<!-- moleCursor -->
-</select>
-]]></setting>
+<setting key='form'><![CDATA[<form name="theForm" action="" method="post" ><!-- moleCursor --></form>]]></setting>
+<setting key='input'><![CDATA[<input name="input" type="text" size="" maxlength="" value="">]]></setting>
+<setting key='pwd'><![CDATA[<input name="pwd" type="passwordd" size="" maxlength="" value="">]]></setting>
+<setting key='submit'><![CDATA[<input name="submit" type="submit" value="OK">]]></setting>
+<setting key='textarea'><![CDATA[<textarea name="textarea" width="30" height="10"><!-- moleCursor --></textarea>]]></setting>
+<setting key='option'><![CDATA[<option value=""><!-- moleCursor --></option>]]></setting>
+<setting key='radio'><![CDATA[<input name="radio" type="radio" value="">]]></setting>
+<setting key='checkbox'><![CDATA[<input name="checkbox" type="checkbox" value="">]]></setting>
+<setting key='upload'><![CDATA[<input name="upload" type="file" size="" maxlength="" accept="text/*">]]></setting>
+<setting key='hidden'><![CDATA[<input type="hidden" name="hidden" value="">]]></setting>
+<setting key='select'><![CDATA[<select name="select" size="1"><!-- moleCursor --></select>]]></setting>
 </setting>
 <setting key='css'>
-<setting key='link'><![CDATA[<link rel="stylesheet" type="text/css" href="<!-- moleCursor -->">
-]]></setting>
-<setting key='stylesheet'><![CDATA[<style type="text/css">
-<!--
-<!-- moleCursor -->
--->
-</style>
-]]></setting>
+<setting key='link'><![CDATA[<link rel="stylesheet" type="text/css" href="<!-- moleCursor -->">]]></setting>
+<setting key='stylesheet'><![CDATA[<style type="text/css"><!--<!-- moleCursor -->--></style>]]></setting>
 <setting key='style'>
-<setting key='color'><![CDATA[color:black;
-]]></setting>
-<setting key='font'><![CDATA[font-family:Verdana,Arial;
-]]></setting>
-<setting key='font size'><![CDATA[font-size:medium;
-]]></setting>
-<setting key='bold'><![CDATA[font-weight:bold;
-]]></setting>
-<setting key='italic'><![CDATA[font-style:italic;
-]]></setting>
-<setting key='underline'><![CDATA[text-decoration:underline;
-]]></setting>
-<setting key='align'><![CDATA[text-align:center;
-]]></setting>
-<setting key='vertical align'><![CDATA[vertical-align:top;
-]]></setting>
-<setting key='margin'><![CDATA[margin: 0px 0px 0px 0px;
-]]></setting>
-<setting key='padding'><![CDATA[padding: 0px 0px 0px 0px;
-]]></setting>
-<setting key='border'><![CDATA[border-color:#000000;
-border-width:1px;
-border-style:solid;
-]]></setting>
-<setting key='background'><![CDATA[background-color:#FFFFFF;
-]]></setting>
-<setting key='pseudo'><![CDATA[a:link    { font-weight:bold; color:#000000; text-decoration:none; }
-a:visited { font-weight:bold; color:#000000; text-decoration:none; }
-a:hover   { font-weight:bold; color:#000000; text-decoration:underline; }
-a:active  { font-weight:bold; color:#000000; text-decoration:none; }
-a:focus   { font-weight:bold; color:#000000; text-decoration:none; }
-
-]]></setting>
+<setting key='color'><![CDATA[color:black;]]></setting>
+<setting key='font'><![CDATA[font-family:Verdana,Arial;]]></setting>
+<setting key='font size'><![CDATA[font-size:medium;]]></setting>
+<setting key='bold'><![CDATA[font-weight:bold;]]></setting>
+<setting key='italic'><![CDATA[font-style:italic;]]></setting>
+<setting key='underline'><![CDATA[text-decoration:underline;]]></setting>
+<setting key='align'><![CDATA[text-align:center;]]></setting>
+<setting key='vertical align'><![CDATA[vertical-align:top;]]></setting>
+<setting key='margin'><![CDATA[margin: 0px 0px 0px 0px;]]></setting>
+<setting key='padding'><![CDATA[padding: 0px 0px 0px 0px;]]></setting>
+<setting key='border'><![CDATA[border-color:#000000;border-width:1px;border-style:solid;]]></setting>
+<setting key='background'><![CDATA[background-color:#FFFFFF;]]></setting>
+<setting key='pseudo'><![CDATA[a:link    { font-weight:bold; color:#000000; text-decoration:none; }a:visited { font-weight:bold; color:#000000; text-decoration:none; }a:hover   { font-weight:bold; color:#000000; text-decoration:underline; }a:active  { font-weight:bold; color:#000000; text-decoration:none; }a:focus   { font-weight:bold; color:#000000; text-decoration:none; }]]></setting>
 </setting>
 </setting>
-<setting key='table'><![CDATA[<table class="" align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
- <tr>
-  <td><!-- moleCursor --></td>
- </tr>
-</table>
-]]></setting>
-<setting key='html'><![CDATA[<html>
- <head>
-  <title></title>
- </head>
- 
- <body>
-<!-- moleCursor -->
- </body>
- 
-</html>
-]]></setting>
-<setting key='script'><![CDATA[<script language="javascript">
-<!-- moleCursor -->
-</script>
-]]></setting>
-<setting key='SSI'><![CDATA[<!--#include virtual="<!-- moleCursor -->" --> 
-]]></setting>
-<setting key='perl'><![CDATA[#!/usr/bin/perl
-
-
-
-]]></setting>
+<setting key='table'><![CDATA[<table class="" align="center" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td><!-- moleCursor --></td></tr></table>]]></setting>
+<setting key='html'><![CDATA[<html><head><title></title></head><body><!-- moleCursor --></body></html>]]></setting>
+<setting key='script'><![CDATA[<script language="javascript"><!-- moleCursor --></script>]]></setting>
+<setting key='SSI'><![CDATA[<!--#include virtual="<!-- moleCursor -->" --> ]]></setting>
+<setting key='perl'><![CDATA[#!/usr/bin/perl]]></setting>
 </setting>
 <setting key='forms'>
 <setting key='regex search'><![CDATA[forms\search.html,250,250,540,400,1]]></setting>
@@ -183,5 +110,6 @@ a:focus   { font-weight:bold; color:#000000; text-decoration:none; }
 </setting>
 </setting>
 <setting key='Ribbon'><![CDATA[On]]></setting>
+<setting key='csi'><![CDATA[C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\Roslyn\csi.exe]]></setting>
 </settings>
 </config>

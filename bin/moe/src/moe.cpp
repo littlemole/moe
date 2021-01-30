@@ -6,7 +6,7 @@
 #include "MoeBar.h"
 
 #include "xmlui.h"
-
+#include "commons.h"
 #include "resource.h"
 #include "Ribbonres.h"
 
@@ -88,12 +88,21 @@ MoeWnd::Instance* MoeWnd::CreateInstance()
 
 	// create the generated UI widgets
 	build_ui<MoeWnd>(moe);
+	DWORD e = ::GetLastError();
 	return moe;
 }
 
 
 /////////////////////////////////////////////////////////////////////
+          
+handle_msg(&MoeWnd::OnCreate,WM_CREATE)
 
+/*
+static  int mol_connect_msgs_xxx = []()				
+{																
+	return make_msg_handlers(&MoeWnd::OnCreate,WM_CREATE);					
+}();
+*/
 void MoeWnd::OnCreate()
 {
 	// the main window and GUI elements have been created
@@ -179,6 +188,7 @@ void MoeWnd::loadPersistUIstate()
 //
 //////////////////////////////////////////////////////////////////////////////
 
+handle_msg(&MoeWnd::OnClose,WM_CLOSE)
 LRESULT MoeWnd::OnClose()
 {
 	int n = this->count();
@@ -196,6 +206,7 @@ LRESULT MoeWnd::OnClose()
 	return 1;
 }
 
+handle_cmd(&MoeWnd::OnCloseAllButThis, IDM_VIEW_CLOSEALL)
 LRESULT MoeWnd::OnCloseAllButThis()
 {
 	HWND m = getActive();
@@ -210,6 +221,7 @@ LRESULT MoeWnd::OnCloseAllButThis()
 	return 0;
 }
 
+handle_msg(&MoeWnd::OnDestroy, WM_DESTROY)
 void MoeWnd::OnDestroy()
 {	
 //	Ribbon::ribbon()->tearDown();
@@ -225,6 +237,7 @@ void MoeWnd::OnDestroy()
 	
 }
 
+handle_msg(&MoeWnd::OnNcDestroy, WM_NCDESTROY)
 void MoeWnd::OnNcDestroy()
 {
 	::CoDisconnectObject( (IMoeDocumentCollection*)(docs()),0);
@@ -237,6 +250,7 @@ void MoeWnd::OnNcDestroy()
 //
 //////////////////////////////////////////////////////////////////////////////
 
+handle_msg(&MoeWnd::OnMDIActivate, WM_MDIACTIVATE)
 void MoeWnd::OnMDIActivate(HWND activated)
 {
 }
@@ -248,6 +262,7 @@ void MoeWnd::OnMDIActivate(HWND activated)
 //
 //////////////////////////////////////////////////////////////////////////////
 
+handle_msg(&MoeWnd::OnMenu, WM_INITMENUPOPUP)
 LRESULT MoeWnd::OnMenu(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 //	if ( mol::Ribbon::ribbon()->enabled())
@@ -291,7 +306,24 @@ LRESULT MoeWnd::OnMenu(UINT msg, WPARAM wParam, LPARAM lParam)
 //
 //
 //////////////////////////////////////////////////////////////////////////////
-
+ 
+handle_notify_code(&MoeWnd::OnDispatch, TBN_DROPDOWN)
+handle_msg(&MoeWnd::OnDispatch, WM_SEARCH_MSG)
+handle_cmd(&MoeWnd::OnDispatch, 
+	IDM_EDIT_CUT, IDM_EDIT_COPY, IDM_EDIT_PASTE, IDM_EDIT_PASTEAS,
+	IDM_FILE_PRINT, IDM_FILE_SAVE, IDM_FILE_SAVE_AS,
+	IDM_MODE_UNIX, IDM_MODE_WIN32, IDM_MODE_USETABS, IDM_MODE_DONT_USE_TABS,
+	IDM_MODE_SETTINGS, IDM_MODE_EOL, IDM_EDIT_COLOR, IDM_EDIT_SELECT,
+	IDM_EDIT_UNDO, IDM_EDIT_REDO, IDM_EDIT_STOP, IDM_EDIT_UPDATE,
+	IDM_EDIT_INDENTION, IDM_FILE_NEWDIR, IDM_FILE_UPDIR, IDM_FILE_DIREXEC,
+	IDM_FILE_DIRPROP, IDM_RIBBON_TABCONVERT, IDM_EDIT_EXECUTESCRIPT,
+	IDM_EDIT_DEBUG, IDM_EDIT_DEBUG_GO, IDM_EDIT_DEBUG_STEPIN,
+	IDM_EDIT_DEBUG_STEPOUT, IDM_EDIT_DEBUG_STEPOVER, IDM_EDIT_DEBUG_STOP,
+	IDM_EDIT_DEBUG_QUIT, IDM_EDIT_DEBUG_EVAL_EXPR, IDM_NAVIGATE_NEXT,
+	IDM_NAVIGATE_BACK, IDM_MODE_EXECUTEFORM, IDM_MODE_SHOW_LINE_NUMBERS
+)
+handle_cmd_range(&MoeWnd::OnDispatch, ID_FIRST_USER_CMD, ID_LAST_USER_CMD)
+handle_cmd_range(&MoeWnd::OnDispatch, IDM_EDIT_16BYTES, IDM_EDIT_32BYTES)
 LRESULT MoeWnd::OnDispatch(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if ( treeWnd()->hasFocus() )
@@ -303,6 +335,11 @@ LRESULT MoeWnd::OnDispatch(UINT msg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+handle_cmd(&MoeWnd::OnDispatchTree, IDM_TREE_OPEN, IDM_TREE_UPDATE,
+	IDM_TREE_RENAME, IDM_TREE_DELETE, 
+	IDM_TREE_CUT, IDM_TREE_COPY, IDM_TREE_PASTE,
+	IDM_TREE_PROPERTIES, IDM_TREE_EXECUTE, IDM_TREE_NEWDIR
+)
 LRESULT MoeWnd::OnDispatchTree(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	treeWnd()->sendMessage(msg,wParam,lParam);
@@ -314,6 +351,7 @@ LRESULT MoeWnd::OnDispatchTree(UINT msg, WPARAM wParam, LPARAM lParam)
 //
 //////////////////////////////////////////////////////////////////////////////
 
+handle_cmd(&MoeWnd::OnFileNew, IDM_FILE_NEW)
 void MoeWnd::OnFileNew()
 {
 	mol::punk<IMoeDocument> doc;
@@ -321,6 +359,7 @@ void MoeWnd::OnFileNew()
 }
 
 
+handle_cmd(&MoeWnd::OnFileNewRTF, IDM_FILE_NEW_RTF)
 void MoeWnd::OnFileNewRTF()
 {
 	mol::punk<IMoeDocument> doc;
@@ -332,12 +371,15 @@ void MoeWnd::OnFileNewRTF()
 //
 //////////////////////////////////////////////////////////////////////////////
 
+handle_cmd(&MoeWnd::OnFileOpen, IDM_FILE_OPEN)
 void MoeWnd::OnFileOpen()
 {
 	mol::punk<IMoeDocument> doc;
 	moeDialogs->Open(0,&doc);
 }
 
+// obsolete ???
+handle_cmd(&MoeWnd::OnRecentItems, IDM_RIBBON_RECENTITEMS)
 void MoeWnd::OnRecentItems()
 {
 	// click on recent items list - retrieve filename
@@ -358,12 +400,14 @@ void MoeWnd::OnRecentItems()
 //
 //////////////////////////////////////////////////////////////////////////////
 
+handle_cmd(&MoeWnd::OnFileOpenDir, IDM_FILE_OPEN_FOLDER)
 void MoeWnd::OnFileOpenDir()
 {
 	mol::punk<IMoeDocument> doc;
 	moeDialogs->OpenDir(&doc);
 }
 
+handle_cmd(&MoeWnd::OnFileOpenHex, IDM_FILE_OPEN_HEX)
 void MoeWnd::OnFileOpenHex()
 {
 	mol::FilenameDlg dlg(*this);	
@@ -380,7 +424,7 @@ void MoeWnd::OnFileOpenHex()
 	}
 }
 
-
+handle_cmd(&MoeWnd::OnFileOpenHtml, IDM_FILE_OPEN_HTML)
 void MoeWnd::OnFileOpenHtml()
 {	
 	if ( IDOK == urlDlg->doModal( IDD_DIALOG_URL, *this ) )
@@ -410,6 +454,8 @@ void MoeWnd::OnFileOpenHtml()
 //
 //////////////////////////////////////////////////////////////////////////////
 
+handle_cmd(&MoeWnd::OnFileExit, IDM_FILE_EXIT)
+
 void MoeWnd::OnFileExit()
 {
 	Exit();
@@ -418,6 +464,7 @@ void MoeWnd::OnFileExit()
 
 //////////////////////////////////////////////////////////////////////////////
 
+handle_cmd(&MoeWnd::OnFind, IDM_EDIT_FIND)
 void MoeWnd::OnFind()
 {
     searchDlg->findText(*this);
@@ -426,6 +473,7 @@ void MoeWnd::OnFind()
 
 //////////////////////////////////////////////////////////////////////////////
 
+handle_cmd(&MoeWnd::OnReplace, IDM_EDIT_REPLACE)
 void MoeWnd::OnReplace()
 {
     searchDlg->replaceText(*this);
@@ -442,6 +490,8 @@ void MoeWnd::OnSysCommand(WPARAM wParam)
 	*/
 }
 
+
+handle_cmd(&MoeWnd::OnExitLoop, WM_EXITMENULOOP)
 void MoeWnd::OnExitLoop()
 {
 //	::SetMenu(hWnd_, 0);
@@ -453,16 +503,19 @@ void MoeWnd::OnExitLoop()
 //
 //////////////////////////////////////////////////////////////////////////////
 
+handle_cmd(&MoeWnd::OnEditSettings, IDM_MODE_EDITSETTINGS)
 void MoeWnd::OnEditSettings()
 {
 	moeConfig->EditSettings();
 }
 
+handle_cmd(&MoeWnd::OnEditPrefs, IDM_MODE_PREFERENCES)
 void MoeWnd::OnEditPrefs()
 {
 	moeConfig->EditPreferences();
 }
 
+handle_cmd(&MoeWnd::OnEditUserStyles, IDM_MODE_USERSTYLES)
 void MoeWnd::OnEditUserStyles()
 {
 	bool result = docs()->open( _T("forms\\styles.html"), MOE_DOCTYPE_HTML, -1, true, 0 );
@@ -474,6 +527,7 @@ void MoeWnd::OnEditUserStyles()
 
 //////////////////////////////////////////////////////////////////////////////
 
+handle_cmd_range(&MoeWnd::OnFx, IDM_F1, IDM_F12)
 void MoeWnd::OnFx(int code, int id, HWND ctrl)
 {
 	int fx =id-IDM_F1+1;
@@ -510,7 +564,7 @@ int mol_connect_cmd##cmd##__()													\
 }																				\
 int mol_connect_cmd##cmd##__initonce__ = mol_connect_cmd##cmd##__();
 */
-
+/*
 class ConnectCmdHandler
 {
 public:
@@ -527,6 +581,9 @@ public:
 
 
 connect_cmd_handler(IDM_VIEW_DIRVIEW,MoeWnd::OnShowDirView)
+*/
+
+handle_cmd(&MoeWnd::OnShowDirView, IDM_VIEW_DIRVIEW)
 void MoeWnd::OnShowDirView ()
 {
 	Menu m(*this);
@@ -551,6 +608,7 @@ void MoeWnd::OnShowDirView ()
 //
 //////////////////////////////////////////////////////////////////////////////
 
+handle_cmd_range(&MoeWnd::OnShowToolBar, IDM_TOOLBARS_FILEBAR, IDM_TOOLBARS_DIRVIEW)
 void MoeWnd::OnShowToolBar (int code, int id, HWND ctrl)
 {
 	/*
@@ -601,6 +659,7 @@ void MoeWnd::OnShowToolBar (int code, int id, HWND ctrl)
 //
 //////////////////////////////////////////////////////////////////////////////
 
+handle_cmd(&MoeWnd::OnFreezeToolBar, IDM_TOOLBARS_FREEZE)
 void MoeWnd::OnFreezeToolBar ()
 {
 	/*
@@ -622,6 +681,7 @@ void MoeWnd::OnFreezeToolBar ()
 //
 //////////////////////////////////////////////////////////////////////////////
 
+handle_cmd(&MoeWnd::OnHelpAbout, IDM_HELP_ABOUT)
 void MoeWnd::OnHelpAbout()
 {
 	statusBar()->status(_T("help"));
@@ -647,6 +707,7 @@ void MoeWnd::OnHelpAbout()
 //
 //////////////////////////////////////////////////////////////////////////////
 
+// obsolete ???
 void MoeWnd::OnSyntax(int code, int id, HWND ctrl)
 {
 	/*
@@ -1304,3 +1365,11 @@ HRESULT __stdcall MoeWnd::InitNew()
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
+
+handle_cmd(&MoeWnd::OnMaximize, IDM_VIEW_MAXIMIZE)
+handle_cmd(&MoeWnd::OnMinimize, IDM_VIEW_MINIMIZE)
+handle_cmd(&MoeWnd::OnTileHorizontal, IDM_VIEW_TILE)
+handle_cmd(&MoeWnd::OnCascade, IDM_VIEW_CASCADE)
+handle_cmd(&MoeWnd::OnNext, IDM_VIEW_NEXT)
+handle_cmd(&MoeWnd::OnCloseChild, IDM_VIEW_CLOSE)
+handle_cmd(&MoeWnd::OnCloseAll, IDM_VIEW_CLOSEALL)

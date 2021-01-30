@@ -133,7 +133,7 @@
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\vcpkg\installed\x64-windows-static\include;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">C:\moe\vcpkg\installed\x64-windows-static\include;$(IncludePath)</IncludePath>
-    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">Midl</CustomBuildAfterTargets>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">Link</CustomBuildAfterTargets>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">Midl</CustomBuildAfterTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
@@ -249,6 +249,10 @@
     <Manifest>
       <AdditionalManifestFiles>resources/moe64.exe.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
     </Manifest>
+    <CustomBuildStep>
+      <Command>tlbimp $(OutDir)\$(TargetName).tlb /namespace:Moe /out:$(OutDir)\interop.$(TargetName).dll</Command>
+      <Outputs>moe.interop..dll</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
     <Midl>

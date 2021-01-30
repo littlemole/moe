@@ -23,6 +23,8 @@ EditorScript::~EditorScript(void)
 {
 }
 
+
+
 void EditorScript::execScript()
 {
 	if ( !editor_->sci )
@@ -31,6 +33,13 @@ void EditorScript::execScript()
 	mol::bstr filename;
 	if ( S_OK != editor_->props_->get_Filename(&filename) )
 		return ;
+
+	std::wstring ext = mol::Path::ext(filename.towstring());
+	if (ext == L".csx")
+	{
+		moe()->moeScript->Run(filename,mol::bstr("csharp"));
+		return;
+	}
 
 	std::wstring engine = engineFromPath(filename.tostring());
 	if ( engine == _T("") )

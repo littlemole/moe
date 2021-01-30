@@ -33,6 +33,15 @@ public:
 	void OnNcDestroy();
 	void OnPaint();
 
+	void OnSave();
+	void OnSaveAs();
+	void OnPrint();
+	void OnCut();
+	void OnCopy();
+	void OnPaste();
+	void OnUndo();
+	void OnRedo();
+
 	void OnMDIActivate(WPARAM unused,HWND activated);
 
     virtual HRESULT __stdcall IOleClientSite_SaveObject();

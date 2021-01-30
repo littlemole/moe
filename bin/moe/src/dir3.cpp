@@ -4,6 +4,7 @@
 #include "Docs.h"
 #include "MoeBar.h"
 #include "xmlui.h"
+#include "win/msgmap.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -88,6 +89,7 @@ bool DirChild::initialize(const std::wstring& p)
 //
 //////////////////////////////////////////////////////////////////////////////
 
+handle_msg(&DirChild::OnDestroy,WM_DESTROY)
 void DirChild::OnDestroy()
 {
 	docs()->remove(this);
@@ -95,8 +97,10 @@ void DirChild::OnDestroy()
 
 }
 
+handle_msg(&DirChild::OnNcDestroy, WM_NCDESTROY)
 void DirChild::OnNcDestroy()
 {
+	thumb.destroy();
 	::CoDisconnectObject(((IMoeDocument*)this),0);
 	((IMoeDocument*)this)->Release();
 }
@@ -118,7 +122,7 @@ HRESULT __stdcall DirChild::get_FilePath( BSTR *fname)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-
+handle_msg(&DirChild::OnMDIActivate, WM_MDIACTIVATE)
 void DirChild::OnMDIActivate( HWND activated )
 {
 	if ( activated == *this )
@@ -206,3 +210,15 @@ HRESULT __stdcall DirChild::DirChild_Events::OnDirChanged(BSTR dir)
 	This()->setText( This()->location_ );
 	return S_OK;
 }
+
+handle_cmd(&DirChild::OnCloseAll, IDM_VIEW_CLOSEALL)
+
+handle_ole_cmd(DirChild, IDM_EDIT_UPDATE, &IShellPane::Update)
+handle_ole_cmd(DirChild, IDM_EDIT_CUT, &IShellPane::Cut)
+handle_ole_cmd(DirChild, IDM_EDIT_COPY, &IShellPane::Copy)
+handle_ole_cmd(DirChild, IDM_EDIT_PASTE, &IShellPane::Paste)
+handle_ole_cmd(DirChild, IDM_FILE_DIREXEC, &IShellPane::Execute)
+handle_ole_cmd(DirChild, IDM_FILE_DIRPROP, &IShellPane::Properties)
+handle_ole_cmd(DirChild, IDM_FILE_NEWDIR, &IShellPane::CreateDir)
+handle_ole_cmd(DirChild, IDM_FILE_UPDIR, &IShellPane::UpDir)
+

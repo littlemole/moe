@@ -56,6 +56,7 @@ MoeHtml2Wnd::Instance* MoeHtml2Wnd::CreateInstance( const std::wstring& loc)
     return form;
 }
 
+handle_msg(&MoeHtml2Wnd::OnMDIActivate, WM_MDIACTIVATE)
 void MoeHtml2Wnd::OnMDIActivate( HWND activated )
 {
 	tab()->select( *this );
@@ -65,6 +66,7 @@ void MoeHtml2Wnd::OnMDIActivate( HWND activated )
 }
 
 
+handle_msg(&MoeHtml2Wnd::OnSize, WM_SIZE)
 void MoeHtml2Wnd::OnSize(WPARAM wParam, LPARAM lParam)
 {
 	if (webViewController) 
@@ -92,6 +94,7 @@ MoeHtml2Wnd::MoeFrame::~MoeFrame()
 
 /////////////////////////////////////////////////////////////////////
 
+handle_cmd(&MoeHtml2Wnd::back, IDM_NAVIGATE_BACK)
 void MoeHtml2Wnd::back()
 {
 	if (!webview) return;
@@ -99,6 +102,7 @@ void MoeHtml2Wnd::back()
 	webview->GoBack();
 }
 
+handle_cmd(&MoeHtml2Wnd::forward, IDM_NAVIGATE_NEXT)
 void MoeHtml2Wnd::forward()
 {
 	if (!webview) return;
@@ -107,6 +111,7 @@ void MoeHtml2Wnd::forward()
 
 }
 
+handle_cmd(&MoeHtml2Wnd::reload, IDM_EDIT_UPDATE)
 void MoeHtml2Wnd::reload()
 {
 	if (!webview) return;
@@ -115,6 +120,7 @@ void MoeHtml2Wnd::reload()
 
 }
 
+handle_cmd(&MoeHtml2Wnd::options, IDM_MODE_SETTINGS)
 void MoeHtml2Wnd::options()
 {
 	if (!webview) return;
@@ -122,7 +128,7 @@ void MoeHtml2Wnd::options()
 	webview->OpenDevToolsWindow();
 }
 
-
+handle_cmd(&MoeHtml2Wnd::print, IDM_FILE_PRINT)
 void MoeHtml2Wnd::print()
 {
 	if (!webview) return;
@@ -130,6 +136,7 @@ void MoeHtml2Wnd::print()
 	webview->ExecuteScript(L"window.print();", nullptr);
 }
 
+handle_cmd(&MoeHtml2Wnd::cut, IDM_EDIT_CUT)
 void MoeHtml2Wnd::cut()
 {
 	if (!webview) return;
@@ -137,6 +144,8 @@ void MoeHtml2Wnd::cut()
 	webview->ExecuteScript(L"document.execCommand('cut')", nullptr);
 
 }
+
+handle_cmd(&MoeHtml2Wnd::copy, IDM_EDIT_COPY)
 void MoeHtml2Wnd::copy()
 {
 	if (!webview) return;
@@ -146,6 +155,7 @@ void MoeHtml2Wnd::copy()
 
 std::wstring escape_json_str(const std::wstring& in);
 
+handle_cmd(&MoeHtml2Wnd::paste, IDM_EDIT_PASTE)
 void MoeHtml2Wnd::paste()
 {
 	if (!webview) return;
@@ -165,6 +175,7 @@ void MoeHtml2Wnd::paste()
 	webview->ExecuteScript(ws.c_str(), nullptr);
 }
 
+handle_cmd(&MoeHtml2Wnd::stop, IDM_EDIT_STOP)
 void MoeHtml2Wnd::stop()
 {
 	if (!webview) return;
@@ -551,12 +562,13 @@ void MoeHtml2Wnd::onMessage(LPCWSTR json)
 	}
 }
 
-
+handle_msg(&MoeHtml2Wnd::OnClose,WM_CLOSE)
 void MoeHtml2Wnd::OnClose()
 {
 	ODBGS("MoeHtmlWndImpl::OnClose");
 }
 
+handle_msg(&MoeHtml2Wnd::OnDestroy, WM_DESTROY)
 void MoeHtml2Wnd::OnDestroy()
 {
 	ODBGS("MoeHtmlWndImpl::OnDestroy");
@@ -593,13 +605,18 @@ void MoeHtml2Wnd::OnDestroy()
 	::CoDisconnectObject(((IExternalMoe*)&external_),0);
 }
 
+
+handle_msg(&MoeHtml2Wnd::OnNcDestroy, WM_NCDESTROY)
 LRESULT MoeHtml2Wnd::OnNcDestroy()
 {
+	thumb.destroy();
 	ODBGS("MoeHtmlWndImpl::OnNcDestroy");
 	((IMoeDocument*)this)->Release();
 
 	return 0;
 }
+
+handle_cmd(&MoeHtml2Wnd::OnCloseAll, IDM_VIEW_CLOSEALL)
 
 
 std::wstring escape_json_str(const std::wstring& in)
@@ -617,6 +634,7 @@ std::wstring escape_json_str(const std::wstring& in)
 	return oss.str();
 }
 
+handle_msg(&MoeHtml2Wnd::OnSearch, WM_SEARCH_MSG)
 void MoeHtml2Wnd::OnSearch(FINDREPLACE* fi)
 {
 	if (!oleObject) return;
