@@ -9,7 +9,7 @@
 #include "EditorMenu.h"
 #include "EditorScript.h"
 
-#include "xmlui.h"
+//#include "xmlui.h"
 #include "ribbonres.h"
 
 using namespace mol::win;
@@ -924,24 +924,108 @@ void Editor::OnShowLineNumbers()
 	vb = vb == VARIANT_FALSE ? VARIANT_TRUE : VARIANT_FALSE;
 	props_->put_ShowLineNumbers(vb);
 
+	/*
 	mol::Menu mode(mol::UI().SubMenu(IDM_MOE,IDM_MODE));
 
 	if ( vb == VARIANT_TRUE )
 		mode.checkItem( IDM_MODE_SHOW_LINE_NUMBERS );
 	else
 		mode.unCheckItem( IDM_MODE_SHOW_LINE_NUMBERS );
+		*/
 }
 
-handle_msg(&Editor::OnShowLineNumbers, WM_INITMENUPOPUP)
+
+handle_msg(&Editor::OnMenu, WM_INITMENUPOPUP)
 void Editor::OnMenu(HMENU popup, LPARAM unused)
 {
-	EditorMenu em(this);
-	em.onMenu(popup,unused);
+	//EditorMenu em(this);
+	//em.onMenu(popup,unused);
+}
+
+
+void walkConf(mol::Menu& parent, ISetting* set, std::map<int, ISetting*>& confMap, int& id)
+{
+	if (!set)
+		return;
+
+	long l;
+	mol::bstr key;
+	if (S_OK != set->get_Key(&key))
+		return;
+
+	if (S_OK != set->Count(&l))
+		return;
+
+	if (l <= 0)
+	{
+		parent.addItem(id, key.towstring(), MF_STRING);
+		confMap[id] = set;
+		id++;
+		return;
+	}
+
+	mol::Menu m;
+	m.create();
+
+	parent.addSubmenu(m, key.towstring(), MF_POPUP | MF_STRING);
+
+	m.detach();
+
+	for (long i = 0; i < l; i++)
+	{
+		mol::punk<ISetting> s;
+		if (S_OK != set->Item(mol::variant(i), &s))
+			continue;
+
+		if (!s)
+			continue;
+
+		walkConf(m, s, confMap, id);
+	}
+}
+
+handle_cmd(&Editor::OnTemplate, IDM_USER_SHORTCUT)
+void Editor::OnTemplate()
+{
+	this->shortCutMap.clear();
+
+	mol::Menu m;
+	m.createContext();
+
+	mol::punk<IDispatch> disp;
+	moe()->moeConfig->get_Settings(&disp);
+	mol::punk<ISetting> config(disp);
+
+	mol::punk<ISetting> shortCuts;
+
+	if (S_OK != config->Item(mol::variant("shortCuts"), &shortCuts))
+		return;
+
+	int id = ID_FIRST_USER_CMD;
+
+	long l;
+	if (S_OK == shortCuts->Count(&l))
+	{
+		for (long i = 0; i < l; i++)
+		{
+			mol::punk<ISetting> set;
+			if (S_OK == shortCuts->Item(mol::variant(i), &set))
+			{
+				walkConf(m, set, shortCutMap,id);
+			}
+		}
+	}
+
+	//
+	//mol::Menu context(mol::UI().SubMenu(IDM_MOE, IDM_USER_SHORTCUT));
+	showContext(m);
+	//m.detach();
 }
 
 handle_notify_code(&Editor::OnToolbarDropDown, TBN_DROPDOWN)
 LRESULT Editor::OnToolbarDropDown(NMTOOLBAR* toolbar)
 {
+	/*
 	mol::Menu m(mol::UI().Menu(IDM_MOE),false);
 
 	EditorMenu em(this);
@@ -956,6 +1040,7 @@ LRESULT Editor::OnToolbarDropDown(NMTOOLBAR* toolbar)
 	showContext(context);
 
 	updateUI();
+	*/
 	return TBDDRET_DEFAULT;
 }
 
@@ -1022,7 +1107,18 @@ void Editor::OnDebugScriptEval()
 	es.debugScriptEval();
 }
 
-handle_cmd(&Editor::OnCloseAll, IDM_VIEW_CLOSEALL)
+handle_cmd( &Editor::OnCloseAll, IDM_VIEW_CLOSEALL)
+LRESULT Editor::OnCloseAll()
+{
+	return MoeAxChild<
+		Editor,
+		MOE_DOCTYPE_DOC,
+		&CLSID_ScintillAx,
+		IDM_MOE
+	>::OnCloseAll();
+}
+
+
 
 handle_ole_cmd(Editor, IDM_EDIT_UNDO, &IScintillAx::Undo)
 handle_ole_cmd(Editor, IDM_EDIT_REDO, &IScintillAx::Redo)

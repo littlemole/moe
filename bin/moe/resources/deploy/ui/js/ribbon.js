@@ -2,272 +2,6 @@
 var mode = "Scintilla";
 var tab = "main";
 
-var api = {
-
-	init : function() {
-
-		// get encodings
-	},
-
-	getSetting : function() {
-
-		let json = window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.JSON;
-		return JSON.parse(json);
-	},
-
-
-	getEncondings : function() {
-
-		let json = window.chrome.webview.hostObjects.sync.external.Moe.Config.GetEncodings();
-		return JSON.parse(json);
-	},
-
-	openFileMenu : function() {
-
-		window.chrome.webview.hostObjects.sync.external.Moe.Script.ShowHtmlForm(
-			"C:\\Users\\mike\\source\\repos\\windot\\file.html",
-			window.chrome.webview.hostObjects.sync.external.Moe.View.Left+20,
-			window.chrome.webview.hostObjects.sync.external.Moe.View.Top+60,
-			600,
-			400,
-			0
-		);
-	},
-
-	newFile : function() {
-
-		window.chrome.webview.hostObjects.sync.external.Moe.Documents.New();
-	},
-
-	openFile : function() {
-
-		window.chrome.webview.hostObjects.sync.external.Moe.Dialogs.Open("");
-	},
-
-	openFolder : function() {
-
-		window.chrome.webview.hostObjects.sync.external.Moe.Dialogs.OpenDir();
-	},
-
-	openUrl : function() {
-
-		// TODO not impl
-		//window.chrome.webview.hostObjects.sync.external.Moe.Dialogs.OpenUrl();
-	},
-
-	save : function() {
-		window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.Save();
-	},
-
-	saveAs : function() {
-
-		// Todo: not impl, existinf api requires filepath. have a saveTo and a saveAs api in future!
-		//window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.SaveAs();
-	},
-
-	cut : function() {
-
-		window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.Model.Cut();
-	},
-
-	copy : function() {
-
-		window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.Model.Paste();
-	},
-
-	paste : function() {
-
-		window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.Model.Paste();
-	},
-
-	pasteAs : function() {
-
-		// todo : not impl
-		//window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.Model.Paste();
-	},
-
-
-	find : function() {
-
-		// todo : not impl
-		//window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.Model.Paste();
-	},
-
-	replace : function() {
-
-		// todo : not impl
-		//window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.Model.Paste();
-	},
-
-	color : function() {
-
-		window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.Model.ShowInsertColorDialog();
-	},
-
-	color : function() {
-
-		window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.Model.ShowInsertColorDialog();
-	},
-
-	print : function() {
-
-		window.chrome.webview.hostObjects.sync.external.Moe.Print();		
-	},
-
-	syntax : function() {
-
-		let s = document.getElementById("syntax").value;
-		window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.Model.Syntax(s);		
-	},
-
-	eol : function() {
-
-		let e = document.getElementById("eol").value;
-		window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.Model.Eol(e);		
-	},
-
-	encoding : function() {
-
-		let e = document.getElementById("encoding").value;
-		window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.Model.Syntax(e);		
-	},
-
-	properties : function() {
-
-		// ??
-	},
-
-	showExplorer : function(b) {
-
-		window.chrome.webview.hostObjects.sync.external.Moe.View.ShowTreeView(b);		
-
-	},
-
-	close : function() {
-
-		window.chrome.webview.hostObjects.sync.external.Moe.Documents.Close(b);		
-	},
-
-	closeAll : function() {
-
-		window.chrome.webview.hostObjects.sync.external.Moe.ActiveDoc.View.Close();		
-	},
-
-	quit : function() {
-
-		window.chrome.webview.hostObjects.sync.external.Moe.Exit();	
-	},
-
-	insertTemplate : function() {
-
-		//window.chrome.webview.hostObjects.sync.external.Moe.Exit();	
-
-	},
-
-	formatJSON : function() {
-
-		//window.chrome.webview.hostObjects.sync.external.Moe.Exit();	
-
-	},
-
-	formatXML : function() {
-
-		//window.chrome.webview.hostObjects.sync.external.Moe.Exit();	
-
-	},
-
-	encodeBase64 : function() {
-
-	},
-
-	decodeBase64 : function() {
-
-	},
-
-	encodeURIcomponent : function() {
-
-	},
-
-	runScript : function() {
-	},
-
-	debugScript : function () {
-	},
-
-	pauseScript : function () {
-	},
-
-	stopScript : function () {
-	},
-
-	stepScript : function () {
-	},
-
-	stepInScript : function () {
-	},
-
-	stepOutScript : function () {
-	},
-	
-	showHTML : function() {
-	},
-
-	admin : function() {
-	},
-
-	certificates : function() {
-	},
-
-	mapDrive : function()  {
-	},
-
-	writeBOM : function() {
-	},
-
-	showLineEndings : function(b) {
-	},
-
-	settings : function(b) {
-	},
-
-	useTabse : function() {
-	},
-
-	tabIndents : function() {
-	},
-
-	backspaceUnindents : function() {
-	},
-
-	tabSize : function() {
-	},
-
-	convertTabs : function() {
-	},
-
-	parentDir : function() {
-	},
-
-	execute : function() {
-	},
-
-	createFolder : function() {
-	},
-
-	reload : function() {
-	},
-
-	back : function() {
-	},
-
-	next : function() {
-	},
-
-	showBytes : function() {
-	},
-};
-
-
 function setApplicationMode(m,t)
 {
 	mode = m;
@@ -290,7 +24,6 @@ function setApplicationMode(m,t)
 				tabs = tabs.split(" ");
 				if(!tabs.includes(tab)) s = "none";
 			}
-			console.log(mode,tabs, tab);
 			n.style.display = s;
 		}		
 		else 
@@ -313,12 +46,11 @@ function setApplicationMode(m,t)
 
 function onToggle(el)
 {
-	console.log(el);
 	let status = el.getAttribute("status");
 
+	el.className = el.className.replace(" active", "");
 	if(status === "true" )
 	{
-		el.className = el.className.replace("active", "");
 		el.setAttribute("status","false");
 	}
 	else
@@ -328,6 +60,99 @@ function onToggle(el)
 	}	
 }
 
+function onMessage(e) {
+
+	let msg = e.data;
+
+	//console.log(JSON.stringify(msg));
+	if("appmode" in msg)
+	{
+		let appmode = msg["appmode"];
+		if(appmode!="Scintilla")
+			tab="main";
+		setApplicationMode(appmode,tab);
+	}
+	if("syntax" in msg)
+	{
+		let syntax = msg["syntax"];
+		document.getElementById("syntax").value = syntax;
+		document.getElementById("syntax2").value = syntax;
+	}
+	if("systype" in msg)
+	{
+		let systype = msg["systype"];
+		document.getElementById("eol").value = systype;
+		document.getElementById("eol2").value = systype;
+	}
+	if("encoding" in msg)
+	{
+		let enc = msg["encoding"];
+		document.getElementById("enc").value = enc;
+	}
+	if("writeBOM" in msg)
+	{
+		let bom = msg["writeBOM"];
+		document.getElementById("writeBom").checked = bom;
+	}
+	if("showLineNumbers" in msg)
+	{
+		let showLineNumbers = msg["showLineNumbers"];
+		document.getElementById("showLineNumbers").checked = showLineNumbers;
+	}
+	if("tabUsage" in msg)
+	{
+		let useTabs = msg["tabUsage"];
+		document.getElementById("useTabs").checked = useTabs;
+	}
+	if("tabIndents" in msg)
+	{
+		let tabIndents = msg["tabIndents"];
+		document.getElementById("tabIndents").checked = tabIndents;
+	}
+	if("backSpaceUnindents" in msg)
+	{
+		let backSpaceUnindents = msg["backSpaceUnindents"];
+		document.getElementById("backUnindents").checked = backSpaceUnindents;
+	}
+	if("tabWidth" in msg)
+	{
+		let tabWidth = msg["tabWidth"];
+		document.getElementById("tabWidth").value = "" + tabWidth;
+	}
+	if("showTreeView" in msg)
+	{
+		let showTreeView = msg["showTreeView"];
+
+		let dirView = document.getElementById("dirView");
+		dirView.setAttribute("status",showTreeView ? "true" : "false");
+		dirView.className = dirView.className.replace(" active", "");
+		if(showTreeView)
+		{
+			dirView.className = dirView.className + " active";
+		}
+	}
+	if("showBytes" in msg)
+	{
+		let showBytes = msg["showBytes"];
+		document.getElementById("showBytes").value = showBytes;
+	}
+	if("action" in msg)
+	{
+		let action = msg["action"];
+		if(action == "enc")
+		{
+			let html = "";
+			let encodings = msg["enc"];
+			encodings.forEach(function(enc) {
+
+				var n = enc.name;
+				var v = enc.value;
+				html += "<option value='" + v + "'>" + n + "</option>";
+			});
+			document.getElementById("enc").innerHTML = html;
+		}
+	}
+}
 
 window.onload = function() {
 
@@ -337,21 +162,100 @@ window.onload = function() {
 		setApplicationMode(m,"main");
 	};
 
-	let toggles = Array.from(document.getElementsByClassName("toggle"));
-	toggles.forEach(function(t)
-	{
-		t.onclick=function(){onToggle(this)};
-	});
-
-
 	document.getElementById("file").onclick = function() { api.openFileMenu(); };
 	document.getElementById("main").onclick = function() { setApplicationMode(mode,'main'); };
 	document.getElementById("run").onclick = function() { setApplicationMode(mode,'run')};
 	document.getElementById("tools").onclick = function() { setApplicationMode(mode,'tools')};
 	document.getElementById("document").onclick = function() { setApplicationMode(mode,'document')};
 
-	setApplicationMode("Scintilla","main");
+	document.getElementById("enc").onchange = function(e) { 
+		let msg = { "action" : "enc", "enc" : this.value };
+		window.chrome.webview.postMessage(msg);
+	};
+
+	var cmds = Array.from(document.querySelectorAll("div[cmd]"));
+	cmds.forEach( function(el) {
+
+		el.onclick = function(e) {
+			let cmd = this.getAttribute("cmd");
+			let msg = { "cmd" : action[cmd] };
+
+			//alert(JSON.stringify(msg));
+
+			window.chrome.webview.postMessage(msg);
+		};
+	});
+
+	var divActions = Array.from(document.querySelectorAll("div[action]"));
+	divActions.forEach( function(el) {
+
+		el.onclick = function(e) {
+			let action = this.getAttribute("action");
+			let value = this.getAttribute("status");
+			let msg = { "action" : action };
+			msg[action] = value === "true" ? false : true;
+			//alert(JSON.stringify(msg));
+
+			onToggle(this);
+			window.chrome.webview.postMessage(msg);
+		};
+	});
+
+	var selects = Array.from( document.querySelectorAll("select[action]") );
+	selects.forEach( function(el) {
+
+		el.onchange = function(e) {
+			
+			let action = this.getAttribute("action");
+			let cmd = this.value;
+			let msg = { 
+				"action" : action
+			};
+			msg[action] = cmd;
+			window.chrome.webview.postMessage(msg);
+		};
+	});
+
+	var inputs = Array.from( document.querySelectorAll("input[action]") );
+	inputs.forEach( function(el) {
+
+		el.onchange = function(e) {
+			let state = this.checked;
+			let action = this.getAttribute("action");
+			let msg = { "action" : action };
+			msg[action] = state;
+			window.chrome.webview.postMessage(msg);
+		};
+	});
+
+	var scripts = Array.from( document.querySelectorAll("div[script]") );
+	scripts.forEach( function(el) {
+
+		el.onclick = function(e) {
+			let script = this.getAttribute("script");
+			let msg = { "action" : "script" };
+			msg["script"] = script;
+			window.chrome.webview.postMessage(msg);
+		};
+	});
+
+	var clis = Array.from( document.querySelectorAll("div[cli]") );
+	clis.forEach( function(el) {
+
+		el.onclick = function(e) {
+			let cli = this.getAttribute("cli");
+			let msg = { "action" : "system" };
+			msg["system"] = cli;
+			window.chrome.webview.postMessage(msg);
+		};
+	});
+
+	setApplicationMode("Img","main");
 	document.getElementById("ribbon").style.display="block";
+
+	window.chrome.webview.addEventListener('message', onMessage);
+
+	//api.init();
 };
 
 

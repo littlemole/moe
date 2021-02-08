@@ -2,10 +2,11 @@
 #include "shared.h"
 #include "mtree.h"
 #include "moe.h"
+#include "moebar.h"
 #include "app.h"
 #include "form2.h"
 #include "Docs.h"
-#include "xmlui.h"
+//#include "xmlui.h"
 #include "moe_dispid.h"
 #include "resource.h"
 #include "ole/SimpleHost.h"
@@ -411,6 +412,11 @@ HRESULT __stdcall MoeView::ShowFileMenu()
 		get_Top(&top);
 
 		moe()->fileMenu = MoeForm2Wnd::CreateInstance(fileMenuPath, left + 20, top + 60, 600, 355, MoeForm2Wnd::HIDE_ON_KILL_FOCUS);
+
+		moe()->fileMenu->onJsonMsg = [this](Json::Value json)
+		{
+			ribbon()->handleMessage(json);
+		};
 	}
 	moe()->fileMenu->show(SW_SHOW);
 	return S_OK;
@@ -427,6 +433,11 @@ HRESULT __stdcall MoeView::ShowContextMenu()
 		std::wstring contextMenuPath = appPath + L"\\ui\\context.html";
 
 		moe()->contextMenu = MoeForm2Wnd::CreateInstance(contextMenuPath, p.x, p.y, 125, 200, MoeForm2Wnd::HIDE_ON_KILL_FOCUS);
+
+		moe()->contextMenu->onJsonMsg = [this](Json::Value json)
+		{
+			ribbon()->handleMessage(json);
+		};
 	}
 //	moe()->contextMenu->show(SW_SHOW);
 	::SetWindowPos(*(moe()->contextMenu.interface_),0, p.x, p.y, 250, 200, SWP_SHOWWINDOW| SWP_NOZORDER|SWP_NOSIZE);
@@ -693,7 +704,7 @@ void executeCSharpScript(const std::wstring& path)
 		<< "\" \"" << path << "\"";
 
 	std::wstring ws = woss.str();
-	mol::io::exec_cmdline(ws);
+	mol::io::exec_cmdline(ws,false);
 }
 HRESULT __stdcall MoeScript::Run( BSTR f, BSTR engine )
 {

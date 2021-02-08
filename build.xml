@@ -102,7 +102,9 @@
  <Target Name="kosmos">
     <CallTarget Targets="build"/>
   	<CallTarget Targets="net"/>
+<!--
 	<CallTarget Targets="jre"/>
+-->
 	<CallTarget Targets="WixmoeEx"/>
  </Target>
 
@@ -112,7 +114,9 @@
         <CallTarget Targets="clean3dParty"/>
 -->
         <CallTarget Targets="cleannet"/>
+<!--
         <CallTarget Targets="cleanjre"/>
+-->
         <CallTarget Targets="cleanWixmoeEx"/>
 <!--
         <CallTarget Targets="3dParty"/>

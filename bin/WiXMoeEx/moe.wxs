@@ -39,7 +39,9 @@
 
     <CustomAction Id="MOEEXE" Property='MOEEXE' Value='[INSTALLLOCATION]\moe\moe.exe' />
     <CustomAction Id="NETEXE" Property='NETEXE' Value='[INSTALLLOCATION]\moe\net.exe' />
+<!--
     <CustomAction Id="JREEXE" Property='JREEXE' Value='[INSTALLLOCATION]\moe\jre.exe' />
+-->
 	<CustomAction Id="USERFORMEXE" Property='USERFORMEXE' Value='[INSTALLLOCATION]\moe\userforms.exe' />
 
     <!-- register/unregister moe's dlls -->
@@ -74,10 +76,10 @@
 
     <CustomAction Id="EXEREG_net"  Property="NETEXE" ExeCommand="/REGSERVER" Execute="deferred" Impersonate="no"  />
     <CustomAction Id="EXEUNREG_net" Property="NETEXE" ExeCommand="/UNREGSERVER" Execute="deferred" Impersonate="no" Return="ignore"/>
-
+<!--
     <CustomAction Id="EXEREG_jre"  Property="JREEXE" ExeCommand="/REGSERVER" Execute="deferred" Impersonate="no"  />
     <CustomAction Id="EXEUNREG_jre" Property="JREEXE" ExeCommand="/UNREGSERVER" Execute="deferred" Impersonate="no" Return="ignore"/>
-
+-->
     <CustomAction Id="EXEREG_userform"  Property="USERFORMEXE" ExeCommand="/REGSERVER" Execute="deferred" Impersonate="no"  />
     <CustomAction Id="EXEUNREG_userform" Property="USERFORMEXE" ExeCommand="/UNREGSERVER" Execute="deferred" Impersonate="no" Return="ignore"/>
 
@@ -88,6 +90,47 @@
         src = Session.Property("INSTALLLOCATION") & "\moe\fx"
         dest = Session.Property("AppDataFolder") & "\moe\fx"
         fso.CopyFolder src,dest,true 
+
+        src = Session.Property("INSTALLLOCATION") & "\moe\css"
+        dest = Session.Property("AppDataFolder") & "\moe\css"
+        fso.CopyFolder src,dest,true 
+
+        src = Session.Property("INSTALLLOCATION") & "\moe\doc"
+        dest = Session.Property("AppDataFolder") & "\moe\doc"
+        fso.CopyFolder src,dest,true 
+
+        src = Session.Property("INSTALLLOCATION") & "\moe\forms"
+        dest = Session.Property("AppDataFolder") & "\moe\forms"
+        fso.CopyFolder src,dest,true 
+
+        src = Session.Property("INSTALLLOCATION") & "\moe\img"
+        dest = Session.Property("AppDataFolder") & "\moe\img"
+        fso.CopyFolder src,dest,true 
+
+        src = Session.Property("INSTALLLOCATION") & "\moe\js"
+        dest = Session.Property("AppDataFolder") & "\moe\js"
+        fso.CopyFolder src,dest,true 
+
+        src = Session.Property("INSTALLLOCATION") & "\moe\ui"
+        dest = Session.Property("AppDataFolder") & "\moe\ui"
+        fso.CopyFolder src,dest,true 
+
+        src = Session.Property("INSTALLLOCATION") & "\moe\xsl"
+        dest = Session.Property("AppDataFolder") & "\moe\xsl"
+        fso.CopyFolder src,dest,true 
+
+        src = Session.Property("INSTALLLOCATION") & "\moe\styles.xml"
+        dest = Session.Property("AppDataFolder") & "\moe\xsl\styles.xml"
+        fso.CopyFile src,dest,true
+ 
+        src = Session.Property("INSTALLLOCATION") & "\moe\settings.xml"
+        dest = Session.Property("AppDataFolder") & "\moe\xsl\settings.xml"
+        fso.CopyFile src,dest,true
+
+        src = Session.Property("INSTALLLOCATION") & "\moe\recentUrls.xml"
+        dest = Session.Property("AppDataFolder") & "\moe\xsl\recentUrls.xml"
+        fso.CopyFile src,dest,true
+
     ]]>
     </CustomAction>
 
@@ -171,10 +214,11 @@
       	<ComponentGroupRef Id="NetCompGroup" />
       	<ComponentGroupRef Id="NetRegProtoCompGroup" />
       </Feature>
+<!--
       <Feature Id="MoeJava" Title="moe Java extensions" Description='install moe Java extension binaries' Level="2" InstallDefault='local'  Absent='allow' >
 	<ComponentGroupRef Id='JreCompGroup' />
       </Feature>
-
+-->
     </Feature>
 
     <!-- fire custom actions -->
@@ -186,7 +230,9 @@
       <!-- set path to moe.exe -->
       <Custom Action='MOEEXE' Before='InstallFiles' />
       <Custom Action='NETEXE' Before='InstallFiles' />
+<!--
       <Custom Action='JREEXE' Before='InstallFiles' />
+-->
 	  <Custom Action='USERFORMEXE' Before='InstallFiles' />
 <!--      <Custom Action='MOEPATH' Before='InstallFiles' /> -->
 
@@ -202,7 +248,9 @@
       <Custom Action='DLLREG_setting' After='InstallFiles'>NOT Installed OR UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLREG_moeShell' After='InstallFiles'>(NOT Installed OR UPGRADINGPRODUCTCODE) AND (&amp;MoeShell=3)</Custom>
       <Custom Action='EXEREG_net' After='InstallFiles'>(NOT Installed OR UPGRADINGPRODUCTCODE) AND (&amp;MoeNet=3)</Custom>
-      <Custom Action='EXEREG_jre' After='InstallFiles'>(NOT Installed OR UPGRADINGPRODUCTCODE) AND (&amp;MoeJava=3)</Custom>
+<!-- 
+     <Custom Action='EXEREG_jre' After='InstallFiles'>(NOT Installed OR UPGRADINGPRODUCTCODE) AND (&amp;MoeJava=3)</Custom>
+-->
 	  <Custom Action='DLLREG_moeSSH' After='InstallFiles'>(NOT Installed OR UPGRADINGPRODUCTCODE) AND (&amp;MoeSSH=3)</Custom>
 
       <!-- unregister COM objects  -->
@@ -216,7 +264,9 @@
       <Custom Action='DLLUNREG_setting' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='DLLUNREG_moeShell' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
       <Custom Action='EXEUNREG_net' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+<!--
       <Custom Action='EXEUNREG_jre' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+-->
 	  <Custom Action='DLLUNREG_moeSSH' Before='RemoveFiles'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
 
       <Custom Action="CopyFx" After="InstallFinalize">Not Installed</Custom>

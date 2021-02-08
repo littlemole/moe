@@ -124,22 +124,24 @@
     </ResourceCompile>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Platform)'=='win32'">
+  <ItemGroup>
     <CustomBuild Include="..\..\cg\disph.exe">
       <Message>dispid generation phase</Message>
-      <Command>..\..\cg\disph.exe $(Configuration)\$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
-      <AdditionalInputs>$(Configuration)\$(TargetName).tlb;%(AdditionalInputs)</AdditionalInputs>
+      <Command>..\..\cg\disph.exe $(IntDir)\$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
       <Outputs>$(TargetName)_dispid.h;%(Outputs)</Outputs>
+      <AdditionalInputs>$(IntDir)$(TargetName).tlb</AdditionalInputs>
+      <LinkObjects>false</LinkObjects>
+      <OutputItemType>ClInclude</OutputItemType>
     </CustomBuild>
-  </ItemGroup>
 
-  <ItemGroup Condition="'$(Platform)'=='x64'">
-    <CustomBuild Include="..\..\cg\disph.exe">
-      <Message>dispid generation phase</Message>
-      <Command>..\..\cg\disph.exe x64\$(Configuration)\$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
-      <AdditionalInputs>x64\$(Configuration)\$(TargetName).tlb;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs>$(TargetName)_dispid.h;%(Outputs)</Outputs>
+    <CustomBuild Include="tlbimp.exe">
+      <Message>generate .NET interop dll</Message>
+      <Command>tlbimp.exe $(OutDir)\$(TargetName).tlb /namespace:Moe /out:$(OutDir)\interop.$(TargetName).dll</Command>
+      <Outputs>$(OutDir)\interop.$(TargetName).dll</Outputs>
+      <AdditionalInputs>$(OutDir)\$(TargetName).tlb</AdditionalInputs>
+      <LinkObjects>false</LinkObjects>
     </CustomBuild>
+
   </ItemGroup>
 
 </Project>

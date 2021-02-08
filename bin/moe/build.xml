@@ -6,7 +6,7 @@
     <RootNamespace>xmoe</RootNamespace>
     <TargetName>moe</TargetName>
 
-    <rcsource>resources\mol</rcsource>
+    <rcsource>resources\moe</rcsource>
     <tlb Condition="'$(Platform)'=='Win32'">$(Configuration)\$(TargetName).tlb</tlb>
     <tlb Condition="'$(Platform)'=='x64'">.\x64\$(Configuration)\$(TargetName).tlb</tlb>
 
@@ -75,9 +75,10 @@
     <ClCompile Include="src\shared.cpp" />
     <ClCompile Include="src\widgets.cpp" />
     <ClCompile Include="src\ThreadScript.cpp" />
-    <ClCompile Include="src\xmlrc.cpp" />
+<!--    <ClCompile Include="src\xmlrc.cpp" />
     <ClCompile Include="src\xmlrib.cpp" />
     <ClCompile Include="src\xmlui.cpp" />
+-->
     <ClCompile Include="src\mdichild.cpp" />
     <ClCompile Include="src\rtf.cpp" />
     <ClCompile Include="src\tree.cpp" />
@@ -86,6 +87,7 @@
     </ClCompile>
   </ItemGroup>
 
+<!--
   <ItemGroup>
     <CustomBuild Include="..\..\cg\js\make.js">
       <Message>code generation phase</Message>
@@ -94,6 +96,7 @@
       <Outputs>xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;ribbonres.rc;ribbonres.h;ribbon.bml;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
+-->
 
   <ItemGroup>
     <CustomBuild Include="..\..\cg\disph.exe">
@@ -101,7 +104,19 @@
       <Command>..\..\cg\disph.exe $(tlb) &gt; $(TargetName)_dispid.h</Command>
       <AdditionalInputs>$(Configuration)\$(TargetName).tlb;%(AdditionalInputs)</AdditionalInputs>
       <Outputs>$(TargetName)_dispid.h;%(Outputs)</Outputs>
+      <AdditionalInputs>$(tlb)</AdditionalInputs>
+      <LinkObjects>false</LinkObjects>
+      <OutputItemType>ClInclude</OutputItemType>
     </CustomBuild>
+
+    <CustomBuild Include="tlbimp.exe">
+      <Message>generate .NET interop dll</Message>
+      <Command>tlbimp.exe $(OutDir)\$(TargetName).tlb /namespace:Moe /out:$(OutDir)\interop.$(TargetName).dll</Command>
+      <Outputs>$(OutDir)\interop.$(TargetName).dll</Outputs>
+      <AdditionalInputs>$(OutDir)\$(TargetName).tlb</AdditionalInputs>
+      <LinkObjects>false</LinkObjects>
+    </CustomBuild>
+
   </ItemGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

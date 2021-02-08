@@ -2,7 +2,7 @@
 #include "ScintillAxProp.h"
 #include "win/enc.h"
 #include <Windowsx.h>
-
+#include "win/msghandler.h"
 
 ScintillAxProperties::ScintillAxProperties()
 {
@@ -12,6 +12,12 @@ ScintillAxProperties::ScintillAxProperties()
 ///////////////////////////////////////////////////////////////////////////////
 // Message Handlers
 ///////////////////////////////////////////////////////////////////////////////
+
+
+handle_cmd(&ScintillAxProperties::OnDirty, IDC_RADIO_UNIX, IDC_RADIO_WIN32,
+	IDC_COMBO_ENCODING, IDC_CHECK_USETABS, IDC_CHECK_TABINDENTS,
+	IDC_EDIT_TABWIDTH, IDC_CHECK_BACKSPACEUNINDENTS, IDC_CHECK_WRITEBOM)
+
 LRESULT ScintillAxProperties::OnDirty(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	this->setDirty();
@@ -19,6 +25,7 @@ LRESULT ScintillAxProperties::OnDirty(UINT msg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
+handle_cmd(&ScintillAxProperties::OnConvert, IDC_CONVERT_BUTTON)
 LRESULT ScintillAxProperties::OnConvert(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	for ( unsigned int i = 0; i < objects_.size(); i++ )
@@ -35,7 +42,7 @@ LRESULT ScintillAxProperties::OnConvert(UINT msg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-
+handle_msg(&ScintillAxProperties::OnInitDialog, WM_INITDIALOG)
 LRESULT ScintillAxProperties::OnInitDialog(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if ( objects_.size() > 0 )
@@ -206,6 +213,11 @@ ScintillAxSettings::ScintillAxSettings()
 ///////////////////////////////////////////////////////////////////////////////
 // Message Handlers
 ///////////////////////////////////////////////////////////////////////////////
+
+handle_cmd(&ScintillAxSettings::OnDirty, IDC_RADIO_UNIX, IDC_RADIO_WIN32,
+	IDC_COMBO_ENCODING, IDC_CHECK_USETABS, IDC_CHECK_TABINDENTS,
+	IDC_EDIT_TABWIDTH, IDC_CHECK_BACKSPACEUNINDENTS, IDC_CHECK_WRITEBOM)
+
 LRESULT ScintillAxSettings::OnDirty(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	this->setDirty();
@@ -233,7 +245,7 @@ LRESULT ScintillAxSettings::OnDirty(UINT msg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-
+handle_msg(&ScintillAxSettings::OnInitDialog, WM_INITDIALOG)
 LRESULT ScintillAxSettings::OnInitDialog(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	combo_.attach(getDlgItem(IDC_COMBO_ENCODING));

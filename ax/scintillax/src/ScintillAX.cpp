@@ -28,8 +28,8 @@ class scintillaDll :
 public:
 	scintillaDll() : si(mol::hinstance()) // brings in scintilla lib
 	{
+		// pre-load available encodings
 		mol::CodePages& cp = mol::CodePages::instance();
-		::load_codegen_metadata();		
 	}
 
 private:

@@ -2,6 +2,7 @@
 #include "ScintillaCtrl.h"
 #include "win/path.h"
 #include "win/shell.h"
+#include "win/layout.h"
 #include "win/overlapped.h"
 #include "win/pp.h"
 #include "util/istr.h"
@@ -27,8 +28,6 @@
 
 #include "ScintillAx_dispid.h"
 
-void init_ribbon_ui(mol::win::WndProc*)
-{}
 
 class UACex
 {
@@ -287,9 +286,22 @@ EditWnd* ScintillAx::edit()
 // OnCreate
 //////////////////////////////////////////////////////////////////////////////
 
+handle_msg(&ScintillAx::OnCreate,WM_CREATE)
 LRESULT ScintillAx::OnCreate(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	make_ui(this);
+	mol::FillLayout* layout = setLayout(new mol::FillLayout);
+
+	//childWindow
+	EditWnd* editor = mol::UI().makeWindow<EditWnd>((HMENU)IDC_EDITOR_VIEW, mol::stdRect, hWnd_);
+	editor->show(SW_SHOW);
+
+	layout->add(*editor);
+	editor->setUsePopUp(true);
+	editor->setCodePage(CP_UTF8);
+	editor->setScrollWidth(120);
+	editor->setMarginWidth(1, 0);
+	editor->setTabWidth(4);
+
 
 	mol::bstr filename;
 	HRESULT hr = props_->get_Filename(&filename);
@@ -300,41 +312,36 @@ LRESULT ScintillAx::OnCreate(UINT msg, WPARAM wParam, LPARAM lParam)
 
 	col_.createObject(CLSID_ColorDialog);
 
+	ODBGS("setting scintilla persist props");
 
+	VARIANT_BOOL vb;
+	LONG w = 4;
 
-	if ( edit() )
-	{
-		ODBGS("setting scintilla persist props");
+	props_->get_TabWidth(&w);
+	editor->setTabWidth( w );
 
-		VARIANT_BOOL vb;
-		LONG w = 4;
+	props_->get_TabUsage(&vb);
+	editor->setUseTabs(  vb == VARIANT_TRUE ? true : false );
 
-		props_->get_TabWidth(&w);
-		edit()->setTabWidth( w );
+	props_->get_TabIndents(&vb);
+	editor->setTabIndents( vb == VARIANT_TRUE ? true : false );
 
-		props_->get_TabUsage(&vb);
-		edit()->setUseTabs(  vb == VARIANT_TRUE ? true : false );
+	props_->get_BackSpaceUnindents( &vb );
+	editor->setBackSpaceUnindents( vb == VARIANT_TRUE ? true : false );
 
-		props_->get_TabIndents(&vb);
-		edit()->setTabIndents( vb == VARIANT_TRUE ? true : false );
+	props_->get_UseContext(&vb);
+	editor->setUsePopUp( vb == VARIANT_TRUE ? true : false );
 
-		props_->get_BackSpaceUnindents( &vb );
-		edit()->setBackSpaceUnindents( vb == VARIANT_TRUE ? true : false );
+	props_->get_ReadOnly(&vb);
+	editor->setReadOnly( vb == VARIANT_TRUE ? true : false );
 
-		props_->get_UseContext(&vb);
-		edit()->setUsePopUp( vb == VARIANT_TRUE ? true : false );
-
-		props_->get_ReadOnly(&vb);
-		edit()->setReadOnly( vb == VARIANT_TRUE ? true : false );
-
-		props_->get_Overtype(&vb);
-		edit()->setOvertype( vb == VARIANT_TRUE ? true : false );
+	props_->get_Overtype(&vb);
+	editor->setOvertype( vb == VARIANT_TRUE ? true : false );
 				
-		//this->put_Font(font_);
-		//this->put_Syntax(syntax_);				
+	//this->put_Font(font_);
+	//this->put_Syntax(syntax_);				
 
-		edit()->setCodePage(SC_CP_UTF8);
-	}
+	edit()->setCodePage(SC_CP_UTF8);
 
 	return 0;
 }
@@ -354,6 +361,7 @@ LRESULT ScintillAx::OnSize(UINT msg, WPARAM wParam, LPARAM lParam)
 // On Pos Changed
 //////////////////////////////////////////////////////////////////////////////
 
+handle_notify_code(&ScintillAx::OnUpdateUI, SCN_UPDATEUI)
 LRESULT ScintillAx::OnUpdateUI(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	mol::Crack mess(msg,wParam,lParam);
@@ -389,6 +397,7 @@ LRESULT ScintillAx::OnUpdateUI(UINT msg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+handle_msg(&ScintillAx::OnContext, WM_CONTEXTMENU)
 LRESULT ScintillAx::OnContext(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	VARIANT_BOOL vb = VARIANT_TRUE;
@@ -401,6 +410,7 @@ LRESULT ScintillAx::OnContext(UINT msg, WPARAM wParam, LPARAM lParam)
 // On Char entered
 //////////////////////////////////////////////////////////////////////////////
 
+handle_notify_code(&ScintillAx::OnChar, SCN_CHARADDED)
 LRESULT ScintillAx::OnChar(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	mol::Crack mess(msg,wParam,lParam);
@@ -417,6 +427,7 @@ LRESULT ScintillAx::OnChar(UINT msg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+handle_notify_code(&ScintillAx::OnDblClick, SCN_DOUBLECLICK)
 LRESULT ScintillAx::OnDblClick(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	this->uiActivate();
@@ -425,6 +436,7 @@ LRESULT ScintillAx::OnDblClick(UINT msg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
+handle_notify_code(&ScintillAx::OnMarginClick, SCN_MARGINCLICK)
 LRESULT ScintillAx::OnMarginClick(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	SCNotification* sciNotify = (SCNotification*)lParam;

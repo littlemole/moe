@@ -73,7 +73,7 @@ class MoeHtmlRibbon :
 public:
 
 	mol::punk< ICoreWebView2Controller> webViewController;
-	mol::punk< ICoreWebView2> oleObject;
+	mol::punk< ICoreWebView2> webView;
 	mol::punk<IMoeDialogView> view;
 
 	MoeHtmlRibbon();
@@ -86,8 +86,9 @@ public:
 	void onNavigationStarted(ICoreWebView2NavigationStartingEventArgs* args);
 //	void onPermissionRequest(ICoreWebView2PermissionRequestedEventArgs* args);
 	void onCreateWebView(std::wstring target, ICoreWebView2Controller* controller);
+	void onMessageReceived(ICoreWebView2* sender, ICoreWebView2WebMessageReceivedEventArgs* args);
 
-
+	void handleMessage(Json::Value& json);
 	void postMessageAsJSON(const Json::Value& json);
 	/////////////////////////////////////////////////////////////////////
 	// msg handlers
@@ -114,9 +115,9 @@ private:
 	int							style_;
 	std::wstring				location_;
 
-//	EventRegistrationToken		documentTitleChangedToken;
+	EventRegistrationToken		webMessageReceivedToken;
 	EventRegistrationToken		navigationStartingToken;
-//	EventRegistrationToken		permissionRequestToken;
+	EventRegistrationToken		onDocumentLoadedToken;
 
 	/////////////////////////////////////////////////////////////////////
 	// external events called from script inside MoeWnd

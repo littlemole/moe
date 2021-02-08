@@ -3,7 +3,7 @@
 #include "moe.h"
 #include "Docs.h"
 #include "MoeBar.h"
-#include "xmlui.h"
+//#include "xmlui.h"
 #include "win/msgmap.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -133,7 +133,7 @@ void DirChild::OnMDIActivate( HWND activated )
 
 		std::string utf8 = JSON::flatten(json);
 		ribbon()->setAppMode("Directory");
-		ribbon()->oleObject->PostWebMessageAsJson(mol::fromUTF8(utf8).c_str());
+		ribbon()->webView->PostWebMessageAsJson(mol::fromUTF8(utf8).c_str());
 /*
 
 		if ( mol::Ribbon::ribbon()->enabled())

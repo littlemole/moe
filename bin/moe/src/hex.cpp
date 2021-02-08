@@ -3,7 +3,7 @@
 #include "moe.h"
 #include "Docs.h"
 #include "MoeBar.h"
-#include "xmlui.h"
+//#include "xmlui.h"
 #include "Ribbonres.h"
 
 using namespace mol::io;

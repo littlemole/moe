@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "form2.h"
 #include "app.h"
-#include "xmlui.h"
-#include "xmlid.h"
+//#include "xmlui.h"
+#include "resource.h"
 
 using namespace mol::win;
 using namespace mol::ole;
@@ -125,6 +125,32 @@ void MoeForm2Wnd::onCreateWebView(std::wstring target, ICoreWebView2Controller* 
 		this->onPermissionRequest(args);
 	}),
 		&permissionRequestToken
+		);
+
+
+	webview->add_WebMessageReceived(
+		make_callback<ICoreWebView2WebMessageReceivedEventHandler>(
+			[this](ICoreWebView2* sender, ICoreWebView2WebMessageReceivedEventArgs* args)
+	{
+		if (this->onJsonMsg)
+		{
+			wchar_t* msg = 0;
+			HRESULT hr = args->get_WebMessageAsJson(&msg);
+
+			if (hr != S_OK)
+				return;
+
+			std::wstring message(msg);
+			::CoTaskMemFree(msg);
+
+			std::string utf8(mol::toUTF8(message));
+
+			Json::Value json = JSON::parse(utf8);
+
+			this->onJsonMsg(json);
+		}
+	}),
+		&webMessageReceivedToken
 		);
 
 	webview->Navigate(target.c_str());
@@ -265,6 +291,7 @@ void MoeForm2Wnd::OnNcDestroy()
 		webview->remove_DocumentTitleChanged(documentTitleChangedToken);
 		webview->remove_NavigationStarting(navigationStartingToken);
 		webview->remove_PermissionRequested(permissionRequestToken);
+		webview->remove_WebMessageReceived(webMessageReceivedToken);
 
 		webViewController->Close();
 		webViewController.release();

@@ -228,7 +228,7 @@ BOOL execute_shell_admin( const std::wstring& path, const std::wstring& args );
 // execute a commandline w/o  cmd.exe
 ////////////////////////////////////////////////////////////////////////////////////
 
-BOOL exec_cmdline( const std::wstring cl );
+BOOL exec_cmdline( const std::wstring cl , bool showWindow = true);
 
 } // end namespace mol::win::io;
 

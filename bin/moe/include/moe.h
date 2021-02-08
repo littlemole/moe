@@ -107,6 +107,8 @@ public:
 
 	 // toggle dirview
 	 void OnShowDirView();
+	 void OnShowFileMenue();
+	 void OnHideFileMenue();
 
 	 // FX Shortcuts (F1 through F12)
 	 void OnFx(int code, int id, HWND ctrl);
@@ -117,7 +119,15 @@ public:
 
 	 void OnSysCommand(WPARAM wParam);
 	 void OnExitLoop();
-	/////////////////////////////////////////////////////////////////////
+
+	 void OnMaximizeView();
+	 void OnMinimizeView();
+	 void OnTileView();
+	 void OnCascadeView();
+	 void OnNextView();
+	 void OnCloseChildView();
+
+	 /////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////
 	// ribbon handlers
 	/////////////////////////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 #include "ThreadScript.h"
-#include "xmlui.h"
+//#include "xmlui.h"
 #include "widgets.h"
 #include <mutex>
 

@@ -12,7 +12,7 @@
 #include "ole.h"
 #include "rtf.h"
 #include "moe.h"
-#include "xmlui.h"
+//#include "xmlui.h"
 #include "ribbonres.h"
 #include "DocFactory.h"
 #include "Docs.h"

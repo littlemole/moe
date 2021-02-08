@@ -140,6 +140,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">
     <LibraryPath>C:\moe\vcpkg\installed\x64-windows-static\lib;$(LibraryPath)</LibraryPath>
+    <CustomBuildAfterTargets>Midl</CustomBuildAfterTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
     <ClCompile>
@@ -327,22 +328,18 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">$(TargetName)_dispid_h</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">$(TargetName)_dispid_h</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">$(TargetName)_dispid.h</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">$(TargetName)_dispid.h</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">Generating DISPIDs</Message>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">$(IntDir)$(TargetName).tlb</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">$(IntDir)$(TargetName).tlb</AdditionalInputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">false</LinkObjects>
+      <OutputItemType Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">ClInclude</OutputItemType>
     </CustomBuild>
     <None Include="ScintillAX.def" />
-    <None Include="xml\cmd.xml" />
-    <None Include="xml\include.xml" />
-    <None Include="xml\menu.xml" />
-    <None Include="resources\mol.rc.inc" />
     <None Include="xml\msg.xml" />
-    <None Include="xml\persist.xml" />
-    <None Include="xml\resource.xml" />
     <None Include="scintillax.ico" />
-    <None Include="xml\ui.xml" />
     <CustomBuild Include="..\..\cg\js\make.js">
       <Message Condition="'$(Configuration)|$(Platform)'=='uni_release_64|Win32'">codegen phase</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_release_64|Win32'">cscript.exe ../../cg/js/make.js
@@ -373,13 +370,14 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">true</ExcludedFromBuild>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="ScintillAX.idl" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="resources\mol.rc">
+    <ResourceCompile Include="resources\scintilla.rc">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">TLB=x64\uni_debug\scintillax.tlb;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
@@ -409,8 +407,6 @@
     <ClInclude Include="include\sciwnd.h" />
     <ClInclude Include="include\Selection.h" />
     <ClInclude Include="include\Text.h" />
-    <ClInclude Include="include\xmlid.h" />
-    <ClInclude Include="include\xmlui.h" />
     <ClInclude Include="ScintillAx_dispid.h" />
     <ClInclude Include="ScintillAx_h.h" />
     <ClInclude Include="stdafx.h" />
@@ -428,8 +424,6 @@
     <ClCompile Include="src\SciStyle.cpp" />
     <ClCompile Include="src\Selection.cpp" />
     <ClCompile Include="src\Text.cpp" />
-    <ClCompile Include="src\xmlrc.cpp" />
-    <ClCompile Include="src\xmlui.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">Create</PrecompiledHeader>

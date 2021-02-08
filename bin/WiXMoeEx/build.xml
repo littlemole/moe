@@ -113,12 +113,12 @@
             SourceFiles="@(moeNetResourceFiles)"
             DestinationFiles="@(moeNetResourceFiles->'.\net\moe\%(RecursiveDir)%(Filename)%(Extension)')"
         />
-
+<!--
         <Copy
             SourceFiles="@(moeJavaResourceFiles)"
             DestinationFiles="@(moeJavaResourceFiles->'.\java\moe\%(RecursiveDir)%(Filename)%(Extension)')"
         />
-
+-->
         <Copy
             SourceFiles="..\moe\resources\moe.ico"
             DestinationFiles=".\moe\moe.ico"
@@ -126,6 +126,11 @@
 
         <Copy
             SourceFiles="..\moe\$(confPath)\moe.exe"
+            DestinationFolder=".\moe"
+        />
+
+        <Copy
+            SourceFiles="..\moe\$(confPath)\interop.moe.dll"
             DestinationFolder=".\moe"
         />
 
@@ -159,12 +164,25 @@
             DestinationFolder=".\moe"
         />
         <Copy
+            SourceFiles="..\..\ax\scintillax\$(confPath)\interop.scintillax.dll"
+            DestinationFolder=".\moe"
+        />
+        <Copy
             SourceFiles="..\..\ax\setting\$(confPath)\setting.dll"
+            DestinationFolder=".\moe"
+        />
+        <Copy
+            SourceFiles="..\..\ax\setting\$(confPath)\interop.setting.dll"
             DestinationFolder=".\moe"
         />
 
         <Copy
             SourceFiles="..\..\ax\shellctrl\$(confPath)\shellctrl.dll"
+            DestinationFolder=".\moe"
+        />
+
+        <Copy
+            SourceFiles="..\..\ax\shellctrl\$(confPath)\interop.shellctrl.dll"
             DestinationFolder=".\moe"
         />
 
@@ -189,10 +207,12 @@
             SourceFiles="..\..\ax\net\net\net\net.reg"
             DestinationFolder=".\net\moe"
         />
+<!--
        <Copy
             SourceFiles="..\moe\java\dispdriver\dispdriver.jar"
             DestinationFolder=".\java\moe\lib"
         />
+
         <Copy
             SourceFiles="..\..\ax\jre\$(confPath)\jre.exe"
             DestinationFolder=".\java\moe"
@@ -201,7 +221,7 @@
             SourceFiles="..\..\ax\jre\dispdriver\$(confPath)\dispdriver.dll"
             DestinationFolder=".\java\moe\lib"
         />
-
+-->
 		<RemoveDir Directories="@(SvnFolders)" />
 
 	 <ItemGroup>
@@ -250,13 +270,14 @@
 
 		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(regNetObj)" netreg.wxs -dVERSION=$(version) -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
 
+<!--
 		<Exec Command='"$(WIX)\bin\candle.exe" -o "$(jreObj)" jre.wxs -dVERSION=$(version) -dSourceDir=".\moe" -dBuildArch=$(arch) -ext "$(uiext)" -arch $(arch)' WorkingDirectory="."/>
-
+-->
 
 
 
         <!-- light -->
-		<Exec Command='"$(WIX)\bin\light.exe" -ext "$(uiext)" -out "$(msiTarget)" -cultures:en-us -loc en-us.wxl "$(jreObj)" "$(netgenObj)" "$(regNetObj)" "$(regProtoObj)" "$(regContextObj)" "$(genObj)" "$(moeObj)" "$(monObj)"' WorkingDirectory="."/>
+		<Exec Command='"$(WIX)\bin\light.exe" -ext "$(uiext)" -out "$(msiTarget)" -cultures:en-us -loc en-us.wxl "$(netgenObj)" "$(regNetObj)" "$(regProtoObj)" "$(regContextObj)" "$(genObj)" "$(moeObj)" "$(monObj)"' WorkingDirectory="."/>
 
 
 		<!-- nonadmin install -->

@@ -3,7 +3,7 @@
 #include "editor.h"
 #include "moe.h"
 #include "Docs.h"
-#include "xmlui.h"
+//#include "xmlui.h"
 #include "ribbonres.h"
 
 EditorScript::EditorScript(void)

@@ -3,15 +3,6 @@
  <head>
   <title>moe scripting reference</title>
   <link rel="stylesheet" type="text/css" href="../../css/doc.css" />
-  <script language="javascript" src="../../js/dialog.js"></script>
-  <script language="javascript" src="../../js/drag.js"></script>
-  <script language="javascript" src="../../js/javascript.js"></script>
-  <script language="javascript" src="../../js/namespace.js"></script>
-  <script language="javascript" src="../../js/class.js"></script>
-  <script language="javascript" src="../../js/dom.js"></script>
-  <script language="javascript" src="../../js/http.js"></script>
-  <script language="javascript" src="../../js/xml/xml.js"></script>
-  <script language="javascript" src="../../js/xml/xslt.js"></script>
  </head>
 
  <body onload="init()">
@@ -82,39 +73,38 @@
        </tr>
        <tr>
         <td>
-		 <a href="moeref.html?moe.exe">moe</a>
+		 <a href="#" onclick="return showDocu('moe.exe');">moe</a>
         </td>
        </tr>
        <tr>
         <td>
-		 <a href="moeref.html?ScintillAx.dll">scintilla</a>
+		 <a href="#" onclick="return showDocu('ScintillAx.dll');">scintilla</a>
         </td>
        </tr>
        <tr>
         <td>
-		 <a href="moeref.html?setting.dll">Settings</a>
+		 <a href="#" onclick="return showDocu('setting.dll');">Settings</a>
         </td>
        </tr>
        <tr>
         <td>
-		 <a href="moeref.html?shellctrl.dll">Ctrls</a>
+		 <a href="#" onclick="return showDocu('shellctrl.dll');">Ctrls</a>
         </td>
        </tr>
        <tr>
         <td>
-		 <a href="moeref.html?io.dll">IO</a>
+		 <a href="#" onclick="return showDocu('io.dll');">IO</a>
         </td>
        </tr>
        <tr>
         <td>
-		 <a href="moeref.html?comTypes.dll">TypeLib</a>
+		 <a href="#" onclick="return showDocu('comTypes.dll');">TypeLib</a>
         </td>
        </tr>
 
       </table>
      </td>
 
-<!--     <td style="background-color:white" width="1px"></td> -->
      <td style="border-color:black;border-style:solid;border-width:0px 1px 0px 0px" >&nbsp;</td>
      <!--content-->
      <td  width="85%">
@@ -133,60 +123,12 @@
 
   Objects
  <select name="objs" onchange="onSelectObj()">
-  <option value="moe.exe#Application">Moe Application
-  <option value="ScintillAx.dll#ScintillAx">Scintilla
-  <option value="Setting.dll#Setting">Setting
-  <option value="ShellCtrl.dll#HexCtrl">Hex Editor
-  <option value="ShellCtrl.dll#ShellTree">Shell Tree
-  <option value="ShellCtrl.dll#ShellList">Shell List
-  <option value="ShellCtrl.dll#ColorDialog">Color Picker
-  <option value="ShellFolder.dll#ShellPane">ShellPane
-  <option value="io.dll#file">file
-  <option value="io.dll#Dir">Dir
-  <option value="io.dll#Path">Path
-  <option value="comtypes.dll#TypeLibToXml">TypeLib to XML
- </select >
-
-  </td>
-  <td>
-
-  Interfaces
- <select name="interfaces" onchange="onSelectInterface()">
-  <option value="moe.exe#IMoe">IMoe
-  <option value="moe.exe#IMoeView">IMoeView
-  <option value="moe.exe#IMoeDocument">IMoeDocument
-  <option value="moe.exe#IMoeDocumentView">IMoeDocumentView
-  <option value="moe.exe#IMoeDocumentCollection">IMoeDocumentCollection
-  <option value="moe.exe#IMoeDialogView">IMoeDialogView
-  <option value="moe.exe#IMoeScript">IMoeScript
-  <option value="moe.exe#IMoeConfig">IMoeConfig
-  <option value="moe.exe#IMoeScript">IMoeScript
-  <option value="moe.exe#IMoeHtmlFrame">IMoeHtmlFrame
-  <option value="moe.exe#IMoeUserForm">IMoeUserForm
-  <option value="moe.exe#IExternalMoe">IExternalMoe
-  <option value="ScintillAx.dll#IScintillAx">IScintillAx
-  <option value="Setting.dll#ISetting">ISetting
-  <option value="ShellCtrl.dll#IHexCtrl">IHexCtrl
-  <option value="ShellCtrl.dll#IColorPicker">IShellTree
-  <option value="ShellCtrl.dll#IShellList">IShellList
-  <option value="ShellCtrl.dll#IColorPicker">IColorPicker
-  <option value="ShellFolder.dll#ShellPane">IShellPane
-  <option value="comtypes.dll#ITypeLibToXml">ITypeLibToXml
-  <option value="io.dll#IFile">IFile
-  <option value="io.dll#IDir">IDir
-  <option value="io.dll#IPath">IPath
- </select >
-
-  </td>
-  <td>
-
-  Events
- <select name="events" onchange="onSelectEvent()">
-  <option value="ScintillAx.dll#_IScintillAxEvents">_IScintillAxEvents
-  <option value="ShellCtrl.dll#_IHexCtrlEvents">_IHexCtrlEvents
-  <option value="ShellCtrl.dll#_IShellListEvents">_IShellListEvents
-  <option value="ShellCtrl.dll#_IShellTreeEvents">_IShellTreeEvents
-  <option value="ShellFolder.dll#_IShellPaneEvents">IShellPane
+  <option value="moe.exe">Moe Application
+  <option value="ScintillAx.dll">Scintilla
+  <option value="Setting.dll">Setting
+  <option value="ShellCtrl.dll">Shell Controls
+  <option value="io.dll">io
+  <option value="comtypes.dll">TypeLib to XML
  </select >
 
   </td>
@@ -223,7 +165,7 @@
 
     <tr>
      <td align="right">
-	  <small style="font-size:xx-small">(c) mole 2004-20011</small>
+	  <small style="font-size:xx-small">(c) mole 2004-2021</small>
      </td>
     </tr>
    </table>
@@ -235,106 +177,45 @@
 
 <script language="javascript">
 
-//alert(window.location.hash+" : "+window.location.search);
-
-var path;
 var type2Xml;
-var xslt;
 var xsl;
-var docu;
 
-function init()
+function showDocu(typelib)
 {
-	path = new ActiveXObject("IO.Path");
-	type2Xml = new ActiveXObject("TypeToXml.TypeLibToXml");
+    var docu = document.getElementById("documentation");
 
+	let path = window.chrome.webview.hostObjects.sync.external.Moe.Config.ModulePath + "\\" + typelib
 
-
-	xslt = new mol.xslt.Processor();
-	xsl  = mol.xml.load("../../xsl/doc.xsl");
-
-    docu = document.getElementById("documentation");
-
-	var object  = window.location.hash.substring(1);
-    var typelib = window.location.search.substring(1).replace(/\//g,"\\");
-
-	object 	= typelib != "" ? object  : "Xmoe";
-    typelib = typelib != "" ? typelib  : "moe.exe";
-
-	var b = type2Xml.load(external.moe.Config.ModulePath + "\\" + typelib);
-//alert(b);
-
+	var b = type2Xml.load(path);
 	var s = type2Xml.transform(xsl);
-//alert(s);
 
 	docu.innerHTML = s;
 
-//	type2Xml.onComplete = onComplete;
-
-
-//	getDocu(typelib, object);
     return false;
 }
 
 function onSelectObj()
 {
 	var val = document.theForm.objs[document.theForm.objs.selectedIndex].value;
-	return getDropDownDocu( val );
+	showDocu(val);
 }
 
-function onSelectInterface()
-{
-	var val = document.theForm.interfaces[document.theForm.interfaces.selectedIndex].value;
-	return getDropDownDocu( val );
-}
-
-function onSelectEvent()
-{
-	var val = document.theForm.events[document.theForm.events.selectedIndex].value;
-	return getDropDownDocu( val );
-}
-
-function getDropDownDocu( val )
-{
-	var a = val.split("#");
-	if ( a.length == 2 )
-	{
-	  getDocu(a[0],a[1]);
-	}
-    return false;
-}
-
-function getDocu( typelib, param )
-{
-
-	if ( typelib != "" && xsl && type2Xml )
-	{
-		var t = external.moe.Config.ModulePath + "\\" + typelib;
-		window.setTimeout(function() {
-				var b = type2Xml.load(t);
-
-				if (!b)
-					return;
-				var s = type2Xml.transform(xsl);		
-
-				docu.innerHTML = s;
-		},100);
-
-	    //docu.innerHTML = "<img src='../../img/wait.gif' />";
-		//type2Xml.onComplete = onComplete;
-		//type2Xml.AsyncDocumentation(typelib,param,xsl);		
-	}
-}	
-
-function onComplete()
-{
-alert("!"+type2Xml.Result);
-	docu.innerHTML = type2Xml.Result;
-}
 
 function onSubmit()
 {
     return false;
+}
+
+function init()
+{
+	type2Xml = window.chrome.webview.hostObjects.sync.external.Moe.Script.CreateObject("TypeToXml.TypeLibToXml");
+
+	xsl = window.chrome.webview.hostObjects.sync.external.Moe.Script.CreateObject("Msxml2.FreeThreadedDOMDocument.3.0");
+	xsl.async = false;
+	xsl.load(window.chrome.webview.hostObjects.sync.external.Moe.Config.ConfigPath + "\\xsl\\doc.xsl");
+
+	var typelib ="moe.exe";
+	showDocu(typelib);
 }
 
 </script>

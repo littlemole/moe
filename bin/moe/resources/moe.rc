@@ -1,9 +1,24 @@
 
 #include "include/resource.h"
 
+#include <windows.h>
 //#########################################
 //#TLB
 //#########################################
+
+IDM_MENU_TAB MENU DISCARDABLE
+BEGIN
+    POPUP "Unused"
+    BEGIN
+        MENUITEM "Close", IDM_VIEW_CLOSE
+        MENUITEM "Close Others", IDM_TAB_CLOSEALLBUTTHIS
+        MENUITEM SEPARATOR
+        MENUITEM "Reload", IDM_TAB_RELOADTAB
+        MENUITEM "Save", IDM_FILE_SAVE
+        MENUITEM SEPARATOR
+        MENUITEM "Open Folder", IDM_TAB_DIRTAB
+    END
+END
 
 
 //ICONS

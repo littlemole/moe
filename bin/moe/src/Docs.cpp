@@ -2,8 +2,8 @@
 #include "Docs.h"
 #include "MoeBar.h"
 #include "Moe.h"
-#include "xmlui.h"
-#include "xmlid.h"
+//#include "xmlui.h"
+#include "resource.h"
 #include "DocFactory.h"
 
 using namespace mol;
@@ -66,7 +66,7 @@ void Docs::remove( mol::MdiChild* mdi )
 					}
 				}
 				std::string utf8 = "{ \"appmode\" : \"Img\" }";
-				ribbon()->oleObject->PostWebMessageAsJson(mol::fromUTF8(utf8).c_str());
+				ribbon()->webView->PostWebMessageAsJson(mol::fromUTF8(utf8).c_str());
 
 				moe()->doLayout();	
 				moe()->redraw();

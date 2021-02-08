@@ -79,9 +79,20 @@
         />
 
         <Copy
+            SourceFiles="..\moe\$(confPath)\interop.moe.dll"
+            DestinationFolder=".\moe"
+        />
+
+        <Copy
+            SourceFiles="..\moe\$(confPath)\WebView2Loader.dll"
+            DestinationFolder=".\moe"
+        />
+
+        <Copy
             SourceFiles="..\moe\$(confPath)\moe.exe"
             DestinationFolder=".\moe"
         />
+
         <Copy
             SourceFiles="..\prw\prw\$(confPath)\prw.exe"
             DestinationFolder=".\moe"
@@ -103,8 +114,19 @@
             SourceFiles="..\..\ax\scintillax\$(confPath)\scintillax.dll"
             DestinationFolder=".\moe"
         />
+
+        <Copy
+            SourceFiles="..\..\ax\scintillax\$(confPath)\interop.ScintillAx.dll"
+            DestinationFolder=".\moe"
+        />
+
         <Copy
             SourceFiles="..\..\ax\setting\$(confPath)\setting.dll"
+            DestinationFolder=".\moe"
+        />
+
+        <Copy
+            SourceFiles="..\..\ax\setting\$(confPath)\interop.setting.dll"
             DestinationFolder=".\moe"
         />
 
@@ -112,6 +134,12 @@
             SourceFiles="..\..\ax\shellctrl\$(confPath)\shellctrl.dll"
             DestinationFolder=".\moe"
         />
+
+        <Copy
+            SourceFiles="..\..\ax\shellctrl\$(confPath)\interop.shellctrl.dll"
+            DestinationFolder=".\moe"
+        />
+
 <!--
         <Copy
             SourceFiles="..\..\ax\shellfolder\$(confPath)\shellfolder.dll"

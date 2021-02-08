@@ -205,6 +205,12 @@ namespace JSON {
 		return json;
 	}
 
+	inline Json::Value parse(const std::wstring& txt)
+	{
+		std::string utf8 = mol::toUTF8(txt);
+		return parse(utf8);
+	}
+
 	//////////////////////////////////////////////////////////////
 
 	//! serialize JSON structure into plaintext
@@ -217,6 +223,12 @@ namespace JSON {
 
 	}
 
+	inline const std::wstring wstringify(Json::Value value)
+	{
+		const std::string s = stringify(value);
+		return mol::fromUTF8(s);
+	}
+
 	//! flatten a JSON structure removing whitespace and newlines
 	//! \ingroup json
 	inline const std::string flatten(Json::Value value)
@@ -225,6 +237,12 @@ namespace JSON {
 		wbuilder["commentStyle"] = "None";
 		wbuilder["indentation"] = "";
 		return Json::writeString(wbuilder, value);
+	}
+
+	inline const std::wstring wflatten(Json::Value value)
+	{
+		const std::string s = flatten(value);
+		return mol::fromUTF8(s);
 	}
 
 } // end namespace JSON
@@ -248,134 +266,41 @@ inline std::string slurp(const std::string& path)
 	return oss.str();
 }
 
-template<class MFP>
-int make_msg_handlers(MFP mfp)
-{
-	return 0;
-}
-
-template<class MFP, class ... Args>
-int make_msg_handlers(MFP mfp, int msg, Args ... args)
-{
-	mol::IMsgMapHandler* handler = mol::make_handler(mfp);				
-	handler->connect_msg(msg);									
-	return make_msg_handlers(mfp, args...);
-}
-
-template<class MFP>
-int make_cmd_handlers(MFP mfp)
-{
-	return 0;
-}
-
-template<class MFP, class ... Args>
-int make_cmd_handlers(MFP mfp, int cmd, Args ... args)
-{
-	mol::IMsgMapHandler* handler = mol::make_handler(mfp);
-	handler->connect_cmd(cmd);
-	return make_cmd_handlers(mfp, args...);
-}
-
-#define CONCAT_(a, b) a ## b
 
 
 
+class MoeWnd;
+MoeWnd* moe();
+ 
+//childWindow
+class MoeHtmlRibbon;
+MoeHtmlRibbon* ribbon();
 
-#define handle_msg_impl(mfp,line, ...)							\
-static  int CONCAT_(mol_connect_msgs,line) = []()				\
-{																\
-	return make_msg_handlers(mfp,__VA_ARGS__);					\
-}();
+//childWindow
+class MoeTreeWnd;
+MoeTreeWnd* treeWnd();
 
-#define handle_msg(mfp,...)									\
-handle_msg_impl(mfp,__LINE__,__VA_ARGS__)
-
-
-
-#define handle_msg_range_impl(mfp,i,j,line)						\
-static int CONCAT_(mol_connect_msg_range,line) = []()			\
-{																\
-	for( UINT msg = i; msg  < j+1; msg++)						\
-	{															\
-		mol::IMsgMapHandler* handler = mol::make_handler(mfp);	\
-		handler->connect_msg(msg);								\
-	}															\
-	return 0;													\
-}();
-
-#define handle_msg_range(mfp,i,j)								\
-handle_msg_range_impl(mfp,i,j,__LINE)
+//childWindow
+class MoeTabControl;
+MoeTabControl* tab();
 
 
+//statusbar
+class MoeStatusBar;
+MoeStatusBar* statusBar();
 
+//childWindow
+class mol::ProgressbarCtrl;
+mol::ProgressbarCtrl* progress();
 
+class Documents;
+Documents* docs();
 
-#define handle_cmd_impl(mfp,line,...)							\
-static int CONCAT_(mol_connect_cmds,line) = []()				\
-{																\
-	return make_cmd_handlers(mfp,__VA_ARGS__);					\
-}();
+class Encodings;
+Encodings* codePages();
 
-#define handle_cmd(mfp,...)										\
-handle_cmd_impl(mfp,__LINE__,__VA_ARGS__)
-
-
-
-#define handle_cmd_range_impl(mfp,i,j,line)						\
-static int CONCAT_(mol_connect_cmd_range,line) = []()			\
-{																\
-	for( UINT cmd = i; cmd  < j+1; cmd++)						\
-	{															\
-		mol::IMsgMapHandler* handler = mol::make_handler(mfp);	\
-		handler->connect_cmd(cmd);								\
-	}															\
-	return 0;													\
-}();
-
-#define handle_cmd_range(mfp,i,j)								\
-handle_cmd_range_impl(mfp,i,j,__LINE__)
-
-
-
-#define handle_notify_id_impl(mfp,id,line)						\
-static int CONCAT_(mol_connect_notify_id,line) = []()			\
-{																\
-	mol::IMsgMapHandler* handler = mol::make_handler(mfp);		\
-	handler->connect_notify_id(id);								\
-	return 0;													\
-}();
-
-#define handle_notify_id(mfp,id)								\
-handle_notify_id_impld(mfp,id,__LINE__)
-
-
-
-#define handle_notify_code_impl(mfp,code,line)					\
-static  int CONCAT_(mol_connect_notify_code,line) = []()		\
-{																\
-	mol::IMsgMapHandler* handler = mol::make_handler(mfp);		\
-	handler->connect_notify_code(code);							\
-	return 0;													\
-}();
-
-#define handle_notify_code(mfp,code)							\
-handle_notify_code_impl(mfp,code,__LINE__)
-
-
-
-
-
-#define handle_ole_cmd_impl(clazz,cmd,mfp,line)							\
-static int CONCAT_(mol_connect_ole_cmd,line) = []()						\
-{																		\
-	mol::IMsgMapHandler* handler = mol::make_ole_handler<clazz>(mfp);	\
-	handler->connect_cmd(cmd);											\
-	return 0;															\
-}();
-
-#define handle_ole_cmd(clazz,cmd,mfp)									\
-handle_ole_cmd_impl(clazz,cmd,mfp,__LINE__)
-
+class DebugDlg;
+DebugDlg* debugDlg();
 
 
 #endif

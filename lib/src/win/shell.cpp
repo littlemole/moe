@@ -521,7 +521,7 @@ BOOL execute_shell( const std::wstring& path, const std::wstring& verb, int nSho
 	return ::ShellExecuteEx(&sei);
 }
 
-BOOL exec_cmdline( const std::wstring cl )
+BOOL exec_cmdline( const std::wstring cl, bool shoWindow )
 {
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
@@ -530,13 +530,17 @@ BOOL exec_cmdline( const std::wstring cl )
     si.cb = sizeof(si);
     ZeroMemory( &pi, sizeof(pi) );
 
+	DWORD opt = NULL;
+	if (!shoWindow)
+		opt = CREATE_NO_WINDOW;
+
     // Start the child process. 
     if( !CreateProcess( NULL,   // No module name (use command line). 
 		(wchar_t*)(cl.c_str()),			// Command line. 
         NULL,             // Process handle not inheritable. 
         NULL,             // Thread handle not inheritable. 
-        FALSE,            // Set handle inheritance to FALSE. 
-		CREATE_NO_WINDOW,                // No creation flags. 
+        FALSE,             // Set handle inheritance to FALSE. 
+		opt,                // No creation flags. 
         NULL,             // Use parent's environment block. 
         NULL,             // Use parent's starting directory. 
         &si,              // Pointer to STARTUPINFO structure.

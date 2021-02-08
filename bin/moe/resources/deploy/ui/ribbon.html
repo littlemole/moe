@@ -3,7 +3,8 @@
  <head>
   <title></title>
   <link rel="stylesheet" href="ribbon.css">
-  <script src="js/mustache.js"></script>
+  <script src="js/action.js"></script>
+  <script src="js/api.js"></script>
   <script src="js/ribbon.js"></script>
  </head> 
  <body>
@@ -13,16 +14,16 @@
 	  <div class="down">▲</div>
       <div class="divider fixed" style="float:right;height:18px;"></div>
 	  <div class="flex fixed viewbar" style="float:right;padding-top:3px;">       
-	   <div class="button hover" title="Maximize">
+	   <div cmd="IDM_VIEW_MAXIMIZE" class="button hover" title="Maximize">
 	    <img src="img/View-fullscreen.svg">
        </div>
-	   <div class="button hover" title="Minimize">
+	   <div cmd="IDM_VIEW_MINIMIZE" class="button hover" title="Minimize">
 	    <img src="img/view-restore.svg">
        </div>
-	   <div class="button hover" title="Tile">
+	   <div  cmd="IDM_VIEW_TILE" class="button hover" title="Tile">
 	    <img src="img/tile.svg">
        </div>
-	   <div class="button hover" title="Cascade">
+	   <div  cmd="IDM_VIEW_CASCADE" class="button hover" title="Cascade">
 	    <img src="img/cascades.svg">
        </div>
       </div>
@@ -38,7 +39,7 @@
   <div id="ribbon">
 	<div class="tabcontent flex" >
 
-	  <div class="one-button fixed hover"  modes="Scintilla Directory Hex Html Img" title="Create New Document" tab="main">
+	  <div cmd="IDM_FILE_NEW" class="one-button fixed hover"  modes="Scintilla Directory Hex Html Img" title="Create New Document" tab="main">
  	    <img src="img/document-new.svg">
         <span  >New</span>
       </div>
@@ -46,10 +47,10 @@
       <div class="divider" modes="Scintilla Directory Html Hex Img Script Debug"  tab="main"></div>
 
 	  <div class="one-and-a-half-buttons fixed flex" modes="Scintilla Html Directory Hex Img"  tab="main">
-       <div class="hover flex"  title="Open existing Document">
+       <div cmd="IDM_FILE_OPEN" class="hover flex"  title="Open existing Document">
  	    <img src="img/document-open.svg">      
        </div>
-       <div class="hover flex fixed"  title="Open Directory">
+       <div cmd="IDM_FILE_OPEN_FOLDER" class="hover flex fixed"  title="Open Directory">
  	    <img class="img-small" src="img/folder.svg">&nbsp;
         <span class="label">Folder</span>        
        </div>
@@ -58,10 +59,10 @@
       <div class="divider" style="flex:0"  modes="Scintilla"  tab="main"></div>
 
 	  <div class="one-and-a-half-buttons fixed flex" modes="Scintilla" tab="main" >
-	   <div class="hover flex "  title="Save Document">
+	   <div cmd="IDM_FILE_SAVE" class="hover flex "  title="Save Document">
  	    <img src="img/document-save.svg">
 	   </div>
-	   <div class="flex hover fixed " title="Save Document As">
+	   <div cmd="IDM_FILE_SAVE_AS" class="flex hover fixed " title="Save Document As">
 	    <img class="img-small" src="img/document-save-as.svg" >
         <span class="label">Save&nbsp;As</span>
        </div>
@@ -71,7 +72,7 @@
 
 	  <div class="button fixd flex row" modes="Hex" tabs="main" title="Number of Bytes to be shown">
        <label for="bytes">Show</label>
-	   <select id="bytes">
+	   <select action="bytes"  id="showBytes">
 	    <option value="16">16 Bytes
 	    <option value="20">20 Bytes
 	    <option value="24">24 Bytes
@@ -81,15 +82,15 @@
 	  </div>
 
 	  <div class="three-small-items"  modes="Scintilla Directory Html"  tab="main">
- 	   <div modes="Scintilla Directory Html" class="button flex hover" title="Cut">
+ 	   <div cmd="IDM_EDIT_CUT" modes="Scintilla Directory Html" class="button flex hover" title="Cut">
 	    <img src="img/edit-cut.svg">
         <span class="label">Cut</span>
        </div>
-	   <div modes="Scintilla Directory Html" class="button flex hover" title="Copy">
+	   <div cmd="IDM_EDIT_COPY" modes="Scintilla Directory Html" class="button flex hover" title="Copy">
 	    <img src="img/edit-copy.svg">
         <span class="label">Copy</span>
        </div>
-	   <div modes="Scintilla Directory Html" class="button flex hover" title="Paste">
+	   <div cmd="IDM_EDIT_PASTE" modes="Scintilla Directory Html" class="button flex hover" title="Paste">
 	    <img src="img/edit-paste.svg">
         <span class="label">Paste</span>
        </div>
@@ -99,21 +100,21 @@
 
 	  <div class="four-buttons fixed flex"  modes="Scintilla"  tab="main">
        <div class="flex">
-        <div class="hover fixed center" title="Undo last Change">
+        <div cmd="IDM_EDIT_UNDO" class="hover fixed center" title="Undo last Change">
  	     <img src="img/edit-undo.svg">
 		 <span class="label">Undo</span>
         </div>
-	    <div class="hover center" title="Redo last Change">
+	    <div cmd="IDM_EDIT_REDO" class="hover center" title="Redo last Change">
 	     <img src="img/edit-redo.svg">
 	     <span class="label">Redo</span>
         </div>
        </div>
        <div class="flex">
-        <div class="hover center" title="Find in Document">
+        <div cmd="IDM_EDIT_FIND" class="hover center" title="Find in Document">
 	     <img src="img/edit-find.svg">
 	     <span class="label">Find</span>
         </div>
-	    <div class="hover center" title="Replace in Document">
+	    <div cmd="IDM_EDIT_REPLACE" class="hover center" title="Replace in Document">
          <img src="img/edit-find-replace.svg">
 	     <span class="label">Replace</span>
         </div>
@@ -121,15 +122,15 @@
       </div>
 
 
-       <div class="hover fixed flex button" modes="Debug" title="Continue Script">
+       <div cmd="IDM_EDIT_DEBUG_GO" lass="hover fixed flex button" modes="Debug" title="Continue Script">
 	     <img src="img/start.svg">
 	     <span class="label">Continue</span>
        </div>
-       <div class="hover fixed flex button" modes="Script" title="Break into Debugger">
+       <div cmd="IDM_EDIT_DEBUG_STOP" class="hover fixed flex button" modes="Script" title="Break into Debugger">
 	     <img src="img/pause.svg">
-	     <span class="label">Pause</span>
+	     <span class="label">Break</span>
        </div>
-       <div class="hover fixed flex button" modes="Script Debug" title="Terminate Script">
+       <div cmd="IDM_EDIT_DEBUG_QUIT" class="hover fixed flex button" modes="Script Debug" title="Terminate Script">
 	     <img src="img/stop.svg">
 	     <span class="label">Stop</span>
        </div>
@@ -153,15 +154,15 @@
       <div class="divider fixed flex" modes="Html"  ></div>
 
 	  <div class="three-buttons flex fixed">
-	   <div class="hover flex button center" title="Reload" modes="Html">
+	   <div cmd="IDM_EDIT_UPDATE" class="hover flex button center" title="Reload" modes="Html">
 	    <img src="img/View-refresh.svg">
 	    <span class="label">Reload</span>
 	   </div>
-	   <div class="hover flex button center" title="Go Back" modes="Html">
+	   <div cmd="IDM_NAVIGATE_BACK" class="hover flex button center" title="Go Back" modes="Html">
 	    <img src="img/Go-previous.svg">
 	    <span class="label">Back</span>
 	   </div>
-	   <div class="hover flex button center" title="Go Next" modes="Html">
+	   <div cmd="IDM_NAVIGATE_NEXT" class="hover flex button center" title="Go Next" modes="Html">
 	    <img src="img/Go-next.svg">
 	    <span class="label">Next</span>
 	   </div>
@@ -169,40 +170,39 @@
 
       <div class="divider fixed flex" modes="Html"  ></div>
 
-	  <div class="hover flex button center" title="Find in Document" modes="Html">
+	  <div  cmd="IDM_EDIT_FIND" class="hover flex button center" title="Find in Document" modes="Html">
 	   <img src="img/edit-find.svg">
 	   <span>Find</span>
 	  </div>
 
       <div class="divider fixed flex" modes=" Html Direcotory Hex"  tab="document"></div>
 
-	  <div modes="Directory" class="button hover flex fixed center"  tab="main" title="Go to Parent Folder">
+	  <div cmd="IDM_FILE_UPDIR"  modes="Directory" class="button hover flex fixed center"  tab="main" title="Go to Parent Folder">
 	   <img src="img/go-up.svg">
        <span class="img">Parent</span>
       </div>
-	  <div modes="Directory"  class="button hover flex fixed center" tab="main" title="Show Properties for selected Element">
+	  <div  cmd="IDM_FILE_DIRPROP" modes="Directory"  class="button hover flex fixed center" tab="main" title="Show Properties for selected Element">
 	   <img src="img/document-properties.svg">
        <span>Properties</span>
       </div>
-	  <div modes="Directory"  class="button hover flex fixed center" tab="main" title="Execute select item via Shell">
+	  <div  cmd="IDM_FILE_DIREXEC" modes="Directory"  class="button hover flex fixed center" tab="main" title="Execute select item via Shell">
 	   <img src="img/Emblem-system.svg">
        <span>Execute</span>
       </div>
-	  <div modes="Directory"  class="button hover flex fixed center" tab="main" title="Create New Folder">
+	  <div  cmd="IDM_FILE_NEWDIR" modes="Directory"  class="button hover flex fixed center" tab="main" title="Create New Folder">
 	   <img src="img/folder-new.svg">
        <span>New&nbsp;Folder</span>
       </div>
 
-
       <div class="divider fixed"  modes="Scintilla Html" tab="tools"></div>
 
-	  <div class="one-button fixed hover" modes="Scintilla" tab="tools" title="Insert Template">
+	  <div cmd="IDM_USER_SHORTCUT" class="one-button fixed hover" modes="Scintilla" tab="tools" title="Insert Template">
 	   <img src="img/preferences-system-windows.svg"><br>
        <span>Template</span>
       </div>
 
 
-	  <div modes="Scintilla"  class="button hover flex fixed center" tab="tools" title="Regular Expression Search">
+	  <div script="js\r.js" modes="Scintilla"  class="button hover flex fixed center" tab="tools" title="Regular Expression Search">
 	   <img src="img/edit-find.svg">
        <span>Regex&nbsp;Search</span>
       </div>
@@ -214,11 +214,11 @@
 
 
 	  <div class="two-buttons-stacked flex fixed" modes="Scintilla" tab="tools" >
-       <div class="hover button fixed flex center" title="Encode as Base64">
+       <div script="js\base64encode.js" class="hover button fixed flex center" title="Encode as Base64">
  	    <img src="img/document-properties.svg">
         <span><small>&nbsp;Encode</small></span>
 	   </div>
-       <div class="hover button fixed flex center" title="Decode Base64">
+       <div script="js\base64decode.js" class="hover button fixed flex center" title="Decode Base64">
  	    <img src="img/document-properties.svg">
         <span><small>&nbsp;Decode</small></span>
 	   </div>
@@ -228,11 +228,11 @@
       <div class="divider"  modes="Scintilla" tab="tools"></div>
 
 	  <div class="two-buttons-stacked flex fixed" modes="Scintilla" tab="tools" >
-       <div class="hover button fixed flex center" title="Encode Url Component">
+       <div script="js\encodeURIComponent.js" class="hover button fixed flex center" title="Encode Url Component">
  	    <img src="img/document-properties.svg">
         <span class="label"><small>encodeURIcomponent</small></span>
 	   </div>
-       <div class="hover button fixed flex center" title="Decode Url Component">
+       <div script="js\decodeURIComponent.js" class="hover button fixed flex center" title="Decode Url Component">
  	    <img src="img/document-properties.svg">
         <span class="label"><small>decodeURIcomponent</small></span>
 	   </div>
@@ -242,15 +242,15 @@
       <div class="divider" style="flex:0"  modes="Scintilla" tab="tools" ></div>
 
 	  <div class="three-buttons flex fixed" modes="Scintilla" tab="run" title="Run current active document as Script">
-       <div class="hover button fixed flex  center">
+       <div cmd="IDM_EDIT_EXECUTESCRIPT" class="hover button fixed flex  center">
  	    <img src="img/system-run.svg">
         <span>Run&nbsp;Script</span>
 	   </div>
-       <div class="hover button fixed flex  center" title="Debug current acitve Document as Script">
+       <div  cmd="IDM_EDIT_DEBUG" class="hover button fixed flex  center" title="Debug current acitve Document as Script">
  	    <img src="img/Applications-system.svg">
         <span>Debug&nbsp;Script</span>
 	   </div>
-       <div class="hover button fixed flex center" title="Show current active document in embedded HTML Brwoser">
+       <div  cmd="IDM_MODE_EXECUTEFORM"class="hover button fixed flex center" title="Show current active document in embedded HTML Brwoser">
  	    <img src="img/web-browser.svg">
         <span>Show&nbsp;Form</span>
 	   </div>
@@ -272,14 +272,14 @@
 
 	  <div class="three-small-items flex fixed "  modes="Scintilla" tab="document" title="Document Settings">
  	   <div class="fixed flex row stretch" title="Write Byte-order-mark (BOM) when saving to disk."  modes="Scintilla"  tab="document">
-	     <input type="checkbox" name="writeBom"  id="writeBom">
+	     <input action="bom" type="checkbox" name="writeBom"  id="writeBom">
 		 <label for="writeBom">Write&nbsp;BOM</label>
        </div>
 	   <div class="fixed flex row stretch" title="Show Line Numbers"  modes="Scintilla"  tab="document">
-	     <input type="checkbox" name="showLineNumbers"  id="showLineNumbers">
+	     <input action="lines"  type="checkbox" name="showLineNumbers"  id="showLineNumbers">
 		 <label for="showLineNumbers">&nbsp;Line&nbsp;Numbers</label>
        </div>
-       <div class="hover flex row stretch">
+       <div cmd="IDM_MODE_SETTINGS" class="hover flex row stretch">
 	    <img class="small" src="img/document-properties.svg">
         <span >Settings</span>
        </div>
@@ -288,11 +288,11 @@
       <div class="divider fixed" modes="Scintilla"  tab=" document"></div>
 
 	  <div class="two-buttons-stacked flex fixed" modes="Scintilla" tab="tools" >
-       <div class="hover fixed flex row center" title="Format XML">
+       <div script="js\formatXml.js" class="hover fixed flex row center" title="Format XML">
  	    <img src="img/document-properties.svg">
         <span><small>&nbsp;XML</small></span>
 	   </div>
-       <div class="hover fixed flex center" title="Format JavaScript">
+       <div script="js\lib\format.js" class="hover fixed flex center" title="Format JavaScript">
  	    <img src="img/document-properties.svg">
         <span class="stretch"><small>&nbsp;JS</small></span>
 	   </div>
@@ -303,15 +303,15 @@
 
 	  <div class="three-small-items flex fixed" modes="Scintilla"  tab="document">
        <div class="flex fixed button" title="Use Tabulators or whitespace">
-	    <input type="checkbox" name="useTabs" checked id="useTabs">
+	    <input action="tabs"  type="checkbox" name="useTabs" checked id="useTabs">
 		<label for="useTabs">Use&nbsp;Tabs</label>
        </div>
 	   <div id="eoldiv"  class="fixed button" title="Tabulator press causes indent">
-	    <input type="checkbox" name="tabIndents" checked id="tabIndents">
+	    <input action="tabindents" type="checkbox" name="tabIndents" checked id="tabIndents">
 		<label for="tabIndents">Tab&nbsp;Indents</label>
        </div>
 	   <div  class="fixed button " title="Backspace press causes un-indent">
-	    <input type="checkbox" name="backUnindents"  id="backUnindents">
+	    <input action="backspaceunindents" type="checkbox" name="backUnindents"  id="backUnindents">
 		<label for="backUnindents">Back&nbsp;Unindents</label>
        </div>
       </div>
@@ -319,9 +319,9 @@
 	  <div class="three-small-items flex fixed" modes="Scintilla"  tab="document">
         <div class="flex center" title="Tabulator size">
          <span><small>Tab Size</small></span>&nbsp;
-		 <input type="number" name="tabSize" value="4" style="width:30px;">
+		 <input action="tabwidth" type="number" name="tabWidth" id="tabWidth" value="4" style="width:30px;">
 	    </div>
-        <div class="hover button stretch center" title="Convert all Tabulators to whitespace now">
+        <div cmd="IDM_RIBBON_TABCONVERT" class="hover button stretch center" title="Convert all Tabulators to whitespace now">
          <span><small>Convert Tabs</small></span>
 	    </div>
       </div>
@@ -334,11 +334,11 @@
       <div class="divider fixed" modes="Html"></div>
 
 	  <div class="two-buttons flex fixed"  tab="main">
- 	   <div modes="Scintilla" class="hover button fixed flex center" tab="main" title="Show Insert-Color Dialog">
+ 	   <div cmd="IDM_EDIT_COLOR" modes="Scintilla" class="hover button fixed flex center" tab="main" title="Show Insert-Color Dialog">
 	    <img src="img/applications-graphics.svg">
         <span class="label">Color</span>
        </div>
-	   <div modes="Scintilla Html" class="hover button fixed flex center" tab="main" title="Show Print Dialog">
+	   <div cmd="IDM_FILE_PRINT" modes="Scintilla Html" class="hover button fixed flex center" tab="main" title="Show Print Dialog">
 	    <img src="img/document-print.svg">
         <span class="label">Print</span>
        </div>
@@ -349,19 +349,30 @@
 	  <div id="scintilla" class="three-small-items fixed flex" style="text-align:left;"  modes="Scintilla"  tab="main">
        <div style="display:flex;flex-direction:row;" class="fixed button" title="Syntax Highliting">
  	    <img class="img" src="img/preferences-system-windows.svg">&nbsp;
-        <select id="syntax" class="stretch">
-         <option value="PLAIN">Plain</option>
-         <option value="HTML">Html</option>
+        <select action="syntax"  id="syntax" class="stretch">
+         <option value="0">Plain</option>
+         <option value="1">Html</option>
+         <option value="2">Css</option>
+         <option value="3">VBScript</option>
+         <option value="4">JavaScript</option>
+         <option value="5">SQL</option>
+         <option value="6">SHELL</option>
+         <option value="7">PERL</option>
+         <option value="8">C++</option>
+         <option value="9">Java</option>
+         <option value="10">C#</option>
+         <option value="11">D</option>
+         <option value="12">Üython</option>
         </select>
        </div>
 	   <div id="eoldiv"  class="fixed button" title="Line Endings (EOL)">
 	    <img class="img-small" src="img/Preferences-system.svg">
-        <select id="eol" class="stretch">
-         <option value="UNIX">Unix</option>
-         <option value="WIN32">Win32</option>
+        <select action="eol" id="eol" class="stretch">
+         <option value="0">Unix</option>
+         <option value="1">Win32</option>
         </select>
        </div>
-	   <div  class="fixed button hover" title="Show Document Properties">
+	   <div cmd="IDM_MODE_SETTINGS" class="fixed button hover" title="Show Document Properties">
 	     <img class="img-small" src="img/document-properties.svg">
 	     <span class="xlabel">Properties</span>
        </div>
@@ -371,23 +382,34 @@
 
        <div class="flex row fixed button" title="Syntax Highliting">
  	    <img src="img/preferences-system-windows.svg">&nbsp;
-        <select id="syntax" class="xfixed stretch">
-         <option value="PLAIN">Plain</option>
-         <option value="HTML">Html</option>
+        <select action="syntax" id="syntax2" class="xfixed stretch">
+         <option value="0">Plain</option>
+         <option value="1">Html</option>
+         <option value="2">Css</option>
+         <option value="3">VBScript</option>
+         <option value="4">JavaScript</option>
+         <option value="5">SQL</option>
+         <option value="6">SHELL</option>
+         <option value="7">PERL</option>
+         <option value="8">C++</option>
+         <option value="9">Java</option>
+         <option value="10">C#</option>
+         <option value="11">D</option>
+         <option value="12">Üython</option>
         </select>
 		<span class="label stretch">&nbsp;Syntax</span>
        </div>
 	   <div class="fixed button" title="Line End Mode">
 	    <img src="img/Preferences-system.svg">
-        <select id="eol" class="xfixed stretch">
-         <option value="UNIX">Unix</option>
-         <option value="WIN32">Win32</option>
+        <select action="eol"  id="eol2" class="xfixed stretch">
+         <option value="0">Unix</option>
+         <option value="1">Win32</option>
         </select>
 		<span class="label stretch">&nbsp;EOL</span>
        </div>
 	   <div class="fixed button" title="Document Encoding" >
 	    <img src="img/document-properties.svg">
-        <select id="enc" class="xfixed stretch">
+        <select action="enc" id="enc" class="xfixed stretch">
          <option value="UTF8">Utf-8</option>
          <option value="ANSI">Ansi</option>
          <option value="UTF17 (LE)">UTF16 (LE)</option>
@@ -400,22 +422,22 @@
       <div class="divider flex fixed" modes="Scintilla" tab="tools" ></div>
 
 	  <div class="three-small-items flex fixed" modes="Scintilla" tab="tools" >
-       <div class="hover button fixed flex center" title="Admin tools">
+       <div cli="mmc|compmgmt.msc" class="hover button fixed flex center" title="Admin tools">
  	    <img src="img/utilities-terminal.svg">
         <span class="label">Administration</span>
 	   </div>
-       <div class="hover button fixed flex center" title="Certificate Managert">
+       <div cli="mmc|certmgr.msc" class="hover button fixed flex center" title="Certificate Managert">
  	    <img src="img/Preferences-system.svg">
         <span class="label">Cert&nbsp;Manager</span>
 	   </div>
-       <div class="hover button fixed flex center" title="Map Network Drive">
+       <div cli="RunDll32.exe shell32.dll,SHHelpShortcuts_RunDLL Connect" class="hover button fixed flex center" title="Map Network Drive">
  	    <img src="img/web-browser.svg">
         <span class="label">Map&nbsp;Drive</span>
 	   </div>
       </div>
 
 	  <div modes="Scintilla Html Directory" class="flex fixed center " status="false" tab="main" title="Show/Hide Explorer">
-	   <div class="hover toggle flex column stretch center button">
+	   <div action="showexplorer" status="true" class="hover toggle flex column stretch center button active" id="dirView">
 	    <img src="img/folder.svg">
 	    <span class="label">Dir</span>
 	   </div>
@@ -424,10 +446,10 @@
       <div class="divider fixed flex" modes="Scintilla Html Directory Hex Img Script Debug"  tab="main tools document"></div>
 
 	  <div class="one-and-a-half-buttons flex fixed"   modes="Scintilla Directory Html Hex Img Script Debug"  tab="main tools document">       
-	    <div class="hover fixed " style="justify-content: flex-end;" title="close window">
+	    <div cmd="IDM_VIEW_CLOSE" class="hover fixed " style="justify-content: flex-end;" title="close window">
 	     <img src="img/document-close.svg" style="width:34px;">
 	    </div>
-	    <div class="hover fixed center" style="margin-bottom:10px;justify-content: flex-end;" title="cloae all windows">
+	    <div cmd="IDM_VIEW_CLOSEALL" class="hover fixed center" style="margin-bottom:10px;justify-content: flex-end;" title="cloae all windows">
 	     <img class="img-small" src="img/document-close.svg">		 
 	    </div>
       </div>

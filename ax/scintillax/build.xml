@@ -11,7 +11,7 @@
   <Import Project="..\build.props" />
 
   <PropertyGroup>
-	<rcsource>resources\mol</rcsource>
+	<rcsource>resources\scintilla</rcsource>
   </PropertyGroup>
 
   <ItemDefinitionGroup>
@@ -33,8 +33,6 @@
     <ClCompile Include="src\ScintillaCtrl.cpp" />
     <ClCompile Include="src\ScintillAX.cpp" />
     <ClCompile Include="src\ScintillAxProp.cpp" />
-    <ClCompile Include="src\xmlrc.cpp" />
-    <ClCompile Include="src\xmlui.cpp" />
 
     <ClCompile Include="src\Properties.cpp" />
     <ClCompile Include="src\Position.cpp" />
@@ -55,6 +53,7 @@
 	</Midl>
   </ItemGroup>
 
+<!--
   <ItemGroup Condition="'$(Platform)'=='x86'">
     <CustomBuild Include="..\..\cg\js\make.js">
       <Message>codegen phase</Message>
@@ -63,7 +62,8 @@
       <Outputs>xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
-
+-->
+<!--
   <ItemGroup Condition="'$(Platform)'=='x64'">
     <CustomBuild Include="..\..\cg\js\make.js">
       <Message>codegen phase</Message>
@@ -72,7 +72,7 @@
       <Outputs>xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
-
+-->
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 

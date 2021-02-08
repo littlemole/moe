@@ -1,6 +1,10 @@
 
-moe.Script.ShowHtmlForm( 
-	   "\\forms\\regexp.html",
-	   moe.View.left+225, moe.View.top+225, 450, 390,
-	   6 );
+moe.Script.ShowHtmlForm(
+	"forms\\search.html",
+	moe.View.Left+100,
+	moe.View.Top+100,
+	600,
+	400,
+	1
+);
 

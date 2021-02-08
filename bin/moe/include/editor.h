@@ -41,6 +41,7 @@ public:
 	void OnDestroy();
 	void OnNcDestroy();
 	LRESULT OnClose();
+	LRESULT OnCloseAll();
 	// menu
 
 	void OnSearch( FINDREPLACE* find );
@@ -81,6 +82,8 @@ public:
 	void OnPasteAs();
 
 	void OnCliReturn();
+
+	void OnTemplate();
 
 	// syntax highlite switches
 	void OnLexer(int code, int id, HWND ctrl);

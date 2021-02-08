@@ -144,6 +144,8 @@ class MoeChild :
 {
 public:
 
+	//using BaseWindowType = MoeChild<C, T, D, M>;
+
 	LRESULT OnCloseAll()
 	{
 
@@ -175,8 +177,8 @@ protected:
 		ODBGS1("initializeMoeChild2 b: ",r.bottom);
 
 		// determine window menu
-		HMENU m = mol::UI().Menu(M);
-		windowMenu_ = mol::UI().SubMenu( M ,IDM_VIEW_WINDOWS);
+		//HMENU m = mol::UI().Menu(M);
+		//windowMenu_ = mol::UI().SubMenu( M ,IDM_VIEW_WINDOWS);
 		statusBar()->status(40);
 
 		// create
@@ -199,7 +201,6 @@ protected:
 template<class C, long D, const CLSID* clsid, UINT M>
 class MoeAxChild : public MoeChild<C,mol::AxWnd<C,mol::MdiChild,clsid>,D,M>
 {
-
 };
 
 /////////////////////////////////////////////////////////////////////

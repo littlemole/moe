@@ -133,7 +133,7 @@
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\vcpkg\installed\x64-windows-static\include;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">D:\boost\boost_1_44_0;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">C:\moe\vcpkg\installed\x64-windows-static\include;$(IncludePath)</IncludePath>
-    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">Link</CustomBuildAfterTargets>
+    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">Midl</CustomBuildAfterTargets>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">Midl</CustomBuildAfterTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
@@ -251,7 +251,9 @@
     </Manifest>
     <CustomBuildStep>
       <Command>tlbimp $(OutDir)\$(TargetName).tlb /namespace:Moe /out:$(OutDir)\interop.$(TargetName).dll</Command>
-      <Outputs>moe.interop..dll</Outputs>
+      <Outputs>$(OutDir)\interop.$(TargetName).dll</Outputs>
+      <Inputs>$(OutDir)\$(TargetName).tlb</Inputs>
+      <TreatOutputAsContent>false</TreatOutputAsContent>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">
@@ -391,9 +393,6 @@
     <ClCompile Include="src\ThreadScript.cpp" />
     <ClCompile Include="src\tree.cpp" />
     <ClCompile Include="src\widgets.cpp" />
-    <ClCompile Include="src\xmlrc.cpp" />
-    <ClCompile Include="src\xmlrib.cpp" />
-    <ClCompile Include="src\xmlui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="src\moe.idl">
@@ -432,12 +431,6 @@
     <ClInclude Include="include\stdafx.h" />
     <ClInclude Include="include\widgets.h" />
     <ClInclude Include="include\xmlid.h" />
-    <ClInclude Include="include\xmlui.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="resources\mol.rc">
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">TLB=x64\uni_release\moe.tlb;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\cg\disph.exe">
@@ -454,6 +447,10 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">$(TargetName)_dispid.h</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">$(IntDir)$(TargetName).tlb</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">..\..\cg\disph.exe $(IntDir)$(TargetName).tlb &gt; $(TargetName)_dispid.h</Command>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">false</VerifyInputsAndOutputsExist>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">false</LinkObjects>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">false</DeploymentContent>
     </CustomBuild>
     <None Include="..\..\cg\xsl\uimenu.xsl" />
     <None Include="packages.config" />
@@ -462,6 +459,7 @@
     <None Include="resources\moe.bmp" />
     <None Include="resources\moe.ico" />
     <None Include="resources\next.bmp" />
+    <None Include="src\api.js.tpl" />
     <None Include="xml\ribbon.xml">
       <SubType>Designer</SubType>
     </None>
@@ -499,6 +497,7 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">true</ExcludedFromBuild>
     </CustomBuild>
     <None Include="xml\cmd.xml">
       <SubType>Designer</SubType>
@@ -520,6 +519,11 @@
     <None Include="xml\ui.xml">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\moe.rc">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">TLB=x64\uni_release\moe.tlb;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

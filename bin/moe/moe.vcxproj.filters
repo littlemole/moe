@@ -21,15 +21,6 @@
     <ClCompile Include="src\MoeBar.cpp">
       <Filter>widget</Filter>
     </ClCompile>
-    <ClCompile Include="src\xmlrc.cpp">
-      <Filter>gen</Filter>
-    </ClCompile>
-    <ClCompile Include="src\xmlrib.cpp">
-      <Filter>gen</Filter>
-    </ClCompile>
-    <ClCompile Include="src\xmlui.cpp">
-      <Filter>gen</Filter>
-    </ClCompile>
     <ClCompile Include="src\widgets.cpp">
       <Filter>widget</Filter>
     </ClCompile>
@@ -94,9 +85,6 @@
       <Filter>widget</Filter>
     </ClInclude>
     <ClInclude Include="include\xmlid.h">
-      <Filter>gen</Filter>
-    </ClInclude>
-    <ClInclude Include="include\xmlui.h">
       <Filter>gen</Filter>
     </ClInclude>
     <ClInclude Include="include\widgets.h">
@@ -216,6 +204,9 @@
       <Filter>resources\xml</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="src\api.js.tpl">
+      <Filter>resources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="mdi">
@@ -241,8 +232,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="resources\mol.rc">
-      <Filter>gen</Filter>
-    </ResourceCompile>
+    <ResourceCompile Include="resources\moe.rc" />
   </ItemGroup>
 </Project>

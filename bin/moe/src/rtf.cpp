@@ -4,7 +4,7 @@
 #include "docs.h"
 #include "MoeBar.h"
 
-#include "xmlui.h"
+//#include "xmlui.h"
 #include "ribbonres.h"
 
 

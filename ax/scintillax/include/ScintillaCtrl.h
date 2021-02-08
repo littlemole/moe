@@ -12,7 +12,6 @@
 #include "ScintillAx_h.h"
 #include "ShellCtrl/ShellCtrl_h.h"
 #include "include/resource.h"
-#include "include/xmlui.h"
 
 
 class SciAxProperties;

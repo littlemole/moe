@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
  <head>
+  <meta charset="UTF-8">
   <title></title>
   <link rel="stylesheet" href="ribbon.css">
-  <script src="js/mustache.js"></script>
-  <script src="js/mustache.js"></script>
+  <script src="js/action.js"></script>
+  <script src="js/api.js"></script>
   <style type="text/css">
     .close {	
 		position:absolute;
 		right:10px;
 		bottom:0px;
-		font-size:1.5em;
+		font-size:1em;
 		z-index:10;
-	}
-	.close a {
 		text-decoration:none;
 		color:black;
 		font-weight:bold;
+		cursor:pointer;
 	}
 
 	img {
@@ -53,6 +53,11 @@
 		align-items:center;
 	}
 
+	a.recentfile {
+		max-height:32px;
+		max-width:350px;
+	}
+
   </style>
  </head>
  
@@ -61,18 +66,16 @@
 	
     <div class="flex row stretch" style="background-color:#f1f1f1;position:relative;width:100%;">
 
-	<div class="close">
-	 <a href="mol://close">x</a>
-	</div>
+	<div onclick="api.closeFileMenu();" class="close">x</div>
 
      <div class="flex column" style="padding:3px">
 
-  	  <div class="flex row tab hover stretch " id="new" title="Create New Document">
+  	  <div cmd="IDM_FILE_NEW" class="flex row tab hover stretch " id="new" title="Create New Document">
 	   <img src="img/document-new.svg">
        <span>&nbsp;New</span>
       </div>
 
-	  <div class="flex hover row stretch tab" id="open" title="Open Existing Document">
+	  <div cmd="IDM_FILE_OPEN" class="flex hover row stretch tab" id="open" title="Open Existing Document">
        <div class="flex row stretch " >
 	    <img src="img/document-open.svg" >
         <span>&nbsp;Open</span>
@@ -80,7 +83,7 @@
        </div>
       </div>
 
-	  <div class=" hover stretch tab" id="save" title="Save Document">
+	  <div cmd="IDM_FILE_SAVE_AS" class=" hover stretch tab" id="save" title="Save Document">
        <div class="flex row stretch" >
  	    <img src="img/document-save.svg">
         <span>&nbsp;Save</span>
@@ -90,24 +93,24 @@
 
   	  <div class="divider flex stretch row" style="width:110px;border-bottom:1px solid #aaa;"></div>
 
-	  <div class=" flex hover stretch tab" title="Print Document">
+	  <div cmd="IDM_FILE_PRINT" class=" flex hover stretch tab" title="Print Document">
 	   <img src="img/document-print.svg">
        <span>&nbsp;Print</span>
       </div>
 
-	  <div class="flex hover stretch tab" title="Edit Preferences">
+	  <div cmd="IDM_MODE_PREFERENCES" class="flex hover stretch tab" title="Edit Preferences">
 	   <img src="img/document-properties.svg">
        <span>&nbsp;Preferences</span>
       </div>
 
-	  <div class="flex hover stretch tab" title="Customize">
+	  <div cmd="IDM_MODE_USERSTYLES" class="flex hover stretch tab" title="Customize">
 	   <img src="img/preferences-desktop.svg">
        <span>&nbsp;Customize</span>
       </div>
 
   	  <div class="divider flex stretch row" style="width:110px;border-bottom:1px solid #aaa;"></div>
 
-	  <div class="button hover stretch tab" title="Exit Application">
+	  <div cmd="IDM_FILE_EXIT" class="button hover stretch tab" title="Exit Application">
 	   <img src="img/application-exit.svg">
        <span>&nbsp;Quit</span>
       </div>
@@ -118,7 +121,7 @@
 
     <div id="recent" class="tabcontent recent column">
       <h4>Recent Files</h4>
-	  <div class="flow column">
+	  <div class="flow column" id="recentFiles">
 	   <div class="hover flex row vcenter">
 	    <img src="img/document.svg">
         <a href="#">File1.txt</a>
@@ -137,15 +140,15 @@
      <div id="createNew" class="tabcontent recent column">
       <h4>Open existing Document</h4>
 	  <div class="flow button column ">
-	   <div class="flex row hover">
+	   <div cmd="IDM_FILE_OPEN" class="flex row hover">
 	    <img src="img/document.svg">
 		<span>Open&nbsp;File</span>
 	   </div>
-	   <div class="flex row hover">
+	   <div cmd="IDM_FILE_OPEN_FOLDER" class="flex row hover">
 	    <img src="img/folder.svg">
 		<span>Open&nbsp;Folder</span>
 	   </div>
-	   <div class="flex row hover">
+	   <div cmd="IDM_FILE_OPEN_HTML" class="flex row hover">
 	    <img src="img/web-browser.svg">
 		<span>Open&nbsp;Url</span>
 	   </div>
@@ -155,11 +158,11 @@
      <div id="saveDocument" class="tabcontent recent column">
       <h4>Save the Document to Disk</h4>
 	  <div class="flow column button">
-	   <div class="flex row hover">
+	   <div cmd="IDM_FILE_SAVE" class="flex row hover">
 	    <img src="img/document-save.svg">
 		<span>Save Document</span>
 	   </div>
-	   <div class="flex row hover">
+	   <div cmd="IDM_FILE_SAVE" class="flex row hover">
 	    <img src="img/document-save-as.svg">
 		<span>Save Document As</span>
 	   </div>
@@ -169,6 +172,7 @@
     </div>
    </div>
 <script>
+
 
 function showTab(id) {
 	Array.from(document.getElementsByClassName("tabcontent"))
@@ -193,6 +197,52 @@ document.getElementById("open").onmouseover = function(e) {
 document.getElementById("save").onmouseover = function(e) {
 	showTab("saveDocument");
 };
+
+let recentFiles = api.loadRecentFiles();
+let html = "";
+recentFiles.forEach( function(f) 
+{
+	let ef = f.replace(/\\/g,"\\\\");
+	let fn = f.split("\\").slice(-1)[0];
+	html += "<div class='hover pointer flex row' action='recent'  file='" + ef +"' title='"+ef+"'><img src='img/document.svg'>";
+	html += "<a class='recentfile' href='"+ef+"' >" + fn + "</a></div>";
+});
+
+document.getElementById("recentFiles").innerHTML = html;
+
+Array.from(document.querySelectorAll("a.recentfile"))
+.forEach( function(a) {
+	a.onclick = function(e) {
+		e.preventDefault();
+	}
+});
+
+
+var cmds = Array.from(document.querySelectorAll("div[cmd]"));
+cmds.forEach( function(el) {
+
+	el.onclick = function(e) {
+		let cmd = this.getAttribute("cmd");
+		let msg = { "cmd" : action[cmd] };
+
+		//alert(JSON.stringify(msg));
+
+		window.chrome.webview.postMessage(msg);
+	};
+});
+
+var actions = Array.from(document.querySelectorAll("div[action]"));
+actions.forEach( function(el) {
+
+	el.onclick = function(e) {
+		let file = this.getAttribute("file");
+		let msg = { "action" : "recent", "recent" : file };
+
+		//alert(JSON.stringify(msg));
+
+		window.chrome.webview.postMessage(msg);
+	};
+});
 
 
 </script>

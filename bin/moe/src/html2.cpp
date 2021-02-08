@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "html2.h"
 #include "app.h"
-#include "xmlui.h"
+//#include "xmlui.h"
 #include "MoeBar.h"
 #include "Docs.h"
 
@@ -433,12 +433,14 @@ bool MoeHtml2Wnd::load( const std::wstring& loc )
 		{
 			if ( !mol::Path::exists(l) )
 			{
-				l = mol::Path::pathname(mol::app<MoeApp>().getModulePath()) + _T("\\");
+				mol::bstr cfgPath;
+				moe()->moeConfig->get_ConfigPath(&cfgPath);
+				l = cfgPath.towstring() + _T("\\");
 				l += loc;
 
 				if ( !mol::Path::exists(l) )
 				{
-					l = mol::Path::pathname(mol::app<MoeApp>().getModulePath()) + _T("\\forms\\") + loc;
+					l = cfgPath.towstring() + _T("\\forms\\") + loc;
 					if ( !mol::Path::exists(l) )
 						return false;
 				}

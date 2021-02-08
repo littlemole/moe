@@ -74,6 +74,8 @@ public:
 	void copy();
 	void paste();
 
+	std::function<void(Json::Value json)> onJsonMsg;
+
   private:
 
 	/////////////////////////////////////////////////////////////////////
@@ -85,11 +87,12 @@ public:
 	/////////////////////////////////////////////////////////////////////
 
 	int							style_;
-	std::wstring					location_;
+	std::wstring				location_;
 
 	EventRegistrationToken		documentTitleChangedToken;
 	EventRegistrationToken		navigationStartingToken;
 	EventRegistrationToken		permissionRequestToken;
+	EventRegistrationToken		webMessageReceivedToken;
 
 	/////////////////////////////////////////////////////////////////////
 	// external events called from script inside MoeWnd

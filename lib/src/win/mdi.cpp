@@ -458,7 +458,7 @@ HWND MdiFrame::childAt(int index)
 	for ( std::list<MdiChild*>::iterator it = children_.begin(); it != children_.end(); it++ )
     {
 		if ( i == index )
-			return **it;
+			return (*it)->operator HWND();
 		i++;
     }
 	return 0;

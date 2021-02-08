@@ -3,9 +3,15 @@
  <head>
   <title></title>
   <link rel="stylesheet" href="ribbon.css">
-  <script src="js/mustache.js"></script>
-  <script src="js/mustache.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/action.js"></script>
   <style type="text/css">
+
+	body {
+		position:absolute;
+		width:150px;
+		height:230px;
+	}
 
 	img {
 		width:20px;
@@ -33,38 +39,38 @@
 
      <div class="flex column" style="padding:3px">
 
-  	  <div class="flex row tab hover stretch " id="selectAll">
+  	  <div cmd="IDM_EDIT_SELECT" class="flex row tab hover stretch " id="selectAll">
 	   <img src="img/View-fullscreen.svg">
        <span>&nbsp;Select All</span>
       </div>
 
-  	  <div class="flex row tab hover stretch " id="insertTemplate">
+  	  <div cmd="IDM_USER_SHORTCUT" class="flex row tab hover stretch " id="insertTemplate">
 	   <img src="img/document-properties.svg">
        <span>&nbsp;Template</span>
       </div>
 
   	  <div class="divider flex stretch row" style="width:100px;border-bottom:1px solid #aaa;"></div>
 
-  	  <div class="flex row tab hover stretch " id="Cut">
+  	  <div cmd="IDM_EDIT_CUT" class="flex row tab hover stretch " id="Cut">
 	   <img src="img/edit-cut.svg">
        <span>&nbsp;Cut</span>
       </div>
-  	  <div class="flex row tab hover stretch " id="Copy">
+  	  <div cmd="IDM_EDIT_COPY" class="flex row tab hover stretch " id="Copy">
 	   <img src="img/edit-copy.svg">
        <span>&nbsp;Copy</span>
       </div>
-  	  <div class="flex row tab hover stretch " id="Pase">
+  	  <div cmd="IDM_EDIT_PASTE" class="flex row tab hover stretch " id="Pase">
 	   <img src="img/edit-paste.svg">
        <span>&nbsp;Paste</span>
       </div>
-  	  <div class="flex row tab hover stretch " id="PaseAs">
+  	  <div cmd="IDM_EDIT_PASTEAS" class="flex row tab hover stretch " id="PaseAs">
 	   <img src="img/edit-paste.svg">
        <span>&nbsp;Paste As</span>
       </div>
 
   	  <div class="divider flex stretch row" style="width:100px;border-bottom:1px solid #aaa;"></div>
 
-  	  <div class="flex row tab hover stretch " id="Settings">
+  	  <div cmd="IDM_MODE_SETTINGS" class="flex row tab hover stretch " id="Settings">
 	   <img src="img/Applications-system.svg">
        <span>&nbsp;Settings</span>
       </div>
@@ -73,6 +79,30 @@
    </div>
 <script>
 
+
+window.onload = function(e) {
+	let w = document.body.offsetWidth;
+	let h = document.body.offsetHeight;
+
+	window.chrome.webview.hostObjects.sync.external.Frame.View.Width = w;
+	window.chrome.webview.hostObjects.sync.external.Frame.View.Height = h;
+};
+
+
+var cmds = Array.from(document.querySelectorAll("div[cmd]"));
+cmds.forEach( function(el) {
+
+	el.onclick = function(e) {
+		let cmd = this.getAttribute("cmd");
+		let msg = { "cmd" : action[cmd] };
+
+		//alert(JSON.stringify(msg));
+
+		window.chrome.webview.postMessage(msg);
+	};
+});
+
 </script>
+
  </body>
 </html>

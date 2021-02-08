@@ -3,7 +3,7 @@
 #include "moe.h"
 #include "app.h"
 #include "docs.h"
-#include "xmlui.h"
+//#include "xmlui.h"
 #include "resource.h"
 
 using namespace mol::io;
@@ -151,7 +151,12 @@ void MoeTabControl::OnRightClick()
 	::GetCursorPos(&pt);
 
 	// display context menut
-	mol::Menu sub = mol::UI().SubMenu(IDM_MENU_TAB,IDM_TAB);
+	//mol::Menu sub = mol::UI().SubMenu(IDM_MENU_TAB,IDM_TAB);
+
+	mol::Menu m;
+	m.load(IDM_MENU_TAB);
+
+	mol::Menu sub(m.getSubMenu(0));
 
 	// use moe main window as parent for ownerdrawn menus to work on XP
 	int id = sub.returnTrackPopup(*moe(),pt.x-10,pt.y-10);
@@ -499,7 +504,7 @@ void MoeHtmlRibbon::OnCreate()
 void MoeHtmlRibbon::postMessageAsJSON(const Json::Value& json)
 {
 	std::string utf8 = JSON::flatten(json);
-	oleObject->PostWebMessageAsJson(mol::fromUTF8(utf8).c_str());
+	webView->PostWebMessageAsJson(mol::fromUTF8(utf8).c_str());
 }
 
 void MoeHtmlRibbon::load(mol::punk<ChromeEdge> edge)
@@ -517,20 +522,341 @@ void MoeHtmlRibbon::setAppMode(const std::string& m)
 {
 	std::ostringstream oss;
 	oss << "{ \"appmode\" : \"" << m << "\" }";
-	ribbon()->oleObject->PostWebMessageAsJson(mol::towstring(oss.str()).c_str());
+	webView->PostWebMessageAsJson(mol::towstring(oss.str()).c_str());
+}
+
+void getActiveDocProperties(IScintillAxProperties** ax)
+{
+	*ax = 0;
+
+	mol::punk<IMoeDocument> doc;
+	moe()->get_ActiveDoc(&doc);
+
+	if (!doc) return;
+
+	long type = 0;
+	doc->get_Type(&type);
+
+	if (type != MOE_DOCTYPE_DOC) return;
+
+	mol::punk<IDispatch> disp;
+	doc->get_Object(&disp);
+
+	if (!disp) return;
+
+	mol::punk<IScintillAx> sci(disp);
+	if (!sci) return;
+
+	mol::punk<IScintillAxProperties> props;
+	sci->get_Properties(ax);
+}
+
+void setActiveDocLongProperty(HRESULT(IScintillAxProperties::* mfp)(long), long value) 
+{
+	mol::punk<IScintillAxProperties> props;
+	getActiveDocProperties(&props);
+	if (!props) return;
+
+	(props->*mfp)(value);
+}
+
+void setActiveDocBooleanProperty(HRESULT(IScintillAxProperties::* mfp)(VARIANT_BOOL), bool value)
+{
+	mol::punk<IScintillAxProperties> props;
+	getActiveDocProperties(&props);
+	if (!props) return;
+
+	(props->*mfp)(value ? VARIANT_TRUE : VARIANT_FALSE);
+}
+
+static std::map<std::string, std::function<void(Json::Value)>> webMsgActionHandlers =
+{
+	{ "recent", [](Json::Value msg) 
+		{ 				
+			std::string path = msg["recent"].asString();
+			mol::punk<IMoeDocument> doc;
+			moe()->moeDialogs->Open(mol::bstr(path), &doc);
+		} 
+	},
+	{ "enc", [](Json::Value msg) 
+		{ 
+			const int enc = atoi(msg["enc"].asString().c_str());
+			setActiveDocLongProperty(&IScintillAxProperties::put_Encoding, enc);		
+		}
+	},
+	{ "syntax", [](Json::Value msg) 
+		{ 
+			const int syntax = atoi(msg["syntax"].asString().c_str());
+			setActiveDocLongProperty(&IScintillAxProperties::put_Syntax, syntax);		
+		}
+	},
+	{ "eol", [](Json::Value msg)
+		{
+			const int eol = atoi(msg["eol"].asString().c_str());
+			setActiveDocLongProperty(&IScintillAxProperties::put_SysType, eol);
+		}
+	},
+	{ "tabs", [](Json::Value msg)
+		{
+			const bool tabs = msg["tabs"].asBool();
+			setActiveDocBooleanProperty(&IScintillAxProperties::put_TabUsage, tabs);
+		}
+	},
+	{ "tabindents", [](Json::Value msg)
+		{
+			const bool tabindents = msg["tabindents"].asBool();
+			setActiveDocBooleanProperty(&IScintillAxProperties::put_TabIndents, tabindents);
+		}
+	},
+	{ "backspaceunindents", [](Json::Value msg)
+		{
+			const bool backspaceunindents = msg["backspaceunindents"].asBool();
+			setActiveDocBooleanProperty(&IScintillAxProperties::put_BackSpaceUnindents, backspaceunindents);
+		}
+	},
+	{ "tabwidth", [](Json::Value msg)
+		{
+			const long tabwidth = atoi(msg["tabwidth"].asString().c_str());
+			setActiveDocLongProperty(&IScintillAxProperties::put_TabWidth, tabwidth);
+		}
+	},
+	{ "bom", [](Json::Value msg)
+		{
+			const bool bom = msg["bom"].asBool();
+			setActiveDocBooleanProperty(&IScintillAxProperties::put_WriteBOM, bom);
+		}
+	},
+	{ "lines", [](Json::Value msg)
+		{
+			const bool lines = msg["lines"].asBool();
+			setActiveDocBooleanProperty(&IScintillAxProperties::put_ShowLineNumbers, lines);
+		}
+	},
+	{ "script", [](Json::Value msg)
+		{
+			const std::string script = msg["script"].asString();
+			moe()->moeScript->Run(mol::bstr(script), mol::bstr("JScript"));
+		}
+	},
+	{ "system", [](Json::Value msg)
+		{
+			const std::string system = msg["system"].asString();
+			moe()->moeScript->System(mol::bstr(system));
+		}
+	},
+	{ "showexplorer", [](Json::Value msg)
+		{
+			const std::string showexplorer = msg["showexplorer"].asString();
+			VARIANT_BOOL vb = showexplorer == "true" ? VARIANT_TRUE : VARIANT_FALSE;
+			moe()->moeConfig->put_ShowTreeView(vb);
+		}
+	}
+};
+
+void handleAction(Json::Value msg)
+{
+	std::string action = msg["action"].asString();
+	if (!msg.isMember(action))
+	{
+		return;
+	}
+	if (webMsgActionHandlers.count(action) == 0)
+	{
+		return;
+	}
+	webMsgActionHandlers[action](msg);
+}
+
+static std::map<std::string, std::function<void(Json::Value)>> webMsgHandlers =
+{
+	{ "cmd",	[](Json::Value msg) { moe()->postMessage(WM_COMMAND, msg["cmd"].asInt(), 0);  } },
+	{ "msg",	[](Json::Value msg) { moe()->postMessage(msg["msg"].asInt(), 0, 0);  } },
+	{ "action",	[](Json::Value msg) { handleAction(msg); } }
+};
+
+void MoeHtmlRibbon::handleMessage(Json::Value& json)
+{
+	for (auto it = webMsgHandlers.begin(); it != webMsgHandlers.end(); it++)
+	{
+		std::string key = (*it).first;
+		if (json.isMember(key))
+		{
+			(*it).second(json);
+			return;
+		}
+	}
+	/*
+	if (json.isMember("cmd"))
+	{
+		int cmd = json["cmd"].asInt();
+		moe()->postMessage(WM_COMMAND, cmd, 0);
+		return;
+	}
+	if (json.isMember("msg"))
+	{
+		int msg = json["msg"].asInt();
+		moe()->postMessage(msg, 0, 0);
+		return;
+	}
+	if (json.isMember("action"))
+	{
+		std::string action = json["action"].asString();
+		if (action == "recent")
+		{
+			if (json.isMember("recent"))
+			{
+				std::string path = json["recent"].asString();
+
+				mol::punk<IMoeDocument> doc;
+				moe()->moeDialogs->Open(mol::bstr(path), &doc);
+			}
+			return;
+		}
+		if (action == "enc")
+		{
+			if (json.isMember("enc"))
+			{
+				const int enc = atoi(json["enc"].asString().c_str());
+
+				setActiveDocLongProperty(&IScintillAxProperties::put_Encoding, enc);
+			}
+			return;
+		}
+		if (action == "syntax")
+		{
+			if (json.isMember("syntax"))
+			{
+				const int syntax = atoi(json["syntax"].asString().c_str());
+
+				setActiveDocLongProperty(&IScintillAxProperties::put_Syntax, syntax);
+			}
+		}
+		if (action == "eol")
+		{
+			if (json.isMember("eol"))
+			{
+				const int eol = atoi(json["eol"].asString().c_str());
+
+				setActiveDocLongProperty(&IScintillAxProperties::put_SysType, eol);
+			}
+		}
+		if (action == "tabs")
+		{
+			if (json.isMember("tabs"))
+			{
+				const bool tabs = json["tabs"].asBool();
+
+				setActiveDocBooleanProperty(&IScintillAxProperties::put_TabUsage, tabs);
+			}
+		}
+		if (action == "tabindents")
+		{
+			if (json.isMember("tabindents"))
+			{
+				const bool tabindents = json["tabindents"].asBool();
+
+				setActiveDocBooleanProperty(&IScintillAxProperties::put_TabIndents, tabindents);
+			}
+		}
+		if (action == "backspaceunindents")
+		{
+			if (json.isMember("backspaceunindents"))
+			{
+				const bool backspaceunindents = json["backspaceunindents"].asBool();
+
+				setActiveDocBooleanProperty(&IScintillAxProperties::put_BackSpaceUnindents, backspaceunindents);
+			}
+		}
+		if (action == "tabwidth")
+		{
+			if (json.isMember("tabwidth"))
+			{
+				const long tabwidth = atoi(json["tabwidth"].asString().c_str());
+
+				setActiveDocLongProperty(&IScintillAxProperties::put_TabWidth, tabwidth);
+			}
+		}
+		if (action == "bom")
+		{
+			if (json.isMember("bom"))
+			{
+				const bool bom = json["bom"].asBool();
+
+				setActiveDocBooleanProperty(&IScintillAxProperties::put_WriteBOM, bom);
+			}
+		}
+		if (action == "lines")
+		{
+			if (json.isMember("lines"))
+			{
+				const bool lines = json["lines"].asBool();
+
+				setActiveDocBooleanProperty(&IScintillAxProperties::put_ShowLineNumbers, lines);
+			}
+		}
+		if (action == "script")
+		{
+			if (json.isMember("script"))
+			{
+				const std::string script = json["script"].asString();
+
+				moe()->moeScript->Run(mol::bstr(script), mol::bstr("JScript"));
+			}
+		}
+		if (action == "system")
+		{
+			if (json.isMember("system"))
+			{
+				const std::string system = json["system"].asString();
+
+				moe()->moeScript->System(mol::bstr(system));
+			}
+		}
+		if (action == "showexplorer")
+		{
+			if (json.isMember("showexplorer"))
+			{
+				const std::string showexplorer = json["showexplorer"].asString();
+
+				VARIANT_BOOL vb = showexplorer == "true" ? VARIANT_TRUE : VARIANT_FALSE;
+
+				moe()->moeConfig->put_ShowTreeView(vb);
+			}
+		}
+		return;
+	}
+*/
+}
+
+void  MoeHtmlRibbon::onMessageReceived(ICoreWebView2* sender, ICoreWebView2WebMessageReceivedEventArgs* args)
+{
+	wchar_t* msg = 0;
+	HRESULT hr = args->get_WebMessageAsJson(&msg);
+
+	if (hr != S_OK)
+		return;
+
+	std::wstring message(msg);
+	::CoTaskMemFree(msg);
+
+	std::string utf8(mol::toUTF8(message));
+
+	Json::Value json = JSON::parse(utf8);
+
+	handleMessage(json);
 }
 
 void MoeHtmlRibbon::onCreateWebView(std::wstring target, ICoreWebView2Controller* controller)
 {
 	webViewController = controller;
 
-	webViewController->get_CoreWebView2(&oleObject);
+	webViewController->get_CoreWebView2(&webView);
 
 	mol::punk<IDispatch> disp(&external_);
 	mol::variant obj(disp);
-	oleObject->AddHostObjectToScript(L"external", &obj);
+	webView->AddHostObjectToScript(L"external", &obj);
 
-	oleObject->add_NavigationStarting(
+	webView->add_NavigationStarting(
 		make_callback<ICoreWebView2NavigationStartingEventHandler>(
 			[this](ICoreWebView2* webView, ICoreWebView2NavigationStartingEventArgs* args)
 		{
@@ -539,10 +865,54 @@ void MoeHtmlRibbon::onCreateWebView(std::wstring target, ICoreWebView2Controller
 		&navigationStartingToken
 	);
 
-	oleObject->Navigate(target.c_str());
+	webView->add_WebMessageReceived(
+		make_callback<ICoreWebView2WebMessageReceivedEventHandler>(
+			[this](ICoreWebView2* sender, ICoreWebView2WebMessageReceivedEventArgs* args)
+		{
+			this->onMessageReceived(sender,args);
+		}),
+		&webMessageReceivedToken
+	);
+
+	webView->add_NavigationCompleted(
+		make_callback< ICoreWebView2NavigationCompletedEventHandler>(
+			[this](ICoreWebView2* webView, ICoreWebView2NavigationCompletedEventArgs* args)
+		{
+			BOOL success = FALSE;
+			args->get_IsSuccess(&success);
+			if (success)
+				this->onDocumentLoad();
+		}),
+		&onDocumentLoadedToken
+	);
+
+	webView->Navigate(target.c_str());
 }
 
+void MoeHtmlRibbon::onDocumentLoad()
+{
+	Json::Value result(Json::objectValue);
+	result["action"] = "enc";
 
+	Json::Value encodings(Json::arrayValue);
+	for (auto& it = codePages()->begin(); it != codePages()->end(); it++)
+	{
+		const int cp = (*it).first;
+		std::wstring n = (*it).second;
+
+		Json::Value codepage(Json::objectValue);
+		codepage["value"] = cp;
+		codepage["name"] = mol::toUTF8(n);
+
+		encodings.append(codepage);
+	}
+
+	result["enc"] = encodings;
+
+	std::string utf8 = JSON::stringify(result);
+
+	webView->PostWebMessageAsJson(mol::towstring(utf8).c_str());
+}
 
 void MoeHtmlRibbon::onNavigationStarted(ICoreWebView2NavigationStartingEventArgs* args)
 {
@@ -587,16 +957,17 @@ void MoeHtmlRibbon::OnNcDestroy()
 {
 	ODBGS("MoeHtmlRibbon::OnNcDestroy");
 
-	if (oleObject)
+	if (webView)
 	{
-		oleObject->RemoveHostObjectFromScript(L"external");
-//		oleObject->remove_DocumentTitleChanged(documentTitleChangedToken);
-		oleObject->remove_NavigationStarting(navigationStartingToken);
-	//	oleObject->remove_PermissionRequested(permissionRequestToken);
+		webView->RemoveHostObjectFromScript(L"external");	
+
+		webView->remove_WebMessageReceived(webMessageReceivedToken);
+		webView->remove_NavigationStarting(navigationStartingToken);
+		webView->remove_NavigationCompleted(onDocumentLoadedToken);
+		webView.release();
 
 		webViewController->Close();
 		webViewController.release();
-		oleObject.release();
 	}
 
 	::CoDisconnectObject(((IExternalMoe*)&external_), 0);

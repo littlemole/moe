@@ -3,7 +3,7 @@
 #include "moe.h"
 #include "Docs.h"
 #include "mdichild.h"
-#include "xmlui.h"
+//#include "xmlui.h"
 #include "MoeBar.h"
 #include "ribbonres.h"
 #include "resource.h"

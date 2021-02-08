@@ -2,7 +2,7 @@
 #include "EditorMenu.h"
 #include "editor.h"
 #include "moe.h"
-#include "xmlui.h"
+//#include "xmlui.h"
 #include "ribbonres.h"
 
 EditorMenu::EditorMenu(void)
@@ -245,7 +245,7 @@ void EditorMenu::updateUI()
 
 
 	std::string utf8 = JSON::flatten(json);
-	ribbon()->oleObject->PostWebMessageAsJson(mol::fromUTF8(utf8).c_str());
+	ribbon()->webView->PostWebMessageAsJson(mol::fromUTF8(utf8).c_str());
 }
 
 void EditorMenu::createMenuFromConf(HMENU m,HMENU popup)
