@@ -242,7 +242,7 @@ public:
 MoeApp::MoeApp()
 {
 	// unlock embedded IE restrictions
-	mol::v7::unlockInternetExplorer();
+	//mol::v7::unlockInternetExplorer();
 
 	// CLI support
 	moeCliTypes.push_back( new moeEditorCliType );
@@ -275,6 +275,7 @@ void load_resources()
 {
 	using namespace mol;
 
+	/*
 	UI().addCmd(IDM_TAB, _T("TAB"));
 	UI().addCmd(IDM_TAB_CLOSETAB, _T("Close"));
 	UI().addCmd(IDM_TAB_CLOSEALLBUTTHIS, _T("Close Others"));
@@ -284,7 +285,7 @@ void load_resources()
 	UI().addCmd(IDM_VIEW_CLOSE, _T("Close"));
 	UI().addCmd(IDM_VIEW_CLOSEALL, _T("Close All"));
 	UI().addCmd(IDM_FILE_SAVE, _T("Save"));
-
+	*/
 	/*
 	UI().addMenu(IDM_MENU_TAB);
 
@@ -413,14 +414,19 @@ int MoeApp::runStandalone(const std::wstring& cmdline)
 
 	MoeWnd::Instance* moe = MoeWnd::CreateInstance();
 
-	// open any filepaths passed via command line using IDispatch
-	mol::punk<IDispatch> disp(moe);
-	openDocsFromCommandLine(disp,cmdline);
+	std::wstring cli = cmdline;
+
+	moe->onMoeBarLoaded = [this,cli](MoeWnd* moe) 
+	{
+		// open any filepaths passed via command line using IDispatch
+		mol::punk<IDispatch> disp(moe);
+		openDocsFromCommandLine(disp, cli);
+	};
 
 	// bring moe to front
 	mol::punk<IMoeView> view;
 	HRESULT hr = moe->get_View(&view);
-	if ( hr == S_OK )
+	if (hr == S_OK)
 	{
 		view->Show();
 	}

@@ -3,7 +3,7 @@
 
 #include "commons.h"
 #include "resource.h"
-
+#include "shared.h"
 /////////////////////////////////////////////////////////////////////
 //
 // common mdi child window
@@ -24,11 +24,7 @@ public:
 	mol::punk<IMoeDocumentView> view;
 	mol::punk<IDispatch> onCloseHandler;
 
-	DispatchMdiWindow()
-	{
-		C* This = (C*)this;
-		MoeChildView::CreateInstance( This, &view );
-	}
+	DispatchMdiWindow();
 
 	virtual ~DispatchMdiWindow()
 	{
@@ -183,17 +179,17 @@ protected:
 
 		// create
 		moe()->setRedraw(false);
-		create(p,0/*a(HMENU)m*/,r,*moe());
-		show(SW_SHOW);	
+		this->create(p,0/*a(HMENU)m*/,r,*moe());
+		this->show(SW_SHOW);	
 		statusBar()->status(50);
 
 		// taskbar thumbnail (win7)
-		thumb = mol::taskbar()->addTab( *this,p );
+		this->thumb = mol::taskbar()->addTab( *this,p );
 
 		// maximize
-		maximize();
+		this->maximize();
 		moe()->setRedraw(true);
-		redraw();
+		this->redraw();
 	}
 };
 
@@ -256,6 +252,12 @@ public:
 
 };
 
+template<class C, class I, long T>
+DispatchMdiWindow<C,I,T>::DispatchMdiWindow()
+{
+	C* This = (C*)this;
+	MoeChildView::CreateInstance(This, &view);
+}
 
 class Script : public  mol::com_obj<mol::ScriptHost>//mol::ScriptHost
 {

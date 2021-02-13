@@ -1,3 +1,4 @@
+#include "conf.h"
 #include "ole/TypeLib.h"
 #include "ole/TypeInfo.h"
 #include "util/str.h"

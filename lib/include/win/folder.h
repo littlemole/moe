@@ -46,13 +46,13 @@ public:
 	std::wstring select( HWND owner, 
 			  UINT flags = BIF_NEWDIALOGSTYLE|
               BIF_RETURNFSANCESTORS|BIF_SHAREABLE, 
-			  mol::io::Shit& shit = desktop().shellItem()
+			  mol::io::Shit shit = desktop().shellItem()
 			);
 
 	Shit dlg( HWND owner, 
 			  UINT flags = BIF_NEWDIALOGSTYLE|
               BIF_RETURNFSANCESTORS|BIF_SHAREABLE, 
-              mol::io::Shit& shit = desktop().shellItem()
+              mol::io::Shit shit = desktop().shellItem()
 			);
 
 protected:

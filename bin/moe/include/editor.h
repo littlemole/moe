@@ -100,8 +100,6 @@ public:
 	// user defined scripts
 	 void OnUserScript(int code, int id, HWND ctrl);
 
-	LRESULT OnToolbarDropDown(NMTOOLBAR* toolbar );
-
 	void OnScriptThread( int line, std::wstring error);
 	void OnScriptThreadDone();
 

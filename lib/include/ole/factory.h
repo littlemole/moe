@@ -295,13 +295,13 @@ public:
 	virtual int runEmbedded(const std::wstring& cmdline)
 	{
 			RegisterClassObjects(CLSCTX_LOCAL_SERVER );
-			return msgLoop_(*this);	
+			return this->msgLoop_(*this);	
 	}
 
 	virtual int runStandalone(const std::wstring& cmdline)
 	{
 			RegisterClassObjects(CLSCTX_LOCAL_SERVER );
-			return msgLoop_(*this);	
+			return this->msgLoop_(*this);	
 	}
 
     virtual int run(const std::wstring& cmdline) 
@@ -375,9 +375,9 @@ public:
 
 	void virtual UnLock()
 	{
-		::InterlockedDecrement(&lockCount_);
-		if ( lockCount_ == 0 )
-			::PostThreadMessage( guithread_, WM_QUIT, 0, 0 );
+		::InterlockedDecrement(&this->lockCount_);
+		if ( this->lockCount_ == 0 )
+			::PostThreadMessage( this->guithread_, WM_QUIT, 0, 0 );
 			//	::PostQuitMessage(0);
 	}
 

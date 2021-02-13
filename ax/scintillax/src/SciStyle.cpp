@@ -601,8 +601,8 @@ HRESULT __stdcall AxStyleSets::get_XML(BSTR* xml)
 		{
 			mol::punk<IScintillAxStyleSet> axStyleSet(v.punkVal);
 			if (axStyleSet)
-			{
-				std::wstring syntax = ScintillaEditor::SyntaxDisplayName(pos);
+			{ 
+				std::wstring syntax = ScintillaEditor::SyntaxDisplayName((int)pos);
 				styleset->setAttribute("syntax", mol::toUTF8(syntax));
 
 				long id;

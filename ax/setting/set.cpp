@@ -7,6 +7,8 @@
 #include <sstream>
 #include <xml/xml.h>
 #include "win/file.h"
+#include "ole/persist.h"
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -844,7 +846,7 @@ HRESULT Setting::makeKey(std::wstring key, ISetting* parent, ISetting** newKey)
 			return set->QueryInterface(IID_ISetting,(void**)newKey);
 		}
 	}
-	if ( S_OK == parent->New( bstr(key), L"", &set ) )
+	if ( S_OK == parent->New( bstr(key), mol::bstr(L""), &set ) )
 	{
 		if ( set )
 		{

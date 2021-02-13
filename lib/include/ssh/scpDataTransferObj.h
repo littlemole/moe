@@ -49,7 +49,7 @@ struct FileDescriptor : public FILEDESCRIPTOR
 		set(fn,FILE_ATTRIBUTE_DIRECTORY,0,flags);
 	}
 
-	void setFile(const std::wstring& fn, int sizeLow, int sizeHigh, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
+	void setFileLarge(const std::wstring& fn, int sizeLow, int sizeHigh, UINT flags = FD_FILESIZE | FD_ATTRIBUTES |FD_PROGRESSUI)
 	{
 		set(fn,FILE_ATTRIBUTE_NORMAL,sizeLow,sizeHigh,flags); 
 	}

@@ -159,7 +159,7 @@ void MoeTabControl::OnRightClick()
 	mol::Menu sub(m.getSubMenu(0));
 
 	// use moe main window as parent for ownerdrawn menus to work on XP
-	int id = sub.returnTrackPopup(*moe(),pt.x-10,pt.y-10);
+	LONG_PTR id = sub.returnTrackPopup(*moe(),pt.x-10,pt.y-10);
 	switch ( id )
 	{
 		case IDM_VIEW_CLOSE:
@@ -551,7 +551,7 @@ void getActiveDocProperties(IScintillAxProperties** ax)
 	sci->get_Properties(ax);
 }
 
-void setActiveDocLongProperty(HRESULT(IScintillAxProperties::* mfp)(long), long value) 
+void setActiveDocLongProperty(HRESULT(__stdcall IScintillAxProperties::* mfp)(long), long value) 
 {
 	mol::punk<IScintillAxProperties> props;
 	getActiveDocProperties(&props);
@@ -560,7 +560,7 @@ void setActiveDocLongProperty(HRESULT(IScintillAxProperties::* mfp)(long), long 
 	(props->*mfp)(value);
 }
 
-void setActiveDocBooleanProperty(HRESULT(IScintillAxProperties::* mfp)(VARIANT_BOOL), bool value)
+void setActiveDocBooleanProperty(HRESULT(__stdcall IScintillAxProperties::* mfp)(VARIANT_BOOL), bool value)
 {
 	mol::punk<IScintillAxProperties> props;
 	getActiveDocProperties(&props);
@@ -881,7 +881,7 @@ void MoeHtmlRibbon::onCreateWebView(std::wstring target, ICoreWebView2Controller
 			BOOL success = FALSE;
 			args->get_IsSuccess(&success);
 			if (success)
-				this->onDocumentLoad();
+				this->onDocumentLoaded();
 		}),
 		&onDocumentLoadedToken
 	);
@@ -889,13 +889,13 @@ void MoeHtmlRibbon::onCreateWebView(std::wstring target, ICoreWebView2Controller
 	webView->Navigate(target.c_str());
 }
 
-void MoeHtmlRibbon::onDocumentLoad()
+void MoeHtmlRibbon::onDocumentLoaded()
 {
 	Json::Value result(Json::objectValue);
 	result["action"] = "enc";
 
 	Json::Value encodings(Json::arrayValue);
-	for (auto& it = codePages()->begin(); it != codePages()->end(); it++)
+	for (auto it = codePages()->begin(); it != codePages()->end(); it++)
 	{
 		const int cp = (*it).first;
 		std::wstring n = (*it).second;
@@ -912,6 +912,11 @@ void MoeHtmlRibbon::onDocumentLoad()
 	std::string utf8 = JSON::stringify(result);
 
 	webView->PostWebMessageAsJson(mol::towstring(utf8).c_str());
+
+	if (onDocumentLoad)
+	{
+		onDocumentLoad(this);
+	}
 }
 
 void MoeHtmlRibbon::onNavigationStarted(ICoreWebView2NavigationStartingEventArgs* args)

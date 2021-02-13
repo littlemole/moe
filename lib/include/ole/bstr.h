@@ -18,7 +18,7 @@ public:
 		: bstr_(0) 
 	{}
 
-    explicit bstr( const bstr& b ) 
+    bstr( const bstr& b ) 
 		: bstr_(::SysAllocString(b.bstr_)) 
 	{}
 

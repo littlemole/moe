@@ -126,7 +126,8 @@ public:
 		std::string spatch = mol::toUTF8( patch );
 		spatch = mol::dos2unix(spatch);
 		
-		dtl::Diff< elem, sequence > diff = parseUnihunkFile(std::istringstream(spatch));
+		std::istringstream is(spatch);
+		dtl::Diff< elem, sequence > diff = parseUnihunkFile(is);
 
 		sequence source = mol::split(soriginal,"\n");
 		sequence result = diff.uniPatch(source);

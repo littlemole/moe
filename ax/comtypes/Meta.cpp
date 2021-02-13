@@ -162,13 +162,13 @@ std::wstring MetaFunc::out()
 MetaClass::MetaClass()
 {}
 
-MetaClass::MetaClass( const std::wstring& t,  GUID& g )
+MetaClass::MetaClass( const std::wstring& t,  const GUID& g )
 	: type (t), guid(g),isDual(false),isSource(false),isDefault(false)
 {
 
 }
 
-MetaClass::MetaClass( const std::wstring& t, const std::wstring& b, GUID& g )
+MetaClass::MetaClass( const std::wstring& t, const std::wstring& b, const GUID& g )
 	: type(t), base(b), guid(g),isDual(false)
 {
 

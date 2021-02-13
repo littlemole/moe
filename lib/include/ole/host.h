@@ -248,7 +248,7 @@ public:
     AxClientWnd()
 	{
 		axClientSite = new AxClientSite;
-		eraseBackground_ = 1;
+		this->eraseBackground_ = 1;
 		dummyFrame_ = 0;
 	}
 
@@ -298,7 +298,7 @@ protected:
 	{
 		W::createWindow( windowName, id, r, frame );
 
-		getClientRect( clientRect_);
+		this->getClientRect( clientRect_);
 		frameWnd_ = frame;
 		oleFrame  = 0;
 
@@ -310,7 +310,7 @@ protected:
 			base->axFrameSite->QueryInterface(IID_IOleInPlaceFrame,(void**)&oleFrame);
 		}
 
-		return hWnd_;
+		return this->hWnd_;
 	}
 
 	//////////////////////////////////////////////////////////////////////
@@ -320,7 +320,7 @@ protected:
 	// then do a re-layout
 	LRESULT OnSize( UINT message, WPARAM wParam, LPARAM lParam)
 	{
-		return mol::ole::AxClientWndBase::handleOnSize( message, wParam, lParam, layout_ );
+		return mol::ole::AxClientWndBase::handleOnSize( message, wParam, lParam, this->layout_ );
 	}
 
 	//////////////////////////////////////////////////////////////////////
@@ -330,7 +330,7 @@ protected:
 	LRESULT OnLayout( UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		//ODBGS("AxClient OnLayout");
-		getClientRect(clientRect_);
+		this->getClientRect(clientRect_);
 		doLayout();
 		return 0;
 	}
@@ -408,7 +408,7 @@ private:
 	// refresh client rect 
 	virtual RECT prepareClientRect() 
 	{
-		getClientRect(clientRect_);
+		this->getClientRect(clientRect_);
 		return clientRect_;
 	}
 
@@ -431,7 +431,7 @@ private:
 	// layout helper, resizes the embedded ax obj
 	mol::Rect  doLayout()
 	{
-		return mol::ole::AxClientWndBase::handleDoLayout( clientRect_, layout_ );
+		return mol::ole::AxClientWndBase::handleDoLayout( clientRect_, this->layout_ );
 	}
 
 	// route windows message to this windows base class window proc
@@ -445,7 +445,7 @@ protected:
 	virtual void redrawOleFrame()
 	{
 		// redraw oleframe
-		mol::win::WndProc* f = mol::wndFromHWND<mol::win::WndProc>(getParent());
+		mol::win::WndProc* f = mol::wndFromHWND<mol::win::WndProc>(this->getParent());
 		if (!f)
 			return;
 
@@ -477,10 +477,10 @@ public:
 	HWND createWindow(const std::wstring& windowName, HMENU id, const mol::Rect& r, HWND parent)
     {
 		AxClientWnd<C,W>::createWindow( windowName, id, r, parent );
-		show(SW_SHOW);
-		getClientRect(clientRect_);
-		loadObject(*G);
-        return hWnd_;
+		this->show(SW_SHOW);
+		this->getClientRect(this->clientRect_);
+		this->loadObject(*G);
+        return this->hWnd_;
     }
 };
 

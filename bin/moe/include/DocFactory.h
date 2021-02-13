@@ -54,7 +54,7 @@ private:
 	template<class E>
 	HRESULT createFile(const std::wstring& p, IMoeDocument** doc)
 	{
-		E::Instance* edit = E::CreateInstance( p );
+		typename E::Instance* edit = E::CreateInstance( p );
 		if (!edit)
 			return E_FAIL;
 

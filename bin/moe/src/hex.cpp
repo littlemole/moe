@@ -4,7 +4,7 @@
 #include "Docs.h"
 #include "MoeBar.h"
 //#include "xmlui.h"
-#include "Ribbonres.h"
+//#include "Ribbonres.h"
 
 using namespace mol::io;
 using namespace mol::win;
@@ -112,6 +112,18 @@ void Hex::OnNcDestroy()
 	((IMoeDocument*)this)->Release();
 }
 
+
+handle_cmd(&Hex::OnCloseAll, IDM_VIEW_CLOSEALL)
+LRESULT Hex::OnCloseAll()
+{
+	return	MoeAxChild<
+		Hex,
+		MOE_DOCTYPE_HEX,
+		&CLSID_HexCtrl,
+		IDM_MOE_HEX
+	>::OnCloseAll();
+}
+
 //////////////////////////////////////////////////////////////////////////////
 
 handle_msg(&Hex::OnMDIActivate, WM_MDIACTIVATE)
@@ -208,7 +220,7 @@ void Hex::updateUI()
 	{
 		hexer->get_DisplayColumns(&bytes);
 	}
-	json["showBytes"] = bytes;
+	json["showBytes"] = (int)bytes;
 
 	ribbon()->postMessageAsJSON(json);
 

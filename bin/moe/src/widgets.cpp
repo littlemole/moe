@@ -5,7 +5,7 @@
 #include "mdichild.h"
 //#include "xmlui.h"
 #include "MoeBar.h"
-#include "ribbonres.h"
+//#include "ribbonres.h"
 #include "resource.h"
 #include "Shobjidl.h"
 #include "win/msgloop.h"
@@ -115,7 +115,7 @@ public:
 
 	typedef Script Host;
 
-	Timeout(mol::variant& f, mol::variant& d, Host* script)
+	Timeout(mol::variant& f, const mol::variant& d, Host* script)
 		:f_(f),script_(script)
 	{
 		timer_.set( d.lVal, std::bind( &Timeout::operator(), this ));
@@ -145,7 +145,7 @@ class Timeouts
 public:
 	Timeouts() : count_(0) {}
 
-	int setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script );
+	int setTimeout( mol::variant f, mol::variant delay, Timeout::Host* script );
 	void clear(Timeout::Host* script, int t);
 	void clear(Timeout::Host* script);
 	void remove(Timeout::Host* script, Timeout* t);
@@ -160,7 +160,7 @@ private:
 
 Timeouts& timeouts();
 
-int Timeouts::setTimeout( mol::variant& f, mol::variant& delay, Timeout::Host* script )
+int Timeouts::setTimeout( mol::variant f, mol::variant delay, Timeout::Host* script )
 {
 	Timeout* t = new Timeout(f,delay,script);
 	timeouts_[script].push_back( t );
@@ -277,7 +277,7 @@ Script::~Script()
 	removeNamedObject(L"NET");
 	removeNamedObject(L"MoeImport");
 
-	close();
+	//close();
 
 	ODBGS("Script death");
 }
@@ -337,7 +337,7 @@ void Script::eval(  const std::wstring& engine, const std::wstring& script, ISci
 	if ( quit_ == true )
 	{
 		timeouts().clear(this);
-		close();
+		//close();
 		((Instance*)this)->Release();
 	}
 	
@@ -363,7 +363,7 @@ void Script::debug(  const std::wstring& engine, const std::wstring& script, ISc
 	if (  quit_ == true )
 	{
 		timeouts().clear(this);
-		close();
+		//close();
 		((Instance*)this)->Release();
 	}
 }
@@ -384,7 +384,7 @@ void Script::call(  const std::wstring& engine, const std::wstring& func, const 
 	if (  quit_ == true)
 	{
 		timeouts().clear(this);
-		close();
+		//close();
 		((Instance*)this)->Release();
 	}
 }
@@ -396,7 +396,7 @@ void  Script::quit()
 	if (completed.test() )
 	{
 		timeouts().clear(this);
-		close();
+		//close();
 		((Instance*)this)->Release();
 	}
 }
@@ -1058,7 +1058,7 @@ LRESULT UrlDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 			{				
 				RECT r;
 				::GetWindowRect(getDlgItem(IDC_BUTTON_BOOKMARK),&r);
-				int id = menu.returnTrackPopup( getDlgItem(IDC_BUTTON_BOOKMARK),r.left+15,r.top+15);
+				int id = (int)menu.returnTrackPopup( getDlgItem(IDC_BUTTON_BOOKMARK),r.left+15,r.top+15);
 				
 				mol::Bookmark& bm = mol::bookmarks().getBookmarkFromMenuId(id);
 				if ( !bm.url.empty() )
@@ -1484,7 +1484,7 @@ std::wstring PasteAs::get()
 
 	POINT pt = {0,0};
 	::GetCursorPos(&pt);
-	UINT format = menu.returnTrackPopup( *moe(), pt.x, pt.y );
+	long format = (long) menu.returnTrackPopup( *moe(), pt.x, pt.y );
 
 	if ( format == clipboard_.format(clipboard_.CSV) )
 	{

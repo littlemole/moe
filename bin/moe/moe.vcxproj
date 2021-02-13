@@ -421,11 +421,10 @@
     <ClInclude Include="include\tailEditor.h" />
     <ClInclude Include="include\ThreadScript.h" />
     <ClInclude Include="include\tree.h" />
-    <ClInclude Include="moe_dispid.h" />
-    <ClInclude Include="moe_h.h" />
     <ClInclude Include="include\MoeBar.h" />
     <ClInclude Include="include\ole.h" />
     <ClInclude Include="include\resource.h" />
+    <ClInclude Include="moe_dispid.h" />
     <ClInclude Include="ribbonres.h" />
     <ClInclude Include="include\shared.h" />
     <ClInclude Include="include\stdafx.h" />

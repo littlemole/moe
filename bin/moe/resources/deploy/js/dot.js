@@ -5,11 +5,11 @@ var Controller = {
 
 	getActive : function() {
 	
-		return active;//Documents.ActiveDoc;
+		return Documents.ActiveDoc;
 	}
 };
 
-var html = Documents.OpenHtmlFrame( moe.Config.ModulePath + "\\" + "forms\\dot.html");
+var html = Documents.OpenHtmlFrame( moe.Config.ConfigPath + "\\" + "forms\\dot.html");
 html.Model.onDocumentLoad = function(){
 	html.Model.addExternalObject("Controller",Controller);
 	View.Tile();

@@ -5,7 +5,7 @@
 
 namespace mol  {
 
-REFIID uuid_info<mol::ole::nullInterface>::uuidof = CLSID_NULL;
+//constexpr REFIID uuid_info<mol::ole::nullInterface>::uuidof = CLSID_NULL;
 
 
 } // endnamespace mol

@@ -4,7 +4,7 @@
 #include "docs.h"
 #include "moeBar.h"
 //#include "xmlui.h"
-#include "ribbonres.h"
+//#include "ribbonres.h"
 #include "resource.h"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -211,9 +211,9 @@ HRESULT __stdcall TreeWndSink::OnContextMenu(BSTR fname,VARIANT_BOOL vb)
 	POINT pt;
 	::GetCursorPos(&pt);
 
-	mol::Menu sub = mol::UI().SubMenu(IDM_CONTEXT_TREE,IDM_TREE);
+	//mol::Menu sub = mol::UI().SubMenu(IDM_CONTEXT_TREE,IDM_TREE);
 
-	moe()->showContext(sub);
+	//moe()->showContext(sub);
 
 	return S_OK;
 

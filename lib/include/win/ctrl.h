@@ -272,8 +272,7 @@ LRESULT ReditBox<Cmd>::wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lP
     {
         HWND parent		= ::GetParent( hwnd );
         int id			= ::GetDlgCtrlID( hwnd );
-        //::SendMessage( parent, WM_COMMAND,MAKEWPARAM(id,Cmd), 0 );//(long)this );
-		::SendMessage( parent, WM_COMMAND,MAKEWPARAM(Cmd,0), 0 );//(long)this );
+		::SendMessage( parent, WM_COMMAND,MAKEWPARAM(Cmd,0), 0 );
         return 0;
     }
     return mol::win::Ctrl::wndProc(hwnd, message, wParam, lParam);

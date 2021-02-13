@@ -551,6 +551,7 @@ BOOL exec_cmdline( const std::wstring cl, bool shoWindow )
         return FALSE;
     }
 
+	::AllowSetForegroundWindow(pi.dwProcessId);
     // Close process and thread handles. 
     CloseHandle( pi.hProcess );
     CloseHandle( pi.hThread );

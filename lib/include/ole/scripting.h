@@ -107,7 +107,7 @@ public:
 		HRESULT hr = getScript("",&disp);
 		if ( (hr == S_OK) && disp )
 		{	
-			std::wstring ws = mol::ansi2wstring(func);
+			std::wstring ws = mol::towstring(func);
 			OLECHAR* c = (OLECHAR*)ws.c_str();
 			DISPID dispid;
 			hr = disp->GetIDsOfNames(IID_NULL, &(c), 1, 0, &dispid);
@@ -128,7 +128,7 @@ public:
 		HRESULT hr = getScript("",&disp);
 		if ( (hr == S_OK) && disp )
 		{	
-			std::wstring ws = mol::ansi2wstring(func);
+			std::wstring ws = mol::towstring(func);
 			OLECHAR* c = (OLECHAR*)ws.c_str();
 			DISPID dispid;
 			hr = disp->GetIDsOfNames(IID_NULL, &(c), 1, 0, &dispid);
@@ -149,7 +149,7 @@ public:
 		HRESULT hr = getScript("",&disp);
 		if ( (hr == S_OK) && disp )
 		{	
-			std::wstring ws = mol::ansi2wstring(func);
+			std::wstring ws = mol::towstring(func);
 			OLECHAR* c = (OLECHAR*)ws.c_str();
 			DISPID dispid;
 			hr = disp->GetIDsOfNames(IID_NULL, &(c), 1, 0, &dispid);
@@ -171,13 +171,13 @@ public:
 		HRESULT hr = getScript("",&disp);
 		if ( (hr == S_OK) && disp )
 		{	
-			std::wstring ws = mol::ansi2wstring(func);
+			std::wstring ws = mol::towstring(func);
 			OLECHAR* c = (OLECHAR*)ws.c_str();
 			DISPID dispid;
 			hr = disp->GetIDsOfNames(IID_NULL, &(c), 1, 0, &dispid);
 			if ( hr == S_OK )
 			{
-				return mol::dispInvoke( disp,dispid, v1, v2, v3, 4 );
+				return mol::disp_invoke( disp,dispid, v1, v2, v3, 4 );
 			}
 		}
 		return ret;

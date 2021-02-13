@@ -7,11 +7,11 @@
 #include "win/v7.h"
 
 namespace mol  {
-	 
+	  
 
 /////////////////////////////////////////////////////////////////////
 
-HICON Icon::load( int id, int w, int h , int options)
+HICON Icon::load( long id, int w, int h , int options)
 {
     hIcon_ = (HICON) LoadImage( hinstance(), MAKEINTRESOURCE(id), IMAGE_ICON,w,h ,options);
     return hIcon_;
@@ -19,7 +19,7 @@ HICON Icon::load( int id, int w, int h , int options)
 
 /////////////////////////////////////////////////////////////////////
 
-HANDLE Bmp::loadRaw( int hImage, int w, int h , int options )
+HANDLE Bmp::loadRaw( long hImage, int w, int h , int options )
 {
     if(bmp_)
         ::DeleteObject(bmp_);
@@ -39,7 +39,7 @@ int Bmp::height()
 	return h_;
 }
 
-HBITMAP Bmp::load( int id )
+HBITMAP Bmp::load( long id )
 {
 	HBITMAP oldBitmap;
 	
@@ -85,7 +85,7 @@ HBITMAP Bmp::load( int id )
 
 namespace win {
 
-MenuItemInfo::MenuItemInfo(const std::wstring& txt, bool s, int i,HBITMAP b)
+MenuItemInfo::MenuItemInfo(const std::wstring& txt, bool s, long i,HBITMAP b)
 : text_(txt), separator_(s), icon_(i), bitmap_(b)
 {}
 
@@ -94,7 +94,7 @@ const std::wstring& MenuItemInfo::text()
 	return text_;
 }
 
-int MenuItemInfo::icon()
+long MenuItemInfo::icon()
 {
 	return icon_;
 }
@@ -268,43 +268,38 @@ Menu::~Menu()
 }
 
 
-BOOL  Menu::addItem   ( UINT_PTR cmd, int iicon, int bmp, bool checked , bool enabled)
-{
+BOOL  Menu::addItem(UINT_PTR cmd, const std::wstring& snewItem, long iicon, long bmp, bool checked, bool enabled)
+{ 
 	mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo(
-									mol::UI().CmdString((int)cmd),
-									false,
-									iicon,
-									mol::UI().Bitmap(bmp));
+		snewItem,
+		false,
+		iicon,
+		mol::UI().Bitmap(bmp)
+	);
 
 	MENUITEMINFO mi;
-	::ZeroMemory( &mi, sizeof(mi) );
+	::ZeroMemory(&mi, sizeof(mi));
 	mi.cbSize = sizeof(mi);
 	mi.wID = (int)cmd;
 	mi.fType = MFT_OWNERDRAW;
 	mi.dwItemData = (ULONG_PTR)inf;
-	mi.fMask = MIIM_DATA|MIIM_TYPE|MIIM_ID|MIIM_STATE;
+	mi.fMask = MIIM_DATA | MIIM_TYPE | MIIM_ID | MIIM_STATE;
 
-	int e = enabled  ? MFS_ENABLED : MFS_DISABLED;
-	mi.fState = checked ? e : MFS_CHECKED|e;
+	int e = enabled ? MFS_ENABLED : MFS_DISABLED;
+	mi.fState = checked ? e : MFS_CHECKED | e;
 
-	return ::InsertMenuItem( hMenu_, ::GetMenuItemCount(hMenu_), TRUE, &mi );
+	return ::InsertMenuItem(hMenu_, ::GetMenuItemCount(hMenu_), TRUE, &mi);
 }
 
 
-
-
-BOOL  Menu::addSubmenu( HMENU sub, int cmd)
-{ 
-	return ::AppendMenu( hMenu_, MF_POPUP|MF_STRING, (UINT_PTR)sub, mol::UI().CmdString(cmd).c_str() );
-}
-
-BOOL  Menu::addSubmenu( HMENU sub, int cmd, int iicon, int bmp)
+BOOL  Menu::addSubmenu( HMENU sub, const std::wstring& snewItem, long cmd, long iicon, long bmp)
 {
 	mol::win::MenuItemInfo* inf = new mol::win::MenuItemInfo(
-									mol::UI().CmdString(cmd),
-									false,
-									iicon,
-									mol::UI().Bitmap(bmp));
+		snewItem,
+		false,
+		iicon,
+		mol::UI().Bitmap(bmp)
+	);
 
 	return ::AppendMenu(hMenu_, MF_OWNERDRAW | MF_POPUP | MF_STRING, (UINT_PTR)sub, (wchar_t*)inf);
 }
@@ -329,7 +324,7 @@ void Menu::attach( HMENU hmenu, bool a)
 
 /////////////////////////////////////////////////////////////////////
 
-HMENU Menu::load( int id, bool a )
+HMENU Menu::load(LONG_PTR id, bool a )
 {
     atached_ = a;
     hMenu_ = ::LoadMenu( hinstance(), MAKEINTRESOURCE(id) );
@@ -410,42 +405,42 @@ BOOL  Menu::remove ( UINT pos, UINT flags )
 
 /////////////////////////////////////////////////////////////////////
 
-HMENU Menu::getSubMenu( int pos )
+HMENU Menu::getSubMenu( long pos )
 {
     return ::GetSubMenu( hMenu_, pos );
 }
 
 /////////////////////////////////////////////////////////////////////
 
-int Menu::trackPopup( HWND hWnd, int x, int y , int flags)
+LONG_PTR Menu::trackPopup( HWND hWnd, int x, int y , int flags)
 {
     return ::TrackPopupMenu(hMenu_, flags,x,y,0, hWnd,0);
 }
 
 /////////////////////////////////////////////////////////////////////
 
-int Menu::returnTrackPopup( HWND hWnd, int x, int y, int flags )
+LONG_PTR Menu::returnTrackPopup( HWND hWnd, int x, int y, int flags )
 {
     return ::TrackPopupMenu(hMenu_, flags,x,y,0, hWnd,0);
 }
 
 /////////////////////////////////////////////////////////////////////
 
-DWORD Menu::checkItem  ( int i , int flags)
+DWORD Menu::checkItem  ( long i , int flags)
 {
     return ::CheckMenuItem( hMenu_, i, flags|MF_CHECKED );
 }
 
 /////////////////////////////////////////////////////////////////////
 
-DWORD Menu::unCheckItem( int i , int flags)
+DWORD Menu::unCheckItem( long i , int flags)
 {
     return ::CheckMenuItem( hMenu_, i, flags|MF_UNCHECKED );
 }
 
 /////////////////////////////////////////////////////////////////////
 
-DWORD Menu::enableItem  ( int i , int flags)
+DWORD Menu::enableItem  ( long i , int flags)
 {
 	int f = flags|MF_ENABLED;
 	f = f & ~MF_DISABLED;
@@ -455,7 +450,7 @@ DWORD Menu::enableItem  ( int i , int flags)
 
 /////////////////////////////////////////////////////////////////////
 
-DWORD Menu::disableItem( int i , int flags)
+DWORD Menu::disableItem( long i , int flags)
 {
     return (DWORD)(::EnableMenuItem( hMenu_, i, flags|MF_GRAYED));
 }
@@ -524,21 +519,15 @@ UserInterface::UserInterface()
 {
 }
 
-std::wstring UserInterface::CmdString(unsigned int id)
-{
-	if ( cmdStrings_.count(id) == 0 )
-		return 0;
-	return cmdStrings_[id];
-}
-
-HMENU UserInterface::Menu(unsigned int id)
+/*
+HMENU UserInterface::Menu(long id)
 {
 	if ( menus_.count(id) == 0 )
 		return 0;
 	return menus_[id];
 }
 
-HMENU UserInterface::SubMenu( unsigned int menu,unsigned int id)
+HMENU UserInterface::SubMenu( long menu, long id)
 {
 	if ( submenus_.count(menu) == 0 )
 		return 0;
@@ -547,8 +536,8 @@ HMENU UserInterface::SubMenu( unsigned int menu,unsigned int id)
 		return 0;
 	return submenus_[menu][id];
 }
-
-HBITMAP UserInterface::Bitmap(unsigned int id)
+*/
+HBITMAP UserInterface::Bitmap( long id)
 {
 	if ( bmps_.count(id) == 0 )
 		return 0;
@@ -556,7 +545,7 @@ HBITMAP UserInterface::Bitmap(unsigned int id)
 	return bmps_[id].hbitmap;
 }
 
-int UserInterface::BitmapCmd(unsigned int id, unsigned int index)
+int UserInterface::BitmapCmd( long id, long index)
 {
 	if ( bmps_.count(id) == 0 )
 		return 0;
@@ -569,12 +558,12 @@ int UserInterface::BitmapCmd(unsigned int id, unsigned int index)
 	return r;
 }
 
-int UserInterface::BitmapCmdIndex(unsigned int id, unsigned int cmd)
+int UserInterface::BitmapCmdIndex( long id, long cmd)
 {
 	if ( bmps_.count(id) == 0 )
 		return 0;
 
-	std::vector<int>& v = bmps_[id].index;
+	std::vector<long>& v = bmps_[id].index;
 	for ( unsigned int i = 0; i < v.size(); i++ )
 	{
 		if ( v[i] == cmd )
@@ -583,7 +572,7 @@ int UserInterface::BitmapCmdIndex(unsigned int id, unsigned int cmd)
 	return -1;
 }
 
-HWND UserInterface::hWnd(unsigned int id)
+HWND UserInterface::hWnd( long id)
 {
 	if ( hWnds_.count(id) == 0 )
 		return 0;
@@ -592,12 +581,7 @@ HWND UserInterface::hWnd(unsigned int id)
 }
 
 
-void UserInterface::addCmd(int key, const std::wstring& title)
-{
-	cmdStrings_.insert( std::make_pair( key, title ) );
-}
-
-void UserInterface::addBmp(int key)
+void UserInterface::addBmp( long key)
 {
 	mol::Bmp b;
 	b.load(key);
@@ -606,13 +590,13 @@ void UserInterface::addBmp(int key)
 	bmps_.insert( std::make_pair( key, bi ) );
 }
 
-void UserInterface::addBmpCmd(int bmp, int cmd)
+void UserInterface::addBmpCmd( long bmp, long cmd)
 {
 	if ( bmps_.count(bmp) > 0 ) {
 		bmps_[bmp].index.push_back(cmd);
 	}
 
-	int index = (int)bmps_[bmp].index.size()-1;
+	long index = ((long)bmps_[bmp].index.size())-1;
 
 	HDC desk = ::GetDC(::GetDesktopWindow());
 	
@@ -638,7 +622,8 @@ void UserInterface::addBmpCmd(int bmp, int cmd)
 	explodedBmps_.insert( std::make_pair( cmd, compatBmp ) );
 }
 
-void UserInterface::addMenu(int menu)
+/*
+void UserInterface::addMenu( long menu)
 {
 	HMENU popup = ::CreateMenu();
 	menus_.insert(std::make_pair(menu,popup));
@@ -761,15 +746,17 @@ void UserInterface::addMenuItem( int root, int menu, int cmd, int bmp, int index
 	}
 }
 
-
+*/
 //////////////////////////////////////////////////////////////
 
 
 
 
-
+/*
 void UIBuilder::addWnd(int key, HWND wnd)
 {
 	UI().hWnds_.insert( std::make_pair( key, wnd ) );
 }
+*/
+
 } // endnamespace mol

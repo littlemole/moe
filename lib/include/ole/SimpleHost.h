@@ -3,6 +3,8 @@
 
 #include "ole/punk.h"
 #include "ole/obj.h"
+#include "ole/ole.h"
+#include "win/res.h"
 
 namespace mol {
 namespace ole {
@@ -249,14 +251,14 @@ public:
 	typedef W	BaseWindowType;
 	typedef C	ThisWindowType;
 
-	SimpleAxHost::SimpleAxHost( ) 
+	SimpleAxHost( ) 
 	{
-		eraseBackground_ = 1;
+		this->eraseBackground_ = 1;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////
 
-	virtual SimpleAxHost::~SimpleAxHost() 
+	virtual ~SimpleAxHost() 
 	{
 		//ODBGS("~SimpleAxHost dies");
 	};
@@ -306,7 +308,7 @@ public:
 	{
 		BaseWindowType::OnSize(message,wParam,lParam);
 
-		mol::Rect clientRect_ = mol::Rect(0,0,0,0);
+		Rect clientRect_ = mol::Rect(0,0,0,0);
 
 		// get new width and height
 		clientRect_.right  = LOWORD(lParam) ;
@@ -407,7 +409,7 @@ protected:
 			return hr;
 
 		RECT r;
-		getClientRect(r);
+		this->getClientRect(r);
 		mol::punk<IOleClientSite> cs(clientSite);
 		hr = oleObject->DoVerb(OLEIVERB_SHOW, NULL, cs, -1, *this, &r);
 		return hr;

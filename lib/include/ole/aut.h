@@ -146,7 +146,7 @@ void disp_invoke( IDispatch* disp, DISPID dispIdMember);
 variant disp_call( IDispatch* disp, DISPID dispIdMember);
 
 template<class V>
-void disp_invoke( IDispatch* disp, DISPID dispIdMember, V& v)
+void disp_invoke( IDispatch* disp, DISPID dispIdMember, V v)
 {
 	variant var(v);
 	DISPPARAMS dps = {&var,0,1,0};
@@ -154,7 +154,7 @@ void disp_invoke( IDispatch* disp, DISPID dispIdMember, V& v)
 }
 
 template<class V>
-variant disp_call( IDispatch* disp, DISPID dispIdMember, V& v)
+variant disp_call( IDispatch* disp, DISPID dispIdMember, V v)
 {
 	variant var(v);
 	DISPPARAMS dps = {&var,0,1,0};
@@ -170,7 +170,7 @@ variant disp_call( IDispatch* disp, DISPID dispIdMember, V& v)
 }
 
 template<class V1, class V2>
-void disp_invoke( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2)
+void disp_invoke( IDispatch* disp, DISPID dispIdMember,  V1 v1,  V2 v2)
 {
 	variant var[] = { variant(v2), variant(v1) };
 	DISPPARAMS dps = {var,0,2,0};
@@ -179,7 +179,7 @@ void disp_invoke( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2)
 }
 
 template<class V1, class V2>
-variant disp_call( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2)
+variant disp_call( IDispatch* disp, DISPID dispIdMember, V1 v1,  V2 v2)
 {
 	variant var[] = { variant(v2), variant(v1) };
 	DISPPARAMS dps = {&var,0,2,0};
@@ -195,7 +195,7 @@ variant disp_call( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2)
 }
 
 template<class V1, class V2, class V3>
-void disp_invoke( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2, V3& v3)
+void disp_invoke( IDispatch* disp, DISPID dispIdMember,  V1 v1, V2 v2, V3 v3)
 {
 	variant var[] = { variant(v3), variant(v2), variant(v1) };
 	DISPPARAMS dps = {var,0,3,0};
@@ -205,7 +205,7 @@ void disp_invoke( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2, V3& v3)
 
 
 template<class V1, class V2, class V3>
-variant disp_call( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2, V3& v3)
+variant disp_call( IDispatch* disp, DISPID dispIdMember, V1 v1, V2 v2, V3 v3)
 {
 	variant var[] = { variant(v2), variant(v1), variant(v3) };
 	DISPPARAMS dps = {&var,0,3,0};
@@ -221,7 +221,7 @@ variant disp_call( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2, V3& v3)
 }
 
 template<class V1, class V2, class V3, class V4>
-void disp_invoke( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2, V3& v3, V4& v4)
+void disp_invoke( IDispatch* disp, DISPID dispIdMember, V1 v1, V2 v2, V3 v3, V4 v4)
 {
 	variant var[] = { variant(v4), variant(v3), variant(v2), variant(v1) };
 	DISPPARAMS dps = {var,0,4,0};
@@ -231,7 +231,7 @@ void disp_invoke( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2, V3& v3, 
 
 
 template<class V1, class V2, class V3, class V4>
-variant disp_call( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2, V3& v3, V4& v4)
+variant disp_call( IDispatch* disp, DISPID dispIdMember, V1 v1, V2 v2, V3 v3, V4 v4)
 {
 	variant var[] = { 
 							variant(v4), variant(v3), 
@@ -249,7 +249,7 @@ variant disp_call( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2, V3& v3,
 }
 
 template<class V1, class V2, class V3, class V4, class V5>
-void disp_invoke( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2, V3& v3, V4& v4, V5& v5)
+void disp_invoke( IDispatch* disp, DISPID dispIdMember, V1 v1, V2 v2, V3 v3, V4 v4, V5 v5)
 {
 	variant var[] = { variant(v5), variant(v4), variant(v3), 
 						   variant(v2), variant(v1) };
@@ -260,7 +260,7 @@ void disp_invoke( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2, V3& v3, 
 
 
 template<class V1, class V2, class V3, class V4, class V5>
-variant disp_call( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2, V3& v3, V4& v4, V5& v5)
+variant disp_call( IDispatch* disp, DISPID dispIdMember, V1 v1, V2 v2, V3 v3, V4 v4, V5 v5)
 {
 	variant var[] = {  variant(v5),
 							variant(v4), variant(v3), 
@@ -278,7 +278,7 @@ variant disp_call( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2, V3& v3,
 }
 
 template<class V1, class V2, class V3, class V4, class V5, class V6>
-void disp_invoke( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2, V3& v3, V4& v4, V5& v5, V6& v6)
+void disp_invoke( IDispatch* disp, DISPID dispIdMember, V1 v1, V2 v2, V3 v3, V4 v4, V5 v5, V6 v6)
 {
 	variant var[] = { variant(v6), variant(v5), variant(v4), 
 						   variant(v3), variant(v2), variant(v1) };
@@ -289,7 +289,7 @@ void disp_invoke( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2, V3& v3, 
 
 
 template<class V1, class V2, class V3, class V4, class V5, class V6>
-variant disp_call( IDispatch* disp, DISPID dispIdMember, V1& v1, V2& v2, V3& v3, V4& v4, V5& v5, V6& v6)
+variant disp_call( IDispatch* disp, DISPID dispIdMember, V1 v1, V2 v2,  V3 v3, V4 v4, V5 v5, V6 v6)
 {
 	variant var[] = {  variant(v6), variant(v5),
 							variant(v4), variant(v3), 

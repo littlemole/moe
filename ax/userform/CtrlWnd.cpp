@@ -110,7 +110,7 @@ void FrameWindow::OnLangPerlScript()
 void FrameWindow::OnMenu(HMENU popup, LPARAM unused)
 {
 	mol::Menu m = menu.getSubMenu(2);
-	HMENU frameMenu = mol::UI().Menu(IDM_MENU_DESIGNFORM);
+	HMENU frameMenu = menu;
 
 	if (popup == m )
 	{

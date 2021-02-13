@@ -86,9 +86,9 @@ private:
 	typedef std::list<mol::MdiChild* > childlist;
 	childlist	children_;
 
-	childlist::iterator iterator(VARIANT& index);
+	childlist::iterator iterator(const VARIANT& index);
 	childlist::iterator iterator(mol::MdiChild* mdi);
-	int key2index( VARIANT& index );
+	int key2index( const VARIANT& index );
 
 	void erase(mol::MdiChild* mdi);
 	void insert(mol::MdiChild* mdiPos,mol::MdiChild* mdi);

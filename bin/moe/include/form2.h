@@ -26,7 +26,6 @@ public:
 
 	mol::punk< ICoreWebView2Controller> webViewController;
 	mol::punk< ICoreWebView2> webview;
-//	mol::punk< IMoeHtmlFrame> oleObject;
 	mol::punk<IMoeDialogView> view;
 
 	MoeForm2Wnd( );
@@ -79,7 +78,7 @@ public:
   private:
 
 	/////////////////////////////////////////////////////////////////////
-	void load( const std::wstring& loc, int s, mol::Rect& r );
+	void load( const std::wstring& loc, int s, const mol::Rect& r );
 	virtual int style();
 
 	void onDocumentLoad();

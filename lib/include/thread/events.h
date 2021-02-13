@@ -162,7 +162,7 @@ public:
 
 	virtual void fire( P1 p1, P2 p2 )
 	{
-		(t_->*fun_)(p1,p2);
+		(fun_)(p1,p2);
 	}
 
 	Function fun_;
@@ -351,7 +351,7 @@ public:
 
 	void fire( P1 p1, P2 p2, P3 p3, P4 p4)
 	{
-		for ( std::list<EventHandler4<P1,P2,P3,P4>*>::iterator it = events.begin(); it != events.end(); it++ )
+		for ( typename std::list<EventHandler4<P1,P2,P3,P4>*>::iterator it = events.begin(); it != events.end(); it++ )
 		{
 			EventHandler4<P1,P2,P3,P4>* e = (*it);
 			e->fire(p1,p2,p3,p4);
@@ -394,7 +394,7 @@ public:
 
 	void fire( P1 p1, P2 p2, P3 p3)
 	{
-		for ( std::list<EventHandler3<P1,P2,P3>*>::iterator it = events.begin(); it != events.end(); it++ )
+		for ( typename std::list<EventHandler3<P1,P2,P3>*>::iterator it = events.begin(); it != events.end(); it++ )
 		{
 			EventHandler3<P1,P2,P3>* e = (*it);
 			e->fire(p1,p2,p3);
@@ -438,7 +438,7 @@ public:
 
 	void fire( P1 p1, P2 p2)
 	{
-		for ( std::list<EventHandler2<P1,P2>*>::iterator it = events.begin(); it != events.end(); it++ )
+		for ( typename std::list<EventHandler2<P1,P2>*>::iterator it = events.begin(); it != events.end(); it++ )
 		{
 			EventHandler2<P1,P2>* e = (*it);
 			e->fire(p1,p2);
@@ -481,7 +481,7 @@ public:
 
 	void fire( P1 p1)
 	{
-		for ( std::list<EventHandler1<P1>*>::iterator 
+		for ( typename std::list<EventHandler1<P1>*>::iterator 
 				it  = events.begin(); 
 				it != events.end(); 
 				it ++ )

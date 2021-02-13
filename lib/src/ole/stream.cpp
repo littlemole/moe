@@ -1,5 +1,8 @@
+#include "conf.h"
 #include "ole/stream.h"
+#include "win/mem.h"
 #include <Shlwapi.h> 
+#include <sstream>
 
 namespace mol {
 

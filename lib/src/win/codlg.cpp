@@ -177,7 +177,7 @@ BOOL FilenameDlg::dlgOpen( int flags)
 			filenames_.push_back( p + _T("\\") + std::wstring(buf + of_.nFileOffset) );
 		}
 		else
-		while ( !( (*c == 0) && (*(c-1) == 0) ) && (int)c <= (int)of_.lpstrFile + (int)(of_.nMaxFile*sizeof(wchar_t)) )
+		while ( !( (*c == 0) && (*(c-1) == 0) ) && c <= of_.lpstrFile + (int)(of_.nMaxFile*sizeof(wchar_t)) )
 		{
 			if ( *c == 0 )
 			{

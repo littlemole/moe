@@ -220,7 +220,7 @@ SSLStreamBuf* SSLStreamBuf::accept(SOCKET s)
 		}
 	}
 
-	return false;
+	return nullptr;
 }
 
 

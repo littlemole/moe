@@ -1,3 +1,4 @@
+#include "conf.h"
 #include "ole/stream.h"
 #include "ole/ie.h"
 #include "ole/urlmoniker.h"

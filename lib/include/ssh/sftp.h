@@ -190,7 +190,8 @@ public:
 
 	bool put(const std::string& s)
 	{
-		return write( s.c_str(), s.size() ) != 0;
+		write( s.c_str(), s.size() );
+		return true;
 	}
 
 	const std::wstring path()

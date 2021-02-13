@@ -256,12 +256,12 @@ protected:
 
     HRESULT virtual __stdcall IOleInPlaceFrame_GetBorder( LPRECT lprectBorder)
 	{
-		return this->handleGetBorder( clientRect_, lprectBorder );
+		return this->handleGetBorder( this->clientRect_, lprectBorder );
 	}
 
     HRESULT virtual __stdcall IOleInPlaceFrame_RequestBorderSpace( LPCBORDERWIDTHS pborderwidths)
 	{
-		return this->handleRequestBorderSpace( clientRect_, pborderwidths );
+		return this->handleRequestBorderSpace( this->clientRect_, pborderwidths );
 	}
 
     HRESULT virtual __stdcall IOleInPlaceFrame_SetBorderSpace( LPCBORDERWIDTHS pborderwidths)
@@ -269,7 +269,7 @@ protected:
 		HRESULT hr = this->handleSetBorderSpace(pborderwidths);
 
 		doLayout();
-		show(SW_SHOW);
+		this->show(SW_SHOW);
 		return hr;
 	}
 
@@ -338,9 +338,9 @@ public:
 		}
 
 		// get new width and height
-		clientRect_ = mol::Rect(0,0,0,0);
-		clientRect_.right  = LOWORD (lParam) ;
-		clientRect_.bottom = HIWORD (lParam) ;		
+		this->clientRect_ = mol::Rect(0,0,0,0);
+		this->clientRect_.right  = LOWORD (lParam) ;
+		this->clientRect_.bottom = HIWORD (lParam) ;		
 		//ODBGS1("new width :",clientRect_.right);
 		//ODBGS1("new height:",clientRect_.bottom);
 
@@ -364,10 +364,10 @@ public:
 	{
 		W::createWindow( windowName, id, r, parent );
 
-		getClientRect( clientRect_);
-		origMenu_= ::GetMenu(*this);
+		this->getClientRect( this->clientRect_);
+		this->origMenu_= ::GetMenu(*this);
 
-		return hWnd_;
+		return this->hWnd_;
 	}
 
 protected:
@@ -393,7 +393,7 @@ protected:
 	virtual RECT prepareClientRect()
 	{
 		RECT r;
-		getClientRect(r);
+		this->getClientRect(r);
 		return r;
 	}
 
@@ -404,7 +404,7 @@ protected:
 
 	virtual mol::LayoutMgr* getLayoutMgr()
 	{
-		return layout_;
+		return this->layout_;
 	}
 
 	virtual bool getMidiState()
@@ -420,9 +420,9 @@ protected:
 	virtual IUnknown* getAxFrameSiteUnknown()
 	{
 		IUnknown* u = 0;
-		if ( axFrameSite() ) 
+		if ( this->axFrameSite() ) 
 		{
-			u = axFrameSite;
+			u = this->axFrameSite;
 		}
 		return u;
 	}
@@ -430,17 +430,17 @@ protected:
 	virtual IOleInPlaceActiveObject* getIOleInPlaceActiveObject()
 	{
 		IOleInPlaceActiveObject* a =  0;
-		if ( activeObject() ) 
+		if ( this->activeObject() ) 
 		{
-			a = activeObject;
+			a = this->activeObject;
 		}
 		return a;
 	}
 
 	virtual void releaseOleContainer()
 	{
-		activeObject.release();
-		axFrameSite.release();
+		this->activeObject.release();
+		this->axFrameSite.release();
 	}
 
 	virtual void setFrameMenu( HMENU newMenu, HMENU windowMenu   ) 

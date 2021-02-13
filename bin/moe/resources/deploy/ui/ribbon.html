@@ -215,11 +215,11 @@
 
 	  <div class="two-buttons-stacked flex fixed" modes="Scintilla" tab="tools" >
        <div script="js\base64encode.js" class="hover button fixed flex center" title="Encode as Base64">
- 	    <img src="img/document-properties.svg">
+ 	    <img src="img/base64.png">
         <span><small>&nbsp;Encode</small></span>
 	   </div>
        <div script="js\base64decode.js" class="hover button fixed flex center" title="Decode Base64">
- 	    <img src="img/document-properties.svg">
+ 	    <img src="img/base64.png">
         <span><small>&nbsp;Decode</small></span>
 	   </div>
 	   <div><span>Base64</span></div>
@@ -250,11 +250,13 @@
  	    <img src="img/Applications-system.svg">
         <span>Debug&nbsp;Script</span>
 	   </div>
-       <div  cmd="IDM_MODE_EXECUTEFORM"class="hover button fixed flex center" title="Show current active document in embedded HTML Brwoser">
+       <div  cmd="IDM_MODE_EXECUTEFORM" class="hover button fixed flex center" title="Show current active document in embedded HTML Brwoser">
  	    <img src="img/web-browser.svg">
         <span>Show&nbsp;Form</span>
 	   </div>
       </div>
+
+      <div class="divider stretch flex" style="flex:1"  modes="Scintilla" tab="run" ></div>
 
 	  <div  modes="Scintilla Directory Html Hex" tab="run" title="App Mode">
        <select id="mode">
@@ -269,6 +271,10 @@
        <span>Set App Mode</span>
       </div>
 
+	  <div cmd="IDM_HELP_ABOUT" modes="Scintilla" tab="run" title="App Mode" class="hover button fixed flex center">
+ 	    <img src="img/help-browser.svg">
+        <span>Help</span>
+      </div>
 
 	  <div class="three-small-items flex fixed "  modes="Scintilla" tab="document" title="Document Settings">
  	   <div class="fixed flex row stretch" title="Write Byte-order-mark (BOM) when saving to disk."  modes="Scintilla"  tab="document">
@@ -289,14 +295,28 @@
 
 	  <div class="two-buttons-stacked flex fixed" modes="Scintilla" tab="tools" >
        <div script="js\formatXml.js" class="hover fixed flex row center" title="Format XML">
- 	    <img src="img/document-properties.svg">
+ 	    <img src="img/xml.svg">
         <span><small>&nbsp;XML</small></span>
 	   </div>
        <div script="js\lib\format.js" class="hover fixed flex center" title="Format JavaScript">
- 	    <img src="img/document-properties.svg">
+ 	    <img src="img/javascript.svg">
         <span class="stretch"><small>&nbsp;JS</small></span>
 	   </div>
 	   <div><span>Format</span></div>
+	  </div>
+
+      <div class="divider fixed" modes="Scintilla"  tab=" document"></div>
+
+	  <div class="two-buttons-stacked flex fixed" modes="Scintilla" tab="tools" >
+       <div script="js\dot.js" class="hover fixed flex row center" title="graphviz">
+ 	    <img src="img/dot.svg">
+        <span><small>&nbsp;graphviz</small></span>
+	   </div>
+       <div script="js\markdown.js" class="hover fixed flex center" title="Markdown">
+ 	    <img src="img/markdown.svg">
+        <span class="stretch"><small>&nbsp;Markdown</small></span>
+	   </div>
+	   <div><span>Preview</span></div>
 	  </div>
 
       <div class="divider" style="flex:0" modes="Scintilla"  tab="document"></div>
@@ -445,7 +465,7 @@
 
       <div class="divider fixed flex" modes="Scintilla Html Directory Hex Img Script Debug"  tab="main tools document"></div>
 
-	  <div class="one-and-a-half-buttons flex fixed"   modes="Scintilla Directory Html Hex Img Script Debug"  tab="main tools document">       
+	  <div class="one-and-a-half-buttons flex fixed"   modes="Scintilla Directory Html Hex Img Script Debug"  tab="main tools document run">       
 	    <div cmd="IDM_VIEW_CLOSE" class="hover fixed " style="justify-content: flex-end;" title="close window">
 	     <img src="img/document-close.svg" style="width:34px;">
 	    </div>

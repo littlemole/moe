@@ -5,12 +5,12 @@
 namespace mol  {
 namespace win  {
 
-const wchar_t button_class[]			= _T("Button");
+const wchar_t button_class[]		= _T("Button");
 const wchar_t edit_class[]			= _T("Edit");
 const wchar_t combo_box_class[]		= _T("ComboBox");
 const wchar_t list_box_class[]		= _T("ListBox");
 const wchar_t scrollbar_class[]		= _T("ScrollBar");
-const wchar_t static_class[]			= _T("Static");
+const wchar_t static_class[]		= _T("Static");
 
 
 Ctrl::~Ctrl()
@@ -79,7 +79,6 @@ HWND Ctrl::createWindow( const std::wstring& windowName, HMENU hMenu, const Rect
 	static HFONT font_ = ::CreateFontIndirect(&fl);
 
 	setFont( font_);
-    //setFont( (HFONT)::GetStockObject(ANSI_VAR_FONT));
 
     this->OnCtrlCreated();
     return hWnd_;
@@ -174,16 +173,6 @@ std::wstring ComboBox::getString(int id )
        throw X( _T("getString failed"));
 	buf[2047] = 0;
     return buf.toString();
-	/*
-	wchar_t buf[1024];
-	::memset(buf,32,1024*sizeof(wchar_t));
-    buf[1023] = 0;
-
-    if ( CB_ERR == sendMessage( CB_GETLBTEXT,id,(LPARAM)buf))
-       throw X( _T("getString failed"));
-
-    return buf;
-	*/
 }
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
@@ -201,7 +190,6 @@ int ListBox::getCurSel()
 
 std::wstring ListBox::getString(int index)
 {
-	//wchar_t* buf = 0;
     int   len = 0;
 
     len = (int)sendMessage(LB_GETTEXTLEN, (WPARAM)index,(LPARAM)0);

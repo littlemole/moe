@@ -29,6 +29,7 @@ public:
 	void OnDestroy();
 	void OnNcDestroy();
 	void OnClose();
+	LRESULT OnCloseAll();
 
 	void OnFind( );
 	void OnSearch( FINDREPLACE* find );

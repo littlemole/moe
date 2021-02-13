@@ -422,7 +422,8 @@ public:
     explicit variant( bool b )		    { ::VariantInit(this); vt =  VT_BOOL; boolVal = b ? VARIANT_TRUE : VARIANT_FALSE; }
     explicit variant( CY cy )		    { ::VariantInit(this); vt =  VT_CY;	 cyVal	 = cy;}
 	explicit variant( BSTR b )		    { ::VariantInit(this); vt =  VT_BSTR; bstrVal = ::SysAllocString(b);}
-    explicit variant( IUnknown* iu )
+	explicit variant( mol::bstr b) { ::VariantInit(this); vt = VT_BSTR; bstrVal = ::SysAllocString(b.bstr_); }
+	explicit variant( IUnknown* iu )
     {
 		::VariantInit(this); 
         vt =  VT_UNKNOWN;
@@ -560,7 +561,7 @@ public:
 };
 
 template<class T>
-T& valueOf( mol::variant& v)
+T& valueOf( mol::variant v)
 {
 	if ( v.vt == mol::ole::VarTraits<T>::vt() )
 	{
@@ -587,7 +588,7 @@ class vEmpty : public concreteVariant<VT_EMPTY> {};
 class vError : public concreteVariant<VT_ERROR> {};
 
 
-std::wstring valueOf( mol::variant& v);
+std::wstring valueOf( mol::variant v);
 
 //BSTR valueOf( mol::variant& v);
 
@@ -873,7 +874,7 @@ public:
 	SafeArray()
 	{}
 
-	SafeArray(SAFEARRAYBOUND& sfb)
+	SafeArray(const SAFEARRAYBOUND& sfb)
 	{
 		this->Create(sfb);
 	}
@@ -954,7 +955,7 @@ public:
 
 	virtual void dispose() {}
 
-	void add(VARIANT& var);
+	void add(const VARIANT& var);
 
 	HRESULT virtual __stdcall Next( ULONG celt, VARIANT* rgelt, ULONG * pceltFetched );
 	HRESULT virtual __stdcall Skip( ULONG celt );
@@ -971,7 +972,7 @@ template<class T>
 HRESULT make_enumVariant( std::vector<T>& v, IEnumVARIANT** newEnum)
 {
 	mol::punk<mol::com_obj<mol::enum_variant> > ev = new mol::com_obj<mol::enum_variant>;
-	for ( std::vector<T>::iterator it = v.begin(); it != v.end(); it++)
+	for ( typename std::vector<T>::iterator it = v.begin(); it != v.end(); it++)
 	{
 		ev->add(mol::variant(*it));
 	}

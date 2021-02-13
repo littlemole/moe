@@ -13,7 +13,7 @@
 #include "rtf.h"
 #include "moe.h"
 //#include "xmlui.h"
-#include "ribbonres.h"
+//#include "ribbonres.h"
 #include "DocFactory.h"
 #include "Docs.h"
 #include "tcp/sockets.h"
@@ -213,11 +213,11 @@ class MoeHexFactory : public IMoeDocumentFactory
 {
 public:
 
-	MoeHexFactory::MoeHexFactory(bool readOnly) 
+	MoeHexFactory(bool readOnly) 
 		: readOnly_(readOnly)
 	{}
 
-	MoeHexFactory::~MoeHexFactory()
+	~MoeHexFactory()
 	{}
 
 	virtual mol::MdiChild* openDocument( const std::wstring& path)

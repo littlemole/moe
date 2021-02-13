@@ -36,13 +36,13 @@ private:
 // script[0] actually is comment,
 // script[1] actually is cdata
 
-char* molscripts[]     = { "<!--", "<[[CDATA", "<?php", "<?", 
+const char* molscripts[]     = { "<!--", "<[[CDATA", "<?php", "<?", 
                            "<&", "<@", "<%init", "<%perl", 
                            "<%args", "<%flags", "<%cleanup", "<%once", 
                            "<%shared", "<%attr", "<%filter", "<%text", 
                            "<%doc", "<% ", "%" } ;
 
-char* molscriptsends[] = { "-->", "]]>", "?>", "?>", 
+const char* molscriptsends[] = { "-->", "]]>", "?>", "?>", 
                            "&>", "@>", "</%init>", "</%perl>", 
                            "</%args>", "</%flags>", "</%cleanup>", "</%once>", 
                            "</%shared>", "</%attr>", "</%filter>", "</%text", 

@@ -31,6 +31,7 @@ public:
 
 	void OnDestroy();
 	void OnNcDestroy();
+	LRESULT OnCloseAll();
 	void OnPaint();
 
 	void OnSave();

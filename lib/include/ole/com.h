@@ -3,11 +3,15 @@
 
 #include "util/uni.h"
 #include "util/util.h"
+#include "ole/punk.h"
+//#include "ole/ole.h"
 #include "thread/Sync.h"
 #include "win/mem.h"
+#include "win/app.h"
 #include <objbase.h>
 #include <ole2.h>
 #include <OCIdl.h>
+#include <list>
 
 namespace mol {
 
@@ -28,53 +32,39 @@ namespace ole {
 
 struct emptyType {};
 
-struct nullInterface {};
+
+
+class ole_init
+{
+public:
+	ole_init()
+	{
+		::OleInitialize(0);
+	}
+
+
+	~ole_init()
+	{
+		for (std::list<IUnknown*>::iterator it = singletons_.begin(); it != singletons_.end(); it++)
+		{
+			(*it)->Release();
+		}
+		::OleUninitialize();
+	}
+
+	static void addRef(IUnknown* p)
+	{
+		p->AddRef();
+		singletons_.push_back(p);
+	}
+
+private:
+	static std::list<IUnknown*> singletons_;
+};
 
 } // end namespace ole
 
-// uuid_info is a template to hide ms specific __uuidof(x)
 
-template <class I> 
-class uuid_info
-{
- public:
-    static REFIID uuidof;
-    typedef I uuid_type;
-};
-
-template <class I> 
-REFIID uuid_info<I>::uuidof = __uuidof(I);
-
-
-template <> 
-class uuid_info<mol::ole::nullInterface>
-{
- public:
-	 static REFIID uuidof;// = CLSID_NULL;
-     typedef mol::ole::nullInterface uuid_type;
-};
-
-
-
-// uuidof is a generic function template to replace __uuidof(x)
-
-template <typename I> 
-const GUID& uuidof() 
-{ 
-	return uuid_info<I>::uuidof;//(); 
-}
-
-template <typename I> 
-const GUID& uuidof(I*) 
-{ 
-	return uuid_info<I>::uuidof;//(); 
-}
-
-template <typename I> 
-const GUID& uuidof(I**) 
-{ 
-	return uuid_info<I>::uuidof;//(); 
-}
 
 template<const IID* I1, const IID* I2 = &IID_NULL, const IID* I3 = &IID_NULL, const IID* I4 = &IID_NULL, const IID* I5 = &IID_NULL>
 class SupportsErrorInfo : public ISupportErrorInfo 
@@ -182,7 +172,7 @@ public:
 			LONG_PTR tmp = locked_comp_ex( &t_,p.interface_,0);
 			if ( tmp == 0 )
 			{
-				mol::ole_init::addRef((IUnknown*)t_);
+				ole::ole_init::addRef((IUnknown*)t_);
 			}
 		}
 		return (T*)t_;
@@ -190,14 +180,14 @@ public:
 
 private:
 
-	static volatile T* t_;	
+	static  T* t_;	
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 template<class T,const CLSID* clsid, const CLSID* iid >
-volatile T* COMSingleton<T,clsid,iid>::t_ = 0;
+ T* COMSingleton<T,clsid,iid>::t_ = 0;
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -207,7 +197,7 @@ volatile T* COMSingleton<T,clsid,iid>::t_ = 0;
 template<class T,const CLSID* clsid, const CLSID* iid>
 T* comSingleton()
 {
-	return COMSingleton<T,REFCLSID clsid, REFCLSID iid>::instance();
+	return COMSingleton<T, clsid,  iid>::instance();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -236,7 +226,7 @@ public:
 			LONG_PTR tmp = locked_comp_ex( &t_,n,0);
 			if ( tmp == 0 )
 			{
-				mol::ole_init::addRef((I*)t_);
+				mol::ole::ole_init::addRef((I*)t_);
 			}
 			else
 			{

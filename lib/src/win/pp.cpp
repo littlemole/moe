@@ -1,5 +1,6 @@
 #include "win/pp.h"
 #include "win/msgloop.h"
+#include "ole/propertypage.h"
 
 namespace mol {
 namespace win {

@@ -54,8 +54,9 @@ protected:
 	std::vector<IUnknown*> objects_;
 };
 
+
 class OlePropPage : 
-	public mol::win::PropPage
+	public ::mol::win::PropPage
 {
 friend class mol::PropSheet;
 public:
@@ -121,23 +122,63 @@ public:
 
 	HRESULT __stdcall Deactivate( void) 
 	{
-		destroy();
+		this->destroy();
 		return S_OK;
 	}
 
 	HRESULT __stdcall Show( UINT nCmdShow)
 	{
-		show(nCmdShow);
+		this->show(nCmdShow);
 		return S_OK;
 	}
 
 	HRESULT __stdcall Move( LPCRECT pRect)
 	{
-		move(*pRect);
+		this->move(*pRect);
 		return S_OK;
 	}
 };
 
+class PropSheet
+{
+public:
+
+	typedef PropSheet BaseWindowType;
+
+	PropSheet(HWND owner, const std::wstring& title, int flags = PSH_NOCONTEXTHELP | PSH_PROPTITLE | PSH_USEPSTARTPAGE | PSH_NOAPPLYNOW | PSH_USECALLBACK);
+
+	template<class T>
+	void addPage(const std::wstring& tab, int id)
+	{
+		mol::win::PropPage* page = new T;
+		page->create(this, tab, id);
+		addPage(page);
+	}
+
+	template<class T>
+	void addPage(const std::wstring& tab, REFCLSID clsid, int id)
+	{
+		mol::ole::OlePropPage* page = new T;
+		page->create(this, tab, clsid, id);
+		addPage(page);
+	}
+
+	INT_PTR create();
+
+	static int CALLBACK PropSheetProc(HWND hwndDlg, UINT uMsg, LPARAM lParam);
+
+	void center(HWND hwnd);
+protected:
+
+	HPROPSHEETPAGE addPage(mol::win::PropPage* page);
+
+	bool centered_;
+	int startPage_;
+	int	nPages_;
+	std::vector<HPROPSHEETPAGE> pages_;
+	PROPSHEETHEADER ph_;
+	std::wstring title_;
+};
 
 } // end namespace mol
 

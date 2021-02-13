@@ -74,7 +74,7 @@ HRESULT ThreadedTimeouts::setTimeout( mol::variant f, mol::variant t)
 	{
 		t.changeType(VT_I4);
 	}
-	timeouts_.push_back( new ThreadedTimeout(f.pdispVal,t.llVal+tick) );
+	timeouts_.push_back( new ThreadedTimeout(f.pdispVal,(long)(t.llVal+tick)) );
 	return S_OK;
 }
 
@@ -330,7 +330,7 @@ void ScriptDebugger::init(const std::wstring& engine)
 	}
 	if (hr == S_OK)
 	{
-		hr = debugHelper_->DefineScriptBlock(0, script_.size(), activeScript_, false, &debugCookie_);
+		hr = debugHelper_->DefineScriptBlock(0, (ULONG)script_.size(), activeScript_, false, &debugCookie_);
 	}
 
 	mol::punk<IActiveScriptProperty> asprop(activeScript_);

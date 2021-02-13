@@ -52,6 +52,7 @@ public:
 	void OnSearch( FINDREPLACE* find );
 
 	void OnMDIActivate( HWND activated );
+	LRESULT OnCloseAll();
 
 	void onDocumentTitleChanged();
 	void onNavigationStarted(ICoreWebView2NavigationStartingEventArgs* args);

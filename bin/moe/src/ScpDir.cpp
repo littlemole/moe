@@ -105,6 +105,18 @@ void ScpDirChild::OnNcDestroy()
 	((IMoeDocument*)this)->Release();
 }
 
+
+handle_cmd(&ScpDirChild::OnCloseAll, IDM_VIEW_CLOSEALL)
+LRESULT ScpDirChild::OnCloseAll()
+{
+	return MoeAxChild<
+		ScpDirChild,
+		MOE_DOCTYPE_SFTP,
+		&CLSID_ScpList,
+		IDM_MOE_DIR
+	>::OnCloseAll();
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // Child gets activated

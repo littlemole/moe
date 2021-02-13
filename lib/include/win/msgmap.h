@@ -6,6 +6,7 @@
 #include <commctrl.h>
 #include <Richedit.h>
 #include <commdlg.h>
+#include "util/util.h"
 #include "util/Signature.h"
 #include "thread/fun.h"
 #include <Windowsx.h>

@@ -2,6 +2,7 @@
 #define MOL_DOTNET_DEF_GUARDX_DEFINE_
 
 #include "ole/punk.h"
+#include "thread/sync.h"
 
 // .NET native interfaces
 #include <mscoree.h>
@@ -9,6 +10,7 @@
 // .NET imported typelib
 #include "mscorlib_tlh.h"
 
+#include <map>
 
 class NetHost;
 

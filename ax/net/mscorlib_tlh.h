@@ -12141,10 +12141,10 @@ ITrackingHandler : IDispatch
 
       virtual HRESULT __stdcall MarshaledObject (
         /*[in]*/ VARIANT obj,
-        /*[in]*/ struct _ObjRef * or ) = 0;
+        /*[in]*/ struct _ObjRef * orf ) = 0;
       virtual HRESULT __stdcall UnmarshaledObject (
         /*[in]*/ VARIANT obj,
-        /*[in]*/ struct _ObjRef * or ) = 0;
+        /*[in]*/ struct _ObjRef * orf ) = 0;
       virtual HRESULT __stdcall DisconnectedObject (
         /*[in]*/ VARIANT obj ) = 0;
 };

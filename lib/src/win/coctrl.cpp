@@ -76,8 +76,6 @@ int StatusBar::setText( const std::wstring& txt )
 
 HWND StatusBarEx::createWindow( const std::wstring& wndName, HMENU hMenu, const Rect& r, HWND parent )
 {
-//    hWnd_ = ::CreateStatusWindow( style(), wndName.c_str(), parent, (UINT_PTR)hMenu );
-
 	hWnd_ = ::CreateWindowEx( 0, mol::win::statusbar_class, wndName.c_str(), style(), r.left, r.top, r.right-r.left, r.bottom-r.top, parent, hMenu, mol::hinstance(), 0 );
 
     //sendMessage( SB_SIMPLE, TRUE, 0 );
@@ -905,7 +903,6 @@ void ReBar::loadToolBarState( CustomToolBar& bar, int cmd, int pos, LPSTREAM pSt
 	ULONG w          = 0;
 	BYTE isVisible   = 0;
 	BYTE isNewline   = 0;
-	//LPTBBUTTON state = 0;
 	
 	pStm->Read( &isVisible, sizeof(BYTE),  &len );
 	pStm->Read( &isNewline, sizeof(BYTE),  &len );
@@ -915,21 +912,13 @@ void ReBar::loadToolBarState( CustomToolBar& bar, int cmd, int pos, LPSTREAM pSt
 	move( cmd, pos );
 	showBar( cmd, isVisible != 0 );
 	postMessage(RB_MAXIMIZEBAND,pos, 0 );
-	//newline( cmd, isNewline != 0 );
 	width( cmd, c*24 );
 
-	//bar.setButtonSize(24,22);
-	//state = (LPTBBUTTON)GlobalAlloc(GPTR, sizeof(TBBUTTON) * c);   
 	TBBUTTON state[100];// = new TBBUTTON[c];
-	//::ZeroMemory(state,sizeof(TBBUTTON) * c);  
-	//pStm->Read( state, sizeof(TBBUTTON)*c, &len );
 	::ZeroMemory(state,sizeof(TBBUTTON) * c);  
 	
-	pStm->Read( state, sizeof(TBBUTTON)*c, &len );
-	
+	pStm->Read( state, sizeof(TBBUTTON)*c, &len );	
 	bar.setToolbarState(state,c);
-	//bar.freeToolbarState(state);		
-
 }
 
 void ReBar::saveToolBarState(CustomToolBar& bar, int index, LPSTREAM pStm)
@@ -979,12 +968,6 @@ void ReBar::loadReBarState( int cmd, int pos, LPSTREAM pStm )
 	pStm->Read( &isVisible, sizeof(BYTE),  &len );
 	pStm->Read( &isNewline, sizeof(BYTE),  &len );
 	pStm->Read( &w,  		sizeof(ULONG), &len );
-
-	//move( cmd, pos );
-	//showBar( cmd, isVisible != 0 );
-
-	//newline( cmd, isNewline != 0);
-	//width( cmd, w );
 }
 ////////////////////////////////////////////////////////////////////////////
 // tab_ctrl
@@ -1013,8 +996,6 @@ HWND TabCtrl::createWindow( const std::wstring& wndName, HMENU hMenu, const Rect
 
     subClass();
 	setFont( (HFONT)::GetStockObject(ANSI_VAR_FONT));
-//	mol::win::AppBase& a = mol::app<mol::win::AppBase>();
-//	a.OnCreateTab(this->hToolTip(),*this);
 	mol::win::tabToolTips().registerTab( this->hToolTip(), *this );
     this->OnCtrlCreated();
 
@@ -1258,16 +1239,6 @@ std::wstring ComboCoxEx::getString(int id )
             throw X(_T("getString failed"));
 
     return buf.toString();
-
-/*	wchar_t  buf[1024];
-    ::memset(buf,32,1024);
-    buf[1023] = 0;
-
-    if ( CB_ERR == sendMessage( CB_GETLBTEXT,id,(LPARAM)buf))
-            throw X(_T("getString failed"));
-
-    return buf;
-	*/
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1651,7 +1622,7 @@ std::wstring ListCtrl::getItemText(int index, int subitem)
 	lvi.iSubItem = subitem;
 	lvi.state = 0;
 	lvi.lParam = 0;
-    lvi.pszText = _T("");
+    lvi.pszText = (LPWSTR) L"";
 	int r = ListView_GetItem(hWnd_,&lvi);		
     return lvi.pszText;
 }
@@ -1665,7 +1636,7 @@ LPARAM ListCtrl::getItemLPARAM(int index)
 	lvi.iSubItem = 0;
 	lvi.state = 0;
 	lvi.lParam = 0;
-	lvi.pszText = _T("");
+	lvi.pszText = (LPWSTR) L"";
 	int r = ListView_GetItem(hWnd_,&lvi);		
     return lvi.lParam;
 }
@@ -1680,7 +1651,7 @@ UINT ListCtrl::getItemState(int index, int mask )
 	lvi.stateMask = mask;
 	lvi.state = 0;
 	lvi.lParam = 0;
-    lvi.pszText = _T("");
+    lvi.pszText = (LPWSTR) "";
 	int r = ListView_GetItem(hWnd_,&lvi);		
     return lvi.state;
 }

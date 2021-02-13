@@ -171,7 +171,7 @@ HRESULT __stdcall  Docs::Item( VARIANT index, IMoeDocument** item)
 
 	*item = 0;
 
-	childlist::iterator& it = iterator(index);
+	childlist::iterator it = iterator(index);
 	if ( it == children_.end() )
 		return S_FALSE;
 
@@ -313,7 +313,7 @@ HRESULT __stdcall Docs::CloseAll()
 
 HRESULT __stdcall Docs::Remove( VARIANT index )
 {
-	childlist::iterator& it = iterator(index);
+	childlist::iterator it = iterator(index);
 	if ( it == children_.end() )
 		return S_FALSE;
 
@@ -364,7 +364,7 @@ HRESULT __stdcall Docs::Move( VARIANT what, VARIANT to )
 // helpers
 /////////////////////////////////////////////////////////////////////
 
-int Docs::key2index( VARIANT& index )
+int Docs::key2index( const VARIANT& index )
 {
 	childlist::iterator it = children_.begin();
 	int c = 0;
@@ -401,7 +401,7 @@ int Docs::key2index( VARIANT& index )
 
 /////////////////////////////////////////////////////////////////////
 
-Docs::childlist::iterator Docs::iterator(VARIANT& index)
+Docs::childlist::iterator Docs::iterator(const VARIANT& index)
 {
 	int pos = key2index(index);
 	if ( pos == -1 )

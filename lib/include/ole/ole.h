@@ -26,33 +26,7 @@ HRESULT __stdcall CreateObjectAdmin( HWND hwnd, BSTR progid, IUnknown** unk);
 BOOL GetAccessPermissionsForLUAServer(SECURITY_DESCRIPTOR **ppSD);
 
 
-class ole_init
-{
-public:
-    ole_init () 
-	{ 
-		::OleInitialize(0);  
-	}
 
-
-    ~ole_init() 
-	{
-		for ( std::list<IUnknown*>::iterator it = singletons_.begin(); it != singletons_.end(); it++ )
-		{
-			(*it)->Release();
-		}
-		::OleUninitialize(); 
-	}
-
-	static void addRef( IUnknown* p )
-	{
-		p->AddRef();
-		singletons_.push_back(p);
-	}
-
-private:
-	static std::list<IUnknown*> singletons_;
-};
 
 namespace ole {
 
@@ -62,7 +36,7 @@ namespace ole {
 
 class Moniker : 
 	public IMoniker,
-	public interfaces< Moniker, implements< IMoniker, IPersistStream> >
+    public ::mol::interfaces< Moniker, ::mol::implements< IMoniker, IPersistStream> >
 {
 public:
 

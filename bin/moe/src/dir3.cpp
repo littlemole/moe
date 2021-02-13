@@ -106,6 +106,18 @@ void DirChild::OnNcDestroy()
 }
 
 
+handle_cmd(&DirChild::OnCloseAll, IDM_VIEW_CLOSEALL)
+LRESULT DirChild::OnCloseAll()
+{
+	return MoeAxChild<
+		DirChild,
+		MOE_DOCTYPE_DIR,
+		&CLSID_ShellPane,
+		IDM_MOE_DIR
+	>::OnCloseAll();
+}
+
+
 HRESULT __stdcall DirChild::get_FilePath( BSTR *fname)
 {
 	if ( fname  )

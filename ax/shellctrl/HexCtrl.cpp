@@ -687,7 +687,9 @@ void HexWnd::updateOffset(unsigned int offset)
 
 	// set toolbar info
 	hexCtrl_->toolBar_.setValue(ossAddr.str(), currentOffsetValue_);
-	hexCtrl_->fire(2,bstr(ossAddr.str()), bstr(currentOffsetValue_) );
+	bstr bAddr(ossAddr.str());
+	bstr bOffset(currentOffsetValue_);
+	hexCtrl_->fire(2, bAddr, bOffset );
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

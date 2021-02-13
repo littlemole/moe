@@ -51,7 +51,7 @@ MoeForm2Wnd::Instance* MoeForm2Wnd::CreateInstance( const std::wstring& loc, int
 }
 
 
-void MoeForm2Wnd::load( const std::wstring& loc, int s, Rect& r )
+void MoeForm2Wnd::load( const std::wstring& loc, int s, const Rect& r )
 {
 	std::wstring l = loc;
 

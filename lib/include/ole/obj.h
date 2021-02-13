@@ -3,7 +3,7 @@
 
 #include "ole/com.h"
 #include "win/regkey.h"
-
+#include <objbase.h>
 namespace mol {
 
 //////////////////////////////////////////////////////////////////////
@@ -393,7 +393,7 @@ public:
 
 		if ( IsEqualIID( IID_IUnknown,iid) )   
 		{
-			*ppv = (IUnknown*)(interface_base<I1>::vtable_type*)(T*)(this);
+			*ppv = (IUnknown*)(typename interface_base<I1>::vtable_type*)(T*)(this);
 			((IUnknown*)(*ppv))->AddRef();
             return S_OK;
 		}

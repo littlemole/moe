@@ -2,10 +2,10 @@
 #include "Sddl.h"
 namespace mol {
 
-std::list<IUnknown*> ole_init::singletons_;
 
 namespace ole {
 
+	std::list<IUnknown*> ole_init::singletons_;
 
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -153,7 +153,7 @@ HRESULT __stdcall CreateObjectAdmin( HWND hwnd, BSTR progid, IUnknown** unk)
 BOOL GetAccessPermissionsForLUAServer(SECURITY_DESCRIPTOR **ppSD)
 {
 	// Local call permissions to IU, SY
-    LPWSTR lpszSDDL = L"O:BAG:BAD:(A;;0x3;;;IU)(A;;0x3;;;SY)";
+    LPWSTR lpszSDDL = (LPWSTR)L"O:BAG:BAD:(A;;0x3;;;IU)(A;;0x3;;;SY)";
     SECURITY_DESCRIPTOR *pSD;
     *ppSD = NULL;
 

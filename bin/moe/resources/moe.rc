@@ -78,7 +78,7 @@ END
 1                                      TYPELIB    TLB
 
 // MENUS
-#include "../ribbonres.rc"
+//#include "../ribbonres.rc"
 #include "dlgs.h"
 /////////////////////////////////////////////////////////////////////////////
 //

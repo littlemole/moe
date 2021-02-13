@@ -943,7 +943,7 @@ void HandlerBase::items( const std::vector<std::wstring>& items, int index )
 	ribbon()->update(id_);
 }
 
-void HandlerBase::recent_item( std::pair<std::wstring,bool>& item)
+void HandlerBase::recent_item( const std::pair<std::wstring,bool>& item)
 {
 	
 	for ( size_t i = 0; i < recent_items_.size(); i++ )

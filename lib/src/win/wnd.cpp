@@ -249,12 +249,6 @@ LRESULT CALLBACK WndProc::windowProcedure (HWND hwnd, UINT message, WPARAM wPara
         // if we have a valid WndProc-pointer, route to wndProc
         if (pThis)
         {
-			if (message == WM_CREATE)
-			{
-				if ( pThis->uiBuilder_)
-					pThis->uiBuilder_->makeUI();
-			}
-
 			if (message == WM_NCDESTROY)
 			{
 				if ( pThis->deleteOnNCDestroy_ )
@@ -424,7 +418,7 @@ BOOL WndProc::freeTrayIcon( int trayID )
     return ::Shell_NotifyIcon(NIM_DELETE, &nid);
 }
 
-UINT WndProc::showContext( HMENU m, HWND parent )
+ULONG_PTR WndProc::showContext( HMENU m, HWND parent )
 {
 	mol::Menu menu(m);
     if ( parent == 0 )
@@ -433,19 +427,19 @@ UINT WndProc::showContext( HMENU m, HWND parent )
 	//show context Menu
 	POINT pt;
 	::GetCursorPos(&pt);
-	UINT res = menu.trackPopup( parent,pt.x,pt.y);
+	ULONG_PTR res = menu.trackPopup( parent,pt.x,pt.y);
 
     return res;
 }
 
-UINT WndProc::returnContext( HMENU m )
+ULONG_PTR WndProc::returnContext( HMENU m )
 {
 	mol::Menu menu(m);
 
 	//show context Menu
 	POINT pt;
 	::GetCursorPos(&pt);
-	UINT res = menu.returnTrackPopup( *this,pt.x,pt.y);
+	ULONG_PTR res = menu.returnTrackPopup( *this,pt.x,pt.y);
 
     return res;
 }

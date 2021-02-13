@@ -5,6 +5,7 @@
 #include "util/uni.h"
 #include "ole/punk.h"
 #include "ole/enum.h"
+#include "ole/aut.h"
 
 #include <ocidl.h>
 #include <olectl.h>
@@ -77,11 +78,11 @@ public:
     }
     HRESULT Advise(IUnknown* object, DWORD& cookie )
     {
-        return mol::Advise<I>(object,this,cookie);
+        return mol::advise<I>(object,this,cookie);
     }
     HRESULT UnAdvise(IUnknown* object, DWORD cookie )
     {
-        return mol::UnAdvise<I>(object,cookie);
+        return mol::unadvise<I>(object,cookie);
     }
 
 protected:
@@ -466,7 +467,7 @@ public:
 		if ( !F::freeze_events(t) )
 			return;
 
-		for ( P::SinkIterator it = Policy_.begin(); it != Policy_.end(); it++)
+		for ( typename P::SinkIterator it = Policy_.begin(); it != Policy_.end(); it++)
 		{
 			punk<IDispatch> disp;
 			if ( S_OK == Policy_.getSinkInterface(it,&disp) )
@@ -478,13 +479,13 @@ public:
 	}
 
 	template<class V>
-	void fire(DISPID dispIdMember,  V& v)
+	void fire(DISPID dispIdMember,  V v)
 	{
 		T* t = (T*)this;	
 		if ( !F::freeze_events(t) )
 			return;
 
-		for ( P::SinkIterator it = Policy_.begin(); it != Policy_.end(); it++)
+		for ( typename P::SinkIterator it = Policy_.begin(); it != Policy_.end(); it++)
 		{
 			punk<IDispatch> disp;
 			if ( S_OK == Policy_.getSinkInterface(it,&disp) )
@@ -496,13 +497,13 @@ public:
 	}
 
 	template<class V1, class V2>
-	void fire(DISPID dispIdMember,  V1& v1, V2& v2)
+	void fire(DISPID dispIdMember,  V1 v1, V2 v2)
 	{
 		T* t = (T*)this;	
 		if ( !F::freeze_events(t) )
 			return;
 
-		for ( P::SinkIterator it = Policy_.begin(); it != Policy_.end(); it++)
+		for ( typename P::SinkIterator it = Policy_.begin(); it != Policy_.end(); it++)
 		{
 			punk<IDispatch> disp;
 			if ( S_OK == Policy_.getSinkInterface(it,&disp) )
@@ -514,13 +515,13 @@ public:
 	}
 
 	template<class V1, class V2, class V3>
-	void fire(DISPID dispIdMember,  V1& v1, V2& v2, V3& v3)
+	void fire(DISPID dispIdMember,  V1 v1, V2 v2, V3 v3)
 	{
 		T* t = (T*)this;	
 		if ( !F::freeze_events(t) )
 			return;
 
-		for ( P::SinkIterator it = Policy_.begin(); it != Policy_.end(); it++)
+		for ( typename P::SinkIterator it = Policy_.begin(); it != Policy_.end(); it++)
 		{
 			punk<IDispatch> disp;
 			if ( S_OK == Policy_.getSinkInterface(it,&disp) )
@@ -532,13 +533,13 @@ public:
 	}
 
 	template<class V1, class V2, class V3, class V4>
-	void fire(DISPID dispIdMember,  V1& v1, V2& v2, V3& v3, V4& v4)
+	void fire(DISPID dispIdMember,  V1 v1, V2 v2, V3 v3, V4 v4)
 	{
 		T* t = (T*)this;	
 		if ( !F::freeze_events(t) )
 			return;
 
-		for ( P::SinkIterator it = Policy_.begin(); it != Policy_.end(); it++)
+		for ( typename P::SinkIterator it = Policy_.begin(); it != Policy_.end(); it++)
 		{
 			punk<IDispatch> disp;
 			if ( S_OK == Policy_.getSinkInterface(it,&disp) )
@@ -550,13 +551,13 @@ public:
 	}
 
 	template<class V1, class V2, class V3, class V4, class V5>
-	void fire(DISPID dispIdMember,  V1& v1, V2& v2, V3& v3, V4& v4, V5& v5)
+	void fire(DISPID dispIdMember,  V1 v1, V2 v2, V3 v3, V4 v4, V5 v5)
 	{
 		T* t = (T*)this;	
 		if ( !F::freeze_events(t) )
 			return;
 
-		for ( P::SinkIterator it = Policy_.begin(); it != Policy_.end(); it++)
+		for ( typename P::SinkIterator it = Policy_.begin(); it != Policy_.end(); it++)
 		{
 			punk<IDispatch> disp;
 			if ( S_OK == Policy_.getSinkInterface(it,&disp) )
@@ -568,13 +569,13 @@ public:
 	}
 
 	template<class V1, class V2, class V3, class V4, class V5, class V6>
-	void fire(DISPID dispIdMember,  V1& v1, V2& v2, V3& v3, V4& v4, V5& v5, V6& v6)
+	void fire(DISPID dispIdMember,  V1 v1, V2 v2, V3 v3, V4 v4, V5 v5, V6 v6)
 	{
 		T* t = (T*)this;	
 		if ( !F::freeze_events(t) )
 			return;
 
-		for ( P::SinkIterator it = Policy_.begin(); it != Policy_.end(); it++)
+		for ( typename P::SinkIterator it = Policy_.begin(); it != Policy_.end(); it++)
 		{
 			punk<IDispatch> disp;
 			if ( S_OK == Policy_.getSinkInterface(it,&disp) )

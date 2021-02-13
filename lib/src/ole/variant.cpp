@@ -4,7 +4,7 @@
 namespace mol {
 
 
-std::wstring valueOf( mol::variant& v)
+std::wstring valueOf( mol::variant v)
 {
 	return v.towstring();
 }
@@ -621,7 +621,7 @@ enum_variant::~enum_variant()
 
 /////////////////////////////////////////////////////////////////////
 
-void enum_variant::add(VARIANT& var)
+void enum_variant::add(const VARIANT& var)
 {
 	//ODBGS("Enumvar::add");
 	LOCK(mutex_);
@@ -754,7 +754,7 @@ HRESULT __stdcall  COMCollection::Item( VARIANT index, VARIANT* item)
 	if ( item )
 		::VariantInit(item);
 
-	varlist::iterator& it = iterator(index);
+	varlist::iterator it = iterator(index);
 	if ( it == variants_.end() )
 		return S_FALSE;
 
@@ -765,7 +765,7 @@ HRESULT __stdcall  COMCollection::Item( VARIANT index, VARIANT* item)
 
 HRESULT __stdcall COMCollection::Remove( VARIANT index )
 {
-	varlist::iterator& it = iterator(index);
+	varlist::iterator it = iterator(index);
 	if ( it == variants_.end() )
 		return S_FALSE;
 
@@ -788,7 +788,7 @@ HRESULT __stdcall COMCollection::Insert( VARIANT index, VARIANT var)
 	if ( (var.vt == VT_EMPTY) || (index.vt == VT_EMPTY) )
 		return S_FALSE;
 
-	varlist::iterator& it = iterator(index);
+	varlist::iterator it = iterator(index);
 	if ( it != variants_.end() )
 		variants_.erase(it);
 
@@ -801,7 +801,7 @@ HRESULT __stdcall COMCollection::InsertAt( VARIANT pos, VARIANT index, VARIANT v
 	if ( (var.vt == VT_EMPTY) || (index.vt == VT_EMPTY) )
 		return S_FALSE;
 
-	varlist::iterator& it = iterator(index);
+	varlist::iterator it = iterator(index);
 	if ( it != variants_.end() )
 		variants_.erase(it);
 

@@ -1095,7 +1095,7 @@ HRESULT __stdcall MoeConfig::GetEncodings(BSTR* json)
 {
 	Json::Value result(Json::arrayValue);
 
-	for (auto& it = codePages()->begin(); it != codePages()->end(); it++)
+	for (auto it = codePages()->begin(); it != codePages()->end(); it++)
 	{
 		int cp = (*it).first;
 		std::wstring n = (*it).second;

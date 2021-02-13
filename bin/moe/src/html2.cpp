@@ -182,6 +182,19 @@ void MoeHtml2Wnd::stop()
 	webview->Stop();
 }
 
+
+handle_cmd(&MoeHtml2Wnd::OnCloseAll, IDM_VIEW_CLOSEALL)
+LRESULT MoeHtml2Wnd::OnCloseAll()
+{
+	return MoeChild<
+		MoeHtml2Wnd,
+		mol::MdiChild,
+		MOE_DOCTYPE_HTML,
+		IDM_MOE_HTML
+	>::OnCloseAll();
+}
+
+
 HRESULT __stdcall MoeHtml2Wnd::get_FilePath(BSTR* fname)
 {
 	if (fname)
@@ -575,6 +588,16 @@ void MoeHtml2Wnd::OnDestroy()
 {
 	ODBGS("MoeHtmlWndImpl::OnDestroy");
 
+	if (this->onCloseHandler)
+	{
+		EXCEPINFO ex;
+		::ZeroMemory(&ex, sizeof(EXCEPINFO));
+		UINT e = 0;
+		DISPPARAMS p = { 0,0 };
+		this->onCloseHandler->Invoke(DISPID_VALUE, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD, &p, NULL, &ex, &e);
+	}
+
+
 	if (oleObject)
 	{
 		for (auto& it : frame_.objects_)
@@ -588,23 +611,16 @@ void MoeHtml2Wnd::OnDestroy()
 		webview->remove_NavigationCompleted(onDocumentLoadedToken);
 		webview->remove_WebMessageReceived(onMessageToken);
 
-		webViewController->Close();
-		webViewController.release();
 		oleObject.release();
+
+		//webViewController->Close();
+		//webViewController.release();
 	}
 
-	if (this->onCloseHandler)
-	{
-		EXCEPINFO ex;
-		::ZeroMemory(&ex, sizeof(EXCEPINFO));
-		UINT e = 0;
-		DISPPARAMS p = { 0,0 };
-		this->onCloseHandler->Invoke(DISPID_VALUE, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD, &p, NULL, &ex, &e);
-	}
 
 	docs()->remove(this);
 
-	::CoDisconnectObject(((IExternalMoe*)&external_),0);
+	//::CoDisconnectObject(((IExternalMoe*)&external_),0);
 }
 
 
@@ -612,6 +628,13 @@ handle_msg(&MoeHtml2Wnd::OnNcDestroy, WM_NCDESTROY)
 LRESULT MoeHtml2Wnd::OnNcDestroy()
 {
 	thumb.destroy();
+
+	if (webViewController)
+	{
+		webViewController->Close();
+		webViewController.release();
+	}
+
 	ODBGS("MoeHtmlWndImpl::OnNcDestroy");
 	((IMoeDocument*)this)->Release();
 
@@ -625,7 +648,7 @@ std::wstring escape_json_str(const std::wstring& in)
 {
 	std::wostringstream oss;
 
-	for (auto& it = in.begin(); it != in.end(); it++)
+	for (auto it = in.begin(); it != in.end(); it++)
 	{
 		if ((*it) == L'\\' || (*it) == L'\'')
 		{

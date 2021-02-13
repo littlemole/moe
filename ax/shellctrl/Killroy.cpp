@@ -127,7 +127,7 @@ HRESULT __stdcall Pids::Item(VARIANT i, IPID** docItem)
 
 HRESULT __stdcall Pids::get_Count(long* cnt)
 {
-	*cnt = pids_.size();
+	*cnt = (long)pids_.size();
 	return S_OK;
 }
 

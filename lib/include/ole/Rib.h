@@ -85,7 +85,7 @@ public:
 	void decimalPlaces(int);
 	void decimal(mol::variant& v);
 	void items(const std::vector<std::wstring>& items, int index = 0);
-	void recent_item(std::pair<std::wstring, bool>& item);
+	void recent_item(const std::pair<std::wstring, bool>& item);
 
     HRESULT virtual __stdcall Execute( UINT nCmdID, UI_EXECUTIONVERB verb, const PROPERTYKEY* key, const PROPVARIANT* ppropvarValue, IUISimplePropertySet* pCommandExecutionProperties);
     HRESULT virtual __stdcall UpdateProperty( UINT nCmdID, REFPROPERTYKEY key, const PROPVARIANT* ppropvarCurrentValue, PROPVARIANT* ppropvarNewValue);
@@ -184,7 +184,7 @@ public:
 	template<class T>
 	bool RegisterHandler( int id, T* t, typename Handler<T>::func f)
 	{
-		Handler<T>::Instance* i = Handler<T>::CreateHandler(id,t,f);
+		typename Handler<T>::Instance* i = Handler<T>::CreateHandler(id,t,f);
 		if ( !i ) return false;
 		registry_[id] = i;
 		i->AddRef();

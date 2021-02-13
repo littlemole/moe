@@ -10,7 +10,7 @@
 #include "EditorScript.h"
 
 //#include "xmlui.h"
-#include "ribbonres.h"
+//#include "ribbonres.h"
 
 using namespace mol::win;
 using namespace mol::ole;
@@ -1022,27 +1022,6 @@ void Editor::OnTemplate()
 	//m.detach();
 }
 
-handle_notify_code(&Editor::OnToolbarDropDown, TBN_DROPDOWN)
-LRESULT Editor::OnToolbarDropDown(NMTOOLBAR* toolbar)
-{
-	/*
-	mol::Menu m(mol::UI().Menu(IDM_MOE),false);
-
-	EditorMenu em(this);
-	
-	int index = toolbar->iItem;
-	if ( index == IDM_MODE_EOL )
-		em.createMenuFromConf(m,mol::UI().SubMenu(IDM_MOE,IDM_MODE_EOL));
-	else 
-		em.createMenuFromConf(m,mol::UI().SubMenu(IDM_MOE,IDM_TOOLS));
-
-	mol::Menu context( mol::UI().SubMenu(IDM_MOE,index) );
-	showContext(context);
-
-	updateUI();
-	*/
-	return TBDDRET_DEFAULT;
-}
 
 handle_cmd(&Editor::OnExecScript, IDM_EDIT_EXECUTESCRIPT)
 void Editor::OnExecScript()

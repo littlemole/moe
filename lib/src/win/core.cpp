@@ -21,12 +21,12 @@ void* dllFunc( const std::wstring& dll, const std::wstring& f )
 }
 
 
-void* dllFunc( HMODULE module, const std::wstring& f )
+void* dllFunc( HMODULE mod, const std::wstring& f )
 {
-	if ( module )
+	if ( mod )
 	{
 		std::string fun = mol::tostring(f);
-		return ::GetProcAddress( module, fun.c_str() );
+		return ::GetProcAddress( mod, fun.c_str() );
 	}
 	return 0;
 }

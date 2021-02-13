@@ -359,14 +359,14 @@ private:
 } // end namespace mol
 
 template<class T>
-IPropertyBag* operator<<( IPropertyBag* bag, mol::persist::Property<T>& prop ) 
+IPropertyBag* operator<<( IPropertyBag* bag, mol::persist::Property<T> prop ) 
 {
 	prop.write(bag);
 	return bag;
 }
 
 template<class T>
-IPropertyBag* operator>>( IPropertyBag* bag, mol::persist::Property<T>& prop ) 
+IPropertyBag* operator>>( IPropertyBag* bag, mol::persist::Property<T> prop ) 
 {
 	prop.load(bag);
 	return bag;
@@ -374,14 +374,14 @@ IPropertyBag* operator>>( IPropertyBag* bag, mol::persist::Property<T>& prop )
 
 
 template<class T>
-IStream* operator<<( IStream* stream, mol::persist::Property<T>& prop ) 
+IStream* operator<<( IStream* stream, mol::persist::Property<T> prop ) 
 {
 	prop.write(stream);
 	return stream;
 }
 
 template<class T>
-IStream* operator>>( IStream* stream, mol::persist::Property<T>& prop ) 
+IStream* operator>>( IStream* stream, mol::persist::Property<T> prop ) 
 {
 	prop.read(stream);
 	return stream;
@@ -412,7 +412,7 @@ inline mol::persist::Property<mol::DispId> property( mol::DispId t)
 	return mol::persist::Property<mol::DispId>(t);
 }
 
-inline mol::persist::Property<mol::bstr> property( mol::bstr& t)
+inline mol::persist::Property<mol::bstr> property( mol::bstr t)
 {
 	return mol::persist::Property<mol::bstr>(t);
 }

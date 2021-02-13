@@ -96,12 +96,6 @@
     <ClInclude Include="ribbonres.h">
       <Filter>gen</Filter>
     </ClInclude>
-    <ClInclude Include="moe_dispid.h">
-      <Filter>gen</Filter>
-    </ClInclude>
-    <ClInclude Include="moe_h.h">
-      <Filter>gen</Filter>
-    </ClInclude>
     <ClInclude Include="include\resource.h">
       <Filter>resources</Filter>
     </ClInclude>
@@ -136,6 +130,7 @@
     <ClInclude Include="include\form2.h">
       <Filter>widget</Filter>
     </ClInclude>
+    <ClInclude Include="moe_dispid.h" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="src\moe.idl" />

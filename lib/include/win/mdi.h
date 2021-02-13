@@ -73,7 +73,7 @@ public:
 
 	void changeMenu( HMENU menu, HMENU wndMenu=0);
 
- 	virtual UINT showContext( HMENU m );
+ 	virtual ULONG_PTR showContext( HMENU m );
 	virtual void post2Parent( UINT msg,  WPARAM wParam, LPARAM lParam);		
 
 	HWND mdiClient();

@@ -8,9 +8,7 @@
 #include "util/util.h"
 #include "thread/sync.h"
 #include "win/wnd.h"
-
-//#include "boost/bind.hpp"
-//#include "boost/any.hpp"
+#include "win/async.h"
 
 #include <functional>
 #include <any>
@@ -18,7 +16,7 @@
 namespace mol {
 namespace win {
 
-
+	/*
 
 template<class P1,class P2, class P3, class P4>
 class EventHandler4
@@ -668,7 +666,7 @@ public:
 
 	std::list< EventHandler0* > events;
 };
-
+*/
 
 } // end namespace win
 } // end namespace mol

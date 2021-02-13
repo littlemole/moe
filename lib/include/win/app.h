@@ -26,7 +26,7 @@ unsigned int guithread();
 template<class T>
 T& app() 
 { 
-	return T::app<T>();
+	return T::template app<T>();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////

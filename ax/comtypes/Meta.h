@@ -63,8 +63,8 @@ class MetaClass
 public:
 
 	MetaClass();
-	MetaClass( const std::wstring& t,  GUID& g );
-	MetaClass( const std::wstring& t, const std::wstring& b, GUID& g );
+	MetaClass( const std::wstring& t,  const GUID& g );
+	MetaClass( const std::wstring& t, const std::wstring& b, const GUID& g );
 
 	std::wstring type;
 	std::wstring base;

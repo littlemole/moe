@@ -4,7 +4,7 @@
 #include <libssh/callbacks.h>
 //#include <libssh/scp.h>
 #include <libssh/sftp.h>
-
+#include "ole/ole.h"
 
 namespace mol {
 namespace scp {

@@ -185,7 +185,7 @@ std::string Cert::toString()
     BIO *mem = BIO_new(BIO_s_mem());
 
 	if(PEM_write_bio_X509(mem,cert_) != 1)
-		return false;
+		return "";
 
 	char* c = 0;
 	int len = BIO_get_mem_data(mem,&c);

@@ -4,7 +4,7 @@
 #include "moe.h"
 #include "Docs.h"
 //#include "xmlui.h"
-#include "ribbonres.h"
+//#include "ribbonres.h"
 
 EditorScript::EditorScript(void)
 	:editor_(0),debugger_(0)

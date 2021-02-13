@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "conf.h"
 #include "dot.h"
 #include "ole/ole.h"
 #include "ole/com.h"
@@ -193,8 +194,6 @@ Domain::Domain()
 Domain::~Domain()
 {
 	HRESULT hr = NET()->UnloadDomain(domain_);
-	if ( hr != S_OK )
-		throw mol::X("unload appdomain failed");
 }
 
 mscorlib::_AppDomain* Domain::operator->() 

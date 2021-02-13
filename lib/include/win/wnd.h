@@ -127,6 +127,7 @@ protected:
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 
+class UserInterface;
 
 
 class WndProc : public Wnd
@@ -134,13 +135,13 @@ class WndProc : public Wnd
 friend class WndClass;
 friend class CtrlResizerImpl;
 friend class UIBuilder;
-friend class mol::UserInterface;
+friend class ::mol::UserInterface;
 public:
 
     typedef WndProc BaseWindowType;
 
 	// Constructor - set erasebackground policy (defaults to zero)
-	WndProc() : eraseBackground_(0), layout_(0), deleteOnNCDestroy_(false), uiBuilder_(0)
+	WndProc() : eraseBackground_(0), layout_(0), deleteOnNCDestroy_(false)
 	{}  // set to eraseBackground 1 if you dont want windows to erase
 
 	// Destructor
@@ -160,8 +161,8 @@ public:
     BOOL addTrayIcon ( int trayID, int WMtray, HICON icon );
     BOOL freeTrayIcon( int trayID );
 
-	UINT showContext  ( HMENU menu, HWND parent = 0 );
-    UINT returnContext( HMENU menu );
+	ULONG_PTR showContext  ( HMENU menu, HWND parent = 0 );
+	ULONG_PTR returnContext( HMENU menu );
 
 	// the most basic wndproc
     virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -189,7 +190,7 @@ public:
 	{
 		HWND wnd = getDlgItem(id);
 
-		T* t = mol::wndFromHWND<T>(wnd);
+		T* t = wndFromHWND<T>(wnd);
 		return t;
 	}
 
@@ -205,10 +206,8 @@ protected:
 
 	LayoutMgr* layout_;
 
-	mol::Menu		menue_;
+	Menu		menue_;
 	bool deleteOnNCDestroy_;
-
-	mol::UIBuilder* uiBuilder_;
 };
 
 

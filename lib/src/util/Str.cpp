@@ -439,7 +439,7 @@ inline char c2x(const char &x) {         return x > 9 ? x + 55: x + 48; }
 
 inline char x2c ( unsigned char* in)
 {
-	register char digit;
+	char digit;
 	digit = ( (*in) >= 'A' ? (((*in) & 0xdf) - 'A')+10 : ((*in) - '0'));
 	digit *= 16;
 	in++;

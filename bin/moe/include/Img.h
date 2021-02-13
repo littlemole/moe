@@ -28,6 +28,7 @@ public:
 	void OnCreate();
 	LRESULT OnDestroy();
 	LRESULT OnNcDestroy();
+	LRESULT OnCloseAll();
 	void OnPaint();
 
 	/////////////////////////////////////////////////////////////////////

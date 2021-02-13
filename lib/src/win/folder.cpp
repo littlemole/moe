@@ -85,7 +85,7 @@ FolderBrowser::FolderBrowser(const std::wstring& text, const std::wstring& title
 	text_  = _T("Browse for folder");
 }
 
-std::wstring FolderBrowser::select( HWND owner, UINT flags, mol::io::Shit& shit)
+std::wstring FolderBrowser::select( HWND owner, UINT flags, mol::io::Shit shit)
 {
 	mol::io::Shit si = dlg( owner, flags, shit );
 	if ( si )
@@ -93,7 +93,7 @@ std::wstring FolderBrowser::select( HWND owner, UINT flags, mol::io::Shit& shit)
 	return _T("");
 }
 
-mol::io::Shit FolderBrowser::dlg( HWND owner, UINT flags, mol::io::Shit& shit)
+mol::io::Shit FolderBrowser::dlg( HWND owner, UINT flags, mol::io::Shit shit)
 {
 	::ZeroMemory(&bInfo_,sizeof(bInfo_));
 	bInfo_.hwndOwner = owner;

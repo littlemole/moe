@@ -79,12 +79,7 @@ public:
 	MoeHtmlRibbon();
 	~MoeHtmlRibbon();
 
-//	virtual void dispose() {}
-
-
-//	void onDocumentTitleChanged();
 	void onNavigationStarted(ICoreWebView2NavigationStartingEventArgs* args);
-//	void onPermissionRequest(ICoreWebView2PermissionRequestedEventArgs* args);
 	void onCreateWebView(std::wstring target, ICoreWebView2Controller* controller);
 	void onMessageReceived(ICoreWebView2* sender, ICoreWebView2WebMessageReceivedEventArgs* args);
 
@@ -103,12 +98,14 @@ public:
 
 	void setAppMode(const std::string& m);
 
+	std::function<void(MoeHtmlRibbon*)> onDocumentLoad;
+
 private:
 
 	/////////////////////////////////////////////////////////////////////
 	virtual int style();
 
-	void onDocumentLoad();
+	void onDocumentLoaded();
 
 	/////////////////////////////////////////////////////////////////////
 

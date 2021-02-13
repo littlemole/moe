@@ -26,6 +26,8 @@ public:
 
 	void OnMDIActivate(HWND activated);
     void OnClose();
+	LRESULT OnCloseAll();
+
 	void OnDestroy();
 	void OnNcDestroy();
 

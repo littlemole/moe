@@ -5,7 +5,7 @@
 #include "MoeBar.h"
 
 //#include "xmlui.h"
-#include "ribbonres.h"
+//#include "ribbonres.h"
 
 
 REFIID mol::uuid_info<IRichEditOleCallback>::uuidof = IID_IRichEditOleCallback;

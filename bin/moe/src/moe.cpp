@@ -8,7 +8,7 @@
 //#include "xmlui.h"
 #include "commons.h"
 #include "resource.h"
-#include "Ribbonres.h"
+//#include "Ribbonres.h"
 
 #include "mtree.h"
 
@@ -104,6 +104,13 @@ void MoeWnd::OnCreate()
 
 	// menu ribbon
 	MoeHtmlRibbon* ribbon = UI().makeWindow<MoeHtmlRibbon>((HMENU)ID_MOE_HTML_RIBBON, mol::Rect(0, 0, 160, 133), hWnd_);
+	ribbon->onDocumentLoad = [this](MoeHtmlRibbon*) {
+		if (this->onMoeBarLoaded)
+		{
+			this->onMoeBarLoaded(this);
+		}
+	};
+
 	ribbon->show(SW_SHOW);
 	ribbon->load(edge);
 	layout->add(*ribbon, BorderLayout::NORTH);
@@ -237,6 +244,27 @@ LRESULT MoeWnd::OnClose()
 	return 1;
 }
 
+handle_cmd(&MoeWnd::OnCloseAll, IDM_VIEW_CLOSEALL)
+LRESULT MoeWnd::OnCloseAll()
+{
+	int n = this->count();
+	if (n == 0)
+	{
+		return 0;
+	}
+
+	for (int i = n - 1; i >= 0; i--)
+	{
+		HWND child = this->childAt(i);
+		if (::IsWindow(child))
+		{
+			LRESULT r = ::SendMessage(child, WM_CLOSE,0, 0);
+			DWORD e = ::GetLastError();
+		}
+	}
+	return 1;
+}
+
 handle_cmd(&MoeWnd::OnCloseAllButThis, IDM_TAB_CLOSEALLBUTTHIS)
 LRESULT MoeWnd::OnCloseAllButThis()
 {
@@ -313,7 +341,6 @@ LRESULT MoeWnd::OnMenu(UINT msg, WPARAM wParam, LPARAM lParam)
 //
 //////////////////////////////////////////////////////////////////////////////
  
-handle_notify_code(&MoeWnd::OnDispatch, TBN_DROPDOWN)
 handle_msg(&MoeWnd::OnDispatch, WM_SEARCH_MSG)
 handle_cmd(&MoeWnd::OnDispatch, 
 	IDM_EDIT_CUT, IDM_EDIT_COPY, IDM_EDIT_PASTE, IDM_EDIT_PASTEAS,
@@ -982,11 +1009,7 @@ HRESULT __stdcall MoeWnd::InsertTemplate()
 	HWND active = this->getActive();
 	if (!active) return S_OK;
 
-	NMTOOLBAR nmTb;
-	nmTb.hdr.code = TBN_DROPDOWN;
-	nmTb.iItem = IDM_USER_SHORTCUT;
-
-	::SendMessage(active, WM_NOTIFY, 0, (WPARAM)&nmTb);
+	::SendMessage(active, WM_COMMAND, IDM_USER_SHORTCUT,0);
 	return S_OK;
 }
 

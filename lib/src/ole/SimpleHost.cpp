@@ -1,3 +1,4 @@
+#include "conf.h"
 #include "ole/SimpleHost.h"
 
 

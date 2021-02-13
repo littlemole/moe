@@ -9,7 +9,7 @@ SciAxProperties::SciAxProperties()
 	::ZeroMemory(&fd,sizeof(fd));
 	fd.cbSizeofstruct = sizeof(fd);
 	fd.cySize.int64 = 10 * 10000;
-	fd.lpstrName = L"Courier New";
+	fd.lpstrName = (LPOLESTR)L"Courier New";
 
 	enc_  = SCINTILLA_ENCODING_ANSI;
 	eol_  = SCINTILLA_SYSTYPE_UNIX;

@@ -211,7 +211,7 @@ HRESULT __stdcall NetServer::copyTo( IDispatch* src, IDispatch* dest)
 	params.set(0,dest);
 	params.set(1,src);
 
-	OLECHAR* name = L"copyTo";
+	OLECHAR* name = (OLECHAR*)L"copyTo";
 	DISPID dispid;
 	hr = type->GetIDsOfNames(IID_NULL,&name,1,LOCALE_SYSTEM_DEFAULT,&dispid);
 	if ( hr != S_OK)
@@ -253,7 +253,7 @@ jsArray enumJSArray(IDispatch* disp)
 
 	DISPID dispid = 0;
 
-	LPOLESTR str = L"length";
+	LPOLESTR str = (LPOLESTR) L"length";
 	HRESULT hr = dispEx->GetIDsOfNames(IID_NULL,&str,1,LOCALE_SYSTEM_DEFAULT,&dispid);
 	if (hr != S_OK )
 		return resultArray;
@@ -430,7 +430,7 @@ HRESULT NetServer::getProperties(IDispatch* def, mol::SafeArray<VT_VARIANT>& res
 		return hr;
 
 	mol::variant properties;
-	hr = getMemberAsVariant( L"properties", def, &properties);
+	hr = getMemberAsVariant( (LPOLESTR) L"properties", def, &properties);
 	if(hr!=S_OK || properties.vt == VT_EMPTY)
 		return hr;
 
@@ -523,7 +523,7 @@ HRESULT NetServer::getMethods(IDispatch* def, mol::SafeArray<VT_VARIANT>& result
 		return hr;
 
 	mol::variant methods;
-	hr = getMemberAsVariant( L"methods", def, &methods);
+	hr = getMemberAsVariant( (LPOLESTR) L"methods", def, &methods);
 	if(hr!=S_OK || methods.vt == VT_EMPTY)
 		return hr;
 
@@ -629,7 +629,7 @@ HRESULT NetServer::getConstructors(IDispatch* def, mol::SafeArray<VT_VARIANT>& r
 		return hr;
 
 	mol::variant ctors;
-	hr = getMemberAsVariant( L"constructors", def, &ctors);
+	hr = getMemberAsVariant( (LPOLESTR) L"constructors", def, &ctors);
 	if(hr!=S_OK || ctors.vt == VT_EMPTY)
 		return hr;
 
@@ -710,7 +710,7 @@ HRESULT NetServer::getInterfaces(IDispatch* def, mol::SafeArray<VT_VARIANT>& res
 		return E_INVALIDARG;
 
 	mol::variant interfaces;
-	HRESULT hr = getMemberAsVariant( L"implements", def, &interfaces);
+	HRESULT hr = getMemberAsVariant( (LPOLESTR) L"implements", def, &interfaces);
 	if(hr!=S_OK || interfaces.vt == VT_EMPTY)
 		return hr;
 
@@ -739,7 +739,7 @@ HRESULT __stdcall NetServer::Declare( BSTR name, IDispatch* def, IDispatch* hand
 	UINT e = 0;
 
 	mol::variant baseType;
-	HRESULT hr = getMemberAsVariant( L"inherits", def, &baseType);
+	HRESULT hr = getMemberAsVariant( (LPOLESTR) L"inherits", def, &baseType);
 	if ( hr != S_OK || baseType.vt == VT_EMPTY)
 	{
 		mol::punk<INetType> t;
@@ -755,7 +755,7 @@ HRESULT __stdcall NetServer::Declare( BSTR name, IDispatch* def, IDispatch* hand
 	hr = getInterfaces( def, sfInterfaces );
 
 	mol::variant attributes;
-	hr = getMemberAsVariant( L"attributes", def, &attributes);
+	hr = getMemberAsVariant( (LPOLESTR) L"attributes", def, &attributes);
 	mol::SafeArray<VT_VARIANT> sfAttrDef;
 
 	if ( hr == S_OK && attributes.vt != VT_EMPTY )

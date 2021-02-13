@@ -1,9 +1,55 @@
 #ifndef MOL_LIB_PUNK_DEF_GUARD_DEFINE_
 #define MOL_LIB_PUNK_DEF_GUARD_DEFINE_
 
-#include "ole/com.h"
+#include <objbase.h>
+#include <string>
+#include "conf.h"
 
 namespace mol {
+namespace ole {
+    struct nullInterface {};
+}
+    // uuid_info is a template to hide ms specific __uuidof(x)
+
+    template <class I>
+    class uuid_info
+    {
+    public:
+        static constexpr REFIID uuidof = __uuidof(I);;
+        typedef I uuid_type;
+    };
+
+
+
+    template <>
+    class uuid_info<mol::ole::nullInterface>
+    {
+    public:
+        static constexpr REFIID uuidof = CLSID_NULL;
+        typedef mol::ole::nullInterface uuid_type;
+    };
+
+
+
+    // uuidof is a generic function template to replace __uuidof(x)
+
+    template <typename I>
+    constexpr GUID& uuidof()
+    {
+        return (GUID&)uuid_info<I>::uuidof;//(); 
+    }
+
+    template <typename I>
+    constexpr GUID& uuidof(I*)
+    {
+        return (GUID&)uuid_info<I>::uuidof;//(); 
+    }
+
+    template <typename I>
+    constexpr GUID& uuidof(I**)
+    {
+        return (GUID&)uuid_info<I>::uuidof;//(); 
+    }
 
 
 //////////////////////////////////////////////////////////////////////
@@ -72,7 +118,7 @@ public:
 	template<class T>
     HRESULT queryInterface( T** Unknown ) const
     {
-		return interface_->QueryInterface( mol::uuidof<T>(), (void**)Unknown );
+		return interface_->QueryInterface( uuidof<T>(), (void**)Unknown );
     }
 
     HRESULT createObject( CLSID classId, int clsctx = CLSCTX_INPROC_SERVER )

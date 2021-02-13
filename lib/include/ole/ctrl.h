@@ -533,13 +533,13 @@ public:
 	static OLEVERB* init_verbs()					
 	{												
 		static OLEVERB ov[] = {			
-			{ OLEIVERB_INPLACEACTIVATE , L"IPA",		 0, 0 },
-			{ OLEIVERB_UIACTIVATE,		 L"UI Activate", 0, 0 },
-			{ OLEIVERB_HIDE ,			 L"HIDE",		 0, 0 },
-			{ OLEIVERB_OPEN ,			 L"OPEN",		 0, 0 },
-			{ OLEIVERB_SHOW  ,			 L"SHOW",		 0, 0 },		
-			{ OLEIVERB_PRIMARY ,		 L"PRIMARY",	 0, 0 },
-			{ OLEIVERB_PROPERTIES,		 L"PROPERTIES",  0, 0 },
+			{ OLEIVERB_INPLACEACTIVATE , (LPOLESTR)L"IPA",		 0, 0 },
+			{ OLEIVERB_UIACTIVATE,		 (LPOLESTR)L"UI Activate", 0, 0 },
+			{ OLEIVERB_HIDE ,			 (LPOLESTR)L"HIDE",		 0, 0 },
+			{ OLEIVERB_OPEN ,			 (LPOLESTR)L"OPEN",		 0, 0 },
+			{ OLEIVERB_SHOW  ,			 (LPOLESTR)L"SHOW",		 0, 0 },
+			{ OLEIVERB_PRIMARY ,		 (LPOLESTR)L"PRIMARY",	 0, 0 },
+			{ OLEIVERB_PROPERTIES,		 (LPOLESTR)L"PROPERTIES",  0, 0 },
 			{ 0,0,0,0 }
 		};
 		return ov;
@@ -691,7 +691,7 @@ public:
 	{					
 		DWORD miscStatus = 0;
 		T::getMiscStatus(0,&miscStatus);
-		RegisterObject( T::getCoClassID(),
+		com_registerobj<T, I, clsctx, cls>::RegisterObject( T::getCoClassID(),
 						miscStatus,
 						T::verbs(),
 						T::getRegFlags(),				
@@ -703,7 +703,7 @@ public:
 	{									
 		DWORD miscStatus = 0;
 		T::getMiscStatus(0,&miscStatus);
-		UnRegisterObject( T::getCoClassID(),
+		com_registerobj<T, I, clsctx, cls>::UnRegisterObject( T::getCoClassID(),
 						miscStatus,
 						T::verbs(),
 						T::getRegFlags(),				
@@ -792,7 +792,7 @@ public:
 			{
 				mol::PaintDC dc(*this);
 				RECT r;
-				getClientRect(r);
+				this->getClientRect(r);
 				Class* c = (Class*)this; 
 				c->OnDraw( (HDC)dc,(LPRECTL)&r,(LPRECTL)&r);
 				return 0;

@@ -110,7 +110,7 @@ void WndClass::setBackground( HBRUSH h)
 
 void WndClass::setMenu( HMENU m)
 {
-    wcex_.lpszMenuName = MAKEINTRESOURCE( m ) ;
+    wcex_.lpszMenuName = MAKEINTRESOURCE( (size_t)m ) ;
 }
 
 void WndClass::hIconSm( HICON i)

@@ -47,7 +47,7 @@ public:
 	{
 		HKEY sub = 0;
 		DWORD disp;
-		if ( ERROR_SUCCESS != ::RegCreateKeyEx( hkey_, subkey.c_str(), 0, _T(""), 0, sam, 0, &sub, &disp) )
+		if ( ERROR_SUCCESS != ::RegCreateKeyEx( hkey_, subkey.c_str(), 0, (LPWSTR)L"", 0, sam, 0, &sub, &disp) )
 			throw mol::X(subkey.c_str());
 		return sub;
 	}

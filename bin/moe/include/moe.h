@@ -76,6 +76,7 @@ public:
 	void OnNcDestroy();
 
 	LRESULT OnClose();
+	LRESULT OnCloseAll();
 	LRESULT OnCloseAllButThis();
 	LRESULT OnMenu(UINT, WPARAM, LPARAM );
 
@@ -216,6 +217,7 @@ public:
 
 	 void OnScreenShot();
 
+	 std::function<void(MoeWnd*)> onMoeBarLoaded;
 
 private:
 	

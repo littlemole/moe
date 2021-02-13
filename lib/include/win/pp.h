@@ -2,6 +2,7 @@
 #define _MOL_DEF_GUARD_MOE_PROP_PAGE_DEF_GUARD_DEFINE_
 
 #include "win/dlg.h"
+//#include "ole/propertypage.h"
 #include <Prsht.h>
 
 namespace mol
@@ -62,46 +63,6 @@ private:
 
 } // end namespace win
 
-class PropSheet
-{
-public:
-
-	typedef PropSheet BaseWindowType;
-
-	PropSheet( HWND owner, const std::wstring& title, int flags = PSH_NOCONTEXTHELP|PSH_PROPTITLE|PSH_USEPSTARTPAGE|PSH_NOAPPLYNOW|PSH_USECALLBACK );
-
-	template<class T>
-	void addPage(  const std::wstring& tab, int id )
-	{
-		mol::win::PropPage* page = new T;
-		page->create(this,tab,id);
-		addPage(page);
-	}
-
-	template<class T>
-	void addPage(  const std::wstring& tab, REFCLSID clsid ,  int id)
-	{
-		mol::ole::OlePropPage* page = new T;
-		page->create(this,tab,clsid,id);
-		addPage(page);
-	}
-
-	INT_PTR create();
-
-	static int CALLBACK PropSheetProc( HWND hwndDlg, UINT uMsg, LPARAM lParam );
-
-	void center(HWND hwnd);
-protected:
-
-	HPROPSHEETPAGE addPage( mol::win::PropPage* page);
-
-	bool centered_;
-	int startPage_;
-	int	nPages_;
-	std::vector<HPROPSHEETPAGE> pages_;
-	PROPSHEETHEADER ph_;
-	std::wstring title_;
-};
 
 
 

@@ -10,7 +10,7 @@
 namespace mol  {
 
 void* dllFunc( const std::wstring& dll, const std::wstring& f );
-void* dllFunc( HMODULE module, const std::wstring& f );
+void* dllFunc( HMODULE mod, const std::wstring& f );
 
 template<class T>
 void zero( T& t )

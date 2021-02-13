@@ -46,7 +46,7 @@ private:
 	~MoeApp();
 
 	// windows libraries
-    mol::ole_init       oi_;
+    mol::ole::ole_init       oi_;
     mol::comm_ctrl_init cci_;
 	mol::GdiPlusUser    gdip_;
 	mol::richedit_init  rei_;

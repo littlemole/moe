@@ -1547,7 +1547,7 @@ Global
 		{4B158FC4-D728-4295-B87A-1F0500C90E20}.uni_release|Mixed Platforms.Build.0 = Release|Win32
 		{4B158FC4-D728-4295-B87A-1F0500C90E20}.uni_release|Win32.ActiveCfg = Release|Win32
 		{4B158FC4-D728-4295-B87A-1F0500C90E20}.uni_release|Win32.Build.0 = Release|Win32
-		{4B158FC4-D728-4295-B87A-1F0500C90E20}.uni_release|x64.ActiveCfg = Release|Win32
+		{4B158FC4-D728-4295-B87A-1F0500C90E20}.uni_release|x64.ActiveCfg = Release|x64
 		{4B158FC4-D728-4295-B87A-1F0500C90E20}.uni_release|x86.ActiveCfg = Release|Win32
 		{4B158FC4-D728-4295-B87A-1F0500C90E20}.Unicode Debug|Any CPU.ActiveCfg = Debug|Win32
 		{4B158FC4-D728-4295-B87A-1F0500C90E20}.Unicode Debug|Mixed Platforms.ActiveCfg = Debug|Win32

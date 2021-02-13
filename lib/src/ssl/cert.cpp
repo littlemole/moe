@@ -88,7 +88,7 @@ std::string PrivateKey::toString()
     BIO *mem = BIO_new(BIO_s_mem());
 
 	if ( PEM_write_bio_PrivateKey(mem,pKey_,0,0,0,0,0) != 1 )
-		return false;
+		return "";
 
 	char* c = 0;
 	int len = BIO_get_mem_data(mem,&c);
@@ -108,7 +108,7 @@ std::string PrivateKey::toString(const std::string& pwd)
     BIO *mem = BIO_new(BIO_s_mem());
 
 	if ( PEM_write_bio_PrivateKey(mem,pKey_,EVP_des_ede3_cbc(),0,0,0,((void*)pwd.c_str())) != 1 )
-		return false;
+		return "";
 
 	char* c = 0;
 	int len = BIO_get_mem_data(mem,&c);

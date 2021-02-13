@@ -61,6 +61,18 @@ LRESULT ImgViewer::OnNcDestroy()
 	return 0;
 }
 
+
+handle_cmd(&ImgViewer::OnCloseAll, IDM_VIEW_CLOSEALL)
+LRESULT ImgViewer::OnCloseAll()
+{
+	return MoeChild<
+		ImgViewer,
+		mol::MdiChild,
+		MOE_DOCTYPE_PIC,
+		IDM_MOE_IMG
+	>::OnCloseAll();
+}
+
 //////////////////////////////////////////////////////////////////////////////
 
 

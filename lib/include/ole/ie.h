@@ -281,12 +281,12 @@ namespace mol  {
 		//events
 		void  advise  ( mol::ie::ie_event_sink& eventSink )
 		{
-			eventSink.Advise(oleObject);
+			eventSink.Advise(this->oleObject);
 		}
 
 		void  unAdvise( mol::ie::ie_event_sink& eventSink  )
 		{
-			eventSink.UnAdvise(oleObject);
+			eventSink.UnAdvise(this->oleObject);
 		}
 
 		// COM overrides
@@ -328,7 +328,7 @@ namespace mol  {
 
 		bool setHtml( const std::string& html )
 		{
-			std::wstring tmp = mol::ansi2wstring(html);		
+			std::wstring tmp = mol::towstring(html);		
 			setHtml(tmp);
 			return true;
 		}
@@ -348,7 +348,7 @@ namespace mol  {
 			return this->writeImpl( html );
 		}
 
-		void getSource(std::string& src)
+		void getSource(std::string& html)
 		{
 			return this->getSourceImpl( html );
 		}
@@ -357,7 +357,7 @@ namespace mol  {
 		{
 			std::string ret;
 			getSource(ret);
-			src = mol::ansi2wstring(ret);
+			src = mol::towstring(ret);
 		}
 
 		BOOL IPictureFromHtmlControl( IPicture** pic )
@@ -411,7 +411,7 @@ namespace mol  {
 			mol::bstr bstr;
 
 			wb->get_LocationURL( &bstr );
-			return bstr.toString();
+			return bstr.towstring();
 		}
 
 		void stop()
@@ -529,7 +529,7 @@ protected:
 		// communication with base class
 		virtual IOleObject* getOleObject() 
 		{
-			return oleObject;
+			return this->oleObject;
 		}
 
 		virtual HWND getHtmlWnd() 

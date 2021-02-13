@@ -5,6 +5,7 @@
 #include "KnownFolders.h"
 #include "win/v7.h"
 #include "ole/punk.h"
+#include "ole/com.h"
 
 namespace mol {
 namespace io  {
@@ -49,7 +50,7 @@ HRESULT SimpleFolderBrowser(HWND hwnd, std::wstring& directory)
         {
             // Do something with the result.
 
-			mol::CoStrBuf buf;
+			::mol::CoStrBuf buf;
 			hr = siResult->GetDisplayName( SIGDN_DESKTOPABSOLUTEPARSING, &buf );
 			if ( S_OK == hr )
 			{

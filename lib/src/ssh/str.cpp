@@ -12,7 +12,7 @@ ssh::wstring utf82wstring( const char* in, const size_t size )
 {
 	int len = ::MultiByteToWideChar( CP_UTF8, 0, in, (int)size, 0, 0 );
 	mol::wbuff buf(len);
-	int r = ::MultiByteToWideChar( CP_UTF8, 0, in, (int)in, buf, len );
+	int r = ::MultiByteToWideChar( CP_UTF8, 0, in, (int)size, buf, len );
 	ssh::wstring out(buf,len);
 	::ZeroMemory((void*)buf,len*sizeof(wchar_t));
 	return out;

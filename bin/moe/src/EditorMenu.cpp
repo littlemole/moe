@@ -3,7 +3,7 @@
 #include "editor.h"
 #include "moe.h"
 //#include "xmlui.h"
-#include "ribbonres.h"
+//#include "ribbonres.h"
 
 EditorMenu::EditorMenu(void)
 {
@@ -75,7 +75,7 @@ void EditorMenu::updateUI()
 		Encodings::CodePage enc = codePages()->item((int)idx);
 		std::wstring cp = enc.second;
 
-		json["encoding"] = encoding;
+		json["encoding"] = (int)encoding;
 		json["codepage"] = mol::toUTF8(cp);
 
 		switch ( encoding )
@@ -107,7 +107,7 @@ void EditorMenu::updateUI()
 	long systype;
 	if ( S_OK == editor_->props_->get_SysType(&systype) )
 	{
-		json["systype"] = systype;
+		json["systype"] = (int)systype;
 		if ( systype ==  SCINTILLA_SYSTYPE_UNIX )
 		{
 			title += _T(" UNIX");
@@ -134,7 +134,7 @@ void EditorMenu::updateUI()
 
 	LONG type = 0;
 	editor_->props_->get_Syntax(&type);
-	json["syntax"] = type;
+	json["syntax"] = (int)type;
 
 //	mol::UI().Wnd<MoeComboBox>(IDW_SYNTAX_BOX)->setCurSel(type);
 	/*
@@ -184,7 +184,7 @@ void EditorMenu::updateUI()
 		long w = 0;
 		if ( S_OK == editor_->props_->get_TabWidth(&w) )
 		{
-			json["tabWidth"] = w;
+			json["tabWidth"] = (int)w;
 			DECIMAL d;
 			::ZeroMemory(&d,sizeof(d));
 			d.Lo32 = w;
@@ -248,6 +248,7 @@ void EditorMenu::updateUI()
 	ribbon()->webView->PostWebMessageAsJson(mol::fromUTF8(utf8).c_str());
 }
 
+/*
 void EditorMenu::createMenuFromConf(HMENU m,HMENU popup)
 {
 	HMENU frameMenu = mol::UI().Menu(IDM_MOE);
@@ -274,7 +275,7 @@ void EditorMenu::createMenuFromConf(HMENU m,HMENU popup)
 
 	/*
 	if ( !mol::Ribbon::ribbon()->enabled())
-	*/
+	* /
 		::DrawMenuBar(*moe()); 
 	::UpdateWindow(*moe()); 
 
@@ -312,7 +313,8 @@ void EditorMenu::updateModeMenu( mol::Menu& mode )
 	}
 
 }
-
+*/
+/*
 void EditorMenu::updateToolMenu( HMENU tools )
 {
 	int startShortCutId_ = ID_FIRST_USER_CMD;
@@ -470,3 +472,5 @@ void EditorMenu::onMenu(HMENU popup, LPARAM unused)
 	if ( popup == mol::UI().SubMenu(IDM_MOE,IDM_EDIT_DEBUG) )
 		createMenuFromConf(frameMenu,popup);
 }
+
+*/

@@ -22,10 +22,10 @@ class Icon
 {
 public:
     Icon() : hIcon_(0) {};
-    Icon(int id, int w=16, int h=16) {  load(id, w, h); }
+    Icon(long id, int w=16, int h=16) {  load(id, w, h); }
     operator HICON() { return hIcon_; };
 
-    HICON load( int id, int w=16, int h=16, int options = LR_DEFAULTCOLOR );
+    HICON load( long id, int w=16, int h=16, int options = LR_DEFAULTCOLOR );
 
 private:
     HICON hIcon_;
@@ -39,9 +39,9 @@ class Bmp
 {
 public:
     Bmp() : bmp_(0),bitmap_(0) {}
-    Bmp( int id): bmp_(0),bitmap_(0)  { load(id); }
-	HBITMAP load( int hImage) ;
-    HANDLE loadRaw( int hImage, int w = 16, int h = 16 , int options = LR_DEFAULTCOLOR ) ;
+    Bmp( long id): bmp_(0),bitmap_(0)  { load(id); }
+	HBITMAP load( long hImage) ;
+    HANDLE loadRaw( long hImage, int w = 16, int h = 16 , int options = LR_DEFAULTCOLOR ) ;
     operator HANDLE() { return bmp_; };
 	operator HBITMAP() { return bitmap_; };
 
@@ -63,17 +63,17 @@ namespace win {
 class MenuItemInfo
 {
 public:
-	MenuItemInfo(const std::wstring& txt, bool s, int i,HBITMAP b);
+	MenuItemInfo(const std::wstring& txt, bool s, long i,HBITMAP b);
 
 private:
 	std::wstring text_;
-	int icon_;
+	long icon_;
 	bool separator_;
 	HBITMAP bitmap_;
 
 public:
 	const std::wstring& text();
-	int icon();
+	long icon();
 	bool separator();
 	HBITMAP bitmap();
 
@@ -92,7 +92,7 @@ class Menu
 {
 public:
     Menu();
-    Menu( Menu& m ) : atached_(false), hMenu_(m) {}
+    Menu( const Menu& m ) : atached_(false), hMenu_(m.hMenu_) {}
 	Menu(HWND hwnd, bool atached = false );
     Menu( HMENU hMenu, bool atached = false );
     virtual ~Menu();
@@ -101,33 +101,31 @@ public:
     HMENU createPopup();
 
 	void attach( HMENU hMenu, bool atached = true );
-    HMENU load( int id, bool atached = true  );
+    HMENU load(LONG_PTR id, bool atached = true  );
 
     BOOL  addItem   ( UINT_PTR cmd, const std::wstring& snewItem, UINT flags = MF_STRING);
 	
-	BOOL  addItem   ( UINT_PTR cmd, int iicon, int bmp, bool checked = false, bool enabled = true );
+	BOOL  addItem   ( UINT_PTR cmd, const std::wstring& snewItem, long iicon, long bmp, bool checked = false, bool enabled = true );
 
     BOOL  addSubmenu( HMENU sub, const std::wstring& snewItem, UINT flags = MF_POPUP|MF_STRING );
 
-    BOOL  addSubmenu( HMENU sub, int cmd);
-
-	BOOL  addSubmenu( HMENU sub, int cmd, int iicon, int bmp);
+	BOOL  addSubmenu( HMENU sub, const std::wstring& snewItem, long cmd, long iicon, long bmp);
 
 	BOOL addSeparator(bool ownerDrawn = true);
 
     BOOL  remove ( UINT pos, UINT flags );
 
-    HMENU getSubMenu( int pos );
+    HMENU getSubMenu( long pos );
     HMENU getMenu(HWND wnd );
 
-    DWORD checkItem  ( int i , int flags = MF_BYCOMMAND);
-    DWORD unCheckItem( int i , int flags = MF_BYCOMMAND);
-    DWORD enableItem ( int i , int flags = MF_BYCOMMAND);
-    DWORD disableItem( int i , int flags = MF_BYCOMMAND);
+    DWORD checkItem  ( long i , int flags = MF_BYCOMMAND);
+    DWORD unCheckItem( long i , int flags = MF_BYCOMMAND);
+    DWORD enableItem ( long i , int flags = MF_BYCOMMAND);
+    DWORD disableItem( long i , int flags = MF_BYCOMMAND);
 
     UINT  GetMenuState( UINT uId, UINT flags =MF_BYCOMMAND);
-    int   trackPopup( HWND hWnd, int x, int y, int flags = TPM_LEFTALIGN|TPM_RIGHTBUTTON );
-    int   returnTrackPopup( HWND hWnd, int x, int y , int flags = TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON);
+	LONG_PTR   trackPopup( HWND hWnd, int x, int y, int flags = TPM_LEFTALIGN|TPM_RIGHTBUTTON );
+	LONG_PTR   returnTrackPopup( HWND hWnd, int x, int y , int flags = TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON);
     HMENU createContext();
 
     operator HMENU() { return hMenu_; };
@@ -156,15 +154,15 @@ namespace win  {
 
 class restype_text
 {
-public:	static wchar_t* type() { return _T("TXT"); }
+public:	static const wchar_t* type() { return _T("TXT"); }
 };
 class restype_html
 {
-public:	static wchar_t* type(){ return RT_HTML; } //"HTML"; }
+public:	static const wchar_t* type(){ return RT_HTML; } //"HTML"; }
 };
 class restype_img
 {
-public:	static wchar_t* type() { return _T("IMAGE"); }
+public:	static const wchar_t* type() { return _T("IMAGE"); }
 };
 
 } // end namespace win
@@ -195,7 +193,7 @@ public:
                 ::FreeResource(res_);
     }
 
-    BOOL load(int id)
+    BOOL load(long id)
     {
         return load( id, mol::hinstance() );
     }
@@ -205,7 +203,7 @@ public:
         return load( id, mol::hinstance() );
     }
 
-    BOOL load(int id, HINSTANCE hinst)
+    BOOL load(long id, HINSTANCE hinst)
     {
         res_  = 0;
         len_  = 0;
@@ -361,6 +359,9 @@ private:
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
+class UserInterface;
+
+UserInterface& UI();
 
 class UserInterface
 {
@@ -370,50 +371,54 @@ public:
 
 	UserInterface();
 
-	std::wstring CmdString(unsigned int id);
-	HMENU Menu(unsigned int id);
-	HMENU SubMenu(unsigned int menu,unsigned int id);
-	HBITMAP Bitmap(unsigned int id);
-	int BitmapCmd(unsigned int id, unsigned int index);
-	int BitmapCmdIndex(unsigned int id, unsigned int cmd);
-	HWND hWnd(unsigned int id);
+//	std::wstring CmdString(unsigned int id);
+	/*
+	HMENU Menu(long id);
+	HMENU SubMenu(long menu, long id);
+	*/
+	HBITMAP Bitmap(long id);
+	int BitmapCmd(long id, long index);
+	int BitmapCmdIndex(long id, long cmd);
+	HWND hWnd(long id);
 
 	template<class T>
-	T* Wnd(unsigned int id)
+	T* Wnd(long id)
 	{
-		return mol::wndFromHWND<T>(hWnd(id));
+		return wndFromHWND<T>(hWnd(id));
 	}
 
 	struct bitmapinfo
 	{
 		HBITMAP hbitmap;
-		std::vector<int> index;
+		std::vector<long> index;
 	};
 
 
-	void addCmd(int key, const std::wstring& title);
-	void addBmp(int key);
-	void addBmpCmd(int bmp, int cmd);
-	void addMenu(int menu);
-	void addMenuSeparator(int root, int menu);
+//	void addCmd(long key, const std::wstring& title);
+	void addBmp(long key);
+	void addBmpCmd(long bmp, long cmd);
+
+	/*
+	void addMenu(long menu);
+	void addMenuSeparator(long root, long menu);
 	void addSubMenu(int root, int menu, int cmd);
 	void addSubMenu(int root, int menu, int cmd, int bmp);
 	void addMenuItem( int root, int menu, int cmd, int bmp, int idx, bool checked = false, bool enabled = true);
-
+	*/
 	template<class T>
 	T* makeWindow(HMENU id, const mol::Rect& r, HWND parent)
 	{
 		T* t = new T;
 		t->deleteOnNCDestroy_ = true;
 		t->create(id, r, parent);
-		addWnd((int)id, *t);
+		addWnd((ULONG_PTR)id, *t);
 		return t;
 	}
 
 	template<class T>
-	void makeMainWindow(T* t, const std::wstring& name, HMENU menu, const mol::Rect& r, int id)
+	void makeMainWindow(T* t, const std::wstring& name, HMENU menu, const mol::Rect& r, ULONG_PTR id)
 	{
-		t->create(name, (HMENU)mol::UI().Menu((unsigned int)menu), r);
+		t->create(name, menu, r);
 		addWnd(id, *t);
 	}
 
@@ -421,34 +426,33 @@ public:
 	template<class T>
 	void makeMdiWindow(T* t, const std::wstring& name, HMENU menu, const mol::Rect& r)
 	{
-		t->create(name, (HMENU)mol::UI().Menu(menu), r);
+		t->create(name, menu, r);
 		//addWnd(id,*t);
 	}
 
-	void addWnd(int key, HWND wnd)
+	void addWnd(ULONG_PTR key, HWND wnd)
 	{
 		hWnds_.insert(std::make_pair(key, wnd));
 	}
 
 private:
 
-	std::map<int,std::wstring> cmdStrings_;
-	std::map<int,HMENU> menus_;
-	std::map<int,std::map<int,HMENU>> submenus_;
-	std::map<int,bitmapinfo> bmps_;
-	std::map<int,HWND> hWnds_;
-	std::map<int,HBITMAP> explodedBmps_;
+	//std::map<int,std::wstring> cmdStrings_;
+	std::map<long,HMENU> menus_;
+	std::map<long,std::map<long,HMENU>> submenus_;
+	std::map<long,bitmapinfo> bmps_;
+	std::map<ULONG_PTR,HWND> hWnds_;
+	std::map<long,HBITMAP> explodedBmps_;
 
 };
 
-UserInterface& UI();
 
 //////////////////////////////////////////////////////////////////////
 
 namespace win {
 class WndProc;
 }
-
+/*
 class UIBuilder
 {
 public:
@@ -522,7 +526,7 @@ void make_ui(T* t)
 	GUIBuilder<T>* builder = new GUIBuilder<T>(t);
 	builder->makeUI();
 }
-
+*/
 //////////////////////////////////////////////////////////////////////
 
 } // endnamespace mol

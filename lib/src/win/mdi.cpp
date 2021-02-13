@@ -31,7 +31,7 @@ void MdiChild::registerClass( HMENU& hMenu )
 	if ( ::IsMenu((HMENU)hMenu) )
 		menue_.attach((HMENU)hMenu,false);
 	else
-		menue_.load((int)hMenu);
+		menue_.load((ULONG_PTR)hMenu);
 
 	mol::win::WndClass& wic = wndClass();
     wic.setWndProc(MdiChild::windowProcedure);
@@ -126,7 +126,7 @@ int MdiChild::mdiMenuIndex()
 	return 0;
 }
 
-UINT MdiChild::showContext( HMENU m )
+ULONG_PTR MdiChild::showContext( HMENU m )
 {
 	// show context and post result as WM_COMMAND to MDI parent
 	return WndProc::showContext(m,mdiParent());
@@ -514,10 +514,6 @@ LRESULT CALLBACK MdiFrame::windowProcedure (HWND hwnd, UINT message, WPARAM wPar
                     LPCREATESTRUCT lpcs = ((LPCREATESTRUCT)lParam);
                     pThis->createMDIClient(lpcs);
                 }
-				if ( pThis->uiBuilder_)
-				{
-					pThis->uiBuilder_->makeUI();
-				}
             }
         }
         if (pThis && (::IsWindow(*pThis)) )
@@ -703,7 +699,7 @@ HWND MdiFrame::createWindow( const std::wstring& windowName, HMENU hMenu, const 
 		}
 		else
 			if (hMenu)
-				menue_ = ::LoadMenu(mol::hinstance(),MAKEINTRESOURCE(hMenu));
+				menue_ = ::LoadMenu(mol::hinstance(),MAKEINTRESOURCE((size_t)hMenu));
 			
 
         this->hWnd_ = ::CreateWindowEx( exstyle(),

@@ -82,6 +82,18 @@ void OleChild::OnDestroy()
 }
 
 
+handle_cmd(&OleChild::OnCloseAll, IDM_VIEW_CLOSEALL)
+LRESULT OleChild::OnCloseAll()
+{
+	return MoeChild<
+		OleChild,
+		mol::AxClientWnd<OleChild, mol::MdiChild>,
+		MOE_DOCTYPE_OLE,
+		IDM_MOE
+	>::OnCloseAll();
+}
+
+
 //disabled
 //handle_msg(&OleChild::OnPaint, WM_PAINT)
 void OleChild::OnPaint()
@@ -239,7 +251,7 @@ bool OleChild::openFile( const std::wstring& path )
 	statusBar()->status(20);
 
 	// determine window menu
-	windowMenu_ = mol::UI().SubMenu( IDM_MOE ,IDM_VIEW_WINDOWS);
+	//windowMenu_ = mol::UI().SubMenu( IDM_MOE ,IDM_VIEW_WINDOWS);
 
 	create(path,  0 /*(HMENU)IDM_MOE*/ ,mol::Rect(0,0,500,500),*moe());
 	show(SW_SHOW);

@@ -27,7 +27,7 @@ public:
 
 	using Instance = mol::com_obj<Callback<I, Args...>>;
 
-	static mol::punk<I> CreateInstance(callback cb)
+	static mol::punk<I> CreateInstance(SimpleCallBack<I, Args...>::callback cb)
 	{
 		Instance* i = new Instance();
 		mol::punk<I> pun(i);
@@ -37,7 +37,7 @@ public:
 
 	HRESULT __stdcall Invoke(Args... args)
 	{
-		cb_(args...);
+		this->cb_(args...);
 		return S_OK;
 	}
 };

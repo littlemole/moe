@@ -27,8 +27,9 @@ public:
 	void OnMDIActivate(HWND activated);
 	void OnNcDestroy();
 	void OnDestroy();
+	LRESULT OnCloseAll();
 
-   virtual HRESULT __stdcall get_FilePath( BSTR *fname);
+    virtual HRESULT __stdcall get_FilePath( BSTR *fname);
 
 private:
 

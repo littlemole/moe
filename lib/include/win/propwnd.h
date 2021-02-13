@@ -134,7 +134,7 @@ public:
 	{
 		std::ostringstream oss;
 		oss << t;
-		v_.push_back( std::make_pair( t, oss.str() ) );
+		this->v_.push_back( std::make_pair( t, oss.str() ) );
 	}
 };
 
@@ -162,97 +162,7 @@ public:
 
 } // end namespace prop
 
-
-class PropWindow : public mol::ChildFrame<PropWindow,mol::ScrollWnd > 
-{
-public:
-
-	typedef std::map<std::wstring,prop::AbstractProp*> PropMap;
-	typedef PropMap::iterator PropIter;
-
-	PropWindow();
-	~PropWindow();
-
-	msg_handler(WM_CREATE,OnCreate)
-	void OnCreate();
-
-	msg_handler(WM_PAINT,OnPaint)
-	void OnPaint();
-
-	msg_handler(WM_LBUTTONDOWN,OnClick)
-	LRESULT OnClick(mol::Crack& msg);
-
-	msg_handler(WM_LBUTTONUP,OnUp)
-	LRESULT OnUp(mol::Crack& msg);
-
-	cmd_handler(IDM_EDIT_DONE, OnEditDone)
-	void OnEditDone();
-
-	virtual LRESULT OnSize(UINT msg, WPARAM wParam, LPARAM lParam);
-
-	template<class T>
-	prop::Category& addProperty( const std::wstring& cat, const std::wstring& n, T& t)
-	{
-		static std::string empty("");
-		prop::Category& c = category(cat);
-		c.add( new prop::Prop<T>(n,this,t,empty)  );
-		return c;
-	}
-
-	template<class T>
-	prop::Category& addProperty( const std::wstring& cat, const std::wstring& n, T& t, const std::string& v )
-	{
-		prop::Category& c = category(cat);
-		c.add( new prop::Prop<T>(n,this,t,v)  );
-		return c;
-	}
-
-	template<class T>
-	prop::Category& addProperty( const std::wstring& cat,  const std::wstring& n, T& t, typename prop::Selection<T>::SelectPropVector& v )
-	{
-		static std::string empty("");
-		prop::Category& c = category(cat);
-		c.add( new prop::SelectProp<T>(n,this,t,v,empty)  );
-		return c;
-	}
-
-	prop::Category& addVBProperty( const std::wstring& cat, const std::wstring& n, VARIANT_BOOL& t);
-	prop::Category& addProperty( const std::wstring& cat, const std::wstring& n, mol::bstr& t);
-	prop::Category& addProperty( const std::wstring& cat, const std::wstring& n, mol::bstr& t, const std::string& v);
-
-	prop::AbstractProp* inEdit();
-
-	int cnt();
-	int spin();
-	int rowHeight();
-	int borderWidth();
-
-	COLORREF backgroundColor();
-	HBRUSH   backgroundBrush();
-	HBRUSH   blackBrush();
-
-	HFONT font()   { return font_; }
-	HFONT bfont()  { return bfont_; }
-
-private:
-
-	prop::Category& category(const std::wstring& cat);
-	void add( prop::AbstractProp* prop);
-	
-	int borderWidth_;
-	int rowHeight_;
-	int spin_;
-
-	HCURSOR cur_;
-	HFONT font_;
-	HFONT bfont_;
-	HBRUSH backgroundBrush_;
-
-	prop::AbstractProp* inEdit_;
-	bool dragging_;
-
-	PropMap props_;
-};
+class PropWindow;
 
 
 
@@ -452,10 +362,10 @@ public:
 
 	virtual void startEdit(HWND parent)
 	{
-		int h = propWnd_->rowHeight();
-		int o = propWnd_->borderWidth();
+		int h = this->propWnd_->rowHeight();
+		int o = this->propWnd_->borderWidth();
 
-		mol::Rect r(rValue_.left+1, rValue_.top+1, rValue_.right-rValue_.left-2, h-2+100);
+		mol::Rect r(this->rValue_.left+1, this->rValue_.top+1, this->rValue_.right-this->rValue_.left-2, h-2+100);
 		box_.create((HMENU)IDC_PROP_EDIT,r,parent);
 
 		for ( size_t i = 0; i < values_.size(); i++ )
@@ -463,7 +373,7 @@ public:
 			box_.addString( values_[i].second );
 		}
 
-		int idx = getValueIndex(value_);
+		int idx = getValueIndex(this->value_);
 		if ( idx != -1 )
 			box_.setCurSel(idx);
 
@@ -481,7 +391,7 @@ public:
 		{
 
 			std::wstring tmp = box_.getString(cursel);
-			setValueFromString(tmp);
+			this->setValueFromString(tmp);
 		}
 
 		box_.destroy();
@@ -575,6 +485,100 @@ private:
 };
 
 } // end namespace prop
+
+class PropWindow : public mol::ChildFrame<PropWindow, mol::ScrollWnd >
+{
+public:
+
+	typedef std::map<std::wstring, prop::AbstractProp*> PropMap;
+	typedef PropMap::iterator PropIter;
+
+	PropWindow();
+	~PropWindow();
+
+	msg_handler(WM_CREATE, OnCreate)
+		void OnCreate();
+
+	msg_handler(WM_PAINT, OnPaint)
+		void OnPaint();
+
+	msg_handler(WM_LBUTTONDOWN, OnClick)
+		LRESULT OnClick(mol::Crack& msg);
+
+	msg_handler(WM_LBUTTONUP, OnUp)
+		LRESULT OnUp(mol::Crack& msg);
+
+	cmd_handler(IDM_EDIT_DONE, OnEditDone)
+		void OnEditDone();
+
+	virtual LRESULT OnSize(UINT msg, WPARAM wParam, LPARAM lParam);
+
+	template<class T>
+	prop::Category& addProperty(const std::wstring& cat, const std::wstring& n, T& t)
+	{
+		static std::string empty("");
+		prop::Category& c = category(cat);
+		using Prop = typename ::mol::prop::Prop<T>;
+		c.add(new Prop(n, this, t, empty));
+		return c;
+	}
+
+	template<class T>
+	prop::Category& addProperty(const std::wstring& cat, const std::wstring& n, T& t, const std::string& v)
+	{
+		prop::Category& c = category(cat);
+		c.add(new prop::Prop<T>(n, this, t, v));
+		return c;
+	}
+
+	template<class T>
+	prop::Category& addProperty(const std::wstring& cat, const std::wstring& n, T& t, typename prop::Selection<T>::SelectPropVector& v)
+	{
+		static std::string empty("");
+		prop::Category& c = category(cat);
+		c.add(new prop::SelectProp<T>(n, this, t, v, empty));
+		return c;
+	}
+
+	prop::Category& addVBProperty(const std::wstring& cat, const std::wstring& n, VARIANT_BOOL& t);
+	prop::Category& addProperty(const std::wstring& cat, const std::wstring& n, mol::bstr& t);
+	prop::Category& addProperty(const std::wstring& cat, const std::wstring& n, mol::bstr& t, const std::string& v);
+
+	prop::AbstractProp* inEdit();
+
+	int cnt();
+	int spin();
+	int rowHeight();
+	int borderWidth();
+
+	COLORREF backgroundColor();
+	HBRUSH   backgroundBrush();
+	HBRUSH   blackBrush();
+
+	HFONT font() { return font_; }
+	HFONT bfont() { return bfont_; }
+
+private:
+
+	prop::Category& category(const std::wstring& cat);
+	void add(prop::AbstractProp* prop);
+
+	int borderWidth_;
+	int rowHeight_;
+	int spin_;
+
+	HCURSOR cur_;
+	HFONT font_;
+	HFONT bfont_;
+	HBRUSH backgroundBrush_;
+
+	prop::AbstractProp* inEdit_;
+	bool dragging_;
+
+	PropMap props_;
+};
+
+
 } // end namespace mol
 
 #undef IDM_EDIT_DONE
