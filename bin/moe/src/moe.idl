@@ -1194,6 +1194,11 @@ library Moe
 		[id(2), helpstring("Close current frame")] 
 		HRESULT Close();
 
+		[id(3), helpstring("connect event")]
+		HRESULT Connect([in] IUnknown* obj, [in] BSTR event, [in] IDispatch* handler);
+
+
+
 	}
 
  	////////////////////////////////////////////////////////////////////////////////////

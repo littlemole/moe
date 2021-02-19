@@ -303,5 +303,28 @@ class DebugDlg;
 DebugDlg* debugDlg();
 
 
+
+class ScriptEventHandler : public IDispatch
+{
+public:
+	~ScriptEventHandler();
+
+	void init(REFIID iid, const std::wstring& n, IDispatch* handler);
+	virtual void dispose() {}
+
+	HRESULT virtual __stdcall QueryInterfaceImpl(REFIID iid, LPVOID* ppv);
+	HRESULT virtual __stdcall GetTypeInfoCount(unsigned int FAR* pctinfo);
+	HRESULT virtual __stdcall GetTypeInfo(unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR* ppTInfo);
+	HRESULT virtual __stdcall GetIDsOfNames(REFIID  riid, OLECHAR FAR* FAR* rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR* rgDispId);
+	HRESULT virtual __stdcall Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS* pDisp, VARIANT* pReturn, EXCEPINFO* ex, UINT* i);
+
+private:
+	IID riid;
+	mol::punk<IDispatch> handler;
+	mol::punk< ITypeInfo> info;
+	std::wstring eventName;
+};
+
+
 #endif
 

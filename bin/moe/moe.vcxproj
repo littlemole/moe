@@ -425,11 +425,9 @@
     <ClInclude Include="include\ole.h" />
     <ClInclude Include="include\resource.h" />
     <ClInclude Include="moe_dispid.h" />
-    <ClInclude Include="ribbonres.h" />
     <ClInclude Include="include\shared.h" />
     <ClInclude Include="include\stdafx.h" />
     <ClInclude Include="include\widgets.h" />
-    <ClInclude Include="include\xmlid.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\cg\disph.exe">
@@ -467,37 +465,6 @@
     <None Include="xsl\uih.xsl" />
     <None Include="xsl\uirc.xsl" />
     <None Include="xsl\uires.xsl" />
-    <CustomBuild Include="..\..\cg\js\make.js">
-      <Message Condition="'$(Configuration)|$(Platform)'=='uni_release_64|Win32'">code generation phase</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='uni_release_64|Win32'">cscript.exe ../../cg/js/make.js
-</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_release_64|Win32'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_release_64|Win32'">xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">code generation phase</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">cscript.exe ../../cg/js/make.js "x64\uni_release_64"
-</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_release_64|x64'">xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">code generation phase</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">code generation phase</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">cscript.exe ../../cg/js/make.js "uni_release"
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">set UICC="C:\Program Files (x86)\Windows Kits\8.1\bin\x86\uicc.exe" &amp;&amp; cscript.exe "../../cg/js/make.js" "TLB"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;xml/ribbon.xml;%(AdditionalInputs)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;xml/ribbon.xml;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">xmlrc.cpp;xmlrib.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;ribbonres.h;ribbonres.rc;ribbon.bml;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|Win32'">xmlrc.cpp;xmlrib.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;ribbonres.h;ribbonres.rc;ribbon.bml;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">code generation phase</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">code generation phase</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">cscript.exe ../../cg/js/make.js "TLB"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">set UICC="C:\Program Files (x86)\Windows Kits\8.1\bin\x86\uicc.exe" &amp;&amp; cscript.exe "../../cg/js/make.js" "TLB"
-</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;%(Outputs)</Outputs>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
     <None Include="xml\cmd.xml">
       <SubType>Designer</SubType>
     </None>

@@ -91,6 +91,7 @@ public:
 		virtual HRESULT __stdcall get_Frame( IMoeHtmlFrame** f);
 		virtual HRESULT __stdcall CodeBehind( BSTR fname );
 		virtual HRESULT __stdcall get_Code( IDispatch** code );
+		virtual HRESULT __stdcall Connect(IUnknown* obj, BSTR event, IDispatch* handler);
 
 	};
 

@@ -3,7 +3,6 @@
 
 #include "shared.h"
 #include "mdichild.h"
-//#include "resource.h"
 
 
 

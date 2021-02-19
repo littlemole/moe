@@ -37,13 +37,12 @@ public:
 	// std windows msgs
 
 	void OnMDIActivate(WPARAM unused,HWND activated);
-	void OnMenu( HMENU menu, LPARAM unused );
 	void OnDestroy();
 	void OnNcDestroy();
 	LRESULT OnClose();
 	LRESULT OnCloseAll();
-	// menu
 
+	// menu commands
 	void OnSearch( FINDREPLACE* find );
 	void OnBeautify ();
 	void OnSaveAs();
@@ -56,13 +55,6 @@ public:
 	void OnConvertTabs();
 	void OnInsertColorDialog();
 
-    void OnEncoding();
-	void OnLanguage();
-	void OnTabUsage();
-	void OnTabWidth();
-	void OnTabIndents();
-	void OnBackspaceUnindents();
-	void OnWriteBOM();
 	void OnShowLineNumbers();
 
 	void OnExecScript();

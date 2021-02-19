@@ -134,11 +134,14 @@ private:
 
 		virtual HRESULT __stdcall get_Moe(IDispatch** disp);
 		virtual HRESULT __stdcall Close();
-		virtual HRESULT __stdcall CreateObject(BSTR progId, IDispatch** disp);
 		virtual HRESULT __stdcall get_Frame(IMoeHtmlFrame** f);
-		virtual HRESULT __stdcall CodeBehind(BSTR fname);
-		virtual HRESULT __stdcall get_Code(IDispatch** code);
+		virtual HRESULT __stdcall Connect(IUnknown* obj, BSTR event, IDispatch* handler);
 
+		private:
+
+			std::map<DWORD, IUnknown*>   sinks;
+			std::map<DWORD, IUnknown*>   ctrls;
+			std::map<DWORD, IID>		 iids;
 	};
 
 	mol::stack_obj<ExternalMoe>		external_;

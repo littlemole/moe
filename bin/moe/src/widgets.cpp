@@ -12,6 +12,8 @@
 #include <regex>
 #include "xml/xml.h"
 
+//#include <cor.h>
+
 // open file dialog std filte for moe
 wchar_t  InFilesFilter[]   = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
 
@@ -272,11 +274,12 @@ Script::Script()
 
 Script::~Script()
 {
+	/*
 	removeNamedObject(L"moe");
 	removeNamedObject(L"Java");
 	removeNamedObject(L"NET");
 	removeNamedObject(L"MoeImport");
-
+	*/
 	//close();
 
 	ODBGS("Script death");
@@ -337,7 +340,7 @@ void Script::eval(  const std::wstring& engine, const std::wstring& script, ISci
 	if ( quit_ == true )
 	{
 		timeouts().clear(this);
-		//close();
+		close();
 		((Instance*)this)->Release();
 	}
 	
@@ -363,7 +366,7 @@ void Script::debug(  const std::wstring& engine, const std::wstring& script, ISc
 	if (  quit_ == true )
 	{
 		timeouts().clear(this);
-		//close();
+		close();
 		((Instance*)this)->Release();
 	}
 }
@@ -384,7 +387,7 @@ void Script::call(  const std::wstring& engine, const std::wstring& func, const 
 	if (  quit_ == true)
 	{
 		timeouts().clear(this);
-		//close();
+		close();
 		((Instance*)this)->Release();
 	}
 }
@@ -393,12 +396,15 @@ void Script::call(  const std::wstring& engine, const std::wstring& func, const 
 void  Script::quit()
 {
 	quit_ = true;
-	if (completed.test() )
-	{
-		timeouts().clear(this);
-		//close();
-		((Instance*)this)->Release();
-	}
+	timeouts().clear(this);
+
+	timer_.set(100, [this]() {
+		if (completed.test())
+		{
+			close();
+			((Instance*)this)->Release();
+		}
+	});
 }
 
 
@@ -1892,9 +1898,113 @@ MOE_DOCTYPE index2type(int index)
 
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+ScriptEventHandler::~ScriptEventHandler()
+{
+	ODBGS("ScriptEventHandler dead");
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void ScriptEventHandler::init(REFIID iid, const std::wstring& n, IDispatch* h)
+{
+	riid = iid;
+	handler = h;
+	eventName = n;
+	info.release();
+	if ((S_OK == mol::typeInfoForInterface(riid, &info)) && info)
+	{
+
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall ScriptEventHandler::QueryInterfaceImpl(REFIID iid, LPVOID* ppv)
+{
+	ODBGS("::QueryInterface ScriptEventHandler");
+	if (ppv == (void**)0)
+		return E_INVALIDARG;
+
+	if (IsEqualIID(iid, IID_IUnknown))
+	{
+		*ppv = (IUnknown*)this;
+		((IUnknown*)(*ppv))->AddRef();
+		return S_OK;
+	}
+	if (IsEqualIID(iid, IID_IDispatch))
+	{
+		*ppv = (IDispatch*)this;
+		((IDispatch*)(*ppv))->AddRef();
+		return S_OK;
+	}
+	if (IsEqualIID(iid, riid))
+	{
+		*ppv = (IDispatch*)this;
+		((IDispatch*)(*ppv))->AddRef();
+		return S_OK;
+	}
+	ODBGS("ScriptEventHandler::QueryInterface E_NOINTERFACE");
+	*ppv = (IUnknown*)(0);
+	return E_NOINTERFACE;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall ScriptEventHandler::GetTypeInfoCount(unsigned int FAR* pctinfo)
+{
+	*pctinfo = 1;
+	return S_OK;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall ScriptEventHandler::GetTypeInfo(unsigned int  iTInfo, LCID  lcid, ITypeInfo FAR* FAR* ppTInfo)
+{
+	return info->QueryInterface(IID_ITypeInfo, (void**)ppTInfo);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall ScriptEventHandler::GetIDsOfNames(REFIID  riid, OLECHAR FAR* FAR* rgszNames, unsigned int  cNames, LCID   lcid, DISPID FAR* rgDispId)
+{
+	return info->GetIDsOfNames(rgszNames, cNames, rgDispId);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+HRESULT __stdcall ScriptEventHandler::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w, DISPPARAMS* pDisp, VARIANT* pReturn, EXCEPINFO* ex, UINT* i)
+{
+	UINT nNames = 0;
+	mol::bstr name;
+	if (pReturn) {
+		pReturn->vt = VT_EMPTY;
+	}
+	if ((S_OK == info->GetNames(dispIdMember, &name, 1, &nNames)) && (nNames == 1))
+	{
+		std::wstring n = name.towstring();
+		if (n == eventName)
+		{
+			// protect refcount as we might quit
+			mol::punk<IDispatch> disp(handler);
+
+			HRESULT hr = disp->Invoke(DISPID_VALUE, IID_NULL,
+				LOCALE_SYSTEM_DEFAULT,
+				w,
+				pDisp,
+				pReturn, ex, i
+			);
+			return hr;
+		}
+	}
+	return S_OK;
+}
+
 
 void MoeImport::dispose() 
 {
+
 }
  
 MoeImport::Instance* MoeImport::CreateInstance(Host* host)
@@ -1977,6 +2087,8 @@ HRESULT __stdcall  MoeImport::clearTimeout( VARIANT t)
 }
 
 
+
+
 HRESULT EventWrapper::CreateInstance(IDispatch* disp, BSTR handler, IDispatch** d)
 {
 	Instance* i = new Instance;
@@ -2014,3 +2126,4 @@ HRESULT __stdcall EventWrapper::Invoke(DISPID dispIdMember, REFIID riid, LCID lc
 	}
 	return hr;
 }
+

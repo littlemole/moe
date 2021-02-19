@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "form2.h"
 #include "app.h"
-//#include "xmlui.h"
+#include "commons.h"
 #include "resource.h"
 
 using namespace mol::win;
@@ -542,6 +542,27 @@ MoeForm2Wnd::ExternalMoe::ExternalMoe()
 
 MoeForm2Wnd::ExternalMoe::~ExternalMoe()
 {
+	for (std::map<DWORD, IUnknown*>::iterator it = ctrls.begin(); it != ctrls.end(); it++)
+	{
+		mol::punk<IConnectionPointContainer>	icPc((*it).second);
+		if (icPc)
+		{
+			mol::punk<IConnectionPoint>			icP;
+
+			HRESULT hr = icPc->FindConnectionPoint(iids[(*it).first], &icP);
+			if (S_OK == hr)
+			{
+				hr = icP->Unadvise((*it).first);
+			}
+			if (sinks.count((*it).first) > 0)
+			{
+				sinks[(*it).first]->Release();
+				(*it).second->Release();
+			}
+		}
+	}
+	sinks.clear();
+	ctrls.clear();
 	ODBGS("ExternalMoe ~");
 }
 
@@ -566,22 +587,6 @@ HRESULT __stdcall MoeForm2Wnd::ExternalMoe::Close()
 	return S_OK;
 }
 
-HRESULT __stdcall MoeForm2Wnd::ExternalMoe::CreateObject( BSTR progId, IDispatch** disp)
-{
-	if (!disp) 
-		return E_INVALIDARG;
-
-	*disp = 0;
-	CLSID clsid;
-
-	if ( S_OK == ::CLSIDFromProgID( progId, &clsid ) )
-	{
-		if ( S_OK == ::CoCreateInstance( clsid, NULL, CLSCTX_INPROC|CLSCTX_LOCAL_SERVER, IID_IDispatch, (void**) disp ) )
-			return S_OK;
-	}
-	return E_FAIL;
-}
-
 HRESULT __stdcall MoeForm2Wnd::ExternalMoe:: get_Frame( IMoeHtmlFrame** f)
 {
 	if (!f) 
@@ -590,18 +595,35 @@ HRESULT __stdcall MoeForm2Wnd::ExternalMoe:: get_Frame( IMoeHtmlFrame** f)
 }
 
 
-HRESULT __stdcall MoeForm2Wnd::ExternalMoe::CodeBehind( BSTR fname )
+HRESULT __stdcall  MoeForm2Wnd::ExternalMoe::Connect(IUnknown* obj, BSTR event, IDispatch* eventHandler)
 {
+	IID iid;
+	if (S_OK != mol::findSourceOnCP(obj, &iid))
+		return S_FALSE;
+	 
+	DWORD cookie;
+	mol::com_obj<ScriptEventHandler>* handler = new mol::com_obj<ScriptEventHandler>;
+	handler->AddRef();
+
+	//TODO: assure only to advis IF script handler present
+	// use static factory func pattern
+	handler->init(iid, mol::bstr(event).towstring(), eventHandler);
+
+	mol::punk<IConnectionPointContainer>	icPc(obj);
+	mol::punk<IConnectionPoint>			icP;
+	HRESULT hr = icPc->FindConnectionPoint(iid, &icP);
+	if (S_OK == hr)
+	{
+		hr = icP->Advise(handler, &cookie);
+	}
+
+	sinks[cookie] = handler;
+	obj->AddRef();
+	ctrls[cookie] = obj;
+	iids[cookie] = iid;
+
+
 	return S_OK;
-}
-
-HRESULT __stdcall MoeForm2Wnd::ExternalMoe::get_Code( IDispatch** code )
-{
-	if ( !code )
-		return E_INVALIDARG;
-
-	*code = 0;
-	return E_FAIL;
 }
 
 /////////////////////////////////////////////////////////////////////

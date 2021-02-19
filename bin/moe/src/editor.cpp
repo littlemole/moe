@@ -9,9 +9,6 @@
 #include "EditorMenu.h"
 #include "EditorScript.h"
 
-//#include "xmlui.h"
-//#include "ribbonres.h"
-
 using namespace mol::win;
 using namespace mol::ole;
 using namespace mol::io;
@@ -139,6 +136,15 @@ handle_msg(&Editor::OnDestroy,WM_DESTROY)
 void Editor::OnDestroy()
 {
 	ODBGS("Editor::OnDestroy()");
+
+	if (this->onCloseHandler)
+	{
+		EXCEPINFO ex;
+		::ZeroMemory(&ex, sizeof(EXCEPINFO));
+		UINT e = 0;
+		DISPPARAMS p = { 0,0 };
+		this->onCloseHandler->Invoke(DISPID_VALUE, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD, &p, NULL, &ex, &e);
+	}
 	
 	docs()->remove(this);
 	
@@ -284,81 +290,6 @@ void Editor::OnConvertTabs()
 	props_->ConvertTabs();
 }
 
-handle_cmd(&Editor::OnEncoding, IDM_RIBBON_ENCODING)
-void Editor::OnEncoding()
-{
-	if ( !sci )
-		return;
-
-	// get chosen encoding index
-//	int enc = mol::Ribbon::handler(RibbonEncoding)->index();
-	//props_->put_Encoding( codePages()->item(enc).first );
-}
-
-handle_cmd(&Editor::OnLanguage, IDM_RIBBON_LANGUAGE)
-void Editor::OnLanguage()
-{
-	// get chosen lexer id
-//	int lexer = mol::Ribbon::handler(RibbonSelectLanguage)->index();
-
-	// convert to menu message
-//	postMessage(WM_COMMAND,IDM_LEXER_PLAIN + lexer,0);
-}
-
-handle_cmd(&Editor::OnTabUsage, IDM_RIBBON_TABUSAGE)
-void Editor::OnTabUsage()
-{
-	if ( !sci )
-		return;
-
-//	VARIANT_BOOL vb = mol::Ribbon::handler(RibbonTabUseTabs)->checked() ? VARIANT_TRUE: VARIANT_FALSE;
-//	props_->put_TabUsage(vb);
-}
-
-handle_cmd(&Editor::OnTabWidth, IDM_RIBBON_TABWIDTH)
-void Editor::OnTabWidth()
-{
-	if ( !sci )
-		return;
-
-//	mol::variant v = mol::Ribbon::handler(RibbonTabSize)->decimal();
-
-//	DECIMAL d = v.decVal;
-//	long w = d.Lo32;
-//	props_->put_TabWidth(w);
-
-}
-
-handle_cmd(&Editor::OnTabIndents, IDM_RIBBON_TABINDENTS)
-void Editor::OnTabIndents()
-{
-	if ( !sci )
-		return;
-
-//	VARIANT_BOOL vb = mol::Ribbon::handler(RibbonTabIndents)->checked() ? VARIANT_TRUE: VARIANT_FALSE;
-//	props_->put_TabIndents(vb);
-}
-
-handle_cmd(&Editor::OnBackspaceUnindents, IDM_RIBBON_BACKSPACE_UNIDENTS)
-void Editor::OnBackspaceUnindents()
-{
-	if ( !sci )
-		return;
-
-//	VARIANT_BOOL vb = mol::Ribbon::handler(RibbonTabBackSpaceUnIndents)->checked() ? VARIANT_TRUE: VARIANT_FALSE;
-//	props_->put_BackSpaceUnindents(vb);
-
-}
-
-handle_cmd(&Editor::OnWriteBOM, IDM_RIBBON_WRITE_BOM)
-void Editor::OnWriteBOM()
-{
-	if ( !sci )
-		return;
-
-//	VARIANT_BOOL vb = mol::Ribbon::handler(RibbonWriteBOM)->checked() ? VARIANT_TRUE: VARIANT_FALSE;
-//	props_->put_WriteBOM(vb);
-}
 
  
 //////////////////////////////////////////////////////////////////////////////
@@ -811,72 +742,37 @@ void Editor::OnSaveAs()
 		return;
 	}
 
-	if ( true ) //mol::Ribbon::ribbon()->enabled() )
+	const COMDLG_FILTERSPEC c_rgSaveTypes[] =
 	{
-		const COMDLG_FILTERSPEC c_rgSaveTypes[] =
-		{
-			{ L"all files (*.*)",       L"*.*"}
-		};
+		{ L"all files (*.*)",       L"*.*"}
+	};
 
-		MoeVistaFileDialog fd(*moe());
-		fd.setFilter((COMDLG_FILTERSPEC*)&c_rgSaveTypes,ARRAYSIZE(c_rgSaveTypes));
-		fd.encoding( enc );
-		fd.path(mol::towstring(p));
-		HRESULT hr = fd.save(FOS_NOVALIDATE);
-		if ( hr != S_OK )
-			return;
-
-		enc = fd.encoding();
-		props_->put_Encoding(enc);
-
-		std::wostringstream oss;
-		if ( S_OK == sci->SaveAs( mol::bstr(fd.path() ) ) )
-		{
-			lastWriteTime_ = getLastWriteTime( fd.path() );
-			docs()->rename( this, fd.path() );
-			props_->put_Filename(mol::bstr(fd.path()));
-
-			oss << _T("file saved as ") << fd.path() << _T(" saved");
-		}
-		else
-		{
-			oss << _T("failed to saved file ") << fd.path() ;
-		}
-		statusBar()->status(oss.str());
+	MoeVistaFileDialog fd(*moe());
+	fd.setFilter((COMDLG_FILTERSPEC*)&c_rgSaveTypes,ARRAYSIZE(c_rgSaveTypes));
+	fd.encoding( enc );
+	fd.path(mol::towstring(p));
+	HRESULT hr = fd.save(FOS_NOVALIDATE);
+	if ( hr != S_OK )
 		return;
+
+	enc = fd.encoding();
+	props_->put_Encoding(enc);
+
+	std::wostringstream oss;
+	if ( S_OK == sci->SaveAs( mol::bstr(fd.path() ) ) )
+	{
+		lastWriteTime_ = getLastWriteTime( fd.path() );
+		docs()->rename( this, fd.path() );
+		props_->put_Filename(mol::bstr(fd.path()));
+
+		oss << _T("file saved as ") << fd.path() << _T(" saved");
 	}
-	/*
-	MolFileFialog ofn(*this);
-
-	ofn.setFilter( OutFilesFilter );		
-	ofn.index(0);
-	ofn.codePage(enc);
-	ofn.fileName(p.towstring());
-
-	if ( ofn.dlgSave( OFN_OVERWRITEPROMPT| OFN_NOTESTFILECREATE| OFN_NOVALIDATE |OFN_EXPLORER | OFN_ENABLEHOOK | OFN_ENABLETEMPLATE ) )
-	{	
-		if ( enc != ofn.index()-1 )
-			props_->put_Encoding(ofn.index()-1);
-		if (sci)
-		{
-			std::wostringstream oss;
-
-			if ( S_OK == sci->SaveAs( mol::bstr(ofn.fileName() ) ) )
-			{
-				lastWriteTime_ = getLastWriteTime( ofn.fileName() );
-				docs()->rename( this, ofn.fileName() );
-				props_->put_Filename(mol::bstr(ofn.fileName()));
-
-				oss << _T("file saved as ") << ofn.fileName() << _T(" saved");
-			}
-			else
-			{
-				oss << _T("failed to saved file ") << ofn.fileName() ;
-			}
-			statusBar()->status(oss.str());
-		}
+	else
+	{
+		oss << _T("failed to saved file ") << fd.path() ;
 	}
-	*/
+	statusBar()->status(oss.str());
+	return;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -923,23 +819,6 @@ void Editor::OnShowLineNumbers()
 
 	vb = vb == VARIANT_FALSE ? VARIANT_TRUE : VARIANT_FALSE;
 	props_->put_ShowLineNumbers(vb);
-
-	/*
-	mol::Menu mode(mol::UI().SubMenu(IDM_MOE,IDM_MODE));
-
-	if ( vb == VARIANT_TRUE )
-		mode.checkItem( IDM_MODE_SHOW_LINE_NUMBERS );
-	else
-		mode.unCheckItem( IDM_MODE_SHOW_LINE_NUMBERS );
-		*/
-}
-
-
-handle_msg(&Editor::OnMenu, WM_INITMENUPOPUP)
-void Editor::OnMenu(HMENU popup, LPARAM unused)
-{
-	//EditorMenu em(this);
-	//em.onMenu(popup,unused);
 }
 
 
@@ -1016,10 +895,7 @@ void Editor::OnTemplate()
 		}
 	}
 
-	//
-	//mol::Menu context(mol::UI().SubMenu(IDM_MOE, IDM_USER_SHORTCUT));
 	showContext(m);
-	//m.detach();
 }
 
 
@@ -1171,12 +1047,8 @@ HRESULT __stdcall  Editor::Sintilla_Events::OnFileNameChanged( BSTR filename, BS
 
 HRESULT __stdcall  Editor::Sintilla_Events::OnShowMenu( VARIANT_BOOL* showMenue)
 {
-	//if ( mol::Ribbon::ribbon()->enabled() )
 	{
 		*showMenue = VARIANT_FALSE;
-//		POINT p;
-//		::GetCursorPos(&p);
-		//mol::Ribbon::ribbon()->showContextualUI( RibbonDocumentContextMap, p.x, p.y);
 		moe()->moeView->ShowContextMenu();
 	}
 	return S_OK;

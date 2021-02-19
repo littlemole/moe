@@ -320,6 +320,7 @@ private:
 
     IScintillAx* sci_;
 	bool quit_ = true;
+	mol::Timer timer_;
 };
 
 
@@ -352,7 +353,10 @@ public:
 
 private:
 	Host* host_;
+
+
 };
+
 
 
 #endif

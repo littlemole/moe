@@ -84,17 +84,11 @@
     <ClInclude Include="include\MoeBar.h">
       <Filter>widget</Filter>
     </ClInclude>
-    <ClInclude Include="include\xmlid.h">
-      <Filter>gen</Filter>
-    </ClInclude>
     <ClInclude Include="include\widgets.h">
       <Filter>widget</Filter>
     </ClInclude>
     <ClInclude Include="include\ThreadScript.h">
       <Filter>widget</Filter>
-    </ClInclude>
-    <ClInclude Include="ribbonres.h">
-      <Filter>gen</Filter>
     </ClInclude>
     <ClInclude Include="include\resource.h">
       <Filter>resources</Filter>
@@ -136,9 +130,6 @@
     <Midl Include="src\moe.idl" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\cg\js\make.js">
-      <Filter>gen</Filter>
-    </CustomBuild>
     <CustomBuild Include="..\..\cg\disph.exe">
       <Filter>gen</Filter>
     </CustomBuild>

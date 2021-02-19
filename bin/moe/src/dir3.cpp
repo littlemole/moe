@@ -3,7 +3,6 @@
 #include "moe.h"
 #include "Docs.h"
 #include "MoeBar.h"
-//#include "xmlui.h"
 #include "win/msgmap.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -146,14 +145,7 @@ void DirChild::OnMDIActivate( HWND activated )
 		std::string utf8 = JSON::flatten(json);
 		ribbon()->setAppMode("Directory");
 		ribbon()->webView->PostWebMessageAsJson(mol::fromUTF8(utf8).c_str());
-/*
 
-		if ( mol::Ribbon::ribbon()->enabled())
-		{
-			mol::Ribbon::ribbon()->mode(2);
-			mol::Ribbon::ribbon()->maximize();
-		}
-		*/
 		statusBar()->status(location_);
 		tab()->select( *this );
 	}
@@ -223,7 +215,6 @@ HRESULT __stdcall DirChild::DirChild_Events::OnDirChanged(BSTR dir)
 	return S_OK;
 }
 
-handle_cmd(&DirChild::OnCloseAll, IDM_VIEW_CLOSEALL)
 
 handle_ole_cmd(DirChild, IDM_EDIT_UPDATE, &IShellPane::Update)
 handle_ole_cmd(DirChild, IDM_EDIT_CUT, &IShellPane::Cut)

@@ -157,7 +157,7 @@ protected:
     EXCEPINFO							ei_; 
 
 	HWND								owner_;
-
+	mol::Timer							timer_;
 };
 
 class MoeDebugImport : 
@@ -180,6 +180,7 @@ public:
 	virtual HRESULT __stdcall  Callback(BSTR name,IDispatch** disp);
 	virtual HRESULT __stdcall  setTimeout( VARIANT f, VARIANT d, VARIANT* retval);
 	virtual HRESULT __stdcall  clearTimeout( VARIANT t);
+	
 
 private:
 	ScriptDebugger::Instance* host_;

@@ -83,10 +83,20 @@ bool ThreadedTimeouts::fire()
 	long now = ::GetTickCount();
 
 	std::list<ThreadedTimeout*>::iterator it = timeouts_.begin();
-	mol::punk<IDispatch> disp;
-
+	ThreadedTimeout* tt = nullptr;
 	{
 		std::lock_guard lock(mutex_);
+
+		if (done_)
+		{
+			for (it = timeouts_.begin(); it != timeouts_.end(); it++)
+			{
+				delete (*it);
+			}
+			timeouts_.clear();
+			done_ = false;
+			return true;
+		}
 
 		if (timeouts_.empty())
 		{
@@ -99,29 +109,29 @@ bool ThreadedTimeouts::fire()
 			{
 				if ((*it)->timeout < now)
 				{
-					disp = (*it)->fun;
+					tt = (*it);
+					timeouts_.erase(it);
 					break;
 				}
 			}
 		}
 	}
 
-	if (disp)
+	if (tt)
 	{
 		EXCEPINFO ex;
 		::ZeroMemory(&ex, sizeof(EXCEPINFO));
 		UINT e = 0;
 		DISPPARAMS p = { 0,0 };
 
-		HRESULT hr = (*it)->fun->Invoke(0, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD, &p, 0, &ex, &e);
+		HRESULT hr = tt->fun->Invoke(0, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD, &p, 0, &ex, &e);
 	}
 
 	std::lock_guard lock(mutex_);
 
-	if (it != timeouts_.end())
+	if (tt)
 	{
-		delete* it;
-		timeouts_.erase(it);
+		delete tt;
 	}
 
 	if (done_)
@@ -139,7 +149,12 @@ bool ThreadedTimeouts::fire()
 void ThreadedTimeouts::clear()
 {
 	std::lock_guard lock(mutex_);
-	done_ = true;
+	for (auto it = timeouts_.begin(); it != timeouts_.end(); it++)
+	{
+		delete (*it);
+	}
+	timeouts_.clear();
+	done_ = false;
 }
 
 
@@ -235,7 +250,6 @@ HRESULT __stdcall  MoeDebugImport::clearTimeout( VARIANT t)
 	return S_OK;
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -256,13 +270,16 @@ void  ScriptDebugger::quit()
 {
 	break_ = false;
 	stepping_ = false;
+	if (quit_)
+		return;
 	quit_ = true;
-//	if (OnScriptThreadDone.test())
-	{
-		threadedTimeouts().clear();
-//		close();
-		//((Instance*)this)->Release();
-	}
+	threadedTimeouts().clear();
+	/*
+	timer_.set(100, [this]() {
+		((Instance*)this)->Release();
+	});
+	*/
+	
 }
 
 
