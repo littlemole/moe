@@ -275,20 +275,11 @@ void  ScriptDebugger::quit()
 		return;
 	quit_ = true;
 	threadedTimeouts().clear();
-	/*
-	timer_.set(100, [this]() {
-		((Instance*)this)->Release();
-	});
-	*/
-	
 }
 
 
 void  ScriptDebugger::wait()
 {
-//	if (completed.test())
-	//	return;
-
 	quit_ = false;
 }
 
@@ -377,12 +368,8 @@ void ScriptDebugger::init(const std::wstring& engine)
 		return;
 
 
-	
-
-	
-
- 	import = MoeDebugImport::CreateInstance((Instance*)this);
- 	addNamedObject((IMoeImport*)(import),_T("Importer"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
+	moeImport = MoeDebugImport::CreateInstance((Instance*)this);
+ 	addNamedObject((IMoeImport*)(moeImport),_T("Importer"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 
 	mol::punk<IDispatch> java;
 	MoeScriptObject::CreateInstance(&java, L"JRE.Java");
@@ -699,7 +686,7 @@ void ScriptDebugger::execute_callback()
 	objectMap_.clear();
 
 //	import->Quit();
-	import.release();
+	moeImport.release();
 
 
 	if ( debugApp_ )

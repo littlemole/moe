@@ -15,7 +15,6 @@
 #include "win/res.h"
 #include "util/str.h"
 
-#include <initguid.h>
 #include <Mshtml.h>
 #include <shlwapi.h>
 #include <tom.h>

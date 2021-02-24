@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "mdichild.h"
 #include "moe.h"
-//#include "xmlui.h"
 
 FILETIME getLastWriteTime(const std::wstring& path)
 {

@@ -13,15 +13,9 @@
  <textColor>#000000</textColor>
 <settings>
 <setting key='shortcuts'>
-<setting key='doctype'>
-<setting key='4.01 loose'><![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">]]></setting>
-<setting key='4.01 strict'><![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">]]></setting>
-<setting key='4.01 transitional'><![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">]]></setting>
-<setting key='4.01 frameset'><![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">]]></setting>
-<setting key='X1.0 strict'><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">]]></setting>
-<setting key='X1.0 transitional'><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">]]></setting>
-<setting key='X1.0 frameset'><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">]]></setting>
-</setting>
+<setting key='doctype'><![CDATA[<!DOCTYPE html>]]></setting>
+<setting key='charset'><![CDATA[<meta charset="UTF-8">]]></setting>
+<setting key='viewport'><![CDATA[<meta name="viewport" content="width=device-width, initial-scale=1.0">]]></setting>
 <setting key='form'>
 <setting key='form'><![CDATA[<form name="theForm" action="" method="post" ><!-- moleCursor --></form>]]></setting>
 <setting key='input'><![CDATA[<input name="input" type="text" size="" maxlength="" value="">]]></setting>
@@ -38,76 +32,22 @@
 <setting key='css'>
 <setting key='link'><![CDATA[<link rel="stylesheet" type="text/css" href="<!-- moleCursor -->">]]></setting>
 <setting key='stylesheet'><![CDATA[<style type="text/css"><!--<!-- moleCursor -->--></style>]]></setting>
-<setting key='style'>
-<setting key='color'><![CDATA[color:black;]]></setting>
-<setting key='font'><![CDATA[font-family:Verdana,Arial;]]></setting>
-<setting key='font size'><![CDATA[font-size:medium;]]></setting>
-<setting key='bold'><![CDATA[font-weight:bold;]]></setting>
-<setting key='italic'><![CDATA[font-style:italic;]]></setting>
-<setting key='underline'><![CDATA[text-decoration:underline;]]></setting>
-<setting key='align'><![CDATA[text-align:center;]]></setting>
-<setting key='vertical align'><![CDATA[vertical-align:top;]]></setting>
-<setting key='margin'><![CDATA[margin: 0px 0px 0px 0px;]]></setting>
-<setting key='padding'><![CDATA[padding: 0px 0px 0px 0px;]]></setting>
-<setting key='border'><![CDATA[border-color:#000000;border-width:1px;border-style:solid;]]></setting>
-<setting key='background'><![CDATA[background-color:#FFFFFF;]]></setting>
-<setting key='pseudo'><![CDATA[a:link    { font-weight:bold; color:#000000; text-decoration:none; }a:visited { font-weight:bold; color:#000000; text-decoration:none; }a:hover   { font-weight:bold; color:#000000; text-decoration:underline; }a:active  { font-weight:bold; color:#000000; text-decoration:none; }a:focus   { font-weight:bold; color:#000000; text-decoration:none; }]]></setting>
-</setting>
 </setting>
 <setting key='table'><![CDATA[<table class="" align="center" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td><!-- moleCursor --></td></tr></table>]]></setting>
-<setting key='html'><![CDATA[<html><head><title></title></head><body><!-- moleCursor --></body></html>]]></setting>
+<setting key='html'><![CDATA[<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+ </head>
+ <body>
+  <!-- moleCursor -->
+ </body>
+</html>]]></setting>
 <setting key='script'><![CDATA[<script language="javascript"><!-- moleCursor --></script>]]></setting>
-<setting key='SSI'><![CDATA[<!--#include virtual="<!-- moleCursor -->" --> ]]></setting>
+<setting key='SSI'><![CDATA[<!--#include virtual="<!-- moleCursor -->" -->]]></setting>
 <setting key='perl'><![CDATA[#!/usr/bin/perl]]></setting>
-</setting>
-<setting key='forms'>
-<setting key='regex search'><![CDATA[forms\search.html,250,250,540,400,1]]></setting>
-<setting key='regex builder'><![CDATA[forms\regexp.html,250,250,450,390,6]]></setting>
-<setting key='tidy'><![CDATA[forms\tidy.html,250,250,440,235,6]]></setting>
-<setting key='typelib'><![CDATA[forms\typelib.html,250,250,440,209,2]]></setting>
-<setting key='xslt'><![CDATA[forms\xslt.html,250,250,440,249,2]]></setting>
-<setting key='perl -cw'><![CDATA[forms\perl.html,250,250,440,357,2]]></setting>
-<setting key='killroy'><![CDATA[forms\killroy.html,250,250,460,400,2]]></setting>
-</setting>
-<setting key='scripts'>
-<setting key='validate xml'><![CDATA[js\validate.js]]></setting>
-<setting key='w3c'><![CDATA[js\w3c.js]]></setting>
-<setting key='xsd'><![CDATA[js\schema.js]]></setting>
-<setting key='format_js'><![CDATA[js\format.js]]></setting>
-<setting key='base64encode'><![CDATA[js\base64encode.js]]></setting>
-<setting key='base64decode'><![CDATA[js\base64decode.js]]></setting>
-<setting key='urlencode'>
-<setting key='escape'><![CDATA[js\escape.js]]></setting>
-<setting key='unescape'><![CDATA[js\unescape.js]]></setting>
-<setting key='encodeURI'><![CDATA[js\encodeURI.js]]></setting>
-<setting key='decodeURI'><![CDATA[js\decodeURI.js]]></setting>
-<setting key='encodeURIcomponent'><![CDATA[js\encodeURIcomponent.js]]></setting>
-<setting key='decodeURIcomponent'><![CDATA[js\decodeURIcomponent.js]]></setting>
-</setting>
-<setting key='format XML'><![CDATA[js\formatXml.js]]></setting>
-<setting key='diff'><![CDATA[js\diff.js]]></setting>
-<setting key='patch'><![CDATA[js\patch.js]]></setting>
-<setting key='edit form'><![CDATA[js\editForm.js]]></setting>
-<setting key='dub'><![CDATA[js\dub.js]]></setting>
-<setting key='markdown'><![CDATA[js\markdown.js]]></setting>
-<setting key='graphviz'><![CDATA[js\dot.js]]></setting>
-</setting>
-<setting key='batches'>
-<setting key='IE options'><![CDATA[RunDll32.exe shell32.dll,Control_RunDLL inetcpl.cpl]]></setting>
-<setting key='map drive'><![CDATA[RunDll32.exe shell32.dll,SHHelpShortcuts_RunDLL Connect]]></setting>
-<setting key='net options'><![CDATA[RunDll32.exe shell32.dll,Control_RunDLL ncpa.cpl]]></setting>
-<setting key='admin'>
-<setting key='users'><![CDATA[!mmc|lusrmgr.msc]]></setting>
-<setting key='certs'><![CDATA[!mmc|certmgr.msc]]></setting>
-<setting key='devices'><![CDATA[!mmc|devmgmt.msc]]></setting>
-<setting key='disks'><![CDATA[!mmc|diskmgmt.msc]]></setting>
-<setting key='events'><![CDATA[!mmc|eventvwr.msc]]></setting>
-<setting key='policy'><![CDATA[!mmc|gpedit.msc]]></setting>
-<setting key='security'><![CDATA[!mmc|secpol.msc]]></setting>
-<setting key='services'><![CDATA[!mmc|services.msc]]></setting>
-<setting key='components'><![CDATA[!mmc|comexp.msc]]></setting>
-<setting key='computer'><![CDATA[!mmc|compmgmt.msc]]></setting>
-</setting>
 </setting>
 <setting key='Ribbon'><![CDATA[On]]></setting>
 <setting key='csi'><![CDATA[C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\Roslyn\csi.exe]]></setting>

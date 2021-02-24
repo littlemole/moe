@@ -127,13 +127,11 @@ void OleChild::OnMDIActivate(WPARAM unused, HWND activated)
 
 	if ( activated == *this )
 	{
-		//ribbon()->setAppMode("Img");
 		::ShowWindow(*ribbon(), SW_HIDE);
 	}
 	else 
 	{
 		::ShowWindow(*ribbon(), SW_SHOW);
-		//		mol::Ribbon::ribbon()->maximize();
 	}
 }
 
@@ -250,9 +248,6 @@ bool OleChild::openFile( const std::wstring& path )
 	mol::bstr bstrFile(path);
 
 	statusBar()->status(20);
-
-	// determine window menu
-	//windowMenu_ = mol::UI().SubMenu( IDM_MOE ,IDM_VIEW_WINDOWS);
 
 	create(path,  0 /*(HMENU)IDM_MOE*/ ,mol::Rect(0,0,500,500),*moe());
 	show(SW_SHOW);

@@ -8,7 +8,6 @@
 #include "ole/variant.h"
 #include <ocidl.h>
 #include <vector>
-//#include "boost/call_traits.hpp"
 
 namespace mol {
 

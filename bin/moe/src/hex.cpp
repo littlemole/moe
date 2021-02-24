@@ -3,13 +3,12 @@
 #include "moe.h"
 #include "Docs.h"
 #include "MoeBar.h"
-//#include "xmlui.h"
-//#include "Ribbonres.h"
 
 using namespace mol::io;
 using namespace mol::win;
 using namespace mol::ole;
 using namespace mol;
+
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -171,10 +170,6 @@ void Hex::OnBytesShown()
 	punk<IHexCtrl> hexer(oleObject);
     if (!hexer)
 		return;
-
-	//int bytes = mol::Ribbon::handler(RibbonBytesShown)->index();
-
-	//hexer->put_DisplayColumns(bytes*4+16);
 }
 
 
@@ -208,8 +203,6 @@ void Hex::updateUI()
 
 	setText(title);
 
-//	ribbon()->setAppMode("Hex");
-
 	Json::Value json(Json::objectValue);
 	json["doctype"] = MOE_DOCTYPE_HEX;
 	json["appmode"] = "Hex";
@@ -224,28 +217,7 @@ void Hex::updateUI()
 
 	ribbon()->postMessageAsJSON(json);
 
-	/*
-	if ( mol::Ribbon::ribbon()->enabled())
-	{
-		Ribbon::ribbon()->mode(4);
-		mol::Ribbon::ribbon()->maximize();
-
-		if ( hexer )
-		{
-			long c = 0;
-			if ( S_OK == hexer->get_DisplayColumns(&c) )
-			{
-				int index = (c-16)/4;
-				Ribbon::handler(RibbonBytesShown)->select( index );
-			}
-		}
-	}
-	*/
-
 }
-
-
-handle_cmd(&Hex::OnCloseAll, IDM_VIEW_CLOSEALL)
 
 
 //////////////////////////////////////////////////////////////////////////////

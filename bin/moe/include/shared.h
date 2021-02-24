@@ -146,9 +146,6 @@ private:
 	VARIANT_BOOL					backSpaceUnIndents_;
 	VARIANT_BOOL					showLineNumbers_;
 	VARIANT_BOOL					showTreeView_;
-	COLORREF						foreColor_;
-	COLORREF						backColor_;
-	COLORREF						textColor_;
 public:
 
 	MoeConfig();
@@ -196,13 +193,6 @@ public:
 	virtual HRESULT __stdcall get_StyleSets( IDispatch** styles);
 
 	virtual HRESULT __stdcall ResetStyles();
-
-	virtual HRESULT __stdcall put_RibbonForeColor( BSTR fPath);
-	virtual HRESULT __stdcall get_RibbonForeColor(  BSTR* fPath);
-	virtual HRESULT __stdcall put_RibbonBackColor( BSTR fPath);
-	virtual HRESULT __stdcall get_RibbonBackColor(  BSTR* fPath);
-	virtual HRESULT __stdcall put_RibbonTextColor( BSTR fPath);
-	virtual HRESULT __stdcall get_RibbonTextColor(  BSTR* fPath);
 
 	virtual HRESULT __stdcall EditFileAssociations();
 

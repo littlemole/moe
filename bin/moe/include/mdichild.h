@@ -4,6 +4,7 @@
 #include "commons.h"
 #include "resource.h"
 #include "shared.h"
+
 /////////////////////////////////////////////////////////////////////
 //
 // common mdi child window
@@ -140,8 +141,6 @@ class MoeChild :
 {
 public:
 
-	//using BaseWindowType = MoeChild<C, T, D, M>;
-
 	LRESULT OnCloseAll()
 	{
 
@@ -172,9 +171,6 @@ protected:
 		ODBGS1("initializeMoeChild2 r: ",r.right);
 		ODBGS1("initializeMoeChild2 b: ",r.bottom);
 
-		// determine window menu
-		//HMENU m = mol::UI().Menu(M);
-		//windowMenu_ = mol::UI().SubMenu( M ,IDM_VIEW_WINDOWS);
 		statusBar()->status(40);
 
 		// create
@@ -259,11 +255,10 @@ DispatchMdiWindow<C,I,T>::DispatchMdiWindow()
 	MoeChildView::CreateInstance(This, &view);
 }
 
-class Script : public  mol::com_obj<mol::ScriptHost>//mol::ScriptHost
+class Script : public  mol::com_obj<mol::ScriptHost>
 {
 public:
 
-	//typedef mol::com_obj<Script> Instance;
 	typedef Script Instance;
 
 	mol::Event completed;

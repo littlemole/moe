@@ -105,7 +105,7 @@ public:
 
 
 
-	mol::punk<IMoeImport>				import;
+	mol::punk<IMoeImport>				moeImport;
 
 	void quit();
 	void wait();

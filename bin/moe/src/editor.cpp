@@ -160,7 +160,7 @@ void Editor::OnDestroy()
 	sci.release();
 	if ( debugger_)
 	{
-		debugger_->import->Quit();
+		debugger_->moeImport->Quit();
 		debugger_ = 0;
 	}
 }
@@ -700,23 +700,12 @@ void Editor::OnReload()
 
 	lastWriteTime_ = getLastWriteTime(filename.towstring());
 
-//	if ( t == SCINTILLA_ENCODING_UTF8 )
-	{
 
-		sci->LoadEncoding(filename,CP_UTF8);
-		props_->put_ReadOnly(vb);
-		props_->put_Syntax(syntax);
-		statusBar()->status(filename.towstring());
-		scrollDown();
-		return ;
-	}
-	/*
-	sci->Load(filename);
+	sci->LoadEncoding(filename,t);
 	props_->put_ReadOnly(vb);
 	props_->put_Syntax(syntax);
 	statusBar()->status(filename.towstring());
 	scrollDown();
-	*/
 }
 
 

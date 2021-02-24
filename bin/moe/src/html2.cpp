@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "html2.h"
 #include "app.h"
-//#include "xmlui.h"
 #include "MoeBar.h"
 #include "Docs.h"
 
@@ -10,8 +9,6 @@ MoeHtml2Wnd::MoeHtml2Wnd( )
     eraseBackground_ = 1;
 	wndClass().setIcon(moe()->icon); 
 	wndClass().hIconSm(moe()->icon); 
-
-//	this->frame_.QueryInterface(IID_IMoeHtmlFrame, (void**)&oleObject);
 
 	oleObject = &frame_;
 }
@@ -51,7 +48,6 @@ MoeHtml2Wnd::Instance* MoeHtml2Wnd::CreateInstance( const std::wstring& loc)
 	}
 
 	statusBar()->status(100);
-// ??	form->frame_.Release();
 	::SetFocus(*form);	
     return form;
 }
@@ -612,15 +608,9 @@ void MoeHtml2Wnd::OnDestroy()
 		webview->remove_WebMessageReceived(onMessageToken);
 
 		oleObject.release();
-
-		//webViewController->Close();
-		//webViewController.release();
 	}
 
-
 	docs()->remove(this);
-
-	//::CoDisconnectObject(((IExternalMoe*)&external_),0);
 }
 
 

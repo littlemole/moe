@@ -3,7 +3,6 @@
 #include "moe.h"
 #include "app.h"
 #include "docs.h"
-//#include "xmlui.h"
 #include "resource.h"
 
 using namespace mol::io;
@@ -685,147 +684,6 @@ void MoeHtmlRibbon::handleMessage(Json::Value& json)
 			return;
 		}
 	}
-	/*
-	if (json.isMember("cmd"))
-	{
-		int cmd = json["cmd"].asInt();
-		moe()->postMessage(WM_COMMAND, cmd, 0);
-		return;
-	}
-	if (json.isMember("msg"))
-	{
-		int msg = json["msg"].asInt();
-		moe()->postMessage(msg, 0, 0);
-		return;
-	}
-	if (json.isMember("action"))
-	{
-		std::string action = json["action"].asString();
-		if (action == "recent")
-		{
-			if (json.isMember("recent"))
-			{
-				std::string path = json["recent"].asString();
-
-				mol::punk<IMoeDocument> doc;
-				moe()->moeDialogs->Open(mol::bstr(path), &doc);
-			}
-			return;
-		}
-		if (action == "enc")
-		{
-			if (json.isMember("enc"))
-			{
-				const int enc = atoi(json["enc"].asString().c_str());
-
-				setActiveDocLongProperty(&IScintillAxProperties::put_Encoding, enc);
-			}
-			return;
-		}
-		if (action == "syntax")
-		{
-			if (json.isMember("syntax"))
-			{
-				const int syntax = atoi(json["syntax"].asString().c_str());
-
-				setActiveDocLongProperty(&IScintillAxProperties::put_Syntax, syntax);
-			}
-		}
-		if (action == "eol")
-		{
-			if (json.isMember("eol"))
-			{
-				const int eol = atoi(json["eol"].asString().c_str());
-
-				setActiveDocLongProperty(&IScintillAxProperties::put_SysType, eol);
-			}
-		}
-		if (action == "tabs")
-		{
-			if (json.isMember("tabs"))
-			{
-				const bool tabs = json["tabs"].asBool();
-
-				setActiveDocBooleanProperty(&IScintillAxProperties::put_TabUsage, tabs);
-			}
-		}
-		if (action == "tabindents")
-		{
-			if (json.isMember("tabindents"))
-			{
-				const bool tabindents = json["tabindents"].asBool();
-
-				setActiveDocBooleanProperty(&IScintillAxProperties::put_TabIndents, tabindents);
-			}
-		}
-		if (action == "backspaceunindents")
-		{
-			if (json.isMember("backspaceunindents"))
-			{
-				const bool backspaceunindents = json["backspaceunindents"].asBool();
-
-				setActiveDocBooleanProperty(&IScintillAxProperties::put_BackSpaceUnindents, backspaceunindents);
-			}
-		}
-		if (action == "tabwidth")
-		{
-			if (json.isMember("tabwidth"))
-			{
-				const long tabwidth = atoi(json["tabwidth"].asString().c_str());
-
-				setActiveDocLongProperty(&IScintillAxProperties::put_TabWidth, tabwidth);
-			}
-		}
-		if (action == "bom")
-		{
-			if (json.isMember("bom"))
-			{
-				const bool bom = json["bom"].asBool();
-
-				setActiveDocBooleanProperty(&IScintillAxProperties::put_WriteBOM, bom);
-			}
-		}
-		if (action == "lines")
-		{
-			if (json.isMember("lines"))
-			{
-				const bool lines = json["lines"].asBool();
-
-				setActiveDocBooleanProperty(&IScintillAxProperties::put_ShowLineNumbers, lines);
-			}
-		}
-		if (action == "script")
-		{
-			if (json.isMember("script"))
-			{
-				const std::string script = json["script"].asString();
-
-				moe()->moeScript->Run(mol::bstr(script), mol::bstr("JScript"));
-			}
-		}
-		if (action == "system")
-		{
-			if (json.isMember("system"))
-			{
-				const std::string system = json["system"].asString();
-
-				moe()->moeScript->System(mol::bstr(system));
-			}
-		}
-		if (action == "showexplorer")
-		{
-			if (json.isMember("showexplorer"))
-			{
-				const std::string showexplorer = json["showexplorer"].asString();
-
-				VARIANT_BOOL vb = showexplorer == "true" ? VARIANT_TRUE : VARIANT_FALSE;
-
-				moe()->moeConfig->put_ShowTreeView(vb);
-			}
-		}
-		return;
-	}
-*/
 }
 
 void  MoeHtmlRibbon::onMessageReceived(ICoreWebView2* sender, ICoreWebView2WebMessageReceivedEventArgs* args)
@@ -977,7 +835,6 @@ void MoeHtmlRibbon::OnNcDestroy()
 
 	::CoDisconnectObject(((IExternalMoe*)&external_), 0);
 
-	//delete this;
 	ODBGS("~MoeFormWnd()OnNcDestroy --");
 }
 

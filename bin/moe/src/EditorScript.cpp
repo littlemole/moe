@@ -3,8 +3,6 @@
 #include "editor.h"
 #include "moe.h"
 #include "Docs.h"
-//#include "xmlui.h"
-//#include "ribbonres.h"
 
 EditorScript::EditorScript(void)
 	:editor_(0),debugger_(0)
@@ -89,7 +87,6 @@ void EditorScript::debugScriptGo()
 
 	if ( debugger_&& debugger_->suspended())
 	{		
-		//mol::Ribbon::ribbon()->mode(8);
 		ribbon()->setAppMode("Script");
 		debugger_->resume();
 		return;
@@ -133,7 +130,6 @@ void EditorScript::debugScriptGo()
 	debugger_->execute( SCRIPTTEXT_ISVISIBLE);
 	editor_->debugger_= debugger_;
 
-	//mol::Ribbon::ribbon()->mode(8);
 	ribbon()->setAppMode("Script");
 }
 
@@ -222,7 +218,7 @@ void EditorScript::debugScriptQuit()
 		debugger_->resume(BREAKRESUMEACTION_ABORT);
 	}
 	
-	debugger_->import->Quit();
+	debugger_->moeImport->Quit();
 	debugger_= 0;
 }
 

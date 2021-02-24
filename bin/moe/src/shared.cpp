@@ -6,12 +6,12 @@
 #include "app.h"
 #include "form2.h"
 #include "Docs.h"
-//#include "xmlui.h"
 #include "moe_dispid.h"
 #include "resource.h"
 #include "ole/SimpleHost.h"
 #include "mdichild.h"
 #include "xml/xml.h"
+
 /////////////////////////////////////////////////////////////////////
 //
 //  moe child dialog view sub obj
@@ -401,17 +401,18 @@ HRESULT __stdcall MoeView::Screenshot()
 
 HRESULT __stdcall MoeView::ShowFileMenu()
 {
+	long left = 0;
+	long top = 0;
+	get_Left(&left);
+	get_Top(&top);
+
 	if (!moe()->fileMenu)
 	{
 		std::wstring appPath = mol::app<mol::win::AppBase>().CreateAppPath(_T("moe"));
 		std::wstring fileMenuPath = appPath + L"\\ui\\file.html";
 
-		long left = 0;
-		long top = 0;
-		get_Left(&left);
-		get_Top(&top);
 
-		moe()->fileMenu = MoeForm2Wnd::CreateInstance(fileMenuPath, left + 20, top + 60, 600, 355, MoeForm2Wnd::HIDE_ON_KILL_FOCUS);
+		moe()->fileMenu = MoeForm2Wnd::CreateInstance(fileMenuPath, left + 20, top + 60, 600, 353, MoeForm2Wnd::HIDE_ON_KILL_FOCUS);
 
 		moe()->fileMenu->onJsonMsg = [this](Json::Value json)
 		{
@@ -419,7 +420,8 @@ HRESULT __stdcall MoeView::ShowFileMenu()
 			moe()->fileMenu->show(SW_HIDE);
 		};
 	}
-	moe()->fileMenu->show(SW_SHOW);
+	::SetWindowPos(*(moe()->fileMenu.interface_), 0, left + 20, top + 60, 600, 353, SWP_SHOWWINDOW | SWP_NOZORDER | SWP_NOSIZE);
+
 	return S_OK;
 }
 
@@ -441,7 +443,6 @@ HRESULT __stdcall MoeView::ShowContextMenu()
 			moe()->contextMenu->show(SW_HIDE);
 		};
 	}
-//	moe()->contextMenu->show(SW_SHOW);
 	::SetWindowPos(*(moe()->contextMenu.interface_),0, p.x, p.y, 250, 200, SWP_SHOWWINDOW| SWP_NOZORDER|SWP_NOSIZE);
 	return S_OK;
 }
@@ -486,100 +487,42 @@ HRESULT __stdcall MoeDialogs::Open(BSTR path,IMoeDocument** d)
 
 	static wchar_t  InFilesFilter[] = _T("open text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
 
-	if ( true) //mol::Ribbon::ribbon()->enabled() )
+	const COMDLG_FILTERSPEC c_rgSaveTypes[] =
 	{
-		const COMDLG_FILTERSPEC c_rgSaveTypes[] =
-		{
-			{ L"open text files",       L"*.*"},
-			{ L"open HTML files",	    L"*.*"},
-			{ L"open RTF  files",	    L"*.*"},
-			{ L"hexviewer",			    L"*.*"},
-			{ L"tail logfile",          L"*.*"}
-		};
+		{ L"open text files",       L"*.*"},
+		{ L"open HTML files",	    L"*.*"},
+		{ L"open RTF  files",	    L"*.*"},
+		{ L"hexviewer",			    L"*.*"},
+		{ L"tail logfile",          L"*.*"}
+	};
 
-		MoeVistaFileDialog fd(*moe());
-		fd.setFilter((COMDLG_FILTERSPEC*)&c_rgSaveTypes,ARRAYSIZE(c_rgSaveTypes));
-		if ( path )
-		{
-			std::wstring p = mol::towstring(path);
-			if ( !p.empty())
-			{
-				fd.path(p);
-			}
-		}
-		HRESULT hr = fd.open(FOS_ALLOWMULTISELECT  | FOS_NOVALIDATE | FOS_ALLNONSTORAGEITEMS);
-		if ( hr != S_OK )
-			return hr;
-
-		MOE_DOCTYPE docType = index2type(fd.type());
-		std::vector<std::wstring> paths = fd.paths();
-		mol::punk<IMoeDocument> doc;
-		for ( size_t i = 0; i < paths.size(); i++)
-		{
-			doc.release(); // do not leak doc if size>1 - only keep the last one
-			bool result = docs()->open( paths[i], docType,fd.encoding(),fd.readOnly(), &doc);
-		}
-		if( d && doc )
-		{
-			doc.queryInterface(d);
-		}
-
-		return S_OK;
-	}
-
-	MolFileFialog ofn(*moe());
-	ofn.setFilter( InFilesFilter );			
+	MoeVistaFileDialog fd(*moe());
+	fd.setFilter((COMDLG_FILTERSPEC*)&c_rgSaveTypes,ARRAYSIZE(c_rgSaveTypes));
 	if ( path )
 	{
 		std::wstring p = mol::towstring(path);
-		ofn.fileName(p);
+		if ( !p.empty())
+		{
+			fd.path(p);
+		}
+	}
+	HRESULT hr = fd.open(FOS_ALLOWMULTISELECT  | FOS_NOVALIDATE | FOS_ALLNONSTORAGEITEMS);
+	if ( hr != S_OK )
+		return hr;
+
+	MOE_DOCTYPE docType = index2type(fd.type());
+	std::vector<std::wstring> paths = fd.paths();
+	mol::punk<IMoeDocument> doc;
+	for ( size_t i = 0; i < paths.size(); i++)
+	{
+		doc.release(); // do not leak doc if size>1 - only keep the last one
+		bool result = docs()->open( paths[i], docType,fd.encoding(),fd.readOnly(), &doc);
+	}
+	if( d && doc )
+	{
+		doc.queryInterface(d);
 	}
 
-	if ( ofn.dlgOpen( OFN_NOVALIDATE | OFN_ALLOWMULTISELECT | OFN_EXPLORER  | OFN_NOTESTFILECREATE | OFN_ENABLEHOOK | OFN_ENABLETEMPLATE ) )
-	{
-		// open rtf
-		if ( ofn.index() == 3 )
-		{
-			for ( int i = 0; i < ofn.selections(); i++ )
-			{
-				ODBGS(ofn.fileName(i).c_str());
-				bool result = docs()->open( ofn.fileName(i), MOE_DOCTYPE_RTF,-1,ofn.readOnly(), 0);
-			}
-		}
-		// open html
-		else if ( ofn.index() == 2 )
-		{
-			for ( int i = 0; i < ofn.selections(); i++ )
-			{
-				ODBGS(ofn.fileName(i).c_str());
-				bool result = docs()->open( ofn.fileName(i), MOE_DOCTYPE_HTML,-1,ofn.readOnly(), 0);
-			}
-		}
-		// open hex
-		else if ( ofn.index() == 4 )
-		{
-			for ( int i = 0; i < ofn.selections(); i++ )
-			{
-				bool result = docs()->open( ofn.fileName(i), MOE_DOCTYPE_HEX,-1, ofn.readOnly(), 0);
-			}
-		}
-		// open log
-		else if ( ofn.index() == 5 )
-		{
-			for ( int i = 0; i < ofn.selections(); i++ )
-			{
-				bool result = docs()->open( ofn.fileName(i), MOE_DOCTYPE_TAIL,-1, TRUE, 0);
-			}
-		}
-		// open text
-		else
-		{
-			for ( int i = 0; i < ofn.selections(); i++ )
-			{
-				bool result = docs()->open(ofn.fileName(i),MOE_DOCTYPE_DOC, ofn.codePage(), ofn.readOnly(), 0);
-			}
-		}
-	}	
 	return S_OK;
 }
 
@@ -592,7 +535,7 @@ HRESULT __stdcall MoeDialogs::OpenDir( IMoeDocument** d)
 		if ( s != _T("") )
 		{
 			//if ( mol::Path::exists(s) ) // too restrictive, would filter ssh
-				docs()->open( s, MOE_DOCTYPE_DIR,-1, false, d);
+			docs()->open( s, MOE_DOCTYPE_DIR,-1, false, d);
 		}
 
 	}
@@ -708,6 +651,7 @@ void executeCSharpScript(const std::wstring& path)
 	std::wstring ws = woss.str();
 	mol::io::exec_cmdline(ws,false);
 }
+
 HRESULT __stdcall MoeScript::Run( BSTR f, BSTR engine )
 {
 	statusBar()->status(mol::bstr(f).towstring());
@@ -920,10 +864,6 @@ MoeConfig::MoeConfig()
 	tabIndents_			= VARIANT_TRUE;
 	backSpaceUnIndents_	= VARIANT_FALSE;
 	fullScreen_			= VARIANT_FALSE;
-
-	foreColor_			= ::GetSysColor(COLOR_MENUTEXT);
-	backColor_			= ::GetSysColor(COLOR_MENU);
-	textColor_			= ::GetSysColor(COLOR_HIGHLIGHT);
 
 	settings_.createObject(CLSID_Setting,CLSCTX_INPROC_SERVER);
 }
@@ -1170,10 +1110,6 @@ HRESULT __stdcall MoeConfig::ExportSettings( BSTR f )
 			ofs << " <showLineNumbers>" << (showLineNumbers_ == VARIANT_TRUE ? "true" : "false") << "</showLineNumbers>" << std::endl;
 			ofs << " <showTreeView>" << (showTreeView_ == VARIANT_TRUE ? "true" : "false") << "</showTreeView>" << std::endl;
 
-			ofs << " <foreColor>" << mol::rgb2hex(foreColor_) << "</foreColor>" << std::endl;
-			ofs << " <backColor>" << mol::rgb2hex(backColor_) << "</backColor>" << std::endl;
-			ofs << " <textColor>" << mol::rgb2hex(textColor_) << "</textColor>" << std::endl;
-
 			mol::bstr s;
 			settings_->get_XML(&s);
 			std::string utf8 = mol::toUTF8(s.towstring());
@@ -1337,27 +1273,6 @@ HRESULT __stdcall MoeConfig::ImportSettings( BSTR f )
 							treeWnd()->show(SW_HIDE);
 						}
 					}
-
-					el = config->getElementByTagName("foreColor");
-					if (el)
-					{
-						std::string value = el->innerXml();
-						foreColor_ = mol::hex2rgb(value);
-					}
-
-					el = config->getElementByTagName("backColor");
-					if (el)
-					{
-						std::string value = el->innerXml();
-						backColor_ = mol::hex2rgb(value);
-					}
-
-					el = config->getElementByTagName("textColor");
-					if (el)
-					{
-						std::string value = el->innerXml();
-						textColor_ = mol::hex2rgb(value);
-					}
 				}
 			}
 		}
@@ -1455,55 +1370,6 @@ HRESULT  __stdcall MoeConfig::ResetStyles()
 	return S_OK;
 }
 
-HRESULT __stdcall MoeConfig::put_RibbonForeColor( BSTR fPath)
-{
-//	foreColor_ = mol::hex2rgb(mol::bstr(fPath).tostring());
-//	mol::Ribbon::ribbon()->setColor(foreColor_,backColor_,textColor_);
-	return S_OK;
-}
-
-HRESULT __stdcall MoeConfig::get_RibbonForeColor(  BSTR* fPath)
-{
-	if(!fPath)
-		return E_INVALIDARG;
-
-	*fPath = ::SysAllocString(mol::towstring(mol::rgb2hex(foreColor_)).c_str());
-	return S_OK;
-}
-
-HRESULT __stdcall MoeConfig::put_RibbonBackColor( BSTR fPath)
-{
-	backColor_ = mol::hex2rgb(mol::bstr(fPath).tostring());
-//	mol::Ribbon::ribbon()->setColor(foreColor_,backColor_,textColor_);
-
-	return S_OK;
-}
-
-HRESULT __stdcall MoeConfig::get_RibbonBackColor(  BSTR* fPath)
-{
-	if(!fPath)
-		return E_INVALIDARG;
-
-	*fPath = ::SysAllocString(mol::towstring(mol::rgb2hex(backColor_)).c_str());
-	return S_OK;
-}
-
-HRESULT __stdcall MoeConfig::put_RibbonTextColor( BSTR fPath)
-{
-	textColor_ = mol::hex2rgb(mol::bstr(fPath).tostring());
-//	mol::Ribbon::ribbon()->setColor(foreColor_,backColor_,textColor_);
-
-	return S_OK;
-}
-
-HRESULT __stdcall MoeConfig::get_RibbonTextColor(  BSTR* fPath)
-{
-	if(!fPath)
-		return E_INVALIDARG;
-
-	*fPath = ::SysAllocString(mol::towstring(mol::rgb2hex(textColor_)).c_str());
-	return S_OK;
-}
 
 void MoeConfig::setDirty(bool b)
 {
