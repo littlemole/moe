@@ -66,10 +66,6 @@ public:
     void go( const std::string location );
 	void updateGUI();
 
-    virtual HRESULT __stdcall Load( LPSTREAM pStm) ;
-    virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
-    virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER *pCbSize);
-   
 	void saveXML(const std::wstring& path);
 	void readXML(const std::wstring& path);
 
@@ -94,10 +90,6 @@ public:
 	virtual LRESULT wndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	std::wstring url;
-
-    virtual HRESULT __stdcall Load( LPSTREAM pStm);
-    virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
-	virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER *pCbSize);
 
 	void saveXML(const std::wstring& path);
 	void readXML(const std::wstring& path);

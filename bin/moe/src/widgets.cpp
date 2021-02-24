@@ -3,16 +3,13 @@
 #include "moe.h"
 #include "Docs.h"
 #include "mdichild.h"
-//#include "xmlui.h"
 #include "MoeBar.h"
-//#include "ribbonres.h"
 #include "resource.h"
 #include "Shobjidl.h"
 #include "win/msgloop.h"
 #include <regex>
 #include "xml/xml.h"
 
-//#include <cor.h>
 
 // open file dialog std filte for moe
 wchar_t  InFilesFilter[]   = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
@@ -305,7 +302,7 @@ HRESULT Script::init(const std::wstring& engine)
 	addNamedObject((IMoe*)(moe()),_T("moe"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 	 
 	mol::punk<IMoeImport> import;
- 	import = MoeImport::CreateInstance(this);
+ 	import = ::MoeImport::CreateInstance(this);
  	addNamedObject((IMoeImport*)(import),_T("Importer"),SCRIPTITEM_ISVISIBLE | SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISSOURCE);
 
 	mol::punk<IDispatch> java;
@@ -584,76 +581,6 @@ void UrlBox::updateGUI()
 		addString( mol::towstring((*it)) );
         it++;
     }
-}
-
-
-HRESULT __stdcall UrlBox::Load( LPSTREAM pStm)
-{
-	DWORD c = 0;
-	ULONG len;
-
-	history_.clear();
-
-	HRESULT hr = pStm->Read( (void*)&c, sizeof(DWORD), &len );
-	if ( hr != S_OK )
-		return hr;
-
-	for ( DWORD i = 0; i < c; i++ )
-	{
-		DWORD s = 0;
-
-		HRESULT hr = pStm->Read( (void*)&s, sizeof(DWORD), &len );
-		if ( hr != S_OK )
-			return hr;
-
-		mol::cbuff sz(s);
-
-		hr = pStm->Read( (void*)sz, s, &len );
-		if ( hr != S_OK )
-			return hr;
-
-		history_.push_back( sz.toString(len));
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall UrlBox::Save( LPSTREAM pStm,BOOL fClearDirty)
-{
-	DWORD c = (DWORD)history_.size();
-	ULONG len;
-	HRESULT hr = pStm->Write( (void*)&c, sizeof(DWORD), &len );
-	if ( hr != S_OK )
-		return hr;
-
-	for ( std::list<std::string>::iterator it = history_.begin(); it != history_.end(); it++ )
-	{
-		DWORD s = (DWORD)(*it).size();
-
-		HRESULT hr = pStm->Write( (void*)&s, sizeof(DWORD), &len );
-		if ( hr != S_OK )
-			return hr;
-
-		hr = pStm->Write( (void*)(*it).c_str(), s, &len );
-		if ( hr != S_OK )
-			return hr;
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall UrlBox::GetSizeMax( ULARGE_INTEGER *pCbSize)
-{
-	unsigned long long uli = (*pCbSize).QuadPart;
-
-	unsigned long long s = sizeof(DWORD) * ( history_.size() + 1 );
-	uli += s;
-
-	for ( std::list<std::string>::iterator it = history_.begin(); it != history_.end(); it++ )
-	{
-		s = (unsigned long long)((*it).size());
-		uli += s;
-	}
-	(*pCbSize).QuadPart = uli;
-	return S_OK;
 }
 
 void UrlBox::saveXML(const std::wstring& path)
@@ -1102,21 +1029,6 @@ LRESULT UrlDlg::wndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		}
     }
 	return mol::win::Dialog::wndProc(hDlg, message, wParam, lParam);
-}
-
-HRESULT __stdcall UrlDlg::Load( LPSTREAM pStm)
-{
-	return urlBox_.Load(pStm);
-}
-
-HRESULT __stdcall UrlDlg::Save( LPSTREAM pStm,BOOL fClearDirty)
-{
-	return urlBox_.Save(pStm,fClearDirty);
-}
-
-HRESULT __stdcall UrlDlg::GetSizeMax( ULARGE_INTEGER *pCbSize)
-{
-	return urlBox_.GetSizeMax(pCbSize);
 }
 
 void UrlDlg::saveXML(const std::wstring& path)

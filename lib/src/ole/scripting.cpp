@@ -1,6 +1,7 @@
 #include "ole/scripting.h"
 #include "ole/bstr.h"
 #include <sstream>
+#include <initguid.h>
 
 namespace mol {
 namespace ole {
@@ -30,7 +31,6 @@ HRESULT ActiveScript::init(const std::wstring& engine)
 		hr = asprop->SetProperty(SCRIPTPROP_INVOKEVERSIONING,NULL,&v);
 	}
 
-	//hr = activeScript.queryInterface(IID_IActiveScriptParse,(void**)&asp_);
 	hr = activeScript.queryInterface(&asp_);
 	if ( hr != S_OK )
 	{
@@ -166,31 +166,7 @@ HRESULT ActiveScript::getScriptEngine(const std::wstring& engine, IActiveScript 
 		hr = CoCreateInstance(clsid, 0, CLSCTX_ALL,IID_IActiveScript,(void**)ppas);
 	return hr;
 }
-/*
- HRESULT ActiveScript::getScriptEngine(const std::wstring& engine, IActiveScript **ppas)
- {
-   *ppas = 0;
-   CLSID clsid;
 
-   ODBGS(engine);
-   
-   HRESULT hr = CLSIDFromProgID(mol::towstring(engine).c_str(), &clsid);
-   if (hr != S_OK || ::IsEqualGUID(clsid,CLSID_NULL) )
-   {
-	   return hr;
-   }
-
-   std::wstring s = std::wstringFromCLSID(clsid);
-   ODBGS(s);
-   
-   hr = CoCreateInstance(clsid, 0, CLSCTX_ALL,IID_IActiveScript,(void**)ppas);
-   if ( hr != S_OK )
-   {
-   }
-   
-   return hr;
- }
- */
  
 } // end namespace mole::win::ole
 
@@ -230,7 +206,7 @@ ScriptHost::~ScriptHost()
 	if ( debugApp_ )
 		debugApp_->DisconnectDebugger();
 
-	close();
+	//close();
 }
 
 HRESULT ScriptHost::close()

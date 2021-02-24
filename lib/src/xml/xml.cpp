@@ -61,7 +61,10 @@ Element* XMLParser::parse( Document* d, Element* root, const std::string& input 
 
 void XMLParser::character (const XML_Char *s, int len)
 {	
-	std::string t = mol::trim ( std::string( s,len) );
+	if (len < 1)
+		return;
+
+	std::string t(s, len);// = mol::trim(std::string(s, len));
 	if ( t.size() == 0 )
 		return;
 

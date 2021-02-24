@@ -1,5 +1,4 @@
 import "ocidl.idl";
-import "..\..\lib\src\ole\HtmlEvents.idl";
 
 [
   uuid(E5769EB9-ADD9-41e5-8D3D-D925C7FC0C29),
@@ -11,8 +10,6 @@ library Moe
    // TLib :     // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
 
 	importlib("stdole32.tlb");
-
-	interface IWebBrowserEvents;
 
 	interface IMoe;
 	interface IMoeView;

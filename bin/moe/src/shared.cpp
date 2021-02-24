@@ -416,6 +416,7 @@ HRESULT __stdcall MoeView::ShowFileMenu()
 		moe()->fileMenu->onJsonMsg = [this](Json::Value json)
 		{
 			ribbon()->handleMessage(json);
+			moe()->fileMenu->show(SW_HIDE);
 		};
 	}
 	moe()->fileMenu->show(SW_SHOW);
@@ -437,6 +438,7 @@ HRESULT __stdcall MoeView::ShowContextMenu()
 		moe()->contextMenu->onJsonMsg = [this](Json::Value json)
 		{
 			ribbon()->handleMessage(json);
+			moe()->contextMenu->show(SW_HIDE);
 		};
 	}
 //	moe()->contextMenu->show(SW_SHOW);
@@ -694,13 +696,13 @@ void executeCSharpScript(const std::wstring& path)
 	if (hr != S_OK)
 		return;
 
-	mol::bstr module;
-	hr = moe()->moeConfig->get_ModulePath(&module);
+	mol::bstr mod;
+	hr = moe()->moeConfig->get_ModulePath(&mod);
 	if (hr != S_OK)
 		return;
 
 	std::wostringstream woss;
-	woss << value.towstring() << " /lib:\"" << module.towstring()
+	woss << value.towstring() << " /lib:\"" << mod.towstring()
 		<< "\" \"" << path << "\"";
 
 	std::wstring ws = woss.str();
@@ -1517,44 +1519,6 @@ bool MoeConfig::isDirty()
 HRESULT __stdcall MoeConfig::EditFileAssociations()
 {
 	mol::v7::editFileExtensions(L"moe");
-	return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////
-// config persistence
-/////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall MoeConfig::Load( LPSTREAM pStm)
-{
-	pStm >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_SYSTYPE, VT_I4) )
-		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_ENCODING, VT_I4) )
-		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_TABUSAGE,VT_BOOL) )
-		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_TABINDENTS,VT_BOOL) )
-		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_BACKSPACEUNINDENTS,VT_BOOL) )
-		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_TABWIDTH, VT_I4) )
-		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_SHOWLINENUMBERS,VT_BOOL) )
-		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONBACKCOLOR,VT_BSTR) )
-		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONFORECOLOR,VT_BSTR) )
-		 >> mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONTEXTCOLOR,VT_BSTR) )
-		 >> mol::property(mol::DispId(this, DISPID_IMOECONFIG_SHOWTREEVIEW, VT_BOOL));
-
-	return S_OK;
-}
-
-HRESULT __stdcall MoeConfig::Save( LPSTREAM pStm,BOOL fClearDirty)
-{
-	pStm << mol::property( mol::DispId(this,DISPID_IMOECONFIG_SYSTYPE, VT_I4) )
-		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_ENCODING, VT_I4) )
-		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_TABUSAGE,VT_BOOL) )
-		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_TABINDENTS,VT_BOOL) )
-		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_BACKSPACEUNINDENTS,VT_BOOL) )
-		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_TABWIDTH, VT_I4) )
-		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_SHOWLINENUMBERS,VT_BOOL) )
-		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONBACKCOLOR,VT_BSTR) )
-		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONFORECOLOR,VT_BSTR) )
-		 << mol::property( mol::DispId(this,DISPID_IMOECONFIG_RIBBONTEXTCOLOR,VT_BSTR) )
-		 << mol::property( mol::DispId(this, DISPID_IMOECONFIG_SHOWTREEVIEW, VT_BOOL));
-
 	return S_OK;
 }
 

@@ -469,7 +469,10 @@ void readWalker(mol::Element* element, ISetting* parent)
 		int type = node->nodeType() ;
 
 		if ( type == mol::Node::CDATA || type == mol::Node::TEXT ) {
-			std::string v = node->nodeValue();
+			std::string v = mol::trim(node->nodeValue());
+			if (v.empty())
+				continue;
+
 			parent->put_Value(mol::bstr(v));
 			continue;
 		}

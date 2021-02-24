@@ -4,13 +4,10 @@
 #include "moe.h"
 #include "Docs.h"
 #include "MoeBar.h"
-
-//#include "xmlui.h"
+#include "mtree.h"
 #include "commons.h"
 #include "resource.h"
-//#include "Ribbonres.h"
 
-#include "mtree.h"
 
 using namespace mol::io;
 using namespace mol;
@@ -26,8 +23,7 @@ using namespace mol::win;
 //////////////////////////////////////////////////////////////////////////////
 
 MoeWnd::MoeWnd() 
-	:	//treeWndSink(new TreeWndSink),
-		moeDrop(new MoeDrop),
+	:	moeDrop(new MoeDrop),
 		searchDlg(new mol::SearchDlg),
 		urlDlg(new UrlDlg)
 {
@@ -200,19 +196,7 @@ void MoeWnd::loadPersistUIstate()
 		return;
 
 	std::wstring recentUrlsPath = appPath + L"\\recentUrls.xml";
-	urlDlg->readXML(recentUrlsPath);
-
-	
-	// open the storage
-	Storage store;
-	if ( !store.open(p, STGM_READ | STGM_SHARE_EXCLUSIVE ))
-		return;
-
-	// load moe config data from storage
-	mol::punk<IPersistStorage> ps;
-	((IMoe*)this)->QueryInterface( IID_IPersistStorage, (void**)&ps);
-//	HRESULT hr = ps->Load( store );
-	
+	urlDlg->readXML(recentUrlsPath);	
 }
 
 
@@ -1043,234 +1027,6 @@ HRESULT MoeWnd::stdOut(BSTR* ret)
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Persistence
-//////////////////////////////////////////////////////////////////////////////
-
-HRESULT __stdcall MoeWnd::Save(	 IStorage * pStgSave, BOOL fSameAsLoad )
-{
-	// save moe UI settings
-	/*
-	punk<IStream> stream;
-	if ( S_OK == pStgSave->CreateStream( L"UI", STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,0,&stream) )
-	{
-		urlDlg->Save(stream,FALSE);
-	}
-	stream.release();
-	*/
-	/*
-	if ( S_OK == pStgSave->CreateStream( L"REBAR", STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,0,&stream) )
-	{
-		if ( mol::Ribbon::ribbon()->enabled() ) 
-		{
-			data_.copyTo(stream);
-		}
-		else
-		{
-			reBar()->Save(stream, FALSE);
-			ULONG written = 0;
-			stream->Write( &toolBarFrozen_, sizeof(BYTE),		 &written );
-		}
-	}
-	stream.release();
-	*/
-	/*
-	mol::punk<IDispatch> disp;
-	moeConfig->get_Settings(&disp);
-	mol::punk<ISetting> config(disp);
-	punk<IPersistStorage> ps(config);
-	if ( ps )
-	{
-		mol::punk<IStorage> store;
-		HRESULT hr = pStgSave->CreateStorage(L"CONF",STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,0,&store);
-		if ( hr != S_OK )
-			return hr;
-
-		hr = ps->Save(store,fSameAsLoad);
-		if ( hr != S_OK )
-			return hr;
-	}
-
-	// save moe default settings
-	if ( S_OK == pStgSave->CreateStream( L"DEFAULTS", STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,0,&stream) )
-	{
-		mol::punk<IPersistStream> ps;
-
-		if ( S_OK == moeConfig.queryInterface(&ps))
-		if ( ps )
-		{
-			ps->Save(stream,TRUE);
-		}
-	}
-
-
-	// save Ribbon UI state (if applicable)
-	mol::Ribbon::ribbon()->save(pStgSave);
-
-	// save moe style settings
-	if ( S_OK == pStgSave->CreateStream( L"STYLES", STGM_CREATE|STGM_READWRITE|STGM_SHARE_EXCLUSIVE,0,0,&stream) )
-	{
-		mol::punk<IPersistStream> ps(moeStyles);
-		if ( ps )
-		{
-			ps->Save(stream,TRUE);
-		}
-	}
-	*/
-	return S_OK;
-}
-
-//#define STILL_USING_STRUCTURED_STORAGE_IN_2020 1
-
-HRESULT __stdcall MoeWnd::Load(	 IStorage * pStgLoad)
-{
-	static LPCOLESTR ui = OLESTR("UI");
-	static LPCOLESTR def = OLESTR("DEFAULTS");
-	static LPCOLESTR con = OLESTR("CONF");
-	static LPCOLESTR reb = OLESTR("REBAR");	
-
-	punk<IStream> stream;
-
-	HRESULT hr;
-
-#ifndef STILL_USING_STRUCTURED_STORAGE_IN_2020 
-
-	// open defaults stream
-	hr = pStgLoad->OpenStream( def, NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
-	if ( stream && hr == S_OK )
-	{
-		mol::punk<IMoeConfig> moeConf;
-		if ( S_OK == this->get_Config(&moeConf) )
-		{
-			mol::punk<IPersistStream> ps(moeConf);
-			if ( ps )
-			{
-				ps->Load(stream);
-			}
-		}		
-	}
-
-	stream.release();
-#endif
-
-	// open UI stream
-	hr = pStgLoad->OpenStream( ui, NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
-	if ( !stream || (hr != S_OK) )
-		return S_OK;
-
-	urlDlg->Load(stream);
-	setDirty(FALSE);
-	
-	stream.release();
-
-	/*
-	hr = pStgLoad->OpenStream( reb, NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
-	if ( !stream || (hr != S_OK) )
-		return S_OK;
-
-	data_.copyFrom(stream);
-
-	reBar()->Load(stream);
-	
-	stream.release();
-	*/
-
-#ifndef STILL_USING_STRUCTURED_STORAGE_IN_2020 
-
-	mol::punk<IStorage> store;
-	hr = pStgLoad->OpenStorage(con,0,STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,0,&store);
-	if ( hr == S_OK && store )
-	{
-
-		// load user settings stream
-		mol::punk<IDispatch> disp;
-		moeConfig->get_Settings(&disp);
-		mol::punk<ISetting> config(disp);
-		punk<IPersistStorage> ps(config);
-		if ( !ps )
-			return S_OK;
-
-		hr = ps->Load(store);
-		if ( hr != S_OK )
-			return S_OK;
-	}
-
-#endif
-
-	// DEBUG: enable/disable creation of new top level user setting items
-	//config()->put_ChildrenAllowed(VARIANT_FALSE);
-
-	// freeze top level items
-	freezeConfig(_T("shortcuts"));
-	freezeConfig(_T("scripts"));
-	freezeConfig(_T("batches"));
-	freezeConfig(_T("forms"));
-
-	mol::punk<IDispatch> disp;
-	moeConfig->get_Settings(&disp);
-	mol::punk<ISetting> config(disp);
-	config->put_IsDirty(VARIANT_FALSE);
-
-	////////////////////////////////////////////
-
-	// show Ribbon UI ?
-	bool showRibbon = false;
-
-	// look at config data for ribbon display
-	mol::punk<ISetting> set;
-	hr = config->Item( mol::variant("Ribbon"), &set);
-	if ( hr == S_OK )
-	{
-		mol::bstr val;
-		hr = set->get_Value(&val);
-		if ( hr == S_OK )
-		{
-			if ( val.tostring() == "On" )
-			{
-				showRibbon = true;
-			}
-		}
-	}
-
-	showRibbon = false;
-
-	// show the ribbon if avail and load persistent ribbon settings from store
-	if ( showRibbon ) 
-		initRibbon(pStgLoad);
-
-	// -- reset styles to default 
-	
-	mol::punk<IPersistStreamInit> psi(moeStyles);
-	if(psi)
-	{
-		//HRESULT hr = psi->InitNew();
-	}
-
-
-	//return S_OK;
-	
-//#ifdef STILL_USING_STRUCTURED_STORAGE_IN_2020 
-
-	// open Style stream
-	hr = pStgLoad->OpenStream( L"STYLES", NULL, STGM_DIRECT|STGM_SHARE_EXCLUSIVE,0,&stream);
-	if ( !stream || (hr != S_OK) )
-		return S_OK;
-
-	// load UI config
-	punk<IPersistStream> psc(moeStyles);
-	if ( !psc )
-		return S_OK;
-
-	hr = psc->Load(stream);
-	if ( hr != S_OK )
-		return S_OK;
-	
-	stream.release();
-//#endif 
-
-	return S_OK;
-}
-
 void  MoeWnd::freezeConfig(const std::wstring& key)
 {
 	// freeze top level items
@@ -1289,123 +1045,6 @@ void  MoeWnd::freezeConfig(const std::wstring& key)
 	}
 }
 
-void  MoeWnd::initRibbon(IStorage* store)
-{
-	/*
-	// show the Ribbon
-	Ribbon::ribbon()->show(*this);
-
-	if ( !Ribbon::ribbon()->enabled() )
-		return;
-
-	// load persist Ribbon state
-	mol::Ribbon::ribbon()->load(store);
-
-	// setup handlers with special handling
-
-	// syntax select dropdown handler - populate from toolbar combobox values 
-	std::vector<std::wstring> vs;
-	
-	for ( int i = 0; i < mol::UI().Wnd<MoeComboBox>(IDW_SYNTAX_BOX)->getCount(); i++ )
-	{
-		vs.push_back( mol::UI().Wnd<MoeComboBox>(IDW_SYNTAX_BOX)->getString(i)  );
-	}
-	mol::Ribbon::handler(RibbonSelectLanguage)->items(vs);
-
-	// encoding dropdown handler
-	std::vector<std::wstring> ve;
-
-	//for ( size_t i = 0; i < codePages_.size(); i++)
-	for ( Encodings::Iterator it = codePages()->begin(); it!= codePages()->end(); it++)
-	{
-		ve.push_back((*it).second );
-	}
-
-	mol::Ribbon::handler(RibbonEncoding)->items(ve);
-
-	// tab size spinner
-	mol::Ribbon::handler(RibbonTabSize)->decimalPlaces(0);
-
-	// bytes shown dropdown handler for hex view	
-	std::vector<std::wstring> vb;
-	vb.push_back(_T("16 bytes"));
-	vb.push_back(_T("20 bytes"));
-	vb.push_back(_T("24 bytes"));
-	vb.push_back(_T("28 bytes"));
-	vb.push_back(_T("32 bytes"));
-	mol::Ribbon::handler(RibbonBytesShown)->items(vb);
-
-	bool showDirTree = mol::Ribbon::handler(RibbonShowDirView)->checked();
-
-	// Check the Show Dir View Handler
-	if (showDirTree)
-	{
-		treeWnd()->show(SW_SHOW);
-		//mol::Ribbon::handler(RibbonShowDirView)->check(true);
-	}
-	else
-	{
-		treeWnd()->show(SW_HIDE);
-	}
-	reBar()->show(SW_HIDE);
-	// default Ribbon mode
-	Ribbon::ribbon()->mode(0);
-
-	mol::bstr foreCol;
-	mol::bstr backCol;
-	mol::bstr textCol;
-
-	moeConfig->get_RibbonForeColor(&foreCol);
-	moeConfig->get_RibbonBackColor(&backCol);
-	moeConfig->get_RibbonTextColor(&textCol);
-
-	moeConfig->put_RibbonForeColor(foreCol);
-	moeConfig->put_RibbonBackColor(backCol);
-	moeConfig->put_RibbonTextColor(textCol);
-
-	Ribbon::ribbon()->flush();
-	*/
-}
-
-HRESULT __stdcall MoeWnd::Load( LPSTREAM pStm) 
-{
-	return S_OK;
-}
-
-
-
-HRESULT __stdcall MoeWnd::Save( LPSTREAM pStm,BOOL fClearDirty)
-{
-	return S_OK;
-}
-
-
-
-HRESULT __stdcall MoeWnd::GetSizeMax( ULARGE_INTEGER *pCbSize)
-{
-	urlDlg->GetSizeMax(pCbSize);
-	//reBar()->GetSizeMax(pCbSize);
-	pCbSize->QuadPart += sizeof(ULONG)*2 + sizeof(BYTE)*3;
-	
-	mol::punk<IDispatch> disp;
-	moe()->moeConfig->get_Settings(&disp);
-	mol::punk<ISetting> config(disp);
-
-	punk<IPersistStream> ps(config);
-	if ( ps )
-	{
-		ULARGE_INTEGER s;
-		s.QuadPart = 0;
-		if ( S_OK == ps->GetSizeMax(&s) )
-			pCbSize->QuadPart += s.QuadPart;
-	}
-	return S_OK;
-}
-
-HRESULT __stdcall MoeWnd::InitNew() 
-{
-	return S_OK;
-}
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////

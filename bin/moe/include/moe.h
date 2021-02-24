@@ -22,18 +22,10 @@ class MoeWnd  :
 	public mol::com_registerobj< MoeWnd, CLSID_Application, CLSCTX_ALL>,
 	public mol::Dispatch<IMoe>,
 	public mol::ProvideClassInfo<MoeWnd>,
-	public mol::PersistStream<MoeWnd>,
-	public mol::PersistStorage<MoeWnd>,
-	public mol::PersistFile<MoeWnd>,
 	public mol::interfaces< MoeWnd, 
 			mol::implements< IDispatch,
 						IMoe,
-						IProvideClassInfo,
-						mol::interface_ex<IPersist,IPersistStream>,
-						IPersistStream,
-						IPersistStreamInit,
-						IPersistStorage,
-						IPersistFile > >
+						IProvideClassInfo>> 
 {
 friend class Exec;
 friend class Docs;
@@ -60,7 +52,6 @@ public:
 	mol::punk<ShellTreeEvents> treeWndSink;
 	mol::punk<MoeForm2Wnd::Instance> fileMenu;
 	mol::punk<MoeForm2Wnd::Instance> contextMenu;
-	//mol::punk<Script> scriptHost;
 
 	std::unique_ptr<MoeDrop> moeDrop;
 	std::unique_ptr<mol::SearchDlg> searchDlg;
@@ -177,17 +168,6 @@ public:
 	// persistence
 	/////////////////////////////////////////////////////////////////////
 
-	virtual HRESULT __stdcall Save(	 IStorage * pStgSave, BOOL fSameAsLoad );
-	virtual HRESULT __stdcall Load(	 IStorage * pStgLoad);
-    virtual HRESULT __stdcall Load( LPSTREAM pStm) ;
-    virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
-    virtual HRESULT __stdcall GetSizeMax( ULARGE_INTEGER *pCbSize);
-    virtual HRESULT __stdcall InitNew();
-
-	// Persistence Dirtyness support
-
-	BOOL isDirty()			{ return true; } 
-	void setDirty(BOOL d)	{ bDirty_ = d; }
 
 	// OLE status messages override - display OLE status in moe status bar
 	virtual HRESULT __stdcall IOleInPlaceFrame_SetStatusText(LPCOLESTR txt);
@@ -202,18 +182,12 @@ public:
 	mol::punk<ChromeEdge> edge;
 	/////////////////////////////////////////////////////////////////////
 
-	 // toolbars (winxp style only)
-
-	 // freeze the toolbars
-	// void OnFreezeToolBar();
 
 	 // select syntax dropdown box
 	 void OnSyntax(int code, int id, HWND ctrl);
 
 	 // show toolbar switches
 	 void OnShowToolBar(int code, int id, HWND ctrl);
-
-//	 bool toolbarFrozen() { return toolBarFrozen_ == 0; }
 
 	 void OnScreenShot();
 
@@ -224,24 +198,12 @@ private:
 	// load conf
 	void loadPersistUIstate();
 
-	// initial Ribbon UI setup
-	void initRibbon(IStorage* store);
-
 	// helpers
 	void freezeConfig(const std::wstring& key);
 
-	//void fullScreen(HWND hwnd);
-	
 	/////////////////////////////////////////////////////////////////////
 	// data members
 	/////////////////////////////////////////////////////////////////////
-
-	// dirty flag
-	BOOL							bDirty_;
-
-	// UI data
-	//BYTE							toolBarFrozen_;
-	//mol::Stream						data_;
 
 	// cookie into IRunningObjectTable for our running OLE server
 	DWORD							activeObj_;

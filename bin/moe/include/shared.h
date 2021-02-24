@@ -126,15 +126,11 @@ public:
 class MoeConfig 
 	:
 	public mol::Dispatch<IMoeConfig>,
-	public mol::PersistStream<MoeConfig>,
 	public mol::ProvideClassInfo<MoeConfig>,
 	public mol::interfaces< MoeConfig, 
 			mol::implements< 
 				IDispatch, 
 				IMoeConfig, 
-				mol::interface_ex<IPersist,IPersistStreamInit>,
-				mol::interface_ex<IPersistStream,IPersistStreamInit>,
-				IPersistStreamInit,
 				IProvideClassInfo> >
 {
 private:
@@ -196,8 +192,6 @@ public:
 	virtual HRESULT __stdcall ImportSettings( BSTR f );
 	virtual HRESULT __stdcall InitializeEditorFromPreferences( IMoeDocument* d );
 
-	virtual HRESULT __stdcall Load( LPSTREAM pStm);
-	virtual HRESULT __stdcall Save( LPSTREAM pStm,BOOL fClearDirty);
 
 	virtual HRESULT __stdcall get_StyleSets( IDispatch** styles);
 

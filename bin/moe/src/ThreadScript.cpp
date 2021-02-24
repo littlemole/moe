@@ -1,8 +1,9 @@
 #include "StdAfx.h"
+#include <initguid.h>
 #include "ThreadScript.h"
-//#include "xmlui.h"
 #include "widgets.h"
 #include <mutex>
+
 
 std::wstring engineFromPath(const std::string& path)
 {
@@ -394,9 +395,12 @@ void ScriptDebugger::init(const std::wstring& engine)
 }
 
 //Guid("{16d51579-a30b-4c8b-a276-0ff4dc41e755}");
+#ifdef INITGUID
 
-DEFINE_GUID( GUID_JSCRIPT9, 0x16d51579L, 0xa30b, 0x4c8b, 
+DEFINE_GUID( MYGUID_JSCRIPT9, 0x16d51579L, 0xa30b, 0x4c8b, 
     0xa2, 0x76, 0x0f,0xf4, 0xdc, 0x41, 0xe7, 0x55 );
+
+#endif
 
 HRESULT ScriptDebugger::getScriptEngine(const std::wstring& engine, IActiveScript **ppas)
 {
@@ -407,7 +411,7 @@ HRESULT ScriptDebugger::getScriptEngine(const std::wstring& engine, IActiveScrip
 	
 	if ( engine == _T("JScript") ) {
 		// try loading JScript 9 dll
-		clsid = GUID_JSCRIPT9;
+		clsid = MYGUID_JSCRIPT9;
 		hr = CoCreateInstance(clsid, 0, CLSCTX_ALL,IID_IActiveScript,(void**)ppas);
 		if (hr == S_OK)
 		{

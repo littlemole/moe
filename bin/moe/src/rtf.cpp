@@ -4,9 +4,9 @@
 #include "docs.h"
 #include "MoeBar.h"
 
-//#include "xmlui.h"
-//#include "ribbonres.h"
+#include "ole/persist.h"
 
+#include <TOM.h>
 
 REFIID mol::uuid_info<IRichEditOleCallback>::uuidof = IID_IRichEditOleCallback;
 

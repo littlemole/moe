@@ -47,12 +47,12 @@ int MoeLoop::operator() ( mol::win::AppBase& app )
 
   return (int)msg.wParam ;
 
-}
+} 
 
 class moeEditorCliType : public moeCliType
 {
 public:
-
+	 
 	virtual bool open(IDispatch* docs, IDispatch* dialogs, std::string p)
 	{
 		if ( p.substr(0,4) == "moe:" ) 
@@ -275,103 +275,14 @@ void load_resources()
 {
 	using namespace mol;
 
-	/*
-	UI().addCmd(IDM_TAB, _T("TAB"));
-	UI().addCmd(IDM_TAB_CLOSETAB, _T("Close"));
-	UI().addCmd(IDM_TAB_CLOSEALLBUTTHIS, _T("Close Others"));
-	UI().addCmd(IDM_TAB_RELOADTAB, _T("Reload"));
-	UI().addCmd(IDM_TAB_SAVETAB, _T("Save"));
-	UI().addCmd(IDM_TAB_DIRTAB, _T("Directory"));
-	UI().addCmd(IDM_VIEW_CLOSE, _T("Close"));
-	UI().addCmd(IDM_VIEW_CLOSEALL, _T("Close All"));
-	UI().addCmd(IDM_FILE_SAVE, _T("Save"));
-	*/
-	/*
-	UI().addMenu(IDM_MENU_TAB);
-
-	UI().addSubMenu(IDM_MENU_TAB, IDM_MENU_TAB, IDM_TAB);
-	UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_VIEW_CLOSE, IDB_TOOLBAR, IDM_VIEW_CLOSE, false, true);
-	UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_TAB_CLOSEALLBUTTHIS, IDB_TOOLBAR, IDM_TAB_CLOSEALLBUTTHIS, false, true);
-	UI().addMenuSeparator(IDM_MENU_TAB, IDM_TAB);
-	UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_TAB_RELOADTAB, IDB_TOOLBAR, IDM_TAB_RELOADTAB, false, true);
-	UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_FILE_SAVE, IDB_TOOLBAR, IDM_FILE_SAVE, false, true);
-	UI().addMenuSeparator(IDM_MENU_TAB, IDM_TAB);
-	UI().addMenuItem(IDM_MENU_TAB, IDM_TAB, IDM_TAB_DIRTAB, IDB_TOOLBAR, IDM_TAB_DIRTAB, false, true);
-	*/
-	//foreach bitmap - loads and registers bitmap
-	  // optionally associate cmds to toolbar icons on bitmap
-
 	UI().addBmp(IDB_MOE_FAV);
-
 	UI().addBmp(IDB_MOE_GO);
-
 	UI().addBmp(IDB_DEBUG_GO);
-
 	UI().addBmp(IDB_DEBUG_PAUSE);
-
 	UI().addBmp(IDB_DEBUG_QUIT);
-
 	UI().addBmp(IDB_DEBUG_STEPIN);
-
 	UI().addBmp(IDB_DEBUG_STEPOVER);
-
 	UI().addBmp(IDB_DEBUG_STEPOUT);
-	/*
-	UI().addBmp(IDB_TOOLBAR);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_FILE_NEW);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_FILE_OPEN);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_FILE_OPEN_FOLDER);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_FILE_SAVE);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_FILE_SAVE_AS);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_FILE_PRINT);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_FILE_EXIT);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_UNDO);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_REDO);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_CUT);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_COPY);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_PASTE);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_FIND);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_REPLACE);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_EXECUTESCRIPT);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_MODE_EXECUTEFORM);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_USER_SCRIPT);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_USER_BATCH);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_USER_FORM);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_USER_SHORTCUT);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_COLOR);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_MODE_EOL);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_MODE_LANGUAGE);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_MODE_SETTINGS);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_MODE_PREFERENCES);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_MODE_EDITSETTINGS);
-	UI().addBmpCmd(IDB_TOOLBAR, -1);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_TAB_CLOSEALLBUTTHIS);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_VIEW_MAXIMIZE);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_VIEW_MINIMIZE);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_VIEW_CASCADE);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_VIEW_TILE);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_VIEW_NEXT);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_TAB_RELOADTAB);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_TAB_DIRTAB);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_VIEW_WINDOWS);
-	UI().addBmpCmd(IDB_TOOLBAR, -1);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_HELP_ABOUT);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_VIEW_CLOSE);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_VIEW_CLOSEALL);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_FILE_OPEN_HTML);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_VIEW_TOOLBARS);
-	UI().addBmpCmd(IDB_TOOLBAR, -1);
-	UI().addBmpCmd(IDB_TOOLBAR, -1);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_DEBUG);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_DEBUG_QUIT);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_DEBUG_STEPIN);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_DEBUG_STEPOUT);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_DEBUG_STEPOVER);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_DEBUG_STOP);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_DEBUG_GO);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_FILE_NEW_RTF);
-	UI().addBmpCmd(IDB_TOOLBAR, IDM_EDIT_PASTEAS);
-*/
 }
 
 // embedded moe 
@@ -495,36 +406,6 @@ void MoeApp::openMoeDocument(IDispatch* docs, IDispatch* dialogs,const std::stri
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// initialize  extensions helper
-/////////////////////////////////////////////////////////////////////////
-/*
-void MoeApp::init_extensions_if( )
-{
-
-	// GTK
-
-	if (!enableExtensions_)
-		return;
-
-	typedef void (*dynamic_gtk_init)( int , char** );
-	dynamic_gtk_init gtk_init = (dynamic_gtk_init)mol::dllFunc( _T("libgtk-win32-2.0-0.dll"), _T("gtk_init"));
-	if ( gtk_init )
-	{
-		gtk_init(0,0);
-		ODBGS("GTK+ 2.0 initialized\r\n");
-	}
-
-	typedef void (*dynamic_g_thread_init)(void *vtable);
-	dynamic_g_thread_init gthread_init = (dynamic_g_thread_init)mol::dllFunc( _T("libgthread-2.0-0.dll"), _T("g_thread_init"));
-	if ( gthread_init )
-	{
-		gthread_init((void*)0);
-		ODBGS("GTK+ 2.0 threads initialized\r\n");
-	}
-
-}
-*/
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
