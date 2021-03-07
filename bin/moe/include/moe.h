@@ -85,7 +85,6 @@ public:
 	/////////////////////////////////////////////////////////////////////
 
 	 void OnFileNew();
-	 void OnFileNewRTF();
 	 void OnFileOpen ();
 	 void OnFileOpenHtml ();
      void OnFileOpenDir ();

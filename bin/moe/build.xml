@@ -62,11 +62,7 @@
     <ClCompile Include="src\EditorScript.cpp" />
     <ClCompile Include="src\EditorMenu.cpp" />
     <ClCompile Include="src\form2.cpp" />
-    <ClCompile Include="src\TailEditor.cpp" />
     <ClCompile Include="src\hex.cpp" />
-<!--
-    <ClCompile Include="src\html.cpp" />
--->
     <ClCompile Include="src\html2.cpp" />
     <ClCompile Include="src\Img.cpp" />
     <ClCompile Include="src\moe.cpp" />
@@ -75,28 +71,12 @@
     <ClCompile Include="src\shared.cpp" />
     <ClCompile Include="src\widgets.cpp" />
     <ClCompile Include="src\ThreadScript.cpp" />
-<!--    <ClCompile Include="src\xmlrc.cpp" />
-    <ClCompile Include="src\xmlrib.cpp" />
-    <ClCompile Include="src\xmlui.cpp" />
--->
     <ClCompile Include="src\mdichild.cpp" />
-    <ClCompile Include="src\rtf.cpp" />
     <ClCompile Include="src\tree.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
-
-<!--
-  <ItemGroup>
-    <CustomBuild Include="..\..\cg\js\make.js">
-      <Message>code generation phase</Message>
-      <Command>cscript.exe //NoLogo ../../cg/js/make.js TLB</Command>
-      <AdditionalInputs>xml/cmd.xml;xml/menu.xml;xml/resource.xml;xml/ui.xml;xml/ribbon.xml;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs>xmlrc.cpp;moe.rc;xmlui.cpp;xmlui.h;xmlid.h;ribbonres.rc;ribbonres.h;ribbon.bml;%(Outputs)</Outputs>
-    </CustomBuild>
-  </ItemGroup>
--->
 
   <ItemGroup>
     <CustomBuild Include="..\..\cg\disph.exe">

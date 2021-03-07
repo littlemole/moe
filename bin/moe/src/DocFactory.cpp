@@ -1,15 +1,12 @@
 #include "stdafx.h"
-#include "TailEditor.h"
 #include "Editor.h"
 #include "Img.h"
 #include "Dir3.h"
 #include "ScpDir.h"
 #include "Form2.h"
-#include "rtf.h"
 #include "hex.h"
 #include "html2.h"
 #include "ole.h"
-#include "rtf.h"
 #include "moe.h"
 #include "DocFactory.h"
 #include "Docs.h"
@@ -94,22 +91,6 @@ mol::MdiChild* MoeEditorDocumentFactory::openDocument( const std::wstring& path)
 
 /////////////////////////////////////////////////////////////////////
 
-class MoeTailEditorDocumentFactory : public IMoeDocumentFactory
-{
-public:
-
-	MoeTailEditorDocumentFactory(long enc) : enc_(enc) {}
-	virtual ~MoeTailEditorDocumentFactory() {}
-	virtual mol::MdiChild* openDocument( const std::wstring& path)
-	{
-		TailEditor::Instance* t = TailEditor::CreateInstance( path );
-		return dynamic_cast<mol::MdiChild*>(t);
-	}
-
-private:
-	long enc_;
-};
-
 
 class MoeSShEditorDocumentFactory : public IMoeDocumentFactory
 {
@@ -126,20 +107,6 @@ public:
 };
 
 
-class MoeRTFEditorDocumentFactory : public IMoeDocumentFactory
-{
-public:
-
-	MoeRTFEditorDocumentFactory() {};
-	virtual ~MoeRTFEditorDocumentFactory() {};
-	virtual mol::MdiChild* openDocument( const std::wstring& path)
-	{
-		RTFEditor::Instance* t = RTFEditor::CreateInstance( path );
-		return dynamic_cast<mol::MdiChild*>(t);
-	}
-
-private:
-};
 
 class MoeDirDocumentFactory : public IMoeDocumentFactory
 {
@@ -370,11 +337,6 @@ IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const std::wstr
 		return new MoeDirDocumentFactory;
 	}
 
-	if ( type == MOE_DOCTYPE_TAIL )
-	{
-		return new MoeTailEditorDocumentFactory(enc);
-	}
-
 	if ( type == MOE_DOCTYPE_HTML )
 	{
 		return new MoeHtmlFactory;
@@ -410,12 +372,6 @@ IMoeDocumentFactory* MoeDocumentFactory::getOpenDocumentFactory( const std::wstr
 	if ( mol::icmp( ext,  _T("ufs") ) == 0 )
 	{
 		//return new MoeFormFactory;
-	}
-
-	// rtf support
-	if ( mol::icmp( ext, _T("rtf") ) == 0 && type == MOE_DOCTYPE_RTF)
-	{
-		return new MoeRTFEditorDocumentFactory;
 	}
 
 	// office support
@@ -473,11 +429,6 @@ HRESULT __stdcall DocFactory::newDocument(MOE_DOCTYPE typ, IMoeDocument** d)
 		{
 			std::wstring p = docs()->getNewFileName(_T(".txt"));
 			return createFile<Editor>(p,d);
-		}
-		case MOE_DOCTYPE_RTF :
-		{
-			std::wstring p = docs()->getNewFileName(_T(".rtf"));
-			return createFile<RTFEditor>(p,d);
 		}
 		case MOE_DOCTYPE_FORM :
 		{

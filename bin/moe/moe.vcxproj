@@ -383,13 +383,11 @@
     <ClCompile Include="src\moe.cpp" />
     <ClCompile Include="src\MoeBar.cpp" />
     <ClCompile Include="src\ole.cpp" />
-    <ClCompile Include="src\rtf.cpp" />
     <ClCompile Include="src\ScpDir.cpp" />
     <ClCompile Include="src\shared.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='uni_debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\tailEditor.cpp" />
     <ClCompile Include="src\ThreadScript.cpp" />
     <ClCompile Include="src\tree.cpp" />
     <ClCompile Include="src\widgets.cpp" />
@@ -416,9 +414,7 @@
     <ClInclude Include="include\Img.h" />
     <ClInclude Include="include\mdichild.h" />
     <ClInclude Include="include\moe.h" />
-    <ClInclude Include="include\rtf.h" />
     <ClInclude Include="include\ScpDir.h" />
-    <ClInclude Include="include\tailEditor.h" />
     <ClInclude Include="include\ThreadScript.h" />
     <ClInclude Include="include\tree.h" />
     <ClInclude Include="include\MoeBar.h" />

@@ -43,10 +43,6 @@ public:
 	virtual HRESULT __stdcall OpenHtmlFrame(  BSTR f,  IMoeDocument** htmlWnd);
 	virtual HRESULT __stdcall OpenUserForm(  BSTR pathname, IMoeDocument** form );	
 	virtual HRESULT __stdcall NewUserForm(  IMoeDocument** form );	
-	virtual HRESULT __stdcall NewRTFDocument(IMoeDocument** d);
-	virtual HRESULT __stdcall OpenRTFDocument(BSTR pathname, IMoeDocument** d);
-	virtual HRESULT __stdcall OpenTailDocument( BSTR pathname, IMoeDocument** doc );	
-
 	virtual HRESULT __stdcall OpenURLDialog();
 
 	virtual HRESULT __stdcall SaveAll();
@@ -61,8 +57,6 @@ public:
 	virtual HRESULT __stdcall get_DOCTYPE_HTML(  long* d )		{ if(d) *d =  MOE_DOCTYPE_HTML; return S_OK; }
 	virtual HRESULT __stdcall get_DOCTYPE_OLE(  long* d )		{ if(d) *d =  MOE_DOCTYPE_OLE; return S_OK; }
 	virtual HRESULT __stdcall get_DOCTYPE_FORM( long* d )		{ if(d) *d =  MOE_DOCTYPE_FORM; return S_OK; }
-	virtual HRESULT __stdcall get_DOCTYPE_RTF(  long* d )		{ if(d) *d =  MOE_DOCTYPE_RTF; return S_OK; }
-	virtual HRESULT __stdcall get_DOCTYPE_TAIL(  long* d )		{ if(d) *d =  MOE_DOCTYPE_TAIL; return S_OK; }
 	virtual HRESULT __stdcall get_DOCTYPE_SFTP(  long* d )		{ if(d) *d =  MOE_DOCTYPE_SFTP; return S_OK; }
 
 	// helpers

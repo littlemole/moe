@@ -139,6 +139,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">
     <LibraryPath>C:\moe\vcpkg\installed\x64-windows-static\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
+    <IncludePath>C:\moe\vcpkg\installed\x86-windows-static\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'">
     <ClCompile>
       <Optimization>MinSpace</Optimization>
@@ -149,12 +152,13 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\uni_Release\win.lib;..\..\lib\src\ole\uni_Release\ole.lib;..\..\lib\src\util\uni_Release\util.lib;..\..\lib\src\thread\uni_Release\thread.lib;..\..\3dParty\pcre\uni_Release\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Msimg32.lib;..\..\lib\src\xml\uni_Release\xml.lib;..\..\3dParty\expat\Source\lib\uni_release\libexpatMT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\src\win\uni_Release\win.lib;..\..\lib\src\ole\uni_Release\ole.lib;..\..\lib\src\util\uni_Release\util.lib;..\..\lib\src\thread\uni_Release\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Msimg32.lib;..\..\lib\src\xml\uni_Release\xml.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>io.def</ModuleDefinitionFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -211,11 +215,12 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\..\lib\src\win\x64\uni_Release\win.lib;..\..\lib\src\ole\x64\uni_Release\ole.lib;..\..\lib\src\util\x64\uni_Release\util.lib;..\..\lib\src\thread\x64\uni_Release\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;Msimg32.lib;..\..\lib\src\xml\x64\uni_Release\xml.lib;expat.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>io.def</ModuleDefinitionFile>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

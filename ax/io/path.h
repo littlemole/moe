@@ -5,6 +5,7 @@
 #include "ole/factory.h"
 #include "ole/bstr.h"
 #include "ole/dll.h"
+#include "ole/factory.h"
 #include "win/file.h"
 
 #include "io_h.h"
@@ -19,7 +20,11 @@
 
 
 class PathObj : 
-	public mol::com_registerobj<PathObj,CLSID_Path>,
+	public mol::com_registerobj<
+		PathObj,
+		CLSID_Path, 
+		CLSCTX_INPROC_SERVER, 
+		mol::PROGRAMMABLE | mol::APARTMENT| mol::CAN_ELEVATE| mol::DLL_SURROGATE>,
 	public mol::Dispatch<IPath>,
 	public mol::interfaces< PathObj,
 			mol::implements<

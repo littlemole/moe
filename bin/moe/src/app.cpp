@@ -167,22 +167,6 @@ public:
 
 
 
-class moeTailCliType : public moeCliType
-{
-public:
-
-	virtual bool open(IDispatch* docs, IDispatch* dialogs, std::string p)
-	{
-		if ( p.substr(0,9) == "moe-tail:" ) 
-		{
-			p = p.substr(9);
-			mol::disp_invoke(docs, DISPID_IMOEDOCUMENTCOLLECTION_OPENTAILDOCUMENT, mol::variant(p) );					
-			return true;
-		}
-		return false;
-	}
-};
-
 
 
 class moeHexCliType : public moeCliType
@@ -201,23 +185,6 @@ public:
 	}
 };
 
-
-
-class moeRtfCliType : public moeCliType
-{
-public:
-
-	virtual bool open(IDispatch* docs, IDispatch* dialogs, std::string p)
-	{
-		if ( p.substr(0,8) == "moe-rtf:" ) 
-		{
-			p = p.substr(8);
-			mol::disp_invoke(docs, DISPID_IMOEDOCUMENTCOLLECTION_OPENRTFDOCUMENT, mol::variant(p) );					
-			return true;
-		}
-		return false;
-	}
-};
 
 
 
@@ -250,9 +217,7 @@ MoeApp::MoeApp()
 	moeCliTypes.push_back( new moeBinCliType );
 	moeCliTypes.push_back( new moeHtmlCliType );
 	moeCliTypes.push_back( new moeDirCliType );
-	moeCliTypes.push_back( new moeTailCliType );
 	moeCliTypes.push_back( new moeHexCliType );
-	moeCliTypes.push_back( new moeRtfCliType );
 	moeCliTypes.push_back( new moeSshCliType );
 	moeCliTypes.push_back( new moeDefaultCliType );
 

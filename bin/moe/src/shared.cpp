@@ -485,15 +485,13 @@ HRESULT __stdcall MoeDialogs::MsgBox( BSTR text, BSTR title, long flags, long* r
 HRESULT __stdcall MoeDialogs::Open(BSTR path,IMoeDocument** d)
 {
 
-	static wchar_t  InFilesFilter[] = _T("open text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
+	//static wchar_t  InFilesFilter[] = _T("open text files *.*\0*.*\0open HTML files *.*\0*.*\0open file in hexviewer *.*\0*.*\0\0");
 
 	const COMDLG_FILTERSPEC c_rgSaveTypes[] =
 	{
 		{ L"open text files",       L"*.*"},
 		{ L"open HTML files",	    L"*.*"},
-		{ L"open RTF  files",	    L"*.*"},
-		{ L"hexviewer",			    L"*.*"},
-		{ L"tail logfile",          L"*.*"}
+		{ L"hexviewer",			    L"*.*"}
 	};
 
 	MoeVistaFileDialog fd(*moe());

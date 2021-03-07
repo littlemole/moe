@@ -74,6 +74,12 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 
 
+STRINGTABLE
+BEGIN
+IDC_DISPLAYNAME   "moe-io"
+END
+
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // TYPELIB

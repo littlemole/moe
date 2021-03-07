@@ -633,7 +633,7 @@ Global
 		{E95B8030-D279-45C5-8D39-7B975B70371D}.uni_release|Win32.Build.0 = uni_release|Win32
 		{E95B8030-D279-45C5-8D39-7B975B70371D}.uni_release|x64.ActiveCfg = uni_release|x64
 		{E95B8030-D279-45C5-8D39-7B975B70371D}.uni_release|x64.Build.0 = uni_release|x64
-		{E95B8030-D279-45C5-8D39-7B975B70371D}.uni_release|x86.ActiveCfg = uni_release|x64
+		{E95B8030-D279-45C5-8D39-7B975B70371D}.uni_release|x86.ActiveCfg = uni_release|Win32
 		{E95B8030-D279-45C5-8D39-7B975B70371D}.Unicode Debug|Any CPU.ActiveCfg = uni_release|x64
 		{E95B8030-D279-45C5-8D39-7B975B70371D}.Unicode Debug|Mixed Platforms.ActiveCfg = uni_release|x64
 		{E95B8030-D279-45C5-8D39-7B975B70371D}.Unicode Debug|Mixed Platforms.Build.0 = uni_release|x64

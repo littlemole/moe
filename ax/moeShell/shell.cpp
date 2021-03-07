@@ -93,14 +93,8 @@ HRESULT __stdcall moeShell::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT i
 	menu.addItem(icmd,_T("show HTML"));
 	registerMenuItem(icmd,_T("moe-html:"),_T("show in moes HTML viewer") );
 
-	menu.addItem(icmd,_T("show RTF"));
-	registerMenuItem(icmd,_T("moe-rtf:"),_T("show in moes RTF viewer") );
-
 	menu.addItem(icmd,_T("show hexdump"));
 	registerMenuItem(icmd,_T("moe-hex:"),_T("show in moes hexdump viewer") );
-
-	menu.addItem(icmd,_T("tail -f log"));
-	registerMenuItem(icmd,_T("moe-tail:"),_T("tail -f log") );
 
 	// menu item #2
 	::InsertMenu( hmenu,
@@ -219,11 +213,7 @@ HRESULT __stdcall moeShellMenuItem::openMoeCom(IUnknown* punk,const std::wstring
 
 	mol::punk<IMoeDocument> pdoc;
 
-	if ( cmd == open_tail_cmd )
-	{
-		pdocs->OpenTailDocument(mol::bstr(filepath), &pdoc);
-	}
-	else if ( cmd == open_html_cmd )
+	if ( cmd == open_html_cmd )
 	{
 		pdocs->OpenHtmlFrame(mol::bstr(filepath), &pdoc );
 	}
@@ -238,10 +228,6 @@ HRESULT __stdcall moeShellMenuItem::openMoeCom(IUnknown* punk,const std::wstring
 	else if ( cmd == open_hex_cmd )
 	{
 		pdocs->OpenHexEditor(mol::bstr(filepath),VARIANT_TRUE, &pdoc );
-	}
-	else if ( cmd == open_rtf_cmd )
-	{
-		pdocs->OpenRTFDocument(mol::bstr(filepath),&pdoc );
 	}
 
 	mol::punk<IMoeView> view;

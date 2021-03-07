@@ -380,12 +380,6 @@ void MoeWnd::OnFileNew()
 }
 
 
-handle_cmd(&MoeWnd::OnFileNewRTF, IDM_FILE_NEW_RTF)
-void MoeWnd::OnFileNewRTF()
-{
-	mol::punk<IMoeDocument> doc;
-	docs()->NewRTFDocument(&doc);
-}
 //////////////////////////////////////////////////////////////////////////////
 //
 // Open from file and Create new child window 

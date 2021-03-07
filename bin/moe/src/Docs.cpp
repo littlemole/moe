@@ -2,7 +2,6 @@
 #include "Docs.h"
 #include "MoeBar.h"
 #include "Moe.h"
-//#include "xmlui.h"
 #include "resource.h"
 #include "DocFactory.h"
 
@@ -225,17 +224,6 @@ HRESULT __stdcall Docs::NewUserForm(IMoeDocument** d)
 }
 
 
-HRESULT __stdcall Docs::NewRTFDocument(IMoeDocument** d)
-{
-	return factory_->newDocument(MOE_DOCTYPE_RTF,d);
-}
-
-
-HRESULT __stdcall Docs::OpenTailDocument(BSTR fp, IMoeDocument** d)
-{
-	return factory_->openDocument(mol::towstring(fp),MOE_DOCTYPE_TAIL,-1,false,d);
-}
-
 HRESULT __stdcall Docs::OpenURLDialog()
 {
 	moe()->postMessage(WM_COMMAND, IDM_FILE_OPEN_HTML, 0);
@@ -248,11 +236,6 @@ HRESULT __stdcall Docs::Open( BSTR fPath, IMoeDocument** d)
 	return factory_->openDocument(mol::towstring(fPath),MOE_DOCTYPE_DOC,-1,false,d);
 }
 
-
-HRESULT __stdcall Docs::OpenRTFDocument( BSTR fPath, IMoeDocument** d)
-{
-	return factory_->openDocument(mol::towstring(fPath),MOE_DOCTYPE_RTF,false,1,d);
-}
 
 HRESULT __stdcall Docs::OpenEncoding( BSTR fPath, long enc, IMoeDocument** d)
 {

@@ -30,12 +30,6 @@
     <ClCompile Include="src\mdichild.cpp">
       <Filter>mdi</Filter>
     </ClCompile>
-    <ClCompile Include="src\rtf.cpp">
-      <Filter>mdi</Filter>
-    </ClCompile>
-    <ClCompile Include="src\tailEditor.cpp">
-      <Filter>mdi</Filter>
-    </ClCompile>
     <ClCompile Include="src\DocFactory.cpp" />
     <ClCompile Include="src\tree.cpp">
       <Filter>widget</Filter>
@@ -94,12 +88,6 @@
       <Filter>resources</Filter>
     </ClInclude>
     <ClInclude Include="include\mdichild.h">
-      <Filter>mdi</Filter>
-    </ClInclude>
-    <ClInclude Include="include\rtf.h">
-      <Filter>mdi</Filter>
-    </ClInclude>
-    <ClInclude Include="include\tailEditor.h">
       <Filter>mdi</Filter>
     </ClInclude>
     <ClInclude Include="include\tree.h">

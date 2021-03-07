@@ -19,9 +19,7 @@ enum cmds {
 	open_cmd = 0,
 	open_open_cmd,
 	open_html_cmd,
-	open_rtf_cmd,
 	open_hex_cmd,
-	open_tail_cmd,
 	open_as_cmd
 };
 

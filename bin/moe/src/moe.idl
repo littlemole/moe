@@ -35,9 +35,7 @@ library Moe
 		MOE_DOCTYPE_HTML   = 5,
 		MOE_DOCTYPE_OLE    = 6,
 		MOE_DOCTYPE_FORM   = 7,
-		MOE_DOCTYPE_RTF    = 8,
-		MOE_DOCTYPE_TAIL   = 9,
-		MOE_DOCTYPE_SFTP   = 10
+		MOE_DOCTYPE_SFTP   = 8
 
 	} MOE_DOCTYPE;
 
@@ -216,15 +214,6 @@ library Moe
 		[id(15), helpstring("Move object from index/path to new index")] 
 		HRESULT Move( [in] VARIANT what, [in] VARIANT to);
 
-		[id(16), helpstring("New RTF document")] 
-		HRESULT NewRTFDocument( [out,retval] IMoeDocument** d);
-
-		[id(17), helpstring("tail -f document")] 
-		HRESULT OpenTailDocument( [in] BSTR fPath, [out,retval] IMoeDocument** d);
-
-		[id(18), helpstring("Open RTF document")] 
-		HRESULT OpenRTFDocument( [in] BSTR fPath, [out,retval] IMoeDocument** d);
-
 		[id(19), helpstring("Open URL dialog")]
 		HRESULT OpenURLDialog();
 
@@ -251,12 +240,6 @@ library Moe
 
 		[id(27), propget, helpstring("Get DOCTYPE_FORM constant")]
 		HRESULT DOCTYPE_FORM( [out,retval] long* d );
-
-		[id(28), propget, helpstring("Get DOCTYPE_RTF constant")]
-		HRESULT DOCTYPE_RTF( [out,retval] long* d );
-
-		[id(29), propget, helpstring("Get DOCTYPE_TAIL constant")]
-		HRESULT DOCTYPE_TAIL( [out,retval] long* d );
 
 		[id(30), propget, helpstring("Get DOCTYPE_SFTP constant")]
 		HRESULT DOCTYPE_SFTP( [out,retval] long* d );

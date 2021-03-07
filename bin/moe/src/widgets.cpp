@@ -12,7 +12,6 @@
 
 
 // open file dialog std filte for moe
-wchar_t  InFilesFilter[]   = _T("open text files *.*\0*.*\0open UTF-8 text files *.*\0*.*\0open HTML files *.*\0*.*\0open rtf files *.*\0*.rtf\0open file in hexviewer *.*\0*.*\0tail log file *.*\0*.*\0\0");
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -1791,15 +1790,7 @@ MOE_DOCTYPE index2type(int index)
 		}
 		case 3 :
 		{
-			return MOE_DOCTYPE_RTF;
-		}
-		case 4 :
-		{
 			return MOE_DOCTYPE_HEX;
-		}
-		case 5 :
-		{
-			return MOE_DOCTYPE_TAIL;
 		}
 	}
 	return MOE_DOCTYPE_DOC;
