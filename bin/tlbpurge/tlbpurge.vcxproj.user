@@ -4,4 +4,8 @@
     <LocalDebuggerCommandArguments>kill {B9AA71CC-ED9E-47AB-90B9-4B84EAA3F4B2}</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">
+    <LocalDebuggerCommandArguments>{00E31FA6-8CA2-30BF-91FE-D9CB4A008990}</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
 </Project>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body>
+</body>
+
+<p>HTML</p>
+<a href="https://www.google.de/">google</a>
+<br>
+<a id="closeLink" href="#">close</a>
+<br>
+
+<button id="butt">click</button>
+
+<script>
+
+
+window.chrome.webview.addEventListener('message', function( msg ) {
+
+	alert(msg.data);
+	alert( JSON.stringify(msg.data) );
+});
+
+
+document.getElementById("butt").onclick = function() {
+
+	var str = "" + document.documentElement.innerHTML;
+//	window.chrome.webview.postMessage(str);
+	chrome.webview.hostObjects.sync.Frame.Controller.click(str);
+}
+
+document.getElementById("closeLink").onclick = function() {
+
+	//window.chrome.webview.postMessage("close");
+	chrome.webview.hostObjects.sync.Frame.close();
+};
+
+</script>
+
+</html>

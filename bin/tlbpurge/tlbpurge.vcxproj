@@ -23,6 +23,7 @@
     <RootNamespace>mol</RootNamespace>
     <TargetName>tlbpurge</TargetName>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|Win32'" Label="Configuration">
@@ -38,7 +39,7 @@
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <PlatformToolset>v142</PlatformToolset>
@@ -171,12 +172,15 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\src\win\x64\uni_Release\win.lib;..\..\lib\src\ole\x64\uni_Release\ole.lib;..\..\lib\src\util\x64\uni_Release\util.lib;..\..\lib\src\thread\x64\uni_Release\thread.lib;..\..\3dParty\pcre\x64\uni_Release\pcre.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ModuleDefinitionFile>comtypes.def</ModuleDefinitionFile>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>..\..\lib\src\win\x64\uni_Release\win.lib;..\..\lib\src\ole\x64\uni_Release\ole.lib;..\..\lib\src\util\x64\uni_Release\util.lib;..\..\lib\src\thread\x64\uni_Release\thread.lib;shlwapi.lib;Mpr.lib;comctl32.lib;urlmon.lib;wininet.lib;msxml2.lib;Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <LinkTimeCodeGeneration>

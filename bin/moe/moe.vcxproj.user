@@ -15,5 +15,6 @@ $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='uni_release|x64'">
     <LocalDebuggerWorkingDirectory>..\..\..\Program Files\mol\moe</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"C:\Users\mike\Downloads\testCMake\testCMake\main.cpp"</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

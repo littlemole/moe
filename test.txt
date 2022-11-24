@@ -1,0 +1,46 @@
+var html = Application.Documents.openHTML("C:\\moe\\winrt.html");
+
+var Controller = {
+
+	click : function(str) {
+		//MsgBox( str,"HTML",0);
+
+		html.postMsg( JSON.stringify( { data : str } ) );
+	},
+
+	onLoad : function() {
+
+		MsgBox("OnLoad","!",0);
+	},
+
+	onClose : function() {
+
+		MsgBox("OnClose","!",0);
+		Quit();
+	},
+
+	onMsg : function(msg) {
+
+		MsgBox( msg,"HTML",0);
+
+		if(msg == "\"close\"")
+		{
+			html.close();
+		}
+	},
+
+	onNavigate : function(url) {
+
+		MsgBox( url,"URL",0);
+
+		if(url == "https://www.google.de/")
+		{
+			return true;
+		}
+		return false;
+	}
+};
+
+html.Controller = Controller;
+
+Wait();

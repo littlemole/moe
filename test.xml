@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<object clsid="{BA446D99-6A2F-4DE2-B644-101033A0250E}"><TestObject><value>42</value><desc>Helo</desc><mode>-1</mode><type vt="9"><object clsid="{C40BFA01-0FE0-4E55-8399-DE862BE9F4CB}"><SUBOBJ><name>MyName</name><value vt="3">4711</value></SUBOBJ></object></type><object clsid="{C40BFA01-0FE0-4E55-8399-DE862BE9F4CB}"><SUBOBJ><name>MyName</name><value vt="3">4711</value></SUBOBJ></object></TestObject></object>

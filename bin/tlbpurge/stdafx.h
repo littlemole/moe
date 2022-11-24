@@ -19,6 +19,3 @@
 #include <set>
 #include <vector>
 
-#define BOOST_BIND_ENABLE_STDCALL 
-#include "boost/bind.hpp"
-

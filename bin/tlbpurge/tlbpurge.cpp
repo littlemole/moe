@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 #include "ole/dll.h"
-#include "util/regex.h"
 #include "win/regkey.h"
 
 bool g_kill = false;
